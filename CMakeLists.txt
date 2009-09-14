@@ -1,0 +1,18 @@
+PROJECT(Monteverdi)
+
+cmake_minimum_required(VERSION 2.6)
+
+FIND_PACKAGE(OTB)
+IF(OTB_FOUND)
+  INCLUDE(${OTB_USE_FILE})
+ELSE(OTB_FOUND)
+  MESSAGE(FATAL_ERROR
+          "OTB not found. Please set OTB_DIR")
+ENDIF(OTB_FOUND)
+
+
+IF(WIN32)
+  ADD_DEFINITIONS(-DWIN32)
+ENDIF(WIN32)
+
+SUBDIRS(Code Testing Prototype1)

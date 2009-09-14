@@ -83,6 +83,16 @@ public:
   unsigned int m_NumberOfData;
 };
 
+class DataWrapper
+{
+public:
+  DataWrapper()  {}
+  ~DataWrapper() {}
+  
+  itk::DataObject * m_DataObject;
+  std::string       m_DataType;
+};
+
 
 /**
 * The module base class: used at the application level, it contains the
@@ -114,16 +124,16 @@ public:
   }
 
   /// Input Data management
-  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  virtual void AddInputData(const std::string & key, const DataWrapper & data)
   {
     // We may be missing type checking here
-    itkExceptionMacro(<<"Subclass must overload this method");
+    itkExceptionMacro(<<"Subclass must overload this method 1");
   }
  
   /// Output data management
-  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
   {
-    itkExceptionMacro(<<"Subclass must overload this method");
+    itkExceptionMacro(<<"Subclass must overload this method 2");
   }
 
   // Output data management
@@ -157,7 +167,6 @@ protected:
 private:
   ModuleBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
 };
 
 /**
@@ -190,11 +199,14 @@ public:
     }
   }
 
-  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
   {
     if(key == "OutputImage")
       {
-      return m_Process->GetOutput();
+      DataWrapper dwrap;
+      dwrap.m_DataObject = m_Process->GetOutput();
+      dwrap.m_DataType = m_OutputDataDescriptorsMap[key].m_DataType;
+      return dwrap;
       }
     else
       {
@@ -245,7 +257,8 @@ public:
   itkTypeMacro(ModuleThreshold, ModuleBase);
 
   typedef otb::Image<double, 2> ImageType;
-  typedef itk::BinaryThresholdImageFilter<ImageType, ImageType>  ProcessType;
+  typedef otb::Image<unsigned char,2> OutputImageType;
+  typedef itk::BinaryThresholdImageFilter<ImageType, OutputImageType>  ProcessType;
 
   virtual void SetParameters(std::string key, const ParameterBase* value)
   {
@@ -257,12 +270,19 @@ public:
     }
   }
   
-  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  virtual void AddInputData(const std::string & key, const DataWrapper & data)
   {
     if(key == "InputImage")
       {
-      // Possible dynamic cast here
-      m_Process->GetInputs()[0] = data;
+      if(m_InputDataDescriptorsMap[key].m_DataType == data.m_DataType)
+	{
+	// Possible dynamic cast here
+	m_Process->GetInputs()[0] = data.m_DataObject;
+	}
+      else
+	{
+	itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_InputDataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
+	}
       }
     else
       {
@@ -270,11 +290,14 @@ public:
       }
   }
 
-  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
   {
     if(key == "OutputImage")
       {
-      return m_Process->GetOutput();
+      DataWrapper dwrap;
+      dwrap.m_DataObject = m_Process->GetOutput();
+      dwrap.m_DataType = m_OutputDataDescriptorsMap[key].m_DataType;
+      return dwrap;
       }
     else
       {
@@ -290,7 +313,7 @@ protected:
 
     // Describe outputs
     OutputDataDescriptor outputDescriptor;
-    outputDescriptor.m_DataType = "Floating_Point_Image";
+    outputDescriptor.m_DataType = "Labeled_Image";
     outputDescriptor.m_DataKey = "OutputImage";
     outputDescriptor.m_DataDescription = "Thresholded image";
     outputDescriptor.m_NumberOfData = 1;
@@ -348,12 +371,18 @@ public:
     }
   }
   
-  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  virtual void AddInputData(const std::string & key, const DataWrapper & data)
   {
     if(key == "InputImage")
       {
-      // Possible dynamic cast here
-      m_Process->SetInput( dynamic_cast<ImageType *>(data));
+      if(m_InputDataDescriptorsMap[key].m_DataType == data.m_DataType)
+	{
+	m_Process->SetInput( dynamic_cast<ImageType *>(data.m_DataObject));
+	}
+      else
+	{
+	itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_InputDataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
+	}
       }
     else
       {
