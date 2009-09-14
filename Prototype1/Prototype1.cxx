@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleWriter->AddInputData("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
+  moduleWriter->SetInputByKey("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
 
   // Update the module
   moduleWriter->Update();

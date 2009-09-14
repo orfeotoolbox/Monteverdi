@@ -348,7 +348,7 @@ public:
     }
   }
   
-  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  virtual void SetInputByKey(const std::string & key, itk::DataObject * data)
   {
     if(key == "InputImage")
       {
