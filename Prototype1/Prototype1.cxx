@@ -6,7 +6,7 @@
 
 #include "otbModule.h"
 
-
+#include "otbImageFileWriter.h"
 
 //Execution
 // ./Prototype1 ~/OTB/trunk/OTB-Data/Examples/qb_RoadExtract.tif
@@ -59,6 +59,16 @@ int main(int argc, char* argv[])
   //to make the syntax better.
   moduleThreshold->GetProcess()->GetInputs()[0] = moduleReader->GetProcess()->GetOutputs()[0];
   moduleThreshold->GetProcess()->Update();
+
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName("output.tif");
+  ProcessType::Pointer process3 = writer.GetPointer();
+  //this does not work because we are out of the particular case of the
+  //BinaryThresholdImageFilter: no SetNthInput is performed in the constructor
+  //ie, the space for m_Inputs[0] does not exist yet...
+  process3->GetInputs()[0]  = moduleThreshold->GetProcess()->GetOutputs()[0];
+  process3->Update();
 
   return EXIT_SUCCESS;
 }
