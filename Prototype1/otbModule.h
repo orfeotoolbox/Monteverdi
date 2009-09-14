@@ -8,8 +8,15 @@ namespace otb
 
 struct Invalid{};
 
+class ITK_EXPORT ParameterBase
+{
+public:
+  ParameterBase(){};
+  virtual ~ParameterBase(){};
+};
+
 template<class TType=Invalid>
-class ITK_EXPORT Parameter
+class ITK_EXPORT Parameter : public ParameterBase
 {
 public:
   Parameter(TType value)
@@ -58,20 +65,7 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(ModuleBase, itk::Object);
 
-  //It works like that, but we have to find a way to avoid the manual
-  //definition of all the cases...
-  //With this situation, the Parameter class is even useless...
-  virtual void SetParameters(std::string key, const Parameter<>& value)
-  {
-    itkExceptionMacro(<<"Subclass must overload this method");
-  }
-
-  virtual void SetParameters(std::string key, const Parameter<std::string>& value)
-  {
-    itkExceptionMacro(<<"Subclass must overload this method");
-  }
-
-  virtual void SetParameters(std::string key, const Parameter<double>& value)
+  virtual void SetParameters(std::string key, const ParameterBase* value)
   {
     itkExceptionMacro(<<"Subclass must overload this method");
   }
@@ -114,12 +108,12 @@ public:
   typedef otb::Image<double, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ProcessType;
 
-
-  virtual void SetParameters(std::string key, const Parameter<std::string>& value)
+  virtual void SetParameters(std::string key, const ParameterBase* value)
   {
     if (key == "FileName")
     {
-      m_Process->SetFileName(value.GetValue());
+      //TODO check the dynamic_cast output
+      m_Process->SetFileName(dynamic_cast<const Parameter<std::string>*>(value)->GetValue());
     }
   }
 
@@ -167,11 +161,13 @@ public:
   typedef otb::Image<double, 2> ImageType;
   typedef itk::BinaryThresholdImageFilter<ImageType, ImageType>  ProcessType;
 
-  virtual void SetParameters(std::string key, const Parameter<double>& value)
+  virtual void SetParameters(std::string key, const ParameterBase* value)
   {
     if (key == "UpperThreshold")
     {
-      m_Process->SetUpperThreshold(value.GetValue());
+      //TODO check the result of the dynamic_cast
+      m_Process->SetUpperThreshold(
+          dynamic_cast<const Parameter<double>*>(value)->GetValue());
     }
   }
 

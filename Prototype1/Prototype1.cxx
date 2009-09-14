@@ -48,10 +48,12 @@ int main(int argc, char* argv[])
 
   typedef otb::ModuleBase ModuleBase;
   ModuleBase::Pointer moduleReader = (otb::ModuleReader::New()).GetPointer();
-  moduleReader->SetParameters("FileName", otb::Parameter<std::string>(argv[1]));
+  otb::Parameter<std::string>* filename = new otb::Parameter<std::string>(argv[1]);
+  moduleReader->SetParameters("FileName", filename);
 
   ModuleBase::Pointer moduleThreshold = (otb::ModuleThreshold::New()).GetPointer();
-  moduleThreshold->SetParameters("UpperThreshold", otb::Parameter<double>(150.0));
+  otb::Parameter<double>* thres = new otb::Parameter<double>(150.0);
+  moduleThreshold->SetParameters("UpperThreshold", thres);
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
