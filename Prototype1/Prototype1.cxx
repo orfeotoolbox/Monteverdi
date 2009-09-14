@@ -4,8 +4,13 @@
 #include "otbImageFileReader.h"
 #include "itkBinaryThresholdImageFilter.h"
 
+#include "otbModule.h"
+
+
+
 //Execution
 // ./Prototype1 ~/OTB/trunk/OTB-Data/Examples/qb_RoadExtract.tif
+
 
 int main(int argc, char* argv[])
 {
@@ -38,8 +43,21 @@ int main(int argc, char* argv[])
   process2->Update();
 
 
+  //Now, we try to get a more generic interface, the problem being passing the
+  //parameters uniformly
 
+  typedef otb::ModuleBase ModuleBase;
+  ModuleBase::Pointer moduleReader = (otb::ModuleReader::New()).GetPointer();
+  moduleReader->SetParameters("FileName", otb::Parameter<std::string>(argv[1]));
 
+  ModuleBase::Pointer moduleThreshold = (otb::ModuleThreshold::New()).GetPointer();
+  moduleThreshold->SetParameters("UpperThreshold", otb::Parameter<double>(150.0));
+
+  //Convenience accessor can be defined at the module level
+  //to make the syntax better.
+  moduleThreshold->GetProcess()->GetInputs()[0] = moduleReader->GetProcess()->GetOutputs()[0];
+  moduleThreshold->GetProcess()->Update();
 
   return EXIT_SUCCESS;
 }
+
