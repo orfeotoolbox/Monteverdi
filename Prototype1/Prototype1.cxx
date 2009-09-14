@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
   
   for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt1 = inmap1.begin(); inIt1 != inmap1.end();++inIt1)
     {
-    std::cout<<"Name: "<<inIt1->second.m_DataName<<", type: "<<inIt1->second.m_DataKey<<", description: "<<inIt1->second.m_DataDescription;
+    std::cout<<"Name: "<<inIt1->second.m_DataKey<<", type: "<<inIt1->second.m_DataType<<", description: "<<inIt1->second.m_DataDescription;
     if(inIt1->second.m_Optional)
       std::cout<<" (optional)";
     if(inIt1->second.m_Multiple)
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 
   for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt1 = outmap1.begin(); outIt1 != outmap1.end();++outIt1)
     {
-    std::cout<<"Name: "<<outIt1->second.m_DataName<<", type: "<<outIt1->second.m_DataKey<<", description: "<<outIt1->second.m_DataDescription<<", cardinal: "<<outIt1->second.m_NumberOfData<<std::endl;
+    std::cout<<"Name: "<<outIt1->second.m_DataKey<<", type: "<<outIt1->second.m_DataType<<", description: "<<outIt1->second.m_DataDescription<<", cardinal: "<<outIt1->second.m_NumberOfData<<std::endl;
     }
 
 
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
   for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt2 = inmap2.begin(); inIt2 != inmap2.end();++inIt2)
     {
-    std::cout<<"Name: "<<inIt2->second.m_DataName<<", type: "<<inIt2->second.m_DataKey<<", description: "<<inIt2->second.m_DataDescription;
+    std::cout<<"Name: "<<inIt2->second.m_DataKey<<", type: "<<inIt2->second.m_DataType<<", description: "<<inIt2->second.m_DataDescription;
     if(inIt2->second.m_Optional)
       std::cout<<" (optional)";
     if(inIt2->second.m_Multiple)
@@ -99,12 +99,12 @@ int main(int argc, char* argv[])
 
   for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt2 = outmap2.begin(); outIt2 != outmap2.end();++outIt2)
     {
-    std::cout<<"Name: "<<outIt2->second.m_DataName<<", type: "<<outIt2->second.m_DataKey<<", description: "<<outIt2->second.m_DataDescription<<", cardinal: "<<outIt2->second.m_NumberOfData<<std::endl;
+    std::cout<<"Name: "<<outIt2->second.m_DataKey<<", type: "<<outIt2->second.m_DataType<<", description: "<<outIt2->second.m_DataDescription<<", cardinal: "<<outIt2->second.m_NumberOfData<<std::endl;
     }
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleThreshold->AddInputData("InputImage",moduleReader->GetOutputData("OutputImage",0));
+  moduleThreshold->AddInputData("InputImage",moduleReader->GetOutputByKey("OutputImage",0));
 
   // Update the module
   moduleThreshold->Update();
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
   //this does not work because we are out of the particular case of the
   //BinaryThresholdImageFilter: no SetNthInput is performed in the constructor
   //ie, the space for m_Inputs[0] does not exist yet...
-  process3->GetInputs()[0]  = moduleThreshold->GetOutputData("OutputImage",0);
+  process3->GetInputs()[0]  = moduleThreshold->GetOutputByKey("OutputImage",0);
   process3->Update();
 
   return EXIT_SUCCESS;

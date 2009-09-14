@@ -47,14 +47,14 @@ private:
 class DataDescriptor
 {
 public:
-  DataDescriptor() : m_DataKey("Unknown"), m_DataName("Unknown"), m_DataDescription("Unknown") {}
+  DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown") {}
   virtual ~DataDescriptor() {}
 
   /// The key to identify data
-  std::string m_DataKey;
+  std::string m_DataType;
 
   /// Data name
-  std::string m_DataName;
+  std::string m_DataKey;
 
   /// A description of the data
   std::string m_DataDescription;
@@ -120,7 +120,7 @@ public:
   }
  
   /// Output data management
-  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
+  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
   {
     itkExceptionMacro(<<"Subclass must overload this method");
   }
@@ -189,7 +189,7 @@ public:
     }
   }
 
-  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
+  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
   {
     if(key == "OutputImage")
       {
@@ -209,11 +209,11 @@ protected:
     
     // Describe outputs
     OutputDataDescriptor outputDescriptor;
-    outputDescriptor.m_DataKey = "Floating_Point_Image";
-    outputDescriptor.m_DataName = "OutputImage";
+    outputDescriptor.m_DataType = "Floating_Point_Image";
+    outputDescriptor.m_DataKey = "OutputImage";
     outputDescriptor.m_DataDescription = "Image read from the disk";
     outputDescriptor.m_NumberOfData = 1;
-    m_OutputDataDescriptorsMap[outputDescriptor.m_DataName]=outputDescriptor;
+    m_OutputDataDescriptorsMap[outputDescriptor.m_DataKey]=outputDescriptor;
   }
   /** Destructor */
   virtual ~ModuleReader() {};
@@ -269,7 +269,7 @@ public:
       }
   }
 
-  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
+  virtual itk::DataObject * GetOutputByKey(const std::string & key,unsigned int idx)
   {
     if(key == "OutputImage")
       {
@@ -289,18 +289,18 @@ protected:
 
     // Describe outputs
     OutputDataDescriptor outputDescriptor;
-    outputDescriptor.m_DataKey = "Floating_Point_Image";
-    outputDescriptor.m_DataName = "OutputImage";
+    outputDescriptor.m_DataType = "Floating_Point_Image";
+    outputDescriptor.m_DataKey = "OutputImage";
     outputDescriptor.m_DataDescription = "Thresholded image";
     outputDescriptor.m_NumberOfData = 1;
-    m_OutputDataDescriptorsMap[outputDescriptor.m_DataName]=outputDescriptor;
+    m_OutputDataDescriptorsMap[outputDescriptor.m_DataKey]=outputDescriptor;
 
     // Describe inputs
     InputDataDescriptor inputDescriptor;
-    inputDescriptor.m_DataKey = "Floating_Point_Image";
-    inputDescriptor.m_DataName = "InputImage";
+    inputDescriptor.m_DataType = "Floating_Point_Image";
+    inputDescriptor.m_DataKey = "InputImage";
     inputDescriptor.m_DataDescription = "Image to apply threshold on";
-    m_InputDataDescriptorsMap[inputDescriptor.m_DataName]=inputDescriptor;
+    m_InputDataDescriptorsMap[inputDescriptor.m_DataKey]=inputDescriptor;
 
   }
   /** Destructor */
