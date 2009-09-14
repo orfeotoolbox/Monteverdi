@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleThreshold->AddInputData("InputImage",moduleReader->GetOutputByKey("OutputImage",0));
+  moduleThreshold->AddInputByKey("InputImage",moduleReader->GetOutputByKey("OutputImage",0));
 
   // Update the module
   moduleThreshold->Update();
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleWriter->AddInputData("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
+  moduleWriter->AddInputByKey("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
 
   // Update the module
   moduleWriter->Update();

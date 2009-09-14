@@ -124,7 +124,7 @@ public:
   }
 
   /// Input Data management
-  virtual void AddInputData(const std::string & key, const DataWrapper & data)
+  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
   {
     // We may be missing type checking here
     itkExceptionMacro(<<"Subclass must overload this method 1");
@@ -270,7 +270,7 @@ public:
     }
   }
   
-  virtual void AddInputData(const std::string & key, const DataWrapper & data)
+  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
   {
     if(key == "InputImage")
       {
@@ -371,7 +371,7 @@ public:
     }
   }
   
-  virtual void AddInputData(const std::string & key, const DataWrapper & data)
+  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
   {
     if(key == "InputImage")
       {
