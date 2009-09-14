@@ -140,6 +140,7 @@ int main(int argc, char* argv[])
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
+  // Julien: This intentionally fails to demonstrates dynamic types checking
   moduleWriter->AddInputByKey("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
 
   // Update the module
