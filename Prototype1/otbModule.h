@@ -44,6 +44,44 @@ private:
   TType m_Value;
 };
 
+class DataDescriptor
+{
+public:
+  DataDescriptor() : m_DataKey("Unknown"), m_DataName("Unknown"), m_DataDescription("Unknown") {}
+  virtual ~DataDescriptor() {}
+
+  /// The key to identify data
+  std::string m_DataKey;
+
+  /// Data name
+  std::string m_DataName;
+
+  /// A description of the data
+  std::string m_DataDescription;
+};
+
+class InputDataDescriptor
+  : public DataDescriptor
+{
+public:
+  InputDataDescriptor() : m_Optional(false), m_Multiple(false) {}
+  virtual ~InputDataDescriptor() {}
+  
+  bool m_Optional;
+  
+  bool m_Multiple;
+};
+
+class OutputDataDescriptor
+  : public DataDescriptor
+{
+public:
+  OutputDataDescriptor() : m_NumberOfData(0) {}
+  virtual ~OutputDataDescriptor() {}
+  
+  unsigned int m_NumberOfData;
+};
+
 
 /**
 * The module base class: used at the application level, it contains the
@@ -59,6 +97,10 @@ public:
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
+  /** Data Description interface */
+  typedef std::map<std::string,InputDataDescriptor>  InputDataDescriptorMapType;
+  typedef std::map<std::string,OutputDataDescriptor> OutputDataDescriptorMapType;
+
   /** Type macro */
   itkNewMacro(Self);
 
@@ -70,16 +112,46 @@ public:
     itkExceptionMacro(<<"Subclass must overload this method");
   }
 
-  virtual itk::ProcessObject* GetProcess()
+  /// Input Data management
+  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  {
+    // We may be missing type checking here
+    itkExceptionMacro(<<"Subclass must overload this method");
+  }
+ 
+  /// Output data management
+  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
   {
     itkExceptionMacro(<<"Subclass must overload this method");
   }
+
+  // Output data management
+
+
+  const InputDataDescriptorMapType & GetInputDataDescriptorsMap()
+  {
+    return m_InputDataDescriptorsMap;
+  }
+
+  const OutputDataDescriptorMapType & GetOutputDataDescriptorsMap()
+  {
+    return m_OutputDataDescriptorsMap;
+  }
+
+  // Default is doing nothing (pipeline execution)
+  virtual void Update(){}
 
 protected:
   /** Constructor */
   ModuleBase() {};
   /** Destructor */
   virtual ~ModuleBase() {};
+
+
+  // Map could be replaced by a simple std::vector
+  InputDataDescriptorMapType m_InputDataDescriptorsMap;
+
+  OutputDataDescriptorMapType m_OutputDataDescriptorsMap;
 
 private:
   ModuleBase(const Self&); //purposely not implemented
@@ -117,9 +189,16 @@ public:
     }
   }
 
-  virtual itk::ProcessObject* GetProcess()
+  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
   {
-    return m_Process;
+    if(key == "OutputImage")
+      {
+      return m_Process->GetOutput();
+      }
+    else
+      {
+      itkExceptionMacro(<<"No output corresponding to "<<key<<" (idx = "<<idx<<")");
+      }
   }
 
 protected:
@@ -127,6 +206,14 @@ protected:
   ModuleReader()
   {
     m_Process = ProcessType::New();
+    
+    // Describe outputs
+    OutputDataDescriptor outputDescriptor;
+    outputDescriptor.m_DataKey = "Floating_Point_Image";
+    outputDescriptor.m_DataName = "OutputImage";
+    outputDescriptor.m_DataDescription = "Image read from the disk";
+    outputDescriptor.m_NumberOfData = 1;
+    m_OutputDataDescriptorsMap[outputDescriptor.m_DataName]=outputDescriptor;
   }
   /** Destructor */
   virtual ~ModuleReader() {};
@@ -134,9 +221,7 @@ protected:
 private:
   ModuleReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
   ProcessType::Pointer m_Process;
-
 };
 
 
@@ -170,10 +255,30 @@ public:
           dynamic_cast<const Parameter<double>*>(value)->GetValue());
     }
   }
-
-  virtual itk::ProcessObject* GetProcess()
+  
+  virtual void AddInputData(const std::string & key, itk::DataObject * data)
   {
-    return m_Process;
+    if(key == "InputImage")
+      {
+      // Possible dynamic cast here
+      m_Process->GetInputs()[0] = data;
+      }
+    else
+      {
+      itkExceptionMacro(<<"No input corresponding to "<<key);
+      }
+  }
+
+  virtual itk::DataObject * GetOutputData(const std::string & key,unsigned int idx)
+  {
+    if(key == "OutputImage")
+      {
+      return m_Process->GetOutput();
+      }
+    else
+      {
+      itkExceptionMacro(<<"No output corresponding to "<<key<<" (idx = "<<idx<<")");
+      }
   }
 
 protected:
@@ -181,11 +286,30 @@ protected:
   ModuleThreshold()
   {
     m_Process = ProcessType::New();
+
+    // Describe outputs
+    OutputDataDescriptor outputDescriptor;
+    outputDescriptor.m_DataKey = "Floating_Point_Image";
+    outputDescriptor.m_DataName = "OutputImage";
+    outputDescriptor.m_DataDescription = "Thresholded image";
+    outputDescriptor.m_NumberOfData = 1;
+    m_OutputDataDescriptorsMap[outputDescriptor.m_DataName]=outputDescriptor;
+
+    // Describe inputs
+    InputDataDescriptor inputDescriptor;
+    inputDescriptor.m_DataKey = "Floating_Point_Image";
+    inputDescriptor.m_DataName = "InputImage";
+    inputDescriptor.m_DataDescription = "Image to apply threshold on";
+    m_InputDataDescriptorsMap[inputDescriptor.m_DataName]=inputDescriptor;
+
   }
   /** Destructor */
   virtual ~ModuleThreshold() {};
 
-
+  virtual void Update()
+  {
+    m_Process->Update();
+  }
 
 private:
   ModuleThreshold(const Self&); //purposely not implemented

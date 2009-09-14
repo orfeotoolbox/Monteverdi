@@ -51,14 +51,66 @@ int main(int argc, char* argv[])
   otb::Parameter<std::string>* filename = new otb::Parameter<std::string>(argv[1]);
   moduleReader->SetParameters("FileName", filename);
 
+  /// Describe first module IO
+  ModuleBase::InputDataDescriptorMapType inmap1 =  moduleReader->GetInputDataDescriptorsMap();
+  ModuleBase::OutputDataDescriptorMapType outmap1 =  moduleReader->GetOutputDataDescriptorsMap();
+
+  std::cout<<std::endl;
+  std::cout<<"Module 1 (I/O): "<<std::endl;
+  std::cout<<std::endl;
+  
+  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt1 = inmap1.begin(); inIt1 != inmap1.end();++inIt1)
+    {
+    std::cout<<"Name: "<<inIt1->second.m_DataName<<", type: "<<inIt1->second.m_DataKey<<", description: "<<inIt1->second.m_DataDescription;
+    if(inIt1->second.m_Optional)
+      std::cout<<" (optional)";
+    if(inIt1->second.m_Multiple)
+      std::cout<<" (multiple)";
+    std::cout<<std::endl;
+    }
+
+  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt1 = outmap1.begin(); outIt1 != outmap1.end();++outIt1)
+    {
+    std::cout<<"Name: "<<outIt1->second.m_DataName<<", type: "<<outIt1->second.m_DataKey<<", description: "<<outIt1->second.m_DataDescription<<", cardinal: "<<outIt1->second.m_NumberOfData<<std::endl;
+    }
+
+
   ModuleBase::Pointer moduleThreshold = (otb::ModuleThreshold::New()).GetPointer();
   otb::Parameter<double>* thres = new otb::Parameter<double>(150.0);
   moduleThreshold->SetParameters("UpperThreshold", thres);
 
+  /// Describe second module IO
+  ModuleBase::InputDataDescriptorMapType inmap2 =  moduleThreshold->GetInputDataDescriptorsMap();
+  ModuleBase::OutputDataDescriptorMapType outmap2 =  moduleThreshold->GetOutputDataDescriptorsMap();
+
+  std::cout<<std::endl;
+  std::cout<<"Module 2 (Threshold): "<<std::endl;
+  std::cout<<std::endl;
+
+  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt2 = inmap2.begin(); inIt2 != inmap2.end();++inIt2)
+    {
+    std::cout<<"Name: "<<inIt2->second.m_DataName<<", type: "<<inIt2->second.m_DataKey<<", description: "<<inIt2->second.m_DataDescription;
+    if(inIt2->second.m_Optional)
+      std::cout<<" (optional)";
+    if(inIt2->second.m_Multiple)
+      std::cout<<" (multiple)";
+    std::cout<<std::endl;
+    }
+
+  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt2 = outmap2.begin(); outIt2 != outmap2.end();++outIt2)
+    {
+    std::cout<<"Name: "<<outIt2->second.m_DataName<<", type: "<<outIt2->second.m_DataKey<<", description: "<<outIt2->second.m_DataDescription<<", cardinal: "<<outIt2->second.m_NumberOfData<<std::endl;
+    }
+
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleThreshold->GetProcess()->GetInputs()[0] = moduleReader->GetProcess()->GetOutputs()[0];
-  moduleThreshold->GetProcess()->Update();
+  moduleThreshold->AddInputData("InputImage",moduleReader->GetOutputData("OutputImage",0));
+
+  // Update the module
+  moduleThreshold->Update();
+
+  // the moduleTreshold should not call filter update in its
+  // implementation. This is left to writing or visualisation module.
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
@@ -67,7 +119,7 @@ int main(int argc, char* argv[])
   //this does not work because we are out of the particular case of the
   //BinaryThresholdImageFilter: no SetNthInput is performed in the constructor
   //ie, the space for m_Inputs[0] does not exist yet...
-  process3->GetInputs()[0]  = moduleThreshold->GetProcess()->GetOutputs()[0];
+  process3->GetInputs()[0]  = moduleThreshold->GetOutputData("OutputImage",0);
   process3->Update();
 
   return EXIT_SUCCESS;
