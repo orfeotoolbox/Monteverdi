@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << "image" << std::endl;
+    std::cerr << " image outImage" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -109,18 +109,41 @@ int main(int argc, char* argv[])
   // Update the module
   moduleThreshold->Update();
 
-  // the moduleTreshold should not call filter update in its
-  // implementation. This is left to writing or visualisation module.
 
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName("output.tif");
-  ProcessType::Pointer process3 = writer.GetPointer();
-  //this does not work because we are out of the particular case of the
-  //BinaryThresholdImageFilter: no SetNthInput is performed in the constructor
-  //ie, the space for m_Inputs[0] does not exist yet...
-  process3->GetInputs()[0]  = moduleThreshold->GetOutputByKey("OutputImage",0);
-  process3->Update();
+  ModuleBase::Pointer moduleWriter = (otb::ModuleWriter::New()).GetPointer();
+  otb::Parameter<std::string>* outfname = new otb::Parameter<std::string>(argv[2]);
+  moduleWriter->SetParameters("FileName", outfname);
+
+  /// Describe second module IO
+  ModuleBase::InputDataDescriptorMapType inmap3 =  moduleWriter->GetInputDataDescriptorsMap();
+  ModuleBase::OutputDataDescriptorMapType outmap3 =  moduleWriter->GetOutputDataDescriptorsMap();
+
+  std::cout<<std::endl;
+  std::cout<<"Module 3 (Writer): "<<std::endl;
+  std::cout<<std::endl;
+
+  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt3 = inmap3.begin(); inIt3 != inmap3.end();++inIt3)
+    {
+    std::cout<<"Name: "<<inIt3->second.m_DataKey<<", type: "<<inIt3->second.m_DataType<<", description: "<<inIt3->second.m_DataDescription;
+    if(inIt3->second.m_Optional)
+      std::cout<<" (optional)";
+    if(inIt3->second.m_Multiple)
+      std::cout<<" (multiple)";
+    std::cout<<std::endl;
+    }
+
+  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt3 = outmap3.begin(); outIt3 != outmap3.end();++outIt3)
+    {
+    std::cout<<"Name: "<<outIt3->second.m_DataKey<<", type: "<<outIt3->second.m_DataType<<", description: "<<outIt3->second.m_DataDescription<<", cardinal: "<<outIt3->second.m_NumberOfData<<std::endl;
+    }
+  std::cout<<std::endl;
+
+  //Convenience accessor can be defined at the module level
+  //to make the syntax better.
+  moduleWriter->AddInputData("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
+
+  // Update the module
+  moduleWriter->Update();
 
   return EXIT_SUCCESS;
 }

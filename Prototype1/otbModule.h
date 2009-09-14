@@ -1,6 +1,7 @@
 
 #include "itkObject.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
 namespace otb
@@ -306,20 +307,89 @@ protected:
   /** Destructor */
   virtual ~ModuleThreshold() {};
 
+private:
+  ModuleThreshold(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  ProcessType::Pointer m_Process;
+};
+
+
+
+
+/**
+* Example of module defined for the writer
+*/
+class ITK_EXPORT ModuleWriter : public ModuleBase
+{
+public:
+  /** Standard typedefs */
+  typedef  ModuleWriter           Self;
+  typedef ModuleBase Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
+
+  /** Type macro */
+  itkNewMacro(Self);
+
+  /** Creation through object factory macro */
+  itkTypeMacro(ModuleWriter, ModuleBase);
+
+  typedef otb::Image<double, 2>           ImageType;
+  typedef otb::ImageFileWriter<ImageType> ProcessType;
+
+  virtual void SetParameters(std::string key, const ParameterBase* value)
+  {
+    if (key == "FileName")
+    {
+      //TODO check the result of the dynamic_cast
+      m_Process->SetFileName(
+          dynamic_cast<const Parameter<string>*>(value)->GetValue());
+    }
+  }
+  
+  virtual void AddInputData(const std::string & key, itk::DataObject * data)
+  {
+    if(key == "InputImage")
+      {
+      // Possible dynamic cast here
+      m_Process->SetInput( dynamic_cast<ImageType *>(data));
+      }
+    else
+      {
+      itkExceptionMacro(<<"No input corresponding to "<<key);
+      }
+  }
+
+protected:
+  /** Constructor */
+  ModuleWriter()
+  {
+    m_Process = ProcessType::New();
+
+     // Describe inputs
+    InputDataDescriptor inputDescriptor;
+    inputDescriptor.m_DataType = "Floating_Point_Image";
+    inputDescriptor.m_DataKey = "InputImage";
+    inputDescriptor.m_DataDescription = "Image to write";
+    m_InputDataDescriptorsMap[inputDescriptor.m_DataKey]=inputDescriptor;
+
+  }
+  /** Destructor */
+  virtual ~ModuleWriter() {};
+
   virtual void Update()
   {
     m_Process->Update();
   }
 
 private:
-  ModuleThreshold(const Self&); //purposely not implemented
+  ModuleWriter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   ProcessType::Pointer m_Process;
 
 };
-
-
 
 
 }
