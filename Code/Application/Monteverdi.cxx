@@ -30,7 +30,6 @@ Fl_Window* splash_screen() {
         o->set_non_modal();
         o->clear_border();
         o->resizable(o);
-	o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
 
         o->border(false);
 	int posx,posy;
@@ -68,13 +67,15 @@ int main(int argc, char** argv) {
 
                 splash_window->show();
 
+
+                // hide splash screen after 3 seconds
+                while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
+		  {
 		Fl::check();
-/*                // hide splash screen after 3 seconds
-                while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 300.0)
-*/
-  return Fl::run();
-                /*splash_window->hide();*/
+		  }
+
+                splash_window->hide();
                 delete splash_window;
 
-      
+		return Fl::run();      
 }
