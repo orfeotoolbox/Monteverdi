@@ -5,6 +5,7 @@
 #include <FL/Fl_Shared_Image.h>
 //#include <FL/Fl_Monitor.h>
 #include <FL/Fl_Window.h>
+#include <FL/Fl_Box.h>
 //#include <FL/Fl_run.h>
 #include <FL/Fl_PNG_Image.h>
 #include <string>
@@ -15,9 +16,13 @@ Fl_Window* splash_screen() {
 
   unsigned int spl_w = 484;
   unsigned int spl_h = 599;
-        Fl_Window* o = new Fl_Window(spl_w, spl_h, "splash screen");
+
+  int posx = (Fl::w() / 2) - spl_w/2;
+  int posy = (Fl::h() / 2) - spl_h/2; 
+  Fl_Window* o = new Fl_Window(spl_w, spl_h, "splash screen");
         o->type(241);
         o->begin();
+	{
                 Fl_Group* g = new Fl_Group(0, 0, spl_w, spl_h);
 		std::string splashImage(Monteverdi_SOURCE_DIR);
 		splashImage +="/Data/Artwork/Monteverdi.png";
@@ -27,7 +32,13 @@ Fl_Window* splash_screen() {
 
                 g->image(new Fl_PNG_Image(splashImage.c_str()));
                 g->resizable(o);
-
+	}
+	{
+	Fl_Box* o = new Fl_Box(posx+10, posy+450, 45, 15, "Monteverdi");
+	o->labeltype(FL_ENGRAVED_LABEL);
+	o->labelsize(10);
+	o->labelcolor((Fl_Color)1);
+	}
         o->end();
 	
         o->set_non_modal();
@@ -35,9 +46,8 @@ Fl_Window* splash_screen() {
         o->resizable(o);
 
         o->border(false);
-	int posx,posy;
-	posx = (Fl::w() / 2) - spl_w/2;
-	posy = (Fl::h() / 2) - spl_h/2; 
+
+
 
 	o->position(posx,posy);
         
