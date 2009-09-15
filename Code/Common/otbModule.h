@@ -28,8 +28,18 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class Module
- *  \brief Base class for modules
+ *  \brief Base class for modules.
  * 
+ * The GetInputsMap() and GetOutputsMap() methods can be used to
+ * retrieve inputs and ouptuts descriptors.
+ *
+ * Data must be passed and retrieve via the AddInputByKey() and
+ * GetOutputByKey() methods.
+ *
+ * These methods performs key and types checking and call the
+ * protected methods AssignInputByKey() and RetrieveOutputByKey()
+ * which are the methods actually reimplemented by subclasses.
+ *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
