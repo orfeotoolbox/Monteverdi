@@ -17,6 +17,12 @@ IF(WIN32)
 ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
+# Configure files with settings for use by the build.
+CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/ConfigureMonteverdi.h.in
+               ${Monteverdi_BINARY_DIR}/ConfigureMonteverdi.h)
+
+
+#-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
