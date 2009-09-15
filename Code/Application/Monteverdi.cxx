@@ -29,12 +29,20 @@ Fl_Window* splash_screen() {
 
 		std::cout << splashImage << std::endl;
 
+		Fl_PNG_Image* im = new Fl_PNG_Image(splashImage.c_str());
+//		im->draw(0,0);
 
-                g->image(new Fl_PNG_Image(splashImage.c_str()));
+                g->image(im);
                 g->resizable(o);
 	}
 	{
 	Fl_Box* o = new Fl_Box(posx+10, posy+450, 45, 15, "Monteverdi");
+	o->labeltype(FL_ENGRAVED_LABEL);
+	o->labelsize(10);
+	o->labelcolor((Fl_Color)1);
+	}
+	{
+	Fl_Box* o = new Fl_Box(posx+10, posy+460, 45, 15, "version x.x");
 	o->labeltype(FL_ENGRAVED_LABEL);
 	o->labelsize(10);
 	o->labelcolor((Fl_Color)1);
@@ -52,14 +60,18 @@ Fl_Window* splash_screen() {
 	o->position(posx,posy);
         
 //o->Rectangle::set(Fl_Monitor::find(0,0),o->w(),o->h(),Fl_ALIGN_CENTER);
-        //o->show();
+        o->show();
+	
+	Fl::flush();
+
 	//o->flush();
 
-        /*do {
-                 Fl::check();
+        do {
+		 Fl::wait(0);
 
-        } while (!o->visible());
-*/
+
+        } while (!o->shown());
+
         return o;
 }
 
@@ -81,11 +93,15 @@ Fl::visual(FL_RGB);
 
                 splash_window->show();
 
+	
+
+
+
 
                 // hide splash screen after 3 seconds
                 while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
 		  {
-		Fl::check();
+		  Fl::wait(0);
 		  }
 
                 splash_window->hide();
