@@ -34,6 +34,7 @@ Fl_Window* splash_screen() {
 
                 g->image(im);
                 g->resizable(o);
+		g->align(FL_ALIGN_CENTER);
 	}
 	{
 	Fl_Box* o = new Fl_Box(posx+10, posy+450, 45, 15, "Monteverdi");
