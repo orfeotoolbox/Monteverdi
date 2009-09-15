@@ -1,8 +1,6 @@
 
 #include "ConfigureMonteverdi.h"
 #include <FL/Fl.h>
-#include <FL/Fl_Timer.h>
-#include <FL/Fl_Shared_Image.h>
 #include <FL/Fl_Window.h>
 #include <FL/Fl_Box.h>
 #include <FL/Fl_PNG_Image.h>
