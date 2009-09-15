@@ -23,10 +23,10 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** Constructors */
-InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false)
+InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false), m_Used(false)
 {}
 
-InputDataDescriptor::InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_Optional(false), m_Multiple(false)
+InputDataDescriptor::InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_Optional(false), m_Multiple(false), m_Used(false)
 {}
 
 /** Destructor */
@@ -45,6 +45,12 @@ bool InputDataDescriptor::IsMultiple() const
   return m_Multiple;
 }
 
+/** Is the input data used ? */
+bool InputDataDescriptor::IsUsed() const
+{
+  return m_Used;
+}
+
 /** Set the optional flag */
 void InputDataDescriptor::SetOptional(bool flag)
 {
@@ -57,13 +63,20 @@ void InputDataDescriptor::SetMultiple(bool flag)
   m_Multiple = flag;
 }
 
+/** Set the used flag */
+void InputDataDescriptor::SetUsed(bool flag)
+{
+  m_Used = flag;
+}
+
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descriptor)
 {
   ostr<< "Input data, "
       << static_cast<DataDescriptor>(descriptor)
       << (descriptor.IsOptional() ? ", optional" : ", mandatory")
-      << (descriptor.IsMultiple() ? ", multiple" : ", single");
+      << (descriptor.IsMultiple() ? ", multiple" : ", single")
+      << (descriptor.IsUsed()     ? ", used"     : ", free");
   return ostr;
 }
 

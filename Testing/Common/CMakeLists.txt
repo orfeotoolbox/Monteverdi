@@ -13,3 +13,7 @@ ADD_TEST(InputDataDescriptorTest otbInputDataDescriptorTest)
 ADD_EXECUTABLE(otbOutputDataDescriptorTest otbOutputDataDescriptorTest.cxx)
 TARGET_LINK_LIBRARIES(otbOutputDataDescriptorTest OTBMonteverdiCommon OTBIO)
 ADD_TEST(OutputDataDescriptorTest otbOutputDataDescriptorTest)
+
+ADD_EXECUTABLE(otbModuleTest otbModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbModuleTest OTBMonteverdiCommon OTBIO)
+ADD_TEST(ModuleTest otbModuleTest)
