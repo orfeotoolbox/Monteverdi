@@ -13,10 +13,12 @@
 
 Fl_Window* splash_screen() {
 
-        Fl_Window* o = new Fl_Window(484, 599, "splash screen");
+  unsigned int spl_w = 484;
+  unsigned int spl_h = 599;
+        Fl_Window* o = new Fl_Window(spl_w, spl_h, "splash screen");
         o->type(241);
         o->begin();
-                Fl_Group* g = new Fl_Group(0, 0, 550, 400);
+                Fl_Group* g = new Fl_Group(0, 0, spl_w, spl_h);
 		std::string splashImage(Monteverdi_SOURCE_DIR);
 		splashImage +="/Data/Artwork/Monteverdi.png";
 
@@ -28,8 +30,14 @@ Fl_Window* splash_screen() {
         o->set_non_modal();
         o->clear_border();
         o->resizable(o);
+	o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
 
         o->border(false);
+	int posx,posy;
+	posx = (Fl::w() / 2) - spl_w/2;
+	posy = (Fl::h() / 2) - spl_h/2; 
+
+	o->position(posx,posy);
         
 //o->Rectangle::set(Fl_Monitor::find(0,0),o->w(),o->h(),Fl_ALIGN_CENTER);
         o->show();
