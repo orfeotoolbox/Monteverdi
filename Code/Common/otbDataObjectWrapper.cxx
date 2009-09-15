@@ -61,7 +61,7 @@ const std::string & DataObjectWrapper::GetDataType() const
 std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper)
 {
   ostr<<"DataObjectWrapper: type = "<<wrapper.GetDataType()
-      <<", object = "<<wrapper.GetDataObject()<<std::endl;
+      <<", object = "<<wrapper.GetDataObject();
   return ostr;
 }
 

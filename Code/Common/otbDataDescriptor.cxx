@@ -67,7 +67,7 @@ std::ostream & operator<<(std::ostream & ostr, const DataDescriptor & descriptor
 {
   ostr<<"DataDescriptor: type = "<<descriptor.GetDataType()
       <<", key = "<<descriptor.GetDataKey()
-      <<", description = "<<descriptor.GetDataDescription()<<std::endl;
+      <<", description = "<<descriptor.GetDataDescription();
   return ostr;
 }
 
