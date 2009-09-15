@@ -60,9 +60,10 @@ void InputDataDescriptor::SetMultiple(bool flag)
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descriptor)
 {
-  ostr<< static_cast<DataDescriptor>(descriptor)
-      <<(descriptor.IsOptional() ? ", optional" : ", mandatory")
-      <<(descriptor.IsMultiple() ? ", multiple" : ", single");
+  ostr<< "Input data, "
+      << static_cast<DataDescriptor>(descriptor)
+      << (descriptor.IsOptional() ? ", optional" : ", mandatory")
+      << (descriptor.IsMultiple() ? ", multiple" : ", single");
   return ostr;
 }
 
