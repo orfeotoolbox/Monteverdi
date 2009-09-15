@@ -21,7 +21,7 @@ class SpeckleFilteringViewGroup {open
       }
       Fl_Choice guiFilterType {
         label {Filter Type} open
-        tooltip {Set the SVM type} xywh {110 43 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Set the filter type} xywh {110 43 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         MenuItem {} {
           label Frost
@@ -39,21 +39,21 @@ class SpeckleFilteringViewGroup {open
         xywh {20 94 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
       } {
         Fl_Value_Input guiLeeRadius {
-          label Radius
-          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {129 108 50 20} minimum -300 maximum 300 step 0.1 value 200
+          label Radius selected
+          tooltip {Radius Parameter for Lee Filter} xywh {129 108 50 20} minimum -300 maximum 300 step 1 value 10
         }
       }
       Fl_Group guiFrostGroup {
-        label {Frost Filter Parameters} open selected
-        xywh {20 95 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        label {Frost Filter Parameters} open
+        xywh {20 96 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Value_Input guiFrostRadius {
           label Radius
-          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {129 109 51 20} maximum 300 step 1 value 200
+          tooltip {Radius Parameter for Frost Image Filter} xywh {129 110 51 20} maximum 300 step 1 value 10
         }
         Fl_Value_Input guiLeeDeRamp {
           label DeRamp
-          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {137 136 50 20} minimum -300 maximum 300 step 0.1 value 200
+          tooltip {De Ramp Parameter for Frost Image Filter} xywh {137 137 50 20} minimum -300 maximum 300 step 0.1 value 0.2
         }
       }
       Fl_Button bOk {
