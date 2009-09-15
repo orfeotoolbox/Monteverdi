@@ -24,9 +24,12 @@ Fl_Window* splash_screen() {
 
 		std::cout << splashImage << std::endl;
 
+
                 g->image(new Fl_PNG_Image(splashImage.c_str()));
                 g->resizable(o);
+
         o->end();
+	
         o->set_non_modal();
         o->clear_border();
         o->resizable(o);
@@ -39,14 +42,14 @@ Fl_Window* splash_screen() {
 	o->position(posx,posy);
         
 //o->Rectangle::set(Fl_Monitor::find(0,0),o->w(),o->h(),Fl_ALIGN_CENTER);
-        o->show();
+        //o->show();
 	//o->flush();
 
-        do {
+        /*do {
                  Fl::check();
 
         } while (!o->visible());
-
+*/
         return o;
 }
 
@@ -56,7 +59,8 @@ Fl_Window* splash_screen() {
 int main(int argc, char** argv) {
 
         const bool show_splash = true;
-
+fl_register_images();
+Fl::visual(FL_RGB); 
         // open splash screen
         Fl_Window* splash_window = 0;
 	std::clock_t start;
