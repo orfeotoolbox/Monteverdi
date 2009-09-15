@@ -22,4 +22,9 @@ ENABLE_TESTING()
 # Set the Buildname for the dashboard
 SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 
+# Include directories
+INCLUDE_DIRECTORIES(
+${Monteverdi_SOURCE_DIR}/Code/Common
+)
+
 SUBDIRS(Code Testing Prototype1)
