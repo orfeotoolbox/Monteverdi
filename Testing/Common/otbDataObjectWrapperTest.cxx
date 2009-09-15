@@ -28,13 +28,16 @@ int main(int argc, char * argv[])
   wrapper1.Set("Floating_Point_Image",FloatImageType::New());
 
   // Access parameters
-  std::cout<<"Wrapper1: DataObject = "<<wrapper1.GetDataObject()<<", DataType: "<<wrapper1.GetDataType()<<std::endl;
+  std::cout<<"Wrapper1: DataObject = "<<wrapper1.GetDataObject()<<", DataType = "<<wrapper1.GetDataType()<<std::endl;
 
   // Constructor with parameters
   otb::DataObjectWrapper wrapper2("Floating_Point_Image",FloatImageType::New());
 
   // Access parameters
-  std::cout<<"Wrapper2: DataObject = "<<wrapper2.GetDataObject()<<", DataType: "<<wrapper2.GetDataType()<<std::endl;
+  std::cout<<"Wrapper2: DataObject = "<<wrapper2.GetDataObject()<<", DataType = "<<wrapper2.GetDataType()<<std::endl;
+
+  // Testing the << operator
+  std::cout<<"Testing << operator: "<<wrapper2<<std::endl;
 
   return EXIT_SUCCESS;
 }

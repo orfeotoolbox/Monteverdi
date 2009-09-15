@@ -66,6 +66,9 @@ private:
   itk::DataObject::Pointer m_DataObject;
 };
 
+/** Overloading the << operator */
+std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper);
+
 } // End namespace otb
 
 #endif
