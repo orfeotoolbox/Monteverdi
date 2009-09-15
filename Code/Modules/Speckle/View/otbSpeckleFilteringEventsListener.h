@@ -18,9 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbSpeckleFilteringEventsListener_h
 #define __otbSpeckleFilteringEventsListener_h
 
-
-#include "itkObject.h"
-
 namespace otb
 {
 /**
@@ -31,19 +28,16 @@ namespace otb
  */
 
 class ITK_EXPORT SpeckleFilteringEventsListener
-      : public itk::Object
+
 {
 public:
   /** Standard class typedefs */
   typedef SpeckleFilteringEventsListener Self;
-  typedef itk::Object                Superclass;
-  typedef itk::SmartPointer<Self>    Pointer;
-  typedef itk::SmartPointer<Self>    ConstPointer;
 
-  itkTypeMacro(SpeckleFilteringEventsListener,Object);
+  itkTypeMacro(SpeckleFilteringEventsListener,itk::Object);
 
   // Update the display
-  virtual void SpeckleFilteringNotify() = 0;
+  virtual void Notify() = 0;
 
 protected:
   /** Constructor */
