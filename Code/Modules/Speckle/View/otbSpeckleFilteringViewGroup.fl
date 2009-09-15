@@ -1,0 +1,77 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class SpeckleFilteringViewGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label SpeckleFilteringApplication
+      callback {this->Quit()} open
+      xywh {657 97 310 270} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+    } {
+      Fl_Button bQuit {
+        label Quit
+        callback {Quit();}
+        tooltip {Quit the viewer manager} xywh {20 220 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Choice guiFilterType {
+        label {Filter Type} open
+        tooltip {Set the SVM type} xywh {110 43 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        MenuItem {} {
+          label Frost
+          callback {FrostFilterUpdate();}
+          xywh {65 65 30 20} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label Lee
+          callback {LeeFilterUpdate();}
+          xywh {75 75 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Group guiLeeGroup {
+        label {Lee Filter Parameters} open
+        xywh {20 94 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
+      } {
+        Fl_Value_Input guiLeeRadius {
+          label Radius
+          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {129 108 50 20} minimum -300 maximum 300 step 0.1 value 200
+        }
+      }
+      Fl_Group guiFrostGroup {
+        label {Frost Filter Parameters} open selected
+        xywh {20 95 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Value_Input guiFrostRadius {
+          label Radius
+          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {129 109 51 20} maximum 300 step 1 value 200
+        }
+        Fl_Value_Input guiLeeDeRamp {
+          label DeRamp
+          tooltip {Upper threshold of the sobel edge detector. (ex: 200 for Quickbird, 50 for SPOT)} xywh {137 136 50 20} minimum -300 maximum 300 step 0.1 value 200
+        }
+      }
+      Fl_Button bOk {
+        label OK
+        callback {Process();}
+        tooltip {Quit the viewer manager} xywh {180 220 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+      }
+    }
+  }
+  Function {SpeckleFilteringViewGroup()} {} {}
+  Function {~SpeckleFilteringViewGroup()} {open return_type virtual
+  } {}
+  Function {LeeFilterUpdate()} {open return_type {virtual void}
+  } {}
+  Function {Process()} {open return_type {virtual void}
+  } {}
+  Function {FrostFilterUpdate()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+} 
