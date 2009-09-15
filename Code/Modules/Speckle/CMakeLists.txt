@@ -23,14 +23,10 @@ View/otbSpeckleFilteringViewGUI.cxx
 
 
 INCLUDE_DIRECTORIES(
-View
-#  ${OTB-Applications_SOURCE_DIR}/ViewerManager/Model
-#  ${OTB-Applications_SOURCE_DIR}/ViewerManager/Controller
-#  ${OTB-Applications_BINARY_DIR}/ViewerManager
-#  ${OTB-Applications_SOURCE_DIR}/Common
+View/
+Model/
+Controller/
 )
-
-
 
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
@@ -43,15 +39,15 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             ${MODEL_SRCS} 
             ${CONTROLLER_SRCS} 
             ${VIEW_SRCS} 
-            ${otbMVCSpeckleFiltering_FLTK_UI_SRCS}
+            ${otbSpeckleFilteringApplication_FLTK_UI_SRCS}
             otbSpeckleFiltering.cxx
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 
-ADD_EXECUTABLE(otbSpeckleFilteringApplication  otbSpeckleFilteringApplication.cxx ${VIEW_SRCS} ${otbMVCSpeckleFiltering_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
-TARGET_LINK_LIBRARIES(otbSpeckleFilteringApplication OTBIO OTBVisualization OTBLearning OTBFeatureExtraction)
+ADD_EXECUTABLE(otbSpeckleFilteringApplication  otbSpeckleFilteringApplication.cxx ${VIEW_SRCS} ${otbSpeckleFilteringApplication_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
+TARGET_LINK_LIBRARIES(otbSpeckleFilteringApplication OTBIO OTBVisualization OTBBasicFilters )
 
 
 ENDIF(OTB_USE_VISU_GUI)
@@ -62,26 +58,3 @@ ENDIF(OTB_USE_VISU_GUI)
 
 
 
-
-
-
-#Removed 
-
-#ADD_LIBRARY(otbMVCSpeckleFiltering   ${VIEW_SRCS}   ${CONTROLLER_SRCS} ${MODEL_SRCS} ${otbMVCSpeckleFiltering_FLTK_UI_SRCS} ) 
-#TARGET_LINK_LIBRARIES(otbMVCSpeckleFiltering OTBIO  OTBVisualization  OTBApplicationsCommon )
-#INSTALL_TARGETS(/bin otbMVCSpeckleFiltering)
-#ADD_DEPENDENCIES(otbMVCSpeckleFiltering)
-
-#ADD_EXECUTABLE(otbSpeckleFiltering otbSpeckleFiltering.cxx )
-#TARGET_LINK_LIBRARIES(otbSpeckleFiltering otbMVCSpeckleFiltering)
-#INSTALL_TARGETS(/bin otbSpeckleFiltering)
-
-
-
-#INCLUDE_DIRECTORIES(
-#  ${OTB-Applications_SOURCE_DIR}/ViewerManager/View
-#  ${OTB-Applications_SOURCE_DIR}/ViewerManager/Model
-#  ${OTB-Applications_SOURCE_DIR}/ViewerManager/Controller
-#  ${OTB-Applications_BINARY_DIR}/ViewerManager
-#  ${OTB-Applications_SOURCE_DIR}/Common
-#)
