@@ -26,7 +26,16 @@ namespace otb
 
 /** \class DataDescriptor
  *  \brief This small class describes the input/outputs of a module.
+ *  
+ *  The DataType field describe the data type and will be used by the
+ *  module to perform dynamic type checking.
  *
+ *  The DataKey field identify the input/output of the module the
+ *  DataDescriptor instance refers to.
+ *
+ *  The DataDescription field will be used to store and display
+ *  useful information about the data.
+ * 
  *  \sa Module
  */
 
