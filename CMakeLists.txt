@@ -16,6 +16,24 @@ IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
+MARK_AS_ADVANCED(OTB_DATA_ROOT)
+
+OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+MARK_AS_ADVANCED(OTB_DATA_USE_LARGEINPUT)
+IF(OTB_DATA_USE_LARGEINPUT)
+  FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+  MARK_AS_ADVANCED(OTB_DATA_LARGEINPUT_ROOT)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# Activate testing
+ENABLE_TESTING()
+
+# Set the Buildname for the dashboard
+SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+
 # Include directories
 INCLUDE_DIRECTORIES(
 ${Monteverdi_SOURCE_DIR}/Code/Common
