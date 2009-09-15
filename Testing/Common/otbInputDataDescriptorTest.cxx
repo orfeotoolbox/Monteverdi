@@ -15,29 +15,28 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbDataObjectWrapper.h"
-#include "otbImage.h"
+#include "otbInputDataDescriptor.h"
+
 
 int main(int argc, char * argv[])
 {
-  // DataObject typedef
-  typedef otb::Image<float,2> FloatImageType;
-
   // Default constructor and call to the set method
-  otb::DataObjectWrapper wrapper1;
-  wrapper1.Set("Floating_Point_Image",FloatImageType::New());
+  otb::InputDataDescriptor desc1;
+  desc1.Set("Floating_Point_Image","InputImage","This is the input image");
+  desc1.SetOptional(true);
+  desc1.SetMultiple(true); 
 
   // Access parameters
-  std::cout<<"Wrapper1: DataObject = "<<wrapper1.GetDataObject()<<", DataType = "<<wrapper1.GetDataType()<<std::endl;
+  std::cout<<"Desc1: Optional = "<<desc1.IsOptional()<<", Multiple = "<<desc1.IsMultiple()<<std::endl;
 
   // Constructor with parameters
-  otb::DataObjectWrapper wrapper2("Floating_Point_Image",FloatImageType::New());
+  otb::InputDataDescriptor desc2("Floating_Point_Image","InputImage","This is the input image");
 
   // Access parameters
-  std::cout<<"Wrapper2: DataObject = "<<wrapper2.GetDataObject()<<", DataType = "<<wrapper2.GetDataType()<<std::endl;
+   std::cout<<"Desc2: Optional = "<<desc2.IsOptional()<<", Multiple = "<<desc2.IsMultiple()<<std::endl;
 
   // Testing the << operator
-  std::cout<<"Testing << operator: "<<wrapper2<<std::endl;
+  std::cout<<"Testing << operator: "<<desc2<<std::endl;
 
   return EXIT_SUCCESS;
 }

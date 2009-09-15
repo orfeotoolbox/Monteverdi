@@ -57,6 +57,14 @@ const std::string & DataObjectWrapper::GetDataType() const
   return m_DataType;
 }
 
+/** Overloading the << operator */
+std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper)
+{
+  ostr<<"DataObjectWrapper: type = "<<wrapper.GetDataType()
+      <<", object = "<<wrapper.GetDataObject();
+  return ostr;
+}
+
 } // End namespace otb
 
 #endif
