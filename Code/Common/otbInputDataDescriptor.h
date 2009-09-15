@@ -52,11 +52,17 @@ public:
   /** Is the input data multiple ? */
   bool IsMultiple() const;
 
+  /** Is the input data used ? */
+  bool IsUsed() const;
+
   /** Set the optional flag */
   void SetOptional(bool flag);
 
   /** Set the multiple flag */
   void SetMultiple(bool flag);
+
+  /** Set the used flag */
+  void SetUsed(bool flag);
 
 private:
   /** The optional flag */
@@ -64,6 +70,9 @@ private:
   
   /** The multiple flag */
   bool m_Multiple;
+
+  /** This flag indicates if the input is set */
+  bool m_Used;
 };
 
 /** Overloading the << operator */

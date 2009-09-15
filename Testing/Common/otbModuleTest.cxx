@@ -43,9 +43,6 @@ protected:
     // Add some inputs
     this->AddInputDescriptor("Floating_Point_Image","InputImage","test input image");
     this->AddInputDescriptor("Vector","InputVector","test input vector",true);
-
-    // Add some outputs
-    this->AddOutputDescriptor("Labeled_Image","OutputImage","test output image");
   }
   /** Destructor */
   virtual ~ModuleTest(){}
@@ -73,6 +70,16 @@ protected:
 
     return wrapper;
   }
+
+  virtual void Run()
+  {
+    std::cout<<"Run method was called, inputs parameters are valid"<<std::endl;
+
+    // Add some outputs
+    // Outputs can be defined once the run method has been called
+    this->AddOutputDescriptor("Labeled_Image","OutputImage","test output image");
+
+  }
 };
 
 int main(int argc, char * argv[])
@@ -93,6 +100,8 @@ int main(int argc, char * argv[])
   // Testing the input/output method
   myModuleTest->AddInputByKey("InputImage",input1);
   myModuleTest->AddInputByKey("InputVector",input2);
+  myModuleTest->Start();
+  std::cout<<"Test class PrintSelf after run; "<<myModuleTest<<std::endl;
   otb::DataObjectWrapper output1 =  myModuleTest->GetOutputByKey("OutputImage");
 
   std::cout<<"Data received in main: "<<output1<<std::endl;

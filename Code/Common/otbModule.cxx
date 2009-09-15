@@ -106,6 +106,9 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
 
   // Then if everything is ok, call the assign method
   this->AssignInputByKey(key,data);
+
+  // Toggle the used flag
+  m_InputsMap[key].SetUsed(true);
 }
 
 /** Get an output by its key */
@@ -138,7 +141,7 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
  *  is already done. */
 void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data) 
 {
-  itkExceptionMacro(<<"This method must be reimplemented in subclasses");
+  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
 }
 
   /** Retrieve output by key  This method must be reimplemented in subclasses.
@@ -146,7 +149,7 @@ void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper &
    *  is already done. */
 const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const 
 {
-  itkExceptionMacro(<<"This method must be reimplemented in subclasses");
+  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
 }
 
 /** Get the input data descriptors map */
@@ -159,6 +162,28 @@ const Module::InputDataDescriptorMapType & Module::GetInputsMap() const
 const Module::OutputDataDescriptorMapType & Module::GetOutputsMap() const
 {
   return m_OutputsMap;
+}
+
+/** Check that every mandatory input has been filled and call the
+ * protected virtual run method */
+void Module::Start()
+{
+  // Check input parameters
+  for(InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it!=m_InputsMap.end();++it)
+    {
+    if(!it->second.IsOptional() && !it->second.IsUsed())
+      {
+      itkExceptionMacro(<<"Mandatory input "<<it->second.GetDataKey()<<" is not used.");
+      }
+    }
+    // Once parameters have been checked, the run method can be triggered.
+    this->Run();
+}
+
+/** The custom run command */
+void Module::Run()
+{
+  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
 }
 
 } // End namespace otb

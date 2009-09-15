@@ -81,6 +81,10 @@ public:
   /** Get the output data descriptors map */
   const OutputDataDescriptorMapType & GetOutputsMap() const;
 
+  /** Check that every mandatory input has been filled and call the
+   * protected virtual run method */
+  void Start();
+
 protected:
   /** Constructor */
   Module();
@@ -105,6 +109,9 @@ protected:
    *  is already done. */
   virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
   
+  /** The custom run command */
+  virtual void Run();
+
 private:
   Module(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
