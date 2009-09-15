@@ -1,4 +1,7 @@
-ADD_TEST(DataObjectWrapperTest otbDataObjectWrapperTest)
-
 ADD_EXECUTABLE(otbDataObjectWrapperTest otbDataObjectWrapperTest.cxx)
 TARGET_LINK_LIBRARIES(otbDataObjectWrapperTest OTBMonteverdiCommon OTBIO)
+ADD_TEST(DataObjectWrapperTest otbDataObjectWrapperTest)
+
+ADD_EXECUTABLE(otbDataDescriptorTest otbDataDescriptorTest.cxx)
+TARGET_LINK_LIBRARIES(otbDataDescriptorTest OTBMonteverdiCommon OTBIO)
+ADD_TEST(DataDescriptorTest otbDataDescriptorTest)

@@ -16,15 +16,22 @@ IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
-# Activate testing
-ENABLE_TESTING()
-
-# Set the Buildname for the dashboard
-SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-
 # Include directories
 INCLUDE_DIRECTORIES(
 ${Monteverdi_SOURCE_DIR}/Code/Common
 )
 
-SUBDIRS(Code Testing Prototype1)
+# Code location
+SUBDIRS(Code Prototype1)
+
+# Enable / Disable testing
+INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
+MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
+IF(BUILD_TESTING)
+  ENABLE_TESTING()
+  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  MARK_AS_ADVANCED(BUILDNAME)
+  SUBDIRS(Testing)
+ENDIF(BUILD_TESTING)
+
+
