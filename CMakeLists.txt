@@ -11,6 +11,8 @@ ELSE(OTB_FOUND)
           "OTB not found. Please set OTB_DIR")
 ENDIF(OTB_FOUND)
 
+
+
 # ensure WIN32 definition
 IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
@@ -43,6 +45,9 @@ SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 # Include directories
 INCLUDE_DIRECTORIES(
 ${Monteverdi_SOURCE_DIR}/Code/Common
+${Monteverdi_SOURCE_DIR}/Utilities/FLU/
+${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
+${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
 ${Monteverdi_SOURCE_DIR}/Code/Modules/Speckle
 ${Monteverdi_BINARY_DIR}/Code/Modules/Speckle
 ${Monteverdi_SOURCE_DIR}/Code/Modules/Reader
@@ -50,7 +55,7 @@ ${Monteverdi_BINARY_DIR}/Code/Modules/Reader
 )
 
 # Code location
-SUBDIRS(Code Prototype1)
+SUBDIRS(Code Prototype1 Utilities)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)

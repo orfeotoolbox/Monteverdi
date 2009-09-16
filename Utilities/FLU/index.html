@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>FLU</title>
+</head>
+<body>
+<h1 style="text-align: center;">FLU - FLTK Utility Widgets</h1>
+<br>
+<center><img src="images/Flu_File_Chooser_Try.gif" title="" alt=""></center><br>
+<h4 style="text-align: center;"><a href="#About">About</a>&nbsp;&nbsp;
+::&nbsp;&nbsp; <a href="#Download">Download</a>&nbsp;&nbsp;
+::&nbsp;&nbsp; <a href="demos/">Demos</a>&nbsp;&nbsp;
+::&nbsp;&nbsp; <a href="#ScreenshotsDescription">Screenshots/Description</a>
+&nbsp; ::&nbsp;&nbsp; <a href="#Documentation">Documentation</a>&nbsp;
+::&nbsp; <a href="#Todo">Todo</a><br>
+</h4>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="About"></a>About</h3>
+&nbsp;&nbsp;&nbsp; This is just a small library of <a
+ href="http://www.fltk.org">FLTK</a> widgets that I have been working
+on for another application (<a href="http://www.osc.edu/VolSuite">VolSuite</a>,
+if you're interested). They are available under the same <a
+ href="http://www.fltk.org/COPYING.php">LGPL-compatible license</a> as
+FLTK. They are designed to work with FLTK 1.1.x and seem to work pretty well on most systems, although my
+testing has been far from exhaustive. There is a configure/Makefile
+included which <span style="font-style: italic;">should</span> compile
+on most *NIX/OSX distributions, as well as <a href="http://www.cygwin.com/">Cygwin</a> and
+<a href="http://www.mingw.org/">MinGW</a>.
+I wrote the configure script by hand so don't
+blame autoconf if it doesn't work, blame me. There are also project
+files for Visual Studio 6 and Visual Studio .NET, as well as a
+directory of many example files to exersize most of the widgets.
+I don't work on the widgets much anymore, but if you find bugs, have
+feature suggestions, or just a general question, feel free to contact
+me directly (jbryan <span style="font-weight: bold;">at</span> osc <span
+ style="font-weight: bold;">dot</span> edu) or via the FLTK mailing
+lists (if it is a question whose answer everyone could benefit from).<br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="Download"></a>Download</h3>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.13">version 2.13</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.13.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.13.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.12">version 2.12</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.12.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.12.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.11">version 2.11</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.11.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.11.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.10">version 2.10</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.10.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.10.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.9.2">version 2.9.2</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.2.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.2.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.9.1">version 2.9.1</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.1.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.1.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.9">version 2.9</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.9.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.8.1">version 2.8.1</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.8.1.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.8.1.zip">zip</a>)<br>
+&nbsp;&nbsp;&nbsp; <a href="CHANGES_2.8">version 2.8</a>: (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.8.tar.gz">tar.gz</a>) (<a href="http://www.osc.edu/~jbryan/FLU/FLU_2.8.zip">zip</a>)<br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="ScreenshotsDescription"></a>Screenshots/Descriptions/Demos</h3>
+&nbsp;&nbsp;&nbsp; Following are a few screenshots from the
+example/test programs, and some simple descriptions of the various
+widgets with links to their individual class documentation as well as executable demos
+for Windows.<br><br>
+
+<center><img src="images/Flu_File_Chooser_Try.gif"></img></center><br>
+<a href="doc/classFlu__File__Chooser.html">Flu_File_Chooser</a>
+- A file/directory chooser that looks/acts much like the stock Win32 chooser, but spiffed up.
+You can use the functions flu_file_chooser() and flu_dir_chooser() much like their fl counterparts.
+This widget has been tested under linux, windows, and OSX and <i>seems</i> to be working well.
+However I will not certify it as bug-free, so if you find any, please let me know.
+Features include:
+<ul>
+<li>choose single/multiple files OR directories</li>
+<li>choose single/multiple files AND directories</li>
+<li>chooser is resizable (unlike windows counterpart)</li>
+<li>forward/back directory history</li>
+<li>directory favorites (stored to disk)</li>
+<li>delete or rename files and create new directories (deleting in windows
+  moves to recyle bin by default, unless you SHIFT-DEL then it is deleted
+  explicitly)</li>
+<li>preview mode</li>
+<li>programmable preview capability</li>
+<li>view files in: list mode (normal), wide list mode (each entry takes up
+  the visible width of the chooser), and details mode</li>
+<li>each column is sortable/resizable in details mode</li>
+<li>programmable sorting routine can be provided instead of default
+  lexigraphic sort by filename</li>
+<li>tab-completion. if tabbing matches exactly one directory, a second tab
+  will cd to it. otherwise all matches are displayed, and exact matches
+  are copied into the filename input area</li>
+<li>can also enter absolute paths and "../"</li>
+<li>can filter files dynamically by typing a series of '|' and ';' delimited
+  patterns (e.g. "*.cpp;*.h") in the filename input area. can even use
+  more regexp-like filters (e.g. "file*.img.[1-4]?")</li>
+<li>programmable pattern filters "Description (pattern)" or just "pattern"
+  where "pattern" is either "*.xxx" or "*.{xxx,yyy,zzz}" (just like
+  Fl_File_Chooser). each pattern filter can be delimited by a tab
+  character '\t', or '|' or ';'</li>
+<li>Right-click context menu for renaming or deleting files/directories and
+  creating new directories</li>
+<li>context menu is programmable so you can add handlers for different files</li>
+<li>file icons/descriptions are programmable</li>
+</ul>
+<a href="images/Flu_File_Chooser_Try-2.gif">Another screenshot...</a><br>
+<a href="images/Flu_File_Chooser_Try-3.gif">And another...</a><br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_File_Chooser_Try.exe"><< Try the Windows demo >></a>
+
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Tree_Browser_Try.gif"></img></center><br>
+<a href="doc/classFlu__Tree__Browser.html">Flu_Tree_Browser</a> - A
+hierarchical data browsing widget. Features per-entry
+customizable icons, animated expand/collapse, ability to embed widgets
+in each entry, numerous prettifying parameters, search- and sort-ability,
+node traversal routines, single and multi selection, drag and drop,
+more-than-you-need callback events, and probably a few other things
+that I am forgetting. Works pretty well with large numbers of entries,
+and the per-Node memory footprint is around 92 bytes.<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Tree_Browser_Try.exe"><< Try the Windows demo >></a>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Button_Try.gif"></img></center><br>
+Three simple classes that extend Fl_Button:<br>
+<ul>
+<li><a href="doc/classFlu__Button.html">Flu_Button</a>
+- Just like Fl_Button except the button face color gets lighter when
+the mouse enters, and its image is automatically desaturated when the
+button is disabled.</li>
+<li><a href="doc/classFlu__Return__Button.html">Flu_Return_Button</a>
+- Just like Fl_Return_Button except with all the benefits of Flu_Button.</li>
+<li><a href="doc/classFlu__Link__Button.html">Flu_Link_Button</a>
+- This is a button that looks/acts like a hyperlink on a web page. The
+cursor changes to a hand when the mouse hovers over the link, and
+clicking invokes the regular FLTK callback.</li>
+</ul
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Button_Try.exe"><< Try the Windows demo >></a>
+<br>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Combo_Box_Try.gif"></img></center><br>
+Two classes implementing your standard combo box (just like Fl_Choice
+except the "input" area is editable). The callback is done when the
+user picks an item or types in text. You can click and hold to choose
+an item, or click once to pop the menu open, scroll a bit, then choose
+an item.<br>
+<ul>
+<li><a href="doc/classFlu__Combo__List.html">Flu_Combo_List</a> - Just like
+Fl_Choice except the input area is editable.</li>
+<li><a href="doc/classFlu__Combo__Tree.html">Flu_Combo_Tree</a> - Just like
+Flu_Combo_List except you can display a tree instead of a list (using
+Flu_Tree_Browser).</li>
+</ul>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Combo_Box_Try.exe"><< Try the Windows demo >></a>
+<br>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Dual_Slider_Try.gif"></img></center><br>
+<a href="doc/classFlu__Dual__Slider.html">Flu_Dual_Slider</a> - This class is essentially an Fl_Slider but with 2 control areas, one for
+the high value and one for the low value. This widget is extremely useful
+for manipulating a range of values instead of a single value.
+<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Dual_Slider_Try.exe"><< Try the Windows demo >></a>
+<br>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><a href="images/Flu_Group_Try.gif"><img src="images/Flu_Group_Try.gif" width="50%"></img>&nbsp;</a>
+ <a href="images/Flu_Group_Try2.gif"><img src="images/Flu_Group_Try2.gif" width="50%"></img>&nbsp; </a>
+ <a href="images/Flu_Wrap_Group_Try.gif"><img src="images/Flu_Wrap_Group_Try.gif" width="50%"></img></a></center><br>
+Five classes that exend the behavior of Fl_Group:<br>
+<ul>
+<li><a href="doc/classFlu__Simple__Group.html">Flu_Simple_Group</a> -
+Fl_Group...but with a spiffed up aesthetic appeal.</li>
+<li><a href="doc/classFlu__Toggle__Group.html">Flu_Toggle_Group</a> - Looks
+like Flu_Simple_Group with an Fl_Check_Button as the title. Toggling
+the title will activate/deactivate all children.</li>
+<li><a href="doc/classFlu__Choice__Group.html">Flu_Choice_Group</a> - Looks
+like Flu_Simple_Group with an Fl_Choice as the title. Works like
+Fl_Tabs but looks more like its Windows/OSX counterparts.</li>
+<li><a href="doc/classFlu__Collapsable__Group.html">Flu_Collapsable_Group</a>
+- Looks like Flu_Simple_Group with an Fl_Button as the title. Clicking
+the button will expand/collapse the group. Frame rate and collapse time
+are customizable.</li>
+<li><a href="doc/classFlu__Wrap__Group.html">Flu_Wrap_Group</a> - This
+class provides an alternative to Fl_Group that automatically
+arranges the children either left to right and top to bottom,
+or top to bottom and left to right, within the available
+size of the group, with a scrollbar turning on if they don't all fit. Best
+used with fixed and equally sized children.</li>
+</ul>
+<< Try the Flu_*_Group Windows demos <a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Group_Try.exe">First</a> <a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Group_Try2.exe">Second</a> <a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Wrap_Group_Try.exe">Third</a> >>
+
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Progress_Try.gif"></img></center><br>
+<a href="doc/classFlu__Progress.html">Flu_Progress</a> - Yet Another
+Progress Bar. Derived from Fl_Slider, the only real difference here is
+the nifty way the color bar glides through the percentage. <br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Progress_Try.exe"><< Try the Windows demo >></a>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+
+<center><img src="images/Flu_Progress_Meter.gif"></img></center><br>
+<a href="doc/classFlu__Progress__Meter.html">Flu_Progress_Meter</a> -
+This widget uses Flu_Progress to report on the progress of an operation. It 
+automatically estimates time to completion based on how frequently the
+progress is updated. An extra callback is invoked if the cancel button
+is pushed.<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Progress_Try.exe"><< Try the Windows demo >></a>
+
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Spinner_Try.gif"></img></center><br>
+<a href="doc/classFlu__Spinner.html">Flu_Spinner</a> - Your everyday
+spinner widget. This one is derived from Fl_Valuator and features an
+editable numeric input and customizable repeat delay and frequency for
+the spinner buttons. Click, click-and-hold, or click-and-drag to change
+the value.<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Spinner_Try.exe"><< Try the Windows demo >></a>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_DND_Try.gif"></img></center><br>
+<a href="doc/classFlu__DND.html">Flu_DND</a> - This class extends the
+behavior of FLTK's Drag 'N Drop mechanism to provide a bit more
+flexibility in determining what kind of item is being dragged and
+whether it is allowed to be dropped. You can create specific DND
+objects, allowing classes derived from Flu_DND to discriminate between
+which objects are "allowed" to be dropped on them. In this demo, you
+can drag text from the input field or the "New" button to the browser
+and drop it in. You can drag an item in the browser, drop it in the
+browser and it moves to the bottom of the list. You can also drag an
+item from the browser to the trashcan, at which point the trash icon
+changes, and dropping it in the trash removes it from the browser.
+The trash icon does not seem to change in Windows, and the whole
+demo does not work correctly on OSX (don't know why...), but on Linux
+it works great!
+<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_DND_Try.exe"><< Try the Windows demo >></a>
+<br>
+
+<hr style="width: 100%; height: 2px;"><br>
+<center><img src="images/Flu_Chat_Buffer_Try.gif"</img></center><br>
+<a href="doc/classFlu__Chat__Buffer.html">Flu_Chat_Buffer</a> - A very
+simple browser displaying chat-like messages in different colors.<br>
+<a href="http://www.osc.edu/~jbryan/FLU/demos/Flu_Chat_Buffer_Try.exe"><< Try the Windows demo >></a>
+
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+&nbsp;&nbsp;&nbsp; In addition to the above are the following
+widgets/files:<br>
+<ul>
+  <li><a href="doc/Flu__Enumerations_8h-source.html">Flu_Enumerations.h</a>
+- Your vanilla enumerations file. I follow the FLTK convention of
+int-enums in the global scope (consistency - not personal preference
+;-).<br>
+  </li>
+  <li><a href="doc/flu__export_8h-source.html">flu_export.h</a> -
+Stupid Windows DLL macros<br>
+  </li>
+  <li><a href="doc/Flu__Helpers_8h-source.html">Flu_Helpers.h</a> - A
+few functions that have come in handy:</li>
+  <ul>
+    <li><span style="text-decoration: underline;">fl_exit()</span>
+- Convenience routine to hide all open windows. This will (eventually) cause FLTK to exit</li>
+    <li><span style="text-decoration: underline;">fl_Full_Find_In_Menu</span>
+- Searches an Fl_Menu for an entry with a given path name (e.g.
+/path/to/menu/entry), returning its index or -1 if it's not there</li>
+    <li><span style="text-decoration: underline;">fl_Find_In_Menu</span>
+- Similar to the above, but doesn't use a full path name, and returns
+the first match</li>
+    <li><span style="text-decoration: underline;">fl_Show_Window_Callback</span>
+- Convenience callback for an Fl_Widget to show an Fl_Window. Pretty
+common thing to do actually...</li>
+    <li><span style="text-decoration: underline;">fl_Hide_Window_Callback</span>
+- I'm sure you can figure out what this one does</li>
+    <li><span style="text-decoration: underline;">fl_Hide_Window_And_Set_User_Data_Callback</span>
+- Useful when writing compact dialogs in-line. Convenience callback for
+an Fl_Widget to hide an Fl_Window.&nbsp; Before the window is hidden,
+its user_data() field is set to the widget that invoked the callback.
+The user_data() can then be used to determine which widget closed the
+window.<br>
+    </li>
+  </ul>
+  <li><a href="doc/classFlu__Int__Input.html">Flu_Int_Input</a> - This
+widget simply extends Fl_Int_Input to allow getting/setting the widget
+value as integers instead of strings. e.g. <span
+ style="font-family: courier new,courier,monospace;">input-&gt;ivalue(27)</span><br>
+  </li>
+  <li><a href="doc/classFlu__Float__Input.html">Flu_Float_Input</a> -
+This widget simply extends Fl_Float_Input to allow getting/setting the
+widget value as floats instead of just strings. e.g. <span
+ style="font-family: courier new,courier,monospace;">input-&gt;fvalue(3.1415926)</span></li>
+  <li><a href="doc/classFlu__GL__Window.html">Flu_GL_Window</a> - This
+widget is derived from Fl_Gl_Window, and makes some GL things easier.
+For example, you can register GLUT-like callbacks to the widget, and
+opt for mouse coordinates to be reported in cartesian coordinates
+instead of window coordinates. There is also a static callback invoked
+for each new GL context which is useful for some API things, such as
+making sure each context has the entry points for GL extensions in
+Windows.<br>
+  </li>
+  <li><a href="doc/classFlu__Label.html">Flu_Label</a> - This widget
+just makes it easier to make stand-alone labels. Setting the value()
+copies the text to a local buffer, so you don't need to worry about
+aliasing.<br>
+  </li>
+  <li><a href="doc/classFlu__Output.html">Flu_Output</a> - This widget
+simply extends Fl_Output to allow getting/setting the widget value as
+integers and floats in addition to strings. e.g. ivalue() and fvalue().<br>
+  </li>
+  <li><a href="doc/flu__pixmaps_8h-source.html">flu_pixmaps.h</a> - A
+few XPM images compatible with Fl_Pixmap. Nothing special.<br>
+  </li>
+  <li><a href="doc/classFlu__Separator.html">Flu_Separator</a> - A
+simple widget that draws a separator line using the current box type.
+You can choose horizontal or vertical.<br>
+  </li>
+</ul>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="Documentation"></a>Documentation</h3>
+&nbsp;&nbsp;&nbsp; <a href="http://www.stack.nl/%7Edimitri/doxygen/">Doxygen</a>
+style developer documentation is available <a href="doc/index.html">here</a>.<br>
+<br>
+
+</body>
+</html>
