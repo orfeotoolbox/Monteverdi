@@ -1,2 +1,1 @@
-SUBDIRS(Speckle)
-SUBDIRS(FeatureExtraction)
+SUBDIRS(Speckle FeatureExtraction )
