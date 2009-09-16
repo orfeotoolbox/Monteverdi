@@ -87,7 +87,7 @@ SpeckleFilteringModel
 
 void
 SpeckleFilteringModel
-::Notify(ListenerBase * listener)
+::NotifyListener(ListenerBase * listener)
 {
   listener->Notify();
 }
