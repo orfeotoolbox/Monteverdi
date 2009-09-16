@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro
 header_name {.h}
 code_name {.cxx}
-class SpeckleFilteringViewGroup {open
+class SpeckleFilteringViewGUI {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
@@ -63,8 +63,8 @@ class SpeckleFilteringViewGroup {open
       }
     }
   }
-  Function {SpeckleFilteringViewGroup()} {} {}
-  Function {~SpeckleFilteringViewGroup()} {open return_type virtual
+  Function {SpeckleFilteringViewGUI()} {} {}
+  Function {~SpeckleFilteringViewGUI()} {open return_type virtual
   } {}
   Function {LeeFilterUpdate()} {open return_type {virtual void}
   } {}

@@ -20,7 +20,7 @@
 #define __otbSpeckleFilteringController_h
 
 #include "otbSpeckleFilteringControllerInterface.h"
-#include "otbSpeckleFilteringViewGUI.h"
+#include "otbSpeckleFilteringView.h"
 
 
 namespace otb
@@ -35,7 +35,7 @@ public:
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
-  typedef SpeckleFilteringViewGUI                        ViewType;
+  typedef SpeckleFilteringView                        ViewType;
   typedef ViewType::Pointer                              ViewPointerType;
 
 

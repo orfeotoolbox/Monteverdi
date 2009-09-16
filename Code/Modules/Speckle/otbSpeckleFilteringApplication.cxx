@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "otbSpeckleFilteringViewGUI.h"
+#include "otbSpeckleFilteringView.h"
 #include "otbSpeckleFilteringModel.h"
 #include "otbSpeckleFilteringController.h"
 
@@ -28,7 +28,7 @@
 int main(int argc, char* argv[])
 {
 
-  typedef otb::SpeckleFilteringViewGUI              ViewType;
+  typedef otb::SpeckleFilteringView              ViewType;
   typedef otb::SpeckleFilteringController           ControllerType;
   typedef ControllerType::ModelType                 ModelType;
 

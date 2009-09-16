@@ -17,8 +17,8 @@
 =========================================================================*/
 
 
-#ifndef __otbSpeckleFilteringViewGUI_h
-#define __otbSpeckleFilteringViewGUI_h
+#ifndef __otbSpeckleFilteringView_h
+#define __otbSpeckleFilteringView_h
 
 #include "otbListenerBase.h"
 
@@ -28,7 +28,7 @@
 #pragma warning(disable:4996)
 #endif
 
-#include "otbSpeckleFilteringViewGroup.h"
+#include "otbSpeckleFilteringViewGUI.h"
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -43,15 +43,15 @@
 
 namespace otb
 {
-/** \class SpeckleFilteringViewGUI
+/** \class SpeckleFilteringView
  *
  */
-class ITK_EXPORT SpeckleFilteringViewGUI
-  : public ListenerBase, public SpeckleFilteringViewGroup, public itk::Object
+class ITK_EXPORT SpeckleFilteringView
+  : public ListenerBase, public SpeckleFilteringViewGUI, public itk::Object
 {
 public:
   /** Standard typedefs */
-  typedef SpeckleFilteringViewGUI                  Self;
+  typedef SpeckleFilteringView                  Self;
   typedef itk::Object                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
@@ -60,7 +60,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SpeckleFilteringViewGUI,itk::Object);
+  itkTypeMacro(SpeckleFilteringView,itk::Object);
 
   //typedef ImageView<VisualizationModelType>      ImageViewType;
   typedef SpeckleFilteringControllerInterface::Pointer ControllerPointerType;
@@ -84,14 +84,14 @@ public:
 
   protected:
   /** Constructor */
-  SpeckleFilteringViewGUI();
+  SpeckleFilteringView();
   /** Destructor */
-  ~SpeckleFilteringViewGUI(){};
+  ~SpeckleFilteringView(){};
   /** PrintSelf*/
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  private:
-  SpeckleFilteringViewGUI(const Self&); //purposely not implemented
+  SpeckleFilteringView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   ControllerPointerType    m_Controller;

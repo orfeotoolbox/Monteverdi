@@ -17,15 +17,15 @@
 =========================================================================*/
 
 
-#include "otbSpeckleFilteringViewGUI.h"
+#include "otbSpeckleFilteringView.h"
 
 namespace otb
 {
 /**
  * Constructor
  */
-SpeckleFilteringViewGUI
-::SpeckleFilteringViewGUI()
+SpeckleFilteringView
+::SpeckleFilteringView()
 {
   // Create the component of the GUI
   this->CreateGUI();
@@ -36,7 +36,7 @@ SpeckleFilteringViewGUI
  * Handle the notification of the model
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::Notify()
 {
 
@@ -46,7 +46,7 @@ SpeckleFilteringViewGUI
  * Show the GUI
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::Show()
 {
   guiMainWindow->show();
@@ -56,7 +56,7 @@ SpeckleFilteringViewGUI
  * Quit method
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::Quit()
 {
   guiMainWindow->hide();
@@ -66,7 +66,7 @@ SpeckleFilteringViewGUI
  * Method process
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::Process()
 {
 
@@ -81,7 +81,7 @@ SpeckleFilteringViewGUI
  * Frost Filter Update
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::FrostFilterUpdate()
 {
   guiLeeGroup->hide();
@@ -93,7 +93,7 @@ SpeckleFilteringViewGUI
  * Lee Filter Update
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::LeeFilterUpdate()
 {
   guiFrostGroup->hide();
@@ -105,7 +105,7 @@ SpeckleFilteringViewGUI
  * PrintSelf Method
  */
 void
-SpeckleFilteringViewGUI
+SpeckleFilteringView
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

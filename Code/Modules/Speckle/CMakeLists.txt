@@ -14,11 +14,11 @@ otbSpeckleFilteringController.cxx
 )
 
 SET(VIEW_FL_SRCS
-otbSpeckleFilteringViewGroup.fl
+otbSpeckleFilteringViewGUI.fl
 )
 
 SET(VIEW_SRCS
-otbSpeckleFilteringViewGUI.cxx
+otbSpeckleFilteringView.cxx
 )
 
 
