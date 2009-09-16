@@ -17,13 +17,18 @@
 =========================================================================*/
 
 #include "ConfigureMonteverdi.h"
+
+#include "otbMonteverdiModel.h"
+
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_PNG_Image.H>
+
 #include <string>
 #include <ctime>
 #include <iostream>
+
 
 Fl_Window* splash_screen() {
 
@@ -79,10 +84,34 @@ Fl_Window* splash_screen() {
   return o;
 }
 
+// There are function prototype conflits under cygwin between standard w32 API
+// and standard C ones
+#ifndef CALLBACK
+#if defined(_WINDOWS) || defined(__CYGWIN__)
+#define CALLBACK __stdcall
+#else
+#define CALLBACK
+#endif
+#endif
 
+#include "otbReaderModule.h"
+#include "otbSpeckleFilteringModule.h"
 
+int main(int argc, char* argv[]) 
+{
+  // Create the model
+  otb::MonteverdiModel::Pointer model = otb::MonteverdiModel::New();
 
-int main(int argc, char** argv) {
+  // Register modules
+  model->RegisterModule<otb::ReaderModule>("Reader");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle");
+
+  // Create an instance of reader
+  otb::Module::Pointer reader = model->CreateModuleByName("Reader");
+  std::cout<<"Instance of reader module created: "<<reader<<std::endl;
+
+  otb::Module::Pointer speckle = model->CreateModuleByName("Speckle");
+  std::cout<<"Instance of speckle filtering module created: "<<speckle<<std::endl;
 
   // open splash screen
   Fl_Window* splash_window = 0;
