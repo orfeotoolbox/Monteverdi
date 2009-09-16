@@ -1,1 +1,2 @@
 SUBDIRS(Speckle)
+SUBDIRS(FeatureExtraction)
