@@ -15,6 +15,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <cstdlib>
 #include "otbInputDataDescriptor.h"
 
 
@@ -24,7 +25,7 @@ int main(int argc, char * argv[])
   otb::InputDataDescriptor desc1;
   desc1.Set("Floating_Point_Image","InputImage","This is the input image");
   desc1.SetOptional(true);
-  desc1.SetMultiple(true); 
+  desc1.SetMultiple(true);
 
   // Access parameters
   std::cout<<"Desc1: Optional = "<<desc1.IsOptional()<<", Multiple = "<<desc1.IsMultiple()<<std::endl;

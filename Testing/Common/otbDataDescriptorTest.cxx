@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <cstdlib>
 #include "otbDataDescriptor.h"
-
 
 int main(int argc, char * argv[])
 {
@@ -29,10 +29,10 @@ int main(int argc, char * argv[])
 
   // Constructor with parameters
   otb::DataDescriptor desc2("Floating_Point_Image","InputImage","This is the input image");
-  
+
   // Access parameters
   std::cout<<"Desc2: DataType = "<<desc2.GetDataType()<<", DataKey = "<<desc1.GetDataKey()<<", DataDescripion = "<<desc2.GetDataDescription()<<std::endl;
- 
+
   // Testing the << operator
   std::cout<<"Testing << operator: "<<desc2<<std::endl;
 
