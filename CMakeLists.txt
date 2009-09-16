@@ -43,6 +43,8 @@ SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 # Include directories
 INCLUDE_DIRECTORIES(
 ${Monteverdi_SOURCE_DIR}/Code/Common
+${Monteverdi_SOURCE_DIR}/Code/Modules/Speckle
+${Monteverdi_BINARY_DIR}/Code/Modules/Speckle
 )
 
 # Code location

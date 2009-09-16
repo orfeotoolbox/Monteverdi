@@ -75,6 +75,7 @@ SpeckleFilteringView
   else
     if(guiFilterType->value() == 1)
       m_Controller->ProcessLeeFilter(guiLeeRadius->value());
+  guiMainWindow->hide();
 }
 
 /**

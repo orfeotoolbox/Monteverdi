@@ -16,10 +16,7 @@
 
 =========================================================================*/
 
-
-#include "otbSpeckleFilteringView.h"
-#include "otbSpeckleFilteringModel.h"
-#include "otbSpeckleFilteringController.h"
+#include "otbSpeckleFilteringModule.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -27,17 +24,10 @@
 
 int main(int argc, char* argv[])
 {
-
-  typedef otb::SpeckleFilteringView              ViewType;
-  typedef otb::SpeckleFilteringController           ControllerType;
-  typedef ControllerType::ModelType                 ModelType;
-
-  // Instanciation of pointer
-  ViewType::Pointer          view       = ViewType::New();
-  ControllerType::Pointer    controller = ControllerType::New();
-
-  controller->SetView(view);
-  view->SetController(controller);
+  otb::SpeckleFilteringModule::Pointer specificModule = otb::SpeckleFilteringModule::New();
+  otb::Module::Pointer module = specificModule.GetPointer();
+  
+  std::cout<<"Module: "<<module<<std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
@@ -49,20 +39,29 @@ int main(int argc, char* argv[])
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();
+  reader->GenerateOutputInformation();
 
-  //Set The model input Image
-  ModelType * model = ModelType::GetInstance();
-  model->SetInputImage(reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn("Floating_Point_Image",reader->GetOutput());
+  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
+  
+  module->AddInputByKey("InputImage",wrapperIn);
+  module->Start();
+  Fl::check();
 
-  // Open the GUI
-  view->Show();
-  Fl::run();
+  // Simulate Ok button callback
+  specificModule->GetView()->bOk->do_callback();
+  Fl::check();
+
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+
+  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+
+  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
   WriterType::Pointer  writer = WriterType::New();
   writer->SetFileName(argv[2]);
-  writer->SetInput(model->GetOutput());
+  writer->SetInput(outImage);
   writer->Update();
 
   return 0;
