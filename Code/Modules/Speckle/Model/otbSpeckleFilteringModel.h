@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbSpeckleFilteringModel_h
 #define __otbSpeckleFilteringModel_h
 
@@ -33,27 +34,27 @@ namespace otb
 class ITK_EXPORT SpeckleFilteringModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
-  
+
  public:
   /** Standard class typedefs */
   typedef SpeckleFilteringModel                           Self;
   typedef MVCModel<ListenerBase>                          Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
-  
+
   /** Standard type macro */
   itkTypeMacro(SpeckleFilteringModel, MVCModel);
-  
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
   /** typedefs */
   typedef double                                   PixelType;
   typedef Image<PixelType,2>                       InputImageType;
-  
+
   typedef LeeImageFilter<InputImageType,InputImageType>       LeeFilterType;
   typedef FrostImageFilter<InputImageType,InputImageType>     FrostFilterType;
-   
+
   /** SetInputImage */
   itkSetObjectMacro(InputImage,InputImageType);
   itkGetObjectMacro(InputImage,InputImageType);
@@ -63,10 +64,10 @@ class ITK_EXPORT SpeckleFilteringModel
 
   /** Lee Filter Processing */
   virtual void LeeFiltering(unsigned int radius);
-    
+
   /** Frost Filter Processing */
   virtual void FrostFiltering(unsigned int radius, double deRamp);
-    
+
  protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
@@ -76,27 +77,27 @@ class ITK_EXPORT SpeckleFilteringModel
 
   /** Destructor */
   virtual ~SpeckleFilteringModel();
-  
+
  private:
   SpeckleFilteringModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
-  
+
   /** The instance singleton */
   static Pointer Instance;
 
   InputImageType::Pointer       m_InputImage;
   InputImageType::Pointer       m_Output;
-  
+
   LeeFilterType::Pointer        m_LeeFilter;
   FrostFilterType::Pointer      m_FrostFilter;
-  
-  
+
+
 };
 
 }
 #endif
-  
+
 

@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 
 #include "otbSpeckleFilteringModel.h"
 
@@ -27,12 +28,12 @@ SpeckleFilteringModel::Pointer SpeckleFilteringModel::Instance = NULL;
 
 /**
  * Constructor
- */ 
+ */
 SpeckleFilteringModel::SpeckleFilteringModel()
 {
   m_InputImage  = InputImageType::New();
   m_LeeFilter   = LeeFilterType::New();
-  m_FrostFilter = FrostFilterType::New(); 
+  m_FrostFilter = FrostFilterType::New();
 }
 
 /**
@@ -54,7 +55,7 @@ SpeckleFilteringModel::Pointer SpeckleFilteringModel::GetInstance()
 
 /**
  * Apply Lee to the inputImage
- */ 
+ */
 void
 SpeckleFilteringModel
 ::LeeFiltering(unsigned int radius)
@@ -70,14 +71,14 @@ SpeckleFilteringModel
 
 /**
  * ApplyLee to the inputImage
- */ 
+ */
 void
 SpeckleFilteringModel
 ::FrostFiltering(unsigned int radius, double deRamp)
 {
   FrostFilterType::SizeType     fradius;
   fradius.Fill(radius);
-  
+
   m_FrostFilter->SetInput(m_InputImage);
   m_FrostFilter->SetRadius(fradius);
   m_FrostFilter->SetDeramp(deRamp);

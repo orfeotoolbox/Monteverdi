@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULA
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 
 #include "otbSpeckleFilteringViewGUI.h"
 
@@ -22,7 +23,7 @@ namespace otb
 {
 /**
  * Constructor
- */ 
+ */
 SpeckleFilteringViewGUI
 ::SpeckleFilteringViewGUI()
 {
@@ -32,8 +33,8 @@ SpeckleFilteringViewGUI
 
 
 /**
- * Handle the notification of the model 
- */ 
+ * Handle the notification of the model
+ */
 void
 SpeckleFilteringViewGUI
 ::Notify()
@@ -43,7 +44,7 @@ SpeckleFilteringViewGUI
 
 /**
  * Show the GUI
- */ 
+ */
 void
 SpeckleFilteringViewGUI
 ::Show()
@@ -52,8 +53,8 @@ SpeckleFilteringViewGUI
 }
 
 /**
- * Quit method 
- */ 
+ * Quit method
+ */
 void
 SpeckleFilteringViewGUI
 ::Quit()
@@ -64,12 +65,12 @@ SpeckleFilteringViewGUI
 /**
  * Method process
  */
-void 
+void
 SpeckleFilteringViewGUI
 ::Process()
 {
-  
-  if( guiFilterType->value() == 0) 
+
+  if( guiFilterType->value() == 0)
     m_Controller->ProcessFrostFilter(guiFrostRadius->value(),guiLeeDeRamp->value());
   else
     if(guiFilterType->value() == 1)
@@ -79,7 +80,7 @@ SpeckleFilteringViewGUI
 /**
  * Frost Filter Update
  */
-void 
+void
 SpeckleFilteringViewGUI
 ::FrostFilterUpdate()
 {
@@ -91,7 +92,7 @@ SpeckleFilteringViewGUI
 /**
  * Lee Filter Update
  */
-void 
+void
 SpeckleFilteringViewGUI
 ::LeeFilterUpdate()
 {

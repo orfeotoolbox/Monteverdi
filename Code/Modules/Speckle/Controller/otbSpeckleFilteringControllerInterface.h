@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbSpeckleFilteringControllerInterface_h
 #define __otbSpeckleFilteringControllerInterface_h
 
@@ -33,7 +34,7 @@ public:
   typedef ImageViewerFullResolutionEventsInterface  Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
-  
+
 
   typedef SpeckleFilteringModel                     ModelType;
 
@@ -43,7 +44,7 @@ public:
   /** Users actions */
   virtual void ProcessLeeFilter(unsigned int radius) =0;
   virtual void ProcessFrostFilter(unsigned int radius, double DeRamp) =0;
-  
+
 protected:
   /** Constructor */
   SpeckleFilteringControllerInterface()

@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbModule_cxx
 #define __otbModule_cxx
 
@@ -35,7 +36,7 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
-  
+
   // Print inputs
   os<<indent<<"Number of inputs: "<<m_InputsMap.size()<<std::endl;
   for(InputDataDescriptorMapType::const_iterator inIt = m_InputsMap.begin(); inIt != m_InputsMap.end(); ++inIt)
@@ -59,12 +60,12 @@ void Module::AddInputDescriptor(const std::string & type, const std::string & ke
     {
     itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
     }
-  
+
   // Else build a new descriptor
   InputDataDescriptor desc(type,key,description);
   desc.SetOptional(optional);
   desc.SetMultiple(multiple);
-  
+
   // Insert it into the map
   m_InputsMap[key]=desc;
 }
@@ -77,11 +78,11 @@ void Module::AddOutputDescriptor(const std::string & type, const std::string & k
     {
     itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
     }
-  
+
   // Else build a new descriptor
   OutputDataDescriptor desc(type,key,description);
   desc.SetNumberOfData(nb);
-  
+
   // Insert it into the map
   m_OutputsMap[key]=desc;
 }
@@ -139,7 +140,7 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data) 
+void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   itkExceptionMacro(<<"This method must be reimplemented by subclasses");
 }
@@ -147,7 +148,7 @@ void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper &
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const 
+const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const
 {
   itkExceptionMacro(<<"This method must be reimplemented by subclasses");
 }

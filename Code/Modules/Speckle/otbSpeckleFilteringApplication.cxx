@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 
 #include "otbSpeckleFilteringViewGUI.h"
 #include "otbSpeckleFilteringModel.h"
@@ -30,8 +31,8 @@ int main(int argc, char* argv[])
   typedef otb::SpeckleFilteringViewGUI              ViewType;
   typedef otb::SpeckleFilteringController           ControllerType;
   typedef ControllerType::ModelType                 ModelType;
-  
-  // Instanciation of pointer 
+
+  // Instanciation of pointer
   ViewType::Pointer          view       = ViewType::New();
   ControllerType::Pointer    controller = ControllerType::New();
 
@@ -43,17 +44,17 @@ int main(int argc, char* argv[])
   typedef otb::Image<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
-  
-  
-  //reader 
+
+
+  //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
-  
+
   //Set The model input Image
   ModelType * model = ModelType::GetInstance();
   model->SetInputImage(reader->GetOutput());
-  
+
   // Open the GUI
   view->Show();
   Fl::run();
@@ -63,7 +64,7 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(model->GetOutput());
   writer->Update();
-  
+
   return 0;
 
 }

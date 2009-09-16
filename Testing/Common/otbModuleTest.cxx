@@ -10,11 +10,12 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #include "otbModule.h"
 #include "otbImage.h"
 #include "otbVectorData.h"
@@ -48,7 +49,7 @@ protected:
   virtual ~ModuleTest(){}
 
   // Reimplement AssignInputByKey
-  virtual void AssignInputByKey(const std::string & key, const otb::DataObjectWrapper & data) 
+  virtual void AssignInputByKey(const std::string & key, const otb::DataObjectWrapper & data)
   {
     if(key == "InputImage" || key == "InputVector")
       {
@@ -57,14 +58,14 @@ protected:
   }
 
   // Reimplement RetrieveOutputByKey
-  const otb::DataObjectWrapper RetrieveOutputByKey(const std::string & key) const 
+  const otb::DataObjectWrapper RetrieveOutputByKey(const std::string & key) const
   {
     otb::DataObjectWrapper wrapper;
 
     if(key == "OutputImage")
       {
       wrapper.Set("Labeled_Image",otb::Image<unsigned short,2>::New());
-      
+
       std::cout<<"Sending data "<<wrapper<<" for output with key "<<key<<std::endl;
       }
 

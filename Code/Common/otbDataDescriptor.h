@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbDataDescriptor_h
 #define __otbDataDescriptor_h
 
@@ -26,7 +27,7 @@ namespace otb
 
 /** \class DataDescriptor
  *  \brief This small class describes the input/outputs of a module.
- *  
+ *
  *  The DataType field describe the data type and will be used by the
  *  module to perform dynamic type checking.
  *
@@ -35,7 +36,7 @@ namespace otb
  *
  *  The DataDescription field will be used to store and display
  *  useful information about the data.
- * 
+ *
  *  \sa Module
  */
 

@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbInputDataDescriptor_h
 #define __otbInputDataDescriptor_h
 
@@ -25,13 +26,13 @@ namespace otb
 
 /** \class InputDataDescriptor
  *  \brief This small class specializes DataDescritpor to represent inputs.
- *  
+ *
  *  The Optional flag allows to define optional inputs.
  *
  *  The Multiple flag allows to define unbounded multiple inputs.
  *
  *  See the DataDescriptor class for more details.
- * 
+ *
  *  \sa Module, DataDescriptor
  */
 
@@ -67,7 +68,7 @@ public:
 private:
   /** The optional flag */
   bool m_Optional;
-  
+
   /** The multiple flag */
   bool m_Multiple;
 

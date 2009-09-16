@@ -1,3 +1,20 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 
 #include "ConfigureMonteverdi.h"
 #include <FL/Fl.H>
@@ -14,7 +31,7 @@ Fl_Window* splash_screen() {
   unsigned int spl_h = 599;
 
   int posx = (Fl::w() / 2) - spl_w/2;
-  int posy = (Fl::h() / 2) - spl_h/2; 
+  int posy = (Fl::h() / 2) - spl_h/2;
   Fl_Window* o = new Fl_Window(spl_w, spl_h, "splash screen");
   o->type(241);
   o->begin();
@@ -43,15 +60,15 @@ Fl_Window* splash_screen() {
   o->labelcolor((Fl_Color)1);
   }
   o->end();
-	
+
   o->set_non_modal();
   o->clear_border();
   o->resizable(o);
 
   o->border(false);
-  o->position(posx,posy);        
+  o->position(posx,posy);
   o->show();
-	
+
   Fl::flush();
 
   do {
@@ -79,9 +96,9 @@ int main(int argc, char** argv) {
     {
     Fl::wait(0);
     }
-	
+
   splash_window->hide();
   delete splash_window;
-	
-  return Fl::run();      
+
+  return Fl::run();
 }
