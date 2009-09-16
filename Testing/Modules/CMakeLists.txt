@@ -18,3 +18,11 @@ ADD_TEST(SpeckleFilteringModuleTest otbSpeckleFilteringModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringModuleOuptut.tif
 )
+
+ADD_EXECUTABLE(otbReaderModuleTest otbReaderModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbReaderModuleTest otbReaderModule)
+
+ADD_TEST(ReaderModuleTest otbReaderModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${TEMP}/readerModuleOuptut.tif
+)

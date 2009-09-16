@@ -1,0 +1,39 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cxx}
+class ReaderModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wFileChooserWindow {
+      label {Open dataset} open selected
+      xywh {566 108 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_File_Input vFilePath {selected
+        xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Return_Button bOk {
+        label Ok
+        callback {this->OpenDataSet();} selected
+        xywh {194 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();} selected
+        xywh {45 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bBrowse {
+        label {...}
+        callback {this->Browse();} selected
+        xywh {306 35 41 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
+  }
+  Function {OpenDataSet()} {open protected return_type {virtual void}
+  } {}
+  Function {Browse()} {open protected return_type {virtual void}
+  } {}
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+} 
