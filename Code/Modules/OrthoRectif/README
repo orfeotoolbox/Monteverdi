@@ -1,0 +1,68 @@
+This is the help file for the ortho-rectification applications.
+
+There are 2 ortho-rectification applications in the OTB-Applications
+package. The first one is a command line program which is called
+otbOrthoRectif. If you launch it without parameters you will get the
+following help message:
+
+
+ Usage : otbOrthoRectif
+      [--help|-h]                     :  Help
+      [--version|-v]                  :  Version
+       --InputImage|-in               :  input image file name   (1 parameter)
+       --OutputImage|-out             :  output image file name   (1 parameter)
+       --xUpperLeft|-xUL              :  Cartographic x coordinate of upper left corner  (1 parameter)
+       --yUpperLeft|-yUL              :  Cartographic y coordinate of upper left corner  (1 parameter)
+       --OutputXSize|-xSize           :  Size of result image  (1 parameter)
+       --OutputYSize|-ySize           :  Size of result image  (1 parameter)
+       --OutputXSpacing|-xSpacing     :  Spacing resolution in meter on x Axis (1 parameter)
+       --OutputYSpacing|-ySpacing     :  Spacing resolution in meter on y Axis (1 parameter)
+      [--NumStreamDivisions|-stream]  :  Number of streaming divisions (optional)  (1 parameter)
+       --MapProjectionType|-mapProj   :  Type (UTM/LAMBERT/LAMBERT2/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used  (N parameters)
+
+
+As you can see, this application is able to ortho-rectify a portion of
+a input image. You define the portion by giving the coordinates upper
+left corner, the size in pixels and the spacing (ground sampling
+distance). These coordinates are given in the cartographic projection
+selected.
+
+The second application has a graphical user interface (GUI) and is
+called otbOrthoRectifAppli. Yes, we know, the names are not fancy, but
+the applications are!
+
+When you launch the application you will get a beautiful GUI. The
+first thing to do is use the "Open image" button to select the input
+image you want to ortho-rectify. A quick-look of your image will be
+created and the image name will appear in the list on the upper left
+part of the GUI. You can view the image if you want to.
+
+The lower right part of the GUI contains a set of tabs where
+interesting information is displayed and can be modified. The
+"Coordinates" tab is initialized using image meta-data. The default
+cartographic projection is UTM. Since we may 
+want to ortho-rectify only a region of the input image, a reference
+coordinate has to be given. This can be either the central pixel of
+the region or the upper left one. The coordinates can be given either
+in geographic projection (longitude, latitude) or in the output
+cartographic projection. If you change one of them, the other changes
+to be coherent. In the "Output Image" tab you can choose the size of
+the output image in pixels and the spacing (ground sampling
+distance). You can also choose among several  different
+interpolators. The "Image Extent" tab gives you an overview of the
+resulting selected area. The "DEM" tab allows you to use a SRTM digital
+elevation model. The "DEM Path" button is used to select the directory
+where the SRTM files are stored. If you do not have a DEM you can
+select an average elevation for the area. Finally, the "Advanced" tab
+allows you to select the output coding for your image: 8 bits or 16
+bits. It is better to use 16 bits for quality purposes. You can also
+set the size in MBytes of the tiles for the streaming mechanism. The
+default value should be OK for most recent computers.
+
+Once you have selected all your settings, you can click on the OK
+button. A file browser will appear so you can choose the name of the
+output image. After that, the ortho-rectification process is
+launched. Once it is finished, the resulting output image will appear
+in the image list, so you can check the results. Since it is an
+ortho-rectified image, the viewer will also display the physical
+coordinates of the pixels in the selected projection.

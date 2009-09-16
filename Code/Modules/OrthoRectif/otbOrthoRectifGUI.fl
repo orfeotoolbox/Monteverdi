@@ -1,0 +1,429 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include "otbOrthoEnum.h"} {public
+} 
+
+decl {\#include "otbGUIRectangle.h"} {public
+} 
+
+class OrthoRectifGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label otbOrthoRectif open
+      xywh {524 118 435 470} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+    } {
+      Fl_Button guiOK {
+        label OK
+        callback {OK();}
+        tooltip {Compute result} xywh {335 420 80 40} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Button guiQuit {
+        label Quit
+        callback {Quit();}
+        tooltip {Quit the viewer manager} xywh {28 419 85 40} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Tabs m_TabsMode {open
+        xywh {18 14 398 396} box PLASTIC_UP_BOX color 57 labelfont 2 labelsize 12 align 0
+      } {
+        Fl_Group AllGrp {
+          label Coordinates open
+          xywh {28 34 375 372} color 22 selection_color 210 labelfont 2 labelsize 11 hide
+        } {
+          Fl_Choice guiMapSelection {
+            label {Map Projection} open
+            tooltip {Select the map projection type} xywh {169 174 160 25} box EMBOSSED_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
+          } {
+            MenuItem {} {
+              label UTM
+              callback {m_UTM->show();
+			m_Lambert2->hide();
+ 			m_TRANSMERCATOR->hide();
+		  	this->m_MapType->redraw();
+		  	SetMapType(UTM);}
+              xywh {10 10 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label LAMBERT2
+              callback {m_UTM->hide();
+	          	m_Lambert2->show();
+			m_TRANSMERCATOR->hide();
+			this->m_MapType->redraw();
+		  	SetMapType(LAMBERT2);}
+              xywh {20 20 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label TRANSMERCATOR
+              callback {m_UTM->hide();
+	          	m_Lambert2->hide();
+			m_TRANSMERCATOR->show();
+			this->m_MapType->redraw();
+		  	SetMapType(TRANSMERCATOR);}
+              xywh {20 20 100 25} labelsize 11
+            }
+          }
+          Fl_Wizard m_MapType {
+            label {Cartographic Coordinates} open
+            xywh {31 227 370 170} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+          } {
+            Fl_Group m_UTM {open
+              xywh {31 227 360 160}
+            } {
+              Fl_Input guiUTMZone {
+                label Zone
+                callback {UpdateLongLat();}
+                tooltip {Enter the zone number} xywh {172 323 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiUTMEastSelection {
+                label Easting
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {172 243 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiUTMNorthSelection {
+                label Northing
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {172 283 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Round_Button guiUTMNorth {
+                label {Northern Hemisphere}
+                callback {guiUTMNorth->value(1);guiUTMSouth->value(0);UpdateLongLat();}
+                xywh {187 362 18 25} down_box ROUND_DOWN_BOX value 1 align 132
+              }
+              Fl_Round_Button guiUTMSouth {
+                label {Southern Hemisphere}
+                callback {guiUTMSouth->value(1);guiUTMNorth->value(0);UpdateLongLat();}
+                xywh {231 362 18 25} down_box ROUND_DOWN_BOX
+              }
+            }
+            Fl_Group m_Lambert2 {open
+              xywh {37 227 360 160} hide
+            } {
+              Fl_Input guiLambertEastSelection {
+                label Easting
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {172 278 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiLambertNorthSelection {
+                label Northing
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {172 318 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+            Fl_Group m_TRANSMERCATOR {open
+              xywh {37 227 360 160} hide
+            } {
+              Fl_Input guiTRANSMERCATOREast {
+                label {False Easting}
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter false easting} xywh {172 298 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTRANSMERCATORNorth {
+                label {False Northing}
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter false northing} xywh {172 329 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTRANSMERCATORScale {
+                label {Scale Factor}
+                callback {UpdateLongLat();}
+                tooltip {Enter Scale Factor} xywh {172 360 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTransmercatorEastSelection {
+                label Easting
+                callback {UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {172 236 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTransmercatorNorthSelection {
+                label Northing
+                callback {UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {172 267 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+          }
+          Fl_Wizard {} {
+            label {Geographical Coordinates} open
+            xywh {31 60 370 98} box THIN_UP_FRAME color 244 selection_color 210 labelsize 12 align 5
+          } {
+            Fl_Group {} {open
+              xywh {33 62 353 92}
+            } {
+              Fl_Input guiLongSelection {
+                label Longitude
+                callback {UpdateMapParam();
+InsightExtent();}
+                tooltip {Enter the longitude of the output image center} xywh {169 92 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiLatSelection {
+                label Latitude
+                callback {UpdateMapParam();
+InsightExtent();}
+                tooltip {Enter the latitude of the output image center} xywh {169 126 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Round_Button guiCenterPixel {
+                label {Use Center Pixel}
+                callback {guiULPixel->value(0);
+guiCenterPixel->value(1);
+InsightExtent();}
+                tooltip {If checked, use the output center image coodinates} xywh {173 66 24 15} down_box ROUND_DOWN_BOX value 1 align 132
+              }
+              Fl_Round_Button guiULPixel {
+                label {Use Upper-Left Pixel}
+                callback {guiULPixel->value(1);
+guiCenterPixel->value(0);
+InsightExtent();}
+                tooltip {If checked, use the upper left output image pixel coodinates} xywh {227 66 18 15} down_box ROUND_DOWN_BOX
+              }
+            }
+          }
+        }
+        Fl_Group {} {
+          label {Output image} open
+          xywh {20 37 396 369} color 22 selection_color 210 labelfont 2 labelsize 11 when 1 hide
+        } {
+          Fl_Input guiSizeX {
+            label {Size X}
+            callback {InsightExtent();}
+            tooltip {Enter the X output size} xywh {169 54 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+          }
+          Fl_Input guiSizeY {
+            label {Size Y}
+            callback {InsightExtent();}
+            tooltip {Enter the Y output size} xywh {169 89 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+          }
+          Fl_Input guiSpacingX {
+            label {Spacing X}
+            callback {InsightExtent();}
+            tooltip {Enter X spacing} xywh {169 131 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+          }
+          Fl_Input guiSpacingY {
+            label {Spacing Y}
+            callback {InsightExtent();}
+            tooltip {Enter Y spacing} xywh {169 166 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+          }
+          Fl_Choice guiInterpSelection {
+            label Interpolator open
+            tooltip {Select the Orthorectif Interpolator} xywh {168 211 160 25} box EMBOSSED_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
+          } {
+            MenuItem {} {
+              label Linear
+              callback {guiLinear->show();
+guiNearest->hide();
+guiSinC->hide();
+guiSplines->hide();
+this->m_InterpType->redraw();
+SetInterpolatorType(LINEAR);}
+              xywh {20 20 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label Nearest
+              callback {guiLinear->hide();
+guiNearest->show();
+guiSinC->hide();
+guiSplines->hide();
+this->m_InterpType->redraw();
+SetInterpolatorType(NEAREST);}
+              xywh {30 30 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label SinC
+              callback {guiLinear->hide();
+guiNearest->hide();
+guiSinC->show();
+guiSplines->hide();
+this->m_InterpType->redraw();
+SetInterpolatorType(SINC);}
+              xywh {30 30 100 25} labelsize 11
+            }
+          }
+          Fl_Wizard m_InterpType {
+            label {Interpolator Parameters} open
+            xywh {38 268 360 125} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+          } {
+            Fl_Group guiLinear {open
+              xywh {39 270 356 121}
+            } {}
+            Fl_Group guiNearest {open
+              xywh {44 272 349 119} hide
+            } {}
+            Fl_Group guiSinC {open
+              xywh {42 271 352 118} hide
+            } {
+              Fl_Choice guiSincWindow {
+                label Interpolator open
+                tooltip {Select the Orthorectif Interpolator} xywh {169 296 160 25} box EMBOSSED_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
+              } {
+                MenuItem {} {
+                  label Blackman
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {30 30 100 25} labelsize 11
+                }
+                MenuItem {} {
+                  label Cosine
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {40 40 100 25} labelsize 11
+                }
+                MenuItem {} {
+                  label Gaussian
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {50 50 100 25} labelsize 11
+                }
+                MenuItem {} {
+                  label Hamming
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {60 60 100 25} labelsize 11
+                }
+                MenuItem {} {
+                  label Lanczos
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {70 70 100 25} labelsize 11
+                }
+                MenuItem {} {
+                  label Welch
+                  callback {SetInterpolatorType(SINC);}
+                  xywh {80 80 100 25} labelsize 11
+                }
+              }
+              Fl_Value_Input guiSincRadius {
+                label Radius
+                callback {SetInterpolatorType(SINC);}
+                xywh {169 342 160 25}
+              }
+            }
+            Fl_Group guiSplines {open
+              xywh {45 274 347 116} hide
+            } {
+              Fl_Counter guiSplineOrder {
+                label Radius
+                callback {SetInterpolatorType(SPLINES);}
+                xywh {169 320 160 25} align 4 minimum 0 maximum 5 step 1
+              }
+            }
+          }
+        }
+        Fl_Group {} {
+          label DEM open
+          xywh {26 34 379 372} color 22 selection_color 210 labelfont 2 labelsize 11 hide
+        } {
+          Fl_Wizard guiUseDEMWiz {open
+            xywh {28 60 377 150} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 0
+          } {
+            Fl_Group guiUseDEMGrp {open
+              xywh {33 65 372 145}
+            } {
+              Fl_Button guiOpenDir {
+                label {DEM Path}
+                callback {OpenDEM();}
+                tooltip {Open a DEM directory} xywh {36 125 85 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 23 selection_color 23 labelcolor 186 deactivate resizable
+              }
+              Fl_Output guiDEMPath {
+                label {DEM Path}
+                xywh {144 125 250 25} selection_color 39 align 16 deactivate
+              }
+              Fl_Check_Button guiShowDEM {
+                label {Save DEM}
+                xywh {304 185 93 25} down_box DOWN_BOX deactivate
+              }
+              Fl_Round_Button guiUseDEM {
+                label {Use DEM}
+                callback {guiUseAverageElevation->value(0);
+guiUseDEM->value(1);
+guiShowDEM->activate();
+guiDEMPath->activate();
+guiOpenDir->activate();
+guiAvElev->deactivate();}
+                xywh {38 69 86 15} down_box ROUND_DOWN_BOX
+              }
+            }
+          }
+          Fl_Wizard guiAverageElevWiz {open
+            xywh {28 237 376 150} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+          } {
+            Fl_Group guiUseAverageElevGrp {open
+              xywh {38 239 366 138}
+            } {
+              Fl_Input guiAvElev {
+                label {Average Elevation}
+                tooltip {Enter the Average Elevation Value} xywh {198 308 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186
+              }
+              Fl_Round_Button guiUseAverageElevation {
+                label {Use Average Elevation}
+                callback {guiUseAverageElevation->value(1);
+guiUseDEM->value(0);
+guiShowDEM->deactivate();
+guiDEMPath->deactivate();
+guiOpenDir->deactivate();
+guiAvElev->activate();}
+                xywh {38 243 169 15} down_box ROUND_DOWN_BOX value 1
+              }
+            }
+          }
+        }
+        Fl_Group guiImageExtent {
+          label {Image Extent} open
+          xywh {20 35 392 373} color 22 selection_color 210 labelfont 2 labelsize 11 when 3
+          class {otb::GUIRectangle}
+        } {}
+        Fl_Group guiAdvanced {
+          label Advanced open
+          xywh {18 38 396 369} color 22 selection_color 210 labelfont 2 labelsize 11 when 1 hide
+        } {
+          Fl_Round_Button gui8bits {
+            label {Work with 8bits}
+            callback {gui8bits->value(1);
+gui16bits->value(0);}
+            tooltip {Work with unsigned char pixel type} xywh {177 146 21 15} down_box ROUND_DOWN_BOX align 132
+          }
+          Fl_Round_Button gui16bits {
+            label {Work with 16bits}
+            callback {gui16bits->value(1);
+gui8bits->value(0);}
+            tooltip {Work with short pixel type} xywh {238 146 21 15} down_box ROUND_DOWN_BOX value 1 align 8
+          }
+          Fl_Value_Input guiTileSize {
+            label {Maximum Tile Size (MB)}
+            callback {SetMaxTileSize();}
+            tooltip {From Streaming pipeline, precise the maximum tile size} xywh {222 235 160 25} labelcolor 186 maximum 1e+06 step 0.1 value 256
+          }
+        }
+      }
+    }
+  }
+  Function {OrthoRectifGUI()} {} {}
+  Function {~OrthoRectifGUI()} {open return_type virtual
+  } {}
+  Function {OpenDEM()} {open return_type {virtual void}
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {SelectAction()} {open return_type {virtual void}
+  } {}
+  Function {InsightExtent()} {open return_type {virtual void}
+  } {}
+  Function {CheckBox(int id)} {open selected return_type {virtual void}
+  } {}
+  Function {SetMapType(MapType map)} {open return_type {virtual void}
+  } {}
+  Function {SetInterpolatorType(InterpolatorType interp)} {open return_type {virtual void}
+  } {}
+  Function {UpdateMapParam()} {open return_type {virtual void}
+  } {}
+  Function {UpdateLongLat()} {open return_type {virtual void}
+  } {}
+  Function {UpdateEastNorth()} {open return_type {virtual void}
+  } {}
+  Function {SetMaxTileSize()} {open return_type {virtual void}
+  } {}
+} 
