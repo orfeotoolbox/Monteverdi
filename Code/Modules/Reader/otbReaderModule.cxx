@@ -27,6 +27,7 @@ namespace otb
 ReaderModule::ReaderModule()
 {
   m_FPVReader = FPVReaderType::New();
+  m_VectorReader = VectorReaderType::New();
 }
 
 /** Destructor */
@@ -46,9 +47,18 @@ void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
-  if(key == "OutputImage")
+  if(key == "OutputDataSet")
     {
-    wrapper.Set("Floating_Point_VectorImage",m_FPVReader->GetOutput());
+    const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
+
+    if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
+      {                                          
+      wrapper.Set("Floating_Point_VectorImage",m_FPVReader->GetOutput());
+      }
+    else if(outMap.find(key)->second.GetDataType() == "VectorData")
+      {
+      wrapper.Set("VectorData",m_VectorReader->GetOutput());
+      }
     }
   return wrapper;
 }
@@ -63,9 +73,39 @@ void ReaderModule::Run()
 void ReaderModule::OpenDataSet()
 {
   std::string filepath = vFilePath->value();
-  m_FPVReader->SetFileName(filepath);
-  m_FPVReader->GenerateOutputInformation();
-  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Image read from file");
+
+  bool typeFound = false;
+
+  try
+    {
+    m_FPVReader->SetFileName(filepath);
+    m_FPVReader->GenerateOutputInformation();
+    // If we are still here, this is a readable image
+    typeFound = true;
+    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    // Silent catch
+    } 
+  
+  // If it is not an image, try to open a VectorData
+  if(!typeFound)
+    {
+    try
+      {
+      m_VectorReader->SetFileName(filepath);
+      m_VectorReader->Update();
+      // If we are still here, this is a readable image
+      typeFound = true;
+      this->AddOutputDescriptor("VectorData","OutputDataSet","Vector read from file");
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      // Silent catch
+      }
+    }
+
   wFileChooserWindow->hide();
 }
 
@@ -81,6 +121,8 @@ void ReaderModule::Browse()
     return ;
     }
   vFilePath->value(filename);
+  
+  
 }
 
 void ReaderModule::Cancel()

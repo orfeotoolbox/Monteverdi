@@ -28,6 +28,9 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
+
 namespace otb
 {
 /** \class ReaderModule
@@ -41,8 +44,8 @@ class ITK_EXPORT ReaderModule
 {
 public:
   /** Standard class typedefs */
-  typedef ReaderModule        Self;
-  typedef itk::Object                   Superclass;
+  typedef ReaderModule                 Self;
+  typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -53,10 +56,12 @@ public:
   itkTypeMacro(ReaderModule,Module);
 
   /** OTB typedefs */
-  /// Images
+  /// Dataset
   typedef VectorImage<double,2>         FPVImageType;
+  typedef VectorData<double>            VectorType;
   /// Readers
-  typedef ImageFileReader<FPVImageType> FPVReaderType;
+  typedef ImageFileReader<FPVImageType>    FPVReaderType;
+  typedef VectorDataFileReader<VectorType> VectorReaderType;
 
 protected:
   /** Constructor */
@@ -84,6 +89,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   FPVReaderType::Pointer m_FPVReader;
+  VectorReaderType::Pointer m_VectorReader;
 };
 
 

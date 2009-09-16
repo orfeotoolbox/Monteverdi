@@ -39,19 +39,23 @@ int main(int argc, char* argv[])
   specificModule->vFilePath->value(argv[1]);
   specificModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputDataSet");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
-  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
+  if(wrapperOut.GetDataType()=="Floating_Point_VectorImage")
+    {
 
-  //Write the image
-  WriterType::Pointer  writer = WriterType::New();
-  writer->SetFileName(argv[2]);
-  writer->SetInput(outImage);
-  writer->Update();
+    ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
-  return 0;
+    //Write the image
+    WriterType::Pointer  writer = WriterType::New();
+    writer->SetFileName(argv[2]);
+    writer->SetInput(outImage);
+    writer->Update();
+    }
+
+  return EXIT_SUCCESS;
 
 }
 
