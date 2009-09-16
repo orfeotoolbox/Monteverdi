@@ -6,27 +6,21 @@ IF(WIN32)
 ENDIF(WIN32)
 
 SET(MODEL_SRCS
-Model/otbSpeckleFilteringModel.cxx
+otbSpeckleFilteringModel.cxx
 )
 
 SET(CONTROLLER_SRCS
-Controller/otbSpeckleFilteringController.cxx
+otbSpeckleFilteringController.cxx
 )
 
 SET(VIEW_FL_SRCS
-View/otbSpeckleFilteringViewGroup.fl
+otbSpeckleFilteringViewGroup.fl
 )
 
 SET(VIEW_SRCS
-View/otbSpeckleFilteringViewGUI.cxx
+otbSpeckleFilteringViewGUI.cxx
 )
 
-
-INCLUDE_DIRECTORIES(
-View/
-Model/
-Controller/
-)
 
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
@@ -36,9 +30,9 @@ FLTK_WRAP_UI(otbSpeckleFilteringApplication ${VIEW_FL_SRCS})
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(
-            ${MODEL_SRCS} 
-            ${CONTROLLER_SRCS} 
-            ${VIEW_SRCS} 
+            ${MODEL_SRCS}
+            ${CONTROLLER_SRCS}
+            ${VIEW_SRCS}
             ${otbSpeckleFilteringApplication_FLTK_UI_SRCS}
             otbSpeckleFiltering.cxx
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
