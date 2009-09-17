@@ -73,7 +73,7 @@ const DataObjectWrapper OrthoRectifModule::RetrieveOutputByKey(const std::string
 void OrthoRectifModule::Run()
 {
   m_OrthoRectif->Show();
-  this->AddOutputDescriptor("Short_Point_VectorImage","OutputImage","OrthoRectified image.");
+  this->AddDataDescriptor("Short_Point_VectorImage","OutputImage","OrthoRectified image.");
 }
 
 } // End namespace otb
