@@ -39,7 +39,7 @@ class ITK_EXPORT SpeckleFilteringModule
 public:
   /** Standard class typedefs */
   typedef SpeckleFilteringModule        Self;
-  typedef itk::Object                   Superclass;
+  typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
