@@ -107,11 +107,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle");
 
   // Create an instance of reader
-  otb::Module::Pointer reader = model->CreateModuleByName("Reader");
-  std::cout<<"Instance of reader module created: "<<reader<<std::endl;
-
-  otb::Module::Pointer speckle = model->CreateModuleByName("Speckle");
-  std::cout<<"Instance of speckle filtering module created: "<<speckle<<std::endl;
+  model->CreateModuleByKey("Reader");
+  model->CreateModuleByKey("Speckle");
 
   // open splash screen
   Fl_Window* splash_window = 0;

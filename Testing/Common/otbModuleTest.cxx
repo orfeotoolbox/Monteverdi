@@ -20,6 +20,18 @@
 #include "otbImage.h"
 #include "otbVectorData.h"
 
+// Better name demanging for gcc
+#if __GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 )
+#define GCC_USEDEMANGLE
+#endif
+
+#ifdef GCC_USEDEMANGLE
+#include <cstdlib>
+#include <cxxabi.h>
+#endif
+
+
+
 // This class is created only for tests purpose
 class ModuleTest
   : public otb::Module
@@ -96,6 +108,18 @@ int main(int argc, char * argv[])
   // Building inputs
   otb::DataObjectWrapper input1("Floating_Point_Image",otb::Image<double,2>::New());
   otb::DataObjectWrapper input2("Vector",otb::VectorData<double>::New());
+
+  std::cout<<"GetNameOfClass(): "<<input1.GetDataObject()->GetNameOfClass()<<std::endl;
+
+  #ifdef GCC_USEDEMANGLE
+  char const * mangledName = typeid(*input1.GetDataObject()).name();
+  int status;
+  char * unmangled = abi::__cxa_demangle(mangledName, 0, 0, &status);
+  std::cout<<"RTTI unmangled: "<<unmangled<<std::endl;
+  free(unmangled);
+  #endif
+
+  std::cout<<"RTTI typeinfo: "<<typeid(*input1.GetDataObject()).name()<<std::endl;
 
 
   // Testing the input/output method
