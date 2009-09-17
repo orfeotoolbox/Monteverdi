@@ -28,7 +28,7 @@ OrthoRectifModule::OrthoRectifModule()
   m_OrthoRectif = OrthoRectif::New();
 
   // Describe inputs
-  this->AddInputDescriptor("Short_Point_VectorImage","InputImage","Image to apply OrthoRectification on.");
+  this->AddDataDescriptor("Short_Point_VectorImage","InputImage","Image to apply OrthoRectification on.");
 }
 
 /** Destructor */
