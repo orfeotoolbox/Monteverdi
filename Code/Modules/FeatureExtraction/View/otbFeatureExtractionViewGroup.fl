@@ -1,0 +1,1182 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107
+i18n_type 1
+i18n_include "otbI18n.h"
+i18n_function otbGetTextMacro
+header_name {.h}
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+}
+
+decl {\#include "otbFeature.h"} {selected public
+}
+
+class FeatureExtractionViewGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Feature Extraction Application}
+      callback {Quit();} open
+      xywh {362 260 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+    } {
+      Fl_Menu_Bar {} {open
+        xywh {0 0 665 20} box PLASTIC_DOWN_BOX
+      } {
+        Submenu {} {
+          label Menu open
+          xywh {0 0 63 20}
+        } {
+          MenuItem {} {
+            label {Open image}
+            callback {OpenImage();}
+            xywh {5 5 30 20} shortcut 0x4006f
+          }
+          MenuItem {} {
+            label {Close image}
+            callback {guiClearImage->do_callback();}
+            xywh {15 15 30 20} shortcut 0x80063
+          }
+          MenuItem {} {
+            label {Save Result}
+            callback {guiOK->do_callback();}
+            xywh {25 25 30 20} shortcut 0x80073 divider
+          }
+          MenuItem {} {
+            label Quit
+            callback {Quit();}
+            xywh {35 35 30 20} shortcut 0x80071
+          }
+        }
+      }
+      Fl_Tabs {} {open
+        xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiAction {
+          label Action open
+          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          Fl_Choice guiFeatureChoice {
+            label {Feature Choice} open
+            xywh {15 318 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+          } {
+            MenuItem guiInitMenu {
+              callback {UpdateParameterArea(0);
+SetFeatureType(otb::UNKNOWN);}
+              tooltip {""} xywh {0 0 30 20}
+            }
+            MenuItem {} {
+              label Touzi
+              callback {UpdateParameterArea(1);
+SetFeatureType(otb::TOUZI);}
+              tooltip {Touzi Image Filter} xywh {15 15 30 20}
+            }
+            MenuItem {} {
+              label {Harris (experimental)}
+              callback {UpdateParameterArea(2);
+SetFeatureType(otb::HARRIS);}
+              tooltip {Harris Image Filter} xywh {5 5 30 20}
+            }
+            MenuItem {} {
+              label {Spectral Angle}
+              callback {UpdateParameterArea(3);
+SetFeatureType(otb::SPECTRALANGLE);}
+              tooltip {Spectral Angle Image Filter} xywh {25 25 30 20}
+            }
+            MenuItem {} {
+              label Variance
+              callback {UpdateParameterArea(4);
+SetFeatureType(otb::VARIANCE);}
+              tooltip {Variance Image Filter} xywh {55 55 30 20}
+            }
+            MenuItem {} {
+              label Mean
+              callback {UpdateParameterArea(4);
+SetFeatureType(otb::MEAN);}
+              tooltip {Mean Image Filter} xywh {65 65 30 20}
+            }
+            MenuItem {} {
+              label {Rec. Gradient}
+              callback {UpdateParameterArea(5);
+SetFeatureType(otb::GRADIENT);}
+              tooltip {Recursive Gradient ImageFilter} xywh {75 75 30 20}
+            }
+            Submenu {} {
+              label Textures
+              tooltip {Texture Filters} xywh {0 0 63 20}
+            } {
+              MenuItem {} {
+                label {Angular Second Momentum Order}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_ASM);}
+                tooltip {Angular 2nd Moment} xywh {0 0 30 20}
+              }
+              MenuItem {} {
+                label {Cluster Shade}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_CSH);}
+                tooltip {Cluster Shade} xywh {170 170 30 20}
+              }
+              MenuItem {} {
+                label {Cluster Prominence}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_CPR);}
+                tooltip {Cluster Prominence} xywh {160 160 30 20}
+              }
+              MenuItem {} {
+                label Contrast
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_CON);}
+                tooltip Contrast xywh {10 10 30 20}
+              }
+              MenuItem {} {
+                label Correlation
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_COR);}
+                tooltip Correlation xywh {20 20 30 20}
+              }
+              MenuItem {} {
+                label {Difference Entropy}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_DEN);}
+                tooltip {Difference Entropy} xywh {130 130 30 20}
+              }
+              MenuItem {} {
+                label {Difference Variance}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_DVA);}
+                tooltip {Difference Variance} xywh {120 120 30 20}
+              }
+              MenuItem {} {
+                label Energy
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_ENJ);}
+                tooltip Energy xywh {50 50 30 20}
+              }
+              MenuItem {} {
+                label Entropy
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_ENT);}
+                tooltip Entropy xywh {110 110 30 20}
+              }
+              MenuItem {} {
+                label {Information Correlation 1}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_IC1);}
+                tooltip {INformation Correlation 1} xywh {140 140 30 20}
+              }
+              MenuItem {} {
+                label {Information Correlation 2}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_IC2);}
+                tooltip {INformation Correlation 2} xywh {150 150 30 20}
+              }
+              MenuItem {} {
+                label {Inverse Difference Moment}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_IDM);}
+                tooltip {Inverse Difference Moment} xywh {70 70 30 20}
+              }
+              MenuItem {} {
+                label Mean
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_MEA);}
+                tooltip Mean xywh {40 40 30 20}
+              }
+              MenuItem {} {
+                label PanTex
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_PANTEX);}
+                tooltip {Panchromatic Texture} xywh {50 50 30 20}
+              }
+              MenuItem {} {
+                label {Sum Average}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_SAV);}
+                tooltip {Sum Average} xywh {80 80 30 20}
+              }
+              MenuItem {} {
+                label {Sum Entropy}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_SEN);}
+                tooltip {Sum Entropy} xywh {100 100 30 20}
+              }
+              MenuItem {} {
+                label {Sum Variance}
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_SVA);}
+                tooltip {Sum Variance} xywh {90 90 30 20}
+              }
+              MenuItem {} {
+                label Variance
+                callback {UpdateParameterArea(6);
+SetFeatureType(otb::TEXT_VAR);}
+                tooltip Variance xywh {30 30 30 20}
+              }
+              Submenu {} {
+                label SFS open
+                tooltip {Structural Feature Set} xywh {15 15 63 20}
+              } {
+                MenuItem {} {
+                  label Length
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_LEN);
+guiSFSAlpha->deactivate();
+guiSFSRatMaxConsNb->deactivate();}
+                  tooltip Length xywh {45 45 30 20}
+                }
+                MenuItem {} {
+                  label Width
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_WID);
+guiSFSAlpha->deactivate();
+guiSFSRatMaxConsNb->deactivate();}
+                  tooltip Width xywh {55 55 30 20}
+                }
+                MenuItem {} {
+                  label PSI
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_PSI);
+guiSFSAlpha->deactivate();
+guiSFSRatMaxConsNb->deactivate();}
+                  tooltip {Pixel Shape Index} xywh {55 55 30 20}
+                }
+                MenuItem {} {
+                  label {W-mean}
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_WME);
+guiSFSAlpha->activate();
+guiSFSRatMaxConsNb->deactivate();}
+                  tooltip {W-Mean} xywh {65 65 30 20}
+                }
+                MenuItem {} {
+                  label Ratio
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_RAT);
+guiSFSAlpha->deactivate();
+guiSFSRatMaxConsNb->activate();}
+                  tooltip Ratio xywh {75 75 30 20}
+                }
+                MenuItem {} {
+                  label SD
+                  callback {UpdateParameterArea(28);
+SetFeatureType(otb::SFS_SD);
+guiSFSAlpha->deactivate();
+guiSFSRatMaxConsNb->deactivate();}
+                  tooltip {Standard Deviation} xywh {85 85 30 20}
+                }
+              }
+            }
+            Submenu {} {
+              label Morphology
+              xywh {10 10 63 20}
+            } {
+              MenuItem {} {
+                label {Morphological Opening Profile (experimental)}
+                callback {UpdateParameterArea(7);
+SetFeatureType(otb::MORPHOLOGICALOPENING);}
+                tooltip {Morphological Opening} xywh {40 40 30 20}
+              }
+              MenuItem {} {
+                label {Morphological Closing Profile (experimental)}
+                callback {UpdateParameterArea(7);
+SetFeatureType(otb::MORPHOLOGICALCLOSING);}
+                tooltip {Morphological Closing} xywh {50 50 30 20}
+              }
+            }
+            Submenu {} {
+              label {Radiometry Indexes}
+              tooltip {Radiometirc Indexes} xywh {10 10 63 20}
+            } {
+              Submenu {} {
+                label Vegetation open
+                tooltip Vegetation xywh {20 20 63 20}
+              } {
+                MenuItem {} {
+                  label NDVI
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::NDVI);}
+                  tooltip {Normalized Difference Vegetation Index} xywh {20 20 30 20}
+                }
+                MenuItem {} {
+                  label RVI
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::RVI);}
+                  tooltip {Ratio Vegetation Index} xywh {40 40 30 20}
+                }
+                MenuItem {} {
+                  label PVI
+                  callback {UpdateParameterArea(9);
+SetFeatureType(otb::PVI);}
+                  tooltip {Perpendicular Vegetation Index} xywh {30 30 30 20}
+                }
+                MenuItem {} {
+                  label SAVI
+                  callback {UpdateParameterArea(10);
+SetFeatureType(otb::SAVI);}
+                  tooltip {Soil Adjusted Vegetation Index} xywh {40 40 30 20}
+                }
+                MenuItem {} {
+                  label MSAVI
+                  callback {UpdateParameterArea(11);
+SetFeatureType(otb::MSAVI);}
+                  tooltip {Modified Soil Adjusted Vegetation Index} xywh {60 60 30 20}
+                }
+                MenuItem {} {
+                  label MSAVI2
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::MSAVI2);}
+                  tooltip {Modified Soil Adjusted Vegetation Index 2} xywh {50 50 30 20}
+                }
+                MenuItem {} {
+                  label TSAVI
+                  callback {UpdateParameterArea(12);
+SetFeatureType(otb::TSAVI);}
+                  tooltip {Transformed Soil Adjusted Vegetation Index} xywh {60 60 30 20}
+                }
+                MenuItem {} {
+                  label GEMI
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::GEMI);}
+                  tooltip {non-linear index to monitor vegetation} xywh {70 70 30 20}
+                }
+                MenuItem {} {
+                  label WDVI
+                  callback {UpdateParameterArea(13);
+SetFeatureType(otb::WDVI);}
+                  tooltip {Weigthted Difference Modified Vegetation Index} xywh {80 80 30 20}
+                }
+                MenuItem {} {
+                  label IPVI
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::IPVI);}
+                  tooltip {Infrared Percantage Vegetation Index} xywh {90 90 30 20}
+                }
+                MenuItem {} {
+                  label TNDVI
+                  callback {UpdateParameterArea(8);
+SetFeatureType(otb::TNDVI);}
+                  tooltip {Transformed Normalized Difference Vegetation Index} xywh {100 100 30 20}
+                }
+                MenuItem {} {
+                  label ARVI
+                  callback {UpdateParameterArea(14);
+SetFeatureType(otb::ARVI);}
+                  tooltip {Atmospherically Resistant Vegetation Index} xywh {110 110 30 20}
+                }
+                MenuItem {} {
+                  label EVI
+                  callback {UpdateParameterArea(15);
+SetFeatureType(otb::EVI);}
+                  tooltip {Enhanced Vegetation Index} xywh {120 120 30 20}
+                }
+                MenuItem {} {
+                  label TSARVI
+                  callback {UpdateParameterArea(16);
+SetFeatureType(otb::TSARVI);}
+                  tooltip {Transformed Soil Atmospherically Resistant Vegetation index} xywh {130 130 30 20}
+                }
+                MenuItem {} {
+                  label AVI
+                  callback {UpdateParameterArea(17);
+SetFeatureType(otb::AVI);}
+                  tooltip {Angular Vegetation index} xywh {140 140 30 20}
+                }
+              }
+              Submenu {} {
+                label Soil open
+                tooltip Soil xywh {30 30 63 20}
+              } {
+                MenuItem {} {
+                  label RI
+                  callback {UpdateParameterArea(18);
+SetFeatureType(otb::IR);}
+                  tooltip {Redness Index} xywh {150 150 30 20}
+                }
+                MenuItem {} {
+                  label CI
+                  callback {UpdateParameterArea(18);
+SetFeatureType(otb::IC);}
+                  tooltip {Color Index} xywh {160 160 30 20}
+                }
+                MenuItem {} {
+                  label BI
+                  callback {UpdateParameterArea(18);
+SetFeatureType(otb::IB);}
+                  tooltip {Brightness Index} xywh {170 170 30 20}
+                }
+                MenuItem {} {
+                  label BI2
+                  callback {UpdateParameterArea(19);
+SetFeatureType(otb::IB2);}
+                  tooltip {Brightness Index 2} xywh {180 180 30 20}
+                }
+              }
+              Submenu {} {
+                label {Built Up} open
+                tooltip {Built Up} xywh {40 40 63 20}
+              } {
+                MenuItem {} {
+                  label NDBI
+                  callback {UpdateParameterArea(20);
+SetFeatureType(otb::NDBI);}
+                  tooltip {Normalized Difference Built up Index} xywh {170 170 30 20}
+                }
+                MenuItem {} {
+                  label ISU
+                  callback {UpdateParameterArea(21);
+SetFeatureType(otb::ISU);}
+                  xywh {180 180 30 20}
+                }
+              }
+              Submenu {} {
+                label Water open
+                tooltip Water xywh {50 50 63 20}
+              } {
+                MenuItem {} {
+                  label SRWI
+                  callback {UpdateParameterArea(22);
+SetFeatureType(otb::SRWI);}
+                  tooltip {SimpleRatio WaterIndex} xywh {30 30 30 20}
+                }
+                MenuItem {} {
+                  label NDWI
+                  callback {UpdateParameterArea(23);
+SetFeatureType(otb::NDWI);}
+                  tooltip {Normalized Difference Water Index (Gao 1996)} xywh {40 40 30 20}
+                }
+                MenuItem {} {
+                  label NDWI2
+                  callback {UpdateParameterArea(24);
+SetFeatureType(otb::NDWI2);}
+                  tooltip {Normalized DIfference Water Index (Mc Feeters 1996)} xywh {50 50 30 20}
+                }
+                MenuItem {} {
+                  label MNDWI
+                  callback {UpdateParameterArea(25);
+SetFeatureType(otb::MNDWI);}
+                  tooltip {Modified Normalized Difference Water Index (Xu 2006)} xywh {60 60 30 20}
+                }
+                MenuItem {} {
+                  label NDPI
+                  callback {UpdateParameterArea(26);
+SetFeatureType(otb::NDPI);}
+                  tooltip {Normalized Difference Pond Index (Lacaux & al)} xywh {70 70 30 20}
+                }
+                MenuItem {} {
+                  label NDTI
+                  callback {UpdateParameterArea(27);
+SetFeatureType(otb::NDTI);}
+                  tooltip {Normalized Difference Turbidity Index (Lacaux & al)} xywh {80 80 30 20}
+                }
+              }
+            }
+            Submenu {} {
+              label {Edge Density}
+              tooltip {Edge Density} xywh {20 20 63 20}
+            } {
+              MenuItem {} {
+                label Sobel
+                callback {UpdateParameterArea(29);
+SetFeatureType(otb::EDGE_SOBEL);}
+                tooltip {Sobel Edge Detector} xywh {50 50 30 20}
+              }
+            }
+            Submenu {} {
+              label {Mean Shift} open
+              tooltip {Edge Density} xywh {30 30 63 20}
+            } {
+              MenuItem {} {
+                label Smooth
+                callback {UpdateParameterArea(30);
+SetFeatureType(otb::MS_SMOOTH);}
+                tooltip {Sobel Edge Detector} xywh {60 60 30 20}
+              }
+              MenuItem {} {
+                label Clusters
+                callback {UpdateParameterArea(30);
+SetFeatureType(otb::MS_CLUSTERED);}
+                tooltip {Sobel Edge Detector} xywh {70 70 30 20}
+              }
+              MenuItem {} {
+                label Labels
+                callback {UpdateParameterArea(30);
+SetFeatureType(otb::MS_LABELED);}
+                tooltip {Sobel Edge Detector} xywh {70 70 30 20}
+              }
+              MenuItem {} {
+                label Boundries
+                callback {UpdateParameterArea(30);
+SetFeatureType(otb::MS_BOUND);}
+                tooltip {Sobel Edge Detector} xywh {80 80 30 20}
+              }
+            }
+            MenuItem {} {
+              label {Original data}
+              callback {UpdateParameterArea(0);
+SetFeatureType(otb::ORIGINAL);}
+              tooltip {Input Copy} xywh {95 95 30 20}
+            }
+          }
+          Fl_Wizard guiParameter {
+            label {Feature parameters} open
+            xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+          } {
+            Fl_Group guiNothing {
+              xywh {206 318 240 140}
+            } {}
+            Fl_Group guiTouzi {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiTouziRadius {
+                label {Radius}
+                xywh {291 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+              }
+            }
+            Fl_Group guiHarris {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiHarrisSigmaD {
+                label {Sigma D}
+                xywh {298 340 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1.5
+              }
+              Fl_Value_Input guiHarrisSigmaI {
+                label {Sigma I}
+                xywh {298 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 2
+              }
+              Fl_Value_Input guiHarrisAlpha {
+                label {Alpha}
+                xywh {298 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 0.1
+              }
+            }
+            Fl_Group guiSpectAngle {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Output guiSpectAnglePixelCoordinates {
+                label {Pixel coordinates}
+                xywh {231 357 190 18} labelsize 11 labelcolor 32 align 5 textsize 11
+              }
+              Fl_Output guiSpectAnglePixelValue {
+                label {Pixel value}
+                xywh {231 408 190 18} labelsize 11 labelcolor 32 align 5 textsize 11
+              }
+            }
+            Fl_Group guiMorpho {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiMorphoInitVal {
+                label {Initial Value}
+                xywh {306 340 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+              }
+              Fl_Value_Input guiMorphoProfileSize {
+                label {Profile Size}
+                xywh {306 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+              }
+              Fl_Value_Input guiMorphoStep {
+                label {Step}
+                xywh {306 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+              }
+            }
+            Fl_Group guiRadius {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiRadiusX {
+                label {Radius along X}
+                xywh {336 358 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiRadiusY {
+                label {Radius along Y}
+                xywh {336 408 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+            }
+            Fl_Group guiGrad {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiGradSigma {
+                label {Sigma}
+                xywh {288 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiTextures {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiTextRadiusX {
+                label {Radius along X}
+                xywh {335 333 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiTextRadiusY {
+                label {Radius along Y}
+                xywh {335 363 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiTextOffsetX {
+                label {Offset along X}
+                xywh {335 393 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum -100 maximum 100 step 1 value 1
+              }
+              Fl_Counter guiTextOffsetY {
+                label {Offset along Y}
+                xywh {335 423 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum -100 maximum 100 step 1 value 1
+              }
+            }
+            Fl_Group guiRAndNIR {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiRAndNIRR {
+                label {Red channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiRAndNIRNIR {
+                label {NIR channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiPVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiPVIR {
+                label {Red channel}
+                xywh {341 340 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiPVINIR {
+                label {NIR channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiPVIa {
+                label {a}
+                tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiPVIb {
+                label {b}
+                tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiSAVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiSAVIR {
+                label {Red channel}
+                xywh {341 335 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiSAVINIR {
+                label {NIR channel}
+                xywh {341 380 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiSAVIL {
+                label {L}
+                tooltip {Correction factor. 0 for high vegetation cover, 1 for low, and usually L = 0.5} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
+              }
+            }
+            Fl_Group guiMSAVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiMSAVIR {
+                label {Red channel}
+                xywh {341 335 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiMSAVINIR {
+                label {NIR channel}
+                xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiMSAVIs {
+                label {s}
+                tooltip {Soil line slope} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiTSAVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiTSAVIR {
+                label {Red channel}
+                xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiTSAVINIR {
+                label {NIR channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiTSAVIs {
+                label {s}
+                tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiTSAVIa {
+                label {a}
+                tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiTSAVIx {
+                label {x}
+                tooltip {Adjustement factor} xywh {296 428 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiWDVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiWDVIR {
+                label {Red channel}
+                xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiWDVINIR {
+                label {NIR channel}
+                xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiWDVIs {
+                label {s}
+                tooltip {Slope of soil line} xywh {296 415 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiARVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiARVIR {
+                label {Red channel}
+                xywh {341 333 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiARVIB {
+                label {Blue channel}
+                xywh {341 363 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+              }
+              Fl_Counter guiARVINIR {
+                label {NIR channel}
+                xywh {341 393 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiARVIgamma {
+                label {gamma}
+                tooltip {gamma generally = 0.5 (default value) or 1 (depending on aerosols)} xywh {296 423 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
+              }
+            }
+            Fl_Group guiEVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiEVIR {
+                label {Red channel}
+                xywh {341 322 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiEVIB {
+                label {Blue channel}
+                xywh {341 341 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+              }
+              Fl_Counter guiEVINIR {
+                label {NIR channel}
+                xywh {341 360 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiEVIG {
+                label {G}
+                xywh {296 380 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiEVIL {
+                label {L}
+                xywh {296 399 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 1
+              }
+              Fl_Value_Input guiEVIC1 {
+                label {C1}
+                xywh {296 418 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 6
+              }
+              Fl_Value_Input guiEVIC2 {
+                label {C2}
+                xywh {296 438 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 7.5
+              }
+            }
+            Fl_Group guiTSARVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiTSARVIR {
+                label {Red channel}
+                xywh {341 328 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiTSARVIB {
+                label {Blue channel}
+                xywh {341 348 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+              }
+              Fl_Counter guiTSARVINIR {
+                label {NIR channel}
+                xywh {341 368 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiTSARVIa_rb {
+                label {a_rb}
+                tooltip {Soil line slope} xywh {296 390 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiTSARVIb_rb {
+                label {b_rb}
+                tooltip {Soil line intercept} xywh {296 410 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+              Fl_Value_Input guiTSARVIx {
+                label {X}
+                xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+              }
+            }
+            Fl_Group guiAVI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiAVIR {
+                label {Red channel}
+                xywh {341 328 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiAVIG {
+                label {Green channel}
+                xywh {341 348 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiAVINIR {
+                label {NIR channel}
+                xywh {341 368 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiAVIlambda1 {
+                label {lambda 1}
+                tooltip {Central wavelength of the G band (0.55 for Pleiade)} xywh {296 390 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.55
+              }
+              Fl_Value_Input guiAVIlambda2 {
+                label {lambda 2}
+                tooltip {Central wavelength of the R band (0.66  for Pleiade)} xywh {296 410 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.66
+              }
+              Fl_Value_Input guiAVIlambda3 {
+                label {lambda 3}
+                tooltip {Central wavelength of the NIR band (0.84 for Pleiade)} xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.84
+              }
+            }
+            Fl_Group guiSoil {open
+              xywh {206 318 240 140} align 0 hide
+            } {
+              Fl_Counter guiSoilG {
+                label {Green channel}
+                xywh {360 358 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiSoilR {
+                label {Red channel}
+                xywh {360 408 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+            }
+            Fl_Group guiIB2 {
+              xywh {206 318 240 140} align 0 hide
+            } {
+              Fl_Counter guiIB2G {
+                label {Green channel}
+                xywh {360 340 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiIB2R {
+                label {Red channel}
+                xywh {360 380 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiIB2NIR {
+                label {NIR channel}
+                xywh {360 415 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiNDBI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiNDBITM4 {
+                label {TM4 channel}
+                xywh {352 358 85 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+              }
+              Fl_Counter guiNDBITM5 {
+                label {TM5 channel}
+                xywh {352 408 85 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+              }
+            }
+            Fl_Group guiISU {
+              xywh {207 318 240 140} hide
+            } {
+              Fl_Counter guiISUR {
+                label {Red channel}
+                xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiISUNIR {
+                label {NIR channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+              }
+              Fl_Value_Input guiISUa {
+                label {a}
+                xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 100
+              }
+              Fl_Value_Input guiISUb {
+                label {b}
+                xywh {296 413 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 25
+              }
+            }
+            Fl_Group guiSRWI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiSRWIR860 {
+                label {Rho 860 Index}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiSRWIR1240 {
+                label {Rho 1240 Index}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiNDWI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiNDWINIR {
+                label {NIR channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiNDWIMIR {
+                label {MIR channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiNDWI2 {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiNDWI2G {
+                label {Green channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiNDWI2NIR {
+                label {NIR channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiMNDWI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiMNDWIG {
+                label {Green channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiMNDWIMIR {
+                label {MIR channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiNDPI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiNDPIMIR {
+                label {MIR channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiNDPIG {
+                label {Green channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiNDTI {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiNDTIR {
+                label {Red channel}
+                xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+              }
+              Fl_Counter guiNDTIG {
+                label {Green channel}
+                xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+              }
+            }
+            Fl_Group guiSFS {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiSFSSpectralThreshold {
+                label {Spectral Thresh}
+                xywh {335 328 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 50
+              }
+              Fl_Value_Input guiSFSSpatialThreshold {
+                label {Spatial Thresh}
+                xywh {335 353 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 100
+              }
+              Fl_Value_Input guiSFSNbDirections {
+                label {Nbr of Directions}
+                xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 20
+              }
+              Fl_Value_Input guiSFSAlpha {
+                label {Alpha}
+                xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1 deactivate
+              }
+              Fl_Value_Input guiSFSRatMaxConsNb {
+                label {Ratio MaxCons. Nb}
+                xywh {335 428 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 5 deactivate
+              }
+            }
+            Fl_Group guiEdgeCanny {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiEdgeCannyRadius {
+                label {Radius}
+                xywh {335 328 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+              }
+              Fl_Value_Input guiEdgeCannyMaxThresh {
+                label {Max Thresh}
+                xywh {335 353 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 15
+              }
+              Fl_Value_Input guiEdgeCannyMinThresh {
+                label {Min Thresh}
+                xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 3
+              }
+              Fl_Value_Input guiEdgeCannyVariance {
+                label {Variance}
+                xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1
+              }
+              Fl_Value_Input guiEdgeCannyMaxError {
+                label {Max Error}
+                xywh {335 428 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.001 value 0.01
+              }
+            }
+            Fl_Group guiEdgeSobel {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Counter guiEdgeSobelRadiusX {
+                label {Radius along X}
+                xywh {320 333 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+              Fl_Counter guiEdgeSobelRadiusY {
+                label {Radius along Y}
+                xywh {320 363 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+              }
+              Fl_Value_Input guiEgdeSobelLowThresh {
+                label {Lower Thresh}
+                xywh {320 393 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5
+              }
+              Fl_Value_Input guiEgdeSobelUpThresh {
+                label {Upper Thresh}
+                xywh {320 423 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 255
+              }
+            }
+            Fl_Group guiMS {
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiMSSpatial {
+                label {Spatial Radius}
+                xywh {330 335 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 3
+              }
+              Fl_Value_Input guiMSRange {
+                label {Range Radius}
+                xywh {330 365 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 10
+              }
+              Fl_Value_Input guiMSSize {
+                label {Min. Region Size}
+                xywh {330 395 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 10
+              }
+              Fl_Value_Input guiMSScale {
+                label {Scale}
+                xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
+              }
+            }
+          }
+          Fl_Check_Browser guiChannelSelection {
+            label {Channels Selection}
+            callback {UpdateChannels();}
+            xywh {15 361 182 96} box PLASTIC_DOWN_BOX color 141 selection_color 139 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1
+          }
+          Fl_Button guiAdd {
+            label Add
+            callback {AddFeature();}
+            tooltip {Add feature to list (one per selected channel)} xywh {186 521 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 80 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Browser guiFeatureListAction {
+            label {Feature Image List}
+            callback {UpdateFeaturePreview();}
+            tooltip {Contains each Computed Feature} xywh {456 318 194 226} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Text_Display guiFeatInfo {
+            label {Feature Information}
+            xywh {15 479 432 35} box PLASTIC_DOWN_BOX color 234 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 12 textcolor 7
+          }
+        }
+        Fl_Group guiOutput {
+          label Output
+          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
+        } {
+          Fl_Browser guiFeatureList {
+            label {Feature Image List}
+            callback {UpdateExtractView();}
+            tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button guiAddChannel {
+            label {>>}
+            callback {AddOutputChannel();}
+            tooltip {Add mono Channel Image to Intput List} xywh {305 363 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Button guiRemoveChannel {
+            label {<<}
+            callback {RemoveOutputChannel();}
+            tooltip {Remove Mono channel Image from Output List} xywh {305 457 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 45 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Browser guiOutputFeatureList {
+            label {Selected Output Channels}
+            callback {UpdateFeaturePreviewFromOutputList();}
+            tooltip {Contains each Selected Feature for Output Generation} xywh {357 319 270 204} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button guiUpChannel {
+            label {+}
+            callback {UpOutputChannel();}
+            tooltip {Change selected Feature Position in Output Image} xywh {634 398 15 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Button guiDownChannel {
+            label {-}
+            callback {DownOutputChannel();}
+            tooltip {Change selected Feature Position in Output Image} xywh {634 429 15 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 45 labelfont 1 labelsize 20 labelcolor 186
+          }
+        }
+      }
+      Fl_Button guiOK {
+        label {Save result}
+        callback {OK();}
+        tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button guiClearImage {
+        label {Close image}
+        callback {ClearImage();}
+        tooltip {Erase Feature and Close Input Image} xywh {230 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button guiClose {
+        label {Clear List}
+        callback {ClearFeature();}
+        tooltip {Clear Feature List} xywh {108 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button guiQuit {
+        label Quit
+        callback {Quit();}
+        tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 120 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Group guiImageGroup {
+        xywh {10 25 645 240} resizable
+      } {
+        Fl_Group gScroll {
+          label Scroll open
+          xywh {10 43 209 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Group gFull {
+          label {Full resolution} open
+          xywh {229 43 210 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Group gFeature {
+          label Feature open
+          xywh {448 43 207 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+      }
+    }
+  }
+  Function {FeatureExtractionViewGroup()} {} {}
+  Function {~FeatureExtractionViewGroup()} {open return_type virtual
+  } {}
+  Function {OpenImage()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {SetFeatureType(otb::FeatureType i)} {open return_type {virtual void}
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {AddFeature()} {open return_type {virtual void}
+  } {}
+  Function {UpdateChannels()} {open return_type {virtual void}
+  } {}
+  Function {AddOutputChannel()} {open return_type {virtual void}
+  } {}
+  Function {RemoveOutputChannel()} {open return_type {virtual void}
+  } {}
+  Function {UpdateFeaturePreview()} {open return_type {virtual void}
+  } {}
+  Function {ClearFeature()} {open return_type {virtual void}
+  } {}
+  Function {ClearImage()} {open return_type {virtual void}
+  } {}
+  Function {UpdateExtractView()} {open return_type {virtual void}
+  } {}
+  Function {UpdateParameterArea(unsigned int groupId)} {open return_type {virtual void}
+  } {}
+  Function {UpOutputChannel()} {open return_type {virtual void}
+  } {}
+  Function {DownOutputChannel()} {open return_type {virtual void}
+  } {}
+  Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
+  } {}
+}
