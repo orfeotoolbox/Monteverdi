@@ -392,6 +392,7 @@ void
 FeatureExtractionViewGUI
 ::OK()
 {
+  /*
   const char * cfname = fl_file_chooser("Save as...", "*.*",m_LastPath.c_str());
   Fl::check();
   guiMainWindow->redraw();
@@ -401,6 +402,8 @@ FeatureExtractionViewGUI
   }
   m_FeatureExtractionController->SetOutputFileName(cfname);
   m_FeatureExtractionController->SaveOutput();
+  */
+  //Here we need to go back to the app Monteverdi //TODO
 }
 
 
@@ -458,7 +461,7 @@ FeatureExtractionViewGUI
     }
 }
 
-
+/*
 void
 FeatureExtractionViewGUI
 ::ClearImage()
@@ -471,7 +474,7 @@ FeatureExtractionViewGUI
   this->UpdateParameterArea(0);
   this->SetFeatureType(otb::UNKNOWN);
 
-  /** NewVisu */
+  // NewVisu 
   if (m_VisuView.IsNotNull())
   {
     m_VisuView->GetScrollWidget()->ClearBuffer();
@@ -494,7 +497,7 @@ FeatureExtractionViewGUI
  guiMainWindow->label("Feature Extraction Application");
 
 }
-
+*/
 void
 FeatureExtractionViewGUI
 ::Quit()

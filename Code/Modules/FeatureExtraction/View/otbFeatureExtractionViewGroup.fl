@@ -1,15 +1,15 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 decl {\#include <FL/Fl_Gl_Window.H>} {public
-}
+} 
 
-decl {\#include "otbFeature.h"} {selected public
-}
+decl {\#include "otbFeature.h"} {public
+} 
 
 class FeatureExtractionViewGroup {open
 } {
@@ -18,37 +18,8 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {362 260 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {378 227 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Menu_Bar {} {open
-        xywh {0 0 665 20} box PLASTIC_DOWN_BOX
-      } {
-        Submenu {} {
-          label Menu open
-          xywh {0 0 63 20}
-        } {
-          MenuItem {} {
-            label {Open image}
-            callback {OpenImage();}
-            xywh {5 5 30 20} shortcut 0x4006f
-          }
-          MenuItem {} {
-            label {Close image}
-            callback {guiClearImage->do_callback();}
-            xywh {15 15 30 20} shortcut 0x80063
-          }
-          MenuItem {} {
-            label {Save Result}
-            callback {guiOK->do_callback();}
-            xywh {25 25 30 20} shortcut 0x80073 divider
-          }
-          MenuItem {} {
-            label Quit
-            callback {Quit();}
-            xywh {35 35 30 20} shortcut 0x80071
-          }
-        }
-      }
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
@@ -529,7 +500,7 @@ SetFeatureType(otb::ORIGINAL);}
               xywh {206 318 240 140} hide
             } {
               Fl_Value_Input guiTouziRadius {
-                label {Radius}
+                label Radius
                 xywh {291 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
               }
             }
@@ -545,7 +516,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {298 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 2
               }
               Fl_Value_Input guiHarrisAlpha {
-                label {Alpha}
+                label Alpha
                 xywh {298 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 0.1
               }
             }
@@ -573,7 +544,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {306 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
               }
               Fl_Value_Input guiMorphoStep {
-                label {Step}
+                label Step
                 xywh {306 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
               }
             }
@@ -593,7 +564,7 @@ SetFeatureType(otb::ORIGINAL);}
               xywh {206 318 240 140} hide
             } {
               Fl_Value_Input guiGradSigma {
-                label {Sigma}
+                label Sigma
                 xywh {288 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -641,11 +612,11 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiPVIa {
-                label {a}
+                label a
                 tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiPVIb {
-                label {b}
+                label b
                 tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -661,7 +632,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 380 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiSAVIL {
-                label {L}
+                label L
                 tooltip {Correction factor. 0 for high vegetation cover, 1 for low, and usually L = 0.5} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
               }
             }
@@ -677,7 +648,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiMSAVIs {
-                label {s}
+                label s
                 tooltip {Soil line slope} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -693,15 +664,15 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiTSAVIs {
-                label {s}
+                label s
                 tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiTSAVIa {
-                label {a}
+                label a
                 tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiTSAVIx {
-                label {x}
+                label x
                 tooltip {Adjustement factor} xywh {296 428 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -717,7 +688,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiWDVIs {
-                label {s}
+                label s
                 tooltip {Slope of soil line} xywh {296 415 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -737,7 +708,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 393 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiARVIgamma {
-                label {gamma}
+                label gamma
                 tooltip {gamma generally = 0.5 (default value) or 1 (depending on aerosols)} xywh {296 423 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
               }
             }
@@ -757,19 +728,19 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 360 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiEVIG {
-                label {G}
+                label G
                 xywh {296 380 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiEVIL {
-                label {L}
+                label L
                 xywh {296 399 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 1
               }
               Fl_Value_Input guiEVIC1 {
-                label {C1}
+                label C1
                 xywh {296 418 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 6
               }
               Fl_Value_Input guiEVIC2 {
-                label {C2}
+                label C2
                 xywh {296 438 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 7.5
               }
             }
@@ -789,15 +760,15 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 368 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiTSARVIa_rb {
-                label {a_rb}
+                label a_rb
                 tooltip {Soil line slope} xywh {296 390 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiTSARVIb_rb {
-                label {b_rb}
+                label b_rb
                 tooltip {Soil line intercept} xywh {296 410 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
               Fl_Value_Input guiTSARVIx {
-                label {X}
+                label X
                 xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
@@ -881,11 +852,11 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
               }
               Fl_Value_Input guiISUa {
-                label {a}
+                label a
                 xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 100
               }
               Fl_Value_Input guiISUb {
-                label {b}
+                label b
                 xywh {296 413 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 25
               }
             }
@@ -977,7 +948,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 20
               }
               Fl_Value_Input guiSFSAlpha {
-                label {Alpha}
+                label Alpha
                 xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1 deactivate
               }
               Fl_Value_Input guiSFSRatMaxConsNb {
@@ -989,7 +960,7 @@ SetFeatureType(otb::ORIGINAL);}
               xywh {206 318 240 140} hide
             } {
               Fl_Value_Input guiEdgeCannyRadius {
-                label {Radius}
+                label Radius
                 xywh {335 328 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
               }
               Fl_Value_Input guiEdgeCannyMaxThresh {
@@ -1001,7 +972,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 3
               }
               Fl_Value_Input guiEdgeCannyVariance {
-                label {Variance}
+                label Variance
                 xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1
               }
               Fl_Value_Input guiEdgeCannyMaxError {
@@ -1045,7 +1016,7 @@ SetFeatureType(otb::ORIGINAL);}
                 xywh {330 395 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 10
               }
               Fl_Value_Input guiMSScale {
-                label {Scale}
+                label Scale
                 xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
               }
             }
@@ -1107,14 +1078,9 @@ SetFeatureType(otb::ORIGINAL);}
         }
       }
       Fl_Button guiOK {
-        label {Save result}
-        callback {OK();}
+        label {Save/Quit}
+        callback {OK();} selected
         tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button guiClearImage {
-        label {Close image}
-        callback {ClearImage();}
-        tooltip {Erase Feature and Close Input Image} xywh {230 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiClose {
         label {Clear List}
@@ -1179,4 +1145,4 @@ SetFeatureType(otb::ORIGINAL);}
   } {}
   Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
   } {}
-}
+} 
