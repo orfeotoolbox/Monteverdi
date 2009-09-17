@@ -52,6 +52,8 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/Speckle
 ${Monteverdi_BINARY_DIR}/Code/Modules/Speckle
 ${Monteverdi_SOURCE_DIR}/Code/Modules/Reader
 ${Monteverdi_BINARY_DIR}/Code/Modules/Reader
+${Monteverdi_SOURCE_DIR}/Code/Modules/OrthoRectif
+${Monteverdi_BINARY_DIR}/Code/Modules/OrthoRectif
 )
 
 # Code location

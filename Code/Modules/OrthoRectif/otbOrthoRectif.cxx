@@ -898,6 +898,7 @@ OrthoRectif::GenericCreateOutput( TMapProjection *mapProj)
   typename PerBandFilterType::Pointer perBandFilter = PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(image);
+  //TODO : remove this update !!!!
   perBandFilter->Update();
   m_Output = perBandFilter->GetOutput();
   
