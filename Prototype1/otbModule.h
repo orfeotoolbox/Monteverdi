@@ -48,7 +48,8 @@ private:
 class DataDescriptor
 {
 public:
-  DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown") {}
+  DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown"),
+  m_Optional(false), m_Multiple(false), m_NumberOfData(0) {}
   virtual ~DataDescriptor() {}
 
   /// The key to identify data
@@ -59,28 +60,13 @@ public:
 
   /// A description of the data
   std::string m_DataDescription;
-};
-
-class InputDataDescriptor
-  : public DataDescriptor
-{
-public:
-  InputDataDescriptor() : m_Optional(false), m_Multiple(false) {}
-  virtual ~InputDataDescriptor() {}
   
   bool m_Optional;
   
   bool m_Multiple;
-};
-
-class OutputDataDescriptor
-  : public DataDescriptor
-{
-public:
-  OutputDataDescriptor() : m_NumberOfData(0) {}
-  virtual ~OutputDataDescriptor() {}
   
   unsigned int m_NumberOfData;
+
 };
 
 class DataWrapper
@@ -109,8 +95,7 @@ public:
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Data Description interface */
-  typedef std::map<std::string,InputDataDescriptor>  InputDataDescriptorMapType;
-  typedef std::map<std::string,OutputDataDescriptor> OutputDataDescriptorMapType;
+  typedef std::map<std::string, DataDescriptor>  DataDescriptorMapType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -120,33 +105,26 @@ public:
 
   virtual void SetParameters(std::string key, const ParameterBase* value)
   {
-    itkExceptionMacro(<<"Subclass must overload this method");
+    itkExceptionMacro(<<"Subclasses should override this method");
   }
 
   /// Input Data management
-  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
+  virtual void AddDataByKey(const std::string & key, const DataWrapper & data)
   {
     // We may be missing type checking here
-    itkExceptionMacro(<<"Subclass must overload this method 1");
+    itkExceptionMacro(<<"Subclasses should override this method 1");
   }
  
   /// Output data management
-  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetDataByKey(const std::string & key,unsigned int idx)
   {
-    itkExceptionMacro(<<"Subclass must overload this method 2");
+    itkExceptionMacro(<<"Subclasses should override this method 2");
   }
 
-  // Output data management
 
-
-  const InputDataDescriptorMapType & GetInputDataDescriptorsMap()
+  const DataDescriptorMapType & GetDataDescriptorsMap()
   {
-    return m_InputDataDescriptorsMap;
-  }
-
-  const OutputDataDescriptorMapType & GetOutputDataDescriptorsMap()
-  {
-    return m_OutputDataDescriptorsMap;
+    return m_DataDescriptorsMap;
   }
 
   // Default is doing nothing (pipeline execution)
@@ -158,11 +136,8 @@ protected:
   /** Destructor */
   virtual ~ModuleBase() {};
 
-
   // Map could be replaced by a simple std::vector
-  InputDataDescriptorMapType m_InputDataDescriptorsMap;
-
-  OutputDataDescriptorMapType m_OutputDataDescriptorsMap;
+  DataDescriptorMapType m_DataDescriptorsMap;
 
 private:
   ModuleBase(const Self&); //purposely not implemented
@@ -199,19 +174,19 @@ public:
     }
   }
 
-  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetDataByKey(const std::string & key, unsigned int idx)
   {
-    if(key == "OutputImage")
-      {
+    if (key == "OutputImage")
+    {
       DataWrapper dwrap;
       dwrap.m_DataObject = m_Process->GetOutput();
-      dwrap.m_DataType = m_OutputDataDescriptorsMap[key].m_DataType;
+      dwrap.m_DataType = m_DataDescriptorsMap[key].m_DataType;
       return dwrap;
-      }
+    }
     else
-      {
+    {
       itkExceptionMacro(<<"No output corresponding to "<<key<<" (idx = "<<idx<<")");
-      }
+    }
   }
 
 protected:
@@ -221,12 +196,12 @@ protected:
     m_Process = ProcessType::New();
     
     // Describe outputs
-    OutputDataDescriptor outputDescriptor;
-    outputDescriptor.m_DataType = "Floating_Point_Image";
-    outputDescriptor.m_DataKey = "OutputImage";
-    outputDescriptor.m_DataDescription = "Image read from the disk";
-    outputDescriptor.m_NumberOfData = 1;
-    m_OutputDataDescriptorsMap[outputDescriptor.m_DataKey]=outputDescriptor;
+    DataDescriptor descriptor;
+    descriptor.m_DataType = "Floating_Point_Image";
+    descriptor.m_DataKey = "OutputImage";
+    descriptor.m_DataDescription = "Image read from the disk";
+    descriptor.m_NumberOfData = 1;
+    m_DataDescriptorsMap[descriptor.m_DataKey]=descriptor;
   }
   /** Destructor */
   virtual ~ModuleReader() {};
@@ -270,33 +245,33 @@ public:
     }
   }
   
-  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
+  virtual void AddDataByKey(const std::string & key, const DataWrapper & data)
   {
-    if(key == "InputImage")
+    if (key == "InputImage")
+    {
+      if (m_DataDescriptorsMap[key].m_DataType == data.m_DataType)
       {
-      if(m_InputDataDescriptorsMap[key].m_DataType == data.m_DataType)
-	{
-	// Possible dynamic cast here
-	m_Process->GetInputs()[0] = data.m_DataObject;
-	}
+        // Possible dynamic cast here
+        m_Process->GetInputs()[0] = data.m_DataObject;
+      }
       else
-	{
-	itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_InputDataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
-	}
-      }
-    else
       {
-      itkExceptionMacro(<<"No input corresponding to "<<key);
+        itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_DataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
       }
+    }
+    else
+    {
+      itkExceptionMacro(<<"No input corresponding to "<<key);
+    }
   }
 
-  virtual const DataWrapper GetOutputByKey(const std::string & key,unsigned int idx)
+  virtual const DataWrapper GetDataByKey(const std::string & key,unsigned int idx)
   {
     if(key == "OutputImage")
       {
       DataWrapper dwrap;
       dwrap.m_DataObject = m_Process->GetOutput();
-      dwrap.m_DataType = m_OutputDataDescriptorsMap[key].m_DataType;
+      dwrap.m_DataType = m_DataDescriptorsMap[key].m_DataType;
       return dwrap;
       }
     else
@@ -312,19 +287,18 @@ protected:
     m_Process = ProcessType::New();
 
     // Describe outputs
-    OutputDataDescriptor outputDescriptor;
-    outputDescriptor.m_DataType = "Labeled_Image";
-    outputDescriptor.m_DataKey = "OutputImage";
-    outputDescriptor.m_DataDescription = "Thresholded image";
-    outputDescriptor.m_NumberOfData = 1;
-    m_OutputDataDescriptorsMap[outputDescriptor.m_DataKey]=outputDescriptor;
+    DataDescriptor descriptor;
+    descriptor.m_DataType = "Labeled_Image";
+    descriptor.m_DataKey = "OutputImage";
+    descriptor.m_DataDescription = "Thresholded image";
+    descriptor.m_NumberOfData = 1;
+    m_DataDescriptorsMap[descriptor.m_DataKey]=descriptor;
 
     // Describe inputs
-    InputDataDescriptor inputDescriptor;
-    inputDescriptor.m_DataType = "Floating_Point_Image";
-    inputDescriptor.m_DataKey = "InputImage";
-    inputDescriptor.m_DataDescription = "Image to apply threshold on";
-    m_InputDataDescriptorsMap[inputDescriptor.m_DataKey]=inputDescriptor;
+    descriptor.m_DataType = "Floating_Point_Image";
+    descriptor.m_DataKey = "InputImage";
+    descriptor.m_DataDescription = "Image to apply threshold on";
+    m_DataDescriptorsMap[descriptor.m_DataKey]=descriptor;
 
   }
   /** Destructor */
@@ -371,23 +345,23 @@ public:
     }
   }
   
-  virtual void AddInputByKey(const std::string & key, const DataWrapper & data)
+  virtual void AddDataByKey(const std::string & key, const DataWrapper & data)
   {
-    if(key == "InputImage")
+    if (key == "InputImage")
+    {
+      if (m_DataDescriptorsMap[key].m_DataType == data.m_DataType)
       {
-      if(m_InputDataDescriptorsMap[key].m_DataType == data.m_DataType)
-	{
-	m_Process->SetInput( dynamic_cast<ImageType *>(data.m_DataObject));
-	}
+        m_Process->SetInput(dynamic_cast<ImageType *> (data.m_DataObject));
+      }
       else
-	{
-	itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_InputDataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
-	}
-      }
-    else
       {
-      itkExceptionMacro(<<"No input corresponding to "<<key);
+        itkExceptionMacro(<<"Wrong type for input "<<key<<": expected "<<m_DataDescriptorsMap[key].m_DataType<<", received "<<data.m_DataType);
       }
+    }
+    else
+    {
+      itkExceptionMacro(<<"No input corresponding to "<<key);
+    }
   }
 
 protected:
@@ -397,11 +371,11 @@ protected:
     m_Process = ProcessType::New();
 
      // Describe inputs
-    InputDataDescriptor inputDescriptor;
-    inputDescriptor.m_DataType = "Floating_Point_Image";
-    inputDescriptor.m_DataKey = "InputImage";
-    inputDescriptor.m_DataDescription = "Image to write";
-    m_InputDataDescriptorsMap[inputDescriptor.m_DataKey]=inputDescriptor;
+    DataDescriptor descriptor;
+    descriptor.m_DataType = "Floating_Point_Image";
+    descriptor.m_DataKey = "InputImage";
+    descriptor.m_DataDescription = "Image to write";
+    m_DataDescriptorsMap[descriptor.m_DataKey]=descriptor;
 
   }
   /** Destructor */

@@ -52,14 +52,13 @@ int main(int argc, char* argv[])
   moduleReader->SetParameters("FileName", filename);
 
   /// Describe first module IO
-  ModuleBase::InputDataDescriptorMapType inmap1 =  moduleReader->GetInputDataDescriptorsMap();
-  ModuleBase::OutputDataDescriptorMapType outmap1 =  moduleReader->GetOutputDataDescriptorsMap();
+  ModuleBase::DataDescriptorMapType inmap1 =  moduleReader->GetDataDescriptorsMap();
 
   std::cout<<std::endl;
   std::cout<<"Module 1 (I/O): "<<std::endl;
   std::cout<<std::endl;
   
-  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt1 = inmap1.begin(); inIt1 != inmap1.end();++inIt1)
+  for(ModuleBase::DataDescriptorMapType::const_iterator inIt1 = inmap1.begin(); inIt1 != inmap1.end();++inIt1)
     {
     std::cout<<"Name: "<<inIt1->second.m_DataKey<<", type: "<<inIt1->second.m_DataType<<", description: "<<inIt1->second.m_DataDescription;
     if(inIt1->second.m_Optional)
@@ -69,25 +68,19 @@ int main(int argc, char* argv[])
     std::cout<<std::endl;
     }
 
-  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt1 = outmap1.begin(); outIt1 != outmap1.end();++outIt1)
-    {
-    std::cout<<"Name: "<<outIt1->second.m_DataKey<<", type: "<<outIt1->second.m_DataType<<", description: "<<outIt1->second.m_DataDescription<<", cardinal: "<<outIt1->second.m_NumberOfData<<std::endl;
-    }
-
 
   ModuleBase::Pointer moduleThreshold = (otb::ModuleThreshold::New()).GetPointer();
   otb::Parameter<double>* thres = new otb::Parameter<double>(150.0);
   moduleThreshold->SetParameters("UpperThreshold", thres);
 
   /// Describe second module IO
-  ModuleBase::InputDataDescriptorMapType inmap2 =  moduleThreshold->GetInputDataDescriptorsMap();
-  ModuleBase::OutputDataDescriptorMapType outmap2 =  moduleThreshold->GetOutputDataDescriptorsMap();
+  ModuleBase::DataDescriptorMapType inmap2 =  moduleThreshold->GetDataDescriptorsMap();
 
   std::cout<<std::endl;
   std::cout<<"Module 2 (Threshold): "<<std::endl;
   std::cout<<std::endl;
 
-  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt2 = inmap2.begin(); inIt2 != inmap2.end();++inIt2)
+  for(ModuleBase::DataDescriptorMapType::const_iterator inIt2 = inmap2.begin(); inIt2 != inmap2.end();++inIt2)
     {
     std::cout<<"Name: "<<inIt2->second.m_DataKey<<", type: "<<inIt2->second.m_DataType<<", description: "<<inIt2->second.m_DataDescription;
     if(inIt2->second.m_Optional)
@@ -97,14 +90,10 @@ int main(int argc, char* argv[])
     std::cout<<std::endl;
     }
 
-  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt2 = outmap2.begin(); outIt2 != outmap2.end();++outIt2)
-    {
-    std::cout<<"Name: "<<outIt2->second.m_DataKey<<", type: "<<outIt2->second.m_DataType<<", description: "<<outIt2->second.m_DataDescription<<", cardinal: "<<outIt2->second.m_NumberOfData<<std::endl;
-    }
 
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
-  moduleThreshold->AddInputByKey("InputImage",moduleReader->GetOutputByKey("OutputImage",0));
+  moduleThreshold->AddDataByKey("InputImage",moduleReader->GetDataByKey("OutputImage",0));
 
   // Update the module
   moduleThreshold->Update();
@@ -115,14 +104,13 @@ int main(int argc, char* argv[])
   moduleWriter->SetParameters("FileName", outfname);
 
   /// Describe second module IO
-  ModuleBase::InputDataDescriptorMapType inmap3 =  moduleWriter->GetInputDataDescriptorsMap();
-  ModuleBase::OutputDataDescriptorMapType outmap3 =  moduleWriter->GetOutputDataDescriptorsMap();
+  ModuleBase::DataDescriptorMapType inmap3 =  moduleWriter->GetDataDescriptorsMap();
 
   std::cout<<std::endl;
   std::cout<<"Module 3 (Writer): "<<std::endl;
   std::cout<<std::endl;
 
-  for(ModuleBase::InputDataDescriptorMapType::const_iterator inIt3 = inmap3.begin(); inIt3 != inmap3.end();++inIt3)
+  for(ModuleBase::DataDescriptorMapType::const_iterator inIt3 = inmap3.begin(); inIt3 != inmap3.end();++inIt3)
     {
     std::cout<<"Name: "<<inIt3->second.m_DataKey<<", type: "<<inIt3->second.m_DataType<<", description: "<<inIt3->second.m_DataDescription;
     if(inIt3->second.m_Optional)
@@ -132,16 +120,10 @@ int main(int argc, char* argv[])
     std::cout<<std::endl;
     }
 
-  for(ModuleBase::OutputDataDescriptorMapType::const_iterator outIt3 = outmap3.begin(); outIt3 != outmap3.end();++outIt3)
-    {
-    std::cout<<"Name: "<<outIt3->second.m_DataKey<<", type: "<<outIt3->second.m_DataType<<", description: "<<outIt3->second.m_DataDescription<<", cardinal: "<<outIt3->second.m_NumberOfData<<std::endl;
-    }
-  std::cout<<std::endl;
-
   //Convenience accessor can be defined at the module level
   //to make the syntax better.
   // Julien: This intentionally fails to demonstrates dynamic types checking
-  moduleWriter->AddInputByKey("InputImage",moduleThreshold->GetOutputByKey("OutputImage",0));
+  moduleWriter->AddDataByKey("InputImage",moduleThreshold->GetDataByKey("OutputImage",0));
 
   // Update the module
   moduleWriter->Update();
