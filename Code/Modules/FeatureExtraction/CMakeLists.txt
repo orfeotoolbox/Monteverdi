@@ -23,6 +23,10 @@ SET(VIEW_SRCS
 View/otbFeatureExtractionViewGUI.cxx
 )
 
+SET(MODULE_SRCS
+otbFeatureExtractionModule.cxx
+)
+
 INCLUDE_DIRECTORIES(
   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/View
   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/Model
@@ -30,11 +34,12 @@ INCLUDE_DIRECTORIES(
   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction
 )
 
-FLTK_WRAP_UI(otbMVCFeatureExtraction ${VIEW_FL_SRCS})
+FLTK_WRAP_UI(otbMVCFeatureExtractionModule ${VIEW_FL_SRCS})
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(
+            ${MODULE_SRCS} 
             ${MODEL_SRCS} 
             ${CONTROLLER_SRCS} 
             ${VIEW_SRCS} 
@@ -44,9 +49,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_LIBRARY(otbMVCFeatureExtraction ${VIEW_SRCS} ${otbMVCFeatureExtraction_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
+ADD_LIBRARY(otbMVCFeatureExtractionModule ${MODULE_SRCS} ${VIEW_SRCS} ${otbMVCFeatureExtraction_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
 # TARGET_LINK_LIBRARIES(otbMVCFeatureExtraction OTBIO OTBBasicFilters OTBVisualization OTBFeatureExtraction OTBApplicationsCommon)
-TARGET_LINK_LIBRARIES(otbMVCFeatureExtraction OTBMonteverdiCommon OTBIO OTBBasicFilters OTBFeatureExtraction )
+TARGET_LINK_LIBRARIES(otbMVCFeatureExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBFeatureExtraction OTBGui)
 # INSTALL_TARGETS(/bin otbMVCFeatureExtraction)
 # ADD_DEPENDENCIES(otbMVCFeatureExtraction OTBApplicationsCommon)                                            
 # ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionGUITest.cxx )
