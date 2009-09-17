@@ -63,12 +63,64 @@ const std::string & DataDescriptor::GetDataDescription() const
   return m_DataDescription;
 }
 
+/** Is the input data optional ? */
+bool DataDescriptor::IsOptional() const
+{
+  return m_Optional;
+}
+
+/** Is the input data multiple ? */
+bool DataDescriptor::IsMultiple() const
+{
+  return m_Multiple;
+}
+
+/** Is the input data used ? */
+bool DataDescriptor::IsUsed() const
+{
+  return m_Used;
+}
+
+/** Set the optional flag */
+void DataDescriptor::SetOptional(bool flag)
+{
+  m_Optional = flag;
+}
+
+/** Set the multiple flag */
+void DataDescriptor::SetMultiple(bool flag)
+{
+  m_Multiple = flag;
+}
+
+/** Set the used flag */
+void DataDescriptor::SetUsed(bool flag)
+{
+  m_Used = flag;
+}
+
+/** Get the number of data */
+unsigned int DataDescriptor::GetNumberOfData() const
+{
+  return m_NumberOfData;
+}
+
+/** Set the number of data */
+void DataDescriptor::SetNumberOfData(unsigned int nb)
+{
+  m_NumberOfData = nb;
+}
+
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const DataDescriptor & descriptor)
 {
   ostr<<"DataDescriptor: type = "<<descriptor.GetDataType()
       <<", key = "<<descriptor.GetDataKey()
-      <<", description = "<<descriptor.GetDataDescription();
+      <<", description = "<<descriptor.GetDataDescription()
+      << (descriptor.IsOptional() ? ", optional" : ", mandatory")
+      << (descriptor.IsMultiple() ? ", multiple" : ", single")
+      << (descriptor.IsUsed()     ? ", used"     : ", free")
+      << ", number of data = "<<descriptor.GetNumberOfData();
   return ostr;
 }
 

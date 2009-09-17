@@ -62,6 +62,30 @@ public:
   /** Get the DataDescription */
   const std::string & GetDataDescription() const;
 
+  /** Is the input data optional ? */
+  bool IsOptional() const;
+
+  /** Is the input data multiple ? */
+  bool IsMultiple() const;
+
+  /** Is the input data used ? */
+  bool IsUsed() const;
+
+  /** Set the optional flag */
+  void SetOptional(bool flag);
+
+  /** Set the multiple flag */
+  void SetMultiple(bool flag);
+
+  /** Set the used flag */
+  void SetUsed(bool flag);
+
+  /** Get the number of data */
+  unsigned int GetNumberOfData() const;
+
+  /** Set the number of data */
+  void SetNumberOfData(unsigned int nb);
+
 private:
   /** The data type */
   std::string m_DataType;
@@ -71,6 +95,19 @@ private:
 
   /** A description of the input/output */
   std::string m_DataDescription;
+
+  /** The optional flag */
+  bool m_Optional;
+
+  /** The multiple flag */
+  bool m_Multiple;
+
+  /** This flag indicates if the input is set */
+  bool m_Used;
+
+  /** The number of data */
+  unsigned int m_NumberOfData;
+
 };
 
 /** Overloading the << operator */

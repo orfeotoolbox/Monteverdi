@@ -24,7 +24,7 @@
 namespace otb
 {
 /** Constructor */
-Module::Module() : m_InputsMap(), m_OutputsMap()
+Module::Module() : m_DataMap()
 {}
 
 /** Destructor */
@@ -38,63 +38,40 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 
   // Print inputs
-  os<<indent<<"Number of inputs: "<<m_InputsMap.size()<<std::endl;
-  for(InputDataDescriptorMapType::const_iterator inIt = m_InputsMap.begin(); inIt != m_InputsMap.end(); ++inIt)
+  os<<indent<<"Number of inputs: "<<m_DataMap.size()<<std::endl;
+  for(DataDescriptorMapType::const_iterator inIt = m_DataMap.begin(); inIt != m_DataMap.end(); ++inIt)
     {
     os<<indent<<indent<<inIt->second<<std::endl;
     }
 
-  // Print outputs
-  os<<indent<<"Number of outputs: "<<m_OutputsMap.size()<<std::endl;
-  for(OutputDataDescriptorMapType::const_iterator outIt = m_OutputsMap.begin(); outIt != m_OutputsMap.end(); ++outIt)
-    {
-    os<<indent<<indent<<outIt->second<<std::endl;
-    }
 }
 
 /** Add a new input descriptor */
-void Module::AddInputDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional, bool multiple)
+void Module::AddDataDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional, bool multiple)
 {
   // Check if the key already exists
-  if(m_InputsMap.count(key) > 0)
+  if(m_DataMap.count(key) > 0)
     {
     itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
     }
 
   // Else build a new descriptor
-  InputDataDescriptor desc(type,key,description);
+  DataDescriptor desc(type,key,description);
   desc.SetOptional(optional);
   desc.SetMultiple(multiple);
 
   // Insert it into the map
-  m_InputsMap[key]=desc;
-}
-
-/** Add a new output descriptor */
-void Module::AddOutputDescriptor(const std::string & type, const std::string & key, const std::string & description, unsigned int nb)
-{
-   // Check if the key already exists
-  if(m_OutputsMap.count(key) > 0)
-    {
-    itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
-    }
-
-  // Else build a new descriptor
-  OutputDataDescriptor desc(type,key,description);
-  desc.SetNumberOfData(nb);
-
-  // Insert it into the map
-  m_OutputsMap[key]=desc;
+  m_DataMap[key]=desc;
 }
 
 /** Add an input data by its key */
-void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & data)
+void Module::AddDataByKey(const std::string & key, const DataObjectWrapper & data)
 {
   // Search for the key in the input map
-  InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
+  DataDescriptorMapType::const_iterator it = m_DataMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if(it == m_DataMap.end())
     {
     itkExceptionMacro(<<"Module has no input with key "<<key);
     }
@@ -106,26 +83,26 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
     }
 
   // Then if everything is ok, call the assign method
-  this->AssignInputByKey(key,data);
+  this->AssignDataByKey(key,data);
 
   // Toggle the used flag
-  m_InputsMap[key].SetUsed(true);
+  m_DataMap[key].SetUsed(true);
 }
 
 /** Get an output by its key */
-const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned int idx) const
+const DataObjectWrapper Module::GetDataByKey(const std::string & key, unsigned int idx) const
 {
   // Search for the key in the output map
-  OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(key);
+  DataDescriptorMapType::const_iterator it = m_DataMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_OutputsMap.end())
+  if(it == m_DataMap.end())
     {
     itkExceptionMacro(<<"Module has no output with key "<<key);
     }
 
   // Then if everything is ok, call the assign method
-  DataObjectWrapper wrapper = this->RetrieveOutputByKey(key);
+  DataObjectWrapper wrapper = this->RetrieveDataByKey(key);
 
   // Check types correctness
   // Else, check for type matching and eventually throw an exception
@@ -140,7 +117,7 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
 /** Assign input by key. Subclasses should override this method.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
+void Module::AssignDataByKey(const std::string & key, const DataObjectWrapper & data)
 {
   itkExceptionMacro(<<"Subclasses should override this method");
 }
@@ -148,21 +125,15 @@ void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper &
 /** Retrieve output by key. Subclasses should override this method.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const
+const DataObjectWrapper Module::RetrieveDataByKey(const std::string & key) const
 {
   itkExceptionMacro(<<"Subclasses should override this method");
 }
 
 /** Get the input data descriptors map */
-const Module::InputDataDescriptorMapType & Module::GetInputsMap() const
+const Module::DataDescriptorMapType & Module::GetDataMap() const
 {
-  return m_InputsMap;
-}
-
-/** Get the output data descriptors map */
-const Module::OutputDataDescriptorMapType & Module::GetOutputsMap() const
-{
-  return m_OutputsMap;
+  return m_DataMap;
 }
 
 /** Check that every mandatory input has been filled and call the
@@ -170,7 +141,7 @@ const Module::OutputDataDescriptorMapType & Module::GetOutputsMap() const
 void Module::Start()
 {
   // Check input parameters
-  for(InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it!=m_InputsMap.end();++it)
+  for(DataDescriptorMapType::const_iterator it = m_DataMap.begin(); it!=m_DataMap.end();++it)
     {
     if(!it->second.IsOptional() && !it->second.IsUsed())
       {

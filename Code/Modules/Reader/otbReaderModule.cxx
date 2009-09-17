@@ -44,12 +44,12 @@ void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Retrieve output by key  This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
+const DataObjectWrapper ReaderModule::RetrieveDataByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputDataSet")
     {
-    const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
+    const Superclass::DataDescriptorMapType outMap = this->GetDataMap();
 
     if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
       {                                          
@@ -82,7 +82,7 @@ void ReaderModule::OpenDataSet()
     m_FPVReader->GenerateOutputInformation();
     // If we are still here, this is a readable image
     typeFound = true;
-    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
+    this->AddDataDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
     }
   catch(itk::ExceptionObject & err)
     {
@@ -98,7 +98,7 @@ void ReaderModule::OpenDataSet()
       m_VectorReader->Update();
       // If we are still here, this is a readable image
       typeFound = true;
-      this->AddOutputDescriptor("VectorData","OutputDataSet","Vector read from file");
+      this->AddDataDescriptor("VectorData","OutputDataSet","Vector read from file");
       }
     catch(itk::ExceptionObject & err)
       {
