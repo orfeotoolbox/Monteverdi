@@ -25,7 +25,7 @@ namespace otb
 /**
  * Constructor
  */
-MonteverdiModel::MonteverdiModel() : m_ModuleConstructorMap()
+MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleList()
 {}
 
 MonteverdiModel::~MonteverdiModel()
@@ -33,18 +33,25 @@ MonteverdiModel::~MonteverdiModel()
 
 /** Create a module according to its name. If the name is not a
   registered module, throws an exception */
-otb::Module::Pointer MonteverdiModel::CreateModuleByName(const std::string & name) const
+void MonteverdiModel::CreateModuleByKey(const std::string & key)
 {
-  ModuleConstructorMapType::const_iterator mcIt = m_ModuleConstructorMap.find(name);
+  ModuleDescriptorMapType::const_iterator mcIt = m_ModuleDescriptorMap.find(key);
 
-  if(mcIt!=m_ModuleConstructorMap.end())
+  if(mcIt!=m_ModuleDescriptorMap.end())
     {
-    return mcIt->second();
+    m_ModuleList.push_back(mcIt->second.m_Constructor());
+    std::cout<<"New module created: "<<m_ModuleList.back()<<std::endl;
     }
   else
     {
-    itkExceptionMacro(<<"No module named "<<name<<" has been registered.");
+    itkExceptionMacro(<<"No module with key "<<key<<" has been registered.");
     }
+}
+
+/** Get available modules map */
+const MonteverdiModel::ModuleDescriptorMapType & MonteverdiModel::GetRegisteredModuleDescriptors() const
+{
+  return m_ModuleDescriptorMap;
 }
 
 }// End namespace

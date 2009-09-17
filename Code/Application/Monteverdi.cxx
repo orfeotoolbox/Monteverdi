@@ -107,27 +107,24 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle");
 
   // Create an instance of reader
-  otb::Module::Pointer reader = model->CreateModuleByName("Reader");
-  std::cout<<"Instance of reader module created: "<<reader<<std::endl;
+  model->CreateModuleByKey("Reader");
+  model->CreateModuleByKey("Speckle");
 
-  otb::Module::Pointer speckle = model->CreateModuleByName("Speckle");
-  std::cout<<"Instance of speckle filtering module created: "<<speckle<<std::endl;
-
-  // open splash screen
-  Fl_Window* splash_window = 0;
-  std::clock_t start;
-  start = std::clock();
-  splash_window = splash_screen();
-  splash_window->show();
+//   // open splash screen
+//   Fl_Window* splash_window = 0;
+//   std::clock_t start;
+//   start = std::clock();
+//   splash_window = splash_screen();
+//   splash_window->show();
 
   // hide splash screen after 3 seconds
-  while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
-    {
-    Fl::wait(0);
-    }
-
-  splash_window->hide();
-  delete splash_window;
+//   while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
+//     {
+//     Fl::wait(0);
+//     }
+// 
+//   splash_window->hide();
+//   delete splash_window;
 
   return Fl::run();
 }
