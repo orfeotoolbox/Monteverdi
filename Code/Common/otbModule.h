@@ -32,7 +32,7 @@ namespace otb
  *  \brief Base class for modules.
  *
  * The GetInputsMap() and GetOutputsMap() methods can be used to
- * retrieve inputs and ouptuts descriptors.
+ * retrieve inputs and outputs descriptors.
  *
  * Data must be passed and retrieve via the AddInputByKey() and
  * GetOutputByKey() methods.
@@ -100,12 +100,12 @@ protected:
   /** Add a new output descriptor */
   void AddOutputDescriptor(const std::string & type, const std::string & key, const std::string & description, unsigned int nb = 1);
 
-  /** Assign input by key. This method must be reimplemented in subclasses.
+  /** Assign input by key. Subclasses should override this methods.
    *  When this method is called, key checking and data type matching
    *  is already done. */
   virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
 
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
+  /** Retrieve output by key. Subclasses should override this method.
    *  When this method is called, key checking and data type matching
    *  is already done. */
   virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;

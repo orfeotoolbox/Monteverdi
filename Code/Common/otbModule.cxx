@@ -137,20 +137,20 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
   return wrapper;
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
+/** Assign input by key. Subclasses should override this method.
  *  When this method is called, key checking and data type matching
  *  is already done. */
 void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
-  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
+  itkExceptionMacro(<<"Subclasses should override this method");
 }
 
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
+/** Retrieve output by key. Subclasses should override this method.
+ *  When this method is called, key checking and data type matching
+ *  is already done. */
 const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const
 {
-  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
+  itkExceptionMacro(<<"Subclasses should override this method");
 }
 
 /** Get the input data descriptors map */
@@ -184,7 +184,7 @@ void Module::Start()
 /** The custom run command */
 void Module::Run()
 {
-  itkExceptionMacro(<<"This method must be reimplemented by subclasses");
+  itkExceptionMacro(<<"Subclasses should override this method");
 }
 
 } // End namespace otb
