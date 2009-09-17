@@ -8,19 +8,19 @@ ENDIF(WIN32)
 
 
 SET(MODEL_SRCS
-Model/otbFeatureExtractionModel.cxx
+otbFeatureExtractionModel.cxx
 )
 
 SET(CONTROLLER_SRCS
-Controller/otbFeatureExtractionController.cxx
+otbFeatureExtractionController.cxx
 )
 
 SET(VIEW_FL_SRCS
-View/otbFeatureExtractionViewGroup.fl
+otbFeatureExtractionViewGroup.fl
 )
 
 SET(VIEW_SRCS
-View/otbFeatureExtractionViewGUI.cxx
+otbFeatureExtractionViewGUI.cxx
 )
 
 SET(MODULE_SRCS
@@ -28,13 +28,13 @@ otbFeatureExtractionModule.cxx
 )
 
 INCLUDE_DIRECTORIES(
-  ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/View
-  ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/Model
-  ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/Controller
+#   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/View
+#   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/Model
+#   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction/Controller
   ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction
 )
 
-FLTK_WRAP_UI(otbMVCFeatureExtractionModule ${VIEW_FL_SRCS})
+FLTK_WRAP_UI(otbFeatureExtractionModule ${VIEW_FL_SRCS})
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -49,9 +49,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_LIBRARY(otbMVCFeatureExtractionModule ${MODULE_SRCS} ${VIEW_SRCS} ${otbMVCFeatureExtraction_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
+ADD_LIBRARY(otbFeatureExtractionModule ${MODULE_SRCS} ${VIEW_SRCS} ${otbFeatureExtraction_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
 # TARGET_LINK_LIBRARIES(otbMVCFeatureExtraction OTBIO OTBBasicFilters OTBVisualization OTBFeatureExtraction OTBApplicationsCommon)
-TARGET_LINK_LIBRARIES(otbMVCFeatureExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBFeatureExtraction OTBGui)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBFeatureExtraction OTBGui OTBVisualization)
 # INSTALL_TARGETS(/bin otbMVCFeatureExtraction)
 # ADD_DEPENDENCIES(otbMVCFeatureExtraction OTBApplicationsCommon)                                            
 # ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionGUITest.cxx )

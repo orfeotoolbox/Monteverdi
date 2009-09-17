@@ -54,6 +54,8 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/Reader
 ${Monteverdi_BINARY_DIR}/Code/Modules/Reader
 ${Monteverdi_SOURCE_DIR}/Code/Modules/OrthoRectif
 ${Monteverdi_BINARY_DIR}/Code/Modules/OrthoRectif
+${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction
+${Monteverdi_BINARY_DIR}/Code/Modules/FeatureExtraction
 )
 
 # Code location

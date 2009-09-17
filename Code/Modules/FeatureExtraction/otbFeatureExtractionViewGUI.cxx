@@ -404,6 +404,7 @@ FeatureExtractionViewGUI
   m_FeatureExtractionController->SaveOutput();
   */
   //Here we need to go back to the app Monteverdi //TODO
+  this->Quit();
 }
 
 
@@ -461,7 +462,7 @@ FeatureExtractionViewGUI
     }
 }
 
-/*
+
 void
 FeatureExtractionViewGUI
 ::ClearImage()
@@ -497,7 +498,7 @@ FeatureExtractionViewGUI
  guiMainWindow->label("Feature Extraction Application");
 
 }
-*/
+
 void
 FeatureExtractionViewGUI
 ::Quit()
