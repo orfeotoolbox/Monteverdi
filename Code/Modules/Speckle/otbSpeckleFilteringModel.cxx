@@ -70,7 +70,7 @@ SpeckleFilteringModel
 }
 
 /**
- * ApplyFrost to the inputImage
+ * Apply Frost to the inputImage
  */
 void
 SpeckleFilteringModel
