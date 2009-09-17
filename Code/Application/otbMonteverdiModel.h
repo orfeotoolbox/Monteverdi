@@ -20,6 +20,8 @@
 
 #include "itkObject.h"
 #include "otbModule.h"
+#include "otbMVCModel.h"
+#include "otbListenerBase.h"
 
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
@@ -36,17 +38,18 @@ namespace otb
 {
 
 class ITK_EXPORT MonteverdiModel
-  : public itk::Object
+  : public MVCModel<ListenerBase>, public itk::Object
 {
  public:
   /** Standard class typedefs */
-  typedef MonteverdiModel                                 Self;
-  typedef itk::Object                                     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef MonteverdiModel                                Self;
+  typedef MVCModel<ListenerBase>                         Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
+
 
   /** Standard type macro */
-  itkTypeMacro(MonteverdiModel, itk::Object);
+  itkTypeMacro(MonteverdiModel, MVCModel);
   
   /** Standard new macro */
   itkNewMacro(Self);
@@ -73,6 +76,11 @@ class ITK_EXPORT MonteverdiModel
   
   // Map of registered modules
   typedef std::map<std::string,RegisteredModuleDescriptor> ModuleDescriptorMapType;
+
+
+
+  /** Get the unique instanc1e of the model */
+  static Pointer GetInstance();
 
 
   /** Register a new module with its associated name */

@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl_Timer.H>
 #include <FLU/Flu_Tree_Browser.h>
-
+#include <ctime>
 #include <sstream>
 #include "itkObject.h"
 
@@ -64,7 +64,7 @@ public:
         unsigned int ui_i;
 
         m_SplashWindow = new Fl_Window(ui_im_w, ui_im_h, "splash screen");
-        m_Group = new Fl_Group(0, 0, ui_im_w, ui_im_h);
+        Fl_Group* group;
 
         m_SplashWindow->type(241);
         m_SplashWindow->begin();
@@ -81,11 +81,13 @@ public:
             Fl_PNG_Image*   image_PNG;
             image_PNG = new Fl_PNG_Image(splashImage.c_str());
             m_ImageVector.push_back(image_PNG);
-        }
 
-        m_Group->image(m_ImageVector[0]);
-        m_Group->align(FL_ALIGN_CENTER);;
-        m_Group->resizable(m_SplashWindow);
+            group = new Fl_Group(0, 0, ui_im_w, ui_im_h);
+            group->image(m_ImageVector[ui_i-1]);
+            group->align(FL_ALIGN_CENTER);;
+            group->resizable(m_SplashWindow);
+            m_GroupVector.push_back(group);
+        }
 
         m_SplashWindow->end();
         m_SplashWindow->set_non_modal();
@@ -102,7 +104,7 @@ public:
 
         unsigned int ui_pos_width = (Fl::w()/2) -275;
         unsigned int ui_pos_height = (Fl::h()/2) - 200;
-        unsigned int ui_cpt =0, ui_cpt2=0;;
+        unsigned int ui_cpt =0;
 
         Fl_Timer* timer = new Fl_Timer(FL_HIDDEN_TIMER,ui_pos_width,ui_pos_height,30,30,"timer");
 
@@ -116,17 +118,17 @@ public:
 
 
 // several images case
-        while(ui_cpt<m_ImageVector.size()){
+        for(ui_cpt=0;ui_cpt<m_GroupVector.size();ui_cpt++){
 
-            // wait 0.5 second
-            while( timer->value() && m_SplashWindow->visible() ){
-              Fl::check();
-            }
-            timer->value(0.1);
-
-            ui_cpt++;
-            m_Group->image(m_ImageVector[ui_cpt]);
-            m_SplashWindow->redraw();
+            // wait 0.1 second
+//             while( timer->value()>0 && m_SplashWindow->visible() ){
+//               Fl::check();
+// std::cout<< timer->value()<<std::endl;
+//              }
+Fl::wait(0.01);
+Fl::check();
+//             timer->value(0.5);
+             m_GroupVector[ui_cpt]->show();
 
           }
           // shut down the splash
@@ -147,6 +149,7 @@ public:
 
   Fl_Window*      m_SplashWindow;
   Fl_Group*       m_Group;
+  std::vector<Fl_Group*>     m_GroupVector;
   std::vector<Fl_PNG_Image*> m_ImageVector;
 
 
@@ -238,7 +241,8 @@ int main(int argc,char* argv[])
   splash->Show();
 
 
-/*
+
+  win->begin();
 
   tree = new Flu_Tree_Browser( 200, 0, 300, 460, "Tree test" );
   tree->box( FL_DOWN_BOX );
@@ -257,14 +261,14 @@ int main(int argc,char* argv[])
   removeBtn = new Fl_Button( 10, 430, 100, 20, "Remove" );
   removeBtn->callback( removeCB, NULL );
 
-  g->end();
-
-  win->end();
   win->resizable( tree );
   win->show( argc, argv );
-  Fl::check;
 
-*/
+  g->end();
+  win->end();
+
+
+
 
 /*
   const bool show_splash = true;

@@ -110,21 +110,21 @@ int main(int argc, char* argv[])
   model->CreateModuleByKey("Reader");
   model->CreateModuleByKey("Speckle");
 
-  // open splash screen
-  Fl_Window* splash_window = 0;
-  std::clock_t start;
-  start = std::clock();
-  splash_window = splash_screen();
-  splash_window->show();
+//   // open splash screen
+//   Fl_Window* splash_window = 0;
+//   std::clock_t start;
+//   start = std::clock();
+//   splash_window = splash_screen();
+//   splash_window->show();
 
   // hide splash screen after 3 seconds
-  while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
-    {
-    Fl::wait(0);
-    }
-
-  splash_window->hide();
-  delete splash_window;
+//   while(splash_window->visible() && ( std::clock() - start ) / (double)CLOCKS_PER_SEC < 3.0)
+//     {
+//     Fl::wait(0);
+//     }
+// 
+//   splash_window->hide();
+//   delete splash_window;
 
   return Fl::run();
 }
