@@ -24,13 +24,17 @@
 namespace otb
 {
 /** Constructors */
-DataDescriptor::DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown")
+DataDescriptor::DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown"), m_Optional(false), m_Multiple(false), m_NumberOfData(1)
 {}
 
 DataDescriptor::DataDescriptor(const std::string & type, const std::string & key, const std::string & description)
 {
   // Call to the set method
   Set(type,key,description);
+  m_NumberOfData = 1;
+  m_Optional = false;
+  m_Multiple = false;
+  m_Used     = false;
 }
 
 /** Destructor */
