@@ -53,8 +53,11 @@ class ITK_EXPORT MonteverdiModel
   
   /** typedef of the Module constructors function */
   typedef otb::Module::Pointer (CALLBACK * ConstructorPointerType)();
-  typedef std::map<std::string,ConstructorPointerType> ModuleConstructorMapType;
+  typedef std::map<std::string,ConstructorPointerType>                ModuleConstructorMapType;
   
+  /** Vector of open modules */
+  typedef std::vector<Module::Pointer>                                ModuleVectorType;
+
   /** Register a new module with its associated name */
   template <class T> void RegisterModule(const std::string & name, const std::string menupath = "Module/")
   {
@@ -82,6 +85,9 @@ class ITK_EXPORT MonteverdiModel
 
   /** Constructors map */
   ModuleConstructorMapType m_ModuleConstructorMap;
+
+  /** Vector of open modules */
+  ModuleVectorType         m_ModuleVector;
 
 };
 
