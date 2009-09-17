@@ -3,6 +3,10 @@ SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
 
+
+
+
+#-------------- Speckle Filtering Tests ---------------------------------
 ADD_EXECUTABLE(otbSpeckleFilteringApplication otbSpeckleFilteringApplication.cxx)
 TARGET_LINK_LIBRARIES(otbSpeckleFilteringApplication otbSpeckleFilteringModule)
 
@@ -10,6 +14,8 @@ ADD_TEST(SpeckleFilteringApplicationTest otbSpeckleFilteringApplication
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringOuptut.tif
 )
+
+
 
 ADD_EXECUTABLE(otbSpeckleFilteringModuleTest otbSpeckleFilteringModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbSpeckleFilteringModuleTest otbSpeckleFilteringModule)
@@ -19,10 +25,23 @@ ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringModuleOuptut.tif
 )
 
+#------------ Reader Module Test ---------------------------------
 ADD_EXECUTABLE(otbReaderModuleTest otbReaderModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbReaderModuleTest otbReaderModule)
+
 
 ADD_TEST(ReaderModuleTest otbReaderModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
+
+#------------- Ortho Rectification Tests ---------------------------
+
+ADD_EXECUTABLE(otbOrthoRectifModuleTest otbOrthoRectifModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbOrthoRectifModuleTest otbOrthoRectifModule)
+
+ADD_TEST(OrthoRectifModuleTest otbOrthoRectifModuleTest
+/home2/data/OTB-Data-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
+${TEMP}/OrthoRectifModuleOuptut.tif
+)
+

@@ -15,30 +15,28 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSpeckleFilteringModule_h
-#define __otbSpeckleFilteringModule_h
+#ifndef __otbOrthoRectifModule_h
+#define __otbOrthoRectifModule_h
 
 #include "otbModule.h"
 
-// MVC from Speckle filtering application
-#include "otbSpeckleFilteringView.h"
-#include "otbSpeckleFilteringModel.h"
-#include "otbSpeckleFilteringController.h"
+// OrthoRectif Application 
+#include "otbOrthoRectif.h"
 
 namespace otb
 {
-/** \class SpeckleFilteringModule
+/** \class OrthoRectifModule
  *  \brief 
  *
- *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
+ *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT SpeckleFilteringModule
+class ITK_EXPORT OrthoRectifModule
   : public Module
 {
 public:
   /** Standard class typedefs */
-  typedef SpeckleFilteringModule        Self;
+  typedef OrthoRectifModule             Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -47,43 +45,40 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SpeckleFilteringModule,Module);
+  itkTypeMacro(OrthoRectifModule,Module);
+  
 
-  itkGetObjectMacro(View,SpeckleFilteringView);
-
+  /** Accessor to the OrthoRectif Instance */
+  itkGetObjectMacro(OrthoRectif,OrthoRectif);
+  
 protected:
   /** Constructor */
-  SpeckleFilteringModule();
+  OrthoRectifModule();
   /** Destructor */
-  virtual ~SpeckleFilteringModule();
+  virtual ~OrthoRectifModule();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Assign input by key. This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual void AssignDataByKey(const std::string & key, const DataObjectWrapper & data);
+  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
 
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual const DataObjectWrapper RetrieveDataByKey(const std::string & key) const;
+  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();
 
 private:
-  SpeckleFilteringModule(const Self&); //purposely not implemented
+  OrthoRectifModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   // The view
-  SpeckleFilteringView::Pointer        m_View;
+  OrthoRectif::Pointer        m_OrthoRectif;
 
-  // The controller
-  SpeckleFilteringController::Pointer  m_Controller;
-
-  // The model
-  SpeckleFilteringModel::Pointer       m_Model;
 };
 
 

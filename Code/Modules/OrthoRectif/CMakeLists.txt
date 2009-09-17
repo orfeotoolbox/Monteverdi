@@ -7,23 +7,15 @@ IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
-
 SET(OR_SRCS 
 otbOrthoRectifAppli.cxx 
-otbOrthoRectif.cxx )
-
-# Include directories
-INCLUDE_DIRECTORIES(
-${Monteverdi_SOURCE_DIR}/Code/Modules/OrthoRectif
-${Monteverdi_BINARY_DIR}/Code/Modules/OrthoRectif	
+otbOrthoRectif.cxx 
+otbOrthoRectifModule.cxx
 )
-
 
 SET(VIEW_FL_SRCS
 otbOrthoRectifGUI.fl
 )
-
-
  
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
@@ -38,11 +30,11 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(otbOrthoRectifApplication ${OR_SRCS} ${otbOrthoRectifApplication_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbOrthoRectifApplication   OTBIO OTBProjections OTBVisu ) #OTBGui
+ADD_LIBRARY(otbOrthoRectifModule ${OR_SRCS} ${otbOrthoRectifApplication_FLTK_UI_SRCS})
+TARGET_LINK_LIBRARIES(otbOrthoRectifModule  OTBIO OTBProjections OTBGui OTBMonteverdiCommon)
 
-ADD_EXECUTABLE(otbOrthoRectifApplicationGUI ${OR_SRCS} ${otbOrthoRectifApplication_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbOrthoRectifApplicationGUI  otbOrthoRectifApplication) #OTBGui
+ADD_EXECUTABLE(otbOrthoRectifApplication ${OR_SRCS} ${otbOrthoRectifApplication_FLTK_UI_SRCS})
+TARGET_LINK_LIBRARIES(otbOrthoRectifApplication  otbOrthoRectifModule)
 
 
 
