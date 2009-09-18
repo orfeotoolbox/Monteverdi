@@ -1,1 +1,1 @@
-SUBDIRS(Speckle FeatureExtraction OrthoRectif Reader)
+SUBDIRS(Speckle FeatureExtraction OrthoRectif Reader Classification)

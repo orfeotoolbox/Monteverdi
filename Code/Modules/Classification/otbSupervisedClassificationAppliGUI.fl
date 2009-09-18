@@ -1,0 +1,526 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+declblock {\#ifdef _MSC_VER} {open public after {\#endif}
+} {
+  decl {\#pragma warning(push)} {public global
+  }
+  decl {\#pragma warning(disable:4996)} {public global
+  }
+} 
+
+class SupervisedClassificationAppliGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window bClassesBrowser {
+      label {Supervised Classification Application}
+      callback {this->QuitCallback();} open
+      xywh {634 114 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Browser dClassList {
+        label {Classes list}
+        callback {ClassSelected();}
+        tooltip {Browse and select classes} xywh {6 41 280 195} type Hold box PLASTIC_DOWN_BOX color 23 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 0 when 3
+      }
+      Fl_Text_Display dClassInfo {
+        label {Class Information}
+        tooltip {Display selected class information} xywh {296 45 198 32} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Menu_Bar {} {open
+        xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Submenu {} {
+          label File open
+          xywh {0 0 67 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          MenuItem bSaveClassifAsVectorData {
+            label {Save classif as vector data (Experimental)}
+            callback {SaveClassifAsVectorData();}
+            tooltip {Export all ROIs of the current set into shapefiles named after the classes names} xywh {50 50 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          MenuItem {} {
+            label {Open SVM model}
+            callback {OpenSVMModel();}
+            tooltip {Import an SVM modeL. This will reset the classes} xywh {20 20 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          MenuItem bSaveSVMModel {
+            label {Save SVM model}
+            callback {SaveSVMModel();}
+            tooltip {Save the estimated SVM model} xywh {30 30 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          MenuItem bImportVectorData {
+            label {Import vector data (ROI)}
+            callback {ImportVectorData();}
+            tooltip {Import ROIs from a shapefile into the selected class and set} xywh {20 20 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          MenuItem bExportVectorData {
+            label {Export vector data (ROI)}
+            callback {ExportVectorData();}
+            tooltip {Export ROIs from the selected class and set into a shapefile} xywh {30 30 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          MenuItem bExportAllVectorData {
+            label {Export all vector data (ROI)}
+            callback {ExportAllVectorData();}
+            tooltip {Export all ROIs of the current set into shapefiles named after the classes names} xywh {40 40 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          MenuItem bImportROIsImage {
+            label {Import ROIs from labeled image}
+            callback {ImportROIsImage();}
+            tooltip {Import ROIs from a labelled image} xywh {30 30 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          MenuItem {} {
+            label Quit
+            callback {this->QuitCallback();}
+            tooltip Quit xywh {5 5 34 24} labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Submenu {} {
+          label Setup open
+          xywh {5 5 67 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          MenuItem bVisualisationSetup {
+            label Visualisation
+            callback {VisualisationSetup();}
+            tooltip {Set the visualisation parameters} xywh {40 40 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          MenuItem {} {
+            label SVM
+            callback {SVMSetup();}
+            tooltip {Set the SVM parameters} xywh {50 50 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+      }
+      Fl_Text_Display dImageInfo {
+        label {Image information}
+        tooltip {Display image information} xywh {291 432 279 76} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 10
+      }
+      Fl_Group {} {
+        label {Edit Classes} open
+        tooltip {Tools to edit classes attributes} xywh {6 250 280 93} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Button bAddClass {
+          label Add
+          callback {AddClass();}
+          tooltip {Add a new class} xywh {22 266 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bRemoveClass {
+          label Remove
+          callback {RemoveClass();}
+          tooltip {Remove the selected class} xywh {151 266 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bChangeClassName {
+          label Name
+          callback {ChangeClassName();}
+          tooltip {Change the name of the selected class} xywh {22 301 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bChangeClassColor {
+          label Color
+          callback {ChangeClassColor();}
+          tooltip {Change the color of the selected class} xywh {151 301 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+      }
+      Fl_Group {} {
+        label Sets open
+        xywh {4 352 280 89} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Round_Button bTrainingSet {
+          label Training
+          callback {TrainingSetSelected();}
+          tooltip {Display the training set} xywh {20 366 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+        Fl_Round_Button bValidationSet {
+          label Validation
+          callback {ValidationSetSelected();} selected
+          tooltip {Display the validation set. Only available if random validation samples is not activated} xywh {149 366 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+        Fl_Check_Button bRandomGeneration {
+          label Random
+          callback {if(bRandomGeneration->value())
+{
+  bTrainingSet->set();
+  bValidationSet->clear();
+  bValidationSet->deactivate();
+  slRandomProbability->activate();
+  this->TrainingSetSelected();
+}
+else
+{
+  bValidationSet->activate();
+  slRandomProbability->deactivate();
+}}
+          tooltip {If activated, validation sample is randomly choosen as a subset of the training samples} xywh {37 409 75 15} down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Value_Slider slRandomProbability {
+          label {Probability     }
+          tooltip {Tune the probability for a sample to be choosen as a training sample. Only available is random validation sample generation is activated} xywh {149 401 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14 deactivate
+        }
+      }
+      Fl_Group {} {
+        label Classification open
+        tooltip {Tools for classification} xywh {291 175 280 63} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Light_Button bOK {
+          label OK
+          callback {SaveOutputResults();}
+          tooltip {Display the results of the classification} xywh {391 201 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+        Fl_Light_Button bLearn {
+          label Learn
+          callback {Learn();}
+          tooltip {Learn the SVM model from training samples} xywh {301 201 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1 deactivate
+        }
+        Fl_Light_Button bValidate {
+          label Validate
+          callback {Validate();}
+          tooltip {Display some quality assesment on the classification} xywh {481 201 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+      }
+      Fl_Group {} {
+        label {Regions of interest} open
+        tooltip {Tools to edit the regions of interest} xywh {291 248 280 165} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Button bEraseLastPoint {
+          label {Erase last point}
+          callback {EraseLastPoint();}
+          tooltip {Delete the last point of the selected region of interest} xywh {307 326 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bEraseLastROI {
+          label Delete
+          callback {EraseLastROI();}
+          tooltip {Delete the selected region of interest} xywh {436 322 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bClearROIs {
+          label ClearROIs
+          callback {ClearROIs();}
+          tooltip {Clear all regions of interest} xywh {436 282 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Button bEndPolygon {
+          label {End polygon}
+          callback {EndPolygon();}
+          tooltip {End the current polygon} xywh {307 284 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+        }
+        Fl_Check_Button bUsePolygon {
+          label Polygon
+          callback {UsePolygon();}
+          tooltip {Switch between polygonal or rectangular selection} xywh {308 362 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+        Fl_Value_Slider slTrainingSetOpacity {
+          label {Opacity         }
+          callback {ChangeTrainingSetOpacity();}
+          tooltip {Tune the region of interest and classification result opacity} xywh {438 361 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 step 0.05 value 0.75 textsize 14 deactivate
+        }
+      }
+      Fl_Output oPixLocValue {
+        label {Pixel locations and values}
+        tooltip {Display pixel location and values} xywh {5 457 279 51} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 textsize 10
+        code0 {\#include <FL/Fl_Multiline_Output.H>}
+        class Fl_Multiline_Output
+      }
+      Fl_Text_Display dClassColor {
+        label {Class color}
+        tooltip {Display the selected class color} xywh {504 46 60 52} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Browser dROIList {
+        label {ROI list}
+        callback {UpdateClassInfo();}
+        tooltip {Browse and select ROI associated to the selected class} xywh {296 92 199 71} type Hold box PLASTIC_DOWN_BOX color 23 selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1
+      }
+      Fl_Button bROIFocus {
+        label Focus
+        callback {ROIFocus();}
+        tooltip {Focus the viewer on the selected ROI} xywh {504 108 60 50} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+      }
+    }
+    Fl_Window guiSVMSetup {
+      label {SVM Setup} open
+      xywh {1108 412 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Choice svmSVMType {
+        label {SVM Type} open
+        tooltip {Set the SVM type} xywh {90 41 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        MenuItem {} {
+          label c_svc
+          xywh {45 45 30 20} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label nu_svc
+          xywh {55 55 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label one_class
+          xywh {75 75 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label epsilon_svr
+          xywh {85 85 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label nu_svr
+          xywh {95 95 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Choice svmKernelType {
+        label {Kernel Type} open
+        tooltip {Set the kernel type} xywh {90 13 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        MenuItem {} {
+          label linear
+          xywh {55 55 30 20} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label polynomial
+          xywh {65 65 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label rbf
+          xywh {75 75 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label sigmoid
+          xywh {85 85 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Spinner svmKernelDegree {
+        label {Kernel Degree }
+        xywh {115 81 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
+      }
+      Fl_Value_Input svmGamma {
+        label {Gamma }
+        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmNu {
+        label {Nu }
+        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmCoef0 {
+        label {Coef0 }
+        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmC {
+        label {C }
+        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmEpsilon {
+        label {Epsilon }
+        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button svmShrinking {
+        label Shrinking
+        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button svmPE {
+        label {Probability Estimation}
+        xywh {15 154 185 31} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Spinner svmCacheSize {
+        label {Cache Size }
+        xywh {115 111 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
+      }
+      Fl_Button {} {
+        label Ok
+        callback {SVMSetupOk();}
+        xywh {30 254 195 31} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmP {
+        label {P }
+        xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {SVMSetupCancel();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {260 255 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+    }
+    Fl_Window guiVisualisationSetup {
+      label {Visualisation Setup} open
+      xywh {511 534 645 170} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide
+    } {
+      Fl_Round_Button viewerGrayscaleMode {
+        label {Grayscale mode}
+        callback {GrayscaleSet();}
+        tooltip {Swith the image viewer mode to grayscale} xywh {16 8 140 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 23 selection_color 22 labelsize 12 labelcolor 186
+      }
+      Fl_Round_Button viewerColorMode {
+        label {RGB composition mode}
+        callback {RGBSet();}
+        tooltip {Switch the image viewer mode to RGB composition} xywh {443 7 184 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 22 labelsize 12 labelcolor 186
+      }
+      Fl_Input_Choice viewerGrayscaleChannelChoice {
+        label {Channel index} open
+        tooltip {Select the band to view in grayscale mode} xywh {101 63 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186
+      } {}
+      Fl_Input_Choice viewerRedChannelChoice {
+        label {Red channel} open
+        tooltip {Select band for red channel in RGB composition} xywh {585 41 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186 deactivate
+      } {}
+      Fl_Input_Choice viewerGreenChannelChoice {
+        label {Green channel} open
+        tooltip {Select band for green channel in RGB composition} xywh {585 63 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186 deactivate
+      } {}
+      Fl_Input_Choice viewerBlueChannelChoice {
+        label {Blue channel} open
+        tooltip {Select band for blue channel in RGB composition} xywh {585 85 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186 deactivate
+      } {}
+      Fl_Return_Button {} {
+        label Ok
+        callback {VisualisationSetupOk();}
+        tooltip {Save changes and leave viewer set up interface} xywh {318 130 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {VisualisationSetupCancel();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {205 130 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+      Fl_Round_Button viewerComplexMode {
+        label {Complex composition mode}
+        callback {ComplexSet();}
+        tooltip {Switch the image viewer mode to complex composition} xywh {198 7 210 26} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 22 labelsize 12 labelcolor 186
+      }
+      Fl_Input_Choice viewerRealChannelChoice {
+        label {Real channel index} open
+        tooltip {Select band for real channel in complex composition} xywh {358 64 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186 deactivate
+      } {}
+      Fl_Input_Choice viewerImaginaryChannelChoice {
+        label {Imaginary channel index} open
+        tooltip {Select band for imaginary channel in complex composition} xywh {358 86 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelsize 12 labelcolor 186 deactivate
+      } {}
+      Fl_Round_Button viewerModulus {
+        label Modulus
+        callback {viewerPhase->clear();}
+        tooltip {Toggle modulus mode} xywh {218 40 80 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 labelsize 12 labelcolor 186 deactivate
+      }
+      Fl_Round_Button viewerPhase {
+        label Phase
+        callback {viewerModulus->clear();}
+        tooltip {Toggle phase mode} xywh {308 40 80 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 deactivate
+      }
+    }
+    Fl_Window guiFullWindow {
+      label {Full Window} open
+      xywh {266 93 780 715} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
+    } {}
+    Fl_Window guiScrollWindow {
+      label {Scroll Window} open
+      xywh {338 265 185 185} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
+    } {}
+    Fl_Window guiChangeClassName {
+      label {Class name chooser} open
+      xywh {478 356 255 90} type Double box PLASTIC_DOWN_BOX labelsize 12 hide
+    } {
+      Fl_Input tNewClassName {
+        label {Name: }
+        xywh {65 12 175 23} box PLASTIC_DOWN_BOX labelsize 12
+      }
+      Fl_Button {} {
+        label ok
+        callback {ChangeClassNameOk();}
+        xywh {70 50 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
+    Fl_Window guiValidationWindow {
+      label Validation open
+      xywh {126 193 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
+    } {
+      Fl_Group gMatrix {
+        label {Confusion matrix} open
+        xywh {5 25 385 160} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gAccuracy {
+        label Accuracy open
+        xywh {5 200 385 145} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Return_Button bCloseValidationWindow {
+        label Close
+        callback {bValidate->clear();
+guiValidationWindow->hide();}
+        tooltip {Save changes and leave viewer set up interface} xywh {155 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+    }
+  }
+  Function {SaveClassifAsVectorData()} {open return_type {virtual void}
+  } {}
+  Function {OpenSVMModel()} {open return_type {virtual void}
+  } {}
+  Function {SaveSVMModel()} {open return_type {virtual void}
+  } {}
+  Function {VisualisationSetup()} {open return_type {virtual void}
+  } {}
+  Function {SVMSetup()} {open return_type {virtual void}
+  } {}
+  Function {AddClass()} {open return_type {virtual void}
+  } {}
+  Function {RemoveClass()} {open return_type {virtual void}
+  } {}
+  Function {ChangeClassName()} {open return_type {virtual void}
+  } {}
+  Function {ChangeClassColor()} {open return_type {virtual void}
+  } {}
+  Function {TrainingSetSelected()} {open return_type {virtual void}
+  } {}
+  Function {ValidationSetSelected()} {open return_type {virtual void}
+  } {}
+  Function {EndPolygon()} {open return_type {virtual void}
+  } {}
+  Function {ClearROIs()} {open return_type {virtual void}
+  } {}
+  Function {EraseLastPoint()} {open return_type {virtual void}
+  } {}
+  Function {EraseLastROI()} {open return_type {virtual void}
+  } {}
+  Function {UsePolygon()} {open return_type {virtual void}
+  } {}
+  Function {Learn()} {open return_type {virtual void}
+  } {}
+  Function {SaveOutputResults()} {open return_type {virtual void}
+  } {}
+  Function {SVMSetupOk()} {open return_type {virtual void}
+  } {}
+  Function {SVMSetupCancel()} {open return_type {virtual void}
+  } {}
+  Function {VisualisationSetupOk()} {open return_type {virtual void}
+  } {}
+  Function {VisualisationSetupCancel()} {open return_type {virtual void}
+  } {}
+  Function {GrayscaleSet()} {open return_type {virtual void}
+  } {}
+  Function {RGBSet()} {open return_type {virtual void}
+  } {}
+  Function {ComplexSet()} {open return_type {virtual void}
+  } {}
+  Function {ClassSelected()} {open return_type {virtual void}
+  } {}
+  Function {ChangeClassNameOk()} {open return_type {virtual void}
+  } {}
+  Function {ChangeTrainingSetOpacity()} {open return_type {virtual void}
+  } {}
+  Function {ROIFocus()} {open return_type {virtual void}
+  } {}
+  Function {UpdateClassInfo()} {open return_type {virtual void}
+  } {}
+  Function {ImportVectorData()} {open return_type {virtual void}
+  } {}
+  Function {ExportVectorData()} {open return_type {virtual void}
+  } {}
+  Function {Validate()} {open return_type {virtual void}
+  } {}
+  Function {ImportROIsImage()} {open return_type {virtual void}
+  } {}
+  Function {ExportAllVectorData()} {open return_type {virtual void}
+  } {}
+  Function {QuitCallback()} {open return_type {virtual void}
+  } {}
+  Function {~SupervisedClassificationAppliGUI()} {open return_type virtual
+  } {}
+} 
+
+declblock {\#ifdef _MSC_VER} {open public after {\#endif}
+} {
+  decl {\#pragma warning(pop)} {public global
+  }
+} 
