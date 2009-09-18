@@ -55,9 +55,9 @@ int main(int argc, char* argv[])
   // Splash Screen
   typedef otb::SplashScreen::Pointer SplashScreenPointerType;
 
-  SplashScreenPointerType splash = otb::SplashScreen::New();
-  splash->Build();
-  splash->Show();
+ // SplashScreenPointerType splash = otb::SplashScreen::New();
+ // splash->Build();
+ // splash->Show();
 
 
   // Application
@@ -73,8 +73,8 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader");
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle");
+  model->RegisterModule<otb::ReaderModule>("Reader","File/Open data set");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
 //   model->RegisterModule<otb::OrthoRectifModule>("OrthoRectification");
 
   // Create an instance of reader

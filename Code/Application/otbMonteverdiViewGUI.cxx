@@ -83,66 +83,13 @@ MonteverdiViewGUI
   ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
-//Fl_Menu_Item mProcessing = {"Processing", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0};
-//mProcessing.SetText("Processing");
-//mMenuBar->add("Processing", 0,  0, 0, FL_NORMAL_LABEL);
-
-Fl_Callback *the_cb;
-Fl_Callback *strange_cb;
-
-
-// Fl_Menu_Item menu_menuItem[] = {
-//   {"&alpha",   FL_ALT+'a', the_cb, (void*)1},
-//   {"&beta",    FL_ALT+'b', the_cb, (void*)2},
-//   {"gamma",    FL_ALT+'c', the_cb, (void*)3, FL_MENU_DIVIDER},
-//   {"&strange",  0,   strange_cb},
-//   {"&charm",    0,   strange_cb},
-//   {"&truth",    0,   strange_cb},
-//   {"b&eauty",   0,   strange_cb},
-//   {"sub&menu",  0,   0, 0, FL_SUBMENU},
-//     {"one"},
-//     {"two"},
-//     {"three"},
-//   {0},
-//   {"inactive", FL_ALT+'i', 0, 0, FL_MENU_INACTIVE|FL_MENU_DIVIDER},
-//   {"invisible",FL_ALT+'i', 0, 0, FL_MENU_INVISIBLE},
-//   {"check",    FL_ALT+'i', 0, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
-//   {"box",      FL_ALT+'i', 0, 0, FL_MENU_TOGGLE},
-// {0}};
-// mMenuBar->copy(menu_menuItem);
-
-
-// mMenuBar->add("Processing",  0,   0, 0, FL_SUBMENU);
-// mMenuBar->add("Processing/&strange",  0,   0);
-// mMenuBar->add("&beta",    FL_ALT+'b', 0, (void*)2,FL_MENU_DIVIDER);
-// mMenuBar->add("processing/gamma",    FL_ALT+'c', 0, (void*)3);
-// mMenuBar->add("sub&menu",  0,   0, 0, FL_SUBMENU);
-
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
-
-
-    if(mcIt->first =="Reader" )
-        mMenuBar->add("File/Open Data Set", 0, 0, (void *)Test_cb);
-
-    if(mcIt->first =="Writer" )
-        mMenuBar->add("File/Save Data Set", 0, 0, 0);
-
-    if(mcIt->first =="Speckle" )
-        mMenuBar->add("Processing/Speckle", 0, 0, 0);
-
-    if(mcIt->first =="OrthoRectification" )
-        mMenuBar->add("Processing/OrthoRectification", 0, 0, 0);
-
-//     std::ostringstream out;
-//     out << mcIt->first;
-//     std::cout<< out <<std::endl;
+      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, 0, (void *)Test_cb);
   }
 
-
- // In the end
- mMenuBar->add("?/Help",0,0);
-
+  // In the end
+  mMenuBar->add("?/Help",0,0);
 }
 
 
@@ -192,7 +139,8 @@ MonteverdiViewGUI
 
 
 /// MARCHE BIEN mais pas exactement ce qu'il faut    this->AddChild(mcIt->first);
-    m_Tree->add(mcIt->first.c_str());
+    m_Tree->add_branch(mcIt->second.m_Key.c_str());
+    AddChild("Input 1");
 
   }
 
