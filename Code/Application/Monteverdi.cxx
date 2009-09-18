@@ -47,7 +47,7 @@
 
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
-#include "otbOrthoRectifModule.h"
+// #include "otbOrthoRectifModule.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -75,12 +75,12 @@ int main(int argc, char* argv[])
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle");
-  model->RegisterModule<otb::OrthoRectifModule>("OrthoRectification");
+//   model->RegisterModule<otb::OrthoRectifModule>("OrthoRectification");
 
   // Create an instance of reader
   model->CreateModuleByKey("Reader");
   model->CreateModuleByKey("Speckle");
-  model->CreateModuleByKey("OrthoRectification");
+//   model->CreateModuleByKey("OrthoRectification");
 
   // Launch Monteverdi
   view->InitWidgets();
