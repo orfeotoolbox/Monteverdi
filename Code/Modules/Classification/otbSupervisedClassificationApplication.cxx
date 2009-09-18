@@ -20,14 +20,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkExceptionObject.h"
 #include "otbCommandLineArgumentParser.h"
 
+#include "otbVectorImage.h"
 #include "otbSupervisedClassificationAppli.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStandardImageViewer.h"
-
-
-#include "otbVectorImage.h"
-
 
 #include "otbI18n.h"
 

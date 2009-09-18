@@ -47,6 +47,6 @@ ADD_LIBRARY(otbSupervisedClassificationModule ${SC_SRCS} ${otbSupervisedClassifi
 TARGET_LINK_LIBRARIES(otbSupervisedClassificationModule OTBLearning OTBIO OTBVisu OTBGui OTBMonteverdiCommon)
 
 ADD_EXECUTABLE(otbSupervisedClassificationApplication ${SC_SRCS} ${otbSupervisedClassificationApplication_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbSupervisedClassificationApplication otbSupervisedClassificationModule OTBVisualization)
+TARGET_LINK_LIBRARIES(otbSupervisedClassificationApplication otbSupervisedClassificationModule)
 
 ENDIF(OTB_USE_VISU_GUI)

@@ -62,7 +62,7 @@ ${TEMP}/OrthoRectifModuleOuptut.tif
 #------------- Supervised Classification Tests ---------------------------
 
 ADD_EXECUTABLE(otbSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassificationModule OTBVisualization)
+TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassificationModule)
 
 ADD_TEST(SupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
