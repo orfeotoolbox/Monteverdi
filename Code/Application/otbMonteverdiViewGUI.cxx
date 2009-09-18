@@ -131,6 +131,9 @@ Fl_Callback *strange_cb;
     if(mcIt->first =="Speckle" )
         mMenuBar->add("Processing/Speckle", 0, 0, 0);
 
+    if(mcIt->first =="OrthoRectification" )
+        mMenuBar->add("Processing/OrthoRectification", 0, 0, 0);
+
 //     std::ostringstream out;
 //     out << mcIt->first;
 //     std::cout<< out <<std::endl;
