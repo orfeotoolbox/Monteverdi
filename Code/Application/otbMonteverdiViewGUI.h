@@ -95,7 +95,7 @@ protected:
   static void CreateModuleByKey_Callback (Fl_Menu_* w, void* v);
 
   typedef std::pair<MonteverdiControllerInterface *,std::string> CallbackParameterType;
-//  class CallbackParameterType { public : MonteverdiControllerInterface * cc; std::string  str; };
+
 
 
 
@@ -110,8 +110,8 @@ private:
   /** Pointer to the controller */
   MonteverdiControllerInterface::Pointer m_MonteverdiController;
 
-  std::vector<CallbackParameterType> m_vector_param;
- 
+  std::vector<CallbackParameterType *> m_vector_param;
+
   Flu_Tree_Browser        *m_Tree;
 
 };

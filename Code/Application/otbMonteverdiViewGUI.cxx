@@ -52,6 +52,9 @@ MonteverdiViewGUI
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
 {
+  // delete the param list built into BuildMenus
+//   while(m_vector_param.size()!=0)
+//     delete m_vector_param.pop_back();
 }
 
 void
@@ -63,6 +66,7 @@ MonteverdiViewGUI
   // Generate dynamicaly the menus with the Model informations
   this->BuildMenus();
 
+  // Generate dynamicaly the tree
   this->BuildTree();
 
 
@@ -77,8 +81,13 @@ MonteverdiViewGUI
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
-     CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
-  //   m_vector_param.push_back( param );
+
+    /** CallbackParameterType is needed to pass two parameters to our callback method. 
+      * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
+      * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end ! 
+      */
+    CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
+    m_vector_param.push_back( param );
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
   }
 
@@ -88,7 +97,12 @@ MonteverdiViewGUI
 
 
 
-/// Static
+/** Static method/callback : CreateModuleByKey_Callback
+  *
+  * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
+  * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
+  * "m_MonteverdiController" which is not static ! 
+  */
 void
 MonteverdiViewGUI
 ::CreateModuleByKey_Callback(Fl_Menu_* w, void* v)
