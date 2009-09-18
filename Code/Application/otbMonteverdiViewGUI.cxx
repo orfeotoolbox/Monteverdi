@@ -68,24 +68,18 @@ MonteverdiViewGUI
 
 }
 
-
-static void Test_cb (Fl_Callback*, void* v)
-{
-  std::cout<< "first cb"<<std::endl;
-  //CreateModuleByKey_Callback();
-}
-
-
 void
 MonteverdiViewGUI
 ::BuildMenus()
 {
-  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
+  const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
-      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, 0, (void *)Test_cb);
+     CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
+  //   m_vector_param.push_back( param );
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
   }
 
   // In the end
@@ -93,13 +87,23 @@ MonteverdiViewGUI
 }
 
 
-Fl_Callback *
+
+/// Static
+void
 MonteverdiViewGUI
-::CreateModuleByKey_Callback()
+::CreateModuleByKey_Callback(Fl_Menu_* w, void* v)
 {
-  std::cout<<"callback"<<std::endl;
-  m_MonteverdiController->CreateModuleByKey("Reader");
+  CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
+
+  std::string moduleKey = param->second;
+
+  MonteverdiControllerInterface *lController = param->first;
+
+  lController->CreateModuleByKey(moduleKey.c_str());
+
 }
+
+
 
 void
 MonteverdiViewGUI
@@ -131,17 +135,11 @@ MonteverdiViewGUI
   ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
-  // for each 
+  // for each modulus
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
-
-    std::cout<< "ICI " << mcIt->first <<std::endl;
-
-
-/// MARCHE BIEN mais pas exactement ce qu'il faut    this->AddChild(mcIt->first);
     m_Tree->add_branch(mcIt->second.m_Key.c_str());
     AddChild("Input 1");
-
   }
 
   wMainWindow->resizable(m_Tree);
@@ -157,9 +155,6 @@ MonteverdiViewGUI
 ::Notify()
 {
     this->InitWidgets();
-//     this->UpdateChannelSelection();
-//     this->UpdateInformation();
-
 }
 
 void

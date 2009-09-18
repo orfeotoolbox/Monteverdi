@@ -76,6 +76,7 @@ public:
   virtual void Notify();
   void InitWidgets();
   void Show();
+  void CreateModuleByKey(Fl_Menu_* w, void* v);
 
   /** Constructor */
   MonteverdiViewGUI();
@@ -87,13 +88,15 @@ protected:
   virtual ~MonteverdiViewGUI();
   virtual void Quit();
 
-  void CreateModuleByKey(const char * modulekey);
   void BuildMenus();
   void BuildTree();
-  Fl_Callback * CreateModuleByKey_Callback();
-  //void Test_cb (Fl_Callback*, void* v);
-
   void AddChild( std::string childname );
+  void CreateModuleByKey(const char * modulekey);
+  static void CreateModuleByKey_Callback (Fl_Menu_* w, void* v);
+
+  typedef std::pair<MonteverdiControllerInterface *,std::string> CallbackParameterType;
+//  class CallbackParameterType { public : MonteverdiControllerInterface * cc; std::string  str; };
+
 
 
 private:
@@ -107,7 +110,8 @@ private:
   /** Pointer to the controller */
   MonteverdiControllerInterface::Pointer m_MonteverdiController;
 
-
+  std::vector<CallbackParameterType> m_vector_param;
+ 
   Flu_Tree_Browser        *m_Tree;
 
 };
