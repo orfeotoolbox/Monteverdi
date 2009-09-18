@@ -1,0 +1,30 @@
+This is the help file for the classification application.
+
+Since version 2.4, OTB provides a new application with a full GUI for supervised images classification (using SVM). This is the otbSupervisedClassification.
+
+
+First steps
+
+Launch the application and open the image. You can go for a truly huge image like 30000x30000 pixels in 4 bands.
+
+First we have to choose the samples for learning: create a new class (button Add), choose a name (button Name) and a color for it (button Color): pick blue if you want to select some water samples first. Click on the image several times to draw a polygon. Click on the End polygon button when you are done. This is your first training set. You can also define some validation sets but we will see that later in the Advanced section.
+
+Repeat the operation for the other classes. You may also choose several polygons for one class if you want. At this point, you can choose to save the ROI as a vector file (shapefile format for example).
+
+Once your done, start the learning process with the Learn button. Information about the convergence will appear in the background in the command line. If the learning samples are not easily separable with the option you pick, it can be really long.
+
+You may choose to save the SVM model in a file if you want to reuse it later (eventually to classify another image).
+
+The Display button enable the view of the classified image. The classification of the full view is done on the fly so you do not process the whole image until you choose to save it.
+
+
+Advanced
+
+You can validate the learning process if you have defined some validation ROI for each class or if you learned only from a random sets of the ROI pixels. In this case, pixels not used during for learning can help validate the classification. After learning, you can display the confusion matrix, Kappa coefficient and accuracy, clicking on the validate button.
+
+When displaying the image, you can choose which band you want to display in which channel using the Setup/Visualization menu. For Pleiades or Quickbird, you will probably want to put band 3 in the red channel, band 2 in the green and band 1 in the blue.
+
+The SVM model is fully parameterizable in the Setup/SVM menu. You can pick different kernel models, different SVM type and set each parameter.
+
+
+All the source code is available, if you add some functions, please let us know so that we can include your contributions.

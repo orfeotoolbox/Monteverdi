@@ -3,6 +3,10 @@ SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
 
+# Large Input 
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
@@ -41,7 +45,7 @@ ADD_EXECUTABLE(otbOrthoRectifModuleTest otbOrthoRectifModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbOrthoRectifModuleTest otbOrthoRectifModule)
 
 ADD_TEST(OrthoRectifModuleTest otbOrthoRectifModuleTest
-/home2/data/OTB-Data-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
+${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
 ${TEMP}/OrthoRectifModuleOuptut.tif
 )
 
@@ -54,3 +58,13 @@ ${TEMP}/OrthoRectifModuleOuptut.tif
 # /home2/data/OTB-Data-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
 # ${TEMP}/FeatureExtractionModuleOuptut.tif
 # )
+
+#------------- Supervised Classification Tests ---------------------------
+
+ADD_EXECUTABLE(otbSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassificationModule)
+
+ADD_TEST(SupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
+${INPUTDATA}/poupees.tif
+${TEMP}/SupervisedClassificationModuleOuptut.tif
+)

@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class SpeckleFilteringViewGUI {open
 } {
@@ -39,8 +39,8 @@ class SpeckleFilteringViewGUI {open
         xywh {20 94 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
       } {
         Fl_Value_Input guiLeeRadius {
-          label Radius selected
-          tooltip {Radius parameter for Lee filter} xywh {129 108 50 20} minimum -300 maximum 300 step 1 value 10
+          label Radius
+          tooltip {Radius parameter for Lee filter} xywh {129 108 50 20} maximum 300 step 1 value 10
         }
       }
       Fl_Group guiFrostGroup {
@@ -48,7 +48,7 @@ class SpeckleFilteringViewGUI {open
         xywh {20 96 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Value_Input guiFrostRadius {
-          label Radius
+          label Radius selected
           tooltip {Radius parameter for Frost image filter} xywh {129 110 51 20} maximum 300 step 1 value 10
         }
         Fl_Value_Input guiLeeDeRamp {
@@ -74,4 +74,4 @@ class SpeckleFilteringViewGUI {open
   } {}
   Function {Quit()} {open return_type {virtual void}
   } {}
-}
+} 
