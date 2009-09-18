@@ -22,6 +22,11 @@
 
 namespace otb
 {
+
+/** Initialize the singleton */
+MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
+
+
 /**
  * Constructor
  */
@@ -52,6 +57,17 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 const MonteverdiModel::ModuleDescriptorMapType & MonteverdiModel::GetRegisteredModuleDescriptors() const
 {
   return m_ModuleDescriptorMap;
+}
+
+/** Manage the singleton */
+MonteverdiModel::Pointer
+MonteverdiModel::GetInstance()
+{
+  if (!Instance)
+  {
+    Instance = MonteverdiModel::New();
+  }
+  return Instance;
 }
 
 }// End namespace

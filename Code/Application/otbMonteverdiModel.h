@@ -50,16 +50,14 @@ class ITK_EXPORT MonteverdiModel
 
   /** Standard type macro */
   itkTypeMacro(MonteverdiModel, MVCModel);
-  
-  /** Standard new macro */
-  itkNewMacro(Self);
-  
+
+
   /** Vector of open modules */
   typedef std::vector<Module::Pointer>                    ModuleVectorType;
 
  /** typedef of the Module constructors function */
   typedef otb::Module::Pointer (CALLBACK * ConstructorPointerType)();
-  
+
   /** Inner class to represent a registered module */
   class RegisteredModuleDescriptor
   {
@@ -73,13 +71,13 @@ class ITK_EXPORT MonteverdiModel
     // pointer to the constructor of the module
     ConstructorPointerType m_Constructor;
   };
-  
+
   // Map of registered modules
   typedef std::map<std::string,RegisteredModuleDescriptor> ModuleDescriptorMapType;
 
 
 
-  /** Get the unique instanc1e of the model */
+  /** Get the unique instance of the model */
   static Pointer GetInstance();
 
 
@@ -107,7 +105,10 @@ class ITK_EXPORT MonteverdiModel
   const ModuleDescriptorMapType & GetRegisteredModuleDescriptors() const;
 
 protected:
- 
+
+  /** This is protected for the singleton. Use GetInstance() instead. */
+  itkNewMacro(Self);
+
   /** Constructor */
   MonteverdiModel();
 
@@ -117,6 +118,9 @@ protected:
  private:
   MonteverdiModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  /** The instance singleton */
+  static Pointer Instance;
 
   /** Constructors map */
   ModuleDescriptorMapType m_ModuleDescriptorMap;

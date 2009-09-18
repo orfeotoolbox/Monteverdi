@@ -47,19 +47,19 @@ MonteverdiController
   }
 }
 
-// void
-// MonteverdiController
-// ::GetAvailableModule(const char * modulename)
-// {
-//   try
-//   {
-//     m_Model->GetAvailableModule();
-//   }
-//   catch (itk::ExceptionObject & err)
-//   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
-//   }
-// }
+const MonteverdiController::ModuleDescriptorMapType &
+MonteverdiController
+::GetRegisteredModuleDescriptors()
+{
+  try
+  {
+    return m_Model->GetRegisteredModuleDescriptors();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    //MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
 
 } // end namespace otb
 

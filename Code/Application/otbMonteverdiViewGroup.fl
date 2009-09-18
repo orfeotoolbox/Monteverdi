@@ -5,9 +5,9 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class otbMonteverdiViewGroup {open selected
+class otbMonteverdiViewGroup {open
 } {
-  Function {QuitCallback()} {return_type {virtual void}
+  Function {Quit()} {return_type {virtual void}
   } {}
   Function {~otbMonteverdiViewGroup()} {open return_type virtual
   } {}
@@ -15,34 +15,26 @@ class otbMonteverdiViewGroup {open selected
   } {
     Fl_Window wMainWindow {
       label Monteverdi
-      callback {this->QuitCallback();} open
-      xywh {198 191 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      callback {this->Quit();} open
+      xywh {198 191 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
-      Fl_Menu_Bar {} {open
+      Fl_Menu_Bar mMenuBar {open
         xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
       } {
-        Submenu {} {
+        Submenu mFile {
           label File open
           xywh {0 0 67 24}
         } {
           MenuItem {} {
             label Quit
-            callback {this->QuitCallback();}
+            callback {this->Quit();}
             tooltip {Quit the application} xywh {10 10 34 24}
           }
         }
-        Submenu {} {
-          label {?} open
-          xywh {10 10 67 24}
-        } {}
       }
-      Fl_Tile gTile {open
-        xywh {5 30 390 565}
-      } {
-        Fl_Group gTreeGroup {
-          xywh {5 30 390 565}
-        } {}
-      }
+      Fl_Group gTreeGroup {
+        xywh {5 30 390 565} resizable
+      } {}
     }
   }
 } 

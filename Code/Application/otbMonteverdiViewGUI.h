@@ -58,12 +58,13 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Standards macros */
+  /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
   itkTypeMacro(MonteverdiViewGUI,itk::Object);
 
   typedef MonteverdiModel                        MonteverdiModelType;
   typedef MonteverdiControllerInterface::Pointer MonteverdiControllerInterfacePointerType;
+  typedef MonteverdiModelType::ModuleDescriptorMapType   ModuleDescriptorMapType;
 
 
   /** Set the controller */
@@ -71,9 +72,9 @@ public:
   itkSetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
 
 
-
   /** Event from the model */
   virtual void Notify();
+  void InitWidgets();
   void Show();
 
   /** Constructor */
@@ -84,13 +85,16 @@ protected:
 
   /** Destructor */
   virtual ~MonteverdiViewGUI();
-
-  virtual void CreateModuleByName(const char * modulename);
   virtual void Quit();
 
-  void InitWidgets();
+  void CreateModuleByKey(const char * modulekey);
   void BuildMenus();
   void BuildTree();
+  Fl_Callback * CreateModuleByKey_Callback();
+  //void Test_cb (Fl_Callback*, void* v);
+
+  void AddChild( std::string childname );
+
 
 private:
 

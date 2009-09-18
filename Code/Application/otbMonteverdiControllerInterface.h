@@ -35,6 +35,7 @@ public:
   typedef itk::SmartPointer<const Self>        ConstPointer;
 
   typedef MonteverdiModel                      ModelType;
+  typedef ModelType::ModuleDescriptorMapType   ModuleDescriptorMapType;
 
 
 
@@ -43,6 +44,8 @@ public:
 
   /** Users actions */
   virtual void CreateModuleByKey(const char * modulekey)=0;
+  virtual const ModuleDescriptorMapType & GetRegisteredModuleDescriptors()=0;
+
 
 
 protected:
