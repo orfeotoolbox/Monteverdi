@@ -1,0 +1,33 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0009 
+header_name {.H} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 5
+class Counter {open : {public Thread}
+} {
+  Function {Counter()} {open
+  } {
+    Fl_Window main_w {
+      label Counter
+      callback {quit_cb();} open selected
+      xywh {379 192 421 100}
+      code0 {\#include <Threads.H>} visible
+    } {
+      Fl_Value_Slider progress {
+        label {Progress:}
+        xywh {5 20 410 30} type {Horz Fill} color 7 labelfont 4 labelsize 18 align 5 maximum 100 step 0.1 textsize 14 textcolor 4
+        code0 {o->set_output();}
+      }
+      Fl_Return_Button command {
+        label START
+        callback {command_cb();}
+        xywh {155 60 125 35} labeltype ENGRAVED_LABEL labelfont 9 labelsize 18 labelcolor 4
+      }
+    }
+  }
+  decl {void thread();} {}
+  decl {void command_cb();} {}
+  decl {void quit_cb();} {}
+} 

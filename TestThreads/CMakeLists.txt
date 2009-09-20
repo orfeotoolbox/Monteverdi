@@ -1,0 +1,9 @@
+FIND_PACKAGE(OTB)
+IF(OTB_FOUND)
+  INCLUDE(${OTB_USE_FILE})
+ENDIF(OTB_FOUND)
+
+
+ADD_EXECUTABLE(Counter Counter_main.cxx Counter.cxx)
+TARGET_LINK_LIBRARIES(Counter OTBGui )
+
