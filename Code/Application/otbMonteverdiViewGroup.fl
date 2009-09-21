@@ -5,36 +5,35 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class otbMonteverdiViewGroup {open
+class MonteverdiViewGroup {open
 } {
-  Function {Quit()} {return_type {virtual void}
-  } {}
-  Function {~otbMonteverdiViewGroup()} {open return_type virtual
+  Function {~MonteverdiViewGroup()} {open return_type virtual
   } {}
   Function {Build()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
       label Monteverdi
       callback {this->Quit();} open
-      xywh {198 191 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Menu_Bar mMenuBar {open
-        xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
-      } {
-        Submenu mFile {
-          label File open
-          xywh {0 0 67 24}
-        } {
-          MenuItem {} {
-            label Quit
-            callback {this->Quit();}
-            tooltip {Quit the application} xywh {10 10 34 24}
-          }
-        }
-      }
+        xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
+      } {}
       Fl_Group gTreeGroup {
         xywh {5 30 390 565} resizable
       } {}
     }
+    Fl_Window wHelpWindow {
+      label {Help Me...} open
+      xywh {653 318 300 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Output gHelpText {
+        xywh {0 0 300 150}
+      }
+    }
   }
+  Function {Quit()} {selected return_type {virtual void}
+  } {}
+  Function {HelpCallback()} {return_type {virtual void}
+  } {}
 } 

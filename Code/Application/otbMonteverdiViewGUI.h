@@ -48,7 +48,7 @@ namespace otb
  *
  */
 class MonteverdiViewGUI
-  : public ListenerBase, public otbMonteverdiViewGroup, public itk::Object
+  : public ListenerBase, public MonteverdiViewGroup, public itk::Object
 {
 public:
 
@@ -81,12 +81,18 @@ public:
   /** Constructor */
   MonteverdiViewGUI();
 
-
+  static void cb_mQuit(Fl_Menu_ *, void*);
+  static void cb_wHelp(Fl_Menu_ *, void*);
+ 
+  // Seems to be needed for quit callback... don't understand why!!!
+  virtual void Quit();  
+  virtual void HelpCallback();
+  
 protected:
 
   /** Destructor */
   virtual ~MonteverdiViewGUI();
-  virtual void Quit();
+
 
   void BuildMenus();
   void BuildTree();
