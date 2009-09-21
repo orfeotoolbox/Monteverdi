@@ -24,6 +24,12 @@
 
 int main(int argc, char* argv[])
 {
+  if (argc != 3 )
+  {
+    std::cout << argv[0] << "\t" << "input image" << "\t" << "output image" << std::endl;
+    return EXIT_FAILURE;
+  }
+  
   otb::FeatureExtractionModule::Pointer specificModule = otb::FeatureExtractionModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
   
@@ -31,7 +37,7 @@ int main(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::Image<double,2>  ImageType;
+  typedef otb::VectorImage<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
@@ -43,19 +49,45 @@ int main(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn("Floating_Point_Image",reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
-  
+//   std::cout<<"ad key.."<<std::endl;
   module->AddDataByKey("InputImage",wrapperIn);
+//   std::cout<<"start..."<<std::endl;
   module->Start();
+//   std::cout<<"start over"<<std::endl;
   Fl::check();
 
-  // Simulate Ok button callback
+  //Simulate use of the application
+  // ------------ Chose NDVI feature
+//   std::cout<<"ndvi begin..."<<std::endl;
+  specificModule->GetView()->UpdateParameterArea(8);
+  specificModule->GetView()->SetFeatureType(otb::NDVI);
+  Fl::check();
+
+  //Select bands 2 and 3
+  specificModule->GetView()->guiRAndNIRR->value(2);
+  specificModule->GetView()->guiRAndNIRR->redraw();
+  Fl::check();
+  specificModule->GetView()->guiRAndNIRR->do_callback();
+  specificModule->GetView()->guiRAndNIRNIR->value(1);
+  specificModule->GetView()->guiRAndNIRNIR->redraw();
+  Fl::check();
+  specificModule->GetView()->guiRAndNIRNIR->do_callback();
+
+  //Add the feature
+  specificModule->GetView()->guiAdd->do_callback();
+  specificModule->GetView()->guiFeatureListAction->redraw();
+  Fl::check();
+  
+  
+  // Simulate Ok (save) button callback
+  std::cout<<"save image"<<std::endl;
   specificModule->GetView()->guiOK->do_callback();
   Fl::check();
 
   otb::DataObjectWrapper wrapperOut = module->GetDataByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
-
+  //std::cout<<"..."<<std::endl;
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
   //Write the image

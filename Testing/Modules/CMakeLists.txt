@@ -51,13 +51,13 @@ ${TEMP}/OrthoRectifModuleOuptut.tif
 
 #------------- Feature Extraction Tests ---------------------------
 
-# ADD_EXECUTABLE(otbFeatureExtractionModuleTest otbFeatureExtractionModuleTest.cxx)
-# TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleTest otbFeatureExtractionModule)
-# 
-# ADD_TEST(FeatureExtractionModuleTest otbFeatureExtractionModuleTest
-# /home2/data/OTB-Data-LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
-# ${TEMP}/FeatureExtractionModuleOuptut.tif
-# )
+ADD_EXECUTABLE(otbFeatureExtractionModuleTest otbFeatureExtractionModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleTest otbFeatureExtractionModule)
+
+ADD_TEST(FeatureExtractionModuleTest otbFeatureExtractionModuleTest
+${INPUTDATA}/GomaBestScale_w15_50.raw.hdr 	
+${TEMP}/FeatureExtractionModuleOuptut.hdr
+)
 
 #------------- Supervised Classification Tests ---------------------------
 

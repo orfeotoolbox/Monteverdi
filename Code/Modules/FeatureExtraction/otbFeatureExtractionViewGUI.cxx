@@ -392,18 +392,20 @@ void
 FeatureExtractionViewGUI
 ::OK()
 {
-  /*
-  const char * cfname = fl_file_chooser("Save as...", "*.*",m_LastPath.c_str());
-  Fl::check();
-  guiMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return;
-  }
-  m_FeatureExtractionController->SetOutputFileName(cfname);
+  
+  //const char * cfname = fl_file_chooser("Save as...", "*.*",m_LastPath.c_str());
+//   Fl::check();
+//   guiMainWindow->redraw();
+//   if (cfname == NULL || strlen(cfname)<1)
+//   {
+//     return;
+//   }
+//   m_FeatureExtractionController->SetOutputFileName(cfname);
   m_FeatureExtractionController->SaveOutput();
-  */
+  
   //Here we need to go back to the app Monteverdi //TODO
+//   m_FeatureExtractionController
+  
   this->Quit();
 }
 
