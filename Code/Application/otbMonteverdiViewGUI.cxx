@@ -186,7 +186,7 @@ MonteverdiViewGUI
 
 void
 MonteverdiViewGUI
-::Notify()
+::Notify(const MonteverdiEvent & event)
 {
   this->InitWidgets();
 }

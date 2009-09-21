@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbModule_h
 #define __otbModule_h
 
@@ -25,6 +24,8 @@
 #include "otbDataObjectWrapper.h"
 #include "otbInputDataDescriptor.h"
 #include "otbOutputDataDescriptor.h"
+#include "otbEventsSender.h"
+#include "otbMonteverdiEvent.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ namespace otb
  */
 
 class ITK_EXPORT Module
-  : public itk::Object
+  : public itk::Object, public EventsSender<MonteverdiEvent>
 {
 public:
   /** Standard class typedefs */

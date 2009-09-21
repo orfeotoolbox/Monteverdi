@@ -38,7 +38,7 @@ namespace otb
 {
 
 class ITK_EXPORT MonteverdiModel
-  : public MVCModel<ListenerBase>, public itk::Object
+  : public itk::Object, public EventsSender<MonteverdiEvent>, public EventsListener<MonteverdiEvent>
 {
  public:
   /** Standard class typedefs */
@@ -120,8 +120,11 @@ class ITK_EXPORT MonteverdiModel
 //   // Get the inputs required for a given module */
 //   const std::vector<InputDataDescriptor> & GetNthModuleInputs(unsigned int idx);
 
-//   /** Start the given module */
-//   void StartModule(unsigned int idx);
+  /** Start the given module */
+  void StartModuleByKey(const std::string & key);
+
+  // Temporary notify stub
+  virtual void Notify(const MonteverdiEvent & event) {}
 
 
 protected:
