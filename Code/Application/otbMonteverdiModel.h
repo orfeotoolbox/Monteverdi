@@ -124,7 +124,10 @@ class ITK_EXPORT MonteverdiModel
   void StartModuleByKey(const std::string & key);
 
   // Temporary notify stub
-  virtual void Notify(const MonteverdiEvent & event) {}
+  virtual void Notify(const MonteverdiEvent & event) 
+  {
+    std::cout<<"Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+  }
 
 
 protected:
