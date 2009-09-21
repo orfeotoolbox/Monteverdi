@@ -72,7 +72,6 @@ BasicApplicationController
 {
   try
   {
-//    ((BasicApplicationController*) arg)->m_Model->RunLoop();
     ModelType::GetInstance()->RunLoop();
   }
   catch (itk::ExceptionObject & err)
