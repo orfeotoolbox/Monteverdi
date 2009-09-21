@@ -54,4 +54,18 @@ BasicApplicationController
     }
 }
 
+void
+BasicApplicationController
+::RunLoop()
+{
+  try
+  {
+    m_Model->RunLoop();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
 } // end namespace otb

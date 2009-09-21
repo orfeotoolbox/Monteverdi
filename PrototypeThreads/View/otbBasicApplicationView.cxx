@@ -99,4 +99,9 @@ void BasicApplicationView::OpenImage()
   m_Controller->OpenImage( cfname );
 }
 
+void BasicApplicationView::RunLoop()
+{
+	m_Controller->RunLoop();
+}
+
 }// end namespace

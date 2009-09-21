@@ -45,6 +45,7 @@ public:
   /** Fluid call backs*/
   virtual void OpenImage();
   virtual void Exit();
+  virtual void RunLoop();
 
   /** Set the controller */
   itkSetObjectMacro(Controller,BasicApplicationControllerInterface);

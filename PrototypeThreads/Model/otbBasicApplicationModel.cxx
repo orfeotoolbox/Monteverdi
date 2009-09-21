@@ -60,7 +60,21 @@ BasicApplicationModel
  this->NotifyAll();
 }
 
+void
+BasicApplicationModel
+::RunLoop()
+{
+  unsigned long i = 0;
+  while (true)
+  {
+    std::cerr << i << std::endl;
+    ++i;
+    sleep(1);
+  }
 
+
+
+}
 
 
 }

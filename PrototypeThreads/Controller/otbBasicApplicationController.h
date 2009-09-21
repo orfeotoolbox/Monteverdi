@@ -46,7 +46,7 @@ public:
 
   /** User action */
   virtual void OpenImage( const char * filename );
-
+  virtual void RunLoop();
 
 protected:
   /** Constructor */

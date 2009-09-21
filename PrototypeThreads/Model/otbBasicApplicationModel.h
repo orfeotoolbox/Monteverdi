@@ -53,6 +53,7 @@ public:
 
   /** Open an image */
   void OpenImage(const char * filename);
+  void RunLoop();
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
