@@ -6,6 +6,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbExtractROI.h"
 
 //Vis
 #include "otbImageLayerRenderingModel.h"
@@ -45,6 +46,8 @@ public:
   typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
 
+  typedef otb::ExtractROI< RGBPixelType, RGBPixelType > ExtractType;
+  
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -78,6 +81,8 @@ private:
 
   /** Vector reader */
   VectorReaderType::Pointer            m_Reader;
+
+  ExtractType::Pointer               m_Extract;
 };
 
 }//end namespace otb

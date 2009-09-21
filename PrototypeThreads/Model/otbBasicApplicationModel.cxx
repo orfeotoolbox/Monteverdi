@@ -1,6 +1,7 @@
 #include "otbBasicApplicationModel.h"
 #include "otbFltkFilterWatcher.h"
 
+
 namespace otb
 {
 /** Initialize the singleton */
@@ -25,6 +26,7 @@ BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reade
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_Reader = VectorReaderType::New();
+  m_Extract = ExtractType::New();
 
 }
 
@@ -64,12 +66,26 @@ void
 BasicApplicationModel
 ::RunLoop()
 {
+  RGBImageType::SizeType size = m_Reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  
   unsigned long i = 0;
   while (true)
   {
-    std::cerr << i << std::endl;
-    ++i;
-    sleep(1);
+  if( i>= size[0]-10 || i>= size[1]-10)
+    i=0;
+  
+  std::cerr << i << std::endl;
+
+  m_Extract->SetStartX(i);
+  m_Extract->SetStartY(i);
+  m_Extract->SetSizeX(5);
+  m_Extract->SetSizeY(5);
+
+  m_Extract->Update();
+  
+  
+  ++i;
+  sleep(1);
   }
 
 
