@@ -31,6 +31,7 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   m_Threader = itk::MultiThreader::New();
 
   m_ImageReady = false;
+
 }
 
 BasicApplicationController
@@ -68,7 +69,7 @@ BasicApplicationController
 {
   if(m_ImageReady)
     {
-    m_Threader->SetNumberOfThreads(2);
+    m_Threader->SetNumberOfThreads(1);
     m_Threader->SpawnThread(ThreadFunction, this);
     }
 }
