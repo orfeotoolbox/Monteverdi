@@ -38,8 +38,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMonteverdiControllerInterface.h"
 
 #include "itkObject.h"
-#include "otbMVCModel.h"
-#include "otbListenerBase.h"
 
 
 namespace otb
@@ -48,7 +46,7 @@ namespace otb
  *
  */
 class MonteverdiViewGUI
-  : public ListenerBase, public MonteverdiViewGroup, public itk::Object
+  : public MonteverdiViewGroup, public itk::Object, public EventsListener<MonteverdiEvent> 
 {
 public:
 
@@ -76,7 +74,7 @@ public:
 
 
   /** Event from the model */
-  virtual void Notify();
+  virtual void Notify(const MonteverdiEvent & event);
   void InitWidgets();
   void BuildTree();
   void Show();

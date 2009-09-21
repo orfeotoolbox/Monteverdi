@@ -107,6 +107,9 @@ void ReaderModule::OpenDataSet()
     }
 
   wFileChooserWindow->hide();
+  
+  // Notify all listener
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated","Reader1"));
 }
 
 void ReaderModule::Browse()

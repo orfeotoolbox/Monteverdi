@@ -55,8 +55,11 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     m_ModuleMap[oss.str()] = module;
     std::cout<<"New module with id "<<oss.str()<<" created: "<<m_ModuleMap[oss.str()]<<std::endl;
 
+    // Register the main model to receive events from the new module
+    module->RegisterListener(this);
+
     // Temporary
-    module->Start();
+    this->StartModuleByKey(oss.str());
 
     // Update instances count
     m_InstancesCountMap[key]++;
@@ -65,6 +68,21 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     {
     itkExceptionMacro(<<"No module with key "<<key<<" has been registered.");
     }
+}
+
+
+void MonteverdiModel::StartModuleByKey(const std::string & key)
+{
+ ModuleMapType::iterator mIt = m_ModuleMap.find(key);
+
+ if(mIt != m_ModuleMap.end())
+   {
+   mIt->second->Start();
+   }
+ else
+   {
+   itkExceptionMacro(<<"No module instance with key "<<key);
+   }
 }
 
 /** Get available modules map */
