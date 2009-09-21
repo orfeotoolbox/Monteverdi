@@ -44,8 +44,6 @@ MonteverdiViewGUI
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
-
-
 }
 
 
@@ -56,6 +54,25 @@ MonteverdiViewGUI
 //   while(m_vector_param.size()!=0)
 //     delete m_vector_param.pop_back();
 }
+
+
+// void MonteverdiViewGUI::cb_mQuit_i(Fl_Menu_*, void*) {
+//   this->QuitCallback();
+// }
+
+
+void MonteverdiViewGUI::cb_mQuit(Fl_Menu_* o, void* v) {
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Quit();
+}
+
+void MonteverdiViewGUI::cb_wHelp(Fl_Menu_* o, void* v) 
+{
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->HelpCallback();
+}
+
+
 
 void
 MonteverdiViewGUI
@@ -69,7 +86,8 @@ MonteverdiViewGUI
   // Generate dynamicaly the tree
   this->BuildTree();
 
-
+  gHelpText->value("Quelque chose");
+  gHelpText->redraw();
 }
 
 void
@@ -91,8 +109,10 @@ MonteverdiViewGUI
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
   }
 
+ 
   // In the end
-  mMenuBar->add("?/Help",0,0);
+  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::cb_mQuit, (void*)(this));
+  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::cb_wHelp, (void*)(this));
 }
 
 
@@ -168,7 +188,7 @@ void
 MonteverdiViewGUI
 ::Notify()
 {
-    this->InitWidgets();
+  this->InitWidgets();
 }
 
 void
@@ -178,14 +198,20 @@ MonteverdiViewGUI
   wMainWindow->show();
 }
 
-
 void
 MonteverdiViewGUI
 ::Quit()
 {
   gTreeGroup->hide();
+  wHelpWindow->hide();
   wMainWindow->hide();
-  //MsgReporter::GetInstance()->Hide();
+}
+
+void
+MonteverdiViewGUI
+::HelpCallback()
+{
+  wHelpWindow->show();
 }
 
 void
