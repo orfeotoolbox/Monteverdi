@@ -45,6 +45,7 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
   if(mcIt!=m_ModuleDescriptorMap.end())
     {
     m_ModuleList.push_back(mcIt->second.m_Constructor());
+    m_ModuleList.back()->Start();
     std::cout<<"New module created: "<<m_ModuleList.back()<<std::endl;
     }
   else

@@ -22,11 +22,11 @@ void BasicApplicationModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reader()
+BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reader(), m_MeanShift()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_Reader = VectorReaderType::New();
-  m_Extract = ExtractType::New();
+  m_MeanShift = MSFilterType::New();
 
 }
 
@@ -40,10 +40,11 @@ BasicApplicationModel
 {
   m_Reader->SetFileName(filename);
   m_Reader->UpdateOutputInformation();
-
+  m_MeanShift->SetInput(m_Reader->GetOutput());
 
   // Generate the layer
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
+  //generator->SetImage(m_MeanShift->GetOutput());
   generator->SetImage(m_Reader->GetOutput());
   generator->GenerateQuicklookOn();
   FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
@@ -59,37 +60,29 @@ BasicApplicationModel
 
   m_VisualizationModel->Update();
 
- this->NotifyAll();
+  this->NotifyAll();
 }
 
 void
 BasicApplicationModel
 ::RunLoop()
 {
-  RGBImageType::SizeType size = m_Reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+  /*
   unsigned long i = 0;
   while (true)
   {
-  if( i>= size[0]-10 || i>= size[1]-10)
-    i=0;
-  
-  std::cerr << i << std::endl;
-
-  m_Extract->SetStartX(i);
-  m_Extract->SetStartY(i);
-  m_Extract->SetSizeX(5);
-  m_Extract->SetSizeY(5);
-
-  m_Extract->Update();
-  
-  
-  ++i;
-  sleep(1);
+    std::cerr << i << std::endl;
+    ++i;
+    sleep(1);
   }
-
-
-
+  */
+  
+  VectorWriterType::Pointer writer = VectorWriterType::New();
+  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
+  writer->SetFileName("msimage.tif");
+  writer->SetInput(m_MeanShift->GetClusteredOutput());
+  writer->Update();
+  
 }
 
 
