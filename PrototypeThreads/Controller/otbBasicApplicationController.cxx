@@ -67,9 +67,9 @@ void
 BasicApplicationController
 ::RunLoop()
 {
-  if(m_ImageReady)
+  if(m_ImageReady && !m_Model->IsUpdating())
     {
-    m_Threader->SetNumberOfThreads(1);
+    m_Threader->SetNumberOfThreads(2);
     m_Threader->SpawnThread(ThreadFunction, this);
     }
 }
