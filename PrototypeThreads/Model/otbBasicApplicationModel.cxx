@@ -42,9 +42,6 @@ BasicApplicationModel
   m_Reader->SetFileName(filename);
   m_Reader->UpdateOutputInformation();
   m_MeanShift->SetInput(m_Reader->GetOutput());
-  m_MeanShift->SetSpatialRadius(20);
-  m_MeanShift->SetRangeRadius(80);
-  m_MeanShift->SetMinimumRegionSize(100);
 
   // Generate the layer
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
@@ -86,6 +83,7 @@ BasicApplicationModel
   writer->SetFileName("msimage.tif");
   writer->SetInput(m_MeanShift->GetClusteredOutput());
   writer->Update();
+  writer->ResetPipeline();
   m_IsUpdating = false;
   
 }
