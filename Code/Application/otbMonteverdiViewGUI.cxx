@@ -56,6 +56,23 @@ MonteverdiViewGUI
 }
 
 
+// void MonteverdiViewGUI::cb_mQuit_i(Fl_Menu_*, void*) {
+//   this->QuitCallback();
+// }
+
+
+void MonteverdiViewGUI::cb_mQuit(Fl_Menu_* o, void* v) {
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Quit();
+}
+
+void MonteverdiViewGUI::cb_wHelp(Fl_Menu_* o, void* v) 
+{
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->HelpCallback();
+}
+
+
 
 void
 MonteverdiViewGUI
@@ -68,6 +85,7 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
+
   gHelpText->value("Quelque chose");
   gHelpText->redraw();
 }
@@ -79,8 +97,6 @@ MonteverdiViewGUI
   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
-  mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
-
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
 
@@ -88,58 +104,39 @@ MonteverdiViewGUI
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
       * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end ! 
       */
-    CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
+    CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
     m_vector_param.push_back( param );
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
   }
 
  
   // In the end
-  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
-  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
+  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::cb_mQuit, (void*)(this));
+  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::cb_wHelp, (void*)(this));
 }
 
 
-/** GenericCallback (static)
+
+/** Static method/callback : CreateModuleByKey_Callback
   *
   * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
   * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
-  * "this" which is not static ! 
+  * "m_MonteverdiController" which is not static ! 
   */
-void 
+void
 MonteverdiViewGUI
-::GenericCallback(Fl_Menu_* w, void* v)
+::CreateModuleByKey_Callback(Fl_Menu_* w, void* v)
 {
   CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
 
-  MonteverdiViewGUI *lThis = param->first;
   std::string moduleKey = param->second;
 
-  lThis->CreateModuleByKey(moduleKey.c_str());
-  lThis->BuildTree();
+  MonteverdiControllerInterface *lController = param->first;
+
+  lController->CreateModuleByKey(moduleKey.c_str());
 
 }
 
-/** QuitCallback (static) */
-void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) {
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->Quit();
-}
-
-/** HelpCallback (static) */
-void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v) 
-{
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->Help();
-}
-
-
-void
-MonteverdiViewGUI
-::CreateModuleByKey(const char * modulekey)
-{
-  m_MonteverdiController->CreateModuleByKey(modulekey);
-}
 
 
 void
@@ -161,8 +158,6 @@ MonteverdiViewGUI
 ::BuildTree()
 {
 
-  unsigned int i;
-
   wMainWindow->begin();
 
   m_Tree->box( FL_DOWN_BOX );
@@ -171,39 +166,18 @@ MonteverdiViewGUI
 
   gTreeGroup->resizable( NULL );
 
-//   ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
-//   ModuleDescriptorMapType::const_iterator mcIt;
-//
-//   // for each modulus
-//   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-//   {
-//     m_Tree->add_branch(mcIt->second.m_Key.c_str());
-//     AddChild("Input 1");
-//   }
+  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
+  ModuleDescriptorMapType::const_iterator mcIt;
 
-  // for each instance of module
-//   ModuleMapType lModuleList = m_MonteverdiModel->GetModuleList();
-// std::cout<<"size : "<<lModuleList.size()<<std::endl;
-//   for(i=0;i<lModuleList.size();i++)
-//   {
-// 
-//     // look after all existing objects into each instance of module
-// //     DataDescriptorMapType lDataMap = lModuleList[i]->GetOutputsMap(); //GetDataMap();
-// // std::cout<<"size2 : "<<lDataMap.size()<<std::endl;
-// // 
-// //     DataDescriptorMapType::const_iterator it;
-// //     for (it = lDataMap.begin();it != lDataMap.end();it++)
-// //     {
-// // 
-// // //ostreamstring oss;
-// //         m_Tree->add_branch(it->second.GetDataKey().c_str());
-// // 
-// // //     AddChild("Input 1");
-// //     }
-//   }
+  // for each modulus
+  for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
+  {
+    m_Tree->add_branch(mcIt->second.m_Key.c_str());
+    AddChild("Input 1");
+  }
 
-
-  wMainWindow->resizable(m_Tree);
+  gTreeGroup->resizable(m_Tree);
+  wMainWindow->resizable(gTreeGroup);
   gTreeGroup->end();
 
   // FileGroup and tree
@@ -236,11 +210,17 @@ MonteverdiViewGUI
 
 void
 MonteverdiViewGUI
-::Help()
+::HelpCallback()
 {
   wHelpWindow->show();
 }
 
+void
+MonteverdiViewGUI
+::CreateModuleByKey(const char * modulekey)
+{
+  m_MonteverdiController->CreateModuleByKey(modulekey);
+}
 
 
 } // end namespace otb
