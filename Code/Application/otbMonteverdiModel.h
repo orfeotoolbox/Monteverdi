@@ -52,9 +52,6 @@ class ITK_EXPORT MonteverdiModel
   itkTypeMacro(MonteverdiModel, MVCModel);
 
 
-  /** Vector of open modules */
-  typedef std::map<std::string,Module::Pointer>            ModuleMapType;
-
  /** typedef of the Module constructors function */
   typedef otb::Module::Pointer (CALLBACK * ConstructorPointerType)();
 
@@ -72,11 +69,17 @@ class ITK_EXPORT MonteverdiModel
     ConstructorPointerType m_Constructor;
   };
 
+
+  /** Map of open modules */
+  typedef std::map<std::string,Module::Pointer>            ModuleMapType;
+
   // Map of registered modules
   typedef std::map<std::string,RegisteredModuleDescriptor> ModuleDescriptorMapType;
   typedef std::map<std::string,unsigned int>               InstancesCountMapType;
 
 
+  typedef otb::Module::OutputDataDescriptorMapType         OutputDataDescriptorMapType;
+  typedef otb::Module::InputDataDescriptorMapType          InputDataDescriptorMapType;
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -106,21 +109,19 @@ class ITK_EXPORT MonteverdiModel
   /** Get available modules map */
   const ModuleDescriptorMapType & GetRegisteredModuleDescriptors() const;
 
-//   /** Get available module instances */
-//   const std::vector<std::string> GetAvailableModuleInstances() const;
 
-//   /** Get outputs for a given module instance */
-//   const std::vector<OutputDataDescriptor> GetModuleOutputsByKey(const std::string & key) const;
+   /** Get available module instances */
+   const std::vector<std::string> GetAvailableModuleInstances() const;
 
-//   /** Get required inputs for a given module instance */
-//   const std::vector<InputDataDescriptor> GtetModuleInputsByKey(const std::string & key) const;
+   /** Get outputs for a given module instance */
+   const OutputDataDescriptorMapType & GetModuleOutputsByKey(const std::string & key) const;
+
+   /** Get required inputs for a given module instance */
+   const InputDataDescriptorMapType & GetModuleInputsByKey(const std::string & key) const;
 
 //   void Connect(const std::string & sourceModule,const std::string& 
 
-//   // Get the inputs required for a given module */
-//   const std::vector<InputDataDescriptor> & GetNthModuleInputs(unsigned int idx);
-
-//   /** Start the given module */
+   /** Start the given module */
 //   void StartModule(unsigned int idx);
 
 

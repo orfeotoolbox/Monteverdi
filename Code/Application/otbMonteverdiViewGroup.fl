@@ -9,6 +9,8 @@ class otbMonteverdiViewGroup {open
 } {
   Function {Quit()} {return_type {virtual void}
   } {}
+  Function {GenericCallback()} {selected return_type {virtual void}
+  } {}
   Function {~otbMonteverdiViewGroup()} {open return_type virtual
   } {}
   Function {Build()} {open return_type {virtual void}

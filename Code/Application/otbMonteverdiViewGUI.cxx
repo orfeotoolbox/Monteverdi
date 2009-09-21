@@ -44,8 +44,6 @@ MonteverdiViewGUI
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
-
-
 }
 
 
@@ -68,8 +66,6 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
-
-
 }
 
 void
@@ -86,37 +82,43 @@ MonteverdiViewGUI
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
       * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end ! 
       */
-    CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
+    CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
     m_vector_param.push_back( param );
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
   }
 
   // In the end
+  mMenuBar->add("File/Quit",0,0);
   mMenuBar->add("?/Help",0,0);
 }
-
 
 
 /** Static method/callback : CreateModuleByKey_Callback
   *
   * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
   * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
-  * "m_MonteverdiController" which is not static ! 
+  * "this" which is not static ! 
   */
-void
+void 
 MonteverdiViewGUI
-::CreateModuleByKey_Callback(Fl_Menu_* w, void* v)
+::GenericCallback(Fl_Menu_* w, void* v)
 {
   CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
 
+  MonteverdiViewGUI *lThis = param->first;
   std::string moduleKey = param->second;
 
-  MonteverdiControllerInterface *lController = param->first;
-
-  lController->CreateModuleByKey(moduleKey.c_str());
+  lThis->CreateModuleByKey(moduleKey.c_str());
+  lThis->BuildTree();
 
 }
 
+void
+MonteverdiViewGUI
+::CreateModuleByKey(const char * modulekey)
+{
+  m_MonteverdiController->CreateModuleByKey(modulekey);
+}
 
 
 void
@@ -138,6 +140,8 @@ MonteverdiViewGUI
 ::BuildTree()
 {
 
+  unsigned int i;
+
   wMainWindow->begin();
 
   m_Tree->box( FL_DOWN_BOX );
@@ -146,15 +150,37 @@ MonteverdiViewGUI
 
   gTreeGroup->resizable( NULL );
 
-  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
-  ModuleDescriptorMapType::const_iterator mcIt;
+//   ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
+//   ModuleDescriptorMapType::const_iterator mcIt;
+//
+//   // for each modulus
+//   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
+//   {
+//     m_Tree->add_branch(mcIt->second.m_Key.c_str());
+//     AddChild("Input 1");
+//   }
 
-  // for each modulus
-  for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-  {
-    m_Tree->add_branch(mcIt->second.m_Key.c_str());
-    AddChild("Input 1");
-  }
+  // for each instance of module
+//   ModuleMapType lModuleList = m_MonteverdiModel->GetModuleList();
+// std::cout<<"size : "<<lModuleList.size()<<std::endl;
+//   for(i=0;i<lModuleList.size();i++)
+//   {
+// 
+//     // look after all existing objects into each instance of module
+// //     DataDescriptorMapType lDataMap = lModuleList[i]->GetOutputsMap(); //GetDataMap();
+// // std::cout<<"size2 : "<<lDataMap.size()<<std::endl;
+// // 
+// //     DataDescriptorMapType::const_iterator it;
+// //     for (it = lDataMap.begin();it != lDataMap.end();it++)
+// //     {
+// // 
+// // //ostreamstring oss;
+// //         m_Tree->add_branch(it->second.GetDataKey().c_str());
+// // 
+// // //     AddChild("Input 1");
+// //     }
+//   }
+
 
   wMainWindow->resizable(m_Tree);
   gTreeGroup->end();
@@ -168,7 +194,7 @@ void
 MonteverdiViewGUI
 ::Notify()
 {
-    this->InitWidgets();
+  this->InitWidgets();
 }
 
 void
@@ -188,12 +214,6 @@ MonteverdiViewGUI
   //MsgReporter::GetInstance()->Hide();
 }
 
-void
-MonteverdiViewGUI
-::CreateModuleByKey(const char * modulekey)
-{
-  m_MonteverdiController->CreateModuleByKey(modulekey);
-}
 
 
 } // end namespace otb

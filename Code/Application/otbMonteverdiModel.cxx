@@ -73,6 +73,47 @@ const MonteverdiModel::ModuleDescriptorMapType & MonteverdiModel::GetRegisteredM
   return m_ModuleDescriptorMap;
 }
 
+
+/** Get available module instances */
+const std::vector<std::string> MonteverdiModel::GetAvailableModuleInstances() const
+{
+  std::vector<std::string> availableModulesInstances;
+  ModuleMapType::const_iterator mcIt;
+  for(mcIt=m_ModuleMap.begin(); mcIt!=m_ModuleMap.end(); mcIt++)
+    {
+    availableModulesInstances.push_back(mcIt->first);
+    }
+  return availableModulesInstances;
+}
+
+/** Get outputs for a given module instance */
+const MonteverdiModel::OutputDataDescriptorMapType & MonteverdiModel::GetModuleOutputsByKey(const std::string & key) const
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(key);
+  if(mcIt!=m_ModuleMap.end())
+    {
+    return mcIt->second->GetOutputsMap();
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module with key "<<key<<" has been registered.");
+    }
+}
+
+/** Get inputs for a given module instance */
+const MonteverdiModel::InputDataDescriptorMapType & MonteverdiModel::GetModuleInputsByKey(const std::string & key) const
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(key);
+  if(mcIt!=m_ModuleMap.end())
+    {
+    return mcIt->second->GetInputsMap();
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module with key "<<key<<" has been registered.");
+    }
+}
+
 /** Manage the singleton */
 MonteverdiModel::Pointer
 MonteverdiModel::GetInstance()
@@ -83,6 +124,7 @@ MonteverdiModel::GetInstance()
   }
   return Instance;
 }
+
 
 }// End namespace
 

@@ -40,6 +40,9 @@ MonteverdiController
   try
   {
     m_Model->CreateModuleByKey(modulekey);
+
+    //TEMPORAIRE pas à mettre ici !
+    m_View->BuildTree();
   }
   catch (itk::ExceptionObject & err)
   {

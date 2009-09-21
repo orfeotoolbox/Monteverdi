@@ -62,9 +62,12 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(MonteverdiViewGUI,itk::Object);
 
-  typedef MonteverdiModel                        MonteverdiModelType;
-  typedef MonteverdiControllerInterface::Pointer MonteverdiControllerInterfacePointerType;
-  typedef MonteverdiModelType::ModuleDescriptorMapType   ModuleDescriptorMapType;
+  typedef MonteverdiModel                                 MonteverdiModelType;
+  typedef MonteverdiControllerInterface::Pointer          MonteverdiControllerInterfacePointerType;
+  typedef MonteverdiModelType::ModuleDescriptorMapType    ModuleDescriptorMapType;
+  typedef MonteverdiModelType::ModuleMapType              ModuleMapType;
+
+  typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
 
 
   /** Set the controller */
@@ -75,8 +78,8 @@ public:
   /** Event from the model */
   virtual void Notify();
   void InitWidgets();
+  void BuildTree();
   void Show();
-  void CreateModuleByKey(Fl_Menu_* w, void* v);
 
   /** Constructor */
   MonteverdiViewGUI();
@@ -89,12 +92,11 @@ protected:
   virtual void Quit();
 
   void BuildMenus();
-  void BuildTree();
   void AddChild( std::string childname );
   void CreateModuleByKey(const char * modulekey);
-  static void CreateModuleByKey_Callback (Fl_Menu_* w, void* v);
+  static void GenericCallback (Fl_Menu_* w, void* v);
 
-  typedef std::pair<MonteverdiControllerInterface *,std::string> CallbackParameterType;
+  typedef std::pair<Self *,std::string> CallbackParameterType;
 
 
 
