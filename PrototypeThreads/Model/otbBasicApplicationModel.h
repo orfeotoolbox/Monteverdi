@@ -6,11 +6,13 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
 //Vis
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
+#include "otbMeanShiftVectorImageFilter.h"
 
 namespace otb {
 
@@ -36,6 +38,9 @@ public:
   typedef      double                                                            PixelType;
   typedef      VectorImage<PixelType,2>                                          VectorImageType;
   typedef      ImageFileReader<VectorImageType>                                  VectorReaderType;
+  typedef      ImageFileWriter<VectorImageType>                                  VectorWriterType;
+ 
+  
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
@@ -44,6 +49,11 @@ public:
   typedef      ImageLayerGenerator<LayerType>                            LayerGeneratorType;
   typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
+
+  /** Mean Shift Vector Image*/
+  typedef  Image<unsigned int>                                                            LabeledImageType;
+  typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType>  MSFilterType;
+  typedef MSFilterType::Pointer                                                  MSFilterPointerType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -78,6 +88,10 @@ private:
 
   /** Vector reader */
   VectorReaderType::Pointer            m_Reader;
+
+  /** MS filter type */
+  MSFilterPointerType m_MeanShift;
+
 };
 
 }//end namespace otb

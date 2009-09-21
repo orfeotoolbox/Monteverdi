@@ -64,7 +64,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_LIBRARY(otbMVCBasicApplication ${VIEW_SRCS} ${otbMVCBasicApplication_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS} ${COMMON_SRCS})
-TARGET_LINK_LIBRARIES(otbMVCBasicApplication OTBCommon OTBIO OTBVisualization)
+TARGET_LINK_LIBRARIES(otbMVCBasicApplication OTBCommon OTBIO OTBBasicFilters OTBVisualization)
 INSTALL_TARGETS(/bin otbMVCBasicApplication)
 ADD_DEPENDENCIES(otbMVCBasicApplication OTBApplicationsCommon)
 
