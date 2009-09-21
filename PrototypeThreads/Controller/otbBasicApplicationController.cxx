@@ -28,7 +28,6 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   m_WidgetsController->AddActionHandler(m_ResizingHandler);
   m_WidgetsController->AddActionHandler(m_ChangeRegionHandler);
 
-  m_Threader = itk::MultiThreader::New();
 }
 
 BasicApplicationController
@@ -62,22 +61,8 @@ void
 BasicApplicationController
 ::RunLoop()
 {
-  m_Threader->SetNumberOfThreads(2);
-  m_Threader->SpawnThread(ThreadFunction, this);
+  m_Model->RunLoop();
 }
 
-ITK_THREAD_RETURN_TYPE
-BasicApplicationController
-::ThreadFunction( void *arg )
-{
-  try
-  {
-    ((BasicApplicationController*) arg)->m_Model->RunLoop();
-  }
-  catch (itk::ExceptionObject & err)
-  {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-}
 
 } // end namespace otb

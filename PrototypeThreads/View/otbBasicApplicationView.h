@@ -9,7 +9,7 @@
 #include "otbListenerBase.h"
 #include "otbBasicApplicationModel.h"
 #include "otbBasicApplicationControllerInterface.h"
-
+#include "Threads.H"
 
 #include "otbImageView.h"
 
@@ -19,7 +19,7 @@ namespace otb
  *
  */
 class ITK_EXPORT BasicApplicationView
-      : public ListenerBase, public BasicApplicationViewGUI, public itk::Object
+      : public ListenerBase, public BasicApplicationViewGUI, public Thread, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -76,6 +76,8 @@ private:
   BasicApplicationView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  void thread();
+  
   /** Pointer to the controller */
   BasicApplicationControllerInterface::Pointer m_Controller;
 
@@ -87,6 +89,9 @@ private:
 
   /** Image view */
   ImageViewType::Pointer                         m_ImageView;
+
+  bool stop;
+  Trigger running;
 
 
 };

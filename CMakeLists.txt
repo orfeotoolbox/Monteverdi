@@ -62,7 +62,7 @@ ${Monteverdi_BINARY_DIR}/Code/Modules/FeatureExtraction
 
 
 # Code location
-SUBDIRS(Code Prototype1 Utilities)
+SUBDIRS(Code Prototype1 Utilities TestThreads)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)

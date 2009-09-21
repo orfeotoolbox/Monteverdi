@@ -101,7 +101,35 @@ void BasicApplicationView::OpenImage()
 
 void BasicApplicationView::RunLoop()
 {
-	m_Controller->RunLoop();
+  this->thread();
 }
+
+
+void BasicApplicationView::thread()
+{
+	running.toggle();
+
+#ifdef DEBUG
+	cout << "running.up(): " << (running.up()?"true":"false") << endl;
+#endif
+
+	m_Controller->RunLoop();
+		
+#ifdef DEBUG
+		cout << "stop: " << (stop?"true":"false") << endl;
+#endif
+
+
+Fl::lock();
+this->Notify();
+Fl::unlock();
+Fl::awake();
+
+#ifdef DEBUG
+	cout << "running.up(): " << (!running.up()?"true":"false") << endl;
+#endif //                      ^^^^^ because we print BEFORE toggle() call.
+	running.toggle();
+}
+
 
 }// end namespace

@@ -9,7 +9,6 @@
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbMouseClickActionHandler.h"
-#include "itkMultiThreader.h"
 
 namespace otb
 {
@@ -55,7 +54,6 @@ protected:
   /** Destructor */
   virtual ~BasicApplicationController();
 
-  static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
   BasicApplicationController(const Self&); //purposely not implemented
@@ -71,7 +69,6 @@ private:
   ResizingHandlerType::Pointer               m_ResizingHandler;
   ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
 
-  itk::MultiThreader::Pointer m_Threader;
 
 };
 } //end namespace otb
