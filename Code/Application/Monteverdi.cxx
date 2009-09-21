@@ -77,7 +77,6 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
 //   model->RegisterModule<otb::OrthoRectifModule>("OrthoRectification");
 
-
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
