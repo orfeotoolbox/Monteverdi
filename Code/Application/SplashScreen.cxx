@@ -106,7 +106,7 @@ public:
         unsigned int ui_pos_height = (Fl::h()/2) - 200;
         unsigned int ui_cpt =0;
 
-        Fl_Timer* timer = new Fl_Timer(FL_HIDDEN_TIMER,ui_pos_width,ui_pos_height,30,30,"timer");
+//         Fl_Timer* timer = new Fl_Timer(FL_HIDDEN_TIMER,ui_pos_width,ui_pos_height,30,30,"timer");
 
         m_SplashWindow->redraw();
         m_SplashWindow->show();
