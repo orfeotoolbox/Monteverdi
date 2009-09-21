@@ -76,7 +76,7 @@ void
 MonteverdiViewGUI
 ::BuildMenus()
 {
-  const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
+  const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
@@ -146,7 +146,7 @@ MonteverdiViewGUI
 
   gTreeGroup->resizable( NULL );
 
-  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
+  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
   // for each modulus

@@ -44,9 +44,6 @@ public:
 
   /** Users actions */
   virtual void CreateModuleByKey(const char * modulekey)=0;
-  virtual const ModuleDescriptorMapType & GetRegisteredModuleDescriptors()=0;
-
-
 
 protected:
   /** Constructor */
