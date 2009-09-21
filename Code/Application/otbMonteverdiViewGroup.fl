@@ -19,8 +19,8 @@ class MonteverdiViewGroup {open
       Fl_Menu_Bar mMenuBar {open
         xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
       } {}
-      Fl_Group gTreeGroup {
-        xywh {5 30 390 565} resizable
+      Fl_Group gTreeGroup {selected
+        xywh {0 25 400 575} resizable
       } {}
     }
     Fl_Window wHelpWindow {
@@ -32,7 +32,7 @@ class MonteverdiViewGroup {open
       }
     }
   }
-  Function {Quit()} {selected return_type {virtual void}
+  Function {Quit()} {return_type {virtual void}
   } {}
   Function {HelpCallback()} {return_type {virtual void}
   } {}

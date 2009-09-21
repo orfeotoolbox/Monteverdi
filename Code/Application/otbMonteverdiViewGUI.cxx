@@ -176,7 +176,8 @@ MonteverdiViewGUI
     AddChild("Input 1");
   }
 
-  wMainWindow->resizable(m_Tree);
+  gTreeGroup->resizable(m_Tree);
+  wMainWindow->resizable(gTreeGroup);
   gTreeGroup->end();
 
   // FileGroup and tree
