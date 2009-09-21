@@ -61,8 +61,25 @@ void
 BasicApplicationController
 ::RunLoop()
 {
-  m_Model->RunLoop();
+  m_Threader->SetNumberOfThreads(2);
+  m_Threader->SpawnThread(ThreadFunction, this);
 }
+
+
+ITK_THREAD_RETURN_TYPE
+BasicApplicationController
+::ThreadFunction( void *arg )
+{
+  try
+  {
+    ModelType::GetInstance()->RunLoop();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
 
 
 } // end namespace otb

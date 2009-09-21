@@ -9,7 +9,7 @@
 #include "otbListenerBase.h"
 #include "otbBasicApplicationModel.h"
 #include "otbBasicApplicationControllerInterface.h"
-#include "Threads.H"
+#include "itkSimpleFastMutexLock.h"
 
 #include "otbImageView.h"
 
@@ -19,7 +19,7 @@ namespace otb
  *
  */
 class ITK_EXPORT BasicApplicationView
-      : public ListenerBase, public BasicApplicationViewGUI, public Thread, public itk::Object
+      : public ListenerBase, public BasicApplicationViewGUI, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -93,6 +93,7 @@ private:
   bool stop;
   Trigger running;
 
+  itk::SimpleFastMutexLock m_Mutex;
 
 };
 }//end namespace otb

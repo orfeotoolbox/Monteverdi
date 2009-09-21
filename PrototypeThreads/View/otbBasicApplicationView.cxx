@@ -66,14 +66,19 @@ void BasicApplicationView::Build()
 void BasicApplicationView::Notify()
 {
   this->RefreshInterface();
+  m_Mutex.Lock();
   this->RefreshVisualization();
+  m_Mutex.Unlock();
   Fl::flush();
 
 }
 
 void BasicApplicationView::RefreshVisualization()
 {
-  m_ImageView->Update();
+  if (!m_Controller->IsModelUpdating())
+  {
+    m_ImageView->Update();
+  }
 }
 
 void BasicApplicationView::RefreshInterface()

@@ -30,7 +30,7 @@ MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
 /**
  * Constructor
  */
-MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleList()
+MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap()
 {}
 
 MonteverdiModel::~MonteverdiModel()
@@ -44,9 +44,22 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 
   if(mcIt!=m_ModuleDescriptorMap.end())
     {
-    m_ModuleList.push_back(mcIt->second.m_Constructor());
-    m_ModuleList.back()->Start();
-    std::cout<<"New module created: "<<m_ModuleList.back()<<std::endl;
+    // Create a new module instance
+    Module::Pointer module = mcIt->second.m_Constructor();
+
+    // Build a unique key
+    itk::OStringStream oss;
+    oss<<key<<m_InstancesCountMap[key]<<std::endl;
+
+    // Register module instance
+    m_ModuleMap[oss.str()] = module;
+    std::cout<<"New module with id "<<oss.str()<<" created: "<<m_ModuleMap[oss.str()]<<std::endl;
+
+    // Temporary
+    module->Start();
+
+    // Update instances count
+    m_InstancesCountMap[key]++;
     }
   else
     {

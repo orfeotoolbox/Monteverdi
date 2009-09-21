@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
   // Add Wrapper Input 
   otb::DataObjectWrapper wrapperIn("Short_Point_VectorImage",reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
-  module->AddDataByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage",wrapperIn);
 
   module->Start();
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
   // Refresh
   Fl::check();
 
-  otb::DataObjectWrapper wrapperOut = module->GetDataByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 

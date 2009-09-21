@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn("Floating_Point_Image",reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 //   std::cout<<"ad key.."<<std::endl;
-  module->AddDataByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage",wrapperIn);
 //   std::cout<<"start..."<<std::endl;
   module->Start();
 //   std::cout<<"start over"<<std::endl;
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
   specificModule->GetView()->guiOK->do_callback();
   Fl::check();
 
-  otb::DataObjectWrapper wrapperOut = module->GetDataByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
   //std::cout<<"..."<<std::endl;

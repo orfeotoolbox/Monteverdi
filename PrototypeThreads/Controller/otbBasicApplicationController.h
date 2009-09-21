@@ -48,6 +48,10 @@ public:
   virtual void OpenImage( const char * filename );
   virtual void RunLoop();
 
+  bool IsModelUpdating()
+  {
+    return m_Model->IsUpdating();
+  }
 protected:
   /** Constructor */
   BasicApplicationController();

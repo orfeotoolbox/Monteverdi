@@ -49,7 +49,7 @@ const DataObjectWrapper ReaderModule::RetrieveDataByKey(const std::string & key)
   DataObjectWrapper wrapper;
   if(key == "OutputDataSet")
     {
-    const Superclass::DataDescriptorMapType outMap = this->GetDataMap();
+    const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
 
     if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
       {                                          
@@ -82,7 +82,7 @@ void ReaderModule::OpenDataSet()
     m_FPVReader->GenerateOutputInformation();
     // If we are still here, this is a readable image
     typeFound = true;
-    this->AddDataDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
+    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
     }
   catch(itk::ExceptionObject & err)
     {
@@ -98,7 +98,7 @@ void ReaderModule::OpenDataSet()
       m_VectorReader->Update();
       // If we are still here, this is a readable image
       typeFound = true;
-      this->AddDataDescriptor("VectorData","OutputDataSet","Vector read from file");
+      this->AddOutputDescriptor("VectorData","OutputDataSet","Vector read from file");
       }
     catch(itk::ExceptionObject & err)
       {

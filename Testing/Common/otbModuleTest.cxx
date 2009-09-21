@@ -20,18 +20,6 @@
 #include "otbImage.h"
 #include "otbVectorData.h"
 
-// Better name demanging for gcc
-#if __GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 )
-#define GCC_USEDEMANGLE
-#endif
-
-#ifdef GCC_USEDEMANGLE
-#include <cstdlib>
-#include <cxxabi.h>
-#endif
-
-
-
 // This class is created only for tests purpose
 class ModuleTest
   : public otb::Module
@@ -54,14 +42,14 @@ protected:
   ModuleTest()
   {
     // Add some inputs
-    this->AddDataDescriptor("Floating_Point_Image","InputImage","test input image");
-    this->AddDataDescriptor("Vector","InputVector","test input vector",true);
+    this->AddInputDescriptor("Floating_Point_Image","InputImage","test input image");
+    this->AddInputDescriptor("Vector","InputVector","test input vector",true);
   }
   /** Destructor */
   virtual ~ModuleTest(){}
 
-  // Reimplement AssignDataByKey
-  virtual void AssignDataByKey(const std::string & key, const otb::DataObjectWrapper & data)
+  // Reimplement AssignInputByKey
+  virtual void AssignInputByKey(const std::string & key, const otb::DataObjectWrapper & data)
   {
     if(key == "InputImage" || key == "InputVector")
       {
@@ -69,8 +57,8 @@ protected:
       }
   }
 
-  // Reimplement RetrieveDataByKey
-  const otb::DataObjectWrapper RetrieveDataByKey(const std::string & key) const
+  // Reimplement RetrieveOutputByKey
+  const otb::DataObjectWrapper RetrieveOutputByKey(const std::string & key) const
   {
     otb::DataObjectWrapper wrapper;
 
@@ -90,7 +78,7 @@ protected:
 
     // Add some outputs
     // Outputs can be defined once the run method has been called
-    this->AddDataDescriptor("Labeled_Image","OutputImage","test output image");
+    this->AddOutputDescriptor("Labeled_Image","OutputImage","test output image");
 
   }
 };
@@ -109,32 +97,22 @@ int main(int argc, char * argv[])
   otb::DataObjectWrapper input1("Floating_Point_Image",otb::Image<double,2>::New());
   otb::DataObjectWrapper input2("Vector",otb::VectorData<double>::New());
 
-  std::cout<<"GetNameOfClass(): "<<input1.GetDataObject()->GetNameOfClass()<<std::endl;
-
-  #ifdef GCC_USEDEMANGLE
-  char const * mangledName = typeid(*input1.GetDataObject()).name();
-  int status;
-  char * unmangled = abi::__cxa_demangle(mangledName, 0, 0, &status);
-  std::cout<<"RTTI unmangled: "<<unmangled<<std::endl;
-  free(unmangled);
-  #endif
-
-  std::cout<<"RTTI typeinfo: "<<typeid(*input1.GetDataObject()).name()<<std::endl;
-
 
   // Testing the input/output method
-  myModuleTest->AddDataByKey("InputImage",input1);
-  myModuleTest->AddDataByKey("InputVector",input2);
+  myModuleTest->AddInputByKey("InputImage",input1);
+  myModuleTest->AddInputByKey("InputVector",input2);
   myModuleTest->Start();
   std::cout<<"Test class PrintSelf after run; "<<myModuleTest<<std::endl;
-  otb::DataObjectWrapper output1 =  myModuleTest->GetDataByKey("OutputImage");
+  otb::DataObjectWrapper output1 =  myModuleTest->GetOutputByKey("OutputImage");
 
   std::cout<<"Data received in main: "<<output1<<std::endl;
 
   // Testing Getters for data descriptor
-  const ModuleTest::DataDescriptorMapType & inputs = myModuleTest->GetDataMap();
+  const ModuleTest::InputDataDescriptorMapType & inputs = myModuleTest->GetInputsMap();
+  const ModuleTest::OutputDataDescriptorMapType & outputs = myModuleTest->GetOutputsMap();
 
   std::cout<<"Found "<<inputs.size()<<" inputs."<<std::endl;
+  std::cout<<"Found "<<outputs.size()<<" outputs."<<std::endl;
 
   return EXIT_SUCCESS;
 }

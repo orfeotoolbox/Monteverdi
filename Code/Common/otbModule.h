@@ -23,25 +23,25 @@
 #include "itkObjectFactory.h"
 
 #include "otbDataObjectWrapper.h"
-#include "otbDataDescriptor.h"
-#include "otbDataDescriptor.h"
+#include "otbInputDataDescriptor.h"
+#include "otbOutputDataDescriptor.h"
 
 namespace otb
 {
 /** \class Module
  *  \brief Base class for modules.
  *
- * The GetDataMap() and GetOutputsMap() methods can be used to
+ * The GetInputsMap() and GetOutputsMap() methods can be used to
  * retrieve inputs and outputs descriptors.
  *
- * Data must be passed and retrieve via the AddDataByKey() and
- * GetDataByKey() methods.
+ * Data must be passed and retrieve via the AddInputByKey() and
+ * GetOutputByKey() methods.
  *
  * These methods performs key and types checking and call the
- * protected methods AssignDataByKey() and RetrieveDataByKey()
+ * protected methods AssignInputByKey() and RetrieveOutputByKey()
  * which are the methods actually reimplemented by subclasses.
  *
- *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
+ *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
 class ITK_EXPORT Module
@@ -61,23 +61,26 @@ public:
   itkTypeMacro(Module,itk::Object);
 
   /** Input data description map */
-  typedef std::map<std::string, DataDescriptor>  DataDescriptorMapType;
+  typedef std::map<std::string, InputDataDescriptor>  InputDataDescriptorMapType;
+
+  /** Output data description map */
+  typedef std::map<std::string, OutputDataDescriptor> OutputDataDescriptorMapType;
 
   /** Add an input data by its key. This method performs key and type
    * checking before invoking the protected method
-   * AssignDataByKey(). */
-  void AddDataByKey(const std::string & key, const DataObjectWrapper & data);
+   * AssignInputByKey(). */
+  void AddInputByKey(const std::string & key, const DataObjectWrapper & data);
 
   /** Get an output by its key. This method performs key and type
    * checking before invoking the protected method
-   * AssignDataByKey(). */
-  const DataObjectWrapper GetDataByKey(const std::string & key, unsigned int idx = 0) const;
+   * AssignInputByKey(). */
+  const DataObjectWrapper GetOutputByKey(const std::string & key, unsigned int idx = 0) const;
 
   /** Get the input data descriptors map */
-  const DataDescriptorMapType  & GetDataMap() const;
+  const InputDataDescriptorMapType  & GetInputsMap() const;
 
   /** Get the output data descriptors map */
-  const DataDescriptorMapType & GetOutputsMap() const;
+  const OutputDataDescriptorMapType & GetOutputsMap() const;
 
   /** Check that every mandatory input has been filled and call the
    * protected virtual run method */
@@ -92,17 +95,20 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Add a new input descriptor */
-  void AddDataDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
+  void AddInputDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
+
+  /** Add a new output descriptor */
+  void AddOutputDescriptor(const std::string & type, const std::string & key, const std::string & description, unsigned int nb = 1);
 
   /** Assign input by key. Subclasses should override this methods.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual void AssignDataByKey(const std::string & key, const DataObjectWrapper & data);
+  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
 
   /** Retrieve output by key. Subclasses should override this method.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual const DataObjectWrapper RetrieveDataByKey(const std::string & key) const;
+  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();
@@ -112,8 +118,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Input descriptor map */
-  DataDescriptorMapType m_DataMap;
+  InputDataDescriptorMapType m_InputsMap;
 
+  /** Output descriptor map */
+  OutputDataDescriptorMapType m_OutputsMap;
 };
 
 
