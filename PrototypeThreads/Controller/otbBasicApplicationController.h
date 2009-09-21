@@ -74,6 +74,8 @@ private:
   ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
 
 
+  bool m_ImageReady;
+
 };
 } //end namespace otb
 
