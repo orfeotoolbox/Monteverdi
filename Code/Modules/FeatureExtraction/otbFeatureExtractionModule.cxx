@@ -57,6 +57,7 @@ void FeatureExtractionModule::AssignDataByKey(const std::string & key, const Dat
   if(key == "InputImage")
     {
     InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
+//     std::cout<<"set model.."<<std::endl;
     m_Model->SetInputImage(image);
     }
 }

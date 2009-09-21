@@ -48,7 +48,7 @@ namespace otb
  *
  */
 class MonteverdiViewGUI
-  : public ListenerBase, public otbMonteverdiViewGroup, public itk::Object
+  : public ListenerBase, public MonteverdiViewGroup, public itk::Object
 {
 public:
 
@@ -84,17 +84,22 @@ public:
   /** Constructor */
   MonteverdiViewGUI();
 
-
 protected:
 
   /** Destructor */
   virtual ~MonteverdiViewGUI();
-  virtual void Quit();
+
 
   void BuildMenus();
   void AddChild( std::string childname );
   void CreateModuleByKey(const char * modulekey);
-  static void GenericCallback (Fl_Menu_* w, void* v);
+  void Quit();
+  void Help();
+
+  /** Callbacks */
+  static void GenericCallback(Fl_Menu_* w, void* v);
+  static void HelpCallback(Fl_Menu_ *, void*);
+  static void QuitCallback(Fl_Menu_ *, void*);
 
   typedef std::pair<Self *,std::string> CallbackParameterType;
 

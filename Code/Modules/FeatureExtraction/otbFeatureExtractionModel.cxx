@@ -95,7 +95,9 @@ FeatureExtractionModel
   // Set the input image
   m_InputImage = image;
   m_InputImage->UpdateOutputInformation();
+
   m_NumberOfChannels = m_InputImage->GetNumberOfComponentsPerPixel();
+
   // Togle the valid flag
   m_HasInput = true;
 
@@ -108,9 +110,10 @@ FeatureExtractionModel
   // Add the layer to the model
   m_VisuModel->ClearLayers();
   m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
+
   // Render
   m_VisuModel->Update();
-
+  
   // Notify the observers
   this->NotifyAll();
 }
@@ -676,7 +679,10 @@ FeatureExtractionModel
     iL2VI->SetInput( imageList );
 
     m_OutputImage = iL2VI->GetOutput();
-
+    
+    //FIXME update during the pipeline!!!!! 
+    iL2VI->Update();
+    /*
     WriterType::Pointer writer = WriterType::New();
 
     writer->SetFileName(m_OutputFileName);
@@ -688,7 +694,9 @@ FeatureExtractionModel
     WatcherType watcher(writer,100,100,200,20, "Generating Output...");
 
     writer->Update();
+    
     watcher.EndFilter();
+    */
 
   }
 }

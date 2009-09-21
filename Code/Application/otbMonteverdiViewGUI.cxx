@@ -55,6 +55,8 @@ MonteverdiViewGUI
 //     delete m_vector_param.pop_back();
 }
 
+
+
 void
 MonteverdiViewGUI
 ::InitWidgets()
@@ -66,6 +68,8 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
+  gHelpText->value("Quelque chose");
+  gHelpText->redraw();
 }
 
 void
@@ -74,6 +78,8 @@ MonteverdiViewGUI
 {
   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
+
+  mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
@@ -87,13 +93,14 @@ MonteverdiViewGUI
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
   }
 
+ 
   // In the end
-  mMenuBar->add("File/Quit",0,0);
-  mMenuBar->add("?/Help",0,0);
+  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
+  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
 }
 
 
-/** Static method/callback : CreateModuleByKey_Callback
+/** GenericCallback (static)
   *
   * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
   * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
@@ -112,6 +119,20 @@ MonteverdiViewGUI
   lThis->BuildTree();
 
 }
+
+/** QuitCallback (static) */
+void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) {
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Quit();
+}
+
+/** HelpCallback (static) */
+void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v) 
+{
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Help();
+}
+
 
 void
 MonteverdiViewGUI
@@ -204,14 +225,20 @@ MonteverdiViewGUI
   wMainWindow->show();
 }
 
-
 void
 MonteverdiViewGUI
 ::Quit()
 {
   gTreeGroup->hide();
+  wHelpWindow->hide();
   wMainWindow->hide();
-  //MsgReporter::GetInstance()->Hide();
+}
+
+void
+MonteverdiViewGUI
+::Help()
+{
+  wHelpWindow->show();
 }
 
 
