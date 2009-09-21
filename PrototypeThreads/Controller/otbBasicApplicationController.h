@@ -77,6 +77,8 @@ private:
 
   itk::MultiThreader::Pointer m_Threader;
 
+  bool m_ImageReady;
+
 };
 } //end namespace otb
 

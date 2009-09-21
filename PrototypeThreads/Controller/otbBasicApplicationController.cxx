@@ -29,6 +29,8 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   m_WidgetsController->AddActionHandler(m_ChangeRegionHandler);
 
   m_Threader = itk::MultiThreader::New();
+
+  m_ImageReady = false;
 }
 
 BasicApplicationController
@@ -50,7 +52,9 @@ BasicApplicationController
 {
   try
     {
+    m_ImageReady = false;
     m_Model->OpenImage(filename);
+    m_ImageReady = true;
     }
   catch(itk::ExceptionObject & err)
     {
@@ -62,8 +66,11 @@ void
 BasicApplicationController
 ::RunLoop()
 {
-  m_Threader->SetNumberOfThreads(2);
-  m_Threader->SpawnThread(ThreadFunction, this);
+  if(m_ImageReady)
+    {
+    m_Threader->SetNumberOfThreads(2);
+    m_Threader->SpawnThread(ThreadFunction, this);
+    }
 }
 
 ITK_THREAD_RETURN_TYPE
