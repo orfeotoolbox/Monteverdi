@@ -65,6 +65,11 @@ public:
   void OpenImage(const char * filename);
   void RunLoop();
 
+  bool IsUpdating() const
+  {
+    return m_IsUpdating;
+  }
+
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
@@ -72,6 +77,8 @@ protected:
   BasicApplicationModel();
   /** Destructor */
   ~BasicApplicationModel();
+
+  bool m_IsUpdating;
 
 private:
   BasicApplicationModel(const Self&); //purposely not implemented
@@ -91,6 +98,8 @@ private:
 
   /** MS filter type */
   MSFilterPointerType m_MeanShift;
+
+
 
 };
 

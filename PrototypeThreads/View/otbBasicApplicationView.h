@@ -9,7 +9,7 @@
 #include "otbListenerBase.h"
 #include "otbBasicApplicationModel.h"
 #include "otbBasicApplicationControllerInterface.h"
-
+#include "itkSimpleFastMutexLock.h"
 
 #include "otbImageView.h"
 
@@ -88,6 +88,7 @@ private:
   /** Image view */
   ImageViewType::Pointer                         m_ImageView;
 
+  itk::SimpleFastMutexLock m_Mutex;
 
 };
 }//end namespace otb

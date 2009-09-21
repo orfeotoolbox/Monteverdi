@@ -27,6 +27,7 @@ BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reade
   m_VisualizationModel    = VisualizationModelType::New();
   m_Reader = VectorReaderType::New();
   m_MeanShift = MSFilterType::New();
+  m_IsUpdating = false;
 
 }
 
@@ -76,12 +77,13 @@ BasicApplicationModel
     sleep(1);
   }
   */
-  
+  m_IsUpdating = true;
   VectorWriterType::Pointer writer = VectorWriterType::New();
   FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
   writer->SetFileName("msimage.tif");
   writer->SetInput(m_MeanShift->GetClusteredOutput());
   writer->Update();
+  m_IsUpdating = false;
   
 }
 
