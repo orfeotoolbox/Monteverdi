@@ -25,6 +25,7 @@ public:
   virtual void OpenImage( const char * filename ) = 0;
   virtual void RunLoop() = 0;
 
+  virtual bool IsModelUpdating() = 0;
 
 protected:
   /** Constructor */
