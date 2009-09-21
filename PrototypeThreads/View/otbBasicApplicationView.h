@@ -76,8 +76,6 @@ private:
   BasicApplicationView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void thread();
-  
   /** Pointer to the controller */
   BasicApplicationControllerInterface::Pointer m_Controller;
 
@@ -89,9 +87,6 @@ private:
 
   /** Image view */
   ImageViewType::Pointer                         m_ImageView;
-
-  bool stop;
-  Trigger running;
 
   itk::SimpleFastMutexLock m_Mutex;
 
