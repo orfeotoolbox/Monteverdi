@@ -29,6 +29,11 @@ class BasicApplicationViewGUI {open
           callback {RunLoop()}
           xywh {840 280 120 50}
         }
+	Fl_Button {} {
+          label RunLoop2
+          callback {RunLoop2()}
+          xywh {840 380 120 50}
+        }
       }
       Fl_Menu_Bar gMenu {open
         xywh {0 0 1000 25}
@@ -51,5 +56,7 @@ class BasicApplicationViewGUI {open
   Function {OpenImage()} {open return_type {virtual void}
   } {}
   Function {RunLoop()} {open selected return_type {virtual void}
+  } {}
+  Function {RunLoop2()} {open selected return_type {virtual void}
   } {}
 } 
