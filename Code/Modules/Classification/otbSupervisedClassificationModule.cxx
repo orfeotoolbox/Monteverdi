@@ -28,7 +28,7 @@ SupervisedClassificationModule::SupervisedClassificationModule()
   m_SupervisedClassification = SupervisedClassificationAppli::New();
 
   // Describe inputs
-  this->AddDataDescriptor("Floating_Point_VectorImage","InputImage","Image to apply Classification on.");
+  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply Classification on.");
 }
 
 /** Destructor */
@@ -75,7 +75,7 @@ void SupervisedClassificationModule::Run()
   m_SupervisedClassification->Build();
   m_SupervisedClassification->LoadImage();
   m_SupervisedClassification->Show();
-  this->AddDataDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassificationied image.");
+  this->AddOutputDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassificationied image.");
 }
 
 } // End namespace otb

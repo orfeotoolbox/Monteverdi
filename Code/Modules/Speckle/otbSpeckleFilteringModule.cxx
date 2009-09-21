@@ -33,7 +33,7 @@ SpeckleFilteringModule::SpeckleFilteringModule()
   m_View->SetController(m_Controller);
 
   // Describe inputs
-  this->AddDataDescriptor("Floating_Point_Image","InputImage","Image to apply speckle filtering on.");
+  this->AddInputDescriptor("Floating_Point_Image","InputImage","Image to apply speckle filtering on.");
 }
 
 /** Destructor */
@@ -50,7 +50,7 @@ void SpeckleFilteringModule::PrintSelf(std::ostream& os, itk::Indent indent) con
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void SpeckleFilteringModule::AssignDataByKey(const std::string & key, const DataObjectWrapper & data)
+void SpeckleFilteringModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   typedef SpeckleFilteringModel::InputImageType InputImageType;
 
@@ -64,7 +64,7 @@ void SpeckleFilteringModule::AssignDataByKey(const std::string & key, const Data
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper SpeckleFilteringModule::RetrieveDataByKey(const std::string & key) const
+const DataObjectWrapper SpeckleFilteringModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
@@ -78,7 +78,7 @@ const DataObjectWrapper SpeckleFilteringModule::RetrieveDataByKey(const std::str
 void SpeckleFilteringModule::Run()
 {
   m_View->Show();
-  this->AddDataDescriptor("Floating_Point_Image","OutputImage","Speckle filtered image.");
+  this->AddOutputDescriptor("Floating_Point_Image","OutputImage","Speckle filtered image.");
 }
 
 } // End namespace otb

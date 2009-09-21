@@ -46,13 +46,13 @@ int main(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   
-  module->AddDataByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
   
   // Refresh
   Fl::run();
   
-  otb::DataObjectWrapper wrapperOut = module->GetDataByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
   
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
   
