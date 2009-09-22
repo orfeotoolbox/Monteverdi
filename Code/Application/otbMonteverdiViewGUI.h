@@ -19,8 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMonteverdiViewGUI_h
 
 
-#include "otbListenerBase.h"
-
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -60,9 +58,13 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(MonteverdiViewGUI,itk::Object);
 
-  typedef MonteverdiModel                        MonteverdiModelType;
-  typedef MonteverdiControllerInterface::Pointer MonteverdiControllerInterfacePointerType;
-  typedef MonteverdiModelType::ModuleDescriptorMapType   ModuleDescriptorMapType;
+  typedef MonteverdiModel                                 MonteverdiModelType;
+  typedef MonteverdiControllerInterface::Pointer          MonteverdiControllerInterfacePointerType;
+  typedef MonteverdiModelType::ModuleDescriptorMapType    ModuleDescriptorMapType;
+  typedef MonteverdiModelType::ModuleMapType              ModuleMapType;
+
+  typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
+  typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
 
   /** Set the controller */
@@ -72,33 +74,35 @@ public:
 
   /** Event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-  void InitWidgets();
+  void UpdateTree(const MonteverdiEvent & event);
   void Show();
-  void CreateModuleByKey(Fl_Menu_* w, void* v);
+  void InitWidgets();
+
 
   /** Constructor */
   MonteverdiViewGUI();
 
-  static void cb_mQuit(Fl_Menu_ *, void*);
-  static void cb_wHelp(Fl_Menu_ *, void*);
- 
-  // Seems to be needed for quit callback... don't understand why!!!
-  virtual void Quit();  
-  virtual void HelpCallback();
-  
 protected:
 
   /** Destructor */
   virtual ~MonteverdiViewGUI();
 
-
   void BuildMenus();
   void BuildTree();
-  void AddChild( std::string childname );
+  void BuildInputsGUI(const char * modulekey);
   void CreateModuleByKey(const char * modulekey);
-  static void CreateModuleByKey_Callback (Fl_Menu_* w, void* v);
+  void Quit();
+  void Help();
+  void InputsGUIOk();
+  void InputsGUICancel();
 
-  typedef std::pair<MonteverdiControllerInterface *,std::string> CallbackParameterType;
+
+  /** Callbacks */
+  static void GenericCallback(Fl_Menu_* w, void* v);
+  static void HelpCallback(Fl_Menu_ *, void*);
+  static void QuitCallback(Fl_Menu_ *, void*);
+
+  typedef std::pair<Self *,std::string> CallbackParameterType;
 
 
 

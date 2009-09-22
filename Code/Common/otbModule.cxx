@@ -24,7 +24,7 @@
 namespace otb
 {
 /** Constructor */
-Module::Module() : m_InputsMap(), m_OutputsMap()
+Module::Module() : m_InputsMap(), m_OutputsMap(), m_InstanceId("Unknown")
 {}
 
 /** Destructor */
@@ -96,7 +96,7 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
   // If the key can not be found, throw an exception
   if(it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module as no input with key "<<key);
+    itkExceptionMacro(<<"Module has no input with key "<<key);
     }
 
   // Else, check for type matching and eventually throw an exception
@@ -121,7 +121,7 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
   // If the key can not be found, throw an exception
   if(it == m_OutputsMap.end())
     {
-    itkExceptionMacro(<<"Module as no output with key "<<key);
+    itkExceptionMacro(<<"Module has no output with key "<<key);
     }
 
   // Then if everything is ok, call the assign method

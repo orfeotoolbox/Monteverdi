@@ -15,81 +15,74 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbReaderModule_cxx
-#define __otbReaderModule_cxx
+#ifndef __otbWriterModule_cxx
+#define __otbWriterModule_cxx
 
-#include "otbReaderModule.h"
+#include "otbWriterModule.h"
 #include <FL/Fl_File_Chooser.H>
-#include "base/ossimFilename.h"
 
 namespace otb
 {
 /** Constructor */
-ReaderModule::ReaderModule()
+WriterModule::WriterModule()
 {
-  m_FPVReader = FPVReaderType::New();
-  m_VectorReader = VectorReaderType::New();
+  m_FPVWriter = FPVWriterType::New();
+  m_VectorWriter = VectorWriterType::New();
 }
 
 /** Destructor */
-ReaderModule::~ReaderModule()
+WriterModule::~WriterModule()
 {}
 
 /** PrintSelf method */
-void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
 }
 
-/** Retrieve output by key  This method must be reimplemented in subclasses.
+/** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
+void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
-  DataObjectWrapper wrapper;
-  if(key == "OutputDataSet")
-    {
+  if(key == "InputDataSet")
+  {
     const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
-
+    
     if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
-      {
-      wrapper.Set("Floating_Point_VectorImage",m_FPVReader->GetOutput());
-      }
-    else if(outMap.find(key)->second.GetDataType() == "VectorData")
-      {
-      wrapper.Set("VectorData",m_VectorReader->GetOutput());
-      }
+    {                                          
+      FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
+      m_FPVWriter->SetInput(image);  
     }
-  return wrapper;
+    else if(outMap.find(key)->second.GetDataType() == "VectorData")
+    {
+      VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
+      m_VectorWriter->SetInput(vector);  
+    }
+  }
 }
 
 /** The custom run command */
-void ReaderModule::Run()
+void WriterModule::Run()
 {
   this->BuildGUI();
   wFileChooserWindow->show();
 }
 
-void ReaderModule::OpenDataSet()
+void WriterModule::OpenDataSet()
 {
   std::string filepath = vFilePath->value();
 
   bool typeFound = false;
 
-  // Get the filename from the filepath
-  ossimFilename lFile = ossimFilename(filepath);
-  ostringstream oss; 
-
   try
     {
-    m_FPVReader->SetFileName(filepath);
-    m_FPVReader->GenerateOutputInformation();
+    m_FPVWriter->SetFileName(filepath);
+//     m_FPVWriter->GenerateOutputInformation();
     // If we are still here, this is a readable image
     typeFound = true;
-    // Get the filename from the filepath
-    oss << "Image read from file : " << lFile.file();
-    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet",oss.str());
+    this->AddOutputDescriptor("Floating_Point_VectorImage","InputDataSet","Write image to file");
     }
   catch(itk::ExceptionObject & err)
     {
@@ -101,13 +94,11 @@ void ReaderModule::OpenDataSet()
     {
     try
       {
-      m_VectorReader->SetFileName(filepath);
-      m_VectorReader->Update();
+      m_VectorWriter->SetFileName(filepath);
+      m_VectorWriter->Update();
       // If we are still here, this is a readable image
       typeFound = true;
-      // Get the filename from the filepath
-      oss << "Vector read from file : " << lFile.file();
-      this->AddOutputDescriptor("VectorData","OutputDataSet",oss.str());
+      this->AddOutputDescriptor("VectorData","InputDataSet","Write vector to file");
       }
     catch(itk::ExceptionObject & err)
       {
@@ -116,12 +107,9 @@ void ReaderModule::OpenDataSet()
     }
 
   wFileChooserWindow->hide();
-  
-  // Notify all listener
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 }
 
-void ReaderModule::Browse()
+void WriterModule::Browse()
 {
   const char * filename = NULL;
 
@@ -137,7 +125,7 @@ void ReaderModule::Browse()
   
 }
 
-void ReaderModule::Cancel()
+void WriterModule::Cancel()
 {
   wFileChooserWindow->hide();
 }

@@ -58,8 +58,11 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     // Register the main model to receive events from the new module
     module->RegisterListener(this);
 
+    // Notify the view that a new module needs inputs
+    this->NotifyAll(MonteverdiEvent("InstanceCreated",oss.str()));
+
     // Temporary
-    this->StartModuleByKey(oss.str());
+    this->StartModuleByInstanceId(oss.str());
 
     // Update instances count
     m_InstancesCountMap[key]++;
@@ -71,17 +74,18 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 }
 
 
-void MonteverdiModel::StartModuleByKey(const std::string & key)
+void MonteverdiModel::StartModuleByInstanceId(const std::string & id)
 {
- ModuleMapType::iterator mIt = m_ModuleMap.find(key);
+  // Try to find the given module
+  ModuleMapType::iterator mIt = m_ModuleMap.find(id);
 
- if(mIt != m_ModuleMap.end())
-   {
-   mIt->second->Start();
-   }
- else
-   {
-   itkExceptionMacro(<<"No module instance with key "<<key);
+  if(mIt != m_ModuleMap.end())
+    {
+    mIt->second->Start();
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module instance with id "<<id);
    }
 }
 
@@ -89,6 +93,47 @@ void MonteverdiModel::StartModuleByKey(const std::string & key)
 const MonteverdiModel::ModuleDescriptorMapType & MonteverdiModel::GetRegisteredModuleDescriptors() const
 {
   return m_ModuleDescriptorMap;
+}
+
+
+/** Get available module instances */
+const std::vector<std::string> MonteverdiModel::GetAvailableModuleInstanceIds() const
+{
+  std::vector<std::string> availableModulesInstances;
+  ModuleMapType::const_iterator mcIt;
+  for(mcIt=m_ModuleMap.begin(); mcIt!=m_ModuleMap.end(); mcIt++)
+    {
+    availableModulesInstances.push_back(mcIt->first);
+    }
+  return availableModulesInstances;
+}
+
+/** Get outputs for a given module instance */
+const MonteverdiModel::OutputDataDescriptorMapType & MonteverdiModel::GetModuleOutputsByInstanceId(const std::string & id) const
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(id);
+  if(mcIt!=m_ModuleMap.end())
+    {
+    return mcIt->second->GetOutputsMap();
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module instance with id "<<id<<" has been registered.");
+    }
+}
+
+/** Get inputs for a given module instance */
+const MonteverdiModel::InputDataDescriptorMapType & MonteverdiModel::GetModuleInputsByInstanceId(const std::string & id) const
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(id);
+  if(mcIt!=m_ModuleMap.end())
+    {
+    return mcIt->second->GetInputsMap();
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module instance with id "<<id<<" has been registered.");
+    }
 }
 
 /** Manage the singleton */
@@ -101,6 +146,7 @@ MonteverdiModel::GetInstance()
   }
   return Instance;
 }
+
 
 }// End namespace
 

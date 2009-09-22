@@ -29,6 +29,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 
+
 namespace otb
 {
 
@@ -56,23 +57,6 @@ MonteverdiViewGUI
 }
 
 
-// void MonteverdiViewGUI::cb_mQuit_i(Fl_Menu_*, void*) {
-//   this->QuitCallback();
-// }
-
-
-void MonteverdiViewGUI::cb_mQuit(Fl_Menu_* o, void* v) {
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->Quit();
-}
-
-void MonteverdiViewGUI::cb_wHelp(Fl_Menu_* o, void* v) 
-{
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->HelpCallback();
-}
-
-
 
 void
 MonteverdiViewGUI
@@ -85,17 +69,19 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
-
   gHelpText->value("Quelque chose");
   gHelpText->redraw();
 }
 
+/** First step of Init Widgets: creation of the menus */
 void
 MonteverdiViewGUI
 ::BuildMenus()
 {
   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
+
+  mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
@@ -104,55 +90,18 @@ MonteverdiViewGUI
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
       * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end ! 
       */
-    CallbackParameterType *param = new CallbackParameterType(m_MonteverdiController,mcIt->second.m_Key);
+    CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
     m_vector_param.push_back( param );
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::CreateModuleByKey_Callback,(void *)(param));
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
   }
 
  
   // In the end
-  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::cb_mQuit, (void*)(this));
-  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::cb_wHelp, (void*)(this));
+  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
+  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
 }
 
-
-
-/** Static method/callback : CreateModuleByKey_Callback
-  *
-  * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
-  * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
-  * "m_MonteverdiController" which is not static ! 
-  */
-void
-MonteverdiViewGUI
-::CreateModuleByKey_Callback(Fl_Menu_* w, void* v)
-{
-  CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
-
-  std::string moduleKey = param->second;
-
-  MonteverdiControllerInterface *lController = param->first;
-
-  lController->CreateModuleByKey(moduleKey.c_str());
-
-}
-
-
-
-void
-MonteverdiViewGUI
-::AddChild( std::string childname )
-{
-  Flu_Tree_Browser::Node* n = m_Tree->get_selected( 1 );
-
-  if( !n )
-    n = m_Tree->last();
-  n->add( childname.c_str() );
-  m_Tree->redraw();
-
-}
-
-
+/** Second step of Init Widgets : creation of the tree */
 void
 MonteverdiViewGUI
 ::BuildTree()
@@ -164,17 +113,10 @@ MonteverdiViewGUI
   m_Tree->auto_branches( true );
   m_Tree->label( "Tree Browser" );
 
-  gTreeGroup->resizable( NULL );
-
-  ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
-  ModuleDescriptorMapType::const_iterator mcIt;
-
-  // for each modulus
-  for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-  {
-    m_Tree->add_branch(mcIt->second.m_Key.c_str());
-    AddChild("Input 1");
-  }
+  // animate the tree
+  m_Tree->animate( 1 );
+  m_Tree->collapse_time( 0.02 );
+  m_Tree->frame_rate(500);
 
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
@@ -183,13 +125,166 @@ MonteverdiViewGUI
   // FileGroup and tree
   gTreeGroup->add(m_Tree);
   gTreeGroup->show();
+
 }
+
+
+void
+MonteverdiViewGUI
+::BuildInputsGUI(const char * modulekey)
+{
+  wInputsWindow->begin();
+
+  // for each instance of module
+  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
+  unsigned int i;
+  for(i=0;i<moduleInstances.size();i++)
+  {
+
+std::cout<<"Existing Instance : " <<moduleInstances[i]<<std::endl;
+std::cout<<"Module Key: " <<modulekey<<std::endl;
+    if(modulekey == moduleInstances[i])
+    {
+      // look after all outputdatas into each instance of module
+      InputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstances[i]);
+      InputDataDescriptorMapType::const_iterator it;
+      for (it = lDataMap.begin();it != lDataMap.end();it++)
+      {
+        Fl_Choice *inputChoice;
+        // create Input Widgets looking the needed inputs
+        inputChoice = new Fl_Choice( 25, 26, 85, 25, "Input : " );
+        inputChoice->add(it->second.GetDataKey().c_str());
+
+        wInputsWindow->add(inputChoice);
+
+      //  inputChoice->callback( mode_callback, 0 );
+
+
+//           it->second.GetDataKey().c_str();
+//           it->second.GetDataType().c_str();
+//           it->second.GetDataDescription().c_str();
+      } // end datas loop
+
+    }
+  }
+  wInputsWindow->show();
+
+}
+
+
+
+
+
+
+/** GenericCallback (static)
+  *
+  * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
+  * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
+  * "this" which is not static ! 
+  */
+void 
+MonteverdiViewGUI
+::GenericCallback(Fl_Menu_* w, void* v)
+{
+  CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
+
+  MonteverdiViewGUI *lThis = param->first;
+  std::string moduleKey = param->second;
+
+  // each call to this callback create a new instance of a module
+  lThis->CreateModuleByKey(moduleKey.c_str());
+}
+
+/** QuitCallback (static) */
+void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) 
+{
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Quit();
+}
+
+/** HelpCallback (static) */
+void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v) 
+{
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  lThis->Help();
+}
+
+
+
+void
+MonteverdiViewGUI
+::CreateModuleByKey(const char * modulekey)
+{
+  m_MonteverdiController->CreateModuleByKey(modulekey);
+}
+
+
+
+/** The tree is updated when a notifaction is received with the Event type "Output" */
+void
+MonteverdiViewGUI
+::UpdateTree(const MonteverdiEvent & event)
+{
+
+std::cout<<"event.GetType() : "<<event.GetType()<<std::endl;
+std::cout<<"event.GetInstanceId() : "<<event.GetInstanceId()<<std::endl;
+
+
+  // for each instance of module
+  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
+  unsigned int i;
+  for(i=0;i<moduleInstances.size();i++)
+  {
+
+std::cout<<"moduleInstances[i]: "<<moduleInstances[i]<<std::endl;
+
+    // we build ONLY the new branch (targeted by the moduleInstanceId )
+//     if(event.GetInstanceId() == moduleInstances[i] )
+//     {
+      Flu_Tree_Browser::Node* root = m_Tree->first();
+
+      // add a new branch for a new instance of module
+      root->add_branch(moduleInstances[i].c_str());
+
+
+      // look after all outputdatas into each instance of module
+      OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(moduleInstances[i]);
+      OutputDataDescriptorMapType::const_iterator it;
+      for (it = lDataMap.begin();it != lDataMap.end();it++)
+      {
+          // we look for the good node in the tree to add leaves
+          Flu_Tree_Browser::Node* n = m_Tree->find(moduleInstances[i].c_str());
+          if( !n )
+            n = m_Tree->last();
+          // add informations to the targeted module
+          n->add(it->second.GetDataKey().c_str());
+          n->add(it->second.GetDataType().c_str());
+          n->add(it->second.GetDataDescription().c_str());
+      } // end datas loop
+//     } //endif
+  } // end moduleInstances loop
+}
+
+
 
 void
 MonteverdiViewGUI
 ::Notify(const MonteverdiEvent & event)
 {
-  this->InitWidgets();
+
+  std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+
+  // Event received : new instance of module is created 
+  // -> Open a inputs Window
+  this->BuildInputsGUI(event.GetInstanceId().c_str());
+
+  // event received : module has changed
+//   if(event.GetType()==
+  this->UpdateTree(event);
+
+  // Event received : UNKNOWN EVENT
+// Faire une exception
+
 }
 
 void
@@ -205,22 +300,34 @@ MonteverdiViewGUI
 {
   gTreeGroup->hide();
   wHelpWindow->hide();
+  wInputsWindow->hide();
   wMainWindow->hide();
 }
 
 void
 MonteverdiViewGUI
-::HelpCallback()
+::Help()
 {
   wHelpWindow->show();
 }
 
 void
 MonteverdiViewGUI
-::CreateModuleByKey(const char * modulekey)
+::InputsGUIOk()
 {
-  m_MonteverdiController->CreateModuleByKey(modulekey);
+
+  std::cout<<"Ok "  <<std::endl;
+  wInputsWindow->hide();
 }
+
+void
+MonteverdiViewGUI
+::InputsGUICancel()
+{
+  std::cout<<"Cancel " <<std::endl;
+  wInputsWindow->hide();
+}
+
 
 
 } // end namespace otb
