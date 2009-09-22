@@ -14,26 +14,43 @@ class MonteverdiViewGroup {open
     Fl_Window wMainWindow {
       label Monteverdi
       callback {this->Quit();} open
-      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Menu_Bar mMenuBar {open
         xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
       } {}
-      Fl_Group gTreeGroup {selected
+      Fl_Group gTreeGroup {
         xywh {0 25 400 575} resizable
       } {}
     }
     Fl_Window wHelpWindow {
       label {Help Me...} open
-      xywh {653 318 300 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {653 318 300 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Output gHelpText {
         xywh {0 0 300 150}
       }
     }
+    Fl_Window wInputsWindow {
+      label {Set Inputs} open
+      xywh {511 294 330 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+    } {
+      Fl_Return_Button bOk {
+        label Ok
+        callback {this->InputsGUIOk();}
+        xywh {199 90 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->InputsGUICancel();} selected
+        xywh {50 90 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
   }
   Function {Quit()} {return_type {virtual void}
   } {}
-  Function {HelpCallback()} {return_type {virtual void}
+  Function {InputsGUIOk()} {return_type {virtual void}
+  } {}
+  Function {InputsGUICancel()} {return_type {virtual void}
   } {}
 } 

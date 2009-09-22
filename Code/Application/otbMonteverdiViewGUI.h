@@ -64,6 +64,7 @@ public:
   typedef MonteverdiModelType::ModuleMapType              ModuleMapType;
 
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
+  typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
 
   /** Set the controller */
@@ -88,10 +89,13 @@ protected:
 
   void BuildMenus();
   void BuildTree();
-  void AddChild( std::string childname );
+  void BuildInputsGUI(const char * modulekey);
   void CreateModuleByKey(const char * modulekey);
   void Quit();
   void Help();
+  void InputsGUIOk();
+  void InputsGUICancel();
+
 
   /** Callbacks */
   static void GenericCallback(Fl_Menu_* w, void* v);
