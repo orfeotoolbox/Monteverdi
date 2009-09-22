@@ -105,7 +105,7 @@ SupervisedClassificationAppli
   m_ImageViewer->SetPolygonalROISelectionMode(false);
   m_ImageViewer->SetRectangularROISelectionMode(false);
   m_ImageViewer->SetPolygonROIList(m_TrainingSet);
-
+  
   Fl_Text_Buffer * buffer1 = new Fl_Text_Buffer();
   this->dClassInfo->buffer(buffer1);
 
@@ -617,7 +617,7 @@ SupervisedClassificationAppli
 {
   m_Model = ModelType::New();
   m_Model->LoadModel(m_ModelFileName.c_str());
-
+  
   m_ClassesMap.clear();
   m_CurrentLabel = 1;
 
@@ -1021,7 +1021,6 @@ SupervisedClassificationAppli
 :: AddClass()
 {
   itk::OStringStream oss;
-
   ClassPointerType newClass = ClassType::New();
   oss<<"Class "<<m_CurrentLabel;
   newClass->SetName(oss.str());
@@ -1033,13 +1032,14 @@ SupervisedClassificationAppli
   color[1]=rand()/(RAND_MAX+1.0);
   color[2]=rand()/(RAND_MAX+1.0);
   color[3]=(float)this->slTrainingSetOpacity->value();
-
+  
+    
   fl_color(static_cast<unsigned char>(255*color[0]),
-           static_cast<unsigned char>(255*color[1]),
-           static_cast<unsigned char>(255*color[2]));
-
+	   static_cast<unsigned char>(255*color[1]),
+	   static_cast<unsigned char>(255*color[2]));
+  
   dClassList->selection_color(fl_color());
-
+  
   newClass->SetColor(color);
   m_ClassesMap.push_back(newClass);
   dClassList->add(oss.str().c_str());

@@ -87,6 +87,10 @@ public:
    * protected virtual run method */
   void Start();
 
+  /** Set/Get the instance id */
+  itkSetStringMacro(InstanceId);
+  itkGetStringMacro(InstanceId);
+
 protected:
   /** Constructor */
   Module();
@@ -113,6 +117,9 @@ protected:
 
   /** The custom run command */
   virtual void Run();
+
+  /** Instance id (intentionnaly left protected) */
+  std::string m_InstanceId;
 
 private:
   Module(const Self&); //purposely not implemented

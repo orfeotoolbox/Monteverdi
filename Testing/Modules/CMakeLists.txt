@@ -67,4 +67,5 @@ TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassif
 ADD_TEST(SupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
+${INPUTDATA}/poupees.svm	
 )
