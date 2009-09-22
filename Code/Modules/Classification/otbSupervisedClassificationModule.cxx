@@ -73,6 +73,8 @@ const DataObjectWrapper SupervisedClassificationModule::RetrieveOutputByKey(cons
 void SupervisedClassificationModule::Run()
 {
   m_SupervisedClassification->Build();
+  m_SupervisedClassification->Show();
+  
   m_SupervisedClassification->LoadImage();
   
   // Check For SVMModel
@@ -81,9 +83,7 @@ void SupervisedClassificationModule::Run()
       m_SupervisedClassification->SetModelFileName(m_Model);
       m_SupervisedClassification->LoadSVMModel();
     }
-  
-  m_SupervisedClassification->Show();
-  this->AddOutputDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassificationied image.");
+  this->AddOutputDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassification image.");
 }
 
 } // End namespace otb

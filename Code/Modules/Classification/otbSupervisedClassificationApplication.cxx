@@ -35,7 +35,7 @@ int main( int argc, char * argv[] )
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddOption("--InputImage","Input image file name","-in",1,false);
-  //parser->AddOption("--InputModel","Input model file name","-m",1,false);
+  parser->AddOption("--InputModel","Input model file name","-m",1,false);
   //parser->AddOption("--InputROIsImage","ROIs image file name","-r",1,false);
   //parser->AddOption("--NumberOfClasses","Number of classes","-nc",1,false);
 
@@ -78,17 +78,10 @@ int main( int argc, char * argv[] )
   
   // Build the application 
   app->Build();
+  app->Show();
   app->LoadImage();
     
-  // show the applicatin 
-  app->Show();
-  Fl::run();
 
-  typedef otb::ImageFileWriter<AppliType::OverlayImageType>      WriterType;
-  WriterType::Pointer    writer = WriterType::New();
-  writer->SetFileName("/home2/otmane/outputClassif.tif");
-  writer->SetInput( app->GetOutput());
-  writer->Update();
   
   // show the app
   //   
@@ -102,11 +95,11 @@ int main( int argc, char * argv[] )
   //     app->SetImageFileName(parseResult->GetParameterString("--InputImage").c_str());
   //     app->LoadImage();
   //   }
-  //   if (parseResult->IsOptionPresent("--InputModel"))
-  //   {
-  //     app->SetModelFileName(parseResult->GetParameterString("--InputModel").c_str());
-  //     app->LoadSVMModel();
-  //   }
+    if (parseResult->IsOptionPresent("--InputModel"))
+    {
+      app->SetModelFileName(parseResult->GetParameterString("--InputModel").c_str());
+      app->LoadSVMModel();
+    }
   //   if (parseResult->IsOptionPresent("--NumberOfClasses"))
   //   {
   //     for (unsigned int i = 0;i<parseResult->GetParameterUInt("--NumberOfClasses");i++)
@@ -125,6 +118,16 @@ int main( int argc, char * argv[] )
   //   {
   //     Fl::run();
   //   }
+
+  // show the applicatin 
+
+  Fl::run();
+
+  typedef otb::ImageFileWriter<AppliType::OverlayImageType>      WriterType;
+  WriterType::Pointer    writer = WriterType::New();
+  writer->SetFileName("/home2/otmane/outputClassif.tif");
+  writer->SetInput( app->GetOutput());
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

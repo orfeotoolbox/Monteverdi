@@ -45,13 +45,15 @@ int main(int argc, char* argv[])
   // Add Wrapper Input 
   otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
-  
   module->AddInputByKey("InputImage",wrapperIn);
+  specificModule->SetModel(argv[3]);
   module->Start();
-  
-  // Refresh
-  Fl::run();
-  
+  Fl::check();
+    
+  //Simulate Ok button callback
+  specificModule->GetSupervisedClassification()->bOK->do_callback();
+ 
+  // Get Output DataWrapper
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
   
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
@@ -63,7 +65,7 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(outImage);
   writer->Update();
-
+  
   return 0;
 
 }
