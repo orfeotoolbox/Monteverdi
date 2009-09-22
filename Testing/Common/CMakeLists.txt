@@ -1,19 +1,19 @@
 ADD_EXECUTABLE(otbDataObjectWrapperTest otbDataObjectWrapperTest.cxx)
 TARGET_LINK_LIBRARIES(otbDataObjectWrapperTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(DataObjectWrapperTest otbDataObjectWrapperTest)
+ADD_TEST(coTuDataObjectWrapperTest otbDataObjectWrapperTest)
 
 ADD_EXECUTABLE(otbDataDescriptorTest otbDataDescriptorTest.cxx)
 TARGET_LINK_LIBRARIES(otbDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(DataDescriptorTest otbDataDescriptorTest)
+ADD_TEST(coTuDataDescriptorTest otbDataDescriptorTest)
 
 ADD_EXECUTABLE(otbInputDataDescriptorTest otbInputDataDescriptorTest.cxx)
 TARGET_LINK_LIBRARIES(otbInputDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(InputDataDescriptorTest otbInputDataDescriptorTest)
+ADD_TEST(coTuInputDataDescriptorTest otbInputDataDescriptorTest)
 
 ADD_EXECUTABLE(otbOutputDataDescriptorTest otbOutputDataDescriptorTest.cxx)
 TARGET_LINK_LIBRARIES(otbOutputDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(OutputDataDescriptorTest otbOutputDataDescriptorTest)
+ADD_TEST(coTuOutputDataDescriptorTest otbOutputDataDescriptorTest)
 
 ADD_EXECUTABLE(otbModuleTest otbModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbModuleTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(ModuleTest otbModuleTest)
+ADD_TEST(coTuModuleTest otbModuleTest)
