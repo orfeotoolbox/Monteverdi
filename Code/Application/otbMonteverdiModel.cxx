@@ -58,6 +58,9 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     // Register the main model to receive events from the new module
     module->RegisterListener(this);
 
+    // Notify the view that a new module needs inputs
+    this->NotifyAll(MonteverdiEvent("InstanceCreated",oss.str()));
+
     // Temporary
     this->StartModuleByInstanceId(oss.str());
 

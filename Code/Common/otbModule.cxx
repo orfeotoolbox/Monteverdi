@@ -24,7 +24,7 @@
 namespace otb
 {
 /** Constructor */
-Module::Module() : m_InputsMap(), m_OutputsMap()
+Module::Module() : m_InputsMap(), m_OutputsMap(), m_InstanceId("Unknown")
 {}
 
 /** Destructor */
