@@ -44,7 +44,7 @@ void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Retrieve output by key  This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-const DataObjectWrapper ReaderModule::RetrieveDataByKey(const std::string & key) const
+const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputDataSet")
