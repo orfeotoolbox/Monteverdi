@@ -102,9 +102,8 @@ public:
   /** Show and shut down the splash screen */
   void Show() {
 
-// Commented out because causing compilation warning
-//        unsigned int ui_pos_width = (Fl::w()/2) -275;
-//         unsigned int ui_pos_height = (Fl::h()/2) - 200;
+        unsigned int ui_pos_width = (Fl::w()/2) -275;
+        unsigned int ui_pos_height = (Fl::h()/2) - 200;
         unsigned int ui_cpt =0;
 
 //         Fl_Timer* timer = new Fl_Timer(FL_HIDDEN_TIMER,ui_pos_width,ui_pos_height,30,30,"timer");

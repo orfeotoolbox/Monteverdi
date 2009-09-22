@@ -47,7 +47,7 @@
 
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
-#include "otbFeatureExtractionModule.h"
+// #include "otbOrthoRectifModule.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader","File/Open data set");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
-  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
+//   model->RegisterModule<otb::OrthoRectifModule>("OrthoRectification");
 
   // Launch Monteverdi
   view->InitWidgets();

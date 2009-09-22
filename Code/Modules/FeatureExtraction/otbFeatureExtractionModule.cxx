@@ -50,7 +50,7 @@ void FeatureExtractionModule::PrintSelf(std::ostream& os, itk::Indent indent) co
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void FeatureExtractionModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
+void FeatureExtractionModule::AssignDataByKey(const std::string & key, const DataObjectWrapper & data)
 {
   typedef FeatureExtractionModel::InputImageType InputImageType;
 
@@ -65,7 +65,7 @@ void FeatureExtractionModule::AssignInputByKey(const std::string & key, const Da
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::string & key) const
+const DataObjectWrapper FeatureExtractionModule::RetrieveDataByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputImage")

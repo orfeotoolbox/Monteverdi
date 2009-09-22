@@ -17,7 +17,6 @@ BasicApplicationView::BasicApplicationView(): m_Controller(), m_Model(), m_Image
   m_ImageView = ImageViewType::New();
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
 
-
 }
 
 BasicApplicationView::~BasicApplicationView()
@@ -62,6 +61,7 @@ void BasicApplicationView::Build()
 
 
     this->RefreshInterface();
+    //wMainWindow->resizable(NULL);
 }
 void BasicApplicationView::Notify()
 {
@@ -106,13 +106,11 @@ void BasicApplicationView::OpenImage()
 
 void BasicApplicationView::RunLoop()
 {
-	m_Controller->RunLoop();
+  //wMainWindow->deactivate();
+  //Fl::check();
+  m_Controller->RunLoop();
+  //wMainWindow->activate();
+  //Fl::check();
 }
-
-void BasicApplicationView::RunLoop2()
-{
-	m_Controller->RunLoop2();
-}
-
 
 }// end namespace

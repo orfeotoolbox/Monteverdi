@@ -74,7 +74,7 @@ protected:
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
+  virtual const DataObjectWrapper RetrieveDataByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();
