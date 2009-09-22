@@ -160,9 +160,6 @@ void
 MonteverdiViewGUI
 ::BuildTree()
 {
-
-  unsigned int i;
-
   wMainWindow->begin();
 
   m_Tree->box( FL_DOWN_BOX );
@@ -216,6 +213,8 @@ void
 MonteverdiViewGUI
 ::Notify(const MonteverdiEvent & event)
 {
+  std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+
   this->InitWidgets();
 }
 

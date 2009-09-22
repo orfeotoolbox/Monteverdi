@@ -19,8 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMonteverdiViewGUI_h
 
 
-#include "otbListenerBase.h"
-
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)

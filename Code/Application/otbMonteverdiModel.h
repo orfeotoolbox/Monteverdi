@@ -111,23 +111,26 @@ class ITK_EXPORT MonteverdiModel
 
 
    /** Get available module instances */
-   const std::vector<std::string> GetAvailableModuleInstances() const;
+   const std::vector<std::string> GetAvailableModuleInstanceIds() const;
 
    /** Get outputs for a given module instance */
-   const OutputDataDescriptorMapType & GetModuleOutputsByKey(const std::string & key) const;
+   const OutputDataDescriptorMapType & GetModuleOutputsByInstanceId(const std::string & id) const;
 
    /** Get required inputs for a given module instance */
-   const InputDataDescriptorMapType & GetModuleInputsByKey(const std::string & key) const;
+   const InputDataDescriptorMapType & GetModuleInputsByInstanceId(const std::string & id) const;
 
 //   void Connect(const std::string & sourceModule,const std::string& 
 
   /** Start the given module */
-  void StartModuleByKey(const std::string & key);
+  void StartModuleByInstanceId(const std::string & id);
 
   // Temporary notify stub
   virtual void Notify(const MonteverdiEvent & event) 
   {
-    std::cout<<"Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+    std::cout<<"Model: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+
+    // Forward event to view
+    this->NotifyAll(event);
   }
 
 
