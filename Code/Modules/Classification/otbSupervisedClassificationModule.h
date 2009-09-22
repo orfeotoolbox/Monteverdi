@@ -46,10 +46,12 @@ public:
 
   /** Type macro */
   itkTypeMacro(SupervisedClassificationModule,Module);
-  
+    
 
   /** Accessor to the SupervisedClassification Instance */
   itkGetObjectMacro(SupervisedClassification,SupervisedClassificationAppli);
+  /** Get the SVM model if any*/
+  itkSetMacro(Model,std::string);
   
 protected:
   /** Constructor */
@@ -62,12 +64,12 @@ protected:
   /** Assign input by key. This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual void AssignDataByKey(const std::string & key, const DataObjectWrapper & data);
+  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
 
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual const DataObjectWrapper RetrieveDataByKey(const std::string & key) const;
+  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();
@@ -78,6 +80,10 @@ private:
 
   // The view
   SupervisedClassificationAppli::Pointer        m_SupervisedClassification;
+  
+  // The SVM Model
+  std::string                                   m_Model;
+
 
 };
 

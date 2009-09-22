@@ -19,8 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbMonteverdiViewGUI_h
 
 
-#include "otbListenerBase.h"
-
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -75,10 +73,10 @@ public:
 
   /** Event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-  void InitWidgets();
-  void BuildTree();
-  void UpdateTree();
+  void UpdateTree(const MonteverdiEvent & event);
   void Show();
+  void InitWidgets();
+
 
   /** Constructor */
   MonteverdiViewGUI();
@@ -88,8 +86,8 @@ protected:
   /** Destructor */
   virtual ~MonteverdiViewGUI();
 
-
   void BuildMenus();
+  void BuildTree();
   void AddChild( std::string childname );
   void CreateModuleByKey(const char * modulekey);
   void Quit();

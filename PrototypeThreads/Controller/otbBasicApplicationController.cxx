@@ -74,6 +74,18 @@ BasicApplicationController
     }
 }
 
+void
+BasicApplicationController
+::RunLoop2()
+{
+  if(m_ImageReady && !m_Model->IsUpdating())
+    {
+    m_Threader->SetNumberOfThreads(2);
+    m_Threader->SpawnThread(ThreadFunction, this);
+    }
+}
+
+
 ITK_THREAD_RETURN_TYPE
 BasicApplicationController
 ::ThreadFunction( void *arg )

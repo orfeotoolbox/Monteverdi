@@ -20,6 +20,7 @@
 
 #include "otbReaderModule.h"
 #include <FL/Fl_File_Chooser.H>
+#include "base/ossimFilename.h"
 
 namespace otb
 {
@@ -44,7 +45,7 @@ void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Retrieve output by key  This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-const DataObjectWrapper ReaderModule::RetrieveDataByKey(const std::string & key) const
+const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputDataSet")
@@ -52,7 +53,7 @@ const DataObjectWrapper ReaderModule::RetrieveDataByKey(const std::string & key)
     const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
 
     if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
-      {                                          
+      {
       wrapper.Set("Floating_Point_VectorImage",m_FPVReader->GetOutput());
       }
     else if(outMap.find(key)->second.GetDataType() == "VectorData")
@@ -82,7 +83,11 @@ void ReaderModule::OpenDataSet()
     m_FPVReader->GenerateOutputInformation();
     // If we are still here, this is a readable image
     typeFound = true;
-    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet","Image read from file");
+    // Get the filename from the filepath
+    ossimFilename lFile = ossimFilename(filepath);
+    ostringstream oss; 
+    oss << "Image read from file : " << lFile.file();
+    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet",oss.str()); //"Image read from file"
     }
   catch(itk::ExceptionObject & err)
     {

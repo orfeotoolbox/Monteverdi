@@ -45,7 +45,7 @@ void SupervisedClassificationModule::PrintSelf(std::ostream& os, itk::Indent ind
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void SupervisedClassificationModule::AssignDataByKey(const std::string & key, const DataObjectWrapper & data)
+void SupervisedClassificationModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   typedef SupervisedClassificationAppli::ImageType InputImageType;
 
@@ -59,7 +59,7 @@ void SupervisedClassificationModule::AssignDataByKey(const std::string & key, co
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper SupervisedClassificationModule::RetrieveDataByKey(const std::string & key) const
+const DataObjectWrapper SupervisedClassificationModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
@@ -74,6 +74,14 @@ void SupervisedClassificationModule::Run()
 {
   m_SupervisedClassification->Build();
   m_SupervisedClassification->LoadImage();
+  
+  // Check For SVMModel
+  if(!m_Model.empty())
+    {
+      m_SupervisedClassification->SetModelFileName(m_Model);
+      m_SupervisedClassification->LoadSVMModel();
+    }
+  
   m_SupervisedClassification->Show();
   this->AddOutputDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassificationied image.");
 }

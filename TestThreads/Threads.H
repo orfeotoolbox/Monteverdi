@@ -6,7 +6,9 @@
 #include <unistd.h>
 
 #ifdef __linux__
-#	define __USE_GNU // defines recursive mutex'es in pthreads.h
+#ifndef __USE_GNU
+#define __USE_GNU // defines recursive mutex'es in pthreads.h
+#endif
 #endif
 #include <pthread.h>
 

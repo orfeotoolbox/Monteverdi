@@ -109,4 +109,10 @@ void BasicApplicationView::RunLoop()
 	m_Controller->RunLoop();
 }
 
+void BasicApplicationView::RunLoop2()
+{
+	m_Controller->RunLoop2();
+}
+
+
 }// end namespace

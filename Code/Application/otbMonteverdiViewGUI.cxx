@@ -29,6 +29,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 
+
 namespace otb
 {
 
@@ -116,15 +117,13 @@ MonteverdiViewGUI
   std::string moduleKey = param->second;
 
   lThis->CreateModuleByKey(moduleKey.c_str());
-  //lThis->UpdateTree();
 }
 
 /** QuitCallback (static) */
 void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) 
 {
   MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  //lThis->Quit();
-lThis->UpdateTree();
+  lThis->Quit();
 }
 
 /** HelpCallback (static) */
@@ -156,49 +155,54 @@ MonteverdiViewGUI
 
 }
 
+/** The tree is updated when a notifaction is received with the Event type "Output" */
 void
 MonteverdiViewGUI
-::UpdateTree()
+::UpdateTree(const MonteverdiEvent & event)
 {
-  unsigned int i;
-//   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
-//   ModuleDescriptorMapType::const_iterator mcIt;
-// 
-//   // for each modulus
-//   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-//   {
-//     m_Tree->add_branch(mcIt->second.m_Key.c_str());
-//     AddChild("Input 1");
-//   }
-//   m_Tree->redraw();
+
+//    event.GetType()
+//    event.GetInstanceId()
+std::cout<<"event.GetInstanceId() : "<<event.GetInstanceId()<<std::endl;
 
 
   // for each instance of module
-  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstances();
-  std::cout<<"size : "<<moduleInstances.size()<<std::endl;
-
+  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
+std::cout<<"size : "<<moduleInstances.size()<<std::endl;
+  unsigned int i;
   for(i=0;i<moduleInstances.size();i++)
   {
-std::cout<<"contenu : "<<moduleInstances[i]<<std::endl;
-    // look after all existing objects into each instance of module
-//      DataDescriptorMapType lDataMap = moduleInstances[i]->GetOutputsMap(); //GetDataMap();
-  
 
-OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByKey(moduleInstances[i]);
-std::cout<<"size2 : "<<lDataMap.size()<<std::endl;
+std::cout<<"moduleInstances[i]: "<<moduleInstances[i]<<std::endl;
 
-    OutputDataDescriptorMapType::const_iterator it;
-    for (it = lDataMap.begin();it != lDataMap.end();it++)
-    {
-        //ostreamstring oss;
-        m_Tree->add_branch(it->second.GetDataKey().c_str());
-        //     AddChild("Input 1");
-    }
-  }
+//     // we build ONLY the new branch (targeted by the moduleInstanceId )
+//     if(event.GetInstanceId() == moduleInstances[i] )
+//     {
+      Flu_Tree_Browser::Node* root = m_Tree->first();
+
+      // add a new branch for a new instance of module
+      root->add_branch(moduleInstances[i].c_str());
 
 
+      // look after all outputdatas into each instance of module
+      OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(moduleInstances[i]);
+      OutputDataDescriptorMapType::const_iterator it;
+      for (it = lDataMap.begin();it != lDataMap.end();it++)
+      {
+          // we look for the good node in the tree to add leaves
+          Flu_Tree_Browser::Node* n = m_Tree->find(moduleInstances[i].c_str());
+          if( !n )
+            n = m_Tree->last();
+          // add informations to the targeted module
+          n->add(it->second.GetDataKey().c_str());
+          n->add(it->second.GetDataType().c_str());
+          n->add(it->second.GetDataDescription().c_str());
+      } // end datas loop
+//     } //endif
+  } // end moduleInstances loop
 }
 
+/** Initialization of the Tree */
 void
 MonteverdiViewGUI
 ::BuildTree()
@@ -210,22 +214,30 @@ MonteverdiViewGUI
   m_Tree->auto_branches( true );
   m_Tree->label( "Tree Browser" );
 
-  gTreeGroup->resizable( NULL );
-  wMainWindow->resizable(m_Tree);
+  // animate the tree
+  m_Tree->animate( 1 );
+  m_Tree->collapse_time( 0.02 );
+  m_Tree->frame_rate(500);
+
+  gTreeGroup->resizable(m_Tree);
+  wMainWindow->resizable(gTreeGroup);
   gTreeGroup->end();
 
   // FileGroup and tree
   gTreeGroup->add(m_Tree);
   gTreeGroup->show();
+
+
 }
 
 void
 MonteverdiViewGUI
 ::Notify(const MonteverdiEvent & event)
 {
+  std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
 
-  std::cout<<"On m'appelle ??" <<std::endl;
-  this->UpdateTree();
+  this->UpdateTree(event);
+
 }
 
 void

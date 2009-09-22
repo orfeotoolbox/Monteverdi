@@ -46,6 +46,7 @@ public:
   virtual void OpenImage();
   virtual void Exit();
   virtual void RunLoop();
+  virtual void RunLoop2();
 
   /** Set the controller */
   itkSetObjectMacro(Controller,BasicApplicationControllerInterface);

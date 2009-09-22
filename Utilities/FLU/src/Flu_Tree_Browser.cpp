@@ -2989,7 +2989,8 @@ printf("warning : revenir ( File Tree Browser ) %s !!!!!!!!! \n",fullpath);
 
   unsigned int *pui_node = (unsigned int *)root.modify( fullpath, Node::REMOVE, rdata );
 
-printf("toc !%d\n");
+// Replaced "toc !%d\n" by "toc !\n"
+printf("toc !\n");
 
   //unsigned int ui_node = *pui_node;
 

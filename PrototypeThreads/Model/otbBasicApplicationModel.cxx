@@ -83,6 +83,7 @@ BasicApplicationModel
   writer->SetFileName("msimage.tif");
   writer->SetInput(m_MeanShift->GetClusteredOutput());
   writer->Update();
+  writer->ResetPipeline();
   m_IsUpdating = false;
   
 }
