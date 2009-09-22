@@ -73,9 +73,10 @@ public:
 
   /** Event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-  void InitWidgets();
-  void BuildTree();
+  void UpdateTree(const MonteverdiEvent & event);
   void Show();
+  void InitWidgets();
+
 
   /** Constructor */
   MonteverdiViewGUI();
@@ -85,8 +86,8 @@ protected:
   /** Destructor */
   virtual ~MonteverdiViewGUI();
 
-
   void BuildMenus();
+  void BuildTree();
   void AddChild( std::string childname );
   void CreateModuleByKey(const char * modulekey);
   void Quit();
