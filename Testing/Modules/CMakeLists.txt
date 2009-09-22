@@ -68,3 +68,14 @@ ADD_TEST(SupervisedClassificationModuleTest otbSupervisedClassificationModuleTes
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
 )
+
+#------------- Writer Module Tests ---------------------------
+
+ADD_EXECUTABLE(otbWriterModuleTest otbWriterModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbWriterModuleTest otbWriterModule otbReaderModule)
+
+
+ADD_TEST(WriterModuleTest otbWriterModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${TEMP}/readerModuleOuptut.tif
+)
