@@ -70,7 +70,7 @@ protected:
   /** Refresh the image widgets */
   void RefreshInterface();
   void RefreshVisualization();
-
+ 
 
 private:
   BasicApplicationView(const Self&); //purposely not implemented

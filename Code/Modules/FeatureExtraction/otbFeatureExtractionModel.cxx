@@ -679,9 +679,12 @@ FeatureExtractionModel
     iL2VI->SetInput( imageList );
 
     m_OutputImage = iL2VI->GetOutput();
-    
+    iL2VI->UpdateOutputInformation();
+    std::cout<<iL2VI->GetOutput()->GetLargestPossibleRegion()<<std::endl;
+
+
     //FIXME update during the pipeline!!!!! 
-    iL2VI->Update();
+    //iL2VI->Update();
     /*
     WriterType::Pointer writer = WriterType::New();
 

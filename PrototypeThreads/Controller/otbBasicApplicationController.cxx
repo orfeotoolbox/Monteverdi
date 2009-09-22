@@ -46,7 +46,7 @@ void BasicApplicationController::SetView(BasicApplicationView * view)
   m_ResizingHandler->SetView(m_View->GetImageView());
   m_ChangeRegionHandler->SetView(m_View->GetImageView());
 }
-
+ 
 void
 BasicApplicationController
 ::OpenImage( const char * filename )
@@ -69,7 +69,7 @@ BasicApplicationController
 {
   if(m_ImageReady && !m_Model->IsUpdating())
     {
-    m_Threader->SetNumberOfThreads(2);
+    m_Threader->SetNumberOfThreads(1);
     m_Threader->SpawnThread(ThreadFunction, this);
     }
 }
@@ -80,6 +80,7 @@ BasicApplicationController
 {
   try
   {
+    //((BasicApplicationController*) arg)->m_Model->RunLoop();
     ModelType::GetInstance()->RunLoop();
   }
   catch (itk::ExceptionObject & err)
@@ -87,5 +88,22 @@ BasicApplicationController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
+
+
+void
+BasicApplicationController
+::FreezeWindow()
+{
+  m_ResizingHandler;
+  m_ChangeRegionHandler;
+}
+
+void
+BasicApplicationController
+::UnFreezeWindow()
+{
+  
+}
+
 
 } // end namespace otb
