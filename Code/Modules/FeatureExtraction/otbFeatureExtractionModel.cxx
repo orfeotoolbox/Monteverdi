@@ -681,22 +681,11 @@ FeatureExtractionModel
     m_OutputImage = iL2VI->GetOutput();
     
     //FIXME update during the pipeline!!!!! 
-    iL2VI->Update();
-    /*
-    WriterType::Pointer writer = WriterType::New();
+//     iL2VI->Update();
+//     iL2VI->UpdateOutputInformation();
 
-    writer->SetFileName(m_OutputFileName);
-    writer->SetInput( iL2VI->GetOutput() );
+    m_OutputImage->UpdateOutputInformation();
 
-    writer->SetAutomaticNumberOfStreamDivisions();
-
-    typedef FltkFilterWatcher WatcherType;
-    WatcherType watcher(writer,100,100,200,20, "Generating Output...");
-
-    writer->Update();
-    
-    watcher.EndFilter();
-    */
 
   }
 }
