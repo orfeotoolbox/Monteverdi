@@ -238,7 +238,7 @@ std::cout<<"event.GetInstanceId() : "<<event.GetInstanceId()<<std::endl;
 
 std::cout<<"moduleInstances[i]: "<<moduleInstances[i]<<std::endl;
 
-//     // we build ONLY the new branch (targeted by the moduleInstanceId )
+    // we build ONLY the new branch (targeted by the moduleInstanceId )
 //     if(event.GetInstanceId() == moduleInstances[i] )
 //     {
       Flu_Tree_Browser::Node* root = m_Tree->first();
@@ -281,6 +281,9 @@ MonteverdiViewGUI
   // event received : module has changed
 //   if(event.GetType()==
   this->UpdateTree(event);
+
+  // Event received : UNKNOWN EVENT
+// Faire une exception
 
 }
 

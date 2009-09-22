@@ -77,6 +77,10 @@ void ReaderModule::OpenDataSet()
 
   bool typeFound = false;
 
+  // Get the filename from the filepath
+  ossimFilename lFile = ossimFilename(filepath);
+  ostringstream oss; 
+
   try
     {
     m_FPVReader->SetFileName(filepath);
@@ -84,10 +88,8 @@ void ReaderModule::OpenDataSet()
     // If we are still here, this is a readable image
     typeFound = true;
     // Get the filename from the filepath
-    ossimFilename lFile = ossimFilename(filepath);
-    ostringstream oss; 
     oss << "Image read from file : " << lFile.file();
-    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet",oss.str()); //"Image read from file"
+    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet",oss.str());
     }
   catch(itk::ExceptionObject & err)
     {
@@ -103,7 +105,9 @@ void ReaderModule::OpenDataSet()
       m_VectorReader->Update();
       // If we are still here, this is a readable image
       typeFound = true;
-      this->AddOutputDescriptor("VectorData","OutputDataSet","Vector read from file");
+      // Get the filename from the filepath
+      oss << "Vector read from file : " << lFile.file();
+      this->AddOutputDescriptor("VectorData","OutputDataSet",oss.str());
       }
     catch(itk::ExceptionObject & err)
       {
