@@ -77,6 +77,7 @@ public:
   virtual void Notify(const MonteverdiEvent & event);
   void InitWidgets();
   void BuildTree();
+  void UpdateTree();
   void Show();
 
   /** Constructor */

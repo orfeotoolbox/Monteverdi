@@ -116,14 +116,15 @@ MonteverdiViewGUI
   std::string moduleKey = param->second;
 
   lThis->CreateModuleByKey(moduleKey.c_str());
-  lThis->BuildTree();
-
+  //lThis->UpdateTree();
 }
 
 /** QuitCallback (static) */
-void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) {
+void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) 
+{
   MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->Quit();
+  //lThis->Quit();
+lThis->UpdateTree();
 }
 
 /** HelpCallback (static) */
@@ -155,13 +156,53 @@ MonteverdiViewGUI
 
 }
 
+void
+MonteverdiViewGUI
+::UpdateTree()
+{
+  unsigned int i;
+//   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
+//   ModuleDescriptorMapType::const_iterator mcIt;
+// 
+//   // for each modulus
+//   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
+//   {
+//     m_Tree->add_branch(mcIt->second.m_Key.c_str());
+//     AddChild("Input 1");
+//   }
+//   m_Tree->redraw();
+
+
+  // for each instance of module
+  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstances();
+  std::cout<<"size : "<<moduleInstances.size()<<std::endl;
+
+  for(i=0;i<moduleInstances.size();i++)
+  {
+std::cout<<"contenu : "<<moduleInstances[i]<<std::endl;
+    // look after all existing objects into each instance of module
+//      DataDescriptorMapType lDataMap = moduleInstances[i]->GetOutputsMap(); //GetDataMap();
+  
+
+OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByKey(moduleInstances[i]);
+std::cout<<"size2 : "<<lDataMap.size()<<std::endl;
+
+    OutputDataDescriptorMapType::const_iterator it;
+    for (it = lDataMap.begin();it != lDataMap.end();it++)
+    {
+        //ostreamstring oss;
+        m_Tree->add_branch(it->second.GetDataKey().c_str());
+        //     AddChild("Input 1");
+    }
+  }
+
+
+}
 
 void
 MonteverdiViewGUI
 ::BuildTree()
 {
-
-  unsigned int i;
 
   wMainWindow->begin();
 
@@ -170,39 +211,6 @@ MonteverdiViewGUI
   m_Tree->label( "Tree Browser" );
 
   gTreeGroup->resizable( NULL );
-
-//   ModuleDescriptorMapType lModuleDescriptorMap = m_MonteverdiController->GetRegisteredModuleDescriptors();
-//   ModuleDescriptorMapType::const_iterator mcIt;
-//
-//   // for each modulus
-//   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-//   {
-//     m_Tree->add_branch(mcIt->second.m_Key.c_str());
-//     AddChild("Input 1");
-//   }
-
-  // for each instance of module
-//   ModuleMapType lModuleList = m_MonteverdiModel->GetModuleList();
-// std::cout<<"size : "<<lModuleList.size()<<std::endl;
-//   for(i=0;i<lModuleList.size();i++)
-//   {
-// 
-//     // look after all existing objects into each instance of module
-// //     DataDescriptorMapType lDataMap = lModuleList[i]->GetOutputsMap(); //GetDataMap();
-// // std::cout<<"size2 : "<<lDataMap.size()<<std::endl;
-// // 
-// //     DataDescriptorMapType::const_iterator it;
-// //     for (it = lDataMap.begin();it != lDataMap.end();it++)
-// //     {
-// // 
-// // //ostreamstring oss;
-// //         m_Tree->add_branch(it->second.GetDataKey().c_str());
-// // 
-// // //     AddChild("Input 1");
-// //     }
-//   }
-
-
   wMainWindow->resizable(m_Tree);
   gTreeGroup->end();
 
@@ -215,7 +223,9 @@ void
 MonteverdiViewGUI
 ::Notify(const MonteverdiEvent & event)
 {
-  this->InitWidgets();
+
+  std::cout<<"On m'appelle ??" <<std::endl;
+  this->UpdateTree();
 }
 
 void
