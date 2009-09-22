@@ -24,9 +24,9 @@ class BasicApplicationViewGUI {open
           label {Navigation View} open
           xywh {810 60 175 170} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
         } {}
-        Fl_Button {} {
+        Fl_Button gButton {
           label RunLoop
-          callback {RunLoop()}
+          callback {RunLoop()} selected
           xywh {840 280 120 50}
         }
       }
@@ -50,6 +50,6 @@ class BasicApplicationViewGUI {open
   } {}
   Function {OpenImage()} {open return_type {virtual void}
   } {}
-  Function {RunLoop()} {open selected return_type {virtual void}
+  Function {RunLoop()} {open return_type {virtual void}
   } {}
 } 

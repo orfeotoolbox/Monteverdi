@@ -62,15 +62,17 @@ BasicApplicationController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
+bool what = true;
 void
 BasicApplicationController
 ::RunLoop()
 {
   if(m_ImageReady && !m_Model->IsUpdating())
     {
-    m_Threader->SetNumberOfThreads(1);
-    m_Threader->SpawnThread(ThreadFunction, this);
+      //this->FreezeWindow();
+      m_Threader->SetNumberOfThreads(1);
+      m_Threader->SpawnThread(ThreadFunction, this);
+      //this->UnFreezeWindow();
     }
 }
 
@@ -94,15 +96,18 @@ void
 BasicApplicationController
 ::FreezeWindow()
 {
-  m_ResizingHandler;
-  m_ChangeRegionHandler;
+  m_WidgetsController->DeactivateActionHandlers();
+  m_View->gButton->deactivate();
+  m_View->gMenu->deactivate();
 }
 
 void
 BasicApplicationController
 ::UnFreezeWindow()
 {
-  
+  m_WidgetsController->ActivateActionHandlers();
+ m_View->gButton->activate();
+  m_View->gMenu->activate();
 }
 
 

@@ -61,7 +61,7 @@ void BasicApplicationView::Build()
 
 
     this->RefreshInterface();
-wMainWindow->resizable(NULL);
+    //wMainWindow->resizable(NULL);
 }
 void BasicApplicationView::Notify()
 {
