@@ -14,7 +14,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_EXECUTABLE(otbSpeckleFilteringApplication otbSpeckleFilteringApplication.cxx)
 TARGET_LINK_LIBRARIES(otbSpeckleFilteringApplication otbSpeckleFilteringModule)
 
-ADD_TEST(SpeckleFilteringApplicationTest otbSpeckleFilteringApplication
+ADD_TEST(moTvSpeckleFilteringApplicationTest otbSpeckleFilteringApplication
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringOuptut.tif
 )
@@ -24,7 +24,7 @@ ${TEMP}/speckleFilteringOuptut.tif
 ADD_EXECUTABLE(otbSpeckleFilteringModuleTest otbSpeckleFilteringModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbSpeckleFilteringModuleTest otbSpeckleFilteringModule)
 
-ADD_TEST(SpeckleFilteringModuleTest otbSpeckleFilteringModuleTest
+ADD_TEST(moTvSpeckleFilteringModuleTest otbSpeckleFilteringModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringModuleOuptut.tif
 )
@@ -34,7 +34,7 @@ ADD_EXECUTABLE(otbReaderModuleTest otbReaderModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbReaderModuleTest otbReaderModule)
 
 
-ADD_TEST(ReaderModuleTest otbReaderModuleTest
+ADD_TEST(moTvReaderModuleTest otbReaderModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
@@ -44,7 +44,7 @@ ${TEMP}/readerModuleOuptut.tif
 ADD_EXECUTABLE(otbOrthoRectifModuleTest otbOrthoRectifModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbOrthoRectifModuleTest otbOrthoRectifModule)
 
-ADD_TEST(OrthoRectifModuleTest otbOrthoRectifModuleTest
+ADD_TEST(moTvOrthoRectifModuleTest otbOrthoRectifModuleTest
 ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
 ${TEMP}/OrthoRectifModuleOuptut.tif
 )
@@ -54,7 +54,7 @@ ${TEMP}/OrthoRectifModuleOuptut.tif
 ADD_EXECUTABLE(otbFeatureExtractionModuleTest otbFeatureExtractionModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleTest otbFeatureExtractionModule)
 
-ADD_TEST(FeatureExtractionModuleTest otbFeatureExtractionModuleTest
+ADD_TEST(moTvFeatureExtractionModuleTest otbFeatureExtractionModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr 	
 ${TEMP}/FeatureExtractionModuleOuptut.hdr
 )
@@ -64,7 +64,7 @@ ${TEMP}/FeatureExtractionModuleOuptut.hdr
 ADD_EXECUTABLE(otbSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassificationModule)
 
-ADD_TEST(SupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
+ADD_TEST(moTvSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
 ${INPUTDATA}/poupees.svm	
