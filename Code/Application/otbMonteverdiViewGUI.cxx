@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbMonteverdiViewGUI.h"
-#include <FL/Fl_File_Chooser.H>
+
 #include <FL/fl_ask.H>
 
 #include "base/ossimFilename.h"
@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkExceptionObject.h"
 #include <iostream>
 //#include "otbMsgReporter.h"
-
+#include "otbInputViewGUI.h"
 
 
 
@@ -128,64 +128,36 @@ MonteverdiViewGUI
 
 }
 
-/** BuildInputsGUI build and show the GUI where the user will select the inputs of a module.
-  * The number and the kind of inputs are choosen considering the expectation of this module.
-  * Note : when no input is required, the GUI must not appear! ( -> bShow )
+/** BuildInputsGUI create an instance of a small GUI where the user will select his inputs
+  * The number and the kind of inputs will be choosen considering the expectation of a 
+  * concerned module (moduleInstanceId)
+  * Note : when no input is required, the GUI must not appear! ( -> skip )
   */
 void
 MonteverdiViewGUI
 ::BuildInputsGUI(const std::string & moduleInstanceId)
 {
-  wInputsWindow->begin();
-  unsigned int ui_which_height = 25;
 
-  // for each instance of module
-  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
-  unsigned int i,j;
-  bool bShow  = true;
-  for(i=0;i<moduleInstances.size();i++)
-  {
+  bool skip  = false;
 
-std::cout<<"Existing Instance : " <<moduleInstances[i]<<std::endl;
-std::cout<<"Module Key: " <<moduleInstanceId<<std::endl;
-    if(moduleInstanceId == moduleInstances[i])
-    {
-      // look after all outputdatas into each instance of module
-      InputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstances[i]);
-      if(lDataMap.size() == 0) bShow =false;
-      InputDataDescriptorMapType::const_iterator it;
-      for (it = lDataMap.begin();it != lDataMap.end();it++)
+
+      // look after all expected or optionnal input datas
+      InputDataDescriptorMapType lInputDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstanceId);
+      if(lInputDataMap.size() == 0)
       {
-        Fl_Choice *inputChoice;
-        // create Input Widgets looking the needed inputs
-        inputChoice = new Fl_Choice( 100, ui_which_height, 175, 25, "Input : " );
-        inputChoice->add(it->second.GetDataKey().c_str());
-     //   inputChoice->align(FL_ALIGN_RIGHT);
+        skip =true;
+      }
 
-        wInputsWindow->add(inputChoice);
+      if(!skip){
+        InputViewGUI::Pointer inputViewGUI = InputViewGUI::New();
 
-       // inputChoice = new Fl_Choice( 80, 25, 150, 25, " In : " );
+        inputViewGUI->SetModel(m_MonteverdiModel);
+        inputViewGUI->SetController(m_MonteverdiController);
+        inputViewGUI->SetModuleInstanceId(moduleInstanceId);
 
-// all convenients outputs are proposed in the inputChoice
-// for(j=0;j<moduleInstances.size();j++)
-// {
-// if(
-//         inputChoice->add(it->second.GetDataKey().c_str());
-// 
-// }
-
-      //  inputChoice->callback( mode_callback, 0 );
-
-
-//           it->second.GetDataKey().c_str();
-//           it->second.GetDataType().c_str();
-//           it->second.GetDataDescription().c_str();
-      } // end datas loop
-    }// end 
-  }
-std::cout<<"bShow : "<<bShow<<std::endl;
-  if(bShow)
-    wInputsWindow->show();
+        inputViewGUI->BuildInputInterface();
+        inputViewGUI->Show();
+      }
 
 }
 
@@ -244,21 +216,14 @@ MonteverdiViewGUI
 ::UpdateTree(const std::string & instanceId)
 {
 
-  // for each instance of module
-  std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
-  unsigned int i;
-
-
       Flu_Tree_Browser::Node* root = m_Tree->first();
 
 
-      //n->
-
       // add a new branch for a new instance of module
-      Flu_Tree_Browser::Node* n = root->add_branch(instanceId.c_str());
+      root->add_branch(instanceId.c_str());
+      /*Flu_Tree_Browser::Node* node =*/ 
 
-//std::cout<< n->text() << std::endl;
-
+      //NodeDescriptor descr = new NodeDescriptor();
 
       // look after all outputdatas into each instance of module
       OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
@@ -274,8 +239,6 @@ MonteverdiViewGUI
           n->add(it->second.GetDataType().c_str());
           n->add(it->second.GetDataDescription().c_str());
       } // end datas loop
-
-
 
 }
 
@@ -321,7 +284,6 @@ MonteverdiViewGUI
 {
   gTreeGroup->hide();
   wHelpWindow->hide();
-  wInputsWindow->hide();
   wMainWindow->hide();
 }
 
@@ -331,29 +293,6 @@ MonteverdiViewGUI
 {
   wHelpWindow->show();
 }
-
-void
-MonteverdiViewGUI
-::InputsGUIOk()
-{
-// Connect 
-
-// Start()
-//  m_MonteverdiModel->StartModuleByInstanceId(event.GetInstanceId());
-
-  std::cout<<"Ok "  <<std::endl;
-  wInputsWindow->hide();
-}
-
-void
-MonteverdiViewGUI
-::InputsGUICancel()
-{
-  std::cout<<"Cancel " <<std::endl;
-  wInputsWindow->hide();
-}
-
-
 
 } // end namespace otb
 

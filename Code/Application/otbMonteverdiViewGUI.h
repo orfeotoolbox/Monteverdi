@@ -29,11 +29,13 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning(pop)
 #endif
 
+#include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Group.H>
 #include <FLU/Flu_Tree_Browser.h>
 
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
+
 
 #include "itkObject.h"
 
@@ -44,7 +46,7 @@ namespace otb
  *
  */
 class MonteverdiViewGUI
-  : public MonteverdiViewGroup, public itk::Object, public EventsListener<MonteverdiEvent> 
+  : public MonteverdiViewGroup, public itk::Object, public EventsListener<MonteverdiEvent>
 {
 public:
 
@@ -54,7 +56,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** This is protected for the singleton. Use GetInstance() instead. */
+  /** Standard type macros */
   itkNewMacro(Self);
   itkTypeMacro(MonteverdiViewGUI,itk::Object);
 
@@ -67,6 +69,24 @@ public:
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
 
+
+  /** Inner class to represent the content of a node */
+  class NodeDescriptor
+  {
+    friend class MonteverdiViewGUI;
+  public:
+  void SetModuleInstanceId(std::string id){ m_ModuleInstanceId = id; }
+  void SetOutputKey(std::string id){ m_OutputKey = id; }
+  const std::string GetOutputKey(){return m_OutputKey;}
+  const std::string GetModuleInstanceId(){return m_ModuleInstanceId;}
+  protected:
+    // key to identify the module instance
+    std::string m_ModuleInstanceId;
+    // key to identify the output
+    std::string m_OutputKey;
+  };
+
+
   /** Set the controller */
   itkGetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
   itkSetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
@@ -74,6 +94,7 @@ public:
 
   /** Event from the model */
   virtual void Notify(const MonteverdiEvent & event);
+
   void UpdateTree(const std::string & instanceId);
   void Show();
   void InitWidgets();
@@ -93,8 +114,6 @@ protected:
   void CreateModuleByKey(const char * modulekey);
   void Quit();
   void Help();
-  void InputsGUIOk();
-  void InputsGUICancel();
 
 
   /** Callbacks */
@@ -102,7 +121,10 @@ protected:
   static void HelpCallback(Fl_Menu_ *, void*);
   static void QuitCallback(Fl_Menu_ *, void*);
 
+
+
   typedef std::pair<Self *,std::string> CallbackParameterType;
+
 
 
 

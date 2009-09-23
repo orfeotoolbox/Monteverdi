@@ -12,6 +12,7 @@ SET(APPLICATION_SRCS
 otbMonteverdiModel.cxx
 otbMonteverdiViewGUI.cxx
 otbMonteverdiController.cxx
+otbInputViewGUI.cxx
 )
 
 SET(VIEW_FL_SRCS

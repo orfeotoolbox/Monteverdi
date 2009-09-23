@@ -31,7 +31,7 @@ class MonteverdiViewGroup {open
         xywh {0 0 300 150}
       }
     }
-    Fl_Window wInputsWindow {
+    Fl_Window wInputWindow {
       label {Set Inputs} open
       xywh {511 294 330 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
@@ -42,14 +42,14 @@ class MonteverdiViewGroup {open
       }
       Fl_Button bCancel {
         label Cancel
-        callback {this->InputsGUICancel();} selected
+        callback {this->InputsGUICancel();}
         xywh {50 90 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
   Function {Quit()} {return_type {virtual void}
   } {}
-  Function {InputsGUIOk()} {return_type {virtual void}
+  Function {InputsGUIOk()} {selected return_type {virtual void}
   } {}
   Function {InputsGUICancel()} {return_type {virtual void}
   } {}
