@@ -86,6 +86,8 @@ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
+ADD_EXECUTABLE(otbReaderWriterModuleTest otbReaderWriterModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbReaderWriterModuleTest otbReaderModule otbWriterModule)
 
 #------------------  Viewer Tests ---------------------------
 ADD_EXECUTABLE(otbViewerModuleTest otbViewerModuleTest.cxx)
