@@ -19,7 +19,6 @@
 #define __otbWriterModule_cxx
 
 #include "otbWriterModule.h"
-#include "otbOGRVectorDataIO.h"
 #include <FL/Fl_File_Chooser.H>
 
 namespace otb
@@ -29,10 +28,6 @@ WriterModule::WriterModule()
 {
   m_FPVWriter = FPVWriterType::New();
   m_VectorWriter = VectorWriterType::New();
-  
-   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImageDataSet","Image to write.",true);
-  this->AddInputDescriptor("VectorData","InputVectorDataSet","Vector to write.",true);
 }
 
 /** Destructor */
@@ -51,16 +46,20 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
  *  is already done. */
 void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
-  const Superclass::InputDataDescriptorMapType inMap = this->GetInputsMap();
-  if(key == "InputImageDataSet")
+  if(key == "InputDataSet")
   {
-    FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
-    m_FPVWriter->SetInput(image);  
-  }
-  else if (key == "InputVectorDataSet")
-  {
-    VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
-    m_VectorWriter->SetInput(vector);  
+    const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
+    
+    if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
+    {                                          
+      FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
+      m_FPVWriter->SetInput(image);  
+    }
+    else if(outMap.find(key)->second.GetDataType() == "VectorData")
+    {
+      VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
+      m_VectorWriter->SetInput(vector);  
+    }
   }
 }
 
@@ -73,24 +72,21 @@ void WriterModule::Run()
 
 void WriterModule::OpenDataSet()
 {
-  /*
   std::string filepath = vFilePath->value();
 
   bool typeFound = false;
-  std::cout << "open dataset" << std::endl;
+
   try
     {
     m_FPVWriter->SetFileName(filepath);
-    //FIXME
 //     m_FPVWriter->GenerateOutputInformation();
     // If we are still here, this is a readable image
     typeFound = true;
-    this->AddInputDescriptor("Floating_Point_VectorImage","InputDataSet","Write image to file");
+    this->AddOutputDescriptor("Floating_Point_VectorImage","InputDataSet","Write image to file");
     }
   catch(itk::ExceptionObject & err)
     {
     // Silent catch
-      std::cout << "catch image" << std::endl;
     } 
   
   // If it is not an image, try to open a VectorData
@@ -102,39 +98,15 @@ void WriterModule::OpenDataSet()
       m_VectorWriter->Update();
       // If we are still here, this is a readable image
       typeFound = true;
-      this->AddInputDescriptor("VectorData","InputDataSet","Write vector to file");
+      this->AddOutputDescriptor("VectorData","InputDataSet","Write vector to file");
       }
     catch(itk::ExceptionObject & err)
       {
       // Silent catch
-        std::cout << "catch vector" << std::endl;
       }
     }
-  */
-  /*
-  std::string filepath = vFilePath->value();
-  std::cout << "filepath" << filepath<<std::endl;
-  m_FPVWriter->SetFileName(filepath);
-//   this->AddInputDescriptor("Floating_Point_VectorImage","InputDataSet","Write image to file");
-  std::cout << "ICI"<<std::endl;
-  m_FPVWriter->Update();
-  std::cout << "ICI"<<std::endl;
+
   wFileChooserWindow->hide();
-  */
-  std::string filepath = vFilePath->value();
-  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
-  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
-  
-  if ( test->CanWriteFile(filepath.c_str()) ) 
-  {
-    m_VectorWriter->SetFileName(filepath);
-    m_VectorWriter->Update();
-  }
-  else
-  {
-    m_FPVWriter->SetFileName(filepath);
-    m_FPVWriter->Update();
-  }
 }
 
 void WriterModule::Browse()

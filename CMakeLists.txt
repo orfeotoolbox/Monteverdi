@@ -58,8 +58,6 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/Classification
 ${Monteverdi_BINARY_DIR}/Code/Modules/Classification
 ${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction
 ${Monteverdi_BINARY_DIR}/Code/Modules/FeatureExtraction
-${Monteverdi_SOURCE_DIR}/Code/Modules/Writer
-${Monteverdi_BINARY_DIR}/Code/Modules/Writer
 )
 
 

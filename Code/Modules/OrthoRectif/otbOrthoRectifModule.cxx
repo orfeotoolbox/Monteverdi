@@ -45,7 +45,7 @@ void OrthoRectifModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void OrthoRectifModule::AssignDataByKey(const std::string & key, const DataObjectWrapper & data)
+void OrthoRectifModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   typedef OrthoRectif::ImageType InputImageType;
 
@@ -59,7 +59,7 @@ void OrthoRectifModule::AssignDataByKey(const std::string & key, const DataObjec
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper OrthoRectifModule::RetrieveDataByKey(const std::string & key) const
+const DataObjectWrapper OrthoRectifModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
