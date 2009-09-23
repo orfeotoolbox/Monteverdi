@@ -19,7 +19,7 @@
 #define __otbReaderModule_cxx
 
 #include "otbReaderModule.h"
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 #include "base/ossimFilename.h"
 
 namespace otb
@@ -125,7 +125,7 @@ void ReaderModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = fl_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = flu_file_chooser("Choose the dataset file ...", "*.*",".");
   
   if (filename == NULL)
     {
