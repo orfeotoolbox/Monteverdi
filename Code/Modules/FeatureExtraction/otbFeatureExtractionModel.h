@@ -523,7 +523,12 @@ private:
   // Instantiate the model
   VisuModelPointerType              m_VisuModel;
   VisuModelPointerType              m_ResultVisuModel;
-
+  
+  
+  //Generation of the output image attributes (to maintain pipeline)
+  SingleImagePointerType m_image;
+  ImageListType::Pointer m_imageList;
+  ImageListToVectorImageFilterType::Pointer m_iL2VI;
 };
 
 }

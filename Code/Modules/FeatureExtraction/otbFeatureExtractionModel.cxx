@@ -60,6 +60,11 @@ FeatureExtractionModel::FeatureExtractionModel()
   // Instantiate the model
   m_VisuModel = VisuModelType::New();
   m_ResultVisuModel = VisuModelType::New();
+  
+  //Instantiate output image attributes
+  m_image = SingleImageType::New();
+  m_imageList = ImageListType::New();
+  m_iL2VI = ImageListToVectorImageFilterType::New();
 }
 
 
@@ -649,11 +654,11 @@ void
 FeatureExtractionModel
 ::GenerateOutputImage()
 {
-  SingleImagePointerType image = SingleImageType::New();
-  ImageListType::Pointer imageList = ImageListType::New();
+//   SingleImagePointerType image = SingleImageType::New();
+//   ImageListType::Pointer imageList = ImageListType::New();
 
   bool todo = false;
-   int outputNb = 0;
+  int outputNb = 0;
   int i = 0;
 
   if( !m_HasInput )
@@ -667,21 +672,21 @@ FeatureExtractionModel
     if (m_SelectedFilters[i] == true)
     {
       todo = true;
-      image = GetSingleImage(i);
-      imageList->PushBack( image );
+      m_image = GetSingleImage(i);
+      m_imageList->PushBack( m_image );
       outputNb++;
     }// if(m_SelectedFilters[i] == true)
   }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
 
   if (todo == true)
   {
-    ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
-    iL2VI->SetInput( imageList );
+//     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
+    m_iL2VI->SetInput( m_imageList );
 
-    m_OutputImage = iL2VI->GetOutput();
+    m_OutputImage = m_iL2VI->GetOutput();
     
     //FIXME update during the pipeline!!!!! 
-    iL2VI->Update();
+//     m_iL2VI->Update();
 //     iL2VI->UpdateOutputInformation();
 
     m_OutputImage->UpdateOutputInformation();
