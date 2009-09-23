@@ -46,7 +46,7 @@ void BasicApplicationController::SetView(BasicApplicationView * view)
   m_ResizingHandler->SetView(m_View->GetImageView());
   m_ChangeRegionHandler->SetView(m_View->GetImageView());
 }
-
+ 
 void
 BasicApplicationController
 ::OpenImage( const char * filename )
@@ -62,29 +62,19 @@ BasicApplicationController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
+bool what = true;
 void
 BasicApplicationController
 ::RunLoop()
 {
   if(m_ImageReady && !m_Model->IsUpdating())
     {
-    m_Threader->SetNumberOfThreads(2);
-    m_Threader->SpawnThread(ThreadFunction, this);
+      //this->FreezeWindow();
+      m_Threader->SetNumberOfThreads(1);
+      m_Threader->SpawnThread(ThreadFunction, this);
+      //this->UnFreezeWindow();
     }
 }
-
-void
-BasicApplicationController
-::RunLoop2()
-{
-  if(m_ImageReady && !m_Model->IsUpdating())
-    {
-    m_Threader->SetNumberOfThreads(2);
-    m_Threader->SpawnThread(ThreadFunction, this);
-    }
-}
-
 
 ITK_THREAD_RETURN_TYPE
 BasicApplicationController
@@ -92,6 +82,7 @@ BasicApplicationController
 {
   try
   {
+    //((BasicApplicationController*) arg)->m_Model->RunLoop();
     ModelType::GetInstance()->RunLoop();
   }
   catch (itk::ExceptionObject & err)
@@ -99,5 +90,25 @@ BasicApplicationController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
+
+
+void
+BasicApplicationController
+::FreezeWindow()
+{
+  m_WidgetsController->DeactivateActionHandlers();
+  m_View->gButton->deactivate();
+  m_View->gMenu->deactivate();
+}
+
+void
+BasicApplicationController
+::UnFreezeWindow()
+{
+  m_WidgetsController->ActivateActionHandlers();
+ m_View->gButton->activate();
+  m_View->gMenu->activate();
+}
+
 
 } // end namespace otb
