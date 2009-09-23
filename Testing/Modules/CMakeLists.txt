@@ -78,3 +78,13 @@ ADD_TEST(WriterModuleTest otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
+
+
+#------------------  Viewer Tests ---------------------------
+ADD_EXECUTABLE(otbViewerModuleTest otbViewerModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
+
+ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
+${INPUTDATA}/poupees.tif
+)
+
