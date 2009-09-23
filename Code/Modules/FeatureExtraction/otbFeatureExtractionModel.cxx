@@ -681,7 +681,7 @@ FeatureExtractionModel
     m_OutputImage = iL2VI->GetOutput();
     
     //FIXME update during the pipeline!!!!! 
-//     iL2VI->Update();
+    iL2VI->Update();
 //     iL2VI->UpdateOutputInformation();
 
     m_OutputImage->UpdateOutputInformation();
