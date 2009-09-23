@@ -74,7 +74,7 @@ public:
 
   /** Event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-  void UpdateTree(const MonteverdiEvent & event);
+  void UpdateTree(const std::string & instanceId);
   void Show();
   void InitWidgets();
 
@@ -89,7 +89,7 @@ protected:
 
   void BuildMenus();
   void BuildTree();
-  void BuildInputsGUI(const char * modulekey);
+  void BuildInputsGUI(const std::string & modulekey);
   void CreateModuleByKey(const char * modulekey);
   void Quit();
   void Help();

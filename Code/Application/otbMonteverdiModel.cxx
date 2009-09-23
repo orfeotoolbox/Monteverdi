@@ -49,9 +49,10 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 
     // Build a unique key
     itk::OStringStream oss;
-    oss<<key<<m_InstancesCountMap[key]<<std::endl;
+    oss<<key<<m_InstancesCountMap[key];
 
     // Register module instance
+    module->SetInstanceId(oss.str());
     m_ModuleMap[oss.str()] = module;
     std::cout<<"New module with id "<<oss.str()<<" created: "<<m_ModuleMap[oss.str()]<<std::endl;
 
@@ -76,17 +77,7 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 
 void MonteverdiModel::StartModuleByInstanceId(const std::string & id)
 {
-  // Try to find the given module
-  ModuleMapType::iterator mIt = m_ModuleMap.find(id);
-
-  if(mIt != m_ModuleMap.end())
-    {
-    mIt->second->Start();
-    }
-  else
-    {
-    itkExceptionMacro(<<"No module instance with id "<<id);
-   }
+  this->GetModuleByInstanceId(id)->Start();
 }
 
 /** Get available modules map */
@@ -111,30 +102,46 @@ const std::vector<std::string> MonteverdiModel::GetAvailableModuleInstanceIds() 
 /** Get outputs for a given module instance */
 const MonteverdiModel::OutputDataDescriptorMapType & MonteverdiModel::GetModuleOutputsByInstanceId(const std::string & id) const
 {
-  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(id);
-  if(mcIt!=m_ModuleMap.end())
-    {
-    return mcIt->second->GetOutputsMap();
-    }
-  else
-    {
-    itkExceptionMacro(<<"No module instance with id "<<id<<" has been registered.");
-    }
+    return this->GetModuleByInstanceId(id)->GetOutputsMap();
 }
 
 /** Get inputs for a given module instance */
 const MonteverdiModel::InputDataDescriptorMapType & MonteverdiModel::GetModuleInputsByInstanceId(const std::string & id) const
 {
-  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(id);
+  return this->GetModuleByInstanceId(id)->GetInputsMap();
+}
+
+/** Get the pointer to the module by an instanceId */
+Module * MonteverdiModel::GetModuleByInstanceId(const std::string & instanceId) const
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(instanceId);
   if(mcIt!=m_ModuleMap.end())
     {
-    return mcIt->second->GetInputsMap();
+    return mcIt->second;
     }
   else
     {
-    itkExceptionMacro(<<"No module instance with id "<<id<<" has been registered.");
+    itkExceptionMacro(<<"No module instance with id "<<instanceId<<" has been registered.");
     }
 }
+
+/** Add a new connection between modules */
+void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey)
+{
+  // Find the source module
+  Module::Pointer source = this->GetModuleByInstanceId(sourceModuleId);
+
+  // Find the target module
+  Module::Pointer target = this->GetModuleByInstanceId(targetModuleId);
+
+  // Retrieve the output data wrapper from the source module
+  DataObjectWrapper outputWrapper = source->GetOutputByKey(outputKey);
+
+  // Add the given data wrapper as an input to target module
+  target->AddInputByKey(inputKey,outputWrapper);
+}
+
+
 
 /** Manage the singleton */
 MonteverdiModel::Pointer

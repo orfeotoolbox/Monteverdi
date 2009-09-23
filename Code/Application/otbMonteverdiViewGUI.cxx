@@ -128,34 +128,51 @@ MonteverdiViewGUI
 
 }
 
-
+/** BuildInputsGUI build and show the GUI where the user will select the inputs of a module.
+  * The number and the kind of inputs are choosen considering the expectation of this module.
+  * Note : when no input is required, the GUI must not appear! ( -> bShow )
+  */
 void
 MonteverdiViewGUI
-::BuildInputsGUI(const char * modulekey)
+::BuildInputsGUI(const std::string & moduleInstanceId)
 {
   wInputsWindow->begin();
+  unsigned int ui_which_height = 25;
 
   // for each instance of module
   std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
-  unsigned int i;
+  unsigned int i,j;
+  bool bShow  = true;
   for(i=0;i<moduleInstances.size();i++)
   {
 
 std::cout<<"Existing Instance : " <<moduleInstances[i]<<std::endl;
-std::cout<<"Module Key: " <<modulekey<<std::endl;
-    if(modulekey == moduleInstances[i])
+std::cout<<"Module Key: " <<moduleInstanceId<<std::endl;
+    if(moduleInstanceId == moduleInstances[i])
     {
       // look after all outputdatas into each instance of module
       InputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstances[i]);
+      if(lDataMap.size() == 0) bShow =false;
       InputDataDescriptorMapType::const_iterator it;
       for (it = lDataMap.begin();it != lDataMap.end();it++)
       {
         Fl_Choice *inputChoice;
         // create Input Widgets looking the needed inputs
-        inputChoice = new Fl_Choice( 25, 26, 85, 25, "Input : " );
+        inputChoice = new Fl_Choice( 100, ui_which_height, 175, 25, "Input : " );
         inputChoice->add(it->second.GetDataKey().c_str());
+     //   inputChoice->align(FL_ALIGN_RIGHT);
 
         wInputsWindow->add(inputChoice);
+
+       // inputChoice = new Fl_Choice( 80, 25, 150, 25, " In : " );
+
+// all convenients outputs are proposed in the inputChoice
+// for(j=0;j<moduleInstances.size();j++)
+// {
+// if(
+//         inputChoice->add(it->second.GetDataKey().c_str());
+// 
+// }
 
       //  inputChoice->callback( mode_callback, 0 );
 
@@ -164,10 +181,11 @@ std::cout<<"Module Key: " <<modulekey<<std::endl;
 //           it->second.GetDataType().c_str();
 //           it->second.GetDataDescription().c_str();
       } // end datas loop
-
-    }
+    }// end 
   }
-  wInputsWindow->show();
+std::cout<<"bShow : "<<bShow<<std::endl;
+  if(bShow)
+    wInputsWindow->show();
 
 }
 
@@ -223,37 +241,32 @@ MonteverdiViewGUI
 /** The tree is updated when a notifaction is received with the Event type "Output" */
 void
 MonteverdiViewGUI
-::UpdateTree(const MonteverdiEvent & event)
+::UpdateTree(const std::string & instanceId)
 {
-
-std::cout<<"event.GetType() : "<<event.GetType()<<std::endl;
-std::cout<<"event.GetInstanceId() : "<<event.GetInstanceId()<<std::endl;
-
 
   // for each instance of module
   std::vector<std::string> moduleInstances = m_MonteverdiModel->GetAvailableModuleInstanceIds();
   unsigned int i;
-  for(i=0;i<moduleInstances.size();i++)
-  {
 
-std::cout<<"moduleInstances[i]: "<<moduleInstances[i]<<std::endl;
 
-    // we build ONLY the new branch (targeted by the moduleInstanceId )
-//     if(event.GetInstanceId() == moduleInstances[i] )
-//     {
       Flu_Tree_Browser::Node* root = m_Tree->first();
 
+
+      //n->
+
       // add a new branch for a new instance of module
-      root->add_branch(moduleInstances[i].c_str());
+      Flu_Tree_Browser::Node* n = root->add_branch(instanceId.c_str());
+
+//std::cout<< n->text() << std::endl;
 
 
       // look after all outputdatas into each instance of module
-      OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(moduleInstances[i]);
+      OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
       OutputDataDescriptorMapType::const_iterator it;
       for (it = lDataMap.begin();it != lDataMap.end();it++)
       {
           // we look for the good node in the tree to add leaves
-          Flu_Tree_Browser::Node* n = m_Tree->find(moduleInstances[i].c_str());
+          Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
           if( !n )
             n = m_Tree->last();
           // add informations to the targeted module
@@ -261,9 +274,11 @@ std::cout<<"moduleInstances[i]: "<<moduleInstances[i]<<std::endl;
           n->add(it->second.GetDataType().c_str());
           n->add(it->second.GetDataDescription().c_str());
       } // end datas loop
-//     } //endif
-  } // end moduleInstances loop
+
+
+
 }
+
 
 
 
@@ -274,17 +289,23 @@ MonteverdiViewGUI
 
   std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
 
+
   // Event received : new instance of module is created 
   // -> Open a inputs Window
-  this->BuildInputsGUI(event.GetInstanceId().c_str());
+  if(event.GetType() == "InstanceCreated" ){
+    this->BuildInputsGUI(event.GetInstanceId());
+  }
 
   // event received : module has changed
-//   if(event.GetType()==
-  this->UpdateTree(event);
+  else if(event.GetType() == "OutputsUpdated" ){
+    this->UpdateTree(event.GetInstanceId());
+  }
 
   // Event received : UNKNOWN EVENT
-// Faire une exception
-
+  else
+  {
+   // itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
+  }
 }
 
 void
@@ -315,6 +336,10 @@ void
 MonteverdiViewGUI
 ::InputsGUIOk()
 {
+// Connect 
+
+// Start()
+//  m_MonteverdiModel->StartModuleByInstanceId(event.GetInstanceId());
 
   std::cout<<"Ok "  <<std::endl;
   wInputsWindow->hide();

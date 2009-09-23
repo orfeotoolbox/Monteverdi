@@ -55,10 +55,17 @@ ADD_EXECUTABLE(otbFeatureExtractionModuleTest otbFeatureExtractionModuleTest.cxx
 TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleTest otbFeatureExtractionModule)
 
 ADD_TEST(moTvFeatureExtractionModuleTest otbFeatureExtractionModuleTest
-${INPUTDATA}/GomaBestScale_w15_50.raw.hdr 	
+${INPUTDATA}/GomaBestScale_w15_50.raw.hdr	
 ${TEMP}/FeatureExtractionModuleOuptut.hdr
 )
 
+ADD_EXECUTABLE(otbFeatureExtractionModuleApplication otbFeatureExtractionApplication.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleApplication otbFeatureExtractionModule)
+
+ADD_TEST(moTvFeatureExtractionModuleApplication otbFeatureExtractionModuleApplication
+${INPUTDATA}/qb_RoadExtract.img
+${TEMP}/featModelTest.tif
+)
 #------------- Supervised Classification Tests ---------------------------
 
 ADD_EXECUTABLE(otbSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest.cxx)
@@ -78,3 +85,15 @@ ADD_TEST(WriterModuleTest otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
+
+ADD_EXECUTABLE(otbReaderWriterModuleTest otbReaderWriterModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbReaderWriterModuleTest otbReaderModule otbWriterModule)
+
+#------------------  Viewer Tests ---------------------------
+ADD_EXECUTABLE(otbViewerModuleTest otbViewerModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
+
+ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
+${INPUTDATA}/poupees.tif
+)
+
