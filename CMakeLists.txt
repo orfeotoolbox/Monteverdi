@@ -66,7 +66,7 @@ ${Monteverdi_BINARY_DIR}/Code/Modules/Viewer
 
 
 # Code location
-SUBDIRS(Code Prototype1 Utilities TestThreads)
+SUBDIRS(Code Prototype1 Utilities)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
