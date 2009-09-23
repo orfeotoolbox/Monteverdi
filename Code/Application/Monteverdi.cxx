@@ -49,6 +49,8 @@
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
 #include "otbOrthoRectifModule.h"
+#include "otbViewerModule.h"
+#include "otbWriterModule.h"
 //#include "otbSupervisedClassificationModule.h"
 
 int main(int argc, char* argv[]) 
@@ -75,11 +77,13 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader","File/Open data set");
+  model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
-  //model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Filtering/Supervised Classification");
+  //model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
   model->RegisterModule<otb::OrthoRectifModule>("OrthoRectif", "Geometry/Ortho Rectification");
+  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
+  model->RegisterModule<otb::ViewerModule> ("Viewer","Visualization/View image");
 
   // Launch Monteverdi
   view->InitWidgets();
