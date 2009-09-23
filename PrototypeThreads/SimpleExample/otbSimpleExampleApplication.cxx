@@ -49,6 +49,10 @@ int main(int argc, char* argv[])
  	    }
 	  //    }
 
+
+
+
+
     //   else if( stopped==true && val2Old!=val2 )
 // 	{
 // 	  if(val2<100)

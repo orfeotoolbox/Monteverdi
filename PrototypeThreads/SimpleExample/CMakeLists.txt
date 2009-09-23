@@ -1,8 +1,8 @@
 
 SET(MY_SRCS
 otbAsynchronousProcessBase.cxx
-otbAsynchronousProcess.cxx
 otbAsynchronousModel.cxx
+otbAsynchronousProcess.cxx
 )
 
 

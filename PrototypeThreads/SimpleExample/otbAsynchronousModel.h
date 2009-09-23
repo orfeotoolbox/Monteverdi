@@ -21,6 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbAsynchronousProcessBase.h"
 #include "otbAsynchronousProcess.h"
+#include "otbMagicMain.h"
 
 namespace otb
 {
@@ -34,14 +35,18 @@ class AsynchronousModel : public AsynchronousProcessBase
   AsynchronousModel();
   virtual ~AsynchronousModel();
   
+  void Register( MagicMain * myMain );
+  void LaunchProcess();
 
  protected: 
   virtual void Run(void * t);
+  void NotifyAll();
 
  private:
   //std::vector<AsynchronousProcess> m_ProcessList;
   AsynchronousProcess * m_Process1;
   AsynchronousProcess * m_Process2;
+  MagicMain           * m_MagicMain;
 };
 
 } // namespace Model
