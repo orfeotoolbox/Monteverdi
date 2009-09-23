@@ -33,8 +33,8 @@ namespace Process
 AsynchronousProcess
 ::AsynchronousProcess( std::string file ) : m_FileName(file)
 {
-  std::cout<<"AsynchronousProcess: Constructor"<<std::endl;
-  std::cout<<this<<std::endl;
+  std::cout<<"AsynchronousProcess: Constructor "<<this<<std::endl;
+  //std::cout<<this<<std::endl;
 }
 
 
@@ -42,9 +42,10 @@ void
 AsynchronousProcess
 ::Run(void *t)
 {
-  std::cout<<"RUN"<<std::endl;
-  std::cout<<"RUN"<<(AsynchronousProcess*)(t)<<std::endl;
-  AsynchronousProcess * lThis = (AsynchronousProcess*)(t);
+  struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
+  AsynchronousProcessBase* lThis = (AsynchronousProcessBase*)(pInfo->UserData);
+
+  std::cout<<"AsynchronousProcess Run : "<<lThis<<std::endl; 
   long int stop = 1e7;
   int valStat = lThis->GetProcessStatus();
   while( valStat<100 )
@@ -56,6 +57,7 @@ AsynchronousProcess
 	}
       valStat++;
       lThis->SetProcessStatus(valStat);
+      //std::cout<<lThis->GetProcessStatus()<<std::endl;
     }
 }
 

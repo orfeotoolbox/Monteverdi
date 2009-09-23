@@ -14,13 +14,10 @@ int main(int argc, char* argv[])
   proc1->SetThreader(mainThreader);
   proc2->SetThreader(mainThreader);
 
-std::cout<<"trace 1"<<std::endl;
-
   proc1->Start();
-std::cout<<"trace 1.1"<<std::endl;
   sleep(1);
   proc2->Start();
-std::cout<<"trace 2"<<std::endl;
+
   bool done = true;
   bool stopped = false;
   int val1, val2 = 0;
@@ -30,10 +27,10 @@ std::cout<<"trace 2"<<std::endl;
     {
       val1 = proc1->GetProcessStatus();
       val2 = proc2->GetProcessStatus();
-      
+      //std::cout<<"Processor 1: "<< val1 <<"/100,  Processor 2: "<< val2 <<"/100"<<std::endl;
       if( val1Old!=val1 || val2Old!=val2 )
  	{
-	  std::cout<<"Processor 1: "<< val1 <<"/100,  Processor 2: "<< val2 <<"/100"<<std::endl;
+	  std::cout<<"************Processor 1: "<< val1 <<"/100,  Processor 2: "<< val2 <<"/100"<<std::endl;
 	}
 
 //       if( val1Old!=val1 || val2Old!=val2 )
@@ -45,12 +42,12 @@ std::cout<<"trace 2"<<std::endl;
 // 	  else if( val1<100 && val2==100)
 // 	    std::cout<<"Processor 1: "<< val1 <<"/100,  Processor 2: FINISHED"<<std::endl;
 	  
-// 	  if( val1 == 100 && val2 == 100 )
-// 	    {
-// 	      std::cout<<"Processor 1: FINISHED,  Processor 2: FINISHED"<<std::endl;
-// 	      done = false;
-// 	    }
-// 	}
+ 	  if( val1 == 100 && val2 == 100 )
+ 	    {
+ 	      std::cout<<"Processor 1: FINISHED,  Processor 2: FINISHED"<<std::endl;
+ 	      done = false;
+ 	    }
+	  //    }
 
     //   else if( stopped==true && val2Old!=val2 )
 // 	{

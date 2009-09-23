@@ -59,11 +59,10 @@ class AsynchronousProcessBase
   
   static ITK_THREAD_RETURN_TYPE Run_static(void * t)
     {
-      std::cout<<"Run_static"<<std::endl;
-      AsynchronousProcessBase* lThis = (AsynchronousProcessBase*)(t);
-      std::cout<<lThis<<std::endl;
+      struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
+      AsynchronousProcessBase* lThis = (AsynchronousProcessBase*)(pInfo->UserData);
+      std::cout<<"Run static : "<<lThis<<std::endl;
       lThis->Run(t);
-      std::cout<<"Run_static OUT"<<std::endl;
       return 0;
     }
   

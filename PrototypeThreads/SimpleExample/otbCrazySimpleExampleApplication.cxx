@@ -9,8 +9,10 @@ int main(int argc, char* argv[])
   ProcessorType * model = new ProcessorType();
 
   model->Start();
-  model->Wait();
-
+ 
+  while(1)
+    {
+    }
   delete model;
 
   return EXIT_SUCCESS;

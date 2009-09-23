@@ -56,7 +56,6 @@ void
 AsynchronousProcessBase
 ::Stop()
 {
-  
   std::cout<<"Stop called "<<std::endl;
   m_Threader->TerminateThread( m_ThreadId );
   /*
@@ -73,8 +72,8 @@ void
 AsynchronousProcessBase
 ::Wait()
 {
-  std::cout<<"Wait called "<<std::endl;
-  /*
+  std::cout<<"Wait called but not implemented yet"<<std::endl;
+  /*  
   int res = pthread_join( m_ThreadId, NULL );
   if(res!=0)
     {

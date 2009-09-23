@@ -34,17 +34,17 @@ namespace Process
 AsynchronousModel
 ::AsynchronousModel()// : m_Process1(NULL), m_Process2(NULL)
 {
-  std::cout<<"AsynchronousModel: Constructor"<<std::endl;
+  std::cout<<"Const. AsynchronousModel : "<< this <<std::endl; 
   m_Process1 = new AsynchronousProcess("Process 1");
   m_Process2 = new AsynchronousProcess("Process 2");
   m_Process1->SetThreader( this->GetThreader());
   m_Process2->SetThreader( this->GetThreader());
-  this->GetThreader()->SetNumberOfThreads(2);
+  this->GetThreader()->SetNumberOfThreads(3);
  
  m_Process1->Start();
-  sleep(1);
+ sleep(1);
  m_Process2->Start();
-   
+  
 }
 
 
@@ -61,6 +61,10 @@ void
 AsynchronousModel
 ::Run(void *t)
 {
+  struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
+  AsynchronousModel* lThis = (AsynchronousModel*)(pInfo->UserData);
+  std::cout<<"Run AsynchronousModel : "<<lThis<<std::endl; 
+
   std::cout<<"runnnnnnnnnnnnnnnnn"<<std::endl;
   bool done = true;
   bool stopped = false;
@@ -71,8 +75,8 @@ AsynchronousModel
 
   while(done)
     {
-      val1 = m_Process1->GetProcessStatus();
-      val2 = m_Process2->GetProcessStatus();
+      val1 = lThis->m_Process1->GetProcessStatus();
+      val2 = lThis->m_Process2->GetProcessStatus();
       
       if( val1Old!=val1 || val2Old!=val2 )
  	{
@@ -83,7 +87,7 @@ AsynchronousModel
 	{
 	  try
 	    {
-	      m_Process1->Stop();
+	      lThis->m_Process1->Stop();
 	    }
 	  catch(...)
 	    {
