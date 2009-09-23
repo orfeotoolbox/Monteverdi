@@ -109,7 +109,6 @@ class ITK_EXPORT MonteverdiModel
   /** Get available modules map */
   const ModuleDescriptorMapType & GetRegisteredModuleDescriptors() const;
 
-
    /** Get available module instances */
    const std::vector<std::string> GetAvailableModuleInstanceIds() const;
 
@@ -119,7 +118,8 @@ class ITK_EXPORT MonteverdiModel
    /** Get required inputs for a given module instance */
    const InputDataDescriptorMapType & GetModuleInputsByInstanceId(const std::string & id) const;
 
-//   void Connect(const std::string & sourceModule,const std::string& 
+  /** Add a new connection between modules */
+  void AddModuleConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey);
 
   /** Start the given module */
   void StartModuleByInstanceId(const std::string & id);
@@ -144,6 +144,9 @@ protected:
 
   /** Destructor */
   virtual ~MonteverdiModel();
+
+  /** Get the pointer to the module by an instanceId */
+  Module * GetModuleByInstanceId(const std::string & instanceId) const;
 
  private:
   MonteverdiModel(const Self&); //purposely not implemented
