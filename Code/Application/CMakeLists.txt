@@ -16,6 +16,7 @@ otbMonteverdiController.cxx
 
 SET(VIEW_FL_SRCS
 otbMonteverdiViewGroup.fl
+otbInputViewGroup.fl
 )
 
 

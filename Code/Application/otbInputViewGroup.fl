@@ -1,0 +1,41 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class InputViewGroup {open
+} {
+  Function {~InputViewGroup()} {open return_type virtual
+  } {}
+  Function {InputViewGroup()} {open
+  } {
+    Fl_Window wInputWindow {
+      label {Set Inputs} open
+      xywh {516 24 570 360} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Scroll gScrollInput {open selected
+        xywh {0 0 570 285}
+      } {}
+      Fl_Group gOkCancelGroup {open
+        xywh {0 290 570 70}
+      } {
+        Fl_Return_Button bOk {
+          label Ok
+          callback {this->Ok();}
+          xywh {340 317 140 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button bCancel {
+          label Cancel
+          callback {this->Cancel();}
+          xywh {83 317 140 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        }
+      }
+    }
+  }
+  Function {Ok()} {return_type {virtual void}
+  } {}
+  Function {Cancel()} {return_type {virtual void}
+  } {}
+} 
