@@ -58,9 +58,9 @@ public:
 
 protected:
   /** Constructor */
-  MonteverdiController();
+  MonteverdiController(){};
   /** Destructor */
-  virtual ~MonteverdiController();
+  virtual ~MonteverdiController(){};
 
 private:
   MonteverdiController(const Self&); //purposely not implemented

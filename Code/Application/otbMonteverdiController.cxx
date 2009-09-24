@@ -22,17 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-MonteverdiController
-::MonteverdiController()
-{
-
-}
-
-MonteverdiController
-::~MonteverdiController()
-{}
-
-
+/** Create a new instance of module using a module key */
 void
 MonteverdiController
 ::CreateModuleByKey(const char * modulekey)
@@ -43,7 +33,7 @@ MonteverdiController
   }
   catch (itk::ExceptionObject & err)
   {
-  //  MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -58,11 +48,16 @@ MonteverdiController
   }
   catch (itk::ExceptionObject & err)
   {
-  //  MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
-
+/** Create a connection between two modules using :
+  *   -ModuleId source
+  *   -OutputDataKey of the module source
+  *   -ModuleId destination
+  *   -InputDataKey of the module destination
+  */
 void
 MonteverdiController
 ::AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey)
@@ -73,7 +68,7 @@ MonteverdiController
     }
   catch (itk::ExceptionObject & err)
     {
-    //  MsgReporter::GetInstance()->SendError(err.GetDescription());
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 
