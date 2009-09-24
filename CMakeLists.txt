@@ -2,6 +2,29 @@ PROJECT(Monteverdi)
 
 cmake_minimum_required(VERSION 2.6)
 
+IF(COMMAND CMAKE_POLICY)
+  CMAKE_POLICY(SET CMP0003 NEW)
+ENDIF(COMMAND CMAKE_POLICY)
+
+# OTB option to access large file (> 4Go).
+ADD_DEFINITIONS(
+        -D_LARGEFILE_SOURCE
+        -D_FILE_OFFSET_BITS=64
+        -D_LARGEFILE64_SOURCE
+        -D_LARGE_FILES
+        )
+
+#Prevents conflicts with visual min/max function
+#Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
+IF(WIN32)
+ADD_DEFINITIONS(-DNOMINMAX -DOSSIM_STATIC)
+ENDIF(WIN32)
+
+# ensure WIN32 definition
+IF(WIN32)
+  ADD_DEFINITIONS(-DWIN32)
+ENDIF(WIN32)
+
 # Link to the Orfeo ToolBox
 FIND_PACKAGE(OTB)
 IF(OTB_FOUND)
@@ -10,13 +33,6 @@ ELSE(OTB_FOUND)
   MESSAGE(FATAL_ERROR
           "OTB not found. Please set OTB_DIR")
 ENDIF(OTB_FOUND)
-
-
-
-# ensure WIN32 definition
-IF(WIN32)
-  ADD_DEFINITIONS(-DWIN32)
-ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
