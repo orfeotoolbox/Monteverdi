@@ -65,6 +65,8 @@ FeatureExtractionModel::FeatureExtractionModel()
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
   m_iL2VI = ImageListToVectorImageFilterType::New();
+
+  m_HasChanged = true;
 }
 
 

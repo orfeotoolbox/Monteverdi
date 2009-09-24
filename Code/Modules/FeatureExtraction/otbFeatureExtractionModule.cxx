@@ -34,6 +34,9 @@ FeatureExtractionModule::FeatureExtractionModule()
 
   // Describe inputs
   this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply feature extraction.");
+
+  // the FeatureExtractionModel registers its module
+  m_Model->RegisterListener(this);
 }
 
 /** Destructor */
@@ -83,6 +86,16 @@ void FeatureExtractionModule::Run()
   
   //Output descriptor
   this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Feature image extraction.");
+}
+
+/** The Notify */
+void FeatureExtractionModule::Notify()
+{
+  if (m_Model->GetHasChanged())
+  {
+    // Send an event to Monteverdi application
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  }
 }
 
 } // End namespace otb

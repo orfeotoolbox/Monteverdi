@@ -389,6 +389,11 @@ public:
   itkSetMacro(OutputFileName, std:: string);
   itkGetMacro(OutputFileName, std:: string);
 
+  /** Need to Notify Monteverdi : output has changed */
+  itkSetMacro(HasChanged, bool);
+  itkGetMacro(HasChanged, bool);
+
+
   /** Input filename */
   itkSetMacro(InputFileName, std:: string);
   itkGetMacro(InputFileName, std:: string);
@@ -533,6 +538,8 @@ private:
   SingleImagePointerType m_image;
   ImageListType::Pointer m_imageList;
   ImageListToVectorImageFilterType::Pointer m_iL2VI;
+
+  bool m_HasChanged;
 };
 
 }
