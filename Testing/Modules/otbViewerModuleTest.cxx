@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
   
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
-  Fl::run();
+  Fl::check();
 
   return 0;
 
