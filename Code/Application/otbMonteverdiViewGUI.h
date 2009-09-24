@@ -127,9 +127,6 @@ protected:
   typedef std::pair<Self *,std::string> CallbackParameterType;
 
 
-
-
-
 private:
 
   MonteverdiViewGUI(const Self&); //purposely not implemented
