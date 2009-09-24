@@ -62,9 +62,6 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     // Notify the view that a new module needs inputs
     this->NotifyAll(MonteverdiEvent("InstanceCreated",oss.str()));
 
-    // Temporary
-    this->StartModuleByInstanceId(oss.str());
-
     // Update instances count
     m_InstancesCountMap[key]++;
     }

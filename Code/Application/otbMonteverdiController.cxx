@@ -47,11 +47,34 @@ MonteverdiController
   }
 }
 
+/** Start module by instance id */
+void 
+MonteverdiController
+::StartModuleByInstanceId(const std::string& id)
+{
+  try
+  {
+  m_Model->StartModuleByInstanceId(id);
+  }
+  catch (itk::ExceptionObject & err)
+  {
+  //  MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
+
 void
 MonteverdiController
 ::AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey)
 {
-  m_Model->AddModuleConnection(src,outKey,dest,inKey);
+  try
+    {
+    m_Model->AddModuleConnection(src,outKey,dest,inKey);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    //  MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
 }
 
 } // end namespace otb

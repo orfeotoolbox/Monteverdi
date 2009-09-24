@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectif_h
-#define __otbOrthoRectif_h
+#ifndef __otbOrthorectification_h
+#define __otbOrthorectification_h
 
 #include "otbOrthoEnum.h"
 // Disabling deprecation warning
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-#include "otbOrthoRectifGUI.h"
+#include "otbOrthorectificationGUI.h"
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -41,18 +41,18 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class OrthoRectif
+/** \class Orthorectification
  *  \brief
  *
  * \ingroup
  * \ingroup
  */
-class ITK_EXPORT OrthoRectif
-      : public itk::ProcessObject, public OrthoRectifGUI
+class ITK_EXPORT Orthorectification
+      : public itk::ProcessObject, public OrthorectificationGUI
 {
 public:
   /** Standard typedefs */
-  typedef OrthoRectif                   Self;
+  typedef Orthorectification                   Self;
   typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -61,10 +61,10 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(OrthoRectif,ProcessObject);
+  itkTypeMacro(Orthorectification,ProcessObject);
 
   /** Template parameters typedefs */
-  typedef short                                     PixelType;
+  typedef double                                    PixelType;
   typedef VectorImage<PixelType,2>                  ImageType;
   typedef ImageType::Pointer                        ImagePointerType;
   typedef ImageType::SizeType                       SizeType;
@@ -74,7 +74,7 @@ public:
 
   
   // Mono Channel Image Type
-  typedef Image<short,2>                            SingleImageType;
+  typedef Image<double,2>                           SingleImageType;
 
   typedef std::vector<std::string>                  StringVectorType;
   typedef std::vector<int>                          IntVectorType;
@@ -100,8 +100,8 @@ public:
   typedef InverseSensorType::OutputPointType        InverseSensorOutputPointType;
 
   /** OrthoRectification Filter */
-  //typedef OrthoRectificationFilter<SingleImageType, SingleImageType, >   OrthoRectifFilterType;
-  //typedef PerBandVectorImageFilter<ImageType, ImageType, OrthoRectifFilterType> PerBandFilterType;
+  //typedef OrthoRectificationFilter<SingleImageType, SingleImageType, >   OrthorectificationFilterType;
+  //typedef PerBandVectorImageFilter<ImageType, ImageType, OrthorectificationFilterType> PerBandFilterType;
 
   /** Interpolator definition*/
   typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;
@@ -205,16 +205,16 @@ protected:
   itkGetMacro(OutputSpacing, SpacingType);
 
   /** Constructor */
-  OrthoRectif();
+  Orthorectification();
   /** Destructor */
-  virtual ~OrthoRectif()
+  virtual ~Orthorectification()
   {
   };
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  OrthoRectif(const Self&); //purposely not implemented
+  Orthorectification(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   SizeType                 m_MainWindowInitSize;
@@ -234,7 +234,7 @@ private:
   double                   m_MaxTileSize;
   
   //Filter Instanciation
-  //OrthoRectifFilterType::Pointer m_OrthoRectifFilter;
+  //OrthorectificationFilterType::Pointer m_OrthorectificationFilter;
   //PerBandFilterType::Pointer     m_PerBandFilter;
 
   //Input & Outputs Images 

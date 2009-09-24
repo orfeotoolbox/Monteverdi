@@ -41,12 +41,12 @@ ${TEMP}/readerModuleOuptut.tif
 
 #------------- Ortho Rectification Tests ---------------------------
 
-ADD_EXECUTABLE(otbOrthoRectifModuleTest otbOrthoRectifModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbOrthoRectifModuleTest otbOrthoRectifModule)
+ADD_EXECUTABLE(otbOrthorectificationModuleTest otbOrthorectificationModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbOrthorectificationModuleTest otbOrthorectificationModule)
 
-ADD_TEST(moTvOrthoRectifModuleTest otbOrthoRectifModuleTest
+ADD_TEST(moTvOrthorectificationModuleTest otbOrthorectificationModuleTest
 ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
-${TEMP}/OrthoRectifModuleOuptut.tif
+${TEMP}/OrthorectificationModuleOuptut.tif
 )
 
 #------------- Feature Extraction Tests ---------------------------

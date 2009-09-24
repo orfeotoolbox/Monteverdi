@@ -94,6 +94,11 @@ protected:
         std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
        return m_ChoiceVector[m_FlChoice->value()];
     }
+    
+    bool HasSelected() const
+    {
+      return m_FlChoice->value()>=0;
+    }
   };
 
   typedef std::map<std::string,InputChoiceDescriptor> InputChoiceDescriptorMapType;

@@ -94,12 +94,15 @@ InputViewGUI
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin();
   mIt!=m_InputChoiceMap.end();++mIt)
   {
-  StringPairType spair = mIt->second.GetSelected();
-  m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+  if(mIt->second.HasSelected())
+    {
+    StringPairType spair = mIt->second.GetSelected();
+    m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+    }
   }
   // Start()
   std::cout<< "Start" <<std::endl;
-  m_Model->StartModuleByInstanceId(m_ModuleInstanceId);
+  m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
   wInputWindow->hide();
 
 

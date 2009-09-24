@@ -2,11 +2,11 @@ This is the help file for the ortho-rectification applications.
 
 There are 2 ortho-rectification applications in the OTB-Applications
 package. The first one is a command line program which is called
-otbOrthoRectif. If you launch it without parameters you will get the
+otbOrthorectification. If you launch it without parameters you will get the
 following help message:
 
 
- Usage : otbOrthoRectif
+ Usage : otbOrthorectification
       [--help|-h]                     :  Help
       [--version|-v]                  :  Version
        --InputImage|-in               :  input image file name   (1 parameter)
@@ -28,7 +28,7 @@ distance). These coordinates are given in the cartographic projection
 selected.
 
 The second application has a graphical user interface (GUI) and is
-called otbOrthoRectifAppli. Yes, we know, the names are not fancy, but
+called otbOrthorectificationAppli. Yes, we know, the names are not fancy, but
 the applications are!
 
 When you launch the application you will get a beautiful GUI. The

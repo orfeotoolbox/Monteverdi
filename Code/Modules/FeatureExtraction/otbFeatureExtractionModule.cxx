@@ -33,7 +33,7 @@ FeatureExtractionModule::FeatureExtractionModule()
   m_View->SetFeatureExtractionController(m_Controller);
 
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_Image","InputImage","Image to apply feature extraction.");
+  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply feature extraction.");
 }
 
 /** Destructor */
@@ -79,7 +79,7 @@ const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::
 void FeatureExtractionModule::Run()
 {
   m_View->Show();
-  this->AddOutputDescriptor("Floating_Point_Image","OutputImage","Feature image extraction.");
+  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Feature image extraction.");
 }
 
 } // End namespace otb

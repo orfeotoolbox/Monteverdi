@@ -15,28 +15,28 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectifModule_cxx
-#define __otbOrthoRectifModule_cxx
+#ifndef __otbOrthorectificationModule_cxx
+#define __otbOrthorectificationModule_cxx
 
-#include "otbOrthoRectifModule.h"
+#include "otbOrthorectificationModule.h"
 
 namespace otb
 {
 /** Constructor */
-OrthoRectifModule::OrthoRectifModule()
+OrthorectificationModule::OrthorectificationModule()
 {
-  m_OrthoRectif = OrthoRectif::New();
+  m_Orthorectification = Orthorectification::New();
 
   // Describe inputs
-  this->AddInputDescriptor("Short_Point_VectorImage","InputImage","Image to apply OrthoRectification on.");
+  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply OrthoRectification on.");
 }
 
 /** Destructor */
-OrthoRectifModule::~OrthoRectifModule()
+OrthorectificationModule::~OrthorectificationModule()
 {}
 
 /** PrintSelf method */
-void OrthoRectifModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void OrthorectificationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
@@ -45,35 +45,35 @@ void OrthoRectifModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Assign input by key. This method must be reimplemented in subclasses.
  *  When this method is called, key checking and data type matching
  *  is already done. */
-void OrthoRectifModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
+void OrthorectificationModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
-  typedef OrthoRectif::ImageType InputImageType;
+  typedef Orthorectification::ImageType InputImageType;
 
   if(key == "InputImage")
     {
     InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
-    m_OrthoRectif->SetInputImage(image);
+    m_Orthorectification->SetInputImage(image);
     }
 }
 
   /** Retrieve output by key  This method must be reimplemented in subclasses.
    *  When this method is called, key checking and data type matching
    *  is already done. */
-const DataObjectWrapper OrthoRectifModule::RetrieveOutputByKey(const std::string & key) const
+const DataObjectWrapper OrthorectificationModule::RetrieveOutputByKey(const std::string & key) const
 {
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-    wrapper.Set("Short_Point_VectorImage",m_OrthoRectif->GetOutput());
+    wrapper.Set("Short_Point_VectorImage",m_Orthorectification->GetOutput());
     }
   return wrapper;
 }
 
 /** The custom run command */
-void OrthoRectifModule::Run()
+void OrthorectificationModule::Run()
 {
-  m_OrthoRectif->Show();
-  this->AddOutputDescriptor("Short_Point_VectorImage","OutputImage","OrthoRectified image.");
+  m_Orthorectification->Show();
+  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Orthorectificationied image.");
 }
 
 } // End namespace otb
