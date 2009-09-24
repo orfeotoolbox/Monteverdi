@@ -18,13 +18,13 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {378 227 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {444 123 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
-          label Action open
+          label Action open selected
           xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice guiFeatureChoice {
@@ -490,7 +490,7 @@ SetFeatureType(otb::ORIGINAL);}
             }
           }
           Fl_Wizard guiParameter {
-            label {Feature parameters} open
+            label {Feature Parameters} open
             xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
             Fl_Group guiNothing {
@@ -1079,7 +1079,7 @@ SetFeatureType(otb::ORIGINAL);}
       }
       Fl_Button guiOK {
         label {Save/Quit}
-        callback {OK();} selected
+        callback {OK();}
         tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiClose {
@@ -1092,7 +1092,7 @@ SetFeatureType(otb::ORIGINAL);}
         callback {Quit();}
         tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 120 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Group guiImageGroup {
+      Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
       } {
         Fl_Group gScroll {
@@ -1100,7 +1100,7 @@ SetFeatureType(otb::ORIGINAL);}
           xywh {10 43 209 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFull {
-          label {Full resolution} open
+          label {Full Resolution} open
           xywh {229 43 210 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFeature {

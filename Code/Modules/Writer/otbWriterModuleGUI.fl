@@ -1,16 +1,16 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class WriterModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Save dataset} open selected
+      label {Save Dataset} open selected
       xywh {608 195 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
@@ -39,4 +39,4 @@ class WriterModuleGUI {open
   } {}
   Function {Cancel()} {open protected return_type {virtual void}
   } {}
-}
+} 
