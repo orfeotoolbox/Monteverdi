@@ -81,8 +81,12 @@ void FeatureExtractionModule::Run()
   m_View->Show();
   m_Model->GenerateLayers();
   
+  std::cout << "end of Feature GUI"<< std::endl;
   //Output descriptor
   this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Feature image extraction.");
+  
+  // Notify all listener
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 }
 
 } // End namespace otb
