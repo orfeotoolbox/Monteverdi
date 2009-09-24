@@ -30,8 +30,6 @@ PURPOSE.  See the above copyright notices for more information.
 
 //#include "otbMsgReporter.h"
 
-
-
 namespace otb
 {
 
@@ -49,16 +47,17 @@ MonteverdiViewGUI
   this->Build();
 }
 
-
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
 {
   // delete the param list built into BuildMenus
-//   while(m_vector_param.size()!=0)
-//     delete m_vector_param.pop_back();
+  CallbackParameterVectorType::iterator it = m_CallbackParametersVector.begin();
+  while(it!=m_CallbackParametersVector.end())
+     {
+     delete (*it);
+     ++it;
+     }
 }
-
-
 
 void
 MonteverdiViewGUI
@@ -90,13 +89,12 @@ MonteverdiViewGUI
 
     /** CallbackParameterType is needed to pass two parameters to our callback method.
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
-      * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end !
+      * Futhermore,  m_CallbackParametersVector is need to save the adresses of these parameters to be able to delete them in the end !
       */
     CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
-    m_vector_param.push_back( param );
+    m_CallbackParametersVector.push_back( param );
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
     }
-
 
   // In the end
   mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
@@ -166,11 +164,6 @@ MonteverdiViewGUI
 
 }
 
-
-
-
-
-
 /** GenericCallback (static)
   *
   * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus),
@@ -204,16 +197,12 @@ void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v)
   lThis->Help();
 }
 
-
-
 void
 MonteverdiViewGUI
 ::CreateModuleByKey(const char * modulekey)
 {
   m_MonteverdiController->CreateModuleByKey(modulekey);
 }
-
-
 
 /** The tree is updated when a notifaction is received with the Event type "Output" */
 void
@@ -244,11 +233,7 @@ MonteverdiViewGUI
     n->add(it->second.GetDataType().c_str());
     n->add(it->second.GetDataDescription().c_str());
     } // end datas loop
-
 }
-
-
-
 
 void
 MonteverdiViewGUI
@@ -260,19 +245,20 @@ MonteverdiViewGUI
 
   // Event received : new instance of module is created
   // -> Open a inputs Window
-  if(event.GetType() == "InstanceCreated" ){
-  this->BuildInputsGUI(event.GetInstanceId());
-  }
+  if(event.GetType() == "InstanceCreated" )
+    {
+    this->BuildInputsGUI(event.GetInstanceId());
+    }
 
   // event received : module has changed
-  else if(event.GetType() == "OutputsUpdated" ){
-  this->UpdateTree(event.GetInstanceId());
-  }
-
+  else if(event.GetType() == "OutputsUpdated" )
+    {
+    this->UpdateTree(event.GetInstanceId());
+    }
   // Event received : UNKNOWN EVENT
   else
     {
-    // itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
+    itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
     }
 }
 
