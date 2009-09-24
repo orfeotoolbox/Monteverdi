@@ -1,1 +1,1 @@
-SUBDIRS(FLU src)
+SUBDIRS(src)
