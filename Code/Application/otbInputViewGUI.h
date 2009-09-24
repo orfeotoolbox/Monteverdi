@@ -32,7 +32,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkObject.h"
 //#include <FL/Fl_File_Chooser.H>
-#include <FL/Fl_Input_Choice.H>
+#include <FL/Fl_Choice.H>
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
 
@@ -61,6 +61,8 @@ public:
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
+  typedef std::pair<std::string,std::string>              StringPairType;
+  
 
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
@@ -81,12 +83,28 @@ protected:
   /** Destructor */
   virtual ~InputViewGUI(){};
 
+  class InputChoiceDescriptor
+  {
+  public:
+    Fl_Choice *                   m_FlChoice;
+    std::vector<StringPairType>   m_ChoiceVector;
+
+    StringPairType GetSelected() const
+    {
+        std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
+       return m_ChoiceVector[m_FlChoice->value()];
+    }
+  };
+
+  typedef std::map<std::string,InputChoiceDescriptor> InputChoiceDescriptorMapType;
+
   /** Callbacks */
   void Ok();
   void Cancel();
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;
   std::string                             m_ModuleInstanceId;
+  InputChoiceDescriptorMapType            m_InputChoiceMap;
 };
 }//end namespace otb
 

@@ -85,6 +85,7 @@ void ReaderModule::OpenDataSet()
     {
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
+    std::cout<<"Vector image reader: "<<m_FPVReader->GetOutput()<<std::endl;
     // If we are still here, this is a readable image
     typeFound = true;
     // Get the filename from the filepath

@@ -58,7 +58,7 @@ void ViewerModule::AssignInputByKey(const std::string & key, const DataObjectWra
 
   if(key == "InputImage")
     {
-    InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
+    InputImageType::Pointer image = dynamic_cast<InputImageType *>(data.GetDataObject());
     m_StandardViewer->SetImage(image);
     }
 }
@@ -68,6 +68,8 @@ void ViewerModule::AssignInputByKey(const std::string & key, const DataObjectWra
 void ViewerModule::Run()
 {
   m_StandardViewer->Update();
+ typedef ViewerModule::ImageType InputImageType;
+  std::cout<<"Image recieved in the viewer module: "<<(InputImageType::Pointer)m_StandardViewer->GetImage()<<std::endl;
 }
 
 } // End namespace otb

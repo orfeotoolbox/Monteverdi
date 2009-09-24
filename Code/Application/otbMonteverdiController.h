@@ -48,6 +48,11 @@ public:
   /** user actions */
   virtual void CreateModuleByKey(const char * modulekey);
 
+  /** Add a module connection */
+  virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey);
+
+
+
 protected:
   /** Constructor */
   MonteverdiController();

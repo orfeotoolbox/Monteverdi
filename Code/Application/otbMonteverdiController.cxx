@@ -46,5 +46,13 @@ MonteverdiController
   //  MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
+
+void
+MonteverdiController
+::AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey)
+{
+  m_Model->AddModuleConnection(src,outKey,dest,inKey);
+}
+
 } // end namespace otb
 

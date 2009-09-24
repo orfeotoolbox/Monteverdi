@@ -48,12 +48,13 @@ InputViewGUI
      // loop on the requiered input data of the module : m_ModuleInstanceId
      for (it_in = lInputDataMap.begin();it_in != lInputDataMap.end();it_in++)
       {
-
-
-        Fl_Input_Choice *inputChoice;
+        Fl_Choice *inputChoice;
 
         // create Input Widgets considering the needed inputs 
-        inputChoice = new Fl_Input_Choice( 200,30+cpt* height, 250, 25, it_in->second.GetDataDescription().c_str() );
+        inputChoice = new Fl_Choice( 200,30+cpt* height, 250, 25, it_in->second.GetDataDescription().c_str() );
+
+        InputChoiceDescriptor inputChoiceDesc;
+        inputChoiceDesc.m_FlChoice = inputChoice;
 
         /// TODO : center the widget...
         //        inputChoice->resizable(gScrollInput);
@@ -71,10 +72,11 @@ InputViewGUI
             if(it_in->second.GetDataType() == it_out->second.GetDataType())
             {
               inputChoice->add(it_out->second.GetDataDescription().c_str());
+              inputChoiceDesc.m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
             }
           }
         }
-
+        m_InputChoiceMap[it_in->first] = inputChoiceDesc;
         gScrollInput->add(inputChoice);
         cpt++;
       }
@@ -87,13 +89,19 @@ void
 InputViewGUI
 ::Ok()
 {
-
-// Connect 
-
-// Start()
-  //m_Model->StartModuleByInstanceId(event.GetInstanceId());
-  //wInputWindow->hide();
   std::cout<< "Ok" <<std::endl;
+  // Connect 
+  for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin();
+  mIt!=m_InputChoiceMap.end();++mIt)
+  {
+  StringPairType spair = mIt->second.GetSelected();
+  m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+  }
+  // Start()
+  std::cout<< "Start" <<std::endl;
+  m_Model->StartModuleByInstanceId(m_ModuleInstanceId);
+  wInputWindow->hide();
+
 
 }
 
@@ -101,7 +109,7 @@ void
 InputViewGUI
 ::Cancel()
 {
- // wInputWindow->hide();
+  wInputWindow->hide();
 }
 
 void 
