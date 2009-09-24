@@ -1,9 +1,12 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0009 
-header_name {.H} 
-code_name {.cxx} 
-gridx 5 
-gridy 5 
+version 1.0009
+i18n_type 1
+i18n_include "otbI18n.h"
+i18n_function otbGetTextMacro
+header_name {.H}
+code_name {.cxx}
+gridx 5
+gridy 5
 snap 5
 class Counter {open : {public Thread}
 } {
@@ -30,4 +33,4 @@ class Counter {open : {public Thread}
   decl {void thread();} {}
   decl {void command_cb();} {}
   decl {void quit_cb();} {}
-} 
+}
