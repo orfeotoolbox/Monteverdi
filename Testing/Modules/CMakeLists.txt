@@ -67,8 +67,8 @@ ${INPUTDATA}/qb_RoadExtract.img
 ${TEMP}/featModelTest.tif
 )
 
-ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
+# ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
+# TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
 
 #------------- Supervised Classification Tests ---------------------------
 
