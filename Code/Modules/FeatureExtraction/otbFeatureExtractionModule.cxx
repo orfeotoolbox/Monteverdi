@@ -70,7 +70,7 @@ const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-    wrapper.Set("Floating_Point_Image",m_Model->GetOutputImage());
+    wrapper.Set("Floating_Point_VectorImage",m_Model->GetOutputImage());
     }
   return wrapper;
 }
@@ -79,6 +79,9 @@ const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::
 void FeatureExtractionModule::Run()
 {
   m_View->Show();
+  m_Model->GenerateLayers();
+  
+  //Output descriptor
   this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Feature image extraction.");
 }
 

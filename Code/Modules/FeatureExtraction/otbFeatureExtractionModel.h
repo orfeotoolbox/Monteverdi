@@ -181,6 +181,10 @@ public:
 
   /** Input Image Pointer */
   void SetInputImage(InputImagePointerType image);
+  
+  /** Generate image layers */
+  void GenerateLayers();
+  
   InputImagePointerType GetInputImage()
   {
     return m_InputImage;
