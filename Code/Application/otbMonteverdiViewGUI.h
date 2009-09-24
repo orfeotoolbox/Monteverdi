@@ -52,99 +52,110 @@ class MonteverdiViewGUI
 public:
 
   /** Standard class typedefs */
-  typedef MonteverdiViewGUI             Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MonteverdiViewGUI                               Self;
+  typedef itk::Object                                     Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Standard type macros */
   itkNewMacro(Self);
   itkTypeMacro(MonteverdiViewGUI,itk::Object);
 
+  /** Typedefs */
   typedef MonteverdiModel                                 MonteverdiModelType;
   typedef MonteverdiControllerInterface::Pointer          MonteverdiControllerInterfacePointerType;
   typedef MonteverdiModelType::ModuleDescriptorMapType    ModuleDescriptorMapType;
   typedef MonteverdiModelType::ModuleMapType              ModuleMapType;
-
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
-
-
 
   /** Inner class to represent the content of a node */
   class NodeDescriptor
   {
     friend class MonteverdiViewGUI;
   public:
-  void SetModuleInstanceId(std::string id){ m_ModuleInstanceId = id; }
-  void SetOutputKey(std::string id){ m_OutputKey = id; }
-  const std::string GetOutputKey(){return m_OutputKey;}
-  const std::string GetModuleInstanceId(){return m_ModuleInstanceId;}
+    /** Setters */
+    void SetModuleInstanceId(std::string id){ m_ModuleInstanceId = id; }
+    void SetOutputKey(std::string id){ m_OutputKey = id; }
+  
+    /** Getters */
+    const std::string GetOutputKey(){return m_OutputKey;}
+    const std::string GetModuleInstanceId(){return m_ModuleInstanceId;}
+
   protected:
-    // key to identify the module instance
+   // key to identify the module instance
     std::string m_ModuleInstanceId;
+
     // key to identify the output
     std::string m_OutputKey;
   };
-
 
   /** Set the controller */
   itkGetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
   itkSetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
 
-
-  /** Event from the model */
+  /** Process event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-
-  void UpdateTree(const std::string & instanceId);
+  
+  /** Show the main interface */
   void Show();
+
+  /** Init the widgets (could be moved in the constructor */
   void InitWidgets();
-
-
-  /** Constructor */
-  MonteverdiViewGUI();
-
+ 
 protected:
+  /** Type used to pass instances through static callbacks */
+  typedef std::pair<Self *,std::string> CallbackParameterType;
+  typedef std::vector<CallbackParameterType *> CallbackParameterVectorType;
+
+   /** Constructor */
+  MonteverdiViewGUI();
 
   /** Destructor */
   virtual ~MonteverdiViewGUI();
 
+  /** Generate the menu according to registered modules */
   void BuildMenus();
+
+  /** First build of the data tree */
   void BuildTree();
+
+  /** Update the tree information regarding the given instanceId */
+  void UpdateTree(const std::string & instanceId);
+
+  /** Generate the gui to choose inputs for a module */
   void BuildInputsGUI(const std::string & modulekey);
+  
+  /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
+  
+  /** Exit the application */
   void Quit();
+
+  /** Show the help */
   void Help();
 
-
-  /** Callbacks */
+  /** Static callbacks */
   static void GenericCallback(Fl_Menu_* w, void* v);
   static void HelpCallback(Fl_Menu_ *, void*);
   static void QuitCallback(Fl_Menu_ *, void*);
 
-
-
-  typedef std::pair<Self *,std::string> CallbackParameterType;
-
-
-
-
-
 private:
-
   MonteverdiViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
 
   /** Pointer to the model */
   MonteverdiModel::Pointer m_MonteverdiModel;
   /** Pointer to the controller */
   MonteverdiControllerInterface::Pointer m_MonteverdiController;
 
-  std::vector<CallbackParameterType *> m_vector_param;
+  /** Vector of static callbacks parameters */
+  CallbackParameterVectorType m_CallbackParametersVector;
 
+  /** The Flu tree browser */
   Flu_Tree_Browser        *m_Tree;
 
+  /** The module input selection interface */
   InputViewGUI::Pointer   m_InputViewGUI;
 
 };
