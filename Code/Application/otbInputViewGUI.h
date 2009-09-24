@@ -55,7 +55,7 @@ public:
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(MonteverdiViewGUI,itk::Object);
+  itkTypeMacro(InputViewGUI,itk::Object);
 
 
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
@@ -75,17 +75,15 @@ public:
   void BuildInputInterface();
 
 
-
-  /** Callbacks */
-  virtual void Ok();
-  virtual void Cancel();
-
 protected:
   /** Constructor */
   InputViewGUI(){};
   /** Destructor */
   virtual ~InputViewGUI(){};
 
+  /** Callbacks */
+  void Ok();
+  void Cancel();
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;
   std::string                             m_ModuleInstanceId;
