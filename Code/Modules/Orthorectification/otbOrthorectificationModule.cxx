@@ -73,7 +73,7 @@ const DataObjectWrapper OrthorectificationModule::RetrieveOutputByKey(const std:
 void OrthorectificationModule::Run()
 {
   m_Orthorectification->Show();
-  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Orthorectificationied image.");
+  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Orthorectified image.");
 }
 
 } // End namespace otb
