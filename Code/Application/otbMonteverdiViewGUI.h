@@ -36,6 +36,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
 
+#include "otbInputViewGUI.h"
 
 #include "itkObject.h"
 
@@ -143,6 +144,8 @@ private:
   std::vector<CallbackParameterType *> m_vector_param;
 
   Flu_Tree_Browser        *m_Tree;
+
+  InputViewGUI::Pointer   m_InputViewGUI;
 
 };
 }//end namespace otb

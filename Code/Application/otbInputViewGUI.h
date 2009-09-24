@@ -74,24 +74,21 @@ public:
   void Show();
   void BuildInputInterface();
 
-  /** Constructor */
-  InputViewGUI(){};
+
 
   /** Callbacks */
   virtual void Ok();
   virtual void Cancel();
 
 protected:
-
+  /** Constructor */
+  InputViewGUI(){};
   /** Destructor */
   virtual ~InputViewGUI(){};
-
-
 
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;
   std::string                             m_ModuleInstanceId;
-
 };
 }//end namespace otb
 

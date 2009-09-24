@@ -29,7 +29,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkExceptionObject.h"
 
 //#include "otbMsgReporter.h"
-#include "otbInputViewGUI.h"
 
 
 
@@ -152,14 +151,14 @@ MonteverdiViewGUI
       }
 
       if(!skip){
-        InputViewGUI::Pointer inputViewGUI = InputViewGUI::New();
+        m_InputViewGUI = InputViewGUI::New();
 
-        inputViewGUI->SetModel(m_MonteverdiModel);
-        inputViewGUI->SetController(m_MonteverdiController);
-        inputViewGUI->SetModuleInstanceId(moduleInstanceId);
+        m_InputViewGUI->SetModel(m_MonteverdiModel);
+        m_InputViewGUI->SetController(m_MonteverdiController);
+        m_InputViewGUI->SetModuleInstanceId(moduleInstanceId);
 
-        inputViewGUI->BuildInputInterface();
-        inputViewGUI->Show();
+        m_InputViewGUI->BuildInputInterface();
+        m_InputViewGUI->Show();
       }
 
 }
