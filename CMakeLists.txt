@@ -45,6 +45,7 @@ SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 # Include directories
 INCLUDE_DIRECTORIES(
 ${Monteverdi_SOURCE_DIR}/Code/Common
+${Monteverdi_BINARY_DIR}/Code/Common
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
