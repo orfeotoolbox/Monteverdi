@@ -34,6 +34,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "itkMacro.h"
 
+// VC6/7 has troubel with min/max which are still defined in macros in Windows headers
+#undef min
+#undef max
 
 namespace otb
 {
