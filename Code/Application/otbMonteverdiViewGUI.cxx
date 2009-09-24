@@ -86,7 +86,7 @@ MonteverdiViewGUI
   mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
-  {
+    {
 
     /** CallbackParameterType is needed to pass two parameters to our callback method.
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
@@ -95,7 +95,7 @@ MonteverdiViewGUI
     CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
     m_vector_param.push_back( param );
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
-  }
+    }
 
 
   // In the end
@@ -143,23 +143,26 @@ MonteverdiViewGUI
   bool skip  = false;
 
 
-      // look after all expected or optionnal input datas
-      InputDataDescriptorMapType lInputDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstanceId);
-      if(lInputDataMap.size() == 0)
-      {
-        skip =true;
-      }
-
-      if(!skip){
-        m_InputViewGUI = InputViewGUI::New();
-
-        m_InputViewGUI->SetModel(m_MonteverdiModel);
-        m_InputViewGUI->SetController(m_MonteverdiController);
-        m_InputViewGUI->SetModuleInstanceId(moduleInstanceId);
-
-        m_InputViewGUI->BuildInputInterface();
-        m_InputViewGUI->Show();
-      }
+  // look after all expected or optionnal input datas
+  InputDataDescriptorMapType lInputDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstanceId);
+  if(lInputDataMap.size() == 0)
+    {
+    skip =true;
+    }
+  
+  if(!skip)
+    {
+    m_InputViewGUI = InputViewGUI::New();   
+    m_InputViewGUI->SetModel(m_MonteverdiModel);
+    m_InputViewGUI->SetController(m_MonteverdiController);
+    m_InputViewGUI->SetModuleInstanceId(moduleInstanceId);
+    m_InputViewGUI->BuildInputInterface();
+    m_InputViewGUI->Show();
+    }
+  else
+    {
+    m_MonteverdiController->StartModuleByInstanceId(moduleInstanceId);
+    }
 
 }
 
@@ -218,29 +221,29 @@ MonteverdiViewGUI
 ::UpdateTree(const std::string & instanceId)
 {
 
-      Flu_Tree_Browser::Node* root = m_Tree->first();
+  Flu_Tree_Browser::Node* root = m_Tree->first();
 
 
-      // add a new branch for a new instance of module
-      root->add_branch(instanceId.c_str());
-      /*Flu_Tree_Browser::Node* node =*/
+  // add a new branch for a new instance of module
+  root->add_branch(instanceId.c_str());
+  /*Flu_Tree_Browser::Node* node =*/
 
-      //NodeDescriptor descr = new NodeDescriptor();
+  //NodeDescriptor descr = new NodeDescriptor();
 
-      // look after all outputdatas into each instance of module
-      OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
-      OutputDataDescriptorMapType::const_iterator it;
-      for (it = lDataMap.begin();it != lDataMap.end();it++)
-      {
-          // we look for the good node in the tree to add leaves
-          Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
-          if( !n )
-            n = m_Tree->last();
-          // add informations to the targeted module
-          n->add(it->second.GetDataKey().c_str());
-          n->add(it->second.GetDataType().c_str());
-          n->add(it->second.GetDataDescription().c_str());
-      } // end datas loop
+  // look after all outputdatas into each instance of module
+  OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
+  OutputDataDescriptorMapType::const_iterator it;
+  for (it = lDataMap.begin();it != lDataMap.end();it++)
+    {
+    // we look for the good node in the tree to add leaves
+    Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
+    if( !n )
+      n = m_Tree->last();
+    // add informations to the targeted module
+    n->add(it->second.GetDataKey().c_str());
+    n->add(it->second.GetDataType().c_str());
+    n->add(it->second.GetDataDescription().c_str());
+    } // end datas loop
 
 }
 
@@ -258,19 +261,19 @@ MonteverdiViewGUI
   // Event received : new instance of module is created
   // -> Open a inputs Window
   if(event.GetType() == "InstanceCreated" ){
-    this->BuildInputsGUI(event.GetInstanceId());
+  this->BuildInputsGUI(event.GetInstanceId());
   }
 
   // event received : module has changed
   else if(event.GetType() == "OutputsUpdated" ){
-    this->UpdateTree(event.GetInstanceId());
+  this->UpdateTree(event.GetInstanceId());
   }
 
   // Event received : UNKNOWN EVENT
   else
-  {
-   // itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
-  }
+    {
+    // itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
+    }
 }
 
 void
