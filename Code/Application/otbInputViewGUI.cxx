@@ -40,7 +40,7 @@ InputViewGUI
   // to count the number of Fl_Input_Choice to display
   unsigned int cpt =0;
   // if there are several Fl_Input_Choice to draw
-  unsigned int height = 40;
+  unsigned int height = 60;
   unsigned int i =0;
   InputDataDescriptorMapType lInputDataMap = m_Model->GetModuleInputsByInstanceId(m_ModuleInstanceId);
   InputDataDescriptorMapType::const_iterator it_in;
@@ -51,13 +51,12 @@ InputViewGUI
         Fl_Choice *inputChoice;
 
         // create Input Widgets considering the needed inputs 
-        inputChoice = new Fl_Choice( 200,30+cpt* height, 250, 25, it_in->second.GetDataDescription().c_str() );
+        inputChoice = new Fl_Choice( 85,30+cpt* height, 400, 25, it_in->second.GetDataDescription().c_str() );
+        inputChoice->align(FL_ALIGN_TOP);
 
         InputChoiceDescriptor inputChoiceDesc;
         inputChoiceDesc.m_FlChoice = inputChoice;
 
-        /// TODO : center the widget...
-        //        inputChoice->resizable(gScrollInput);
 
         // we check if there are convenient outputs in the modules
         std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();

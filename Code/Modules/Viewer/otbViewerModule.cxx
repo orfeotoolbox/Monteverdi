@@ -34,7 +34,7 @@ ViewerModule::ViewerModule()
 
   
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image tovisualize.");
+  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to visualize :");
 }
 
 /** Destructor */

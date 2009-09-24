@@ -120,6 +120,9 @@ MonteverdiViewGUI
   m_Tree->collapse_time( 0.02 );
   m_Tree->frame_rate(500);
 
+  Flu_Tree_Browser::Node* root = m_Tree->first();
+  root->open(true);
+
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
   gTreeGroup->end();
@@ -243,6 +246,7 @@ MonteverdiViewGUI
     n->add(it->second.GetDataKey().c_str());
     n->add(it->second.GetDataType().c_str());
     n->add(it->second.GetDataDescription().c_str());
+    n->open(true);
     } // end datas loop
 
 }
