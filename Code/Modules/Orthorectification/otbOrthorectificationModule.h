@@ -15,28 +15,28 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectifModule_h
-#define __otbOrthoRectifModule_h
+#ifndef __otbOrthorectificationModule_h
+#define __otbOrthorectificationModule_h
 
 #include "otbModule.h"
 
-// OrthoRectif Application 
-#include "otbOrthoRectif.h"
+// Orthorectification Application 
+#include "otbOrthorectification.h"
 
 namespace otb
 {
-/** \class OrthoRectifModule
+/** \class OrthorectificationModule
  *  \brief 
  *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT OrthoRectifModule
+class ITK_EXPORT OrthorectificationModule
   : public Module
 {
 public:
   /** Standard class typedefs */
-  typedef OrthoRectifModule             Self;
+  typedef OrthorectificationModule             Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -45,17 +45,17 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(OrthoRectifModule,Module);
+  itkTypeMacro(OrthorectificationModule,Module);
   
 
-  /** Accessor to the OrthoRectif Instance */
-  itkGetObjectMacro(OrthoRectif,OrthoRectif);
+  /** Accessor to the Orthorectification Instance */
+  itkGetObjectMacro(Orthorectification,Orthorectification);
   
 protected:
   /** Constructor */
-  OrthoRectifModule();
+  OrthorectificationModule();
   /** Destructor */
-  virtual ~OrthoRectifModule();
+  virtual ~OrthorectificationModule();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -73,11 +73,11 @@ protected:
   virtual void Run();
 
 private:
-  OrthoRectifModule(const Self&); //purposely not implemented
+  OrthorectificationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   // The view
-  OrthoRectif::Pointer        m_OrthoRectif;
+  Orthorectification::Pointer        m_Orthorectification;
 
 };
 

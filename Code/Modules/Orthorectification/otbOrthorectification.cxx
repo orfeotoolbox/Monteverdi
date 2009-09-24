@@ -15,7 +15,7 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbOrthoRectif.h"
+#include "otbOrthorectification.h"
 
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/fl_ask.H>
@@ -58,7 +58,7 @@ namespace otb
 /**
  * Constructor
  */
-OrthoRectif::OrthoRectif()
+Orthorectification::Orthorectification()
 {
   this->CreateGUI();
   guiAvElev->value("0");
@@ -82,12 +82,12 @@ OrthoRectif::OrthoRectif()
   guiShowDEM->hide();
 
   //Instanciate Filter 
-  //m_OrthoRectifFilter = OrthoRectifFilterType::New();
+  //m_OrthorectificationFilter = OrthorectificationFilterType::New();
   //m_PerBandFilter     = PerBandFilterType::New();
 }
 
 void
-OrthoRectif
+Orthorectification
 ::Show()
 {
   guiMainWindow->show();
@@ -95,7 +95,7 @@ OrthoRectif
 }
 
 void
-OrthoRectif
+Orthorectification
 ::OpenDEM()
 {
   // Choose directory
@@ -121,7 +121,7 @@ OrthoRectif
 }
 
 void
-OrthoRectif
+Orthorectification
 ::Quit()
 {
   guiMainWindow->hide();
@@ -130,7 +130,7 @@ OrthoRectif
 
 
 void
-OrthoRectif
+Orthorectification
 ::OK()
 {
 
@@ -153,7 +153,7 @@ OrthoRectif
 
 
 void
-OrthoRectif::ComputeTileNumber()
+Orthorectification::ComputeTileNumber()
 {
   // Compute the output image bounding box IN the image repere
   GUIRectangle::VectorVectorType pointList =  guiImageExtent->GetExtentList();
@@ -226,7 +226,7 @@ OrthoRectif::ComputeTileNumber()
 
 
 void
-OrthoRectif
+Orthorectification
 ::InsightExtent()
 {
   if (this->CheckImageParameters()!=0)
@@ -285,8 +285,8 @@ OrthoRectif
 
 
 
-OrthoRectif::DoubleVectorType
-OrthoRectif::PointToLongLat(ForwardSensorInputPointType point)
+Orthorectification::DoubleVectorType
+Orthorectification::PointToLongLat(ForwardSensorInputPointType point)
 {
   ForwardSensorOutputPointType latLongPoint;
   DoubleVectorType      outVectPoint(2, 0);
@@ -306,7 +306,7 @@ OrthoRectif::PointToLongLat(ForwardSensorInputPointType point)
 
 
 void
-OrthoRectif
+Orthorectification
 ::UpdateUTMParam()
 {
   ImagePointerType image = m_InputImage;
@@ -353,7 +353,7 @@ OrthoRectif
 
 
 void
-OrthoRectif
+Orthorectification
 ::UpdateMapParam()
 {
 
@@ -433,7 +433,7 @@ OrthoRectif
 
 
 void
-OrthoRectif
+Orthorectification
 ::UpdateLongLat()
 {
   ForwardSensorInputPointType point;
@@ -453,7 +453,7 @@ OrthoRectif
 }
 
 void
-OrthoRectif
+Orthorectification
 ::UpdateOutputParameters()
 {
   ImagePointerType image = m_InputImage;
@@ -566,7 +566,7 @@ OrthoRectif
 
 
 void
-OrthoRectif::UpdateDEMSpacing()
+Orthorectification::UpdateDEMSpacing()
 {
   double cartoSpacingX = strtod( guiSpacingX->value(), NULL);
   double cartoSpacingY = strtod( guiSpacingY->value(), NULL);
@@ -589,7 +589,7 @@ OrthoRectif::UpdateDEMSpacing()
 }
 
 int
-OrthoRectif::CheckImageParameters()
+Orthorectification::CheckImageParameters()
 {
 
   try
@@ -642,7 +642,7 @@ OrthoRectif::CheckImageParameters()
 
 
 int
-OrthoRectif
+Orthorectification
 ::CheckMapParameters()
 {
   int res = 0;
@@ -714,7 +714,7 @@ OrthoRectif
 
 
 int
-OrthoRectif
+Orthorectification
 ::UpdateInterpolator()
 {
   int res = 0;
@@ -827,7 +827,7 @@ OrthoRectif
 
 template <class TMapProjection>
 int
-OrthoRectif
+Orthorectification
 ::CreateOutput(TMapProjection* mapProj)
 {
   int res = 0;
@@ -857,17 +857,17 @@ OrthoRectif
 
 template<class TInputImage, class TOutputImage, class TInputVectorImage, class TOutputVectorImage, class TMapProjection>
 int
-OrthoRectif::GenericCreateOutput( TMapProjection *mapProj)
+Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
 {
   ImagePointerType image = m_InputImage;
 
-  typedef OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection> OrthoRectifFilterType ;
-  typename OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
+  typedef OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection> OrthorectificationFilterType ;
+  typename OrthorectificationFilterType::Pointer orthoRectifFilter = OrthorectificationFilterType::New();
   IndexType start;
   start[0] = 0;
   start[1] = 0;
-  typename OrthoRectifFilterType::OriginPointType         origin;
-  typedef typename OrthoRectifFilterType::OriginPointType OriginPointType;
+  typename OrthorectificationFilterType::OriginPointType         origin;
+  typedef typename OrthorectificationFilterType::OriginPointType OriginPointType;
   origin = static_cast<OriginPointType>(m_OutputOrigin);
 
   orthoRectifFilter->SetOutputStartIndex(start);
@@ -894,7 +894,7 @@ OrthoRectif::GenericCreateOutput( TMapProjection *mapProj)
     }
   }
 
-  typedef PerBandVectorImageFilter<TInputVectorImage, TOutputVectorImage, OrthoRectifFilterType> PerBandFilterType;
+  typedef PerBandVectorImageFilter<TInputVectorImage, TOutputVectorImage, OrthorectificationFilterType> PerBandFilterType;
   typename PerBandFilterType::Pointer perBandFilter = PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(image);
@@ -907,7 +907,7 @@ OrthoRectif::GenericCreateOutput( TMapProjection *mapProj)
 
 
 void
-OrthoRectif::SelectAction()
+Orthorectification::SelectAction()
 {
   bool outputDone = false;
   bool containsKeywordlist = true;
@@ -980,7 +980,7 @@ OrthoRectif::SelectAction()
 
 
 void
-OrthoRectif
+Orthorectification
 ::UpdateEastNorth()
 {
   switch (this->GetMapType())
@@ -1011,7 +1011,7 @@ OrthoRectif
 
 
 void
-OrthoRectif::SetMapType(MapType map)
+Orthorectification::SetMapType(MapType map)
 {
   m_MapType = map;
   this->SelectAction();
@@ -1020,14 +1020,14 @@ OrthoRectif::SetMapType(MapType map)
 
 
 MapType
-OrthoRectif::GetMapType()
+Orthorectification::GetMapType()
 {
   return m_MapType;
 }
 
 
 void
-OrthoRectif::SetInterpolatorType(InterpolatorType interp)
+Orthorectification::SetInterpolatorType(InterpolatorType interp)
 {
   m_InterpType = interp;
   this->UpdateInterpolator();
@@ -1036,20 +1036,20 @@ OrthoRectif::SetInterpolatorType(InterpolatorType interp)
 
 
 InterpolatorType
-OrthoRectif::GetInterpolatorType()
+Orthorectification::GetInterpolatorType()
 {
   return m_InterpType;
 }
 
 void
-OrthoRectif::SetMaxTileSize()
+Orthorectification::SetMaxTileSize()
 {
   m_MaxTileSize = guiTileSize->value();
 }
 
 
 void
-OrthoRectif
+Orthorectification
 ::GenerateImageExtent()
 {
   guiImageExtent->ClearPointList();
@@ -1094,8 +1094,8 @@ OrthoRectif
 }
 
 
-OrthoRectif::DoubleVectorType
-OrthoRectif::ImageToCarto(ForwardSensorInputPointType point)
+Orthorectification::DoubleVectorType
+Orthorectification::ImageToCarto(ForwardSensorInputPointType point)
 {
   ForwardSensorInputPointType longLatDouble;
   DoubleVectorType longLat = this->PointToLongLat(point);
@@ -1109,8 +1109,8 @@ OrthoRectif::ImageToCarto(ForwardSensorInputPointType point)
 
 
 
-OrthoRectif::DoubleVectorType
-OrthoRectif::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint)
+Orthorectification::DoubleVectorType
+Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint)
 {
   DoubleVectorType outVectPoint(2, 0);
 
@@ -1182,8 +1182,8 @@ OrthoRectif::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint)
 
 
 
-OrthoRectif::DoubleVectorType
-OrthoRectif::LongLatPointToCartoInOriginRef(ForwardSensorInputPointType latLongPoint)
+Orthorectification::DoubleVectorType
+Orthorectification::LongLatPointToCartoInOriginRef(ForwardSensorInputPointType latLongPoint)
 {
   DoubleVectorType outVectPoint(2, 0);
 
@@ -1211,8 +1211,8 @@ OrthoRectif::LongLatPointToCartoInOriginRef(ForwardSensorInputPointType latLongP
 
 
 
-OrthoRectif::IntVectorType
-OrthoRectif::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
+Orthorectification::IntVectorType
+Orthorectification::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
 {
   ImagePointerType image =  m_InputImage;
 
@@ -1307,8 +1307,8 @@ OrthoRectif::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
 }
 
 
-OrthoRectif::DoubleVectorType
-OrthoRectif::CartoPointToLongLat(ForwardSensorInputPointType cartoPoint)
+Orthorectification::DoubleVectorType
+Orthorectification::CartoPointToLongLat(ForwardSensorInputPointType cartoPoint)
 {
   DoubleVectorType outVectPoint(2, 0);
 
@@ -1380,7 +1380,7 @@ OrthoRectif::CartoPointToLongLat(ForwardSensorInputPointType cartoPoint)
  * PrintSelf Method
  */
 void
-OrthoRectif::PrintSelf(std::ostream& os, itk::Indent indent) const
+Orthorectification::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbOrthoRectifModule.h"
+#include "otbOrthorectificationModule.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -23,7 +23,7 @@
 
 int main(int argc, char* argv[])
 {
-  otb::OrthoRectifModule::Pointer specificModule = otb::OrthoRectifModule::New();
+  otb::OrthorectificationModule::Pointer specificModule = otb::OrthorectificationModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
   
   std::cout<<"Module: "<<module<<std::endl;
@@ -49,15 +49,15 @@ int main(int argc, char* argv[])
   // Simulate the update of the output parameters : 
   itk::OStringStream oss;
   oss.str("100");
-  specificModule->GetOrthoRectif()->guiSizeX->value(oss.str().c_str());
-  specificModule->GetOrthoRectif()->guiSizeY->value(oss.str().c_str());
+  specificModule->GetOrthorectification()->guiSizeX->value(oss.str().c_str());
+  specificModule->GetOrthorectification()->guiSizeY->value(oss.str().c_str());
   oss.str("");
-  specificModule->GetOrthoRectif()->guiSizeX->do_callback();
-  specificModule->GetOrthoRectif()->guiSizeY->do_callback();
+  specificModule->GetOrthorectification()->guiSizeX->do_callback();
+  specificModule->GetOrthorectification()->guiSizeY->do_callback();
   Fl::check();
 
   // Simulate Ok button callback
-  specificModule->GetOrthoRectif()->guiOK->do_callback();
+  specificModule->GetOrthorectification()->guiOK->do_callback();
   
   // Refresh
   Fl::check();

@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
-i18n_type 1 
-i18n_include "otbI18n.h" 
-i18n_function otbGetTextMacro 
-header_name {.h} 
+version 1.0109
+i18n_type 1
+i18n_include "otbI18n.h"
+i18n_function otbGetTextMacro
+header_name {.h}
 code_name {.cxx}
 class InputViewGroup {open
 } {
@@ -12,7 +12,7 @@ class InputViewGroup {open
   Function {InputViewGroup()} {open
   } {
     Fl_Window wInputWindow {
-      label {Set Inputs} open selected
+      label {Set inputs} open selected
       xywh {675 472 570 360} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
     } {
       Fl_Scroll gScrollInput {open
@@ -38,4 +38,4 @@ class InputViewGroup {open
   } {}
   Function {Cancel()} {return_type {virtual void}
   } {}
-} 
+}
