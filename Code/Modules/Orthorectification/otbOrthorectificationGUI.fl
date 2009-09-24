@@ -11,12 +11,12 @@ decl {\#include "otbOrthoEnum.h"} {public
 decl {\#include "otbGUIRectangle.h"} {public
 } 
 
-class OrthoRectifGUI {open
+class OrthorectificationGUI {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbOrthoRectif open
+      label otbOrthorectification open
       xywh {524 118 435 470} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
@@ -399,8 +399,8 @@ gui8bits->value(0);}
       }
     }
   }
-  Function {OrthoRectifGUI()} {} {}
-  Function {~OrthoRectifGUI()} {open return_type virtual
+  Function {OrthorectificationGUI()} {} {}
+  Function {~OrthorectificationGUI()} {open return_type virtual
   } {}
   Function {OpenDEM()} {open return_type {virtual void}
   } {}
