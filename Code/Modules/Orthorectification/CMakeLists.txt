@@ -31,7 +31,8 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbOrthorectificationModule ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbOrthorectificationModule  OTBIO OTBProjections OTBGui OTBMonteverdiCommon)
+#TARGET_LINK_LIBRARIES(otbOrthorectificationModule  OTBIO OTBProjections OTBGui OTBMonteverdiCommon)
+TARGET_LINK_LIBRARIES(otbOrthorectificationModule  OTBProjections OTBGui OTBMonteverdiCommon)
 
 ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)

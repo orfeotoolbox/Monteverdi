@@ -27,10 +27,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Group.H>
-#include "otbFileName.h"
+
 #include "otbMacro.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "otbStreamingImageFileWriter.h"
+//#include "otbStreamingImageFileWriter.h"
+#include "otbStreamingTraits.h"
 #include "otbExtractROI.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkBinaryThresholdImageFilter.h"

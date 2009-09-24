@@ -29,15 +29,14 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning(pop)
 #endif
 #include "otbObjectList.h"
-#include "otbImageFileReader.h"
-#include "otbImageViewer.h"
-#include "otbFixedSizeFullImageWidget.h"
+#include "otbVectorImage.h"
 #include <FL/Fl_File_Chooser.H>
 #include "otbOrthoRectificationFilter.h"
 #include "otbDEMToImageGenerator.h"
 #include "otbForwardSensorModel.h"
 #include "itkInterpolateImageFunction.h"
-#include "otbPerBandVectorImageFilter.h"
+// let it in comments...
+//#include "otbPerBandVectorImageFilter.h"
 
 namespace otb
 {

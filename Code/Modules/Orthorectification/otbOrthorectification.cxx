@@ -21,25 +21,14 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/fl_ask.H>
 #include <FL/Enumerations.H>
 
-#include "otbFltkFilterWatcher.h"
 #include "otbMacro.h"
-#include "otbFileName.h"
-#include "itkTransform.h"
-#include "itkDirectory.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbImageFileWriter.h"
 #include "otbPerBandVectorImageFilter.h"
-#include "otbImageToVectorImageCastFilter.h"
 #include "itkExceptionObject.h"
 
 
 #include "elevation/ossimElevManager.h"
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
-
-#include "otbDEMHandler.h"
-#include "itkDirectory.h"
-#include "itkVectorCastImageFilter.h"
 
 // Maps include
 #include "otbMapProjections.h"
@@ -51,7 +40,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbBSplineInterpolateImageFunction.h"
-#include "otbBSplineDecompositionImageFilter.h"
+
 
 namespace otb
 {
