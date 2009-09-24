@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     }
     
   // Convenient typedefs 
-  typedef otb::VectorImage<short,2>              InputImageType;
+  typedef otb::VectorImage<double,2>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<InputImageType>   WriterType;
   typedef otb::OrthoRectif                       OrthoType;

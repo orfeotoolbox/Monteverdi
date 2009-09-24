@@ -64,7 +64,7 @@ public:
   itkTypeMacro(OrthoRectif,ProcessObject);
 
   /** Template parameters typedefs */
-  typedef short                                     PixelType;
+  typedef double                                    PixelType;
   typedef VectorImage<PixelType,2>                  ImageType;
   typedef ImageType::Pointer                        ImagePointerType;
   typedef ImageType::SizeType                       SizeType;
@@ -74,7 +74,7 @@ public:
 
   
   // Mono Channel Image Type
-  typedef Image<short,2>                            SingleImageType;
+  typedef Image<double,2>                           SingleImageType;
 
   typedef std::vector<std::string>                  StringVectorType;
   typedef std::vector<int>                          IntVectorType;
