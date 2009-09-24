@@ -55,7 +55,7 @@ void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWra
   if(key == "InputImageDataSet")
   {
     FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
-    m_FPVWriter->SetInput(image);  
+    m_FPVWriter->SetInput(image);
   }
   else if (key == "InputVectorDataSet")
   {
