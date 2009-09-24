@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbMonteverdiController.h"
-//#include "otbMsgReporter.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
