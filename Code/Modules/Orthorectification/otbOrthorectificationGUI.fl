@@ -17,11 +17,11 @@ class OrthorectificationGUI {open
   } {
     Fl_Window guiMainWindow {
       label otbOrthorectification open
-      xywh {524 118 435 470} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      xywh {246 121 435 470} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide resizable
     } {
       Fl_Button guiOK {
         label OK
-        callback {OK();}
+        callback {OK();} selected
         tooltip {Compute result} xywh {335 420 80 40} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
       }
       Fl_Button guiQuit {
@@ -222,7 +222,7 @@ guiNearest->hide();
 guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(LINEAR);}
+SetInterpolatorType(LINEAR_);}
               xywh {20 20 100 25} labelsize 11
             }
             MenuItem {} {
@@ -250,7 +250,7 @@ SetInterpolatorType(SINC);}
             label {Interpolator Parameters} open
             xywh {38 268 360 125} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
           } {
-            Fl_Group guiLinear {open
+            Fl_Group guiLinear {
               xywh {39 270 356 121}
             } {}
             Fl_Group guiNearest {open
@@ -412,7 +412,7 @@ gui8bits->value(0);}
   } {}
   Function {InsightExtent()} {open return_type {virtual void}
   } {}
-  Function {CheckBox(int id)} {open selected return_type {virtual void}
+  Function {CheckBox(int id)} {open return_type {virtual void}
   } {}
   Function {SetMapType(MapType map)} {open return_type {virtual void}
   } {}

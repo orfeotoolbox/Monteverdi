@@ -73,7 +73,7 @@ Orthorectification::Orthorectification()
   m_DEMSpacing.Fill(0);
   m_EastNorth.push_back(0);
   m_EastNorth.push_back(0);
-  m_InterpType = LINEAR;
+  m_InterpType = LINEAR_;
   m_MapType = UTM;
   m_UTMZoneRef = 0;
   m_UTMHemRef = 'N';
@@ -721,7 +721,7 @@ Orthorectification
 
   switch (this->GetInterpolatorType())
   {
-  case LINEAR:
+  case LINEAR_:
   {
     typedef itk::LinearInterpolateImageFunction<SingleImageType, double> LinearType;
     LinearType::Pointer interp = LinearType::New();
