@@ -22,6 +22,7 @@
 #include "otbMonteverdiViewGUI.h"
 #include "otbMonteverdiController.h"
 #include "otbSplashScreen.h"
+#include "otbI18n.h"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -53,8 +54,10 @@
 #include "otbWriterModule.h"
 //#include "otbSupervisedClassificationModule.h"
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
+  //Internationalization
+  otbI18nMacro();
 
   // Splash Screen
   typedef otb::SplashScreen::Pointer SplashScreenPointerType;

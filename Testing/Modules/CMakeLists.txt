@@ -80,7 +80,6 @@ ${INPUTDATA}/poupees.svm
 ADD_EXECUTABLE(otbWriterModuleTest otbWriterModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbWriterModuleTest otbWriterModule)
 
-
 ADD_TEST(WriterModuleTest otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
@@ -89,6 +88,10 @@ ${TEMP}/readerModuleOuptut.tif
 ADD_EXECUTABLE(otbReaderWriterModuleTest otbReaderWriterModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbReaderWriterModuleTest otbReaderModule otbWriterModule)
 
+ADD_TEST(ReaderWriterModuleTest otbReaderWriterModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${TEMP}/readerwriterModuleOuptut.tif
+)
 #------------------  Viewer Tests ---------------------------
 ADD_EXECUTABLE(otbViewerModuleTest otbViewerModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
