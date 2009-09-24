@@ -48,8 +48,4 @@ TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi)
 INSTALL_TARGETS(/bin Monteverdi)
 
 
-ADD_EXECUTABLE(SplashScreen SplashScreen.cxx)
-TARGET_LINK_LIBRARIES(SplashScreen OTBIO OTBVisualization flu)
-INSTALL_TARGETS(/bin SplashScreen)
-
 ENDIF(OTB_USE_VISU_GUI)

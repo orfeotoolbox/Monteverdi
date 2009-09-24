@@ -45,7 +45,7 @@ public:
 
   itkSetObjectMacro(View,ViewType);
 
-  /** user actions */
+  /** User actions */
   virtual void CreateModuleByKey(const char * modulekey);
 
   /** Start module by instance id */
@@ -53,8 +53,6 @@ public:
 
   /** Add a module connection */
   virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey);
-
-
 
 protected:
   /** Constructor */
