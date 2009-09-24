@@ -18,13 +18,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMonteverdiViewGUI.h"
 
+#include <iostream>
+#include <cassert>
+
 #include <FL/fl_ask.H>
 
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
-#include <iostream>
+
 //#include "otbMsgReporter.h"
 #include "otbInputViewGUI.h"
 
@@ -86,16 +89,16 @@ MonteverdiViewGUI
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
   {
 
-    /** CallbackParameterType is needed to pass two parameters to our callback method. 
+    /** CallbackParameterType is needed to pass two parameters to our callback method.
       * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
-      * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end ! 
+      * Futhermore,  m_vector_param is need to save the adresses of these parameters to be able to delete them in the end !
       */
     CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
     m_vector_param.push_back( param );
     mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
   }
 
- 
+
   // In the end
   mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
   mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
@@ -129,7 +132,7 @@ MonteverdiViewGUI
 }
 
 /** BuildInputsGUI create an instance of a small GUI where the user will select his inputs
-  * The number and the kind of inputs will be choosen considering the expectation of a 
+  * The number and the kind of inputs will be choosen considering the expectation of a
   * concerned module (moduleInstanceId)
   * Note : when no input is required, the GUI must not appear! ( -> skip )
   */
@@ -168,11 +171,11 @@ MonteverdiViewGUI
 
 /** GenericCallback (static)
   *
-  * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus), 
-  * "CreateModuleByKey_Callback" must be static. Problem : in this method must use 
-  * "this" which is not static ! 
+  * Because this method is called from a button into the Fl_Menu_Bar (cf. BuildMenus),
+  * "CreateModuleByKey_Callback" must be static. Problem : in this method must use
+  * "this" which is not static !
   */
-void 
+void
 MonteverdiViewGUI
 ::GenericCallback(Fl_Menu_* w, void* v)
 {
@@ -186,14 +189,14 @@ MonteverdiViewGUI
 }
 
 /** QuitCallback (static) */
-void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v) 
+void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v)
 {
   MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
   lThis->Quit();
 }
 
 /** HelpCallback (static) */
-void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v) 
+void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v)
 {
   MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
   lThis->Help();
@@ -221,7 +224,7 @@ MonteverdiViewGUI
 
       // add a new branch for a new instance of module
       root->add_branch(instanceId.c_str());
-      /*Flu_Tree_Browser::Node* node =*/ 
+      /*Flu_Tree_Browser::Node* node =*/
 
       //NodeDescriptor descr = new NodeDescriptor();
 
@@ -253,7 +256,7 @@ MonteverdiViewGUI
   std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
 
 
-  // Event received : new instance of module is created 
+  // Event received : new instance of module is created
   // -> Open a inputs Window
   if(event.GetType() == "InstanceCreated" ){
     this->BuildInputsGUI(event.GetInstanceId());
