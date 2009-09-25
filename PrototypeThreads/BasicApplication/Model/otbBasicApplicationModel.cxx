@@ -66,7 +66,8 @@ BasicApplicationModel
 
 void
 BasicApplicationModel
-::RunLoop()
+//::RunLoop()
+::Run(void * v)
 {
   /*
   unsigned long i = 0;
@@ -77,12 +78,14 @@ BasicApplicationModel
     sleep(1);
   }
   */
+  std::cout<<"ca commence"<<std::endl;
   m_IsUpdating = true;
   VectorWriterType::Pointer writer = VectorWriterType::New();
-  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
+  //FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
   writer->SetFileName("msimage.tif");
   writer->SetInput(m_MeanShift->GetClusteredOutput());
   writer->Update();
+  std::cout<<"c'est fini"<<std::endl;
   m_IsUpdating = false;
   
 }

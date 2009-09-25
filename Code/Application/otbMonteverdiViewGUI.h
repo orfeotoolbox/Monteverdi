@@ -105,10 +105,6 @@ public:
   void InitWidgets();
  
 protected:
-  /** Type used to pass instances through static callbacks */
-  typedef std::pair<Self *,std::string> CallbackParameterType;
-  typedef std::vector<CallbackParameterType *> CallbackParameterVectorType;
-
    /** Constructor */
   MonteverdiViewGUI();
 
@@ -151,9 +147,6 @@ private:
   MonteverdiModel::Pointer m_MonteverdiModel;
   /** Pointer to the controller */
   MonteverdiControllerInterface::Pointer m_MonteverdiController;
-
-  /** Vector of static callbacks parameters */
-  CallbackParameterVectorType m_CallbackParametersVector;
 
   /** The Flu tree browser */
   Flu_Tree_Browser        *m_Tree;

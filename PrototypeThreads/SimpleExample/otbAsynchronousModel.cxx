@@ -39,9 +39,6 @@ AsynchronousModel
   m_Process2->SetThreader( this->GetThreader());
   this->GetThreader()->SetNumberOfThreads(3);
 
-  m_Process1->Start();
-  sleep(1);
-  m_Process2->Start();
 }
 
 

@@ -1,0 +1,139 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ViewerModuleGroup {open
+} {
+  Function {ViewerModuleGroup()} {open return_type void
+  } {}
+  Function {Build()} {open
+  } {
+    Fl_Window bSetupWindow {
+      label {Vector Datas Propreties} open selected
+      xywh {717 160 785 320} type Double resizable size_range {0 0 785 320} visible
+    } {
+      Fl_Tabs gVectorData {open
+        xywh {0 10 785 310}
+      } {
+        Fl_Group {} {
+          label {Vector Datas}
+          tooltip {Vector Datas Propreties} xywh {0 40 785 280} box PLASTIC_DOWN_BOX color 41 labelfont 1 labelsize 12 labelcolor 186 resizable
+        } {
+          Fl_Text_Display dROIColor {
+            tooltip {Display the selected ROI color} xywh {216 225 25 25} box GTK_DOWN_BOX color 51 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bChangeROIColor {
+            label Color
+            callback {this->ChangeROIColor();}
+            tooltip {Change the color of the selected class} xywh {61 225 73 25} box GTK_DOWN_BOX down_box PLASTIC_DOWN_BOX color 51 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Browser dVDList {
+            callback {this->UpdateListSelectionColor();}
+            tooltip {Browse and select ROI} xywh {5 40 321 125} type Hold box BORDER_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1
+          }
+          Fl_Button bEraseLastROI {
+            label Delete
+            callback {this->DeleteVectorData();}
+            tooltip {Delete the selected region of interest} xywh {216 185 100 25} box GTK_DOWN_BOX down_box PLASTIC_DOWN_BOX color 51 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bClearAll {
+            label ClearAll
+            callback {this->ClearAll();}
+            tooltip {Clear all vector data} xywh {61 185 70 25} box GTK_DOWN_BOX down_box PLASTIC_DOWN_BOX color 51 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Check_Button bDEM {
+            label {Use DEM}
+            callback {this->UseDEM();}
+            xywh {61 270 59 15} down_box DOWN_BOX
+          }
+        }
+        Fl_Group guiViewerSetupWindow {
+          label Setup
+          xywh {3 36 762 268} hide
+        } {
+          Fl_Round_Button guiViewerSetupGrayscaleMode {
+            label {Grayscale mode}
+            callback {this->GrayScaleSet();}
+            tooltip {Swith the image viewer mode to grayscale} xywh {3 54 145 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 color 23 selection_color 22 labelcolor 186
+          }
+          Fl_Round_Button guiViewerSetupColorMode {
+            label {RGB composition mode}
+            callback {RGBSet();}
+            tooltip {Switch the image viewer mode to RGB composition} xywh {446 53 184 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
+          }
+          Fl_Input_Choice guiGrayscaleChannelChoice {
+            label {Channel index} open
+            tooltip {Select the band to view in grayscale mode} xywh {104 109 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187
+          } {}
+          Fl_Input_Choice guiRedChannelChoice {
+            label {Red channel} open
+            tooltip {Select band for red channel in RGB composition} xywh {588 87 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+          } {}
+          Fl_Input_Choice guiGreenChannelChoice {
+            label {Green channel} open
+            tooltip {Select band for green channel in RGB composition} xywh {588 109 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+          } {}
+          Fl_Input_Choice guiBlueChannelChoice {
+            label {Blue channel} open
+            tooltip {Select band for blue channel in RGB composition} xywh {588 131 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+          } {}
+          Fl_Return_Button guiViewerSetupOk {
+            label Ok
+            callback {ViewerSetupOk();}
+            tooltip {Save changes and leave viewer set up interface} xywh {373 226 75 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
+          }
+          Fl_Input guiViewerSetupName {
+            label {Viewer name}
+            tooltip {Set a new name for the selected viewer} xywh {191 172 305 24} box EMBOSSED_BOX color 54 selection_color 55 labelcolor 186 textcolor 187
+          }
+          Fl_Round_Button guiViewerSetupComplexMode {
+            label {Complex composition mode}
+            callback {ComplexSet();}
+            tooltip {Switch the image viewer mode to complex composition} xywh {201 53 210 26} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
+          }
+          Fl_Input_Choice guiRealChannelChoice {
+            label {Real channel index} open
+            tooltip {Select band for real channel in complex composition} xywh {361 110 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+          } {}
+          Fl_Input_Choice guiImaginaryChannelChoice {
+            label {Imaginary channel index} open
+            tooltip {Select band for imaginary channel in complex composition} xywh {361 132 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+          } {}
+          Fl_Round_Button bAmplitude {
+            label Amplitude
+            callback {bPhase->clear();}
+            tooltip {Toggle modulus mode} xywh {221 86 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
+          }
+          Fl_Round_Button bPhase {
+            label Phase
+            callback {bAmplitude->clear();}
+            tooltip {Toggle phase mode} xywh {311 86 80 15} down_box ROUND_DOWN_BOX labelcolor 187 deactivate
+          }
+        }
+      }
+    }
+  }
+  Function {UpdateListSelectionColor()} {open return_type {virtual void}
+  } {}
+  Function {DeleteVectorData()} {open return_type {virtual void}
+  } {}
+  Function {ClearAll()} {open return_type {virtual void}
+  } {}
+  Function {~ViewerModuleGroup()} {open return_type virtual
+  } {}
+  Function {ChangeROIColor()} {open return_type {virtual void}
+  } {}
+  Function {GrayScaleSet()} {open return_type {virtual void}
+  } {}
+  Function {RGBSet()} {open return_type {virtual void}
+  } {}
+  Function {ViewerSetupOk()} {open return_type {virtual void}
+  } {}
+  Function {ComplexSet()} {open return_type {virtual void}
+  } {}
+  Function {UseDEM()} {open return_type {virtual void}
+  } {}
+} 
