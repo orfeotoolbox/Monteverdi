@@ -103,8 +103,8 @@ ViewerModule::ViewerModule() : m_Label("Default label"), m_InputImage(), m_Vecto
   m_GLComponentList = VectorDataGlComponentListType::New();
   
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to visualize.");
-  this->AddInputDescriptor("Floating_Point_VectorData","VectorData","VectorData to visualize.",true,true);
+  this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
+  this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
 
   // Build GUI
   this->Build();   

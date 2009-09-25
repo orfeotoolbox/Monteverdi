@@ -28,23 +28,9 @@ namespace otb
 DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject()
 {}
 
-DataObjectWrapper::DataObjectWrapper(const std::string & type, itk::DataObject * data)
-{
-  // Call to the set method
-  Set(type,data);
-}
-
 /** Destructor */
 DataObjectWrapper::~DataObjectWrapper()
 {}
-
-/** Set the data object mandatory types */
-void DataObjectWrapper::Set(const std::string & type, itk::DataObject * data)
-{
-  // Fill the data type and object
-  m_DataType = type;
-  m_DataObject = data;
-}
 
 /** Get the DataObject */
 itk::DataObject * DataObjectWrapper::GetDataObject() const

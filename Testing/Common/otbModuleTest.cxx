@@ -42,8 +42,8 @@ protected:
   ModuleTest()
   {
     // Add some inputs
-    this->AddInputDescriptor("Floating_Point_Image","InputImage","test input image");
-    this->AddInputDescriptor("Vector","InputVector","test input vector",true);
+    this->AddInputDescriptor<otb::VectorImage<double,2> >("InputImage","test input image");
+    this->AddInputDescriptor<otb::VectorData<double> >("InputVector","test input vector",true);
   }
   /** Destructor */
   virtual ~ModuleTest(){}
@@ -64,7 +64,7 @@ protected:
 
     if(key == "OutputImage")
       {
-      wrapper.Set("Labeled_Image",otb::Image<unsigned short,2>::New());
+      wrapper.Set(otb::Image<unsigned short,2>::New());
 
       std::cout<<"Sending data "<<wrapper<<" for output with key "<<key<<std::endl;
       }
@@ -78,7 +78,7 @@ protected:
 
     // Add some outputs
     // Outputs can be defined once the run method has been called
-    this->AddOutputDescriptor("Labeled_Image","OutputImage","test output image");
+    this->AddOutputDescriptor< otb::Image<unsigned short, 2> >("OutputImage","test output image");
 
   }
 };
@@ -94,8 +94,10 @@ int main(int argc, char * argv[])
   std::cout<<"Test class PrintSelf: "<<myModuleTest<<std::endl;
 
   // Building inputs
-  otb::DataObjectWrapper input1("Floating_Point_Image",otb::Image<double,2>::New());
-  otb::DataObjectWrapper input2("Vector",otb::VectorData<double>::New());
+  otb::DataObjectWrapper input1;
+  input1.Set(otb::VectorImage<double,2>::New());
+  otb::DataObjectWrapper input2;
+  input2.Set(otb::VectorData<double>::New());
 
 
   // Testing the input/output method

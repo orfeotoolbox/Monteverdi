@@ -17,10 +17,6 @@
 =========================================================================*/
 #include "otbTypeManager.h"
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbVectorData.h"
-
 namespace otb
 {
 /** Initialize singleton */
@@ -38,14 +34,6 @@ TypeManager * TypeManager::GetInstance()
 
 TypeManager::TypeManager() : m_IdToNameMap()
 {
-  // Some basic typedefs
-  typedef double                                       Floating_Point_Precision;
-  typedef unsigned short                               Label_Precision;
-  typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
-  typedef otb::Image<Label_Precision,2>                Labeled_Image;
-  typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
-  typedef otb::VectorData<Floating_Point_Precision>    Vector_Data;
-  
   // Register basic types
   this->RegisterType<Floating_Point_Image>("Floating_Point_Image");
   this->RegisterType<Labeled_Image>("Labeled_Image");

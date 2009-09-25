@@ -33,7 +33,7 @@ SpeckleFilteringModule::SpeckleFilteringModule()
   m_View->SetController(m_Controller);
 
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_Image","InputImage","Image to apply speckle filtering on.");
+  this->AddInputDescriptor<SpeckleFilteringModel::InputImageType>("InputImage","Image to apply speckle filtering on.");
 }
 
 /** Destructor */
@@ -69,7 +69,7 @@ const DataObjectWrapper SpeckleFilteringModule::RetrieveOutputByKey(const std::s
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-    wrapper.Set("Floating_Point_Image",m_Model->GetOutput());
+    wrapper.Set(m_Model->GetOutput());
     }
   return wrapper;
 }
@@ -78,7 +78,7 @@ const DataObjectWrapper SpeckleFilteringModule::RetrieveOutputByKey(const std::s
 void SpeckleFilteringModule::Run()
 {
   m_View->Show();
-  this->AddOutputDescriptor("Floating_Point_Image","OutputImage","Speckle filtered image.");
+  this->AddOutputDescriptor<SpeckleFilteringModel::InputImageType>("OutputImage","Speckle filtered image.");
 }
 
 } // End namespace otb

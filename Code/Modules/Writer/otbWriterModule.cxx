@@ -31,8 +31,8 @@ WriterModule::WriterModule()
   m_VectorWriter = VectorWriterType::New();
   
    // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImageDataSet","Image to write.",true);
-  this->AddInputDescriptor("VectorData","InputVectorDataSet","Vector to write.",true);
+  this->AddInputDescriptor<FPVImageType>("InputImageDataSet","Image to write.",true);
+  this->AddInputDescriptor<VectorType>("InputVectorDataSet","Vector to write.",true);
 }
 
 /** Destructor */
