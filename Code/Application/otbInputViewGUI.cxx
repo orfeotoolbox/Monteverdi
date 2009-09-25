@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/fl_ask.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scroll.H>
+#include <FL/Fl_Text_Display.H>
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
@@ -40,7 +41,7 @@ InputViewGUI
    {
 
     // deactivate Ok button
-    bOk->deactivate();
+    //bOk->deactivate();
 
     // to count the number of Fl_Input_Choice to display
     unsigned int cpt =0;
@@ -131,7 +132,9 @@ InputViewGUI
 ::BuildList(int cpt,int height)
 {
   std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
+  Fl_Text_Display *textDisplay = new Fl_Text_Display(85,height+cpt* height, 400, 110);
   Fl_Scroll *littleScroll = new Fl_Scroll( 85,height+cpt* height, 400, 110);
+  littleScroll->add(textDisplay);
   gScrollInput->add(littleScroll);
 }
 
