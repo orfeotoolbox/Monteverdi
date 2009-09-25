@@ -22,17 +22,17 @@
 int main(int argc, char * argv[])
 {
   // DataObject typedef
-  typedef otb::Image<float,2> FloatImageType;
+  typedef otb::Image<double,2> FloatImageType;
 
   // Default constructor and call to the set method
   otb::DataObjectWrapper wrapper1;
-  wrapper1.Set("Floating_Point_Image",FloatImageType::New());
+  wrapper1.Set(FloatImageType::New());
 
   // Access parameters
   std::cout<<"Wrapper1: DataObject = "<<wrapper1.GetDataObject()<<", DataType = "<<wrapper1.GetDataType()<<std::endl;
 
   // Constructor with parameters
-  otb::DataObjectWrapper wrapper2("Floating_Point_Image",FloatImageType::New());
+  otb::DataObjectWrapper wrapper2 = otb::DataObjectWrapper::Create(FloatImageType::New());
 
   // Access parameters
   std::cout<<"Wrapper2: DataObject = "<<wrapper2.GetDataObject()<<", DataType = "<<wrapper2.GetDataType()<<std::endl;

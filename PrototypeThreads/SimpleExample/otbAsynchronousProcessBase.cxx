@@ -56,8 +56,9 @@ void
 AsynchronousProcessBase
 ::Stop()
 {
-  std::cout<<"Stop called "<<std::endl;
+  std::cout<<"AsynchronousProcessBase::Stop called "<<std::endl;
   m_Threader->TerminateThread( m_ThreadId );
+  std::cout<<"AsynchronousProcessBase::Stop done "<<std::endl;
   /*
   int res = pthread_cancel( m_ThreadId );
   if(res!=0)
@@ -85,7 +86,7 @@ AsynchronousProcessBase
 }
 
 
-int
+double
 AsynchronousProcessBase
 ::GetProcessStatus()
 {
@@ -94,7 +95,7 @@ AsynchronousProcessBase
 
 void
 AsynchronousProcessBase
-::SetProcessStatus( int val )
+::SetProcessStatus( double val )
 {
   m_ProcessStatus = val;
 }

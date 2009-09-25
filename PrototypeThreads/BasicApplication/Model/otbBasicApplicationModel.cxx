@@ -1,6 +1,6 @@
 #include "otbBasicApplicationModel.h"
 #include "otbFltkFilterWatcher.h"
-
+//#include "otbSimpleFilterProcessWatcher.h"
 
 namespace otb
 {
@@ -22,11 +22,12 @@ void BasicApplicationModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reader(), m_MeanShift()
+  BasicApplicationModel::BasicApplicationModel() : m_VisualizationModel(), m_Reader(), m_MeanShift(), m_Writer()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_Reader = VectorReaderType::New();
   m_MeanShift = MSFilterType::New();
+  m_Writer = VectorWriterType::New();
   m_IsUpdating = false;
 
 }
@@ -82,9 +83,12 @@ BasicApplicationModel
   m_IsUpdating = true;
   VectorWriterType::Pointer writer = VectorWriterType::New();
   //FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
-  writer->SetFileName("msimage.tif");
-  writer->SetInput(m_MeanShift->GetClusteredOutput());
-  writer->Update();
+  //SimpleFilterProcessWatcher<BasicApplicationModel> qlwatcher(writer, "tuiou ...");
+  //qlwatcher.SetMaster(this);
+  m_Writer = VectorWriterType::New();
+  m_Writer->SetFileName("msimage.tif");
+  m_Writer->SetInput(m_MeanShift->GetClusteredOutput());
+  m_Writer->Update();
   std::cout<<"c'est fini"<<std::endl;
   m_IsUpdating = false;
   

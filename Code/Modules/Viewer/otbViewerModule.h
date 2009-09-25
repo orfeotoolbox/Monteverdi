@@ -172,8 +172,6 @@ public:
 
   /** VectorData ObjectList*/
   typedef ObjectList<VectorDataType>                 VectorDataListType;
-  typedef ObjectList<VectorDataGlComponentType>      VectorDataGlComponentListType;
-  
 
   /** Set InputImage*/
   itkSetObjectMacro(InputImage,ImageType);
@@ -236,9 +234,6 @@ private:
 
   /** VectorData List pointer*/
   VectorDataListType::Pointer              m_VectorDataList;
-  
-  /** Gl Component List pointer */
-  VectorDataGlComponentListType::Pointer   m_GLComponentList;
   
   /** The image layer */
   ImageLayerPointerType                    m_InputImageLayer;

@@ -26,7 +26,7 @@ SupervisedClassificationModule::SupervisedClassificationModule()
   m_SupervisedClassification = SupervisedClassificationAppli::New();
 
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply Classification on.");
+  this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage","Image to apply Classification on.");
 }
 
 /** Destructor */
@@ -62,7 +62,7 @@ const DataObjectWrapper SupervisedClassificationModule::RetrieveOutputByKey(cons
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-      wrapper.Set("UI_Point_VectorImage",m_SupervisedClassification->GetOutput());
+      wrapper.Set(m_SupervisedClassification->GetOutput());
     }
   return wrapper;
 }
@@ -81,7 +81,7 @@ void SupervisedClassificationModule::Run()
       m_SupervisedClassification->SetModelFileName(m_Model);
       m_SupervisedClassification->LoadSVMModel();
     }
-  this->AddOutputDescriptor("UI_Point_VectorImage","OutputImage","SupervisedClassification image.");
+  this->AddOutputDescriptor<SupervisedClassificationAppli::LabeledImageType>("OutputImage","SupervisedClassification image.");
 }
 
 } // End namespace otb

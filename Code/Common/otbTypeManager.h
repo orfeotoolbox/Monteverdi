@@ -49,6 +49,14 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  // Some basic typedefs
+  typedef double                                       Floating_Point_Precision;
+  typedef unsigned short                               Label_Precision;
+  typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
+  typedef otb::Image<Label_Precision,2>                Labeled_Image;
+  typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
+  typedef otb::VectorData<Floating_Point_Precision>    Vector_Data;
+
   /** Standard type macro */
   itkTypeMacro(TypeManager,itk::Object);
 

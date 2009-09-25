@@ -20,6 +20,7 @@
 #define __otbDataObjectWrapper_h
 
 #include "itkDataObject.h"
+#include "otbTypeManager.h"
 
 namespace otb
 {
@@ -43,15 +44,40 @@ namespace otb
 class DataObjectWrapper
 {
 public:
+  /** DataObjectWrapper must be created by the Create function. */
+  template <typename T> static DataObjectWrapper Create(T * data)
+  {
+    DataObjectWrapper resp;
+    resp.Set(data);
+    return resp;
+  }
+  template <typename T> static DataObjectWrapper Create(itk::SmartPointer<T> data)
+  {
+    DataObjectWrapper resp;
+    resp.Set(data);
+    return resp;
+  }
+  
+
   /** Constructors */
   DataObjectWrapper();
-  DataObjectWrapper(const std::string & type, itk::DataObject * data);
 
   /** Destructor */
   virtual ~DataObjectWrapper();
 
   /** Set the data object mandatory types */
-  void Set(const std::string & type, itk::DataObject * data);
+  template <typename T> void Set(T * data)
+  {
+    // Fill the data type and object
+  m_DataType = TypeManager::GetInstance()->GetTypeName<T>();
+  m_DataObject = data;
+  }
+
+  /** Set the data object mandatory types (SmartPointer version) */
+  template <typename T> void Set(itk::SmartPointer<T> ptr)
+  {
+    this->Set(ptr.GetPointer());
+  }
 
   /** Get the DataObject */
   itk::DataObject * GetDataObject() const;
@@ -60,6 +86,8 @@ public:
   const std::string & GetDataType() const;
 
 private:
+  
+
   /** The key to identify the data type */
   std::string m_DataType;
 

@@ -61,16 +61,32 @@ void BasicApplicationView::Build()
 
 
     this->RefreshInterface();
+
+    pBar->minimum(0);
+    pBar->maximum(1);
+
     //wMainWindow->resizable(NULL);
 }
 void BasicApplicationView::Notify()
 {
-  this->RefreshInterface();
-  //m_Mutex.Lock();
-  this->RefreshVisualization();
-  //m_Mutex.Unlock();
-  //Fl::flush();
+  if( !m_Model->IsUpdating() )
+    {
+      this->RefreshInterface();
+      //m_Mutex.Lock();
+      this->RefreshVisualization();
+      //m_Mutex.Unlock();
+      //Fl::flush();
+    }
+//   else
+//     this->UpdateProgressBar();
+  //std::cout<<m_Model-> m_Master->GetProcessStatus();<<std::endl;
+}
 
+void BasicApplicationView::UpdateProgressBar( float prog )
+{
+  pBar->value(prog);
+  pBar->redraw();
+  Fl::check();
 }
 
 void BasicApplicationView::RefreshVisualization()
@@ -109,6 +125,17 @@ void BasicApplicationView::RunLoop()
   //wMainWindow->deactivate();
   //Fl::check();
   m_Controller->RunLoop();
+  pBar->visible();
+  //wMainWindow->activate();
+  //Fl::check();
+}
+
+
+void BasicApplicationView::StopLoop()
+{
+  //wMainWindow->deactivate();
+  //Fl::check();
+  m_Controller->StopLoop();
   //wMainWindow->activate();
   //Fl::check();
 }
