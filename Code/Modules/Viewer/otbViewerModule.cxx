@@ -26,11 +26,13 @@
 namespace otb
 {
 /** Constructor */
-ViewerModule::ViewerModule() : m_Label("Default label"), m_InputImage(), m_VectorDataList(),
-			       m_InputImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
-			       m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-			       m_Controller(), m_RenderingFunction(), m_DisplayWindow(),m_GLComponentList()
-{
+  ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
+				  m_View(), m_PixelDescriptionView(), m_CurveWidget(),
+				  m_Controller(), m_RenderingFunction()
+  {
+  // 
+  m_Label = "Viewer Module";
+
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
   m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -98,10 +100,7 @@ ViewerModule::ViewerModule() : m_Label("Default label"), m_InputImage(), m_Vecto
 
   // VectorData List Instance
   m_VectorDataList = VectorDataListType::New();
-  
-  // GlComponent List
-  m_GLComponentList = VectorDataGlComponentListType::New();
-  
+   
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
@@ -292,10 +291,7 @@ void ViewerModule::UpdateVectorData(unsigned int index)
   VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
   vgl->SetVectorData(vproj->GetOutput());
   vgl->SetColor(this->SetRandomColor());
-  
-  // Add the GlComponent to the list 
-  m_GLComponentList->PushBack(vgl);
-  
+    
   // Add it to the image view
   m_View->GetScrollWidget()->AddGlComponent(vgl);
   m_View->GetFullWidget()->AddGlComponent(vgl);
