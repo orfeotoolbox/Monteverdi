@@ -14,6 +14,8 @@
 #include "otbImageLayer.h"
 #include "otbMeanShiftVectorImageFilter.h"
 
+#include "otbAsynchronousProcessBase.h"
+
 namespace otb {
 
 /** \class BasicApplicationModel
@@ -22,7 +24,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT BasicApplicationModel
-      : public MVCModel<ListenerBase>, public itk::Object
+  : public MVCModel<ListenerBase>, public itk::Object, public Process::AsynchronousProcessBase
 {
 
 public:
@@ -63,7 +65,8 @@ public:
 
   /** Open an image */
   void OpenImage(const char * filename);
-  void RunLoop();
+  //void RunLoop();
+  virtual void Run( void * v );
 
   bool IsUpdating() const
   {

@@ -28,7 +28,7 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   m_WidgetsController->AddActionHandler(m_ResizingHandler);
   m_WidgetsController->AddActionHandler(m_ChangeRegionHandler);
 
-  m_Threader = itk::MultiThreader::New();
+  //m_Threader = itk::MultiThreader::New();
 
   m_ImageReady = false;
 
@@ -69,10 +69,23 @@ BasicApplicationController
 {
   if(m_ImageReady && !m_Model->IsUpdating())
     {
+      try
+	{
+	  m_Model->Start();
+      	}
+      catch (itk::ExceptionObject & err)
+	{
+	  std::cout<<err.GetDescription()<<std::endl;
+	}
+      
+      /*
       //this->FreezeWindow();
-      m_Threader->SetNumberOfThreads(1);
+      std::cout<<"Run Loop"<<std::endl;
+      m_Threader->SetNumberOfThreads(2);
       m_Threader->SpawnThread(ThreadFunction, this);
+      std::cout<<"Run Loop END"<<std::endl;
       //this->UnFreezeWindow();
+      */
     }
 }
 
@@ -80,15 +93,19 @@ ITK_THREAD_RETURN_TYPE
 BasicApplicationController
 ::ThreadFunction( void *arg )
 {
+  
   try
   {
     //((BasicApplicationController*) arg)->m_Model->RunLoop();
-    ModelType::GetInstance()->RunLoop();
+    std::cout<<"ThreadFunction before"<<std::endl;
+    //ModelType::GetInstance()->RunLoop();
+    std::cout<<"ThreadFunction after"<<std::endl;
   }
   catch (itk::ExceptionObject & err)
   {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
+  
 }
 
 

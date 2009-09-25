@@ -15,8 +15,6 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSupervisedClassificationAppli_cxx
-#define __otbSupervisedClassificationAppli_cxx
 
 #include "otbSupervisedClassificationAppli.h"
 
@@ -2346,6 +2344,6 @@ SupervisedClassificationAppli
   this->Update();
 }
 } // end namespace otb
-#endif
+
 
 

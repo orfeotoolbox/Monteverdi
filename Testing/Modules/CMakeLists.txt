@@ -106,7 +106,6 @@ ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
 )
 
-
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvViewerModuleTestWithSHP otbViewerModuleTest
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -114,3 +113,11 @@ ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
 ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+
+#------------- Writer Module Tests ---------------------------
+ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
+
+

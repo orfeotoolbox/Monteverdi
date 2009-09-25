@@ -23,16 +23,6 @@
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 
-// There are function prototype conflits under cygwin between standard w32 API
-// and standard C ones
-#ifndef CALLBACK
-#if defined(_WINDOWS) || defined(__CYGWIN__)
-#define CALLBACK __stdcall
-#else
-#define CALLBACK
-#endif
-#endif
-
 
 namespace otb
 {
@@ -53,7 +43,7 @@ class ITK_EXPORT MonteverdiModel
 
 
  /** typedef of the Module constructors function */
-  typedef otb::Module::Pointer (CALLBACK * ConstructorPointerType)();
+  typedef otb::Module::Pointer (* ConstructorPointerType)();
 
   /** Inner class to represent a registered module */
   class RegisteredModuleDescriptor
@@ -97,7 +87,7 @@ class ITK_EXPORT MonteverdiModel
     RegisteredModuleDescriptor desc;
     desc.m_Key = key;
     desc.m_MenuPath = menupath;
-    desc.m_Constructor = (ConstructorPointerType)T::New;
+    desc.m_Constructor = (ConstructorPointerType)&T::New;
     m_ModuleDescriptorMap[key]=desc;
     m_InstancesCountMap[key]=0;
   }

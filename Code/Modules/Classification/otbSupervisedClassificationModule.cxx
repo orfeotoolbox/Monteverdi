@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSupervisedClassificationModule_cxx
-#define __otbSupervisedClassificationModule_cxx
 
 #include "otbSupervisedClassificationModule.h"
 
@@ -88,4 +86,3 @@ void SupervisedClassificationModule::Run()
 
 } // End namespace otb
 
-#endif

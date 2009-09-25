@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthorectificationModule_cxx
-#define __otbOrthorectificationModule_cxx
 
 #include "otbOrthorectificationModule.h"
 
@@ -78,4 +76,3 @@ void OrthorectificationModule::Run()
 
 } // End namespace otb
 
-#endif
