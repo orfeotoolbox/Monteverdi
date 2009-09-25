@@ -9,12 +9,13 @@
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbMouseClickActionHandler.h"
-#include "itkMultiThreader.h"
+//#include "itkMultiThreader.h"
+#include "otbAsynchronousProcessBase.h"
 
 namespace otb
 {
 class ITK_EXPORT BasicApplicationController
-      : public BasicApplicationControllerInterface
+      : public BasicApplicationControllerInterface, public Process::AsynchronousProcessBase
 {
 public:
   /** Standard class typedefs */
@@ -48,6 +49,7 @@ public:
   /** User action */
   virtual void OpenImage( const char * filename );
   virtual void RunLoop();
+  virtual void StopLoop();
   void FreezeWindow();
   void UnFreezeWindow();
 
@@ -55,6 +57,9 @@ public:
   {
     return m_Model->IsUpdating();
   }
+
+  virtual void Run( void * v );
+
 protected:
   /** Constructor */
   BasicApplicationController();
@@ -77,7 +82,7 @@ private:
   ResizingHandlerType::Pointer               m_ResizingHandler;
   ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
 
-  itk::MultiThreader::Pointer m_Threader;
+  //itk::MultiThreader::Pointer m_Threader;
 
   bool m_ImageReady;
 

@@ -62,6 +62,7 @@ public:
 
   /** Get the visualization models */
   itkGetObjectMacro(VisualizationModel,VisualizationModelType);
+  itkGetObjectMacro(Writer,VectorWriterType);
 
   /** Open an image */
   void OpenImage(const char * filename);
@@ -102,8 +103,8 @@ private:
   /** MS filter type */
   MSFilterPointerType m_MeanShift;
 
-
-
+  /** Vector writer */
+  VectorWriterType::Pointer m_Writer;
 };
 
 }//end namespace otb

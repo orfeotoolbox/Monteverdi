@@ -46,6 +46,8 @@ public:
   virtual void OpenImage();
   virtual void Exit();
   virtual void RunLoop();
+  virtual void StopLoop();
+  void UpdateProgressBar( float prog );
 
   /** Set the controller */
   itkSetObjectMacro(Controller,BasicApplicationControllerInterface);
@@ -70,7 +72,7 @@ protected:
   /** Refresh the image widgets */
   void RefreshInterface();
   void RefreshVisualization();
- 
+
 
 private:
   BasicApplicationView(const Self&); //purposely not implemented

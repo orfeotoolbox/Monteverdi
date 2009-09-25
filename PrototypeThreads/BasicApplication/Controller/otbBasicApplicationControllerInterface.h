@@ -24,6 +24,7 @@ public:
   /** Users actions */
   virtual void OpenImage( const char * filename ) = 0;
   virtual void RunLoop() = 0;
+  virtual void StopLoop() = 0;
 
   virtual bool IsModelUpdating() = 0;
 
