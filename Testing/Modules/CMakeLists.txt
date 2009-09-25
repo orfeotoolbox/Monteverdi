@@ -106,3 +106,6 @@ ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
 )
 
+#------------- Writer Module Tests ---------------------------
+ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
