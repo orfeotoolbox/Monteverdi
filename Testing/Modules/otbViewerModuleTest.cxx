@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   
   module->AddInputByKey("InputImage",wrapperIn);
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     vreader->SetFileName(vfname);
     vreader->GenerateOutputInformation();
     
-    otb::DataObjectWrapper wrapperVector("Floating_Point_VectorData",vreader->GetOutput());
+    otb::DataObjectWrapper wrapperVector = otb::DataObjectWrapper::Create(vreader->GetOutput());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector << std::endl;
     module->AddInputByKey("VectorData",wrapperVector);
 
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
     vreader1->SetFileName(vfname1);
     vreader1->GenerateOutputInformation();
     
-    otb::DataObjectWrapper wrapperVector1("Floating_Point_VectorData",vreader1->GetOutput());
+    otb::DataObjectWrapper wrapperVector1 = otb::DataObjectWrapper::Create(vreader1->GetOutput());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector1 << std::endl;
     module->AddInputByKey("VectorData",wrapperVector1);
     

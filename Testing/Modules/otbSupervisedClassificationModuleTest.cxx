@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   // Add Wrapper Input 
-  otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   module->AddInputByKey("InputImage",wrapperIn);
   specificModule->SetModel(argv[3]);

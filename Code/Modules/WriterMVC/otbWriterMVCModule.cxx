@@ -36,8 +36,8 @@ WriterModule::WriterModule()
   m_View->SetWriterController(m_Controller);
   
    // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImageDataSet","Image to write.",true);
-  this->AddInputDescriptor("VectorData","InputVectorDataSet","Vector to write.",true);
+  this->AddInputDescriptor<FPVImageType>("InputImageDataSet","Image to write.",true);
+  this->AddInputDescriptor<VectorType>("InputVectorDataSet","Vector to write.",true);
 }
 
 /** Destructor */
@@ -65,7 +65,7 @@ void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWra
   }
   else if (key == "InputVectorDataSet")
   {
-    VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
+  // COMMENTED OUT BECAUSE UNUSED VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
 //     m_VectorWriter->SetInput(vector);  
     //TODO manage vector data in the model
   }

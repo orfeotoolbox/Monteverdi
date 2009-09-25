@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 //   std::cout<<"ad key.."<<std::endl;
   module->AddInputByKey("InputImage",wrapperIn);
