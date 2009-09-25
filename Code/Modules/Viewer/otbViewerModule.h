@@ -26,10 +26,40 @@
 //#include "otbImageFileViewer.h"
 
 #include "otbVectorData.h"
-#include "otbVectorDataFileReader.h"
 
 //standardImage Viewer
-#include "otbStandardImageViewer.h"
+#include "otbViewerModuleGroup.h"
+
+//
+#include "itkRGBAPixel.h"
+#include "otbImageLayer.h"
+#include "otbImageLayerRenderingModel.h"
+#include "otbImageView.h"
+#include "otbImageWidgetController.h"
+#include "otbImageLayerGenerator.h"
+#include "otbWidgetResizingActionHandler.h"
+#include "otbArrowKeyMoveActionHandler.h"
+#include "otbChangeScaledExtractRegionActionHandler.h"
+#include "otbChangeExtractRegionActionHandler.h"
+#include "otbChangeScaleActionHandler.h"
+#include "otbCurves2DWidget.h"
+#include "otbHistogramCurve.h"
+#include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionActionHandler.h"
+#include "otbPixelDescriptionView.h"
+#include "otbStandardRenderingFunction.h"
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataGlComponent.h"
+#include "otbVectorDataExtractROI.h"
+#include "otbRemoteSensingRegion.h"
+#include "otbObjectList.h"
+
+#include "otbAmplitudeFunctor.h"
+#include "otbPhaseFunctor.h"
+
+#include "otbPackedWidgetManager.h"
 
 namespace otb
 {
@@ -40,11 +70,11 @@ namespace otb
  */
 
 class ITK_EXPORT ViewerModule
-  : public Module
+  : public Module, public ViewerModuleGroup
 {
 public:
   /** Standard class typedefs */
-  typedef ViewerModule                 Self;
+  typedef ViewerModule                  Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -55,19 +85,108 @@ public:
   /** Type macro */
   itkTypeMacro(ViewerModule,Module);
 
-  /** OTB typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>               ImageType;
-  typedef VectorData<double>                  VectorType;
-  typedef StandardImageViewer<ImageType>      ViewerType; 
+  /** Dataset */
+  typedef double                                    PixelType;
+  typedef VectorImage<PixelType,2>                  ImageType;
+  typedef VectorData<PixelType>                     VectorDataType;
   
-  /*   typedef ImageFileReader<FPVImageType>    FPVViewerType; */
-  /*   typedef VectorDataFileReader<VectorType> VectorViewerType; */
+  /** PackedWidgetManager typedef*/
+  typedef PackedWidgetManager                       WidgetManagerType;
+  typedef WidgetManagerType::Pointer                WidgetManagerPointerType;
+
+  /** Output image type */
+  typedef itk::RGBAPixel<unsigned char>             RGBPixelType;
+  typedef Image<RGBPixelType,2>                     OutputImageType;
+
+  /** Image layer type */
+  typedef ImageLayer<ImageType, OutputImageType>    ImageLayerType;
+  typedef ImageLayerType::Pointer                   ImageLayerPointerType;
+  typedef ImageLayerType::HistogramType             HistogramType;
+    
+  /** Image layer generator type */
+  typedef ImageLayerGenerator<ImageLayerType>       ImageLayerGeneratorType;
+  typedef ImageLayerGeneratorType::Pointer          ImageLayerGeneratorPointerType;
+  
+  /** Rendering model type */
+  typedef ImageLayerRenderingModel<OutputImageType> RenderingModelType;
+  typedef RenderingModelType::Pointer               RenderingModelPointerType;
+  
+  /** View type */
+  typedef ImageView<RenderingModelType>             ViewType;
+  typedef ViewType::Pointer                         ViewPointerType;
+
+  /** Widget controller */
+  typedef ImageWidgetController                     WidgetControllerType;
+  typedef WidgetControllerType::Pointer             WidgetControllerPointerType;
+  
+  /** Curves 2D widget */
+  typedef Curves2DWidget                            CurvesWidgetType;
+  typedef CurvesWidgetType::Pointer                 CurvesWidgetPointerType;
+  typedef HistogramCurve<HistogramType>             HistogramCurveType;
+  typedef HistogramCurveType::ColorType             ColorType;
+  typedef HistogramCurveType::Pointer               HistogramCurvePointerType;
+  
+  /** Standard action handlers */
+  typedef otb::WidgetResizingActionHandler
+  <RenderingModelType,ViewType>                     ResizingHandlerType;
+  typedef otb::ChangeScaledExtractRegionActionHandler
+  <RenderingModelType,ViewType>                     ChangeScaledRegionHandlerType;
+  typedef otb::ChangeExtractRegionActionHandler
+  <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
+  typedef otb::ChangeScaleActionHandler
+  <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
+  typedef otb::ArrowKeyMoveActionHandler
+  <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
+
+  /** Rendering function */
+  typedef  ImageLayerGeneratorType::RenderingFunctionType    RenderingFunctionType;
+  typedef  RenderingFunctionType::Pointer                    RenderingFunctionPointerType;
+  
+  typedef Function::StandardRenderingFunction<ImageType::PixelType,
+                                              RGBPixelType>  StandardRenderingFunctionType;
+  typedef  StandardRenderingFunctionType::Pointer            StandardRenderingFunctionPointerType;
+  typedef  StandardRenderingFunctionType::ChannelListType    ChannelListType;
+
+  typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
+    otb::Function::AmplitudeFunctor<ImageType::PixelType> >                             AmplitudeRenderingFunction;
+  typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
+    otb::Function::PhaseFunctor<ImageType::PixelType> >                                 PhaseRenderingFunction;
+ 
+    
+  /** Pixel description */
+  typedef PixelDescriptionModel<OutputImageType>     PixelDescriptionModelType;
+  typedef  PixelDescriptionModelType::Pointer        PixelDescriptionModelPointerType;
+  typedef PixelDescriptionActionHandler
+    < PixelDescriptionModelType, ViewType>           PixelDescriptionActionHandlerType;
+  typedef otb::PixelDescriptionView
+    < PixelDescriptionModelType >                    PixelDescriptionViewType;
+  typedef  PixelDescriptionViewType::Pointer         PixelDescriptionViewPointerType;
+
+    /** VectorData overlay */
+  typedef VectorDataProjectionFilter
+  <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
+  typedef  VectorDataExtractROIType::RegionType      RemoteSensingRegionType;
+  typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
+  typedef VectorDataFileReader<VectorDataType>       VectorDataFileReaderType;
+
+  /** VectorData ObjectList*/
+  typedef ObjectList<VectorDataType>                 VectorDataListType;
+  typedef ObjectList<VectorDataGlComponentType>      VectorDataGlComponentListType;
+  
 
   /** Set InputImage*/
   itkSetObjectMacro(InputImage,ImageType);
 
-protected:
+  /** Set/Get the DEM directory */
+  itkSetStringMacro(DEMDirectory);
+  itkGetStringMacro(DEMDirectory);
+  
+  /** Set/Get the Label */
+  itkSetStringMacro(Label);
+  itkGetStringMacro(Label);
+  
+ protected:
   /** Constructor */
   ViewerModule();
   /** Destructor */
@@ -86,17 +205,73 @@ protected:
    *  When this method is called, key checking and data type matching
    *  is already done. */
   virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
-  
+
+  /** CallBacks Implementations*/
+  virtual void ChangeROIColor();
+  virtual void UpdateListSelectionColor();
+  virtual void AddName();
+  virtual void ClearAll();
+  virtual void DeleteVectorData();
+  virtual void UpdateVectorData(unsigned int index);
+  virtual ColorType SetRandomColor();
+  virtual void RedrawWidget();
+  virtual void UseDEM();
+
+  /** Setup Color Composition Callbacks*/
+  virtual void GrayScaleSet();
+  virtual void RGBSet();
+  virtual void ViewerSetupOk();
+  virtual void ComplexSet();
+  virtual void UpdateViewerSetupWindow();
+  virtual void UpdateGrayScaleChannelOrder(int choice);
+  virtual void UpdateRGBChannelOrder(int red, int green , int blue);
+  virtual void UpdateAmplitudeChannelOrder(int realChoice, int imChoice);
+  virtual void UpdatePhaseChannelOrder(int realChoice, int imChoice);
 private:
   ViewerModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
-  ImageType::Pointer                       m_InputImage;
-  ViewerType::Pointer                      m_StandardViewer;
   
-  /*   FPVViewerType::Pointer              m_FPVViewer; */
-  /*   VectorViewerType::Pointer           m_VectorViewer; */
+  /** Pointer to the image */
+  ImageType::Pointer                       m_InputImage;
+
+  /** VectorData List pointer*/
+  VectorDataListType::Pointer              m_VectorDataList;
+  
+  /** Gl Component List pointer */
+  VectorDataGlComponentListType::Pointer   m_GLComponentList;
+  
+  /** The image layer */
+  ImageLayerPointerType                    m_InputImageLayer;
+  
+   /** The rendering model */
+  RenderingModelPointerType                m_RenderingModel;
+
+  /** The pixel description model */
+  PixelDescriptionModelPointerType         m_PixelDescriptionModel;
+  
+  /** The view */
+  ViewPointerType                          m_View;
+
+    /** The pixel description view */
+  PixelDescriptionViewPointerType          m_PixelDescriptionView;
+
+  /** Curve widget */
+  CurvesWidgetPointerType                  m_CurveWidget;
+
+  /** The widget controller */
+  WidgetControllerPointerType              m_Controller;
+
+  /** StandardRenderingFunction */
+  RenderingFunctionPointerType             m_RenderingFunction;
+
+  /** */
+  std::string                              m_Label;
+
+  /** Path to the DEMDirectory (used if a VectorData is rendered */
+  std::string                             m_DEMDirectory;
+  
+    /** */
+  WidgetManagerPointerType                m_DisplayWindow;
 };
 
 
