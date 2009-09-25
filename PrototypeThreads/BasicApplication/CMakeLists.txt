@@ -1,6 +1,10 @@
+INCLUDE_DIRECTORIES(../SimpleExample)
 
 SET(MODEL_SRCS
 Model/otbBasicApplicationModel.cxx
+../SimpleExample/otbAsynchronousProcessBase.cxx
+../SimpleExample/otbAsynchronousProcess.cxx
+
 )
 
 SET(CONTROLLER_SRCS

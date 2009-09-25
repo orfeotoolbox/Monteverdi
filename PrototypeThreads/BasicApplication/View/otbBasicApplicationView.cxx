@@ -66,10 +66,10 @@ void BasicApplicationView::Build()
 void BasicApplicationView::Notify()
 {
   this->RefreshInterface();
-  m_Mutex.Lock();
+  //m_Mutex.Lock();
   this->RefreshVisualization();
-  m_Mutex.Unlock();
-  Fl::flush();
+  //m_Mutex.Unlock();
+  //Fl::flush();
 
 }
 
