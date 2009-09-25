@@ -83,9 +83,9 @@ protected:
   virtual ~WriterView();
 
   /** Callbacks */
-  virtual void OpenDataSet();
+  virtual void OK();
   virtual void Browse();
-  virtual void Cancel();
+  virtual void Quit();
 
 private:
   WriterView(const Self&); //purposely not implemented

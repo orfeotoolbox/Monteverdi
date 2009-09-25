@@ -60,7 +60,7 @@ void WriterView::Show()
 
 
 
-void WriterView::OpenDataSet()
+void WriterView::OK()
 {
   std::string filepath = vFilePath->value();
   m_WriterModel->UpdateWriter(filepath);
@@ -83,9 +83,9 @@ void WriterView::Browse()
   
 }
 
-void WriterView::Cancel()
+void WriterView::Quit()
 {
-  wFileChooserWindow->hide();
+  guiMainWindow->hide();
 }
 
 } // End namespace otb
