@@ -44,10 +44,12 @@ ${TEMP}/readerModuleOuptut.tif
 ADD_EXECUTABLE(otbOrthorectificationModuleTest otbOrthorectificationModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbOrthorectificationModuleTest otbOrthorectificationModule)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvOrthorectificationModuleTest otbOrthorectificationModuleTest
-${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
 ${TEMP}/OrthorectificationModuleOuptut.tif
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Feature Extraction Tests ---------------------------
 
