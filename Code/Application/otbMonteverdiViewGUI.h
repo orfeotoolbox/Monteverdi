@@ -30,6 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 #endif
 
 #include <FL/Fl_File_Chooser.H>
+#include <FL/Fl_Menu_Window.H>
 #include <FL/Fl_Group.H>
 #include <FLU/Flu_Tree_Browser.h>
 
@@ -139,6 +140,8 @@ protected:
   static void GenericCallback(Fl_Menu_* w, void* v);
   static void HelpCallback(Fl_Menu_ *, void*);
   static void QuitCallback(Fl_Menu_ *, void*);
+  static void TreeCallback( Fl_Widget* w, void* );
+
 
 private:
   MonteverdiViewGUI(const Self&); //purposely not implemented

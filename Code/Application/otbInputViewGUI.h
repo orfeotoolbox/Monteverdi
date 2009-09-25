@@ -62,7 +62,6 @@ public:
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
   typedef std::pair<std::string,std::string>              StringPairType;
-  
 
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
@@ -75,9 +74,10 @@ public:
 
   void Show();
   void BuildInputInterface();
+  void BuildList(int cpt,int height);
+  void BuildCheckBox(int cpt,int height,Fl_Choice *inputChoice);
 
-
-protected:
+private:
   /** Constructor */
   InputViewGUI(){};
   /** Destructor */
@@ -94,7 +94,7 @@ protected:
         std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
        return m_ChoiceVector[m_FlChoice->value()];
     }
-    
+
     bool HasSelected() const
     {
       return m_FlChoice->value()>=0;
@@ -106,6 +106,10 @@ protected:
   /** Callbacks */
   void Ok();
   void Cancel();
+  static void ActivateInputChoice(Fl_Widget * w, void * v);
+
+
+protected:
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;
   std::string                             m_ModuleInstanceId;

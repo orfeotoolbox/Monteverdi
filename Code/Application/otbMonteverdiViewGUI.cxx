@@ -28,10 +28,15 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
-//#include "otbMsgReporter.h"
+
 
 namespace otb
 {
+  /*Fl_Pixmap blue_dot( (char*const*)bluedot_xpm );*/
+  /*, green_dot( (char*const*)greendot_xpm ), red_dot( (char*const*)reddot_xpm ), teal_dot( (char*const*)tealdot_xpm ), 
+                       text_doc( (char*const*)textdoc_xpm ), computer( (char*const*)computer_xpm ), book( (char*const*)book_xpm ), cd_drive( (char*const*)cd_drive_xpm ),
+                                  arrow_closed( (char*const*)arrow_closed_xpm ), arrow_open( (char*const*)arrow_open_xpm );
+*/
 
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
@@ -45,6 +50,7 @@ MonteverdiViewGUI
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
+ 
 }
 
 MonteverdiViewGUI
@@ -70,7 +76,7 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
-  gHelpText->value("Quelque chose");
+  gHelpText->value("Call 911");
   gHelpText->redraw();
 }
 
@@ -113,8 +119,15 @@ MonteverdiViewGUI
   m_Tree->auto_branches( true );
   m_Tree->label( "Tree Browser" );
 
+  // allow callback with the tree
+  m_Tree->box( FL_DOWN_BOX );
+  m_Tree->allow_dnd( true );
+
+  //m_Tree->when( FL_WHEN_RELEASE );
+  m_Tree->callback( TreeCallback );
+
   // animate the tree
-  m_Tree->animate( 1 );
+  m_Tree->animate( true );
   m_Tree->collapse_time( 0.02 );
   m_Tree->frame_rate(500);
 
@@ -200,6 +213,64 @@ void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v)
   lThis->Help();
 }
 
+/** TreeCallback (static) */
+void MonteverdiViewGUI::TreeCallback( Fl_Widget* w, void* v )
+{
+  Flu_Tree_Browser *t = (Flu_Tree_Browser*)w;
+  Fl_Menu_Window *coolMenu = new Fl_Menu_Window(300,100,100,300);
+  coolMenu->clear_overlay();
+  coolMenu->hide();
+  
+  int reason = t->callback_reason();
+  Flu_Tree_Browser::Node *n = t->callback_node();
+  
+  switch( reason )
+  {
+    case FLU_HILIGHTED:
+      printf( "%s hilighted\n", n->label() );
+      break;
+  
+    case FLU_UNHILIGHTED:
+      printf( "%s unhilighted\n", n->label() );
+      break;
+
+    case FLU_SELECTED:
+      printf( "%s selected\n", n->label() );
+      break;
+
+    case FLU_UNSELECTED:
+      printf( "%s unselected\n", n->label() );
+      break;
+
+    case FLU_OPENED:
+      printf( "%s opened\n", n->label() );
+      break;
+
+    case FLU_CLOSED:
+      printf( "%s closed\n", n->label() );
+      break;
+
+    case FLU_DOUBLE_CLICK:
+      printf( "%s double-clicked\n", n->label() );
+      coolMenu->show();
+//       gTree->remove(n);
+//       gTree->redraw();
+      break;
+
+    case FLU_WIDGET_CALLBACK:
+      printf( "%s widget callback\n", n->label() );
+      break;
+
+    case FLU_MOVED_NODE:
+      printf( "%s moved\n", n->label() );
+      break;
+
+    case FLU_NEW_NODE:
+      printf( "node '%s' added to the tree\n", n->label() );
+      break;
+  }
+}
+
 void
 MonteverdiViewGUI
 ::CreateModuleByKey(const char * modulekey)
@@ -231,6 +302,12 @@ MonteverdiViewGUI
     Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
     if( !n )
       n = m_Tree->last();
+    
+    // this node can receive new nodes as a result of draggind-and-dropping
+    //TODO
+    //n->droppable(true);
+    //n->movable(true);
+    
     // add informations to the targeted module
     n->add(it->second.GetDataKey().c_str());
     n->add(it->second.GetDataType().c_str());
