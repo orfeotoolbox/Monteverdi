@@ -37,8 +37,8 @@ class AsynchronousProcessBase
   void Start();
   void Stop();
   void Wait();
-  int GetProcessStatus();
-  void SetProcessStatus(int val);
+  double GetProcessStatus();
+  void SetProcessStatus(double val);
 
 
   AsynchronousProcessBase();
@@ -73,7 +73,7 @@ class AsynchronousProcessBase
  
 
  private:
-  int m_ProcessStatus;
+  double m_ProcessStatus;
   ThreaderType::Pointer m_Threader;
   //ThreaderType m_Threader;
   int m_ThreadId;
