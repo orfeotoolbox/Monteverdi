@@ -26,7 +26,7 @@ OrthorectificationModule::OrthorectificationModule()
   m_Orthorectification = Orthorectification::New();
 
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply OrthoRectification on.");
+  this->AddInputDescriptor<Orthorectification::ImageType>("InputImage","Image to apply OrthoRectification on.");
 }
 
 /** Destructor */
@@ -62,7 +62,7 @@ const DataObjectWrapper OrthorectificationModule::RetrieveOutputByKey(const std:
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-    wrapper.Set("Short_Point_VectorImage",m_Orthorectification->GetOutput());
+    wrapper.Set(m_Orthorectification->GetOutput());
     }
   return wrapper;
 }
@@ -71,7 +71,7 @@ const DataObjectWrapper OrthorectificationModule::RetrieveOutputByKey(const std:
 void OrthorectificationModule::Run()
 {
   m_Orthorectification->Show();
-  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Orthorectified image.");
+  this->AddOutputDescriptor<Orthorectification::ImageType>("OutputImage","Orthorectified image.");
 }
 
 } // End namespace otb

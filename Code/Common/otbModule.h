@@ -26,6 +26,7 @@
 #include "otbOutputDataDescriptor.h"
 #include "otbEventsSender.h"
 #include "otbMonteverdiEvent.h"
+#include "otbTypeManager.h"
 
 namespace otb
 {
@@ -100,10 +101,39 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Add a new input descriptor */
-  void AddInputDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
+  template <typename T> void AddInputDescriptor(const std::string & key, const std::string & description, bool optional = false, bool multiple = false)
+  {
+    // Check if the key already exists
+    if(m_InputsMap.count(key) > 0)
+      {
+      itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
+      }
+
+    // Else build a new descriptor
+    InputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(),key,description);
+    desc.SetOptional(optional);
+    desc.SetMultiple(multiple);
+
+    // Insert it into the map
+    m_InputsMap[key]=desc;
+  }
 
   /** Add a new output descriptor */
-  void AddOutputDescriptor(const std::string & type, const std::string & key, const std::string & description, unsigned int nb = 1);
+  template <typename T> void AddOutputDescriptor(const std::string & key, const std::string & description, unsigned int nb = 1)
+  {
+    // Check if the key already exists
+    if(m_OutputsMap.count(key) > 0)
+      {
+      itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
+      }
+    
+    // Else build a new descriptor
+    OutputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(),key,description);
+    desc.SetNumberOfData(nb);
+    
+    // Insert it into the map
+    m_OutputsMap[key]=desc;
+  }
 
   /** Assign input by key. Subclasses should override this methods.
    *  When this method is called, key checking and data type matching

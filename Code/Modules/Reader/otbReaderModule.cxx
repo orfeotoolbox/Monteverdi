@@ -52,13 +52,13 @@ const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & ke
     {
     const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
 
-    if(outMap.find(key)->second.GetDataType() == "Floating_Point_VectorImage")
+    if(outMap.find(key)->second.GetDataType() == otb::TypeManager::GetInstance()->GetTypeName<FPVImageType>())
       {
-      wrapper.Set("Floating_Point_VectorImage",m_FPVReader->GetOutput());
+      wrapper.Set(m_FPVReader->GetOutput());
       }
-    else if(outMap.find(key)->second.GetDataType() == "VectorData")
+    else if(outMap.find(key)->second.GetDataType() ==otb::TypeManager::GetInstance()->GetTypeName<VectorType>() )
       {
-      wrapper.Set("VectorData",m_VectorReader->GetOutput());
+      wrapper.Set(m_VectorReader->GetOutput());
       }
     }
   return wrapper;
@@ -90,7 +90,7 @@ void ReaderModule::OpenDataSet()
     typeFound = true;
     // Get the filename from the filepath
     oss << "Image read from file : " << lFile.file();
-    this->AddOutputDescriptor("Floating_Point_VectorImage","OutputDataSet",oss.str());
+    this->AddOutputDescriptor<FPVImageType>("OutputDataSet",oss.str());
     }
   catch(itk::ExceptionObject & err)
     {
@@ -108,7 +108,7 @@ void ReaderModule::OpenDataSet()
       typeFound = true;
       // Get the filename from the filepath
       oss << "Vector read from file : " << lFile.file();
-      this->AddOutputDescriptor("VectorData","OutputDataSet",oss.str());
+      this->AddOutputDescriptor<VectorType>("OutputDataSet",oss.str());
       }
     catch(itk::ExceptionObject & err)
       {

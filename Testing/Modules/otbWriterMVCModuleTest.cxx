@@ -16,25 +16,24 @@
 
 =========================================================================*/
 
-#include "otbSpeckleFilteringModule.h"
 
-#include "otbImage.h"
+#include "otbWriterMVCModule.h"
+
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+
 
 int main(int argc, char* argv[])
 {
-  otb::SpeckleFilteringModule::Pointer specificModule = otb::SpeckleFilteringModule::New();
+  otb::WriterModule::Pointer specificModule = otb::WriterModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
-  
+
   std::cout<<"Module: "<<module<<std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::Image<double,2>  ImageType;
+  typedef otb::VectorImage<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
-
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -42,29 +41,18 @@ int main(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
+  std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImageDataSet",wrapperIn);
+  
   module->Start();
   Fl::check();
-
-  // Simulate Ok button callback
+  
+  // Simulate file chooser and ok callback
+  specificModule->GetView()->vFilePath->value(argv[2]);
   specificModule->GetView()->bOk->do_callback();
-  Fl::check();
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
-
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
-
-  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
-
-  //Write the image
-  WriterType::Pointer  writer = WriterType::New();
-  writer->SetFileName(argv[2]);
-  writer->SetInput(outImage);
-  writer->Update();
-
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

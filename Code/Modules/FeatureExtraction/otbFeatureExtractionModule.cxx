@@ -33,7 +33,7 @@ FeatureExtractionModule::FeatureExtractionModule()
   m_View->SetFeatureExtractionController(m_Controller);
 
   // Describe inputs
-  this->AddInputDescriptor("Floating_Point_VectorImage","InputImage","Image to apply feature extraction.");
+  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage","Image to apply feature extraction.");
 }
 
 /** Destructor */
@@ -70,7 +70,7 @@ const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::
   DataObjectWrapper wrapper;
   if(key == "OutputImage")
     {
-    wrapper.Set("Floating_Point_VectorImage",m_Model->GetOutputImage());
+    wrapper.Set(m_Model->GetOutputImage());
     }
   return wrapper;
 }
@@ -83,7 +83,7 @@ void FeatureExtractionModule::Run()
   
   std::cout << "end of Feature GUI"<< std::endl;
   //Output descriptor
-  this->AddOutputDescriptor("Floating_Point_VectorImage","OutputImage","Feature image extraction.");
+  this->AddOutputDescriptor<FeatureExtractionModel::InputImageType>("OutputImage","Feature image extraction.");
   
   // Notify all listener
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));

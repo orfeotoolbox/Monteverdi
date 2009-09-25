@@ -18,17 +18,22 @@
 #ifndef __otbWriterModule_cxx
 #define __otbWriterModule_cxx
 
-#include "otbWriterModule.h"
-#include "otbOGRVectorDataIO.h"
-#include <FL/Fl_File_Chooser.H>
+#include "otbWriterMVCModule.h"
+
 
 namespace otb
 {
 /** Constructor */
 WriterModule::WriterModule()
 {
-  m_FPVWriter = FPVWriterType::New();
-  m_VectorWriter = VectorWriterType::New();
+//   m_FPVWriter = FPVWriterType::New();
+//   m_VectorWriter = VectorWriterType::New();
+  
+  m_View       = WriterView::New();
+  m_Controller = WriterController::New();
+  m_Model      = WriterModel::GetInstance();
+  m_Controller->SetView(m_View);
+  m_View->SetWriterController(m_Controller);
   
    // Describe inputs
   this->AddInputDescriptor<FPVImageType>("InputImageDataSet","Image to write.",true);
@@ -55,60 +60,26 @@ void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWra
   if(key == "InputImageDataSet")
   {
     FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
-    m_FPVWriter->SetInput(image);
+//     m_FPVWriter->SetInput(image);
+    m_Model->SetInputImage(image);
   }
   else if (key == "InputVectorDataSet")
   {
-    VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
-    m_VectorWriter->SetInput(vector);  
+  // COMMENTED OUT BECAUSE UNUSED VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
+//     m_VectorWriter->SetInput(vector);  
+    //TODO manage vector data in the model
   }
 }
 
 /** The custom run command */
 void WriterModule::Run()
-{
+{/*
   this->BuildGUI();
-  wFileChooserWindow->show();
+  wFileChooserWindow->show();*/
+  m_View->Show();
 }
 
-void WriterModule::OpenDataSet()
-{
-  std::string filepath = vFilePath->value();
-  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
-  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
-  
-  if ( test->CanWriteFile(filepath.c_str()) ) 
-  {
-    m_VectorWriter->SetFileName(filepath);
-    m_VectorWriter->Update();
-  }
-  else
-  {
-    m_FPVWriter->SetFileName(filepath);
-    m_FPVWriter->Update();
-  }
-}
 
-void WriterModule::Browse()
-{
-  const char * filename = NULL;
-
-  filename = fl_file_chooser("Choose the dataset file ...", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-  vFilePath->value(filename);
-  
-  
-}
-
-void WriterModule::Cancel()
-{
-  wFileChooserWindow->hide();
-}
 
 
 } // End namespace otb

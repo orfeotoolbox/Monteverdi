@@ -49,15 +49,7 @@ MonteverdiViewGUI
 
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
-{
-  // delete the param list built into BuildMenus
-  CallbackParameterVectorType::iterator it = m_CallbackParametersVector.begin();
-  while(it!=m_CallbackParametersVector.end())
-     {
-     delete (*it);
-     ++it;
-     }
-}
+{}
 
 void
 MonteverdiViewGUI
@@ -86,14 +78,7 @@ MonteverdiViewGUI
 
   for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
     {
-
-    /** CallbackParameterType is needed to pass two parameters to our callback method.
-      * Indeed, to call "CreateModuleByKey" and create instances of a module, we will both need the controller and the key of the module.
-      * Futhermore,  m_CallbackParametersVector is need to save the adresses of these parameters to be able to delete them in the end !
-      */
-    CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
-    m_CallbackParametersVector.push_back( param );
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
     }
 
   // In the end
@@ -177,13 +162,11 @@ void
 MonteverdiViewGUI
 ::GenericCallback(Fl_Menu_* w, void* v)
 {
-  CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
-
-  MonteverdiViewGUI *lThis = param->first;
-  std::string moduleKey = param->second;
+  MonteverdiViewGUI * pthis = static_cast<MonteverdiViewGUI *>(w->parent()->user_data());
+  const char* moduleKey = static_cast<const char *>(v);
 
   // each call to this callback create a new instance of a module
-  lThis->CreateModuleByKey(moduleKey.c_str());
+  pthis->CreateModuleByKey(moduleKey);
 }
 
 /** QuitCallback (static) */

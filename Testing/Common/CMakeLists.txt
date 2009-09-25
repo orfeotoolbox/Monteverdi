@@ -14,6 +14,11 @@ ADD_EXECUTABLE(otbOutputDataDescriptorTest otbOutputDataDescriptorTest.cxx)
 TARGET_LINK_LIBRARIES(otbOutputDataDescriptorTest OTBMonteverdiCommon OTBIO)
 ADD_TEST(coTuOutputDataDescriptorTest otbOutputDataDescriptorTest)
 
+ADD_EXECUTABLE(otbTypeManagerTest otbTypeManagerTest.cxx)
+TARGET_LINK_LIBRARIES(otbTypeManagerTest OTBMonteverdiCommon OTBIO)
+ADD_TEST(coTuTypeManagerTest otbTypeManagerTest)
+
 ADD_EXECUTABLE(otbModuleTest otbModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbModuleTest OTBMonteverdiCommon OTBIO)
 ADD_TEST(coTuModuleTest otbModuleTest)
+

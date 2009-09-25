@@ -52,41 +52,6 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
     }
 }
 
-/** Add a new input descriptor */
-void Module::AddInputDescriptor(const std::string & type, const std::string & key, const std::string & description, bool optional, bool multiple)
-{
-  // Check if the key already exists
-  if(m_InputsMap.count(key) > 0)
-    {
-    itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
-    }
-
-  // Else build a new descriptor
-  InputDataDescriptor desc(type,key,description);
-  desc.SetOptional(optional);
-  desc.SetMultiple(multiple);
-
-  // Insert it into the map
-  m_InputsMap[key]=desc;
-}
-
-/** Add a new output descriptor */
-void Module::AddOutputDescriptor(const std::string & type, const std::string & key, const std::string & description, unsigned int nb)
-{
-   // Check if the key already exists
-  if(m_OutputsMap.count(key) > 0)
-    {
-    itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
-    }
-
-  // Else build a new descriptor
-  OutputDataDescriptor desc(type,key,description);
-  desc.SetNumberOfData(nb);
-
-  // Insert it into the map
-  m_OutputsMap[key]=desc;
-}
-
 /** Add an input data by its key */
 void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
