@@ -93,7 +93,7 @@ MonteverdiViewGUI
       */
     CallbackParameterType *param = new CallbackParameterType(this,mcIt->second.m_Key);
     m_CallbackParametersVector.push_back( param );
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(param));
+    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
     }
 
   // In the end
@@ -177,13 +177,11 @@ void
 MonteverdiViewGUI
 ::GenericCallback(Fl_Menu_* w, void* v)
 {
-  CallbackParameterType *param = static_cast<CallbackParameterType *>(v);
-
-  MonteverdiViewGUI *lThis = param->first;
-  std::string moduleKey = param->second;
+  MonteverdiViewGUI * pthis = static_cast<MonteverdiViewGUI *>(w->parent()->user_data());
+  const char* moduleKey = static_cast<const char *>(v);
 
   // each call to this callback create a new instance of a module
-  lThis->CreateModuleByKey(moduleKey.c_str());
+  pthis->CreateModuleByKey(moduleKey);
 }
 
 /** QuitCallback (static) */
