@@ -21,7 +21,7 @@ class OrthorectificationGUI {open
     } {
       Fl_Button guiOK {
         label OK
-        callback {OK();} selected
+        callback {OK();}
         tooltip {Compute result} xywh {336 420 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Button guiQuit {
@@ -33,7 +33,7 @@ class OrthorectificationGUI {open
         xywh {18 14 398 393} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open
+          label Coordinates open selected
           xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -371,7 +371,7 @@ guiAvElev->activate();}
         }
         Fl_Group guiImageExtent {
           label {Image Extent}
-          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 3 hide
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 44 selection_color 32 labelfont 2 labelsize 11 when 3 hide
           class {otb::GUIRectangle}
         } {}
         Fl_Group guiAdvanced {
