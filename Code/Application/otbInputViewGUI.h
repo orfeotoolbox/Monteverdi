@@ -94,7 +94,9 @@ protected:
 private:
   InputViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
+  static void AddInputToList(Fl_Widget * w, void * v);
+  static void RemoveInputFromList(Fl_Widget * w, void * v);
+  static void ClearList(Fl_Widget * w, void * v);
   typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
 
   MonteverdiModel::Pointer                m_Model;
