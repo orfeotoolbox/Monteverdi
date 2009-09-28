@@ -5,14 +5,16 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
+decl {\#include <FL/Fl_File_Chooser.H>} { public
+}	
+
 class ViewerModuleGroup {open
 } {
   Function {ViewerModuleGroup()} {open return_type void
   } {}
-  Function {Build()} {open
-  } {
+  Function {Build()} {} {
     Fl_Window bSetupWindow {
-      label {Vector Datas Propreties} open selected
+      label {Vector Datas Propreties}
       xywh {717 160 785 320} type Double resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {open
@@ -136,4 +138,65 @@ class ViewerModuleGroup {open
   } {}
   Function {UseDEM()} {open return_type {virtual void}
   } {}
+  Function {BuildDEM()} {open return_type {virtual void}
+  } {
+    Fl_Window wDEM {
+      label {DEM Selection} open
+      xywh {613 234 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Check_Button gUseInputDEM {
+        label {Use DEM for Loading}
+        callback {if( gUseInputDEM->value()==1 || gUseOutputDEM->value()==1 )
+{
+gLoadDEM->activate();
+gDEMPath->activate();
+}
+else
+{
+gLoadDEM->deactivate();
+gDEMPath->deactivate();
+}}
+        xywh {15 14 64 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Check_Button gUseOutputDEM {
+        label {Use DEM for Processing}
+        callback {if( gUseInputDEM->value()==1 || gUseOutputDEM->value()==1 )
+{
+gLoadDEM->activate();
+gDEMPath->activate();
+}
+else
+{
+gLoadDEM->deactivate();
+gDEMPath->deactivate();
+}}
+        xywh {220 14 64 15} down_box DOWN_BOX labelsize 12 hide deactivate
+      }
+      Fl_Button gLoadDEM {
+        label Load
+        callback {const char * cfname = fl_dir_chooser("Choose DEM Directory...", "");
+Fl::check();
+wDEM->redraw();
+gDEMPath->value(cfname);
+gDEMPath->redraw();}
+        xywh {16 38 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 15 labelfont 1 deactivate
+      }
+      Fl_Output gDEMPath {
+        xywh {87 38 288 25} box PLASTIC_DOWN_BOX align 0 deactivate
+      }
+      Fl_Button gQuitDEM {
+        label Quit
+        callback {wDEM->hide();}
+        xywh {311 70 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+      }
+      Fl_Button gOKDEM {
+        label OK
+        callback {this->UpdateDEMSettings();}
+        xywh {234 70 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+      }
+    }
+  }
+  Function {UpdateDEMSettings()} {open return_type {virtual void}
+  } {}
+
 } 

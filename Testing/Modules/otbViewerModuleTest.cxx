@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   }
   
   module->Start();
-  Fl::check();
+  Fl::run();
 
   return 0;
 
