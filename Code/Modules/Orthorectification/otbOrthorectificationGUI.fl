@@ -17,28 +17,63 @@ class OrthorectificationGUI {open
   } {
     Fl_Window guiMainWindow {
       label otbOrthorectification open
-      xywh {246 121 435 470} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide resizable
+      xywh {155 303 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
         label OK
         callback {OK();} selected
-        tooltip {Compute result} xywh {335 420 80 40} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+        tooltip {Compute result} xywh {336 420 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Button guiQuit {
         label Quit
         callback {Quit();}
-        tooltip {Quit the viewer manager} xywh {28 419 85 40} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+        tooltip {Quit the viewer manager} xywh {18 420 85 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Tabs m_TabsMode {open
-        xywh {18 14 398 396} box PLASTIC_UP_BOX color 57 labelfont 2 labelsize 12 align 0
+        xywh {18 14 398 393} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
           label Coordinates open
-          xywh {28 34 375 372} color 22 selection_color 210 labelfont 2 labelsize 11 hide
+          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
+          Fl_Wizard {} {
+            label {Geographical Coordinates} open
+            xywh {31 60 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
+          } {
+            Fl_Group {} {
+              xywh {33 62 353 92}
+            } {
+              Fl_Input guiLongSelection {
+                label Longitude
+                callback {UpdateMapParam();
+InsightExtent();}
+                tooltip {Enter the longitude of the output image center} xywh {169 92 160 25} box PLASTIC_DOWN_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiLatSelection {
+                label Latitude
+                callback {UpdateMapParam();
+InsightExtent();}
+                tooltip {Enter the latitude of the output image center} xywh {169 126 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Round_Button guiCenterPixel {
+                label {Use Center Pixel}
+                callback {guiULPixel->value(0);
+guiCenterPixel->value(1);
+InsightExtent();}
+                tooltip {If checked, use the output center image coodinates} xywh {173 66 24 15} down_box ROUND_DOWN_BOX value 1 align 132
+              }
+              Fl_Round_Button guiULPixel {
+                label {Use Upper-Left Pixel}
+                callback {guiULPixel->value(1);
+guiCenterPixel->value(0);
+InsightExtent();}
+                tooltip {If checked, use the upper left output image pixel coodinates} xywh {227 66 18 15} down_box ROUND_DOWN_BOX
+              }
+            }
+          }
           Fl_Choice guiMapSelection {
             label {Map Projection} open
-            tooltip {Select the map projection type} xywh {169 174 160 25} box EMBOSSED_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
+            tooltip {Select the map projection type} xywh {169 174 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
               label UTM
@@ -70,7 +105,7 @@ class OrthorectificationGUI {open
           }
           Fl_Wizard m_MapType {
             label {Cartographic Coordinates} open
-            xywh {31 227 370 170} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+            xywh {31 227 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group m_UTM {open
               xywh {31 227 360 160}
@@ -151,45 +186,10 @@ UpdateLongLat();}
               }
             }
           }
-          Fl_Wizard {} {
-            label {Geographical Coordinates} open
-            xywh {31 60 370 98} box THIN_UP_FRAME color 244 selection_color 210 labelsize 12 align 5
-          } {
-            Fl_Group {} {open
-              xywh {33 62 353 92}
-            } {
-              Fl_Input guiLongSelection {
-                label Longitude
-                callback {UpdateMapParam();
-InsightExtent();}
-                tooltip {Enter the longitude of the output image center} xywh {169 92 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiLatSelection {
-                label Latitude
-                callback {UpdateMapParam();
-InsightExtent();}
-                tooltip {Enter the latitude of the output image center} xywh {169 126 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Round_Button guiCenterPixel {
-                label {Use Center Pixel}
-                callback {guiULPixel->value(0);
-guiCenterPixel->value(1);
-InsightExtent();}
-                tooltip {If checked, use the output center image coodinates} xywh {173 66 24 15} down_box ROUND_DOWN_BOX value 1 align 132
-              }
-              Fl_Round_Button guiULPixel {
-                label {Use Upper-Left Pixel}
-                callback {guiULPixel->value(1);
-guiCenterPixel->value(0);
-InsightExtent();}
-                tooltip {If checked, use the upper left output image pixel coodinates} xywh {227 66 18 15} down_box ROUND_DOWN_BOX
-              }
-            }
-          }
         }
         Fl_Group {} {
           label {Output image} open
-          xywh {20 37 396 369} color 22 selection_color 210 labelfont 2 labelsize 11 when 1 hide
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
             label {Size X}
@@ -248,7 +248,7 @@ SetInterpolatorType(SINC);}
           }
           Fl_Wizard m_InterpType {
             label {Interpolator Parameters} open
-            xywh {38 268 360 125} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+            xywh {38 268 360 125} box PLASTIC_DOWN_BOX color 48 selection_color 210 labelsize 12 align 5
           } {
             Fl_Group guiLinear {
               xywh {39 270 356 121}
@@ -313,10 +313,10 @@ SetInterpolatorType(SINC);}
         }
         Fl_Group {} {
           label DEM open
-          xywh {26 34 379 372} color 22 selection_color 210 labelfont 2 labelsize 11 hide
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard guiUseDEMWiz {open
-            xywh {28 60 377 150} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 0
+            xywh {28 60 377 150} box PLASTIC_DOWN_BOX color 48 selection_color 210 labelsize 12 align 0
           } {
             Fl_Group guiUseDEMGrp {open
               xywh {33 65 372 145}
@@ -324,15 +324,15 @@ SetInterpolatorType(SINC);}
               Fl_Button guiOpenDir {
                 label {DEM Path}
                 callback {OpenDEM();}
-                tooltip {Open a DEM directory} xywh {36 125 85 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 23 selection_color 23 labelcolor 186 deactivate resizable
+                tooltip {Open a DEM directory} xywh {36 125 85 25} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0x6f color 7 selection_color 23 labelcolor 186 deactivate resizable
               }
               Fl_Output guiDEMPath {
                 label {DEM Path}
-                xywh {144 125 250 25} selection_color 39 align 16 deactivate
+                xywh {144 125 250 25} box EMBOSSED_BOX selection_color 39 align 16 deactivate
               }
               Fl_Check_Button guiShowDEM {
                 label {Save DEM}
-                xywh {304 185 93 25} down_box DOWN_BOX deactivate
+                xywh {304 179 93 25} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 7 deactivate
               }
               Fl_Round_Button guiUseDEM {
                 label {Use DEM}
@@ -347,7 +347,7 @@ guiAvElev->deactivate();}
             }
           }
           Fl_Wizard guiAverageElevWiz {open
-            xywh {28 237 376 150} box THIN_UP_FRAME color 245 selection_color 210 labelsize 12 align 5
+            xywh {28 237 376 150} box PLASTIC_DOWN_BOX color 48 selection_color 210 labelsize 12 align 5
           } {
             Fl_Group guiUseAverageElevGrp {open
               xywh {38 239 366 138}
@@ -370,13 +370,13 @@ guiAvElev->activate();}
           }
         }
         Fl_Group guiImageExtent {
-          label {Image Extent} open
-          xywh {20 35 392 373} color 22 selection_color 210 labelfont 2 labelsize 11 when 3
+          label {Image Extent}
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 3 hide
           class {otb::GUIRectangle}
         } {}
         Fl_Group guiAdvanced {
-          label Advanced open
-          xywh {18 38 396 369} color 22 selection_color 210 labelfont 2 labelsize 11 when 1 hide
+          label Advanced
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Round_Button gui8bits {
             label {Work with 8bits}

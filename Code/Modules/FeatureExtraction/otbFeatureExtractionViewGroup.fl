@@ -18,14 +18,14 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {444 123 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {444 123 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
-          label Action open selected
-          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
+          label Action open
+          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice guiFeatureChoice {
             label {Feature Choice} open
@@ -494,7 +494,7 @@ SetFeatureType(otb::ORIGINAL);}
             xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
             Fl_Group guiNothing {
-              xywh {206 318 240 140}
+              xywh {206 318 240 140} color 7
             } {}
             Fl_Group guiTouzi {
               xywh {206 318 240 140} hide
@@ -1024,31 +1024,31 @@ SetFeatureType(otb::ORIGINAL);}
           Fl_Check_Browser guiChannelSelection {
             label {Channels Selection}
             callback {UpdateChannels();}
-            xywh {15 361 182 96} box PLASTIC_DOWN_BOX color 141 selection_color 139 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1
+            xywh {15 361 182 96} box PLASTIC_DOWN_BOX selection_color 139 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1
           }
           Fl_Button guiAdd {
             label Add
             callback {AddFeature();}
-            tooltip {Add feature to list (one per selected channel)} xywh {186 521 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 80 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Add feature to list (one per selected channel)} xywh {186 521 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Browser guiFeatureListAction {
             label {Feature Image List}
             callback {UpdateFeaturePreview();}
-            tooltip {Contains each Computed Feature} xywh {456 318 194 226} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Contains each Computed Feature} xywh {456 318 194 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Text_Display guiFeatInfo {
             label {Feature Information}
-            xywh {15 479 432 35} box PLASTIC_DOWN_BOX color 234 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 12 textcolor 7
+            xywh {15 479 432 35} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 12 textcolor 7
           }
         }
         Fl_Group guiOutput {
           label Output
-          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
+          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Browser guiFeatureList {
             label {Feature Image List}
             callback {UpdateExtractView();}
-            tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiAddChannel {
             label {>>}
@@ -1063,7 +1063,7 @@ SetFeatureType(otb::ORIGINAL);}
           Fl_Browser guiOutputFeatureList {
             label {Selected Output Channels}
             callback {UpdateFeaturePreviewFromOutputList();}
-            tooltip {Contains each Selected Feature for Output Generation} xywh {357 319 270 204} type Hold box PLASTIC_DOWN_BOX color 3 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Contains each Selected Feature for Output Generation} xywh {357 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiUpChannel {
             label {+}
@@ -1090,7 +1090,7 @@ SetFeatureType(otb::ORIGINAL);}
       Fl_Button guiQuit {
         label Quit
         callback {Quit();}
-        tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 120 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
@@ -1119,7 +1119,7 @@ SetFeatureType(otb::ORIGINAL);}
   } {}
   Function {SetFeatureType(otb::FeatureType i)} {open return_type {virtual void}
   } {}
-  Function {OK()} {open return_type {virtual void}
+  Function {OK()} {open selected return_type {virtual void}
   } {}
   Function {AddFeature()} {open return_type {virtual void}
   } {}
