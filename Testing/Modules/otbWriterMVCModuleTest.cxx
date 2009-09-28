@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
   
   // Simulate file chooser and ok callback
   specificModule->GetView()->vFilePath->value(argv[2]);
-  specificModule->GetView()->bOK->do_callback();
+  specificModule->GetView()->guiOK->do_callback();
 
   return EXIT_SUCCESS;
 
