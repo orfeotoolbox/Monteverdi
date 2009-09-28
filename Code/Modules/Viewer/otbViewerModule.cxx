@@ -463,7 +463,48 @@ void ViewerModule::RedrawWidget()
 void ViewerModule::UseDEM()
 {
   std::cout <<"Selected " << bDEM->value() << std::flush <<std::endl;
+  // 
+  this->BuildDEM();
+  if(bDEM->value())
+    {
+      
+      wDEM->show();
+    }
+}
+
+/**
+ *
+ */
+void ViewerModule::UpdateDEMSettings()
+{
+  std::cout << "Path du DEM "<<gDEMPath->value()<< std::endl;
   
+  if(gDEMPath->value())
+    {
+      // Copy the DEM pathname
+      m_DEMDirectory = gDEMPath->value();
+  
+      // Delete the vector data
+      for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+	{
+	  m_View->GetScrollWidget()->RemoveGlComponent(1);
+	  m_View->GetFullWidget()->RemoveGlComponent(1);
+	  m_View->GetZoomWidget()->RemoveGlComponent(0);
+	}
+  
+      // Reproject using the DEM this time
+      for(unsigned int i = 0; i < m_VectorDataList->Size();i++)
+	{
+	  this->UpdateVectorData(i);
+	}
+
+      // Refresh widgets
+      this->RedrawWidget();
+    }
+  else
+    {
+      std::cout <<"DEM path empty" << std::endl;
+    }
 }
 
 /**
