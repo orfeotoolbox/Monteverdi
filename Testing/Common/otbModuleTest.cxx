@@ -43,6 +43,8 @@ protected:
   {
     // Add some inputs
     this->AddInputDescriptor<otb::VectorImage<double,2> >("InputImage","test input image");
+    this->AddTypeToInputDescriptor<otb::Image<double,2> >("InputImage");
+
     this->AddInputDescriptor<otb::VectorData<double> >("InputVector","test input vector",true);
   }
   /** Destructor */

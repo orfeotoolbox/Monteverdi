@@ -65,7 +65,7 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
     }
 
   // Else, check for type matching and eventually throw an exception
-  if(it->second.GetDataType() != data.GetDataType())
+  if(!it->second.IsTypeCompatible(data.GetDataType()))
     {
     itkExceptionMacro(<<"Type mismatch for input with key "<<key<<": expected "<<it->second.GetDataType()<<", received "<<data.GetDataType());
     }
