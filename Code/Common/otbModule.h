@@ -118,6 +118,17 @@ protected:
     m_InputsMap[key]=desc;
   }
 
+  /** Add additional supported types for a given input descriptors */
+  template <typename T> void AddTypeToInputDescriptor(const std::string & key)
+  {
+    // Check if the key already exists
+    if(m_InputsMap.count(key) <= 0)
+      {
+      itkExceptionMacro(<<"No input with key "<<key);
+      }
+    m_InputsMap[key].AddSupportedType(TypeManager::GetInstance()->GetTypeName<T>());
+  }
+
   /** Add a new output descriptor */
   template <typename T> void AddOutputDescriptor(const std::string & key, const std::string & description, unsigned int nb = 1)
   {

@@ -36,8 +36,9 @@ WriterModule::WriterModule()
   m_View->SetWriterController(m_Controller);
   
    // Describe inputs
-  this->AddInputDescriptor<FPVImageType>("InputImageDataSet","Image to write.",true);
-  this->AddInputDescriptor<VectorType>("InputVectorDataSet","Vector to write.",true);
+  this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
+  this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
+
 }
 
 /** Destructor */
@@ -57,18 +58,18 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   const Superclass::InputDataDescriptorMapType inMap = this->GetInputsMap();
-  if(key == "InputImageDataSet")
+  if(key == "InputDataSet")
   {
     FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
 //     m_FPVWriter->SetInput(image);
     m_Model->SetInputImage(image);
   }
-  else if (key == "InputVectorDataSet")
-  {
+//   else if (key == "InputVectorDataSet")
+//   {
   // COMMENTED OUT BECAUSE UNUSED VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
 //     m_VectorWriter->SetInput(vector);  
     //TODO manage vector data in the model
-  }
+//   }
 }
 
 /** The custom run command */

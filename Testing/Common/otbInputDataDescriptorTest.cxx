@@ -40,5 +40,15 @@ int main(int argc, char * argv[])
   // Testing the << operator
   std::cout<<"Testing << operator: "<<desc2<<std::endl;
 
+  // Add additional types
+  desc2.AddSupportedType("Data");
+  desc2.AddSupportedType("Data");
+  
+  // Couting again  
+  std::cout<<"Testing << operator: "<<desc2<<std::endl;
+
+  // Check type compatibility 
+  std::cout<<"IsTypeCompatible: Data "<<desc2.IsTypeCompatible("Data")<<std::endl;
+
   return EXIT_SUCCESS;
 }
