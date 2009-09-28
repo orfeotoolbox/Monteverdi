@@ -72,8 +72,23 @@ public:
     // Check if that type is allready registered
     if(m_IdToNameMap.count(typeId)==0)
       {
-      // If not, register it
-      m_IdToNameMap[typeId]=name;
+      // If not, check if a type is already registered with this name
+      IdToNameMapType::const_iterator mIt = m_IdToNameMap.begin();
+      bool found = false;
+      while(!found && mIt!=m_IdToNameMap.end())
+	{
+	found = (mIt->second == name);
+	++mIt;
+	}
+      // If not, register the type under the given name
+      if(!found)
+	{
+	m_IdToNameMap[typeId]=name;
+	}       
+      else
+	{
+	itkExceptionMacro(<<"Type with typeid "<<typeId<<" is already registered with the name "<<name);
+	}
       }
     else
       {

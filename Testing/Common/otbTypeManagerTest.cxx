@@ -47,10 +47,21 @@ int main(int argc, char * argv[])
   // Try to get the name of a type
   std::cout<<"The name of the pointSet type is: "<<typeManager->GetTypeName< itk::PointSet<double,2> >()<<std::endl;
 
-  // Try to ghet the name of an unregistered type 
+  // Try to get the name of an unregistered type 
   try
     {
     std::string name = typeManager->GetTypeName< itk::PointSet<float,2> >();
+    return EXIT_FAILURE;
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    std::cout<<"Expected exception was caught."<<std::endl;
+    }
+
+// Try to register a type with an already existing name 
+  try
+    {
+    typeManager->RegisterType< itk::PointSet<float,2> >("Point_Set");
     return EXIT_FAILURE;
     }
   catch(itk::ExceptionObject & err)
