@@ -156,6 +156,10 @@ InputViewGUI
 
   Fl_Browser *browser = new Fl_Browser( 85,height+cpt* height, 400, 110);
   browser->box(FL_PLASTIC_DOWN_BOX);
+  browser->type(2);
+  //browser->selection_color(FL_BLUE);
+  browser->selection_color(inputChoiceDesc->m_FlChoice->selection_color());
+
   gScrollInput->add(browser);
 
   Fl_Button *plusButton = new Fl_Button( 490+15, height/2+cpt* height+2, 20, 20, "+");
@@ -233,16 +237,11 @@ void
 InputViewGUI
 ::AddInputToList(Fl_Widget * w, void * v)
 {
-  std::cout<<"ADDDDD"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
   int choiceVal = inputChoiceDesc->m_FlChoice->value();
-  std::cout<<"ADDDDD "<<choiceVal<<std::endl;
   if(choiceVal >= 0)
     {
       inputChoiceDesc->m_FlBrowser->add(inputChoiceDesc->m_FlChoice->text(choiceVal));
-      std::cout<<inputChoiceDesc->m_FlChoice->text(choiceVal)<<std::endl;
-      //std::cout<<"guillaume est malade "<<choiceVal<<std::endl;
-      //std::cout<<inputChoiceDesc->m_FlChoice->text(0)<<std::endl;
       inputChoiceDesc->m_FlChoice->redraw();
       inputChoiceDesc->m_FlBrowser->redraw();
     }
@@ -252,22 +251,27 @@ void
 InputViewGUI
 ::RemoveInputFromList(Fl_Widget * w, void * v)
 {
-  std::cout<<"REMOVEEEEEE"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-  
-  int choiceVal = inputChoiceDesc->m_FlChoice->value();
-  if(inputChoiceDesc->m_FlChoice->size() >= choiceVal)
+
+  int choiceVal = inputChoiceDesc->m_FlBrowser->value();
+  inputChoiceDesc->m_FlBrowser->remove(choiceVal);
+
+  if( choiceVal <= inputChoiceDesc->m_FlBrowser->size() )
     {
-      inputChoiceDesc->m_FlBrowser->remove(choiceVal);
-      inputChoiceDesc->m_FlBrowser->redraw();
+      inputChoiceDesc->m_FlBrowser->value(choiceVal);
     }
+  else
+    {
+      inputChoiceDesc->m_FlBrowser->value(choiceVal-1);
+    }
+  
+  inputChoiceDesc->m_FlBrowser->redraw();
 }
 
 void 
 InputViewGUI
 ::ClearList(Fl_Widget * w, void * v)
 {
-  std::cout<<"CLEAR"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
   inputChoiceDesc->m_FlBrowser->clear();
   inputChoiceDesc->m_FlBrowser->redraw();
