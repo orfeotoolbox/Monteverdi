@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/fl_ask.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scroll.H>
+#include <FL/Fl_Browser.H>
 #include <FL/Fl_Text_Display.H>
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
@@ -109,7 +110,6 @@ InputViewGUI
 {
   std::cout << "---------------------------- case OPTIONAL "<<std::endl<<std::endl;
   Fl_Check_Button *checkButton = new Fl_Check_Button( 60,height/2+cpt* height, 25, 25);
-  checkButton->box(FL_PLASTIC_DOWN_BOX);
   gScrollInput->add(checkButton);
   inputChoice->deactivate();
   checkButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
@@ -135,14 +135,44 @@ InputViewGUI
 ::BuildList(int cpt,int height)
 {
   std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
+  /*
   Fl_Scroll *littleScroll = new Fl_Scroll( 85,height+cpt* height, 400, 110);
   littleScroll->box(FL_PLASTIC_DOWN_BOX);
   littleScroll->begin();
   Fl_Text_Display *textDisplay = new Fl_Text_Display(0,0, 600, 300);
-  textDisplay->box(FL_PLASTIC_DOWN_BOX);
   littleScroll->end();
+  */
+  Fl_Browser *browser = new Fl_Browser( 85,height+cpt* height, 400, 110);
+  browser->box(FL_PLASTIC_DOWN_BOX);
+  gScrollInput->add(browser);
 
-  gScrollInput->add(littleScroll);
+  Fl_Button *plusButton = new Fl_Button( 490+15, height/2+cpt* height+2, 20, 20, "+");
+  //plusButton->box(FL_PLASTIC_DOWN_BOX);
+  plusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
+  plusButton->color((Fl_Color)55);
+  plusButton->labelfont(1);
+  plusButton->labelsize(17);
+  plusButton->labelcolor((Fl_Color)186);
+  gScrollInput->add(plusButton);
+
+  //plusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
+  Fl_Button *minusButton = new Fl_Button( 490+15, height+cpt* height + 37, 20, 20, "-");
+  minusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
+  minusButton->color((Fl_Color)55);
+  minusButton->labelfont(1);
+  minusButton->labelsize(17);
+  minusButton->labelcolor((Fl_Color)186);
+  gScrollInput->add(minusButton);
+
+  //minusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
+  Fl_Button *clearButton = new Fl_Button( 490, height+cpt* height+85, 50, 25, "Clear");
+  gScrollInput->add(clearButton);
+  clearButton->box(FL_PLASTIC_DOWN_BOX);
+  clearButton->color((Fl_Color)55);
+  clearButton->labelfont(1);
+  clearButton->labelsize(12);
+  clearButton->labelcolor((Fl_Color)186);
+  //plusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
 }
 
 

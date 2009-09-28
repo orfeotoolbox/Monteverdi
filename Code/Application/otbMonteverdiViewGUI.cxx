@@ -68,7 +68,7 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
-  gHelpText->value("Call 911");
+  gHelpText->value(" Someone please call 911 ");
   gHelpText->redraw();
 }
 
