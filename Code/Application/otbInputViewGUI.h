@@ -76,7 +76,7 @@ public:
 
   void Show();
   void BuildInputInterface();
-  void BuildList(int cpt,int height);
+  Fl_Browser * BuildList(int cpt,int height);
   void BuildCheckBox(int cpt,int height,Fl_Choice *inputChoice);
 
 protected:

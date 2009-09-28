@@ -56,13 +56,6 @@ public:
   typedef std::pair<std::string,std::string>   StringPairType;
 
 
-  Fl_Choice *                   m_FlChoice;
-  Fl_Browser *                  m_FlBrowser;
-  std::vector<StringPairType>   m_ChoiceVector;
-
-  StringPairType GetSelected() const;
-  bool HasSelected() const;
-
   /** Getters/Setters */
   itkSetMacro(Multiple, bool);
   itkSetMacro(Optional, bool);
@@ -72,6 +65,14 @@ public:
 
   /** Is the input data multiple ? */
   bool IsMultiple() const;
+
+  StringPairType GetSelected() const;
+  bool HasSelected() const;
+
+
+  Fl_Choice *                   m_FlChoice;
+  Fl_Browser *                  m_FlBrowser;
+  std::vector<StringPairType>   m_ChoiceVector;
 
 protected:
   /** Constructor */

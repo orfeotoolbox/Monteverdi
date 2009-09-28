@@ -101,21 +101,19 @@ InputViewGUI
       if(it_in->second.IsOptional())
       {
         this->BuildCheckBox(cpt,height,inputChoice);
-    //    inputChoiceDesc.SetOptional(true);
+        inputChoiceDesc->SetOptional(true);
       }
       /** Build the List **/
       if(it_in->second.IsMultiple())
       {
-        this->BuildList(cpt,height);
-        //inputChoiceDesc.SetBrowser();
- //       inputChoiceDesc.SetMultiple(true);
+        Fl_Browser * browser = this->BuildList(cpt,height);
+        inputChoiceDesc->m_FlBrowser = browser;
+        inputChoiceDesc->SetMultiple(true);
         cpt+= 2;
       }
 
       /** Add the inputChoiceDescriptor into the inputChoiceMap */
-  //    m_InputChoiceMap[it_in->first] = inputChoiceDesc;
-
-
+      m_InputChoiceMap[it_in->first] = inputChoiceDesc;
       cpt++;
 
 
@@ -150,8 +148,7 @@ InputViewGUI
     }
 }
 
-//Fl_Browser *
-void
+Fl_Browser *
 InputViewGUI
 ::BuildList(int cpt,int height)
 {
@@ -202,7 +199,6 @@ InputViewGUI
 {
   std::cout<< "Ok" <<std::endl;
   // Connect 
-/*
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin();
   mIt!=m_InputChoiceMap.end();++mIt)
   {
@@ -212,7 +208,7 @@ InputViewGUI
     m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
     }
   }
-*/
+
   // Start()
   std::cout<< "Start" <<std::endl;
   m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
