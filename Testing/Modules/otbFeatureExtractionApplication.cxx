@@ -27,38 +27,33 @@
 
 int main(int argc, char* argv[])
 {
-
   typedef otb::FeatureExtractionViewGUI              ViewType;
   typedef otb::FeatureExtractionController           ControllerType;
   typedef ControllerType::ModelType                 ModelType;
 
   // Instanciation of pointer
-  ViewType::Pointer          view       = ViewType::New();
-  ControllerType::Pointer    controller = ControllerType::New();
+  ViewType::Pointer       view       = ViewType::New();
+  ControllerType::Pointer controller = ControllerType::New();
+  ModelType::Pointer      model      = ModelType::New();
 
-  controller->SetView(view);
+  view->SetFeatureExtractionModel(model);
+  view->InitVisu();
   view->SetFeatureExtractionController(controller);
-
+  
+  controller->SetModel(model);
+  controller->SetView(view);
+  
   // Put in the tests
   const char * infname = argv[1];
   typedef otb::VectorImage<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
-
+  
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();
-
-  //Set The model input Image
-  ModelType * model = ModelType::New();
+  reader->GenerateOutputInformation();
   
-  view->SetFeatureExtractionModel(model);
-  view->InitVisu();
-
-  controller->SetModel(model);
-  
-
   model->SetInputImage(reader->GetOutput());
 
   // Open the GUI
@@ -78,8 +73,7 @@ int main(int argc, char* argv[])
   view->guiTextOffsetY->value(1);
   view->guiParameter->redraw();
   Fl::check();
-
-
+  
   // Uncheck channels
   view->guiChannelSelection->checked(1,false);
   view->guiChannelSelection->checked(2,false);
@@ -93,7 +87,7 @@ int main(int argc, char* argv[])
   view->guiAdd->do_callback();
   view->guiFeatureListAction->redraw();
   Fl::check();
-  
+
   view->guiOK->do_callback();
   Fl::check();
 
@@ -104,6 +98,5 @@ int main(int argc, char* argv[])
   writer->Update();
 
   return 0;
-
 }
 
