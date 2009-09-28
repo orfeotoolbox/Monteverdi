@@ -39,6 +39,8 @@ InputViewGUI
 
    if( m_Model.IsNotNull() && m_Controller.IsNotNull() )
    {
+     wInputWindow->size_range(wInputWindow->w(), wInputWindow->h(), wInputWindow->w(), 0, 0, 0);
+     gScrollInput->type(Fl_Scroll::VERTICAL_ALWAYS);
 
     // deactivate Ok button
     //bOk->deactivate();
@@ -57,10 +59,10 @@ InputViewGUI
     {
       /** Build the Fl_Choice **/
       Fl_Choice *inputChoice;
-      // create Input Widgets considering the needed inputs 
+      // create Input Widgets considering the needed inputs   
       inputChoice = new Fl_Choice( 85,base + cpt* height, 400, 25, it_in->second.GetDataDescription().c_str() );
+      inputChoice->box(FL_PLASTIC_DOWN_BOX);      
       inputChoice->align(FL_ALIGN_TOP);
-
       InputChoiceDescriptor inputChoiceDesc;
       inputChoiceDesc.m_FlChoice = inputChoice;
 
@@ -83,7 +85,7 @@ InputViewGUI
       }
       m_InputChoiceMap[it_in->first] = inputChoiceDesc;
       gScrollInput->add(inputChoice);
-
+   
       /** Build the Fl_Check_Button **/
       if(it_in->second.IsOptional())
       {
@@ -107,6 +109,7 @@ InputViewGUI
 {
   std::cout << "---------------------------- case OPTIONAL "<<std::endl<<std::endl;
   Fl_Check_Button *checkButton = new Fl_Check_Button( 60,height/2+cpt* height, 25, 25);
+  checkButton->box(FL_PLASTIC_DOWN_BOX);
   gScrollInput->add(checkButton);
   inputChoice->deactivate();
   checkButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
@@ -132,9 +135,13 @@ InputViewGUI
 ::BuildList(int cpt,int height)
 {
   std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
-  Fl_Text_Display *textDisplay = new Fl_Text_Display(85,height+cpt* height, 400, 110);
   Fl_Scroll *littleScroll = new Fl_Scroll( 85,height+cpt* height, 400, 110);
-  littleScroll->add(textDisplay);
+  littleScroll->box(FL_PLASTIC_DOWN_BOX);
+  littleScroll->begin();
+  Fl_Text_Display *textDisplay = new Fl_Text_Display(0,0, 600, 300);
+  textDisplay->box(FL_PLASTIC_DOWN_BOX);
+  littleScroll->end();
+
   gScrollInput->add(littleScroll);
 }
 

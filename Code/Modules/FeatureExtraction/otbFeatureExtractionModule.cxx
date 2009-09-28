@@ -35,11 +35,11 @@ FeatureExtractionModule::FeatureExtractionModule()
   // Describe inputs
   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage","Image to apply feature extraction.");
 
-//   this->AddInputDescriptor("Floating_Point_VectorImage","InputImage2","Optionnal image to apply feature extraction.",true,false);
-// 
-//   this->AddInputDescriptor("Floating_Point_VectorImage","InputImage3","Multiple images to apply feature extraction.",false,true);
-// 
-//   this->AddInputDescriptor("Floating_Point_VectorImage","InputImage4","Image to apply feature extraction.",true,true);
+  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage2","Optionnal image to apply feature extraction.",true,false);
+  
+  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage3","Multiple images to apply feature extraction.",false,true);
+  
+  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage4","Image to apply feature extraction.",true,true);
 
   // the FeatureExtractionModel registers its module
   m_Model->RegisterListener(this);
