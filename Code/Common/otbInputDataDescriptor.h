@@ -31,6 +31,9 @@ namespace otb
  *
  *  The Multiple flag allows to define unbounded multiple inputs.
  *
+ *  Inputs are polymorph : They accept to have more than one type. The
+ *  types are given as a list of types seperated with a ';'.
+ *
  *  See the DataDescriptor class for more details.
  *
  *  \sa Module, DataDescriptor
@@ -64,6 +67,19 @@ public:
 
   /** Set the used flag */
   void SetUsed(bool flag);
+
+  /** Add a supported type for the input */
+  void AddSupportedType(const std::string & type);
+
+  /** Check if the given type is compatible with the input */
+  bool IsTypeCompatible(const std::string & type) const;
+
+protected:
+  /** Type of a vector of strings */
+  typedef std::vector<std::string> StringVectorType;
+
+  /** Split type string according to a separator */
+  static StringVectorType SplitTypeName(const std::string & types, char separator = ',');
 
 private:
   /** The optional flag */
