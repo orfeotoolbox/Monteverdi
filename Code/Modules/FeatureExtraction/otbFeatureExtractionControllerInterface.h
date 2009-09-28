@@ -73,13 +73,13 @@ protected:
   /** Constructor */
   FeatureExtractionControllerInterface()
   {
-    m_Model = ModelType::GetInstance();
+   // m_Model = ModelType::GetInstance();
   }
   /** Destructor */
   ~FeatureExtractionControllerInterface() {};
 
   /** The instance of the model (for commodity) */
-  ModelType * m_Model;
+  ModelType::Pointer m_Model;
 
 private:
   FeatureExtractionControllerInterface(const Self&); //purposely not implemented

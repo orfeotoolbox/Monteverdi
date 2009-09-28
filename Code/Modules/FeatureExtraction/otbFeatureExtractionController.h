@@ -59,6 +59,9 @@ public:
   itkTypeMacro(FeatureExtractionController,Superclass);
   itkNewMacro(Self);
 
+/** Set the model */
+  itkSetObjectMacro(Model,ModelType);
+
 /** NewVisu */
   VisuControllerPointerType GetVisuController()
   {

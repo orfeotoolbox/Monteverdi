@@ -20,7 +20,7 @@
 
 #include "otbWriterModule.h"
 #include "otbOGRVectorDataIO.h"
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 
 namespace otb
 {
@@ -31,8 +31,8 @@ WriterModule::WriterModule()
   m_VectorWriter = VectorWriterType::New();
   
    // Describe inputs
-  this->AddInputDescriptor<FPVImageType>("InputImageDataSet","Image to write.",true);
-  this->AddInputDescriptor<VectorType>("InputVectorDataSet","Vector to write.",true);
+  this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
+  this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
 }
 
 /** Destructor */
@@ -52,15 +52,19 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   const Superclass::InputDataDescriptorMapType inMap = this->GetInputsMap();
-  if(key == "InputImageDataSet")
+  if(key == "InputDataSet")
   {
+  if(data.GetDataType() == TypeManager::GetInstance()->GetTypeName<FPVImageType>())
+    {
+
     FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
     m_FPVWriter->SetInput(image);
-  }
-  else if (key == "InputVectorDataSet")
-  {
-    VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
-    m_VectorWriter->SetInput(vector);  
+    }
+   else if (data.GetDataType() == TypeManager::GetInstance()->GetTypeName<FPVImageType>())
+     {
+     VectorType * vect = dynamic_cast<VectorType *>(data.GetDataObject());
+     m_VectorWriter->SetInput(vect);  
+     }
   }
 }
 
@@ -93,7 +97,7 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = fl_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = flu_file_chooser("Choose the dataset file ...", "*.*",".");
   
   if (filename == NULL)
     {

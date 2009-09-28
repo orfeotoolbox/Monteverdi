@@ -77,7 +77,7 @@ InputViewGUI
         for(it_out=lOutputDataMap.begin();it_out!=lOutputDataMap.end();it_out++)
         {
           // if the type is ok, we can add the label in the Fl_Input_Choice
-          if(it_in->second.GetDataType() == it_out->second.GetDataType())
+          if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
             inputChoice->add(it_out->second.GetDataDescription().c_str());
             inputChoiceDesc.m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));

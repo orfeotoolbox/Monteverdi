@@ -214,6 +214,8 @@ public:
   virtual ColorType SetRandomColor();
   virtual void RedrawWidget();
   virtual void UseDEM();
+  virtual void UpdateDEMSettings();
+  
 
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();

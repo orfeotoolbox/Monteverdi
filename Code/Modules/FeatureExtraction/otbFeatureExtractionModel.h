@@ -176,9 +176,6 @@ public:
   typedef VisuModelType::Pointer                         VisuModelPointerType;
 
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
-
   /** Input Image Pointer */
   void SetInputImage(InputImagePointerType image);
   
@@ -413,7 +410,8 @@ public:
     return m_SelectedFilters;
   };
 
-
+  /** Standard type macro */
+  itkNewMacro(Self);
   itkGetMacro(HasInput,bool);
 
   /** VisuModel */
@@ -470,8 +468,6 @@ public:
 
 
 protected:
-  /** This is protected for the singleton. Use GetInstance() instead. */
-  itkNewMacro(Self);
 
   /** Constructor */
   FeatureExtractionModel();

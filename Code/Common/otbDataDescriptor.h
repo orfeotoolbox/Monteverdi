@@ -20,6 +20,7 @@
 #define __otbDataDescriptor_h
 
 #include <string>
+#include <vector>
 #include <iostream>
 
 namespace otb
@@ -62,7 +63,7 @@ public:
   /** Get the DataDescription */
   const std::string & GetDataDescription() const;
 
-private:
+protected:
   /** The data type */
   std::string m_DataType;
 

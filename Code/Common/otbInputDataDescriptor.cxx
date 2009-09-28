@@ -70,6 +70,51 @@ void InputDataDescriptor::SetUsed(bool flag)
   m_Used = flag;
 }
 
+/** Add a type to the supported type for this input */
+void InputDataDescriptor::AddSupportedType(const std::string & type)
+{
+  // Check if new type is already supported
+  if(!IsTypeCompatible(type))
+    {
+    // If not, add the new type
+    m_DataType = m_DataType+','+type;
+    }
+}
+
+/** Check if the given type is compatible with the input */
+bool InputDataDescriptor::IsTypeCompatible(const std::string & type) const
+{
+  // Split the string into types substring
+  StringVectorType typesStringVector = SplitTypeName(m_DataType);
+
+  // Searh for the type in the vector
+  StringVectorType::const_iterator it = std::find(typesStringVector.begin(),typesStringVector.end(),type);
+
+  // Return true if the type was found
+  return (it!=typesStringVector.end());
+}
+
+
+InputDataDescriptor::StringVectorType InputDataDescriptor::SplitTypeName(const std::string & types, char separator)
+{
+  StringVectorType resp;
+
+  size_t currentSep = 0;
+  size_t nextSep = 0; 
+
+  while(nextSep != std::string::npos)
+    {
+    nextSep = types.find_first_of(separator,currentSep);
+    std::string newType = types.substr(currentSep,nextSep-currentSep);
+    if(!newType.empty())
+      {
+      resp.push_back(newType);
+      }
+    currentSep = nextSep+1;
+    }
+  return resp;
+}
+
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descriptor)
 {
