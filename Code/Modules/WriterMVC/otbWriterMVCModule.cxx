@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_cxx
-#define __otbWriterModule_cxx
+#ifndef __otbWriterMVCModule_cxx
+#define __otbWriterMVCModule_cxx
 
 #include "otbWriterMVCModule.h"
 

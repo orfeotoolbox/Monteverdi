@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_h
-#define __otbWriterModule_h
+#ifndef __otbWriterMVCModule_h
+#define __otbWriterMVCModule_h
 
 // include the base class
 #include "otbModule.h"
@@ -37,90 +37,86 @@
 
 #include "otbWriterController.h"
 #include "otbWriterModel.h"
-#include "otbWriterView.h"
+#include "otbWriterViewGUI.h"
 
 namespace otb
 {
 /** \class WriterModule
- *  \brief 
- *
- *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
+   *  \brief 
+   *
+   *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT WriterModule
+  class ITK_EXPORT WriterModule
   : public Module
-{
-public:
-  /** Standard class typedefs */
-  typedef WriterModule                 Self;
-  typedef Module                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  {
+    public:
+      /** Standard class typedefs */
+      typedef WriterModule                 Self;
+      typedef Module                        Superclass;
+      typedef itk::SmartPointer<Self>       Pointer;
+      typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** New macro */
-  itkNewMacro(Self);
+      /** New macro */
+      itkNewMacro(Self);
 
-  /** Type macro */
-  itkTypeMacro(WriterModule,Module);
+      /** Type macro */
+      itkTypeMacro(WriterModule,Module);
 
-  /** OTB typedefs */
+      /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FPVImageType;
-  typedef FPVImageType::Pointer         FPVImagePointerType;
-  typedef VectorData<double>            VectorType;
+      typedef VectorImage<double,2>         FPVImageType;
+      typedef FPVImageType::Pointer         FPVImagePointerType;
+      typedef VectorData<double>            VectorType;
   /// Writers
 //   typedef ImageFileWriter<FPVImageType>    FPVWriterType;
 //   typedef VectorDataFileWriter<VectorType> VectorWriterType;
 
-  /** Typedefs for layers generation*/
-//   typedef Image<double,2>                                                  SingleImageType;
-//   typedef SingleImageType::Pointer                                         SingleImagePointerType;
-//   typedef SingleImageType::PixelType                                       SinglePixelType;
-//   typedef SingleImageType::InternalPixelType                               SingleInternalPixelType;
-//   typedef SingleImageType::RegionType                                      SingleRegionType;
-//   typedef SingleImageType::IndexType                                       SingleIndexType;
-//   typedef SingleImageType::RegionType                                      SingleSpacingType;
-//   typedef SingleImageType::SizeType                                        SingleSizeType;
-//   typedef ImageList< SingleImageType >                                     ImageListType;
-//   typedef ImageListType::Pointer                                           ImageListPointerType;
+      /** Typedefs for layers generation*/
+      typedef Image<double,2>                                                  SingleImageType;
+      typedef SingleImageType::Pointer                                         SingleImagePointerType;
+      typedef SingleImageType::PixelType                                       SinglePixelType;
+      typedef SingleImageType::InternalPixelType                               SingleInternalPixelType;
+      typedef SingleImageType::RegionType                                      SingleRegionType;
+      typedef SingleImageType::IndexType                                       SingleIndexType;
+      typedef SingleImageType::RegionType                                      SingleSpacingType;
+      typedef SingleImageType::SizeType                                        SingleSizeType;
+      typedef ImageList< SingleImageType >                                     ImageListType;
+      typedef ImageListType::Pointer                                           ImageListPointerType;
   
-//   typedef VectorImageToImageListFilter<FPVImageType, ImageListType>       VectorToImageListType;
-//   typedef ImageListToVectorImageFilter< ImageListType, FPVImageType >     ImageListToVectorImageFilterType;
-  
-  
-  
-  
+      typedef VectorImageToImageListFilter<FPVImageType, ImageListType>       VectorToImageListType;
+      typedef ImageListToVectorImageFilter< ImageListType, FPVImageType >     ImageListToVectorImageFilterType;
 
-  itkGetObjectMacro(View,WriterView);
-protected:
-  /** Constructor */
-  WriterModule();
-  /** Destructor */
-  virtual ~WriterModule();
-  /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      itkGetObjectMacro(View,WriterViewGUI);
+    protected:
+      /** Constructor */
+      WriterModule();
+      /** Destructor */
+      virtual ~WriterModule();
+      /** PrintSelf method */
+      virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Assign input by key. This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
+       *  When this method is called, key checking and data type matching
    *  is already done. */
-  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
+      virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
 
-  /** The custom run command */
-  virtual void Run();
+      /** The custom run command */
+      virtual void Run();
 
-  /** Callbacks */
+      /** Callbacks */
 //   virtual void OpenDataSet();
 //   virtual void Browse();
 //   virtual void Cancel();
   
   
-  /** Write the data Options*/
+      /** Write the data Options*/
 //   virtual void GenerateOutputLayers();
 //   virtual void RescaleOutputImage();
 //   virtual void ExportPixelType();
   
   
-  /** Manage the layer list */
+      /** Manage the layer list */
 //   void AddToOutputListOrder(int val)
 //   {
 //     m_OutputListOrder.push_back(val);
@@ -131,42 +127,42 @@ protected:
 //     m_OutputListOrder.erase(m_OutputListOrder.begin()+id-1);
 //     this->Modified();
 //   };
-//   
+      //   
 //   virtual void Show();
       
-private:
-  WriterModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+    private:
+      WriterModule(const Self&); //purposely not implemented
+      void operator=(const Self&); //purposely not implemented
 
 //   FPVWriterType::Pointer m_FPVWriter;
 //   VectorWriterType::Pointer m_VectorWriter;
-//   
-  /** Layer generation*/
+      //   
+      /** Layer generation*/
 //   ImageListPointerType m_InputImageList;
 //   ImageListPointerType m_OutputImageList;
   
-  /** Contains the filter list order for outputs */
+      /** Contains the filter list order for outputs */
 //   std::vector<unsigned int>         m_OutputListOrder;
   
-  /** VectorImage for generation*/
+      /** VectorImage for generation*/
 //   FPVImagePointerType m_InputFPVImage;
 //   FPVImagePointerType m_OutputFPVImage;
   
-  /** Output Pixel Type*/
+      /** Output Pixel Type*/
 //   std::string m_OutputPixelType;
   
-  /** Scale factor*/
+      /** Scale factor*/
 //   double m_ScaleFactor;
   
   // The view
-  WriterView::Pointer        m_View;
+      WriterViewGUI::Pointer        m_View;
 
   // The controller
-  WriterController::Pointer  m_Controller;
+      WriterController::Pointer  m_Controller;
 
   // The model
-  WriterModel::Pointer       m_Model;
-};
+      WriterModel::Pointer       m_Model;
+  };
 
 
 } // End namespace otb

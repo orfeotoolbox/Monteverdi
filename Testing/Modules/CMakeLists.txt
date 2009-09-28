@@ -121,3 +121,4 @@ ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
 
 
+TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest2 otbWriterMVCModule)

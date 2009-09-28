@@ -40,14 +40,15 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
   std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
   module->AddInputByKey("InputImageDataSet",wrapperIn);
   
   module->Start();
-  Fl::check();
-  
+  specificModule->GetView()->Show();
+  Fl::run();
+  /*
   // Simulate file chooser and ok callback
   specificModule->GetView()->vFilePath->value(argv[2]);
   //Select band to write
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
   Fl::check();
   
   specificModule->GetView()->guiOK->do_callback();
-
+  */
   return EXIT_SUCCESS;
 
 }
