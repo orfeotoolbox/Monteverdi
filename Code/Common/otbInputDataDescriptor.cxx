@@ -21,6 +21,8 @@
 
 #include "otbInputDataDescriptor.h"
 
+#include <algorithm>
+
 namespace otb
 {
 /** Constructors */

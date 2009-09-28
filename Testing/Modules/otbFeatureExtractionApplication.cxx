@@ -51,7 +51,14 @@ int main(int argc, char* argv[])
   reader->Update();
 
   //Set The model input Image
-  ModelType * model = ModelType::GetInstance();
+  ModelType * model = ModelType::New();
+  
+  view->SetFeatureExtractionModel(model);
+  view->InitVisu();
+
+  controller->SetModel(model);
+  
+
   model->SetInputImage(reader->GetOutput());
 
   // Open the GUI
