@@ -26,20 +26,26 @@ namespace otb
 FeatureExtractionModule::FeatureExtractionModule()
 {
   // Build mvc
+  m_Model      = FeatureExtractionModel::New();
   m_View       = FeatureExtractionViewGUI::New();
   m_Controller = FeatureExtractionController::New();
-  m_Model      = FeatureExtractionModel::GetInstance();
-  m_Controller->SetView(m_View);
+
+  m_View->SetFeatureExtractionModel(m_Model);
+  m_View->InitVisu();
   m_View->SetFeatureExtractionController(m_Controller);
+
+  m_Controller->SetModel(m_Model);
+  m_Controller->SetView(m_View);
+
 
   // Describe inputs
   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage","Image to apply feature extraction.");
 
-  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage2","Optionnal image to apply feature extraction.",true,false);
-  
-  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage3","Multiple images to apply feature extraction.",false,true);
-  
-  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage4","Image to apply feature extraction.",true,true);
+//   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage2","Optionnal image to apply feature extraction.",true,false);
+//   
+//   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage3","Multiple images to apply feature extraction.",false,true);
+//   
+//   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage4","Image to apply feature extraction.",true,true);
 
   // the FeatureExtractionModel registers its module
   m_Model->RegisterListener(this);

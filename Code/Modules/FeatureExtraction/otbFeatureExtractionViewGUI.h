@@ -91,10 +91,18 @@ public:
     m_ResultVisuView->SetController(m_FeatureExtractionController->GetResultVisuController());
   }
 
+  /** Set the model and register the view to the model */
+  void SetFeatureExtractionModel(FeatureExtractionModel *pModel)
+  {
+    m_FeatureExtractionModel = pModel;
+    m_FeatureExtractionModel->RegisterListener(this);
+  }
+
   itkGetMacro(VisuView,VisuViewPointerType);
   itkGetMacro(ResultVisuView,VisuViewPointerType);
 
   void InitWidgets();
+  void InitVisu();
 
   /** Standard Running macro */
   otbRunningMacro();

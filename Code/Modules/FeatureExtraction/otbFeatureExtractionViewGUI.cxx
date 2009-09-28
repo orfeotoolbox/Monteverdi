@@ -35,8 +35,8 @@ FeatureExtractionViewGUI
 ::FeatureExtractionViewGUI()
 {
   // Model pointer and listener registration
-  m_FeatureExtractionModel = FeatureExtractionModel::GetInstance();
-  m_FeatureExtractionModel->RegisterListener(this);
+  //m_FeatureExtractionModel = FeatureExtractionModel::GetInstance();
+  
 
   // Initialisation
   m_FileNameList =  StringVectorType(4, "");
@@ -57,7 +57,13 @@ FeatureExtractionViewGUI
   m_FeatureExtractPreviewParentBrowser = -1;
   this->InitParameterGroupList();
 
-  /** NewVisu */
+}
+
+void
+FeatureExtractionViewGUI
+::InitVisu()
+{
+   /** NewVisu */
   // Instanstiate the view
   m_VisuView = VisuViewType::New();
   // Set the model
@@ -66,9 +72,7 @@ FeatureExtractionViewGUI
   m_ResultVisuView = VisuViewType::New();
   // Set the model
   m_ResultVisuView->SetModel(m_FeatureExtractionModel->GetResultVisuModel());
-
 }
-
 
 FeatureExtractionViewGUI
 ::~FeatureExtractionViewGUI()

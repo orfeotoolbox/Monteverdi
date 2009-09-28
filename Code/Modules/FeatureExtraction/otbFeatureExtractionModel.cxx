@@ -30,9 +30,6 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-/** Initialize the singleton */
-FeatureExtractionModel::Pointer FeatureExtractionModel::Instance = NULL;
-
 FeatureExtractionModel::FeatureExtractionModel()
 {
   /** Initial parameters */
@@ -73,18 +70,6 @@ FeatureExtractionModel::FeatureExtractionModel()
 FeatureExtractionModel
 ::~FeatureExtractionModel() {}
 
-
-
-/** Manage the singleton */
-FeatureExtractionModel::Pointer
-FeatureExtractionModel::GetInstance()
-{
-  if (!Instance)
-  {
-    Instance = FeatureExtractionModel::New();
-  }
-  return Instance;
-}
 
 void
 FeatureExtractionModel
