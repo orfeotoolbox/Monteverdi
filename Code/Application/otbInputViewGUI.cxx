@@ -106,7 +106,7 @@ InputViewGUI
       /** Build the List **/
       if(it_in->second.IsMultiple())
       {
-        Fl_Browser * browser = this->BuildList(cpt,height);
+        Fl_Browser * browser = this->BuildList(cpt,height,inputChoiceDesc);
         inputChoiceDesc->m_FlBrowser = browser;
         inputChoiceDesc->SetMultiple(true);
         cpt+= 2;
@@ -150,15 +150,13 @@ InputViewGUI
 
 Fl_Browser *
 InputViewGUI
-::BuildList(int cpt,int height)
+::BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc)
 {
   std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
 
   Fl_Browser *browser = new Fl_Browser( 85,height+cpt* height, 400, 110);
   browser->box(FL_PLASTIC_DOWN_BOX);
   gScrollInput->add(browser);
-  // tempppppp
-  int * inputChoiceDesc;
 
   Fl_Button *plusButton = new Fl_Button( 490+15, height/2+cpt* height+2, 20, 20, "+");
   plusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
@@ -187,7 +185,7 @@ InputViewGUI
   clearButton->labelcolor((Fl_Color)186);
   clearButton->callback((Fl_Callback *)InputViewGUI::ClearList,(void *)inputChoiceDesc);
 
-  //return browser;
+  return browser;
 }
 
 
@@ -237,13 +235,14 @@ InputViewGUI
 {
   std::cout<<"ADDDDD"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-
   int choiceVal = inputChoiceDesc->m_FlChoice->value();
-  if(choiceVal != 0)
+  std::cout<<"ADDDDD "<<choiceVal<<std::endl;
+  if(choiceVal >= 0)
     {
-      //inputChoiceDesc->m_FlBrowser->add(choiceVal);
-      //std::cout<<<<std::endl;
-      //guiOutputFeatureList->add(guiFeatureList->text(guiFeatureList->value()));
+      inputChoiceDesc->m_FlBrowser->add(inputChoiceDesc->m_FlChoice->text(choiceVal));
+      std::cout<<inputChoiceDesc->m_FlChoice->text(choiceVal)<<std::endl;
+      //std::cout<<"guillaume est malade "<<choiceVal<<std::endl;
+      //std::cout<<inputChoiceDesc->m_FlChoice->text(0)<<std::endl;
       inputChoiceDesc->m_FlChoice->redraw();
       inputChoiceDesc->m_FlBrowser->redraw();
     }
