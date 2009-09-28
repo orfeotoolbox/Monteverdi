@@ -28,8 +28,8 @@ class ReaderModuleGUI {open
       }
       Fl_Button bBrowse {
         label {...}
-        callback {this->Browse();}
-        xywh {306 35 41 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->Browse();} selected
+        xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
