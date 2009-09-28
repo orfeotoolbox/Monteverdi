@@ -235,8 +235,6 @@ InputViewGUI
   wInputWindow->show();
 }
 
-} // end namespace otb
-
 void 
 InputViewGUI
 ::AddInputToList(Fl_Widget * w, void * v)
@@ -244,12 +242,14 @@ InputViewGUI
   std::cout<<"ADDDDD"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
 
-  int choiceVal = inputChoiceDesc->GetFlChoice()->value();
+  int choiceVal = inputChoiceDesc->m_FlChoice->value();
   if(choiceVal != 0)
     {
-      inputChoiceDesc->GetFlBrowser()->add(choiceVal);
-      inputChoiceDesc->GetFlChoice()->redraw();
-      inputChoiceDesc->GetFlBrowser()->redraw();
+      //inputChoiceDesc->m_FlBrowser->add(choiceVal);
+      //std::cout<<<<std::endl;
+      //guiOutputFeatureList->add(guiFeatureList->text(guiFeatureList->value()));
+      inputChoiceDesc->m_FlChoice->redraw();
+      inputChoiceDesc->m_FlBrowser->redraw();
     }
 }
 
@@ -260,11 +260,11 @@ InputViewGUI
   std::cout<<"REMOVEEEEEE"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
   
-  int choiceVal = inputChoiceDesc->GetFlChoice()->value();
-  if(inputChoiceDesc->GetFlChoice()->size() >= choiceVal)
+  int choiceVal = inputChoiceDesc->m_FlChoice->value();
+  if(inputChoiceDesc->m_FlChoice->size() >= choiceVal)
     {
-      inputChoiceDesc->GetFlBrowser()->remove(choiceVal);
-      inputChoiceDesc->GetFlBrowser()->redraw();
+      inputChoiceDesc->m_FlBrowser->remove(choiceVal);
+      inputChoiceDesc->m_FlBrowser->redraw();
     }
 }
 
@@ -274,8 +274,10 @@ InputViewGUI
 {
   std::cout<<"CLEAR"<<std::endl;
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-  inputChoiceDesc->GetFlBrowser()->clear();
-  inputChoiceDesc->GetFlBrowser()->redraw();
+  inputChoiceDesc->m_FlBrowser->clear();
+  inputChoiceDesc->m_FlBrowser->redraw();
 }
 
 } // end namespace otb
+
+#endif
