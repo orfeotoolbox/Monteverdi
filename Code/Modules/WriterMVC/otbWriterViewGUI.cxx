@@ -407,7 +407,7 @@ WriterViewGUI
   
   //m_View->guiOutputFeatureList->add( m_Model->GetOutputFilterInformationId(i).c_str() );
   this->guiFeatureList->redraw();
-  this->guiOutputFeatureList->redraw();
+//   this->guiOutputFeatureList->redraw();
 }
 
 void
@@ -544,7 +544,8 @@ void WriterViewGUI::Browse()
   }
   vFilePath->value(filename);
   
-  m_WriterController->OpenInputImage(filename);
+//   m_WriterController->OpenInputImage(filename);
+  
   
 }
 

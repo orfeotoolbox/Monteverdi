@@ -59,6 +59,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayerRenderingModel.h"
 
+#include "otbImageFileWriter.h"
+#include "otbVectorDataFileWriter.h"
 
 namespace otb
 {
@@ -175,7 +177,12 @@ public:
   typedef otb::ImageLayerRenderingModel<ViewerImageType> VisuModelType;
   typedef VisuModelType::Pointer                         VisuModelPointerType;
 
-
+  /** inpuyt vector data */
+  typedef VectorData<double>            VectorType;
+  /// Writers
+  typedef ImageFileWriter<InputImageType>    FPVWriterType;
+  typedef VectorDataFileWriter<VectorType> VectorWriterType;
+  
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -428,7 +435,7 @@ public:
   template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 
   /** Generate output image */
-//   void GenerateOutputImage();
+  void GenerateOutputImage();
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
@@ -439,6 +446,10 @@ public:
   /** Init Input Image */
   void InitInput();
 
+  /** update writers*/
+  void UpdateWriter(std::string & fname);
+  void UpdateVectorWriter(std::string & fname);
+  void UpdateImageWriter(std::string & fname);   
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
@@ -505,6 +516,10 @@ private:
   SingleImagePointerType m_image;
   ImageListType::Pointer m_imageList;
   ImageListToVectorImageFilterType::Pointer m_iL2VI;
+  
+  //Writers
+  FPVWriterType::Pointer m_FPVWriter;
+  VectorWriterType::Pointer m_VectorWriter;
 };
 
 }

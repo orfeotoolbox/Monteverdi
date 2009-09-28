@@ -109,3 +109,6 @@ ${INPUTDATA}/poupees.tif
 #------------- Writer Module Tests ---------------------------
 ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
+
+ADD_EXECUTABLE(otbWriterMVCModuleTest2 otbWriterMVCModuleTest2.cxx)
+TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest2 otbWriterMVCModule)

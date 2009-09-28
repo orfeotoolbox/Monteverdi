@@ -77,6 +77,11 @@ namespace otb
     this->BuildGUI();
     wFileChooserWindow->show();*/
     m_View->Show();
+    m_Model->GenerateLayers();
+    std::cout << "end of Feature GUI"<< std::endl;
+    
+    // Notify all listener
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
   }
 
 

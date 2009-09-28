@@ -76,7 +76,7 @@ WriterController
 {
   try
   {
-//     m_Model->GenerateOutputImage();
+    m_Model->GenerateOutputImage();
   }
   catch (itk::ExceptionObject & err)
   {

@@ -46,8 +46,9 @@ int main(int argc, char* argv[])
   module->AddInputByKey("InputImageDataSet",wrapperIn);
   
   module->Start();
-  Fl::check();
-  
+  specificModule->GetView()->Show();
+  Fl::run();
+  /*
   // Simulate file chooser and ok callback
   specificModule->GetView()->vFilePath->value(argv[2]);
   //Select band to write
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
   Fl::check();
   
   specificModule->GetView()->guiOK->do_callback();
-
+  */
   return EXIT_SUCCESS;
 
 }

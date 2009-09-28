@@ -50,8 +50,6 @@ WriterModel::WriterModel()
   m_IntensityFilter          = IntensityFilterType::New();
   m_Reader                   = ReaderType::New();
   
-
-
   // init input image + m_HasInput
   this->InitInput();
 
@@ -63,6 +61,11 @@ WriterModel::WriterModel()
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
   m_iL2VI = ImageListToVectorImageFilterType::New();
+  
+  //Input and Writers
+  m_InputImage = InputImageType::New(); 
+  m_FPVWriter = FPVWriterType::New();
+  m_VectorWriter = VectorWriterType::New();
 }
 
 
@@ -117,6 +120,8 @@ WriterModel
   // Render
   m_VisuModel->Update();
   
+  //Set Input Writer
+  m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
   this->NotifyAll();
 }
@@ -271,7 +276,60 @@ WriterModel
  ****************************************************/
 
 
+void
+WriterModel
+::GenerateOutputImage()
+{
+//   SingleImagePointerType image = SingleImageType::New();
+//   ImageListType::Pointer imageList = ImageListType::New();
 
+  bool todo = false;
+  int outputNb = 0;
+  int i = 0;
+
+  if( !m_HasInput )
+    itkExceptionMacro("Impossible to create output image : no image image selected.")
+        if( m_OutputListOrder.size()==0 )
+        itkExceptionMacro("Impossible to create output image : no feature selected.")
+
+        for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
+  {
+    /*
+    i = m_OutputListOrder[ii];
+    if (m_SelectedFilters[i] == true)
+    {
+      todo = true;
+      m_image = GetSingleImage(i);
+      m_imageList->PushBack( m_image );
+      outputNb++;
+    */
+    i = m_OutputListOrder[ii];
+    todo = true;
+    m_image = this->GetInputImageList()->GetNthElement(i);
+    m_imageList->PushBack( m_image );
+    outputNb++;
+    
+    
+  }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
+
+  if (todo == true)
+  {
+//     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
+    m_iL2VI->SetInput( m_imageList );
+
+    m_OutputImage = m_iL2VI->GetOutput();
+    
+    //FIXME update during the pipeline!!!!! 
+//     m_iL2VI->Update();
+//     iL2VI->UpdateOutputInformation();
+
+    m_OutputImage->UpdateOutputInformation();
+
+    this->UpdateWriter(m_OutputFileName);
+  }
+  
+  
+}
 
 
 
@@ -296,7 +354,37 @@ WriterModel
   m_ResultVisuModel->Update();
 }
 
-
+void WriterModel
+  ::UpdateWriter(std::string & fname)
+{
+  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
+  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
+  
+  if ( test->CanWriteFile(fname.c_str()) ) 
+  {
+//     m_VectorWriter->SetFileName(filepath);
+//     m_VectorWriter->Update();
+    this->UpdateVectorWriter(fname);
+  }
+  else
+  {
+//     m_FPVWriter->SetFileName(filepath);
+//     m_FPVWriter->Update();
+    this->UpdateImageWriter(fname);
+  }
+}
+void WriterModel
+  ::UpdateVectorWriter(std::string & fname)
+{
+  m_VectorWriter->SetFileName(fname);
+  m_VectorWriter->Update();
+}
+void WriterModel
+  ::UpdateImageWriter(std::string & fname)   
+{
+  m_FPVWriter->SetFileName(fname);
+  m_FPVWriter->Update();
+}
 
 }
 
