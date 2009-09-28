@@ -1,34 +1,34 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class ReaderModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Open dataset} open selected
-      xywh {566 108 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      label {Open dataset} open
+      xywh {207 225 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
-      Fl_File_Input vFilePath {selected
+      Fl_File_Input vFilePath {
         xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
         label Ok
-        callback {this->OpenDataSet();} selected
-        xywh {194 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->OpenDataSet();}
+        xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
-        callback {this->Cancel();} selected
-        xywh {45 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->Cancel();}
+        xywh {24 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
-        callback {this->Browse();} selected
+        callback {this->Browse();}
         xywh {306 35 41 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
@@ -39,4 +39,4 @@ class ReaderModuleGUI {open
   } {}
   Function {Cancel()} {open protected return_type {virtual void}
   } {}
-}
+} 
