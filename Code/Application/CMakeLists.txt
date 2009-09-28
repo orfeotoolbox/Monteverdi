@@ -12,6 +12,7 @@ SET(APPLICATION_SRCS
 otbMonteverdiModel.cxx
 otbMonteverdiViewGUI.cxx
 otbMonteverdiController.cxx
+#otbInputChoiceDescriptor.cxx
 otbInputViewGUI.cxx
 )
 
@@ -24,7 +25,7 @@ otbInputViewGroup.fl
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
 
-FLTK_WRAP_UI(Monteverdi ${VIEW_FL_SRCS})
+FLTK_WRAP_UI(otbMonteverdi ${VIEW_FL_SRCS})
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -36,14 +37,15 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${Monteverdi_FLTK_UI_SRCS})
+ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbMonteverdi OTBGui OTBMonteverdiCommon 
                       otbReaderModule otbSpeckleFilteringModule otbFeatureExtractionModule otbSupervisedClassificationModule 
                       otbOrthorectificationModule otbWriterModule otbViewerModule flu)
 INSTALL_TARGETS(/bin otbMonteverdi)
 
 
-ADD_EXECUTABLE(Monteverdi Monteverdi.cxx )
+ADD_EXECUTABLE(Monteverdi Monteverdi.cxx
+)
 TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi)
 INSTALL_TARGETS(/bin Monteverdi)
 

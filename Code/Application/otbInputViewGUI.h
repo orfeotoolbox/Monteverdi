@@ -31,10 +31,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 #include "itkObject.h"
-//#include <FL/Fl_File_Chooser.H>
+#include "itkObjectFactory.h"
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Browser.H>
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
+#include "otbInputChoiceDescriptor.h"
 
 
 namespace otb
@@ -42,11 +44,10 @@ namespace otb
 /** \class InputViewGUI
  *
  */
-class InputViewGUI
-   : public InputViewGroup, public itk::Object
+class ITK_EXPORT InputViewGUI
+   : public itk::Object, public InputViewGroup
 {
 public:
-
   /** Standard class typedefs */
   typedef InputViewGUI                  Self;
   typedef itk::Object                   Superclass;
@@ -55,13 +56,14 @@ public:
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(InputViewGUI,itk::Object);
+  itkTypeMacro(InputViewGUI,Object);
 
 
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
-  typedef std::pair<std::string,std::string>              StringPairType;
+  typedef InputChoiceDescriptor::StringPairType           StringPairType;
+  typedef InputChoiceDescriptor::Pointer                  InputChoiceDescriptorPointerType;
 
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
@@ -77,39 +79,24 @@ public:
   void BuildList(int cpt,int height);
   void BuildCheckBox(int cpt,int height,Fl_Choice *inputChoice);
 
-private:
+protected:
   /** Constructor */
-  InputViewGUI(){};
+  InputViewGUI();
   /** Destructor */
-  virtual ~InputViewGUI(){};
-
-  class InputChoiceDescriptor
-  {
-  public:
-    Fl_Choice *                   m_FlChoice;
-    std::vector<StringPairType>   m_ChoiceVector;
-
-    StringPairType GetSelected() const
-    {
-        std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
-       return m_ChoiceVector[m_FlChoice->value()];
-    }
-
-    bool HasSelected() const
-    {
-      return m_FlChoice->value()>=0;
-    }
-  };
-
-  typedef std::map<std::string,InputChoiceDescriptor> InputChoiceDescriptorMapType;
+  virtual ~InputViewGUI(){}
 
   /** Callbacks */
-  void Ok();
-  void Cancel();
+  virtual void Ok();
+  virtual void Cancel();
   static void ActivateInputChoice(Fl_Widget * w, void * v);
 
 
-protected:
+private:
+  InputViewGUI(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
+
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;
   std::string                             m_ModuleInstanceId;

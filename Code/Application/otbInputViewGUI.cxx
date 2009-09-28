@@ -15,13 +15,15 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbInputViewGUI_cxx
+#define __otbInputViewGUI_cxx
+
 #include "otbInputViewGUI.h"
 
 #include <FL/fl_ask.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Browser.H>
-#include <FL/Fl_Text_Display.H>
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
@@ -31,6 +33,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
+InputViewGUI
+::InputViewGUI()
+{
+
+}
 
 
 void
@@ -62,10 +70,10 @@ InputViewGUI
       Fl_Choice *inputChoice;
       // create Input Widgets considering the needed inputs   
       inputChoice = new Fl_Choice( 85,base + cpt* height, 400, 25, it_in->second.GetDataDescription().c_str() );
-      inputChoice->box(FL_PLASTIC_DOWN_BOX);      
+      inputChoice->box(FL_PLASTIC_DOWN_BOX);
       inputChoice->align(FL_ALIGN_TOP);
-      InputChoiceDescriptor inputChoiceDesc;
-      inputChoiceDesc.m_FlChoice = inputChoice;
+      InputChoiceDescriptor::Pointer inputChoiceDesc = InputChoiceDescriptor::New();
+      inputChoiceDesc->m_FlChoice = inputChoice;
 
       // we check if there are convenient outputs in the modules
       std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();
@@ -80,25 +88,37 @@ InputViewGUI
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
             inputChoice->add(it_out->second.GetDataDescription().c_str());
-            inputChoiceDesc.m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
+
+            /** Build the inputChoiceDescriptor */
+            inputChoiceDesc->m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
           }
         }
       }
-      m_InputChoiceMap[it_in->first] = inputChoiceDesc;
+
       gScrollInput->add(inputChoice);
-   
+
       /** Build the Fl_Check_Button **/
       if(it_in->second.IsOptional())
       {
         this->BuildCheckBox(cpt,height,inputChoice);
+    //    inputChoiceDesc.SetOptional(true);
       }
       /** Build the List **/
       if(it_in->second.IsMultiple())
       {
         this->BuildList(cpt,height);
+        //inputChoiceDesc.SetBrowser();
+ //       inputChoiceDesc.SetMultiple(true);
         cpt+= 2;
       }
+
+      /** Add the inputChoiceDescriptor into the inputChoiceMap */
+  //    m_InputChoiceMap[it_in->first] = inputChoiceDesc;
+
+
       cpt++;
+
+
     }
   }
 
@@ -130,7 +150,8 @@ InputViewGUI
     }
 }
 
-void 
+//Fl_Browser *
+void
 InputViewGUI
 ::BuildList(int cpt,int height)
 {
@@ -173,6 +194,8 @@ InputViewGUI
   clearButton->labelsize(12);
   clearButton->labelcolor((Fl_Color)186);
   //plusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
+
+  //return browser;
 }
 
 
@@ -184,15 +207,17 @@ InputViewGUI
 {
   std::cout<< "Ok" <<std::endl;
   // Connect 
+/*
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin();
   mIt!=m_InputChoiceMap.end();++mIt)
   {
-  if(mIt->second.HasSelected())
+  if(mIt->second->HasSelected())
     {
-    StringPairType spair = mIt->second.GetSelected();
+    StringPairType spair = mIt->second->GetSelected();
     m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
     }
   }
+*/
   // Start()
   std::cout<< "Start" <<std::endl;
   m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
@@ -216,3 +241,5 @@ InputViewGUI
 }
 
 } // end namespace otb
+
+#endif
