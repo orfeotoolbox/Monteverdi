@@ -135,27 +135,22 @@ InputViewGUI
 ::BuildList(int cpt,int height)
 {
   std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
-  /*
-  Fl_Scroll *littleScroll = new Fl_Scroll( 85,height+cpt* height, 400, 110);
-  littleScroll->box(FL_PLASTIC_DOWN_BOX);
-  littleScroll->begin();
-  Fl_Text_Display *textDisplay = new Fl_Text_Display(0,0, 600, 300);
-  littleScroll->end();
-  */
+
   Fl_Browser *browser = new Fl_Browser( 85,height+cpt* height, 400, 110);
   browser->box(FL_PLASTIC_DOWN_BOX);
   gScrollInput->add(browser);
+  // tempppppp
+  int * inputChoiceDesc;
 
   Fl_Button *plusButton = new Fl_Button( 490+15, height/2+cpt* height+2, 20, 20, "+");
-  //plusButton->box(FL_PLASTIC_DOWN_BOX);
   plusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
   plusButton->color((Fl_Color)55);
   plusButton->labelfont(1);
   plusButton->labelsize(17);
   plusButton->labelcolor((Fl_Color)186);
   gScrollInput->add(plusButton);
+  plusButton->callback((Fl_Callback *)InputViewGUI::AddInputToList,(void *)inputChoiceDesc);
 
-  //plusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
   Fl_Button *minusButton = new Fl_Button( 490+15, height+cpt* height + 37, 20, 20, "-");
   minusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
   minusButton->color((Fl_Color)55);
@@ -163,8 +158,8 @@ InputViewGUI
   minusButton->labelsize(17);
   minusButton->labelcolor((Fl_Color)186);
   gScrollInput->add(minusButton);
+  minusButton->callback((Fl_Callback *)InputViewGUI::RemoveInputFromList,(void *)inputChoiceDesc);
 
-  //minusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
   Fl_Button *clearButton = new Fl_Button( 490, height+cpt* height+85, 50, 25, "Clear");
   gScrollInput->add(clearButton);
   clearButton->box(FL_PLASTIC_DOWN_BOX);
@@ -172,7 +167,7 @@ InputViewGUI
   clearButton->labelfont(1);
   clearButton->labelsize(12);
   clearButton->labelcolor((Fl_Color)186);
-  //plusButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
+  clearButton->callback((Fl_Callback *)InputViewGUI::ClearList,(void *)inputChoiceDesc);
 }
 
 
@@ -213,6 +208,48 @@ InputViewGUI
 ::Show()
 {
   wInputWindow->show();
+}
+
+
+void 
+InputViewGUI
+::AddInputToList(Fl_Widget * w, void * v)
+{
+  std::cout<<"ADDDDD"<<std::endl;
+  InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
+
+  int choiceVal = inputChoiceDesc->GetFlChoice()->value();
+  if(choiceVal != 0)
+    {
+      inputChoiceDesc->GetFlBrowser()->add(choiceVal);
+      inputChoiceDesc->GetFlChoice()->redraw();
+      inputChoiceDesc->GetFlBrowser()->redraw();
+    }
+}
+
+void 
+InputViewGUI
+::RemoveInputFromList(Fl_Widget * w, void * v)
+{
+  std::cout<<"REMOVEEEEEE"<<std::endl;
+  InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
+  
+  int choiceVal = inputChoiceDesc->GetFlChoice()->value();
+  if(inputChoiceDesc->GetFlChoice()->size() >= choiceVal)
+    {
+      inputChoiceDesc->GetFlBrowser()->remove(choiceVal);
+      inputChoiceDesc->GetFlBrowser()->redraw();
+    }
+}
+
+void 
+InputViewGUI
+::ClearList(Fl_Widget * w, void * v)
+{
+  std::cout<<"CLEAR"<<std::endl;
+  InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
+  inputChoiceDesc->GetFlBrowser()->clear();
+  inputChoiceDesc->GetFlBrowser()->redraw();
 }
 
 } // end namespace otb

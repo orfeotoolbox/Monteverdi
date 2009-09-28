@@ -107,6 +107,9 @@ private:
   void Ok();
   void Cancel();
   static void ActivateInputChoice(Fl_Widget * w, void * v);
+  static void AddInputToList(Fl_Widget * w, void * v);
+  static void RemoveInputFromList(Fl_Widget * w, void * v);
+  static void ClearList(Fl_Widget * w, void * v);
 
 
 protected:

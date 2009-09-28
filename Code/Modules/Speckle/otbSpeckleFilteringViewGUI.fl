@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class SpeckleFilteringViewGUI {open
 } {
@@ -12,16 +12,16 @@ class SpeckleFilteringViewGUI {open
     Fl_Window guiMainWindow {
       label SpeckleFilteringApplication
       callback {this->Quit()} open
-      xywh {657 97 310 270} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      xywh {91 164 310 270} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button bQuit {
         label Quit
         callback {Quit();}
-        tooltip {Quit the viewer manager} xywh {20 220 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+        tooltip {Quit the viewer manager} xywh {30 220 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Choice guiFilterType {
         label {Filter type} open
-        tooltip {Set the filter type} xywh {110 43 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Set the filter type} xywh {120 29 111 25} box PLASTIC_DOWN_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         MenuItem {} {
           label Frost
@@ -35,31 +35,31 @@ class SpeckleFilteringViewGUI {open
         }
       }
       Fl_Group guiLeeGroup {
-        label {Lee filter parameters} open
-        xywh {20 94 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
+        label {Lee filter parameters} open selected
+        xywh {30 95 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
       } {
         Fl_Value_Input guiLeeRadius {
-          label Radius selected
-          tooltip {Radius parameter for Lee filter} xywh {129 108 50 20} minimum -300 maximum 300 step 1 value 10
+          label Radius
+          tooltip {Radius parameter for Lee filter} xywh {145 126 50 20} minimum -300 maximum 300 step 1 value 10
         }
       }
       Fl_Group guiFrostGroup {
         label {Frost filter parameters} open
-        xywh {20 96 250 80} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {30 95 250 80} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Value_Input guiFrostRadius {
           label Radius
-          tooltip {Radius parameter for Frost image filter} xywh {129 110 51 20} maximum 300 step 1 value 10
+          tooltip {Radius parameter for Frost image filter} xywh {146 110 50 20} box PLASTIC_DOWN_BOX maximum 300 step 1 value 10
         }
         Fl_Value_Input guiLeeDeRamp {
           label DeRamp
-          tooltip {Deramp parameter for Frost image filter} xywh {137 137 50 20} minimum -300 maximum 300 step 0.1 value 0.2
+          tooltip {Deramp parameter for Frost image filter} xywh {146 143 50 20} box PLASTIC_DOWN_BOX minimum -300 maximum 300 step 0.1 value 0.2
         }
       }
       Fl_Button bOk {
         label OK
         callback {Process();}
-        tooltip {Quit the viewer manager} xywh {180 220 95 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0x71 color 23 selection_color 23 labelcolor 186
+        tooltip {Quit the viewer manager} xywh {185 220 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
     }
   }
@@ -74,4 +74,4 @@ class SpeckleFilteringViewGUI {open
   } {}
   Function {Quit()} {open return_type {virtual void}
   } {}
-}
+} 
