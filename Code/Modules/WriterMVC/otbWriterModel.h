@@ -183,8 +183,9 @@ public:
   typedef ImageFileWriter<InputImageType>    FPVWriterType;
   typedef VectorDataFileWriter<VectorType> VectorWriterType;
   
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
+  itkNewMacro(Self);
+  
+  
 
   /** Input Image Pointer */
   void SetInputImage(InputImagePointerType image);
@@ -452,8 +453,7 @@ public:
   void UpdateVectorWriter(const std::string & fname);
   void UpdateImageWriter(const std::string & fname);   
 protected:
-  /** This is protected for the singleton. Use GetInstance() instead. */
-  itkNewMacro(Self);
+  
 
   /** Constructor */
   WriterModel();

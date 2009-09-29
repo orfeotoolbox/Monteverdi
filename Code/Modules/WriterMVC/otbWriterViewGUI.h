@@ -91,10 +91,18 @@ public:
     m_ResultVisuView->SetController(m_WriterController->GetResultVisuController());
   }
 
+  /** Set the model and register the view to the model */
+  void SetWriterModel(WriterModel *pModel)
+  {
+    m_WriterModel = pModel;
+    m_WriterModel->RegisterListener(this);
+  }
+  
   itkGetMacro(VisuView,VisuViewPointerType);
   itkGetMacro(ResultVisuView,VisuViewPointerType);
 
   void InitWidgets();
+  void InitVisu();
 
   /** Standard Running macro */
   otbRunningMacro();

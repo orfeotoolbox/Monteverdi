@@ -71,7 +71,7 @@ protected:
   /** Constructor */
   WriterControllerInterface()
   {
-    m_Model = ModelType::GetInstance();
+//     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
   ~WriterControllerInterface() {};

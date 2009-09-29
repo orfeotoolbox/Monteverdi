@@ -29,12 +29,19 @@ WriterModule::WriterModule()
 //   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
   
+  //Build MVC
   m_View       = WriterViewGUI::New();
   m_Controller = WriterController::New();
-  m_Model      = WriterModel::GetInstance();
+  m_Model      = WriterModel::New();
   m_Controller->SetView(m_View);
   m_View->SetWriterController(m_Controller);
   
+  m_View->SetWriterModel(m_Model);
+  m_View->InitVisu();
+  m_View->SetWriterController(m_Controller);
+
+  m_Controller->SetModel(m_Model);
+  m_Controller->SetView(m_View);
    // Describe inputs
   this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");

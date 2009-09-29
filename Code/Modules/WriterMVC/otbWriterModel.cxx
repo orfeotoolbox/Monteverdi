@@ -30,8 +30,6 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-/** Initialize the singleton */
-WriterModel::Pointer WriterModel::Instance = NULL;
 
 WriterModel::WriterModel()
 {
@@ -71,19 +69,6 @@ WriterModel::WriterModel()
 
 WriterModel
 ::~WriterModel() {}
-
-
-
-/** Manage the singleton */
-WriterModel::Pointer
-WriterModel::GetInstance()
-{
-  if (!Instance)
-  {
-    Instance = WriterModel::New();
-  }
-  return Instance;
-}
 
 void
 WriterModel

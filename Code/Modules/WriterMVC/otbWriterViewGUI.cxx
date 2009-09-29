@@ -35,8 +35,8 @@ WriterViewGUI
 ::WriterViewGUI()
 {
   // Model pointer and listener registration
-  m_WriterModel = WriterModel::GetInstance();
-  m_WriterModel->RegisterListener(this);
+//   m_WriterModel = WriterModel::GetInstance();
+//   m_WriterModel->RegisterListener(this);
 
   // Initialisation
   m_FileNameList =  StringVectorType(4, "");
@@ -49,14 +49,16 @@ WriterViewGUI
 
   this->CreateGUI();
 
-//   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-//   guiFeatInfo->buffer(buffer);
-
   m_SelectedPixel.SetSize(0);
   m_SelectedPixel.Fill(0);
   m_FeatureExtractPreviewParentBrowser = -1;
-//   this->InitParameterGroupList();
 
+}
+
+void
+WriterViewGUI
+::InitVisu()
+{
   /** NewVisu */
   // Instanstiate the view
   m_VisuView = VisuViewType::New();
@@ -66,9 +68,7 @@ WriterViewGUI
   m_ResultVisuView = VisuViewType::New();
   // Set the model
   m_ResultVisuView->SetModel(m_WriterModel->GetResultVisuModel());
-
 }
-
 
 WriterViewGUI
 ::~WriterViewGUI()

@@ -59,6 +59,9 @@ public:
   itkTypeMacro(WriterController,Superclass);
   itkNewMacro(Self);
 
+  /** Set the model */
+  itkSetObjectMacro(Model,ModelType);
+  
 /** NewVisu */
   VisuControllerPointerType GetVisuController()
   {
