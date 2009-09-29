@@ -77,7 +77,7 @@ public:
 
 protected:
   /** Constructor */
-  InputChoiceDescriptor(){}; //m_Optional=false; m_Multiple=false;
+  InputChoiceDescriptor(){m_Optional=false; m_Multiple=false;};
   /** Destructor */
   virtual ~InputChoiceDescriptor(){};
 

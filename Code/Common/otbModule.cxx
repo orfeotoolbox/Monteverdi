@@ -55,6 +55,8 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Add an input data by its key */
 void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
+  std::cout<<"AddInputByKey:key : " << key<<" data : "<<data<<std::endl;
+
   // Search for the key in the input map
   InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
 
