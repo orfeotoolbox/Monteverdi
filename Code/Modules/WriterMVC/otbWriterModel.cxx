@@ -120,6 +120,8 @@ WriterModel
   // Render
   m_VisuModel->Update();
   
+  //GenerateImageList
+  
   //Set Input Writer
   m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
@@ -143,6 +145,8 @@ void
   // Render
   m_VisuModel->Update();
   
+//   otbMsgDebugMacro (<< "image list size " << m_InputImageList->Size());
+  std::cout << "Image list size " << m_InputImageList->Size() << std::endl;
   // Notify the observers
   this->NotifyAll();
 }
@@ -234,13 +238,13 @@ WriterModel
 /************************************************
  ******************* FILTERS FUNCTIONS **********
  ************************************************/
-void
-WriterModel
-::AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess)
+ void
+     WriterModel
+  ::AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess)
 {
   this->AddFilter( filter );
   this->AddFilterType(type);
-
+  
   itk::OStringStream oss;
   if( inputId!=-1 )
     oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
@@ -250,6 +254,25 @@ WriterModel
   m_OutputIndexMap.push_back(indexMapval);
   m_SelectedFilters.push_back(true);
   m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
+}
+void
+WriterModel
+::AddFeature()
+{
+//   this->AddFilter( filter );
+//   this->AddFilterType(type);
+
+  //itk::OStringStream oss;
+  
+  //oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
+//   unsigned int size = m_NumberOfChannels;
+  for (unsigned int i=0;i<m_NumberOfChannels;++i)
+  {
+    m_OutputIndexMap.push_back(0);
+//   m_SelectedFilters.push_back(true);
+    m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));  
+  }
+  
 }
 
 void
@@ -278,7 +301,7 @@ WriterModel
 
 void
 WriterModel
-::GenerateOutputImage()
+::GenerateOutputImage(const std::string & fname)
 {
 //   SingleImagePointerType image = SingleImageType::New();
 //   ImageListType::Pointer imageList = ImageListType::New();
@@ -306,6 +329,7 @@ WriterModel
     i = m_OutputListOrder[ii];
     todo = true;
     m_image = this->GetInputImageList()->GetNthElement(i);
+    std::cout << "list of image "<< i << std::endl;
     m_imageList->PushBack( m_image );
     outputNb++;
     
@@ -325,7 +349,7 @@ WriterModel
 
     m_OutputImage->UpdateOutputInformation();
 
-    this->UpdateWriter(m_OutputFileName);
+    this->UpdateWriter(fname);
   }
   
   
@@ -343,6 +367,7 @@ WriterModel
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
   //lResultVisuGenerator->SetImage(this->GetSingleImage(id));
+  std::cout << "render feature number " << " "<< id <<this->GetInputImageList()->GetNthElement(id)<< " size " << this->GetInputImageList()->Size() << std::endl;
   lResultVisuGenerator->SetImage( this->GetInputImageList()->GetNthElement(id) );
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");
@@ -355,7 +380,7 @@ WriterModel
 }
 
 void WriterModel
-  ::UpdateWriter(std::string & fname)
+  ::UpdateWriter(const std::string & fname)
 {
   typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
@@ -374,15 +399,17 @@ void WriterModel
   }
 }
 void WriterModel
-  ::UpdateVectorWriter(std::string & fname)
+  ::UpdateVectorWriter(const std::string & fname)
 {
   m_VectorWriter->SetFileName(fname);
+  //Need tio set input //TODO
   m_VectorWriter->Update();
 }
 void WriterModel
-  ::UpdateImageWriter(std::string & fname)   
+  ::UpdateImageWriter(const std::string & fname)   
 {
   m_FPVWriter->SetFileName(fname);
+  m_FPVWriter->SetInput(m_OutputImage);
   m_FPVWriter->Update();
 }
 

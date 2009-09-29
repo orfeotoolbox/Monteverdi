@@ -431,11 +431,12 @@ public:
 
   /** This have for aim to factorized the previous AddFunctions code*/
   void AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess);
+  void AddFeature();
 
   template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 
   /** Generate output image */
-  void GenerateOutputImage();
+  void GenerateOutputImage(const std::string & fname);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
@@ -447,9 +448,9 @@ public:
   void InitInput();
 
   /** update writers*/
-  void UpdateWriter(std::string & fname);
-  void UpdateVectorWriter(std::string & fname);
-  void UpdateImageWriter(std::string & fname);   
+  void UpdateWriter(const std::string & fname);
+  void UpdateVectorWriter(const std::string & fname);
+  void UpdateImageWriter(const std::string & fname);   
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);

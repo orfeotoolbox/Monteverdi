@@ -162,25 +162,31 @@ WriterViewGUI
     m_ParameterGroupList[i]->hide();
   m_ParameterGroupList[groupId]->show();
 }
-/*
+
 void
 WriterViewGUI
 ::UpdateFeaturePreview()
 {
-  if (guiFeatureListAction->value()>0)
+  if (guiOutputFeatureList->value()>0)
   {
-    m_WriterModel->GetSingleOutput(guiFeatureListAction->value()-1);
+  m_WriterModel->GetSingleOutput(guiOutputFeatureList->value()-1);
   }
 }
-*/
+
 void
 WriterViewGUI
 ::UpdateFeaturePreviewFromOutputList()
 {
+  
   if (guiOutputFeatureList->value()>0)
   {
+    std::cout  << "update output " << guiOutputFeatureList->value()-1 << "size list order "<<m_WriterModel->GetOutputListOrder().size()<< std::endl;
     if( static_cast<unsigned int>(guiOutputFeatureList->value()-1) <m_WriterModel->GetOutputListOrder().size() )
+    {
+      std::cout  << "update output if " << guiOutputFeatureList->value()-1 << "size list order " <<m_WriterModel->GetOutputListOrder().size()<< std::endl;
       m_WriterModel->GetSingleOutput( m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
+      
+    }
   }
 }
 
@@ -230,7 +236,7 @@ WriterViewGUI
 ::UpdateChannelSelection()
 {
   guiChannelSelection->clear();
-  itk::OStringStream oss;
+  itk::OStringStream oss;InitWidgets
   int count = 1;
   for (unsigned int i = 0; i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
   {
@@ -277,7 +283,7 @@ WriterViewGUI
   if (guiFeatureList->size()!=0 && guiFeatureList->value()!=0)
   {
     m_InputOutputFeatureLink.push_back(guiFeatureList->value()-1);
-    m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+//     m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
     guiOutputFeatureList->add(guiFeatureList->text(guiFeatureList->value()));
     m_WriterController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
     guiOutputFeatureList->redraw();
@@ -290,9 +296,12 @@ WriterViewGUI
 {
   if (guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
   {
-    m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+//     m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     m_WriterController->RemoveFromOutputListOrder(guiOutputFeatureList->value());
+//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin()+guiOutputFeatureList->value()-1);
+//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     guiOutputFeatureList->remove(guiOutputFeatureList->value());
     guiOutputFeatureList->redraw();
   }
@@ -364,7 +373,7 @@ WriterViewGUI
 //     oss<<m_SelectedPixel[i]<<", ";
 //   }
 //   oss<<m_SelectedPixel[i]<<"]";
-//   guiSpectAnglePixelValue->value(oss.str().c_str());
+//   guiSpectAnglePixelValue->valGetViewue(oss.str().c_str());
 //   guiSpectAnglePixelValue->redraw();
 }
 
@@ -387,8 +396,9 @@ void
 WriterViewGUI
 ::Show()
 {
-  this->InitFeatureOutputList();
-  
+  //this->InitFeatureOutputList();
+  m_WriterController->CreateFeature();
+//   this->UpdateChannels();
   guiMainWindow->show();
 }
 
@@ -396,18 +406,23 @@ void
 WriterViewGUI
 ::InitFeatureOutputList()
 {
+  //this->UpdateChannels();
+  
   std::ostringstream oss;
   std::string strBase = "channel number: ";
-  for (unsigned int i=0;i<m_WriterModel->GetInputImageList()->Size();++i)
+  for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
   {
-    
-    this->guiFeatureList->add( (strBase + oss.str()).c_str() );
+    std::ostringstream oss;
+    oss << i+1;
+//     this->guiFeatureList->add( (strBase + oss.str()).c_str() );
+//     this->guiOutputFeatureList->add( (strBase + oss.str()).c_str() );
+    this->guiFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
+    this->guiOutputFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
+    this->AddToInputOutputFeatureLink(i);
+    std::cout << "InitFeatureOutputList"<< std::endl;
   }
-  
-  
-  //m_View->guiOutputFeatureList->add( m_Model->GetOutputFilterInformationId(i).c_str() );
   this->guiFeatureList->redraw();
-//   this->guiOutputFeatureList->redraw();
+  this->guiOutputFeatureList->redraw();
 }
 
 void
@@ -423,7 +438,8 @@ WriterViewGUI
 //     return;
 //   }
 //   m_WriterController->SetOutputFileName(cfname);
-  m_WriterController->SaveOutput();
+  std::string filepath = vFilePath->value();
+  m_WriterController->SaveOutput(filepath);
   
   //Here we need to go back to the app Monteverdi //TODO
 //   m_WriterController
@@ -436,23 +452,14 @@ void
 WriterViewGUI
 ::UpdateChannels()
 {
-//   // Gets the used channels
-//   std::vector<unsigned int> ckeckedList(guiChannelSelection->nchecked(), 0);
-//   int j = 1;
-//   int count = 0;
-//   while ( j<guiChannelSelection->nitems() || count<guiChannelSelection->nchecked() )
-//   {
-//     if (guiChannelSelection->checked(j) == 1)
-//     {
-//       ckeckedList[count] = j;
-//       count++;
-//     }
-// 
-//     j++;
-//   }
-// 
-// 
-//   m_WriterController->AddInputChannels(ckeckedList);
+  // Gets the used channels
+  unsigned int nbBand = m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
+  std::vector<unsigned int> ckeckedList(nbBand, 0);
+  for (unsigned int i=0;i<nbBand;++i)
+  {
+    ckeckedList[i] = i+1;
+  }
+  m_WriterController->AddInputChannels(ckeckedList);
 }
 
 /*
@@ -544,7 +551,7 @@ void WriterViewGUI::Browse()
   }
   vFilePath->value(filename);
   
-//   m_WriterController->OpenInputImage(filename);
+  //m_WriterController->OpenInputImage(filename);
   
   
 }

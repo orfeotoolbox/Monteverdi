@@ -111,10 +111,10 @@ public:
 
 
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput();
+  virtual void SaveOutput(const std::string & fname);
   virtual void InitInput();
   virtual void ClearFeatures();
-//   virtual void CreateFeature(FeatureType featureType);
+  virtual void CreateFeature();
   virtual void ClearSelectedChannels();
   virtual void SetOutputFileName( const char * name );
   virtual void AddInputChannels(std::vector<unsigned int> list);

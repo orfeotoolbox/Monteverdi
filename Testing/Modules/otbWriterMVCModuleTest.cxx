@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
-  module->AddInputByKey("InputImageDataSet",wrapperIn);
+  module->AddInputByKey("InputDataSet",wrapperIn);
   
   module->Start();
   Fl::check();
@@ -51,12 +51,12 @@ int main(int argc, char* argv[])
   // Simulate file chooser and ok callback
   specificModule->GetView()->vFilePath->value(argv[2]);
   //Select band to write
-  Fl::check();
-  specificModule->GetView()->guiFeatureList->value(1);
-  specificModule->GetView()->guiAddChannel->do_callback();
-  Fl::check();
-  specificModule->GetView()->guiOutputFeatureList->value(2);
-  specificModule->GetView()->guiOutputFeatureList->do_callback();
+//   Fl::check();
+//   specificModule->GetView()->guiFeatureList->value(1);
+//   specificModule->GetView()->guiAddChannel->do_callback();
+//   Fl::check();
+//   specificModule->GetView()->guiOutputFeatureList->value(2);
+//   specificModule->GetView()->guiOutputFeatureList->do_callback();
   Fl::check();
   
   specificModule->GetView()->guiOK->do_callback();

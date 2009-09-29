@@ -40,13 +40,13 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  otb::DataObjectWrapper wrapperIn("Floating_Point_VectorImage",reader->GetOutput());
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
-  module->AddInputByKey("InputImageDataSet",wrapperIn);
+  module->AddInputByKey("InputDataSet",wrapperIn);
   
   module->Start();
-  specificModule->GetView()->Show();
+//   specificModule->GetView()->Show();
   Fl::run();
   /*
   // Simulate file chooser and ok callback

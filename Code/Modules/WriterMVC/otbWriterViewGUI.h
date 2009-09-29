@@ -101,7 +101,7 @@ public:
 
   /** Event from the model */
   virtual void Notify();
-  //virtual void UpdateFeaturePreview();
+  virtual void UpdateFeaturePreview();
   virtual void UpdateFeaturePreviewFromOutputList();
   virtual void UpdateFeatureInfo(FeatureType feat);
   virtual void UpdateParameterArea(unsigned int groupId);

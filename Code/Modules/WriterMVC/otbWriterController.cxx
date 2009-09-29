@@ -72,11 +72,11 @@ WriterController
 
 void
 WriterController
-::SaveOutput()
+::SaveOutput(const std::string & fname)
 {
   try
   {
-    m_Model->GenerateOutputImage();
+    m_Model->GenerateOutputImage(fname);
   }
   catch (itk::ExceptionObject & err)
   {
@@ -233,6 +233,24 @@ void WriterController::ViewedRegionChanged()
   }
 }
 
+
+void
+WriterController
+::CreateFeature()
+{
+  try
+  {
+    m_View->UpdateChannels();
+    m_Model->AddFeature();
+    m_View->InitFeatureOutputList();
+    
+    
+  }
+  catch (itk::ExceptionObject & err)
+  {
+//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
 
 } // end namespace otb
 

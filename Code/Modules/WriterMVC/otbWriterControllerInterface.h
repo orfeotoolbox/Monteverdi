@@ -50,10 +50,10 @@ public:
 
   /** Users actions */
   virtual void OpenInputImage(const char * filename) =0;
-  virtual void SaveOutput() =0;
+  virtual void SaveOutput(const std::string & fname) =0;
   virtual void InitInput() =0;
   virtual void ClearFeatures() =0;
-//   virtual void CreateFeature(FeatureType featureType) =0;
+  virtual void CreateFeature() =0;
   virtual void ClearSelectedChannels() =0;
   virtual void SetOutputFileName( const char * name ) =0;
   virtual void AddInputChannels(std::vector<unsigned int> list) =0;
