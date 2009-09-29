@@ -87,6 +87,13 @@ InputViewGUI
           // if the type is ok, we can add the label in the Fl_Input_Choice
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
+
+std::cout<< "it_in->second.GetDataType : "<<it_in->second.GetDataType()<<std::endl;
+std::cout<< "it_out->second.GetDataType : "<<it_out->second.GetDataType()<<std::endl;
+std::cout<< "it_in->second.GetDataKey : "<<it_in->second.GetDataKey()<<std::endl;
+std::cout<< "it_out->second.GetDataKey : "<<it_out->second.GetDataKey()<<std::endl;
+std::cout<< "it_in->second.GetDataDescription : "<<it_in->second.GetDataDescription()<<std::endl;
+std::cout<< "it_out->second.GetDataDescription : "<<it_out->second.GetDataDescription()<<std::endl;
             inputChoice->add(it_out->second.GetDataDescription().c_str());
 
             /** Build the inputChoiceDescriptor */
@@ -100,14 +107,13 @@ InputViewGUI
       /** Build the Fl_Check_Button **/
       if(it_in->second.IsOptional())
       {
-        this->BuildCheckBox(cpt,height,inputChoice);
+        this->BuildCheckBox(cpt,height,inputChoiceDesc);
         inputChoiceDesc->SetOptional(true);
       }
       /** Build the List **/
       if(it_in->second.IsMultiple())
       {
-        Fl_Browser * browser = this->BuildList(cpt,height,inputChoiceDesc);
-        inputChoiceDesc->m_FlBrowser = browser;
+        this->BuildList(cpt,height,inputChoiceDesc);
         inputChoiceDesc->SetMultiple(true);
         cpt+= 2;
       }
@@ -116,7 +122,6 @@ InputViewGUI
       m_InputChoiceMap[it_in->first] = inputChoiceDesc;
       cpt++;
 
-
     }
   }
 
@@ -124,31 +129,35 @@ InputViewGUI
 
 void
 InputViewGUI
-::BuildCheckBox(int cpt,int height,Fl_Choice *inputChoice)
+::BuildCheckBox(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc)
 {
   std::cout << "---------------------------- case OPTIONAL "<<std::endl<<std::endl;
   Fl_Check_Button *checkButton = new Fl_Check_Button( 60,height/2+cpt* height, 25, 25);
   gScrollInput->add(checkButton);
-  inputChoice->deactivate();
-  checkButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoice);
+  inputChoiceDesc->m_FlChoice->deactivate();
+  checkButton->callback((Fl_Callback *)InputViewGUI::ActivateInputChoice,(void *)inputChoiceDesc);
 }
 
 void
 InputViewGUI
 ::ActivateInputChoice(Fl_Widget * w, void * v)
 {
-  Fl_Choice* inputChoice = (Fl_Choice *)v;
-  if(inputChoice->active())
+  InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
+  if(inputChoiceDesc->m_FlChoice->active())
     {
-    inputChoice->deactivate();
+    inputChoiceDesc->m_FlChoice->deactivate();
+    if(inputChoiceDesc->IsMultiple())
+      inputChoiceDesc->m_FlBrowser->deactivate();
     }
     else
     {
-    inputChoice->activate();
+    inputChoiceDesc->m_FlChoice->activate();
+    if(inputChoiceDesc->IsMultiple())
+      inputChoiceDesc->m_FlBrowser->activate();
     }
 }
 
-Fl_Browser *
+void
 InputViewGUI
 ::BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc)
 {
@@ -189,7 +198,13 @@ InputViewGUI
   clearButton->labelcolor((Fl_Color)186);
   clearButton->callback((Fl_Callback *)InputViewGUI::ClearList,(void *)inputChoiceDesc);
 
-  return browser;
+  // Save the browser
+  inputChoiceDesc->m_FlBrowser = browser;
+
+  if(inputChoiceDesc->IsOptional())
+    inputChoiceDesc->m_FlBrowser->deactivate();
+
+
 }
 
 
@@ -201,13 +216,52 @@ InputViewGUI
 {
   std::cout<< "Ok" <<std::endl;
   // Connect 
-  for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin();
-  mIt!=m_InputChoiceMap.end();++mIt)
+  for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
-  if(mIt->second->HasSelected())
+    // Multiple data
+    if(mIt->second->IsMultiple())
     {
-    StringPairType spair = mIt->second->GetSelected();
-    m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+
+std::cout<< "Multiple "<< std::endl;
+
+      if( !mIt->second->IsOptional() ||
+          (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
+      {
+std::cout<< "sizes Browser : "<< mIt->second->m_FlBrowser->size() << std::endl;
+std::cout<< "sizes Choice : "<< mIt->second->m_FlChoice->size() << std::endl;
+std::cout<< "sizes VectorChoice : "<< mIt->second->m_ChoiceVector.size() << std::endl;
+for(int i=0;i<mIt->second->m_FlBrowser->size();i++)
+{
+  for(int j=0;j<mIt->second->m_FlChoice->size() ;j++)
+  {
+std::cout<< "---FlChoice  : "<< mIt->second->m_FlBrowser->text(j) <<std::endl;
+std::cout<< "---FlBrowser : " << mIt->second->m_FlBrowser->text(i) <<std::endl;
+
+    if(mIt->second->m_FlChoice->text(j)==mIt->second->m_FlBrowser->text(i))
+    {
+        if(j!=0)
+        {
+          StringPairType spair = mIt->second->m_ChoiceVector[j-1];
+          m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+        }
+    }
+  }
+
+}
+      }
+    }
+    else // Single data
+    {
+      // mandatory OR optional & active
+      if( !mIt->second->IsOptional() ||
+          (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
+      {
+        if(mIt->second->HasSelected())
+        {
+          StringPairType spair = mIt->second->GetSelected();
+          m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+        }
+      }
     }
   }
 

@@ -53,6 +53,7 @@ public:
   itkTypeMacro(InputChoiceDescriptor,itk::Object);
 
   /** Typedefs */
+  // contains a module instance Id and a data key
   typedef std::pair<std::string,std::string>   StringPairType;
 
 

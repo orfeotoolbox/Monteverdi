@@ -76,8 +76,8 @@ public:
 
   void Show();
   void BuildInputInterface();
-  Fl_Browser * BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc);
-  void BuildCheckBox(int cpt,int height,Fl_Choice *inputChoice);
+  void BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc);
+  void BuildCheckBox(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc);
 
 protected:
   /** Constructor */
@@ -97,6 +97,8 @@ private:
   static void AddInputToList(Fl_Widget * w, void * v);
   static void RemoveInputFromList(Fl_Widget * w, void * v);
   static void ClearList(Fl_Widget * w, void * v);
+
+  // map containing the key and the descriptor
   typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
 
   MonteverdiModel::Pointer                m_Model;

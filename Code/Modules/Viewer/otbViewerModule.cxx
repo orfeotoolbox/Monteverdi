@@ -105,6 +105,7 @@ namespace otb
   this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
 
+
   // Build GUI
   this->Build();   
 }
@@ -136,6 +137,7 @@ void ViewerModule::AssignInputByKey(const std::string & key, const DataObjectWra
     {
       VectorDataType * vdata = dynamic_cast<VectorDataType*>(data.GetDataObject());
       m_VectorDataList->PushBack(vdata);
+      std::cout <<"Add Vector Data Nb : " <<  m_VectorDataList->Size() << std::endl;
       this->AddName();
     }
 }
