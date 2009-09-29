@@ -32,10 +32,14 @@ class WriterViewGroup {open
             xywh {65 320 240 35}
           }
           Fl_Button bBrowse {
-            label button
+            label {...}
             callback {this->Browse();}
-            xywh {335 330 70 20}
+            xywh {325 330 80 25}
           }
+          Fl_Choice guiOutputPixelTypeChoice {
+            label {Output Pixel Type:} open selected
+            xywh {145 375 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelsize 12
+          } {}
         }
         Fl_Group guiOutput {
           label Output
@@ -141,6 +145,6 @@ class WriterViewGroup {open
   } {}
   Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
   } {}
-  Function {Browse()} {open selected protected return_type {virtual void}
+  Function {Browse()} {open protected return_type {virtual void}
   } {}
 } 

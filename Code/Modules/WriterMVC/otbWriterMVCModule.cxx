@@ -30,16 +30,14 @@ WriterModule::WriterModule()
 //   m_VectorWriter = VectorWriterType::New();
   
   //Build MVC
+  m_Model      = WriterModel::New();
   m_View       = WriterViewGUI::New();
   m_Controller = WriterController::New();
-  m_Model      = WriterModel::New();
-  m_Controller->SetView(m_View);
-  m_View->SetWriterController(m_Controller);
   
   m_View->SetWriterModel(m_Model);
   m_View->InitVisu();
   m_View->SetWriterController(m_Controller);
-
+  
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
    // Describe inputs
@@ -85,8 +83,9 @@ void WriterModule::Run()
   this->BuildGUI();
   wFileChooserWindow->show();*/
   m_View->Show();
+//   std::cout << "show"<< std::endl;
   m_Model->GenerateLayers();
-  std::cout << "end of Feature GUI"<< std::endl;
+//   std::cout << "end of Feature GUI"<< std::endl;
 }
 
 
