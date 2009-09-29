@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
-  module->AddInputByKey("InputImageDataSet",wrapperIn);
+  module->AddInputByKey("InputDataSet",wrapperIn);
   
   module->Start();
   Fl::check();

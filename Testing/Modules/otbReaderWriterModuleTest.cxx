@@ -43,12 +43,12 @@ int main(int argc, char* argv[])
   specificReaderModule->vFilePath->value(argv[1]);
   specificReaderModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("OutputDataSet");
+  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
   //Writer module now
-  writerModule->AddInputByKey("InputImageDataSet",wrapperOut);
+  writerModule->AddInputByKey("InputDataSet",wrapperOut);
   writerModule->Start();
   Fl::check();
   

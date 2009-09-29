@@ -69,6 +69,7 @@ void FeatureExtractionModule::Run()
 
   if(input.IsNotNull())
     {
+    m_Model->SetInputImage(input);
     m_View->Show();
     m_Model->GenerateLayers();
     this->ClearOutputDescriptors();

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::VectorImage<short,2>           ImageType;
+  typedef otb::VectorImage<double,2>          ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
+
 
   // Add Wrapper Input 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
@@ -61,6 +62,7 @@ int main(int argc, char* argv[])
   
   // Refresh
   Fl::check();
+
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 

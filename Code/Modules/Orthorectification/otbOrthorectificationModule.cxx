@@ -47,6 +47,7 @@ void OrthorectificationModule::Run()
 
   if(input.IsNotNull())
     {
+    m_Orthorectification->SetInputImage(input);
     m_Orthorectification->Show();
     this->ClearOutputDescriptors();
     this->AddOutputDescriptor(m_Orthorectification->GetOutput(),"OutputImage","Orthorectified image.");
