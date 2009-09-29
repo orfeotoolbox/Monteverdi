@@ -199,11 +199,6 @@ public:
   /** Callbacks */
   //virtual void OpenDataSet();
 
-  /** Assign input by key.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
-
   /** CallBacks Implementations*/
   virtual void ChangeROIColor();
   virtual void UpdateListSelectionColor();

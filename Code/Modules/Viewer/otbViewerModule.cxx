@@ -121,30 +121,11 @@ void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void ViewerModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  typedef ViewerModule::ImageType InputImageType;
-
-  if(key == "InputImage")
-    {
-      m_InputImage = dynamic_cast<InputImageType *>(data.GetDataObject());
-    }
-
-  if(key == "VectorData")
-    {
-      VectorDataType * vdata = dynamic_cast<VectorDataType*>(data.GetDataObject());
-      m_VectorDataList->PushBack(vdata);
-      std::cout <<"Add Vector Data Nb : " <<  m_VectorDataList->Size() << std::endl;
-      this->AddName();
-    }
-}
-
 /** The custom run command */
 void ViewerModule::Run()
 {
+  m_InputImage = this->GetInputData<ImageType>("InputImage");
+
     // First check if there is actually an input image
   if(m_InputImage.IsNull())
     {
@@ -155,9 +136,11 @@ void ViewerModule::Run()
   m_InputImage->UpdateOutputInformation();
 
   // If there is a VectorData
-  for(unsigned int i = 0; i < m_VectorDataList->Size();i++)
+  for(unsigned int i = 0; i < this->GetNumberOfInputDataByKey("VectorData");i++)
   {
-    this->UpdateVectorData(i);
+  VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
+  m_VectorDataList->PushBack(vdata);
+  this->UpdateVectorData(i);
   }
 
   // Colors

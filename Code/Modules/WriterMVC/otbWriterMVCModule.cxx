@@ -57,35 +57,25 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  const Superclass::InputDataDescriptorMapType inMap = this->GetInputsMap();
-  if(key == "InputDataSet")
-  {
-    FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
-//     m_FPVWriter->SetInput(image);
-    m_Model->SetInputImage(image);
-  }
-//   else if (key == "InputVectorDataSet")
-//   {
-  // COMMENTED OUT BECAUSE UNUSED VectorType * vector = dynamic_cast<VectorType *>(data.GetDataObject());
-//     m_VectorWriter->SetInput(vector);  
-    //TODO manage vector data in the model
-//   }
-}
-
 /** The custom run command */
 void WriterModule::Run()
-{/*
+{
+  FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
+  
+  if(vectorImage.IsNotNull())
+    {
+    m_Model->SetInputImage(vectorImage);
+
+/*
   this->BuildGUI();
   wFileChooserWindow->show();*/
-  m_View->Show();
-//   std::cout << "show"<< std::endl;
-  m_Model->GenerateLayers();
-//   std::cout << "end of Feature GUI"<< std::endl;
+    m_View->Show();
+    m_Model->GenerateLayers();
+    }
+  else
+    {
+    itkExceptionMacro(<<"InputDataSet is NULL");
+    }
 }
 
 

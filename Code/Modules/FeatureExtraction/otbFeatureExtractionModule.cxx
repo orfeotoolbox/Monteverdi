@@ -39,7 +39,7 @@ FeatureExtractionModule::FeatureExtractionModule()
 
 
   // Describe inputs
-  this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage","Image to apply feature extraction.");
+  this->AddInputDescriptor<InputImageType>("InputImage","Image to apply feature extraction.");
   /*
    this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage2","Optionnal image to apply feature extraction.",true,false);
    
@@ -62,51 +62,31 @@ void FeatureExtractionModule::PrintSelf(std::ostream& os, itk::Indent indent) co
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void FeatureExtractionModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  typedef FeatureExtractionModel::InputImageType InputImageType;
-
-  if(key == "InputImage")
-    {
-    InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
-//     std::cout<<"set model.."<<std::endl;
-    m_Model->SetInputImage(image);
-    }
-}
-
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-const DataObjectWrapper FeatureExtractionModule::RetrieveOutputByKey(const std::string & key) const
-{
-  DataObjectWrapper wrapper;
-  if(key == "OutputImage")
-    {
-    wrapper.Set(m_Model->GetOutputImage());
-    }
-  return wrapper;
-}
-
 /** The custom run command */
 void FeatureExtractionModule::Run()
 {
-  m_View->Show();
-  m_Model->GenerateLayers();
+  InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
 
-  std::cout << "end of Feature GUI"<< std::endl;
-  //Output descriptor
-  this->AddOutputDescriptor<FeatureExtractionModel::InputImageType>("OutputImage","Feature image extraction.");
-
+  if(input.IsNotNull())
+    {
+    m_Model->SetInputImage(input);
+    m_View->Show();
+    m_Model->GenerateLayers();
+    
+    }
+  else
+    {
+    itkExceptionMacro(<<"Input image is NULL.");
+    }
 }
 
 /** The Notify */
 void FeatureExtractionModule::Notify()
 {
   if (m_Model->GetHasChanged())
-  {
+    {
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage","Feature image extraction.");
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
   }

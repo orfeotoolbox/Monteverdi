@@ -21,11 +21,6 @@
 
 namespace otb
 {
-
-
-/** Initialize the singleton */
-SpeckleFilteringModel::Pointer SpeckleFilteringModel::Instance = NULL;
-
 /**
  * Constructor
  */
@@ -34,6 +29,7 @@ SpeckleFilteringModel::SpeckleFilteringModel()
   m_InputImage  = InputImageType::New();
   m_LeeFilter   = LeeFilterType::New();
   m_FrostFilter = FrostFilterType::New();
+  m_OutputChanged = false;
 }
 
 /**
@@ -41,17 +37,6 @@ SpeckleFilteringModel::SpeckleFilteringModel()
  */
 SpeckleFilteringModel::
 ~SpeckleFilteringModel(){}
-
-
-/** Manage the singleton */
-SpeckleFilteringModel::Pointer SpeckleFilteringModel::GetInstance()
-{
-  if (!Instance)
-  {
-    Instance = SpeckleFilteringModel::New();
-  }
-  return Instance;
-}
 
 /**
  * Apply Lee to the inputImage
@@ -67,6 +52,8 @@ SpeckleFilteringModel
   m_LeeFilter->SetRadius(lradius);
   std::cout <<"Model : Computation Lee Done ... " << std::endl;
   m_Output = m_LeeFilter->GetOutput();
+  m_OutputChanged = true;
+  this->NotifyAll();
 }
 
 /**
@@ -83,6 +70,8 @@ SpeckleFilteringModel
   m_FrostFilter->SetRadius(fradius);
   m_FrostFilter->SetDeramp(deRamp);
   m_Output = m_FrostFilter->GetOutput();
+  m_OutputChanged = true;
+  this->NotifyAll();
 }
 
 void
@@ -93,4 +82,4 @@ SpeckleFilteringModel
 }
 
 
-}// End namespac
+}// End namespace

@@ -41,20 +41,10 @@ class OutputDataDescriptor
 public:
   /** Constructors */
   OutputDataDescriptor();
-  OutputDataDescriptor(const std::string & type, const std::string & key, const std::string & description);
+  OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description);
 
   /** Destructor */
   virtual ~OutputDataDescriptor();
-
-  /** Get the number of data */
-  unsigned int GetNumberOfData() const;
-
-  /** Set the number of data */
-  void SetNumberOfData(unsigned int nb);
-
-private:
-  /** The number of data */
-  unsigned int m_NumberOfData;
 
 };
 

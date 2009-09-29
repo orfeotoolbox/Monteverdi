@@ -29,6 +29,8 @@ ReaderModule::ReaderModule()
 {
   m_FPVReader = FPVReaderType::New();
   m_VectorReader = VectorReaderType::New();
+  m_AmplitudeFilter = AmplitudeFilterType::New();
+  m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
 }
 
 /** Destructor */
@@ -42,27 +44,6 @@ void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-/** Retrieve output by key  This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-const DataObjectWrapper ReaderModule::RetrieveOutputByKey(const std::string & key) const
-{
-  DataObjectWrapper wrapper;
-  if(key == "OutputDataSet")
-    {
-    const Superclass::OutputDataDescriptorMapType outMap = this->GetOutputsMap();
-
-    if(outMap.find(key)->second.GetDataType() == otb::TypeManager::GetInstance()->GetTypeName<FPVImageType>())
-      {
-      wrapper.Set(m_FPVReader->GetOutput());
-      }
-    else if(outMap.find(key)->second.GetDataType() ==otb::TypeManager::GetInstance()->GetTypeName<VectorType>() )
-      {
-      wrapper.Set(m_VectorReader->GetOutput());
-      }
-    }
-  return wrapper;
-}
 
 /** The custom run command */
 void ReaderModule::Run()
@@ -73,6 +54,9 @@ void ReaderModule::Run()
 
 void ReaderModule::OpenDataSet()
 {
+  // First, clear any existing output
+  this->ClearOutputDescriptors();
+
   std::string filepath = vFilePath->value();
 
   bool typeFound = false;
@@ -83,14 +67,44 @@ void ReaderModule::OpenDataSet()
 
   try
     {
+    // Read the image
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
-    std::cout<<"Vector image reader: "<<m_FPVReader->GetOutput()<<std::endl;
+
+    // Add the full data set as a descriptor
+    oss << "Image read from file: " << lFile.file();
+    this->AddOutputDescriptor(m_FPVReader->GetOutput(),"OutputImage",oss.str());
+
+    // Extract first band
+    ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
+    extract->SetInput(m_FPVReader->GetOutput());
+    extract->SetChannel(1);
+    m_ExtractROIFilterList->PushBack(extract);
+
+    // Add the first sub band
+    oss.str("");
+    oss << "Image bands read from file: " << lFile.file();
+    this->AddOutputDescriptor(extract->GetOutput(),"OutputImageBand",oss.str());
+
+    // Add sub-bands
+    for(unsigned int band = 1; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
+      {
+      ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
+      extract->SetInput(m_FPVReader->GetOutput());
+      extract->SetChannel(band+1);
+      m_ExtractROIFilterList->PushBack(extract);
+      this->AddDataToOutputDescriptor(extract->GetOutput(),"OutputImageBand");
+      }
+
+    m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
+
+    oss.str("");
+    oss <<" Image amplitude read from file: "<<lFile.file();
+    this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),"OutputImageAmplitude",oss.str());
+
+
     // If we are still here, this is a readable image
     typeFound = true;
-    // Get the filename from the filepath
-    oss << "Image read from file : " << lFile.file();
-    this->AddOutputDescriptor<FPVImageType>("OutputDataSet",oss.str());
     }
   catch(itk::ExceptionObject & err)
     {
@@ -108,7 +122,7 @@ void ReaderModule::OpenDataSet()
       typeFound = true;
       // Get the filename from the filepath
       oss << "Vector read from file : " << lFile.file();
-      this->AddOutputDescriptor<VectorType>("OutputDataSet",oss.str());
+      this->AddOutputDescriptor(m_VectorReader->GetOutput(),"OutputVector",oss.str());
       }
     catch(itk::ExceptionObject & err)
       {
@@ -119,6 +133,7 @@ void ReaderModule::OpenDataSet()
   wFileChooserWindow->hide();
   
   // Notify all listener
+  // TODO: this should not be done by the user
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 }
 

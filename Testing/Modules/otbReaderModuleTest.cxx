@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   specificModule->vFilePath->value(argv[1]);
   specificModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputDataSet");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 

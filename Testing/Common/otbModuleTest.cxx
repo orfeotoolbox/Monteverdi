@@ -50,38 +50,26 @@ protected:
   /** Destructor */
   virtual ~ModuleTest(){}
 
-  // Reimplement AssignInputByKey
-  virtual void AssignInputByKey(const std::string & key, const otb::DataObjectWrapper & data)
-  {
-    if(key == "InputImage" || key == "InputVector")
-      {
-      std::cout<<"Received data "<<data<<" for input with key "<<key<<std::endl;
-      }
-  }
-
-  // Reimplement RetrieveOutputByKey
-  const otb::DataObjectWrapper RetrieveOutputByKey(const std::string & key) const
-  {
-    otb::DataObjectWrapper wrapper;
-
-    if(key == "OutputImage")
-      {
-      wrapper.Set(otb::Image<unsigned short,2>::New());
-
-      std::cout<<"Sending data "<<wrapper<<" for output with key "<<key<<std::endl;
-      }
-
-    return wrapper;
-  }
-
   virtual void Run()
   {
     std::cout<<"Run method was called, inputs parameters are valid"<<std::endl;
+    std::cout<<"Trying to retrieve input data ..."<<std::endl;
+    
+    otb::VectorImage<double,2>::Pointer firstPossibleInput = this->GetInputData<otb::VectorImage<double,2> >("InputImage");
+    otb::Image<double,2>::Pointer secondPossibleInput = this->GetInputData<otb::Image<double,2> >("InputImage");
+    otb::VectorData<double>::Pointer thirdPossibleInput = this->GetInputData<otb::VectorData<double> >("InputVector");
 
+    std::cout<<"1st Input as VectorImage: "<<firstPossibleInput.IsNotNull()<<std::endl;
+    std::cout<<"1st Input as Image: "<<secondPossibleInput.IsNotNull()<<std::endl;
+    std::cout<<"2nd input as Vector: "<<thirdPossibleInput.IsNotNull()<<std::endl;
+
+    // Clear previous descriptors
+    this->ClearOutputDescriptors();
+    
     // Add some outputs
     // Outputs can be defined once the run method has been called
-    this->AddOutputDescriptor< otb::Image<unsigned short, 2> >("OutputImage","test output image");
-
+    this->AddOutputDescriptor(otb::Image<unsigned short, 2>::New(),"OutputImage","test output image");
+    this->AddDataToOutputDescriptor(otb::Image<unsigned short,2>::New(),"OutputImage");
   }
 };
 
@@ -95,9 +83,12 @@ int main(int argc, char * argv[])
   ModuleTest::Pointer myModuleTest = ModuleTest::New();
   std::cout<<"Test class PrintSelf: "<<myModuleTest<<std::endl;
 
+  myModuleTest->SetInstanceId("MyModuleInstance");
+
   // Building inputs
   otb::DataObjectWrapper input1;
   input1.Set(otb::VectorImage<double,2>::New());
+
   otb::DataObjectWrapper input2;
   input2.Set(otb::VectorData<double>::New());
 

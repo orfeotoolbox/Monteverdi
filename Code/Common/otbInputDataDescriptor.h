@@ -56,23 +56,24 @@ public:
   /** Is the input data multiple ? */
   bool IsMultiple() const;
 
-  /** Is the input data used ? */
-  bool IsUsed() const;
-
   /** Set the optional flag */
   void SetOptional(bool flag);
 
   /** Set the multiple flag */
   void SetMultiple(bool flag);
 
-  /** Set the used flag */
-  void SetUsed(bool flag);
-
   /** Add a supported type for the input */
   void AddSupportedType(const std::string & type);
 
   /** Check if the given type is compatible with the input */
-  bool IsTypeCompatible(const std::string & type) const;
+  virtual bool IsTypeCompatible(const std::string & type) const;
+
+  /** Add data (virtual because behaviour depends 
+   *  on subclasses) */
+  virtual void AddData(const DataObjectWrapper & wrapper);
+
+  /** Check consistency */
+  bool IsConsistent() const;
 
 protected:
   /** Type of a vector of strings */
@@ -87,9 +88,6 @@ private:
 
   /** The multiple flag */
   bool m_Multiple;
-
-  /** This flag indicates if the input is set */
-  bool m_Used;
 };
 
 /** Overloading the << operator */

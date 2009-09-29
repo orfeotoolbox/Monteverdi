@@ -18,6 +18,8 @@
 
 #include <cstdlib>
 #include "otbDataDescriptor.h"
+#include "otbDataObjectWrapper.h"
+#include "otbImage.h"
 
 int main(int argc, char * argv[])
 {
@@ -37,5 +39,26 @@ int main(int argc, char * argv[])
   // Testing the << operator
   std::cout<<"Testing << operator: "<<desc2<<std::endl;
 
+  // Checking type compatibility
+  std::cout<<"IsTypeCompatible(Floating_Point_Image): "<<desc2.IsTypeCompatible("Floating_Point_Image")<<std::endl;
+
+  // Create data
+  otb::DataObjectWrapper wrapper = otb::DataObjectWrapper::Create(otb::Image<double,2>::New());
+  
+  // Add data
+  desc2.AddData(wrapper);
+  
+  // Number of data
+  std::cout<<"Number of data: "<<desc2.GetNumberOfData()<<std::endl;
+
+  // Retrieve nth data
+  std::cout<<"Data retrieved: "<<desc2.GetNthData(0)<<std::endl;
+  
+  // Clear data
+  desc2.ClearData();
+  
+  // Number of data
+  std::cout<<"Number of data after clearing: "<<desc2.GetNumberOfData()<<std::endl;
+  
   return EXIT_SUCCESS;
 }

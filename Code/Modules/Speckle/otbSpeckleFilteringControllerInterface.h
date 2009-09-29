@@ -41,21 +41,21 @@ public:
   /** Standard type macros */
   itkTypeMacro(SpeckleFilteringControllerInterface,Superclass);
 
+  itkSetObjectMacro(Model,SpeckleFilteringModel);
+  itkGetObjectMacro(Model,SpeckleFilteringModel);
+
   /** Users actions */
   virtual void ProcessLeeFilter(unsigned int radius) =0;
   virtual void ProcessFrostFilter(unsigned int radius, double DeRamp) =0;
 
 protected:
   /** Constructor */
-  SpeckleFilteringControllerInterface()
-  {
-    m_Model = ModelType::GetInstance();
-  }
+  SpeckleFilteringControllerInterface() {}
   /** Destructor */
   ~SpeckleFilteringControllerInterface() {};
 
   /** The instance of the model (for commodity) */
-  ModelType * m_Model;
+  ModelType::Pointer m_Model;
 
 private:
   SpeckleFilteringControllerInterface(const Self&); //purposely not implemented

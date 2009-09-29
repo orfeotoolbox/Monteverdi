@@ -15,13 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbDataDescriptor_h
 #define __otbDataDescriptor_h
 
 #include <string>
 #include <vector>
 #include <iostream>
+
+#include "itkSmartPointer.h"
+
+#include "otbDataObjectWrapper.h"
 
 namespace otb
 {
@@ -63,6 +66,23 @@ public:
   /** Get the DataDescription */
   const std::string & GetDataDescription() const;
 
+ /** Check if the given type is compatible with the input (virtual
+  * because behaviour depends on subclasses) */
+  virtual bool IsTypeCompatible(const std::string & type) const;
+  
+  /** Get number of data */
+  unsigned int GetNumberOfData() const;
+
+  /** Add data (virtual because behaviour depends 
+   *  on subclasses) */
+  virtual void AddData(const DataObjectWrapper & wrapper);
+
+  /** Get nth data */
+  const DataObjectWrapper & GetNthData(const unsigned int& idx) const;
+
+  /** Clear data */
+  void ClearData();
+
 protected:
   /** The data type */
   std::string m_DataType;
@@ -72,6 +92,9 @@ protected:
 
   /** A description of the input/output */
   std::string m_DataDescription;
+
+  /** A vector of DataObject wrapper associated with the descriptor */
+  std::vector<DataObjectWrapper> m_Data;
 };
 
 /** Overloading the << operator */

@@ -36,6 +36,12 @@ int main(int argc, char* argv[])
   ViewType::Pointer          view       = ViewType::New();
   ControllerType::Pointer    controller = ControllerType::New();
 
+  //Set The model input Image
+  ModelType * model = ModelType::New();
+  std::cout<<"Model: "<<model<<std::endl;
+
+
+  controller->SetModel(model);
   controller->SetView(view);
   view->SetController(controller);
 
@@ -49,11 +55,14 @@ int main(int argc, char* argv[])
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();
-
-  //Set The model input Image
-  ModelType * model = ModelType::GetInstance();
+  reader->UpdateOutputInformation();
+  std::cout<<"Model: "<<model<<std::endl;
+  std::cout<<"Reader: "<<(ReaderType *)reader<<std::endl;
+  std::cout<<"Output: "<<reader->GetOutput()<<std::endl;
+  std::cout<<"Test."<<std::endl;
   model->SetInputImage(reader->GetOutput());
+  std::cout<<"Test2."<<std::endl;
+
 
   // Open the GUI
   view->Show();
@@ -67,7 +76,7 @@ int main(int argc, char* argv[])
   writer->SetInput(model->GetOutput());
   writer->Update();
 
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

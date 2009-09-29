@@ -44,9 +44,7 @@ class ITK_EXPORT SpeckleFilteringModel
 
   /** Standard type macro */
   itkTypeMacro(SpeckleFilteringModel, MVCModel);
-
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
+  itkNewMacro(Self);
 
   /** typedefs */
   typedef double                                   PixelType;
@@ -62,6 +60,9 @@ class ITK_EXPORT SpeckleFilteringModel
   /** Get Output Image */
   itkGetObjectMacro(Output,InputImageType);
 
+  /** Get the output changed flag */
+  itkGetMacro(OutputChanged,bool);
+
   /** Lee Filter Processing */
   virtual void LeeFiltering(unsigned int radius);
 
@@ -69,9 +70,6 @@ class ITK_EXPORT SpeckleFilteringModel
   virtual void FrostFiltering(unsigned int radius, double deRamp);
 
  protected:
-  /** This is protected for the singleton. Use GetInstance() instead. */
-  itkNewMacro(Self);
-
   /** Constructor */
   SpeckleFilteringModel();
 
@@ -85,14 +83,14 @@ class ITK_EXPORT SpeckleFilteringModel
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
 
-  /** The instance singleton */
-  static Pointer Instance;
 
   InputImageType::Pointer       m_InputImage;
   InputImageType::Pointer       m_Output;
 
   LeeFilterType::Pointer        m_LeeFilter;
   FrostFilterType::Pointer      m_FrostFilter;
+
+  bool                          m_OutputChanged;
 
 
 };
