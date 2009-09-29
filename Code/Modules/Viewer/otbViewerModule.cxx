@@ -201,21 +201,33 @@ void ViewerModule::Run()
   rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0));
   rhistogram->SetHistogramColor(red);
   rhistogram->SetLabelColor(red);
+
+  HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+  HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
   
-   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-  //   ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex()));
-  ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
-  ghistogram->SetHistogramColor(green);
-  ghistogram->SetLabelColor(green);
+  if( m_InputImage->GetNumberOfComponentsPerPixel() > 1 )
+    {
+      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+      //   ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex()));
+      ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
+      ghistogram->SetHistogramColor(green);
+      ghistogram->SetLabelColor(green);
+    }
+
+  if( m_InputImage->GetNumberOfComponentsPerPixel() > 2 )
+    {
+      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+      //   bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex()));
+      bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
+      bhistogram->SetHistogramColor(blue);
+      bhistogram->SetLabelColor(blue);
+    }
   
-   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-  //   bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex()));
-  bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
-  bhistogram->SetHistogramColor(blue);
-  bhistogram->SetLabelColor(blue);
   m_CurveWidget->AddCurve(rhistogram);
-  m_CurveWidget->AddCurve(ghistogram);
-  m_CurveWidget->AddCurve(bhistogram);
+  if( m_InputImage->GetNumberOfComponentsPerPixel() > 1 )
+    m_CurveWidget->AddCurve(ghistogram);
+  if( m_InputImage->GetNumberOfComponentsPerPixel() > 2 )
+    m_CurveWidget->AddCurve(bhistogram);
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Frequency");
   
