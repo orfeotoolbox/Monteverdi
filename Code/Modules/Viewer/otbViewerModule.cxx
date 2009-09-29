@@ -190,7 +190,6 @@ void ViewerModule::Run()
   
   if( m_InputImage->GetNumberOfComponentsPerPixel() > 1 )
     {
-      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
       //   ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex()));
       ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
       ghistogram->SetHistogramColor(green);
@@ -199,7 +198,6 @@ void ViewerModule::Run()
 
   if( m_InputImage->GetNumberOfComponentsPerPixel() > 2 )
     {
-      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
       //   bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex()));
       bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
       bhistogram->SetHistogramColor(blue);

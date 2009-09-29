@@ -87,13 +87,6 @@ InputViewGUI
           // if the type is ok, we can add the label in the Fl_Input_Choice
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-
-std::cout<< "it_in->second.GetDataType : "<<it_in->second.GetDataType()<<std::endl;
-std::cout<< "it_out->second.GetDataType : "<<it_out->second.GetDataType()<<std::endl;
-std::cout<< "it_in->second.GetDataKey : "<<it_in->second.GetDataKey()<<std::endl;
-std::cout<< "it_out->second.GetDataKey : "<<it_out->second.GetDataKey()<<std::endl;
-std::cout<< "it_in->second.GetDataDescription : "<<it_in->second.GetDataDescription()<<std::endl;
-std::cout<< "it_out->second.GetDataDescription : "<<it_out->second.GetDataDescription()<<std::endl;
             inputChoice->add(it_out->second.GetDataDescription().c_str());
 
             /** Build the inputChoiceDescriptor */
@@ -215,6 +208,8 @@ InputViewGUI
 ::Ok()
 {
   std::cout<< "Ok" <<std::endl;
+  unsigned int i,j;
+
   // Connect 
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
@@ -222,36 +217,25 @@ InputViewGUI
     if(mIt->second->IsMultiple())
     {
 
-std::cout<< "Multiple "<< std::endl;
+std::cout<< "************************Multiple "<< std::endl;
 
       if( !mIt->second->IsOptional() ||
           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
       {
-std::cout<< "sizes Browser : "<< mIt->second->m_FlBrowser->size() << std::endl;
-std::cout<< "sizes Choice : "<< mIt->second->m_FlChoice->size() << std::endl;
-std::cout<< "sizes VectorChoice : "<< mIt->second->m_ChoiceVector.size() << std::endl;
-for(int i=0;i<mIt->second->m_FlBrowser->size();i++)
-{
-  for(int j=0;j<mIt->second->m_FlChoice->size() ;j++)
-  {
-std::cout<< "---FlChoice  : "<< mIt->second->m_FlBrowser->text(j) <<std::endl;
-std::cout<< "---FlBrowser : " << mIt->second->m_FlBrowser->text(i) <<std::endl;
-
-    if(mIt->second->m_FlChoice->text(j)==mIt->second->m_FlBrowser->text(i))
-    {
-        if(j!=0)
-        {
-          StringPairType spair = mIt->second->m_ChoiceVector[j-1];
-          m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
-        }
-    }
-  }
-
-}
-      }
+              for(i=0;i<mIt->second->m_Indexes.size();i++)
+              {
+                  int ind = mIt->second->m_Indexes[i];
+                  if(ind >= 0)
+                  {
+                    StringPairType spair = mIt->second->m_ChoiceVector[ind];
+                    m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+                  }
+              }
+       }
     }
     else // Single data
     {
+std::cout<< "************************Single "<< std::endl;
       // mandatory OR optional & active
       if( !mIt->second->IsOptional() ||
           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
@@ -299,6 +283,9 @@ InputViewGUI
       inputChoiceDesc->m_FlChoice->redraw();
       inputChoiceDesc->m_FlBrowser->redraw();
     }
+
+    inputChoiceDesc->m_Indexes.push_back(choiceVal);
+std::cout<< "choiceVal :" <<choiceVal<<std::endl;
 }
 
 void 
@@ -318,8 +305,12 @@ InputViewGUI
     {
       inputChoiceDesc->m_FlBrowser->value(choiceVal-1);
     }
-  
+
   inputChoiceDesc->m_FlBrowser->redraw();
+
+  // Cheat the indexe is set to -1 
+  inputChoiceDesc->m_Indexes.erase(inputChoiceDesc->m_Indexes.begin()+choiceVal-1);
+
 }
 
 void 
@@ -329,6 +320,9 @@ InputViewGUI
   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
   inputChoiceDesc->m_FlBrowser->clear();
   inputChoiceDesc->m_FlBrowser->redraw();
+
+  // Cheat the indexe is set to -1 
+  inputChoiceDesc->m_Indexes.clear();
 }
 
 } // end namespace otb

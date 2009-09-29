@@ -74,6 +74,8 @@ public:
   Fl_Choice *                   m_FlChoice;
   Fl_Browser *                  m_FlBrowser;
   std::vector<StringPairType>   m_ChoiceVector;
+  /** if input is multiple, we keep the indexes */
+  std::vector<int>              m_Indexes;
 
 protected:
   /** Constructor */
@@ -89,6 +91,7 @@ private:
 
   /** The multiple flag */
   bool m_Multiple;
+
 };
 
 } // End namespace otb
