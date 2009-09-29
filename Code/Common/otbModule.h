@@ -101,50 +101,13 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Add a new input descriptor */
-  template <typename T> void AddInputDescriptor(const std::string & key, const std::string & description, bool optional = false, bool multiple = false)
-  {
-    // Check if the key already exists
-    if(m_InputsMap.count(key) > 0)
-      {
-      itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
-      }
-
-    // Else build a new descriptor
-    InputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(),key,description);
-    desc.SetOptional(optional);
-    desc.SetMultiple(multiple);
-
-    // Insert it into the map
-    m_InputsMap[key]=desc;
-  }
+  template <typename T> void AddInputDescriptor(const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
 
   /** Add additional supported types for a given input descriptors */
-  template <typename T> void AddTypeToInputDescriptor(const std::string & key)
-  {
-    // Check if the key already exists
-    if(m_InputsMap.count(key) <= 0)
-      {
-      itkExceptionMacro(<<"No input with key "<<key);
-      }
-    m_InputsMap[key].AddSupportedType(TypeManager::GetInstance()->GetTypeName<T>());
-  }
+  template <typename T> void AddTypeToInputDescriptor(const std::string & key);
 
   /** Add a new output descriptor */
-  template <typename T> void AddOutputDescriptor(const std::string & key, const std::string & description, unsigned int nb = 1)
-  {
-    // Check if the key already exists
-    if(m_OutputsMap.count(key) > 0)
-      {
-      itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
-      }
-    
-    // Else build a new descriptor
-    OutputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(),key,description);
-    desc.SetNumberOfData(nb);
-    
-    // Insert it into the map
-    m_OutputsMap[key]=desc;
-  }
+  template <typename T> void AddOutputDescriptor(const std::string & key, const std::string & description, unsigned int nb = 1);
 
   /** Assign input by key. Subclasses should override this methods.
    *  When this method is called, key checking and data type matching
