@@ -33,7 +33,7 @@ SpeckleFilteringModule::SpeckleFilteringModule()
   m_View->SetController(m_Controller);
 
   // Describe inputs
-  this->AddInputDescriptor<SpeckleFilteringModel::InputImageType>("InputImage","Image to apply speckle filtering on.");
+  this->AddInputDescriptor<InputImageType>("InputImage","Image to apply speckle filtering on.");
 }
 
 /** Destructor */
@@ -47,38 +47,22 @@ void SpeckleFilteringModule::PrintSelf(std::ostream& os, itk::Indent indent) con
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void SpeckleFilteringModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  typedef SpeckleFilteringModel::InputImageType InputImageType;
-
-  if(key == "InputImage")
-    {
-    InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
-    m_Model->SetInputImage(image);
-    }
-}
-
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-const DataObjectWrapper SpeckleFilteringModule::RetrieveOutputByKey(const std::string & key) const
-{
-  DataObjectWrapper wrapper;
-  if(key == "OutputImage")
-    {
-    wrapper.Set(m_Model->GetOutput());
-    }
-  return wrapper;
-}
-
 /** The custom run command */
 void SpeckleFilteringModule::Run()
 {
-  m_View->Show();
-  this->AddOutputDescriptor<SpeckleFilteringModel::InputImageType>("OutputImage","Speckle filtered image.");
+  InputImageType::Pointer inputImage = this->GetInputData<InputImageType>("InputImage");
+
+  if(inputImage.IsNotNull())
+    {
+    m_Model->SetInputImage(inputImage);
+    m_View->Show();
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_Model->GetOutput(),"OutputImage","Speckle filtered image.");
+    }
+  else
+    {
+    itkExceptionMacro(<<"Input image is NULL");
+    }
 }
 
 } // End namespace otb

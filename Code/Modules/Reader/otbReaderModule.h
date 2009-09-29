@@ -30,7 +30,7 @@
 
 #include "otbObjectList.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-#inlcude "otbVectorImageToAmplitudeImageFilter.h"
+#include "otbVectorImageToAmplitudeImageFilter.h"
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
@@ -70,7 +70,7 @@ public:
 
   /// Extract ROIs
   typedef MultiToMonoChannelExtractROI<double,double> ExtractROIImageFilterType;
-  typedef ObjectList<ExtractROIImageFilterType>       ExtractROIImageFilterListType
+  typedef ObjectList<ExtractROIImageFilterType>       ExtractROIImageFilterListType;
   
   // Amplitude filter
   typedef VectorImageToAmplitudeImageFilter<FPVImageType,FPImageType> AmplitudeFilterType;
@@ -82,11 +82,6 @@ protected:
   virtual ~ReaderModule();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();

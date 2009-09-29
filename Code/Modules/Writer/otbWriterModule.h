@@ -58,9 +58,11 @@ public:
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FPVImageType;
+  typedef Image<double,2>               FPImageType;
   typedef VectorData<double>            VectorType;
   /// Writers
   typedef ImageFileWriter<FPVImageType>    FPVWriterType;
+  typedef ImageFileWriter<FPImageType>     FPWriterType;
   typedef VectorDataFileWriter<VectorType> VectorWriterType;
 
 protected:
@@ -89,6 +91,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   FPVWriterType::Pointer m_FPVWriter;
+  FPWriterType::Pointer m_FPWriter;
   VectorWriterType::Pointer m_VectorWriter;
 };
 

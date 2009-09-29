@@ -55,7 +55,7 @@ void ReaderModule::Run()
 void ReaderModule::OpenDataSet()
 {
   // First, clear any existing output
-  this->ClearModuleOutputs();
+  this->ClearOutputDescriptors();
 
   std::string filepath = vFilePath->value();
 
@@ -78,7 +78,7 @@ void ReaderModule::OpenDataSet()
     // Extract first band
     ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
     extract->SetInput(m_FPVReader->GetOutput());
-    extract->SetChannel(band+1);
+    extract->SetChannel(1);
     m_ExtractROIFilterList->PushBack(extract);
 
     // Add the first sub band
@@ -87,7 +87,7 @@ void ReaderModule::OpenDataSet()
     this->AddOutputDescriptor(extract->GetOutput(),"OutputImageBand",oss.str());
 
     // Add sub-bands
-    for(unsigned int band = 0; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
+    for(unsigned int band = 1; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
       {
       ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
       extract->SetInput(m_FPVReader->GetOutput());

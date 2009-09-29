@@ -126,6 +126,9 @@ protected:
   /** Retrieve the actual data from the map (returns NULL if wrong DataType */
   template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;
 
+  /** Get the number of input data by key */
+  unsigned int GetNumberOfInputDataByKey(const std::string & key) const;
+
   /** The custom run command */
   virtual void Run();
 

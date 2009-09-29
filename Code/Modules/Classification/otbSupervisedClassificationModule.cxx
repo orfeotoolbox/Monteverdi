@@ -40,48 +40,31 @@ void SupervisedClassificationModule::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void SupervisedClassificationModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  typedef SupervisedClassificationAppli::ImageType InputImageType;
-
-  if(key == "InputImage")
-    {
-    InputImageType * image = dynamic_cast<InputImageType *>(data.GetDataObject());
-    m_SupervisedClassification->SetInputImage(image);
-    }
-}
-
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-const DataObjectWrapper SupervisedClassificationModule::RetrieveOutputByKey(const std::string & key) const
-{
-  DataObjectWrapper wrapper;
-  if(key == "OutputImage")
-    {
-      wrapper.Set(m_SupervisedClassification->GetOutput());
-    }
-  return wrapper;
-}
-
 /** The custom run command */
 void SupervisedClassificationModule::Run()
 {
-  m_SupervisedClassification->Build();
-  m_SupervisedClassification->Show();
-  
-  m_SupervisedClassification->LoadImage();
-  
-  // Check For SVMModel
-  if(!m_Model.empty())
+  InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
+
+  if(input.IsNotNull())
     {
+    m_SupervisedClassification->SetInputImage(input);
+    m_SupervisedClassification->Build();
+    m_SupervisedClassification->Show();
+  
+    m_SupervisedClassification->LoadImage();
+  
+    // Check For SVMModel
+    if(!m_Model.empty())
+      {
       m_SupervisedClassification->SetModelFileName(m_Model);
       m_SupervisedClassification->LoadSVMModel();
+      }
+    this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","SupervisedClassification image.");
     }
-  this->AddOutputDescriptor<SupervisedClassificationAppli::LabeledImageType>("OutputImage","SupervisedClassification image.");
+  else
+    {
+    itkExceptionMacro(<<"InputImage is NULL");
+    }
 }
 
 } // End namespace otb

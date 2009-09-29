@@ -51,23 +51,18 @@ public:
   /** Accessor to the Orthorectification Instance */
   itkGetObjectMacro(Orthorectification,Orthorectification);
   
+  /** Input typedef */
+  typedef Orthorectification::ImageType ImageType;
+
 protected:
   /** Constructor */
   OrthorectificationModule();
+
   /** Destructor */
   virtual ~OrthorectificationModule();
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** Assign input by key. This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
-
-  /** Retrieve output by key  This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
 
   /** The custom run command */
   virtual void Run();

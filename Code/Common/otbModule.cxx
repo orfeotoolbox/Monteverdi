@@ -107,6 +107,19 @@ const Module::OutputDataDescriptorMapType & Module::GetOutputsMap() const
 {
   return m_OutputsMap;
 }
+/** Get number of input data by key */
+unsigned int Module::GetNumberOfInputDataByKey(const std::string & key) const
+{
+  // Search for the key in the input map
+  InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
+
+  // If the key can not be found, throw an exception
+  if(it == m_InputsMap.end())
+    {
+    itkExceptionMacro(<<"Module has no input with key "<<key);
+    }
+  return it->second.GetNumberOfData();
+}
 
 /** Check that every mandatory input has been filled and call the
  * protected virtual run method */

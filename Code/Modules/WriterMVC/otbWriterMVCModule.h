@@ -100,11 +100,6 @@ protected:
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Assign input by key. This method must be reimplemented in subclasses.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
-
   /** The custom run command */
   virtual void Run();
 

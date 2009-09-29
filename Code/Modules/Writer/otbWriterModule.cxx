@@ -28,11 +28,14 @@ namespace otb
 WriterModule::WriterModule()
 {
   m_FPVWriter = FPVWriterType::New();
+  m_FPWriter = FPWriterType::New();
   m_VectorWriter = VectorWriterType::New();
   
    // Describe inputs
   this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
+  this->AddTypeToInputDescriptor<FPImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
+  
 }
 
 /** Destructor */
@@ -78,19 +81,29 @@ void WriterModule::Run()
 void WriterModule::OpenDataSet()
 {
   std::string filepath = vFilePath->value();
-  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
-  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
   
-  if ( test->CanWriteFile(filepath.c_str()) ) 
-  {
-    m_VectorWriter->SetFileName(filepath);
-    m_VectorWriter->Update();
-  }
-  else
-  {
+  FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
+  FPImageType::Pointer singleImage = this->GetInputData<FPImageType>("InputDataSet");
+  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+					   
+  if ( vectorImage.IsNotNull() ) 
+    {
+    m_FPVWriter->SetInput(vectorImage);
     m_FPVWriter->SetFileName(filepath);
     m_FPVWriter->Update();
-  }
+    }
+  else if( singleImage.IsNotNull() )
+    {
+    m_FPWriter->SetInput(singleImage);
+    m_FPWriter->SetFileName(filepath);
+    m_FPWriter->Update();
+    }
+  else if( vectorData.IsNotNull() )
+    {
+    m_VectorWriter->SetInput(vectorData);
+    m_VectorWriter->SetFileName(filepath);
+    m_VectorWriter->Update();
+    }
 }
 
 void WriterModule::Browse()
