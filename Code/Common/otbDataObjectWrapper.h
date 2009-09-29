@@ -58,7 +58,6 @@ public:
     return resp;
   }
   
-
   /** Constructors */
   DataObjectWrapper();
 
@@ -85,14 +84,32 @@ public:
   /** Get the DataType */
   const std::string & GetDataType() const;
 
-private:
-  
+  /** Set the source instance id */
+  void SetSourceInstanceId(const std::string & id);
 
+  /** Get the source instance id */
+  const std::string& GetSourceInstanceId() const;
+
+   /** Set the source output Key */
+  void SetSourceOutputKey(const std::string & key);
+
+  /** Get the source output Key */
+  const std::string& GetSourceOutputKey() const;
+
+
+private:
   /** The key to identify the data type */
   std::string m_DataType;
 
   /** A pointer to the DataObject */
   itk::DataObject::Pointer m_DataObject;
+
+  /** The source module instance id */
+  std::string m_SourceInstanceId;
+
+  /** The source module output key */
+  std::string m_SourceOutputKey;
+
 };
 
 /** Overloading the << operator */

@@ -28,6 +28,10 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
+#include "otbObjectList.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+#inlcude "otbVectorImageToAmplitudeImageFilter.h"
+
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
@@ -58,10 +62,18 @@ public:
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FPVImageType;
+  typedef Image<double,2>               FPImageType;
   typedef VectorData<double>            VectorType;
   /// Readers
   typedef ImageFileReader<FPVImageType>    FPVReaderType;
   typedef VectorDataFileReader<VectorType> VectorReaderType;
+
+  /// Extract ROIs
+  typedef MultiToMonoChannelExtractROI<double,double> ExtractROIImageFilterType;
+  typedef ObjectList<ExtractROIImageFilterType>       ExtractROIImageFilterListType
+  
+  // Amplitude filter
+  typedef VectorImageToAmplitudeImageFilter<FPVImageType,FPImageType> AmplitudeFilterType;
 
 protected:
   /** Constructor */
@@ -90,6 +102,8 @@ private:
 
   FPVReaderType::Pointer m_FPVReader;
   VectorReaderType::Pointer m_VectorReader;
+  AmplitudeFilterType::Pointer m_AmplitudeFilter;
+  ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
 };
 
 

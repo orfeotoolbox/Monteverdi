@@ -26,10 +26,10 @@
 namespace otb
 {
 /** Constructors */
-InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false), m_Used(false)
+InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false)
 {}
 
-InputDataDescriptor::InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_Optional(false), m_Multiple(false), m_Used(false)
+InputDataDescriptor::InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_Optional(false), m_Multiple(false)
 {}
 
 /** Destructor */
@@ -48,12 +48,6 @@ bool InputDataDescriptor::IsMultiple() const
   return m_Multiple;
 }
 
-/** Is the input data used ? */
-bool InputDataDescriptor::IsUsed() const
-{
-  return m_Used;
-}
-
 /** Set the optional flag */
 void InputDataDescriptor::SetOptional(bool flag)
 {
@@ -64,12 +58,6 @@ void InputDataDescriptor::SetOptional(bool flag)
 void InputDataDescriptor::SetMultiple(bool flag)
 {
   m_Multiple = flag;
-}
-
-/** Set the used flag */
-void InputDataDescriptor::SetUsed(bool flag)
-{
-  m_Used = flag;
 }
 
 /** Add a type to the supported type for this input */
@@ -96,7 +84,33 @@ bool InputDataDescriptor::IsTypeCompatible(const std::string & type) const
   return (it!=typesStringVector.end());
 }
 
+/** Add data (virtual because behaviour depends 
+   *  on subclasses) */
+void InputDataDescriptor::AddData(const DataObjectWrapper & wrapper)
+{
+  if(this->IsTypeCompatible(wrapper.GetDataType()))
+    {
+    if(!m_Multiple && !m_Data.empty())
+      {
+      m_Data[0] = wrapper;
+      }
+    else
+      {
+      m_Data.push_back(wrapper);
+      }
+    }
+  else
+    {
+    itkGenericExceptionMacro(<<"Incompatible type. Expected "<<this->GetDataType()<<", received "<<wrapper.GetDataType());
+    }  
+}
 
+bool InputDataDescriptor::IsConsistent() const
+{
+  return (m_Optional || (m_Multiple && !m_Data.empty()) || (!m_Multiple && m_Data.size()==1));
+}
+
+/** Split type string according to a separator */
 InputDataDescriptor::StringVectorType InputDataDescriptor::SplitTypeName(const std::string & types, char separator)
 {
   StringVectorType resp;
@@ -124,7 +138,7 @@ std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descr
       << static_cast<DataDescriptor>(descriptor)
       << (descriptor.IsOptional() ? ", optional" : ", mandatory")
       << (descriptor.IsMultiple() ? ", multiple" : ", single")
-      << (descriptor.IsUsed()     ? ", used"     : ", free");
+      << (descriptor.IsConsistent() ? ", consistent"     : ", inconsistent");
   return ostr;
 }
 

@@ -24,27 +24,17 @@
 namespace otb
 {
 /** Constructors */
-OutputDataDescriptor::OutputDataDescriptor() : DataDescriptor(), m_NumberOfData(1)
+OutputDataDescriptor::OutputDataDescriptor() : DataDescriptor()
 {}
 
-OutputDataDescriptor::OutputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_NumberOfData(1)
-{}
+OutputDataDescriptor::OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description) : DataDescriptor(data.GetDataType(),key,description)
+{
+  m_Data.push_back(data);
+}
 
 /** Destructor */
 OutputDataDescriptor::~OutputDataDescriptor()
 {}
-
-/** Get the number of data */
-unsigned int OutputDataDescriptor::GetNumberOfData() const
-{
-  return m_NumberOfData;
-}
-
-/** Set the number of data */
-void OutputDataDescriptor::SetNumberOfData(unsigned int nb)
-{
-  m_NumberOfData = nb;
-}
 
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const OutputDataDescriptor & descriptor)

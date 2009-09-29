@@ -55,7 +55,7 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
 void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & data)
 {
   // Search for the key in the input map
-  InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
+  InputDataDescriptorMapType::iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
   if(it == m_InputsMap.end())
@@ -69,11 +69,9 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
     itkExceptionMacro(<<"Type mismatch for input with key "<<key<<": expected "<<it->second.GetDataType()<<", received "<<data.GetDataType());
     }
 
-  // Then if everything is ok, call the assign method
-  this->AssignInputByKey(key,data);
+  /** Add the data to the input descriptor */
+  it->second.AddData(data);
 
-  // Toggle the used flag
-  m_InputsMap[key].SetUsed(true);
 }
 
 /** Get an output by its key */
@@ -89,32 +87,13 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
     }
 
   // Then if everything is ok, call the assign method
-  DataObjectWrapper wrapper = this->RetrieveOutputByKey(key);
+  DataObjectWrapper wrapper = it->second.GetNthData(idx);
 
-  // Check types correctness
-  // Else, check for type matching and eventually throw an exception
-  if(it->second.GetDataType() != wrapper.GetDataType())
-    {
-    itkExceptionMacro(<<"Type mismatch for output with key "<<key<<": expected "<<it->second.GetDataType()<<", retrieved "<<wrapper.GetDataType());
-    }
-
+  if(!it->second.IsTypeCompatible(wrapper.GetDataType()))
+  {
+  itkExceptionMacro(<<"Type mismatch for output with key "<<key<<": expected "<<it->second.GetDataType()<<", received "<<wrapper.GetDataType());
+  }
   return wrapper;
-}
-
-/** Assign input by key. Subclasses should override this method.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void Module::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  itkExceptionMacro(<<"Subclasses should override this method");
-}
-
-/** Retrieve output by key. Subclasses should override this method.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-const DataObjectWrapper Module::RetrieveOutputByKey(const std::string & key) const
-{
-  itkExceptionMacro(<<"Subclasses should override this method");
 }
 
 /** Get the input data descriptors map */
@@ -136,9 +115,9 @@ void Module::Start()
   // Check input parameters
   for(InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it!=m_InputsMap.end();++it)
     {
-    if(!it->second.IsOptional() && !it->second.IsUsed())
+    if(!it->second.IsConsistent())
       {
-      itkExceptionMacro(<<"Mandatory input "<<it->second.GetDataKey()<<" is not used.");
+      itkExceptionMacro(<<"Input "<<it->second.GetDataKey()<<" is inconsistent.");
       }
     }
     // Once parameters have been checked, the run method can be triggered.
@@ -149,6 +128,12 @@ void Module::Start()
 void Module::Run()
 {
   itkExceptionMacro(<<"Subclasses should override this method");
+}
+
+/** Clear output descriptors */
+void Module::ClearOutputDescriptors()
+{
+  m_OutputsMap.clear();
 }
 
 } // End namespace otb

@@ -95,10 +95,15 @@ public:
 protected:
   /** Constructor */
   Module();
+
   /** Destructor */
   virtual ~Module();
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Clear output descriptors */
+  void ClearOutputDescriptors();
 
   /** Add a new input descriptor */
   template <typename T> void AddInputDescriptor(const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
@@ -107,17 +112,19 @@ protected:
   template <typename T> void AddTypeToInputDescriptor(const std::string & key);
 
   /** Add a new output descriptor */
-  template <typename T> void AddOutputDescriptor(const std::string & key, const std::string & description, unsigned int nb = 1);
+  template <typename T> void AddOutputDescriptor(T* data, const std::string & key, const std::string & description);
 
-  /** Assign input by key. Subclasses should override this methods.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
+  /** Add a new output descritpor (SmartPointer version) */
+  template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description);
 
-  /** Retrieve output by key. Subclasses should override this method.
-   *  When this method is called, key checking and data type matching
-   *  is already done. */
-  virtual const DataObjectWrapper RetrieveOutputByKey(const std::string & key) const;
+  /** Add data to the output descriptor */
+  template <typename T> void AddDataToOutputDescriptor(T * data, const std::string & key);
+
+  /** Add data to the output descriptor (SmartPointer version) */
+  template <typename T> void AddDataToOutputDescriptor(itk::SmartPointer<T> data, const std::string & key);
+
+  /** Retrieve the actual data from the map (returns NULL if wrong DataType */
+  template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;
 
   /** The custom run command */
   virtual void Run();
@@ -138,5 +145,9 @@ private:
 
 
 } // End namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbModule.txx"
+#endif
 
 #endif

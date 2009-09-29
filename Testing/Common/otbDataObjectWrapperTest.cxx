@@ -27,12 +27,16 @@ int main(int argc, char * argv[])
   // Default constructor and call to the set method
   otb::DataObjectWrapper wrapper1;
   wrapper1.Set(FloatImageType::New());
+  wrapper1.SetSourceInstanceId("Reader1");
+  wrapper1.SetSourceOutputKey("Output");
 
   // Access parameters
   std::cout<<"Wrapper1: DataObject = "<<wrapper1.GetDataObject()<<", DataType = "<<wrapper1.GetDataType()<<std::endl;
 
   // Constructor with parameters
   otb::DataObjectWrapper wrapper2 = otb::DataObjectWrapper::Create(FloatImageType::New());
+  wrapper2.SetSourceInstanceId("Reader2");
+  wrapper2.SetSourceOutputKey("Output");
 
   // Access parameters
   std::cout<<"Wrapper2: DataObject = "<<wrapper2.GetDataObject()<<", DataType = "<<wrapper2.GetDataType()<<std::endl;
