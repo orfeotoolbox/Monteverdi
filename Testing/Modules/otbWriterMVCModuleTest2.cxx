@@ -46,22 +46,9 @@ int main(int argc, char* argv[])
   module->AddInputByKey("InputDataSet",wrapperIn);
   
   module->Start();
-//   specificModule->GetView()->Show();
+
   Fl::run();
-  /*
-  // Simulate file chooser and ok callback
-  specificModule->GetView()->vFilePath->value(argv[2]);
-  //Select band to write
-  Fl::check();
-  specificModule->GetView()->guiFeatureList->value(1);
-  specificModule->GetView()->guiAddChannel->do_callback();
-  Fl::check();
-  specificModule->GetView()->guiOutputFeatureList->value(2);
-  specificModule->GetView()->guiOutputFeatureList->do_callback();
-  Fl::check();
-  
-  specificModule->GetView()->guiOK->do_callback();
-  */
+
   return EXIT_SUCCESS;
 
 }
