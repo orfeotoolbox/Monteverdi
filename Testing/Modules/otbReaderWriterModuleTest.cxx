@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
   //Writer module now
-  writerModule->AddInputByKey("InputImageDataSet",wrapperOut);
+  writerModule->AddInputByKey("InputDataSet",wrapperOut);
   writerModule->Start();
   Fl::check();
   

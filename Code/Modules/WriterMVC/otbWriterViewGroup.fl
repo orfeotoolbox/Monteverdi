@@ -11,34 +11,35 @@ decl {\#include <FL/Fl_Gl_Window.H>} {public
 decl {\#include "otbFeature.h"} {public
 } 
 
-class WriterModuleGUI {open
+class WriterViewGroup {open
 } {
-  Function {BuildGUI()} {open return_type void
+  Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {593 47 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {482 119 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
           label Action open
-          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
+          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_File_Input vFilePath {
-            xywh {30 315 295 30}
+            label {file:}
+            xywh {65 320 240 35}
           }
           Fl_Button bBrowse {
             label button
             callback {this->Browse();}
-            xywh {350 320 70 25}
+            xywh {335 330 70 20}
           }
         }
         Fl_Group guiOutput {
-          label Output open
-          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
+          label Output
+          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Browser guiFeatureList {
             label {Feature Image List}
@@ -47,7 +48,7 @@ class WriterModuleGUI {open
           }
           Fl_Button guiAddChannel {
             label {>>}
-            callback {AddOutputChannel();} selected
+            callback {AddOutputChannel();}
             tooltip {Add mono Channel Image to Intput List} xywh {305 363 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
           }
           Fl_Button guiRemoveChannel {
@@ -72,9 +73,9 @@ class WriterModuleGUI {open
           }
         }
       }
-      Fl_Button bOK {
+      Fl_Button guiOK {
         label {Save/Quit}
-        callback {this->OK();}
+        callback {OK();}
         tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiClose {
@@ -82,7 +83,7 @@ class WriterModuleGUI {open
         callback {ClearFeature();}
         tooltip {Clear Feature List} xywh {108 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Button bCancel {
+      Fl_Button guiQuit {
         label Quit
         callback {Quit();}
         tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 120 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
@@ -105,8 +106,8 @@ class WriterModuleGUI {open
       }
     }
   }
-  Function {WriterModuleGUI()} {} {}
-  Function {~WriterModuleGUI()} {open return_type virtual
+  Function {WriterViewGroup()} {} {}
+  Function {~WriterViewGroup()} {open return_type virtual
   } {}
   Function {OpenImage()} {open return_type {virtual void}
   } {}
@@ -140,6 +141,6 @@ class WriterModuleGUI {open
   } {}
   Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
   } {}
-  Function {Browse()} {open protected return_type {virtual void}
+  Function {Browse()} {open selected protected return_type {virtual void}
   } {}
 } 

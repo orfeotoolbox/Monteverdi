@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_cxx
-#define __otbWriterModule_cxx
+#ifndef __otbWriterMVCModule_cxx
+#define __otbWriterMVCModule_cxx
 
 #include "otbWriterMVCModule.h"
 
@@ -29,7 +29,7 @@ WriterModule::WriterModule()
 //   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
   
-  m_View       = WriterView::New();
+  m_View       = WriterViewGUI::New();
   m_Controller = WriterController::New();
   m_Model      = WriterModel::GetInstance();
   m_Controller->SetView(m_View);
@@ -78,6 +78,8 @@ void WriterModule::Run()
   this->BuildGUI();
   wFileChooserWindow->show();*/
   m_View->Show();
+  m_Model->GenerateLayers();
+  std::cout << "end of Feature GUI"<< std::endl;
 }
 
 

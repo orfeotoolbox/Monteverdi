@@ -231,7 +231,7 @@ FeatureExtractionModel
 {
   this->AddFilter( filter );
   this->AddFilterType(type);
-
+  
   itk::OStringStream oss;
   if( inputId!=-1 )
     oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
