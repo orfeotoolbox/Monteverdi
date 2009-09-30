@@ -218,7 +218,7 @@ WriterViewGUI
   std::string imName = m_WriterModel->GetInputFileName();
   itk::OStringStream oss;
   oss.str("");
-  oss<<"Feature Extraction Application";
+  oss<<"Writer Application";
   oss<<" : "<<imName.substr(imName.find_last_of("/")+1, imName.size());
   oss<<" ("<<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
   if(m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel() != 1)

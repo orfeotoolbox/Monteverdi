@@ -86,7 +86,7 @@ void WriterMVCModule::Notify()
   if (m_Model->GetHasChanged())
   {
     // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("Dataset writed",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("Dataset written",m_InstanceId));
   }
 }
 
