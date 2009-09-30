@@ -81,6 +81,8 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/WriterMVC
 ${Monteverdi_BINARY_DIR}/Code/Modules/WriterMVC
 ${Monteverdi_SOURCE_DIR}/Code/Modules/Viewer
 ${Monteverdi_BINARY_DIR}/Code/Modules/Viewer
+${Monteverdi_SOURCE_DIR}/Code/Application
+${Monteverdi_BINARY_DIR}/Code/Application
 )
 
 

@@ -97,13 +97,16 @@ public:
 
   /** Process event from the model */
   virtual void Notify(const MonteverdiEvent & event);
-  
-  /** Show the main interface */
-  void Show();
 
   /** Init the widgets (could be moved in the constructor */
   void InitWidgets();
- 
+
+  /** Show the main interface */
+  void Show();
+
+  /** Exit the application */
+  void Quit();
+
 protected:
    /** Constructor */
   MonteverdiViewGUI();
@@ -122,12 +125,9 @@ protected:
 
   /** Generate the gui to choose inputs for a module */
   void BuildInputsGUI(const std::string & modulekey);
-  
+
   /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
-  
-  /** Exit the application */
-  void Quit();
 
   /** Show the help */
   void Help();
