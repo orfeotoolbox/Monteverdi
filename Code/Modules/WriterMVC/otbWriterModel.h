@@ -262,13 +262,19 @@ public:
   itkGetMacro(NumberOfChannels, unsigned int);
 
   
-
+  /** Need to Notify Monteverdi : output has changed */
+  itkGetMacro(HasChanged, bool);
 
   itkGetMacro(HasInput,bool);
 
   /** VisuModel */
   itkGetMacro(VisuModel,VisuModelPointerType );
   itkGetMacro(ResultVisuModel,VisuModelPointerType );
+
+  
+  /** Get writer */
+  itkGetObjectMacro(FPVWriter,FPVWriterType);
+  itkGetObjectMacro(VectorWriter,VectorWriterType);
 
   /** Chain lsit */
   void CreateFilterList( int filterId );
@@ -354,6 +360,8 @@ private:
   //Writers
   FPVWriterType::Pointer m_FPVWriter;
   VectorWriterType::Pointer m_VectorWriter;
+  
+  bool m_HasChanged;
 };
 
 }

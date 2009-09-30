@@ -60,6 +60,8 @@ WriterModel::WriterModel()
   m_InputImage = InputImageType::New(); 
   m_FPVWriter = FPVWriterType::New();
   m_VectorWriter = VectorWriterType::New();
+  
+  m_HasChanged = false;
 }
 
 
@@ -72,8 +74,6 @@ WriterModel
 {
   listener->Notify();
 }
-
-
 
 void
 WriterModel
@@ -101,8 +101,6 @@ WriterModel
   // Render
   m_VisuModel->Update();
   
-  //GenerateImageList
-  
   //Set Input Writer
   m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
@@ -125,8 +123,6 @@ void
 
   // Render
   m_VisuModel->Update();
-  
-//   otbMsgDebugMacro (<< "image list size " << m_InputImageList->Size());
   
   // Notify the observers
   this->NotifyAll();
@@ -220,27 +216,14 @@ void
 WriterModel
 ::AddFeature()
 {
-//   this->AddFilter( filter );
-//   this->AddFilterType(type);
-
-  //itk::OStringStream oss;
-  
-  //oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
-//   unsigned int size = m_NumberOfChannels;
   for (unsigned int i=0;i<m_NumberOfChannels;++i)
   {
     m_OutputIndexMap.push_back(0);
-//   m_SelectedFilters.push_back(true);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));  
   }
   
 }
 
-
-
-/****************************************************
- ******************* FIN FILTERS FUNCTIONS **********
- ****************************************************/
 
 
 void
@@ -295,6 +278,8 @@ WriterModel
         break;
     }
 //     this->UpdateWriter(fname);
+    m_HasChanged = true;
+    this->NotifyAll();
   }
   
   
