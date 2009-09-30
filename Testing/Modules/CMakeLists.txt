@@ -120,5 +120,10 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
 TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
 
+ADD_TEST(WriterMVCModuleTest otbWriterMVCModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${TEMP}/readerModuleOuptut.tif
+)
+
 ADD_EXECUTABLE(otbWriterMVCModuleTest2 otbWriterMVCModuleTest2.cxx)
 TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest2 otbWriterMVCModule)
