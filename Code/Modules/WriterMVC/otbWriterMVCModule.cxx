@@ -41,7 +41,7 @@ WriterMVCModule::WriterMVCModule()
   // Describe inputs
   //this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
   this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
-  this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
+//   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   
   m_Model->RegisterListener(this);
 }
@@ -61,7 +61,7 @@ void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void WriterMVCModule::Run()
 { 
   FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
-  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+//   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   
   if(vectorImage.IsNotNull())
   {
@@ -69,11 +69,11 @@ void WriterMVCModule::Run()
     m_View->Show();
     m_Model->GenerateLayers();
   }
-  else if (vectorData.IsNotNull())
-  {
-    //TODO write vectordata
-    m_Model->GetVectorWriter()->SetInput(vectorData);
-  }
+//   else if (vectorData.IsNotNull())
+//   {
+//     //TODO write vectordata
+//     m_Model->GetVectorWriter()->SetInput(vectorData);
+//   }
   else
   {
     itkExceptionMacro(<<"Input image is NULL.");
