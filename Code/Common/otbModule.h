@@ -88,6 +88,9 @@ public:
    * protected virtual run method */
   void Start();
 
+  /** Notify outputs change */
+  void NotifyOutputsChange();
+
   /** Set/Get the instance id */
   itkSetStringMacro(InstanceId);
   itkGetStringMacro(InstanceId);

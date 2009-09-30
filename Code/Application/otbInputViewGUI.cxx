@@ -208,7 +208,7 @@ InputViewGUI
 ::Ok()
 {
   std::cout<< "Ok" <<std::endl;
-  unsigned int i,j;
+  unsigned int i;
 
   // Connect 
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)

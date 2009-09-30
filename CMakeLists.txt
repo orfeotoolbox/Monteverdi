@@ -60,6 +60,7 @@ SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 
 # Include directories
 INCLUDE_DIRECTORIES(
+${Monteverdi_BINARY_DIR}/
 ${Monteverdi_SOURCE_DIR}/Code/Common
 ${Monteverdi_BINARY_DIR}/Code/Common
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/
@@ -87,7 +88,7 @@ ${Monteverdi_BINARY_DIR}/Code/Application
 
 
 # Code location
-SUBDIRS(Code Prototype1 Utilities)
+SUBDIRS(Code Prototype1 Utilities StarterKit)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
