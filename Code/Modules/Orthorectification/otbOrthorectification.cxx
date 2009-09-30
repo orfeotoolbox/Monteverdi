@@ -69,11 +69,20 @@ Orthorectification::Orthorectification()
   m_TileNumber = 0;
   m_MaxTileSize = 256.;
   guiShowDEM->hide();
+  
+  m_HasOutput = false;
 
   //Instanciate Filter 
   //m_OrthorectificationFilter = OrthorectificationFilterType::New();
   //m_PerBandFilter     = PerBandFilterType::New();
 }
+void
+Orthorectification
+::NotifyListener(ListenerBase * listener)
+{
+  listener->Notify();
+}
+
 
 void
 Orthorectification
@@ -126,7 +135,7 @@ Orthorectification
   int resCheckImageParameters = this->CheckImageParameters();
   if (resCheckImageParameters == 1)
   {
-    return;
+  itkExceptionMacro(<<"Invalid image parameters");
   }
 
   this->ComputeTileNumber();
@@ -134,10 +143,13 @@ Orthorectification
 
   if (resCheckMapParameters == 1)
   {
-    return;
+  itkExceptionMacro(<<"Invalid map parameters");
   }
 
   guiMainWindow->hide();
+
+  m_HasOutput = true;
+  this->NotifyAll();
 }
 
 
@@ -580,7 +592,6 @@ Orthorectification::UpdateDEMSpacing()
 int
 Orthorectification::CheckImageParameters()
 {
-
   try
   {
     ForwardSensorType::Pointer sensor = ForwardSensorType::New();
@@ -588,7 +599,7 @@ Orthorectification::CheckImageParameters()
   }
   catch ( itk::ExceptionObject & )
   {
-    return 1;
+  return 1;
   }
   if (strcmp("",guiSizeX->value()) == 0 || strcmp("",guiSizeY->value()) == 0)
   {
@@ -887,9 +898,9 @@ Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
   typename PerBandFilterType::Pointer perBandFilter = PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(image);
-  //TODO : remove this update !!!!
-  perBandFilter->Update();
+
   m_Output = perBandFilter->GetOutput();
+  m_PerBandFilter = perBandFilter.GetPointer();
   
   return 0;
 }

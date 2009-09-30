@@ -35,8 +35,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbDEMToImageGenerator.h"
 #include "otbForwardSensorModel.h"
 #include "itkInterpolateImageFunction.h"
-// let it in comments...
-//#include "otbPerBandVectorImageFilter.h"
+
+#include "otbMVCModel.h"
+#include "otbListenerBase.h"
+
 
 namespace otb
 {
@@ -47,7 +49,7 @@ namespace otb
  * \ingroup
  */
 class ITK_EXPORT Orthorectification
-      : public itk::ProcessObject, public OrthorectificationGUI
+      : public itk::ProcessObject, public OrthorectificationGUI, public MVCModel<ListenerBase>
 {
 public:
   /** Standard typedefs */
@@ -113,6 +115,9 @@ public:
   //Get Output Image
   itkGetObjectMacro(Output,ImageType);
   
+  // Get the HasOutput flag
+  itkGetMacro(HasOutput,bool);
+
   // Show the GUI
   virtual void Show();
 
@@ -216,6 +221,9 @@ private:
   Orthorectification(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Notify a given listener of changes */
+  virtual void NotifyListener(ListenerBase * listener);
+
   SizeType                 m_MainWindowInitSize;
   MapType                  m_MapType;
   InterpolatorType         m_InterpType;
@@ -234,11 +242,16 @@ private:
   
   //Filter Instanciation
   //OrthorectificationFilterType::Pointer m_OrthorectificationFilter;
-  //PerBandFilterType::Pointer     m_PerBandFilter;
+
+  // This pointer is used to store the main filter of the application
+  itk::ProcessObject::Pointer m_PerBandFilter;
 
   //Input & Outputs Images 
-  ImagePointerType         m_InputImage;
-  ImagePointerType         m_Output;
+  ImagePointerType            m_InputImage;
+  ImagePointerType            m_Output;
+
+  // Flag to determine if there is an output
+  bool m_HasOutput;
 };
 
 }// End namespace otb
