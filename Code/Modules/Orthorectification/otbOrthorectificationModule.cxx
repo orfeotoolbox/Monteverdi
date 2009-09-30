@@ -25,6 +25,8 @@ OrthorectificationModule::OrthorectificationModule()
 {
   m_Orthorectification = Orthorectification::New();
 
+  m_Orthorectification->RegisterListener(this);
+
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to apply OrthoRectification on.");
 }
@@ -49,12 +51,22 @@ void OrthorectificationModule::Run()
     {
     m_Orthorectification->SetInputImage(input);
     m_Orthorectification->Show();
-    this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Orthorectification->GetOutput(),"OutputImage","Orthorectified image.");
+    
     }
   else
     {
     itkExceptionMacro(<<"InputImage is NULL");
+    }
+}
+
+/** The notify */
+void OrthorectificationModule::Notify()
+{
+  if(m_Orthorectification->GetHasOutput())
+    {
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_Orthorectification->GetOutput(),"OutputImage","Orthorectified image.");
+    this->NotifyOutputsChange();
     }
 }
 
