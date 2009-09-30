@@ -40,18 +40,18 @@
 #include "otbListenerBase.h"
 namespace otb
 {
-/** \class WriterModule
+/** \class WriterMVCModule
    *  \brief 
    *
    *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-  class ITK_EXPORT WriterModule
+  class ITK_EXPORT WriterMVCModule
   : public Module, public ListenerBase
   {
     public:
       /** Standard class typedefs */
-      typedef WriterModule                 Self;
+      typedef WriterMVCModule                 Self;
       typedef Module                        Superclass;
       typedef itk::SmartPointer<Self>       Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
@@ -60,7 +60,7 @@ namespace otb
       itkNewMacro(Self);
 
       /** Type macro */
-      itkTypeMacro(WriterModule,Module);
+      itkTypeMacro(WriterMVCModule,Module);
 
       /** OTB typedefs */
       /// Dataset
@@ -71,9 +71,9 @@ namespace otb
       itkGetObjectMacro(View,WriterViewGUI);
     protected:
       /** Constructor */
-      WriterModule();
+      WriterMVCModule();
       /** Destructor */
-      virtual ~WriterModule();
+      virtual ~WriterMVCModule();
       /** PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -83,7 +83,7 @@ namespace otb
       /** Notify Monteverdi application that Writer has a result */
       void Notify();
     private:
-      WriterModule(const Self&); //purposely not implemented
+      WriterMVCModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
       // The view

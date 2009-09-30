@@ -24,7 +24,7 @@
 namespace otb
 {
 /** Constructor */
-WriterModule::WriterModule()
+WriterMVCModule::WriterMVCModule()
 {
   //Build MVC
   m_Model      = WriterModel::New();
@@ -47,18 +47,18 @@ WriterModule::WriterModule()
 }
 
 /** Destructor */
-WriterModule::~WriterModule()
+WriterMVCModule::~WriterMVCModule()
 {}
 
 /** PrintSelf method */
-void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
 }
 
 /** The custom run command */
-void WriterModule::Run()
+void WriterMVCModule::Run()
 { 
   FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
@@ -81,7 +81,7 @@ void WriterModule::Run()
 }
 
 /** The Notify */
-void WriterModule::Notify()
+void WriterMVCModule::Notify()
 {
   if (m_Model->GetHasChanged())
   {

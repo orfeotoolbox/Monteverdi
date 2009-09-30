@@ -25,7 +25,7 @@
 
 int main(int argc, char* argv[])
 {
-  otb::WriterModule::Pointer specificModule = otb::WriterModule::New();
+  otb::WriterMVCModule::Pointer specificModule = otb::WriterMVCModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
 
   std::cout<<"Module: "<<module<<std::endl;
