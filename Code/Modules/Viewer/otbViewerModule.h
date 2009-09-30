@@ -202,7 +202,7 @@ public:
   /** CallBacks Implementations*/
   virtual void ChangeROIColor();
   virtual void UpdateListSelectionColor();
-  virtual void AddName();
+  virtual void AddName( std::string name );
   virtual void ClearAll();
   virtual void DeleteVectorData();
   virtual void UpdateVectorData(unsigned int index);

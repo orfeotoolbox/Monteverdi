@@ -25,7 +25,7 @@ namespace otb
 {
 
 /** Constructors */
-DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"), m_SourceOutputKey("Unknown")
+  DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"), m_SourceOutputKey("Unknown"), m_Description("Unknown")
 {}
 
 /** Destructor */
@@ -68,14 +68,27 @@ const std::string& DataObjectWrapper::GetSourceOutputKey() const
   return m_SourceOutputKey;
 }
 
+/** Set the description */
+void DataObjectWrapper::SetDescription(const std::string & desc)
+{
+  m_Description = desc;
+}
+
+/** Get the description */
+const std::string& DataObjectWrapper::GetDescription() const
+{
+  return m_Description;
+}
+
 /** Overloading the << operator */
 std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper)
 {
   ostr<<"DataObjectWrapper: type= "<<wrapper.GetDataType()
       <<", object= "<<wrapper.GetDataObject()
       <<", source id= "<<wrapper.GetSourceInstanceId()
-      <<", output key= "<<wrapper.GetSourceOutputKey();
-     
+      <<", output key= "<<wrapper.GetSourceOutputKey()
+      <<", description= "<<wrapper.GetDescription();
+
   return ostr;
 }
 

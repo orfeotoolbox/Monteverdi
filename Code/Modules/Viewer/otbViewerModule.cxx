@@ -141,7 +141,8 @@ void ViewerModule::Run()
   VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
   m_VectorDataList->PushBack(vdata);
   this->UpdateVectorData(i);
-  this->AddName();
+  std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData",i);
+  this->AddName( desc );
   }
 
   // Colors
@@ -297,12 +298,13 @@ void ViewerModule::UpdateVectorData(unsigned int index)
 /**
  *
  */
-void ViewerModule::AddName()
+void ViewerModule::AddName(std::string name)
 {
   // Set a random color to the vector data
-  itk::OStringStream oss;
-  oss<<"Vector Data : "<<m_VectorDataList->Size();
-  dVDList->add(oss.str().c_str());
+  //itk::OStringStream oss;
+  //oss<<"Vector Data : "<<m_VectorDataList->Size();
+  //dVDList->add(oss.str().c_str());
+  dVDList->add(name.c_str());
   dVDList->redraw();
   dVDList->redraw();
 }

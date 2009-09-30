@@ -97,6 +97,12 @@ public:
   const std::string& GetSourceOutputKey() const;
 
 
+   /** Set the description */
+  void SetDescription(const std::string & desc);
+
+  /** Get the description */
+  const std::string& GetDescription() const;
+
 private:
   /** The key to identify the data type */
   std::string m_DataType;
@@ -109,7 +115,9 @@ private:
 
   /** The source module output key */
   std::string m_SourceOutputKey;
-
+  
+  /** The description of the object (file name) */
+  std::string m_Description;
 };
 
 /** Overloading the << operator */

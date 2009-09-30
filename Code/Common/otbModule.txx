@@ -65,6 +65,7 @@ template <typename T> void Module::AddOutputDescriptor(T* data, const std::strin
   DataObjectWrapper wrapper = DataObjectWrapper::Create(data);
   wrapper.SetSourceInstanceId(m_InstanceId);
   wrapper.SetSourceOutputKey(key);
+  wrapper.SetDescription(description);
 
   // Else build a new descriptor
   OutputDataDescriptor desc(wrapper,key,description);
@@ -130,6 +131,34 @@ template <typename T> T * Module::GetInputData(const std::string & key, unsigned
  
   return resp;
 }
+
+/** Retrieve the actual data description from the map */
+template <typename T> std::string Module::GetInputDataDescription(const std::string & key, unsigned int idx) const
+{
+  /*
+  T * data = this->GetInputData<T>(key, idx);
+  DataObjectWrapper wrapper = DataObjectWrapper::Create(data);
+  */
+
+  // Search for the key in the input map
+  InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
+  
+  // If the key can not be found, throw an exception
+  if(it == m_InputsMap.end())
+    {
+    itkExceptionMacro(<<"Module has no input with key "<<key);
+    }
+  
+  // Check if type are compatible
+  if(!it->second.IsTypeCompatible(TypeManager::GetInstance()->GetTypeName<T>()))
+    {
+    itkExceptionMacro(<<"Type "<<TypeManager::GetInstance()->GetTypeName<T>()<<" incompatible with available types for this input: "<<it->second.GetDataType());
+    }
+
+  return it->second.GetNthData(idx).GetDescription();
+}
+
+
 
 } // end namespace otb
 
