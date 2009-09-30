@@ -76,15 +76,15 @@ void ReaderModule::OpenDataSet()
     this->AddOutputDescriptor(m_FPVReader->GetOutput(),"OutputImage",oss.str());
 
     // Extract first band
-    ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
-    extract->SetInput(m_FPVReader->GetOutput());
-    extract->SetChannel(1);
-    m_ExtractROIFilterList->PushBack(extract);
+    ExtractROIImageFilterType::Pointer extractMono = ExtractROIImageFilterType::New();
+    extractMono->SetInput(m_FPVReader->GetOutput());
+    extractMono->SetChannel(1);
+    m_ExtractROIFilterList->PushBack(extractMono);
 
     // Add the first sub band
     oss.str("");
     oss << "Image bands read from file: " << lFile.file();
-    this->AddOutputDescriptor(extract->GetOutput(),"OutputImageBand",oss.str());
+    this->AddOutputDescriptor(extractMono->GetOutput(),"OutputImageBand",oss.str());
 
     // Add sub-bands
     for(unsigned int band = 1; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)

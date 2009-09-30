@@ -65,6 +65,13 @@ public:
   typedef ImageFileWriter<FPImageType>     FPWriterType;
   typedef VectorDataFileWriter<VectorType> VectorWriterType;
 
+  /** Callbacks */
+  virtual void SaveDataSet();
+  virtual void Browse();
+  virtual void Cancel();
+
+  //itkGetObjectMacro(FPVWriter, FPVWriterType);
+
 protected:
   /** Constructor */
   WriterModule();
@@ -76,17 +83,13 @@ protected:
   /** The custom run command */
   virtual void Run();
 
-  /** Callbacks */
-  virtual void OpenDataSet();
-  virtual void Browse();
-  virtual void Cancel();
 
 private:
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  FPVWriterType::Pointer m_FPVWriter;
-  FPWriterType::Pointer m_FPWriter;
+  FPVWriterType::Pointer    m_FPVWriter;
+  FPWriterType::Pointer     m_FPWriter;
   VectorWriterType::Pointer m_VectorWriter;
 };
 

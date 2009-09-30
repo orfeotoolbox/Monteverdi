@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
   writer->SetInput(outImage);
   writer->Update();
 
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

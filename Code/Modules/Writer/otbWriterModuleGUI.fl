@@ -18,7 +18,7 @@ class WriterModuleGUI {open
       }
       Fl_Return_Button bOk {
         label Ok
-        callback {this->OpenDataSet();}
+        callback {this->SaveDataSet();} selected
         xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
@@ -28,15 +28,15 @@ class WriterModuleGUI {open
       }
       Fl_Button bBrowse {
         label {...}
-        callback {this->Browse();} selected
+        callback {this->Browse();}
         xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
-  Function {OpenDataSet()} {open protected return_type {virtual void}
+  Function {SaveDataSet()} {open return_type {virtual void}
   } {}
-  Function {Browse()} {open protected return_type {virtual void}
+  Function {Browse()} {open return_type {virtual void}
   } {}
-  Function {Cancel()} {open protected return_type {virtual void}
+  Function {Cancel()} {open return_type {virtual void}
   } {}
 } 

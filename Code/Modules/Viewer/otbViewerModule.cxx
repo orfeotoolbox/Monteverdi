@@ -141,6 +141,7 @@ void ViewerModule::Run()
   VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
   m_VectorDataList->PushBack(vdata);
   this->UpdateVectorData(i);
+  this->AddName();
   }
 
   // Colors

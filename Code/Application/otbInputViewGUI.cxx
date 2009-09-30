@@ -35,9 +35,8 @@ namespace otb
 {
 
 InputViewGUI
-::InputViewGUI()
+::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputChoiceMap()
 {
-
 }
 
 
