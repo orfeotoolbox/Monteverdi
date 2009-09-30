@@ -87,13 +87,11 @@ public:
 	}       
       else
 	{
-	itkExceptionMacro(<<"Type with typeid "<<typeId<<" is already registered with the name "<<name);
+	// If name is already in use, use the typeid instead
+	m_IdToNameMap[typeId]=typeId;
 	}
       }
-    else
-      {
-      itkExceptionMacro(<<"Type with typeid "<<typeId<<" already registered with name "<<m_IdToNameMap[name]);
-      }
+    // If typeid is already registered, do nothing
   }
 
   /** Get the pretty name associated with a type if it is registered */
@@ -110,7 +108,8 @@ public:
       }
     else
       {
-      itkExceptionMacro(<<"No type registered with typeid "<<typeId);
+      // If no name is available, return the typeId
+      return typeId;
       }
   }
 
