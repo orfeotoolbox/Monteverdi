@@ -52,6 +52,7 @@
 #include "otbOrthorectificationModule.h"
 #include "otbViewerModule.h"
 #include "otbWriterModule.h"
+#include "otbWriterMVCModule.h"
 #include "otbSupervisedClassificationModule.h"
 
 int main(int argc, char* argv[])
@@ -86,6 +87,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Ortho Rectification");
   model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X Image");
   model->RegisterModule<otb::ViewerModule> ("Viewer","Visualization/View image");
 
   // Launch Monteverdi

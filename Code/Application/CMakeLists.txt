@@ -40,7 +40,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbMonteverdi OTBGui OTBMonteverdiCommon 
                       otbReaderModule otbSpeckleFilteringModule otbFeatureExtractionModule otbSupervisedClassificationModule 
-                      otbOrthorectificationModule otbWriterModule otbViewerModule flu)
+                      otbOrthorectificationModule otbWriterModule otbWriterMVCModule otbViewerModule flu)
 INSTALL_TARGETS(/bin otbMonteverdi)
 
 
