@@ -63,7 +63,7 @@ FeatureExtractionModel::FeatureExtractionModel()
   m_imageList = ImageListType::New();
   m_iL2VI = ImageListToVectorImageFilterType::New();
 
-  m_HasChanged = true;
+  m_HasChanged = false;
 }
 
 
@@ -700,6 +700,8 @@ FeatureExtractionModel
 //     iL2VI->UpdateOutputInformation();
 
     m_OutputImage->UpdateOutputInformation();
+    m_HasChanged = true;
+    this->NotifyAll();
 
 
   }

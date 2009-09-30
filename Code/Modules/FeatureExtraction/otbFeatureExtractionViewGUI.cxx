@@ -406,10 +406,7 @@ FeatureExtractionViewGUI
 //   }
 //   m_FeatureExtractionController->SetOutputFileName(cfname);
   m_FeatureExtractionController->SaveOutput();
-  
-  //Here we notify the app Monteverdi that outputs have changed
-  m_FeatureExtractionController->NotifyMonteverdi();
-  
+    
   this->Quit();
 }
 

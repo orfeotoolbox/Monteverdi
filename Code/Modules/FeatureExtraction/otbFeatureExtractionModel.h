@@ -387,9 +387,7 @@ public:
   itkGetMacro(OutputFileName, std:: string);
 
   /** Need to Notify Monteverdi : output has changed */
-  itkSetMacro(HasChanged, bool);
   itkGetMacro(HasChanged, bool);
-
 
   /** Input filename */
   itkSetMacro(InputFileName, std:: string);

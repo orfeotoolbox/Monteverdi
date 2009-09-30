@@ -233,21 +233,6 @@ void FeatureExtractionController::ViewedRegionChanged()
   }
 }
 
-void FeatureExtractionController::NotifyMonteverdi()
-{
-  try
-  {
-
-    m_Model->SetHasChanged(true);
-    /** Notify Monteverdi application */
-    m_Model->NotifyAll();
-  }
-  catch (itk::ExceptionObject & err)
-  {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-}
-
 void
 FeatureExtractionController
 ::CreateFeature(FeatureType featureType)

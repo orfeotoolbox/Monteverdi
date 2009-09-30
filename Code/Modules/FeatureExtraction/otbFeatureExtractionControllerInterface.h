@@ -63,8 +63,6 @@ public:
   virtual void RemoveFromOutputListOrder(int id)=0;
   virtual void ExchangeOutputListOrder( int direction )=0;
 
-  virtual void NotifyMonteverdi()=0;
-
 /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetResultVisuController()=0;
