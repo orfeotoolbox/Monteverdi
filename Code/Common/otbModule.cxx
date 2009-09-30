@@ -145,6 +145,12 @@ void Module::Run()
   itkExceptionMacro(<<"Subclasses should override this method");
 }
 
+/** Notify outputs change */
+void Module::NotifyOutputsChange()
+{
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+}
+
 /** Clear output descriptors */
 void Module::ClearOutputDescriptors()
 {
