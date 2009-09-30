@@ -34,7 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
-#include "otbFeature.h"
+#include "otbPixelType.h"
 
 //Filter include:
 // Feature includes
@@ -437,7 +437,7 @@ public:
   template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 
   /** Generate output image */
-  void GenerateOutputImage(const std::string & fname);
+  void GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
@@ -448,10 +448,12 @@ public:
   /** Init Input Image */
   void InitInput();
 
+  /** Convert OutputImage*/
+  template<typename CastOutputPixelType> void genericImageConverter(const std::string & fname, const bool useScale);
   /** update writers*/
   void UpdateWriter(const std::string & fname);
   void UpdateVectorWriter(const std::string & fname);
-  void UpdateImageWriter(const std::string & fname);   
+//   void UpdateImageWriter(const std::string & fname, bool useScale);   
 protected:
   
 
