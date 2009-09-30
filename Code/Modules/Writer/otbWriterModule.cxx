@@ -49,28 +49,6 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-/** Assign input by key. This method must be reimplemented in subclasses.
- *  When this method is called, key checking and data type matching
- *  is already done. */
-void WriterModule::AssignInputByKey(const std::string & key, const DataObjectWrapper & data)
-{
-  const Superclass::InputDataDescriptorMapType inMap = this->GetInputsMap();
-  if(key == "InputDataSet")
-  {
-  if(data.GetDataType() == TypeManager::GetInstance()->GetTypeName<FPVImageType>())
-    {
-
-    FPVImageType * image = dynamic_cast<FPVImageType *>(data.GetDataObject());
-    m_FPVWriter->SetInput(image);
-    }
-   else if (data.GetDataType() == TypeManager::GetInstance()->GetTypeName<FPVImageType>())
-     {
-     VectorType * vect = dynamic_cast<VectorType *>(data.GetDataObject());
-     m_VectorWriter->SetInput(vect);  
-     }
-  }
-}
-
 /** The custom run command */
 void WriterModule::Run()
 {
