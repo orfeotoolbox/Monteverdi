@@ -25,17 +25,17 @@
 namespace otb
 {
 /** Constructor */
-WriterModule::WriterModule() : m_FPVWriter(), m_FPWriter(), m_VectorWriter()
+WriterModule::WriterModule()
 {
-  m_FPVWriter    = FPVWriterType::New();
-  m_FPWriter     = FPWriterType::New();
+  m_FPVWriter = FPVWriterType::New();
+  m_FPWriter = FPWriterType::New();
   m_VectorWriter = VectorWriterType::New();
- 
+  
    // Describe inputs
   this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FPImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
-     std::cout<<"WriterModule::WriterModule()"<<std::endl;
+  
 }
 
 /** Destructor */
@@ -49,8 +49,6 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-  /*
-  */
 /** The custom run command */
 void WriterModule::Run()
 {
@@ -58,55 +56,31 @@ void WriterModule::Run()
   wFileChooserWindow->show();
 }
 
-void WriterModule::SaveDataSet()
+void WriterModule::OpenDataSet()
 {
   std::string filepath = vFilePath->value();
   
   FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
-  FPImageType::Pointer  singleImage = this->GetInputData<FPImageType>("InputDataSet");
-  VectorType::Pointer   vectorData  = this->GetInputData<VectorType>("InputDataSet");
-  
-
+  FPImageType::Pointer singleImage = this->GetInputData<FPImageType>("InputDataSet");
+  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+					   
   if ( vectorImage.IsNotNull() ) 
     {
-      std::cout<<"On y va, on record VectorImage"<<std::endl;
-
-      FPVWriterType::Pointer writer = FPVWriterType::New();
-      writer->SetInput(vectorImage);
-      writer->SetFileName("localWriter.tif");
-      writer->Update();
-      //std::cout<<"writer:"<<std::endl;
-      //std::cout<<writer<<std::endl;
-      
-      //m_FPVWriter = writer;//FPVWriterType::New();
-      m_FPVWriter->SetInput(vectorImage);
-      m_FPVWriter->SetFileName(filepath);
-      m_FPVWriter->Update();
-      //std::cout<<" ******************************************************************* "<<std::endl;
-      
-      //std::cout<<"m_FPVWriter:"<<std::endl;
-      //std::cout<<m_FPVWriter<<std::endl;
-
-      /*
-      this->GetFPVWriter()->SetInput(vectorImage);
-      this->GetFPVWriter()->SetFileName(filepath);
-      this->GetFPVWriter()->Update();
-      */
-
+    m_FPVWriter->SetInput(vectorImage);
+    m_FPVWriter->SetFileName(filepath);
+    m_FPVWriter->Update();
     }
   else if( singleImage.IsNotNull() )
     {
-      std::cout<<"On y va, on record SingleImage"<<std::endl;
-      m_FPWriter->SetInput(singleImage);
-      m_FPWriter->SetFileName(filepath);
-      m_FPWriter->Update();
+    m_FPWriter->SetInput(singleImage);
+    m_FPWriter->SetFileName(filepath);
+    m_FPWriter->Update();
     }
   else if( vectorData.IsNotNull() )
     {
-      std::cout<<"On y va, on record VectorData"<<std::endl;
-      m_VectorWriter->SetInput(vectorData);
-      m_VectorWriter->SetFileName(filepath);
-      m_VectorWriter->Update();
+    m_VectorWriter->SetInput(vectorData);
+    m_VectorWriter->SetFileName(filepath);
+    m_VectorWriter->Update();
     }
 }
 
