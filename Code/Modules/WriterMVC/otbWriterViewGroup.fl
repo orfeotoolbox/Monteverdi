@@ -8,7 +8,7 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Gl_Window.H>} {public
 } 
 
-decl {\#include "otbFeature.h"} {public
+decl {\#include "otbPixelType.h"} {public
 } 
 
 class WriterViewGroup {open
@@ -16,9 +16,9 @@ class WriterViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label {Feature Extraction Application}
+      label {Writer Application}
       callback {Quit();} open
-      xywh {482 119 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {507 108 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -37,9 +37,53 @@ class WriterViewGroup {open
             xywh {325 330 80 25}
           }
           Fl_Choice guiOutputPixelTypeChoice {
-            label {Output Pixel Type:} open selected
+            label {Output Pixel Type:} open
             xywh {145 375 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelsize 12
-          } {}
+          } {
+            MenuItem guiInitMenu {
+              callback {SetPixelType(otb::DOUBLE);} selected
+              xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label {unsigned char}
+              callback {SetPixelType(otb::UNSIGNEDCHAR);}
+              tooltip {unsigned char} xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label {short int}
+              callback {SetPixelType(otb::SHORTINT);}
+              tooltip {short int} xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label int
+              callback {SetPixelType(otb::INT);}
+              tooltip int xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label float
+              callback {SetPixelType(otb::FLOAT);}
+              tooltip float xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label double
+              callback {SetPixelType(otb::DOUBLE);}
+              tooltip double xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label {unsigned short int}
+              callback {SetPixelType(otb::UNSIGNEDSHORTINT);}
+              tooltip {unsigned short int} xywh {0 0 34 21}
+            }
+            MenuItem {} {
+              label {unsigned int}
+              callback {SetPixelType(otb::UNSIGNEDINT);}
+              tooltip {unsigned int} xywh {0 0 34 21}
+            }
+          }
+          Fl_Check_Button guiScale {
+            label scale
+            xywh {305 380 70 20} down_box DOWN_BOX
+          }
         }
         Fl_Group guiOutput {
           label Output
@@ -117,7 +161,7 @@ class WriterViewGroup {open
   } {}
   Function {Quit()} {open return_type {virtual void}
   } {}
-  Function {SetFeatureType(otb::FeatureType i)} {open return_type {virtual void}
+  Function {SetPixelType(otb::PixelType i)} {open return_type {virtual void}
   } {}
   Function {OK()} {open return_type {virtual void}
   } {}

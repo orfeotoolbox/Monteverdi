@@ -22,11 +22,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 
 #include "otbImageFileWriter.h"
-#include "otbRadiometricIndicesGenerator.h"
-#include "otbTextureFilterGenerator.h"
-#include "otbSFSTexturesGenerator.h"
-#include "otbEdgeDensityGenerator.h"
 
+#include "otbStreamingImageFileWriter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbStandardFilterWatcher.h"
+#include "otbStandardWriterWatcher.h"
 namespace otb
 {
 
@@ -38,10 +38,6 @@ WriterModel::WriterModel()
   m_NumberOfChannels = 0;
   m_InputImageList = SingleImageListType::New();
 
-
-  m_FilterList = FilterListType::New();
-  m_FilterTypeList.clear();
-  m_OutputFilterInformation.clear();
   m_OutputListOrder.clear();
 
   m_ChannelExtractorList     = ExtractROIFilterListType::New();
@@ -64,6 +60,8 @@ WriterModel::WriterModel()
   m_InputImage = InputImageType::New(); 
   m_FPVWriter = FPVWriterType::New();
   m_VectorWriter = VectorWriterType::New();
+  
+  m_HasChanged = false;
 }
 
 
@@ -76,8 +74,6 @@ WriterModel
 {
   listener->Notify();
 }
-
-
 
 void
 WriterModel
@@ -105,8 +101,6 @@ WriterModel
   // Render
   m_VisuModel->Update();
   
-  //GenerateImageList
-  
   //Set Input Writer
   m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
@@ -130,8 +124,6 @@ void
   // Render
   m_VisuModel->Update();
   
-//   otbMsgDebugMacro (<< "image list size " << m_InputImageList->Size());
-  std::cout << "Image list size " << m_InputImageList->Size() << std::endl;
   // Notify the observers
   this->NotifyAll();
 }
@@ -220,77 +212,24 @@ WriterModel
 }
 
 
-/************************************************
- ******************* FILTERS FUNCTIONS **********
- ************************************************/
- void
-     WriterModel
-  ::AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess)
-{
-  this->AddFilter( filter );
-  this->AddFilterType(type);
-  
-  itk::OStringStream oss;
-  if( inputId!=-1 )
-    oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
-  else
-    oss<<mess;
-  m_OutputFilterInformation.push_back( oss.str() );
-  m_OutputIndexMap.push_back(indexMapval);
-  m_SelectedFilters.push_back(true);
-  m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
-}
 void
 WriterModel
 ::AddFeature()
 {
-//   this->AddFilter( filter );
-//   this->AddFilterType(type);
-
-  //itk::OStringStream oss;
-  
-  //oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
-//   unsigned int size = m_NumberOfChannels;
   for (unsigned int i=0;i<m_NumberOfChannels;++i)
   {
     m_OutputIndexMap.push_back(0);
-//   m_SelectedFilters.push_back(true);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));  
   }
   
 }
 
-void
-WriterModel
-::AddOriginalData()
-{
-  for (unsigned int i = 0; i<m_InputImageList->Size(); i++)
-  {
-    ShiftScaleFilterType::Pointer copy = ShiftScaleFilterType::New();
-    copy->SetShift(0);
-    copy->SetScale(1);
-    copy->SetInput(m_InputImageList->GetNthElement(i));
-
-    itk::OStringStream oss;
-    oss<<"Original data";
-    std::string mess = oss.str();
-
-    this->AddFeatureFilter( copy, ORIGINAL, i, 0, mess);
-  }
-}
-
-/****************************************************
- ******************* FIN FILTERS FUNCTIONS **********
- ****************************************************/
 
 
 void
 WriterModel
-::GenerateOutputImage(const std::string & fname)
+::GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
 {
-//   SingleImagePointerType image = SingleImageType::New();
-//   ImageListType::Pointer imageList = ImageListType::New();
-
   bool todo = false;
   int outputNb = 0;
   int i = 0;
@@ -302,39 +241,45 @@ WriterModel
 
         for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
   {
-    /*
-    i = m_OutputListOrder[ii];
-    if (m_SelectedFilters[i] == true)
-    {
-      todo = true;
-      m_image = GetSingleImage(i);
-      m_imageList->PushBack( m_image );
-      outputNb++;
-    */
     i = m_OutputListOrder[ii];
     todo = true;
     m_image = this->GetInputImageList()->GetNthElement(i);
-    std::cout << "list of image "<< i << std::endl;
     m_imageList->PushBack( m_image );
     outputNb++;
-    
-    
   }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
 
   if (todo == true)
   {
-//     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
-    m_iL2VI->SetInput( m_imageList );
-
-    m_OutputImage = m_iL2VI->GetOutput();
-    
-    //FIXME update during the pipeline!!!!! 
-//     m_iL2VI->Update();
-//     iL2VI->UpdateOutputInformation();
-
-    m_OutputImage->UpdateOutputInformation();
-
-    this->UpdateWriter(fname);
+    switch (pType)
+    {
+      case 0:
+        genericImageConverter<unsigned char>(fname, useScale);
+        break;
+      case 1:
+        genericImageConverter<short int>(fname, useScale);
+        break;
+      case 2:
+        genericImageConverter<int>(fname, useScale);
+        break;
+      case 3:
+        genericImageConverter<float>(fname, useScale);
+        break;
+      case 4:
+        genericImageConverter<double>(fname, useScale);
+        break;
+      case 5:
+        genericImageConverter<unsigned short int>(fname, useScale);
+        break;
+      case 6:
+        genericImageConverter<unsigned int>(fname, useScale);
+        break;
+      default:
+        genericImageConverter<unsigned char>(fname, useScale);
+        break;
+    }
+//     this->UpdateWriter(fname);
+    m_HasChanged = true;
+    this->NotifyAll();
   }
   
   
@@ -352,7 +297,6 @@ WriterModel
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
   //lResultVisuGenerator->SetImage(this->GetSingleImage(id));
-  std::cout << "render feature number " << " "<< id <<this->GetInputImageList()->GetNthElement(id)<< " size " << this->GetInputImageList()->Size() << std::endl;
   lResultVisuGenerator->SetImage( this->GetInputImageList()->GetNthElement(id) );
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");
@@ -372,15 +316,12 @@ void WriterModel
   
   if ( test->CanWriteFile(fname.c_str()) ) 
   {
-//     m_VectorWriter->SetFileName(filepath);
-//     m_VectorWriter->Update();
     this->UpdateVectorWriter(fname);
   }
   else
   {
-//     m_FPVWriter->SetFileName(filepath);
-//     m_FPVWriter->Update();
-    this->UpdateImageWriter(fname);
+    //TODO refactoring to write vectordata
+    return;
   }
 }
 void WriterModel
@@ -390,13 +331,68 @@ void WriterModel
   //Need tio set input //TODO
   m_VectorWriter->Update();
 }
-void WriterModel
-  ::UpdateImageWriter(const std::string & fname)   
+
+
+
+template <typename CastOutputPixelType> 
+void WriterModel::genericImageConverter(const std::string & fname, const bool useScale)
 {
-  m_FPVWriter->SetFileName(fname);
-  m_FPVWriter->SetInput(m_OutputImage);
-  m_FPVWriter->Update();
+  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
+  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
+  
+  if ( test->CanWriteFile(fname.c_str()) ) 
+  {
+    this->UpdateVectorWriter(fname);
+  }
+  else
+  {
+    typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
+    typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
+    
+    typename CastWriterType::Pointer writer=CastWriterType::New();
+    
+    writer->SetFileName(fname.c_str());
+
+    if ( useScale )
+    {
+      m_iL2VI->SetInput( m_imageList );
+      
+      typedef otb::VectorRescaleIntensityImageFilter<InputImageType, CastOutputImageType> RescalerType;
+      
+      m_iL2VI->UpdateOutputInformation();
+      
+      typename OutputImageType::PixelType minimum;
+      typename OutputImageType::PixelType maximum;
+      minimum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      maximum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      minimum.Fill(itk::NumericTraits<CastOutputPixelType>::min());
+      maximum.Fill(itk::NumericTraits<CastOutputPixelType>::max());
+
+      typename RescalerType::Pointer rescaler=RescalerType::New();
+
+      rescaler->SetOutputMinimum(minimum);
+      rescaler->SetOutputMaximum(maximum);
+
+      rescaler->SetInput(m_iL2VI->GetOutput());
+      writer->SetInput(rescaler->GetOutput());
+
+      otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
+
+      writer->Update();
+    }
+    else
+    {
+      typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToCastVectorImageFilterType;
+      typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
+      i2CastVI->SetInput( m_imageList );
+      
+      otb::StandardFilterWatcher watcher(writer,"Conversion");
+      
+      writer->SetInput(i2CastVI->GetOutput());
+      writer->Update();
+    }
+  }
 }
 
-}
+} //end namespace otb
 

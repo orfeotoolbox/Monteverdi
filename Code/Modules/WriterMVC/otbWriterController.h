@@ -114,14 +114,13 @@ public:
 
 
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput(const std::string & fname);
+  virtual void SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale);
   virtual void InitInput();
   virtual void ClearFeatures();
   virtual void CreateFeature();
   virtual void ClearSelectedChannels();
   virtual void SetOutputFileName( const char * name );
   virtual void AddInputChannels(std::vector<unsigned int> list);
-  virtual void ChangeFilterStatus(int id);
   virtual void ViewedRegionChanged();
   virtual void AddToOutputListOrder(int id);
   virtual void RemoveFromOutputListOrder(int id);

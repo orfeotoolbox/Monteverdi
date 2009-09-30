@@ -26,9 +26,6 @@ namespace otb
 /** Constructor */
 WriterModule::WriterModule()
 {
-//   m_FPVWriter = FPVWriterType::New();
-//   m_VectorWriter = VectorWriterType::New();
-  
   //Build MVC
   m_Model      = WriterModel::New();
   m_View       = WriterViewGUI::New();
@@ -40,10 +37,13 @@ WriterModule::WriterModule()
   
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
-   // Describe inputs
+   
+  // Describe inputs
+  //this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
   this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
-
+  
+  m_Model->RegisterListener(this);
 }
 
 /** Destructor */
@@ -59,27 +59,36 @@ void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 
 /** The custom run command */
 void WriterModule::Run()
-{
+{ 
   FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
+  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   
   if(vectorImage.IsNotNull())
-    {
+  {
     m_Model->SetInputImage(vectorImage);
-
-/*
-  this->BuildGUI();
-  wFileChooserWindow->show();*/
     m_View->Show();
     m_Model->GenerateLayers();
-    }
+  }
+  else if (vectorData.IsNotNull())
+  {
+    //TODO write vectordata
+    m_Model->GetVectorWriter()->SetInput(vectorData);
+  }
   else
-    {
-    itkExceptionMacro(<<"InputDataSet is NULL");
-    }
+  {
+    itkExceptionMacro(<<"Input image is NULL.");
+  }
 }
 
-
-
+/** The Notify */
+void WriterModule::Notify()
+{
+  if (m_Model->GetHasChanged())
+  {
+    // Send an event to Monteverdi application
+    this->NotifyAll(MonteverdiEvent("Dataset writed",m_InstanceId));
+  }
+}
 
 } // End namespace otb
 

@@ -21,8 +21,6 @@
 // include the base class
 #include "otbModule.h"
 
-
-
 // include the OTB elements
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
@@ -39,6 +37,7 @@
 #include "otbWriterModel.h"
 #include "otbWriterViewGUI.h"
 
+#include "otbListenerBase.h"
 namespace otb
 {
 /** \class WriterModule
@@ -48,7 +47,7 @@ namespace otb
  */
 
   class ITK_EXPORT WriterModule
-  : public Module
+  : public Module, public ListenerBase
   {
     public:
       /** Standard class typedefs */
@@ -64,29 +63,11 @@ namespace otb
       itkTypeMacro(WriterModule,Module);
 
       /** OTB typedefs */
-  /// Dataset
+      /// Dataset
       typedef VectorImage<double,2>         FPVImageType;
       typedef FPVImageType::Pointer         FPVImagePointerType;
       typedef VectorData<double>            VectorType;
-  /// Writers
-//   typedef ImageFileWriter<FPVImageType>    FPVWriterType;
-//   typedef VectorDataFileWriter<VectorType> VectorWriterType;
-
-      /** Typedefs for layers generation*/
-      typedef Image<double,2>                                                  SingleImageType;
-      typedef SingleImageType::Pointer                                         SingleImagePointerType;
-      typedef SingleImageType::PixelType                                       SinglePixelType;
-      typedef SingleImageType::InternalPixelType                               SingleInternalPixelType;
-      typedef SingleImageType::RegionType                                      SingleRegionType;
-      typedef SingleImageType::IndexType                                       SingleIndexType;
-      typedef SingleImageType::RegionType                                      SingleSpacingType;
-      typedef SingleImageType::SizeType                                        SingleSizeType;
-      typedef ImageList< SingleImageType >                                     ImageListType;
-      typedef ImageListType::Pointer                                           ImageListPointerType;
-  
-      typedef VectorImageToImageListFilter<FPVImageType, ImageListType>       VectorToImageListType;
-      typedef ImageListToVectorImageFilter< ImageListType, FPVImageType >     ImageListToVectorImageFilterType;
-
+    
       itkGetObjectMacro(View,WriterViewGUI);
     protected:
       /** Constructor */
@@ -98,64 +79,18 @@ namespace otb
 
       /** The custom run command */
       virtual void Run();
-
-      /** Callbacks */
-//   virtual void OpenDataSet();
-//   virtual void Browse();
-//   virtual void Cancel();
-  
-  
-      /** Write the data Options*/
-//   virtual void GenerateOutputLayers();
-//   virtual void RescaleOutputImage();
-//   virtual void ExportPixelType();
-  
-  
-      /** Manage the layer list */
-//   void AddToOutputListOrder(int val)
-//   {
-//     m_OutputListOrder.push_back(val);
-//     this->Modified();
-//   };
-//   void RemoveFromOutputListOrder(int id)
-//   {
-//     m_OutputListOrder.erase(m_OutputListOrder.begin()+id-1);
-//     this->Modified();
-//   };
-      //   
-//   virtual void Show();
       
+      /** Notify Monteverdi application that Writer has a result */
+      void Notify();
     private:
       WriterModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
-//   FPVWriterType::Pointer m_FPVWriter;
-//   VectorWriterType::Pointer m_VectorWriter;
-      //   
-      /** Layer generation*/
-//   ImageListPointerType m_InputImageList;
-//   ImageListPointerType m_OutputImageList;
-  
-      /** Contains the filter list order for outputs */
-//   std::vector<unsigned int>         m_OutputListOrder;
-  
-      /** VectorImage for generation*/
-//   FPVImagePointerType m_InputFPVImage;
-//   FPVImagePointerType m_OutputFPVImage;
-  
-      /** Output Pixel Type*/
-//   std::string m_OutputPixelType;
-  
-      /** Scale factor*/
-//   double m_ScaleFactor;
-  
-  // The view
+      // The view
       WriterViewGUI::Pointer        m_View;
-
-  // The controller
+      // The controller
       WriterController::Pointer  m_Controller;
-
-  // The model
+      // The model
       WriterModel::Pointer       m_Model;
   };
 
