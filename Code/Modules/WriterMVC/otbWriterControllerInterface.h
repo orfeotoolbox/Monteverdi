@@ -57,7 +57,6 @@ public:
   virtual void ClearSelectedChannels() =0;
   virtual void SetOutputFileName( const char * name ) =0;
   virtual void AddInputChannels(std::vector<unsigned int> list) =0;
-  virtual void ChangeFilterStatus(int id)=0;
   virtual void ViewedRegionChanged()=0;
   virtual void AddToOutputListOrder(int id)=0;
   virtual void RemoveFromOutputListOrder(int id)=0;

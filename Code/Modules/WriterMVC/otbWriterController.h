@@ -121,7 +121,6 @@ public:
   virtual void ClearSelectedChannels();
   virtual void SetOutputFileName( const char * name );
   virtual void AddInputChannels(std::vector<unsigned int> list);
-  virtual void ChangeFilterStatus(int id);
   virtual void ViewedRegionChanged();
   virtual void AddToOutputListOrder(int id);
   virtual void RemoveFromOutputListOrder(int id);

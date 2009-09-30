@@ -36,23 +36,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbPixelType.h"
 
-//Filter include:
-// Feature includes
-#include "otbTouziEdgeDetectorImageFilter.h"
-#include "otbHarrisImageFilter.h"
-#include "otbSpectralAngleDistanceImageFilter.h"
-#include "otbMorphologicalOpeningProfileFilter.h"
-#include "otbMorphologicalClosingProfileFilter.h"
-#include "itkBinaryBallStructuringElement.h"
-#include "itkVarianceImageFunction.h"
-#include "itkUnaryFunctorImageFilter.h"
-#include "itkMeanImageFilter.h"
-#include "otbVarianceImageFilter.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
-#include "itkConstNeighborhoodIterator.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
-#include "itkShiftScaleImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+
 
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
@@ -122,7 +106,7 @@ public:
   typedef FilterType::Pointer                                                FilterPointerType;
   typedef ObjectList<FilterType>                                             FilterListType;
   typedef FilterListType::Pointer                                            FilterListPointerType;
-  typedef std::vector<FeatureType>                                           FilterTypeListType;
+  typedef std::vector<PixelType>                                           FilterTypeListType;
   typedef std::vector<std::string>                                           OutputFilterInformationType;
 
   /** Concatenation typedef */
@@ -138,32 +122,7 @@ public:
 
   typedef itk::ConstNeighborhoodIterator<SingleImageType> IteratorType;
 
-  /***************************/
-  /** Filter type declaration*/
-  /***************************/
-  // Copy of original data
-  typedef itk::ShiftScaleImageFilter<SingleImageType, SingleImageType>                              ShiftScaleFilterType;
-  // Touzi
-  typedef TouziEdgeDetectorImageFilter<SingleImageType, SingleImageType>                            TouziFilterType;
-  // Harris
-  typedef HarrisImageFilter<SingleImageType,SingleImageType>                                        HarrisType;
-  // Spectral Angle
-  typedef SpectralAngleDistanceImageFilter<InputImageType,SingleImageType>                          DistanceFilterType;
-  // Morpho
-  typedef itk::BinaryBallStructuringElement<PixelType,2> StructuringElementType;
-  typedef MorphologicalOpeningProfileFilter<SingleImageType,SingleImageType,StructuringElementType> OpeningProfileFilterType;
-  typedef MorphologicalClosingProfileFilter<SingleImageType,SingleImageType,StructuringElementType> ClosingProfileFilterType;
-   // Variance
-  typedef VarianceImageFilter<SingleImageType, SingleImageType>                                     VarFilterType;
-  // Mean
-  typedef itk::MeanImageFilter<SingleImageType, SingleImageType>                                    MeanFilterType;
-  // Gradient
-  typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<SingleImageType>                       GradientFilterType;
-  // Mean Shift
-  typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType>              MeanShiftFilterType;
-  typedef otb::ObjectList<MeanShiftFilterType>                                                      MeanShiftFilterListType;
-
-
+  
   typedef itk::RGBAPixel<unsigned char>                RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                  ViewerImageType;
   typedef otb::ImageLayer<InputImageType, ViewerImageType> LayerType;
@@ -251,115 +210,12 @@ public:
       return m_OutputListOrder;
     }
 
-  void ClearSelectedFilters()
-  {
-    m_SelectedFilters.clear();
-  }
+  
 
   /** Get the output image */
   itkGetObjectMacro(OutputImage,OutputImageType);
 
-
-  /** Filter list*/
-  FilterListPointerType GetFilterList()
-  {
-    return m_FilterList;
-  };
-  FilterPointerType GetFilter( int id )
-  {
-    return m_FilterList->GetNthElement(id);
-  };
-  void SetFilterList(FilterListPointerType lst)
-  {
-    m_FilterList=lst;
-  };
-  void ClearFilterList()
-  {
-    m_FilterList->Clear();
-  };
-  void EraseFromFilterList(int i)
-  {
-    m_FilterList->Erase( static_cast<unsigned int>(i) );
-  };
-  void AddFilter(FilterType * filter)
-  {
-    m_FilterList->PushBack(filter);
-  };
-  void AddFilterToIndex(FilterPointerType filter, int i)
-  {
-    if ( m_FilterList->Size()<static_cast<unsigned int>(i+1) )
-    {
-      m_FilterList->PushBack(filter);
-    }
-    else
-    {
-      m_FilterList->SetNthElement(i, filter);
-    }
-  }
-
-  /** Filter Type list*/
-  FilterTypeListType GetFilterTypeList()
-  {
-    return m_FilterTypeList;
-  };
-  FeatureType GetFilterType( int id )
-  {
-    return m_FilterTypeList[id];
-  };
-  void SetFilterTypeList(FilterTypeListType lst)
-  {
-    m_FilterTypeList=lst;
-  };
-  void AddFilterType(FeatureType type)
-  {
-    m_FilterTypeList.push_back(type);
-  };
-  void ClearFilterTypeList()
-  {
-    m_FilterTypeList.clear();
-  };
-  void EraseFromFilterTypeList(int i)
-  {
-    m_FilterTypeList.erase( m_FilterTypeList.begin()+(i-1) );
-  };
-  void AddFilterTypeToIndex(FeatureType type, int i)
-  {
-    if ( m_FilterTypeList.size() < static_cast<unsigned int>(i+1) )
-    {
-      m_FilterTypeList.push_back(type);
-    }
-    else
-    {
-      m_FilterTypeList[i] = type;
-    }
-
-  }
-
-
-
-  /** Output Filter Information */
-  OutputFilterInformationType GetOutputFilterInformation()
-  {
-    return m_OutputFilterInformation;
-  };
-  std::string GetOutputFilterInformationId( int id )
-  {
-    return m_OutputFilterInformation[id];
-  };
-  void SetOutputFilterInformation(OutputFilterInformationType lst)
-  {
-    m_OutputFilterInformation=lst;
-  };
-  void ClearOutputFilterInformation()
-  {
-    m_OutputFilterInformation.clear();
-  };
-  void EraseFromOutputFilterInformation(int i)
-  {
-    m_OutputFilterInformation.erase( m_OutputFilterInformation.begin()+(i-1) );
-  };
-
-  /** Channels Information */
+   /** Channels Information */
   OutputFilterInformationType GetOutputChannelsInformation()
   {
     return m_OutputChannelsInformation;
@@ -405,16 +261,7 @@ public:
   itkSetMacro(NumberOfChannels, unsigned int);
   itkGetMacro(NumberOfChannels, unsigned int);
 
-  /** Selected output filters. */
-  void SetSelectedFilters( std::vector<bool> vect)
-  {
-    m_SelectedFilters = vect;
-    this->Modified();
-  };
-  std::vector<bool> GetSelectedFilters()
-  {
-    return m_SelectedFilters;
-  };
+  
 
 
   itkGetMacro(HasInput,bool);
@@ -426,15 +273,9 @@ public:
   /** Chain lsit */
   void CreateFilterList( int filterId );
 
-  /** FILTER LIST*/
-  void AddOriginalData();
-
 
   /** This have for aim to factorized the previous AddFunctions code*/
-  void AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess);
   void AddFeature();
-
-  template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 
   /** Generate output image */
   void GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
@@ -455,8 +296,6 @@ public:
   void UpdateVectorWriter(const std::string & fname);
 //   void UpdateImageWriter(const std::string & fname, bool useScale);   
 protected:
-  
-
   /** Constructor */
   WriterModel();
   /** Destructor */
@@ -475,13 +314,7 @@ private:
   SingleImageListPointerType m_InputImageList;
   /** Output Image */
   OutputImagePointerType m_OutputImage;
-  /** Filter list*/
-  FilterListPointerType m_FilterList;
-
-  /** Filter Type list*/
-  FilterTypeListType m_FilterTypeList;
-  /** Output Filter Information */
-  OutputFilterInformationType m_OutputFilterInformation;
+  
   /** Output Filter Information */
   OutputFilterInformationType m_OutputChannelsInformation;
   /** The instance singleton */
@@ -493,9 +326,7 @@ private:
   /** Input number of channels */
   unsigned int m_NumberOfChannels;
   /** Input filename*/
-  std:: string m_InputFileName;
-  /** Output filters selected to generate the output image. */
-  std::vector<bool> m_SelectedFilters;
+  std:: string m_InputFileName; 
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasInput;
 

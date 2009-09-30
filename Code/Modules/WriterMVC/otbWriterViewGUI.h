@@ -111,7 +111,6 @@ public:
   virtual void Notify();
   virtual void UpdateFeaturePreview();
   virtual void UpdateFeaturePreviewFromOutputList();
-  virtual void UpdateFeatureInfo(FeatureType feat);
   virtual void UpdateParameterArea(unsigned int groupId);
   void Show();
 
@@ -138,7 +137,7 @@ public:
     return m_SelectedPixel;
   };
 
-  virtual void SetFeatureType(FeatureType i);
+  virtual void SetPixelType(PixelType i);
   virtual void ClearImage();
   
   virtual void InitFeatureOutputList();
@@ -180,7 +179,7 @@ private:
   StringVectorType         m_DisplayedLabelList;
   StringVectorType         m_UndisplayedLabelList;
   std::vector<bool>        m_DisplayStatusList;
-  FeatureType              m_FeatureType;
+  PixelType                m_PixelType;
   /** output/input feature list link. */
   std::vector<int> m_InputOutputFeatureLink;
   int m_FeatureExtractPreviewParentBrowser;

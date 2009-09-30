@@ -22,10 +22,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 
 #include "otbImageFileWriter.h"
-#include "otbRadiometricIndicesGenerator.h"
-#include "otbTextureFilterGenerator.h"
-#include "otbSFSTexturesGenerator.h"
-#include "otbEdgeDensityGenerator.h"
 
 #include "otbStreamingImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
@@ -42,10 +38,6 @@ WriterModel::WriterModel()
   m_NumberOfChannels = 0;
   m_InputImageList = SingleImageListType::New();
 
-
-  m_FilterList = FilterListType::New();
-  m_FilterTypeList.clear();
-  m_OutputFilterInformation.clear();
   m_OutputListOrder.clear();
 
   m_ChannelExtractorList     = ExtractROIFilterListType::New();
@@ -135,7 +127,7 @@ void
   m_VisuModel->Update();
   
 //   otbMsgDebugMacro (<< "image list size " << m_InputImageList->Size());
-  std::cout << "Image list size " << m_InputImageList->Size() << std::endl;
+  
   // Notify the observers
   this->NotifyAll();
 }
@@ -224,26 +216,6 @@ WriterModel
 }
 
 
-/************************************************
- ******************* FILTERS FUNCTIONS **********
- ************************************************/
- void
-     WriterModel
-  ::AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess)
-{
-  this->AddFilter( filter );
-  this->AddFilterType(type);
-  
-  itk::OStringStream oss;
-  if( inputId!=-1 )
-    oss<< m_OutputChannelsInformation[inputId]<<": "<<mess;
-  else
-    oss<<mess;
-  m_OutputFilterInformation.push_back( oss.str() );
-  m_OutputIndexMap.push_back(indexMapval);
-  m_SelectedFilters.push_back(true);
-  m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
-}
 void
 WriterModel
 ::AddFeature()
@@ -264,24 +236,7 @@ WriterModel
   
 }
 
-void
-WriterModel
-::AddOriginalData()
-{
-  for (unsigned int i = 0; i<m_InputImageList->Size(); i++)
-  {
-    ShiftScaleFilterType::Pointer copy = ShiftScaleFilterType::New();
-    copy->SetShift(0);
-    copy->SetScale(1);
-    copy->SetInput(m_InputImageList->GetNthElement(i));
 
-    itk::OStringStream oss;
-    oss<<"Original data";
-    std::string mess = oss.str();
-
-    this->AddFeatureFilter( copy, ORIGINAL, i, 0, mess);
-  }
-}
 
 /****************************************************
  ******************* FIN FILTERS FUNCTIONS **********
@@ -292,9 +247,6 @@ void
 WriterModel
 ::GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
 {
-//   SingleImagePointerType image = SingleImageType::New();
-//   ImageListType::Pointer imageList = ImageListType::New();
-
   bool todo = false;
   int outputNb = 0;
   int i = 0;
@@ -306,34 +258,15 @@ WriterModel
 
         for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
   {
-    /*
-    i = m_OutputListOrder[ii];
-    if (m_SelectedFilters[i] == true)
-    {
-      todo = true;
-      m_image = GetSingleImage(i);
-      m_imageList->PushBack( m_image );
-      outputNb++;
-    */
     i = m_OutputListOrder[ii];
     todo = true;
     m_image = this->GetInputImageList()->GetNthElement(i);
-    std::cout << "list of image "<< i << std::endl;
     m_imageList->PushBack( m_image );
     outputNb++;
-    
-    
   }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
 
   if (todo == true)
   {
-//     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
-    //m_iL2VI->SetInput( m_imageList );
-
-    //m_OutputImage = m_iL2VI->GetOutput();
-    
-    //Convert Image
-    //switch case PType go to converter
     switch (pType)
     {
       case 0:
@@ -379,7 +312,6 @@ WriterModel
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
   //lResultVisuGenerator->SetImage(this->GetSingleImage(id));
-  std::cout << "render feature number " << " "<< id <<this->GetInputImageList()->GetNthElement(id)<< " size " << this->GetInputImageList()->Size() << std::endl;
   lResultVisuGenerator->SetImage( this->GetInputImageList()->GetNthElement(id) );
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");
@@ -399,15 +331,11 @@ void WriterModel
   
   if ( test->CanWriteFile(fname.c_str()) ) 
   {
-//     m_VectorWriter->SetFileName(filepath);
-//     m_VectorWriter->Update();
     this->UpdateVectorWriter(fname);
   }
   else
   {
-//     m_FPVWriter->SetFileName(filepath);
-//     m_FPVWriter->Update();
-//     this->UpdateImageWriter(fname);
+    //TODO refactoring to write vectordata
     return;
   }
 }

@@ -90,13 +90,7 @@ WriterController
 {
   try
   {
-
-    m_Model->ClearFilterList();
-    m_Model->ClearFilterTypeList();
-    m_Model->ClearOutputFilterInformation();
-    m_Model->ClearSelectedFilters();
     m_Model->ClearOutputListOrder();
-    
   }
   catch (itk::ExceptionObject & err)
   {
@@ -136,23 +130,6 @@ WriterController
 //     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
-
-
-void
-WriterController
-::ChangeFilterStatus(int id)
-{
-  try
-  {
-    m_Model->GetSelectedFilters()[id] = !(m_Model->GetSelectedFilters()[id]);
-  }
-  catch (itk::ExceptionObject & err)
-  {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-}
-
-
 
 void
 WriterController
@@ -243,8 +220,6 @@ WriterController
     m_View->UpdateChannels();
     m_Model->AddFeature();
     m_View->InitFeatureOutputList();
-    
-    
   }
   catch (itk::ExceptionObject & err)
   {

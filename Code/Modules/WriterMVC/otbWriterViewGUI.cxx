@@ -45,7 +45,7 @@ WriterViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_FeatureType = UNKNOWN;
+  m_PixelType = UNKNOWN;
 
   this->CreateGUI();
 
@@ -103,8 +103,6 @@ WriterViewGUI
   m_ResultVisuView->GetFullWidget()->show();
   m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
 
-  this->UpdateFeatureInfo(otb::UNKNOWN);
-
   gScroll->show();
   gFull->show();
   gFeature->show();
@@ -112,48 +110,7 @@ WriterViewGUI
   //Initi Feature Model
   
 }
-/*
-void
-WriterViewGUI
-::InitParameterGroupList()
-{
-  m_ParameterGroupList.clear();
-  m_ParameterGroupList.push_back(guiNothing);
-  m_ParameterGroupList.push_back(guiTouzi);
-  m_ParameterGroupList.push_back(guiHarris);
-  m_ParameterGroupList.push_back(guiSpectAngle);
-  m_ParameterGroupList.push_back(guiRadius);
-  m_ParameterGroupList.push_back(guiGrad);
-  m_ParameterGroupList.push_back(guiTextures);
-  m_ParameterGroupList.push_back(guiMorpho);
-  m_ParameterGroupList.push_back(guiRAndNIR); // panel 8
-  m_ParameterGroupList.push_back(guiPVI);
-  m_ParameterGroupList.push_back(guiSAVI);
-  m_ParameterGroupList.push_back(guiMSAVI);
-  m_ParameterGroupList.push_back(guiTSAVI);
-  m_ParameterGroupList.push_back(guiWDVI);
-  m_ParameterGroupList.push_back(guiARVI);
-  m_ParameterGroupList.push_back(guiEVI); // 15
-  m_ParameterGroupList.push_back(guiTSARVI);
-  m_ParameterGroupList.push_back(guiAVI);
-  m_ParameterGroupList.push_back(guiSoil);
-  m_ParameterGroupList.push_back(guiIB2);
-  m_ParameterGroupList.push_back(guiNDBI);
-  m_ParameterGroupList.push_back(guiISU); // 21
-  m_ParameterGroupList.push_back(guiSRWI);
-  m_ParameterGroupList.push_back(guiNDWI);
-  m_ParameterGroupList.push_back(guiNDWI2);
-  m_ParameterGroupList.push_back(guiMNDWI);
-  m_ParameterGroupList.push_back(guiNDPI);
-  m_ParameterGroupList.push_back(guiNDTI); // 27
-  m_ParameterGroupList.push_back(guiSFS);
-  m_ParameterGroupList.push_back(guiEdgeSobel);
-  m_ParameterGroupList.push_back(guiMS);
-  // for original data, uses guiNothing, ie.m_ParameterGroupList[0]
-  //m_ParameterGroupList.push_back(guiEdgeCanny);
 
-}
-*/
 void
 WriterViewGUI
 ::UpdateParameterArea( unsigned int groupId )
@@ -180,11 +137,9 @@ WriterViewGUI
   
   if (guiOutputFeatureList->value()>0)
   {
-    std::cout  << "update output " << guiOutputFeatureList->value()-1 << "size list order "<<m_WriterModel->GetOutputListOrder().size()<< std::endl;
     if( static_cast<unsigned int>(guiOutputFeatureList->value()-1) <m_WriterModel->GetOutputListOrder().size() )
     {
-      std::cout  << "update output if " << guiOutputFeatureList->value()-1 << "size list order " <<m_WriterModel->GetOutputListOrder().size()<< std::endl;
-      m_WriterModel->GetSingleOutput( m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
+     m_WriterModel->GetSingleOutput( m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
       
     }
   }
@@ -193,10 +148,9 @@ WriterViewGUI
 
 void
 WriterViewGUI
-::SetFeatureType(FeatureType i)
+::SetPixelType(PixelType i)
 {
-  m_FeatureType = i;
-  this->UpdateFeatureInfo(i);
+  m_PixelType = i;
 }
 
 void
@@ -296,12 +250,8 @@ WriterViewGUI
 {
   if (guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
   {
-//     m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
-//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     m_WriterController->RemoveFromOutputListOrder(guiOutputFeatureList->value());
-//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin()+guiOutputFeatureList->value()-1);
-//     std::cout << "output selected "<< guiOutputFeatureList->value() << std::endl;
     guiOutputFeatureList->remove(guiOutputFeatureList->value());
     guiOutputFeatureList->redraw();
   }
@@ -379,17 +329,7 @@ WriterViewGUI
 
 
 
-void
-WriterViewGUI
-::UpdateFeatureInfo(FeatureType feat)
-{
-//   FeatureInfo inf;
-//   itk::OStringStream oss;
-//   oss<<inf.GetMapInfo().find(feat)->second;
-//   guiFeatInfo->buffer()->remove(0,guiFeatInfo->buffer()->length());
-//   guiFeatInfo->insert(oss.str().c_str());
-//   guiFeatInfo->redraw();
-}
+
 
 
 void
@@ -414,12 +354,9 @@ WriterViewGUI
   {
     std::ostringstream oss;
     oss << i+1;
-//     this->guiFeatureList->add( (strBase + oss.str()).c_str() );
-//     this->guiOutputFeatureList->add( (strBase + oss.str()).c_str() );
     this->guiFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
     this->guiOutputFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
     this->AddToInputOutputFeatureLink(i);
-    std::cout << "InitFeatureOutputList"<< std::endl;
   }
   this->guiFeatureList->redraw();
   this->guiOutputFeatureList->redraw();
@@ -429,22 +366,11 @@ void
 WriterViewGUI
 ::OK()
 {
-  
-  //const char * cfname = fl_file_chooser("Save as...", "*.*",m_LastPath.c_str());
-//   Fl::check();
-//   guiMainWindow->redraw();
-//   if (cfname == NULL || strlen(cfname)<1)
-//   {
-//     return;
-//   }
-//   m_WriterController->SetOutputFileName(cfname);
   std::string filepath = vFilePath->value();
   const bool useScale = static_cast <bool> ( guiScale->value() );
-  m_WriterController->SaveOutput(filepath, m_FeatureType, useScale);
+  m_WriterController->SaveOutput(filepath, m_PixelType, useScale);
   
   //Here we need to go back to the app Monteverdi //TODO
-//   m_WriterController
-  
   this->Quit();
 }
 
@@ -468,7 +394,7 @@ void
 WriterViewGUI
 ::AddFeature()
 {
-  m_WriterController->CreateFeature(m_FeatureType);
+  m_WriterController->CreateFeature(m_PixelType);
 }
 */
 
@@ -505,7 +431,7 @@ WriterViewGUI
 
 //   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
-  this->SetFeatureType(otb::UNKNOWN);
+  this->SetPixelType(otb::UNKNOWN);
 
   // NewVisu 
   if (m_VisuView.IsNotNull())

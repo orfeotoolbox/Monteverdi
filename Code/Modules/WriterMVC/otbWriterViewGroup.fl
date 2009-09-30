@@ -41,47 +41,47 @@ class WriterViewGroup {open
             xywh {145 375 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelsize 12
           } {
             MenuItem guiInitMenu {
-              callback {SetFeatureType(otb::UNKNOWN);}
+              callback {SetPixelType(otb::DOUBLE);} selected
               xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned char}
-              callback {SetFeatureType(otb::UNSIGNEDCHAR);}
+              callback {SetPixelType(otb::UNSIGNEDCHAR);}
               tooltip {unsigned char} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {short int}
-              callback {SetFeatureType(otb::SHORTINT);}
+              callback {SetPixelType(otb::SHORTINT);}
               tooltip {short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label int
-              callback {SetFeatureType(otb::INT);}
+              callback {SetPixelType(otb::INT);}
               tooltip int xywh {0 0 34 21}
             }
             MenuItem {} {
               label float
-              callback {SetFeatureType(otb::FLOAT);}
+              callback {SetPixelType(otb::FLOAT);}
               tooltip float xywh {0 0 34 21}
             }
             MenuItem {} {
               label double
-              callback {SetFeatureType(otb::DOUBLE);}
+              callback {SetPixelType(otb::DOUBLE);}
               tooltip double xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned short int}
-              callback {SetFeatureType(otb::UNSIGNEDSHORTINT);}
+              callback {SetPixelType(otb::UNSIGNEDSHORTINT);}
               tooltip {unsigned short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned int}
-              callback {SetFeatureType(otb::UNSIGNEDINT);}
+              callback {SetPixelType(otb::UNSIGNEDINT);}
               tooltip {unsigned int} xywh {0 0 34 21}
             }
           }
           Fl_Check_Button guiScale {
-            label scale selected
+            label scale
             xywh {305 380 70 20} down_box DOWN_BOX
           }
         }
@@ -161,7 +161,7 @@ class WriterViewGroup {open
   } {}
   Function {Quit()} {open return_type {virtual void}
   } {}
-  Function {SetFeatureType(otb::FeatureType i)} {open return_type {virtual void}
+  Function {SetPixelType(otb::PixelType i)} {open return_type {virtual void}
   } {}
   Function {OK()} {open return_type {virtual void}
   } {}
