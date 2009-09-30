@@ -32,7 +32,7 @@ namespace otb
  */
 
 class ITK_EXPORT SupervisedClassificationModule
-  : public Module
+  : public Module, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -66,6 +66,9 @@ protected:
 
   /** The custom run command */
   virtual void Run();
+
+  /** Notify Monteverdi application that supervised classification has a result */
+  void Notify();
 
 private:
   SupervisedClassificationModule(const Self&); //purposely not implemented

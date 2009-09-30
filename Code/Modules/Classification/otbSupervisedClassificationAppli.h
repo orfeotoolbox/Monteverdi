@@ -43,6 +43,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 
+#include "otbMVCModel.h"
+#include "otbListenerBase.h"
+
 namespace otb
 {
 /** \class SupervisedClassificationAppli
@@ -52,7 +55,7 @@ namespace otb
  *
  */
 class ITK_EXPORT SupervisedClassificationAppli
-      : public itk::ProcessObject, public SupervisedClassificationAppliGUI
+      : public itk::ProcessObject, public SupervisedClassificationAppliGUI, public MVCModel<ListenerBase>
 {
 public:
   /** Standard class typedefs */
@@ -86,7 +89,9 @@ public:
 
   /// Image Type and related typedefs
   typedef  FullWidgetType::ImageType                                      ImageType;
-  typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
+//   typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
+
+  typedef  ImageType                                             OverlayImageType;
   typedef  OverlayImageType::Pointer                                      OverlayImagePointerType;
   typedef otb::Image<LabeledPixelType,2>                                  LabeledImageType;
   typedef  ImageType::Pointer                                             ImagePointerType;
@@ -136,9 +141,14 @@ public:
   typedef  itk::PreOrderTreeIterator<DataTreeType>                        TreeIteratorType;
 
   itkSetObjectMacro(InputImage,ImageType);
+  itkGetObjectMacro(InputImage,ImageType);
+
   itkGetMacro(Output,OverlayImageType::Pointer);
   itkSetStringMacro(ModelFileName);
   itkSetStringMacro(ROIsImageFileName);
+
+  // Get the HasOutput flag
+  itkGetMacro(HasOutput,bool);
 
   /** Main methods */
 
@@ -269,6 +279,11 @@ private:
   ListSamplePointerType m_ValidationListSample;
   /// Validation label sample list
   TrainingListSamplePointerType m_ValidationListLabelSample;
+
+// GBMOD
+  /// Flag to determine if there is an output
+  bool m_HasOutput;
+  //bool m_HasOutputImage;
 };
 
 } // end namespace otb

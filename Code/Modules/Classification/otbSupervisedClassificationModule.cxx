@@ -25,6 +25,8 @@ SupervisedClassificationModule::SupervisedClassificationModule()
 {
   m_SupervisedClassification = SupervisedClassificationAppli::New();
 
+  m_SupervisedClassification->RegisterListener(this);
+
   // Describe inputs
   this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage","Image to apply Classification on.");
 }
@@ -59,11 +61,22 @@ void SupervisedClassificationModule::Run()
       m_SupervisedClassification->SetModelFileName(m_Model);
       m_SupervisedClassification->LoadSVMModel();
       }
-    this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","SupervisedClassification image.");
+
     }
   else
     {
     itkExceptionMacro(<<"InputImage is NULL");
+    }
+}
+
+/** The notify */
+void SupervisedClassificationModule::Notify()
+{
+  if(m_SupervisedClassification->GetHasOutput())
+    {
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
+    this->NotifyOutputsChange();
     }
 }
 

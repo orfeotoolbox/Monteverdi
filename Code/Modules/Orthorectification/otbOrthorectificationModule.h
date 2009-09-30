@@ -67,7 +67,7 @@ protected:
   /** The custom run command */
   virtual void Run();
 
-  /** Notify Monteverdi application that featureExtraction has a result */
+  /** Notify Monteverdi application that orthorectification has a result */
   void Notify();
 
 private:

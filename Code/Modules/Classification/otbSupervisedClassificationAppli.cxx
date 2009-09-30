@@ -54,6 +54,8 @@ SupervisedClassificationAppli
   m_CurrentLabel = 1;
   m_Model = NULL;
 
+// GBMOD
+  m_HasOutput = false;
   m_ImageViewer               = ImageViewerType::New();
   m_Estimator                 = EstimatorType::New();
   m_ClassificationFilter      = ClassificationFilterType::New();
@@ -1883,52 +1885,53 @@ void
 SupervisedClassificationAppli
 ::ShowResults()
 {
-  m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
-
-  m_ResultViewer = ImageViewerType::New();
-  m_ResultViewer->SetImage(m_InputImage);
-  m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
-  m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
-  m_ResultViewer->SetShowClass(true);
-  m_ResultViewer->SetClassesMap(m_ClassesMap);
-  m_ResultViewer->SetUseImageOverlay(true);
-  m_ResultViewer->SetShowHistograms(false);
-  m_ResultViewer->SetPixLocOutput(oPixLocValue);
-  m_ResultViewer->SetShowZoomWidget(false);
-  m_ResultViewer->SetLabel("Result image");
-  m_ResultViewer->Build();
-  m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
-  this->VisualisationSetupOk();
-
-  FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
-  guiFullWindow->remove(full);
-  guiFullWindow->redraw();
-
-  if (m_ImageViewer->GetUseScroll())
-  {
-    ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
-    guiScrollWindow->remove(scroll);
-    guiScrollWindow->redraw();
-  }
-
-  full = m_ResultViewer->GetFullWidget();
-  full->resize(0,0,guiFullWindow->w(),guiFullWindow->h());
-  guiFullWindow->add(full);
-  guiFullWindow->resizable(full);
-  guiFullWindow->show();
-  full->show();
-
-  if (m_ResultViewer->GetUseScroll())
-  {
-    ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-    scroll->resize(0,0,guiScrollWindow->w(),guiScrollWindow->h());
-    guiScrollWindow->add(scroll);
-    guiScrollWindow->resizable(scroll);
-    guiScrollWindow->show();
-    scroll->show();
-  }
-  m_ImageViewer->Hide();
-  m_ResultViewer->Show();
+/// Show Result is not used any more and SetImageOverlay deprecated
+//   m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
+// 
+//   m_ResultViewer = ImageViewerType::New();
+//   m_ResultViewer->SetImage(m_InputImage);
+//   m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
+//   m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
+//   m_ResultViewer->SetShowClass(true);
+//   m_ResultViewer->SetClassesMap(m_ClassesMap);
+//   m_ResultViewer->SetUseImageOverlay(true);
+//   m_ResultViewer->SetShowHistograms(false);
+//   m_ResultViewer->SetPixLocOutput(oPixLocValue);
+//   m_ResultViewer->SetShowZoomWidget(false);
+//   m_ResultViewer->SetLabel("Result image");
+//   m_ResultViewer->Build();
+//   m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
+//   this->VisualisationSetupOk();
+// 
+//   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
+//   guiFullWindow->remove(full);
+//   guiFullWindow->redraw();
+// 
+//   if (m_ImageViewer->GetUseScroll())
+//   {
+//     ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
+//     guiScrollWindow->remove(scroll);
+//     guiScrollWindow->redraw();
+//   }
+// 
+//   full = m_ResultViewer->GetFullWidget();
+//   full->resize(0,0,guiFullWindow->w(),guiFullWindow->h());
+//   guiFullWindow->add(full);
+//   guiFullWindow->resizable(full);
+//   guiFullWindow->show();
+//   full->show();
+// 
+//   if (m_ResultViewer->GetUseScroll())
+//   {
+//     ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+//     scroll->resize(0,0,guiScrollWindow->w(),guiScrollWindow->h());
+//     guiScrollWindow->add(scroll);
+//     guiScrollWindow->resizable(scroll);
+//     guiScrollWindow->show();
+//     scroll->show();
+//   }
+//   m_ImageViewer->Hide();
+//   m_ResultViewer->Show();
 
 }
 
@@ -1947,8 +1950,12 @@ SupervisedClassificationAppli
     m_Output = m_ChangeLabelFilter->GetOutput();
   }
 
+  m_HasOutput = true;
+  this->NotifyAll();
+
   bClassesBrowser->hide();
   guiFullWindow->hide();
+  guiScrollWindow->hide();
 }
 
 /**
