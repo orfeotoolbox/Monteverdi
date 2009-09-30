@@ -15,11 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_cxx
-#define __otbWriterModule_cxx
-
 #include "otbWriterModule.h"
-#include "otbOGRVectorDataIO.h"
 #include <FLU/Flu_File_Chooser.h>
 
 namespace otb
@@ -56,7 +52,7 @@ void WriterModule::Run()
   wFileChooserWindow->show();
 }
 
-void WriterModule::OpenDataSet()
+void WriterModule::SaveDataSet()
 {
   std::string filepath = vFilePath->value();
   
@@ -82,6 +78,12 @@ void WriterModule::OpenDataSet()
     m_VectorWriter->SetFileName(filepath);
     m_VectorWriter->Update();
     }
+  else
+    {
+    itkExceptionMacro(<<"Input data are NULL.");
+    }
+
+  wFileChooserWindow->hide();
 }
 
 void WriterModule::Browse()
@@ -108,4 +110,3 @@ void WriterModule::Cancel()
 
 } // End namespace otb
 
-#endif

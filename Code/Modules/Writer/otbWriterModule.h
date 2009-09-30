@@ -77,7 +77,7 @@ protected:
   virtual void Run();
 
   /** Callbacks */
-  virtual void OpenDataSet();
+  virtual void SaveDataSet();
   virtual void Browse();
   virtual void Cancel();
 
