@@ -114,7 +114,7 @@ public:
 
 
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput(const std::string & fname);
+  virtual void SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale);
   virtual void InitInput();
   virtual void ClearFeatures();
   virtual void CreateFeature();

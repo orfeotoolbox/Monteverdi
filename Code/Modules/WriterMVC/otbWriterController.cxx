@@ -72,11 +72,11 @@ WriterController
 
 void
 WriterController
-::SaveOutput(const std::string & fname)
+::SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale)
 {
   try
   {
-    m_Model->GenerateOutputImage(fname);
+    m_Model->GenerateOutputImage(fname, pType, useScale);
   }
   catch (itk::ExceptionObject & err)
   {

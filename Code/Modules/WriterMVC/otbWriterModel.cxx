@@ -27,6 +27,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSFSTexturesGenerator.h"
 #include "otbEdgeDensityGenerator.h"
 
+#include "otbStreamingImageFileWriter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbStandardFilterWatcher.h"
+#include "otbStandardWriterWatcher.h"
 namespace otb
 {
 
@@ -286,7 +290,7 @@ WriterModel
 
 void
 WriterModel
-::GenerateOutputImage(const std::string & fname)
+::GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
 {
 //   SingleImagePointerType image = SingleImageType::New();
 //   ImageListType::Pointer imageList = ImageListType::New();
@@ -324,17 +328,40 @@ WriterModel
   if (todo == true)
   {
 //     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
-    m_iL2VI->SetInput( m_imageList );
+    //m_iL2VI->SetInput( m_imageList );
 
-    m_OutputImage = m_iL2VI->GetOutput();
+    //m_OutputImage = m_iL2VI->GetOutput();
     
-    //FIXME update during the pipeline!!!!! 
-//     m_iL2VI->Update();
-//     iL2VI->UpdateOutputInformation();
-
-    m_OutputImage->UpdateOutputInformation();
-
-    this->UpdateWriter(fname);
+    //Convert Image
+    //switch case PType go to converter
+    switch (pType)
+    {
+      case 0:
+        genericImageConverter<unsigned char>(fname, useScale);
+        break;
+      case 1:
+        genericImageConverter<short int>(fname, useScale);
+        break;
+      case 2:
+        genericImageConverter<int>(fname, useScale);
+        break;
+      case 3:
+        genericImageConverter<float>(fname, useScale);
+        break;
+      case 4:
+        genericImageConverter<double>(fname, useScale);
+        break;
+      case 5:
+        genericImageConverter<unsigned short int>(fname, useScale);
+        break;
+      case 6:
+        genericImageConverter<unsigned int>(fname, useScale);
+        break;
+      default:
+        genericImageConverter<unsigned char>(fname, useScale);
+        break;
+    }
+//     this->UpdateWriter(fname);
   }
   
   
@@ -380,7 +407,8 @@ void WriterModel
   {
 //     m_FPVWriter->SetFileName(filepath);
 //     m_FPVWriter->Update();
-    this->UpdateImageWriter(fname);
+//     this->UpdateImageWriter(fname);
+    return;
   }
 }
 void WriterModel
@@ -390,13 +418,68 @@ void WriterModel
   //Need tio set input //TODO
   m_VectorWriter->Update();
 }
-void WriterModel
-  ::UpdateImageWriter(const std::string & fname)   
+
+
+
+template <typename CastOutputPixelType> 
+void WriterModel::genericImageConverter(const std::string & fname, const bool useScale)
 {
-  m_FPVWriter->SetFileName(fname);
-  m_FPVWriter->SetInput(m_OutputImage);
-  m_FPVWriter->Update();
+  typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
+  OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
+  
+  if ( test->CanWriteFile(fname.c_str()) ) 
+  {
+    this->UpdateVectorWriter(fname);
+  }
+  else
+  {
+    typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
+    typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
+    
+    typename CastWriterType::Pointer writer=CastWriterType::New();
+    
+    writer->SetFileName(fname.c_str());
+
+    if ( useScale )
+    {
+      m_iL2VI->SetInput( m_imageList );
+      
+      typedef otb::VectorRescaleIntensityImageFilter<InputImageType, CastOutputImageType> RescalerType;
+      
+      m_iL2VI->UpdateOutputInformation();
+      
+      typename OutputImageType::PixelType minimum;
+      typename OutputImageType::PixelType maximum;
+      minimum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      maximum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      minimum.Fill(itk::NumericTraits<CastOutputPixelType>::min());
+      maximum.Fill(itk::NumericTraits<CastOutputPixelType>::max());
+
+      typename RescalerType::Pointer rescaler=RescalerType::New();
+
+      rescaler->SetOutputMinimum(minimum);
+      rescaler->SetOutputMaximum(maximum);
+
+      rescaler->SetInput(m_iL2VI->GetOutput());
+      writer->SetInput(rescaler->GetOutput());
+
+      otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
+
+      writer->Update();
+    }
+    else
+    {
+      typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToCastVectorImageFilterType;
+      typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
+      i2CastVI->SetInput( m_imageList );
+      
+      otb::StandardFilterWatcher watcher(writer,"Conversion");
+      
+      writer->SetInput(i2CastVI->GetOutput());
+      writer->Update();
+    }
+  }
 }
 
-}
+} //end namespace otb
 

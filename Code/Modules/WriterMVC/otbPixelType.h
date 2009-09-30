@@ -24,10 +24,17 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /**
- * this enum defines the different features available.
+ * this enum defines the different Pixel type available.
    */
 typedef enum
 {
+  UNSIGNEDCHAR, //0
+  SHORTINT,
+  INT,
+  FLOAT,
+  DOUBLE,
+  UNSIGNEDSHORTINT,
+  UNSIGNEDINT, //6
   TOUZI, //0
   HARRIS,
   NDVI,
@@ -103,6 +110,7 @@ class FeatureInfo
 public:
  FeatureInfo()
    {
+     
      m_MapInfo.insert( std::pair<FeatureType, std::string>(UNKNOWN, "Tools for classification.\nItems marked as experimental are not likely to work on huge images.") );  // 0
      m_MapInfo.insert( std::pair<FeatureType, std::string>(ORIGINAL, "Copy Input Data.") ); 
      m_MapInfo.insert( std::pair<FeatureType, std::string>(TOUZI, "Touzi Image Filter.")); 
@@ -170,6 +178,7 @@ public:
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_CLUSTERED, "Mean Shift Clustered Image.")); 
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_LABELED, "Mean Shift Labeled Image.")); 
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_BOUND, "Mean Shift Cluster Boundaries Image.")); 
+     
    };
  
  ~FeatureInfo(){};
