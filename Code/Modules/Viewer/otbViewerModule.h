@@ -42,8 +42,10 @@
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
+#include "otbHistogramActionHandler.h"
 #include "otbCurves2DWidget.h"
 #include "otbHistogramCurve.h"
+#include "otbVerticalAsymptoteCurve.h"
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionActionHandler.h"
 #include "otbPixelDescriptionView.h"
@@ -125,19 +127,9 @@ public:
   typedef HistogramCurve<HistogramType>             HistogramCurveType;
   typedef HistogramCurveType::ColorType             ColorType;
   typedef HistogramCurveType::Pointer               HistogramCurvePointerType;
+  typedef VerticalAsymptoteCurve                    VerticalAsymptoteCurveType;
+  typedef VerticalAsymptoteCurveType::Pointer       VerticalAsymptoteCurvePointerType;
   
-  /** Standard action handlers */
-  typedef otb::WidgetResizingActionHandler
-  <RenderingModelType,ViewType>                     ResizingHandlerType;
-  typedef otb::ChangeScaledExtractRegionActionHandler
-  <RenderingModelType,ViewType>                     ChangeScaledRegionHandlerType;
-  typedef otb::ChangeExtractRegionActionHandler
-  <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
-  typedef otb::ChangeScaleActionHandler
-  <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
-  typedef otb::ArrowKeyMoveActionHandler
-  <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
-
   /** Rendering function */
   typedef  ImageLayerGeneratorType::RenderingFunctionType    RenderingFunctionType;
   typedef  RenderingFunctionType::Pointer                    RenderingFunctionPointerType;
@@ -152,6 +144,22 @@ public:
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
     otb::Function::PhaseFunctor<ImageType::PixelType> >                                 PhaseRenderingFunction;
  
+  /** Standard action handlers */
+  typedef otb::WidgetResizingActionHandler
+  <RenderingModelType,ViewType>                     ResizingHandlerType;
+  typedef otb::ChangeScaledExtractRegionActionHandler
+  <RenderingModelType,ViewType>                     ChangeScaledRegionHandlerType;
+  typedef otb::ChangeExtractRegionActionHandler
+  <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
+  typedef otb::ChangeScaleActionHandler
+  <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
+  typedef otb::ArrowKeyMoveActionHandler
+  <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
+  typedef otb::HistogramActionHandler
+    <RenderingModelType,
+    ViewType,
+    StandardRenderingFunctionType>                  HistogramActionHandlerType;
+
     
   /** Pixel description */
   typedef PixelDescriptionModel<OutputImageType>     PixelDescriptionModelType;
@@ -199,6 +207,11 @@ public:
   /** Callbacks */
   //virtual void OpenDataSet();
 
+  /** Assign input by key.
+   *  When this method is called, key checking and data type matching
+   *  is already done. */
+  //virtual void AssignInputByKey(const std::string & key, const DataObjectWrapper & data);
+
   /** CallBacks Implementations*/
   virtual void ChangeROIColor();
   virtual void UpdateListSelectionColor();
@@ -210,6 +223,8 @@ public:
   virtual void RedrawWidget();
   virtual void UseDEM();
   virtual void UpdateDEMSettings();
+  virtual void UpdateHistogramCurve();
+  virtual void UpdateTabHistogram();
   
 
   /** Setup Color Composition Callbacks*/
@@ -222,6 +237,8 @@ public:
   virtual void UpdateRGBChannelOrder(int red, int green , int blue);
   virtual void UpdateAmplitudeChannelOrder(int realChoice, int imChoice);
   virtual void UpdatePhaseChannelOrder(int realChoice, int imChoice);
+  virtual void TabSetupPosition();
+  
 private:
   ViewerModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -256,6 +273,9 @@ private:
   /** StandardRenderingFunction */
   RenderingFunctionPointerType             m_RenderingFunction;
 
+  /** StandardRendering Function*/
+  StandardRenderingFunctionPointerType     m_StandardRenderingFunction;
+
   /** */
   std::string                              m_Label;
 
@@ -264,6 +284,30 @@ private:
   
     /** */
   WidgetManagerPointerType                m_DisplayWindow;
+  
+  /** Used colors*/
+  HistogramCurveType::ColorType                 m_Red;
+  HistogramCurveType::ColorType                 m_Green;
+  HistogramCurveType::ColorType                 m_Blue;
+  HistogramCurveType::ColorType                 m_Grey;
+
+  /** */
+  /** Curve widget */
+  CurvesWidgetPointerType      m_CurveWidgetGroup;
+
+  /** Vertical Asymptotes*/
+  // Blue
+  VerticalAsymptoteCurveType::Pointer   m_BlueVaCurveR;
+  VerticalAsymptoteCurveType::Pointer   m_BlueVaCurveL;
+  // Green
+  VerticalAsymptoteCurveType::Pointer   m_GreenVaCurveR;
+  VerticalAsymptoteCurveType::Pointer   m_GreenVaCurveL;
+  // Red
+  VerticalAsymptoteCurveType::Pointer   m_RedVaCurveR;
+  VerticalAsymptoteCurveType::Pointer   m_RedVaCurveL;
+  
+  
+  
 };
 
 
