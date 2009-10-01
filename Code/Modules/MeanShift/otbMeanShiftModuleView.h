@@ -4,7 +4,7 @@
 
 
 
-#include "otbMeanShiftModuleViewGUI.h"
+#include "otbMeanShiftModuleViewGroup.h"
 
 #include "otbListenerBase.h"
 #include "otbMeanShiftModuleModel.h"
@@ -19,12 +19,12 @@ namespace otb
  *
  */
 class ITK_EXPORT MeanShiftModuleView
-      : public ListenerBase, public MeanShiftModuleViewGUI, public itk::Object
+      : public ListenerBase, public MeanShiftModuleViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef MeanShiftModuleView          Self;
-  typedef MeanShiftModuleViewGUI   Superclass;
+  typedef MeanShiftModuleViewGroup   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

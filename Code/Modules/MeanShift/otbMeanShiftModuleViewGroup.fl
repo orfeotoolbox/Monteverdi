@@ -5,7 +5,7 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Gl_Window.H>} {public
 } 
 
-class MeanShiftModuleViewGUI {open
+class MeanShiftModuleViewGroup {open
 } {
   Function {Build()} {open return_type void
   } {
