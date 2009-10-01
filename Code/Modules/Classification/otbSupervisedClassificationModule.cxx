@@ -78,6 +78,13 @@ void SupervisedClassificationModule::Notify()
     this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
     this->NotifyOutputsChange();
     }
+
+  if(m_SupervisedClassification->GetHasOutputVector())
+    {
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputImage","Vectors of classified image.");
+    this->NotifyOutputsChange();
+    }
 }
 
 } // End namespace otb

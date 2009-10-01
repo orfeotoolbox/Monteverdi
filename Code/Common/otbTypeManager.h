@@ -56,6 +56,7 @@ public:
   typedef otb::Image<Label_Precision,2>                Labeled_Image;
   typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
   typedef otb::VectorData<Floating_Point_Precision>    Vector_Data;
+  typedef otb::VectorData<double,2,short unsigned int> Labeled_Vector_Data;
 
   /** Standard type macro */
   itkTypeMacro(TypeManager,itk::Object);

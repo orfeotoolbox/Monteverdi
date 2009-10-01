@@ -39,6 +39,7 @@ TypeManager::TypeManager() : m_IdToNameMap()
   this->RegisterType<Labeled_Image>("Labeled_Image");
   this->RegisterType<Floating_Point_VectorImage>("Floating_Point_VectorImage");
   this->RegisterType<Vector_Data>("Vector_Data");
+  this->RegisterType<Labeled_Vector_Data>("Labeled_Vector_Data");
 }
 
 /** Destructor */

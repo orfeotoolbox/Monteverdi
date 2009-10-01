@@ -89,9 +89,9 @@ public:
 
   /// Image Type and related typedefs
   typedef  FullWidgetType::ImageType                                      ImageType;
-//   typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
 
-  typedef  ImageType                                             OverlayImageType;
+  // Warning : OverlayImageType is in fact- the same thing that ImageType
+  typedef  ImageType                                                      OverlayImageType;
   typedef  OverlayImageType::Pointer                                      OverlayImagePointerType;
   typedef otb::Image<LabeledPixelType,2>                                  LabeledImageType;
   typedef  ImageType::Pointer                                             ImagePointerType;
@@ -147,8 +147,11 @@ public:
   itkSetStringMacro(ModelFileName);
   itkSetStringMacro(ROIsImageFileName);
 
+  itkGetObjectMacro(OutputVector,VectorDataType);
+
   // Get the HasOutput flag
   itkGetMacro(HasOutput,bool);
+  itkGetMacro(HasOutputVector,bool);
 
   /** Main methods */
 
@@ -280,10 +283,11 @@ private:
   /// Validation label sample list
   TrainingListSamplePointerType m_ValidationListLabelSample;
 
-// GBMOD
-  /// Flag to determine if there is an output
+  /// Flag to determine if there are outputs
   bool m_HasOutput;
-  //bool m_HasOutputImage;
+  bool m_HasOutputVector;
+  VectorDataPointerType m_OutputVector;
+
 };
 
 } // end namespace otb
