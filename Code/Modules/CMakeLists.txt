@@ -1,1 +1,1 @@
-SUBDIRS(Speckle FeatureExtraction Orthorectification Reader Classification Writer Viewer WriterMVC)
+SUBDIRS(Speckle FeatureExtraction Orthorectification Reader Classification Writer Viewer WriterMVC PanSharpening)
