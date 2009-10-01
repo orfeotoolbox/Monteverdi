@@ -24,8 +24,9 @@ MeanShiftModule::MeanShiftModule()
 {
   // First, do constructor stuffs
 
-  ControllerType::Pointer m_Controller = ControllerType::New();
-  ViewType::Pointer m_View = ViewType::New();
+  m_Controller = ControllerType::New();
+  m_View = ViewType::New();
+
   m_Controller->SetView(m_View);
   m_View->SetController(m_Controller);
   m_View->SetWidgetsController(m_Controller->GetWidgetsController());
@@ -35,9 +36,6 @@ MeanShiftModule::MeanShiftModule()
   // Add a new input
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Image to apply MeanShift on");
   
-  // Add another supported type for this input
-  this->AddTypeToInputDescriptor<FloatingImageType>("InputImage");
-
 }
 
 /** Destructor */
@@ -63,27 +61,22 @@ void MeanShiftModule::Run()
   
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  FloatingImageType::Pointer fpImage = this->GetInputData<FloatingImageType>("InputImage");
-  
+    
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-    }
-  else if(fpImage.IsNotNull())
-    {
-    // Process the input as an FloatingImageType
+      m_View->Build();
     }
   else
     {
-    // Rerport error
+      itkExceptionMacro(<<"Input image is NULL.");
     }
   
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
 
 
-  m_View->Build();
 
 
   // Then, when the module did actually produce some outputs, declare

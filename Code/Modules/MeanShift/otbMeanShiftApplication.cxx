@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
   // If specific types are used in your modules, you can register
   // friendly name for them:
-  otb::TypeManager::GetInstance()->RegisterType<otb::MeanShiftModule::FloatingPointSetType>("Floating_Point_PointSet");
+  otb::TypeManager::GetInstance()->RegisterType<otb::MeanShiftModule::LabelImageType>("Unsigned_Long_Image");
 
   // Register modules. First argument is a key to identify module, the
   // second specify where the module will appear in Monteverdi menubar
