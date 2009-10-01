@@ -39,7 +39,7 @@ void MeanShiftModuleView::Build()
     itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
-  MeanShiftModuleViewGUI::Build();
+  MeanShiftModuleViewGroup::Build();
 
   // Register controllers
    m_ImageView->SetController(m_WidgetsController);
