@@ -215,7 +215,7 @@ MeanShiftModuleModel
     m_ClustersGenerator->GenerateLayer();
 
     std::vector<unsigned int> channels;
-  if(m_Reader->GetOutput()->GetNumberOfComponentsPerPixel()==3)
+  if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
     {
     channels.push_back(0);
     channels.push_back(1);
