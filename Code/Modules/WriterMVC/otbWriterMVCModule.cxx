@@ -39,8 +39,8 @@ WriterMVCModule::WriterMVCModule()
   m_Controller->SetView(m_View);
    
   // Describe inputs
-  //this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
-  this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
+  //this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
 //   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   
   m_Model->RegisterListener(this);
@@ -60,7 +60,7 @@ void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void WriterMVCModule::Run()
 { 
-  FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
+  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 //   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   
   if(vectorImage.IsNotNull())

@@ -15,12 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbExampleModule.h"
+#include "otbPanSharpeningModule.h"
 
 namespace otb
 {
 /** Constructor */
-ExampleModule::ExampleModule()
+PanSharpeningModule::PanSharpeningModule()
 {
   // First, do constructor stuffs
 
@@ -40,11 +40,11 @@ ExampleModule::ExampleModule()
 }
 
 /** Destructor */
-ExampleModule::~ExampleModule()
+PanSharpeningModule::~PanSharpeningModule()
 {}
 
 /** PrintSelf method */
-void ExampleModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PanSharpeningModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
@@ -52,7 +52,7 @@ void ExampleModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 
 
 /** The custom run command */
-void ExampleModule::Run()
+void PanSharpeningModule::Run()
 {
   // Here is the body of the module. 
   // When the Run() method is called, necessary inputs have been

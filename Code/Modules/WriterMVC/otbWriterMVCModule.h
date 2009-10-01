@@ -64,8 +64,8 @@ namespace otb
 
       /** OTB typedefs */
       /// Dataset
-      typedef VectorImage<double,2>         FPVImageType;
-      typedef FPVImageType::Pointer         FPVImagePointerType;
+      typedef VectorImage<double,2>         FloatingVectorImageType;
+      typedef FloatingVectorImageType::Pointer         FPVImagePointerType;
       typedef VectorData<double>            VectorType;
     
       itkGetObjectMacro(View,WriterViewGUI);
