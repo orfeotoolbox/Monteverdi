@@ -73,7 +73,7 @@ protected:
 //     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  ~WriterControllerInterface() {};
+  virtual ~WriterControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType * m_Model;

@@ -86,7 +86,7 @@ public:
   /** Constructor */
   SpeckleFilteringView();
   /** Destructor */
-  ~SpeckleFilteringView(){};
+  virtual ~SpeckleFilteringView(){};
   /** PrintSelf*/
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

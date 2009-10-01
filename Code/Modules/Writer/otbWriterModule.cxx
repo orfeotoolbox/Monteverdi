@@ -65,6 +65,7 @@ void WriterModule::SaveDataSet()
     m_FPVWriter->SetInput(vectorImage);
     m_FPVWriter->SetFileName(filepath);
     m_FPVWriter->Update();
+    //m_FPVWriter = FPVWriterType::New();
     }
   else if( singleImage.IsNotNull() )
     {

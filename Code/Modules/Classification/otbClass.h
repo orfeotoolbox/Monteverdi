@@ -57,7 +57,7 @@ protected:
   /// Constructor
   Class() {};
   /// Destructor
-  ~Class() {};
+  virtual ~Class() {};
 
 private:
   Class(const Self&); // purposely not implemented

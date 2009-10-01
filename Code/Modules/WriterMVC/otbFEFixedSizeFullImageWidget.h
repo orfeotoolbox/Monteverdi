@@ -159,7 +159,7 @@ protected:
   /**
    * Destructor.
    */
-  ~FEFixedSizeFullImageWidget() {};
+  virtual ~FEFixedSizeFullImageWidget() {};
 
 private:
   bool m_CustomHandle;

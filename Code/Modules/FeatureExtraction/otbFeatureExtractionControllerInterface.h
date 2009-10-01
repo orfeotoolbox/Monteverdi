@@ -74,7 +74,7 @@ protected:
    // m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  ~FeatureExtractionControllerInterface() {};
+  virtual ~FeatureExtractionControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType::Pointer m_Model;

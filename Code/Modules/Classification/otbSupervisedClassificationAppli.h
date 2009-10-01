@@ -167,7 +167,7 @@ protected:
   SupervisedClassificationAppli();
 
   /** destructor */
-  ~SupervisedClassificationAppli();
+  virtual ~SupervisedClassificationAppli();
 
   /** File selection Callbacks */
 

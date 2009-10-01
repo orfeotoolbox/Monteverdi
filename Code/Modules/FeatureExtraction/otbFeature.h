@@ -172,7 +172,7 @@ public:
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_BOUND, "Mean Shift Cluster Boundaries Image.")); 
    };
  
- ~FeatureInfo(){};
+ virtual ~FeatureInfo(){};
  
  typedef std::map<FeatureType, std::string> MapType;
 

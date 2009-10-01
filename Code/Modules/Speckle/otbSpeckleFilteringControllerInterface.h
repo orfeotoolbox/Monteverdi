@@ -52,7 +52,7 @@ protected:
   /** Constructor */
   SpeckleFilteringControllerInterface() {}
   /** Destructor */
-  ~SpeckleFilteringControllerInterface() {};
+  virtual ~SpeckleFilteringControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType::Pointer m_Model;

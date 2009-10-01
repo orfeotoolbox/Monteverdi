@@ -73,7 +73,7 @@ protected:
     m_ShowClass = false;
   };
   /// Destructor
-  ~ClassificationViewer() {};
+  virtual ~ClassificationViewer() {};
 
   virtual void ReportPixel(IndexType index)
   {

@@ -58,7 +58,7 @@ protected:
     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  ~MonteverdiControllerInterface() {};
+  virtual ~MonteverdiControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType * m_Model;

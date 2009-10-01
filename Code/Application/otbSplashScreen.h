@@ -135,7 +135,7 @@ public:
   /** Constructor */
   SplashScreen(){};
   /** Destructor */
-  ~SplashScreen(){};
+  virtual ~SplashScreen(){};
 
  private:
   SplashScreen(const Self&); //purposely not implemented
