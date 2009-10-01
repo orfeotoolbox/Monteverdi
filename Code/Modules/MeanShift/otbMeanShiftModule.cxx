@@ -66,6 +66,7 @@ void MeanShiftModule::Run()
   if(fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
+      m_Controller->SetInputImage( fpvImage );
       m_View->Build();
     }
   else

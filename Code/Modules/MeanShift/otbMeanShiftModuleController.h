@@ -64,6 +64,10 @@ public:
   virtual void GenerateLabeled(bool t);
 
 
+  virtual void SetInputImage(MeanShiftModuleModel::VectorImageType* image)
+  {
+    m_Model->SetInputImage(image);
+  }
 
 
   bool IsModelUpdating()

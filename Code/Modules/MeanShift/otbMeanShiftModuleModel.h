@@ -38,9 +38,10 @@ public:
   typedef      double                                                            PixelType;
   typedef      VectorImage<PixelType,2>                VectorImageType;
   typedef      VectorImageType::Pointer                VectorImagePointerType;
-  typedef  Image<unsigned int>                         LabeledImageType;  
+  typedef      Image<unsigned int>                     LabeledImageType;
+  typedef      LabeledImageType::Pointer               LabeledImagePointerType;
   typedef      ImageFileReader<VectorImageType>        VectorReaderType;
-  typedef      ImageFileWriter<VectorImageType>         VectorWriterType;
+  typedef      ImageFileWriter<VectorImageType>        VectorWriterType;
   typedef      ImageFileWriter<LabeledImageType>       LabeledWriterType;
 
 
@@ -68,6 +69,11 @@ public:
 
   /** Input Image Pointer */
   void SetInputImage(VectorImagePointerType image);
+
+  /** Output Image Pointers */
+  itkGetObjectMacro(OutputFilteredImage,VectorImageType);
+  itkGetObjectMacro(OutputClusteredImage,VectorImageType);
+  itkGetObjectMacro(OutputLabeledImage,LabeledImageType);
  
   /** Open an image */
   void OpenImage(const char * filename);
@@ -141,6 +147,10 @@ private:
   bool m_GenerateLabeled;
 
   VectorImagePointerType m_InputImage;
+  VectorImagePointerType m_OutputFilteredImage;
+  VectorImagePointerType m_OutputClusteredImage;
+  LabeledImagePointerType m_OutputLabeledImage;
+
 
 };
 
