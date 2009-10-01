@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  bool run = atoi(argv[2]);
+  unsigned int  run = atoi(argv[2]);
 
 
   typedef otb::VectorImage<double,2>          ImageType;
@@ -81,11 +81,11 @@ int main(int argc, char* argv[])
 
   module->Start();
 
-  if(run)
-    Fl::run();
-  else
-    Fl::check();
-
+    if(run == 0)
+      Fl::run();
+    else
+      Fl::check();
+  
   return EXIT_SUCCESS;
 
 }

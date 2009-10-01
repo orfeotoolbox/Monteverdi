@@ -104,7 +104,7 @@ TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
 
 ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
-0
+1
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
