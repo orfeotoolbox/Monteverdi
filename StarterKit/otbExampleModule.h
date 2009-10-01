@@ -28,8 +28,8 @@
 
 namespace otb
 {
-/** \class 
- *  \brief 
+/** \class ExampleModule
+ *  \brief This is the Example module
  * 
  * Description of the module.
  *
