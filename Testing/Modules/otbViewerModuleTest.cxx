@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  bool run = atoi(argv[3]);
+  bool run = atoi(argv[2]);
 
-  
+
   typedef otb::VectorImage<double,2>          ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
@@ -51,36 +51,36 @@ int main(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
-  
+
   module->AddInputByKey("InputImage",wrapperIn);
 
   VReaderType::Pointer vreader = VReaderType::New();
   VReaderType::Pointer vreader1 = VReaderType::New();
-      
-  if(argc > 2)
+
+  if(argc > 3)
   {
-    const char * vfname  = argv[2];
+    const char * vfname  = argv[3];
     // VectorData Reader 
     vreader->SetFileName(vfname);
     vreader->GenerateOutputInformation();
-    
+
     otb::DataObjectWrapper wrapperVector = otb::DataObjectWrapper::Create(vreader->GetOutput());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector << std::endl;
     module->AddInputByKey("VectorData",wrapperVector);
 
-    const char * vfname1  = argv[3];
+    const char * vfname1  = argv[4];
     // VectorData Reader 
     vreader1->SetFileName(vfname1);
     vreader1->GenerateOutputInformation();
-    
+
     otb::DataObjectWrapper wrapperVector1 = otb::DataObjectWrapper::Create(vreader1->GetOutput());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector1 << std::endl;
     module->AddInputByKey("VectorData",wrapperVector1);
-    
+
   }
-  
+
   module->Start();
-  
+
   if(run)
     Fl::run();
   else

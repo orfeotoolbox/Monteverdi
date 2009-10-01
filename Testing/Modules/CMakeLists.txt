@@ -104,11 +104,13 @@ TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
 
 ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
+0
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvViewerModuleTestWithSHP otbViewerModuleTest
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+0
 ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
 ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
