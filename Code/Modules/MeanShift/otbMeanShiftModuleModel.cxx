@@ -236,8 +236,15 @@ MeanShiftModuleModel
 
     m_VisualizationModel->Update();
 
+    m_OutputFilteredImage = m_MeanShift->GetOutput();
+    m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
+    m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
+
+    m_OutputFilteredImage->UpdateOutputInformation();
+    m_OutputClusteredImage->UpdateOutputInformation();
+    m_OutputLabeledImage->UpdateOutputInformation();
+
     this->NotifyAll();
-  
     }
   
 }
