@@ -36,7 +36,8 @@ TypeManager::TypeManager() : m_IdToNameMap()
 {
   // Register basic types
   this->RegisterType<Floating_Point_Image>("Floating_Point_Image");
-  this->RegisterType<Labeled_Image>("Labeled_Image");
+  this->RegisterType<Labeled_Short_Image>("Labeled_Short_Image");
+  this->RegisterType<Labeled_Char_Image>("Labeled_Char_Image");
   this->RegisterType<Floating_Point_VectorImage>("Floating_Point_VectorImage");
   this->RegisterType<Vector_Data>("Vector_Data");
   this->RegisterType<Labeled_Vector_Data>("Labeled_Vector_Data");

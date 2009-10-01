@@ -1,3 +1,7 @@
+
+
+
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -51,9 +55,11 @@ public:
 
   // Some basic typedefs
   typedef double                                       Floating_Point_Precision;
-  typedef unsigned short                               Label_Precision;
+  typedef unsigned short                               Label_Short_Precision;
+  typedef unsigned char                                Label_Char_Precision;
   typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
-  typedef otb::Image<Label_Precision,2>                Labeled_Image;
+  typedef otb::Image<Label_Short_Precision,2>          Labeled_Short_Image;
+  typedef otb::Image<Label_Char_Precision,2>           Labeled_Char_Image;
   typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
   typedef otb::VectorData<Floating_Point_Precision>    Vector_Data;
   typedef otb::VectorData<double,2,short unsigned int> Labeled_Vector_Data;
