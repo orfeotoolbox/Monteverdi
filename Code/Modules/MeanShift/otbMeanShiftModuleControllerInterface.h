@@ -35,7 +35,11 @@ public:
   virtual bool GenerateFiltered() = 0;
   virtual bool GenerateClustered() = 0;
   virtual bool GenerateLabeled() = 0;
+  virtual void GenerateFiltered(bool t) = 0;
+  virtual void GenerateClustered(bool t) = 0;
+  virtual void GenerateLabeled(bool t) = 0;
 
+  
   virtual bool IsModelUpdating() = 0;
   
 

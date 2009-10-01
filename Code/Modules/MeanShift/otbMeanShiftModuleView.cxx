@@ -1,4 +1,4 @@
-#include "otbMeanShiftApplicationView.h"
+#include "otbMeanShiftModuleView.h"
 
 #include "otbMsgReporter.h"
 
@@ -8,9 +8,9 @@
 namespace otb
 {
 
-MeanShiftApplicationView::MeanShiftApplicationView(): m_Controller(), m_Model(), m_ImageView()
+MeanShiftModuleView::MeanShiftModuleView(): m_Controller(), m_Model(), m_ImageView()
 {
-  m_Model = MeanShiftApplicationModel::GetInstance();
+  m_Model = MeanShiftModuleModel::GetInstance();
   m_Model->RegisterListener(this);
 
   // Build the visualization part
@@ -20,14 +20,14 @@ MeanShiftApplicationView::MeanShiftApplicationView(): m_Controller(), m_Model(),
 
 }
 
-MeanShiftApplicationView::~MeanShiftApplicationView()
+MeanShiftModuleView::~MeanShiftModuleView()
 {
   // Remove registered visualization components from the interface
   gImageViewer->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
 }
 
-void MeanShiftApplicationView::Build()
+void MeanShiftModuleView::Build()
 {
   if(!m_Controller)
     {
@@ -39,7 +39,7 @@ void MeanShiftApplicationView::Build()
     itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
-  MeanShiftApplicationViewGUI::Build();
+  MeanShiftModuleViewGUI::Build();
 
   // Register controllers
    m_ImageView->SetController(m_WidgetsController);
@@ -66,7 +66,7 @@ void MeanShiftApplicationView::Build()
     SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));
     SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));
 }
-void MeanShiftApplicationView::Notify()
+void MeanShiftModuleView::Notify()
 {
   this->RefreshInterface();
   m_Mutex.Lock();
@@ -76,7 +76,7 @@ void MeanShiftApplicationView::Notify()
 
 }
 
-void MeanShiftApplicationView::RefreshVisualization()
+void MeanShiftModuleView::RefreshVisualization()
 {
   if (!m_Controller->IsModelUpdating())
   {
@@ -84,18 +84,18 @@ void MeanShiftApplicationView::RefreshVisualization()
   }
 }
 
-void MeanShiftApplicationView::RefreshInterface()
+void MeanShiftModuleView::RefreshInterface()
 {
 
 }
 
-void MeanShiftApplicationView::Exit()
+void MeanShiftModuleView::Exit()
 {
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
 
-void MeanShiftApplicationView::OpenImage()
+void MeanShiftModuleView::OpenImage()
 {
   const char * cfname = fl_file_chooser("Select an Input Image", "*.*",".");
   Fl::check();
@@ -107,7 +107,7 @@ void MeanShiftApplicationView::OpenImage()
   m_Controller->OpenImage( cfname );
 }
 
-void MeanShiftApplicationView::SaveLabelImage()
+void MeanShiftModuleView::SaveLabelImage()
 {
   const char * cfname = fl_file_chooser("Select Image Name", "*.*",".");
   Fl::check();
@@ -119,7 +119,7 @@ void MeanShiftApplicationView::SaveLabelImage()
   m_Controller->SaveLabelImage( cfname );
 }
 
-void MeanShiftApplicationView::SaveClusterImage()
+void MeanShiftModuleView::SaveClusterImage()
 {
   const char * cfname = fl_file_chooser("Select Image Name", "*.*",".");
   Fl::check();
@@ -133,35 +133,35 @@ void MeanShiftApplicationView::SaveClusterImage()
 
 
 
-void MeanShiftApplicationView::RunSegmentation()
+void MeanShiftModuleView::RunSegmentation()
 {
 	m_Controller->RunSegmentation();
 	static_cast<bool>(this->mClustersButton->value(1));
 }
 
-void MeanShiftApplicationView::SetSpatialRadius(unsigned int sr)
+void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
 {
   m_Controller->SetSpatialRadius(sr);
 }
 
-void MeanShiftApplicationView::SetSpectralRadius(unsigned int sr)
+void MeanShiftModuleView::SetSpectralRadius(unsigned int sr)
 {
 	m_Controller->SetSpectralRadius(sr);
 }
 
-void MeanShiftApplicationView::SetMinRegionSize(unsigned int mr)
+void MeanShiftModuleView::SetMinRegionSize(unsigned int mr)
 {
 	m_Controller->SetMinRegionSize(mr);
 }
 
 
-void MeanShiftApplicationView::SwitchClusters()
+void MeanShiftModuleView::SwitchClusters()
 {
 	m_Controller->SwitchClusters(
 	  static_cast<bool>(this->mClustersButton->value()));
 }
 
-void MeanShiftApplicationView::SwitchBoundaries()
+void MeanShiftModuleView::SwitchBoundaries()
 {
 
 }

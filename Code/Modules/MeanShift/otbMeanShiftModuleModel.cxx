@@ -1,4 +1,4 @@
-#include "otbMeanShiftApplicationModel.h"
+#include "otbMeanShiftModuleModel.h"
 #include "otbFltkFilterWatcher.h"
 
 
@@ -6,24 +6,24 @@
 namespace otb
 {
 /** Initialize the singleton */
-MeanShiftApplicationModel::Pointer MeanShiftApplicationModel::Instance = NULL;
+MeanShiftModuleModel::Pointer MeanShiftModuleModel::Instance = NULL;
 /** Manage the singleton */
-MeanShiftApplicationModel::Pointer
-MeanShiftApplicationModel::GetInstance()
+MeanShiftModuleModel::Pointer
+MeanShiftModuleModel::GetInstance()
 {
   if (!Instance)
   {
-    Instance = MeanShiftApplicationModel::New();
+    Instance = MeanShiftModuleModel::New();
   }
   return Instance;
 }
 
-void MeanShiftApplicationModel::Notify(ListenerBase * listener)
+void MeanShiftModuleModel::Notify(ListenerBase * listener)
 {
   listener->Notify();
 }
 
-MeanShiftApplicationModel::MeanShiftApplicationModel() : m_VisualizationModel(), m_Reader(), m_MeanShift(), m_BlendingFunction()
+MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(), m_MeanShift(), m_BlendingFunction()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_Reader = VectorReaderType::New();
@@ -42,12 +42,12 @@ MeanShiftApplicationModel::MeanShiftApplicationModel() : m_VisualizationModel(),
 
 }
 
-MeanShiftApplicationModel
-::~MeanShiftApplicationModel() {}
+MeanShiftModuleModel
+::~MeanShiftModuleModel() {}
 
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::OpenImage( const char * filename)
 {
   m_Reader->SetFileName(filename);
@@ -93,7 +93,7 @@ MeanShiftApplicationModel
 }
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SaveLabelImage( const char * filename)
 {
   m_IsUpdating = true;
@@ -107,7 +107,7 @@ MeanShiftApplicationModel
 }
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SaveClusterImage( const char * filename)
 {
   m_IsUpdating = true;
@@ -122,20 +122,20 @@ MeanShiftApplicationModel
 
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SetSpatialRadius(unsigned int sr){
   m_SpatialRadius = sr;
   m_MeanShift->SetSpatialRadius(m_SpatialRadius);
 }
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SetSpectralRadius(unsigned int sr){
   m_SpectralRadius = sr;
   m_MeanShift->SetRangeRadius(m_SpectralRadius);
 }
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SetMinRegionSize(unsigned int mr){
   m_MinRegionSize = mr;
   m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
@@ -143,7 +143,7 @@ MeanShiftApplicationModel
 
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::RunSegmentation()
 {
 
@@ -189,7 +189,7 @@ MeanShiftApplicationModel
 }
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SwitchClusters(bool sc)
 {
   if(m_IsImageReady)
@@ -204,7 +204,7 @@ MeanShiftApplicationModel
 }
 
 void
-MeanShiftApplicationModel
+MeanShiftModuleModel
 ::SwitchBoundaries(bool sb)
 {
   if(m_IsImageReady)

@@ -1,4 +1,4 @@
-#include "otbMeanShiftApplicationController.h"
+#include "otbMeanShiftModuleController.h"
 #include "otbMsgReporter.h"
 #include "otbFltkFilterWatcher.h"
 #include <FL/fl_ask.H>
@@ -8,8 +8,8 @@
 namespace otb
 {
 
-MeanShiftApplicationController
-::MeanShiftApplicationController(): m_View(), m_WidgetsController(),
+MeanShiftModuleController
+::MeanShiftModuleController(): m_View(), m_WidgetsController(),
 m_ResizingHandler(), m_ChangeRegionHandler()
 {
   // Build the widgets controller
@@ -34,13 +34,13 @@ m_ResizingHandler(), m_ChangeRegionHandler()
 
 }
 
-MeanShiftApplicationController
-::~MeanShiftApplicationController()
+MeanShiftModuleController
+::~MeanShiftModuleController()
 {
   MsgReporter::GetInstance()->Hide();
 }
 
-void MeanShiftApplicationController::SetView(MeanShiftApplicationView * view)
+void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
 {
   m_View = view;
   m_ResizingHandler->SetView(m_View->GetImageView());
@@ -48,7 +48,7 @@ void MeanShiftApplicationController::SetView(MeanShiftApplicationView * view)
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::OpenImage( const char * filename )
 {
   try
@@ -64,7 +64,7 @@ MeanShiftApplicationController
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::SaveLabelImage( const char * filename )
 {
   try
@@ -78,7 +78,7 @@ MeanShiftApplicationController
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::SaveClusterImage( const char * filename )
 {
   try
@@ -92,81 +92,81 @@ MeanShiftApplicationController
 }
 
 
-void MeanShiftApplicationController::SetSpatialRadius(unsigned int sr)
+void MeanShiftModuleController::SetSpatialRadius(unsigned int sr)
 {
 	m_Model->SetSpatialRadius(sr);
 }
 
-void MeanShiftApplicationController::SetSpectralRadius(unsigned int sr)
+void MeanShiftModuleController::SetSpectralRadius(unsigned int sr)
 {
 	m_Model->SetSpectralRadius(sr);
 }
 
-void MeanShiftApplicationController::SetMinRegionSize(unsigned int mr)
+void MeanShiftModuleController::SetMinRegionSize(unsigned int mr)
 {
 	m_Model->SetMinRegionSize(mr);
 }
 
 
 bool
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateFiltered()
 {
-  return m_Model->GenerateFiltered();
+  return m_Model->GetGenerateFiltered();
 }
 
 bool
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateClustered()
 {
-  return m_Model->GenerateClustered();
+  return m_Model->GetGenerateClustered();
 }
 
 bool
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateLabeled()
 {
-  return m_Model->GenerateLabeled();
+  return m_Model->GetGenerateLabeled();
 }
 
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateFiltered(bool t)
 {
-  m_Model->GenerateFiltered(t);
+  m_Model->SetGenerateFiltered(t);
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateClustered(bool t)
 {
-  m_Model->GenerateClustered(t);
+  m_Model->SetGenerateClustered(t);
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::GenerateLabeled(bool t)
 {
-  m_Model->GenerateLabeled(t);
+  m_Model->SetGenerateLabeled(t);
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::RunSegmentation()
 {
   m_Model->RunSegmentation();
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::SwitchClusters(bool sc)
 {
   m_Model->SwitchClusters(sc);
 }
 
 void
-MeanShiftApplicationController
+MeanShiftModuleController
 ::SwitchBoundaries(bool sb)
 {
   m_Model->SwitchBoundaries(sb);
@@ -174,7 +174,7 @@ MeanShiftApplicationController
 
 
 ITK_THREAD_RETURN_TYPE
-MeanShiftApplicationController
+MeanShiftModuleController
 ::ThreadFunction( void *arg )
 {
   try

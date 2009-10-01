@@ -76,6 +76,14 @@ public:
   void SetSpectralRadius(unsigned int sr);
   void SetMinRegionSize(unsigned int mr);
 
+  itkSetMacro(GenerateFiltered, bool);
+  itkSetMacro(GenerateClustered, bool);
+  itkSetMacro(GenerateLabeled, bool);
+
+  itkGetMacro(GenerateFiltered, bool);
+  itkGetMacro(GenerateClustered, bool);
+  itkGetMacro(GenerateLabeled, bool);
+
 
   bool IsUpdating() const
   {
@@ -93,7 +101,7 @@ protected:
   bool m_IsUpdating;
   bool m_ShowingResult;
   bool m_IsImageReady;
-
+  
 private:
   MeanShiftModuleModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -122,7 +130,10 @@ private:
   unsigned int m_MinRegionSize;
 
   BlendingFunctionType::Pointer m_BlendingFunction;
-  
+
+  bool m_GenerateFiltered;
+  bool m_GenerateClustered;
+  bool m_GenerateLabeled;
 
 };
 
