@@ -5,12 +5,12 @@ code_name {.cxx}
 decl {\#include <FL/Fl_Gl_Window.H>} {public
 } 
 
-class MeanShiftApplicationViewGUI {open
+class MeanShiftModuleViewGUI {open
 } {
   Function {Build()} {open return_type void
   } {
     Fl_Window wMainWindow {
-      label {MeanShift Application}
+      label {MeanShift Module}
       callback {this->Exit();} open
       xywh {368 159 595 440} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {

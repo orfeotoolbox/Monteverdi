@@ -24,6 +24,12 @@ MeanShiftModule::MeanShiftModule()
 {
   // First, do constructor stuffs
 
+  ControllerType::Pointer m_Controller = ControllerType::New();
+  ViewType::Pointer m_View = ViewType::New();
+  m_Controller->SetView(m_View);
+  m_View->SetController(m_Controller);
+  m_View->SetWidgetsController(m_Controller->GetWidgetsController());
+  
   // Then, describe inputs needed by the module
 
   // Add a new input
@@ -76,15 +82,7 @@ void MeanShiftModule::Run()
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
 
-  typedef otb::MeanShiftModuleController ControllerType;
-  typedef otb::MeanShiftModuleView ViewType;
-  otb::MsgReporter::GetInstance()->SetTitle("MeanShift");
 
-  ControllerType::Pointer m_Controller = ControllerType::New();
-  ViewType::Pointer m_View = ViewType::New();
-  m_Controller->SetView(m_View);
-  m_View->SetController(m_Controller);
-  m_View->SetWidgetsController(m_Controller->GetWidgetsController());
   m_View->Build();
 
 

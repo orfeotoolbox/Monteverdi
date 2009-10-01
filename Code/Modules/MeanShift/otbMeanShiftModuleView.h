@@ -1,40 +1,40 @@
-#ifndef __otbBasicApplicationView_h
-#define __otbBasicApplicationView_h
+#ifndef __otbBasicModuleView_h
+#define __otbBasicModuleView_h
 
 
 
 
-#include "otbMeanShiftApplicationViewGUI.h"
+#include "otbMeanShiftModuleViewGUI.h"
 
 #include "otbListenerBase.h"
-#include "otbMeanShiftApplicationModel.h"
-#include "otbMeanShiftApplicationControllerInterface.h"
+#include "otbMeanShiftModuleModel.h"
+#include "otbMeanShiftModuleControllerInterface.h"
 #include "itkSimpleFastMutexLock.h"
 
 #include "otbImageView.h"
 
 namespace otb
 {
-/** \class MeanShiftApplicationView
+/** \class MeanShiftModuleView
  *
  */
-class ITK_EXPORT MeanShiftApplicationView
-      : public ListenerBase, public MeanShiftApplicationViewGUI, public itk::Object
+class ITK_EXPORT MeanShiftModuleView
+      : public ListenerBase, public MeanShiftModuleViewGUI, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef MeanShiftApplicationView          Self;
-  typedef MeanShiftApplicationViewGUI   Superclass;
+  typedef MeanShiftModuleView          Self;
+  typedef MeanShiftModuleViewGUI   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(MeanShiftApplicationView,Object);
+  itkTypeMacro(MeanShiftModuleView,Object);
 
 
-  typedef MeanShiftApplicationModel::VisualizationModelType    VisualizationModelType;
-  typedef MeanShiftApplicationModel::RGBPixelType                    PixelType;
+  typedef MeanShiftModuleModel::VisualizationModelType    VisualizationModelType;
+  typedef MeanShiftModuleModel::RGBPixelType                    PixelType;
 
   typedef ImageView<VisualizationModelType>                         ImageViewType;
 
@@ -55,8 +55,8 @@ public:
   virtual void SetMinRegionSize(unsigned int mr);
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,MeanShiftApplicationControllerInterface);
-  itkGetObjectMacro(Controller,MeanShiftApplicationControllerInterface);
+  itkSetObjectMacro(Controller,MeanShiftModuleControllerInterface);
+  itkGetObjectMacro(Controller,MeanShiftModuleControllerInterface);
 
   /** Set the widgets controller */
   itkSetObjectMacro(WidgetsController,ImageWidgetController);
@@ -69,10 +69,10 @@ public:
 
 protected:
   /** Constructor */
-  MeanShiftApplicationView();
+  MeanShiftModuleView();
 
   /** Destructor */
-  virtual ~MeanShiftApplicationView();
+  virtual ~MeanShiftModuleView();
 
   /** Refresh the image widgets */
   void RefreshInterface();
@@ -80,17 +80,17 @@ protected:
 
 
 private:
-  MeanShiftApplicationView(const Self&); //purposely not implemented
+  MeanShiftModuleView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the controller */
-  MeanShiftApplicationControllerInterface::Pointer m_Controller;
+  MeanShiftModuleControllerInterface::Pointer m_Controller;
 
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer                        m_WidgetsController;
 
   /** Pointer to the model */
-  MeanShiftApplicationModel::Pointer               m_Model;
+  MeanShiftModuleModel::Pointer               m_Model;
 
   /** Image view */
   ImageViewType::Pointer                         m_ImageView;

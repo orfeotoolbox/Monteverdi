@@ -1,25 +1,25 @@
-#ifndef __otbMeanShiftApplicationControllerInterface_h
-#define __otbMeanShiftApplicationControllerInterface_h
+#ifndef __otbMeanShiftModuleControllerInterface_h
+#define __otbMeanShiftModuleControllerInterface_h
 
 #include "itkObject.h"
-#include "otbMeanShiftApplicationModel.h"
+#include "otbMeanShiftModuleModel.h"
 
 namespace otb
 {
-class ITK_EXPORT MeanShiftApplicationControllerInterface
+class ITK_EXPORT MeanShiftModuleControllerInterface
       : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef MeanShiftApplicationControllerInterface Self;
+  typedef MeanShiftModuleControllerInterface Self;
   typedef itk::Object                      Superclass;
   typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
 
-  typedef MeanShiftApplicationModel           ModelType;
+  typedef MeanShiftModuleModel           ModelType;
 
   /** Standard type macros */
-  itkTypeMacro(MeanShiftApplicationControllerInterface,Superclass);
+  itkTypeMacro(MeanShiftModuleControllerInterface,Superclass);
 
   /** Users actions */
   virtual void OpenImage( const char * filename ) = 0;
@@ -37,18 +37,18 @@ public:
 
 protected:
   /** Constructor */
-  MeanShiftApplicationControllerInterface()
+  MeanShiftModuleControllerInterface()
   {
     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  ~MeanShiftApplicationControllerInterface() {};
+  ~MeanShiftModuleControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType * m_Model;
 
 private:
-  MeanShiftApplicationControllerInterface(const Self&); //purposely not implemented
+  MeanShiftModuleControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 } // end namespace otb

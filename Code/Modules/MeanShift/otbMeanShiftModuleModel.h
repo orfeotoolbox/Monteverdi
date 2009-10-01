@@ -1,5 +1,5 @@
-#ifndef __otbMeanShiftApplicationModel_h
-#define __otbMeanShiftApplicationModel_h
+#ifndef __otbMeanShiftModuleModel_h
+#define __otbMeanShiftModuleModel_h
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
@@ -16,24 +16,24 @@
 
 namespace otb {
 
-/** \class MeanShiftApplicationModel
+/** \class MeanShiftModuleModel
  *
  *
  *
  */
-class ITK_EXPORT MeanShiftApplicationModel
+class ITK_EXPORT MeanShiftModuleModel
       : public MVCModel<ListenerBase>, public itk::Object
 {
 
 public:
   /** Standard class typedefs */
-  typedef MeanShiftApplicationModel                         Self;
+  typedef MeanShiftModuleModel                         Self;
   typedef MVCModel<ListenerBase> Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(MeanShiftApplicationModel, Object);
+  itkTypeMacro(MeanShiftModuleModel, Object);
 
   typedef      double                                                            PixelType;
   typedef      VectorImage<PixelType,2>                VectorImageType;
@@ -86,16 +86,16 @@ protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
   /** Constructor */
-  MeanShiftApplicationModel();
+  MeanShiftModuleModel();
   /** Destructor */
-  ~MeanShiftApplicationModel();
+  ~MeanShiftModuleModel();
 
   bool m_IsUpdating;
   bool m_ShowingResult;
   bool m_IsImageReady;
 
 private:
-  MeanShiftApplicationModel(const Self&); //purposely not implemented
+  MeanShiftModuleModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
