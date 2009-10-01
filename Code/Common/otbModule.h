@@ -27,6 +27,7 @@
 #include "otbEventsSender.h"
 #include "otbMonteverdiEvent.h"
 #include "otbTypeManager.h"
+#include "otbAsynchronousProcessBase.h"
 
 namespace otb
 {
@@ -47,7 +48,7 @@ namespace otb
  */
 
 class ITK_EXPORT Module
-  : public itk::Object, public EventsSender<MonteverdiEvent>
+  : public EventsSender<MonteverdiEvent>, public AsynchronousProcessBase
 {
 public:
   /** Standard class typedefs */

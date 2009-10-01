@@ -11,14 +11,14 @@ class WriterModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Save Dataset} open
-      xywh {277 232 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {277 232 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
         label Ok
-        callback {this->SaveDataSet();} selected
+        callback {this->SaveDataSet();}
         xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
@@ -30,6 +30,9 @@ class WriterModuleGUI {open
         label {...}
         callback {this->Browse();}
         xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Progress pBar {selected
+        xywh {0 125 365 20} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
   }

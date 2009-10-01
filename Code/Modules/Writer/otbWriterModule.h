@@ -20,9 +20,10 @@
 
 // include the base class
 #include "otbModule.h"
-
 // include the GUI
 #include "otbWriterModuleGUI.h"
+// include process
+//#include "otbAsynchronousProcessBase.h"
 
 // include the OTB elements
 #include "otbVectorImage.h"
@@ -40,7 +41,7 @@ namespace otb
  */
 
 class ITK_EXPORT WriterModule
-  : public Module, public WriterModuleGUI
+  : public Module, public WriterModuleGUI//, public AsynchronousProcessBase
 {
 public:
   /** Standard class typedefs */
@@ -82,6 +83,9 @@ protected:
   virtual void SaveDataSet();
   virtual void Browse();
   virtual void Cancel();
+  virtual void RunProcess1( void * v );
+  virtual void RunProcess2( void * v );
+  void UpdateProgressBar( float progress );
 
 private:
   WriterModule(const Self&); //purposely not implemented
