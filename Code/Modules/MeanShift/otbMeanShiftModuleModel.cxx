@@ -41,6 +41,11 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_IsUpdating = false;
   m_IsImageReady = false;
 
+  m_GenerateFiltered = true;
+  m_GenerateClustered = true;
+  m_GenerateLabeled = true;
+
+
   
 
 }
