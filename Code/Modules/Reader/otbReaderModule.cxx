@@ -29,6 +29,7 @@ ReaderModule::ReaderModule()
 {
   m_FPVReader = FPVReaderType::New();
   m_VectorReader = VectorReaderType::New();
+  m_LabeledVectorReader = LabeledVectorReaderType::New();
   m_AmplitudeFilter = AmplitudeFilterType::New();
   m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
 }
@@ -123,6 +124,24 @@ void ReaderModule::OpenDataSet()
       // Get the filename from the filepath
       oss << "Vector read from file : " << lFile.file();
       this->AddOutputDescriptor(m_VectorReader->GetOutput(),"OutputVector",oss.str());
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      // Silent catch
+      }
+    }
+
+ if(!typeFound)
+    {
+    try
+      {
+      m_LabeledVectorReader->SetFileName(filepath);
+      m_LabeledVectorReader->Update();
+      // If we are still here, this is a readable image
+      typeFound = true;
+      // Get the filename from the filepath
+      oss << "Labeled Vector read from file : " << lFile.file();
+      this->AddOutputDescriptor(m_LabeledVectorReader->GetOutput(),"LabeledOutputVector",oss.str());
       }
     catch(itk::ExceptionObject & err)
       {

@@ -520,13 +520,6 @@ void
 SupervisedClassificationAppli
 ::SaveClassifAsVectorData()
 {
-/// Deprecated
-//   const char * cfname = fl_file_chooser("Vector data file :", "*.shp\t*.kml",m_LastPath.c_str());
-//   if (cfname == NULL || strlen(cfname)<1)
-//   {
-//     return ;
-//   }
-//   std::string filename = std::string(cfname);
 
   this->SetupClassification();
 
@@ -574,29 +567,6 @@ SupervisedClassificationAppli
 
   m_HasOutputVector = true;
   this->NotifyAll();
-
-
-///not Deprecated
-//   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-//     WriterType::Pointer writer = WriterType::New();
-//   writer->SetFileName(filename.c_str());
-//   writer->SetInput(vectorDataProjection->GetOutput());
-//   otb::FltkWriterWatcher watcher(writer,0,0,200,40,"Saving result vector file...");
-// 
-//   try
-//   {
-//     writer->Update();
-//   }
-//   catch ( itk::ExceptionObject & err )
-//   {
-//     itk::OStringStream oss;
-//     oss << "Error while writing result image: "  << err << std::endl;
-//     return;
-//   }
-// 
-//   ossimFilename fname(filename.c_str());
-//   m_LastPath = fname.path();
-
 
 
 }
