@@ -1,0 +1,104 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class MeanShiftApplicationViewGUI {open
+} {
+  Function {Build()} {open return_type void
+  } {
+    Fl_Window wMainWindow {
+      label {MeanShift Application}
+      callback {this->Exit();} open
+      xywh {368 159 595 440} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gImageViewer {open
+        xywh {5 30 375 405} box PLASTIC_DOWN_BOX color 23
+      } {}
+      Fl_Group gRightGroup {open
+        xywh {385 30 205 405} box PLASTIC_THIN_DOWN_BOX color 23
+      } {
+        Fl_Group gScroll {
+          label {Navigation View} open
+          xywh {401 60 175 170} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
+        } {}
+        Fl_Button {} {
+          label Run
+          callback {RunSegmentation()}
+          xywh {396 375 90 35}
+        }
+        Fl_Value_Slider mSpatialRadius {
+          label {Spatial Radius}
+          callback {SetSpatialRadius(static_cast<unsigned int>(this->mSpatialRadius->value()));}
+          tooltip {Set the MeanShift spatial radius} xywh {420 237 135 20} type Horizontal when 4 maximum 30 step 1 value 5 textsize 14
+        }
+        Fl_Value_Slider mSpectralRadius {
+          label {Spectral Radius}
+          callback {SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));}
+          tooltip {Set the MeanShift spectral radius} xywh {420 276 135 20} type Horizontal when 4 maximum 100 step 1 value 15 textsize 14
+        }
+        Fl_Value_Slider mMinRegionSize {
+          label {Min Region Size}
+          callback {SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));}
+          tooltip {Set the MeanShift minimum region size} xywh {420 316 135 20} type Horizontal when 4 minimum 1 maximum 1000 step 1 value 100 textsize 14
+        }
+        Fl_Round_Button mClustersButton {
+          label Clusters
+          callback {SwitchClusters();}
+          xywh {500 384 80 15} down_box ROUND_DOWN_BOX
+        }
+      }
+      Fl_Menu_Bar gMenu {open
+        xywh {0 0 1000 25}
+      } {
+        Submenu gMenuFile {
+          label File open
+          xywh {0 0 100 20}
+        } {
+          MenuItem mOpenImage {
+            label {Open Image}
+            callback {OpenImage();}
+            tooltip {Load image} xywh {0 0 100 20}
+          }
+          MenuItem mSaveLabelImage {
+            label {Save Label Image}
+            callback {SaveLabelImage();}
+            tooltip {Save Label Image} xywh {0 0 30 20}
+          }
+          MenuItem mSaveClusterImage {
+            label {Save Cluster Image}
+            callback {SaveClusterImage();}
+            tooltip {Save Cluster Image} xywh {10 10 30 20}
+          }
+          MenuItem mQuitApplication {
+            label Quit
+            callback {Exit();}
+            tooltip {Quit the application} xywh {0 0 30 20}
+          }
+        }
+      }
+    }
+  }
+  Function {Exit()} {open return_type {virtual void}
+  } {}
+  Function {OpenImage()} {open return_type {virtual void}
+  } {}
+  Function {RunSegmentation()} {open return_type {virtual void}
+  } {}
+  Function {SwitchClusters()} {open return_type {virtual void}
+  } {}
+  Function {SaveLabelImage()} {open return_type {virtual void}
+  } {}
+  Function {SaveClusterImage()} {open selected return_type {virtual void}
+  } {}
+  Function {SetSpatialRadius(unsigned int)} {return_type {virtual void}
+  } {}
+  Function {SetSpectralRadius(unsigned int)} {open return_type {virtual void}
+  } {}
+  Function {SetMinRegionSize(unsigned int)} {open return_type {virtual void}
+  } {}
+  Function {SwitchBoundaries()} {open return_type {virtual void}
+  } {}
+} 
