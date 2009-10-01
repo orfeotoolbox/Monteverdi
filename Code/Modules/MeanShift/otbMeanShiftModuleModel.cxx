@@ -36,9 +36,13 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_ClustersGenerator = LayerGeneratorType::New();
   m_BoundariesGenerator = LabelLayerGeneratorType::New();
 
-  m_MeanShift->SetInput( m_Reader->GetOutput() );
+  m_Image = VectorImageType::New();
+  
+
   m_IsUpdating = false;
   m_IsImageReady = false;
+
+  
 
 }
 

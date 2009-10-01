@@ -37,6 +37,7 @@ public:
 
   typedef      double                                                            PixelType;
   typedef      VectorImage<PixelType,2>                VectorImageType;
+  typedef      VectorImageType::Pointer                VectorImagePointerType;
   typedef  Image<unsigned int>                         LabeledImageType;  
   typedef      ImageFileReader<VectorImageType>        VectorReaderType;
   typedef      ImageFileWriter<VectorImageType>         VectorWriterType;
@@ -64,6 +65,10 @@ public:
   /** Get the visualization models */
   itkGetObjectMacro(VisualizationModel,VisualizationModelType);
 
+
+  /** Input Image Pointer */
+  void SetInputImage(VectorImagePointerType image);
+ 
   /** Open an image */
   void OpenImage(const char * filename);
   void SaveLabelImage(const char * filename);
@@ -134,6 +139,8 @@ private:
   bool m_GenerateFiltered;
   bool m_GenerateClustered;
   bool m_GenerateLabeled;
+
+  VectorImagePointerType m_InputImage;
 
 };
 
