@@ -24,6 +24,7 @@ namespace otb
 WriterModule::WriterModule()
 {
   m_FPVWriter = FPVWriterType::New();
+  m_CharVWriter = CharVWriterType::New();
   m_FPWriter = FPWriterType::New();
   m_VectorWriter = VectorWriterType::New();
   m_LabeledVectorWriter = LabeledVectorWriterType::New();
@@ -31,6 +32,7 @@ WriterModule::WriterModule()
    // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
+  this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
 }
@@ -108,13 +110,18 @@ void WriterModule::RunProcess1( void * v )
   Fl::unlock();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
+  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 
   itk::ProcessObject::Pointer myObject;
 				   
-  if ( vectorImage.IsNotNull() ) 
+  if ( charVectorImage.IsNotNull() ) 
+    {
+    myObject = m_CharVWriter;
+    }
+  else if ( vectorImage.IsNotNull() ) 
     {
     myObject = m_FPVWriter;
     }
@@ -179,9 +186,16 @@ void WriterModule::RunProcess2( void * v )
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 
-  if ( vectorImage.IsNotNull() ) 
+  if ( charVectorImage.IsNotNull() ) 
+    {
+      m_CharVWriter->SetInput(charVectorImage);
+      m_CharVWriter->SetFileName(filepath);
+      m_CharVWriter->Update();
+    }
+  else if ( vectorImage.IsNotNull() ) 
     {
       m_FPVWriter->SetInput(vectorImage);
       m_FPVWriter->SetFileName(filepath);

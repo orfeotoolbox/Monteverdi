@@ -41,7 +41,7 @@ namespace otb
  */
 
 class ITK_EXPORT WriterModule
-  : public Module, public WriterModuleGUI//, public AsynchronousProcessBase
+  : public Module, public WriterModuleGUI
 {
 public:
   /** Standard class typedefs */
@@ -59,14 +59,16 @@ public:
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
+  typedef VectorImage<unsigned char,2>  CharVectorImageType;
   typedef Image<double,2>               FloatingImageType;
   typedef VectorData<double>                           VectorType;
   typedef VectorData<double,2,short unsigned int>      LabeledVectorType;
   /// Writers
-  typedef ImageFileWriter<FloatingVectorImageType>    FPVWriterType;
-  typedef ImageFileWriter<FloatingImageType>     FPWriterType;
-  typedef VectorDataFileWriter<VectorType>        VectorWriterType;
-  typedef VectorDataFileWriter<LabeledVectorType> LabeledVectorWriterType;
+  typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
+  typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
+  typedef ImageFileWriter<FloatingImageType>       FPWriterType;
+  typedef VectorDataFileWriter<VectorType>         VectorWriterType;
+  typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
 
 protected:
   /** Constructor */
@@ -92,6 +94,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   FPVWriterType::Pointer m_FPVWriter;
+  CharVWriterType::Pointer m_CharVWriter;
   FPWriterType::Pointer m_FPWriter;
   VectorWriterType::Pointer m_VectorWriter;
   LabeledVectorWriterType::Pointer m_LabeledVectorWriter;
