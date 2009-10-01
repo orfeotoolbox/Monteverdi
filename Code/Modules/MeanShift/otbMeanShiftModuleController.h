@@ -56,6 +56,15 @@ public:
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
 
+  virtual bool GenerateFiltered();
+  virtual bool GenerateClustered();
+  virtual bool GenerateLabeled();
+  virtual void GenerateFiltered(bool t);
+  virtual void GenerateClustered(bool t);
+  virtual void GenerateLabeled(bool t);
+
+
+
 
   bool IsModelUpdating()
   {

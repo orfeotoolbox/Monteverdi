@@ -108,6 +108,49 @@ void MeanShiftApplicationController::SetMinRegionSize(unsigned int mr)
 }
 
 
+bool
+MeanShiftApplicationController
+::GenerateFiltered()
+{
+  return m_Model->GenerateFiltered();
+}
+
+bool
+MeanShiftApplicationController
+::GenerateClustered()
+{
+  return m_Model->GenerateClustered();
+}
+
+bool
+MeanShiftApplicationController
+::GenerateLabeled()
+{
+  return m_Model->GenerateLabeled();
+}
+
+
+void
+MeanShiftApplicationController
+::GenerateFiltered(bool t)
+{
+  m_Model->GenerateFiltered(t);
+}
+
+void
+MeanShiftApplicationController
+::GenerateClustered(bool t)
+{
+  m_Model->GenerateClustered(t);
+}
+
+void
+MeanShiftApplicationController
+::GenerateLabeled(bool t)
+{
+  m_Model->GenerateLabeled(t);
+}
+
 void
 MeanShiftApplicationController
 ::RunSegmentation()

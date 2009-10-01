@@ -32,8 +32,12 @@ public:
   virtual void SetSpectralRadius(unsigned int sr) = 0;
   virtual void SetMinRegionSize(unsigned int mr) =0;
 
+  virtual bool GenerateFiltered() = 0;
+  virtual bool GenerateClustered() = 0;
+  virtual bool GenerateLabeled() = 0;
 
   virtual bool IsModelUpdating() = 0;
+  
 
 protected:
   /** Constructor */

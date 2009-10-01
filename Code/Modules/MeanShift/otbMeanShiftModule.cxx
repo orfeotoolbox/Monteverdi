@@ -92,21 +92,29 @@ void MeanShiftModule::Run()
   // First, clear any previous output
   this->ClearOutputDescriptors();
 
-  // Add an output (single version)
-  FloatingImageType::Pointer myBrandNewImageOutput = FloatingImageType::New();
-  this->AddOutputDescriptor(myBrandNewImageOutput,"MyImageOutput","This is my image output");
+  // Add outputs
 
-  // Add an output (multiple version)
-  
-  FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
-  this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", "These are my pointset outputs");
-  
-  // Add addional data to the same output
-  for(unsigned int i = 0; i<9;++i)
+
+  if(m_Controller->GenerateFiltered())
     {
-    FloatingPointSetType::Pointer pointSetOutputN = FloatingPointSetType::New();
-    this->AddDataToOutputDescriptor(pointSetOutputN,"MyPointSetOutput");
+      FloatingVectorImageType::Pointer filteredOutput =
+	FloatingVectorImageType::New();
+      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
     }
+
+  if(m_Controller->GenerateClustered())
+    {
+      FloatingVectorImageType::Pointer clusteredOutput =
+	FloatingVectorImageType::New();
+      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
+    }
+
+  if(m_Controller->GenerateLabeled())
+    {
+      LabelImageType::Pointer labeledOutput = LabelImageType::New();
+      this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
+    }
+  
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
