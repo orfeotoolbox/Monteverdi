@@ -12,7 +12,7 @@ otbMeanShiftModuleView.cxx
 )
 
 SET(VIEW_FL_SRCS
-otbMeanShiftModuleViewGUI.fl
+otbMeanShiftModuleViewGroup.fl
 )
 
 
