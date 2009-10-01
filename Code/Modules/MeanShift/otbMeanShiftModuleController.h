@@ -69,6 +69,22 @@ public:
     m_Model->SetInputImage(image);
   }
 
+  MeanShiftModuleModel::VectorImageType* GetFilteredOutput()
+  {
+    return m_Model->GetOutputFilteredImage();
+  }
+
+  MeanShiftModuleModel::VectorImageType* GetClusteredOutput()
+  {
+    return m_Model->GetOutputClusteredImage();
+  }
+
+//   MeanShiftModuleModel::LabeledImageType* GetLabeledOutput()
+//   {
+//     return m_Model->GetOutputLabeledImage();
+//   }
+
+
 
   bool IsModelUpdating()
   {

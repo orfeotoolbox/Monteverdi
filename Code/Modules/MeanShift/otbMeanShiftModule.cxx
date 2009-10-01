@@ -92,22 +92,22 @@ void MeanShiftModule::Run()
   if(m_Controller->GenerateFiltered())
     {
       FloatingVectorImageType::Pointer filteredOutput =
-	FloatingVectorImageType::New();
+	m_Controller->GetFilteredOutput();
       this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
     }
 
   if(m_Controller->GenerateClustered())
     {
       FloatingVectorImageType::Pointer clusteredOutput =
-	FloatingVectorImageType::New();
+	m_Controller->GetClusteredOutput();
       this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
     }
 
-  if(m_Controller->GenerateLabeled())
-    {
-      LabelImageType::Pointer labeledOutput = LabelImageType::New();
-      this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
-    }
+//   if(m_Controller->GenerateLabeled())
+//     {
+//       LabelImageType::Pointer labeledOutput = m_Controller->GetLabeledOutput();
+//       this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
+//     }
   
 
   // Last, when all outputs where declared, notify listeners
