@@ -15,36 +15,32 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_h
-#define __otbWriterModule_h
+#ifndef __otbPanSharpeningModule_h
+#define __otbPanSharpeningModule_h
 
 // include the base class
 #include "otbModule.h"
 
-// include the GUI
-#include "otbWriterModuleGUI.h"
-
-// include the OTB elements
+// include the OTB/ITK elements
 #include "otbVectorImage.h"
-#include "otbImageFileWriter.h"
-
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
+#include "otbImage.h"
+#include "itkPointSet.h"
 
 namespace otb
 {
-/** \class WriterModule
- *  \brief 
+/** \class PanSharpeningModule
+ *  \brief This is the PanSharpening module
+ * 
+ * Description of the module.
  *
- *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT WriterModule
-  : public Module, public WriterModuleGUI
+class ITK_EXPORT PanSharpeningModule
+  : public Module
 {
 public:
   /** Standard class typedefs */
-  typedef WriterModule                 Self;
+  typedef PanSharpeningModule                 Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -53,41 +49,31 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(WriterModule,Module);
+  itkTypeMacro(PanSharpeningModule,Module);
 
-  /** OTB typedefs */
+  /** Data typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
   typedef VectorData<double>            VectorType;
-  /// Writers
-  typedef ImageFileWriter<FloatingVectorImageType>    FPVWriterType;
-  typedef ImageFileWriter<FloatingImageType>     FPWriterType;
-  typedef VectorDataFileWriter<VectorType> VectorWriterType;
+  typedef itk::PointSet<double,2>       FloatingPointSetType;
 
 protected:
   /** Constructor */
-  WriterModule();
+  PanSharpeningModule();
+
   /** Destructor */
-  virtual ~WriterModule();
+  virtual ~PanSharpeningModule();
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** The custom run command */
   virtual void Run();
 
-  /** Callbacks */
-  virtual void SaveDataSet();
-  virtual void Browse();
-  virtual void Cancel();
-
 private:
-  WriterModule(const Self&); //purposely not implemented
+  PanSharpeningModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  FPVWriterType::Pointer m_FPVWriter;
-  FPWriterType::Pointer m_FPWriter;
-  VectorWriterType::Pointer m_VectorWriter;
 };
 
 

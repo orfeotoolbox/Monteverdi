@@ -61,11 +61,11 @@ public:
 
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FPVImageType;
-  typedef Image<double,2>               FPImageType;
+  typedef VectorImage<double,2>         FloatingVectorImageType;
+  typedef Image<double,2>               FloatingImageType;
   typedef VectorData<double>            VectorType;
   /// Readers
-  typedef ImageFileReader<FPVImageType>    FPVReaderType;
+  typedef ImageFileReader<FloatingVectorImageType>    FPVReaderType;
   typedef VectorDataFileReader<VectorType> VectorReaderType;
 
   /// Extract ROIs
@@ -73,7 +73,7 @@ public:
   typedef ObjectList<ExtractROIImageFilterType>       ExtractROIImageFilterListType;
   
   // Amplitude filter
-  typedef VectorImageToAmplitudeImageFilter<FPVImageType,FPImageType> AmplitudeFilterType;
+  typedef VectorImageToAmplitudeImageFilter<FloatingVectorImageType,FloatingImageType> AmplitudeFilterType;
 
 protected:
   /** Constructor */

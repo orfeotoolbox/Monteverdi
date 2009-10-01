@@ -28,8 +28,8 @@ WriterModule::WriterModule()
   m_VectorWriter = VectorWriterType::New();
   
    // Describe inputs
-  this->AddInputDescriptor<FPVImageType>("InputDataSet","Dataset to write.");
-  this->AddTypeToInputDescriptor<FPImageType>("InputDataSet");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
+  this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   
 }
@@ -56,8 +56,8 @@ void WriterModule::SaveDataSet()
 {
   std::string filepath = vFilePath->value();
   
-  FPVImageType::Pointer vectorImage = this->GetInputData<FPVImageType>("InputDataSet");
-  FPImageType::Pointer singleImage = this->GetInputData<FPImageType>("InputDataSet");
+  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
+  FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
 					   
   if ( vectorImage.IsNotNull() ) 
