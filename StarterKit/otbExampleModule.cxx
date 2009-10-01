@@ -27,10 +27,10 @@ ExampleModule::ExampleModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FPVImageType>("MyInputImage","This is my input");
+  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage","This is my input");
   
   // Add another supported type for this input
-  this->AddTypeToInputDescriptor<FPImageType>("MyInputImage");
+  this->AddTypeToInputDescriptor<FloatingImageType>("MyInputImage");
 
   // Add an optional input
   this->AddInputDescriptor<VectorType>("MyOptionalInput","This is my optional input",true);
@@ -61,17 +61,17 @@ void ExampleModule::Run()
   // First step is to retrieve the inputs
   
   // To handle an input with multiple supported type :
-  FPVImageType::Pointer fpvImage = this->GetInputData<FPVImageType>("MyInputImage");
-  FPImageType::Pointer fpImage = this->GetInputData<FPImageType>("MyInputImage");
+  FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("MyInputImage");
+  FloatingImageType::Pointer fpImage = this->GetInputData<FloatingImageType>("MyInputImage");
   
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull())
     {
-    // Process the input as an FPVImageType
+    // Process the input as an FloatingVectorImageType
     }
   else if(fpImage.IsNotNull())
     {
-    // Process the input as an FPImageType
+    // Process the input as an FloatingImageType
     }
   else
     {
@@ -122,18 +122,18 @@ void ExampleModule::Run()
   this->ClearOutputDescriptors();
 
   // Add an output (single version)
-  FPImageType::Pointer myBrandNewImageOutput = FPImageType::New();
+  FloatingImageType::Pointer myBrandNewImageOutput = FloatingImageType::New();
   this->AddOutputDescriptor(myBrandNewImageOutput,"MyImageOutput","This is my image output");
 
   // Add an output (multiple version)
   
-  FPPointSetType::Pointer pointSetOutput1 = FPPointSetType::New();
+  FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
   this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", "These are my pointset outputs");
   
   // Add addional data to the same output
   for(unsigned int i = 0; i<9;++i)
     {
-    FPPointSetType::Pointer pointSetOutputN = FPPointSetType::New();
+    FloatingPointSetType::Pointer pointSetOutputN = FloatingPointSetType::New();
     this->AddDataToOutputDescriptor(pointSetOutputN,"MyPointSetOutput");
     }
 
