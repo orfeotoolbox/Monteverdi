@@ -59,11 +59,13 @@ public:
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
-  typedef VectorData<double>            VectorType;
+  typedef VectorData<double>                           VectorType;
+  typedef VectorData<double,2,short unsigned int>      LabeledVectorType;
   /// Writers
   typedef ImageFileWriter<FloatingVectorImageType>    FPVWriterType;
   typedef ImageFileWriter<FloatingImageType>     FPWriterType;
-  typedef VectorDataFileWriter<VectorType> VectorWriterType;
+  typedef VectorDataFileWriter<VectorType>        VectorWriterType;
+  typedef VectorDataFileWriter<LabeledVectorType> LabeledVectorWriterType;
 
 protected:
   /** Constructor */
@@ -88,6 +90,7 @@ private:
   FPVWriterType::Pointer m_FPVWriter;
   FPWriterType::Pointer m_FPWriter;
   VectorWriterType::Pointer m_VectorWriter;
+  LabeledVectorWriterType::Pointer m_LabeledVectorWriter;
 };
 
 

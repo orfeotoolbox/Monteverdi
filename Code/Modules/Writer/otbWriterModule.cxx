@@ -26,11 +26,13 @@ WriterModule::WriterModule()
   m_FPVWriter = FPVWriterType::New();
   m_FPWriter = FPWriterType::New();
   m_VectorWriter = VectorWriterType::New();
+  m_LabeledVectorWriter = LabeledVectorWriterType::New();
   
    // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
+  this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
   
 }
 
@@ -59,6 +61,7 @@ void WriterModule::SaveDataSet()
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+  LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 					   
   if ( vectorImage.IsNotNull() ) 
     {
@@ -78,6 +81,12 @@ void WriterModule::SaveDataSet()
     m_VectorWriter->SetInput(vectorData);
     m_VectorWriter->SetFileName(filepath);
     m_VectorWriter->Update();
+    }
+  else if( labeledVectorData.IsNotNull() )
+    {
+    m_LabeledVectorWriter->SetInput(labeledVectorData);
+    m_LabeledVectorWriter->SetFileName(filepath);
+    m_LabeledVectorWriter->Update();
     }
   else
     {

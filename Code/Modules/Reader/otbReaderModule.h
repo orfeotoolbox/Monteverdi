@@ -63,10 +63,12 @@ public:
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
-  typedef VectorData<double>            VectorType;
+  typedef VectorData<double>                      VectorType;
+  typedef VectorData<double,2,short unsigned int> LabeledVectorType;
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType>    FPVReaderType;
-  typedef VectorDataFileReader<VectorType> VectorReaderType;
+  typedef VectorDataFileReader<VectorType>        VectorReaderType;
+  typedef VectorDataFileReader<LabeledVectorType> LabeledVectorReaderType;
 
   /// Extract ROIs
   typedef MultiToMonoChannelExtractROI<double,double> ExtractROIImageFilterType;
@@ -97,6 +99,7 @@ private:
 
   FPVReaderType::Pointer m_FPVReader;
   VectorReaderType::Pointer m_VectorReader;
+  LabeledVectorReaderType::Pointer m_LabeledVectorReader;
   AmplitudeFilterType::Pointer m_AmplitudeFilter;
   ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
 };

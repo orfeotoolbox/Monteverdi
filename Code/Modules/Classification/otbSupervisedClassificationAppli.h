@@ -89,6 +89,7 @@ public:
 
   /// Image Type and related typedefs
   typedef  FullWidgetType::ImageType                                      ImageType;
+  //typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
 
   // Warning : OverlayImageType is in fact- the same thing that ImageType
   typedef  ImageType                                                      OverlayImageType;
