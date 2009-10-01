@@ -176,14 +176,13 @@ void ViewerModule::Run()
 
   // If there is a VectorData
   for(unsigned int i = 0; i < this->GetNumberOfInputDataByKey("VectorData");i++)
-  {
-    VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
-    m_VectorDataList->PushBack(vdata);
-    this->AddName();
-    this->UpdateVectorData(i);
-  std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData",i);
-  this->AddName( desc );
-  }
+    {
+      VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
+      m_VectorDataList->PushBack(vdata);
+      this->UpdateVectorData(i);
+      std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData",i);
+      this->AddName( desc );
+    }
 
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
