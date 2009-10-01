@@ -28,8 +28,8 @@
 
 namespace otb
 {
-/** \class 
- *  \brief 
+/** \class PanSharpeningModule
+ *  \brief This is the PanSharpening module
  * 
  * Description of the module.
  *
