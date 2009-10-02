@@ -249,6 +249,7 @@ MeanShiftModuleModel
     m_OutputClusteredImage->UpdateOutputInformation();
     m_OutputLabeledImage->UpdateOutputInformation();
 
+    m_IsUpdating = false;
     m_OutputChanged = true;
     
     this->NotifyAll();
