@@ -40,7 +40,7 @@ class ITK_EXPORT PanSharpeningModule
 {
 public:
   /** Standard class typedefs */
-  typedef PanSharpeningModule                 Self;
+  typedef PanSharpeningModule           Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

@@ -84,6 +84,8 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/Viewer
 ${Monteverdi_BINARY_DIR}/Code/Modules/Viewer
 ${Monteverdi_SOURCE_DIR}/Code/Modules/MeanShift
 ${Monteverdi_BINARY_DIR}/Code/Modules/MeanShift
+${Monteverdi_SOURCE_DIR}/Code/Modules/PanSharpening
+${Monteverdi_BINARY_DIR}/Code/Modules/PanSharpening
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
 )
