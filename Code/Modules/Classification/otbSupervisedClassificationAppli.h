@@ -89,10 +89,7 @@ public:
 
   /// Image Type and related typedefs
   typedef  FullWidgetType::ImageType                                      ImageType;
-  //typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
-
-  // Warning : OverlayImageType is in fact- the same thing that ImageType
-  typedef  ImageType                                                      OverlayImageType;
+  typedef  FullWidgetType::OverlayImageType                               OverlayImageType;
   typedef  OverlayImageType::Pointer                                      OverlayImagePointerType;
   typedef otb::Image<LabeledPixelType,2>                                  LabeledImageType;
   typedef  ImageType::Pointer                                             ImagePointerType;
@@ -245,7 +242,7 @@ private:
   /// Input Image 
   ImageType::Pointer           m_InputImage;
   /// Output Classified image  
-  OverlayImageType::Pointer    m_Output;
+  OverlayImagePointerType      m_Output;
   /// Model filename
   std::string m_ModelFileName;
   /// Training ROIs filename

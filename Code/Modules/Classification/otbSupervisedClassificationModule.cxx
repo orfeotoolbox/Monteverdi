@@ -29,6 +29,7 @@ SupervisedClassificationModule::SupervisedClassificationModule()
 
   // Describe inputs
   this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage","Image to apply Classification on.");
+
 }
 
 /** Destructor */
@@ -74,15 +75,17 @@ void SupervisedClassificationModule::Notify()
 {
   if(m_SupervisedClassification->GetHasOutput())
     {
-    this->ClearOutputDescriptors();
+    //this->ClearOutputDescriptors();
+    this->EraseOutputByKey("OutputImage");
     this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
     this->NotifyOutputsChange();
     }
 
   if(m_SupervisedClassification->GetHasOutputVector())
     {
-    this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputImage","Vectors of classified image.");
+    //this->ClearOutputDescriptors();
+    this->EraseOutputByKey("OutputVector");
+    this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputVector","Vectors of classified image.");
     this->NotifyOutputsChange();
     }
 }

@@ -56,6 +56,7 @@ public:
   // Input image typedef
   typedef FeatureExtractionModel::InputImageType InputImageType;
 
+
 protected:
   /** Constructor */
   FeatureExtractionModule();

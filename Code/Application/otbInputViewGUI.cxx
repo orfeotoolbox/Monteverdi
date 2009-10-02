@@ -307,7 +307,7 @@ InputViewGUI
 
   inputChoiceDesc->m_FlBrowser->redraw();
 
-  // Cheat the indexe is set to -1 
+  // Erase the target index
   inputChoiceDesc->m_Indexes.erase(inputChoiceDesc->m_Indexes.begin()+choiceVal-1);
 
 }

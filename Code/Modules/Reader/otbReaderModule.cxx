@@ -64,7 +64,7 @@ void ReaderModule::OpenDataSet()
 
   // Get the filename from the filepath
   ossimFilename lFile = ossimFilename(filepath);
-  ostringstream oss; 
+  ostringstream oss,ossId; 
 
   try
     {
@@ -76,31 +76,30 @@ void ReaderModule::OpenDataSet()
     oss << "Image read from file: " << lFile.file();
     this->AddOutputDescriptor(m_FPVReader->GetOutput(),"OutputImage",oss.str());
 
-    // Extract first band
-    ExtractROIImageFilterType::Pointer extractMono = ExtractROIImageFilterType::New();
-    extractMono->SetInput(m_FPVReader->GetOutput());
-    extractMono->SetChannel(1);
-    m_ExtractROIFilterList->PushBack(extractMono);
-
-    // Add the first sub band
-    oss.str("");
-    oss << "Image bands read from file: " << lFile.file();
-    this->AddOutputDescriptor(extractMono->GetOutput(),"OutputImageBand",oss.str());
 
     // Add sub-bands
-    for(unsigned int band = 1; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
+    for(unsigned int band = 0; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
       {
+      // Extract band
       ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
       extract->SetInput(m_FPVReader->GetOutput());
       extract->SetChannel(band+1);
       m_ExtractROIFilterList->PushBack(extract);
-      this->AddDataToOutputDescriptor(extract->GetOutput(),"OutputImageBand");
+
+      // Description
+      oss.str("");
+      oss << "Band "<<band+1<<" read from file: " << lFile.file();
+      // Output ID
+      ossId.str("");
+      ossId<<"OutputImageBand"<<band+1;
+      this->AddOutputDescriptor(extract->GetOutput(),ossId.str(),oss.str());
+
       }
 
     m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
 
     oss.str("");
-    oss <<" Image amplitude read from file: "<<lFile.file();
+    oss <<"Image amplitude read from file: "<<lFile.file();
     this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),"OutputImageAmplitude",oss.str());
 
 

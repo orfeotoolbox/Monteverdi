@@ -157,6 +157,12 @@ void Module::ClearOutputDescriptors()
   m_OutputsMap.clear();
 }
 
+/** Erase an output with its key */
+void Module::EraseOutputByKey(const std::string & key)
+{
+  m_OutputsMap.erase(key);
+}
+
 } // End namespace otb
 
 #endif

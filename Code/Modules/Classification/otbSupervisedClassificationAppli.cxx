@@ -563,10 +563,10 @@ SupervisedClassificationAppli
   vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
 
   m_OutputVector = vectorDataProjection->GetOutput();
-  vectorDataProjection->Update();
 
   m_HasOutputVector = true;
   this->NotifyAll();
+  m_HasOutputVector = false;
 
 
 }
@@ -1935,6 +1935,7 @@ SupervisedClassificationAppli
 
   m_HasOutput = true;
   this->NotifyAll();
+  m_HasOutput = false;
 /*
   bClassesBrowser->hide();
   guiFullWindow->hide();

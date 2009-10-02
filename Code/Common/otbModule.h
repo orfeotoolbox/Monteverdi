@@ -96,6 +96,9 @@ public:
   itkSetStringMacro(InstanceId);
   itkGetStringMacro(InstanceId);
 
+  /** Erase an output with its key */
+  void EraseOutputByKey(const std::string & key);
+
 protected:
   /** Constructor */
   Module();
@@ -120,12 +123,6 @@ protected:
 
   /** Add a new output descritpor (SmartPointer version) */
   template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description);
-
-  /** Add data to the output descriptor */
-  template <typename T> void AddDataToOutputDescriptor(T * data, const std::string & key);
-
-  /** Add data to the output descriptor (SmartPointer version) */
-  template <typename T> void AddDataToOutputDescriptor(itk::SmartPointer<T> data, const std::string & key);
 
   /** Retrieve the actual data from the map (returns NULL if wrong DataType */
   template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;

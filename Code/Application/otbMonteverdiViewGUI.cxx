@@ -272,9 +272,7 @@ MonteverdiViewGUI
 
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
-  /*Flu_Tree_Browser::Node* node =*/
 
-  //NodeDescriptor descr = new NodeDescriptor();
 
   // look after all outputdatas into each instance of module
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
@@ -291,11 +289,14 @@ MonteverdiViewGUI
     //n->droppable(true);
     //n->movable(true);
     
+    Flu_Tree_Browser::Node* new_node =  n->add_branch(it->second.GetDataDescription().c_str());
+    
+    
     // add informations to the targeted module
-    n->add(it->second.GetDataKey().c_str());
-    n->add(it->second.GetDataType().c_str());
-    n->add(it->second.GetDataDescription().c_str());
-    n->open(true);
+    new_node->add(it->second.GetDataKey().c_str());
+    new_node->add(it->second.GetDataType().c_str());
+    
+    new_node->open(true);
     } // end datas loop
 }
 

@@ -40,13 +40,7 @@ FeatureExtractionModule::FeatureExtractionModule()
 
   // Describe inputs
   this->AddInputDescriptor<InputImageType>("InputImage","Image to apply feature extraction.");
-  /*
-   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage2","Optionnal image to apply feature extraction.",true,false);
-   
-   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage3","Multiple images to apply feature extraction.",false,true);
-   
-   this->AddInputDescriptor<FeatureExtractionModel::InputImageType>("InputImage4","Image to apply feature extraction.",true,true);
-  */
+
   // the FeatureExtractionModel registers its module
   m_Model->RegisterListener(this);
 }

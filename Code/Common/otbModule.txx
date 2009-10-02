@@ -80,34 +80,6 @@ template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data
   this->AddOutputDescriptor(data.GetPointer(),key,description);
 }
 
-/** Add data to the output descriptor */
-template <typename T> void Module::AddDataToOutputDescriptor(T * data, const std::string & key)
-{
- 
-  // Search for the key in the output map
-  OutputDataDescriptorMapType::iterator it = m_OutputsMap.find(key);
-
-  // If the key can not be found, throw an exception
-  if(it == m_OutputsMap.end())
-    {
-    itkExceptionMacro(<<"Module has no output with key "<<key);
-    }
-  
-  // Create a DataObjectWrapper
-  DataObjectWrapper wrapper = DataObjectWrapper::Create(data);
-  wrapper.SetSourceInstanceId(m_InstanceId);
-  wrapper.SetSourceOutputKey(key);
-
-  // Add data to the descriptor
-  it->second.AddData(wrapper);
-}
-
-/** Add data to the output descriptor (SmartPointer version) */
-template <typename T> void Module::AddDataToOutputDescriptor(itk::SmartPointer<T> data, const std::string & key)
-{
-  this->AddDataToOutputDescriptor(data.GetPointer(),key);
-}
-
 /** Retrieve the actual data from the map (returns NULL if wrong DataType */
 template <typename T> T * Module::GetInputData(const std::string & key, unsigned int idx) const
 {
