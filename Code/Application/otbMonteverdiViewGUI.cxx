@@ -27,16 +27,16 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
-
+#include "flu_pixmaps.h"
 
 
 namespace otb
 {
-  /*Fl_Pixmap blue_dot( (char*const*)bluedot_xpm );*/
-  /*, green_dot( (char*const*)greendot_xpm ), red_dot( (char*const*)reddot_xpm ), teal_dot( (char*const*)tealdot_xpm ), 
-                       text_doc( (char*const*)textdoc_xpm ), computer( (char*const*)computer_xpm ), book( (char*const*)book_xpm ), cd_drive( (char*const*)cd_drive_xpm ),
-                                  arrow_closed( (char*const*)arrow_closed_xpm ), arrow_open( (char*const*)arrow_open_xpm );
-*/
+Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ), green_dot( (char*const*)greendot_xpm ), red_dot( (char*const*)reddot_xpm ), teal_dot( (char*const*)tealdot_xpm ), 
+  text_doc( (char*const*)textdoc_xpm ), computer( (char*const*)computer_xpm ), book( (char*const*)book_xpm ), cd_drive( (char*const*)cd_drive_xpm ),
+  arrow_closed( (char*const*)arrow_closed_xpm ), arrow_open( (char*const*)arrow_open_xpm );
+
+
 
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
