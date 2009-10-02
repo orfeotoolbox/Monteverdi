@@ -10,12 +10,10 @@ namespace otb
 
 MeanShiftModuleView::MeanShiftModuleView(): m_Controller(), m_Model(), m_ImageView()
 {
-  m_Model = MeanShiftModuleModel::GetInstance();
-  m_Model->RegisterListener(this);
+  m_Model = MeanShiftModuleModel::New();
 
   // Build the visualization part
   m_ImageView = ImageViewType::New();
-  m_ImageView->SetModel(m_Model->GetVisualizationModel());
 
 
 }
@@ -25,6 +23,13 @@ MeanShiftModuleView::~MeanShiftModuleView()
   // Remove registered visualization components from the interface
   gImageViewer->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
+}
+
+void MeanShiftModuleView::SetModel(MeanShiftModuleModel* model)
+{
+  m_Model = model;
+  m_ImageView->SetModel(m_Model->GetVisualizationModel());
+  m_Model->RegisterListener(this);
 }
 
 void MeanShiftModuleView::Build()

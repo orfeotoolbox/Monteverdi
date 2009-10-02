@@ -26,11 +26,16 @@ MeanShiftModule::MeanShiftModule()
 
   m_Controller = ControllerType::New();
   m_View = ViewType::New();
+  m_Model = ModelType::New();
 
+  m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
   m_View->SetController(m_Controller);
+  m_View->SetModel(m_Model);
   m_View->SetWidgetsController(m_Controller->GetWidgetsController());
-  
+
+  m_Model->RegisterListener(this);
+
   // Then, describe inputs needed by the module
 
   // Add a new input
@@ -66,7 +71,7 @@ void MeanShiftModule::Run()
   if(fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_Controller->SetInputImage( fpvImage );
+      m_Model->SetInputImage( fpvImage );
       m_View->Build();
     }
   else
@@ -77,41 +82,43 @@ void MeanShiftModule::Run()
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
 
+}
 
+/** The Notify */
+void MeanShiftModule::Notify()
+{
 
-
-  // Then, when the module did actually produce some outputs, declare
-  // them.
-
-  // First, clear any previous output
-  this->ClearOutputDescriptors();
-
-  // Add outputs
-
-
-  if(m_Controller->GenerateFiltered())
+  if (m_Model->GetOutputChanged())
     {
-      FloatingVectorImageType::Pointer filteredOutput =
-	m_Controller->GetFilteredOutput();
-      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
-    }
+      this->ClearOutputDescriptors();
+      
+      // Add outputs
 
-  if(m_Controller->GenerateClustered())
-    {
-      FloatingVectorImageType::Pointer clusteredOutput =
-	m_Controller->GetClusteredOutput();
-      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
-    }
 
-//   if(m_Controller->GenerateLabeled())
-//     {
-//       LabelImageType::Pointer labeledOutput = m_Controller->GetLabeledOutput();
-//       this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
-//     }
+      if(m_Controller->GenerateFiltered())
+	{
+	  FloatingVectorImageType::Pointer filteredOutput =
+	    m_Controller->GetFilteredOutput();
+	  this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
+	}
+
+      if(m_Controller->GenerateClustered())
+	{
+	  FloatingVectorImageType::Pointer clusteredOutput =
+	    m_Controller->GetClusteredOutput();
+	  this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
+	}
+
+      //   if(m_Controller->GenerateLabeled())
+      //     {
+      //       LabelImageType::Pointer labeledOutput = m_Controller->GetLabeledOutput();
+      //       this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
+      //     }
   
 
-  // Last, when all outputs where declared, notify listeners
-  this->NotifyOutputsChange();
+      // Send an event to Monteverdi application
+      this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    }
 }
 } // End namespace otb
 

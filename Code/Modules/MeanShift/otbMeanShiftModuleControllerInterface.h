@@ -18,6 +18,7 @@ public:
 
   typedef MeanShiftModuleModel           ModelType;
 
+
   /** Standard type macros */
   itkTypeMacro(MeanShiftModuleControllerInterface,Superclass);
 
@@ -47,13 +48,10 @@ protected:
   /** Constructor */
   MeanShiftModuleControllerInterface()
   {
-    m_Model = ModelType::GetInstance();
   }
   /** Destructor */
   ~MeanShiftModuleControllerInterface() {};
 
-  /** The instance of the model (for commodity) */
-  ModelType * m_Model;
 
 private:
   MeanShiftModuleControllerInterface(const Self&); //purposely not implemented

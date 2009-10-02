@@ -38,6 +38,8 @@ public:
   typedef ChangeExtractRegionActionHandler
       <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
 
+  void SetModel(ModelType* model);
+
   /** Set the pointer to the view */
   void SetView(MeanShiftModuleView * view);
 
@@ -104,6 +106,10 @@ private:
 
   /** Pointer to the view */
   MeanShiftModuleView * m_View;
+
+  /** The instance of the model */
+  ModelType * m_Model;
+
 
   /** Widgets controller */
   WidgetsControllerType::Pointer             m_WidgetsController;
