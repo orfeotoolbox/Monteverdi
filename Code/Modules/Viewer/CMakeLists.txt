@@ -28,7 +28,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(otbViewerModule ${MODULE_SRCS} ${otbReaderModule_FLTK_UI_SRCS})
+ADD_LIBRARY(otbViewerModule ${MODULE_SRCS} ${otbViewerModule_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbViewerModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBVisualization OTBGui)
 				    
 ENDIF(OTB_USE_VISU_GUI)

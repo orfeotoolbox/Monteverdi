@@ -16,4 +16,4 @@ IF(WIN32)
 ENDIF(WIN32)
 
 
-SUBDIRS( BasicApplication SimpleExample )
+ADD_SUBDIRECTORY( BasicApplication SimpleExample )

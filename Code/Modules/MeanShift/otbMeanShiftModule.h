@@ -15,32 +15,37 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPanSharpeningModule_h
-#define __otbPanSharpeningModule_h
+#ifndef __otbMeanShiftModule_h
+#define __otbMeanShiftModule_h
 
 // include the base class
 #include "otbModule.h"
 
+// the MVC classes
+#include "otbMeanShiftModuleController.h"
+#include "otbMeanShiftModuleModel.h"
+#include "otbMeanShiftModule.h"
+
 // include the OTB/ITK elements
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
 namespace otb
 {
-/** \class PanSharpeningModule
- *  \brief This is the PanSharpening module
+/** \class MeanShiftModule
+ *    
+ *  \brief This is the MeanShift module, which allows to perform
+ *  MeanShift filtering, segmentation and clustering.
  * 
- * Description of the module.
  *
  */
 
-class ITK_EXPORT PanSharpeningModule
-  : public Module
+class ITK_EXPORT MeanShiftModule
+  : public Module, public ListenerBase
 {
 public:
   /** Standard class typedefs */
-  typedef PanSharpeningModule           Self;
+  typedef MeanShiftModule                 Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -49,23 +54,30 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(PanSharpeningModule,Module);
+  itkTypeMacro(MeanShiftModule,Module);
 
   /** Data typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
+  typedef Image<unsigned long int,2>    LabelImageType;
 
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;
+  /** MVC typedefs */
+  typedef otb::MeanShiftModuleController ControllerType;
+  typedef otb::MeanShiftModuleModel      ModelType;
+  typedef otb::MeanShiftModuleView       ViewType;
+
 
 protected:
   /** Constructor */
-  PanSharpeningModule();
+  MeanShiftModule();
 
   /** Destructor */
-  virtual ~PanSharpeningModule();
+  virtual ~MeanShiftModule();
 
+  /** Notify Monteverdi application that featureExtraction has a result */
+  void Notify();
+  
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -73,11 +85,13 @@ protected:
   virtual void Run();
 
 private:
-  PanSharpeningModule(const Self&); //purposely not implemented
+  MeanShiftModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  FusionFilterType::Pointer m_PanSharpeningFilter;
 
+  ControllerType::Pointer m_Controller;
+  ViewType::Pointer m_View;
+  ModelType::Pointer m_Model;
 };
 
 

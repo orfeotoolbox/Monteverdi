@@ -82,13 +82,20 @@ ${Monteverdi_SOURCE_DIR}/Code/Modules/WriterMVC
 ${Monteverdi_BINARY_DIR}/Code/Modules/WriterMVC
 ${Monteverdi_SOURCE_DIR}/Code/Modules/Viewer
 ${Monteverdi_BINARY_DIR}/Code/Modules/Viewer
+${Monteverdi_SOURCE_DIR}/Code/Modules/MeanShift
+${Monteverdi_BINARY_DIR}/Code/Modules/MeanShift
+${Monteverdi_SOURCE_DIR}/Code/Modules/PanSharpening
+${Monteverdi_BINARY_DIR}/Code/Modules/PanSharpening
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
 )
 
 
 # Code location
-SUBDIRS(Code Prototype1 Utilities StarterKit)
+ADD_SUBDIRECTORY(Code)
+ADD_SUBDIRECTORY(Prototype1)
+ADD_SUBDIRECTORY(Utilities)
+ADD_SUBDIRECTORY(StarterKit)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
@@ -97,7 +104,7 @@ IF(BUILD_TESTING)
   ENABLE_TESTING()
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
-  SUBDIRS(Testing)
+  ADD_SUBDIRECTORY(Testing)
 ENDIF(BUILD_TESTING)
 
 

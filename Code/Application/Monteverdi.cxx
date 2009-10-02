@@ -50,10 +50,12 @@
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
 #include "otbOrthorectificationModule.h"
-#include "otbViewerModule.h"
+#include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
 #include "otbSupervisedClassificationModule.h"
+#include "otbMeanShiftModule.h"
+#include "otbPanSharpeningModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -83,12 +85,13 @@ int main(int argc, char* argv[])
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
-  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
-  model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
-  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Ortho Rectification");
+  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
+  model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
+  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
   model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
-  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X Image");
-  model->RegisterModule<otb::ViewerModule> ("Viewer","Visualization/View image");
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
+  model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");
+  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   
   // Launch Monteverdi
   view->InitWidgets();
