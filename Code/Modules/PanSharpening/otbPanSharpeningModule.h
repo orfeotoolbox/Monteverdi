@@ -24,7 +24,7 @@
 // include the OTB/ITK elements
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "itkPointSet.h"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
 namespace otb
 {
@@ -56,6 +56,9 @@ public:
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
 
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
+  <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;
+
 protected:
   /** Constructor */
   PanSharpeningModule();
@@ -72,6 +75,9 @@ protected:
 private:
   PanSharpeningModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  FusionFilterType::Pointer m_PanSharpeningFilter;
+
 };
 
 
