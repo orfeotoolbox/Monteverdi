@@ -130,13 +130,6 @@ void ExampleModule::Run()
   FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
   this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", "These are my pointset outputs");
   
-  // Add addional data to the same output
-  for(unsigned int i = 0; i<9;++i)
-    {
-    FloatingPointSetType::Pointer pointSetOutputN = FloatingPointSetType::New();
-    this->AddDataToOutputDescriptor(pointSetOutputN,"MyPointSetOutput");
-    }
-
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
 }

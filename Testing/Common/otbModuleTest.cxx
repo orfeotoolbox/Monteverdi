@@ -69,7 +69,6 @@ protected:
     // Add some outputs
     // Outputs can be defined once the run method has been called
     this->AddOutputDescriptor(otb::Image<unsigned short, 2>::New(),"OutputImage","test output image");
-    this->AddDataToOutputDescriptor(otb::Image<unsigned short,2>::New(),"OutputImage");
   }
 };
 
