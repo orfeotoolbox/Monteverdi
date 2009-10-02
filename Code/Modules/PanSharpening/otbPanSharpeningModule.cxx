@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "otbPanSharpeningModule.h"
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
+
 
 namespace otb
 {
@@ -30,7 +30,7 @@ PanSharpeningModule::PanSharpeningModule()
   // Add a new input
   this->AddInputDescriptor<FloatingImageType>("PanImage","Panchromatic image");
   this->AddInputDescriptor<FloatingVectorImageType>("XsImage","Multispectral image");
-
+  m_PanSharpeningFilter = FusionFilterType::New();
 }
 
 /** Destructor */
@@ -59,11 +59,10 @@ void PanSharpeningModule::Run()
 
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;
-  FusionFilterType::Pointer panSharpeningFilter = FusionFilterType::New();
-  panSharpeningFilter->SetPanInput(panImage);
-  panSharpeningFilter->SetXsInput(xsImage);
+
+
+  m_PanSharpeningFilter->SetPanInput(panImage);
+  m_PanSharpeningFilter->SetXsInput(xsImage);
 
   // Then, when the module did actually produce some outputs, declare
   // them.
@@ -72,7 +71,7 @@ void PanSharpeningModule::Run()
   this->ClearOutputDescriptors();
 
   // Add an output (single version)
-  this->AddOutputDescriptor(panSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", "Pan-sharpened image");
+  this->AddOutputDescriptor(m_PanSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", "Pan-sharpened image");
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
