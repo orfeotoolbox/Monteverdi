@@ -283,19 +283,20 @@ MonteverdiViewGUI
     Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
     if( !n )
       n = m_Tree->last();
-    
+
+    n->open(true);
+
     // this node can receive new nodes as a result of draggind-and-dropping
     //TODO
     //n->droppable(true);
     //n->movable(true);
-    
+
     Flu_Tree_Browser::Node* new_node =  n->add_branch(it->second.GetDataDescription().c_str());
-    
-    
+
     // add informations to the targeted module
     new_node->add(it->second.GetDataKey().c_str());
     new_node->add(it->second.GetDataType().c_str());
-    
+
     new_node->open(true);
     } // end datas loop
 }
