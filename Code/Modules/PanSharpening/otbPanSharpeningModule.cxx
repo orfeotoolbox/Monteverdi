@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbPanSharpeningModule.h"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
 namespace otb
 {
@@ -27,16 +28,9 @@ PanSharpeningModule::PanSharpeningModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage","This is my input");
-  
-  // Add another supported type for this input
-  this->AddTypeToInputDescriptor<FloatingImageType>("MyInputImage");
+  this->AddInputDescriptor<FloatingImageType>("PanImage","Panchromatic image");
+  this->AddInputDescriptor<FloatingVectorImageType>("XsImage","Multispectral image");
 
-  // Add an optional input
-  this->AddInputDescriptor<VectorType>("MyOptionalInput","This is my optional input",true);
-
-  // add a multiple input (multiple can also be optional)
-  this->AddInputDescriptor<VectorType>("MyMultipleInput","This is my multiple input",false,true);
 }
 
 /** Destructor */
@@ -59,61 +53,17 @@ void PanSharpeningModule::Run()
   // passed to the module.
 
   // First step is to retrieve the inputs
+  FloatingImageType::Pointer panImage = this->GetInputData<FloatingImageType>("PanImage");
+  FloatingVectorImageType::Pointer xsImage = this->GetInputData<FloatingVectorImageType>("XsImage");
   
-  // To handle an input with multiple supported type :
-  FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("MyInputImage");
-  FloatingImageType::Pointer fpImage = this->GetInputData<FloatingImageType>("MyInputImage");
-  
-  // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull())
-    {
-    // Process the input as an FloatingVectorImageType
-    }
-  else if(fpImage.IsNotNull())
-    {
-    // Process the input as an FloatingImageType
-    }
-  else
-    {
-    // Rerport error
-    }
 
-  // To handle an optional input: 
-
-  if(this->GetNumberOfInputDataByKey("MyOptionalInput") > 0)
-    {
-    VectorType::Pointer optionalVector = this->GetInputData<VectorType>("MyOptionalInput");
-
-    // Again, check for pointer validity
-    if(optionalVector.IsNotNull())
-      {
-      // Process optional input
-      }
-    else
-      {
-      // Report error
-      }
-    }
-  
-  // To handle a multiple input:
-
-  for(unsigned int inputIdx = 0; inputIdx < this->GetNumberOfInputDataByKey("MyMultipleInput");++inputIdx)
-    {
-    VectorType::Pointer nthMultipleVector = this->GetInputData<VectorType>("MyMultipleInput",inputIdx);
-    
-    if(nthMultipleVector.IsNotNull())
-      {
-      // Process the nth mutliple input
-      }
-    else
-      {
-      // Report error
-      }
-    }
-  
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
-  
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
+  <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;
+  FusionFilterType::Pointer panSharpeningFilter = FusionFilterType::New();
+  panSharpeningFilter->SetPanInput(panImage);
+  panSharpeningFilter->SetXsInput(xsImage);
 
   // Then, when the module did actually produce some outputs, declare
   // them.
@@ -122,20 +72,7 @@ void PanSharpeningModule::Run()
   this->ClearOutputDescriptors();
 
   // Add an output (single version)
-  FloatingImageType::Pointer myBrandNewImageOutput = FloatingImageType::New();
-  this->AddOutputDescriptor(myBrandNewImageOutput,"MyImageOutput","This is my image output");
-
-  // Add an output (multiple version)
-  
-  FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
-  this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", "These are my pointset outputs");
-  
-  // Add addional data to the same output
-  for(unsigned int i = 0; i<9;++i)
-    {
-    FloatingPointSetType::Pointer pointSetOutputN = FloatingPointSetType::New();
-    this->AddDataToOutputDescriptor(pointSetOutputN,"MyPointSetOutput");
-    }
+  this->AddOutputDescriptor(panSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", "Pan-sharpened image");
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
