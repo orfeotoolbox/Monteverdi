@@ -54,6 +54,7 @@
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
 #include "otbSupervisedClassificationModule.h"
+#include "otbMeanShiftModule.h"
 
 int main(int argc, char* argv[])
 {
