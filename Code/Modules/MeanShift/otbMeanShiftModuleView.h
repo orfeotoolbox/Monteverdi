@@ -67,6 +67,8 @@ public:
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(ImageView,ImageViewType);
 
+  void SetModel(MeanShiftModuleModel* model);
+  
 protected:
   /** Constructor */
   MeanShiftModuleView();

@@ -31,6 +31,7 @@ MeanShiftModule::MeanShiftModule()
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
   m_View->SetController(m_Controller);
+  m_View->SetModel(m_Model);
   m_View->SetWidgetsController(m_Controller->GetWidgetsController());
 
   m_Model->RegisterListener(this);
