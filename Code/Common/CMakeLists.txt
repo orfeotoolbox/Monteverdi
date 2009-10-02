@@ -21,4 +21,7 @@ SET(OTBMonteverdiCommon_SRCS ${OTBMonteverdiCommon_SRCS} ${OTBMonteverdiCommon_F
 ADD_LIBRARY(OTBMonteverdiCommon ${OTBMonteverdiCommon_SRCS} )
 TARGET_LINK_LIBRARIES(OTBMonteverdiCommon ITKCommon )
 
-INSTALL_TARGETS(/bin OTBMonteverdiCommon)
+INSTALL(TARGETS OTBMonteverdiCommon
+        RUNTIME DESTINATION /bin
+        LIBRARY DESTINATION /bin
+        ARCHIVE DESTINATION /bin )

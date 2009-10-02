@@ -1,1 +1,3 @@
-SUBDIRS(Common Application Modules)
+ADD_SUBDIRECTORY(Common)
+ADD_SUBDIRECTORY(Application)
+ADD_SUBDIRECTORY(Modules)

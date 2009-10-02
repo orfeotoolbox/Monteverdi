@@ -92,7 +92,10 @@ ${Monteverdi_BINARY_DIR}/Code/Application
 
 
 # Code location
-SUBDIRS(Code Prototype1 Utilities StarterKit)
+ADD_SUBDIRECTORY(Code)
+ADD_SUBDIRECTORY(Prototype1)
+ADD_SUBDIRECTORY(Utilities)
+ADD_SUBDIRECTORY(StarterKit)
 
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
@@ -101,7 +104,7 @@ IF(BUILD_TESTING)
   ENABLE_TESTING()
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
-  SUBDIRS(Testing)
+  ADD_SUBDIRECTORY(Testing)
 ENDIF(BUILD_TESTING)
 
 
