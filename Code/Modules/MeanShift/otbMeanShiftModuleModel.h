@@ -60,6 +60,9 @@ public:
   typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType>  MSFilterType;
   typedef MSFilterType::Pointer                                                  MSFilterPointerType;
 
+  /** New macro */
+  itkNewMacro(Self);
+  
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -95,6 +98,9 @@ public:
   itkGetMacro(GenerateClustered, bool);
   itkGetMacro(GenerateLabeled, bool);
 
+  /** Get the output changed flag */
+  itkGetMacro(OutputChanged,bool);
+  
 
   bool IsUpdating() const
   {
@@ -102,8 +108,7 @@ public:
   }
 
 protected:
-  /** This is protected for the singleton. Use GetInstance() instead. */
-  itkNewMacro(Self);
+
   /** Constructor */
   MeanShiftModuleModel();
   /** Destructor */
@@ -151,6 +156,7 @@ private:
   VectorImagePointerType m_OutputClusteredImage;
   LabeledImagePointerType m_OutputLabeledImage;
 
+  bool m_OutputChanged;
 
 };
 

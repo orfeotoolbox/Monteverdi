@@ -46,7 +46,7 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_GenerateLabeled = true;
 
 
-  
+  m_OutputChanged = false;  
 
 }
 
@@ -249,6 +249,8 @@ MeanShiftModuleModel
     m_OutputClusteredImage->UpdateOutputInformation();
     m_OutputLabeledImage->UpdateOutputInformation();
 
+    m_OutputChanged = true;
+    
     this->NotifyAll();
     }
   

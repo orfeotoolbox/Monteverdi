@@ -23,6 +23,7 @@
 
 // the MVC classes
 #include "otbMeanShiftModuleController.h"
+#include "otbMeanShiftModuleModel.h"
 #include "otbMeanShiftModule.h"
 
 // include the OTB/ITK elements
@@ -40,7 +41,7 @@ namespace otb
  */
 
 class ITK_EXPORT MeanShiftModule
-  : public Module
+  : public Module, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -63,6 +64,7 @@ public:
 
   /** MVC typedefs */
   typedef otb::MeanShiftModuleController ControllerType;
+  typedef otb::MeanShiftModuleModel      ModelType;
   typedef otb::MeanShiftModuleView       ViewType;
 
 
@@ -73,6 +75,9 @@ protected:
   /** Destructor */
   virtual ~MeanShiftModule();
 
+  /** Notify Monteverdi application that featureExtraction has a result */
+  void Notify();
+  
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -86,6 +91,7 @@ private:
 
   ControllerType::Pointer m_Controller;
   ViewType::Pointer m_View;
+  ModelType::Pointer m_Model;
 };
 
 

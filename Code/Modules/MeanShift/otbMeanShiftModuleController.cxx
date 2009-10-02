@@ -9,7 +9,7 @@ namespace otb
 {
 
 MeanShiftModuleController
-::MeanShiftModuleController(): m_View(), m_WidgetsController(),
+::MeanShiftModuleController(): m_View(), m_Model(), m_WidgetsController(),
 m_ResizingHandler(), m_ChangeRegionHandler()
 {
   // Build the widgets controller
@@ -19,9 +19,6 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   m_ResizingHandler           = ResizingHandlerType::New();
   m_ChangeRegionHandler       = ChangeRegionHandlerType::New();
 
-  // Register the model to the action handlers
-  m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
-  m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
 
 
   // Add the action handlers to the widgets controller
@@ -38,6 +35,14 @@ MeanShiftModuleController
 ::~MeanShiftModuleController()
 {
   MsgReporter::GetInstance()->Hide();
+}
+
+void MeanShiftModuleController::SetModel(ModelType* model){
+  m_Model = model;
+  // Register the model to the action handlers
+  m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
+  m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
+
 }
 
 void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
