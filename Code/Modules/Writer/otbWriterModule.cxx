@@ -18,6 +18,8 @@
 #include "otbWriterModule.h"
 #include <FLU/Flu_File_Chooser.h>
 
+
+
 namespace otb
 {
 /** Constructor */
@@ -54,7 +56,6 @@ void WriterModule::Run()
   this->BuildGUI();
   pBar->minimum(0);
   pBar->maximum(1);
-  this->UpdateProgressBar(0);
   wFileChooserWindow->show();
 }
 
@@ -88,19 +89,24 @@ void WriterModule::Cancel()
 
 void WriterModule::UpdateProgressBar( float progress )
 {
+  itk::OStringStream oss1, oss2;
+  oss1.str("");
+  oss1<<"Writing dataset  ("<<std::floor(100*progress)<<"%)";
+  oss2.str("");
+  oss2<<std::floor(100*progress);
+  oss2<<"%";
+  Fl::lock();
   pBar->value( progress );
-  itk::OStringStream oss;
-  oss.str("");
-  oss<<std::floor(100*progress);
-  oss<<"%";
-  pBar->label( oss.str().c_str() );
-  pBar->redraw();
-  Fl::check();
+  wFileChooserWindow->copy_label(oss1.str().c_str());
+  pBar->copy_label( oss2.str().c_str() );
+  Fl::awake();
+  Fl::unlock();
 }
 
 
-void WriterModule::RunProcess1( void * v )
+void WriterModule::ThreadedWatch()
 {
+  std::cout<<"RunProcess1: Deactivate interface"<<std::endl;
   // Deactivate window buttons
   Fl::lock();
   bBrowse->deactivate();
@@ -145,20 +151,21 @@ void WriterModule::RunProcess1( void * v )
   float progress = 0;
   float progressOld = -1;
 
+  std::cout<<"RunProcess1: Starting the watch loop."<<std::endl;
+
+
   while( progress != 1)
     {
       sleep(0.5);
       progress = myObject->GetProgress();
       float diffProg = progress - progressOld;
 
-      if(diffProg > 0.01)
-	{
-	  Fl::lock();
+       if(diffProg > 0.01)
+ 	{
+	  std::cout<<"RunProcess1: Updating progress ..."<<std::endl;
 	  this->UpdateProgressBar( progress );
-	  Fl::unlock();
-	  progressOld = progress;
-	}
-
+ 	  progressOld = progress;
+ 	}
     }
 
   Fl::lock();
@@ -171,15 +178,20 @@ void WriterModule::RunProcess1( void * v )
   bOk->activate();
   vFilePath->activate();
 
+  // Changing back label
+  wFileChooserWindow->copy_label("Save dataset ...");
+
   // Close the window
   wFileChooserWindow->hide();
   Fl::unlock();
+  
+  std::cout<<"RunProcess1: End"<<std::endl;
 }
 
 
 
 
-void WriterModule::RunProcess2( void * v )
+void WriterModule::ThreadedRun()
 {
   std::string filepath = vFilePath->value();
   
@@ -197,6 +209,7 @@ void WriterModule::RunProcess2( void * v )
     }
   else if ( vectorImage.IsNotNull() ) 
     {
+    std::cout<<"RunProcess2: Writing floating point vector image"<<std::endl;
       m_FPVWriter->SetInput(vectorImage);
       m_FPVWriter->SetFileName(filepath);
       m_FPVWriter->Update();
