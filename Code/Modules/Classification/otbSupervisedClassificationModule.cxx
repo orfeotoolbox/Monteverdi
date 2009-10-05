@@ -47,9 +47,11 @@ void SupervisedClassificationModule::PrintSelf(std::ostream& os, itk::Indent ind
 void SupervisedClassificationModule::Run()
 {
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
+  std::string desc = this->GetInputDataDescription<InputImageType>("InputImage",0);
 
   if(input.IsNotNull())
     {
+      m_SupervisedClassification->SetImageFileName(desc);
     m_SupervisedClassification->SetInputImage(input);
     m_SupervisedClassification->Build();
     m_SupervisedClassification->Show();

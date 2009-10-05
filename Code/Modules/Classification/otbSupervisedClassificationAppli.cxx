@@ -28,7 +28,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMacro.h"
 #include "itkImageRegionIteratorWithIndex.h"
-//#include "otbStreamingImageFileWriter.h"
+// to be removedddddddddddddddddddddddddddddddddddddddddddddddddddd
+#include "otbImageFileWriter.h"
 #include "otbStreamingTraits.h"
 #include "otbExtractROI.h"
 #include "itkMinimumMaximumImageCalculator.h"
@@ -39,12 +40,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSimplifyPathListFilter.h"
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
-#include "otbImageFileReader.h"
 
 namespace otb
 {
 /// Constructor
-
 SupervisedClassificationAppli
 ::SupervisedClassificationAppli()
 {
@@ -58,6 +57,9 @@ SupervisedClassificationAppli
   m_HasOutputVector = false;
 
   m_ImageViewer               = ImageViewerType::New();
+  m_OutputVector              = VectorDataType::New();
+  m_Output                    = OverlayImageType::New();
+  //m_ImageReader               = ImageReaderType::New();
   m_Estimator                 = EstimatorType::New();
   m_ClassificationFilter      = ClassificationFilterType::New();
   m_ChangeLabelFilter         = ChangeLabelFilterType::New();
@@ -71,7 +73,6 @@ SupervisedClassificationAppli
 }
 
 /// Destructor
-
 SupervisedClassificationAppli
 ::~SupervisedClassificationAppli()
 {}
@@ -81,7 +82,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::Show()
@@ -94,7 +94,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::Build()
@@ -107,7 +106,7 @@ SupervisedClassificationAppli
   m_ImageViewer->SetPolygonalROISelectionMode(false);
   m_ImageViewer->SetRectangularROISelectionMode(false);
   m_ImageViewer->SetPolygonROIList(m_TrainingSet);
-  
+
   Fl_Text_Buffer * buffer1 = new Fl_Text_Buffer();
   this->dClassInfo->buffer(buffer1);
 
@@ -121,29 +120,26 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ReInitButtons()
 {
-  //bSaveResultImage->deactivate();
   bSaveClassifAsVectorData->deactivate();
   bSaveSVMModel->deactivate();
   bVisualisationSetup->deactivate();
-  bOK->deactivate();
+  bDisplay->deactivate();
 }
 
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::Update()
 {
   m_ImageViewer->Update();
 
-  if (bOK->value())
+  if (bDisplay->value())
   {
     m_ResultViewer->Update();
   }
@@ -153,13 +149,12 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::LoadImage()
 {
   this->ClearROIs();
-  
+
   // Removing widgets from the display group, since they will be destroyed
   if (m_ImageViewer.IsNotNull())
   {
@@ -178,7 +173,7 @@ SupervisedClassificationAppli
   m_ImageViewer->SetPolygonalROISelectionMode(false);
   m_ImageViewer->SetRectangularROISelectionMode(false);
   m_ImageViewer->SetPolygonROIList(m_TrainingSet);
-  m_ImageViewer->SetImage(/*m_ImageReader->GetOutput()*/m_InputImage);
+  m_ImageViewer->SetImage(m_InputImage);//m_ImageReader->GetOutput());
   m_ImageViewer->Build();
 
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
@@ -201,7 +196,7 @@ SupervisedClassificationAppli
 
   /// Add the choice for color composition
   itk::OStringStream oss;
-  for (unsigned int i = 0; i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+  for (unsigned int i = 0; i</*m_ImageReader->GetOutput()*/m_InputImage->GetNumberOfComponentsPerPixel();++i)
   {
     oss<<i+1;
     viewerGrayscaleChannelChoice->add(oss.str().c_str());
@@ -281,12 +276,36 @@ SupervisedClassificationAppli
 }
 
 
- /** File selection Callbacks */
+/** File selection Callbacks */
 
 /**
 *
 */
+/*
+void
+SupervisedClassificationAppli
+::OpenImage()
+{
 
+  const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
+  Fl::check();
+
+  if (cfname == NULL || strlen(cfname)<1)
+  {
+    return ;
+  }
+  ossimFilename fname(cfname);
+  m_LastPath = fname.path();
+  m_ImageFileName = cfname;
+  this->LoadImage();
+
+}
+*/
+
+
+/**
+*
+*/
 void
 SupervisedClassificationAppli
 ::ImportROIsImage()
@@ -307,7 +326,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ImportVectorData()
@@ -350,7 +368,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ExportAllVectorData()
@@ -447,7 +464,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ExportVectorData()
@@ -458,6 +474,7 @@ SupervisedClassificationAppli
     return ;
   }
   std::string filename = std::string(cfname);
+
 
   VectorDataPointerType vectorData = VectorDataType::New();
 
@@ -516,11 +533,48 @@ SupervisedClassificationAppli
 *
 */
 
+// void
+// SupervisedClassificationAppli
+// ::SaveResultImage()
+// {
+//   const char * cfname = fl_file_chooser("Image file :", "*.*",m_LastPath.c_str());
+//   if (cfname == NULL || strlen(cfname)<1)
+//   {
+//     return ;
+//   }
+//   std::string filename = std::string(cfname);
+
+//   this->SetupClassification();
+
+//   typedef otb::StreamingImageFileWriter<OverlayImageType> WriterType;
+//     WriterType::Pointer writer = WriterType::New();
+//   writer->SetFileName(filename.c_str());
+//   writer->SetInput(m_ChangeLabelFilter->GetOutput());
+//   otb::FltkWriterWatcher watcher(writer,0,0,200,40,"Saving result image ...");
+
+//   try
+//   {
+//     writer->Update();
+//   }
+//   catch ( itk::ExceptionObject & err )
+//   {
+//     itk::OStringStream oss;
+//     oss << "Error while writing result image: "  << err << std::endl;
+//     return;
+//   }
+
+//   ossimFilename fname(filename.c_str());
+//   m_LastPath = fname.path();
+// }
+
+
+/**
+ *
+ */
 void
 SupervisedClassificationAppli
 ::SaveClassifAsVectorData()
 {
-
   this->SetupClassification();
 
   m_VectorizationFilter->Update();
@@ -552,29 +606,26 @@ SupervisedClassificationAppli
   typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(vectorData);
-  vectorDataProjection->SetInputOrigin(m_InputImage->GetOrigin());
-  vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
+  vectorDataProjection->SetInputOrigin(m_InputImage/*m_ImageReader->GetOutput()*/->GetOrigin());
+  vectorDataProjection->SetInputSpacing(m_InputImage/*m_ImageReader->GetOutput()*/->GetSpacing());
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
+  itk::ExposeMetaData<std::string>(m_InputImage/*m_ImageReader->GetOutput()*/->GetMetaDataDictionary(),
                                    MetaDataKey::ProjectionRefKey, projectionRef );
   vectorDataProjection->SetInputProjectionRef(projectionRef);
 
-  vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
+  vectorDataProjection->SetInputKeywordList(m_InputImage/*m_ImageReader->GetOutput()*/->GetImageKeywordlist());
 
-  m_OutputVector = vectorDataProjection->GetOutput();
+   m_OutputVector = vectorDataProjection->GetOutput();
 
   m_HasOutputVector = true;
   this->NotifyAll();
   m_HasOutputVector = false;
-
-
 }
 
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::OpenSVMModel()
@@ -594,14 +645,13 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::LoadSVMModel()
 {
   m_Model = ModelType::New();
   m_Model->LoadModel(m_ModelFileName.c_str());
-  
+
   m_ClassesMap.clear();
   m_CurrentLabel = 1;
 
@@ -611,10 +661,9 @@ SupervisedClassificationAppli
   }
 
   bLearn->set();
-  //bSaveResultImage->activate();
   bSaveClassifAsVectorData->activate();
   bSaveSVMModel->activate();
-  bOK->activate();
+  bDisplay->activate();
   bValidate->activate();
 }
 
@@ -623,7 +672,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::SaveSVMModel()
@@ -645,7 +693,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: SVMSetup()
@@ -668,7 +715,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: SVMSetupOk()
@@ -693,18 +739,17 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ResetClassification()
 {
   bLearn->clear();
-  if (bOK->value())
+  if (bDisplay->value())
   {
     this->ShowImage();
   }
-  bOK->clear();
-  bOK->deactivate();
+  bDisplay->clear();
+  bDisplay->deactivate();
   bValidate->deactivate();
   guiSVMSetup->hide();
   bSaveClassifAsVectorData->deactivate();
@@ -714,7 +759,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: SVMSetupCancel()
@@ -730,7 +774,7 @@ SupervisedClassificationAppli
 :: VisualisationSetup()
 {
   itk::OStringStream oss;
-  for (unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+  for (unsigned int i = 0;i</*m_ImageReader->GetOutput()*/m_InputImage->GetNumberOfComponentsPerPixel();++i)
   {
     oss.str("");
     oss<<i+1;
@@ -761,7 +805,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: VisualisationSetupOk()
@@ -833,70 +876,9 @@ SupervisedClassificationAppli
 
 }
 
-
 /**
 *
 */
-void
-SupervisedClassificationAppli
-::UpdateImageInfo()
-{
-  itk::OStringStream oss;
-  oss.str("");
-  // Clear the info buffer
-  dImageInfo->buffer()->remove(0,dImageInfo->buffer()->length());
-  oss.str("");
-  oss<<"Number of bands: "<<m_InputImage->GetNumberOfComponentsPerPixel();
-  oss<<" - Size: "<<m_InputImage->GetLargestPossibleRegion().GetSize()<<std::endl;
-  dImageInfo->insert(oss.str().c_str());
-  oss.str("");
-  if (m_ImageViewer->GetUseScroll())
-  {
-    oss<<"Scroll window activated"<<std::endl;
-    dImageInfo->insert(oss.str().c_str());
-    oss.str("");
-  }
-
-  oss.str("");
-  switch (m_ImageViewer->GetViewModel())
-  {
-  case ImageViewerType::ScrollWidgetType::RGB:
-  {
-    oss<<"RGB Composition: ";
-    oss<<" Band 1: "<<m_ImageViewer->GetRedChannelIndex();
-    oss<<" Band 2: "<<m_ImageViewer->GetGreenChannelIndex();
-    oss<<" Band 3: "<<m_ImageViewer->GetBlueChannelIndex()<<std::endl;
-    break;
-  }
-  case ImageViewerType::ScrollWidgetType::GRAYSCALE:
-  {
-    oss<<"Grayscale: ";
-    oss<<" Band: "<<m_ImageViewer->GetRedChannelIndex()<<std::endl;
-    break;
-  }
-  case ImageViewerType::ScrollWidgetType::COMPLEX_MODULUS:
-  {
-    oss<<"Complex modulus: ";
-    oss<<" Real part: "     <<m_ImageViewer->GetRedChannelIndex();
-    oss<<" Imaginary part: "<<m_ImageViewer->GetGreenChannelIndex();
-    break;
-  }
-  case ImageViewerType::ScrollWidgetType::COMPLEX_PHASE:
-  {
-    oss<<"Complex phase: ";
-    oss<<" Real part: "     <<m_ImageViewer->GetRedChannelIndex();
-    oss<<" Imaginary part: "<<m_ImageViewer->GetGreenChannelIndex();
-    break;
-  }
-  }
-  dImageInfo->insert(oss.str().c_str());
-  oss.str("");
-}
-
-/**
-*
-*/
-
 void
 SupervisedClassificationAppli
 :: VisualisationSetupCancel()
@@ -907,7 +889,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: GrayscaleSet()
@@ -929,7 +910,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: RGBSet()
@@ -953,7 +933,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ComplexSet()
@@ -978,7 +957,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ClassSelected()
@@ -999,12 +977,12 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: AddClass()
 {
   itk::OStringStream oss;
+
   ClassPointerType newClass = ClassType::New();
   oss<<"Class "<<m_CurrentLabel;
   newClass->SetName(oss.str());
@@ -1016,14 +994,13 @@ SupervisedClassificationAppli
   color[1]=rand()/(RAND_MAX+1.0);
   color[2]=rand()/(RAND_MAX+1.0);
   color[3]=(float)this->slTrainingSetOpacity->value();
-  
-    
+
   fl_color(static_cast<unsigned char>(255*color[0]),
-	   static_cast<unsigned char>(255*color[1]),
-	   static_cast<unsigned char>(255*color[2]));
-  
+           static_cast<unsigned char>(255*color[1]),
+           static_cast<unsigned char>(255*color[2]));
+
   dClassList->selection_color(fl_color());
-  
+
   newClass->SetColor(color);
   m_ClassesMap.push_back(newClass);
   dClassList->add(oss.str().c_str());
@@ -1039,7 +1016,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: RemoveClass()
@@ -1102,7 +1078,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ChangeClassName()
@@ -1120,7 +1095,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ChangeClassNameOk()
@@ -1143,7 +1117,7 @@ SupervisedClassificationAppli
 /**
 *
 */
-SupervisedClassificationAppli
+  SupervisedClassificationAppli
 ::ClassPointerType
 SupervisedClassificationAppli
 ::GetSelectedClass()
@@ -1162,7 +1136,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 int
 SupervisedClassificationAppli
 ::GetSelectedROI()
@@ -1207,7 +1180,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::UpdateClassInfo()
@@ -1272,11 +1244,74 @@ SupervisedClassificationAppli
 /**
 *
 */
+void
+SupervisedClassificationAppli
+::UpdateImageInfo()
+{
+  itk::OStringStream oss;
+  oss.str("");
+  // Clear the info buffer
+  dImageInfo->buffer()->remove(0,dImageInfo->buffer()->length());
+  oss<<"Filename: "<<m_ImageFileName<<std::endl;
+  dImageInfo->insert(oss.str().c_str());
+  oss.str("");
+  oss<<"Number of bands: "<<m_InputImage/*ImageReader->GetOutput()*/->GetNumberOfComponentsPerPixel();
+  oss<<" - Size: "<<m_InputImage/*m_ImageReader->GetOutput()*/->GetLargestPossibleRegion().GetSize()<<std::endl;
+  dImageInfo->insert(oss.str().c_str());
+  oss.str("");
+  if (m_ImageViewer->GetUseScroll())
+  {
+    oss<<"Scroll window activated"<<std::endl;
+    dImageInfo->insert(oss.str().c_str());
+    oss.str("");
+  }
 
+  oss.str("");
+  switch (m_ImageViewer->GetViewModel())
+  {
+  case ImageViewerType::ScrollWidgetType::RGB:
+  {
+    oss<<"RGB Composition: ";
+    oss<<" Band 1: "<<m_ImageViewer->GetRedChannelIndex();
+    oss<<" Band 2: "<<m_ImageViewer->GetGreenChannelIndex();
+    oss<<" Band 3: "<<m_ImageViewer->GetBlueChannelIndex()<<std::endl;
+    break;
+  }
+  case ImageViewerType::ScrollWidgetType::GRAYSCALE:
+  {
+    oss<<"Grayscale: ";
+    oss<<" Band: "<<m_ImageViewer->GetRedChannelIndex()<<std::endl;
+    break;
+  }
+  case ImageViewerType::ScrollWidgetType::COMPLEX_MODULUS:
+  {
+    oss<<"Complex modulus: ";
+    oss<<" Real part: "     <<m_ImageViewer->GetRedChannelIndex();
+    oss<<" Imaginary part: "<<m_ImageViewer->GetGreenChannelIndex();
+    break;
+  }
+  case ImageViewerType::ScrollWidgetType::COMPLEX_PHASE:
+  {
+    oss<<"Complex phase: ";
+    oss<<" Real part: "     <<m_ImageViewer->GetRedChannelIndex();
+    oss<<" Imaginary part: "<<m_ImageViewer->GetGreenChannelIndex();
+    break;
+  }
+  }
+  dImageInfo->insert(oss.str().c_str());
+  oss.str("");
+}
+
+
+/**
+*
+*/
 void
 SupervisedClassificationAppli
 :: ChangeClassColor()
 {
+
+
   ClassType * theClass = this->GetSelectedClass();
 
   if (theClass == NULL)
@@ -1306,7 +1341,7 @@ SupervisedClassificationAppli
     color[2]=static_cast<unsigned char>(theClass->GetColor()[2]*255);
     m_ChangeLabelFilter->SetChange(theClass->GetId(),color);
 
-    if (bOK->value())
+    if (bDisplay->value())
     {
       m_ResultViewer->Reset();
     }
@@ -1318,7 +1353,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: TrainingSetSelected()
@@ -1337,7 +1371,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ValidationSetSelected()
@@ -1358,7 +1391,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: EndPolygon()
@@ -1399,7 +1431,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: ClearROIs()
@@ -1434,7 +1465,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: EraseLastPoint()
@@ -1467,7 +1497,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: EraseLastROI()
@@ -1491,7 +1520,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 :: UsePolygon()
@@ -1523,7 +1551,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ChangeTrainingSetOpacity()
@@ -1535,7 +1562,7 @@ SupervisedClassificationAppli
     (*it)->SetColor(color);
     m_ImageViewer->AddROIColorMapEntry((*it)->GetId(),color);
   }
-  if (bOK->value())
+  if (bDisplay->value())
   {
     m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
   }
@@ -1545,7 +1572,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ROIFocus()
@@ -1592,7 +1618,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::GenerateTrainingSamplesFromROIs()
@@ -1602,7 +1627,7 @@ SupervisedClassificationAppli
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;
+  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for ( PolygonListType::Iterator polygIt = m_TrainingSet->Begin();
@@ -1647,7 +1672,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::JointlyGenerateTrainingAndValidationSamplesFromROIs()
@@ -1660,7 +1684,7 @@ SupervisedClassificationAppli
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;
+  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for ( PolygonListType::Iterator polygIt = m_TrainingSet->Begin();
@@ -1713,7 +1737,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::Learn()
@@ -1771,24 +1794,22 @@ SupervisedClassificationAppli
 
 
   bLearn->set();
-  //  bSaveResultImage->activate();
   bSaveClassifAsVectorData->activate();
   bSaveSVMModel->activate();
-  bOK->activate();
+  bDisplay->activate();
   bValidate->activate();
 }
 
 /**
  *
  */
-
 void
 SupervisedClassificationAppli
 ::SetupClassification()
 {
   m_ClassificationFilter = ClassificationFilterType::New();
   m_ClassificationFilter->SetModel(m_Model);
-  m_ClassificationFilter->SetInput(m_InputImage);
+  m_ClassificationFilter->SetInput(m_InputImage);//m_ImageReader->GetOutput());
   m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
 
@@ -1808,12 +1829,21 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::QuitCallback()
 {
+  m_Output = m_ChangeLabelFilter->GetOutput();
+  
+   ImageFileWriter<OverlayImageType>::Pointer wri = ImageFileWriter<OverlayImageType>::New();
+   wri->SetFileName("classif.tif");
+   wri->SetInput(m_Output);
+   wri->Update();
 
+  m_HasOutput = true;
+  this->NotifyAll();
+  m_HasOutput = false;
+  
   bClassesBrowser->hide();
   guiScrollWindow->hide();
   guiFullWindow->hide();
@@ -1827,7 +1857,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ShowImage()
@@ -1863,98 +1892,89 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::ShowResults()
 {
-/// Show Result is not used any more and SetImageOverlay deprecated
-//   m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
-// 
-//   m_ResultViewer = ImageViewerType::New();
-//   m_ResultViewer->SetImage(m_InputImage);
-//   m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
-//   m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
-//   m_ResultViewer->SetShowClass(true);
-//   m_ResultViewer->SetClassesMap(m_ClassesMap);
-//   m_ResultViewer->SetUseImageOverlay(true);
-//   m_ResultViewer->SetShowHistograms(false);
-//   m_ResultViewer->SetPixLocOutput(oPixLocValue);
-//   m_ResultViewer->SetShowZoomWidget(false);
-//   m_ResultViewer->SetLabel("Result image");
-//   m_ResultViewer->Build();
-//   m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
-//   this->VisualisationSetupOk();
-// 
-//   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
-//   guiFullWindow->remove(full);
-//   guiFullWindow->redraw();
-// 
-//   if (m_ImageViewer->GetUseScroll())
-//   {
-//     ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
-//     guiScrollWindow->remove(scroll);
-//     guiScrollWindow->redraw();
-//   }
-// 
-//   full = m_ResultViewer->GetFullWidget();
-//   full->resize(0,0,guiFullWindow->w(),guiFullWindow->h());
-//   guiFullWindow->add(full);
-//   guiFullWindow->resizable(full);
-//   guiFullWindow->show();
-//   full->show();
-// 
-//   if (m_ResultViewer->GetUseScroll())
-//   {
-//     ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-//     scroll->resize(0,0,guiScrollWindow->w(),guiScrollWindow->h());
-//     guiScrollWindow->add(scroll);
-//     guiScrollWindow->resizable(scroll);
-//     guiScrollWindow->show();
-//     scroll->show();
-//   }
-//   m_ImageViewer->Hide();
-//   m_ResultViewer->Show();
+  m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
+
+  m_ResultViewer = ImageViewerType::New();
+  m_ResultViewer->SetImage(m_InputImage);//m_ImageReader->GetOutput());
+  m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
+  m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
+  m_ResultViewer->SetShowClass(true);
+  m_ResultViewer->SetClassesMap(m_ClassesMap);
+  m_ResultViewer->SetUseImageOverlay(true);
+  m_ResultViewer->SetShowHistograms(false);
+  m_ResultViewer->SetPixLocOutput(oPixLocValue);
+  m_ResultViewer->SetShowZoomWidget(false);
+  m_ResultViewer->SetLabel("Result image");
+  m_ResultViewer->Build();
+  m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
+  this->VisualisationSetupOk();
+
+  FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
+  guiFullWindow->remove(full);
+  guiFullWindow->redraw();
+
+  if (m_ImageViewer->GetUseScroll())
+  {
+    ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
+    guiScrollWindow->remove(scroll);
+    guiScrollWindow->redraw();
+  }
+
+  full = m_ResultViewer->GetFullWidget();
+  full->resize(0,0,guiFullWindow->w(),guiFullWindow->h());
+  guiFullWindow->add(full);
+  guiFullWindow->resizable(full);
+  guiFullWindow->show();
+  full->show();
+
+  if (m_ResultViewer->GetUseScroll())
+  {
+    ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+    scroll->resize(0,0,guiScrollWindow->w(),guiScrollWindow->h());
+    guiScrollWindow->add(scroll);
+    guiScrollWindow->resizable(scroll);
+    guiScrollWindow->show();
+    scroll->show();
+  }
+  m_ImageViewer->Hide();
+  m_ResultViewer->Show();
 
 }
 
-
 void
 SupervisedClassificationAppli
-::SaveOutputResults()
+::DisplayResults()
 {
-  if (!bOK->value())
+
+  if (!bDisplay->value())
   {
     this->ShowImage();
   }
   else
   {
     this->SetupClassification();
-    m_Output = m_ChangeLabelFilter->GetOutput();
+    this->ShowResults();
   }
-
-  m_HasOutput = true;
-  this->NotifyAll();
-  m_HasOutput = false;
-/*
-  bClassesBrowser->hide();
-  guiFullWindow->hide();
-  guiScrollWindow->hide();*/
 }
 
 /**
- *
- */
+*
+*/
 void
 SupervisedClassificationAppli
 ::GenerateValidationSamplesFromROIs()
 {
+
   m_ValidationListSample->Clear();
   m_ValidationListLabelSample->Clear();
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;
+  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   std::vector<unsigned int> sampleCount(m_ClassesMap.size(),0);
@@ -2000,7 +2020,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::Validate()
@@ -2016,19 +2035,19 @@ SupervisedClassificationAppli
     this->GenerateValidationSamplesFromROIs();
   }
 
-  ClassifierType::Pointer validationClassifier = ClassifierType::New();
+   ClassifierType::Pointer validationClassifier = ClassifierType::New();
   validationClassifier->SetSample(m_ValidationListSample);
   validationClassifier->SetNumberOfClasses(m_ClassesMap.size());
   validationClassifier->SetModel(m_Model);
   validationClassifier->Update();
 
-  ClassifierType::OutputType::Pointer membershipSample = validationClassifier->GetOutput();
-  ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
-  ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
+    ClassifierType::OutputType::Pointer membershipSample = validationClassifier->GetOutput();
+   ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
+   ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
 
-  TrainingListSampleType::ConstIterator sampleValIter = m_ValidationListLabelSample->Begin();
-  TrainingListSampleType::ConstIterator sampleValEnd  = m_ValidationListLabelSample->End();
-  
+   TrainingListSampleType::ConstIterator sampleValIter = m_ValidationListLabelSample->Begin();
+   TrainingListSampleType::ConstIterator sampleValEnd  = m_ValidationListLabelSample->End();
+
   ConfusionMatrixType confusion(m_ClassesMap.size(),m_ClassesMap.size());
   confusion.Fill(0);
 
@@ -2209,7 +2228,6 @@ SupervisedClassificationAppli
 /**
 *
 */
-
 void
 SupervisedClassificationAppli
 ::LoadROIsImage()
@@ -2335,6 +2353,5 @@ SupervisedClassificationAppli
   this->Update();
 }
 } // end namespace otb
-
 
 
