@@ -51,7 +51,7 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
   Fl::check();
     
   //Simulate Ok button callback
-  specificModule->GetSupervisedClassification()->bOK->do_callback();
+  specificModule->GetSupervisedClassification()->bDisplay->do_callback();
  
   // Get Output DataWrapper
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
