@@ -93,11 +93,7 @@ private:
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  FPVWriterType::Pointer m_FPVWriter;
-  CharVWriterType::Pointer m_CharVWriter;
-  FPWriterType::Pointer m_FPWriter;
-  VectorWriterType::Pointer m_VectorWriter;
-  LabeledVectorWriterType::Pointer m_LabeledVectorWriter;
+  itk::ProcessObject::Pointer m_ProcessObject;
 };
 
 
