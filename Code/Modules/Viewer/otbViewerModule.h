@@ -138,6 +138,7 @@ public:
                                               RGBPixelType>  StandardRenderingFunctionType;
   typedef  StandardRenderingFunctionType::Pointer            StandardRenderingFunctionPointerType;
   typedef  StandardRenderingFunctionType::ChannelListType    ChannelListType;
+  typedef  StandardRenderingFunctionType::ParametersType     ParametersType;
 
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType,
     otb::Function::AmplitudeFunctor<ImageType::PixelType> >                             AmplitudeRenderingFunction;
@@ -238,6 +239,9 @@ public:
   virtual void UpdateAmplitudeChannelOrder(int realChoice, int imChoice);
   virtual void UpdatePhaseChannelOrder(int realChoice, int imChoice);
   virtual void TabSetupPosition();
+  virtual void UpdateUpperQuantile();
+  virtual void UpdateLowerQuantile();
+  
   
 private:
   ViewerModule(const Self&); //purposely not implemented
@@ -245,7 +249,7 @@ private:
   
   /** Pointer to the image */
   ImageType::Pointer                       m_InputImage;
-
+  
   /** VectorData List pointer*/
   VectorDataListType::Pointer              m_VectorDataList;
   
@@ -282,29 +286,35 @@ private:
   /** Path to the DEMDirectory (used if a VectorData is rendered */
   std::string                             m_DEMDirectory;
   
-    /** */
+  /** */
   WidgetManagerPointerType                m_DisplayWindow;
   
   /** Used colors*/
-  HistogramCurveType::ColorType                 m_Red;
-  HistogramCurveType::ColorType                 m_Green;
-  HistogramCurveType::ColorType                 m_Blue;
-  HistogramCurveType::ColorType                 m_Grey;
+  HistogramCurveType::ColorType           m_Red;
+  HistogramCurveType::ColorType           m_Green;
+  HistogramCurveType::ColorType           m_Blue;
+  HistogramCurveType::ColorType           m_Grey;
 
-  /** */
   /** Curve widget */
-  CurvesWidgetPointerType      m_CurveWidgetGroup;
-
+  CurvesWidgetPointerType                 m_BlueCurveWidgetGroup;
+  CurvesWidgetPointerType                 m_GreenCurveWidgetGroup;
+  CurvesWidgetPointerType                 m_RedCurveWidgetGroup;
+  
   /** Vertical Asymptotes*/
   // Blue
-  VerticalAsymptoteCurveType::Pointer   m_BlueVaCurveR;
-  VerticalAsymptoteCurveType::Pointer   m_BlueVaCurveL;
+  VerticalAsymptoteCurveType::Pointer     m_BlueVaCurveR;
+  VerticalAsymptoteCurveType::Pointer     m_BlueVaCurveL;
   // Green
-  VerticalAsymptoteCurveType::Pointer   m_GreenVaCurveR;
-  VerticalAsymptoteCurveType::Pointer   m_GreenVaCurveL;
+  VerticalAsymptoteCurveType::Pointer     m_GreenVaCurveR;
+  VerticalAsymptoteCurveType::Pointer     m_GreenVaCurveL;
   // Red
-  VerticalAsymptoteCurveType::Pointer   m_RedVaCurveR;
-  VerticalAsymptoteCurveType::Pointer   m_RedVaCurveL;
+  VerticalAsymptoteCurveType::Pointer     m_RedVaCurveR;
+  VerticalAsymptoteCurveType::Pointer     m_RedVaCurveL;
+
+  HistogramActionHandlerType::Pointer     m_HistogramHandler;
+  HistogramActionHandlerType::Pointer     m_BlueHistogramHandler;
+  HistogramActionHandlerType::Pointer     m_GreenHistogramHandler;
+  HistogramActionHandlerType::Pointer     m_RedHistogramHandler;
   
   
   

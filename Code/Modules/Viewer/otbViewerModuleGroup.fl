@@ -16,16 +16,16 @@ class ViewerModuleGroup {open
   } {
     Fl_Window bSetupWindow {
       label {Vector Datas Propreties} open
-      xywh {717 160 785 320} type Double resizable size_range {0 0 785 320} visible
+      xywh {646 159 865 315} type Double resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
         callback {this->TabSetupPosition();} open
-        xywh {0 10 805 320} box PLASTIC_DOWN_BOX
+        xywh {0 10 869 320} box PLASTIC_DOWN_BOX resizable
       } {
         Fl_Group {} {
           label {Vector Datas}
-          callback {this->TabSetupPosition();}
-          tooltip {Vector Datas Propreties} xywh {0 35 785 280} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          callback {this->TabSetupPosition();} open
+          tooltip {Vector Datas Propreties} xywh {0 39 865 275} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {216 225 25 25} box GTK_DOWN_BOX color 51 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -36,8 +36,8 @@ class ViewerModuleGroup {open
             tooltip {Change the color of the selected class} xywh {61 225 73 25} box GTK_DOWN_BOX down_box PLASTIC_DOWN_BOX color 51 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Browser dVDList {
-            callback {this->UpdateListSelectionColor();}
-            tooltip {Browse and select ROI} xywh {5 40 321 125} type Hold box BORDER_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1
+            callback {this->UpdateListSelectionColor();} selected
+            tooltip {Browse and select ROI} xywh {5 41 321 125} type Hold box BORDER_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Button bEraseLastROI {
             label Delete
@@ -57,76 +57,99 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiViewerSetupWindow {
           label Setup
-          callback {this->TabSetupPosition();}
-          xywh {0 35 785 288} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
+          callback {this->TabSetupPosition();} open
+          xywh {0 39 865 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Round_Button guiViewerSetupGrayscaleMode {
             label {Grayscale mode}
             callback {this->GrayScaleSet();}
-            tooltip {Swith the image viewer mode to grayscale} xywh {10 65 145 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 color 23 selection_color 22 labelcolor 186
+            tooltip {Swith the image viewer mode to grayscale} xywh {10 57 145 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX value 1 color 23 selection_color 22 labelcolor 186
           }
           Fl_Round_Button guiViewerSetupColorMode {
             label {RGB composition mode}
             callback {RGBSet();}
-            tooltip {Switch the image viewer mode to RGB composition} xywh {453 64 184 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
+            tooltip {Switch the image viewer mode to RGB composition} xywh {453 56 184 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
           }
           Fl_Input_Choice guiGrayscaleChannelChoice {
             label {Channel index} open
-            tooltip {Select the band to view in grayscale mode} xywh {111 120 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187
+            tooltip {Select the band to view in grayscale mode} xywh {111 112 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187
           } {}
           Fl_Input_Choice guiRedChannelChoice {
             label {Red channel} open
-            tooltip {Select band for red channel in RGB composition} xywh {595 98 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for red channel in RGB composition} xywh {595 90 90 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
           } {}
           Fl_Input_Choice guiGreenChannelChoice {
             label {Green channel} open
-            tooltip {Select band for green channel in RGB composition} xywh {595 120 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for green channel in RGB composition} xywh {595 112 90 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
           } {}
           Fl_Input_Choice guiBlueChannelChoice {
             label {Blue channel} open
-            tooltip {Select band for blue channel in RGB composition} xywh {595 142 177 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for blue channel in RGB composition} xywh {595 134 90 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
           } {}
           Fl_Return_Button guiViewerSetupOk {
             label Ok
             callback {ViewerSetupOk();}
-            tooltip {Save changes and leave viewer set up interface} xywh {380 237 75 30} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
+            tooltip {Save changes and leave viewer set up interface} xywh {380 229 80 22} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
           }
           Fl_Input guiViewerSetupName {
             label {Viewer name}
-            tooltip {Set a new name for the selected viewer} xywh {198 183 305 24} box EMBOSSED_BOX color 54 selection_color 55 labelcolor 186 textcolor 187
+            tooltip {Set a new name for the selected viewer} xywh {198 175 305 24} box EMBOSSED_BOX color 54 selection_color 55 labelcolor 186 textcolor 187
           }
           Fl_Round_Button guiViewerSetupComplexMode {
             label {Complex composition mode}
             callback {ComplexSet();}
-            tooltip {Switch the image viewer mode to complex composition} xywh {208 64 210 26} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
+            tooltip {Switch the image viewer mode to complex composition} xywh {208 56 210 26} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
           }
           Fl_Input_Choice guiRealChannelChoice {
             label {Real channel index} open
-            tooltip {Select band for real channel in complex composition} xywh {368 121 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for real channel in complex composition} xywh {368 113 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
           } {}
           Fl_Input_Choice guiImaginaryChannelChoice {
             label {Imaginary channel index} open
-            tooltip {Select band for imaginary channel in complex composition} xywh {368 143 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for imaginary channel in complex composition} xywh {368 135 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
           } {}
           Fl_Round_Button bAmplitude {
             label Amplitude
             callback {bPhase->clear();}
-            tooltip {Toggle modulus mode} xywh {228 97 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
+            tooltip {Toggle modulus mode} xywh {228 89 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
           }
           Fl_Round_Button bPhase {
             label Phase
             callback {bAmplitude->clear();}
-            tooltip {Toggle phase mode} xywh {318 97 80 15} down_box ROUND_DOWN_BOX labelcolor 187 deactivate
+            tooltip {Toggle phase mode} xywh {318 89 80 15} down_box ROUND_DOWN_BOX labelcolor 187 deactivate
           }
         }
         Fl_Group {} {
           label Histogram
-          callback {this->TabSetupPosition();} open selected
-          xywh {0 40 780 279} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
+          callback {this->TabSetupPosition();} open
+          xywh {0 39 860 282} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Group gHistogram {open
-            xywh {30 60 685 215} box PLASTIC_DOWN_BOX
-          } {}
+            xywh {51 47 744 265} box PLASTIC_DOWN_BOX
+          } {
+            Fl_Group QuantileButtons {open
+              xywh {435 205 360 95} resizable
+            } {
+              Fl_Value_Input bUpperQuantile {
+                label {Upper Quantile  %:}
+                xywh {640 241 40 24} maximum 100 step 0.1 value 2
+              }
+              Fl_Value_Input bLowerQuantile {
+                label {Lower Quantile  %:}
+                xywh {640 271 40 24} maximum 100 step 0.1 value 2 resizable
+              }
+              Fl_Button bUpperApply {
+                label Apply
+                callback {this->UpdateUpperQuantile();}
+                xywh {690 245 90 20}
+              }
+              Fl_Button bLowerApply {
+                label Apply
+                callback {this->UpdateLowerQuantile();}
+                xywh {690 275 90 20}
+              }
+            }
+          }
         }
       }
     }
@@ -154,7 +177,7 @@ class ViewerModuleGroup {open
   Function {BuildDEM()} {open return_type {virtual void}
   } {
     Fl_Window wDEM {
-      label {DEM Selection} open
+      label {DEM Selection}
       xywh {717 527 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Check_Button gUseInputDEM {
@@ -212,5 +235,9 @@ gDEMPath->redraw();}
   Function {UpdateDEMSettings()} {return_type {virtual void}
   } {}
   Function {TabSetupPosition()} {open return_type {virtual void}
+  } {}
+  Function {UpdateUpperQuantile()} {open return_type {virtual void}
+  } {}
+  Function {UpdateLowerQuantile()} {open return_type {virtual void}
   } {}
 } 
