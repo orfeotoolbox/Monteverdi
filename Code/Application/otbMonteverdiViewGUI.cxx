@@ -289,7 +289,7 @@ MonteverdiViewGUI
     //TODO
     //n->droppable(true);
     //n->movable(true);
- 
+
     Flu_Tree_Browser::Node* new_node = n->add_branch(it->second.GetDataDescription().c_str());
 
     // add informations to the targeted module
