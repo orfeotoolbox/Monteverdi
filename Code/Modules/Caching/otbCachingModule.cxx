@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbCachingModule.h"
 #include <FLU/Flu_File_Chooser.h>
-
+#include <FL/Fl.H>
 #include <algorithm>
 #include "otbFileName.h"
 
@@ -98,7 +98,7 @@ void CachingModule::ThreadedWatch()
 
   while( progress != 1)
     {
-      sleep(0.5);
+      Fl::wait(0.5);
       if(m_WritingProcess.IsNotNull())
 	{
 	progress = m_WritingProcess->GetProgress();
@@ -115,7 +115,7 @@ void CachingModule::ThreadedWatch()
   // Wait for the reader to be set
   while(!m_Done)
     {
-    sleep(0.5);
+    Fl::wait(0.5);
     }
 
   Fl::lock();

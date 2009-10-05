@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbWriterModule.h"
 #include <FLU/Flu_File_Chooser.h>
-
+#include <FL/Fl.H>
 
 
 namespace otb
@@ -113,7 +113,7 @@ void WriterModule::ThreadedWatch()
 
   while( progress != 1)
     {
-      sleep(0.5);
+      Fl::wait(0.5);
       if(m_ProcessObject.IsNotNull())
 	{
 	progress = m_ProcessObject->GetProgress();
