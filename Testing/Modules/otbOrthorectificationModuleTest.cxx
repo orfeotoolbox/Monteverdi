@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbOrthorectificationModuleTest(int argc, char* argv[])
 {
   otb::OrthorectificationModule::Pointer specificModule = otb::OrthorectificationModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();

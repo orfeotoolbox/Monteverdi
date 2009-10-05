@@ -20,7 +20,7 @@
 #include "otbInputDataDescriptor.h"
 
 
-int main(int argc, char * argv[])
+int otbInputDataDescriptorTest(int argc, char * argv[])
 {
   // Case single, mandatory
   otb::InputDataDescriptor desc1;

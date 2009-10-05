@@ -8,15 +8,17 @@ IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+SET(Application_TESTS ${CXX_TEST_PATH}/otbApplicationTests)
 
 #-------------- Monteverdi Application Tests ---------------------------------
-ADD_EXECUTABLE(otbMonteverdiApplicationNew otbMonteverdiApplicationNew.cxx)
-TARGET_LINK_LIBRARIES(otbMonteverdiApplicationNew otbMonteverdi)
-ADD_TEST(apTuMonteverdiApplication otbMonteverdiApplicationNew)
+ADD_TEST(apTuMonteverdiApplication ${Application_TESTS} otbMonteverdiApplicationNew)
+ADD_TEST(apTvMonteverdiApplication ${Application_TESTS} otbMonteverdiApplicationTest)
 
-ADD_EXECUTABLE(otbMonteverdiApplicationTest otbMonteverdiApplicationTest.cxx)
-TARGET_LINK_LIBRARIES(otbMonteverdiApplicationTest otbMonteverdi)
-ADD_TEST(apTvMonteverdiApplication otbMonteverdiApplicationTest)
+SET(Application_SRCS
+otbMonteverdiApplicationNew.cxx
+otbMonteverdiApplicationTest.cxx
+)
 
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
+ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
+TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting)

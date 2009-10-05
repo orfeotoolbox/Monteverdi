@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbSpeckleFilteringModuleTest(int argc, char* argv[])
 {
   otb::SpeckleFilteringModule::Pointer specificModule = otb::SpeckleFilteringModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();

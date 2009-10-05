@@ -20,7 +20,7 @@
 #include "otbMonteverdiViewGUI.h"
 #include "otbMonteverdiController.h"
 
-int main(int argc, char* argv[])
+int otbMonteverdiApplicationNew(int argc, char* argv[])
 {
 
    // Application

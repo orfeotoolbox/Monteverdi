@@ -1,24 +1,21 @@
-ADD_EXECUTABLE(otbDataObjectWrapperTest otbDataObjectWrapperTest.cxx)
-TARGET_LINK_LIBRARIES(otbDataObjectWrapperTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuDataObjectWrapperTest otbDataObjectWrapperTest)
+SET(Common_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
-ADD_EXECUTABLE(otbDataDescriptorTest otbDataDescriptorTest.cxx)
-TARGET_LINK_LIBRARIES(otbDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuDataDescriptorTest otbDataDescriptorTest)
+ADD_TEST(coTuDataObjectWrapperTest  ${Common_TESTS} otbDataObjectWrapperTest)
+ADD_TEST(coTuDataDescriptorTest ${Common_TESTS} otbDataDescriptorTest)
+ADD_TEST(coTuInputDataDescriptorTest ${Common_TESTS}  otbInputDataDescriptorTest)
+ADD_TEST(coTuOutputDataDescriptorTest  ${Common_TESTS}  otbOutputDataDescriptorTest)
+ADD_TEST(coTuTypeManagerTest ${Common_TESTS} otbTypeManagerTest)
+ADD_TEST(coTuModuleTest ${Common_TESTS} otbModuleTest)
 
-ADD_EXECUTABLE(otbInputDataDescriptorTest otbInputDataDescriptorTest.cxx)
-TARGET_LINK_LIBRARIES(otbInputDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuInputDataDescriptorTest otbInputDataDescriptorTest)
+SET(Common_SRCS
+otbDataObjectWrapperTest.cxx
+otbDataDescriptorTest.cxx
+otbInputDataDescriptorTest.cxx
+otbOutputDataDescriptorTest.cxx
+otbTypeManagerTest.cxx
+otbModuleTest.cxx
+)
 
-ADD_EXECUTABLE(otbOutputDataDescriptorTest otbOutputDataDescriptorTest.cxx)
-TARGET_LINK_LIBRARIES(otbOutputDataDescriptorTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuOutputDataDescriptorTest otbOutputDataDescriptorTest)
-
-ADD_EXECUTABLE(otbTypeManagerTest otbTypeManagerTest.cxx)
-TARGET_LINK_LIBRARIES(otbTypeManagerTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuTypeManagerTest otbTypeManagerTest)
-
-ADD_EXECUTABLE(otbModuleTest otbModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbModuleTest OTBMonteverdiCommon OTBIO)
-ADD_TEST(coTuModuleTest otbModuleTest)
-
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
+ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${Common_SRCS})
+TARGET_LINK_LIBRARIES(otbCommonTests OTBMonteverdiCommon OTBIO OTBTesting)

@@ -21,7 +21,7 @@
 #include "otbDataObjectWrapper.h"
 #include "otbImage.h"
 
-int main(int argc, char * argv[])
+int otbDataDescriptorTest(int argc, char * argv[])
 {
   // Default constructor and call to the set method
   otb::DataDescriptor desc1;

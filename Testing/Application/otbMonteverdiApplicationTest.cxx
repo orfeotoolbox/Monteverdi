@@ -30,7 +30,7 @@
 #include "otbSupervisedClassificationModule.h"
 
 
-int main(int argc, char* argv[])
+int otbMonteverdiApplicationTest(int argc, char* argv[])
 {
 
    // Application

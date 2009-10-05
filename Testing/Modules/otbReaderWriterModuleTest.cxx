@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbReaderWriterModuleTest(int argc, char* argv[])
 {
   otb::ReaderModule::Pointer specificReaderModule = otb::ReaderModule::New();
   otb::Module::Pointer readerModule = specificReaderModule.GetPointer();

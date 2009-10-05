@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbSpeckleFilteringApplication(int argc, char* argv[])
 {
   typedef otb::SpeckleFilteringView       ViewType;
   typedef otb::SpeckleFilteringController ControllerType;

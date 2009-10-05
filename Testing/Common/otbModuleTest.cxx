@@ -72,7 +72,7 @@ protected:
   }
 };
 
-int main(int argc, char * argv[])
+int otbModuleTest(int argc, char * argv[])
 {
   // Checking the Module base class construction
   otb::Module::Pointer myModule = otb::Module::New();

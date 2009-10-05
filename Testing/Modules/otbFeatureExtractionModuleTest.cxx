@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbFeatureExtractionModuleTest(int argc, char* argv[])
 {
   if (argc != 3 )
   {

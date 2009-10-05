@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbSupervisedClassificationModuleTest(int argc, char* argv[])
 {
   otb::SupervisedClassificationModule::Pointer specificModule = otb::SupervisedClassificationModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();

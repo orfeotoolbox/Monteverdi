@@ -97,6 +97,13 @@ ADD_SUBDIRECTORY(Prototype1)
 ADD_SUBDIRECTORY(Utilities)
 ADD_SUBDIRECTORY(StarterKit)
 
+#-----------------------------------------------------------------------------
+# Output directories.
+SET (LIBRARY_OUTPUT_PATH ${Monteverdi_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
+SET (EXECUTABLE_OUTPUT_PATH ${Monteverdi_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
 # Enable / Disable testing
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)

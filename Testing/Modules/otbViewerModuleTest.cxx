@@ -24,7 +24,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
-int main(int argc, char* argv[])
+int otbViewerModuleTest(int argc, char* argv[])
 {
   otb::ViewerModule::Pointer specificModule = otb::ViewerModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();

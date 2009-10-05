@@ -19,7 +19,7 @@
 #include "otbDataObjectWrapper.h"
 #include "otbImage.h"
 
-int main(int argc, char * argv[])
+int otbDataObjectWrapperTest(int argc, char * argv[])
 {
   // DataObject typedef
   typedef otb::Image<double,2> FloatImageType;

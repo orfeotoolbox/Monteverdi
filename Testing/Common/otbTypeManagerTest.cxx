@@ -19,7 +19,7 @@
 #include "itkPointSet.h"
 #include "itkExceptionObject.h"
 
-int main(int argc, char * argv[])
+int otbTypeManagerTest(int argc, char * argv[])
 {
   // Retrieve the TypeManger instance
   otb::TypeManager::Pointer typeManager = otb::TypeManager::GetInstance();
