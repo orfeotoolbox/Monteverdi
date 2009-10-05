@@ -34,7 +34,7 @@ namespace otb
 {
 Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ), green_dot( (char*const*)greendot_xpm ), red_dot( (char*const*)reddot_xpm ), teal_dot( (char*const*)tealdot_xpm ), 
   text_doc( (char*const*)textdoc_xpm ), computer( (char*const*)computer_xpm ), book( (char*const*)book_xpm ), cd_drive( (char*const*)cd_drive_xpm ),
-  arrow_closed( (char*const*)arrow_closed_xpm ), arrow_open( (char*const*)arrow_open_xpm );
+  arrow_closed( (char*const*)arrow_closed_xpm ), arrow_open( (char*const*)arrow_open_xpm ), home( (char*const*)home_xpm ), purple_dot( (char*const*)purpledot_xpm );
 
 
 
@@ -118,6 +118,7 @@ MonteverdiViewGUI
 
   Flu_Tree_Browser::Node* root = m_Tree->first();
   root->open(true);
+  root->label("Data Set");
 
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
@@ -266,13 +267,11 @@ void
 MonteverdiViewGUI
 ::UpdateTree(const std::string & instanceId)
 {
-
   Flu_Tree_Browser::Node* root = m_Tree->first();
-
 
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
-
+  root->label("Data Set");
 
   // look after all outputdatas into each instance of module
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
@@ -290,14 +289,18 @@ MonteverdiViewGUI
     //TODO
     //n->droppable(true);
     //n->movable(true);
-
-    Flu_Tree_Browser::Node* new_node =  n->add_branch(it->second.GetDataDescription().c_str());
+ 
+    Flu_Tree_Browser::Node* new_node = n->add_branch(it->second.GetDataDescription().c_str());
 
     // add informations to the targeted module
     new_node->add(it->second.GetDataKey().c_str());
+
+
     new_node->add(it->second.GetDataType().c_str());
 
-    new_node->open(true);
+    //new_node->open(close);
+    n->branch_icons( &book,&book );
+    new_node->branch_icons( &blue_dot,&purple_dot );
     } // end datas loop
 }
 
