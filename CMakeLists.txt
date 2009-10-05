@@ -6,7 +6,7 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
-# OTB option to access large file (> 4Go).
+# OTB option to access large files (> 4Go).
 ADD_DEFINITIONS(
         -D_LARGEFILE_SOURCE
         -D_FILE_OFFSET_BITS=64
