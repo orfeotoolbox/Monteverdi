@@ -34,7 +34,11 @@ MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_I
 {}
 
 MonteverdiModel::~MonteverdiModel()
-{}
+{
+  m_ModuleDescriptorMap.clear();
+  m_ModuleMap.clear();
+  m_InstancesCountMap.clear();
+}
 
 /** Create a module according to its name. If the name is not a
   registered module, throws an exception */

@@ -1,0 +1,21 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class CachingModuleGUI {open selected
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wCachingWindow {
+      label {Caching Data} open
+      xywh {277 232 365 40} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Progress pBar {
+        xywh {0 10 365 20} box PLASTIC_DOWN_BOX selection_color 1
+      }
+    }
+  }
+} 
