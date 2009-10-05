@@ -62,6 +62,8 @@ InputViewGUI
     InputDataDescriptorMapType lInputDataMap = m_Model->GetModuleInputsByInstanceId(m_ModuleInstanceId);
     InputDataDescriptorMapType::const_iterator it_in;
 
+     itk::OStringStream oss;
+
     // loop on the requiered input data of the module : m_ModuleInstanceId
     for (it_in = lInputDataMap.begin();it_in != lInputDataMap.end();it_in++)
     {
@@ -86,7 +88,11 @@ InputViewGUI
           // if the type is ok, we can add the label in the Fl_Input_Choice
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-            inputChoice->add(it_out->second.GetDataDescription().c_str());
+	    oss.str("");
+	    oss<<moduleInstances[i];
+	    oss<<" : ";
+	    oss<<it_out->second.GetDataKey();
+            inputChoice->add(oss.str().c_str());//it_out->second.GetDataDescription().c_str());
 
             /** Build the inputChoiceDescriptor */
             inputChoiceDesc->m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
@@ -115,6 +121,7 @@ InputViewGUI
       cpt++;
 
     }
+    gLabel->value(m_ModuleInstanceId.c_str());
   }
 
 }
@@ -209,6 +216,14 @@ InputViewGUI
   std::cout<< "Ok" <<std::endl;
   unsigned int i;
 
+  if(m_ModuleInstanceId != gLabel->value())
+    { 
+      int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());
+      if(res != 0)
+	return;
+      m_ModuleInstanceId = gLabel->value();
+    }
+
   // Connect 
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
@@ -251,6 +266,8 @@ std::cout<< "************************Single "<< std::endl;
   // Start()
   std::cout<< "Start" <<std::endl;
   m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
+
+
   wInputWindow->hide();
 
 

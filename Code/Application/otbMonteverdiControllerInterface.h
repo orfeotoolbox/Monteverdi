@@ -29,14 +29,14 @@ class ITK_EXPORT  MonteverdiControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef MonteverdiControllerInterface        Self;
-  typedef itk::ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef MonteverdiControllerInterface          Self;
+  typedef itk::ProcessObject                     Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
-  typedef MonteverdiModel                      ModelType;
-  typedef ModelType::ModuleDescriptorMapType   ModuleDescriptorMapType;
-
+  typedef MonteverdiModel                        ModelType;
+  typedef ModelType::ModuleDescriptorMapType     ModuleDescriptorMapType;
+  typedef ModelType::ModuleMapType               ModuleMapType;
 
 
   /** Standard type macros */
@@ -50,6 +50,9 @@ public:
 
   /** Add a new module connection */
   virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey) = 0;
+
+  /** Change module InstanceId (ie. tree label) */
+  virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId ) =0;
 
 protected:
   /** Constructor */

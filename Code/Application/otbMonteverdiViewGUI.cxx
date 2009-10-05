@@ -290,10 +290,10 @@ MonteverdiViewGUI
     //n->droppable(true);
     //n->movable(true);
 
-    Flu_Tree_Browser::Node* new_node = n->add_branch(it->second.GetDataDescription().c_str());
+    Flu_Tree_Browser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
 
     // add informations to the targeted module
-    new_node->add(it->second.GetDataKey().c_str());
+    new_node->add(it->second.GetDataDescription().c_str());
 
 
     new_node->add(it->second.GetDataType().c_str());
@@ -318,10 +318,16 @@ MonteverdiViewGUI
     {
     this->BuildInputsGUI(event.GetInstanceId());
     }
-
   // event received : module has changed
   else if(event.GetType() == "OutputsUpdated" )
     {
+    this->UpdateTree(event.GetInstanceId());
+    }
+  // event received : module instanceID has changed
+  else if(event.GetType() == "ChangeInstanceId" )
+    {
+
+      std::cout<<"event.GetInstanceId(): "<<event.GetInstanceId()<<std::endl;
     this->UpdateTree(event.GetInstanceId());
     }
   // Event received : UNKNOWN EVENT
@@ -330,6 +336,8 @@ MonteverdiViewGUI
     itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
     }
 }
+
+
 
 void
 MonteverdiViewGUI

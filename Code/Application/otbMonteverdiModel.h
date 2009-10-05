@@ -114,6 +114,9 @@ class ITK_EXPORT MonteverdiModel
   /** Start the given module */
   void StartModuleByInstanceId(const std::string & id);
 
+  /** Change module InstanceId (ie. tree label) */
+  void ChangeInstanceId( const std::string & oldInstanceId, const std::string & newIntanceId );
+
   // Temporary notify stub
   virtual void Notify(const MonteverdiEvent & event) 
   {
@@ -123,6 +126,10 @@ class ITK_EXPORT MonteverdiModel
     this->NotifyAll(event);
   }
 
+  ModuleMapType GetModuleMap() const
+  {
+    return m_ModuleMap;
+  }
 
 protected:
 

@@ -54,6 +54,9 @@ public:
   /** Add a module connection */
   virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey);
 
+  /** Change module InstanceId (ie. tree label) */
+  virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId );
+
 protected:
   /** Constructor */
   MonteverdiController(){};

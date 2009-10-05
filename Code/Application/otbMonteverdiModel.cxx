@@ -111,6 +111,8 @@ const MonteverdiModel::InputDataDescriptorMapType & MonteverdiModel::GetModuleIn
 /** Get the pointer to the module by an instanceId */
 Module * MonteverdiModel::GetModuleByInstanceId(const std::string & instanceId) const
 {
+  ModuleMapType::const_iterator it_in;
+
   ModuleMapType::const_iterator mcIt = m_ModuleMap.find(instanceId);
   if(mcIt!=m_ModuleMap.end())
     {
@@ -138,7 +140,20 @@ void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,cons
   target->AddInputByKey(inputKey,outputWrapper);
 }
 
+void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )
+{
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(oldInstanceId);
 
+  Module::Pointer module = mcIt->second;
+
+  // Register module instance
+  module->SetInstanceId(newInstanceId);
+  m_ModuleMap[newInstanceId] = module;
+  m_ModuleMap.erase( oldInstanceId );
+
+  this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
+
+}
 
 /** Manage the singleton */
 MonteverdiModel::Pointer
