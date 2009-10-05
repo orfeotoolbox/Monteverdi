@@ -142,7 +142,11 @@ void Module::Start()
 /** The custom run command */
 void Module::Run()
 {
-  itkExceptionMacro(<<"Subclasses should override this method");
+  // Start the watcher
+  this->StartProcess1();
+
+  // Start the threaded run
+  this->StartProcess2();
 }
 
 /** Notify outputs change */
@@ -161,6 +165,30 @@ void Module::ClearOutputDescriptors()
 void Module::EraseOutputByKey(const std::string & key)
 {
   m_OutputsMap.erase(key);
+}
+
+/** The custom run command */
+void Module::ThreadedRun()
+{
+  itkExceptionMacro(<<"Subclasses should override this method");
+}
+
+/** The custom run command */
+void Module::ThreadedWatch()
+{
+  itkExceptionMacro(<<"Subclasses should override this method");
+}
+
+/** The custom run command */
+void Module::RunProcess1(void *)
+{
+  this->ThreadedWatch();
+}
+
+/** The custom run command */
+void Module::RunProcess2(void *)
+{
+  this->ThreadedRun();
 }
 
 } // End namespace otb

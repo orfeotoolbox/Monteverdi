@@ -136,12 +136,23 @@ protected:
   /** The custom run command */
   virtual void Run();
 
+  /** The custom run command (asynchronous threaded version) */
+  virtual void ThreadedRun();
+
+  /** The custom Watch common to report progress of the ThreadedRun */
+  virtual void ThreadedWatch();
+
   /** Instance id (intentionnaly left protected) */
   std::string m_InstanceId;
 
 private:
   Module(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  // Hiding the Asynchronous process base methods */
+  virtual void RunProcess1(void *v);
+  virtual void RunProcess2(void *v);
+  
 
   /** Input descriptor map */
   InputDataDescriptorMapType m_InputsMap;

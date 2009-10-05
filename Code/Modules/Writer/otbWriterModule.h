@@ -85,8 +85,8 @@ protected:
   virtual void SaveDataSet();
   virtual void Browse();
   virtual void Cancel();
-  virtual void RunProcess1( void * v );
-  virtual void RunProcess2( void * v );
+  virtual void ThreadedRun();
+  virtual void ThreadedWatch();
   void UpdateProgressBar( float progress );
 
 private:
