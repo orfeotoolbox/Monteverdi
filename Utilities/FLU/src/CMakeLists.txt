@@ -8,3 +8,4 @@ Flu_Combo_List.cpp         flu_file_chooser_pixmaps.cpp  Flu_Label.cpp        Fl
 
 
 ADD_LIBRARY(flu ${CPPFILES})
+TARGET_LINK_LIBRARIES(flu OTBGui)

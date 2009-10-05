@@ -19,7 +19,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 SET(OTBMonteverdiCommon_SRCS ${OTBMonteverdiCommon_SRCS} ${OTBMonteverdiCommon_FLTK_UI_SRCS})
 
 ADD_LIBRARY(OTBMonteverdiCommon ${OTBMonteverdiCommon_SRCS} )
-TARGET_LINK_LIBRARIES(OTBMonteverdiCommon ITKCommon )
+TARGET_LINK_LIBRARIES(OTBMonteverdiCommon ITKCommon OTBGui)
 
 INSTALL(TARGETS OTBMonteverdiCommon
         RUNTIME DESTINATION /bin
