@@ -22,6 +22,7 @@
 
 #include <FL/Fl_File_Chooser.H>
 #include <FL/fl_draw.H>
+//#include <FL/Fl_Color_Chooser.H>
 
 namespace otb
 {
@@ -123,6 +124,19 @@ HomologousPointExtractionModuleView
   int x2 = vX2->value();
   int y2 = vY2->value();
   m_Controller->AddPoints( x1, y1, x2, y2 );
+ itk::OStringStream oss;
+ oss<<"["<<x1<<","<<y1<<"] , ["<<x2<<","<<y2<<"]";
+ this->lPointList->add(oss.str().c_str()); 
+
+ //[]
+ srand(x1+x2+y1+y1+123456);
+ fl_color(static_cast<unsigned char>(255*rand()/(RAND_MAX+1.0)),
+	  static_cast<unsigned char>(255*rand()/(RAND_MAX+1.0)),
+	  static_cast<unsigned char>(255*rand()/(RAND_MAX+1.0)));
+ 
+ lPointList->selection_color(fl_color());
+ lPointList->redraw();
+
 }
 
 void

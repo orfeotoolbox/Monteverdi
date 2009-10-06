@@ -92,7 +92,7 @@ public:
   typedef FullWidgetType::ImageType                                      ImageType;
   typedef FullWidgetType::OverlayImageType                               OverlayImageType;
   typedef OverlayImageType::Pointer                                      OverlayImagePointerType;
-  typedef otb::Image<LabeledPixelType,2>                                          LabeledImageType;
+  typedef otb::Image<LabeledPixelType,2>                                 LabeledImageType;
   typedef ImageType::Pointer                                             ImagePointerType;
   typedef ImageType::ConstPointer                                        ImageConstPointerType;
   typedef ImageType::RegionType                                          RegionType;
@@ -100,17 +100,15 @@ public:
   typedef ImageType::IndexType                                           IndexType;
   typedef ImageType::OffsetType                                          OffsetType;
   typedef ImageType::PixelType                                           PixelType;
-  //typedef otb::ImageFileReader< ImageType >                                       ImageReaderType;
-  //typedef ImageReaderType::Pointer                                       ImageReaderPointerType;
   typedef FullWidgetType::ColorType                                      ColorType;
-  typedef otb::Class<LabeledPixelType,ColorType>                                  ClassType;
+  typedef otb::Class<LabeledPixelType,ColorType>                         ClassType;
   typedef ClassType::Pointer                                             ClassPointerType;
-  typedef std::vector<ClassPointerType>                                           ClassesMapType;
+  typedef std::vector<ClassPointerType>                                  ClassesMapType;
 
   /// Classification typedefs
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>           ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                            ModelType;
-  typedef ModelType::Pointer                                             ModelPointerType;
+  typedef ClassificationFilterType::ModelType                                     ModelType;
+  typedef ModelType::Pointer                                                      ModelPointerType;
   typedef itk::VariableLengthVector<InputPixelType>                               SampleType;
   typedef itk::Statistics::ListSample<SampleType>                                 ListSampleType;
   typedef itk::FixedArray<LabeledPixelType,1>                                     TrainingSampleType;
@@ -175,9 +173,6 @@ protected:
   ~SupervisedClassificationAppli();
 
   /** File selection Callbacks */
-
-  //virtual void OpenImage();
-  //virtual void SaveResultImage();
   virtual void SaveClassifAsVectorData();
   virtual void OpenSVMModel();
   virtual void SaveSVMModel();
@@ -261,8 +256,6 @@ private:
   ImageViewerPointerType m_ImageViewer;
   ///  Result viewer
   ImageViewerPointerType m_ResultViewer;
-  /// left image reader
-  //ImageReaderPointerType m_ImageReader;
   /// Classification filter
   ClassificationFilterPointerType m_ClassificationFilter;
   /// Change label filter

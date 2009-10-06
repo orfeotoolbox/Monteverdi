@@ -28,8 +28,6 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMacro.h"
 #include "itkImageRegionIteratorWithIndex.h"
-// to be removedddddddddddddddddddddddddddddddddddddddddddddddddddd
-#include "otbImageFileWriter.h"
 #include "otbStreamingTraits.h"
 #include "otbExtractROI.h"
 #include "itkMinimumMaximumImageCalculator.h"
@@ -59,7 +57,6 @@ SupervisedClassificationAppli
   m_ImageViewer               = ImageViewerType::New();
   m_OutputVector              = VectorDataType::New();
   m_Output                    = OverlayImageType::New();
-  //m_ImageReader               = ImageReaderType::New();
   m_Estimator                 = EstimatorType::New();
   m_ClassificationFilter      = ClassificationFilterType::New();
   m_ChangeLabelFilter         = ChangeLabelFilterType::New();
@@ -173,7 +170,7 @@ SupervisedClassificationAppli
   m_ImageViewer->SetPolygonalROISelectionMode(false);
   m_ImageViewer->SetRectangularROISelectionMode(false);
   m_ImageViewer->SetPolygonROIList(m_TrainingSet);
-  m_ImageViewer->SetImage(m_InputImage);//m_ImageReader->GetOutput());
+  m_ImageViewer->SetImage(m_InputImage);
   m_ImageViewer->Build();
 
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
@@ -196,7 +193,7 @@ SupervisedClassificationAppli
 
   /// Add the choice for color composition
   itk::OStringStream oss;
-  for (unsigned int i = 0; i</*m_ImageReader->GetOutput()*/m_InputImage->GetNumberOfComponentsPerPixel();++i)
+  for (unsigned int i = 0; i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
   {
     oss<<i+1;
     viewerGrayscaleChannelChoice->add(oss.str().c_str());
@@ -277,32 +274,6 @@ SupervisedClassificationAppli
 
 
 /** File selection Callbacks */
-
-/**
-*
-*/
-/*
-void
-SupervisedClassificationAppli
-::OpenImage()
-{
-
-  const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
-  Fl::check();
-
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
-  ossimFilename fname(cfname);
-  m_LastPath = fname.path();
-  m_ImageFileName = cfname;
-  this->LoadImage();
-
-}
-*/
-
-
 /**
 *
 */
@@ -529,44 +500,6 @@ SupervisedClassificationAppli
   m_LastPath = fname.path();
 }
 
-/**
-*
-*/
-
-// void
-// SupervisedClassificationAppli
-// ::SaveResultImage()
-// {
-//   const char * cfname = fl_file_chooser("Image file :", "*.*",m_LastPath.c_str());
-//   if (cfname == NULL || strlen(cfname)<1)
-//   {
-//     return ;
-//   }
-//   std::string filename = std::string(cfname);
-
-//   this->SetupClassification();
-
-//   typedef otb::StreamingImageFileWriter<OverlayImageType> WriterType;
-//     WriterType::Pointer writer = WriterType::New();
-//   writer->SetFileName(filename.c_str());
-//   writer->SetInput(m_ChangeLabelFilter->GetOutput());
-//   otb::FltkWriterWatcher watcher(writer,0,0,200,40,"Saving result image ...");
-
-//   try
-//   {
-//     writer->Update();
-//   }
-//   catch ( itk::ExceptionObject & err )
-//   {
-//     itk::OStringStream oss;
-//     oss << "Error while writing result image: "  << err << std::endl;
-//     return;
-//   }
-
-//   ossimFilename fname(filename.c_str());
-//   m_LastPath = fname.path();
-// }
-
 
 /**
  *
@@ -606,15 +539,15 @@ SupervisedClassificationAppli
   typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(vectorData);
-  vectorDataProjection->SetInputOrigin(m_InputImage/*m_ImageReader->GetOutput()*/->GetOrigin());
-  vectorDataProjection->SetInputSpacing(m_InputImage/*m_ImageReader->GetOutput()*/->GetSpacing());
+  vectorDataProjection->SetInputOrigin(m_InputImage->GetOrigin());
+  vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(m_InputImage/*m_ImageReader->GetOutput()*/->GetMetaDataDictionary(),
+  itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
                                    MetaDataKey::ProjectionRefKey, projectionRef );
   vectorDataProjection->SetInputProjectionRef(projectionRef);
 
-  vectorDataProjection->SetInputKeywordList(m_InputImage/*m_ImageReader->GetOutput()*/->GetImageKeywordlist());
+  vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
 
    m_OutputVector = vectorDataProjection->GetOutput();
 
@@ -774,7 +707,7 @@ SupervisedClassificationAppli
 :: VisualisationSetup()
 {
   itk::OStringStream oss;
-  for (unsigned int i = 0;i</*m_ImageReader->GetOutput()*/m_InputImage->GetNumberOfComponentsPerPixel();++i)
+  for (unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
   {
     oss.str("");
     oss<<i+1;
@@ -1255,8 +1188,8 @@ SupervisedClassificationAppli
   oss<<"Filename: "<<m_ImageFileName<<std::endl;
   dImageInfo->insert(oss.str().c_str());
   oss.str("");
-  oss<<"Number of bands: "<<m_InputImage/*ImageReader->GetOutput()*/->GetNumberOfComponentsPerPixel();
-  oss<<" - Size: "<<m_InputImage/*m_ImageReader->GetOutput()*/->GetLargestPossibleRegion().GetSize()<<std::endl;
+  oss<<"Number of bands: "<<m_InputImage->GetNumberOfComponentsPerPixel();
+  oss<<" - Size: "<<m_InputImage->GetLargestPossibleRegion().GetSize()<<std::endl;
   dImageInfo->insert(oss.str().c_str());
   oss.str("");
   if (m_ImageViewer->GetUseScroll())
@@ -1608,8 +1541,8 @@ SupervisedClassificationAppli
 
   RegionType boundingRegion = polygonList->GetNthElement(index)->GetBoundingRegion().GetImageRegion();
   IndexType upperLeft;
-  upperLeft[0] = boundingRegion.GetIndex()[0] + boundingRegion.GetSize()[0]/2/**-guiFullWindow->w()/2*/;
-  upperLeft[1] = boundingRegion.GetIndex()[1] + boundingRegion.GetSize()[1]/2/**-guiFullWindow->h()/2*/;
+  upperLeft[0] = boundingRegion.GetIndex()[0] + boundingRegion.GetSize()[0]/2;
+  upperLeft[1] = boundingRegion.GetIndex()[1] + boundingRegion.GetSize()[1]/2;
 
   m_ImageViewer->ChangeFullViewedRegion(upperLeft);
   m_ImageViewer->Update();
@@ -1627,7 +1560,7 @@ SupervisedClassificationAppli
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
+  ImagePointerType image = m_InputImage;
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for ( PolygonListType::Iterator polygIt = m_TrainingSet->Begin();
@@ -1684,7 +1617,7 @@ SupervisedClassificationAppli
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
+  ImagePointerType image = m_InputImage;
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for ( PolygonListType::Iterator polygIt = m_TrainingSet->Begin();
@@ -1809,7 +1742,7 @@ SupervisedClassificationAppli
 {
   m_ClassificationFilter = ClassificationFilterType::New();
   m_ClassificationFilter->SetModel(m_Model);
-  m_ClassificationFilter->SetInput(m_InputImage);//m_ImageReader->GetOutput());
+  m_ClassificationFilter->SetInput(m_InputImage);
   m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
 
@@ -1834,11 +1767,6 @@ SupervisedClassificationAppli
 ::QuitCallback()
 {
   m_Output = m_ChangeLabelFilter->GetOutput();
-  
-   ImageFileWriter<OverlayImageType>::Pointer wri = ImageFileWriter<OverlayImageType>::New();
-   wri->SetFileName("classif.tif");
-   wri->SetInput(m_Output);
-   wri->Update();
 
   m_HasOutput = true;
   this->NotifyAll();
@@ -1899,7 +1827,7 @@ SupervisedClassificationAppli
   m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
 
   m_ResultViewer = ImageViewerType::New();
-  m_ResultViewer->SetImage(m_InputImage);//m_ImageReader->GetOutput());
+  m_ResultViewer->SetImage(m_InputImage);
   m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
   m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
   m_ResultViewer->SetShowClass(true);
@@ -1974,7 +1902,7 @@ SupervisedClassificationAppli
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  ImagePointerType image = m_InputImage;//m_ImageReader->GetOutput();
+  ImagePointerType image = m_InputImage;
   unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
 
   std::vector<unsigned int> sampleCount(m_ClassesMap.size(),0);

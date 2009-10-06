@@ -43,6 +43,8 @@ void HomologousPointExtractionModuleModel::Notify(ListenerBase * listener)
 
 HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(), m_BlendingFunction()
 {
+  srand((unsigned)time(0));
+
   VisualizationModelType::Pointer visualizationModel1 = VisualizationModelType::New();
   VisualizationModelType::Pointer visualizationModel2 = VisualizationModelType::New();
   m_VisualizationModel.push_back(visualizationModel1);

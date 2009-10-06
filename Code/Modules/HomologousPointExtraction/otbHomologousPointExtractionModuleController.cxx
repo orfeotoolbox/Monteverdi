@@ -160,12 +160,13 @@ HomologousPointExtractionModuleController
 	}
 
       m_Model->AddIndexesToList( id1, id2 );
-      itk::OStringStream oss;
-      oss<<id1<<" , "<<id2;
+      //itk::OStringStream oss;
+      //oss<<id1<<" , "<<id2;
       //oss<<id1<<" "<<m_Model->GetFirstInputImage()->GetPixel(id1)<<" , ";
       //oss<<id2<<" "<<m_Model->GetSecondInputImage()->GetPixel(id2);
       //oss<<id1<<" , "<<id2<<" ("<<m_Model->GetFirstInputImage()->GetPixel(id1)<<" , "<<m_Model->GetSecondInputImage()->GetPixel(id2)<<")";
-      m_View->lPointList->add(oss.str().c_str());
+      //std::cout<<oss.str()<<std::endl;
+      //m_View->lPointList->add(oss.str().c_str());
     }
   catch (itk::ExceptionObject & err)
     {
