@@ -219,6 +219,8 @@ public:
   virtual void AddName( std::string name );
   virtual void ClearAll();
   virtual void DeleteVectorData();
+  virtual void DisplaySelectedVectorData();
+  virtual void DisplayVectorData();
   virtual void UpdateVectorData(unsigned int index);
   virtual ColorType SetRandomColor();
   virtual void RedrawWidget();
@@ -227,7 +229,6 @@ public:
   virtual void UpdateHistogramCurve();
   virtual void UpdateTabHistogram();
   
-
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();
   virtual void RGBSet();
@@ -241,7 +242,6 @@ public:
   virtual void TabSetupPosition();
   virtual void UpdateUpperQuantile();
   virtual void UpdateLowerQuantile();
-  
   
 private:
   ViewerModule(const Self&); //purposely not implemented
@@ -284,37 +284,41 @@ private:
   std::string                              m_Label;
 
   /** Path to the DEMDirectory (used if a VectorData is rendered */
-  std::string                             m_DEMDirectory;
+  std::string                              m_DEMDirectory;
   
   /** */
-  WidgetManagerPointerType                m_DisplayWindow;
+  WidgetManagerPointerType                 m_DisplayWindow;
   
   /** Used colors*/
-  HistogramCurveType::ColorType           m_Red;
-  HistogramCurveType::ColorType           m_Green;
-  HistogramCurveType::ColorType           m_Blue;
-  HistogramCurveType::ColorType           m_Grey;
+  HistogramCurveType::ColorType            m_Red;
+  HistogramCurveType::ColorType            m_Green;
+  HistogramCurveType::ColorType            m_Blue;
+  HistogramCurveType::ColorType            m_Grey;
 
   /** Curve widget */
-  CurvesWidgetPointerType                 m_BlueCurveWidgetGroup;
-  CurvesWidgetPointerType                 m_GreenCurveWidgetGroup;
-  CurvesWidgetPointerType                 m_RedCurveWidgetGroup;
+  CurvesWidgetPointerType                  m_BlueCurveWidgetGroup;
+  CurvesWidgetPointerType                  m_GreenCurveWidgetGroup;
+  CurvesWidgetPointerType                  m_RedCurveWidgetGroup;
   
   /** Vertical Asymptotes*/
   // Blue
-  VerticalAsymptoteCurveType::Pointer     m_BlueVaCurveR;
-  VerticalAsymptoteCurveType::Pointer     m_BlueVaCurveL;
+  VerticalAsymptoteCurveType::Pointer      m_BlueVaCurveR;
+  VerticalAsymptoteCurveType::Pointer      m_BlueVaCurveL;
   // Green
-  VerticalAsymptoteCurveType::Pointer     m_GreenVaCurveR;
-  VerticalAsymptoteCurveType::Pointer     m_GreenVaCurveL;
+  VerticalAsymptoteCurveType::Pointer      m_GreenVaCurveR;
+  VerticalAsymptoteCurveType::Pointer      m_GreenVaCurveL;
   // Red
-  VerticalAsymptoteCurveType::Pointer     m_RedVaCurveR;
-  VerticalAsymptoteCurveType::Pointer     m_RedVaCurveL;
+  VerticalAsymptoteCurveType::Pointer      m_RedVaCurveR;
+  VerticalAsymptoteCurveType::Pointer      m_RedVaCurveL;
 
-  HistogramActionHandlerType::Pointer     m_HistogramHandler;
-  HistogramActionHandlerType::Pointer     m_BlueHistogramHandler;
-  HistogramActionHandlerType::Pointer     m_GreenHistogramHandler;
-  HistogramActionHandlerType::Pointer     m_RedHistogramHandler;
+  // Histogram Handlers 
+  HistogramActionHandlerType::Pointer      m_HistogramHandler;
+  HistogramActionHandlerType::Pointer      m_BlueHistogramHandler;
+  HistogramActionHandlerType::Pointer      m_GreenHistogramHandler;
+  HistogramActionHandlerType::Pointer      m_RedHistogramHandler;
+  
+  // Vector to handle the dispalyed vector data
+  std::vector<bool>                        m_DisplayedVectorData;
   
   
   

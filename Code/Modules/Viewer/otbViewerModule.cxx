@@ -20,7 +20,6 @@
 
 #include "otbViewerModule.h"
 #include <FL/Fl_File_Chooser.H>
-#include "base/ossimFilename.h"
 #include <FL/Fl_Color_Chooser.H>
 
 namespace otb
@@ -38,9 +37,6 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   m_Red[0]  = 1.;   m_Red[3]   = 0.5;
   m_Green[1]= 1.;   m_Green[3] = 0.5;
   m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
-  
-  // 
-  m_Label = "Viewer Module";
   
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -189,6 +185,10 @@ void ViewerModule::Run()
 {
   //Get Input Image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
+
+  // Set the File Name as a label to the viewer window
+  m_Label = this->GetInputDataDescription<ImageType>("InputImage");
+  m_DisplayWindow->SetLabel(m_Label.c_str());
   
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
@@ -204,6 +204,7 @@ void ViewerModule::Run()
     {
       VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
       m_VectorDataList->PushBack(vdata);
+      m_DisplayedVectorData.push_back(true);
       this->UpdateVectorData(i);
       std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData",i);
       this->AddName( desc );
@@ -222,10 +223,6 @@ void ViewerModule::Run()
   m_StandardRenderingFunction->SetChannelList(channels);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
   
-  // Set the window and layer label
-  m_DisplayWindow->SetLabel(m_Label.c_str());
-  m_InputImageLayer->SetName(m_Label);
-
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(generator->GetLayer());
 
@@ -387,7 +384,7 @@ void ViewerModule::UpdateListSelectionColor()
   //selectedIndex
   unsigned int selectedIndex = dVDList->value();
 
-  if(selectedIndex)
+  if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
     {
       VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
       ColorType                   curColor                     = selecedVectorDataGlComponent->GetColor();
@@ -397,7 +394,7 @@ void ViewerModule::UpdateListSelectionColor()
 	       static_cast<unsigned char>(255*curColor[1]),
 	       static_cast<unsigned char>(255*curColor[2]));
       
-      //Update the ROIColoritem
+      //Update the ROIColorItem
       dROIColor->color(fl_color());
       dROIColor->redraw();
       //Update the text color
@@ -405,7 +402,6 @@ void ViewerModule::UpdateListSelectionColor()
       dVDList->redraw();
     }
 }
-
 
 /**
  *
@@ -416,19 +412,13 @@ void ViewerModule::DeleteVectorData()
   
   if(selectedIndex)
     {
-  
-      std::cout <<"SelectedItem " << selectedIndex << std::endl;
-  
-      // Remove the VectorData from the list
-      m_VectorDataList->Erase(selectedIndex-1);
-  
-      //Update the Fl_Browser
-      dVDList->remove(selectedIndex);
-  
       // Remove the VectorDataGl Compenent
-      m_View->GetScrollWidget()->RemoveGlComponent(selectedIndex);
-      m_View->GetFullWidget()->RemoveGlComponent(selectedIndex);
-      m_View->GetZoomWidget()->RemoveGlComponent(selectedIndex-1);   //-1 because in the Zoom Widget there is no red square wich is a GlComponent 
+      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square wich is a GlComponent 
+
+      // Update the status of the selectedItem vector data
+      m_DisplayedVectorData[selectedIndex-1] = false;
   
       //Redraw all the widgets
       this->RedrawWidget();
@@ -436,32 +426,70 @@ void ViewerModule::DeleteVectorData()
 }
 
 /**
- *
+ * Hide all the vector datas
  **/
 void ViewerModule::ClearAll()
 {
   for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
     {
-      m_View->GetScrollWidget()->RemoveGlComponent(1);
-      m_View->GetFullWidget()->RemoveGlComponent(1);
-      m_View->GetZoomWidget()->RemoveGlComponent(0);
+      // Hide the Gl Componenent int the view
+      m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(false);
+      
+      // Update the dispaly status of each vector
+      m_DisplayedVectorData[i] = false;
     }
-  
-  //Erase the VectorDataList
-  m_VectorDataList->Clear();
-  
-  //Erase the Fl_Browser
-  dVDList->clear();
+  //Redraw all the widgets
+  this->RedrawWidget();
+}
 
-  //
-  //Update the ROIColoritem
-  dROIColor->color(fl_color());
-  dROIColor->redraw();
+/**
+ *  Dispaly if Hidden VectorData
+ */
+void 
+ViewerModule::DisplaySelectedVectorData()
+{
+  // Get the selected vectordata
+  unsigned int selectedIndex = dVDList->value();
+  
+  // Dispaly the selected VD if not already dispalyed
+  if(!m_DisplayedVectorData[selectedIndex-1])
+    {
+      // Hide all displayed vector datas
+      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(true);
+      // Set visible status to selected VectorDataGl Compenents
+      m_DisplayedVectorData[selectedIndex-1] = true;
+    }
   
   //Redraw all the widgets
   this->RedrawWidget();
 }
 
+
+/**
+ *  Dispaly if Hidden VectorData
+ */
+void 
+ViewerModule::DisplayVectorData()
+{
+  // loop over all the vector datas
+  for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+    {
+      // Dispaly the selected VD if not already displayed
+      if(!m_DisplayedVectorData[i])
+	{
+	  m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+	  m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+	  m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
+	  m_DisplayedVectorData[i] = true;
+	}
+    }
+  //Redraw all the widgets
+  this->RedrawWidget();
+}
 
 /**
  *
@@ -485,7 +513,7 @@ void ViewerModule::ChangeROIColor()
 {
   unsigned int selectedIndex = dVDList->value();
   
-  if(selectedIndex)
+  if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
     {
       VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
       ColorType curColor  = selecedVectorDataGlComponent->GetColor();
@@ -524,14 +552,15 @@ void ViewerModule::ChangeROIColor()
 void ViewerModule::RedrawWidget()
 {
   m_DisplayWindow->Refresh();
+  
 }
 
 void ViewerModule::UseDEM()
 {
-  // 
+  // build the GUI
   this->BuildDEM();
   
-  // 
+  // show the DEM GUI
   if(bDEM->value())
     wDEM->show();
 }
@@ -999,7 +1028,7 @@ void ViewerModule::UpdateUpperQuantile()
   // Cancel the automatic computation of the quantile
   m_StandardRenderingFunction->SetAutoMinMax(false);
   
-  // 
+  //  Get the extrema value for all the bands
   ParametersType    params;
   params = m_StandardRenderingFunction->GetParameters();
   
@@ -1010,15 +1039,15 @@ void ViewerModule::UpdateUpperQuantile()
       double max = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
       params.SetElement(i,max);
     }
-
+  
   // Update the layer
   m_StandardRenderingFunction->SetParameters(params);
   m_RenderingModel->Update();
    
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
-
-    // Tab Setup Position
+  
+  // Tab Setup Position
   m_BlueCurveWidgetGroup->redraw();
   m_GreenCurveWidgetGroup->redraw();
   m_RedCurveWidgetGroup->redraw();
@@ -1026,7 +1055,7 @@ void ViewerModule::UpdateUpperQuantile()
 
 
 /**
- * 
+ *  
  */
 void ViewerModule::UpdateLowerQuantile()
 {
@@ -1057,7 +1086,6 @@ void ViewerModule::UpdateLowerQuantile()
   m_BlueCurveWidgetGroup->redraw();
   m_GreenCurveWidgetGroup->redraw();
   m_RedCurveWidgetGroup->redraw();
-  
 }
 
 } // End namespace otb
