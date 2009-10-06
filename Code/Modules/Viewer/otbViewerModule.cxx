@@ -185,7 +185,7 @@ void ViewerModule::Run()
 {
   //Get Input Image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
-
+  
   // Set the File Name as a label to the viewer window
   m_Label = this->GetInputDataDescription<ImageType>("InputImage");
   m_DisplayWindow->SetLabel(m_Label.c_str());
@@ -570,8 +570,6 @@ void ViewerModule::UseDEM()
  */
 void ViewerModule::UpdateDEMSettings()
 {
-  std::cout << "Path du DEM "<<gDEMPath->value()<< std::endl;
-  
   if(gDEMPath->value())
     {
       // Copy the DEM pathname
@@ -593,10 +591,6 @@ void ViewerModule::UpdateDEMSettings()
 
       // Refresh widgets
       this->RedrawWidget();
-    }
-  else
-    {
-      std::cout <<"DEM path empty" << std::endl;
     }
 }
 
@@ -680,7 +674,6 @@ void ViewerModule::UpdateDEMSettings()
    unsigned int i=0;
    while (channels.size() < 3)
    {
-     std::cout << "channels[ " << i<<"] " << channels[i]<< std::endl;
      channels.push_back(i);
      ++i;
    }
@@ -944,10 +937,6 @@ void ViewerModule::UpdateTabHistogram()
       m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1));
       m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
 
-      std::cout <<"Upper abcisse "<<m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1)<<std::endl;
-      std::cout <<"Lower abcisse "<<m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1])<<std::endl;
-      
-      
       // Add the asymptote to the curve
       m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
       m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
@@ -1002,8 +991,6 @@ void ViewerModule::UpdateTabHistogram()
 
 void ViewerModule::TabSetupPosition()
 {
-  std::cout << "position " << gVectorData->value()->label()<< std::endl;
-  
   if(strcmp(gVectorData->value()->label(),"Histogram" ))
     {
       m_BlueCurveWidgetGroup->hide();
@@ -1031,8 +1018,6 @@ void ViewerModule::UpdateUpperQuantile()
   //  Get the extrema value for all the bands
   ParametersType    params;
   params = m_StandardRenderingFunction->GetParameters();
-  
-  std::cout <<"parmas size"  << params.Size() << std::endl;
   
   for(unsigned int i = 1 ; i< params.Size() ; i = i+2)
     {
