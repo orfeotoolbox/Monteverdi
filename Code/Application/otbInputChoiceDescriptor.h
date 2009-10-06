@@ -85,6 +85,8 @@ protected:
 
 
 private:
+  InputChoiceDescriptor(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
   /** The optional flag */
   bool m_Optional;

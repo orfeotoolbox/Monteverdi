@@ -99,14 +99,17 @@ class ITK_EXPORT MonteverdiModel
   /** Get available modules map */
   const ModuleDescriptorMapType & GetRegisteredModuleDescriptors() const;
 
-   /** Get available module instances */
-   const std::vector<std::string> GetAvailableModuleInstanceIds() const;
+  /** Get available module instances */
+  const std::vector<std::string> GetAvailableModuleInstanceIds() const;
 
-   /** Get outputs for a given module instance */
-   const OutputDataDescriptorMapType & GetModuleOutputsByInstanceId(const std::string & id) const;
+  /** Get outputs for a given module instance */
+  const OutputDataDescriptorMapType & GetModuleOutputsByInstanceId(const std::string & id) const;
 
-   /** Get required inputs for a given module instance */
-   const InputDataDescriptorMapType & GetModuleInputsByInstanceId(const std::string & id) const;
+  /** Get required inputs for a given module instance */
+  const InputDataDescriptorMapType & GetModuleInputsByInstanceId(const std::string & id) const;
+
+  /** Get the pointer to the module by an instanceId */
+  Module * GetModuleByInstanceId(const std::string & instanceId) const;
 
   /** Add a new connection between modules */
   void AddModuleConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey);
@@ -141,9 +144,6 @@ protected:
 
   /** Destructor */
   virtual ~MonteverdiModel();
-
-  /** Get the pointer to the module by an instanceId */
-  Module * GetModuleByInstanceId(const std::string & instanceId) const;
 
  private:
   MonteverdiModel(const Self&); //purposely not implemented

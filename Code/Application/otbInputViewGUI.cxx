@@ -51,7 +51,7 @@ InputViewGUI
      gScrollInput->type(Fl_Scroll::VERTICAL_ALWAYS);
 
     // deactivate Ok button
-    //bOk->deactivate();
+    //TODO bOk->deactivate();
 
     // to count the number of Fl_Input_Choice to display
     unsigned int cpt =0;
@@ -92,7 +92,7 @@ InputViewGUI
 	    oss<<moduleInstances[i];
 	    oss<<" : ";
 	    oss<<it_out->second.GetDataKey();
-            inputChoice->add(oss.str().c_str());//it_out->second.GetDataDescription().c_str());
+            inputChoice->add(oss.str().c_str());
 
             /** Build the inputChoiceDescriptor */
             inputChoiceDesc->m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
@@ -130,7 +130,6 @@ void
 InputViewGUI
 ::BuildCheckBox(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc)
 {
-  std::cout << "---------------------------- case OPTIONAL "<<std::endl<<std::endl;
   Fl_Check_Button *checkButton = new Fl_Check_Button( 60,height/2+cpt* height, 25, 25);
   gScrollInput->add(checkButton);
   inputChoiceDesc->m_FlChoice->deactivate();
@@ -160,8 +159,6 @@ void
 InputViewGUI
 ::BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc)
 {
-  std::cout << "---------------------------- case MULTIPLE "<<std::endl<<std::endl;
-
   Fl_Browser *browser = new Fl_Browser( 85,height+cpt* height, 400, 110);
   browser->box(FL_PLASTIC_DOWN_BOX);
   browser->type(2);
@@ -202,8 +199,6 @@ InputViewGUI
 
   if(inputChoiceDesc->IsOptional())
     inputChoiceDesc->m_FlBrowser->deactivate();
-
-
 }
 
 
@@ -213,7 +208,6 @@ void
 InputViewGUI
 ::Ok()
 {
-  std::cout<< "Ok" <<std::endl;
   unsigned int i;
 
   if(m_ModuleInstanceId != gLabel->value())
@@ -230,26 +224,22 @@ InputViewGUI
     // Multiple data
     if(mIt->second->IsMultiple())
     {
-
-std::cout<< "************************Multiple "<< std::endl;
-
       if( !mIt->second->IsOptional() ||
           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
       {
-              for(i=0;i<mIt->second->m_Indexes.size();i++)
-              {
-                  int ind = mIt->second->m_Indexes[i];
-                  if(ind >= 0)
-                  {
-                    StringPairType spair = mIt->second->m_ChoiceVector[ind];
-                    m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
-                  }
-              }
-       }
+        for(i=0;i<mIt->second->m_Indexes.size();i++)
+        {
+          int ind = mIt->second->m_Indexes[i];
+          if(ind >= 0)
+          {
+            StringPairType spair = mIt->second->m_ChoiceVector[ind];
+            m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
+          }
+        }
+      }
     }
     else // Single data
     {
-std::cout<< "************************Single "<< std::endl;
       // mandatory OR optional & active
       if( !mIt->second->IsOptional() ||
           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
@@ -264,12 +254,8 @@ std::cout<< "************************Single "<< std::endl;
   }
 
   // Start()
-  std::cout<< "Start" <<std::endl;
   m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
-
-
   wInputWindow->hide();
-
 
 }
 

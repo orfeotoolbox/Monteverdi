@@ -65,6 +65,9 @@ public:
   typedef InputChoiceDescriptor::StringPairType           StringPairType;
   typedef InputChoiceDescriptor::Pointer                  InputChoiceDescriptorPointerType;
 
+  // map containing the key and the descriptor
+  typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
+
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
   itkSetObjectMacro(Model,MonteverdiModel);
@@ -72,7 +75,7 @@ public:
   itkSetObjectMacro(Controller,MonteverdiControllerInterface);
   itkGetMacro(ModuleInstanceId,std::string);
   itkSetMacro(ModuleInstanceId,std::string);
-
+  InputChoiceDescriptorMapType GetInputChoiceMap(){ return m_InputChoiceMap; };
 
   void Show();
   void BuildInputInterface();
@@ -98,8 +101,6 @@ private:
   static void RemoveInputFromList(Fl_Widget * w, void * v);
   static void ClearList(Fl_Widget * w, void * v);
 
-  // map containing the key and the descriptor
-  typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
 
   MonteverdiModel::Pointer                m_Model;
   MonteverdiControllerInterface::Pointer  m_Controller;

@@ -91,9 +91,12 @@ public:
     std::string m_OutputKey;
   };
 
-  /** Set the controller */
+  /** Get/Set the controller */
   itkGetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
   itkSetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
+
+  /** Get the inputViewGUI */
+  itkGetObjectMacro(InputViewGUI,InputViewGUI);
 
   /** Process event from the model */
   virtual void Notify(const MonteverdiEvent & event);
@@ -106,6 +109,9 @@ public:
 
   /** Exit the application */
   void Quit();
+
+  /** Create a module instance according to its name */
+  void CreateModuleByKey(const char * modulekey);
 
 protected:
    /** Constructor */
@@ -125,9 +131,6 @@ protected:
 
   /** Generate the gui to choose inputs for a module */
   void BuildInputsGUI(const std::string & modulekey);
-
-  /** Create a module instance according to its name */
-  void CreateModuleByKey(const char * modulekey);
 
   /** Show the help */
   void Help();

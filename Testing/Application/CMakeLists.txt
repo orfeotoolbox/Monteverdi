@@ -14,9 +14,19 @@ SET(Application_TESTS ${CXX_TEST_PATH}/otbApplicationTests)
 ADD_TEST(apTuMonteverdiApplication ${Application_TESTS} otbMonteverdiApplicationNew)
 ADD_TEST(apTvMonteverdiApplication ${Application_TESTS} otbMonteverdiApplicationTest)
 
+
+#-------------- Monteverdi Application Read and vizualise an image ---------------------------------
+ADD_TEST(apTvMonteverdiReaderViewer ${Application_TESTS} otbMonteverdiApplicationReaderViewer
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+0
+)
+
+
+
 SET(Application_SRCS
 otbMonteverdiApplicationNew.cxx
 otbMonteverdiApplicationTest.cxx
+otbMonteverdiApplicationReaderViewer.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
