@@ -28,9 +28,16 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
+// Optical images filters
 #include "otbObjectList.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbVectorImageToAmplitudeImageFilter.h"
+
+// Radar images filters
+#include "itkComplexToRealImageFilter.h"
+#include "itkComplexToImaginaryImageFilter.h"
+#include "itkComplexToPhaseImageFilter.h"
+#include "itkComplexToModulusImageFilter.h"
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
@@ -61,14 +68,16 @@ public:
 
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
+  typedef VectorImage<double,2>                   FloatingVectorImageType;
+  typedef Image<double,2>                         FloatingImageType;
   typedef VectorData<double>                      VectorType;
   typedef VectorData<double,2,short unsigned int> LabeledVectorType;
+  typedef Image<std::complex<double>, 2>          ComplexImageType;
   /// Readers
-  typedef ImageFileReader<FloatingVectorImageType>    FPVReaderType;
-  typedef VectorDataFileReader<VectorType>        VectorReaderType;
-  typedef VectorDataFileReader<LabeledVectorType> LabeledVectorReaderType;
+  typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
+  typedef ImageFileReader<ComplexImageType>        ComplexImageReaderType;
+  typedef VectorDataFileReader<VectorType>         VectorReaderType;
+  typedef VectorDataFileReader<LabeledVectorType>  LabeledVectorReaderType;
 
   /// Extract ROIs
   typedef MultiToMonoChannelExtractROI<double,double> ExtractROIImageFilterType;
@@ -76,6 +85,12 @@ public:
   
   // Amplitude filter
   typedef VectorImageToAmplitudeImageFilter<FloatingVectorImageType,FloatingImageType> AmplitudeFilterType;
+
+  // Complex modulus, phase, imaginary, real filters
+  typedef itk::ComplexToRealImageFilter<ComplexImageType,FloatingImageType> RealFilterType;
+  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,FloatingImageType> ImaginaryFilterType;
+  typedef itk::ComplexToModulusImageFilter<ComplexImageType,FloatingImageType> ModulusFilterType;
+  typedef itk::ComplexToPhaseImageFilter<ComplexImageType,FloatingImageType> PhaseFilterType;
 
 protected:
   /** Constructor */
@@ -97,11 +112,21 @@ private:
   ReaderModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  // Readers
   FPVReaderType::Pointer m_FPVReader;
   VectorReaderType::Pointer m_VectorReader;
+  ComplexImageReaderType::Pointer m_ComplexReader;
+
+  // Optical filters
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
   AmplitudeFilterType::Pointer m_AmplitudeFilter;
   ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
+
+  // Radar filters
+  RealFilterType::Pointer m_RealFilter;
+  ImaginaryFilterType::Pointer m_ImaginaryFilter;
+  ModulusFilterType::Pointer m_ModulusFilter;
+  PhaseFilterType::Pointer m_PhaseFilter; 
 };
 
 
