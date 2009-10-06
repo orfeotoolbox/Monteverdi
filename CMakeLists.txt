@@ -68,6 +68,8 @@ ${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
+${Monteverdi_SOURCE_DIR}/Code/Module/HomologousPointExtraction
+${Monteverdi_BINARY_DIR}/Code/Module/HomologousPointExtraction
 )
 
 MESSAGE(STATUS "Automatic includes modules:")

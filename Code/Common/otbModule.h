@@ -145,6 +145,7 @@ protected:
   /** Instance id (intentionnaly left protected) */
   std::string m_InstanceId;
 
+
 private:
   Module(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
