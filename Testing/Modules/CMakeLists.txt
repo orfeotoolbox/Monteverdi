@@ -120,8 +120,4 @@ otbPanSharpeningModuleTest.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule   OTBIO OTBTesting)
-
-
-
-
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule   OTBIO OTBCommon OTBTesting)
