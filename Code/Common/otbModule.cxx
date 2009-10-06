@@ -142,11 +142,11 @@ void Module::Start()
 /** The custom run command */
 void Module::Run()
 {
-  // Start the watcher
-  this->StartProcess1();
-
   // Start the threaded run
   this->StartProcess2();
+
+  // Start the watcher
+  this->StartProcess1();
 }
 
 /** Notify outputs change */

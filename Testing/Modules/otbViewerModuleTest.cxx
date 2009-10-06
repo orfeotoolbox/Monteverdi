@@ -23,6 +23,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
+#include "base/ossimFilename.h"
 
 int otbViewerModuleTest(int argc, char* argv[])
 {
@@ -50,6 +51,8 @@ int otbViewerModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
+  ossimFilename vcutIn(infname);
+  wrapperIn.SetDescription(vcutIn.file());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
   module->AddInputByKey("InputImage",wrapperIn);
@@ -65,6 +68,8 @@ int otbViewerModuleTest(int argc, char* argv[])
     vreader->GenerateOutputInformation();
 
     otb::DataObjectWrapper wrapperVector = otb::DataObjectWrapper::Create(vreader->GetOutput());
+    ossimFilename vcut(vfname);
+    wrapperVector.SetDescription(vcut.file());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector << std::endl;
     module->AddInputByKey("VectorData",wrapperVector);
 
@@ -74,6 +79,8 @@ int otbViewerModuleTest(int argc, char* argv[])
     vreader1->GenerateOutputInformation();
 
     otb::DataObjectWrapper wrapperVector1 = otb::DataObjectWrapper::Create(vreader1->GetOutput());
+    ossimFilename vcut1(vfname1);
+    wrapperVector1.SetDescription(vcut1.file());
     std::cout <<"Input VectorData Wrapper " <<wrapperVector1 << std::endl;
     module->AddInputByKey("VectorData",wrapperVector1);
 

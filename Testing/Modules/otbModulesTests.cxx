@@ -38,4 +38,5 @@ void RegisterTests()
   REGISTER_TEST(otbViewerModuleTest);
   REGISTER_TEST(otbWriterMVCModuleTest);
   REGISTER_TEST(otbWriterMVCModuleTest2);
+  REGISTER_TEST(otbPanSharpeningModuleTest);
 }

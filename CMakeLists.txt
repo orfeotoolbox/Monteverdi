@@ -6,7 +6,7 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
-# OTB option to access large file (> 4Go).
+# OTB option to access large files (> 4Go).
 ADD_DEFINITIONS(
         -D_LARGEFILE_SOURCE
         -D_FILE_OFFSET_BITS=64
@@ -66,29 +66,22 @@ ${Monteverdi_BINARY_DIR}/Code/Common
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
-${Monteverdi_SOURCE_DIR}/Code/Modules/Speckle
-${Monteverdi_BINARY_DIR}/Code/Modules/Speckle
-${Monteverdi_SOURCE_DIR}/Code/Modules/Reader
-${Monteverdi_BINARY_DIR}/Code/Modules/Reader
-${Monteverdi_SOURCE_DIR}/Code/Modules/Orthorectification
-${Monteverdi_BINARY_DIR}/Code/Modules/Orthorectification
-${Monteverdi_SOURCE_DIR}/Code/Modules/Classification
-${Monteverdi_BINARY_DIR}/Code/Modules/Classification
-${Monteverdi_SOURCE_DIR}/Code/Modules/FeatureExtraction
-${Monteverdi_BINARY_DIR}/Code/Modules/FeatureExtraction
-${Monteverdi_SOURCE_DIR}/Code/Modules/Writer
-${Monteverdi_BINARY_DIR}/Code/Modules/Writer
-${Monteverdi_SOURCE_DIR}/Code/Modules/WriterMVC
-${Monteverdi_BINARY_DIR}/Code/Modules/WriterMVC
-${Monteverdi_SOURCE_DIR}/Code/Modules/Viewer
-${Monteverdi_BINARY_DIR}/Code/Modules/Viewer
-${Monteverdi_SOURCE_DIR}/Code/Modules/MeanShift
-${Monteverdi_BINARY_DIR}/Code/Modules/MeanShift
-${Monteverdi_SOURCE_DIR}/Code/Modules/PanSharpening
-${Monteverdi_BINARY_DIR}/Code/Modules/PanSharpening
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
+${Monteverdi_SOURCE_DIR}/Code/Module/HomologousPointExtraction
+${Monteverdi_BINARY_DIR}/Code/Module/HomologousPointExtraction
 )
+
+MESSAGE(STATUS "Automatic includes modules:")
+FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*/)
+FOREACH(moduleDir ${moduleList})
+  IF(IS_DIRECTORY ${moduleDir})
+    FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})  
+    MESSAGE(STATUS  - ${moduleName})
+    INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Code/Modules/${moduleName})
+    INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules/${moduleName})
+  ENDIF(IS_DIRECTORY ${moduleDir})
+ENDFOREACH(moduleDir)
 
 
 # Code location

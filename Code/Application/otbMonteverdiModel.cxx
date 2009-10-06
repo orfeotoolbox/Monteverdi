@@ -22,7 +22,6 @@
 
 namespace otb
 {
-
 /** Initialize the singleton */
 MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
 
@@ -34,7 +33,11 @@ MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_I
 {}
 
 MonteverdiModel::~MonteverdiModel()
-{}
+{
+  m_ModuleDescriptorMap.clear();
+  m_ModuleMap.clear();
+  m_InstancesCountMap.clear();
+}
 
 /** Create a module according to its name. If the name is not a
   registered module, throws an exception */
@@ -142,8 +145,21 @@ void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,cons
 
 void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )
 {
+  // Look for the old instance id
   ModuleMapType::const_iterator mcIt = m_ModuleMap.find(oldInstanceId);
 
+  if(mcIt == m_ModuleMap.end())
+    {
+    itkExceptionMacro(<<"No module found with instanceId "<<oldInstanceId);
+    }
+
+  // Check if the new instanceId is in use
+  if(m_ModuleMap.count(newInstanceId)>0)
+    {
+    itkExceptionMacro(<<"InstanceId "<<newInstanceId<<" already exists");
+    }
+
+  // Retrieve the module pointer 
   Module::Pointer module = mcIt->second;
 
   // Register module instance
@@ -152,7 +168,6 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   m_ModuleMap.erase( oldInstanceId );
 
   this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
-
 }
 
 /** Manage the singleton */
@@ -165,8 +180,6 @@ MonteverdiModel::GetInstance()
   }
   return Instance;
 }
-
-
 }// End namespace
 
 #endif

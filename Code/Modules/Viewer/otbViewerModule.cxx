@@ -20,7 +20,6 @@
 
 #include "otbViewerModule.h"
 #include <FL/Fl_File_Chooser.H>
-#include "base/ossimFilename.h"
 #include <FL/Fl_Color_Chooser.H>
 
 namespace otb
@@ -30,8 +29,14 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
 				m_View(), m_PixelDescriptionView(), m_CurveWidget(),
 				m_Controller(), m_RenderingFunction()
 {
-  // 
-  m_Label = "Viewer Module";
+  // Color Definition
+  m_Red.Fill(0);
+  m_Green.Fill(0);
+  m_Blue.Fill(0);
+  m_Grey.Fill(0.5);
+  m_Red[0]  = 1.;   m_Red[3]   = 0.5;
+  m_Green[1]= 1.;   m_Green[3] = 0.5;
+  m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
   
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -58,35 +63,42 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   m_RedVaCurveR = VerticalAsymptoteCurveType::New();
   m_RedVaCurveL = VerticalAsymptoteCurveType::New();
   
-  
   // Build the curve widget
   m_CurveWidget    = CurvesWidgetType::New();
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Frequency");
    
   // Curvet Widget Instanciation
-   m_CurveWidgetGroup    = CurvesWidgetType::New();
-   m_CurveWidgetGroup->SetIdentifier("Curve");
-   m_CurveWidgetGroup->SetController(m_Controller);
+  m_BlueCurveWidgetGroup  = CurvesWidgetType::New();
+  m_GreenCurveWidgetGroup = CurvesWidgetType::New();
+  m_RedCurveWidgetGroup   = CurvesWidgetType::New();
    
-   // Wire the MVC
-   m_View->SetModel(m_RenderingModel);
-   m_View->SetController(m_Controller);
-   m_PixelDescriptionView->SetModel(m_PixelDescriptionModel);
+  m_BlueCurveWidgetGroup->SetIdentifier("BlueCurve");
+  m_GreenCurveWidgetGroup->SetIdentifier("GreenCurve");
+  m_RedCurveWidgetGroup->SetIdentifier("RedCurve");
    
-   // Add the resizing handler
-   ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
-   resizingHandler->SetModel(m_RenderingModel);
-   resizingHandler->SetView(m_View);
-   m_Controller->AddActionHandler(resizingHandler);
+  m_BlueCurveWidgetGroup->SetController(m_Controller);
+  m_GreenCurveWidgetGroup->SetController(m_Controller);
+  m_RedCurveWidgetGroup->SetController(m_Controller);
    
-   // Add the change extract region handler
-   ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
-   changeHandler->SetModel(m_RenderingModel);
-   changeHandler->SetView(m_View);
-   m_Controller->AddActionHandler(changeHandler);
+  // Wire the MVC
+  m_View->SetModel(m_RenderingModel);
+  m_View->SetController(m_Controller);
+  m_PixelDescriptionView->SetModel(m_PixelDescriptionModel);
    
-   // Add the change scaled region handler
+  // Add the resizing handler
+  ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
+  resizingHandler->SetModel(m_RenderingModel);
+  resizingHandler->SetView(m_View);
+  m_Controller->AddActionHandler(resizingHandler);
+   
+  // Add the change extract region handler
+  ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
+  changeHandler->SetModel(m_RenderingModel);
+  changeHandler->SetView(m_View);
+  m_Controller->AddActionHandler(changeHandler);
+   
+  // Add the change scaled region handler
   ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(m_RenderingModel);
   changeScaledHandler->SetView(m_View);
@@ -110,16 +122,33 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   arrowKeyMoveHandler->SetView(m_View);
   m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
-  // Add the histogram handler
-  HistogramActionHandlerType::Pointer histogramHandler = HistogramActionHandlerType::New();
-  histogramHandler->SetModel(m_RenderingModel);
-  histogramHandler->SetView(m_View);
-  histogramHandler->SetCurve(m_CurveWidgetGroup);
-  histogramHandler->SetLeftAsymptote(m_BlueVaCurveL);
-  histogramHandler->SetRightAsymptote(m_BlueVaCurveR);
-  histogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
-  m_Controller->AddActionHandler(histogramHandler);
+  // Add the blue histogram handler
+  m_BlueHistogramHandler = HistogramActionHandlerType::New();
+  m_BlueHistogramHandler->SetModel(m_RenderingModel);
+  m_BlueHistogramHandler->SetView(m_View);
+  m_BlueHistogramHandler->SetCurve(m_BlueCurveWidgetGroup);
+  m_BlueHistogramHandler->SetLeftAsymptote(m_BlueVaCurveL);
+  m_BlueHistogramHandler->SetRightAsymptote(m_BlueVaCurveR);
+  m_Controller->AddActionHandler(m_BlueHistogramHandler);
 
+  // Add the green histogram handler
+  m_GreenHistogramHandler = HistogramActionHandlerType::New();
+  m_GreenHistogramHandler->SetModel(m_RenderingModel);
+  m_GreenHistogramHandler->SetView(m_View);
+  m_GreenHistogramHandler->SetCurve(m_GreenCurveWidgetGroup);
+  m_GreenHistogramHandler->SetLeftAsymptote(m_GreenVaCurveL);
+  m_GreenHistogramHandler->SetRightAsymptote(m_GreenVaCurveR);
+  m_Controller->AddActionHandler(m_GreenHistogramHandler);
+
+  // Add the red histogram handler
+  m_RedHistogramHandler = HistogramActionHandlerType::New();
+  m_RedHistogramHandler->SetModel(m_RenderingModel);
+  m_RedHistogramHandler->SetView(m_View);
+  m_RedHistogramHandler->SetCurve(m_RedCurveWidgetGroup);
+  m_RedHistogramHandler->SetLeftAsymptote(m_RedVaCurveL);
+  m_RedHistogramHandler->SetRightAsymptote(m_RedVaCurveR);
+  m_Controller->AddActionHandler(m_RedHistogramHandler);
+  
   // Display Window
   m_DisplayWindow   = WidgetManagerType::New();
   m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
@@ -134,15 +163,6 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
-
-  // Color Definition
-  m_Red.Fill(0);
-  m_Green.Fill(0);
-  m_Blue.Fill(0);
-  m_Grey.Fill(0.5);
-  m_Red[0]  = 1.;   m_Red[3]   = 0.5;
-  m_Green[1]= 1.;   m_Green[3] = 0.5;
-  m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
 
   // Build GUI
   this->Build();   
@@ -163,7 +183,12 @@ void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ViewerModule::Run()
 {
+  //Get Input Image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
+  
+  // Set the File Name as a label to the viewer window
+  m_Label = this->GetInputDataDescription<ImageType>("InputImage");
+  m_DisplayWindow->SetLabel(m_Label.c_str());
   
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
@@ -179,6 +204,7 @@ void ViewerModule::Run()
     {
       VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData",i);
       m_VectorDataList->PushBack(vdata);
+      m_DisplayedVectorData.push_back(true);
       this->UpdateVectorData(i);
       std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData",i);
       this->AddName( desc );
@@ -194,15 +220,9 @@ void ViewerModule::Run()
 
   // Work with standardrenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
-  std::cout <<"Channel Size " << channels.size() << std::endl;
   m_StandardRenderingFunction->SetChannelList(channels);
-  m_StandardRenderingFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
   
-  // Set the window and layer label
-  m_DisplayWindow->SetLabel(m_Label.c_str());
-  m_InputImageLayer->SetName(m_Label);
-
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(generator->GetLayer());
 
@@ -352,12 +372,7 @@ void ViewerModule::UpdateVectorData(unsigned int index)
  */
 void ViewerModule::AddName(std::string name)
 {
-  // Set a random color to the vector data
-  //itk::OStringStream oss;
-  //oss<<"Vector Data : "<<m_VectorDataList->Size();
-  //dVDList->add(oss.str().c_str());
   dVDList->add(name.c_str());
-  dVDList->redraw();
   dVDList->redraw();
 }
 
@@ -369,7 +384,7 @@ void ViewerModule::UpdateListSelectionColor()
   //selectedIndex
   unsigned int selectedIndex = dVDList->value();
 
-  if(selectedIndex)
+  if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
     {
       VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
       ColorType                   curColor                     = selecedVectorDataGlComponent->GetColor();
@@ -379,7 +394,7 @@ void ViewerModule::UpdateListSelectionColor()
 	       static_cast<unsigned char>(255*curColor[1]),
 	       static_cast<unsigned char>(255*curColor[2]));
       
-      //Update the ROIColoritem
+      //Update the ROIColorItem
       dROIColor->color(fl_color());
       dROIColor->redraw();
       //Update the text color
@@ -387,7 +402,6 @@ void ViewerModule::UpdateListSelectionColor()
       dVDList->redraw();
     }
 }
-
 
 /**
  *
@@ -398,19 +412,13 @@ void ViewerModule::DeleteVectorData()
   
   if(selectedIndex)
     {
-  
-      std::cout <<"SelectedItem " << selectedIndex << std::endl;
-  
-      // Remove the VectorData from the list
-      m_VectorDataList->Erase(selectedIndex-1);
-  
-      //Update the Fl_Browser
-      dVDList->remove(selectedIndex);
-  
       // Remove the VectorDataGl Compenent
-      m_View->GetScrollWidget()->RemoveGlComponent(selectedIndex);
-      m_View->GetFullWidget()->RemoveGlComponent(selectedIndex);
-      m_View->GetZoomWidget()->RemoveGlComponent(selectedIndex-1);   //-1 because in the Zoom Widget there is no red square wich is a GlComponent 
+      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square wich is a GlComponent 
+
+      // Update the status of the selectedItem vector data
+      m_DisplayedVectorData[selectedIndex-1] = false;
   
       //Redraw all the widgets
       this->RedrawWidget();
@@ -418,32 +426,70 @@ void ViewerModule::DeleteVectorData()
 }
 
 /**
- *
+ * Hide all the vector datas
  **/
 void ViewerModule::ClearAll()
 {
   for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
     {
-      m_View->GetScrollWidget()->RemoveGlComponent(1);
-      m_View->GetFullWidget()->RemoveGlComponent(1);
-      m_View->GetZoomWidget()->RemoveGlComponent(0);
+      // Hide the Gl Componenent int the view
+      m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(false);
+      
+      // Update the dispaly status of each vector
+      m_DisplayedVectorData[i] = false;
     }
-  
-  //Erase the VectorDataList
-  m_VectorDataList->Clear();
-  
-  //Erase the Fl_Browser
-  dVDList->clear();
+  //Redraw all the widgets
+  this->RedrawWidget();
+}
 
-  //
-  //Update the ROIColoritem
-  dROIColor->color(fl_color());
-  dROIColor->redraw();
+/**
+ *  Dispaly if Hidden VectorData
+ */
+void 
+ViewerModule::DisplaySelectedVectorData()
+{
+  // Get the selected vectordata
+  unsigned int selectedIndex = dVDList->value();
+  
+  // Dispaly the selected VD if not already dispalyed
+  if(!m_DisplayedVectorData[selectedIndex-1])
+    {
+      // Hide all displayed vector datas
+      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(true);
+      // Set visible status to selected VectorDataGl Compenents
+      m_DisplayedVectorData[selectedIndex-1] = true;
+    }
   
   //Redraw all the widgets
   this->RedrawWidget();
 }
 
+
+/**
+ *  Dispaly if Hidden VectorData
+ */
+void 
+ViewerModule::DisplayVectorData()
+{
+  // loop over all the vector datas
+  for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+    {
+      // Dispaly the selected VD if not already displayed
+      if(!m_DisplayedVectorData[i])
+	{
+	  m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+	  m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+	  m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
+	  m_DisplayedVectorData[i] = true;
+	}
+    }
+  //Redraw all the widgets
+  this->RedrawWidget();
+}
 
 /**
  *
@@ -467,7 +513,7 @@ void ViewerModule::ChangeROIColor()
 {
   unsigned int selectedIndex = dVDList->value();
   
-  if(selectedIndex)
+  if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
     {
       VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
       ColorType curColor  = selecedVectorDataGlComponent->GetColor();
@@ -506,14 +552,15 @@ void ViewerModule::ChangeROIColor()
 void ViewerModule::RedrawWidget()
 {
   m_DisplayWindow->Refresh();
+  
 }
 
 void ViewerModule::UseDEM()
 {
-  // 
+  // build the GUI
   this->BuildDEM();
   
-  // 
+  // show the DEM GUI
   if(bDEM->value())
     wDEM->show();
 }
@@ -523,8 +570,6 @@ void ViewerModule::UseDEM()
  */
 void ViewerModule::UpdateDEMSettings()
 {
-  std::cout << "Path du DEM "<<gDEMPath->value()<< std::endl;
-  
   if(gDEMPath->value())
     {
       // Copy the DEM pathname
@@ -547,10 +592,6 @@ void ViewerModule::UpdateDEMSettings()
       // Refresh widgets
       this->RedrawWidget();
     }
-  else
-    {
-      std::cout <<"DEM path empty" << std::endl;
-    }
 }
 
 /**
@@ -564,7 +605,6 @@ void ViewerModule::UpdateDEMSettings()
  {
    //Get the number of components per pixel
    unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
-   std::cout <<"nbComponents " <<  nbComponent << std::endl;
    
    itk::OStringStream oss;
    oss.str("");
@@ -630,7 +670,7 @@ void ViewerModule::UpdateDEMSettings()
    guiGreenChannelChoice->activate();
    guiBlueChannelChoice->activate();
 
-   ChannelListType channels = m_RenderingFunction->GetChannelList();
+   ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
    unsigned int i=0;
    while (channels.size() < 3)
    {
@@ -666,7 +706,7 @@ void ViewerModule::GrayScaleSet()
 
   guiGrayscaleChannelChoice->activate();
   
-  ChannelListType channels = m_RenderingFunction->GetChannelList();
+  ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
   if (channels.size() < 1)
     {
       channels.push_back(0);
@@ -693,7 +733,7 @@ void ViewerModule::ComplexSet()
    bAmplitude->activate();
    bPhase->activate();
    
-   ChannelListType channels = m_RenderingFunction->GetChannelList();
+   ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
    unsigned int i=0;
    while (channels.size() < 2)
    {
@@ -824,89 +864,217 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
  */
 void ViewerModule::UpdateTabHistogram()
 {
-  //TODO : FIXME : test for a new instance of histogram Curve
-  m_CurveWidgetGroup->SetXAxisLabel("Pixels");
-  m_CurveWidgetGroup->SetYAxisLabel("Frequency");
-  
+  //Get the number of subdivisons in the GUI 
+ double width  = gHistogram->w()/2;
+ double height = gHistogram->h()/2;
+ 
   // Clear the widget 
-  m_CurveWidgetGroup->ClearAllCurves();
-
-  //Update the StandardRenderingFunction
+  m_BlueCurveWidgetGroup->ClearAllCurves();
+  m_GreenCurveWidgetGroup->ClearAllCurves();
+  m_RedCurveWidgetGroup->ClearAllCurves();
+    
+  /// Update the StandardRenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
   m_StandardRenderingFunction->SetChannelList(channels);
-  m_StandardRenderingFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-    
-  for(unsigned int i = 0 ; i<m_StandardRenderingFunction->GetChannelList().size() ; i++)
-    std::cout <<" m_StandardRenderingFunction Channel N "<< i << " Value  " << m_StandardRenderingFunction->GetChannelList()[i]<< std::endl;
+   
+  //Set the rendering to the histogram handlers
+  m_BlueHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
+  m_GreenHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
+  m_RedHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
   
-  
-  if (/*m_InputImageLayer->GetRenderingFunction()*/m_StandardRenderingFunction->GetPixelRepresentationSize() >=3)
+  /// BLUE band : draw the BLUE band histogram and the asymptote
+  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=3)
     {
       HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
       bhistogram->SetHistogramColor(m_Blue);
       bhistogram->SetLabelColor(m_Blue);
-      bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
-      m_CurveWidgetGroup->AddCurve(bhistogram);
+      bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[2]));
+      m_BlueCurveWidgetGroup->AddCurve(bhistogram);
+      
+      //Add to the gHistogram group
+      gHistogram->add(m_BlueCurveWidgetGroup);
+      gHistogram->resizable(m_BlueCurveWidgetGroup);
+      m_BlueCurveWidgetGroup->resize(gHistogram->x(),gHistogram->y()+height,
+				     width ,height);
+      
+      // Right Asymptote
+      m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
+      m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
+      
+      // Left Asymptote
+      m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]+1));
+      m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
+      
+      // Add the asymptote to the curve
+      m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveR);
+      m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveL);
+      
+      // Edit the channel we're changing
+      m_BlueHistogramHandler->SetChannel(channels[2]);
     }
   
-  if (/*m_InputImageLayer->GetRenderingFunction()*/m_StandardRenderingFunction->GetPixelRepresentationSize() >=2)
+  /// GREEN band : draw the GREEN band histogram and the asymptote
+  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=2)
     {
       HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
       ghistogram->SetHistogramColor(m_Green);
       ghistogram->SetLabelColor(m_Green);
-      ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
-      //m_CurveWidgetGroup->AddCurve(ghistogram);
-    }
+      ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[1]));
+      m_GreenCurveWidgetGroup->AddCurve(ghistogram);
+      
+      //Add to the gHistogram group
+      gHistogram->add(m_GreenCurveWidgetGroup);
+      gHistogram->resizable(m_GreenCurveWidgetGroup);
+      m_GreenCurveWidgetGroup->resize(gHistogram->x() + width ,gHistogram->y(),
+				      width, height);
+      
+      // Right Asymptote
+      m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
+      m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green); 
+      
+      // Left Asymptote
+      m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1));
+      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
 
+      // Add the asymptote to the curve
+      m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
+      m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
+      
+      // Edit the channel we're changing
+      m_GreenHistogramHandler->SetChannel(channels[1]);
+    }
+  
+  /// RED band : draw the RED band histogram and the asymptote
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  if (/*m_InputImageLayer->GetRenderingFunction()*/m_StandardRenderingFunction->GetPixelRepresentationSize() == 1)
+  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() == 1)
     {
       rhistogram->SetHistogramColor(m_Grey);
       rhistogram->SetLabelColor(m_Grey);
+      
+      //Add to the gHistogram group
+      gHistogram->add(m_RedCurveWidgetGroup);
+      gHistogram->resizable(m_RedCurveWidgetGroup);
+      m_RedCurveWidgetGroup->resize(gHistogram->x()+1,gHistogram->y(),
+				    gHistogram->w()-1,height);
     }
   else
     {
       rhistogram->SetHistogramColor(m_Red);
       rhistogram->SetLabelColor(m_Red);
+	
+      //Add to the gHistogram group
+      gHistogram->add(m_RedCurveWidgetGroup);
+      gHistogram->resizable(m_RedCurveWidgetGroup);
+      m_RedCurveWidgetGroup->resize(gHistogram->x(),gHistogram->y(),
+				    width, height);
     }
-  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0));
-  //m_CurveWidgetGroup->AddCurve(rhistogram);
-  
-  // Add the verticalAsymptotes Curve
+    
+  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[0])); 
+  m_RedCurveWidgetGroup->AddCurve(rhistogram);
   // Right Asymptote
-  m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(4) );
-  m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Red);
+  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]));
+  m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor()); 
+    
   // Left Asymptote
-  m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(5) );
-  m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Red);
-  
-  m_CurveWidgetGroup->AddCurve(m_BlueVaCurveR);
-  m_CurveWidgetGroup->AddCurve(m_BlueVaCurveL);
-  
-  //Add to the gHistogram group
-  gHistogram->add(m_CurveWidgetGroup);
-  gHistogram->resizable(m_CurveWidgetGroup);
-  m_CurveWidgetGroup->resize(gHistogram->x(),gHistogram->y(),
-			     gHistogram->w(),gHistogram->h());
+  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]+1));
+  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
+    
+  // Add the asymptote to the curve
+  m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveR);
+  m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveL);
+    
+  // Edit the channel we're changing
+  m_RedHistogramHandler->SetChannel(channels[0]);
 }
 
 
 void ViewerModule::TabSetupPosition()
 {
-  std::cout << "position " << gVectorData->value()->label()<< std::endl;
-  
   if(strcmp(gVectorData->value()->label(),"Histogram" ))
-   {
-     m_CurveWidgetGroup->hide();
-   }
+    {
+      m_BlueCurveWidgetGroup->hide();
+      m_GreenCurveWidgetGroup->hide();
+      m_RedCurveWidgetGroup->hide();
+    }
   else
-   {
-     m_CurveWidgetGroup->show();
-   }
+    {
+      m_BlueCurveWidgetGroup->show();
+      m_GreenCurveWidgetGroup->show();
+      m_RedCurveWidgetGroup->show();
+    }
 }
 
+/**
+ * 
+ */
+void ViewerModule::UpdateUpperQuantile()
+{
+  double upperQuantile = bUpperQuantile->value() / 100.;
+
+  // Cancel the automatic computation of the quantile
+  m_StandardRenderingFunction->SetAutoMinMax(false);
+  
+  //  Get the extrema value for all the bands
+  ParametersType    params;
+  params = m_StandardRenderingFunction->GetParameters();
+  
+  for(unsigned int i = 1 ; i< params.Size() ; i = i+2)
+    {
+      double max = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
+      params.SetElement(i,max);
+    }
+  
+  // Update the layer
+  m_StandardRenderingFunction->SetParameters(params);
+  m_RenderingModel->Update();
+   
+  // Redraw the hitogram curves
+  this->UpdateTabHistogram();
+  
+  // Tab Setup Position
+  m_BlueCurveWidgetGroup->redraw();
+  m_GreenCurveWidgetGroup->redraw();
+  m_RedCurveWidgetGroup->redraw();
+}
+
+
+/**
+ *  
+ */
+void ViewerModule::UpdateLowerQuantile()
+{
+  double lowerQuantile = bLowerQuantile->value() / 100.;
+   
+  // Cancel the automatic computation of the quantile
+  m_StandardRenderingFunction->SetAutoMinMax(false);
+  
+  // Get the standardRenderingFunction extrema parameters 
+  ParametersType    params;
+  params = m_StandardRenderingFunction->GetParameters();
+  
+  // Update the parameters
+  for(unsigned int i = 0 ; i< params.Size() ; i = i+2)
+    {
+      double min = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,lowerQuantile);
+      params.SetElement(i,min);
+    }
+  
+  // Update the layer
+  m_StandardRenderingFunction->SetParameters(params);
+  m_RenderingModel->Update();
+  
+  // Redraw the hitogram curves
+  this->UpdateTabHistogram();
+
+  // Tab Setup Position
+  m_BlueCurveWidgetGroup->redraw();
+  m_GreenCurveWidgetGroup->redraw();
+  m_RedCurveWidgetGroup->redraw();
+}
 
 } // End namespace otb
 
 #endif
+
+

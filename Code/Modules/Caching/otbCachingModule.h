@@ -15,37 +15,35 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWriterModule_h
-#define __otbWriterModule_h
+#ifndef __otbCachingModule_h
+#define __otbCachingModule_h
 
 // include the base class
 #include "otbModule.h"
 // include the GUI
-#include "otbWriterModuleGUI.h"
-// include process
-//#include "otbAsynchronousProcessBase.h"
+#include "otbCachingModuleGUI.h"
+
 
 // include the OTB elements
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
+#include "otbImageFileReader.h"
 
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
 
 namespace otb
 {
-/** \class WriterModule
+/** \class CachingModule
  *  \brief 
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT WriterModule
-  : public Module, public WriterModuleGUI
+class ITK_EXPORT CachingModule
+  : public Module, public CachingModuleGUI
 {
 public:
   /** Standard class typedefs */
-  typedef WriterModule                 Self;
+  typedef CachingModule                 Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -54,46 +52,55 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(WriterModule,Module);
+  itkTypeMacro(CachingModule,Module);
 
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef VectorImage<unsigned char,2>  CharVectorImageType;
   typedef Image<double,2>               FloatingImageType;
-  typedef VectorData<double>                           VectorType;
-  typedef VectorData<double,2,short unsigned int>      LabeledVectorType;
-  /// Writers
+
+   /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
   typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
   typedef ImageFileWriter<FloatingImageType>       FPWriterType;
-  typedef VectorDataFileWriter<VectorType>         VectorWriterType;
-  typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
+
+  /// Readers
+  typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
+  typedef ImageFileReader<CharVectorImageType>     CharVReaderType;
+  typedef ImageFileReader<FloatingImageType>       FPReaderType;
 
 protected:
   /** Constructor */
-  WriterModule();
+  CachingModule();
   /** Destructor */
-  virtual ~WriterModule();
+  virtual ~CachingModule();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** The custom run command */
-  virtual void Run();
-
   /** Callbacks */
-  virtual void SaveDataSet();
-  virtual void Browse();
-  virtual void Cancel();
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
   void UpdateProgressBar( float progress );
 
 private:
-  WriterModule(const Self&); //purposely not implemented
+  CachingModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  itk::ProcessObject::Pointer m_ProcessObject;
+  // The writing process
+  itk::ProcessObject::Pointer m_WritingProcess;
+  
+  // The reading process
+  itk::ProcessObject::Pointer m_ReadingProcess;
+
+  // Is caching done ?
+  bool m_Done;
+
+  // The caching path (could be later read from parameters file)
+  std::string m_CachingPath;
+
+  // The file path
+  std::string m_FilePath;
 };
 
 

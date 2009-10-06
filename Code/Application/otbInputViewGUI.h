@@ -103,7 +103,7 @@ private:
 
 
   MonteverdiModel::Pointer                m_Model;
-  MonteverdiControllerInterface::Pointer  m_Controller;
+  itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
   std::string                             m_ModuleInstanceId;
   InputChoiceDescriptorMapType            m_InputChoiceMap;
 };

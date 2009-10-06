@@ -57,6 +57,7 @@
 #include "otbMeanShiftModule.h"
 #include "otbPanSharpeningModule.h"
 #include "otbViewerModule.h"
+#include "otbCachingModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -94,6 +95,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
+  model->RegisterModule<otb::CachingModule>("Caching","File/Cache dataset");
   
 
   // Launch Monteverdi

@@ -31,14 +31,14 @@ ${TEMP}/readerModuleOuptut.tif
 #------------- Ortho Rectification Tests ---------------------------
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvOrthorectificationModuleTest ${Modules_TESTS}  otbOrthorectificationModuleTest
-${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
 ${TEMP}/OrthorectificationModuleOuptut.tif
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Feature Extraction Tests ---------------------------
 ADD_TEST(moTvFeatureExtractionModuleTest  ${Modules_TESTS} otbFeatureExtractionModuleTest
-${INPUTDATA}/GomaBestScale_w15_50.raw.hdr	
+${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
 ${TEMP}/FeatureExtractionModuleOuptut.hdr
 )
 
@@ -54,7 +54,7 @@ ${TEMP}/featModelTest.tif
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS}  otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
-${INPUTDATA}/poupees.svm	
+${INPUTDATA}/poupees.svm    
 )
 #------------- Writer Module Tests ---------------------------
 ADD_TEST(WriterModuleTest  ${Modules_TESTS} otbWriterModuleTest
@@ -94,6 +94,14 @@ ${TEMP}/readerModuleOuptut.tif
 #${TEMP}/readerModuleOuptut.tif
 #)
 
+#------------- PanSharpening Module Tests ---------------------------
+
+ADD_TEST(PanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+    ${TEMP}/panSharpeningModuleOutput.tif
+)
+
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -107,8 +115,9 @@ otbReaderWriterModuleTest.cxx
 otbViewerModuleTest.cxx
 otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx
+otbPanSharpeningModuleTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule   OTBIO OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule OTBIO OTBCommon OTBTesting)

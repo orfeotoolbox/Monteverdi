@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbWriterModule.h"
 #include <FLU/Flu_File_Chooser.h>
-
+#include <FL/Fl.H>
 
 
 namespace otb
@@ -25,13 +25,7 @@ namespace otb
 /** Constructor */
 WriterModule::WriterModule()
 {
-  m_FPVWriter = FPVWriterType::New();
-  m_CharVWriter = CharVWriterType::New();
-  m_FPWriter = FPWriterType::New();
-  m_VectorWriter = VectorWriterType::New();
-  m_LabeledVectorWriter = LabeledVectorWriterType::New();
-  
-   // Describe inputs
+  // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
@@ -61,8 +55,8 @@ void WriterModule::Run()
 
 void WriterModule::SaveDataSet()
 {
-  this->StartProcess1();
   this->StartProcess2();
+  this->StartProcess1();
 }
 
 void WriterModule::Browse()
@@ -106,7 +100,6 @@ void WriterModule::UpdateProgressBar( float progress )
 
 void WriterModule::ThreadedWatch()
 {
-  std::cout<<"RunProcess1: Deactivate interface"<<std::endl;
   // Deactivate window buttons
   Fl::lock();
   bBrowse->deactivate();
@@ -115,54 +108,21 @@ void WriterModule::ThreadedWatch()
   vFilePath->deactivate();
   Fl::unlock();
 
-  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-  FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
-  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
-  LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
-
-  itk::ProcessObject::Pointer myObject;
-				   
-  if ( charVectorImage.IsNotNull() ) 
-    {
-    myObject = m_CharVWriter;
-    }
-  else if ( vectorImage.IsNotNull() ) 
-    {
-    myObject = m_FPVWriter;
-    }
-  else if( singleImage.IsNotNull() )
-    {
-    myObject = m_FPWriter;
-    }
-  else if( vectorData.IsNotNull() )
-    {
-    myObject = m_VectorWriter;
-    }
-  else if( labeledVectorData.IsNotNull() )
-    {
-    myObject = m_LabeledVectorWriter;
-    }
-  else
-    {
-    itkExceptionMacro(<<"Input data are NULL.");
-    }
-	
   float progress = 0;
   float progressOld = -1;
 
-  std::cout<<"RunProcess1: Starting the watch loop."<<std::endl;
-
-
   while( progress != 1)
     {
-      sleep(0.5);
-      progress = myObject->GetProgress();
+      Sleep(500);
+      if(m_ProcessObject.IsNotNull())
+	{
+	progress = m_ProcessObject->GetProgress();
+	}
+
       float diffProg = progress - progressOld;
 
        if(diffProg > 0.01)
  	{
-	  std::cout<<"RunProcess1: Updating progress ..."<<std::endl;
 	  this->UpdateProgressBar( progress );
  	  progressOld = progress;
  	}
@@ -184,9 +144,7 @@ void WriterModule::ThreadedWatch()
   // Close the window
   wFileChooserWindow->hide();
   Fl::unlock();
-  
-  std::cout<<"RunProcess1: End"<<std::endl;
-}
+  }
 
 
 
@@ -203,34 +161,43 @@ void WriterModule::ThreadedRun()
 
   if ( charVectorImage.IsNotNull() ) 
     {
-      m_CharVWriter->SetInput(charVectorImage);
-      m_CharVWriter->SetFileName(filepath);
-      m_CharVWriter->Update();
+    CharVWriterType::Pointer charVWriter = CharVWriterType::New();
+    charVWriter->SetInput(charVectorImage);
+    charVWriter->SetFileName(filepath);
+    m_ProcessObject = charVWriter;
+    charVWriter->Update();
     }
   else if ( vectorImage.IsNotNull() ) 
     {
-    std::cout<<"RunProcess2: Writing floating point vector image"<<std::endl;
-      m_FPVWriter->SetInput(vectorImage);
-      m_FPVWriter->SetFileName(filepath);
-      m_FPVWriter->Update();
+    FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+    fPVWriter->SetInput(vectorImage);
+    fPVWriter->SetFileName(filepath);
+    m_ProcessObject = fPVWriter;
+    fPVWriter->Update();
     }
   else if( singleImage.IsNotNull() )
     {
-      m_FPWriter->SetInput(singleImage);
-      m_FPWriter->SetFileName(filepath);
-      m_FPWriter->Update();
+    FPWriterType::Pointer fPWriter = FPWriterType::New();
+    fPWriter->SetInput(singleImage);
+    fPWriter->SetFileName(filepath);
+    m_ProcessObject = fPWriter;
+    fPWriter->Update();
     }
   else if( vectorData.IsNotNull() )
     {
-      m_VectorWriter->SetInput(vectorData);
-      m_VectorWriter->SetFileName(filepath);
-      m_VectorWriter->Update();
+    VectorWriterType::Pointer vectorWriter = VectorWriterType::New();
+    vectorWriter->SetInput(vectorData);
+    vectorWriter->SetFileName(filepath);
+    m_ProcessObject = vectorWriter;
+    vectorWriter->Update();
     }
   else if( labeledVectorData.IsNotNull() )
     {
-      m_LabeledVectorWriter->SetInput(labeledVectorData);
-      m_LabeledVectorWriter->SetFileName(filepath);
-      m_LabeledVectorWriter->Update();
+    LabeledVectorWriterType::Pointer labeledVectorWriter = LabeledVectorWriterType::New();
+    labeledVectorWriter->SetInput(labeledVectorData);
+    labeledVectorWriter->SetFileName(filepath);
+    m_ProcessObject = labeledVectorWriter;
+    labeledVectorWriter->Update();
     }
   else
     {

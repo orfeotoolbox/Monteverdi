@@ -45,7 +45,7 @@ InputViewGUI
 ::BuildInputInterface()
 {
 
-   if( m_Model.IsNotNull() && m_Controller.IsNotNull() )
+   if( m_Model.IsNotNull() && m_Controller != NULL)
    {
      wInputWindow->size_range(wInputWindow->w(), wInputWindow->h(), wInputWindow->w(), 0, 0, 0);
      gScrollInput->type(Fl_Scroll::VERTICAL_ALWAYS);
