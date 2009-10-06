@@ -15,131 +15,147 @@ class HomologousPointExtractionViewGroup {open
     Fl_Window wMainWindow {
       label {homologus points}
       callback {this->Quit();} open
-      xywh {50 142 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {6 87 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Menu_Bar {} {
-        label mMenu
-        callback {this->Quit();} open
-        xywh {0 0 200 20} box PLASTIC_DOWN_BOX
+      Fl_Tile {} {open
+        xywh {0 0 205 600}
       } {
-        Submenu {} {
-          label File open
-          xywh {0 0 63 20}
+        Fl_Menu_Bar {} {
+          label mMenu
+          callback {this->Quit();}
+          xywh {0 0 200 20} box PLASTIC_DOWN_BOX
         } {
-          MenuItem {} {
+          Submenu {} {
+            label File open
+            xywh {5 5 63 20}
+          } {
+            MenuItem {} {
+              label Quit
+              callback {this->Quit();}
+              xywh {5 5 30 20}
+            }
+          }
+        }
+        Fl_Group grParam {
+          xywh {0 20 200 580} box PLASTIC_DOWN_BOX color 48
+        } {
+          Fl_Choice gTrasnform {
+            label Transformation
+            xywh {5 60 190 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+          } {
+            MenuItem guiInitMenu {
+              tooltip {""} xywh {20 20 30 20}
+            }
+            MenuItem {} {
+              label Linear
+              tooltip {Touzi Image Filter} xywh {35 35 30 20}
+            }
+          }
+          Fl_Text_Display tError {
+            label Errors
+            xywh {5 152 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Text_Display tTransform {
+            label {Transform Value}
+            xywh {5 325 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Group gPixelValue1 {
+            label {Pixel Values} open
+            xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+          } {}
+          Fl_Group gPixelValue2 {
+            label {Pixel Values} open
+            xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+          } {}
+          Fl_Button guiQuit {
             label Quit
-            callback {this->Quit();}
-            xywh {0 0 30 20}
+            callback {Quit();}
+            tooltip {Quit Application} xywh {55 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
           }
         }
       }
-      Fl_Group grParam {open
-        xywh {0 20 200 580} box PLASTIC_DOWN_BOX color 48
+      Fl_Tile {} {open
+        xywh {204 0 600 605} resizable
       } {
-        Fl_Choice gTrasnform {
-          label Transformation open
-          xywh {5 60 190 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+        Fl_Group {} {open selected
+          xywh {204 0 600 605} resizable
         } {
-          MenuItem guiInitMenu {
-            tooltip {""} xywh {15 15 30 20}
+          Fl_Group guiImageGroup1 {
+            xywh {204 0 210 600}
+          } {
+            Fl_Group gFull1 {
+              label {Full 1}
+              xywh {210 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
+            Fl_Group gScroll1 {
+              label {Scrol 1} open
+              xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
+            Fl_Group gZoom1 {
+              label {Zoom 1} open
+              xywh {210 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
           }
-          MenuItem {} {
-            label Linear
-            tooltip {Touzi Image Filter} xywh {30 30 30 20}
+          Fl_Group {} {
+            xywh {413 0 173 600}
+          } {
+            Fl_Group gIndexes {
+              xywh {419 181 163 95} box PLASTIC_DOWN_BOX color 7
+            } {
+              Fl_Value_Input vX1 {
+                label X1
+                xywh {442 189 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
+              }
+              Fl_Value_Input vY1 {
+                label Y1
+                xywh {442 219 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
+              }
+              Fl_Value_Input vX2 {
+                label X2
+                xywh {507 189 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
+              }
+              Fl_Value_Input vY2 {
+                label Y2
+                xywh {507 219 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
+              }
+              Fl_Button guiAdd {
+                label Add
+                callback {AddPoints();}
+                tooltip {Clear Feature List} xywh {469 250 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              }
+            }
+            Fl_Browser lPointList {
+              label {Point List}
+              tooltip {Contains each Computed Feature} xywh {424 309 145 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            }
+            Fl_Button guiClose {
+              label {Clear List}
+              callback {ClearPointsList();}
+              tooltip {Clear Feature List} xywh {424 542 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Button guiDelete {
+              label Delete
+              callback {DeletePoint();}
+              tooltip {Clear Feature List} xywh {499 542 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+          }
+          Fl_Group guiImageGroup2 {
+            xywh {585 0 215 600}
+          } {
+            Fl_Group gFull2 {
+              label {Full 2} open
+              xywh {590 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
+            Fl_Group gScroll2 {
+              label {Scroll 2} open
+              xywh {590 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
+            Fl_Group gZoom2 {
+              label {Zoom 2} open
+              xywh {590 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
           }
         }
-        Fl_Text_Display tError {
-          label Errors
-          xywh {5 152 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Text_Display tTransform {
-          label {Transform Value}
-          xywh {5 325 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Group gPixelValue1 {
-          label {Pixel Values} open
-          xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
-        } {}
-        Fl_Group gPixelValue2 {
-          label {Pixel Values} open
-          xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
-        } {}
-        Fl_Button guiQuit {
-          label Quit
-          callback {Quit();}
-          tooltip {Quit Application} xywh {55 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
-        }
-      }
-      Fl_Group guiImageGroup1 {open
-        xywh {200 0 215 600}
-      } {
-        Fl_Group gFull1 {
-          label {Full 1} open
-          xywh {210 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-        Fl_Group gScroll1 {
-          label {Scrol 1} open
-          xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-        Fl_Group gZoom1 {
-          label {Zoom 1} open
-          xywh {210 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-      }
-      Fl_Group guiImageGroup2 {open
-        xywh {580 0 219 600} resizable
-      } {
-        Fl_Group gFull2 {
-          label {Full 2} open
-          xywh {590 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-        Fl_Group gScroll2 {
-          label {Scroll 2} open
-          xywh {590 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-        Fl_Group gZoom2 {
-          label {Zoom 2} open selected
-          xywh {590 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        } {}
-      }
-      Fl_Group gIndexes {open
-        xywh {420 181 163 95} box PLASTIC_DOWN_BOX color 7
-      } {
-        Fl_Value_Input vX1 {
-          label X1
-          xywh {443 189 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
-        }
-        Fl_Value_Input vY1 {
-          label Y1
-          xywh {443 219 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
-        }
-        Fl_Value_Input vX2 {
-          label X2
-          xywh {508 189 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
-        }
-        Fl_Value_Input vY2 {
-          label Y2
-          xywh {508 219 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
-        }
-        Fl_Button guiAdd {
-          label Add
-          callback {AddPoints();}
-          tooltip {Clear Feature List} xywh {470 250 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
-        }
-      }
-      Fl_Browser lPointList {
-        label {Point List}
-        tooltip {Contains each Computed Feature} xywh {425 309 145 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
-      }
-      Fl_Button guiClose {
-        label {Clear List}
-        callback {ClearPointsList();}
-        tooltip {Clear Feature List} xywh {425 542 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
-      }
-      Fl_Button guiDelete {
-        label Delete
-        callback {DeletePoint();}
-        tooltip {Clear Feature List} xywh {500 542 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
       }
     }
   }
