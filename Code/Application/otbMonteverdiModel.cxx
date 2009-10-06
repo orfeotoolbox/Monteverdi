@@ -30,10 +30,7 @@ MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
  * Constructor
  */
 MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap()
-{
-  m_MonteverdiModel = MonteverdiModel::GetInstance();
-  m_MonteverdiModel->RegisterListener(this);
-}
+{}
 
 MonteverdiModel::~MonteverdiModel()
 {
