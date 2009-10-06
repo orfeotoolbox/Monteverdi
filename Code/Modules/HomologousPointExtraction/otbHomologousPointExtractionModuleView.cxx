@@ -26,36 +26,45 @@
 namespace otb
 {
 
-HomologousPointExtractionModuleView::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_ImageView()
+HomologousPointExtractionModuleView
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
-  m_ImageView = ImageViewType::New();
-  
+  m_FirstImageView = ImageViewType::New();
+  m_SecondImageView = ImageViewType::New();
 }
 
 
-HomologousPointExtractionModuleView::~HomologousPointExtractionModuleView()
+HomologousPointExtractionModuleView
+::~HomologousPointExtractionModuleView()
 {
   // Remove registered visualization components from the interface
 //   gImageViewer->remove(m_ImageView->GetFullWidget());
 //   gScroll->remove(m_ImageView->GetScrollWidget());
 }
 
-void HomologousPointExtractionModuleView::SetModel(HomologousPointExtractionModuleModel* model)
+void
+HomologousPointExtractionModuleView
+::SetModel(HomologousPointExtractionModuleModel* model)
 {
   m_Model = model;
-  m_ImageView->SetModel(m_Model->GetVisualizationModel());
+  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0)); 
+  m_SecondImageView->SetModel(m_Model->GetVisualizationModel(1));
   m_Model->RegisterListener(this);
 }
 
-void HomologousPointExtractionModuleView::BuildInterface()
+void
+HomologousPointExtractionModuleView
+::BuildInterface()
 {
+  std::cout<<"************HomologousPointExtractionModuleView::BuildInterface()************"<<std::endl;
+
   if(!m_Controller)
     {
     itkExceptionMacro(<<"Controller is not set, can not build view.");
     }
 
-  if(!m_WidgetsController)
+  if(!m_FirstWidgetsController || !m_SecondWidgetsController)
     {
     itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
@@ -63,31 +72,69 @@ void HomologousPointExtractionModuleView::BuildInterface()
   HomologousPointExtractionViewGroup::CreateGUI();
 
   // Register controllers
-   m_ImageView->SetController(m_WidgetsController);
+   m_FirstImageView->SetController(m_FirstWidgetsController);
+   m_SecondImageView->SetController(m_SecondWidgetsController);
 
    // Remove registered visualization components from the interface
-//    gImageViewer->add(m_ImageView->GetFullWidget());
-//    gScroll->add(m_ImageView->GetScrollWidget());
+    gFull1->add(m_FirstImageView->GetFullWidget());
+    gScroll1->add(m_FirstImageView->GetScrollWidget());
+    gZoom1->add(m_FirstImageView->GetZoomWidget());
+    gFull1->resizable(m_FirstImageView->GetFullWidget());
+    gScroll1->resizable(m_FirstImageView->GetScrollWidget());
+    gZoom1->resizable(m_FirstImageView->GetZoomWidget());
 
-//    gImageViewer->resizable(m_ImageView->GetFullWidget());
-//    gScroll->resizable(m_ImageView->GetScrollWidget());
+    m_FirstImageView->GetFullWidget()->resize(gFull1->x(),gFull1->y(),gFull1->w(),gFull1->h());
+    m_FirstImageView->GetScrollWidget()->resize(gScroll1->x(),gScroll1->y(),gScroll1->w(),gScroll1->h());
+    m_FirstImageView->GetZoomWidget()->resize(gZoom1->x(),gZoom1->y(),gZoom1->w(),gZoom1->h());
 
-//    m_ImageView->GetFullWidget()->resize(gImageViewer->x(),gImageViewer->y(),gImageViewer->w(),gImageViewer->h());
-//    m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
+  // Remove registered visualization components from the interface
+    gFull2->add(m_SecondImageView->GetFullWidget());
+    gScroll2->add(m_SecondImageView->GetScrollWidget());
+    gZoom2->add(m_SecondImageView->GetZoomWidget());
+    gFull2->resizable(m_SecondImageView->GetFullWidget());
+    gScroll2->resizable(m_SecondImageView->GetScrollWidget());
+    gZoom2->resizable(m_SecondImageView->GetZoomWidget());
+
+    m_SecondImageView->GetFullWidget()->resize(gFull2->x(),gFull2->y(),gFull2->w(),gFull2->h());
+    m_SecondImageView->GetScrollWidget()->resize(gScroll2->x(),gScroll2->y(),gScroll2->w(),gScroll2->h());
+    m_SecondImageView->GetZoomWidget()->resize(gZoom2->x(),gZoom2->y(),gZoom2->w(),gZoom2->h());
 
    // Show and refresh the interface
     this->wMainWindow->show();
 
-//     m_ImageView->GetFullWidget()->show();
-//     m_ImageView->GetScrollWidget()->show();
+     m_FirstImageView->GetFullWidget()->show();
+     m_FirstImageView->GetScrollWidget()->show();
+     m_FirstImageView->GetZoomWidget()->show();
+     m_SecondImageView->GetFullWidget()->show();
+     m_SecondImageView->GetScrollWidget()->show();
+     m_SecondImageView->GetZoomWidget()->show();
+
+     // Link pixel descriptors (not do before because widgets have to be instanciated)
+     m_Controller->LinkPixelDescriptors();
 }
 
-void HomologousPointExtractionModuleView::Notify()
+
+void 
+HomologousPointExtractionModuleView
+::AddPoints()
+{
+  int x1 = vX1->value();
+  int y1 = vY1->value();
+  int x2 = vX2->value();
+  int y2 = vY2->value();
+  m_Controller->AddPoints( x1, y1, x2, y2 );
+}
+
+void
+HomologousPointExtractionModuleView
+::Notify()
 {
 
 }
 
-void HomologousPointExtractionModuleView::Exit()
+void
+HomologousPointExtractionModuleView
+::Quit()
 {
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();

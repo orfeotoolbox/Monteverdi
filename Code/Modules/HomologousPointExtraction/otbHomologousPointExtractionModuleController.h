@@ -23,11 +23,16 @@
 #include "otbHomologousPointExtractionModuleView.h"
 
 #include "otbImageWidgetController.h"
+// Handlers list
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbPixelDescriptionActionHandler.h"
+#include "otbChangeScaledExtractRegionActionHandler.h"
+#include "otbChangeScaleActionHandler.h"
 #include "otbMouseClickActionHandler.h"
-#include "itkMultiThreader.h"
+#include "otbPixelDescriptionActionHandler.h"
+#include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionView.h"
 
 namespace otb
 {
@@ -47,14 +52,27 @@ public:
 
 
   /** Widgets controller and action handlers */
-  typedef HomologousPointExtractionModuleView::ImageViewType              ImageViewType;
-  typedef HomologousPointExtractionModuleModel::VisualizationModelType    VisualizationModelType;
+  typedef HomologousPointExtractionModuleView::ImageViewType           ImageViewType;
+  typedef HomologousPointExtractionModuleModel::VisualizationModelType VisualizationModelType;
+  typedef HomologousPointExtractionModuleModel::VectorImageType        VectorImageType;
+  typedef VectorImageType::IndexType                                   IndexType;
+  typedef VectorImageType::PixelType                                   PixelType;
+  typedef HomologousPointExtractionModuleModel::RGBImageType           RGBImageType;
 
-  typedef ImageWidgetController                                     WidgetsControllerType;
-  typedef WidgetResizingActionHandler
-    <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
-  typedef ChangeExtractRegionActionHandler
-      <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+
+  /** Handlers */
+  typedef ImageWidgetController                                                        WidgetsControllerType;
+  typedef WidgetResizingActionHandler<VisualizationModelType,ImageViewType>            ResizingHandlerType;
+  typedef ChangeExtractRegionActionHandler<VisualizationModelType,ImageViewType>       ChangeRegionHandlerType;
+  typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
+  typedef ChangeScaleActionHandler<VisualizationModelType,ImageViewType>               ChangeScaleHandlerType;
+
+  typedef PixelDescriptionModel<RGBImageType>                                          PixelDescriptionModelType;
+  typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType>      PixelDescriptionActionHandlerType;
+  typedef PixelDescriptionView<PixelDescriptionModelType>                              PixelDescriptionViewType;
+  typedef PixelDescriptionViewType::Pointer                                            PixelDescriptionViewPointerType;
+  
+
 
   void SetModel(ModelType* model);
 
@@ -62,8 +80,8 @@ public:
   void SetView(HomologousPointExtractionModuleView * view);
 
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetsController,WidgetsControllerType);
-
+  itkGetObjectMacro(FirstWidgetsController,WidgetsControllerType);
+  itkGetObjectMacro(SecondWidgetsController,WidgetsControllerType);
 
   virtual void SetFirstInputImage(HomologousPointExtractionModuleModel::VectorImageType* image)
   {
@@ -73,7 +91,10 @@ public:
   {
     m_Model->SetSecondInputImage(image);
   }
- 
+
+  /** Link module and pixel descriptor action handlers. */
+  virtual void LinkPixelDescriptors(); 
+  virtual void AddPoints( int x1, int y1, int x2, int y2 );
 
 protected:
   /** Constructor */
@@ -94,11 +115,26 @@ private:
 
 
   /** Widgets controller */
-  WidgetsControllerType::Pointer             m_WidgetsController;
+  WidgetsControllerType::Pointer             m_FirstWidgetsController;
+  WidgetsControllerType::Pointer             m_SecondWidgetsController;
 
   /** Action handlers */
-  ResizingHandlerType::Pointer               m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
+  ResizingHandlerType::Pointer               m_FirstResizingHandler;
+  ChangeRegionHandlerType::Pointer           m_FirstChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer     m_FirstChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer            m_FirstChangeScaleHandler;
+
+  ResizingHandlerType::Pointer               m_SecondResizingHandler;
+  ChangeRegionHandlerType::Pointer           m_SecondChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer     m_SecondChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer            m_SecondChangeScaleHandler;
+
+  PixelDescriptionActionHandlerType::Pointer m_FirstPixelActionHandler;
+  PixelDescriptionModelType::Pointer         m_FirstPixelModel;
+  PixelDescriptionViewType::Pointer          m_FirstPixelView;
+  PixelDescriptionActionHandlerType::Pointer m_SecondPixelActionHandler;
+  PixelDescriptionModelType::Pointer         m_SecondPixelModel;
+  PixelDescriptionViewType::Pointer          m_SecondPixelView;
 
   bool m_ImageReady;
 

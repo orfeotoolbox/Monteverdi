@@ -19,6 +19,8 @@
 #ifndef __otbHomologousPointExtractionModuleModel_h
 #define __otbHomologousPointExtractionModuleModel_h
 
+#include <iostream>
+#include <utility>
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 #include "otbVectorImage.h"
@@ -52,26 +54,28 @@ public:
   /** Standard type macro */
   itkTypeMacro(HomologousPointExtractionModuleModel, Object);
 
-  typedef      double                                                            PixelType;
-  typedef      VectorImage<PixelType,2>                VectorImageType;
-  typedef      VectorImageType::Pointer                VectorImagePointerType;
-  typedef      Image<unsigned int>                     LabeledImageType;
-  typedef      LabeledImageType::Pointer               LabeledImagePointerType;
-  typedef      ImageFileReader<VectorImageType>        VectorReaderType;
-  typedef      ImageFileWriter<VectorImageType>        VectorWriterType;
-  typedef      ImageFileWriter<LabeledImageType>       LabeledWriterType;
+  typedef double                              PixelType;
+  typedef VectorImage<PixelType,2>            VectorImageType;
+  typedef VectorImageType::Pointer            VectorImagePointerType;
+  typedef VectorImageType::IndexType          IndexType;
+  typedef std::vector<VectorImagePointerType> ImageListType;    
 
+  typedef std::pair<IndexType, IndexType> IndexCoupleType;
+  typedef std::vector<IndexCoupleType>    IndexesListType;
 
   /** Visualization model */
-  typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef      Image<RGBPixelType,2>                                     RGBImageType;
-  typedef      ImageLayer<VectorImageType,RGBImageType>                  LayerType;
-  typedef      ImageLayer<LabeledImageType,RGBImageType>                  LabelLayerType;
-  typedef      ImageLayerGenerator<LayerType>                            LayerGeneratorType;
-  typedef      ImageLayerGenerator<LabelLayerType>                            LabelLayerGeneratorType;
-  typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
+  typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
+  typedef Image<RGBPixelType,2>                                     RGBImageType;
+  typedef ImageLayer<VectorImageType,RGBImageType>                  LayerType;
+  typedef ImageLayerGenerator<LayerType>                            LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
+  typedef std::vector<LayerGeneratorPointerType>                    LayerGeneratorListType;
+  typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
+  typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
+  typedef std::vector<VisualizationModelPointerType>                VisualizationModelListType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
-
+  typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
+  typedef std::vector<BlendingFunctionPointerType>                                                    BlendingFunctionListType;
 
   /** New macro */
   itkNewMacro(Self);
@@ -80,18 +84,43 @@ public:
   static Pointer GetInstance();
 
   /** Get the visualization models */
-  itkGetObjectMacro(VisualizationModel,VisualizationModelType);
-
+  VisualizationModelPointerType GetVisualizationModel(unsigned int id)
+  {
+    if( id != 0 && id != 1 )
+      {
+	itkExceptionMacro(<<"invalid id "<<id<<".");
+      }
+    return m_VisualizationModel[id];
+  }
 
   /** Input Images Pointer */
-  itkSetObjectMacro(FirstInputImage, VectorImageType);
+  void SetFirstInputImage( VectorImagePointerType img );
   itkGetConstObjectMacro(FirstInputImage, VectorImageType);
-  itkSetObjectMacro(SecondInputImage, VectorImageType);
+  void SetSecondInputImage( VectorImagePointerType img );
   itkGetConstObjectMacro(SecondInputImage, VectorImageType);
+  void SetImage( unsigned int id, VectorImagePointerType image );
 
+  /** Indexes list manipulation. */
+  IndexesListType GetIndexesList() const
+  {
+    return m_IndexesList;
+  }
+  void AddIndexesToList( IndexType id1, IndexType id2 )
+  {
+    IndexCoupleType paire(id1, id2);
+    m_IndexesList.push_back(paire);
+  }
+ void ClearIndexesList()
+  {
+    m_IndexesList.clear();
+  }
+ void RemoveFromList( unsigned int id )
+  {
+    if(m_IndexesList.size())
+      itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size.");
 
-  /** Open an image */
-  //void OpenImage(const char * filename);
+    m_IndexesList.erase(m_IndexesList.begin()+id);
+  }
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
@@ -116,18 +145,17 @@ private:
   /** Singleton instance */
   static Pointer                     Instance;
 
-  /** Visualization model */
-  VisualizationModelType::Pointer    m_VisualizationModel;
-
-  /** Vector reader */
-  VectorReaderType::Pointer            m_Reader;
-
-  LayerGeneratorType::Pointer m_ImageGenerator;
-
-  BlendingFunctionType::Pointer m_BlendingFunction;
-
+  /** Visualization */
+  VisualizationModelListType m_VisualizationModel;
+  LayerGeneratorListType     m_ImageGenerator;
+  BlendingFunctionListType   m_BlendingFunction;
+  /** Input Images */
+  ImageListType              m_Images;
   VectorImagePointerType m_FirstInputImage;
   VectorImagePointerType m_SecondInputImage;
+
+  /** First and second input image indexes list */
+  IndexesListType m_IndexesList;
 
   bool m_OutputChanged;
 

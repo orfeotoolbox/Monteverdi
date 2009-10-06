@@ -14,7 +14,7 @@ class HomologousPointExtractionViewGroup {open
   } {
     Fl_Window wMainWindow {
       label {homologus points}
-      callback {Quit();} open
+      callback {this->Quit();} open
       xywh {50 142 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Menu_Bar {} {
@@ -28,6 +28,7 @@ class HomologousPointExtractionViewGroup {open
         } {
           MenuItem {} {
             label Quit
+            callback {this->Quit();}
             xywh {0 0 30 20}
           }
         }
@@ -55,7 +56,11 @@ class HomologousPointExtractionViewGroup {open
           label {Transform Value}
           xywh {5 325 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
-        Fl_Group {} {
+        Fl_Group gPixelValue1 {
+          label {Pixel Values} open
+          xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+        } {}
+        Fl_Group gPixelValue2 {
           label {Pixel Values} open
           xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
         } {}
@@ -76,7 +81,7 @@ class HomologousPointExtractionViewGroup {open
           label {Scrol 1} open
           xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
-        Fl_Group gZooml1 {
+        Fl_Group gZoom1 {
           label {Zoom 1} open
           xywh {210 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
@@ -93,7 +98,7 @@ class HomologousPointExtractionViewGroup {open
           xywh {590 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gZoom2 {
-          label {Zoom 2} open
+          label {Zoom 2} open selected
           xywh {590 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
       }
@@ -123,7 +128,7 @@ class HomologousPointExtractionViewGroup {open
         }
       }
       Fl_Browser lPointList {
-        label {Point List} selected
+        label {Point List}
         tooltip {Contains each Computed Feature} xywh {425 309 145 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
       }
       Fl_Button guiClose {

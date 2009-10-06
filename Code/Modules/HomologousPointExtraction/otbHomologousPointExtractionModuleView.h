@@ -51,30 +51,32 @@ public:
   itkTypeMacro(HomologousPointExtractionModuleView,Object);
 
 
-  typedef HomologousPointExtractionModuleModel::VisualizationModelType    VisualizationModelType;
-  typedef HomologousPointExtractionModuleModel::RGBPixelType                    PixelType;
-
-  typedef ImageView<VisualizationModelType>                         ImageViewType;
+  typedef HomologousPointExtractionModuleModel::VisualizationModelType VisualizationModelType;
+  typedef HomologousPointExtractionModuleModel::RGBPixelType           PixelType;
+  typedef ImageView<VisualizationModelType>                            ImageViewType;
 
 
   /** Event from the model */
   virtual void Notify();
 
   /** Fluid call backs*/
-  virtual void Exit();
+  virtual void Quit();
 
   /** Set the controller */
   itkSetObjectMacro(Controller,HomologousPointExtractionModuleControllerInterface);
   itkGetObjectMacro(Controller,HomologousPointExtractionModuleControllerInterface);
 
   /** Set the widgets controller */
-  itkSetObjectMacro(WidgetsController,ImageWidgetController);
+  itkSetObjectMacro(FirstWidgetsController,ImageWidgetController);
+  itkSetObjectMacro(SecondWidgetsController,ImageWidgetController);
 
   /** Build the interface */
   virtual void BuildInterface();
+  virtual void AddPoints();
 
   /** Get a pointer to the view parts for the controller */
-  itkGetObjectMacro(ImageView,ImageViewType);
+  itkGetObjectMacro(FirstImageView,ImageViewType);
+  itkGetObjectMacro(SecondImageView,ImageViewType);
 
   void SetModel(HomologousPointExtractionModuleModel* model);
   
@@ -94,15 +96,15 @@ private:
   HomologousPointExtractionModuleControllerInterface::Pointer m_Controller;
 
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer                        m_WidgetsController;
+  ImageWidgetController::Pointer                        m_FirstWidgetsController;
+  ImageWidgetController::Pointer                        m_SecondWidgetsController;
 
   /** Pointer to the model */
   HomologousPointExtractionModuleModel::Pointer               m_Model;
 
   /** Image view */
-  ImageViewType::Pointer                         m_ImageView;
-
-  itk::SimpleFastMutexLock m_Mutex;
+  ImageViewType::Pointer                         m_FirstImageView;
+  ImageViewType::Pointer                         m_SecondImageView;
 
 };
 }//end namespace otb
