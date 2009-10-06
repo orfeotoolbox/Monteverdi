@@ -42,18 +42,11 @@ CachingModule::~CachingModule()
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
 
-  std::cout<<"Trying to remove file "<<m_FilePath<<std::endl;
-  
-
 // try to remove the file
   if(ofname.exists())
     {
+    std::cout<<"Cleaning up cache file "<<m_FilePath<<std::endl;
     bool result = ofname.remove();
-    
-    if(!result)
-      {
-      std::cout<<"Could not remove file "<<m_FilePath<<std::endl;
-      }
     }
 }
 
