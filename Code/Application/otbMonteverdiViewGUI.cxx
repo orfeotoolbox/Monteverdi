@@ -46,7 +46,9 @@ MonteverdiViewGUI
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
- 
+
+  m_MonteverdiModel = MonteverdiModel::GetInstance();
+  m_MonteverdiModel->RegisterListener(this);
 }
 
 MonteverdiViewGUI
