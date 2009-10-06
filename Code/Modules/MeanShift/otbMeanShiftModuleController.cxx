@@ -190,6 +190,7 @@ MeanShiftModuleController
   {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
+  return 0;
 }
 
 } // end namespace otb
