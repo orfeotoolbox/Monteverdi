@@ -29,9 +29,14 @@ ReaderModule::ReaderModule()
 {
   m_FPVReader = FPVReaderType::New();
   m_VectorReader = VectorReaderType::New();
+  m_ComplexReader = ComplexImageReaderType::New();
   m_LabeledVectorReader = LabeledVectorReaderType::New();
   m_AmplitudeFilter = AmplitudeFilterType::New();
   m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
+  m_RealFilter = RealFilterType::New();
+  m_ImaginaryFilter = ImaginaryFilterType::New();
+  m_ModulusFilter = ModulusFilterType::New();
+  m_PhaseFilter = PhaseFilterType::New();
 }
 
 /** Destructor */
@@ -72,39 +77,70 @@ void ReaderModule::OpenDataSet()
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
 
-    // Add the full data set as a descriptor
-    oss << "Image read from file: " << lFile.file();
-    this->AddOutputDescriptor(m_FPVReader->GetOutput(),"OutputImage",oss.str());
-
-
-    // Add sub-bands
-    for(unsigned int band = 0; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
+    switch(m_FPVReader->GetImageIO()->GetPixelType())
       {
-      // Extract band
-      ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
-      extract->SetInput(m_FPVReader->GetOutput());
-      extract->SetChannel(band+1);
-      m_ExtractROIFilterList->PushBack(extract);
+      // handle the radar case
+      case itk::ImageIOBase::COMPLEX:
+	m_ComplexReader->SetFileName(filepath);
+	m_ComplexReader->GenerateOutputInformation();
+	oss <<"Complex image read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_ComplexReader->GetOutput(),"OutputImage",oss.str());
 
-      // Description
-      oss.str("");
-      oss << "Band "<<band+1<<" read from file: " << lFile.file();
-      // Output ID
-      ossId.str("");
-      ossId<<"OutputImageBand"<<band+1;
-      this->AddOutputDescriptor(extract->GetOutput(),ossId.str(),oss.str());
+	m_RealFilter->SetInput(m_ComplexReader->GetOutput());
+	oss.str("");
+	oss <<"Image real part read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_RealFilter->GetOutput(),"OutputImageReal",oss.str());
+	
+	m_ImaginaryFilter->SetInput(m_ComplexReader->GetOutput());
+	oss.str("");
+	oss <<"Image Imaginary part read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_ImaginaryFilter->GetOutput(),"OutputImageImaginary",oss.str());
 
+	m_ModulusFilter->SetInput(m_ComplexReader->GetOutput());
+	oss.str("");
+	oss <<"Image real part read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_ModulusFilter->GetOutput(),"OutputImageModulus",oss.str());
+
+	m_PhaseFilter->SetInput(m_ComplexReader->GetOutput());
+	oss.str("");
+	oss <<"Image real part read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_PhaseFilter->GetOutput(),"OutputImagePhase",oss.str());
+
+	// If we are still here, this is a readable image
+	typeFound = true;
+
+	break;
+
+      // handle the optical case
+      default:
+	// Add the full data set as a descriptor
+	oss << "Image read from file: " << lFile.file();
+	this->AddOutputDescriptor(m_FPVReader->GetOutput(),"OutputImage",oss.str());
+	// Add sub-bands
+	for(unsigned int band = 0; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
+	  {
+	  // Extract band
+	  ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
+	  extract->SetInput(m_FPVReader->GetOutput());
+	  extract->SetChannel(band+1);
+	  m_ExtractROIFilterList->PushBack(extract);
+	  
+	  // Description
+	  oss.str("");
+	  oss << "Band "<<band+1<<" read from file: " << lFile.file();
+	  // Output ID
+	  ossId.str("");
+	  ossId<<"OutputImageBand"<<band+1;
+	  this->AddOutputDescriptor(extract->GetOutput(),ossId.str(),oss.str());
+	  }
+	m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
+	oss.str("");
+	oss <<"Image amplitude read from file: "<<lFile.file();
+	this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),"OutputImageAmplitude",oss.str());
+	// If we are still here, this is a readable image
+	typeFound = true;
+	break;
       }
-
-    m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
-
-    oss.str("");
-    oss <<"Image amplitude read from file: "<<lFile.file();
-    this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),"OutputImageAmplitude",oss.str());
-
-
-    // If we are still here, this is a readable image
-    typeFound = true;
     }
   catch(itk::ExceptionObject & err)
     {
