@@ -41,10 +41,6 @@ Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ), green_dot( (char*const*)greendot
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
 {
-  // Model pointer and listener registration
-  m_MonteverdiModel = MonteverdiModel::GetInstance();
-  m_MonteverdiModel->RegisterListener(this);
-
   // Files Tree
   m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
 
@@ -61,7 +57,7 @@ void
 MonteverdiViewGUI
 ::InitWidgets()
 {
-  assert(m_MonteverdiController.IsNotNull() && "The controller is not created");
+  assert(m_MonteverdiController!=NULL && "The controller is not created");
 
   // Generate dynamicaly the menus with the Model informations
   this->BuildMenus();

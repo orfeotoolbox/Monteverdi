@@ -39,6 +39,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbInputViewGUI.h"
 
+#include "itkWeakPointer.h"
+
 #include "itkObject.h"
 
 
@@ -146,7 +148,7 @@ private:
   /** Pointer to the model */
   MonteverdiModel::Pointer m_MonteverdiModel;
   /** Pointer to the controller */
-  MonteverdiControllerInterface::Pointer m_MonteverdiController;
+  itk::WeakPointer<MonteverdiControllerInterface> m_MonteverdiController;
 
   /** The Flu tree browser */
   Flu_Tree_Browser        *m_Tree;
