@@ -129,3 +129,14 @@ ${TEMP}/readerModuleOuptut.tif
 
 ADD_EXECUTABLE(otbWriterMVCModuleTest2 otbWriterMVCModuleTest2.cxx)
 TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest2 otbWriterMVCModule)
+
+#------------- PanSharpening Module Tests ---------------------------
+ADD_EXECUTABLE(otbPanSharpeningModuleTest otbPanSharpeningModuleTest.cxx)
+TARGET_LINK_LIBRARIES(otbPanSharpeningModuleTest otbPanSharpeningModule OTBCommon OTBIO)
+
+ADD_TEST(PanSharpeningModuleTest otbPanSharpeningModuleTest
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+    ${TEMP}/panSharpeningModuleOutput.tif
+)
+
