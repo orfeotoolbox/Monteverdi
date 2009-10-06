@@ -867,6 +867,7 @@ void ViewerModule::UpdateTabHistogram()
   //Get the number of subdivisons in the GUI 
  double width  = gHistogram->w()/2;
  double height = gHistogram->h()/2;
+ double blank = 2.;
  
   // Clear the widget 
   m_BlueCurveWidgetGroup->ClearAllCurves();
@@ -895,8 +896,8 @@ void ViewerModule::UpdateTabHistogram()
       //Add to the gHistogram group
       gHistogram->add(m_BlueCurveWidgetGroup);
       gHistogram->resizable(m_BlueCurveWidgetGroup);
-      m_BlueCurveWidgetGroup->resize(gHistogram->x(),gHistogram->y()+height,
-				     width ,height);
+      m_BlueCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+height+blank,
+				     width-blank ,height-blank);
       
       // Right Asymptote
       m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
@@ -926,8 +927,8 @@ void ViewerModule::UpdateTabHistogram()
       //Add to the gHistogram group
       gHistogram->add(m_GreenCurveWidgetGroup);
       gHistogram->resizable(m_GreenCurveWidgetGroup);
-      m_GreenCurveWidgetGroup->resize(gHistogram->x() + width ,gHistogram->y(),
-				      width, height);
+      m_GreenCurveWidgetGroup->resize(gHistogram->x() + width + blank ,gHistogram->y()+blank,
+				      width-blank, height-blank);
       
       // Right Asymptote
       m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
@@ -955,8 +956,8 @@ void ViewerModule::UpdateTabHistogram()
       //Add to the gHistogram group
       gHistogram->add(m_RedCurveWidgetGroup);
       gHistogram->resizable(m_RedCurveWidgetGroup);
-      m_RedCurveWidgetGroup->resize(gHistogram->x()+1,gHistogram->y(),
-				    gHistogram->w()-1,height);
+      m_RedCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+blank,
+				    gHistogram->w()-blank,height-blank);
     }
   else
     {
@@ -966,8 +967,8 @@ void ViewerModule::UpdateTabHistogram()
       //Add to the gHistogram group
       gHistogram->add(m_RedCurveWidgetGroup);
       gHistogram->resizable(m_RedCurveWidgetGroup);
-      m_RedCurveWidgetGroup->resize(gHistogram->x(),gHistogram->y(),
-				    width, height);
+      m_RedCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+blank,
+				    width-blank, height-blank);
     }
     
   rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[0])); 
@@ -1071,6 +1072,30 @@ void ViewerModule::UpdateLowerQuantile()
   m_BlueCurveWidgetGroup->redraw();
   m_GreenCurveWidgetGroup->redraw();
   m_RedCurveWidgetGroup->redraw();
+}
+
+
+/**
+ *
+ */
+void ViewerModule::ShowHide()
+{
+  m_DisplayWindow->Show();
+}
+
+/**
+ *  
+ */
+void ViewerModule::Quit()
+{
+  // Hide the main window
+  m_DisplayWindow->Hide();
+  
+  // Hide the Setup Propreties Window
+  bSetupWindow->hide();
+  
+  // Hide the DEM Window
+  wDEM->hide();
 }
 
 } // End namespace otb

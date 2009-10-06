@@ -242,6 +242,9 @@ public:
   virtual void TabSetupPosition();
   virtual void UpdateUpperQuantile();
   virtual void UpdateLowerQuantile();
+  virtual void ShowHide();
+  virtual void Quit();
+  
   
 private:
   ViewerModule(const Self&); //purposely not implemented
