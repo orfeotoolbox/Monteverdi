@@ -98,24 +98,24 @@ void CachingModule::ThreadedWatch()
 
   while( progress != 1)
     {
-      Fl::wait(0.5);
-      if(m_WritingProcess.IsNotNull())
-	{
-	progress = m_WritingProcess->GetProgress();
-	}
-      float diffProg = progress - progressOld;
-
-       if(diffProg > 0.01)
- 	{
-	  this->UpdateProgressBar( progress );
- 	  progressOld = progress;
- 	}
+    Sleep(500);
+    if(m_WritingProcess.IsNotNull())
+      {
+      progress = m_WritingProcess->GetProgress();
+      }
+    float diffProg = progress - progressOld;
+    
+    if(diffProg > 0.01)
+      {
+      this->UpdateProgressBar( progress );
+      progressOld = progress;
+      }
     }
-
+  
   // Wait for the reader to be set
   while(!m_Done)
     {
-    Fl::wait(0.5);
+    Sleep(500);
     }
 
   Fl::lock();

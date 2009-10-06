@@ -113,7 +113,7 @@ void WriterModule::ThreadedWatch()
 
   while( progress != 1)
     {
-      Fl::wait(0.5);
+      Sleep(500);
       if(m_ProcessObject.IsNotNull())
 	{
 	progress = m_ProcessObject->GetProgress();

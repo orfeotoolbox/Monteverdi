@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkMultiThreader.h"
 #include "itkObject.h"
 #include "itkExceptionObject.h"
+#include <OpenThreads/Thread>
 
 namespace otb
 {
@@ -98,6 +99,12 @@ class ITK_EXPORT AsynchronousProcessBase
     {
       itkExceptionMacro(<<"The RunProcess2 method has to be overloaded.");
     }
+
+  // Internal call to openthread::Thread::microSleep
+  static int Sleep(unsigned int microsec)
+  {
+    return OpenThreads::Thread::microSleep(microsec);
+  }
 
  private:
   AsynchronousProcessBase(const Self&); //purposely not implemented
