@@ -39,7 +39,7 @@ int otbTypeManagerTest(int argc, char * argv[])
       typeManager->RegisterType< itk::PointSet<double,2> >("Point_Set");
       return EXIT_FAILURE;
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject & )
     {
     std::cout<<"Expected exception was caught."<<std::endl;
     }
@@ -53,7 +53,7 @@ int otbTypeManagerTest(int argc, char * argv[])
     std::string name = typeManager->GetTypeName< itk::PointSet<float,2> >();
     return EXIT_FAILURE;
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject & )
     {
     std::cout<<"Expected exception was caught."<<std::endl;
     }
@@ -64,7 +64,7 @@ int otbTypeManagerTest(int argc, char * argv[])
     typeManager->RegisterType< itk::PointSet<float,2> >("Point_Set");
     return EXIT_FAILURE;
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject & )
     {
     std::cout<<"Expected exception was caught."<<std::endl;
     }
