@@ -76,33 +76,6 @@ int
 MonteverdiController
 ::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )
 {
-  ModuleMapType lMap = m_Model->GetModuleMap();
-  ModuleMapType::const_iterator it;
-  
-  // Check if the oldInstanceId exists
-  int keyFound = 0;
-  for (it = lMap.begin(); it != lMap.end(); it++)
-    {
-      if( it->first == oldInstanceId )
-	  keyFound++;
-    }
-  if(keyFound != 1)
-   {
-     itk::OStringStream oss;
-     oss<<"Instance to rename ("<<oldInstanceId<<") not found.";
-     MsgReporter::GetInstance()->SendError(oss.str());
-     return 1;
-   }
-  // Check if newInstanceId doesn't exist 
-  ModuleMapType::const_iterator lIt = lMap.find(newInstanceId);
-  if(lIt!=lMap.end())
-    {
-      itk::OStringStream oss;
-      oss<<"Invalid new instance name "<<newInstanceId<<" already exists.";
-      MsgReporter::GetInstance()->SendError(oss.str());
-      return 1;
-   }
-
   try
     {
       m_Model->ChangeInstanceId( oldInstanceId, newInstanceId );
