@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char* argv[])
+int otbPanSharpeningModuleTest(int argc, char* argv[])
 {
   otb::PanSharpeningModule::Pointer specificModule = otb::PanSharpeningModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();

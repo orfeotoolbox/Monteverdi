@@ -8,63 +8,41 @@ IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+SET(Modules_TESTS ${CXX_TEST_PATH}/otbModulesTests)
 
 
 #-------------- Speckle Filtering Tests ---------------------------------
-ADD_EXECUTABLE(otbSpeckleFilteringApplication otbSpeckleFilteringApplication.cxx)
-TARGET_LINK_LIBRARIES(otbSpeckleFilteringApplication otbSpeckleFilteringModule)
-
-ADD_TEST(moTvSpeckleFilteringApplicationTest otbSpeckleFilteringApplication
+ADD_TEST(moTvSpeckleFilteringApplicationTest ${Modules_TESTS} otbSpeckleFilteringApplication
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringOuptut.tif
 )
 
-
-
-ADD_EXECUTABLE(otbSpeckleFilteringModuleTest otbSpeckleFilteringModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbSpeckleFilteringModuleTest otbSpeckleFilteringModule)
-
-ADD_TEST(moTvSpeckleFilteringModuleTest otbSpeckleFilteringModuleTest
+ADD_TEST(moTvSpeckleFilteringModuleTest  ${Modules_TESTS} otbSpeckleFilteringModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/speckleFilteringModuleOuptut.tif
 )
 
 #------------ Reader Module Test ---------------------------------
-ADD_EXECUTABLE(otbReaderModuleTest otbReaderModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbReaderModuleTest otbReaderModule)
-
-
-ADD_TEST(moTvReaderModuleTest otbReaderModuleTest
+ADD_TEST(moTvReaderModuleTest ${Modules_TESTS}  otbReaderModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
 #------------- Ortho Rectification Tests ---------------------------
-
-ADD_EXECUTABLE(otbOrthorectificationModuleTest otbOrthorectificationModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbOrthorectificationModuleTest otbOrthorectificationModule)
-
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvOrthorectificationModuleTest otbOrthorectificationModuleTest
-${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 	
+ADD_TEST(moTvOrthorectificationModuleTest ${Modules_TESTS}  otbOrthorectificationModuleTest
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
 ${TEMP}/OrthorectificationModuleOuptut.tif
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Feature Extraction Tests ---------------------------
-
-ADD_EXECUTABLE(otbFeatureExtractionModuleTest otbFeatureExtractionModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleTest otbFeatureExtractionModule)
-
-ADD_TEST(moTvFeatureExtractionModuleTest otbFeatureExtractionModuleTest
-${INPUTDATA}/GomaBestScale_w15_50.raw.hdr	
+ADD_TEST(moTvFeatureExtractionModuleTest  ${Modules_TESTS} otbFeatureExtractionModuleTest
+${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
 ${TEMP}/FeatureExtractionModuleOuptut.hdr
 )
 
-ADD_EXECUTABLE(otbFeatureExtractionModuleApplication otbFeatureExtractionApplication.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleApplication otbFeatureExtractionModule)
-
-ADD_TEST(moTvFeatureExtractionModuleApplication otbFeatureExtractionModuleApplication
+ADD_TEST(moTvFeatureExtractionModuleApplication  ${Modules_TESTS} otbFeatureExtractionModuleApplication
 ${INPUTDATA}/qb_RoadExtract.img
 ${TEMP}/featModelTest.tif
 )
@@ -73,42 +51,29 @@ ${TEMP}/featModelTest.tif
 # TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
 
 #------------- Supervised Classification Tests ---------------------------
-
-ADD_EXECUTABLE(otbSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbSupervisedClassificationModuleTest otbSupervisedClassificationModule)
-
-ADD_TEST(moTvSupervisedClassificationModuleTest otbSupervisedClassificationModuleTest
+ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS}  otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
-${INPUTDATA}/poupees.svm	
+${INPUTDATA}/poupees.svm    
 )
 #------------- Writer Module Tests ---------------------------
-ADD_EXECUTABLE(otbWriterModuleTest otbWriterModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbWriterModuleTest otbWriterModule)
-
-ADD_TEST(WriterModuleTest otbWriterModuleTest
+ADD_TEST(WriterModuleTest  ${Modules_TESTS} otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
-ADD_EXECUTABLE(otbReaderWriterModuleTest otbReaderWriterModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbReaderWriterModuleTest otbReaderModule otbWriterModule)
-
-ADD_TEST(ReaderWriterModuleTest otbReaderWriterModuleTest
+ADD_TEST(ReaderWriterModuleTest ${Modules_TESTS} otbReaderWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerwriterModuleOuptut.tif
 )
 #------------------  Viewer Tests ---------------------------
-ADD_EXECUTABLE(otbViewerModuleTest otbViewerModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbViewerModuleTest otbViewerModule)
-
-ADD_TEST(moTvViewerModuleTest otbViewerModuleTest
+ADD_TEST(moTvViewerModuleTest ${Modules_TESTS} otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
 1
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvViewerModuleTestWithSHP otbViewerModuleTest
+ADD_TEST(moTvViewerModuleTestWithSHP ${Modules_TESTS} otbViewerModuleTest
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 1
 ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
@@ -119,24 +84,44 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #------------- Writer MVC Module Tests ---------------------------
-ADD_EXECUTABLE(otbWriterMVCModuleTest otbWriterMVCModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest otbWriterMVCModule)
-
-ADD_TEST(WriterMVCModuleTest otbWriterMVCModuleTest
+ADD_TEST(WriterMVCModuleTest  ${Modules_TESTS} otbWriterMVCModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
-ADD_EXECUTABLE(otbWriterMVCModuleTest2 otbWriterMVCModuleTest2.cxx)
-TARGET_LINK_LIBRARIES(otbWriterMVCModuleTest2 otbWriterMVCModule)
+#ADD_TEST(WriterMVCModuleTest2  ${Modules_TESTS} otbWriterMVCModuleTest2
+#${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+#${TEMP}/readerModuleOuptut.tif
+#)
 
 #------------- PanSharpening Module Tests ---------------------------
-ADD_EXECUTABLE(otbPanSharpeningModuleTest otbPanSharpeningModuleTest.cxx)
-TARGET_LINK_LIBRARIES(otbPanSharpeningModuleTest otbPanSharpeningModule OTBCommon OTBIO)
 
-ADD_TEST(PanSharpeningModuleTest otbPanSharpeningModuleTest
+ADD_TEST(PanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
     ${TEMP}/panSharpeningModuleOutput.tif
 )
+
+SET(Modules_SRCS
+otbSpeckleFilteringApplication.cxx
+otbSpeckleFilteringModuleTest.cxx
+otbReaderModuleTest.cxx 
+otbWriterModuleTest.cxx
+otbOrthorectificationModuleTest.cxx
+otbFeatureExtractionModuleTest.cxx
+otbFeatureExtractionApplication.cxx
+otbSupervisedClassificationModuleTest.cxx
+otbReaderWriterModuleTest.cxx
+otbViewerModuleTest.cxx
+otbWriterMVCModuleTest.cxx
+otbWriterMVCModuleTest2.cxx
+otbPanSharpeningModuleTest.cxx
+)
+
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
+ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule   OTBIO OTBTesting)
+
+
+
 
