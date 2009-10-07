@@ -107,6 +107,15 @@ protected:
   virtual void OpenDataSet();
   virtual void Browse();
   virtual void Cancel();
+  virtual void Analyse();
+  virtual void TypeChanged();
+
+  void OpenOpticalImage();
+
+  void OpenSarImage();
+
+  void OpenVector();
+  
 
 private:
   ReaderModule(const Self&); //purposely not implemented

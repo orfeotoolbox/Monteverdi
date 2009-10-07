@@ -11,25 +11,35 @@ class ReaderModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Open dataset} open
-      xywh {207 225 365 135} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {749 286 365 195} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
-        xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->Analyse();}
+        xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 1
       }
       Fl_Return_Button bOk {
         label Ok
         callback {this->OpenDataSet();}
-        xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {217 153 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {24 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {27 153 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
-        callback {this->Browse();} selected
+        callback {this->Browse();}
         xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Choice vType {
+        label {Data type }
+        callback {this->TypeChanged();} open
+        xywh {100 70 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 48 labelfont 1 labelsize 12 labelcolor 185
+      } {}
+      Fl_Input vName {
+        label {Name }
+        xywh {100 106 195 24} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 185
       }
     }
   }
@@ -38,5 +48,9 @@ class ReaderModuleGUI {open
   Function {Browse()} {open protected return_type {virtual void}
   } {}
   Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+  Function {Analyse()} {open protected return_type {virtual void}
+  } {}
+  Function {TypeChanged()} {open selected protected return_type {virtual void}
   } {}
 } 
