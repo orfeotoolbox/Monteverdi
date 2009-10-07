@@ -46,7 +46,7 @@ CachingModule::~CachingModule()
   if(ofname.exists())
     {
     std::cout<<"Cleaning up cache file "<<m_FilePath<<std::endl;
-    bool result = ofname.remove();
+    ofname.remove();
     }
 }
 

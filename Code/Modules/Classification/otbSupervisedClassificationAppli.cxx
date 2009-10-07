@@ -1757,6 +1757,9 @@ SupervisedClassificationAppli
   }
 
   m_VectorizationFilter->SetInput(m_ClassificationFilter->GetOutput());
+
+  m_Output = m_ChangeLabelFilter->GetOutput();
+  m_HasOutput = true;
 }
 
 /**
@@ -1766,12 +1769,9 @@ void
 SupervisedClassificationAppli
 ::QuitCallback()
 {
-  m_Output = m_ChangeLabelFilter->GetOutput();
-
-  m_HasOutput = true;
   this->NotifyAll();
   m_HasOutput = false;
-  
+
   bClassesBrowser->hide();
   guiScrollWindow->hide();
   guiFullWindow->hide();
