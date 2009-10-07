@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbFeatureExtractionController.h"
-// #include "otbMsgReporter.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -51,7 +51,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -66,7 +66,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -80,7 +80,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -100,7 +100,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 
 }
@@ -117,7 +117,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -133,7 +133,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -148,7 +148,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -164,7 +164,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -178,7 +178,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -193,7 +193,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -229,7 +229,7 @@ void FeatureExtractionController::ViewedRegionChanged()
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -597,7 +597,7 @@ FeatureExtractionController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 

@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbWriterController.h"
-// #include "otbMsgReporter.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -51,7 +51,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -66,7 +66,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -80,7 +80,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -94,7 +94,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 
 }
@@ -111,7 +111,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -127,7 +127,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -141,7 +141,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -155,7 +155,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -170,7 +170,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -206,7 +206,7 @@ void WriterController::ViewedRegionChanged()
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 
@@ -223,7 +223,7 @@ WriterController
   }
   catch (itk::ExceptionObject & err)
   {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
 

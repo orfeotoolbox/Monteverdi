@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbSpeckleFilteringController.h"
-//#include "otbMsgReporter.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -50,8 +50,7 @@ SpeckleFilteringController
     }
   catch(itk::ExceptionObject & err)
     {
-      std::cout << err.GetDescription() << std::endl;
-      //MsgReporter::GetInstance()->SendError(err.GetDescription());
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 
   std::cout <<"Controller:  Process Lee Filter done ..." << std::endl;
@@ -67,8 +66,7 @@ SpeckleFilteringController
     }
   catch(itk::ExceptionObject & err)
     {
-      std::cout << err.GetDescription() << std::endl;
-      //MsgReporter::GetInstance()->SendError(err.GetDescription());
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 
