@@ -20,6 +20,7 @@
 #define __otbHomologousPointExtractionModuleControllerInterface_h
 
 #include "itkObject.h"
+#include "itkIndex.h"
 #include "otbHomologousPointExtractionModuleModel.h"
 
 namespace otb
@@ -30,12 +31,12 @@ class ITK_EXPORT HomologousPointExtractionModuleControllerInterface
 public:
   /** Standard class typedefs */
   typedef HomologousPointExtractionModuleControllerInterface Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::Object                                        Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
-  typedef HomologousPointExtractionModuleModel           ModelType;
-
+  typedef HomologousPointExtractionModuleModel               ModelType;
+  typedef itk::Index<>                                       IndexType;
 
   /** Standard type macros */
   itkTypeMacro(HomologousPointExtractionModuleControllerInterface,Superclass);
@@ -44,6 +45,9 @@ public:
   //virtual void GenerateLabeled(bool t) = 0;
   virtual void LinkPixelDescriptors() =0;
   virtual void AddPoints( int x1, int y1, int x2, int y2 ) =0;
+  virtual void ClearPointList() =0;
+  virtual void DeletePointFromList( unsigned int id ) =0;
+  virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId ) =0;
 
 protected:
   /** Constructor */
