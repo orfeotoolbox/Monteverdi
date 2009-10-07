@@ -114,10 +114,10 @@ public:
   {
     m_IndexesList.clear();
   }
- void RemoveFromList( unsigned int id )
+ void RemovePointFromList( unsigned int id )
   {
-    if(m_IndexesList.size())
-      itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size.");
+    if( id>=m_IndexesList.size() )
+      itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_IndexesList.size()<<").");
 
     m_IndexesList.erase(m_IndexesList.begin()+id);
   }
@@ -125,7 +125,7 @@ public:
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
   
-
+ 
 
 protected:
 

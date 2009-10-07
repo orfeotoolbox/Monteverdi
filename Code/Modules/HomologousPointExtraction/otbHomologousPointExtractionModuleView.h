@@ -27,7 +27,7 @@
 #include "otbListenerBase.h"
 #include "otbHomologousPointExtractionModuleModel.h"
 #include "otbHomologousPointExtractionModuleControllerInterface.h"
-#include "itkSimpleFastMutexLock.h"
+#include "otbImageWidgetCircleForm.h"
 
 #include "otbImageView.h"
 
@@ -53,8 +53,10 @@ public:
 
   typedef HomologousPointExtractionModuleModel::VisualizationModelType VisualizationModelType;
   typedef HomologousPointExtractionModuleModel::RGBPixelType           PixelType;
+  typedef HomologousPointExtractionModuleModel::IndexType              IndexType;
   typedef ImageView<VisualizationModelType>                            ImageViewType;
-
+  typedef ImageWidgetCircleForm::ColorType                             ColorType;
+  typedef std::vector<ColorType>                                       ColorListType;
 
   /** Event from the model */
   virtual void Notify();
@@ -73,6 +75,10 @@ public:
   /** Build the interface */
   virtual void BuildInterface();
   virtual void AddPoints();
+  virtual void ClearPointList();
+  virtual void DeletePoint();
+  void UpdateListSelectionColor();
+  void ChangePointValue(IndexType index, unsigned int viewId );
 
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(FirstImageView,ImageViewType);
@@ -94,18 +100,16 @@ private:
 
   /** Pointer to the controller */
   HomologousPointExtractionModuleControllerInterface::Pointer m_Controller;
-
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer                        m_FirstWidgetsController;
-  ImageWidgetController::Pointer                        m_SecondWidgetsController;
-
+  ImageWidgetController::Pointer                m_FirstWidgetsController;
+  ImageWidgetController::Pointer                m_SecondWidgetsController;
   /** Pointer to the model */
-  HomologousPointExtractionModuleModel::Pointer               m_Model;
-
+  HomologousPointExtractionModuleModel::Pointer m_Model;
   /** Image view */
-  ImageViewType::Pointer                         m_FirstImageView;
-  ImageViewType::Pointer                         m_SecondImageView;
-
+  ImageViewType::Pointer                        m_FirstImageView;
+  ImageViewType::Pointer                        m_SecondImageView;
+  /** Point color */
+  ColorListType                                 m_ColorList;
 };
 }//end namespace otb
 
