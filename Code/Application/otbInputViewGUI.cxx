@@ -70,7 +70,8 @@ InputViewGUI
       /** Build the Fl_Choice **/
       Fl_Choice *inputChoice;
       // create Input Widgets considering the needed inputs   
-      inputChoice = new Fl_Choice( 85,base + cpt* height, 400, 25, it_in->second.GetDataDescription().c_str() );
+      inputChoice = new Fl_Choice( 85,base + cpt* height, 400, 25);//, it_in->second.GetDataDescription().c_str() );
+      inputChoice->copy_label(it_in->second.GetDataDescription().c_str());
       inputChoice->box(FL_PLASTIC_DOWN_BOX);
       inputChoice->align(FL_ALIGN_TOP);
       InputChoiceDescriptor::Pointer inputChoiceDesc = InputChoiceDescriptor::New();
