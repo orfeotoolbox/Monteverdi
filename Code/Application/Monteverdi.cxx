@@ -86,16 +86,19 @@ int main(int argc, char* argv[])
 
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
+  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
+  model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
+
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
-  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
-  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
+  
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
-  model->RegisterModule<otb::CachingModule>("Caching","File/Cache dataset");
+  
   
 
   // Launch Monteverdi

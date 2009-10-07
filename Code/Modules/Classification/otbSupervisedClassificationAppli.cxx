@@ -1782,6 +1782,20 @@ SupervisedClassificationAppli
 
 }
 
+void
+SupervisedClassificationAppli
+::QuitScrollCallback()
+{
+  guiScrollWindow->hide();
+}
+
+void
+SupervisedClassificationAppli
+::QuitFullCallback()
+{
+  guiFullWindow->hide();
+}
+
 /**
 *
 */

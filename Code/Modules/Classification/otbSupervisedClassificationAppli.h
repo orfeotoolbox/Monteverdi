@@ -223,6 +223,8 @@ protected:
 
   /** Application callbacks*/
   virtual void QuitCallback();
+  virtual void QuitScrollCallback();
+  virtual void QuitFullCallback();
 
   /** Other methods */
   virtual void UpdateClassInfo();

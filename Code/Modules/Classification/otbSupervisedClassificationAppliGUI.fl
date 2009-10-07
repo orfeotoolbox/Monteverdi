@@ -80,7 +80,7 @@ class SupervisedClassificationAppliGUI {open
           }
           MenuItem {} {
             label {Save/Quit}
-            callback {this->QuitCallback();} selected
+            callback {this->QuitCallback();}
             tooltip Quit xywh {5 5 34 24} labelfont 1 labelsize 12 labelcolor 186
           }
         }
@@ -243,7 +243,7 @@ else
     }
     Fl_Window guiSVMSetup {
       label {SVM Setup} open
-      xywh {571 266 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {274 320 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide
     } {
       Fl_Choice svmSVMType {
         label {SVM Type} open
@@ -407,11 +407,13 @@ else
       }
     }
     Fl_Window guiFullWindow {
-      label {Full Window} open
+      label {Full Window}
+      callback {this->QuitFullCallback();} open
       xywh {266 93 780 715} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
     } {}
     Fl_Window guiScrollWindow {
-      label {Scroll Window} open
+      label {Scroll Window}
+      callback {this->QuitScrollCallback();} open
       xywh {338 265 185 185} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
     } {}
     Fl_Window guiChangeClassName {
@@ -521,6 +523,10 @@ guiValidationWindow->hide();}
   Function {ExportAllVectorData()} {open return_type {virtual void}
   } {}
   Function {QuitCallback()} {open return_type {virtual void}
+  } {}
+  Function {QuitScrollCallback()} {open return_type {virtual void}
+  } {}
+  Function {QuitFullCallback()} {open selected return_type {virtual void}
   } {}
   Function {~SupervisedClassificationAppliGUI()} {open return_type virtual
   } {}

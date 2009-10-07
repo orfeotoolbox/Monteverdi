@@ -124,6 +124,11 @@ public:
   // Inherited methods
   virtual void OpenDEM();
 
+  // Check the size, spacing, long and lat parameters.
+  int CheckImageParameters();
+  // Call when clic an image list
+  virtual void SelectAction();
+
 protected:
 
   // Quit the application
@@ -132,9 +137,6 @@ protected:
   // Launch the orthorectification
   virtual void OK();
   
-  // Call when clic an image list
-  virtual void SelectAction();
-
   // Show the selected ortho area in the extent view
   virtual void InsightExtent();
   
@@ -153,9 +155,6 @@ protected:
 
   // Compute number of tiles used.
   void ComputeTileNumber();
-
-  // Check the size, spacing, long and lat parameters.
-  int CheckImageParameters();
   
   // Check the map parameters.
   int CheckMapParameters();

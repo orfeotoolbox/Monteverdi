@@ -40,7 +40,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbBSplineInterpolateImageFunction.h"
-
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -88,8 +88,24 @@ void
 Orthorectification
 ::Show()
 {
-  guiMainWindow->show();
-  this->SelectAction();
+  try
+  {
+    this->SelectAction();
+  
+    // test if the good parameters are available
+    int resCheckImageParameters = this->CheckImageParameters();
+    if (resCheckImageParameters == 1)
+    {
+    itkExceptionMacro(<<"Invalid image parameters");
+    }
+
+    guiMainWindow->show();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+
 }
 
 void
@@ -131,25 +147,31 @@ void
 Orthorectification
 ::OK()
 {
-
-  int resCheckImageParameters = this->CheckImageParameters();
-  if (resCheckImageParameters == 1)
+  try
   {
-  itkExceptionMacro(<<"Invalid image parameters");
+    int resCheckImageParameters = this->CheckImageParameters();
+    if (resCheckImageParameters == 1)
+    {
+    itkExceptionMacro(<<"Invalid image parameters");
+    }
+
+    this->ComputeTileNumber();
+    int resCheckMapParameters = this->CheckMapParameters();
+
+    if (resCheckMapParameters == 1)
+    {
+    itkExceptionMacro(<<"Invalid map parameters");
+    }
+
+    guiMainWindow->hide();
+
+    m_HasOutput = true;
+    this->NotifyAll();
   }
-
-  this->ComputeTileNumber();
-  int resCheckMapParameters = this->CheckMapParameters();
-
-  if (resCheckMapParameters == 1)
+  catch (itk::ExceptionObject & err)
   {
-  itkExceptionMacro(<<"Invalid map parameters");
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
-
-  guiMainWindow->hide();
-
-  m_HasOutput = true;
-  this->NotifyAll();
 }
 
 
