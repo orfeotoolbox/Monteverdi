@@ -28,11 +28,13 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView()
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
   m_FirstImageView = ImageViewType::New();
   m_SecondImageView = ImageViewType::New();
+  m_FirstCrossGlComponent = CrossGlComponent::New();
+  m_SecondCrossGlComponent = CrossGlComponent::New();
   m_ColorList.clear();
 }
 
@@ -40,9 +42,6 @@ HomologousPointExtractionModuleView
 HomologousPointExtractionModuleView
 ::~HomologousPointExtractionModuleView()
 {
-  // Remove registered visualization components from the interface
-//   gImageViewer->remove(m_ImageView->GetFullWidget());
-//   gScroll->remove(m_ImageView->GetScrollWidget());
 }
 
 void
@@ -59,8 +58,6 @@ void
 HomologousPointExtractionModuleView
 ::BuildInterface()
 {
-  std::cout<<"************HomologousPointExtractionModuleView::BuildInterface()************"<<std::endl;
-
   if(!m_Controller)
     {
     itkExceptionMacro(<<"Controller is not set, can not build view.");
@@ -71,7 +68,10 @@ HomologousPointExtractionModuleView
     itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
-  HomologousPointExtractionViewGroup::CreateGUI();
+  //HomologousPointExtractionViewGroup::CreateGUI();
+  this->CreateGUI();
+  //wMainWindow->size_range(400, 300, wMainWindow->w(), wMainWindow->h(), 0, 0);
+
 
   // Register controllers
    m_FirstImageView->SetController(m_FirstWidgetsController);
@@ -104,15 +104,35 @@ HomologousPointExtractionModuleView
    // Show and refresh the interface
     this->wMainWindow->show();
 
-     m_FirstImageView->GetFullWidget()->show();
-     m_FirstImageView->GetScrollWidget()->show();
-     m_FirstImageView->GetZoomWidget()->show();
-     m_SecondImageView->GetFullWidget()->show();
-     m_SecondImageView->GetScrollWidget()->show();
-     m_SecondImageView->GetZoomWidget()->show();
+    m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    m_SecondImageView->GetFullWidget()->AddGlComponent( m_SecondCrossGlComponent );
+    m_SecondImageView->GetScrollWidget()->AddGlComponent( m_SecondCrossGlComponent );
+    m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCrossGlComponent );
 
+    m_FirstImageView->GetFullWidget()->show();
+    m_FirstImageView->GetScrollWidget()->show();
+    m_FirstImageView->GetZoomWidget()->show();
+    m_SecondImageView->GetFullWidget()->show();
+    m_SecondImageView->GetScrollWidget()->show();
+    m_SecondImageView->GetZoomWidget()->show();
+    
      // Link pixel descriptors (not do before because widgets have to be instanciated)
      m_Controller->LinkPixelDescriptors();
+}
+
+void 
+HomologousPointExtractionModuleView
+::RedrawWidgets()
+{
+  m_FirstImageView->GetFullWidget()->redraw();
+  m_FirstImageView->GetScrollWidget()->redraw();
+  m_FirstImageView->GetZoomWidget()->redraw();
+
+  m_SecondImageView->GetFullWidget()->redraw();
+  m_SecondImageView->GetScrollWidget()->redraw();
+  m_SecondImageView->GetZoomWidget()->redraw();
 }
 
 
@@ -125,11 +145,17 @@ HomologousPointExtractionModuleView
   int x2 = vX2->value();
   int y2 = vY2->value();
   m_Controller->AddPoints( x1, y1, x2, y2 );
+}
+
+void 
+HomologousPointExtractionModuleView
+::AddPointsToList( IndexType id1, IndexType id2)
+{
  itk::OStringStream oss;
- oss<<"["<<x1<<","<<y1<<"] , ["<<x2<<","<<y2<<"]";
+ oss<<id1<<" , "<<id2;
  this->lPointList->add(oss.str().c_str()); 
 
- srand((x1+x2+y1+y2)*123456);
+ srand((id2[0]+id1[1]+id2[0]+id2[1])*123456);
  ColorType color;
  color[0]=rand()/(RAND_MAX+1.0);
  color[1]=rand()/(RAND_MAX+1.0);
@@ -138,12 +164,19 @@ HomologousPointExtractionModuleView
 
  fl_color(static_cast<unsigned char>(255*color[0]),
 	  static_cast<unsigned char>(255*color[1]),
-	  static_cast<unsigned char>(255*color[3]));
+	  static_cast<unsigned char>(255*color[2]));
  m_ColorList.push_back(color);
 
  lPointList->value(lPointList->size());
  this->UpdateListSelectionColor();
+
+ m_FirstCrossGlComponent->AddIndex( id1 );
+ m_FirstCrossGlComponent->ChangeColor( color, m_FirstCrossGlComponent->GetColorList().size()-1 );
+ m_SecondCrossGlComponent->AddIndex( id2 );
+ m_SecondCrossGlComponent->ChangeColor( color, m_SecondCrossGlComponent->GetColorList().size()-1 );
+ this->RedrawWidgets();
 }
+
 
 
 /**
@@ -198,6 +231,11 @@ HomologousPointExtractionModuleView
   lPointList->clear();
   lPointList->redraw();
   m_ColorList.clear();
+
+  m_FirstCrossGlComponent->Clear();
+  m_SecondCrossGlComponent->Clear();
+  this->RedrawWidgets();
+
 }  
 
 
@@ -210,11 +248,15 @@ HomologousPointExtractionModuleView
     {
       m_Controller->DeletePointFromList(id-1);
       lPointList->remove(id);
-      if(id<=lPointList->size())
+      m_ColorList.erase(m_ColorList.begin()+id-1);
+      if(id<=static_cast<unsigned int>(lPointList->size()))
 	lPointList->value(id);
       else
 	lPointList->value(1);
       this->UpdateListSelectionColor();
+      m_FirstCrossGlComponent->ClearIndex(id-1);
+      m_SecondCrossGlComponent->ClearIndex(id-1);
+      this->RedrawWidgets();
     }
 }
 

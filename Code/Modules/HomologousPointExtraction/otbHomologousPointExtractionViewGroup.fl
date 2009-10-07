@@ -13,7 +13,7 @@ class HomologousPointExtractionViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window wMainWindow {
-      label {homologus points}
+      label {Homologous Point Extraction}
       callback {this->Quit();} open
       xywh {6 87 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
@@ -36,7 +36,7 @@ class HomologousPointExtractionViewGroup {open
             }
           }
         }
-        Fl_Group grParam {
+        Fl_Group grParam {open selected
           xywh {0 20 200 580} box PLASTIC_DOWN_BOX color 48
         } {
           Fl_Choice gTransform {
@@ -57,15 +57,15 @@ class HomologousPointExtractionViewGroup {open
           }
           Fl_Text_Display tTransform {
             label {Transform Value}
-            xywh {5 325 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+            xywh {5 317 190 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Group gPixelValue1 {
             label {Pixel Values} open
-            xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+            xywh {5 440 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Group gPixelValue2 {
             label {Pixel Values} open
-            xywh {5 460 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+            xywh {5 440 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Button guiQuit {
             label Quit
@@ -140,7 +140,7 @@ class HomologousPointExtractionViewGroup {open
               tooltip {Clear Feature List} xywh {511 525 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
           }
-          Fl_Group guiImageGroup2 {
+          Fl_Group guiImageGroup2 {open
             xywh {585 0 215 600}
           } {
             Fl_Group gFull2 {

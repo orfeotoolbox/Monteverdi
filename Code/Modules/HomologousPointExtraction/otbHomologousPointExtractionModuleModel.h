@@ -101,26 +101,10 @@ public:
   void SetImage( unsigned int id, VectorImagePointerType image );
 
   /** Indexes list manipulation. */
-  IndexesListType GetIndexesList() const
-  {
-    return m_IndexesList;
-  }
-  void AddIndexesToList( IndexType id1, IndexType id2 )
-  {
-    IndexCoupleType paire(id1, id2);
-    m_IndexesList.push_back(paire);
-  }
- void ClearIndexesList()
-  {
-    m_IndexesList.clear();
-  }
- void RemovePointFromList( unsigned int id )
-  {
-    if( id>=m_IndexesList.size() )
-      itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_IndexesList.size()<<").");
-
-    m_IndexesList.erase(m_IndexesList.begin()+id);
-  }
+  IndexesListType GetIndexesList() const { return m_IndexesList; }
+  void AddIndexesToList( IndexType id1, IndexType id2 );
+  void ClearIndexesList() { m_IndexesList.clear(); }
+ void RemovePointFromList( unsigned int id );
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);

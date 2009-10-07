@@ -68,7 +68,11 @@ HomologousPointExtractionModuleController
   m_SecondMouseClickedController->SetImageViewId(1);
   m_SecondMouseClickedController->SetController(this);
   m_FirstLeftMouseClickedHandler->SetModel(m_FirstMouseClickedController);
+  m_FirstLeftMouseClickedHandler->SetActiveOnFullWidget(false);
+  m_FirstLeftMouseClickedHandler->SetActiveOnScrollWidget(false);
   m_SecondLeftMouseClickedHandler->SetModel(m_SecondMouseClickedController);
+  m_SecondLeftMouseClickedHandler->SetActiveOnFullWidget(false);
+  m_SecondLeftMouseClickedHandler->SetActiveOnScrollWidget(false);
 
   // Add the action handlers to the widgets controller
   m_FirstWidgetsController->AddActionHandler(m_FirstResizingHandler);
@@ -160,24 +164,25 @@ HomologousPointExtractionModuleController
   IndexType id1, id2;
   id1[0] = x1; id1[1] = y1;
   id2[0] = x2; id2[1] = y2;
+
+  if( !m_Model->GetFirstInputImage()->GetLargestPossibleRegion().IsInside(id1) )
+    {
+      itk::OStringStream oss1;
+      oss1<<"Index "<<id1<<" is outside the image size "<<m_Model->GetFirstInputImage()->GetLargestPossibleRegion().GetSize();  
+      MsgReporter::GetInstance()->SendError(oss1.str().c_str());
+      return;
+    }
+  if( !m_Model->GetSecondInputImage()->GetLargestPossibleRegion().IsInside(id2) )
+    {
+      itk::OStringStream oss2;
+      oss2<<"Index "<<id2<<" is outside the image size "<<m_Model->GetSecondInputImage()->GetLargestPossibleRegion().GetSize();  
+      MsgReporter::GetInstance()->SendError(oss2.str().c_str());
+      return;
+    }
   try
     {
-      if( !m_Model->GetFirstInputImage()->GetLargestPossibleRegion().IsInside(id1) )
-	{
-	  itk::OStringStream oss1;
-	  oss1<<"Index "<<id1<<" is outside the image size "<<m_Model->GetFirstInputImage()->GetLargestPossibleRegion().GetSize();  
-	  MsgReporter::GetInstance()->SendError(oss1.str().c_str());
-	  return;
-	}
-      if( !m_Model->GetSecondInputImage()->GetLargestPossibleRegion().IsInside(id2) )
-	{
-	  itk::OStringStream oss2;
-	  oss2<<"Index "<<id2<<" is outside the image size "<<m_Model->GetSecondInputImage()->GetLargestPossibleRegion().GetSize();  
-	  MsgReporter::GetInstance()->SendError(oss2.str().c_str());
-	  return;
-	}
-
       m_Model->AddIndexesToList( id1, id2 );
+      m_View->AddPointsToList( id1, id2 );
     }
   catch (itk::ExceptionObject & err)
     {
