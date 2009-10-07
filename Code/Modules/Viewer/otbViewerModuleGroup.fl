@@ -16,7 +16,7 @@ class ViewerModuleGroup {open
   } {
     Fl_Window bSetupWindow {
       label {Vector Datas Propreties}
-      callback {this->Quit();} open selected
+      callback {this->Quit();} open
       xywh {646 159 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
@@ -165,8 +165,8 @@ class ViewerModuleGroup {open
         xywh {617 308 70 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bShowHide {
-        label {Show/Hide}
-        callback {this->ShowHide();}
+        label Show
+        callback {this->ShowHide();} selected
         xywh {521 309 70 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }

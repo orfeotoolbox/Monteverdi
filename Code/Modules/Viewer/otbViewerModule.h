@@ -31,6 +31,8 @@
 #include "otbViewerModuleGroup.h"
 
 //
+#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerRenderingModel.h"
@@ -57,6 +59,7 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbObjectList.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 #include "otbAmplitudeFunctor.h"
 #include "otbPhaseFunctor.h"
@@ -89,6 +92,7 @@ public:
 
   /** Dataset */
   typedef double                                    PixelType;
+  typedef Image<PixelType,2>                        SingleImageType;
   typedef VectorImage<PixelType,2>                  ImageType;
   typedef VectorData<PixelType>                     VectorDataType;
   
@@ -175,9 +179,12 @@ public:
   typedef VectorDataProjectionFilter
   <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
-  typedef  VectorDataExtractROIType::RegionType      RemoteSensingRegionType;
+  typedef VectorDataExtractROIType::RegionType       RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
   typedef VectorDataFileReader<VectorDataType>       VectorDataFileReaderType;
+
+  /** Cast SingleImage to VectorImageType*/
+  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
 
   /** VectorData ObjectList*/
   typedef ObjectList<VectorDataType>                 VectorDataListType;
@@ -322,9 +329,9 @@ private:
   
   // Vector to handle the dispalyed vector data
   std::vector<bool>                        m_DisplayedVectorData;
-  
-  
-  
+
+  // Cast Filter
+  CastSingleImageFilter::Pointer           m_CastFilter;
 };
 
 
