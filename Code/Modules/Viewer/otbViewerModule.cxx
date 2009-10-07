@@ -21,6 +21,7 @@
 #include "otbViewerModule.h"
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Color_Chooser.H>
+#include <FL/Fl_Text_Buffer.H>
 
 namespace otb
 {
@@ -157,15 +158,22 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   m_DisplayWindow->RegisterPixelDescriptionWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
   m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
 
+  // Instanciation of the Image To VectorImage Filter
+  m_CastFilter = CastSingleImageFilter::New();
+
   // VectorData List Instance
   m_VectorDataList = VectorDataListType::New();
    
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
+  this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
 
   // Build GUI
   this->Build();   
+
+  // build the DEM GUI
+  this->BuildDEM();
 }
 
 /** Destructor */
@@ -183,11 +191,26 @@ void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ViewerModule::Run()
 {
-  //Get Input Image
+  
+  // Get Input Image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
+  // Get the description
+  m_Label = this->GetInputDataDescription<ImageType>("InputImage");
+  
+  // Try to get a single image
+  // If the input image is an otb::Image instead of VectorImage then cast it 
+  // in Vector Image and continue the processing
+  SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
+  
+  if(!singleImage.IsNull() && m_InputImage.IsNull())
+    {
+      m_CastFilter->SetInput(singleImage);
+      m_InputImage = m_CastFilter->GetOutput();
+      // Get the description
+      m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");      
+    }
   
   // Set the File Name as a label to the viewer window
-  m_Label = this->GetInputDataDescription<ImageType>("InputImage");
   m_DisplayWindow->SetLabel(m_Label.c_str());
   
   // First check if there is actually an input image
@@ -557,9 +580,7 @@ void ViewerModule::RedrawWidget()
 
 void ViewerModule::UseDEM()
 {
-  // build the GUI
-  this->BuildDEM();
-  
+ 
   // show the DEM GUI
   if(bDEM->value())
     wDEM->show();
@@ -1074,6 +1095,29 @@ void ViewerModule::UpdateLowerQuantile()
   m_RedCurveWidgetGroup->redraw();
 }
 
+/**
+ *
+ */
+// void ViewerModule::UpdatePixelInformationWindow()
+// {
+//   //Create buffer for the guiViewerInformation
+// //   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
+// //   bPixelInfo->buffer(buffer);
+
+//   //bPixelOK - bX - bY - bPixelInfo
+//   ImageType::PixelType     spixel(ImageType::ImageDimension);
+//   std::cout <<"ImageType::ImageDimension "  << ImageType::ImageDimension << std::endl;
+//   spixel[0] = 16;//bX->value();
+//   spixel[1] = 16;//bY->value();
+
+//   itk::OStringStream oss;
+//   oss.str("");
+//   //bPixelInfo->buffer()->remove(0,bPixelInfo->buffer()->length());
+//   oss<<m_StandardRenderingFunction->Describe(spixel);
+//   std::cout << "Description " << oss.str() << std::endl;
+//   //bPixelInfo->insert(oss.str().c_str());
+// }
+
 
 /**
  *
@@ -1095,7 +1139,10 @@ void ViewerModule::Quit()
   bSetupWindow->hide();
   
   // Hide the DEM Window
-  wDEM->hide();
+  if(wDEM->shown() > 0)
+    {
+      wDEM->hide();
+    }
 }
 
 } // End namespace otb
