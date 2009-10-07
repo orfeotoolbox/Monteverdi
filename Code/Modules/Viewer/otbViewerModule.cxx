@@ -22,6 +22,7 @@
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Text_Buffer.H>
+#include "otbFltkFilterWatcher.h"
 
 namespace otb
 {
@@ -237,7 +238,7 @@ void ViewerModule::Run()
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_InputImage);
-  //FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   generator->GenerateLayer();
   m_InputImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();

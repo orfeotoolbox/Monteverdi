@@ -204,6 +204,9 @@ void ReaderModule::OpenOpticalImage()
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
+  m_FPVReader->SetFileName(filepath);
+  m_FPVReader->GenerateOutputInformation();
+
   // Add the full data set as a descriptor
   oss << "Image read from file: " << lFile.file();
   ossId<<vName->value()<<" (Whole dataset)";
@@ -244,6 +247,7 @@ void ReaderModule::OpenSarImage()
 
   m_ComplexReader->SetFileName(filepath);
   m_ComplexReader->GenerateOutputInformation();
+
   oss <<"Complex image read from file: "<<lFile.file();
   ossId<<vName->value()<<" (whole dataset)";
   this->AddOutputDescriptor(m_ComplexReader->GetOutput(),ossId.str(),oss.str());
@@ -285,6 +289,8 @@ void ReaderModule::OpenVector()
   ossimFilename lFile = ossimFilename(filepath);
 
   m_VectorReader->SetFileName(filepath);
+  m_VectorReader->GenerateOutputInformation();
+
   oss << "Vector read from file : " << lFile.file();
   ossId<<vName->value()<<" (whole dataset)";
   this->AddOutputDescriptor(m_VectorReader->GetOutput(),ossId.str(),oss.str());

@@ -58,6 +58,8 @@
 #include "otbPanSharpeningModule.h"
 #include "otbViewerModule.h"
 #include "otbCachingModule.h"
+#include "otbSarIntensityModule.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -88,18 +90,17 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
   model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
-  model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","SAR/Despeckle image");
+  model->RegisterModule<otb::SarIntensityModule>("SarIntensity","SAR/Compute intensity and log-intensity");
 
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
-  
+
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
-  
-  
+  model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset")
 
   // Launch Monteverdi
   view->InitWidgets();
