@@ -26,7 +26,7 @@ class ViewerModuleGroup {open
         Fl_Group {} {
           label {Vector Datas}
           callback {this->TabSetupPosition();}
-          tooltip {Vector Datas Propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Vector Datas Propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {160 260 25 25} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -158,6 +158,27 @@ class ViewerModuleGroup {open
             }
           }
         }
+        Fl_Group {} {
+          label PixelDescription open
+          xywh {0 29 700 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {
+          Fl_Text_Display bPixelInfo {selected
+            xywh {25 104 325 166} box PLASTIC_DOWN_BOX color 55
+          }
+          Fl_Value_Input bX {
+            label {X:}
+            xywh {45 56 45 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+06 step 1
+          }
+          Fl_Value_Input bY {
+            label {Y:}
+            xywh {140 56 45 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+08 step 1
+          }
+          Fl_Button bPixelOK {
+            label Ok
+            callback {this->UpdatePixelInformationWindow();}
+            xywh {282 57 64 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
       }
       Fl_Return_Button bQuit {
         label {Quit }
@@ -166,7 +187,7 @@ class ViewerModuleGroup {open
       }
       Fl_Button bShowHide {
         label Show
-        callback {this->ShowHide();} selected
+        callback {this->ShowHide();}
         xywh {521 309 70 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
@@ -264,5 +285,7 @@ gDEMPath->redraw();}
   Function {ShowHide()} {open return_type {virtual void}
   } {}
   Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {UpdatePixelInformationWindow()} {open return_type {virtual void}
   } {}
 } 

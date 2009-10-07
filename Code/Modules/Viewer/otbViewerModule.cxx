@@ -209,9 +209,10 @@ void ViewerModule::Run()
       // Get the description
       m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");      
     }
-  
+
   // Set the File Name as a label to the viewer window
   m_DisplayWindow->SetLabel(m_Label.c_str());
+  bSetupWindow->copy_label(m_Label.c_str());
   
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
@@ -1098,25 +1099,31 @@ void ViewerModule::UpdateLowerQuantile()
 /**
  *
  */
-// void ViewerModule::UpdatePixelInformationWindow()
-// {
-//   //Create buffer for the guiViewerInformation
-// //   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-// //   bPixelInfo->buffer(buffer);
+void ViewerModule::UpdatePixelInformationWindow()
+{
+  //Create buffer for the guiViewerInformation
+  Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
+  bPixelInfo->buffer(buffer);
 
-//   //bPixelOK - bX - bY - bPixelInfo
-//   ImageType::PixelType     spixel(ImageType::ImageDimension);
-//   std::cout <<"ImageType::ImageDimension "  << ImageType::ImageDimension << std::endl;
-//   spixel[0] = 16;//bX->value();
-//   spixel[1] = 16;//bY->value();
+  // Set the index 
+  ImageType::IndexType     index;
+  index[0] = bX->value();
+  index[1] = bY->value();
 
-//   itk::OStringStream oss;
-//   oss.str("");
-//   //bPixelInfo->buffer()->remove(0,bPixelInfo->buffer()->length());
-//   oss<<m_StandardRenderingFunction->Describe(spixel);
-//   std::cout << "Description " << oss.str() << std::endl;
-//   //bPixelInfo->insert(oss.str().c_str());
-// }
+  // Get the description
+  itk::OStringStream oss;
+  oss.str("");
+  bPixelInfo->buffer()->remove(0,bPixelInfo->buffer()->length());
+  oss<<m_InputImageLayer->GetPixelDescription(index);
+  bPixelInfo->insert(oss.str().c_str());
+
+  // Center the view around the index selected
+  m_RenderingModel->SetScaledExtractRegionCenter(index);
+  m_RenderingModel->SetExtractRegionCenter(index);
+  m_RenderingModel->Update();
+
+  
+}
 
 
 /**

@@ -235,6 +235,7 @@ public:
   virtual void UpdateDEMSettings();
   virtual void UpdateHistogramCurve();
   virtual void UpdateTabHistogram();
+  virtual void UpdatePixelInformationWindow();
   
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();
