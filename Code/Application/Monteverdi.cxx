@@ -58,6 +58,8 @@
 #include "otbPanSharpeningModule.h"
 #include "otbViewerModule.h"
 #include "otbCachingModule.h"
+#include "otbSarIntensityModule.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -86,7 +88,8 @@ int main(int argc, char* argv[])
 
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","SAR/Despeckle image");
+  model->RegisterModule<otb::SarIntensityModule>("SarIntensity","SAR/Compute intensity and log-intensity");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
