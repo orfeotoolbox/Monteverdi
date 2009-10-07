@@ -71,7 +71,7 @@ public:
     itkGetMacro(MouseButton,int);
     itkSetClampMacro(ImageViewId,int,0,1);
     itkGetMacro(ImageViewId,int);
-    itkSetObjectMacro(Controller, HomologousPointExtractionModuleController);
+    itkSetObjectMacro(Controller, HomologousPointExtractionModuleControllerInterface);
   protected:
  /** Constructor */
   MouseClickedController() : m_MouseButton(1), m_ImageViewId(1), m_Controller(){};
@@ -82,7 +82,7 @@ public:
     /** Set the associated view (0: left, 1: right) */
     int m_ImageViewId;
     /** Inner model class for mouse click action handler */
-    HomologousPointExtractionModuleController::Pointer m_Controller;
+    HomologousPointExtractionModuleControllerInterface::Pointer m_Controller;
   };
 
   /** Standard class typedefs */
