@@ -34,6 +34,16 @@ CachingModule::CachingModule()
   m_CachingPath = "Caching/";
   m_FilePath = "";
   m_Done = false;
+
+  // Build gui
+  this->BuildGUI();
+
+  pBar->minimum(0);
+  pBar->maximum(1);
+
+  pBar->label("Caching dataset (0%)");
+  
+  wCachingWindow->show();
 }
 
 /** Destructor */
@@ -68,26 +78,19 @@ void CachingModule::UpdateProgressBar( float progress )
   oss2<<"%";
   Fl::lock();
   pBar->value( progress );
-  wCachingWindow->copy_label(oss1.str().c_str());
+  // Unfortunately this can not be done on windows ...
+  //wCachingWindow->copy_label(oss1.str().c_str());
   pBar->copy_label( oss2.str().c_str() );
   Fl::awake();
   Fl::unlock();
+
 }
 
 
 void CachingModule::ThreadedWatch()
 {
-  this->BuildGUI();
-
-  Fl::lock();
-  pBar->minimum(0);
-  pBar->maximum(1);
-  wCachingWindow->show();
-  Fl::unlock();
   float progress = 0;
   float progressOld = -1;
-
-
 
   while( progress != 1)
     {
@@ -97,7 +100,6 @@ void CachingModule::ThreadedWatch()
       progress = m_WritingProcess->GetProgress();
       }
     float diffProg = progress - progressOld;
-    
     if(diffProg > 0.01)
       {
       this->UpdateProgressBar( progress );
