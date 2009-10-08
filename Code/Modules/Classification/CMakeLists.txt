@@ -45,6 +45,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbSupervisedClassificationModule ${SC_SRCS} ${otbSupervisedClassificationApplication_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbSupervisedClassificationModule OTBLearning OTBIO OTBVisu OTBGui OTBMonteverdiCommon)
+ADD_DEPENDENCIES(otbSupervisedClassificationModule OTBMonteverdiCommon)
 
 ADD_EXECUTABLE(otbSupervisedClassificationApplication ${SC_SRCS} ${otbSupervisedClassificationApplication_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbSupervisedClassificationApplication otbSupervisedClassificationModule)

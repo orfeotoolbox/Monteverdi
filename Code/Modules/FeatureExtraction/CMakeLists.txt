@@ -52,6 +52,8 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_LIBRARY(otbFeatureExtractionModule ${MODULE_SRCS} ${VIEW_SRCS} ${otbFeatureExtractionModule_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
 # TARGET_LINK_LIBRARIES(otbMVCFeatureExtraction OTBIO OTBBasicFilters OTBVisualization OTBFeatureExtraction OTBApplicationsCommon)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBFeatureExtraction OTBGui OTBVisualization)
+ADD_DEPENDENCIES(otbFeatureExtractionModule OTBMonteverdiCommon)
+
 # INSTALL(TARGETS /bin otbMVCFeatureExtraction)
 # ADD_DEPENDENCIES(otbMVCFeatureExtraction OTBApplicationsCommon)                                            
 # ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionGUITest.cxx )

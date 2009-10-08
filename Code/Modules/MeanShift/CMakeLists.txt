@@ -32,7 +32,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_LIBRARY(otbMeanShiftModule ${MODULE_SRCS}  ${otbMeanShiftModule_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbMeanShiftModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui OTBVisualization)
+TARGET_LINK_LIBRARIES(otbMeanShiftModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui)
+ADD_DEPENDENCIES(otbMeanShiftModule OTBMonteverdiCommon)
+
 INSTALL(TARGETS otbMeanShiftModule
         RUNTIME DESTINATION /bin
         LIBRARY DESTINATION /bin
@@ -41,7 +43,7 @@ INSTALL(TARGETS otbMeanShiftModule
 # Then, compile the application
 
 ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
-TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbReaderModule otbMeanShiftModule)
+TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule)
 INSTALL(TARGETS otbMeanShiftApplication
         RUNTIME DESTINATION /bin
         LIBRARY DESTINATION /bin

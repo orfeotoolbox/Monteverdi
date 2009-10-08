@@ -52,6 +52,8 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_LIBRARY(otbWriterMVCModule ${MODULE_SRCS} ${VIEW_SRCS} ${otbWriterMVCModule_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS})
 # TARGET_LINK_LIBRARIES(otbMVCWriter OTBIO OTBBasicFilters OTBVisualization OTBWriter OTBApplicationsCommon)
 TARGET_LINK_LIBRARIES(otbWriterMVCModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui OTBVisualization)
+ADD_DEPENDENCIES(otbWriterMVCModule OTBMonteverdiCommon)
+
 # INSTALL(TARGETS /bin otbMVCWriter)
 # ADD_DEPENDENCIES(otbMVCWriter OTBApplicationsCommon)                                            
 # ADD_EXECUTABLE(otbWriterApplication otbWriterGUITest.cxx )
