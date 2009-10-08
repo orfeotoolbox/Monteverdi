@@ -81,23 +81,30 @@ void WriterModule::Cancel()
 }
 
 
-void WriterModule::UpdateProgressBar( float progress )
+void WriterModule::UpdateProgress()
 {
+  double progress = m_ProcessObject->GetProgress();
+
   itk::OStringStream oss1, oss2;
   oss1.str("");
   oss1<<"Writing dataset  ("<<std::floor(100*progress)<<"%)";
   oss2.str("");
   oss2<<std::floor(100*progress);
   oss2<<"%";
-  Fl::lock();
   pBar->value( progress );
-  // Unfortunately this can not be done on windows ...
-  //  wFileChooserWindow->copy_label(oss1.str().c_str());
+  wFileChooserWindow->copy_label(oss1.str().c_str());
   pBar->copy_label( oss2.str().c_str() );
-  Fl::awake();
-  Fl::unlock();
 }
 
+void WriterModule::UpdateProgressCallback(void * data)
+{
+  Self::Pointer writer = static_cast<Self *>(data);
+
+  if(writer.IsNotNull())
+    {
+    writer->UpdateProgress();
+    }
+}
 
 void WriterModule::ThreadedWatch()
 {
@@ -109,46 +116,27 @@ void WriterModule::ThreadedWatch()
   vFilePath->deactivate();
   Fl::unlock();
 
-  float progress = 0;
-  float progressOld = -1;
-
-  while( progress != 1)
+  if(m_ProcessObject.IsNotNull())
     {
+
+    while( m_ProcessObject->GetProgress() != 1)
+      {
+      // Make the main fltk loop update progress fields
+      Fl::awake(&UpdateProgressCallback,this);
+      // Sleep for a while
       Sleep(500);
-      if(m_ProcessObject.IsNotNull())
-	{
-	progress = m_ProcessObject->GetProgress();
-	}
-
-      float diffProg = progress - progressOld;
-
-       if(diffProg > 0.01)
- 	{
-	  this->UpdateProgressBar( progress );
- 	  progressOld = progress;
- 	}
+      }
     }
-
+  
   Fl::lock();
-  this->UpdateProgressBar( 1. );
-  this->UpdateProgressBar( 0. );
-   
-  // Activate window buttons
+  // Reactivate window buttons
   bBrowse->activate();
   bCancel->activate();
   bOk->activate();
   vFilePath->activate();
-
-  // Changing back label (commented because not supported on windows)
-  // wFileChooserWindow->copy_label("Save dataset ...");
-
-  // Close the window
-  wFileChooserWindow->hide();
+  Fl::awake(&HideWindowCallback,this);
   Fl::unlock();
   }
-
-
-
 
 void WriterModule::ThreadedRun()
 {
@@ -204,6 +192,21 @@ void WriterModule::ThreadedRun()
     {
       itkExceptionMacro(<<"Input data are NULL.");
     } 
+}
+
+void WriterModule::HideWindow()
+{
+  wFileChooserWindow->hide();
+}
+
+void WriterModule::HideWindowCallback(void * data)
+{
+  Self::Pointer writer = static_cast<Self *>(data);
+
+  if(writer.IsNotNull())
+    {
+    writer->HideWindow();
+    }
 }
 
 

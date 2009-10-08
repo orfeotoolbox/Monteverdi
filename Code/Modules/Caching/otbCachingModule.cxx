@@ -68,42 +68,43 @@ void CachingModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 }
 
 
-void CachingModule::UpdateProgressBar( float progress )
+void CachingModule::UpdateProgress()
 {
+  double progress = m_WritingProcess->GetProgress();
+
   itk::OStringStream oss1, oss2;
   oss1.str("");
   oss1<<"Caching dataset  ("<<std::floor(100*progress)<<"%)";
   oss2.str("");
   oss2<<std::floor(100*progress);
   oss2<<"%";
-  Fl::lock();
   pBar->value( progress );
-  // Unfortunately this can not be done on windows ...
-  //wCachingWindow->copy_label(oss1.str().c_str());
+  wCachingWindow->copy_label(oss1.str().c_str());
   pBar->copy_label( oss2.str().c_str() );
-  Fl::awake();
-  Fl::unlock();
+}
 
+void CachingModule::UpdateProgressCallback(void * data)
+{
+  Self::Pointer caching = static_cast<Self *>(data);
+
+  if(caching.IsNotNull())
+    {
+    caching->UpdateProgress();
+    }
 }
 
 
 void CachingModule::ThreadedWatch()
 {
-  float progress = 0;
-  float progressOld = -1;
-
-  while( progress != 1)
+   if(m_WritingProcess.IsNotNull())
     {
-    Sleep(500);
-    if(m_WritingProcess.IsNotNull())
+
+    while( m_WritingProcess->GetProgress() != 1)
       {
-      progress = m_WritingProcess->GetProgress();
-      }
-    float diffProg = progress - progressOld;
-    if(diffProg > 0.01)
-      {
-      this->UpdateProgressBar( progress );
-      progressOld = progress;
+      // Make the main fltk loop update progress fields
+      Fl::awake(&UpdateProgressCallback,this);
+      // Sleep for a while
+      Sleep(500);
       }
     }
   
@@ -113,19 +114,10 @@ void CachingModule::ThreadedWatch()
     Sleep(500);
     }
 
-  Fl::lock();
-  this->UpdateProgressBar( 1. );
-  this->UpdateProgressBar( 0. );
-   
-  // Changing back label (commented because not supported on windows
-  // wCachingWindow->copy_label("Caching dataset ...");
-
-  // Close the window
-  wCachingWindow->hide();
-
   // Notify new outputs
+  Fl::lock();
+  Fl::awake(&HideWindowCallback,this);
   this->NotifyOutputsChange();
-
   Fl::unlock();
   }
 
@@ -222,6 +214,22 @@ void CachingModule::ThreadedRun()
 
   m_Done = true;
 }
+
+void CachingModule::HideWindow()
+{
+  wCachingWindow->hide();
+}
+
+void CachingModule::HideWindowCallback(void * data)
+{
+  Self::Pointer caching = static_cast<Self *>(data);
+
+  if(caching.IsNotNull())
+    {
+    caching->HideWindow();
+    }
+}
+
 
 
 } // End namespace otb
