@@ -34,6 +34,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbSpeckleFilteringModule ${MODULE_SRCS} ${otbSpeckleFilteringModule_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbSpeckleFilteringModule OTBMonteverdiCommon OTBIO OTBCommon OTBBasicFilters OTBGui flu)
+ADD_DEPENDENCIES(otbSpeckleFilteringModule OTBMonteverdiCommon)
 
 ENDIF(OTB_USE_VISU_GUI)
 
