@@ -91,7 +91,8 @@ void WriterModule::UpdateProgressBar( float progress )
   oss2<<"%";
   Fl::lock();
   pBar->value( progress );
-  wFileChooserWindow->copy_label(oss1.str().c_str());
+  // Unfortunately this can not be done on windows ...
+  //  wFileChooserWindow->copy_label(oss1.str().c_str());
   pBar->copy_label( oss2.str().c_str() );
   Fl::awake();
   Fl::unlock();
