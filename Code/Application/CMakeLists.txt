@@ -38,17 +38,28 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbMonteverdi OTBGui OTBMonteverdiCommon 
-                      otbReaderModule otbSpeckleFilteringModule otbFeatureExtractionModule otbSupervisedClassificationModule 
-                      otbOrthorectificationModule otbViewerModule otbWriterModule otbWriterMVCModule otbMeanShiftModule otbPanSharpeningModule otbCachingModule otbSarIntensityModule flu)
+TARGET_LINK_LIBRARIES(otbMonteverdi OTBGui OTBMonteverdiCommon flu)
 INSTALL(TARGETS otbMonteverdi
         RUNTIME DESTINATION /bin
         LIBRARY DESTINATION /bin
         ARCHIVE DESTINATION /bin )
 
-ADD_EXECUTABLE(Monteverdi Monteverdi.cxx
-)
-TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi)
+ADD_EXECUTABLE(Monteverdi Monteverdi.cxx)
+
+TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi
+otbReaderModule
+otbSpeckleFilteringModule
+otbFeatureExtractionModule
+otbSupervisedClassificationModule
+otbOrthorectificationModule
+otbViewerModule
+otbWriterModule
+otbWriterMVCModule 
+otbMeanShiftModule
+otbPanSharpeningModule 
+otbCachingModule
+otbSarIntensityModule)
+
 INSTALL(TARGETS Monteverdi
         RUNTIME DESTINATION /bin
         LIBRARY DESTINATION /bin
