@@ -117,8 +117,8 @@ void CachingModule::ThreadedWatch()
   this->UpdateProgressBar( 1. );
   this->UpdateProgressBar( 0. );
    
-  // Changing back label
-  wCachingWindow->copy_label("Caching dataset ...");
+  // Changing back label (commented because not supported on windows
+  // wCachingWindow->copy_label("Caching dataset ...");
 
   // Close the window
   wCachingWindow->hide();

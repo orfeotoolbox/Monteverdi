@@ -139,8 +139,8 @@ void WriterModule::ThreadedWatch()
   bOk->activate();
   vFilePath->activate();
 
-  // Changing back label
-  wFileChooserWindow->copy_label("Save dataset ...");
+  // Changing back label (commented because not supported on windows)
+  // wFileChooserWindow->copy_label("Save dataset ...");
 
   // Close the window
   wFileChooserWindow->hide();
