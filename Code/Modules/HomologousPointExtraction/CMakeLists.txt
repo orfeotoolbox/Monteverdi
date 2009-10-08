@@ -32,7 +32,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
 ADD_LIBRARY(otbHomologousPointExtractionModule ${MODULE_SRCS}  ${otbHomologousPointExtractionModule_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbHomologousPointExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui)
+TARGET_LINK_LIBRARIES(otbHomologousPointExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui OTBVisualization)
 INSTALL(TARGETS otbHomologousPointExtractionModule
         RUNTIME DESTINATION /bin
         LIBRARY DESTINATION /bin
