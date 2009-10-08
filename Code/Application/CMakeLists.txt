@@ -58,7 +58,8 @@ otbWriterMVCModule
 otbMeanShiftModule
 otbPanSharpeningModule 
 otbCachingModule
-otbSarIntensityModule)
+otbSarIntensityModule
+otbHomologousPointExtractionModule)
 
 INSTALL(TARGETS Monteverdi
         RUNTIME DESTINATION /bin

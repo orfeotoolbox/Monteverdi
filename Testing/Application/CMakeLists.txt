@@ -42,4 +42,5 @@ otbWriterMVCModule
 otbMeanShiftModule
 otbPanSharpeningModule 
 otbCachingModule
-otbSarIntensityModule )
+otbSarIntensityModule
+otbHomologousPointExtractionModule )
