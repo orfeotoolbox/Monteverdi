@@ -106,6 +106,9 @@ private:
 
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
+
+  // Is writing done ?
+  bool m_Done;
 };
 
 

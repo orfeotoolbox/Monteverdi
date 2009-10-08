@@ -31,6 +31,8 @@ WriterModule::WriterModule()
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
+
+  m_Done = false;
 }
 
 /** Destructor */
@@ -116,16 +118,24 @@ void WriterModule::ThreadedWatch()
   vFilePath->deactivate();
   Fl::unlock();
 
-  if(m_ProcessObject.IsNotNull())
-    {
+  double last = 0;
+  double updateThres = 0.01;
+  double current = -1;
 
-    while( m_ProcessObject->GetProgress() != 1)
-      {
-      // Make the main fltk loop update progress fields
-      Fl::awake(&UpdateProgressCallback,this);
-      // Sleep for a while
-      Sleep(500);
-      }
+  while( (m_ProcessObject.IsNull() && !m_Done) || m_ProcessObject->GetProgress() != 1)
+    {
+    if(m_ProcessObject.IsNotNull())
+	  {
+      current = m_ProcessObject->GetProgress();
+	  if(current - last > updateThres)
+	    {
+        // Make the main fltk loop update progress fields
+        Fl::awake(&UpdateProgressCallback,this);
+	    last = current;
+	    }
+	  } 
+	// Sleep for a while
+    Sleep(500);
     }
   
   Fl::lock();
@@ -190,8 +200,10 @@ void WriterModule::ThreadedRun()
     }
   else
     {
+	  m_Done = true;
       itkExceptionMacro(<<"Input data are NULL.");
     } 
+  m_Done = true;
 }
 
 void WriterModule::HideWindow()

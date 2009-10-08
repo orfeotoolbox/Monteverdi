@@ -96,18 +96,27 @@ void CachingModule::UpdateProgressCallback(void * data)
 
 void CachingModule::ThreadedWatch()
 {
-   if(m_WritingProcess.IsNotNull())
-    {
+  double last = 0;
+  double updateThres = 0.01;
+  double current = -1;
 
-    while( m_WritingProcess->GetProgress() != 1)
-      {
+  while((m_WritingProcess.IsNull() && !m_Done ) || m_WritingProcess->GetProgress() != 1)
+    {
+	if(m_WritingProcess.IsNotNull())
+	{
+      current = m_WritingProcess->GetProgress();
+	  if(current - last > updateThres)
+	  {
       // Make the main fltk loop update progress fields
       Fl::awake(&UpdateProgressCallback,this);
-      // Sleep for a while
-      Sleep(500);
-      }
+	  last = current;
+	  }
+	}
+
+    // Sleep for a while
+    Sleep(500);
     }
-  
+
   // Wait for the reader to be set
   while(!m_Done)
     {
