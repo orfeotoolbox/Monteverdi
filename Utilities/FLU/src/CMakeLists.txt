@@ -1,3 +1,7 @@
+IF(CYGWIN)
+  ADD_DEFINITIONS(-DCYGWIN)
+ENDIF(CYGWIN)
+
 SET(CPPFILES
 Flu_Button.cpp             Flu_Combo_Tree.cpp            Flu_Float_Input.cpp  Flu_Link_Button.cpp     Flu_Separator.cpp     Flu_Wrap_Group.cpp
 Flu_Chat_Buffer.cpp        Flu_DND.cpp                   Flu_GL_Canvas.cpp    Flu_Output.cpp          Flu_Simple_Group.cpp
