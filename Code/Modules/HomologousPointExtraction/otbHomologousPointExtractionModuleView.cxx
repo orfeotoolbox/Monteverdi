@@ -49,7 +49,7 @@ HomologousPointExtractionModuleView
 ::SetModel(HomologousPointExtractionModuleModel* model)
 {
   m_Model = model;
-  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0)); 
+  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0));
   m_SecondImageView->SetModel(m_Model->GetVisualizationModel(1));
   m_Model->RegisterListener(this);
 }
@@ -122,7 +122,7 @@ HomologousPointExtractionModuleView
      m_Controller->LinkPixelDescriptors();
 }
 
-void 
+void
 HomologousPointExtractionModuleView
 ::RedrawWidgets()
 {
@@ -136,7 +136,7 @@ HomologousPointExtractionModuleView
 }
 
 
-void 
+void
 HomologousPointExtractionModuleView
 ::AddPoints()
 {
@@ -147,13 +147,13 @@ HomologousPointExtractionModuleView
   m_Controller->AddPoints( x1, y1, x2, y2 );
 }
 
-void 
+void
 HomologousPointExtractionModuleView
 ::AddPointsToList( IndexType id1, IndexType id2)
 {
  itk::OStringStream oss;
  oss<<id1<<" , "<<id2;
- this->lPointList->add(oss.str().c_str()); 
+ this->lPointList->add(oss.str().c_str());
 
  srand((id2[0]+id1[1]+id2[0]+id2[1])*123456);
  ColorType color;
@@ -163,8 +163,8 @@ HomologousPointExtractionModuleView
  color[3]=1.0;
 
  fl_color(static_cast<unsigned char>(255*color[0]),
-	  static_cast<unsigned char>(255*color[1]),
-	  static_cast<unsigned char>(255*color[2]));
+         static_cast<unsigned char>(255*color[1]),
+         static_cast<unsigned char>(255*color[2]));
  m_ColorList.push_back(color);
 
  lPointList->value(lPointList->size());
@@ -195,8 +195,8 @@ HomologousPointExtractionModuleView
       
       // color To fl_color
       fl_color(static_cast<unsigned char>(255*curColor[0]),
-	       static_cast<unsigned char>(255*curColor[1]),
-	       static_cast<unsigned char>(255*curColor[2]));
+              static_cast<unsigned char>(255*curColor[1]),
+              static_cast<unsigned char>(255*curColor[2]));
       
       //Update the List Point Color
       lPointList->selection_color(fl_color());
@@ -221,7 +221,7 @@ HomologousPointExtractionModuleView
       vX2->value(index[0]);
       vY2->value(index[1]);
     }
-}   
+}
 
 void
 HomologousPointExtractionModuleView
@@ -236,7 +236,7 @@ HomologousPointExtractionModuleView
   m_SecondCrossGlComponent->Clear();
   this->RedrawWidgets();
 
-}  
+}
 
 
 void
@@ -250,9 +250,9 @@ HomologousPointExtractionModuleView
       lPointList->remove(id);
       m_ColorList.erase(m_ColorList.begin()+id-1);
       if(id<=static_cast<unsigned int>(lPointList->size()))
-	lPointList->value(id);
+       lPointList->value(id);
       else
-	lPointList->value(1);
+       lPointList->value(1);
       this->UpdateListSelectionColor();
       m_FirstCrossGlComponent->ClearIndex(id-1);
       m_SecondCrossGlComponent->ClearIndex(id-1);

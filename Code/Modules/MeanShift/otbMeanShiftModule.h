@@ -33,10 +33,10 @@
 namespace otb
 {
 /** \class MeanShiftModule
- *    
+ *
  *  \brief This is the MeanShift module, which allows to perform
  *  MeanShift filtering, segmentation and clustering.
- * 
+ *
  *
  */
 

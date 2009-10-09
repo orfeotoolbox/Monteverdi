@@ -32,10 +32,10 @@
 namespace otb
 {
 /** \class HomologousPointExtractionModule
- *    
+ *
  *  \brief This is the HomologousPointExtraction module, which allows to perform
  *  HomologousPointExtraction filtering, segmentation and clustering.
- * 
+ *
  *
  */
 

@@ -70,13 +70,13 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
   model->CreateModuleByKey("Reader");
   moduleVector = model->GetAvailableModuleInstanceIds();
 
-  // Get the ModuleInstanceId 
+  // Get the ModuleInstanceId
   std::string readerId = moduleVector[0];
 
   // Get the module itself
   otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
 
-  // Simulate file chooser and ok callback 
+  // Simulate file chooser and ok callback
   // Cyrille cast effect !
   otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
   readerModule->vFilePath->value(infname);
@@ -89,7 +89,7 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
   model->CreateModuleByKey("Viewer");
   moduleVector = model->GetAvailableModuleInstanceIds();
 
-  // Get the ModuleInstanceId 
+  // Get the ModuleInstanceId
   std::string viewerId = moduleVector[1];
 
   // Get the module itself

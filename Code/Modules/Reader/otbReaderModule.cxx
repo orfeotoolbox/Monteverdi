@@ -31,8 +31,8 @@ ReaderModule::ReaderModule()
   // Build filters
   m_FPVReader = FPVReaderType::New();
   m_VectorReader = VectorReaderType::New();
-  m_ComplexReader = ComplexImageReaderType::New();
   m_LabeledVectorReader = LabeledVectorReaderType::New();
+  m_ComplexReader = ComplexImageReaderType::New();
   m_AmplitudeFilter = AmplitudeFilterType::New();
   m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
   m_RealFilter = RealFilterType::New();
@@ -92,21 +92,21 @@ void ReaderModule::Analyse()
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
 
-    switch(m_FPVReader->GetImageIO()->GetPixelType())     
+    switch(m_FPVReader->GetImageIO()->GetPixelType())
       {
       // handle the radar case
       case itk::ImageIOBase::COMPLEX:
-	vType->value(2);
-	// If we are still here, this is a readable image
-	typeFound = true;
-	break;
+       vType->value(2);
+       // If we are still here, this is a readable image
+       typeFound = true;
+       break;
 
-	// handle the optical case
+       // handle the optical case
       default:
-	vType->value(1);
-	// If we are still here, this is a readable image
-	typeFound = true;
-	break;
+       vType->value(1);
+       // If we are still here, this is a readable image
+       typeFound = true;
+       break;
       }
     }
   catch(itk::ExceptionObject & err)
@@ -118,8 +118,9 @@ void ReaderModule::Analyse()
     {
     try
       {
-      m_LabeledVectorReader->SetFileName(filepath);
-      m_LabeledVectorReader->GenerateOutputInformation();
+      VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+      vectorReader->SetFileName(filepath);
+      vectorReader->GenerateOutputInformation();
       vType->value(3);
       typeFound = true;
       }
@@ -159,17 +160,17 @@ void ReaderModule::OpenDataSet()
     switch(vType->value())
       {
       case 1:
-	this->OpenOpticalImage();
-	break;
+       this->OpenOpticalImage();
+       break;
       case 2:
-	this->OpenSarImage();
-	break;
+       this->OpenSarImage();
+       break;
       case 3:
-	this->OpenVector();
-	break;
+       this->OpenVector();
+       break;
       default:
-	itkExceptionMacro(<<"Unknow dataset type.");
-	break;
+       itkExceptionMacro(<<"Unknow dataset type.");
+       break;
       }
  
     wFileChooserWindow->hide();
@@ -200,7 +201,7 @@ void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -241,7 +242,7 @@ void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -284,7 +285,7 @@ void ReaderModule::OpenVector()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -301,7 +302,7 @@ void ReaderModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = flu_file_chooser("Choose the dataset file...", "*.*",".");
   
   if (filename == NULL)
     {

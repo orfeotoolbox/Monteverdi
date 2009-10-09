@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class SpeckleFilteringModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */

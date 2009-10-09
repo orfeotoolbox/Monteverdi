@@ -84,7 +84,7 @@ bool InputDataDescriptor::IsTypeCompatible(const std::string & type) const
   return (it!=typesStringVector.end());
 }
 
-/** Add data (virtual because behaviour depends 
+/** Add data (virtual because behaviour depends
    *  on subclasses) */
 void InputDataDescriptor::AddData(const DataObjectWrapper & wrapper)
 {
@@ -102,7 +102,7 @@ void InputDataDescriptor::AddData(const DataObjectWrapper & wrapper)
   else
     {
     itkGenericExceptionMacro(<<"Incompatible type. Expected "<<this->GetDataType()<<", received "<<wrapper.GetDataType());
-    }  
+    }
 }
 
 bool InputDataDescriptor::IsConsistent() const
@@ -116,7 +116,7 @@ InputDataDescriptor::StringVectorType InputDataDescriptor::SplitTypeName(const s
   StringVectorType resp;
 
   size_t currentSep = 0;
-  size_t nextSep = 0; 
+  size_t nextSep = 0;
 
   while(nextSep != std::string::npos)
     {

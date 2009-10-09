@@ -549,7 +549,7 @@ FeatureExtractionModel
       double scaleCur = meanShiftTemp->GetScale();
 
       if( spatialCur == spatial && rangeCur == range && minSizeCur == minSize && scaleCur == scale    )
-	alreadyLinked = true;
+       alreadyLinked = true;
       i++;
     }
 
@@ -560,9 +560,9 @@ FeatureExtractionModel
 
       // Create input vector image from selectd channels
       for (unsigned int j = 0; j<m_InputImageList->Size(); j++)
-	{
-	  imList->PushBack( m_InputImageList->GetNthElement(j) );
-	}
+       {
+         imList->PushBack( m_InputImageList->GetNthElement(j) );
+       }
       list2Vec->SetInput( imList );
 
       MeanShiftFilterType::Pointer meanShift = MeanShiftFilterType::New();
@@ -573,42 +573,42 @@ FeatureExtractionModel
       meanShift->SetScale( scale );
 
       if( type==MS_SMOOTH ||  type==MS_CLUSTERED )
-	{
-	  for(unsigned int k=0; k<m_InputImageList->Size(); k++)
-	    {
-	      ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
-	      extract->SetChannel(k+1);
-	      itk::OStringStream oss;
-	      oss<<"Mean Shift ";
-	      if( type==MS_SMOOTH )
-		{
-		  extract->SetInput( meanShift->GetOutput() );
-		  oss<<"Smooth";
-		}
-	      else if( type==MS_CLUSTERED )
-		{
-		  extract->SetInput( meanShift->GetClusteredOutput() );
-		  oss<<"Clustered";
-		}
-	      oss<<" (Ch."<<k+1<<"): ";
-	      oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
-	      std::string mess = oss.str();
-	      this->AddFeatureFilter( extract, type, -1, 0, mess);
-	    }
-	}
+       {
+         for(unsigned int k=0; k<m_InputImageList->Size(); k++)
+           {
+             ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+             extract->SetChannel(k+1);
+             itk::OStringStream oss;
+             oss<<"Mean Shift ";
+             if( type==MS_SMOOTH )
+              {
+                extract->SetInput( meanShift->GetOutput() );
+                oss<<"Smooth";
+              }
+             else if( type==MS_CLUSTERED )
+              {
+                extract->SetInput( meanShift->GetClusteredOutput() );
+                oss<<"Clustered";
+              }
+             oss<<" (Ch."<<k+1<<"): ";
+             oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
+             std::string mess = oss.str();
+             this->AddFeatureFilter( extract, type, -1, 0, mess);
+           }
+       }
       else
-	{
-	  itk::OStringStream oss;
-	  oss<<"Mean Shift ";
-	  if( type==MS_BOUND )
-	    oss<<"Clustered Boundries: ";
-	  else if(type==MS_LABELED)
-	    oss<<"Labeled: ";
-	  oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
-	  std::string mess = oss.str();
+       {
+         itk::OStringStream oss;
+         oss<<"Mean Shift ";
+         if( type==MS_BOUND )
+           oss<<"Clustered Boundries: ";
+         else if(type==MS_LABELED)
+           oss<<"Labeled: ";
+         oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
+         std::string mess = oss.str();
 
-	  this->AddFeatureFilter( meanShift, type, -1, 0, mess);
-	}
+         this->AddFeatureFilter( meanShift, type, -1, 0, mess);
+       }
       m_MSImageListList->PushBack(imList);
       m_MSListToVectorFilterList->PushBack(list2Vec);
       m_MeanShiftFilterList->PushBack(meanShift);
@@ -616,42 +616,42 @@ FeatureExtractionModel
   else
     {
       if( type==MS_SMOOTH || type==MS_CLUSTERED )
-	{
-	  for(unsigned int k=0; k<m_InputImageList->Size(); k++)
-	    {
-	      ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
-	      extract->SetChannel(k+1);
-	      itk::OStringStream oss;
-	      oss<<"Mean Shift ";
-	      if( type==MS_SMOOTH )
-		{
-		  extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetOutput() );
-		  oss<<"Smooth";
-		}
-	      else if( type==MS_CLUSTERED )
-		{
-		  extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetClusteredOutput() );
-		  oss<<"Clustered";
-		}
-	      oss<<" (Ch."<<k+1<<"): ";
-	      oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
-	      std::string mess = oss.str();
-	      this->AddFeatureFilter( extract, type, -1, 0, mess);
-	    }
-	}
+       {
+         for(unsigned int k=0; k<m_InputImageList->Size(); k++)
+           {
+             ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+             extract->SetChannel(k+1);
+             itk::OStringStream oss;
+             oss<<"Mean Shift ";
+             if( type==MS_SMOOTH )
+              {
+                extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetOutput() );
+                oss<<"Smooth";
+              }
+             else if( type==MS_CLUSTERED )
+              {
+                extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetClusteredOutput() );
+                oss<<"Clustered";
+              }
+             oss<<" (Ch."<<k+1<<"): ";
+             oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
+             std::string mess = oss.str();
+             this->AddFeatureFilter( extract, type, -1, 0, mess);
+           }
+       }
       else
-	{
-	  itk::OStringStream oss;
-	  oss<<"Mean Shift ";
-	  if( type==MS_LABELED )
-	    oss<<"Labeled: ";
-	  else if(type==MS_BOUND)
-	    oss<<"Clustered Boundries: ";
-	  oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
-	  std::string mess = oss.str();
+       {
+         itk::OStringStream oss;
+         oss<<"Mean Shift ";
+         if( type==MS_LABELED )
+           oss<<"Labeled: ";
+         else if(type==MS_BOUND)
+           oss<<"Clustered Boundries: ";
+         oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
+         std::string mess = oss.str();
 
-	  this->AddFeatureFilter( m_MeanShiftFilterList->GetNthElement(i-1), type, -1, 0, mess);
-	}
+         this->AddFeatureFilter( m_MeanShiftFilterList->GetNthElement(i-1), type, -1, 0, mess);
+       }
     }
 }
 
@@ -695,7 +695,7 @@ FeatureExtractionModel
 
     m_OutputImage = m_iL2VI->GetOutput();
     
-    //FIXME update during the pipeline!!!!! 
+    //FIXME update during the pipeline!!!!!
 //     m_iL2VI->Update();
 //     iL2VI->UpdateOutputInformation();
 
@@ -844,21 +844,21 @@ FeatureExtractionModel
     case MS_SMOOTH:
     case MS_CLUSTERED:
       {
-	ExtractROIFilterType::Pointer extract = dynamic_cast<ExtractROIFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
-	image = extract->GetOutput();
-	break;
+       ExtractROIFilterType::Pointer extract = dynamic_cast<ExtractROIFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
+       image = extract->GetOutput();
+       break;
       }
     case MS_LABELED:
       {
-	MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
-	image = meanShift->GetLabeledClusteredOutput();
-	break;
+       MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
+       image = meanShift->GetLabeledClusteredOutput();
+       break;
       }
     case MS_BOUND:
       {
-	MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
-	image = meanShift->GetClusterBoundariesOutput();
-	break;
+       MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
+       image = meanShift->GetClusterBoundariesOutput();
+       break;
       }
     case ORIGINAL:
       {

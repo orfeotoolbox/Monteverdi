@@ -45,7 +45,7 @@
 namespace otb
 {
 /** \class ReaderModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
@@ -125,9 +125,9 @@ private:
   FPVReaderType::Pointer m_FPVReader;
   VectorReaderType::Pointer m_VectorReader;
   ComplexImageReaderType::Pointer m_ComplexReader;
+  LabeledVectorReaderType::Pointer m_LabeledVectorReader;
 
   // Optical filters
-  LabeledVectorReaderType::Pointer m_LabeledVectorReader;
   AmplitudeFilterType::Pointer m_AmplitudeFilter;
   ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
 
@@ -135,7 +135,7 @@ private:
   RealFilterType::Pointer m_RealFilter;
   ImaginaryFilterType::Pointer m_ImaginaryFilter;
   ModulusFilterType::Pointer m_ModulusFilter;
-  PhaseFilterType::Pointer m_PhaseFilter; 
+  PhaseFilterType::Pointer m_PhaseFilter;
 };
 
 

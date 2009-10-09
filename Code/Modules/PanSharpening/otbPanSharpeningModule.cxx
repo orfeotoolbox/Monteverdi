@@ -48,7 +48,7 @@ void PanSharpeningModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void PanSharpeningModule::Run()
 {
-  // Here is the body of the module. 
+  // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
 
@@ -58,7 +58,7 @@ void PanSharpeningModule::Run()
   
 
   // Once all inputs have been properly retrieved, do what the module
-  // should do : show a gui, start an MVC model, trigger processing ...
+  // should do : show a gui, start an MVC model, trigger processing...
 
 
   m_PanSharpeningFilter->SetPanInput(panImage);

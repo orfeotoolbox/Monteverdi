@@ -20,13 +20,13 @@
 
 #include "otbModule.h"
 
-// Orthorectification Application 
+// Orthorectification Application
 #include "otbOrthorectification.h"
 
 namespace otb
 {
 /** \class OrthorectificationModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */

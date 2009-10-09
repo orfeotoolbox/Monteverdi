@@ -26,6 +26,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbCachingModule ${MODULE_SRCS} ${otbCachingModule_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbCachingModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui flu)
+ADD_DEPENDENCIES(otbCachingModule OTBMonteverdiCommon)
 
 ENDIF(OTB_USE_VISU_GUI)
 

@@ -30,6 +30,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbViewerModule ${MODULE_SRCS} ${otbViewerModule_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbViewerModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBVisualization OTBGui)
+ADD_DEPENDENCIES(otbViewerModule OTBMonteverdiCommon)
 				    
 ENDIF(OTB_USE_VISU_GUI)
 

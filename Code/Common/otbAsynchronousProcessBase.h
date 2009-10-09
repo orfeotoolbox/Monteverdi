@@ -66,7 +66,7 @@ class ITK_EXPORT AsynchronousProcessBase
   itkGetConstMacro(Thread2HasFinished, bool);
   itkSetMacro(Thread2HasFinished, bool);
 
- protected: 
+ protected:
 
   AsynchronousProcessBase();
   virtual ~AsynchronousProcessBase(){};

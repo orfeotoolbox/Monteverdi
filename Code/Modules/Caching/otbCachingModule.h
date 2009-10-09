@@ -33,7 +33,7 @@
 namespace otb
 {
 /** \class CachingModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
@@ -81,11 +81,23 @@ protected:
   /** Callbacks */
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
-  void UpdateProgressBar( float progress );
+
+  // Update the progress bar
+  void UpdateProgress();
+
+  // Hide the window
+  void HideWindow();
 
 private:
   CachingModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  
+  // Callback to update the window label
+  static void UpdateProgressCallback(void * data);
+
+  // Callback to hide window
+  static void HideWindowCallback(void * data);
+
 
   // The writing process
   itk::ProcessObject::Pointer m_WritingProcess;

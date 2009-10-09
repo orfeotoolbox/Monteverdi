@@ -268,15 +268,15 @@ WriterViewGUI
       m_WriterController->ExchangeOutputListOrder(1);
       // exchnage the list display order
       if(id!=1)
-	{
-	  guiOutputFeatureList->swap( id, id-1 );
-	  guiOutputFeatureList->value(id-1);
-	}
+       {
+         guiOutputFeatureList->swap( id, id-1 );
+         guiOutputFeatureList->value(id-1);
+       }
       else
-	{
-	  guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
-	  guiOutputFeatureList->value(guiOutputFeatureList->size());
-	}
+       {
+         guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
+         guiOutputFeatureList->value(guiOutputFeatureList->size());
+       }
     }
 }
 
@@ -291,15 +291,15 @@ WriterViewGUI
       m_WriterController->ExchangeOutputListOrder(-1);
       // exchnage the list display order
       if(id!=guiOutputFeatureList->size())
-	{
-	  guiOutputFeatureList->swap( id, id+1 );
-	  guiOutputFeatureList->value(id+1);
-	}
+       {
+         guiOutputFeatureList->swap( id, id+1 );
+         guiOutputFeatureList->value(id+1);
+       }
       else
-	{
-	  guiOutputFeatureList->swap(id, 1 );
-	  guiOutputFeatureList->value(1);
-	}
+       {
+         guiOutputFeatureList->swap(id, 1 );
+         guiOutputFeatureList->value(1);
+       }
       guiOutputFeatureList->redraw();
     }
 }
@@ -313,7 +313,7 @@ WriterViewGUI
 //   oss<<"("<<id[0]<<" , "<<id[1]<<")";
 //   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
 //   guiSpectAnglePixelCoordinates->redraw();
-// 
+//
 //   m_SelectedPixel = m_WriterModel->GetInputImage()->GetPixel(id);
 //   oss.str("");
 //   oss<<"[";
@@ -342,7 +342,7 @@ WriterViewGUI
   guiMainWindow->show();
 }
 
-void 
+void
 WriterViewGUI
 ::InitFeatureOutputList()
 {
@@ -433,7 +433,7 @@ WriterViewGUI
   this->UpdateParameterArea(0);
   this->SetPixelType(otb::UNKNOWN);
 
-  // NewVisu 
+  // NewVisu
   if (m_VisuView.IsNotNull())
   {
     m_VisuView->GetScrollWidget()->ClearBuffer();
@@ -469,7 +469,7 @@ void WriterViewGUI::Browse()
 {
   const char * filename = NULL;
 
-  filename = fl_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = fl_file_chooser("Choose the dataset file...", "*.*",".");
   Fl::check();
   if (filename == NULL)
   {

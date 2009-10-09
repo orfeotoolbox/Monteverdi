@@ -63,7 +63,7 @@ int otbViewerModuleTest(int argc, char* argv[])
   if(argc > 3)
   {
     const char * vfname  = argv[3];
-    // VectorData Reader 
+    // VectorData Reader
     vreader->SetFileName(vfname);
     vreader->GenerateOutputInformation();
 
@@ -74,7 +74,7 @@ int otbViewerModuleTest(int argc, char* argv[])
     module->AddInputByKey("VectorData",wrapperVector);
 
     const char * vfname1  = argv[4];
-    // VectorData Reader 
+    // VectorData Reader
     vreader1->SetFileName(vfname1);
     vreader1->GenerateOutputInformation();
 

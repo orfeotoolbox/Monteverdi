@@ -58,7 +58,7 @@ public:
   typedef VectorImage<PixelType,2>            VectorImageType;
   typedef VectorImageType::Pointer            VectorImagePointerType;
   typedef VectorImageType::IndexType          IndexType;
-  typedef std::vector<VectorImagePointerType> ImageListType;    
+  typedef std::vector<VectorImagePointerType> ImageListType;
 
   typedef std::pair<IndexType, IndexType> IndexCoupleType;
   typedef std::vector<IndexCoupleType>    IndexesListType;
@@ -88,7 +88,7 @@ public:
   {
     if( id != 0 && id != 1 )
       {
-	itkExceptionMacro(<<"invalid id "<<id<<".");
+       itkExceptionMacro(<<"invalid id "<<id<<".");
       }
     return m_VisualizationModel[id];
   }

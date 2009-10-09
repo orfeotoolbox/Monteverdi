@@ -57,7 +57,7 @@ WriterModel::WriterModel()
   m_iL2VI = ImageListToVectorImageFilterType::New();
   
   //Input and Writers
-  m_InputImage = InputImageType::New(); 
+  m_InputImage = InputImageType::New();
   m_FPVWriter = FPVWriterType::New();
   m_VectorWriter = VectorWriterType::New();
   
@@ -219,7 +219,7 @@ WriterModel
   for (unsigned int i=0;i<m_NumberOfChannels;++i)
   {
     m_OutputIndexMap.push_back(0);
-    m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));  
+    m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
   }
   
 }
@@ -314,7 +314,7 @@ void WriterModel
   typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
   
-  if ( test->CanWriteFile(fname.c_str()) ) 
+  if ( test->CanWriteFile(fname.c_str()) )
   {
     this->UpdateVectorWriter(fname);
   }
@@ -334,13 +334,13 @@ void WriterModel
 
 
 
-template <typename CastOutputPixelType> 
+template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(const std::string & fname, const bool useScale)
 {
   typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
   
-  if ( test->CanWriteFile(fname.c_str()) ) 
+  if ( test->CanWriteFile(fname.c_str()) )
   {
     this->UpdateVectorWriter(fname);
   }

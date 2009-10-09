@@ -41,7 +41,7 @@ HomologousPointExtractionModule::HomologousPointExtractionModule()
 
   // Add a new input
   this->AddInputDescriptor<FloatingVectorImageType>("FirstInputImage","Image to apply HomologousPointExtraction on");
-  this->AddInputDescriptor<FloatingVectorImageType>("SecondInputImage","Image to apply HomologousPointExtraction on");  
+  this->AddInputDescriptor<FloatingVectorImageType>("SecondInputImage","Image to apply HomologousPointExtraction on");
 }
 
 /** Destructor */
@@ -59,7 +59,7 @@ void HomologousPointExtractionModule::PrintSelf(std::ostream& os, itk::Indent in
 /** The custom run command */
 void HomologousPointExtractionModule::Run()
 {
-  // Here is the body of the module. 
+  // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
 
@@ -84,7 +84,7 @@ void HomologousPointExtractionModule::Run()
     }
   
   // Once all inputs have been properly retrieved, do what the module
-  // should do : show a gui, start an MVC model, trigger processing ...
+  // should do : show a gui, start an MVC model, trigger processing...
 
 }
 

@@ -40,14 +40,14 @@ int otbOrthorectificationModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
 
-  // Add Wrapper Input 
+  // Add Wrapper Input
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   module->AddInputByKey("InputImage",wrapperIn);
 
   module->Start();
 
-  // Simulate the update of the output parameters : 
+  // Simulate the update of the output parameters :
   itk::OStringStream oss;
   oss.str("100");
   specificModule->GetOrthorectification()->guiSizeX->value(oss.str().c_str());

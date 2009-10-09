@@ -68,7 +68,7 @@ public:
   /** Check if the given type is compatible with the input */
   virtual bool IsTypeCompatible(const std::string & type) const;
 
-  /** Add data (virtual because behaviour depends 
+  /** Add data (virtual because behaviour depends
    *  on subclasses) */
   virtual void AddData(const DataObjectWrapper & wrapper);
 

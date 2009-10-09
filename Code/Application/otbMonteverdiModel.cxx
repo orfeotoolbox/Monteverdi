@@ -159,7 +159,7 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
     itkExceptionMacro(<<"InstanceId "<<newInstanceId<<" already exists");
     }
 
-  // Retrieve the module pointer 
+  // Retrieve the module pointer
   Module::Pointer module = mcIt->second;
 
   // Register module instance

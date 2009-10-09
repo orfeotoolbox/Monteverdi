@@ -28,7 +28,7 @@ int otbInputDataDescriptorTest(int argc, char * argv[])
   desc1.AddSupportedType("Vector_Data");
   desc1.AddSupportedType("Vector_Data");
 
-  // Check type compatibility 
+  // Check type compatibility
   std::cout<<"IsTypeCompatible: Vector_Data "<<desc1.IsTypeCompatible("Vector_Data")<<std::endl;
   std::cout<<"IsTypeCompatible: Data "<<desc1.IsTypeCompatible("Data")<<std::endl;
 

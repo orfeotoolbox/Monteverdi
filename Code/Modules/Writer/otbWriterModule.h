@@ -35,7 +35,7 @@
 namespace otb
 {
 /** \class WriterModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
@@ -58,11 +58,11 @@ public:
 
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef VectorImage<unsigned char,2>  CharVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
-  typedef VectorData<double>                           VectorType;
-  typedef VectorData<double,2,short unsigned int>      LabeledVectorType;
+  typedef VectorImage<double,2>                    FloatingVectorImageType;
+  typedef VectorImage<unsigned char,2>             CharVectorImageType;
+  typedef Image<double,2>                          FloatingImageType;
+  typedef VectorData<double>                       VectorType;
+  typedef VectorData<double,2,short unsigned int>  LabeledVectorType;
   /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
   typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
@@ -87,13 +87,28 @@ protected:
   virtual void Cancel();
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
-  void UpdateProgressBar( float progress );
+
+  // Update the progress bar
+  void UpdateProgress();
+
+  // Hide the window
+  void HideWindow();
 
 private:
+  // Callback to update the window label
+  static void UpdateProgressCallback(void * data);
+
+  // Callback to hide window
+  static void HideWindowCallback(void * data);
+
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
+
+  // Is writing done ?
+  bool m_Done;
 };
 
 

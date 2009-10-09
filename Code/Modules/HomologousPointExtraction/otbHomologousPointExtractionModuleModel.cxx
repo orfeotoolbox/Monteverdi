@@ -70,7 +70,7 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
 
   m_IndexesList.clear();
 
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
 }
 
@@ -111,7 +111,7 @@ HomologousPointExtractionModuleModel
   // Generate the layer
   m_ImageGenerator[id]->SetImage(image);
   m_ImageGenerator[id]->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook...");
   m_ImageGenerator[id]->GenerateLayer();
   
   std::vector<unsigned int> channels;
@@ -155,10 +155,10 @@ HomologousPointExtractionModuleModel
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
-	{
-	  found = true;
-	  itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
-	}
+       {
+         found = true;
+         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+       }
       j++;
     }
 

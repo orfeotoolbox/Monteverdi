@@ -206,17 +206,17 @@ FeatureExtractionController
   if (direction > 0 )
     {
       if(id!=0)
-	m_Model->ExchangeOutputListOrder( id,id-1 );
+       m_Model->ExchangeOutputListOrder( id,id-1 );
       else
-	m_Model->ExchangeOutputListOrder( id, m_View->guiOutputFeatureList->size()-1 );
+       m_Model->ExchangeOutputListOrder( id, m_View->guiOutputFeatureList->size()-1 );
     }
   // if switch with  previous element
   else
     {
       if(id!=m_View->guiOutputFeatureList->size()-1)
-	m_Model->ExchangeOutputListOrder (id+1,id );
+       m_Model->ExchangeOutputListOrder (id+1,id );
       else
-	m_Model->ExchangeOutputListOrder ( id, 0 );
+       m_Model->ExchangeOutputListOrder ( id, 0 );
     }
 }
 
@@ -307,7 +307,7 @@ FeatureExtractionController
       double sigma = m_View->guiGradSigma->value();
       m_Model->AddGradientFilter(sigma);
       break;
-    } 
+    }
     case TEXT_ASM:
     case TEXT_CSH:
     case TEXT_CPR:

@@ -24,12 +24,12 @@ namespace otb
 {
 /** \class PixelClickedActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class PixelClickedActionHandler
   : public ImageWidgetActionHandler
 {
@@ -62,30 +62,30 @@ public:
    * \return The handling return code
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
-  { 
+  {
     if( m_View.IsNotNull() && m_Model.IsNotNull() && m_View->GetVisuView().IsNotNull() &&  m_Model->GetVisuModel().IsNotNull() && m_Model->GetHasInput() )
       {
-	if(widgetId == m_View->GetVisuView()->GetFullWidget()->GetIdentifier() && event == FL_PUSH)
-	  {
-	    otbMsgDevMacro(<<"PixelClickedActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
-	    
-	    // Get the clicked index
-	    typename VisuViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-	    screenPoint = m_View->GetVisuView()->GetScrollWidget()->GetMousePosition();
-	    
-	    // Transform to image point
-	    imagePoint = m_View->GetVisuView()->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
-	    
-	    // Transform to index
-	    typename VisuViewType::IndexType index;
-	    index[0]=static_cast<int>(imagePoint[0]);
-	    index[1]=static_cast<int>(imagePoint[1]);
-	    
-	    // Change scaled extract region center
-	    m_View->UpdateSelectedPixel(index);
-	
-	    return true;
-	  }
+       if(widgetId == m_View->GetVisuView()->GetFullWidget()->GetIdentifier() && event == FL_PUSH)
+         {
+           otbMsgDevMacro(<<"PixelClickedActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+           
+           // Get the clicked index
+           typename VisuViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+           screenPoint = m_View->GetVisuView()->GetScrollWidget()->GetMousePosition();
+           
+           // Transform to image point
+           imagePoint = m_View->GetVisuView()->GetScrollWidget()->GetScreenToImageTransform()->TransformPoint(screenPoint);
+           
+           // Transform to index
+           typename VisuViewType::IndexType index;
+           index[0]=static_cast<int>(imagePoint[0]);
+           index[1]=static_cast<int>(imagePoint[1]);
+           
+           // Change scaled extract region center
+           m_View->UpdateSelectedPixel(index);
+       
+           return true;
+         }
       }
     return false;
   }
@@ -121,7 +121,7 @@ private:
   // Pointer to the model
   ModelPointerType m_Model;
   
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

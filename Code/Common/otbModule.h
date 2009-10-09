@@ -79,6 +79,9 @@ public:
    * AssignInputByKey(). */
   const DataObjectWrapper GetOutputByKey(const std::string & key, unsigned int idx = 0) const;
 
+  /** Get the Data object descriptor corresponding to the given key */
+  const InputDataDescriptor & GetInputDataDescriptorByKey(const std::string & key) const;
+
   /** Get the input data descriptors map */
   const InputDataDescriptorMapType  & GetInputsMap() const;
 

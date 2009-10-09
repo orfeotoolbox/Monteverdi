@@ -46,7 +46,7 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_GenerateLabeled = true;
 
 
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
 }
 
@@ -69,7 +69,7 @@ MeanShiftModuleModel
   // Generate the layer
   m_ImageGenerator->SetImage(m_Reader->GetOutput());
   m_ImageGenerator->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
     std::vector<unsigned int> channels;
@@ -110,7 +110,7 @@ MeanShiftModuleModel
 {
   m_IsUpdating = true;
   LabeledWriterType::Pointer writer = LabeledWriterType::New();
-  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
+  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image...");
   writer->SetFileName(filename);
   writer->SetInput(m_MeanShift->GetLabeledClusteredOutput());
   writer->Update();
@@ -124,7 +124,7 @@ MeanShiftModuleModel
 {
   m_IsUpdating = true;
   VectorWriterType::Pointer writer = VectorWriterType::New();
-  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image ...");
+  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image...");
   writer->SetFileName(filename);
   writer->SetInput(m_MeanShift->GetClusteredOutput());
   writer->Update();
@@ -166,7 +166,7 @@ MeanShiftModuleModel
   // Generate the layer
   m_ImageGenerator->SetImage(m_InputImage);
   m_ImageGenerator->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
   std::vector<unsigned int> channels;

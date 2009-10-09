@@ -31,7 +31,7 @@ namespace otb
 {
 /** \class SarIntensityModule
  *  \brief This is the SarIntensity module
- * 
+ *
  * Description of the module.
  *
  */

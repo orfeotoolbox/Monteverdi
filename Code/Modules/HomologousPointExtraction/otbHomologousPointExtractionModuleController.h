@@ -61,11 +61,11 @@ public:
     void IndexClicked(IndexType index)
     {
       if( !m_Controller.IsNotNull() )
-	itkExceptionMacro(<<"Not Controller set.");
+       itkExceptionMacro(<<"Not Controller set.");
       if( m_MouseButton==1 )
-	m_Controller->LeftMouseButtonClicked(index, m_ImageViewId);
+       m_Controller->LeftMouseButtonClicked(index, m_ImageViewId);
       else
-	itkExceptionMacro(<<"Mouse event not supproted yet.");
+       itkExceptionMacro(<<"Mouse event not supproted yet.");
     }
     itkSetClampMacro(MouseButton,int,1,3);
     itkGetMacro(MouseButton,int);
@@ -138,7 +138,7 @@ public:
   }
 
   /** Link module and pixel descriptor action handlers. */
-  virtual void LinkPixelDescriptors(); 
+  virtual void LinkPixelDescriptors();
   virtual void AddPoints( int x1, int y1, int x2, int y2 );
   virtual void ClearPointList();
   virtual void DeletePointFromList( unsigned int id );

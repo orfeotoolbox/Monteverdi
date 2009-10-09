@@ -69,7 +69,7 @@
 namespace otb
 {
 /** \class ViewerModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
@@ -322,7 +322,7 @@ private:
   VerticalAsymptoteCurveType::Pointer      m_RedVaCurveR;
   VerticalAsymptoteCurveType::Pointer      m_RedVaCurveL;
 
-  // Histogram Handlers 
+  // Histogram Handlers
   HistogramActionHandlerType::Pointer      m_HistogramHandler;
   HistogramActionHandlerType::Pointer      m_BlueHistogramHandler;
   HistogramActionHandlerType::Pointer      m_GreenHistogramHandler;

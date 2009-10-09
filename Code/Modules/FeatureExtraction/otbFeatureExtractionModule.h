@@ -30,7 +30,7 @@
 namespace otb
 {
 /** \class FeatureExtractionModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
