@@ -923,12 +923,12 @@ void ViewerModule::UpdateTabHistogram()
 				     width-blank ,height-blank);
       
       // Right Asymptote
-      m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
-      m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
+      m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
+      m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
       
       // Left Asymptote
-      m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]+1));
-      m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
+      m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]+1));
+      m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
       
       // Add the asymptote to the curve
       m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveR);
@@ -954,12 +954,12 @@ void ViewerModule::UpdateTabHistogram()
 				      width-blank, height-blank);
       
       // Right Asymptote
-      m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
-      m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green); 
+      m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
+      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green); 
       
       // Left Asymptote
-      m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1));
-      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
+      m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1));
+      m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green);
 
       // Add the asymptote to the curve
       m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
@@ -997,12 +997,12 @@ void ViewerModule::UpdateTabHistogram()
   rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[0])); 
   m_RedCurveWidgetGroup->AddCurve(rhistogram);
   // Right Asymptote
-  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]));
-  m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor()); 
+  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]));
+  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor()); 
     
   // Left Asymptote
-  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]+1));
-  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
+  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]+1));
+  m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
     
   // Add the asymptote to the curve
   m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveR);
@@ -1055,11 +1055,6 @@ void ViewerModule::UpdateUpperQuantile()
    
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
-  
-  // Tab Setup Position
-  m_BlueCurveWidgetGroup->redraw();
-  m_GreenCurveWidgetGroup->redraw();
-  m_RedCurveWidgetGroup->redraw();
 }
 
 
@@ -1090,11 +1085,6 @@ void ViewerModule::UpdateLowerQuantile()
   
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
-
-  // Tab Setup Position
-  m_BlueCurveWidgetGroup->redraw();
-  m_GreenCurveWidgetGroup->redraw();
-  m_RedCurveWidgetGroup->redraw();
 }
 
 /**
@@ -1122,8 +1112,6 @@ void ViewerModule::UpdatePixelInformationWindow()
   m_RenderingModel->SetScaledExtractRegionCenter(index);
   m_RenderingModel->SetExtractRegionCenter(index);
   m_RenderingModel->Update();
-
-  
 }
 
 
