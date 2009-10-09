@@ -98,6 +98,20 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
   return wrapper;
 }
 
+/** Get the Data object descriptor corresponding to the given key */
+const InputDataDescriptor & Module::GetInputDataDescriptorByKey(const std::string & key) const
+{
+  // Search for the key in the output map
+  InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
+
+  // If the key can not be found, throw an exception
+  if(it == m_InputsMap.end())
+    {
+    itkExceptionMacro(<<"Module has no input with key "<<key);
+    }
+  return it->second;
+}
+
 /** Get the input data descriptors map */
 const Module::InputDataDescriptorMapType & Module::GetInputsMap() const
 {
