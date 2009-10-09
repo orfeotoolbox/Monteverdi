@@ -44,8 +44,10 @@ InputChoiceDescriptor::StringPairType
 InputChoiceDescriptor
 ::GetSelected() const
 {
-    std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
-    return m_ChoiceVector[m_FlChoice->value()];
+  std::cout<<"Selected item "<<m_FlChoice->value()<<std::endl;
+  StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(m_FlChoice->value()); 
+
+  return mcIt->second; 
 }
 
 bool
