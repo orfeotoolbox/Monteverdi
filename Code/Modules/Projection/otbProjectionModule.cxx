@@ -50,32 +50,26 @@ namespace otb
 ProjectionModule::ProjectionModule()
 {
   this->CreateGUI();
-//   guiAvElev->value("0");
-//   guiTRANSMERCATOREast->value("0");
-//   guiTRANSMERCATORNorth->value("0");
-//   guiTRANSMERCATORScale->value("1");
-//   m_MainWindowInitSize[0] = guiMainWindow->w();
-//   m_MainWindowInitSize[1] = guiMainWindow->h();
-//   m_OutputSize.Fill(0);
-//   m_OutputOrigin.Fill(0);
-//   m_OutputSpacing.Fill(0);
-//   m_DEMSpacing.Fill(0);
-//   m_EastNorth.push_back(0);
-//   m_EastNorth.push_back(0);
-//   m_InterpType = LINEAR_;
-//   m_MapType = UTM;
-//   m_UTMZoneRef = 0;
-//   m_UTMHemRef = 'N';
-//   m_TileNumber = 0;
-//   m_MaxTileSize = 256.;
-//   guiShowDEM->hide();
-  
-//   m_HasOutput = false;
 
-//   //Instanciate Filter 
-//   //m_ProjectionModuleFilter = ProjectionModuleFilterType::New();
-//   //m_PerBandFilter     = PerBandFilterType::New();
-    // Describe inputs
+  // Initiliaze the GUI values
+  guiAvElev->value("0");
+  guiTRANSMERCATOREast->value("0");
+  guiTRANSMERCATORNorth->value("0");
+  guiTRANSMERCATORScale->value("1");
+  m_OutputSize.Fill(0);
+  m_OutputOrigin.Fill(0);
+  m_OutputSpacing.Fill(0);
+  //   m_DEMSpacing.Fill(0);
+  m_EastNorth.push_back(0);
+  m_EastNorth.push_back(0);
+  m_InterpType = LINEAR_;
+  m_MapType = UTM;
+  m_UTMZoneRef = 0;
+  m_UTMHemRef = 'N';
+  //   guiShowDEM->hide();
+  //   m_HasOutput = false;
+  
+  // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to project :");
 }
 
@@ -83,6 +77,16 @@ void
 ProjectionModule
 ::Run()
 {
+
+  // Get the input image
+  m_InputImage = m_InputImage = this->GetInputData<ImageType>("InputImage");
+  
+  // First check if there is actually an input image
+  if(m_InputImage.IsNull())
+    {
+      itkExceptionMacro(<<"The image pointer is null, there is nothing to reproject. You probably forget to set the image.");
+    }
+  
   try
   {
 //     this->SelectAction();
@@ -506,7 +510,7 @@ ProjectionModule::CheckImageParameters()
 //     }
 //   }
 
-//   return 0;
+   return 0;
 }
 
 
@@ -577,7 +581,7 @@ ProjectionModule
 //     res = 1;
 //     break;
 //   }
-//   return res;
+  return 0;
 }
 
 
@@ -689,7 +693,7 @@ ProjectionModule
 //     res = 1;
 //     break;
 //   }
-//   return res;
+   return 0;
 }
 
 
@@ -739,11 +743,6 @@ ProjectionModule::SelectAction()
 
 //     // Update outputinformation
 //     this->UpdateOutputParameters();
-
-//     // Compute extent image
-//     this->GenerateImageExtent();
-//     // Show insight image
-//     this->InsightExtent();
 
 //     // Load the default interpolator
 //     this->UpdateInterpolator();
