@@ -42,7 +42,7 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  // Add Wrapper Input 
+  // Add Wrapper Input
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   module->AddInputByKey("InputImage",wrapperIn);
