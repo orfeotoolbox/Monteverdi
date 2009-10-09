@@ -102,16 +102,16 @@ void CachingModule::ThreadedWatch()
 
   while((m_WritingProcess.IsNull() && !m_Done ) || m_WritingProcess->GetProgress() != 1)
     {
-	if(m_WritingProcess.IsNotNull())
-	{
+       if(m_WritingProcess.IsNotNull())
+       {
       current = m_WritingProcess->GetProgress();
-	  if(current - last > updateThres)
-	  {
+         if(current - last > updateThres)
+         {
       // Make the main fltk loop update progress fields
       Fl::awake(&UpdateProgressCallback,this);
-	  last = current;
-	  }
-	}
+         last = current;
+         }
+       }
 
     // Sleep for a while
     Sleep(500);

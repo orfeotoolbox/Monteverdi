@@ -88,7 +88,7 @@ public:
   {
     if( id != 0 && id != 1 )
       {
-	itkExceptionMacro(<<"invalid id "<<id<<".");
+       itkExceptionMacro(<<"invalid id "<<id<<".");
       }
     return m_VisualizationModel[id];
   }

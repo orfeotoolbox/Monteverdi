@@ -65,7 +65,7 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = flu_file_chooser("Choose the dataset file...", "*.*",".");
   
   if (filename == NULL)
     {
@@ -125,16 +125,16 @@ void WriterModule::ThreadedWatch()
   while( (m_ProcessObject.IsNull() && !m_Done) || m_ProcessObject->GetProgress() != 1)
     {
     if(m_ProcessObject.IsNotNull())
-	  {
+         {
       current = m_ProcessObject->GetProgress();
-	  if(current - last > updateThres)
-	    {
+         if(current - last > updateThres)
+           {
         // Make the main fltk loop update progress fields
         Fl::awake(&UpdateProgressCallback,this);
-	    last = current;
-	    }
-	  } 
-	// Sleep for a while
+           last = current;
+           }
+         } 
+       // Sleep for a while
     Sleep(500);
     }
   
@@ -200,7 +200,7 @@ void WriterModule::ThreadedRun()
     }
   else
     {
-	  m_Done = true;
+         m_Done = true;
       itkExceptionMacro(<<"Input data are NULL.");
     } 
   m_Done = true;

@@ -140,8 +140,8 @@ void MeanShiftModuleView::SaveClusterImage()
 
 void MeanShiftModuleView::RunSegmentation()
 {
-	m_Controller->RunSegmentation();
-	static_cast<bool>(this->mClustersButton->value(1));
+       m_Controller->RunSegmentation();
+       static_cast<bool>(this->mClustersButton->value(1));
 }
 
 void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
@@ -151,19 +151,19 @@ void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
 
 void MeanShiftModuleView::SetSpectralRadius(unsigned int sr)
 {
-	m_Controller->SetSpectralRadius(sr);
+       m_Controller->SetSpectralRadius(sr);
 }
 
 void MeanShiftModuleView::SetMinRegionSize(unsigned int mr)
 {
-	m_Controller->SetMinRegionSize(mr);
+       m_Controller->SetMinRegionSize(mr);
 }
 
 
 void MeanShiftModuleView::SwitchClusters()
 {
-	m_Controller->SwitchClusters(
-	  static_cast<bool>(this->mClustersButton->value()));
+       m_Controller->SwitchClusters(
+         static_cast<bool>(this->mClustersButton->value()));
 }
 
 void MeanShiftModuleView::SwitchBoundaries()

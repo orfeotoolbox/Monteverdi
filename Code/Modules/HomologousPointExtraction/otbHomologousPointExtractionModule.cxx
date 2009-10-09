@@ -84,7 +84,7 @@ void HomologousPointExtractionModule::Run()
     }
   
   // Once all inputs have been properly retrieved, do what the module
-  // should do : show a gui, start an MVC model, trigger processing ...
+  // should do : show a gui, start an MVC model, trigger processing...
 
 }
 

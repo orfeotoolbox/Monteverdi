@@ -89,10 +89,10 @@ InputViewGUI
           // if the type is ok, we can add the label in the Fl_Input_Choice
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-	    oss.str("");
-	    oss<<moduleInstances[i];
-	    oss<<" : ";
-	    oss<<it_out->second.GetDataKey();
+           oss.str("");
+           oss<<moduleInstances[i];
+           oss<<" : ";
+           oss<<it_out->second.GetDataKey();
             inputChoice->add(oss.str().c_str());
 
             /** Build the inputChoiceDescriptor */
@@ -215,7 +215,7 @@ InputViewGUI
     { 
       int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());
       if(res != 0)
-	return;
+       return;
       m_ModuleInstanceId = gLabel->value();
     }
 

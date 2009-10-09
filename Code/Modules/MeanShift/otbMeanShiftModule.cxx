@@ -80,7 +80,7 @@ void MeanShiftModule::Run()
     }
   
   // Once all inputs have been properly retrieved, do what the module
-  // should do : show a gui, start an MVC model, trigger processing ...
+  // should do : show a gui, start an MVC model, trigger processing...
 
 }
 
@@ -96,18 +96,18 @@ void MeanShiftModule::Notify()
 
 
       if(m_Controller->GenerateFiltered())
-	{
-	  FloatingVectorImageType::Pointer filteredOutput =
-	    m_Controller->GetFilteredOutput();
-	  this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
-	}
+       {
+         FloatingVectorImageType::Pointer filteredOutput =
+           m_Controller->GetFilteredOutput();
+         this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
+       }
 
       if(m_Controller->GenerateClustered())
-	{
-	  FloatingVectorImageType::Pointer clusteredOutput =
-	    m_Controller->GetClusteredOutput();
-	  this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
-	}
+       {
+         FloatingVectorImageType::Pointer clusteredOutput =
+           m_Controller->GetClusteredOutput();
+         this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
+       }
 
       //   if(m_Controller->GenerateLabeled())
       //     {

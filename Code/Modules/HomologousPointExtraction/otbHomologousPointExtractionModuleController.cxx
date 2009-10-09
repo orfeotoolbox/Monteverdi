@@ -28,12 +28,12 @@ namespace otb
 
 HomologousPointExtractionModuleController
 ::HomologousPointExtractionModuleController(): m_View(), m_Model(), m_FirstWidgetsController(), m_SecondWidgetsController(),
-					       m_FirstMouseClickedController(), m_SecondMouseClickedController(),
-					       m_FirstResizingHandler(), m_FirstChangeRegionHandler(), m_FirstChangeScaledRegionHandler(),
-					       m_FirstChangeScaleHandler(), m_FirstLeftMouseClickedHandler(), m_FirstPixelActionHandler(),
-					       m_FirstPixelModel(), m_FirstPixelView(), m_SecondResizingHandler(), m_SecondChangeRegionHandler(), 
-					       m_SecondChangeScaledRegionHandler(), m_SecondChangeScaleHandler(), m_SecondLeftMouseClickedHandler(), 
-					       m_SecondPixelActionHandler(), m_SecondPixelModel(), m_SecondPixelView()
+                                          m_FirstMouseClickedController(), m_SecondMouseClickedController(),
+                                          m_FirstResizingHandler(), m_FirstChangeRegionHandler(), m_FirstChangeScaledRegionHandler(),
+                                          m_FirstChangeScaleHandler(), m_FirstLeftMouseClickedHandler(), m_FirstPixelActionHandler(),
+                                          m_FirstPixelModel(), m_FirstPixelView(), m_SecondResizingHandler(), m_SecondChangeRegionHandler(), 
+                                          m_SecondChangeScaledRegionHandler(), m_SecondChangeScaleHandler(), m_SecondLeftMouseClickedHandler(), 
+                                          m_SecondPixelActionHandler(), m_SecondPixelModel(), m_SecondPixelView()
 {
   // Build the widgets controller
   m_FirstWidgetsController        = WidgetsControllerType::New();
