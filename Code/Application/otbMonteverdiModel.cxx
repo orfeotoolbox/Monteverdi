@@ -168,7 +168,7 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   m_ModuleMap[newInstanceId] = module;
   m_ModuleMap.erase( oldInstanceId );
 
-  this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
+  //this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
 }
 
 bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std::string & outputKey) const

@@ -324,9 +324,8 @@ MonteverdiViewGUI
   // event received : module instanceID has changed
   else if(event.GetType() == "ChangeInstanceId" )
     {
-
       std::cout<<"event.GetInstanceId(): "<<event.GetInstanceId()<<std::endl;
-    this->UpdateTree(event.GetInstanceId());
+      this->UpdateTree(event.GetInstanceId());
     }
   // Event received : UNKNOWN EVENT
   else

@@ -231,7 +231,7 @@ void ReaderModule::OpenOpticalImage()
     }
   m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
   oss.str("");
-  oss <<"Image amplitude read from file: "<<vName->value();
+  oss <<"Image amplitude read from file: "<< vName->value(); // lFile.file(); /
   ossId.str("");
   ossId<<vName->value()<<" (amplitude)";
   this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),ossId.str(),oss.str(),true);

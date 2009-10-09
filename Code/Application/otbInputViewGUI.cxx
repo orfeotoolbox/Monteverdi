@@ -52,7 +52,7 @@ InputViewGUI
      gScrollInput->type(Fl_Scroll::VERTICAL_ALWAYS);
 
     // deactivate Ok button
-    //TODO bOk->deactivate();
+    bOk->deactivate();
 
     // to count the number of Fl_Input_Choice to display
     unsigned int cpt =0;
@@ -230,7 +230,7 @@ InputViewGUI
       m_ModuleInstanceId = gLabel->value();
     }
 
-  // Connect
+  // Connect modules
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
     // Multiple data
@@ -377,6 +377,28 @@ InputViewGUI
       inputChoiceDesc->m_StatusBox->hide();
       }
     }
+
+  // Activate Ok button if needed
+  InputChoiceDescriptorMapType lInputChoiceMap = pthis->GetInputChoiceMap();
+  InputChoiceDescriptorMapType::const_iterator mcIt;
+
+  bool allInputsSet = true;
+  // Check all the FlChoices
+  for( mcIt=lInputChoiceMap.begin();mcIt!=lInputChoiceMap.end();mcIt++)
+  {
+    // If the input choice is not set
+    if ((mcIt->second->m_FlChoice->value()<0) 
+        // and if the input choice is active
+        &&(mcIt->second->m_FlChoice->active()))
+    {
+      allInputsSet = false;
+    }
+
+    // TODO Multiple case (and multiple + optional)
+  }
+  if(allInputsSet)
+    pthis->bOk->activate();
+
 }
 
 } // end namespace otb
