@@ -75,7 +75,7 @@ ${INPUTDATA}/poupees.tif
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvViewerModuleTestWithSHP ${Modules_TESTS} otbViewerModuleTest
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-1
+0
 ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
 ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
@@ -102,6 +102,13 @@ ADD_TEST(PanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
     ${TEMP}/panSharpeningModuleOutput.tif
 )
 
+#------------- Projection Module Tests ---------------------------
+
+ADD_TEST(moTuProjectionModule ${Modules_TESTS} otbProjectionModuleTest
+${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+)
+
+
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -116,8 +123,9 @@ otbViewerModuleTest.cxx
 otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx
 otbPanSharpeningModuleTest.cxx
+otbProjectionModuleTest.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule OTBIO OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule OTBIO OTBCommon OTBTesting)
