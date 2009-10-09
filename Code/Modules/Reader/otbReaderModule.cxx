@@ -31,8 +31,8 @@ ReaderModule::ReaderModule()
   // Build filters
   m_FPVReader = FPVReaderType::New();
   m_VectorReader = VectorReaderType::New();
-  m_ComplexReader = ComplexImageReaderType::New();
   m_LabeledVectorReader = LabeledVectorReaderType::New();
+  m_ComplexReader = ComplexImageReaderType::New();
   m_AmplitudeFilter = AmplitudeFilterType::New();
   m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
   m_RealFilter = RealFilterType::New();
@@ -118,8 +118,9 @@ void ReaderModule::Analyse()
     {
     try
       {
-      m_LabeledVectorReader->SetFileName(filepath);
-      m_LabeledVectorReader->GenerateOutputInformation();
+      VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+      vectorReader->SetFileName(filepath);
+      vectorReader->GenerateOutputInformation();
       vType->value(3);
       typeFound = true;
       }

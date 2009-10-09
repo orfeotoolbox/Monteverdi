@@ -125,9 +125,9 @@ private:
   FPVReaderType::Pointer m_FPVReader;
   VectorReaderType::Pointer m_VectorReader;
   ComplexImageReaderType::Pointer m_ComplexReader;
+  LabeledVectorReaderType::Pointer m_LabeledVectorReader;
 
   // Optical filters
-  LabeledVectorReaderType::Pointer m_LabeledVectorReader;
   AmplitudeFilterType::Pointer m_AmplitudeFilter;
   ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
 
