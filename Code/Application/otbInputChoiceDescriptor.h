@@ -55,7 +55,7 @@ public:
   /** Typedefs */
   // contains a module instance Id and a data key
   typedef std::pair<std::string,std::string>   StringPairType;
-
+  typedef std::map<int, StringPairType>        StringPairMapType;
 
   /** Getters/Setters */
   itkSetMacro(Multiple, bool);
@@ -73,7 +73,7 @@ public:
 
   Fl_Choice *                   m_FlChoice;
   Fl_Browser *                  m_FlBrowser;
-  std::vector<StringPairType>   m_ChoiceVector;
+  StringPairMapType             m_ChoiceMap;
   /** if input is multiple, we keep the indexes */
   std::vector<int>              m_Indexes;
 

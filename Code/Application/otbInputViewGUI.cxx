@@ -91,12 +91,12 @@ InputViewGUI
           {
            oss.str("");
            oss<<moduleInstances[i];
-           oss<<" : ";
+           oss<<"/";
            oss<<it_out->second.GetDataKey();
-            inputChoice->add(oss.str().c_str());
+           int index = inputChoice->add(oss.str().c_str());
 
-            /** Build the inputChoiceDescriptor */
-            inputChoiceDesc->m_ChoiceVector.push_back(StringPairType(moduleInstances[i],it_out->first));
+           /** Build the inputChoiceDescriptor */
+           inputChoiceDesc->m_ChoiceMap[index]=(StringPairType(moduleInstances[i],it_out->first));
           }
         }
       }
@@ -233,7 +233,7 @@ InputViewGUI
           int ind = mIt->second->m_Indexes[i];
           if(ind >= 0)
           {
-            StringPairType spair = mIt->second->m_ChoiceVector[ind];
+            StringPairType spair = mIt->second->m_ChoiceMap[ind];
             m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
           }
         }
@@ -288,7 +288,6 @@ InputViewGUI
     }
 
     inputChoiceDesc->m_Indexes.push_back(choiceVal);
-std::cout<< "choiceVal :" <<choiceVal<<std::endl;
 }
 
 void
