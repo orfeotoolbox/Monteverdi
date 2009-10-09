@@ -888,8 +888,8 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
 void ViewerModule::UpdateTabHistogram()
 {
   //Get the number of subdivisons in the GUI 
- double width  = gHistogram->w()/2;
- double height = gHistogram->h()/2;
+ unsigned int  width  = (unsigned int)(gHistogram->w()/2.);
+ unsigned int  height = (unsigned int)(gHistogram->h()/2.);
  double blank = 2.;
  
   // Clear the widget 
