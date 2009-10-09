@@ -28,8 +28,8 @@ namespace otb
 {
 /** Constructor */
 ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
-				m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-				m_Controller(), m_RenderingFunction()
+                            m_View(), m_PixelDescriptionView(), m_CurveWidget(),
+                            m_Controller(), m_RenderingFunction()
 {
   // Color Definition
   m_Red.Fill(0);
@@ -416,8 +416,8 @@ void ViewerModule::UpdateListSelectionColor()
       
       // color To fl_color
       fl_color(static_cast<unsigned char>(255*curColor[0]),
-	       static_cast<unsigned char>(255*curColor[1]),
-	       static_cast<unsigned char>(255*curColor[2]));
+              static_cast<unsigned char>(255*curColor[1]),
+              static_cast<unsigned char>(255*curColor[2]));
       
       //Update the ROIColorItem
       dROIColor->color(fl_color());
@@ -505,12 +505,12 @@ ViewerModule::DisplayVectorData()
     {
       // Dispaly the selected VD if not already displayed
       if(!m_DisplayedVectorData[i])
-	{
-	  m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(true);
-	  m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
-	  m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
-	  m_DisplayedVectorData[i] = true;
-	}
+       {
+         m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+         m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+         m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
+         m_DisplayedVectorData[i] = true;
+       }
     }
   //Redraw all the widgets
   this->RedrawWidget();
@@ -550,24 +550,24 @@ void ViewerModule::ChangeROIColor()
       int ok = fl_color_chooser("Changed class color:",r,g,b);
 
       if (ok)
-	{
-	  curColor[0]=(float)r;
-	  curColor[1]=(float)g;
-	  curColor[2]=(float)b;
+       {
+         curColor[0]=(float)r;
+         curColor[1]=(float)g;
+         curColor[2]=(float)b;
       
-	  fl_color(static_cast<unsigned char>(255*curColor[0]),
-		   static_cast<unsigned char>(255*curColor[1]),
-		   static_cast<unsigned char>(255*curColor[2]));
-	  
-	  // Change the color of the RoiButton 
-	  dROIColor->color(fl_color());
-	  // Change the color of the text
-	  dVDList->selection_color(fl_color());
-      	  dVDList->redraw();
-	  // Change the color of the VectorData
-	  selecedVectorDataGlComponent->SetColor(curColor);
-	  this->RedrawWidget();
-	}
+         fl_color(static_cast<unsigned char>(255*curColor[0]),
+                 static_cast<unsigned char>(255*curColor[1]),
+                 static_cast<unsigned char>(255*curColor[2]));
+         
+         // Change the color of the RoiButton 
+         dROIColor->color(fl_color());
+         // Change the color of the text
+         dVDList->selection_color(fl_color());
+               dVDList->redraw();
+         // Change the color of the VectorData
+         selecedVectorDataGlComponent->SetColor(curColor);
+         this->RedrawWidget();
+       }
     }
 }
 
@@ -600,17 +600,17 @@ void ViewerModule::UpdateDEMSettings()
   
       // Delete the vector data
       for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
-	{
-	  m_View->GetScrollWidget()->RemoveGlComponent(1);
-	  m_View->GetFullWidget()->RemoveGlComponent(1);
-	  m_View->GetZoomWidget()->RemoveGlComponent(0);
-	}
+       {
+         m_View->GetScrollWidget()->RemoveGlComponent(1);
+         m_View->GetFullWidget()->RemoveGlComponent(1);
+         m_View->GetZoomWidget()->RemoveGlComponent(0);
+       }
   
       // Reproject using the DEM this time
       for(unsigned int i = 0; i < m_VectorDataList->Size();i++)
-	{
-	  this->UpdateVectorData(i);
-	}
+       {
+         this->UpdateVectorData(i);
+       }
 
       // Refresh widgets
       this->RedrawWidget();
@@ -775,8 +775,8 @@ void ViewerModule::ViewerSetupOk()
    if (guiViewerSetupColorMode->value())
      {
        this->UpdateRGBChannelOrder(atoi(guiRedChannelChoice->value())-1,
-				   atoi(guiGreenChannelChoice->value())-1,
-				   atoi(guiBlueChannelChoice->value())-1);
+                               atoi(guiGreenChannelChoice->value())-1,
+                               atoi(guiBlueChannelChoice->value())-1);
      }
    else if (guiViewerSetupGrayscaleMode->value())
      {
@@ -785,15 +785,15 @@ void ViewerModule::ViewerSetupOk()
    else if (guiViewerSetupComplexMode->value())
      {
        if (bAmplitude->value())
-	 {
-	   this->UpdateAmplitudeChannelOrder(atoi(guiRealChannelChoice->value())-1,
-								       atoi(guiImaginaryChannelChoice->value())-1);
-	 }
+        {
+          this->UpdateAmplitudeChannelOrder(atoi(guiRealChannelChoice->value())-1,
+                                                               atoi(guiImaginaryChannelChoice->value())-1);
+        }
        else
-	 {
-	   this->UpdatePhaseChannelOrder(atoi(guiRealChannelChoice->value())-1,
-					 atoi(guiImaginaryChannelChoice->value())-1);
-	 }
+        {
+          this->UpdatePhaseChannelOrder(atoi(guiRealChannelChoice->value())-1,
+                                    atoi(guiImaginaryChannelChoice->value())-1);
+        }
      }
      
   // Refresh widgets
@@ -920,7 +920,7 @@ void ViewerModule::UpdateTabHistogram()
       gHistogram->add(m_BlueCurveWidgetGroup);
       gHistogram->resizable(m_BlueCurveWidgetGroup);
       m_BlueCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+height+blank,
-				     width-blank ,height-blank);
+                                 width-blank ,height-blank);
       
       // Right Asymptote
       m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
@@ -951,7 +951,7 @@ void ViewerModule::UpdateTabHistogram()
       gHistogram->add(m_GreenCurveWidgetGroup);
       gHistogram->resizable(m_GreenCurveWidgetGroup);
       m_GreenCurveWidgetGroup->resize(gHistogram->x() + width + blank ,gHistogram->y()+blank,
-				      width-blank, height-blank);
+                                  width-blank, height-blank);
       
       // Right Asymptote
       m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
@@ -980,18 +980,18 @@ void ViewerModule::UpdateTabHistogram()
       gHistogram->add(m_RedCurveWidgetGroup);
       gHistogram->resizable(m_RedCurveWidgetGroup);
       m_RedCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+blank,
-				    gHistogram->w()-blank,height-blank);
+                                gHistogram->w()-blank,height-blank);
     }
   else
     {
       rhistogram->SetHistogramColor(m_Red);
       rhistogram->SetLabelColor(m_Red);
-	
+       
       //Add to the gHistogram group
       gHistogram->add(m_RedCurveWidgetGroup);
       gHistogram->resizable(m_RedCurveWidgetGroup);
       m_RedCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+blank,
-				    width-blank, height-blank);
+                                width-blank, height-blank);
     }
     
   rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[0])); 

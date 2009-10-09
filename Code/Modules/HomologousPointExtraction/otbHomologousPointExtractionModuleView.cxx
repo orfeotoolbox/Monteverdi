@@ -163,8 +163,8 @@ HomologousPointExtractionModuleView
  color[3]=1.0;
 
  fl_color(static_cast<unsigned char>(255*color[0]),
-	  static_cast<unsigned char>(255*color[1]),
-	  static_cast<unsigned char>(255*color[2]));
+         static_cast<unsigned char>(255*color[1]),
+         static_cast<unsigned char>(255*color[2]));
  m_ColorList.push_back(color);
 
  lPointList->value(lPointList->size());
@@ -195,8 +195,8 @@ HomologousPointExtractionModuleView
       
       // color To fl_color
       fl_color(static_cast<unsigned char>(255*curColor[0]),
-	       static_cast<unsigned char>(255*curColor[1]),
-	       static_cast<unsigned char>(255*curColor[2]));
+              static_cast<unsigned char>(255*curColor[1]),
+              static_cast<unsigned char>(255*curColor[2]));
       
       //Update the List Point Color
       lPointList->selection_color(fl_color());
@@ -250,9 +250,9 @@ HomologousPointExtractionModuleView
       lPointList->remove(id);
       m_ColorList.erase(m_ColorList.begin()+id-1);
       if(id<=static_cast<unsigned int>(lPointList->size()))
-	lPointList->value(id);
+       lPointList->value(id);
       else
-	lPointList->value(1);
+       lPointList->value(1);
       this->UpdateListSelectionColor();
       m_FirstCrossGlComponent->ClearIndex(id-1);
       m_SecondCrossGlComponent->ClearIndex(id-1);

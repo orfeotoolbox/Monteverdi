@@ -85,20 +85,20 @@ public:
       IdToNameMapType::const_iterator mIt = m_IdToNameMap.begin();
       bool found = false;
       while(!found && mIt!=m_IdToNameMap.end())
-	{
-	found = (mIt->second == name);
-	++mIt;
-	}
+       {
+       found = (mIt->second == name);
+       ++mIt;
+       }
       // If not, register the type under the given name
       if(!found)
-	{
-	m_IdToNameMap[typeId]=name;
-	}       
+       {
+       m_IdToNameMap[typeId]=name;
+       }       
       else
-	{
-	// If name is already in use, use the typeid instead
-	m_IdToNameMap[typeId]=typeId;
-	}
+       {
+       // If name is already in use, use the typeid instead
+       m_IdToNameMap[typeId]=typeId;
+       }
       }
     // If typeid is already registered, do nothing
   }

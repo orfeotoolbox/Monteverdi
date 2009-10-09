@@ -155,10 +155,10 @@ HomologousPointExtractionModuleModel
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
-	{
-	  found = true;
-	  itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
-	}
+       {
+         found = true;
+         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+       }
       j++;
     }
 

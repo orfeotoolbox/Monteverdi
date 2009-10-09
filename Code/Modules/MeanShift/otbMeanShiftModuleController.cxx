@@ -99,17 +99,17 @@ MeanShiftModuleController
 
 void MeanShiftModuleController::SetSpatialRadius(unsigned int sr)
 {
-	m_Model->SetSpatialRadius(sr);
+       m_Model->SetSpatialRadius(sr);
 }
 
 void MeanShiftModuleController::SetSpectralRadius(unsigned int sr)
 {
-	m_Model->SetSpectralRadius(sr);
+       m_Model->SetSpectralRadius(sr);
 }
 
 void MeanShiftModuleController::SetMinRegionSize(unsigned int mr)
 {
-	m_Model->SetMinRegionSize(mr);
+       m_Model->SetMinRegionSize(mr);
 }
 
 

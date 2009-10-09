@@ -522,27 +522,27 @@ Orthorectification
     // Origins
     if ( minX > coordList[i][0] )
       {
-	minX = coordList[i][0];
-	left = i;
+       minX = coordList[i][0];
+       left = i;
       }
 
     if ( minY > coordList[i][1] )
       {
-	minY = coordList[i][1];
-	down = i;
+       minY = coordList[i][1];
+       down = i;
       }
 
     // Sizes
     if ( maxX < coordList[i][0] )
       {
-	maxX = coordList[i][0];
-	right = i;
+       maxX = coordList[i][0];
+       right = i;
       }
 
     if ( maxY < coordList[i][1] )
       {
-	maxY = coordList[i][1];
-	up = i;
+       maxY = coordList[i][1];
+       up = i;
       }
   }
   // size image in carto coordinate :

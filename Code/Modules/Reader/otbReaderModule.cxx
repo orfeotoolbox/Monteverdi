@@ -96,17 +96,17 @@ void ReaderModule::Analyse()
       {
       // handle the radar case
       case itk::ImageIOBase::COMPLEX:
-	vType->value(2);
-	// If we are still here, this is a readable image
-	typeFound = true;
-	break;
+       vType->value(2);
+       // If we are still here, this is a readable image
+       typeFound = true;
+       break;
 
-	// handle the optical case
+       // handle the optical case
       default:
-	vType->value(1);
-	// If we are still here, this is a readable image
-	typeFound = true;
-	break;
+       vType->value(1);
+       // If we are still here, this is a readable image
+       typeFound = true;
+       break;
       }
     }
   catch(itk::ExceptionObject & err)
@@ -159,17 +159,17 @@ void ReaderModule::OpenDataSet()
     switch(vType->value())
       {
       case 1:
-	this->OpenOpticalImage();
-	break;
+       this->OpenOpticalImage();
+       break;
       case 2:
-	this->OpenSarImage();
-	break;
+       this->OpenSarImage();
+       break;
       case 3:
-	this->OpenVector();
-	break;
+       this->OpenVector();
+       break;
       default:
-	itkExceptionMacro(<<"Unknow dataset type.");
-	break;
+       itkExceptionMacro(<<"Unknow dataset type.");
+       break;
       }
  
     wFileChooserWindow->hide();

@@ -311,15 +311,15 @@ FeatureExtractionViewGUI
       m_FeatureExtractionController->ExchangeOutputListOrder(1);
       // exchnage the list display order
       if(id!=1)
-	{
-	  guiOutputFeatureList->swap( id, id-1 );
-	  guiOutputFeatureList->value(id-1);
-	}
+       {
+         guiOutputFeatureList->swap( id, id-1 );
+         guiOutputFeatureList->value(id-1);
+       }
       else
-	{
-	  guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
-	  guiOutputFeatureList->value(guiOutputFeatureList->size());
-	}
+       {
+         guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
+         guiOutputFeatureList->value(guiOutputFeatureList->size());
+       }
     }
 }
 
@@ -334,15 +334,15 @@ FeatureExtractionViewGUI
       m_FeatureExtractionController->ExchangeOutputListOrder(-1);
       // exchnage the list display order
       if(id!=guiOutputFeatureList->size())
-	{
-	  guiOutputFeatureList->swap( id, id+1 );
-	  guiOutputFeatureList->value(id+1);
-	}
+       {
+         guiOutputFeatureList->swap( id, id+1 );
+         guiOutputFeatureList->value(id+1);
+       }
       else
-	{
-	  guiOutputFeatureList->swap(id, 1 );
-	  guiOutputFeatureList->value(1);
-	}
+       {
+         guiOutputFeatureList->swap(id, 1 );
+         guiOutputFeatureList->value(1);
+       }
       guiOutputFeatureList->redraw();
     }
 }
