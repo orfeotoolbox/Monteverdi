@@ -20,9 +20,9 @@
 
 // include the base class
 #include "otbModule.h"
+
 // include the GUI
 #include "otbCachingModuleGUI.h"
-
 
 // include the OTB elements
 #include "otbVectorImage.h"
@@ -70,6 +70,17 @@ public:
   typedef ImageFileReader<CharVectorImageType>     CharVReaderType;
   typedef ImageFileReader<FloatingImageType>       FPReaderType;
 
+
+  itkSetMacro(WatchProgress,bool);
+  itkBooleanMacro(WatchProgress);
+
+  // Is the caching process in progress ?
+  bool IsWorking() const;
+
+  // Return the writing progress
+  double GetProgress() const;
+
+
 protected:
   /** Constructor */
   CachingModule();
@@ -106,13 +117,16 @@ private:
   itk::ProcessObject::Pointer m_ReadingProcess;
 
   // Is caching done ?
-  bool m_Done;
+  bool m_Working;
 
   // The caching path (could be later read from parameters file)
   std::string m_CachingPath;
 
   // The file path
   std::string m_FilePath;
+
+  // Report visual progress
+  bool m_WatchProgress;
 };
 
 

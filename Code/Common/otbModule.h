@@ -102,6 +102,9 @@ public:
   /** Erase an output with its key */
   void EraseOutputByKey(const std::string & key);
 
+  /** Load cached data */
+  void LoadCachedData(const DataObjectWrapper & data, const std::string & key, unsigned int idx);
+
 protected:
   /** Constructor */
   Module();
@@ -122,10 +125,10 @@ protected:
   template <typename T> void AddTypeToInputDescriptor(const std::string & key);
 
   /** Add a new output descriptor */
-  template <typename T> void AddOutputDescriptor(T* data, const std::string & key, const std::string & description);
+  template <typename T> void AddOutputDescriptor(T* data, const std::string & key, const std::string & description, bool cached = false);
 
   /** Add a new output descritpor (SmartPointer version) */
-  template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description);
+  template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description, bool cached = false);
 
   /** Retrieve the actual data from the map (returns NULL if wrong DataType */
   template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;

@@ -137,6 +137,22 @@ unsigned int Module::GetNumberOfInputDataByKey(const std::string & key) const
   return it->second.GetNumberOfData();
 }
 
+/** Load cached data */
+void Module::LoadCachedData(const DataObjectWrapper & data, const std::string & key, unsigned int idx)
+{
+  // Search for the key in the output map
+  OutputDataDescriptorMapType::iterator it = m_OutputsMap.find(key);
+  
+  // If the key can not be found, throw an exception
+  if(it == m_OutputsMap.end())
+    {
+    itkExceptionMacro(<<"Module has no output with key "<<key);
+    }
+
+  // Change the 
+  it->second.CacheNthData(idx,data);
+}
+
 /** Check that every mandatory input has been filled and call the
  * protected virtual run method */
 void Module::Start()

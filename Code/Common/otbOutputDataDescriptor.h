@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbOutputDataDescriptor_h
 #define __otbOutputDataDescriptor_h
 
@@ -41,11 +40,19 @@ class OutputDataDescriptor
 public:
   /** Constructors */
   OutputDataDescriptor();
-  OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description);
+  OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description, bool cached = false);
 
   /** Destructor */
   virtual ~OutputDataDescriptor();
 
+  void CacheNthData(unsigned int idx, const DataObjectWrapper& data);
+
+  // Is the output cached
+  bool IsCached() const;
+
+private:
+  // Is Data cached ?
+  bool m_Cached;
 };
 
 /** Overloading the << operator */
