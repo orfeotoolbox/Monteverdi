@@ -469,7 +469,7 @@ void WriterViewGUI::Browse()
 {
   const char * filename = NULL;
 
-  filename = fl_file_chooser("Choose the dataset file ...", "*.*",".");
+  filename = fl_file_chooser("Choose the dataset file...", "*.*",".");
   Fl::check();
   if (filename == NULL)
   {

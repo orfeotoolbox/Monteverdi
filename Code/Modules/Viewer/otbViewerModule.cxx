@@ -238,7 +238,7 @@ void ViewerModule::Run()
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook...");
   generator->GenerateLayer();
   m_InputImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();

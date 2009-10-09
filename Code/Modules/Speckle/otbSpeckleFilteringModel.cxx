@@ -50,7 +50,7 @@ SpeckleFilteringModel
   lradius.Fill(radius);
   m_LeeFilter->SetInput(m_InputImage);
   m_LeeFilter->SetRadius(lradius);
-  std::cout <<"Model : Computation Lee Done ... " << std::endl;
+  std::cout <<"Model : Computation Lee Done... " << std::endl;
   m_Output = m_LeeFilter->GetOutput();
   m_OutputChanged = true;
   this->NotifyAll();

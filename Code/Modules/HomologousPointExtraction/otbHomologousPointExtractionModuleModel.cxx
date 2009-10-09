@@ -111,7 +111,7 @@ HomologousPointExtractionModuleModel
   // Generate the layer
   m_ImageGenerator[id]->SetImage(image);
   m_ImageGenerator[id]->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook...");
   m_ImageGenerator[id]->GenerateLayer();
   
   std::vector<unsigned int> channels;

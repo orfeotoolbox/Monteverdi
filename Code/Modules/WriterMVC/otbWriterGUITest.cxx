@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 
   Fl::check();
 
-  otbGenericMsgDebugMacro(<<"Running GUI ...");
+  otbGenericMsgDebugMacro(<<"Running GUI...");
   Fl::run();
 
 
