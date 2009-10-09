@@ -234,10 +234,7 @@ Orthorectification::ComputeTileNumber()
   double outputSize = strtod(guiSizeX->value(), NULL)*strtod(guiSizeY->value(), NULL);
   double bandNb = m_InputImage->GetNumberOfComponentsPerPixel();
   double internalPixelSize = 2*1e-6;   // 16 bits = 2 octet = 0.0000002 MO
-  if ( gui8bits->value()==1 )
-  {
-    internalPixelSize = 1e-6; // 8 bits = 1 octet = 0.0000001 MO
-  }
+  // note : Only 16 bits image are proposed in Monteverdi
 
   m_TileNumber = static_cast<int>(std::floor(2*bandNb*internalPixelSize*(outputInImageSize+outputSize)/m_MaxTileSize+0.5));
 
@@ -853,19 +850,10 @@ Orthorectification
 ::CreateOutput(TMapProjection* mapProj)
 {
   int res = 0;
-  
-  if (gui16bits->value()==1)
-  {
-    res = this->GenericCreateOutput<SingleImageType, SingleImageType, ImageType, ImageType, TMapProjection>(mapProj);
-    //res = this->GenericCreateOutput<SingleImageType, SingleImageType, ImageType, ImageType, TMapProjection>(mapProj);
-  }
+
   //TODO : for the moment Handle Only 16 bits image
-  //   else if (gui8bits->value()==1)
-  //   {
-  //     typedef otb::Image<unsigned char, 2>        SingleImage8bitsType;
-  //     typedef otb::VectorImage<unsigned char, 2>  Image8bitsType;
-  //     res = this->GenericCreateOutput<SingleImageType, SingleImage8bitsType, ImageType, Image8bitsType, TMapProjection>(mapProj);
-  //   }
+  //if (gui16bits->value()==1)
+  res = this->GenericCreateOutput<SingleImageType, SingleImageType, ImageType, ImageType, TMapProjection>(mapProj);
 
   if (res != 0)
   {
@@ -1061,12 +1049,6 @@ InterpolatorType
 Orthorectification::GetInterpolatorType()
 {
   return m_InterpType;
-}
-
-void
-Orthorectification::SetMaxTileSize()
-{
-  m_MaxTileSize = guiTileSize->value();
 }
 
 

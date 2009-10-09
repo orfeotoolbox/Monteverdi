@@ -35,14 +35,9 @@ class SupervisedClassificationAppliGUI {open
         xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
       } {
         Submenu {} {
-          label File open
+          label File open selected
           xywh {0 0 67 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
         } {
-          MenuItem {} {
-            label {Open image}
-            callback {OpenImage();}
-            tooltip {Open a new image in the classification application} xywh {0 0 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-          }
           MenuItem bSaveClassifAsVectorData {
             label {Save classif as vector data (Experimental)}
             callback {SaveClassifAsVectorData();}
@@ -526,7 +521,7 @@ guiValidationWindow->hide();}
   } {}
   Function {QuitScrollCallback()} {open return_type {virtual void}
   } {}
-  Function {QuitFullCallback()} {open selected return_type {virtual void}
+  Function {QuitFullCallback()} {open return_type {virtual void}
   } {}
   Function {~SupervisedClassificationAppliGUI()} {open return_type virtual
   } {}

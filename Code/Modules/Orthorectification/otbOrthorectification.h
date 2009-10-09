@@ -133,20 +133,17 @@ protected:
 
   // Quit the application
   virtual void Quit();
-  
+
   // Launch the orthorectification
   virtual void OK();
-  
+
   // Show the selected ortho area in the extent view
   virtual void InsightExtent();
-  
-  // Set tile maximum size for streaming
-  virtual void SetMaxTileSize();
-  
+
   // Set/Get the used map projection
   void SetMapType(MapType map);
   MapType GetMapType();
-  
+
   // Set/Get the used interpolator
   void SetInterpolatorType(InterpolatorType interp);
   InterpolatorType GetInterpolatorType();
