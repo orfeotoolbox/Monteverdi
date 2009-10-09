@@ -22,7 +22,7 @@
 #include "otbModule.h"
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
-
+#include "otbCachingModule.h"
 
 namespace otb
 {
@@ -66,7 +66,9 @@ class ITK_EXPORT MonteverdiModel
   // Map of registered modules
   typedef std::map<std::string,RegisteredModuleDescriptor> ModuleDescriptorMapType;
   typedef std::map<std::string,unsigned int>               InstancesCountMapType;
-
+  
+  // Map of caching modules
+  typedef std::map<std::string,CachingModule::Pointer>     CachingModuleMapType;
 
   typedef otb::Module::OutputDataDescriptorMapType         OutputDataDescriptorMapType;
   typedef otb::Module::InputDataDescriptorMapType          InputDataDescriptorMapType;
@@ -120,14 +122,17 @@ class ITK_EXPORT MonteverdiModel
   /** Change module InstanceId (ie. tree label) */
   void ChangeInstanceId( const std::string & oldInstanceId, const std::string & newIntanceId );
 
-  // Temporary notify stub
-  virtual void Notify(const MonteverdiEvent & event)
-  {
-    std::cout<<"Model: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+  /** Does the output key from the module instanceId supports caching ? */
+  bool SupportsCaching(const std::string & instanceId, const std::string & outputKey) const;
 
-    // Forward event to view
-    this->NotifyAll(event);
-  }
+  /** Start caching the given data */
+  void StartCaching(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0);
+
+  /** Get the caching progress for the given data */
+  double GetCachingProgress(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0) const;
+
+  // Temporary notify stub
+  virtual void Notify(const MonteverdiEvent & event);
 
   ModuleMapType GetModuleMap() const
   {
@@ -145,6 +150,15 @@ protected:
   /** Destructor */
   virtual ~MonteverdiModel();
 
+  /** Build caching module id */
+  static std::string BuildCachingModuleId(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0);
+
+  /** Split the caching module id */
+  static bool SplitCachingModuleId(const std::string & instanceId, std::string & sourceId, std::string & key, unsigned int & idx);
+
+  /** End the caching process by updating the output id */
+  void EndCaching(const std::string & cachingModuleId);
+
  private:
   MonteverdiModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -161,6 +175,8 @@ protected:
   /** Instances count map */
   InstancesCountMapType m_InstancesCountMap;
 
+  /** The caching modules map */
+  CachingModuleMapType m_CachingModuleMap;
 };
 
 }

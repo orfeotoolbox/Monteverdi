@@ -53,7 +53,7 @@ template <typename T> void Module::AddTypeToInputDescriptor(const std::string & 
 }
 
 /** Add a new output descriptor */
-template <typename T> void Module::AddOutputDescriptor(T* data, const std::string & key, const std::string & description)
+template <typename T> void Module::AddOutputDescriptor(T* data, const std::string & key, const std::string & description, bool cached)
 {
   // Check if the key already exists
   if(m_OutputsMap.count(key) > 0)
@@ -68,16 +68,16 @@ template <typename T> void Module::AddOutputDescriptor(T* data, const std::strin
   wrapper.SetDescription(description);
 
   // Else build a new descriptor
-  OutputDataDescriptor desc(wrapper,key,description);
+  OutputDataDescriptor desc(wrapper,key,description,cached);
     
   // Insert it into the map
   m_OutputsMap[key]=desc;
 }
 
 /** Add a new output descritpor (SmartPointer version) */
-template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description)
+template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description, bool cached)
 {
-  this->AddOutputDescriptor(data.GetPointer(),key,description);
+  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
 }
 
 /** Retrieve the actual data from the map (returns NULL if wrong DataType */

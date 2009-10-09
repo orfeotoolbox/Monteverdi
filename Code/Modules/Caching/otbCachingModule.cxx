@@ -21,6 +21,8 @@
 #include <algorithm>
 #include "otbFileName.h"
 
+#include "otbCachingModule.h"
+
 namespace otb
 {
 /** Constructor */
@@ -33,7 +35,8 @@ CachingModule::CachingModule()
 
   m_CachingPath = "Caching/";
   m_FilePath = "";
-  m_Done = false;
+  m_Working = false;
+  m_WatchProgress = true;
 
   // Build gui
   this->BuildGUI();
@@ -93,6 +96,17 @@ void CachingModule::UpdateProgressCallback(void * data)
     }
 }
 
+double CachingModule::GetProgress() const
+{
+  if(m_WritingProcess.IsNotNull())
+    {
+    return m_WritingProcess->GetProgress();
+    }
+  else
+    {
+    return 0.;
+    }
+}
 
 void CachingModule::ThreadedWatch()
 {
@@ -100,7 +114,7 @@ void CachingModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = -1;
 
-  while((m_WritingProcess.IsNull() && !m_Done ) || m_WritingProcess->GetProgress() != 1)
+  while(m_Working)
     {
        if(m_WritingProcess.IsNotNull())
        {
@@ -118,7 +132,7 @@ void CachingModule::ThreadedWatch()
     }
 
   // Wait for the reader to be set
-  while(!m_Done)
+  while(m_Working)
     {
     Sleep(500);
     }
@@ -132,6 +146,8 @@ void CachingModule::ThreadedWatch()
 
 void CachingModule::ThreadedRun()
 {
+  m_Working = true;
+
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
@@ -217,11 +233,16 @@ void CachingModule::ThreadedRun()
     }
   else
     {
-    m_Done = true;
+    m_Working = false;
     itkExceptionMacro(<<"Input data are NULL.");
     }
 
-  m_Done = true;
+  m_Working = false;
+
+  // Notify new outputs
+  Fl::lock();
+  this->NotifyOutputsChange();
+  Fl::unlock();
 }
 
 void CachingModule::HideWindow()
@@ -239,7 +260,10 @@ void CachingModule::HideWindowCallback(void * data)
     }
 }
 
-
+bool CachingModule::IsWorking() const
+{
+  return m_Working;
+}
 
 } // End namespace otb
 

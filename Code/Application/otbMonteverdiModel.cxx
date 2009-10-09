@@ -37,6 +37,7 @@ MonteverdiModel::~MonteverdiModel()
   m_ModuleDescriptorMap.clear();
   m_ModuleMap.clear();
   m_InstancesCountMap.clear();
+  m_CachingModuleMap.clear();
 }
 
 /** Create a module according to its name. If the name is not a
@@ -168,6 +169,151 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   m_ModuleMap.erase( oldInstanceId );
 
   this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
+}
+
+bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std::string & outputKey) const
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey);
+
+  // Create a local instance of the caching module
+  CachingModule::Pointer cache = CachingModule::New();
+  
+  // Check type compatibility
+  InputDataDescriptor inputDD = cache->GetInputDataDescriptorByKey("InputDataset");
+  return inputDD.IsTypeCompatible(output.GetDataType());
+}
+
+/** Start caching the given data */
+void MonteverdiModel::StartCaching(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey,idx);
+
+  // Now, create a new instance of the caching module
+  CachingModule::Pointer cache = CachingModule::New();
+  
+  // Disable individual reporting
+  cache->WatchProgressOff();
+
+  // Create the instance id
+  std::string id = BuildCachingModuleId(instanceId,outputKey,idx);
+
+  // Store the module in the map
+  m_CachingModuleMap[id] = cache;
+  
+  // Finally starts the module
+  cache->Start();
+}
+
+/** End the caching process by updating the output id */
+void MonteverdiModel::EndCaching(const std::string & cachingModuleId)
+{
+  // Retrieve the parameters from the caching module id
+    std::string id,key;
+    unsigned int idx;
+
+    // Try to split back the string
+    bool ok = SplitCachingModuleId(cachingModuleId,id,key,idx);
+
+    // Retrieve the caching module
+    CachingModule::Pointer cache = m_CachingModuleMap[cachingModuleId];
+    
+    // First retrieve the data descritpor
+    Module::Pointer module = GetModuleByInstanceId(id);
+
+    // Retrieve the cached data
+    DataObjectWrapper cachedData = cache->GetOutputByKey("CachedData");
+  
+    // Load cached data to the module
+    module->LoadCachedData(cachedData,key,idx);
+}
+
+/** Get the caching progress for the given data */
+double MonteverdiModel::GetCachingProgress(const std::string & instanceId, const std::string & outputKey, unsigned int idx) const
+{
+  // Create the instance id
+  std::string id = BuildCachingModuleId(instanceId,outputKey,idx);
+
+  // Look for the caching module instance id
+  CachingModuleMapType::const_iterator it = m_CachingModuleMap.find(id);
+
+  // Report errors
+  if(it == m_CachingModuleMap.end())
+    {
+    itkExceptionMacro(<<"No caching module found with instanceId "<<id);
+    }
+  
+  // Return progress
+  return it->second->GetProgress();
+}
+
+std::string MonteverdiModel::BuildCachingModuleId(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
+{
+ // Create the instance id
+  itk::OStringStream oss;
+  oss<<"[Cache] "<<instanceId<<":"<<outputKey<<":"<<idx;
+  return oss.str();
+}
+
+bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::string & sourceId, std::string & key, unsigned int & idx)
+{
+  // Eliminate prefix
+  std::string temp = instanceId.substr(0,8);
+
+  // Get source id
+  size_t idPos = temp.find_first_of(':',0);
+
+  if(idPos==std::string::npos)
+    {
+    return false;
+    }
+  sourceId = temp.substr(0,idPos);
+
+  // Remove the sourceId part
+  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+
+  // Get outputKey
+  size_t keyPos = temp.find_first_of(':',0);
+
+  
+  if(keyPos==std::string::npos)
+    {
+    return false;
+    }
+  key = temp.substr(0,keyPos);
+  
+  // Remove the outputKey part
+  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+  
+  // compute the idx from the remaining
+  idx = atoi(temp.c_str());
+
+  return true;
+}
+
+void MonteverdiModel::Notify(const MonteverdiEvent & event)
+{
+  // First, check if the notify event comes from a CachingModule
+
+  CachingModuleMapType::iterator it = m_CachingModuleMap.find(event.GetInstanceId());
+
+  if(it == m_CachingModuleMap.end())
+    {
+    // The event does not come from a caching module, so forward it
+    this->NotifyAll(event);
+    }
+  else
+    {
+      // End the caching process
+      this->EndCaching(event.GetInstanceId());
+    }
 }
 
 /** Manage the singleton */
