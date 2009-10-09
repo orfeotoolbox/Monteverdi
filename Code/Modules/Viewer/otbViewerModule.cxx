@@ -888,9 +888,9 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
 void ViewerModule::UpdateTabHistogram()
 {
   //Get the number of subdivisons in the GUI 
- unsigned int  width  = (unsigned int)(gHistogram->w()/2.);
- unsigned int  height = (unsigned int)(gHistogram->h()/2.);
- double blank = 2.;
+ int  width  = (int)(gHistogram->w()/2.);
+ int  height = (int)(gHistogram->h()/2.);
+ int  blank  = 2;
  
   // Clear the widget 
   m_BlueCurveWidgetGroup->ClearAllCurves();
