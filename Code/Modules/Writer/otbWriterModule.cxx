@@ -133,7 +133,7 @@ void WriterModule::ThreadedWatch()
         Fl::awake(&UpdateProgressCallback,this);
            last = current;
            }
-         } 
+         }
        // Sleep for a while
     Sleep(500);
     }
@@ -158,7 +158,7 @@ void WriterModule::ThreadedRun()
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 
-  if ( charVectorImage.IsNotNull() ) 
+  if ( charVectorImage.IsNotNull() )
     {
     CharVWriterType::Pointer charVWriter = CharVWriterType::New();
     charVWriter->SetInput(charVectorImage);
@@ -166,7 +166,7 @@ void WriterModule::ThreadedRun()
     m_ProcessObject = charVWriter;
     charVWriter->Update();
     }
-  else if ( vectorImage.IsNotNull() ) 
+  else if ( vectorImage.IsNotNull() )
     {
     FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
     fPVWriter->SetInput(vectorImage);
@@ -202,7 +202,7 @@ void WriterModule::ThreadedRun()
     {
          m_Done = true;
       itkExceptionMacro(<<"Input data are NULL.");
-    } 
+    }
   m_Done = true;
 }
 

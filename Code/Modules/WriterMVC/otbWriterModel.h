@@ -300,7 +300,7 @@ public:
   /** update writers*/
   void UpdateWriter(const std::string & fname);
   void UpdateVectorWriter(const std::string & fname);
-//   void UpdateImageWriter(const std::string & fname, bool useScale);   
+//   void UpdateImageWriter(const std::string & fname, bool useScale);
 protected:
   /** Constructor */
   WriterModel();
@@ -332,7 +332,7 @@ private:
   /** Input number of channels */
   unsigned int m_NumberOfChannels;
   /** Input filename*/
-  std:: string m_InputFileName; 
+  std:: string m_InputFileName;
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasInput;
 

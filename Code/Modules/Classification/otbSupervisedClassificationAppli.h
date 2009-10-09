@@ -244,9 +244,9 @@ private:
 
   /// Image filename
   std::string m_ImageFileName;
-  /// Input Image 
+  /// Input Image
   ImageType::Pointer           m_InputImage;
-  /// Output Classified image  
+  /// Output Classified image
   OverlayImagePointerType      m_Output;
   /// Model filename
   std::string m_ModelFileName;

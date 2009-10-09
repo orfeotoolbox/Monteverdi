@@ -313,7 +313,7 @@ WriterViewGUI
 //   oss<<"("<<id[0]<<" , "<<id[1]<<")";
 //   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
 //   guiSpectAnglePixelCoordinates->redraw();
-// 
+//
 //   m_SelectedPixel = m_WriterModel->GetInputImage()->GetPixel(id);
 //   oss.str("");
 //   oss<<"[";
@@ -342,7 +342,7 @@ WriterViewGUI
   guiMainWindow->show();
 }
 
-void 
+void
 WriterViewGUI
 ::InitFeatureOutputList()
 {
@@ -433,7 +433,7 @@ WriterViewGUI
   this->UpdateParameterArea(0);
   this->SetPixelType(otb::UNKNOWN);
 
-  // NewVisu 
+  // NewVisu
   if (m_VisuView.IsNotNull())
   {
     m_VisuView->GetScrollWidget()->ClearBuffer();

@@ -80,7 +80,7 @@ class ITK_EXPORT MonteverdiModel
   {
     if(m_ModuleDescriptorMap.count(key)>0)
       {
-      itkExceptionMacro(<<"A module with key "<<key<<" is already registered"); 
+      itkExceptionMacro(<<"A module with key "<<key<<" is already registered");
       }
 
     // Create a new descriptor
@@ -121,7 +121,7 @@ class ITK_EXPORT MonteverdiModel
   void ChangeInstanceId( const std::string & oldInstanceId, const std::string & newIntanceId );
 
   // Temporary notify stub
-  virtual void Notify(const MonteverdiEvent & event) 
+  virtual void Notify(const MonteverdiEvent & event)
   {
     std::cout<<"Model: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
 

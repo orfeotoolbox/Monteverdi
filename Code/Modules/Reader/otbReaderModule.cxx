@@ -92,7 +92,7 @@ void ReaderModule::Analyse()
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
 
-    switch(m_FPVReader->GetImageIO()->GetPixelType())     
+    switch(m_FPVReader->GetImageIO()->GetPixelType())
       {
       // handle the radar case
       case itk::ImageIOBase::COMPLEX:
@@ -200,7 +200,7 @@ void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -241,7 +241,7 @@ void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -284,7 +284,7 @@ void ReaderModule::OpenVector()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId; 
+  ostringstream oss,ossId;
   std::string filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 

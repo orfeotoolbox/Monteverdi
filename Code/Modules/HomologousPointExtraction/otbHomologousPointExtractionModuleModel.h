@@ -58,7 +58,7 @@ public:
   typedef VectorImage<PixelType,2>            VectorImageType;
   typedef VectorImageType::Pointer            VectorImagePointerType;
   typedef VectorImageType::IndexType          IndexType;
-  typedef std::vector<VectorImagePointerType> ImageListType;    
+  typedef std::vector<VectorImagePointerType> ImageListType;
 
   typedef std::pair<IndexType, IndexType> IndexCoupleType;
   typedef std::vector<IndexCoupleType>    IndexesListType;

@@ -72,7 +72,7 @@ Orthorectification::Orthorectification()
   
   m_HasOutput = false;
 
-  //Instanciate Filter 
+  //Instanciate Filter
   //m_OrthorectificationFilter = OrthorectificationFilterType::New();
   //m_PerBandFilter     = PerBandFilterType::New();
 }

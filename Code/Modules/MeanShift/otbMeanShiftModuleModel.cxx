@@ -46,7 +46,7 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_GenerateLabeled = true;
 
 
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
 }
 

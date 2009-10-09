@@ -112,7 +112,7 @@ private:
   ImageViewType::Pointer                        m_SecondImageView;
   /** Cross Gl Component */
   CrossGlComponent::Pointer                     m_FirstCrossGlComponent;
-  CrossGlComponent::Pointer                     m_SecondCrossGlComponent;  
+  CrossGlComponent::Pointer                     m_SecondCrossGlComponent;
   /** Point color */
   ColorListType                                 m_ColorList;
 };

@@ -70,7 +70,7 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
 
   m_IndexesList.clear();
 
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
 }
 

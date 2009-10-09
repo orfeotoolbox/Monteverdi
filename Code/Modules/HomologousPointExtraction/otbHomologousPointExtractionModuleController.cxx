@@ -31,8 +31,8 @@ HomologousPointExtractionModuleController
                                           m_FirstMouseClickedController(), m_SecondMouseClickedController(),
                                           m_FirstResizingHandler(), m_FirstChangeRegionHandler(), m_FirstChangeScaledRegionHandler(),
                                           m_FirstChangeScaleHandler(), m_FirstLeftMouseClickedHandler(), m_FirstPixelActionHandler(),
-                                          m_FirstPixelModel(), m_FirstPixelView(), m_SecondResizingHandler(), m_SecondChangeRegionHandler(), 
-                                          m_SecondChangeScaledRegionHandler(), m_SecondChangeScaleHandler(), m_SecondLeftMouseClickedHandler(), 
+                                          m_FirstPixelModel(), m_FirstPixelView(), m_SecondResizingHandler(), m_SecondChangeRegionHandler(),
+                                          m_SecondChangeScaledRegionHandler(), m_SecondChangeScaleHandler(), m_SecondLeftMouseClickedHandler(),
                                           m_SecondPixelActionHandler(), m_SecondPixelModel(), m_SecondPixelView()
 {
   // Build the widgets controller
@@ -108,7 +108,7 @@ HomologousPointExtractionModuleController
   m_SecondResizingHandler->SetModel(m_Model->GetVisualizationModel(1));
   m_SecondChangeRegionHandler->SetModel(m_Model->GetVisualizationModel(1));
   m_SecondChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel(1));
-  m_SecondChangeScaleHandler->SetModel(m_Model->GetVisualizationModel(1));  
+  m_SecondChangeScaleHandler->SetModel(m_Model->GetVisualizationModel(1));
 }
 
 void
@@ -138,7 +138,7 @@ HomologousPointExtractionModuleController
   // First image pixel descriptor
   m_FirstWidgetsController->AddActionHandler(m_FirstPixelActionHandler);
   m_FirstPixelModel->SetLayers(m_Model->GetVisualizationModel(0)->GetLayers());
-  m_FirstPixelView->SetModel(m_FirstPixelModel); 
+  m_FirstPixelView->SetModel(m_FirstPixelModel);
   m_FirstPixelActionHandler->SetModel(m_FirstPixelModel);
   m_FirstPixelActionHandler->SetView(m_View->GetFirstImageView());
   m_View->gPixelValue1->add(m_FirstPixelView->GetPixelDescriptionWidget());
@@ -148,12 +148,12 @@ HomologousPointExtractionModuleController
   // Second image pixel descriptor
   m_SecondWidgetsController->AddActionHandler(m_SecondPixelActionHandler);
   m_SecondPixelModel->SetLayers(m_Model->GetVisualizationModel(1)->GetLayers());
-  m_SecondPixelView->SetModel(m_SecondPixelModel); 
+  m_SecondPixelView->SetModel(m_SecondPixelModel);
   m_SecondPixelActionHandler->SetModel(m_SecondPixelModel);
   m_SecondPixelActionHandler->SetView(m_View->GetSecondImageView());
   m_View->gPixelValue2->add(m_SecondPixelView->GetPixelDescriptionWidget());
   m_SecondPixelView->GetPixelDescriptionWidget()->show();
-  m_SecondPixelView->GetPixelDescriptionWidget()->resize(m_View->gPixelValue2->x(),m_View->gPixelValue2->y(), m_View->gPixelValue2->w(), m_View->gPixelValue2->h());  
+  m_SecondPixelView->GetPixelDescriptionWidget()->resize(m_View->gPixelValue2->x(),m_View->gPixelValue2->y(), m_View->gPixelValue2->w(), m_View->gPixelValue2->h());
 }
 
 
@@ -168,14 +168,14 @@ HomologousPointExtractionModuleController
   if( !m_Model->GetFirstInputImage()->GetLargestPossibleRegion().IsInside(id1) )
     {
       itk::OStringStream oss1;
-      oss1<<"Index "<<id1<<" is outside the image size "<<m_Model->GetFirstInputImage()->GetLargestPossibleRegion().GetSize();  
+      oss1<<"Index "<<id1<<" is outside the image size "<<m_Model->GetFirstInputImage()->GetLargestPossibleRegion().GetSize();
       MsgReporter::GetInstance()->SendError(oss1.str().c_str());
       return;
     }
   if( !m_Model->GetSecondInputImage()->GetLargestPossibleRegion().IsInside(id2) )
     {
       itk::OStringStream oss2;
-      oss2<<"Index "<<id2<<" is outside the image size "<<m_Model->GetSecondInputImage()->GetLargestPossibleRegion().GetSize();  
+      oss2<<"Index "<<id2<<" is outside the image size "<<m_Model->GetSecondInputImage()->GetLargestPossibleRegion().GetSize();
       MsgReporter::GetInstance()->SendError(oss2.str().c_str());
       return;
     }
@@ -188,7 +188,7 @@ HomologousPointExtractionModuleController
     {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-} 
+}
 
 void
 HomologousPointExtractionModuleController

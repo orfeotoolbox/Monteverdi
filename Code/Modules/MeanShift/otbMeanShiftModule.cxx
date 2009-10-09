@@ -58,7 +58,7 @@ void MeanShiftModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void MeanShiftModule::Run()
 {
-  // Here is the body of the module. 
+  // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
 

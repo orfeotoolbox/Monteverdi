@@ -46,12 +46,12 @@ int main(int argc, char* argv[])
     }
   catch(itk::ExceptionObject & err)
     {
-      std::string descriptionException = err.GetDescription();   
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos) 
+      std::string descriptionException = err.GetDescription();
+      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
        {
          return EXIT_SUCCESS;
        }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos) 
+      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
        {
          return EXIT_SUCCESS;
        }
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
 
     
-  // Convenient typedefs 
+  // Convenient typedefs
   typedef otb::VectorImage<double,2>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<InputImageType>   WriterType;
@@ -94,5 +94,5 @@ int main(int argc, char* argv[])
 
   module->Start();
  
-  Fl::run();  
+  Fl::run();
 }

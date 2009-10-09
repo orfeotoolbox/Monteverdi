@@ -49,7 +49,7 @@ HomologousPointExtractionModuleView
 ::SetModel(HomologousPointExtractionModuleModel* model)
 {
   m_Model = model;
-  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0)); 
+  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0));
   m_SecondImageView->SetModel(m_Model->GetVisualizationModel(1));
   m_Model->RegisterListener(this);
 }
@@ -122,7 +122,7 @@ HomologousPointExtractionModuleView
      m_Controller->LinkPixelDescriptors();
 }
 
-void 
+void
 HomologousPointExtractionModuleView
 ::RedrawWidgets()
 {
@@ -136,7 +136,7 @@ HomologousPointExtractionModuleView
 }
 
 
-void 
+void
 HomologousPointExtractionModuleView
 ::AddPoints()
 {
@@ -147,13 +147,13 @@ HomologousPointExtractionModuleView
   m_Controller->AddPoints( x1, y1, x2, y2 );
 }
 
-void 
+void
 HomologousPointExtractionModuleView
 ::AddPointsToList( IndexType id1, IndexType id2)
 {
  itk::OStringStream oss;
  oss<<id1<<" , "<<id2;
- this->lPointList->add(oss.str().c_str()); 
+ this->lPointList->add(oss.str().c_str());
 
  srand((id2[0]+id1[1]+id2[0]+id2[1])*123456);
  ColorType color;
@@ -221,7 +221,7 @@ HomologousPointExtractionModuleView
       vX2->value(index[0]);
       vY2->value(index[1]);
     }
-}   
+}
 
 void
 HomologousPointExtractionModuleView
@@ -236,7 +236,7 @@ HomologousPointExtractionModuleView
   m_SecondCrossGlComponent->Clear();
   this->RedrawWidgets();
 
-}  
+}
 
 
 void

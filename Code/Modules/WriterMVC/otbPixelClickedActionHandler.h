@@ -24,12 +24,12 @@ namespace otb
 {
 /** \class PixelClickedActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel, class TView> 
+template <class TModel, class TView>
 class PixelClickedActionHandler
   : public ImageWidgetActionHandler
 {
@@ -62,7 +62,7 @@ public:
    * \return The handling return code
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
-  { 
+  {
     if( m_View.IsNotNull() && m_Model.IsNotNull() && m_View->GetVisuView().IsNotNull() &&  m_Model->GetVisuModel().IsNotNull() && m_Model->GetHasInput() )
       {
        if(widgetId == m_View->GetVisuView()->GetFullWidget()->GetIdentifier() && event == FL_PUSH)
@@ -121,7 +121,7 @@ private:
   // Pointer to the model
   ModelPointerType m_Model;
   
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

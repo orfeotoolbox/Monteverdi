@@ -20,13 +20,13 @@
 
 #include "otbModule.h"
 
-// SupervisedClassification Application 
+// SupervisedClassification Application
 #include "otbSupervisedClassificationAppli.h"
 
 namespace otb
 {
 /** \class SupervisedClassificationModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */

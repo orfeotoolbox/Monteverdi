@@ -35,7 +35,7 @@
 namespace otb
 {
 /** \class WriterModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */

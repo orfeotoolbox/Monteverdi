@@ -242,7 +242,7 @@ private:
   // This pointer is used to store the main filter of the application
   itk::ProcessObject::Pointer m_PerBandFilter;
 
-  //Input & Outputs Images 
+  //Input & Outputs Images
   ImagePointerType            m_InputImage;
   ImagePointerType            m_Output;
 

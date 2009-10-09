@@ -41,7 +41,7 @@
 namespace otb
 {
 /** \class WriterMVCModule
-   *  \brief 
+   *  \brief
    *
    *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */

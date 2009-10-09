@@ -478,7 +478,7 @@ FeatureExtractionViewGUI
   this->UpdateParameterArea(0);
   this->SetFeatureType(otb::UNKNOWN);
 
-  // NewVisu 
+  // NewVisu
   if (m_VisuView.IsNotNull())
   {
     m_VisuView->GetScrollWidget()->ClearBuffer();

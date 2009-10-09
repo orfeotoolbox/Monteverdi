@@ -112,7 +112,7 @@ public:
         m_SplashWindow->show();
 
 
-        // simple case 
+        // simple case
         timer->value(3.);
         m_GroupVector[ui_cpt]->show();
         while( timer->value() && m_SplashWindow->visible() )

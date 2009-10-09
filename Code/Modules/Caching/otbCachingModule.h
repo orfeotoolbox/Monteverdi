@@ -33,7 +33,7 @@
 namespace otb
 {
 /** \class CachingModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */

@@ -38,7 +38,7 @@ MonteverdiController
 }
 
 /** Start module by instance id */
-void 
+void
 MonteverdiController
 ::StartModuleByInstanceId(const std::string& id)
 {

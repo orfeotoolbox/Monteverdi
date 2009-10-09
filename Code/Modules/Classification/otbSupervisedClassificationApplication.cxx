@@ -76,7 +76,7 @@ int main( int argc, char * argv[] )
   // Add input image
   app->SetInputImage(reader->GetOutput());
   
-  // Build the application 
+  // Build the application
   app->Build();
   app->Show();
   app->LoadImage();
@@ -84,7 +84,7 @@ int main( int argc, char * argv[] )
 
   
   // show the app
-  //   
+  //
   //   // build the app
   //   app->Build();
   //   // show the app
@@ -119,7 +119,7 @@ int main( int argc, char * argv[] )
   //     Fl::run();
   //   }
 
-  // show the applicatin 
+  // show the applicatin
 
   Fl::run();
 

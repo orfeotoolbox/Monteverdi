@@ -307,7 +307,7 @@ FeatureExtractionController
       double sigma = m_View->guiGradSigma->value();
       m_Model->AddGradientFilter(sigma);
       break;
-    } 
+    }
     case TEXT_ASM:
     case TEXT_CSH:
     case TEXT_CPR:

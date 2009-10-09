@@ -115,7 +115,7 @@ public:
 
       oss<<pSpatialThr<<","<<pSpectralThr<<","<<pNbDirection<<","<<pAlpha<<","<<pRatioMaxConsNb;
       std::string mess = oss.str();
-      pModel->AddFeatureFilter( filter, pType, i, 0, mess); 
+      pModel->AddFeatureFilter( filter, pType, i, 0, mess);
     }
   }
 

@@ -73,7 +73,7 @@ public:
   /** Get number of data */
   unsigned int GetNumberOfData() const;
 
-  /** Add data (virtual because behaviour depends 
+  /** Add data (virtual because behaviour depends
    *  on subclasses) */
   virtual void AddData(const DataObjectWrapper & wrapper);
 

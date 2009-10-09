@@ -76,7 +76,7 @@ unsigned int DataDescriptor::GetNumberOfData() const
   return m_Data.size();
 }
 
-/** Add data (virtual because behaviour depends 
+/** Add data (virtual because behaviour depends
  *  on subclasses) */
 void DataDescriptor::AddData(const DataObjectWrapper & wrapper)
 {

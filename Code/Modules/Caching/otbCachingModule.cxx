@@ -131,7 +131,7 @@ void CachingModule::ThreadedWatch()
   }
 
 void CachingModule::ThreadedRun()
-{ 
+{
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
@@ -165,7 +165,7 @@ void CachingModule::ThreadedRun()
   m_FilePath = oss.str();
   oss.str("");
 
-  if ( charVectorImage.IsNotNull() ) 
+  if ( charVectorImage.IsNotNull() )
     {
     // Writing
     CharVWriterType::Pointer charVWriter = CharVWriterType::New();
@@ -182,7 +182,7 @@ void CachingModule::ThreadedRun()
     this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description);
     }
 
-  else if ( vectorImage.IsNotNull() ) 
+  else if ( vectorImage.IsNotNull() )
     {
     // Writing
     FPVWriterType::Pointer fPVWriter = FPVWriterType::New();

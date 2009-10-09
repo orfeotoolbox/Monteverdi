@@ -45,7 +45,7 @@
 namespace otb
 {
 /** \class ReaderModule
- *  \brief 
+ *  \brief
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
@@ -135,7 +135,7 @@ private:
   RealFilterType::Pointer m_RealFilter;
   ImaginaryFilterType::Pointer m_ImaginaryFilter;
   ModulusFilterType::Pointer m_ModulusFilter;
-  PhaseFilterType::Pointer m_PhaseFilter; 
+  PhaseFilterType::Pointer m_PhaseFilter;
 };
 
 

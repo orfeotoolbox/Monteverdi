@@ -69,7 +69,7 @@ InputViewGUI
     {
       /** Build the Fl_Choice **/
       Fl_Choice *inputChoice;
-      // create Input Widgets considering the needed inputs   
+      // create Input Widgets considering the needed inputs
       inputChoice = new Fl_Choice( 85,base + cpt* height, 400, 25);//, it_in->second.GetDataDescription().c_str() );
       inputChoice->copy_label(it_in->second.GetDataDescription().c_str());
       inputChoice->box(FL_PLASTIC_DOWN_BOX);
@@ -205,21 +205,21 @@ InputViewGUI
 
 // **        Callbacks         ** //
 
-void 
+void
 InputViewGUI
 ::Ok()
 {
   unsigned int i;
 
   if(m_ModuleInstanceId != gLabel->value())
-    { 
+    {
       int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());
       if(res != 0)
        return;
       m_ModuleInstanceId = gLabel->value();
     }
 
-  // Connect 
+  // Connect
   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
     // Multiple data
@@ -260,21 +260,21 @@ InputViewGUI
 
 }
 
-void 
+void
 InputViewGUI
 ::Cancel()
 {
   wInputWindow->hide();
 }
 
-void 
+void
 InputViewGUI
 ::Show()
 {
   wInputWindow->show();
 }
 
-void 
+void
 InputViewGUI
 ::AddInputToList(Fl_Widget * w, void * v)
 {
@@ -291,7 +291,7 @@ InputViewGUI
 std::cout<< "choiceVal :" <<choiceVal<<std::endl;
 }
 
-void 
+void
 InputViewGUI
 ::RemoveInputFromList(Fl_Widget * w, void * v)
 {
@@ -316,7 +316,7 @@ InputViewGUI
 
 }
 
-void 
+void
 InputViewGUI
 ::ClearList(Fl_Widget * w, void * v)
 {
@@ -324,7 +324,7 @@ InputViewGUI
   inputChoiceDesc->m_FlBrowser->clear();
   inputChoiceDesc->m_FlBrowser->redraw();
 
-  // Cheat the indexe is set to -1 
+  // Cheat the indexe is set to -1
   inputChoiceDesc->m_Indexes.clear();
 }
 

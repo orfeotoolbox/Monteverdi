@@ -59,7 +59,7 @@ void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 
 /** The custom run command */
 void WriterMVCModule::Run()
-{ 
+{
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 //   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   

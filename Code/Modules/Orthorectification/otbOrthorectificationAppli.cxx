@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-// 
+//
 #include "otbOrthorectification.h"
 
 
@@ -47,25 +47,25 @@ int main(int argc, char* argv[])
     }
   catch(itk::ExceptionObject & err)
     {
-      std::string descriptionException = err.GetDescription();   
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos) 
+      std::string descriptionException = err.GetDescription();
+      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
        {
          return EXIT_SUCCESS;
        }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos) 
+      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
        {
          return EXIT_SUCCESS;
        }
       return EXIT_FAILURE;
     }
     
-  // Convenient typedefs 
+  // Convenient typedefs
   typedef otb::VectorImage<double,2>             InputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<InputImageType>   WriterType;
   typedef otb::Orthorectification                       OrthoType;
 
-  ReaderType::Pointer   reader = ReaderType::New();   
+  ReaderType::Pointer   reader = ReaderType::New();
   OrthoType::Pointer    rectif = OrthoType::New();
     
   //Read The input Image

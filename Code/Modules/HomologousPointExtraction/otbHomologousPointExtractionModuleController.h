@@ -138,7 +138,7 @@ public:
   }
 
   /** Link module and pixel descriptor action handlers. */
-  virtual void LinkPixelDescriptors(); 
+  virtual void LinkPixelDescriptors();
   virtual void AddPoints( int x1, int y1, int x2, int y2 );
   virtual void ClearPointList();
   virtual void DeletePointFromList( unsigned int id );
