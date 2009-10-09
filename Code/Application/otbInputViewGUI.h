@@ -93,15 +93,14 @@ protected:
   virtual void Cancel();
   static void ActivateInputChoice(Fl_Widget * w, void * v);
 
-
 private:
   InputViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   static void AddInputToList(Fl_Widget * w, void * v);
   static void RemoveInputFromList(Fl_Widget * w, void * v);
   static void ClearList(Fl_Widget * w, void * v);
-
-
+  static void InputChoiceChanged(Fl_Widget * w, void * v);
+  
   MonteverdiModel::Pointer                m_Model;
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
   std::string                             m_ModuleInstanceId;

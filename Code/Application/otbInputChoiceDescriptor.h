@@ -24,6 +24,7 @@
 #include "itkObjectFactory.h"
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Browser.H>
+#include <FL/Fl_Box.H>
 
 namespace otb
 {
@@ -72,6 +73,7 @@ public:
 
 
   Fl_Choice *                   m_FlChoice;
+  Fl_Box *                      m_StatusBox;
   Fl_Browser *                  m_FlBrowser;
   StringPairMapType             m_ChoiceMap;
   /** if input is multiple, we keep the indexes */

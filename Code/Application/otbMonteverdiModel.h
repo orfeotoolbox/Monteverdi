@@ -131,6 +131,9 @@ class ITK_EXPORT MonteverdiModel
   /** Get the caching progress for the given data */
   double GetCachingProgress(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0) const;
 
+  /** Is data cached ? */
+  bool IsCached(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0) const;
+
   // Temporary notify stub
   virtual void Notify(const MonteverdiEvent & event);
 

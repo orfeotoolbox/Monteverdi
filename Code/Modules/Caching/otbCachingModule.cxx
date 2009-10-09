@@ -45,9 +45,7 @@ CachingModule::CachingModule()
   pBar->maximum(1);
 
   pBar->label("Caching dataset (0%)");
-  
-  wCachingWindow->show();
-}
+  }
 
 /** Destructor */
 CachingModule::~CachingModule()
@@ -113,6 +111,10 @@ void CachingModule::ThreadedWatch()
   double last = 0;
   double updateThres = 0.01;
   double current = -1;
+
+  Fl::lock();
+  Fl::awake(&ShowWindowCallback,this);
+  Fl::unlock();
 
   while(m_Working)
     {
@@ -259,6 +261,22 @@ void CachingModule::HideWindowCallback(void * data)
     caching->HideWindow();
     }
 }
+
+void CachingModule::ShowWindow()
+{
+  wCachingWindow->show();
+}
+
+void CachingModule::ShowWindowCallback(void * data)
+{
+  Self::Pointer caching = static_cast<Self *>(data);
+
+  if(caching.IsNotNull())
+    {
+    caching->ShowWindow();
+    }
+}
+
 
 bool CachingModule::IsWorking() const
 {

@@ -183,9 +183,26 @@ bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std:
   CachingModule::Pointer cache = CachingModule::New();
   
   // Check type compatibility
-  InputDataDescriptor inputDD = cache->GetInputDataDescriptorByKey("InputDataset");
+  InputDataDescriptor inputDD = cache->GetInputDataDescriptorByKey("InputDataSet");
   return inputDD.IsTypeCompatible(output.GetDataType());
 }
+
+/** Is data cached ? */
+bool MonteverdiModel::IsCached(const std::string & instanceId, const std::string & outputKey, unsigned int idx) const
+{
+  // Retrieve the output map
+  OutputDataDescriptorMapType outputs = GetModuleOutputsByInstanceId(instanceId);
+  
+  // Retrieve the output data descriptor
+  OutputDataDescriptorMapType::const_iterator outIt = outputs.find(outputKey);
+  if(outIt == outputs.end())
+    {
+    itkExceptionMacro(<<"Module "<<instanceId<<" has no output with key "<<outputKey);
+    }
+
+  return outIt->second.IsCached();
+}
+
 
 /** Start caching the given data */
 void MonteverdiModel::StartCaching(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
@@ -198,7 +215,10 @@ void MonteverdiModel::StartCaching(const std::string & instanceId, const std::st
 
   // Now, create a new instance of the caching module
   CachingModule::Pointer cache = CachingModule::New();
-  
+
+  // Pass data to the module
+  cache->AddInputByKey("InputDataSet",output);
+
   // Disable individual reporting
   cache->WatchProgressOff();
 

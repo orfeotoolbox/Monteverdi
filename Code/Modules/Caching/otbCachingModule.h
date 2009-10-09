@@ -99,12 +99,18 @@ protected:
   // Hide the window
   void HideWindow();
 
+  // Show the window
+  void ShowWindow();
+
 private:
   CachingModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
   // Callback to update the window label
   static void UpdateProgressCallback(void * data);
+
+  // Callback to show window
+  static void ShowWindowCallback(void * data);
 
   // Callback to hide window
   static void HideWindowCallback(void * data);

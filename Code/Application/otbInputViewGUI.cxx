@@ -37,6 +37,7 @@ namespace otb
 InputViewGUI
 ::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputChoiceMap()
 {
+  std::cout<<"This: "<<this<<std::endl;
 }
 
 
@@ -76,7 +77,16 @@ InputViewGUI
       inputChoice->align(FL_ALIGN_TOP);
       InputChoiceDescriptor::Pointer inputChoiceDesc = InputChoiceDescriptor::New();
       inputChoiceDesc->m_FlChoice = inputChoice;
+      inputChoice->callback((Fl_Callback *)InputViewGUI::InputChoiceChanged,(void *)inputChoiceDesc);
 
+      // Build the statuBox
+      Fl_Box * statusBox = new Fl_Box(490+15,height/2+cpt* height+2, 40, 20);
+      statusBox->box(FL_PLASTIC_DOWN_BOX);
+      statusBox->align(FL_ALIGN_INSIDE);
+      // Hide it for now
+      statusBox->hide();
+      inputChoiceDesc->m_StatusBox = statusBox;
+      
       // we check if there are convenient outputs in the modules
       std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();
       for(i=0;i<moduleInstances.size();i++)
@@ -102,6 +112,7 @@ InputViewGUI
       }
 
       gScrollInput->add(inputChoice);
+      gScrollInput->add(statusBox);
 
       /** Build the Fl_Check_Button **/
       if(it_in->second.IsOptional())
@@ -168,7 +179,7 @@ InputViewGUI
 
   gScrollInput->add(browser);
 
-  Fl_Button *plusButton = new Fl_Button( 490+15, height/2+cpt* height+2, 20, 20, "+");
+  Fl_Button *plusButton = new Fl_Button( 490+15, 2*height/3+cpt* height+2, 20, 20, "+");
   plusButton->box(FL_PLASTIC_ROUND_DOWN_BOX);
   plusButton->color((Fl_Color)55);
   plusButton->labelfont(1);
@@ -325,6 +336,47 @@ InputViewGUI
 
   // Cheat the indexe is set to -1
   inputChoiceDesc->m_Indexes.clear();
+}
+
+
+void 
+InputViewGUI
+::InputChoiceChanged(Fl_Widget *w, void *v)
+{
+  // Retrieve input choice descriptor
+  InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
+
+  // Retrieve the input view gui instance
+  InputViewGUI * pthis = dynamic_cast<InputViewGUI*>(static_cast<InputViewGroup *>(w->parent()->parent()->user_data()));
+
+  std::cout<<"Pthis: "<<pthis<<std::endl;
+
+  if(inputChoiceDesc->m_FlChoice->value() >= 0)
+    {
+    std::string id = inputChoiceDesc->m_ChoiceMap[inputChoiceDesc->m_FlChoice->value()].first;
+    std::string key = inputChoiceDesc->m_ChoiceMap[inputChoiceDesc->m_FlChoice->value()].second;
+
+    if(pthis->GetModel()->SupportsCaching(id,key))
+      {
+
+      if(pthis->GetModel()->IsCached(id,key))
+	{
+	inputChoiceDesc->m_StatusBox->copy_label("cached");
+	inputChoiceDesc->m_StatusBox->color(FL_GREEN);
+	}
+      else
+	{
+	inputChoiceDesc->m_StatusBox->copy_label("streamed");
+	inputChoiceDesc->m_StatusBox->color(FL_RED);
+	}
+
+      inputChoiceDesc->m_StatusBox->show();
+      }
+    else
+      {
+      inputChoiceDesc->m_StatusBox->hide();
+      }
+    }
 }
 
 } // end namespace otb
