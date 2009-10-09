@@ -1,7 +1,3 @@
-
-
-
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -33,7 +29,7 @@ namespace otb
 {
 /** \class TypeManager
  *  \brief This class helps to manage coherently the type name in Monteverdi.
- *  
+ *
  *  Due to its authoritative nature, this class has a unique instance
  *  which maybe accessed through the GetInstance() method (accordingly
  *  to the Singleton pattern).
@@ -77,7 +73,7 @@ public:
   {
     // Retrieve typeId
     std::string typeId = GetTypeId<T>();
-    
+
     // Check if that type is allready registered
     if(m_IdToNameMap.count(typeId)==0)
       {
@@ -93,7 +89,7 @@ public:
       if(!found)
        {
        m_IdToNameMap[typeId]=name;
-       }       
+       }
       else
        {
        // If name is already in use, use the typeid instead
@@ -125,10 +121,10 @@ public:
 protected:
   /** Constructor */
   TypeManager();
-  
+
   /** Destructor */
   virtual ~TypeManager();
-  
+
   /** PrintSelf */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
