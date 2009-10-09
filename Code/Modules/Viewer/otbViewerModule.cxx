@@ -1009,7 +1009,7 @@ void ViewerModule::UpdateTabHistogram()
   m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveL);
     
   // Edit the channel we're changing
-  m_RedHistogramHandler->SetChannel(channels[0];
+  m_RedHistogramHandler->SetChannel(channels[0]);
 }
 
 
