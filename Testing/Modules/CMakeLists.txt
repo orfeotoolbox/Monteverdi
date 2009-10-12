@@ -126,6 +126,9 @@ otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 )
 
+MESSAGE("Tsting: LIST_MODULE_LIBRARIES ${LIST_MODULE_LIBRARIES}")
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleFilteringModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbSupervisedClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule OTBIO OTBCommon OTBTesting)
+
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule OTBIO OTBCommon OTBTesting)

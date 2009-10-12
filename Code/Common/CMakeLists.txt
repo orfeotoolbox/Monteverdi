@@ -21,7 +21,11 @@ SET(OTBMonteverdiCommon_SRCS ${OTBMonteverdiCommon_SRCS} ${OTBMonteverdiCommon_F
 ADD_LIBRARY(OTBMonteverdiCommon ${OTBMonteverdiCommon_SRCS} )
 TARGET_LINK_LIBRARIES(OTBMonteverdiCommon OTBCommon OTBGui)
 
-INSTALL(TARGETS OTBMonteverdiCommon
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
+
+IF(NOT Monteverdi_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS OTBMonteverdiCommon
+    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT Monteverdi_INSTALL_NO_LIBRARIES)
+

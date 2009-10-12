@@ -1,11 +1,9 @@
-# Only if OTB is generate with Visu GUI option
-IF(OTB_USE_VISU_GUI)
-
 IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
 ENDIF(WIN32)
 
-INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 
 
 SET(APPLICATION_SRCS
@@ -40,30 +38,22 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbMonteverdi OTBGui OTBMonteverdiCommon flu otbCachingModule)
 ADD_DEPENDENCIES(otbMonteverdi OTBMonteverdiCommon otbCachingModule)
-INSTALL(TARGETS otbMonteverdi
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
 
+IF(NOT OTB_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS otbMonteverdi
+    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+
+#Create Monteverdi application
 ADD_EXECUTABLE(Monteverdi Monteverdi.cxx)
 
-TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi
-otbReaderModule
-otbSpeckleFilteringModule
-otbFeatureExtractionModule
-otbSupervisedClassificationModule
-otbOrthorectificationModule
-otbViewerModule
-otbWriterModule
-otbWriterMVCModule 
-otbMeanShiftModule
-otbPanSharpeningModule 
-otbSarIntensityModule
-otbHomologousPointExtractionModule)
-
-INSTALL(TARGETS Monteverdi
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
-
-ENDIF(OTB_USE_VISU_GUI)
+MESSAGE(SATUS "Monteverdi -> lib depends: otbMonteverdi ${LIST_MODULE_LIBRARIES} ")
+TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi ${LIST_MODULE_LIBRARIES} )
+IF(NOT OTB_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS Monteverdi
+    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)

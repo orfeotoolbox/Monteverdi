@@ -1,6 +1,6 @@
 PROJECT(Monteverdi)
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.4)
 
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
@@ -33,6 +33,12 @@ ELSE(OTB_FOUND)
   MESSAGE(FATAL_ERROR
           "OTB not found. Please set OTB_DIR")
 ENDIF(OTB_FOUND)
+
+# Check OTB_USE_VISU_GUI option activated
+IF(NOT OTB_USE_VISU_GUI)
+  MESSAGE(FATAL_ERROR
+          "The OTB library must be compiled with Visu/Gui options. Please reinstall OTB and set OTB_USE_VISU_GUI to ON")
+ENDIF(NOT OTB_USE_VISU_GUI)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
@@ -70,6 +76,94 @@ ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
 )
 
+#-----------------------------------------------------------------------------
+# Installation vars.
+# Monteverdi_INSTALL_BIN_DIR          - binary dir (executables)
+# Monteverdi_INSTALL_LIB_DIR          - library dir (libs)
+# Monteverdi_INSTALL_DATA_DIR         - share dir (say, examples, data, etc)
+# Monteverdi_INSTALL_INCLUDE_DIR      - include dir (headers)
+# Monteverdi_INSTALL_PACKAGE_DIR      - package/export configuration files
+# Monteverdi_INSTALL_NO_DEVELOPMENT   - do not install development files
+# Monteverdi_INSTALL_NO_RUNTIME       - do not install runtime files
+# Monteverdi_INSTALL_NO_DOCUMENTATION - do not install documentation files
+
+IF(NOT Monteverdi_INSTALL_BIN_DIR)
+  SET(Monteverdi_INSTALL_BIN_DIR "/bin")
+ENDIF(NOT Monteverdi_INSTALL_BIN_DIR)
+
+IF(NOT Monteverdi_INSTALL_LIB_DIR)
+  SET(Monteverdi_INSTALL_LIB_DIR "/bin")
+ENDIF(NOT Monteverdi_INSTALL_LIB_DIR)
+
+IF(NOT Monteverdi_INSTALL_DATA_DIR)
+  SET(Monteverdi_INSTALL_DATA_DIR "/share/otb")
+ENDIF(NOT Monteverdi_INSTALL_DATA_DIR)
+
+IF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
+  SET(Monteverdi_INSTALL_INCLUDE_DIR "/include/otb")
+ENDIF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
+
+IF(NOT Monteverdi_INSTALL_PACKAGE_DIR)
+  SET(Monteverdi_INSTALL_PACKAGE_DIR ${Monteverdi_INSTALL_LIB_DIR}
+    CACHE INTERNAL "")
+ENDIF(NOT Monteverdi_INSTALL_PACKAGE_DIR)
+
+IF(NOT Monteverdi_INSTALL_NO_DEVELOPMENT)
+  SET(Monteverdi_INSTALL_NO_DEVELOPMENT 0)
+ENDIF(NOT Monteverdi_INSTALL_NO_DEVELOPMENT)
+
+IF(NOT Monteverdi_INSTALL_NO_RUNTIME)
+  SET(Monteverdi_INSTALL_NO_RUNTIME 0)
+ENDIF(NOT Monteverdi_INSTALL_NO_RUNTIME)
+
+IF(NOT Monteverdi_INSTALL_NO_DOCUMENTATION)
+  SET(Monteverdi_INSTALL_NO_DOCUMENTATION 0)
+ENDIF(NOT Monteverdi_INSTALL_NO_DOCUMENTATION)
+
+SET(Monteverdi_INSTALL_NO_LIBRARIES)
+IF(Monteverdi_BUILD_SHARED_LIBS)
+  IF(Monteverdi_INSTALL_NO_RUNTIME AND Monteverdi_INSTALL_NO_DEVELOPMENT)
+    SET(Monteverdi_INSTALL_NO_LIBRARIES 1)
+  ENDIF(Monteverdi_INSTALL_NO_RUNTIME AND Monteverdi_INSTALL_NO_DEVELOPMENT)
+ELSE(Monteverdi_BUILD_SHARED_LIBS)
+  IF(Monteverdi_INSTALL_NO_DEVELOPMENT)
+    SET(Monteverdi_INSTALL_NO_LIBRARIES 1)
+  ENDIF(Monteverdi_INSTALL_NO_DEVELOPMENT)
+ENDIF(Monteverdi_BUILD_SHARED_LIBS)
+
+# Because INSTALL_* commands require a leading / and because INSTALL (cmake 2.4
+# and newer) requires no leading / to install under INSTALL_PREFIX, we
+# are stripping the leading /. In the future, there should be no leading
+# / in any install directory variables
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_LIB_DIR_CM24 "${Monteverdi_INSTALL_LIB_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_BIN_DIR_CM24 "${Monteverdi_INSTALL_BIN_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_INCLUDE_DIR_CM24 "${Monteverdi_INSTALL_INCLUDE_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_PACKAGE_DIR_CM24 "${Monteverdi_INSTALL_PACKAGE_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_DOXYGEN_DIR_CM24 "${Monteverdi_INSTALL_DOXYGEN_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_TCL_DIR_CM24 "${Monteverdi_INSTALL_TCL_DIR}")
+STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_JAVA_DIR_CM24 "${Monteverdi_INSTALL_JAVA_DIR}")
+
+
+
+# Make sure the user does not try to install on top of the build tree.
+IF(WIN32 OR APPLE OR UNIX)
+  STRING(TOLOWER "${CMAKE_INSTALL_PREFIX}" _PREFIX)
+  STRING(TOLOWER "${Monteverdi_BINARY_DIR}" _BUILD)
+ELSE(WIN32 OR APPLE OR UNIX)
+  SET(_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  SET(_BUILD "${Monteverdi_BINARY_DIR}")
+ENDIF(WIN32 OR APPLE OR UNIX)
+IF("${_PREFIX}" STREQUAL "${_BUILD}")
+  MESSAGE(FATAL_ERROR
+    "The current CMAKE_INSTALL_PREFIX points at the build tree:\n"
+    "  ${CMAKE_INSTALL_PREFIX}\n"
+    "This is not supported."
+    )
+ENDIF("${_PREFIX}" STREQUAL "${_BUILD}")
+
+
+
+
 MESSAGE(STATUS "Automatic includes modules:")
 FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*/)
 FOREACH(moduleDir ${moduleList})
@@ -80,8 +174,10 @@ FOREACH(moduleDir ${moduleList})
     INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules/${moduleName})
   ENDIF(IS_DIRECTORY ${moduleDir})
 ENDFOREACH(moduleDir)
+INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules)
 
-
+SET(LIST_MODULE_LIBRARIES "" CACHE STRING "List of alls modules libraries" FORCE)
+#SET(LIST_MODULE_LIBRARIES "" )
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Prototype1)
