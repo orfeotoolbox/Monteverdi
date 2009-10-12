@@ -126,9 +126,32 @@ otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 )
 
-MESSAGE("Tsting: LIST_MODULE_LIBRARIES ${LIST_MODULE_LIBRARIES}")
-
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
 
 TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule OTBIO OTBCommon OTBTesting)
+
+
+ADD_EXECUTABLE(otbHomologousPointExtractionApplication otbHomologousPointExtractionApplication.cxx)
+TARGET_LINK_LIBRARIES(otbHomologousPointExtractionApplication otbMonteverdi otbHomologousPointExtractionModule)
+# CPack installation: only Monteverdi application
+#IF(NOT OTB_INSTALL_NO_LIBRARIES)
+#  INSTALL(TARGETS otbHomologousPointExtractionApplication
+#    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+#    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+#    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+#ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+
+ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
+TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule otbReaderModule)
+# CPack installation: only Monteverdi application
+#IF(NOT OTB_INSTALL_NO_LIBRARIES)
+#  INSTALL(TARGETS otbMeanShiftApplication
+#    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+#    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+#    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+#ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+
+#ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
+#TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)
+

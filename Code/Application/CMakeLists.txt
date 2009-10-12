@@ -48,8 +48,6 @@ ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 #Create Monteverdi application
 ADD_EXECUTABLE(Monteverdi Monteverdi.cxx)
-
-MESSAGE(SATUS "Monteverdi -> lib depends: otbMonteverdi ${LIST_MODULE_LIBRARIES} ")
 TARGET_LINK_LIBRARIES(Monteverdi otbMonteverdi ${LIST_MODULE_LIBRARIES} )
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS Monteverdi

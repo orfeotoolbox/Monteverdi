@@ -40,13 +40,5 @@ INSTALL(TARGETS otbMeanShiftModule
         LIBRARY DESTINATION /bin
         ARCHIVE DESTINATION /bin )
 
-# Then, compile the application
-
-ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
-TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule otbReaderModule)
-INSTALL(TARGETS otbMeanShiftApplication
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
         
 ENDIF(OTB_USE_VISU_GUI)

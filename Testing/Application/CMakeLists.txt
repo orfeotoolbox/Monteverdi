@@ -31,16 +31,4 @@ otbMonteverdiApplicationReaderViewer.cxx
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
-TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting otbReaderModule
-otbSpeckleFilteringModule
-otbFeatureExtractionModule
-otbSupervisedClassificationModule
-otbOrthorectificationModule
-otbViewerModule
-otbWriterModule
-otbWriterMVCModule 
-otbMeanShiftModule
-otbPanSharpeningModule 
-otbCachingModule
-otbSarIntensityModule
-otbHomologousPointExtractionModule )
+TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting ${LIST_MODULE_LIBRARIES} )

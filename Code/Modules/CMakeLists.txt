@@ -9,22 +9,19 @@ ENDIF(WIN32)
 FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*)
 FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
-    SET(LIB_NAME "otb${moduleName}Module")
-#    SET(APPLI_NAME "otb${moduleName}Application")
-
-
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})
+    SET(LIB_NAME "otb${moduleName}Module")
     FILE(GLOB SC_SRCS  ${moduleDir}/*.cxx )
     FILE(GLOB SC_GUI_SRCS_TEMP  ${moduleDir}/*.fl )
     SET(SC_GUI_SRCS "")
-    FOREACH(file_gui_src ${SC_GUI_SRCS_TEMP})
-      GET_FILENAME_COMPONENT(name "${file_gui_src}" NAME)
-      SET (SC_GUI_SRCS 
+    IF(SC_GUI_SRCS_TEMP)
+      FOREACH(file_gui_src ${SC_GUI_SRCS_TEMP})
+        GET_FILENAME_COMPONENT(name "${file_gui_src}" NAME)
+        SET (SC_GUI_SRCS 
           ${SC_GUI_SRCS}
           "${moduleName}/${name}"
           )
-    ENDFOREACH(file_gui_src)
-    IF(SC_GUI_SRCS)
+      ENDFOREACH(file_gui_src)
       FLTK_WRAP_UI(${LIB_NAME} ${SC_GUI_SRCS}) 
       # Suppress warning Fl_RGB_Image deferencing pointeur
       IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -35,7 +32,7 @@ FOREACH(moduleDir ${moduleList})
       ENDIF(CMAKE_COMPILER_IS_GNUCXX)
       # Add GUI cxx file
       SET(SC_SRCS ${SC_SRCS} ${${LIB_NAME}_FLTK_UI_SRCS} )
-    ENDIF(SC_GUI_SRCS)
+    ENDIF(SC_GUI_SRCS_TEMP)
 
     ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
     TARGET_LINK_LIBRARIES(${LIB_NAME} OTBLearning OTBIO OTBVisualization OTBVisu OTBGui OTBMonteverdiCommon)
@@ -67,4 +64,5 @@ FOREACH(moduleDir ${moduleList})
   ENDIF(IS_DIRECTORY ${moduleDir})
 ENDFOREACH(moduleDir)
 
+# Set the value to the Cache
 SET(LIST_MODULE_LIBRARIES ${LIST_MODULE_LIBRARIES} CACHE STRING "List of alls modules libraries" FORCE)

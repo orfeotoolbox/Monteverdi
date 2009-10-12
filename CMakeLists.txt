@@ -175,6 +175,8 @@ FOREACH(moduleDir ${moduleList})
   ENDIF(IS_DIRECTORY ${moduleDir})
 ENDFOREACH(moduleDir)
 INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules)
+INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Code/Application)
+INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Application)
 
 SET(LIST_MODULE_LIBRARIES "" CACHE STRING "List of alls modules libraries" FORCE)
 #SET(LIST_MODULE_LIBRARIES "" )

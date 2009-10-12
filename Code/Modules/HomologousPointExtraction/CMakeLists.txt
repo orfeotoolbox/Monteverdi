@@ -35,18 +35,15 @@ ADD_LIBRARY(otbHomologousPointExtractionModule ${MODULE_SRCS}  ${otbHomologousPo
 TARGET_LINK_LIBRARIES(otbHomologousPointExtractionModule OTBMonteverdiCommon OTBIO OTBBasicFilters OTBGui OTBVisualization)
 ADD_DEPENDENCIES(otbHomologousPointExtractionModule OTBMonteverdiCommon)
 
-INSTALL(TARGETS otbHomologousPointExtractionModule
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
+IF(NOT OTB_INSTALL_NO_LIBRARIES)
+  INSTALL(TARGETS otbHomologousPointExtractionModule
+    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+
 
 # Then, compile the application
 
-ADD_EXECUTABLE(otbHomologousPointExtractionApplication otbHomologousPointExtractionApplication.cxx)
-TARGET_LINK_LIBRARIES(otbHomologousPointExtractionApplication otbMonteverdi otbHomologousPointExtractionModule)
-INSTALL(TARGETS otbHomologousPointExtractionModule
-        RUNTIME DESTINATION /bin
-        LIBRARY DESTINATION /bin
-        ARCHIVE DESTINATION /bin )
-        
+       
 ENDIF(OTB_USE_VISU_GUI)

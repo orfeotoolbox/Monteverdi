@@ -35,9 +35,5 @@ ADD_LIBRARY(otbOrthorectificationModule ${OR_SRCS} ${otbOrthorectificationApplic
 TARGET_LINK_LIBRARIES(otbOrthorectificationModule  OTBProjections OTBGui OTBMonteverdiCommon)
 ADD_DEPENDENCIES(otbOrthorectificationModule OTBMonteverdiCommon)
 
-#ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
-#TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)
-
-
 
 ENDIF(OTB_USE_VISU_GUI)
