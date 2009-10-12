@@ -197,7 +197,7 @@ void CachingModule::ThreadedRun()
     charVReader->SetFileName(m_FilePath);
     charVReader->UpdateOutputInformation();
     m_ReadingProcess = charVReader;
-    this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description);
+    this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description,true);
     }
 
   else if ( vectorImage.IsNotNull() )
@@ -214,7 +214,7 @@ void CachingModule::ThreadedRun()
     fPVReader->SetFileName(m_FilePath);
     fPVReader->UpdateOutputInformation();
     m_ReadingProcess =  fPVReader;
-    this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description);
+    this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description,true);
 
     }
   else if( singleImage.IsNotNull() )
@@ -231,7 +231,7 @@ void CachingModule::ThreadedRun()
     fPReader->SetFileName(m_FilePath);
     fPReader->UpdateOutputInformation();
     m_ReadingProcess =  fPReader;
-    this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description);
+    this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description,true);
     }
   else
     {
