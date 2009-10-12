@@ -229,12 +229,16 @@ void ReaderModule::OpenOpticalImage()
     ossId<<vName->value()<<" (band "<<band+1<<")";
     this->AddOutputDescriptor(extract->GetOutput(),ossId.str(),oss.str(),true);
     }
-  m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
-  oss.str("");
-  oss <<"Image amplitude read from file: "<< vName->value(); // lFile.file(); /
-  ossId.str("");
-  ossId<<vName->value()<<" (amplitude)";
-  this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),ossId.str(),oss.str(),true);
+
+  if(m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel()>1)
+    {
+    m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
+    oss.str("");
+    oss <<"Image amplitude read from file: "<< vName->value(); // lFile.file(); /
+    ossId.str("");
+    ossId<<vName->value()<<" (amplitude)";
+    this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),ossId.str(),oss.str(),true);
+    }
 }
 
 
