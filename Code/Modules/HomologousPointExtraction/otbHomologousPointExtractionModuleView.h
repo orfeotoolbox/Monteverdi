@@ -29,7 +29,7 @@
 #include "otbHomologousPointExtractionModuleControllerInterface.h"
 
 #include "otbCrossGlComponent.h"
-//#include "otbCircleGlComponent.h"
+#include "otbCircleGlComponent.h"
 #include "otbImageView.h"
 
 namespace otb
@@ -118,7 +118,8 @@ private:
   CrossGlComponent::Pointer                     m_FirstCrossGlComponent;
   CrossGlComponent::Pointer                     m_SecondCrossGlComponent;
   /** Circle Gl Component */
-  // CircleGlComponent::Pointer                    m_FirstCircleGlComponent;
+  CircleGlComponent::Pointer                    m_FirstCircleGlComponent;
+  CircleGlComponent::Pointer                    m_SecondCircleGlComponent;
   /** Point color */
   ColorListType                                 m_ColorList;
 };
