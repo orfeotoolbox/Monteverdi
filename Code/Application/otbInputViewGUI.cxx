@@ -75,7 +75,6 @@ InputViewGUI
       inputChoice->SetController(m_Controller);
 
       // Add it to the scroll group
-      std::cout<<"vindex= "<<vIndex<<std::endl;
       inputChoice->resize(0,vIndex,gScrollInput->w(),inputChoice->h());
       
       // Build the input Choice
@@ -85,7 +84,6 @@ InputViewGUI
 
       // Update vertical index
       vIndex = inputChoice->y()+inputChoice->h();
-
 
       // Add it to the map
       m_InputChoiceMap[it_in->first]=inputChoice;
