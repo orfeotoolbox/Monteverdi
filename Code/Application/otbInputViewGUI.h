@@ -36,7 +36,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_Browser.H>
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
-#include "otbInputChoiceDescriptor.h"
+#include "otbInputViewComponent.h"
 #include "otbAsynchronousProcessBase.h"
 
 namespace otb
@@ -62,11 +62,11 @@ public:
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
-  typedef InputChoiceDescriptor::StringPairType           StringPairType;
-  typedef InputChoiceDescriptor::Pointer                  InputChoiceDescriptorPointerType;
+  typedef InputViewComponent::StringPairType           StringPairType;
+  typedef InputViewComponent::Pointer                  InputViewComponentPointerType;
 
   // map containing the key and the descriptor
-  typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
+  typedef std::map<std::string,InputViewComponentPointerType> InputViewComponentMapType;
 
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
@@ -75,7 +75,6 @@ public:
   itkSetObjectMacro(Controller,MonteverdiControllerInterface);
   itkGetMacro(ModuleInstanceId,std::string);
   itkSetMacro(ModuleInstanceId,std::string);
-  InputChoiceDescriptorMapType GetInputChoiceMap(){ return m_InputChoiceMap; };
 
   void Show();
   void BuildInputInterface();
@@ -101,7 +100,7 @@ private:
   MonteverdiModel::Pointer                m_Model;
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
   std::string                             m_ModuleInstanceId;
-  InputChoiceDescriptorMapType            m_InputChoiceMap;
+  InputViewComponentMapType               m_InputChoiceMap;
   bool                                    m_Alive;
 
 };

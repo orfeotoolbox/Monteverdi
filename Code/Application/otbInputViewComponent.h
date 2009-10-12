@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbInputChoiceDescriptor_h
-#define __otbInputChoiceDescriptor_h
+#ifndef __otbInputViewComponent_h
+#define __otbInputViewComponent_h
 
 #include <string>
 #include <vector>
@@ -37,7 +37,7 @@
 namespace otb
 {
 
-/** \class InputChoiceDescriptor
+/** \class InputViewComponent
  *  \brief This small class describes the different input choices of a InputViewGUI.
  *
  *  The Optional flag allows to define optional inputs.
@@ -46,20 +46,20 @@ namespace otb
  *
  */
  
-class ITK_EXPORT InputChoiceDescriptor
+class ITK_EXPORT InputViewComponent
   : public itk::Object, public Fl_Group
 {
 public:
 
  /** Standard class typedefs */
-  typedef InputChoiceDescriptor         Self;
+  typedef InputViewComponent         Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(InputChoiceDescriptor,itk::Object);
+  itkTypeMacro(InputViewComponent,itk::Object);
 
   /** Typedefs */
   // contains a module instance Id and a data key
@@ -102,13 +102,13 @@ public:
 
 protected:
   /** Constructor */
-  InputChoiceDescriptor();
+  InputViewComponent();
   /** Destructor */
-  virtual ~InputChoiceDescriptor();
+  virtual ~InputViewComponent();
 
 
 private:
-  InputChoiceDescriptor(const Self&); //purposely not implemented
+  InputViewComponent(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Callbacks */

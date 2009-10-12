@@ -72,7 +72,7 @@ InputViewGUI
     // loop on the requiered input data of the module : m_ModuleInstanceId
     for (it_in = lInputDataMap.begin();it_in != lInputDataMap.end();it_in++)
       {
-      InputChoiceDescriptor::Pointer inputChoice = InputChoiceDescriptor::New();
+      InputViewComponent::Pointer inputChoice = InputViewComponent::New();
       inputChoice->SetInputDataDescriptor(it_in->second);
       inputChoice->SetModel(m_Model);
       inputChoice->SetController(m_Controller);
@@ -126,7 +126,7 @@ void InputViewGUI
     {
     bool globalOk = true;
 
-    for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+    for(InputViewComponentMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
       {
       // Update caching progress
       mIt->second->UpdateCachingProgress();
@@ -168,13 +168,13 @@ InputViewGUI
     }
 
   // Connect modules
-  for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+  for(InputViewComponentMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
   {
   if(mIt->second->HasSelected())
     {
-    InputChoiceDescriptor::StringPairVectorType inputs = mIt->second->GetSelected();
+    InputViewComponent::StringPairVectorType inputs = mIt->second->GetSelected();
 
-    for (InputChoiceDescriptor::StringPairVectorType::const_iterator it = inputs.begin();
+    for (InputViewComponent::StringPairVectorType::const_iterator it = inputs.begin();
 	 it!= inputs.end();++it)
       {
        m_Controller->AddModuleConnection(it->first,it->second,m_ModuleInstanceId,mIt->first);

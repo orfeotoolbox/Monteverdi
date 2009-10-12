@@ -15,15 +15,15 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbInputChoiceDescriptor.h"
+#include "otbInputViewComponent.h"
 
 #include <FL/fl_draw.H>
 
 namespace otb
 {
 
-InputChoiceDescriptor
-::InputChoiceDescriptor() : Fl_Group(0,0,0,0)
+InputViewComponent
+::InputViewComponent() : Fl_Group(0,0,0,0)
 {
   // Widgets
   m_FlChoice     = NULL;
@@ -46,22 +46,22 @@ InputChoiceDescriptor
   m_CachingInProgress = false;
 }
 
-InputChoiceDescriptor
-::~InputChoiceDescriptor()
+InputViewComponent
+::~InputViewComponent()
 {
   this->clear();
 }
 
 /** Set the input data descriptor */
-void InputChoiceDescriptor
+void InputViewComponent
 ::SetInputDataDescriptor(const InputDataDescriptor & desc)
 {
   m_InputDataDescriptor = desc;
 }
 
 
-InputChoiceDescriptor::StringPairVectorType
-InputChoiceDescriptor
+InputViewComponent::StringPairVectorType
+InputViewComponent
 ::GetSelected() const
 {
   StringPairVectorType resp;
@@ -93,14 +93,14 @@ InputChoiceDescriptor
 }
 
 bool
-InputChoiceDescriptor
+InputViewComponent
 ::HasSelected() const
 {
   return (m_InputDataDescriptor.IsMultiple() && !m_Indices.empty()) || (m_FlChoice->value()>=0);
 }
 
 /** Add Choice */
-void InputChoiceDescriptor::AddChoice(const StringPairType & choice)
+void InputViewComponent::AddChoice(const StringPairType & choice)
 {
   if(m_FlChoice == NULL)
     {
@@ -117,7 +117,7 @@ void InputChoiceDescriptor::AddChoice(const StringPairType & choice)
   m_ChoiceMap[index]=choice;
 }
 
-void InputChoiceDescriptor::Rebuild()
+void InputViewComponent::Rebuild()
 {
   // Clear all previous widgets
   this->clear();
@@ -140,14 +140,14 @@ void InputChoiceDescriptor::Rebuild()
   m_FlChoice->box(FL_PLASTIC_DOWN_BOX);
   m_FlChoice->align(FL_ALIGN_TOP);
   this->add(m_FlChoice);
-  m_FlChoice->callback((Fl_Callback *)InputChoiceDescriptor::InputChanged,(void *)this);
+  m_FlChoice->callback((Fl_Callback *)InputViewComponent::InputChanged,(void *)this);
     
  // Build the statuBox
   m_StatusBox = new Fl_Button(m_LeftMargin+m_CentralWidgetsLength + m_WidgetsMargin,this->y()+m_UpperMargin, 60,m_SimpleWidgetsHeight);
   m_StatusBox->box(FL_PLASTIC_DOWN_BOX);
   m_StatusBox->align(FL_ALIGN_INSIDE);
   m_StatusBox->labelsize(8);
-  m_StatusBox->callback((Fl_Callback *)InputChoiceDescriptor::StartCaching, (void *)this);
+  m_StatusBox->callback((Fl_Callback *)InputViewComponent::StartCaching, (void *)this);
   this->add(m_StatusBox);
 
   // Hide it for now
@@ -173,7 +173,7 @@ void InputChoiceDescriptor::Rebuild()
     m_CheckButton = new Fl_Check_Button( m_LeftMargin-m_WidgetsMargin-25,this->y()+m_UpperMargin, 25, 25);
     this->add(m_CheckButton);
     m_FlChoice->deactivate();
-    m_CheckButton->callback((Fl_Callback *)InputChoiceDescriptor::Switch,(void *)this);
+    m_CheckButton->callback((Fl_Callback *)InputViewComponent::Switch,(void *)this);
     }
 
   // Eventually build the multiple environment
@@ -194,7 +194,7 @@ void InputChoiceDescriptor::Rebuild()
     m_AddButton->labelsize(17);
     m_AddButton->labelcolor((Fl_Color)186);
     this->add(m_AddButton);
-    m_AddButton->callback((Fl_Callback *)InputChoiceDescriptor::AddInput,(void *)this);
+    m_AddButton->callback((Fl_Callback *)InputViewComponent::AddInput,(void *)this);
     
     // Build the remove button
     m_RemoveButton = new Fl_Button(m_LeftMargin + m_CentralWidgetsLength + m_WidgetsMargin + 10 ,this->y() + m_SimpleWidgetsHeight + 2 * m_MultipleWidgetsHeight / 3 , 20,20, "-");
@@ -204,7 +204,7 @@ void InputChoiceDescriptor::Rebuild()
     m_RemoveButton->labelsize(17);
     m_RemoveButton->labelcolor((Fl_Color)186);
     this->add(m_RemoveButton);
-    m_RemoveButton->callback((Fl_Callback *)InputChoiceDescriptor::RemoveInput,(void *)this);
+    m_RemoveButton->callback((Fl_Callback *)InputViewComponent::RemoveInput,(void *)this);
     
     // Build the clear button
     m_ClearButton = new Fl_Button(m_LeftMargin + m_CentralWidgetsLength + m_WidgetsMargin ,this->y() + m_SimpleWidgetsHeight + 3 * m_MultipleWidgetsHeight / 3 ,40,m_SimpleWidgetsHeight, "Clear");
@@ -214,7 +214,7 @@ void InputChoiceDescriptor::Rebuild()
     m_ClearButton->labelfont(1);
     m_ClearButton->labelsize(12);
     m_ClearButton->labelcolor((Fl_Color)186); 
-    m_ClearButton->callback((Fl_Callback *)InputChoiceDescriptor::ClearInputs,(void *)this);
+    m_ClearButton->callback((Fl_Callback *)InputViewComponent::ClearInputs,(void *)this);
 
     if(m_InputDataDescriptor.IsOptional())
       {
@@ -226,7 +226,7 @@ void InputChoiceDescriptor::Rebuild()
     }
 }
 
-void InputChoiceDescriptor::Switch(Fl_Widget *w, void * v)
+void InputViewComponent::Switch(Fl_Widget *w, void * v)
 {
   // Retrieve the pointer
   Self * pthis = static_cast<Self *>(v);
@@ -241,7 +241,7 @@ void InputChoiceDescriptor::Switch(Fl_Widget *w, void * v)
      }
 }
 
-void InputChoiceDescriptor::AddInput(Fl_Widget * w, void * v)
+void InputViewComponent::AddInput(Fl_Widget * w, void * v)
 {
   Self * pthis = static_cast<Self *>(v);
   
@@ -255,7 +255,7 @@ void InputChoiceDescriptor::AddInput(Fl_Widget * w, void * v)
     }
 }
 
-void InputChoiceDescriptor::RemoveInput(Fl_Widget * w, void * v)
+void InputViewComponent::RemoveInput(Fl_Widget * w, void * v)
 {
    Self * pthis = static_cast<Self *>(v);
 
@@ -275,7 +275,7 @@ void InputChoiceDescriptor::RemoveInput(Fl_Widget * w, void * v)
    pthis->m_FlBrowser->redraw();
 }
 
-void InputChoiceDescriptor::ClearInputs(Fl_Widget * w, void * v)
+void InputViewComponent::ClearInputs(Fl_Widget * w, void * v)
 {
    Self * pthis = static_cast<Self *>(v);
    pthis->m_FlBrowser->clear();
@@ -285,7 +285,7 @@ void InputChoiceDescriptor::ClearInputs(Fl_Widget * w, void * v)
    pthis->m_Indices.clear();
 }
 
-void InputChoiceDescriptor::InputChanged(Fl_Widget * w, void * v)
+void InputViewComponent::InputChanged(Fl_Widget * w, void * v)
 {
    // Retrieve input choice descriptor
    Self * pthis  = static_cast<Self *>(v);
@@ -319,7 +319,7 @@ void InputChoiceDescriptor::InputChanged(Fl_Widget * w, void * v)
      }
 }
 
-void InputChoiceDescriptor::StartCaching(Fl_Widget * w, void * v)
+void InputViewComponent::StartCaching(Fl_Widget * w, void * v)
 {
   // Retrieve input choice descriptor
   Self * pthis  = static_cast<Self *>(v);
@@ -348,7 +348,7 @@ void InputChoiceDescriptor::StartCaching(Fl_Widget * w, void * v)
     }
 }
 
-void InputChoiceDescriptor::UpdateCachingProgress()
+void InputViewComponent::UpdateCachingProgress()
 {
   if(m_CachingInProgress && m_FlChoice->value() >= 0)
     {
@@ -390,7 +390,7 @@ void InputChoiceDescriptor::UpdateCachingProgress()
     }
 }
 
-void InputChoiceDescriptor::Activate()
+void InputViewComponent::Activate()
 {
   if(m_FlChoice != NULL)
     {
@@ -414,7 +414,7 @@ void InputChoiceDescriptor::Activate()
     }
 }
 
-void InputChoiceDescriptor::Deactivate()
+void InputViewComponent::Deactivate()
 {
   if(m_FlChoice != NULL)
     {
@@ -438,7 +438,7 @@ void InputChoiceDescriptor::Deactivate()
     }
 }
 
-bool InputChoiceDescriptor::IsReady()
+bool InputViewComponent::IsReady()
 {
   if(m_CachingInProgress)
     {

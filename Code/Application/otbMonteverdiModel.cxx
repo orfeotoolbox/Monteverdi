@@ -305,7 +305,7 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
   sourceId = temp.substr(0,idPos);
 
   // Remove the sourceId part
-  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+  temp = temp.substr(idPos+1);
 
   // Get outputKey
   size_t keyPos = temp.find_first_of(":");
@@ -318,7 +318,7 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
   key = temp.substr(0,keyPos);
   
   // Remove the outputKey part
-  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+  temp = temp.substr(keyPos+1);
   
   // compute the idx from the remaining
   idx = atoi(temp.c_str());
