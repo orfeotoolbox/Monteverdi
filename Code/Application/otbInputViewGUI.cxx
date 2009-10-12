@@ -59,11 +59,8 @@ InputViewGUI
     // deactivate Ok button
     bOk->deactivate();
 
-    // to count the number of Fl_Input_Choice to display
-    unsigned int cpt =0;
     // if there are several Fl_Input_Choice to draw
     unsigned int vIndex = 0;
-    unsigned int i = 0;
 
     // Retrieve the module inputs
     InputDataDescriptorMapType lInputDataMap = m_Model->GetModuleInputsByInstanceId(m_ModuleInstanceId);
@@ -95,17 +92,17 @@ InputViewGUI
       
       // we check if there are convenient outputs in the modules
       std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();
-      for(i=0;i<moduleInstances.size();i++)
+      for(std::vector<std::string>::const_iterator instIt = moduleInstances.begin();instIt != moduleInstances.end();instIt++)
       {
         // look after all the outputs of each instance of module
-        OutputDataDescriptorMapType lOutputDataMap = m_Model->GetModuleOutputsByInstanceId(moduleInstances[i]);
+        OutputDataDescriptorMapType lOutputDataMap = m_Model->GetModuleOutputsByInstanceId(*instIt);
         OutputDataDescriptorMapType::const_iterator it_out;
         for(it_out=lOutputDataMap.begin();it_out!=lOutputDataMap.end();it_out++)
         {
           // if the type is ok, we can add the label in the Fl_Input_Choice
           if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-	  inputChoice->AddChoice(StringPairType(moduleInstances[i],it_out->first));
+	  inputChoice->AddChoice(StringPairType(*instIt,it_out->first));
           }
         }
       }
@@ -157,8 +154,6 @@ void
 InputViewGUI
 ::Ok()
 {
-  unsigned int i;
-
   if(m_ModuleInstanceId != gLabel->value())
     {
       int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());

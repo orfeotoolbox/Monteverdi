@@ -141,7 +141,7 @@ void MeanShiftModuleView::SaveClusterImage()
 void MeanShiftModuleView::RunSegmentation()
 {
        m_Controller->RunSegmentation();
-       static_cast<bool>(this->mClustersButton->value(1));
+       this->mClustersButton->value(1);
 }
 
 void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
