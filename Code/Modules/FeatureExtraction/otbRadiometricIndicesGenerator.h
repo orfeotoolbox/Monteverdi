@@ -48,6 +48,7 @@ public:
   typedef ModelType::InputImageType                                                InputImageType;
   typedef ModelType::SingleImageType                                               SingleImageType;
   typedef ModelType::SingleImagePointerType                                        SingleImagePointerType;
+  typedef FeatureInfo::FeatureType                                                 FeatureType;
 
 
   /****************************************/
@@ -182,19 +183,19 @@ public:
     std::string mess;
     switch(type)
     {
-      case NDVI:
+      case FeatureInfo::NDVI:
       {
         mess = "Full Image : NDVI : ";
         this->GenericAddRAndNIRFilter<NDVIFilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case RVI:
+      case FeatureInfo::RVI:
       {
         mess = "Full Image : RVI : ";
         this->GenericAddRAndNIRFilter<RVIFilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case PVI:
+      case FeatureInfo::PVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : PVI : "<<params[0]<<","<<params[1]<<" ";
@@ -205,7 +206,7 @@ public:
         filter->GetFunctor().SetB(params[1]);
         break;
       }
-      case SAVI:
+      case FeatureInfo::SAVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : SAVI : "<<params[0]<<" ";
@@ -215,7 +216,7 @@ public:
         filter->GetFunctor().SetL(params[0]);
         break;
       }
-      case MSAVI:
+      case FeatureInfo::MSAVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : MSAVI : "<<params[0]<<" ";
@@ -225,13 +226,13 @@ public:
         filter->GetFunctor().SetS(params[0]);
         break;
       }
-      case MSAVI2:
+      case FeatureInfo::MSAVI2:
       {
         mess = "Full Image : MSAVI2 : ";
         this->GenericAddRAndNIRFilter<MSAVI2FilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case TSAVI:
+      case FeatureInfo::TSAVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : TSAVI : "<<params[0]<<","<<params[1]<<","<<params[2]<<" ";
@@ -243,13 +244,13 @@ public:
         filter->GetFunctor().SetX(params[2]);
         break;
       }
-      case GEMI:
+      case FeatureInfo::GEMI:
       {
         mess = "Full Image : GEMI : ";
         this->GenericAddRAndNIRFilter<GEMIFilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case WDVI:
+      case FeatureInfo::WDVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : WDVI : "<<params[0]<<" ";
@@ -259,19 +260,19 @@ public:
         filter->GetFunctor().SetS(params[0]);
         break;
       }
-      case IPVI:
+      case FeatureInfo::IPVI:
       {
         mess = "Full Image : IPVI : ";
         this->GenericAddRAndNIRFilter<IPVIFilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case TNDVI:
+      case FeatureInfo::TNDVI:
       {
         mess = "Full Image : TNDVI : ";
         this->GenericAddRAndNIRFilter<TNDVIFilterType>(model, type, redId, nirId, mess);
         break;
       }
-      case ISU:
+      case FeatureInfo::ISU:
       {
         itk::OStringStream oss;
         oss<<"Full Image : ISU : "<<params[0]<<","<<params[1]<<" ";
@@ -294,7 +295,7 @@ public:
     std::string mess;
     switch(type)
     {
-      case ARVI:
+      case FeatureInfo::ARVI:
       {
         mess = "Full Image : ARVI : ";
         ARVIFilterType::Pointer filter;
@@ -302,7 +303,7 @@ public:
         filter->GetFunctor().SetGamma(params[0]);
         break;
       }
-      case EVI:
+      case FeatureInfo::EVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : EVI : "<<params[0]<<","<<params[1]<<","<<params[2]<<","<<params[3]<<" ";
@@ -315,7 +316,7 @@ public:
         filter->GetFunctor().SetC2(params[3]);
         break;
       }
-      case TSARVI:
+      case FeatureInfo::TSARVI:
       {
         itk::OStringStream oss;
         oss<<"Full Image : TSARVI : "<<params[0]<<","<<params[1]<<","<<params[2]<<" ";
@@ -338,7 +339,7 @@ public:
   {
     switch(type)
     {
-      case AVI:
+      case FeatureInfo::AVI:
       {
         AVIFilterType::Pointer avi = AVIFilterType::New();
         avi->SetInput(model->GetInputImage());
@@ -353,10 +354,10 @@ public:
         itk::OStringStream oss;
         oss<<"Full Image : AVI : "<<params[0]<<","<<params[1]<<","<<params[2]<<" "<<greenId<<","<<redId<<","<<nirId;
         std::string mess = oss.str();
-        model->AddFeatureFilter( avi, AVI, itk::NumericTraits<unsigned int>::max(), 0, mess);
+        model->AddFeatureFilter( avi, FeatureInfo::AVI, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
       }
-      case IB2:
+      case FeatureInfo::IB2:
       {
         IB2FilterType::Pointer ib2 = IB2FilterType::New();
         ib2->SetInput(model->GetInputImage());
@@ -367,7 +368,7 @@ public:
         itk::OStringStream oss;
         oss<<"Full Image : IB2 : "<<redId<<", "<<greenId<<", "<<nirId;
         std::string mess = oss.str();
-        model->AddFeatureFilter( ib2, IB2, itk::NumericTraits<unsigned int>::max(), 0, mess);
+        model->AddFeatureFilter( ib2, FeatureInfo::IB2, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
       }
       default:
@@ -383,7 +384,7 @@ public:
     std::string mess;
     switch(type)
     {
-      case IR:
+      case FeatureInfo::IR:
       {
         IRFilterType::Pointer ir = IRFilterType::New();
         ir->SetInput(model->GetInputImage());
@@ -393,10 +394,10 @@ public:
         itk::OStringStream oss;
         oss<<"Full Image : IR : "<<chan1Id<<", "<<chan2Id;
         std::string mess = oss.str();
-        model->AddFeatureFilter( ir, IR, itk::NumericTraits<unsigned int>::max(), 0, mess);
+        model->AddFeatureFilter( ir, FeatureInfo::IR, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
       }
-      case IC:
+      case FeatureInfo::IC:
       {
         ICFilterType::Pointer ic = ICFilterType::New();
         ic->SetInput(model->GetInputImage());
@@ -406,10 +407,10 @@ public:
         itk::OStringStream oss;
         oss<<"Full Image : IC : "<<chan1Id<<", "<<chan2Id;
         std::string mess = oss.str();
-        model->AddFeatureFilter( ic, IC, itk::NumericTraits<unsigned int>::max(), 0, mess);
+        model->AddFeatureFilter( ic, FeatureInfo::IC, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
       }
-      case IB:
+      case FeatureInfo::IB:
       {
         IBFilterType::Pointer ib = IBFilterType::New();
         ib->SetInput(model->GetInputImage());
@@ -419,46 +420,46 @@ public:
         itk::OStringStream oss;
         oss<<"Full Image : IB : "<<chan1Id<<", "<<chan2Id;
         std::string mess = oss.str();
-        model->AddFeatureFilter( ib, IB, itk::NumericTraits<unsigned int>::max(), 0, mess);
+        model->AddFeatureFilter( ib, FeatureInfo::IB, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
       }
-      case NDBI:
+      case FeatureInfo::NDBI:
       {
         mess = "Full Image : NDBI : ";
         this->GenericAdd2ChannelsFilter<NDBIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case SRWI:
+      case FeatureInfo::SRWI:
       {
         mess = "Full Image : SRWI : ";
         this->GenericAdd2ChannelsFilter<SRWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case NDWI:
+      case FeatureInfo::NDWI:
       {
         mess = "Full Image : NDWI : ";
         this->GenericAdd2ChannelsFilter<NDWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case NDWI2:
+      case FeatureInfo::NDWI2:
       {
         mess = "Full Image : NDWI2 : ";
         this->GenericAdd2ChannelsFilter<NDWI2FilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case MNDWI:
+      case FeatureInfo::MNDWI:
       {
         mess = "Full Image : MNDWI : ";
         this->GenericAdd2ChannelsFilter<MNDWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case NDPI:
+      case FeatureInfo::NDPI:
       {
         mess = "Full Image : NDPI : ";
         this->GenericAdd2ChannelsFilter<NDPIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
       }
-      case NDTI:
+      case FeatureInfo::NDTI:
       {
         mess = "Full Image : NDTI : ";
         this->GenericAdd2ChannelsFilter<NDTIFilterType>(model, type, chan1Id, chan2Id, mess);
@@ -476,163 +477,163 @@ public:
     SingleImagePointerType image =  SingleImageType::New();
     switch (type)
     {
-      case NDVI:
+      case FeatureInfo::NDVI:
       {
         NDVIFilterType::Pointer ndvi = dynamic_cast<NDVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ndvi->GetOutput();
         break;
       }
-      case RVI:
+      case FeatureInfo::RVI:
       {
         RVIFilterType::Pointer rvi = dynamic_cast<RVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = rvi->GetOutput();
         break;
       }
-      case ARVI:
+      case FeatureInfo::ARVI:
       {
         ARVIFilterType::Pointer arvi = dynamic_cast<ARVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = arvi->GetOutput();
         break;
       }
-      case EVI:
+      case FeatureInfo::EVI:
       {
         EVIFilterType::Pointer evi = dynamic_cast<EVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = evi->GetOutput();
         break;
       }
-      case PVI:
+      case FeatureInfo::PVI:
       {
         PVIFilterType::Pointer pvi = dynamic_cast<PVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = pvi->GetOutput();
         break;
       }
-      case SAVI:
+      case FeatureInfo::SAVI:
       {
         SAVIFilterType::Pointer savi = dynamic_cast<SAVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = savi->GetOutput();
         break;
       }
-      case MSAVI:
+      case FeatureInfo::MSAVI:
       {
         MSAVIFilterType::Pointer msavi = dynamic_cast<MSAVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = msavi->GetOutput();
         break;
       }
-      case MSAVI2:
+      case FeatureInfo::MSAVI2:
       {
         MSAVI2FilterType::Pointer msavi2 = dynamic_cast<MSAVI2FilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = msavi2->GetOutput();
         break;
       }
-      case TSAVI:
+      case FeatureInfo::TSAVI:
       {
         TSAVIFilterType::Pointer tsavi = dynamic_cast<TSAVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = tsavi->GetOutput();
         break;
       }
-      case TSARVI:
+      case FeatureInfo::TSARVI:
       {
         TSARVIFilterType::Pointer tsarvi = dynamic_cast<TSARVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = tsarvi->GetOutput();
         break;
       }
-      case GEMI:
+      case FeatureInfo::GEMI:
       {
         GEMIFilterType::Pointer gemi = dynamic_cast<GEMIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = gemi->GetOutput();
         break;
       }
-      case AVI:
+      case FeatureInfo::AVI:
       {
         AVIFilterType::Pointer avi = dynamic_cast<AVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = avi->GetOutput();
         break;
       }
-      case WDVI:
+      case FeatureInfo::WDVI:
       {
         WDVIFilterType::Pointer wdvi = dynamic_cast<WDVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = wdvi->GetOutput();
         break;
       }
-      case IPVI:
+      case FeatureInfo::IPVI:
       {
         IPVIFilterType::Pointer ipvi = dynamic_cast<IPVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ipvi->GetOutput();
         break;
       }
-      case TNDVI:
+      case FeatureInfo::TNDVI:
       {
         TNDVIFilterType::Pointer tndvi = dynamic_cast<TNDVIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = tndvi->GetOutput();
         break;
       }
-      case IR:
+      case FeatureInfo::IR:
       {
         IRFilterType::Pointer ir = dynamic_cast<IRFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ir->GetOutput();
         break;
       }
-      case IC:
+      case FeatureInfo::IC:
       {
         ICFilterType::Pointer ic = dynamic_cast<ICFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ic->GetOutput();
         break;
       }
-      case IB:
+      case FeatureInfo::IB:
       {
         IBFilterType::Pointer ib = dynamic_cast<IBFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ib->GetOutput();
         break;
       }
-      case IB2:
+      case FeatureInfo::IB2:
       {
         IB2FilterType::Pointer ib2 = dynamic_cast<IB2FilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ib2->GetOutput();
         break;
       }
-      case NDBI:
+      case FeatureInfo::NDBI:
       {
         NDBIFilterType::Pointer ndbi = dynamic_cast<NDBIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ndbi->GetOutput();
         break;
       }
-      case ISU:
+      case FeatureInfo::ISU:
       {
         ISUFilterType::Pointer isu = dynamic_cast<ISUFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = isu->GetOutput();
         break;
       }
-      case SRWI:
+      case FeatureInfo::SRWI:
       {
         SRWIFilterType::Pointer filter = dynamic_cast<SRWIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();
         break;
       }
-      case NDWI:
+      case FeatureInfo::NDWI:
       {
         NDWIFilterType::Pointer filter = dynamic_cast<NDWIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();
         break;
       }
-      case NDWI2:
+      case FeatureInfo::NDWI2:
       {
         NDWI2FilterType::Pointer filter = dynamic_cast<NDWI2FilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();
         break;
       }
-      case MNDWI:
+      case FeatureInfo::MNDWI:
       {
         MNDWIFilterType::Pointer filter = dynamic_cast<MNDWIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();
         break;
       }
-      case NDPI:
+      case FeatureInfo::NDPI:
       {
         NDPIFilterType::Pointer filter = dynamic_cast<NDPIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();
         break;
       }
-      case NDTI:
+      case FeatureInfo::NDTI:
       {
         NDTIFilterType::Pointer filter = dynamic_cast<NDTIFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = filter->GetOutput();

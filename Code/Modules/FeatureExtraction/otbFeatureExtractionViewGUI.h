@@ -76,6 +76,7 @@ public:
   typedef RegionType::SizeType                          SizeType;
   typedef RegionType::IndexType                         IndexType;
   typedef ImageType::Pointer                            ImagePointerType;
+  typedef FeatureInfo::FeatureType                      FeatureType;
 
   typedef std::vector<std::string>                      StringVectorType;
 

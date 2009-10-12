@@ -39,6 +39,7 @@ public:
   typedef ModelType::PixelType                                                     PixelType;
   typedef ModelType::SingleImageType                                               SingleImageType;
   typedef ModelType::SingleImagePointerType                                        SingleImagePointerType;
+  typedef FeatureInfo::FeatureType                                                 FeatureType;
 
 
   /***************************/
@@ -72,37 +73,37 @@ public:
 
       switch(pType)
       {
-        case SFS_LEN:
+        case FeatureInfo::SFS_LEN:
         {
           oss<<"SFS Length : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::LENGTH,true); //LENGTH, SFSTexturesFilterType::WIDTH, PSI, WMEAN, RATIO, SD
           break;
         }
-        case SFS_WID:
+        case FeatureInfo::SFS_WID:
         {
           oss<<"SFS Width : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WIDTH,true);
           break;
         }
-        case SFS_PSI:
+        case FeatureInfo::SFS_PSI:
         {
           oss<<"SFS PSI : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::PSI,true);
           break;
         }
-        case SFS_WME:
+        case FeatureInfo::SFS_WME:
         {
           oss<<"SFS W-mean : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WMEAN,true);
           break;
         }
-        case SFS_RAT:
+        case FeatureInfo::SFS_RAT:
         {
           oss<<"SFS Ratio : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::RATIO,true);
           break;
         }
-        case SFS_SD:
+        case FeatureInfo::SFS_SD:
         {
           oss<<"SFS SD : ";
           filter->SetFeatureStatus(SFSTexturesFilterType::SD,true);
@@ -127,32 +128,32 @@ public:
     SFSTexturesFilterType::Pointer filter = dynamic_cast<SFSTexturesFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(pInputListId)));
     switch (pType)
     {
-      case SFS_LEN:
+      case FeatureInfo::SFS_LEN:
       {
         image = filter->GetLengthOutput();
         break;
       }
-      case SFS_WID:
+      case FeatureInfo::SFS_WID:
       {
         image = filter->GetWidthOutput();
         break;
       }
-      case SFS_PSI:
+      case FeatureInfo::SFS_PSI:
       {
         image = filter->GetPSIOutput();
         break;
       }
-      case SFS_WME:
+      case FeatureInfo::SFS_WME:
       {
         image = filter->GetWMeanOutput();
         break;
       }
-      case SFS_RAT:
+      case FeatureInfo::SFS_RAT:
       {
         image = filter->GetRatioOutput();
         break;
       }
-      case SFS_SD:
+      case FeatureInfo::SFS_SD:
       {
         image = filter->GetSDOutput();
         break;

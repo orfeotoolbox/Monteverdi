@@ -39,7 +39,7 @@ public:
   typedef ModelType::InputImagePointerType     InputImagePointerType;
   typedef ModelType::IndexType                 IndexType;
   typedef ModelType::SizeType                  SizeType;
-
+  typedef FeatureInfo::FeatureType             FeatureType;
 /** NewVisu */
   typedef ImageWidgetController                VisuControllerType;
   typedef VisuControllerType::Pointer          VisuControllerPointerType;

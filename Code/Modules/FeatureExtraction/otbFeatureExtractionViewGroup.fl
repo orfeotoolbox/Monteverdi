@@ -33,43 +33,43 @@ class FeatureExtractionViewGroup {open
           } {
             MenuItem guiInitMenu {
               callback {UpdateParameterArea(0);
-SetFeatureType(otb::UNKNOWN);}
+SetFeatureType(otb::FeatureInfo::UNKNOWN);}
               tooltip {""} xywh {0 0 30 20}
             }
             MenuItem {} {
               label Touzi
               callback {UpdateParameterArea(1);
-SetFeatureType(otb::TOUZI);}
+SetFeatureType(otb::FeatureInfo::TOUZI);}
               tooltip {Touzi Image Filter} xywh {15 15 30 20}
             }
             MenuItem {} {
               label {Harris (experimental)}
               callback {UpdateParameterArea(2);
-SetFeatureType(otb::HARRIS);}
+SetFeatureType(otb::FeatureInfo::HARRIS);}
               tooltip {Harris Image Filter} xywh {5 5 30 20}
             }
             MenuItem {} {
               label {Spectral Angle}
               callback {UpdateParameterArea(3);
-SetFeatureType(otb::SPECTRALANGLE);}
+SetFeatureType(otb::FeatureInfo::SPECTRALANGLE);}
               tooltip {Spectral Angle Image Filter} xywh {25 25 30 20}
             }
             MenuItem {} {
               label Variance
               callback {UpdateParameterArea(4);
-SetFeatureType(otb::VARIANCE);}
+SetFeatureType(otb::FeatureInfo::VARIANCE);}
               tooltip {Variance Image Filter} xywh {55 55 30 20}
             }
             MenuItem {} {
               label Mean
               callback {UpdateParameterArea(4);
-SetFeatureType(otb::MEAN);}
+SetFeatureType(otb::FeatureInfo::MEAN);}
               tooltip {Mean Image Filter} xywh {65 65 30 20}
             }
             MenuItem {} {
               label {Rec. Gradient}
               callback {UpdateParameterArea(5);
-SetFeatureType(otb::GRADIENT);}
+SetFeatureType(otb::FeatureInfo::GRADIENT);}
               tooltip {Recursive Gradient ImageFilter} xywh {75 75 30 20}
             }
             Submenu {} {
@@ -79,109 +79,109 @@ SetFeatureType(otb::GRADIENT);}
               MenuItem {} {
                 label {Angular Second Momentum Order}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_ASM);}
+SetFeatureType(otb::FeatureInfo::TEXT_ASM);}
                 tooltip {Angular 2nd Moment} xywh {0 0 30 20}
               }
               MenuItem {} {
                 label {Cluster Shade}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_CSH);}
+SetFeatureType(otb::FeatureInfo::TEXT_CSH);}
                 tooltip {Cluster Shade} xywh {170 170 30 20}
               }
               MenuItem {} {
                 label {Cluster Prominence}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_CPR);}
+SetFeatureType(otb::FeatureInfo::TEXT_CPR);}
                 tooltip {Cluster Prominence} xywh {160 160 30 20}
               }
               MenuItem {} {
                 label Contrast
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_CON);}
+SetFeatureType(otb::FeatureInfo::TEXT_CON);}
                 tooltip Contrast xywh {10 10 30 20}
               }
               MenuItem {} {
                 label Correlation
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_COR);}
+SetFeatureType(otb::FeatureInfo::TEXT_COR);}
                 tooltip Correlation xywh {20 20 30 20}
               }
               MenuItem {} {
                 label {Difference Entropy}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_DEN);}
+SetFeatureType(otb::FeatureInfo::TEXT_DEN);}
                 tooltip {Difference Entropy} xywh {130 130 30 20}
               }
               MenuItem {} {
                 label {Difference Variance}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_DVA);}
+SetFeatureType(otb::FeatureInfo::TEXT_DVA);}
                 tooltip {Difference Variance} xywh {120 120 30 20}
               }
               MenuItem {} {
                 label Energy
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_ENJ);}
+SetFeatureType(otb::FeatureInfo::TEXT_ENJ);}
                 tooltip Energy xywh {50 50 30 20}
               }
               MenuItem {} {
                 label Entropy
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_ENT);}
+SetFeatureType(otb::FeatureInfo::TEXT_ENT);}
                 tooltip Entropy xywh {110 110 30 20}
               }
               MenuItem {} {
                 label {Information Correlation 1}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_IC1);}
+SetFeatureType(otb::FeatureInfo::TEXT_IC1);}
                 tooltip {INformation Correlation 1} xywh {140 140 30 20}
               }
               MenuItem {} {
                 label {Information Correlation 2}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_IC2);}
+SetFeatureType(otb::FeatureInfo::TEXT_IC2);}
                 tooltip {INformation Correlation 2} xywh {150 150 30 20}
               }
               MenuItem {} {
                 label {Inverse Difference Moment}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_IDM);}
+SetFeatureType(otb::FeatureInfo::TEXT_IDM);}
                 tooltip {Inverse Difference Moment} xywh {70 70 30 20}
               }
               MenuItem {} {
                 label Mean
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_MEA);}
+SetFeatureType(otb::FeatureInfo::TEXT_MEA);}
                 tooltip Mean xywh {40 40 30 20}
               }
               MenuItem {} {
                 label PanTex
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_PANTEX);}
+SetFeatureType(otb::FeatureInfo::TEXT_PANTEX);}
                 tooltip {Panchromatic Texture} xywh {50 50 30 20}
               }
               MenuItem {} {
                 label {Sum Average}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_SAV);}
+SetFeatureType(otb::FeatureInfo::TEXT_SAV);}
                 tooltip {Sum Average} xywh {80 80 30 20}
               }
               MenuItem {} {
                 label {Sum Entropy}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_SEN);}
+SetFeatureType(otb::FeatureInfo::TEXT_SEN);}
                 tooltip {Sum Entropy} xywh {100 100 30 20}
               }
               MenuItem {} {
                 label {Sum Variance}
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_SVA);}
+SetFeatureType(otb::FeatureInfo::TEXT_SVA);}
                 tooltip {Sum Variance} xywh {90 90 30 20}
               }
               MenuItem {} {
                 label Variance
                 callback {UpdateParameterArea(6);
-SetFeatureType(otb::TEXT_VAR);}
+SetFeatureType(otb::FeatureInfo::TEXT_VAR);}
                 tooltip Variance xywh {30 30 30 20}
               }
               Submenu {} {
@@ -191,7 +191,7 @@ SetFeatureType(otb::TEXT_VAR);}
                 MenuItem {} {
                   label Length
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_LEN);
+SetFeatureType(otb::FeatureInfo::SFS_LEN);
 guiSFSAlpha->deactivate();
 guiSFSRatMaxConsNb->deactivate();}
                   tooltip Length xywh {45 45 30 20}
@@ -199,7 +199,7 @@ guiSFSRatMaxConsNb->deactivate();}
                 MenuItem {} {
                   label Width
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_WID);
+SetFeatureType(otb::FeatureInfo::SFS_WID);
 guiSFSAlpha->deactivate();
 guiSFSRatMaxConsNb->deactivate();}
                   tooltip Width xywh {55 55 30 20}
@@ -207,7 +207,7 @@ guiSFSRatMaxConsNb->deactivate();}
                 MenuItem {} {
                   label PSI
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_PSI);
+SetFeatureType(otb::FeatureInfo::SFS_PSI);
 guiSFSAlpha->deactivate();
 guiSFSRatMaxConsNb->deactivate();}
                   tooltip {Pixel Shape Index} xywh {55 55 30 20}
@@ -215,7 +215,7 @@ guiSFSRatMaxConsNb->deactivate();}
                 MenuItem {} {
                   label {W-mean}
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_WME);
+SetFeatureType(otb::FeatureInfo::SFS_WME);
 guiSFSAlpha->activate();
 guiSFSRatMaxConsNb->deactivate();}
                   tooltip {W-Mean} xywh {65 65 30 20}
@@ -223,7 +223,7 @@ guiSFSRatMaxConsNb->deactivate();}
                 MenuItem {} {
                   label Ratio
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_RAT);
+SetFeatureType(otb::FeatureInfo::SFS_RAT);
 guiSFSAlpha->deactivate();
 guiSFSRatMaxConsNb->activate();}
                   tooltip Ratio xywh {75 75 30 20}
@@ -231,7 +231,7 @@ guiSFSRatMaxConsNb->activate();}
                 MenuItem {} {
                   label SD
                   callback {UpdateParameterArea(28);
-SetFeatureType(otb::SFS_SD);
+SetFeatureType(otb::FeatureInfo::SFS_SD);
 guiSFSAlpha->deactivate();
 guiSFSRatMaxConsNb->deactivate();}
                   tooltip {Standard Deviation} xywh {85 85 30 20}
@@ -245,13 +245,13 @@ guiSFSRatMaxConsNb->deactivate();}
               MenuItem {} {
                 label {Morphological Opening Profile (experimental)}
                 callback {UpdateParameterArea(7);
-SetFeatureType(otb::MORPHOLOGICALOPENING);}
+SetFeatureType(otb::FeatureInfo::MORPHOLOGICALOPENING);}
                 tooltip {Morphological Opening} xywh {40 40 30 20}
               }
               MenuItem {} {
                 label {Morphological Closing Profile (experimental)}
                 callback {UpdateParameterArea(7);
-SetFeatureType(otb::MORPHOLOGICALCLOSING);}
+SetFeatureType(otb::FeatureInfo::MORPHOLOGICALCLOSING);}
                 tooltip {Morphological Closing} xywh {50 50 30 20}
               }
             }
@@ -266,91 +266,91 @@ SetFeatureType(otb::MORPHOLOGICALCLOSING);}
                 MenuItem {} {
                   label NDVI
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::NDVI);}
+SetFeatureType(otb::FeatureInfo::NDVI);}
                   tooltip {Normalized Difference Vegetation Index} xywh {20 20 30 20}
                 }
                 MenuItem {} {
                   label RVI
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::RVI);}
+SetFeatureType(otb::FeatureInfo::RVI);}
                   tooltip {Ratio Vegetation Index} xywh {40 40 30 20}
                 }
                 MenuItem {} {
                   label PVI
                   callback {UpdateParameterArea(9);
-SetFeatureType(otb::PVI);}
+SetFeatureType(otb::FeatureInfo::PVI);}
                   tooltip {Perpendicular Vegetation Index} xywh {30 30 30 20}
                 }
                 MenuItem {} {
                   label SAVI
                   callback {UpdateParameterArea(10);
-SetFeatureType(otb::SAVI);}
+SetFeatureType(otb::FeatureInfo::SAVI);}
                   tooltip {Soil Adjusted Vegetation Index} xywh {40 40 30 20}
                 }
                 MenuItem {} {
                   label MSAVI
                   callback {UpdateParameterArea(11);
-SetFeatureType(otb::MSAVI);}
+SetFeatureType(otb::FeatureInfo::MSAVI);}
                   tooltip {Modified Soil Adjusted Vegetation Index} xywh {60 60 30 20}
                 }
                 MenuItem {} {
                   label MSAVI2
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::MSAVI2);}
+SetFeatureType(otb::FeatureInfo::MSAVI2);}
                   tooltip {Modified Soil Adjusted Vegetation Index 2} xywh {50 50 30 20}
                 }
                 MenuItem {} {
                   label TSAVI
                   callback {UpdateParameterArea(12);
-SetFeatureType(otb::TSAVI);}
+SetFeatureType(otb::FeatureInfo::TSAVI);}
                   tooltip {Transformed Soil Adjusted Vegetation Index} xywh {60 60 30 20}
                 }
                 MenuItem {} {
                   label GEMI
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::GEMI);}
+SetFeatureType(otb::FeatureInfo::GEMI);}
                   tooltip {non-linear index to monitor vegetation} xywh {70 70 30 20}
                 }
                 MenuItem {} {
                   label WDVI
                   callback {UpdateParameterArea(13);
-SetFeatureType(otb::WDVI);}
+SetFeatureType(otb::FeatureInfo::WDVI);}
                   tooltip {Weigthted Difference Modified Vegetation Index} xywh {80 80 30 20}
                 }
                 MenuItem {} {
                   label IPVI
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::IPVI);}
+SetFeatureType(otb::FeatureInfo::IPVI);}
                   tooltip {Infrared Percantage Vegetation Index} xywh {90 90 30 20}
                 }
                 MenuItem {} {
                   label TNDVI
                   callback {UpdateParameterArea(8);
-SetFeatureType(otb::TNDVI);}
+SetFeatureType(otb::FeatureInfo::TNDVI);}
                   tooltip {Transformed Normalized Difference Vegetation Index} xywh {100 100 30 20}
                 }
                 MenuItem {} {
                   label ARVI
                   callback {UpdateParameterArea(14);
-SetFeatureType(otb::ARVI);}
+SetFeatureType(otb::FeatureInfo::ARVI);}
                   tooltip {Atmospherically Resistant Vegetation Index} xywh {110 110 30 20}
                 }
                 MenuItem {} {
                   label EVI
                   callback {UpdateParameterArea(15);
-SetFeatureType(otb::EVI);}
+SetFeatureType(otb::FeatureInfo::EVI);}
                   tooltip {Enhanced Vegetation Index} xywh {120 120 30 20}
                 }
                 MenuItem {} {
                   label TSARVI
                   callback {UpdateParameterArea(16);
-SetFeatureType(otb::TSARVI);}
+SetFeatureType(otb::FeatureInfo::TSARVI);}
                   tooltip {Transformed Soil Atmospherically Resistant Vegetation index} xywh {130 130 30 20}
                 }
                 MenuItem {} {
                   label AVI
                   callback {UpdateParameterArea(17);
-SetFeatureType(otb::AVI);}
+SetFeatureType(otb::FeatureInfo::AVI);}
                   tooltip {Angular Vegetation index} xywh {140 140 30 20}
                 }
               }
@@ -361,25 +361,25 @@ SetFeatureType(otb::AVI);}
                 MenuItem {} {
                   label RI
                   callback {UpdateParameterArea(18);
-SetFeatureType(otb::IR);}
+SetFeatureType(otb::FeatureInfo::IR);}
                   tooltip {Redness Index} xywh {150 150 30 20}
                 }
                 MenuItem {} {
                   label CI
                   callback {UpdateParameterArea(18);
-SetFeatureType(otb::IC);}
+SetFeatureType(otb::FeatureInfo::IC);}
                   tooltip {Color Index} xywh {160 160 30 20}
                 }
                 MenuItem {} {
                   label BI
                   callback {UpdateParameterArea(18);
-SetFeatureType(otb::IB);}
+SetFeatureType(otb::FeatureInfo::IB);}
                   tooltip {Brightness Index} xywh {170 170 30 20}
                 }
                 MenuItem {} {
                   label BI2
                   callback {UpdateParameterArea(19);
-SetFeatureType(otb::IB2);}
+SetFeatureType(otb::FeatureInfo::IB2);}
                   tooltip {Brightness Index 2} xywh {180 180 30 20}
                 }
               }
@@ -390,13 +390,13 @@ SetFeatureType(otb::IB2);}
                 MenuItem {} {
                   label NDBI
                   callback {UpdateParameterArea(20);
-SetFeatureType(otb::NDBI);}
+SetFeatureType(otb::FeatureInfo::NDBI);}
                   tooltip {Normalized Difference Built up Index} xywh {170 170 30 20}
                 }
                 MenuItem {} {
                   label ISU
                   callback {UpdateParameterArea(21);
-SetFeatureType(otb::ISU);}
+SetFeatureType(otb::FeatureInfo::ISU);}
                   xywh {180 180 30 20}
                 }
               }
@@ -407,37 +407,37 @@ SetFeatureType(otb::ISU);}
                 MenuItem {} {
                   label SRWI
                   callback {UpdateParameterArea(22);
-SetFeatureType(otb::SRWI);}
+SetFeatureType(otb::FeatureInfo::SRWI);}
                   tooltip {SimpleRatio WaterIndex} xywh {30 30 30 20}
                 }
                 MenuItem {} {
                   label NDWI
                   callback {UpdateParameterArea(23);
-SetFeatureType(otb::NDWI);}
+SetFeatureType(otb::FeatureInfo::NDWI);}
                   tooltip {Normalized Difference Water Index (Gao 1996)} xywh {40 40 30 20}
                 }
                 MenuItem {} {
                   label NDWI2
                   callback {UpdateParameterArea(24);
-SetFeatureType(otb::NDWI2);}
+SetFeatureType(otb::FeatureInfo::NDWI2);}
                   tooltip {Normalized DIfference Water Index (Mc Feeters 1996)} xywh {50 50 30 20}
                 }
                 MenuItem {} {
                   label MNDWI
                   callback {UpdateParameterArea(25);
-SetFeatureType(otb::MNDWI);}
+SetFeatureType(otb::FeatureInfo::MNDWI);}
                   tooltip {Modified Normalized Difference Water Index (Xu 2006)} xywh {60 60 30 20}
                 }
                 MenuItem {} {
                   label NDPI
                   callback {UpdateParameterArea(26);
-SetFeatureType(otb::NDPI);}
+SetFeatureType(otb::FeatureInfo::NDPI);}
                   tooltip {Normalized Difference Pond Index (Lacaux & al)} xywh {70 70 30 20}
                 }
                 MenuItem {} {
                   label NDTI
                   callback {UpdateParameterArea(27);
-SetFeatureType(otb::NDTI);}
+SetFeatureType(otb::FeatureInfo::NDTI);}
                   tooltip {Normalized Difference Turbidity Index (Lacaux & al)} xywh {80 80 30 20}
                 }
               }
@@ -449,7 +449,7 @@ SetFeatureType(otb::NDTI);}
               MenuItem {} {
                 label Sobel
                 callback {UpdateParameterArea(29);
-SetFeatureType(otb::EDGE_SOBEL);}
+SetFeatureType(otb::FeatureInfo::EDGE_SOBEL);}
                 tooltip {Sobel Edge Detector} xywh {50 50 30 20}
               }
             }
@@ -460,32 +460,32 @@ SetFeatureType(otb::EDGE_SOBEL);}
               MenuItem {} {
                 label Smooth
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::MS_SMOOTH);}
+SetFeatureType(otb::FeatureInfo::MS_SMOOTH);}
                 tooltip {Sobel Edge Detector} xywh {60 60 30 20}
               }
               MenuItem {} {
                 label Clusters
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::MS_CLUSTERED);}
+SetFeatureType(otb::FeatureInfo::MS_CLUSTERED);}
                 tooltip {Sobel Edge Detector} xywh {70 70 30 20}
               }
               MenuItem {} {
                 label Labels
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::MS_LABELED);}
+SetFeatureType(otb::FeatureInfo::MS_LABELED);}
                 tooltip {Sobel Edge Detector} xywh {70 70 30 20}
               }
               MenuItem {} {
                 label Boundries
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::MS_BOUND);}
+SetFeatureType(otb::FeatureInfo::MS_BOUND);}
                 tooltip {Sobel Edge Detector} xywh {80 80 30 20}
               }
             }
             MenuItem {} {
               label {Original data}
               callback {UpdateParameterArea(0);
-SetFeatureType(otb::ORIGINAL);}
+SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               tooltip {Input Copy} xywh {95 95 30 20}
             }
           }
@@ -1117,7 +1117,7 @@ SetFeatureType(otb::ORIGINAL);}
   } {}
   Function {Quit()} {open return_type {virtual void}
   } {}
-  Function {SetFeatureType(otb::FeatureType i)} {open return_type {virtual void}
+  Function {SetFeatureType(otb::FeatureInfo::FeatureType i)} {open return_type {virtual void}
   } {}
   Function {OK()} {open selected return_type {virtual void}
   } {}

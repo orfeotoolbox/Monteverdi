@@ -45,7 +45,7 @@ FeatureExtractionViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_FeatureType = UNKNOWN;
+  m_FeatureType =  FeatureInfo::UNKNOWN;
 
   this->CreateGUI();
 
@@ -107,7 +107,7 @@ FeatureExtractionViewGUI
   m_ResultVisuView->GetFullWidget()->show();
   m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
 
-  this->UpdateFeatureInfo(otb::UNKNOWN);
+  this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
 
   gScroll->show();
   gFull->show();
@@ -476,7 +476,7 @@ FeatureExtractionViewGUI
 
   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
-  this->SetFeatureType(otb::UNKNOWN);
+  this->SetFeatureType(FeatureInfo::UNKNOWN);
 
   // NewVisu
   if (m_VisuView.IsNotNull())

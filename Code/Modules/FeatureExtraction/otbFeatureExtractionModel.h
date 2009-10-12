@@ -120,6 +120,7 @@ public:
   typedef FilterType::Pointer                                                FilterPointerType;
   typedef ObjectList<FilterType>                                             FilterListType;
   typedef FilterListType::Pointer                                            FilterListPointerType;
+  typedef FeatureInfo::FeatureType                                           FeatureType;
   typedef std::vector<FeatureType>                                           FilterTypeListType;
   typedef std::vector<std::string>                                           OutputFilterInformationType;
 

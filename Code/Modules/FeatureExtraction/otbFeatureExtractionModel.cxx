@@ -258,7 +258,7 @@ FeatureExtractionModel
     oss<<"Original data";
     std::string mess = oss.str();
 
-    this->AddFeatureFilter( copy, ORIGINAL, i, 0, mess);
+    this->AddFeatureFilter( copy, FeatureInfo::ORIGINAL, i, 0, mess);
   }
 }
 
@@ -279,7 +279,7 @@ FeatureExtractionModel
     itk::OStringStream oss;
     oss<<"TOUZI : "<<radiusX;
     std::string mess = oss.str();
-    this->AddFeatureFilter( filterTouzi, TOUZI, i, 0, mess);
+    this->AddFeatureFilter( filterTouzi, FeatureInfo::TOUZI, i, 0, mess);
   }
 }
 
@@ -299,7 +299,7 @@ FeatureExtractionModel
     itk::OStringStream oss;
     oss<<"HARRIS : "<<sigmaD<<" , "<<sigmaI<<" , "<<alpha;
     std::string mess = oss.str();
-    this->AddFeatureFilter( harris, HARRIS, i, 0, mess);
+    this->AddFeatureFilter( harris, FeatureInfo::HARRIS, i, 0, mess);
   }
 }
 
@@ -325,7 +325,7 @@ FeatureExtractionModel
     oss<<pix[i]<<" ";
   }
   std::string mess = oss.str();
-  this->AddFeatureFilter( angle, SPECTRALANGLE, -1, 0, mess);
+  this->AddFeatureFilter( angle, FeatureInfo::SPECTRALANGLE, -1, 0, mess);
 }
 
 void
@@ -350,7 +350,7 @@ FeatureExtractionModel
       itk::OStringStream oss;
       oss<<"Morpho Opening: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step ;
       std::string mess = oss.str();
-      this->AddFeatureFilter( profileFilter, MORPHOLOGICALOPENING, i, j,  mess);
+      this->AddFeatureFilter( profileFilter, FeatureInfo::MORPHOLOGICALOPENING, i, j,  mess);
     }
   }
 }
@@ -376,7 +376,7 @@ FeatureExtractionModel
       itk::OStringStream oss;
       oss<<"Morpho Closing: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step ;
       std::string mess = oss.str();
-      this->AddFeatureFilter( profileFilter, MORPHOLOGICALCLOSING, i, j,  mess);
+      this->AddFeatureFilter( profileFilter, FeatureInfo::MORPHOLOGICALCLOSING, i, j,  mess);
     }
   }
 }
@@ -397,7 +397,7 @@ FeatureExtractionModel
       itk::OStringStream oss;
       oss<<"Variance : "<<radiusX<<", "<<radiusY;
       std::string mess = oss.str();
-      this->AddFeatureFilter( var, VARIANCE, i, 0, mess);
+      this->AddFeatureFilter( var, FeatureInfo::VARIANCE, i, 0, mess);
     }
 }
 
@@ -417,7 +417,7 @@ FeatureExtractionModel
       itk::OStringStream oss;
       oss<<"Mean : "<<radiusX<<", "<<radiusY;
       std::string mess = oss.str();
-      this->AddFeatureFilter( mean, MEAN, i, 0, mess);
+      this->AddFeatureFilter( mean, FeatureInfo::MEAN, i, 0, mess);
     }
 }
 
@@ -435,7 +435,7 @@ FeatureExtractionModel
     itk::OStringStream oss;
     oss<<"Rec. Gradient : "<<sigma;
     std::string mess = oss.str();
-    this->AddFeatureFilter( grad, GRADIENT, i, 0, mess);
+    this->AddFeatureFilter( grad, FeatureInfo::GRADIENT, i, 0, mess);
   }
 }
 
@@ -572,7 +572,7 @@ FeatureExtractionModel
       meanShift->SetMinimumRegionSize( minSize );
       meanShift->SetScale( scale );
 
-      if( type==MS_SMOOTH ||  type==MS_CLUSTERED )
+      if( type==FeatureInfo::MS_SMOOTH ||  type==FeatureInfo::MS_CLUSTERED )
        {
          for(unsigned int k=0; k<m_InputImageList->Size(); k++)
            {
@@ -580,12 +580,12 @@ FeatureExtractionModel
              extract->SetChannel(k+1);
              itk::OStringStream oss;
              oss<<"Mean Shift ";
-             if( type==MS_SMOOTH )
+             if( type==FeatureInfo::MS_SMOOTH )
               {
                 extract->SetInput( meanShift->GetOutput() );
                 oss<<"Smooth";
               }
-             else if( type==MS_CLUSTERED )
+             else if( type==FeatureInfo::MS_CLUSTERED )
               {
                 extract->SetInput( meanShift->GetClusteredOutput() );
                 oss<<"Clustered";
@@ -600,9 +600,9 @@ FeatureExtractionModel
        {
          itk::OStringStream oss;
          oss<<"Mean Shift ";
-         if( type==MS_BOUND )
+         if( type==FeatureInfo::MS_BOUND )
            oss<<"Clustered Boundries: ";
-         else if(type==MS_LABELED)
+         else if(type==FeatureInfo::MS_LABELED)
            oss<<"Labeled: ";
          oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
          std::string mess = oss.str();
@@ -615,7 +615,7 @@ FeatureExtractionModel
     }
   else
     {
-      if( type==MS_SMOOTH || type==MS_CLUSTERED )
+      if( type==FeatureInfo::MS_SMOOTH || type==FeatureInfo::MS_CLUSTERED )
        {
          for(unsigned int k=0; k<m_InputImageList->Size(); k++)
            {
@@ -623,12 +623,12 @@ FeatureExtractionModel
              extract->SetChannel(k+1);
              itk::OStringStream oss;
              oss<<"Mean Shift ";
-             if( type==MS_SMOOTH )
+             if( type==FeatureInfo::MS_SMOOTH )
               {
                 extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetOutput() );
                 oss<<"Smooth";
               }
-             else if( type==MS_CLUSTERED )
+             else if( type==FeatureInfo::MS_CLUSTERED )
               {
                 extract->SetInput( m_MeanShiftFilterList->GetNthElement(i-1)->GetClusteredOutput() );
                 oss<<"Clustered";
@@ -643,9 +643,9 @@ FeatureExtractionModel
        {
          itk::OStringStream oss;
          oss<<"Mean Shift ";
-         if( type==MS_LABELED )
+         if( type==FeatureInfo::MS_LABELED )
            oss<<"Labeled: ";
-         else if(type==MS_BOUND)
+         else if(type==FeatureInfo::MS_BOUND)
            oss<<"Clustered Boundries: ";
          oss<<spatial<<", "<<range<<", "<<minSize<<", "<<scale;
          std::string mess = oss.str();
@@ -721,25 +721,25 @@ FeatureExtractionModel
 
   switch (m_FilterTypeList[i])
     {
-      case TOUZI:
+      case FeatureInfo::TOUZI:
       {
         TouziFilterType::Pointer touzi = dynamic_cast<TouziFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = touzi->GetOutput();
         break;
       }
-      case HARRIS:
+      case FeatureInfo::HARRIS:
       {
         HarrisType::Pointer harris = dynamic_cast<HarrisType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = harris->GetOutput();
         break;
       }
-      case SPECTRALANGLE:
+      case FeatureInfo::SPECTRALANGLE:
       {
         DistanceFilterType::Pointer angle = dynamic_cast<DistanceFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = angle->GetOutput();
         break;
       }
-      case MORPHOLOGICALOPENING:
+      case FeatureInfo::MORPHOLOGICALOPENING:
       {
         OpeningProfileFilterType::Pointer profile = dynamic_cast<OpeningProfileFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         profile->Update();
@@ -747,120 +747,120 @@ FeatureExtractionModel
         break;
       }
 
-      case MORPHOLOGICALCLOSING:
+      case FeatureInfo::MORPHOLOGICALCLOSING:
       {
         ClosingProfileFilterType::Pointer profile = dynamic_cast<ClosingProfileFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         profile->Update();
         image = profile->GetOutput()->GetNthElement(m_OutputIndexMap[i]);
         break;
       }
-      case VARIANCE:
+      case FeatureInfo::VARIANCE:
       {
         VarFilterType::Pointer var = dynamic_cast<VarFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = var->GetOutput();
         break;
       }
-      case MEAN:
+      case FeatureInfo::MEAN:
       {
         MeanFilterType::Pointer mean = dynamic_cast<MeanFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = mean->GetOutput();
         break;
       }
-      case GRADIENT:
+      case FeatureInfo::GRADIENT:
       {
         GradientFilterType::Pointer grad = dynamic_cast<GradientFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = grad->GetOutput();
         break;
       }
-      case TEXT_ASM:
-      case TEXT_CSH:
-      case TEXT_CPR:
-      case TEXT_CON:
-      case TEXT_COR:
-      case TEXT_DEN:
-      case TEXT_DVA:
-      case TEXT_ENJ:
-      case TEXT_ENT:
-      case TEXT_IC1:
-      case TEXT_IC2:
-      case TEXT_IDM:
-      case TEXT_MEA:
-      case TEXT_PANTEX:
-      case TEXT_SAV:
-      case TEXT_SEN:
-      case TEXT_SVA:
-      case TEXT_VAR:
+      case FeatureInfo::TEXT_ASM:
+      case FeatureInfo::TEXT_CSH:
+      case FeatureInfo::TEXT_CPR:
+      case FeatureInfo::TEXT_CON:
+      case FeatureInfo::TEXT_COR:
+      case FeatureInfo::TEXT_DEN:
+      case FeatureInfo::TEXT_DVA:
+      case FeatureInfo::TEXT_ENJ:
+      case FeatureInfo::TEXT_ENT:
+      case FeatureInfo::TEXT_IC1:
+      case FeatureInfo::TEXT_IC2:
+      case FeatureInfo::TEXT_IDM:
+      case FeatureInfo::TEXT_MEA:
+      case FeatureInfo::TEXT_PANTEX:
+      case FeatureInfo::TEXT_SAV:
+      case FeatureInfo::TEXT_SEN:
+      case FeatureInfo::TEXT_SVA:
+      case FeatureInfo::TEXT_VAR:
       {
         image = featureGenerator.GenerateTextureOutputImage( this, m_FilterTypeList[i], i);
         break;
       }
-      case NDVI:
-      case RVI:
-      case ARVI:
-      case EVI:
-      case PVI:
-      case SAVI:
-      case MSAVI:
-      case MSAVI2:
-      case TSAVI:
-      case TSARVI:
-      case GEMI:
-      case AVI:
-      case WDVI:
-      case IPVI:
-      case TNDVI:
-      case IR:
-      case IC:
-      case IB:
-      case IB2:
-      case NDBI:
-      case ISU:
-      case SRWI:
-      case NDWI:
-      case NDWI2:
-      case MNDWI:
-      case NDPI:
-      case NDTI:
+      case FeatureInfo::NDVI:
+      case FeatureInfo::RVI:
+      case FeatureInfo::ARVI:
+      case FeatureInfo::EVI:
+      case FeatureInfo::PVI:
+      case FeatureInfo::SAVI:
+      case FeatureInfo::MSAVI:
+      case FeatureInfo::MSAVI2:
+      case FeatureInfo::TSAVI:
+      case FeatureInfo::TSARVI:
+      case FeatureInfo::GEMI:
+      case FeatureInfo::AVI:
+      case FeatureInfo::WDVI:
+      case FeatureInfo::IPVI:
+      case FeatureInfo::TNDVI:
+      case FeatureInfo::IR:
+      case FeatureInfo::IC:
+      case FeatureInfo::IB:
+      case FeatureInfo::IB2:
+      case FeatureInfo::NDBI:
+      case FeatureInfo::ISU:
+      case FeatureInfo::SRWI:
+      case FeatureInfo::NDWI:
+      case FeatureInfo::NDWI2:
+      case FeatureInfo::MNDWI:
+      case FeatureInfo::NDPI:
+      case FeatureInfo::NDTI:
       {
         image = lRadiometricIndicesGenrator.GenerateRadiometricIndicesOutputImage(this,m_FilterTypeList[i],i);
         break;
       }
-      case SFS_LEN:
-      case SFS_WID:
-      case SFS_PSI:
-      case SFS_WME:
-      case SFS_RAT:
-      case SFS_SD:
+      case FeatureInfo::SFS_LEN:
+      case FeatureInfo::SFS_WID:
+      case FeatureInfo::SFS_PSI:
+      case FeatureInfo::SFS_WME:
+      case FeatureInfo::SFS_RAT:
+      case FeatureInfo::SFS_SD:
       {
         image = lSFSTexturesGenerator.GenerateSFSTextureOutputImage(this,m_FilterTypeList[i],i);
         break;
       }
-    case EDGE_CANNY:
-    case EDGE_SOBEL:
+    case FeatureInfo::EDGE_CANNY:
+    case FeatureInfo::EDGE_SOBEL:
       {
         image = lEdgeDensityGenerator.GenerateEdgeDensityOutputImage(this,m_FilterTypeList[i],i);
         break;
       }
-    case MS_SMOOTH:
-    case MS_CLUSTERED:
+    case FeatureInfo::MS_SMOOTH:
+    case FeatureInfo::MS_CLUSTERED:
       {
        ExtractROIFilterType::Pointer extract = dynamic_cast<ExtractROIFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
        image = extract->GetOutput();
        break;
       }
-    case MS_LABELED:
+    case FeatureInfo::MS_LABELED:
       {
        MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
        image = meanShift->GetLabeledClusteredOutput();
        break;
       }
-    case MS_BOUND:
+    case FeatureInfo::MS_BOUND:
       {
        MeanShiftFilterType::Pointer meanShift = dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
        image = meanShift->GetClusterBoundariesOutput();
        break;
       }
-    case ORIGINAL:
+    case FeatureInfo::ORIGINAL:
       {
         ShiftScaleFilterType::Pointer copy = dynamic_cast<ShiftScaleFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = copy->GetOutput();

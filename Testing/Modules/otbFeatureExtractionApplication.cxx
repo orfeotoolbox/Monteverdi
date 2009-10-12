@@ -62,7 +62,7 @@ int otbFeatureExtractionModuleApplication(int argc, char* argv[])
   
   // ------------ Chose Text feature (entropy)
   view->UpdateParameterArea(6);
-  view->SetFeatureType(otb::TEXT_ENT);
+  view->SetFeatureType(otb::FeatureInfo::TEXT_ENT);
   Fl::check();
 
   view->guiTextures->show();

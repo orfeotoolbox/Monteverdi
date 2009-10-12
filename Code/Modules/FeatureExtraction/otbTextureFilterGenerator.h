@@ -41,6 +41,8 @@ class TextureFilterGenerator
   typedef ModelType::SingleImageType        SingleImageType;
   typedef ModelType::SinglePixelType        SinglePixelType;
   typedef ModelType::SingleImagePointerType SingleImagePointerType;
+  typedef FeatureInfo::FeatureType          FeatureType;
+
   // Angular second momentum
   typedef Functor::AngularSecondMomentumTextureFunctor<SinglePixelType, SinglePixelType>            ASMTextureFunctorType;
   typedef TextureImageFunction<SingleImageType, ASMTextureFunctorType>                              ASMFunctionType;
@@ -121,85 +123,85 @@ void GenerateTextureFilter( ModelPointerType model, FeatureType type, unsigned i
   std::string mess;
   switch (type)
     {
-    case TEXT_ASM:
+    case FeatureInfo::TEXT_ASM:
       {
         mess = "Angular 2nd momentum: ";
         this->GenericAddTextureFilter<ASMFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_CSH:
+    case FeatureInfo::TEXT_CSH:
       {
         mess = "Cluster shade: ";
         this->GenericAddTextureFilter<CSHFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_CPR:
+    case FeatureInfo::TEXT_CPR:
       {
         mess = "Cluster prominence: ";
         this->GenericAddTextureFilter<CPRFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_CON:
+    case FeatureInfo::TEXT_CON:
       {
         mess = "Contrast: ";
         this->GenericAddTextureFilter<CONFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_COR:
+    case FeatureInfo::TEXT_COR:
       {
         mess = "Correlation: ";
         this->GenericAddTextureFilter<CORFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_DEN:
+    case FeatureInfo::TEXT_DEN:
       {
         mess = "Difference entropy: ";
         this->GenericAddTextureFilter<DENFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_DVA:
+    case FeatureInfo::TEXT_DVA:
       {
         mess = "Difference variance: ";
         this->GenericAddTextureFilter<DVAFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_ENJ:
+    case FeatureInfo::TEXT_ENJ:
       {
         mess = "Energy: ";
         this->GenericAddTextureFilter<ENJFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_ENT:
+    case FeatureInfo::TEXT_ENT:
       {
         mess = "Entropy: ";
         this->GenericAddTextureFilter<ENTFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_IC1:
+    case FeatureInfo::TEXT_IC1:
       {
         mess = "Information measure of correlation 1: ";
         this->GenericAddTextureFilter<IC1FilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_IC2:
+    case FeatureInfo::TEXT_IC2:
       {
         mess = "Information measure of correlation 2: ";
         this->GenericAddTextureFilter<IC2FilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_IDM:
+    case FeatureInfo::TEXT_IDM:
       {
         mess = "Inverse difference moment: ";
         this->GenericAddTextureFilter<IDMFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_MEA:
+    case FeatureInfo::TEXT_MEA:
       {
         mess = "Mean: ";
         this->GenericAddTextureFilter<MEAFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_PANTEX:
+    case FeatureInfo::TEXT_PANTEX:
       {
         // Don't call generic method because don't take offset as input
         itk::OStringStream oss;
@@ -211,25 +213,25 @@ void GenerateTextureFilter( ModelPointerType model, FeatureType type, unsigned i
         model->AddFeatureFilter( panTexFilter, type, inputListId, 0, mess);
         break;
       }
-    case TEXT_SAV:
+    case FeatureInfo::TEXT_SAV:
       {
         mess = "Sum average: ";
         this->GenericAddTextureFilter<SAVFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_SEN:
+    case FeatureInfo::TEXT_SEN:
       {
         mess = "Sum entropy: ";
         this->GenericAddTextureFilter<SENFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_SVA:
+    case FeatureInfo::TEXT_SVA:
       {
         mess = "Sum variance: ";
         this->GenericAddTextureFilter<SVAFilterType>( model, type, inputListId, radius, offset, mess);
         break;
       }
-    case TEXT_VAR:
+    case FeatureInfo::TEXT_VAR:
       {
         mess = "Variance: ";
         this->GenericAddTextureFilter<VARFilterType>( model, type, inputListId, radius, offset, mess);
@@ -248,109 +250,109 @@ SingleImagePointerType GenerateTextureOutputImage( ModelPointerType model,  Feat
   SingleImagePointerType image =  SingleImageType::New();
   switch (type)
     {
-    case TEXT_ASM:
+    case FeatureInfo::TEXT_ASM:
       {
         ASMFilterType::Pointer asmFilter = dynamic_cast<ASMFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = asmFilter->GetOutput();
         break;
       }
-    case TEXT_CSH:
+    case FeatureInfo::TEXT_CSH:
       {
         CSHFilterType::Pointer cshFilter = dynamic_cast<CSHFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = cshFilter->GetOutput();
         break;
       }
-    case TEXT_CPR:
+    case FeatureInfo::TEXT_CPR:
       {
         CPRFilterType::Pointer cprFilter = dynamic_cast<CPRFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = cprFilter->GetOutput();
         break;
       }
-    case TEXT_CON:
+    case FeatureInfo::TEXT_CON:
       {
         CONFilterType::Pointer conFilter = dynamic_cast<CONFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = conFilter->GetOutput();
         break;
       }
-    case TEXT_COR:
+    case FeatureInfo::TEXT_COR:
       {
         CORFilterType::Pointer corFilter = dynamic_cast<CORFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = corFilter->GetOutput();
         break;
       }
-    case TEXT_DEN:
+    case FeatureInfo::TEXT_DEN:
       {
         DENFilterType::Pointer denFilter = dynamic_cast<DENFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = denFilter->GetOutput();
         break;
       }
-    case TEXT_DVA:
+    case FeatureInfo::TEXT_DVA:
       {
         DVAFilterType::Pointer dvaFilter = dynamic_cast<DVAFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = dvaFilter->GetOutput();
         break;
       }
-    case TEXT_ENJ:
+    case FeatureInfo::TEXT_ENJ:
       {
 
               ENJFilterType::Pointer enjFilter = dynamic_cast<ENJFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = enjFilter->GetOutput();break;
       }
-    case TEXT_ENT:
+    case FeatureInfo::TEXT_ENT:
       {
         ENTFilterType::Pointer entFilter = dynamic_cast<ENTFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = entFilter->GetOutput();
         break;
       }
-    case TEXT_IC1:
+    case FeatureInfo::TEXT_IC1:
       {
         IC1FilterType::Pointer ic2Filter = dynamic_cast<IC1FilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ic2Filter->GetOutput();
         break;
       }
-    case TEXT_IC2:
+    case FeatureInfo::TEXT_IC2:
       {
         IC2FilterType::Pointer ic1Filter = dynamic_cast<IC2FilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = ic1Filter->GetOutput();
         break;
       }
-    case TEXT_IDM:
+    case FeatureInfo::TEXT_IDM:
       {
         IDMFilterType::Pointer idmFilter = dynamic_cast<IDMFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = idmFilter->GetOutput();
         break;
       }
-    case TEXT_MEA:
+    case FeatureInfo::TEXT_MEA:
       {
         MEAFilterType::Pointer meaFilter = dynamic_cast<MEAFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = meaFilter->GetOutput();
         break;
       }
-    case TEXT_PANTEX:
+    case FeatureInfo::TEXT_PANTEX:
       {
         PanTexFilterType::Pointer panTexFilter = dynamic_cast<PanTexFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = panTexFilter->GetOutput();
         break;
       }
-    case TEXT_SAV:
+    case FeatureInfo::TEXT_SAV:
       {
         SAVFilterType::Pointer savFilter = dynamic_cast<SAVFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = savFilter->GetOutput();
         break;
       }
-    case TEXT_SEN:
+    case FeatureInfo::TEXT_SEN:
       {
         SENFilterType::Pointer senFilter = dynamic_cast<SENFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = senFilter->GetOutput();
         break;
       }
-    case TEXT_SVA:
+    case FeatureInfo::TEXT_SVA:
       {
         SVAFilterType::Pointer svaFilter = dynamic_cast<SVAFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = svaFilter->GetOutput();
         break;
       }
-    case TEXT_VAR:
+    case FeatureInfo::TEXT_VAR:
       {
         VARFilterType::Pointer varFilter = dynamic_cast<VARFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = varFilter->GetOutput();

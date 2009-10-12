@@ -44,6 +44,7 @@ public:
   typedef ModelType::SingleImageType                                               SingleImageType;
   typedef ModelType::SingleImagePointerType                                        SingleImagePointerType;
   typedef SingleImageType::SizeType                                                SizeType;
+  typedef FeatureInfo::FeatureType                                                 FeatureType;
 
 
   /***************************/
@@ -72,7 +73,7 @@ public:
       switch(pType)
       {
        /** CASE NOT USED : ITK PROBLEM WITH CANNY FILTER*/
-        case EDGE_CANNY:
+        case FeatureInfo::EDGE_CANNY:
         {
           oss<<"Edge Canny : ";
 
@@ -93,7 +94,7 @@ public:
           pModel->AddFeatureFilter( edgeDetectorFilter, pType, i, 0, mess);
           break;
         }
-      case EDGE_SOBEL:
+      case FeatureInfo::EDGE_SOBEL:
         {
           oss<<"Edge Sobel : ";
 
@@ -126,7 +127,7 @@ public:
     SingleImagePointerType image =  SingleImageType::New();
     switch (pType)
     {
-      case EDGE_CANNY:
+      case FeatureInfo::EDGE_CANNY:
       {
         CannyEdgeDensityFilterType::Pointer filter = dynamic_cast<CannyEdgeDensityFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(pInputListId)));
        filter->GetOutput()->UpdateOutputInformation();
@@ -134,7 +135,7 @@ public:
         image = filter->GetOutput();
         break;
       }
-    case EDGE_SOBEL:
+    case FeatureInfo::EDGE_SOBEL:
       {
         SobelEdgeDensityFilterType::Pointer filter = dynamic_cast<SobelEdgeDensityFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(pInputListId)));
        filter->GetOutput()->UpdateOutputInformation();

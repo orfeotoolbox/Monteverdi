@@ -23,6 +23,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+
+class FeatureInfo
+  {
+public:
 /**
  * this enum defines the different features available.
    */
@@ -97,10 +101,6 @@ typedef enum
   UNKNOWN
 } FeatureType;
 
-
-class FeatureInfo
-  {
-public:
  FeatureInfo()
    {
      m_MapInfo.insert( std::pair<FeatureType, std::string>(UNKNOWN, "Tools for classification.\nItems marked as experimental are not likely to work on huge images") );  // 0

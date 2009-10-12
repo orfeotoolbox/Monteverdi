@@ -249,13 +249,13 @@ FeatureExtractionController
 
     switch (featureType)
     {
-    case TOUZI:
+    case FeatureInfo::TOUZI:
     {
       unsigned int radius = static_cast<unsigned int>(m_View->guiTouziRadius->value());
       m_Model->AddTouziFilter(radius);
       break;
     }
-    case HARRIS:
+    case FeatureInfo::HARRIS:
     {
       double sigmaD = m_View->guiHarrisSigmaD->value();
       double sigmaI = m_View->guiHarrisSigmaI->value();
@@ -263,7 +263,7 @@ FeatureExtractionController
       m_Model->AddHarrisFilter(sigmaD,sigmaI, alpha);
       break;
     }
-    case SPECTRALANGLE:
+    case FeatureInfo::SPECTRALANGLE:
     {
       if ( m_View->GetSelectedPixel().GetSize() != m_Model->GetNumberOfChannels() )
       {
@@ -272,7 +272,7 @@ FeatureExtractionController
       m_Model->AddSpectralAngleFilter(m_View->GetSelectedPixel());
       break;
     }
-    case MORPHOLOGICALOPENING:
+    case FeatureInfo::MORPHOLOGICALOPENING:
     {
       int size = static_cast<int>(m_View->guiMorphoProfileSize->value());
       int value = static_cast<int>(m_View->guiMorphoInitVal->value());
@@ -280,7 +280,7 @@ FeatureExtractionController
       m_Model->AddMorphoOpeningProfileFilter(size, value, step);
       break;
     }
-    case MORPHOLOGICALCLOSING:
+    case FeatureInfo::MORPHOLOGICALCLOSING:
     {
       int size = static_cast<int>(m_View->guiMorphoProfileSize->value());
       int value = static_cast<int>(m_View->guiMorphoInitVal->value());
@@ -288,43 +288,43 @@ FeatureExtractionController
       m_Model->AddMorphoClosingProfileFilter(size, value, step);
       break;
     }
-    case VARIANCE:
+    case FeatureInfo::VARIANCE:
     {
       int radiusX = static_cast<int>(m_View->guiRadiusX->value());
       int radiusY = static_cast<int>(m_View->guiRadiusY->value());
       m_Model->AddVarianceFilter(radiusX, radiusY);
       break;
     }
-    case MEAN:
+    case FeatureInfo::MEAN:
     {
       int radiusX = static_cast<int>(m_View->guiRadiusX->value());
       int radiusY = static_cast<int>(m_View->guiRadiusY->value());
       m_Model->AddMeanFilter(radiusX, radiusY);
       break;
     }
-    case GRADIENT:
+    case FeatureInfo::GRADIENT:
     {
       double sigma = m_View->guiGradSigma->value();
       m_Model->AddGradientFilter(sigma);
       break;
     }
-    case TEXT_ASM:
-    case TEXT_CSH:
-    case TEXT_CPR:
-    case TEXT_CON:
-    case TEXT_COR:
-    case TEXT_DEN:
-    case TEXT_DVA:
-    case TEXT_ENJ:
-    case TEXT_ENT:
-    case TEXT_IC1:
-    case TEXT_IC2:
-    case TEXT_IDM:
-    case TEXT_MEA:
-    case TEXT_SAV:
-    case TEXT_SEN:
-    case TEXT_SVA:
-    case TEXT_VAR:
+    case FeatureInfo::TEXT_ASM:
+    case FeatureInfo::TEXT_CSH:
+    case FeatureInfo::TEXT_CPR:
+    case FeatureInfo::TEXT_CON:
+    case FeatureInfo::TEXT_COR:
+    case FeatureInfo::TEXT_DEN:
+    case FeatureInfo::TEXT_DVA:
+    case FeatureInfo::TEXT_ENJ:
+    case FeatureInfo::TEXT_ENT:
+    case FeatureInfo::TEXT_IC1:
+    case FeatureInfo::TEXT_IC2:
+    case FeatureInfo::TEXT_IDM:
+    case FeatureInfo::TEXT_MEA:
+    case FeatureInfo::TEXT_SAV:
+    case FeatureInfo::TEXT_SEN:
+    case FeatureInfo::TEXT_SVA:
+    case FeatureInfo::TEXT_VAR:
     {
       SizeType rad;
       rad[0] = static_cast<unsigned int>(m_View->guiTextRadiusX->value());
@@ -335,7 +335,7 @@ FeatureExtractionController
       m_Model->AddTextureFilter(featureType, rad, off);
       break;
     }
-    case TEXT_PANTEX:
+    case FeatureInfo::TEXT_PANTEX:
       {
         SizeType rad;
       rad[0] = static_cast<unsigned int>(m_View->guiRadiusX->value());
@@ -346,18 +346,18 @@ FeatureExtractionController
       m_Model->AddTextureFilter(featureType, rad, off);
       break;
       }
-    case NDVI:
-    case RVI:
-    case GEMI:
-    case IPVI:
-    case TNDVI:
+    case FeatureInfo::NDVI:
+    case FeatureInfo::RVI:
+    case FeatureInfo::GEMI:
+    case FeatureInfo::IPVI:
+    case FeatureInfo::TNDVI:
     {
       int RId = static_cast<int>(m_View->guiRAndNIRR->value());
       int NIRId = static_cast<int>(m_View->guiRAndNIRNIR->value());
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case PVI:
+    case FeatureInfo::PVI:
     {
       int RId = static_cast<int>(m_View->guiPVIR->value());
       int NIRId = static_cast<int>(m_View->guiPVINIR->value());
@@ -366,7 +366,7 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case SAVI:
+    case FeatureInfo::SAVI:
     {
       int RId = static_cast<int>(m_View->guiSAVIR->value());
       int NIRId = static_cast<int>(m_View->guiSAVINIR->value());
@@ -374,7 +374,7 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case MSAVI:
+    case FeatureInfo::MSAVI:
     {
       int RId = static_cast<int>(m_View->guiMSAVIR->value());
       int NIRId = static_cast<int>(m_View->guiMSAVINIR->value());
@@ -382,14 +382,14 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case MSAVI2:
+    case FeatureInfo::MSAVI2:
     {
       int RId = static_cast<int>(m_View->guiRAndNIRR->value());
       int NIRId = static_cast<int>(m_View->guiRAndNIRNIR->value());
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case TSAVI:
+    case FeatureInfo::TSAVI:
     {
       int RId = static_cast<int>(m_View->guiTSAVIR->value());
       int NIRId = static_cast<int>(m_View->guiTSAVINIR->value());
@@ -399,7 +399,7 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case WDVI:
+    case FeatureInfo::WDVI:
     {
       int RId = static_cast<int>(m_View->guiWDVIR->value());
       int NIRId = static_cast<int>(m_View->guiWDVINIR->value());
@@ -407,7 +407,7 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case ARVI:
+    case FeatureInfo::ARVI:
     {
       int RId = static_cast<int>(m_View->guiARVIR->value());
       int BId = static_cast<int>(m_View->guiARVIB->value());
@@ -416,7 +416,7 @@ FeatureExtractionController
       m_Model->AddRAndBAndNIRFilter(RId, BId, NIRId, featureType, params);
       break;
     }
-    case EVI:
+    case FeatureInfo::EVI:
     {
       int RId = static_cast<int>(m_View->guiEVIR->value());
       int BId = static_cast<int>(m_View->guiEVIB->value());
@@ -428,7 +428,7 @@ FeatureExtractionController
       m_Model->AddRAndBAndNIRFilter(RId, BId, NIRId, featureType, params);
       break;
     }
-    case TSARVI:
+    case FeatureInfo::TSARVI:
     {
       int RId = static_cast<int>(m_View->guiTSARVIR->value());
       int BId = static_cast<int>(m_View->guiTSARVIB->value());
@@ -439,7 +439,7 @@ FeatureExtractionController
       m_Model->AddRAndBAndNIRFilter(RId, BId, NIRId, featureType, params);
       break;
     }
-    case AVI:
+    case FeatureInfo::AVI:
     {
       int RId = static_cast<int>(m_View->guiAVIR->value());
       int GId = static_cast<int>(m_View->guiAVIG->value());
@@ -450,16 +450,16 @@ FeatureExtractionController
       m_Model->AddRAndGAndNIRFilter(RId, GId, NIRId, featureType, params);
       break;
     }
-    case IR:
-    case IC:
-    case IB:
+    case FeatureInfo::IR:
+    case FeatureInfo::IC:
+    case FeatureInfo::IB:
     {
       int GId = static_cast<int>(m_View->guiSoilG->value());
       int RId = static_cast<int>(m_View->guiSoilR->value());
       m_Model->Add2ChannelsFilter( GId, RId, featureType);
       break;
     }
-    case IB2:
+    case FeatureInfo::IB2:
     {
       int GId = static_cast<int>(m_View->guiIB2G->value());
       int RId = static_cast<int>(m_View->guiIB2R->value());
@@ -467,14 +467,14 @@ FeatureExtractionController
       m_Model->AddRAndGAndNIRFilter(RId, GId, NIRId, featureType, params);
       break;
     }
-    case NDBI:
+    case FeatureInfo::NDBI:
     {
       int TM4Id = static_cast<int>(m_View->guiNDBITM4->value());
       int TM5Id = static_cast<int>(m_View->guiNDBITM5->value());
       m_Model->Add2ChannelsFilter(TM4Id, TM5Id, featureType);
       break;
     }
-    case ISU:
+    case FeatureInfo::ISU:
     {
       int RId = static_cast<int>(m_View->guiISUR->value());
       int NIRId = static_cast<int>(m_View->guiISUNIR->value());
@@ -483,54 +483,54 @@ FeatureExtractionController
       m_Model->AddRAndNIRFilter(RId, NIRId, featureType, params);
       break;
     }
-    case SRWI:
+    case FeatureInfo::SRWI:
     {
       int R860Id = static_cast<int>(m_View->guiSRWIR860->value());
       int R1240Id = static_cast<int>(m_View->guiSRWIR1240->value());
       m_Model->Add2ChannelsFilter(R860Id, R1240Id, featureType);
       break;
     }
-    case NDWI:
+    case FeatureInfo::NDWI:
     {
       int NIRId = static_cast<int>(m_View->guiNDWINIR->value());
       int MIRId = static_cast<int>(m_View->guiNDWIMIR->value());
       m_Model->Add2ChannelsFilter(NIRId, MIRId, featureType);
       break;
     }
-    case NDWI2:
+    case FeatureInfo::NDWI2:
     {
       int GId = static_cast<int>(m_View->guiNDWI2G->value());
       int NIRId = static_cast<int>(m_View->guiNDWI2NIR->value());
       m_Model->Add2ChannelsFilter(GId, NIRId, featureType);
       break;
     }
-    case MNDWI:
+    case FeatureInfo::MNDWI:
     {
       int GId = static_cast<int>(m_View->guiMNDWIG->value());
       int MIRId = static_cast<int>(m_View->guiMNDWIMIR->value());
       m_Model->Add2ChannelsFilter(GId, MIRId, featureType);
       break;
     }
-    case NDPI:
+    case FeatureInfo::NDPI:
     {
       int MIRId = static_cast<int>(m_View->guiNDPIMIR->value());
       int GId = static_cast<int>(m_View->guiNDPIG->value());
       m_Model->Add2ChannelsFilter(MIRId, GId, featureType);
       break;
     }
-    case NDTI:
+    case FeatureInfo::NDTI:
     {
       int RId = static_cast<int>(m_View->guiNDTIR->value());
       int GId = static_cast<int>(m_View->guiNDTIG->value());
       m_Model->Add2ChannelsFilter(RId, GId, featureType);
       break;
     }
-    case SFS_LEN:
-    case SFS_WID:
-    case SFS_PSI:
-    case SFS_WME:
-    case SFS_RAT:
-    case SFS_SD:
+    case FeatureInfo::SFS_LEN:
+    case FeatureInfo::SFS_WID:
+    case FeatureInfo::SFS_PSI:
+    case FeatureInfo::SFS_WME:
+    case FeatureInfo::SFS_RAT:
+    case FeatureInfo::SFS_SD:
     {
       double dSpectralThreshold = static_cast<double>(m_View->guiSFSSpectralThreshold->value());
       unsigned int uiSpectralThresh = static_cast<unsigned int>(m_View->guiSFSSpatialThreshold->value());
@@ -540,7 +540,7 @@ FeatureExtractionController
       m_Model->AddSFSTexturesFilter(featureType,dSpectralThreshold,uiSpectralThresh,uiNbDirections,dAlpha,uiRatMaxConsNb);
       break;
     }
-    case EDGE_CANNY:
+    case FeatureInfo::EDGE_CANNY:
     {
       params.push_back(static_cast<double>(m_View->guiEdgeCannyRadius->value()));
       params.push_back(static_cast<double>(m_View->guiEdgeCannyMaxThresh->value()));
@@ -550,7 +550,7 @@ FeatureExtractionController
       m_Model->AddEdgeDensityFilter(featureType,params);
       break;
     }
-    case EDGE_SOBEL:
+    case FeatureInfo::EDGE_SOBEL:
     {
       params.push_back(static_cast<double>(m_View->guiEdgeSobelRadiusX->value()));
       params.push_back(static_cast<double>(m_View->guiEdgeSobelRadiusY->value()));
@@ -559,10 +559,10 @@ FeatureExtractionController
       m_Model->AddEdgeDensityFilter(featureType,params);
       break;
     }
-    case MS_SMOOTH:
-    case MS_CLUSTERED:
-    case MS_LABELED:
-    case MS_BOUND:
+    case FeatureInfo::MS_SMOOTH:
+    case FeatureInfo::MS_CLUSTERED:
+    case FeatureInfo::MS_LABELED:
+    case FeatureInfo::MS_BOUND:
     {
       unsigned int spatial = static_cast<unsigned int>(m_View->guiMSSpatial->value());
       double range = static_cast<double>(m_View->guiMSRange->value());
@@ -571,7 +571,7 @@ FeatureExtractionController
       m_Model->AddMeanShiftFilter(featureType, spatial, range, minSize, scale);
       break;
     }
-    case ORIGINAL:
+    case FeatureInfo::ORIGINAL:
     {
       m_Model->AddOriginalData();
       break;

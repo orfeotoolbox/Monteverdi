@@ -55,6 +55,8 @@ public:
   typedef PixelClickedActionHandler<ModelType,ViewType>                PixelClickedHandlerType;
   typedef PixelClickedHandlerType::Pointer                             PixelClickedHandlerPointerType;
 
+  typedef FeatureInfo::FeatureType         FeatureType;
+
 /** Standard type macros */
   itkTypeMacro(FeatureExtractionController,Superclass);
   itkNewMacro(Self);

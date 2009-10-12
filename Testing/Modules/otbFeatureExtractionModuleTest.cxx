@@ -60,7 +60,7 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
   // ------------ Chose NDVI feature
 //   std::cout<<"ndvi begin..."<<std::endl;
   specificModule->GetView()->UpdateParameterArea(8);
-  specificModule->GetView()->SetFeatureType(otb::NDVI);
+  specificModule->GetView()->SetFeatureType(otb::FeatureInfo::NDVI);
   Fl::check();
 
   //Select bands 2 and 3

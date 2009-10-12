@@ -45,7 +45,7 @@ WriterViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_PixelType = UNKNOWN;
+  m_PixelType = FeatureInfo::UNKNOWN;
 
   this->CreateGUI();
 
@@ -431,7 +431,7 @@ WriterViewGUI
 
 //   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
-  this->SetPixelType(otb::UNKNOWN);
+  this->SetPixelType(FeatureInfo::UNKNOWN);
 
   // NewVisu
   if (m_VisuView.IsNotNull())
