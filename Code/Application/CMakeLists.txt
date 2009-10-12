@@ -29,8 +29,8 @@ FLTK_WRAP_UI(otbMonteverdi ${VIEW_FL_SRCS})
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(
             ${APPLICATION_SRCS}
-            ${Monteverdi_FLTK_UI_SRCS}
-            Monteverdi.cxx
+            ${otbMonteverdi_FLTK_UI_SRCS}
+#            Monteverdi.cxx
         PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
