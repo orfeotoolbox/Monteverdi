@@ -27,11 +27,21 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-
 //Vis
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
+// Estimation
+#include "itkEuclideanDistancePointMetric.h"
+#include "itkLevenbergMarquardtOptimizer.h"
+#include "itkPointSet.h"
+#include "itkPointSetToPointSetRegistrationMethod.h"
+// Transformation
+#include "otbTransformEnumType.h"
+#include "itkTransformBase.h"
+#include "itkAffineTransform.h"
+#include "itkTranslationTransform.h"
+
 
 namespace otb {
 
@@ -58,10 +68,11 @@ public:
   typedef VectorImage<PixelType,2>            VectorImageType;
   typedef VectorImageType::Pointer            VectorImagePointerType;
   typedef VectorImageType::IndexType          IndexType;
-  typedef std::vector<VectorImagePointerType> ImageListType;
+  typedef std::vector<VectorImagePointerType> ImageListType;    
 
   typedef std::pair<IndexType, IndexType> IndexCoupleType;
   typedef std::vector<IndexCoupleType>    IndexesListType;
+  typedef std::vector<IndexType>          IndexListType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -80,6 +91,20 @@ public:
   /** New macro */
   itkNewMacro(Self);
   
+  /** Point Set */
+  typedef itk::PointSet< float, 2 > PointSetType;
+  typedef PointSetType::Pointer     PointSetPointerType;
+  typedef PointSetType::PointType   PointType;
+  typedef itk::Point<double,2>      OutPointType;
+  typedef std::vector<OutPointType> OutPointListType;
+
+  /** Transformation type */
+  typedef itk::Transform<double, 2>            TransformType;
+  typedef TransformType::ParametersType        ParametersType;
+  typedef itk::AffineTransform<double, 2>      AffineTransformType;
+  typedef itk::TranslationTransform<double, 2> TranslationTransformType;
+
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -88,7 +113,7 @@ public:
   {
     if( id != 0 && id != 1 )
       {
-       itkExceptionMacro(<<"invalid id "<<id<<".");
+	itkExceptionMacro(<<"invalid id "<<id<<".");
       }
     return m_VisualizationModel[id];
   }
@@ -104,12 +129,38 @@ public:
   IndexesListType GetIndexesList() const { return m_IndexesList; }
   void AddIndexesToList( IndexType id1, IndexType id2 );
   void ClearIndexesList() { m_IndexesList.clear(); }
- void RemovePointFromList( unsigned int id );
+  void RemovePointFromList( unsigned int id );
+
+  /** Transform performing */
+  void ComputeTransform( TransformEnumType transformType );
+
+  /** Convert index list to point sets*/
+  void ConvertList( PointSetPointerType fix, PointSetPointerType mov );
+  
+  /** Perform the transform */
+  template <typename T> void GenericRegistration();
+
+  /** Compute the transform the point of m_IndexList */
+ OutPointListType TransformPoints( TransformEnumType transformType );
+
+   /** Compute the transform of a list of i
+ndex */
+  template <typename T> OutPointListType GenericTransformPoints(IndexListType inList);
+
+  /** Instanciate the right transformation */
+  //void InstanciateTransform(TransformEnumType transformType, TransformPointerType myTransform);
+
+  /** Get the transformation parameters. */
+  //void UpdateTransformParameters( TransformEnumType transformType );
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
   
+  /** Get Transform */
+  itkGetObjectMacro(Transform, TransformType);
  
+  /** Get Transform Parameters*/
+  itkGetMacro(TransformParameters, ParametersType);
 
 protected:
 
@@ -140,6 +191,12 @@ private:
 
   /** First and second input image indexes list */
   IndexesListType m_IndexesList;
+
+  /** Transform base */
+  TransformType::Pointer m_Transform;
+
+  /** Store transformation parameters*/
+  ParametersType m_TransformParameters;
 
   bool m_OutputChanged;
 

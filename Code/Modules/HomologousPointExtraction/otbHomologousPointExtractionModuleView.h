@@ -77,6 +77,8 @@ public:
   virtual void AddPoints();
   virtual void ClearPointList();
   virtual void DeletePoint();
+  virtual void ComputeTransform();
+
   void UpdateListSelectionColor();
   void ChangePointValue(IndexType index, unsigned int viewId );
   void AddPointsToList( IndexType id1, IndexType id2);

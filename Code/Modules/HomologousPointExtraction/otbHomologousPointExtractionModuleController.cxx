@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbHomologousPointExtractionModuleController.h"
+
 #include "otbMsgReporter.h"
 #include "otbFltkFilterWatcher.h"
 #include <FL/fl_ask.H>
@@ -115,7 +116,6 @@ void
 HomologousPointExtractionModuleController
 ::SetView(HomologousPointExtractionModuleView * view)
 {
-  std::cout<<"----------------HomologousPointExtractionModuleController::SetView----------------"<<std::endl;
   m_View = view;
   m_FirstResizingHandler->SetView(m_View->GetFirstImageView());
   m_FirstChangeRegionHandler->SetView(m_View->GetFirstImageView());
@@ -187,6 +187,7 @@ HomologousPointExtractionModuleController
   catch (itk::ExceptionObject & err)
     {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
     }
 }
 
@@ -202,8 +203,6 @@ HomologousPointExtractionModuleController
 ::DeletePointFromList( unsigned int id )
 {
   m_Model->RemovePointFromList( id );
-  for(unsigned int j=0; j<m_Model->GetIndexesList().size(); j++)
-    std::cout<<m_Model->GetIndexesList()[j].first<<"   "<<m_Model->GetIndexesList()[j].second<<std::endl;
 }
 
 
@@ -214,5 +213,99 @@ HomologousPointExtractionModuleController
   m_View->ChangePointValue(index, viewId);
 }
 
+
+void
+HomologousPointExtractionModuleController
+::ComputeTransform()
+{
+  int transformType = m_View->gTransform->value();
+  TransformEnumType transf = otb::UNKNOWN;
+  switch (transformType)
+    {
+    case 0:
+      {
+	transf = otb::UNKNOWN;
+	break;
+      }
+    case 1:
+    {
+	transf = otb::TRANSLATION;
+      break;
+    }
+    case 2:
+      {
+	transf = otb::AFFINE;
+	break;
+      }
+    default:
+      {
+	return;
+      }
+    }
+  
+  if(transf == otb::UNKNOWN)
+    {
+      MsgReporter::GetInstance()->SendError("Please select a transform");
+      return;
+    }
+
+  m_View->tTransform->value("");
+  m_View->tError->clear();
+  m_View->tMeanError->value("");
+
+  try
+    {
+      m_Model->ComputeTransform(transf);
+      this->UpdateStats(transf);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+ 
+}
+
+
+void
+HomologousPointExtractionModuleController
+::UpdateStats(TransformEnumType transf)
+{
+  itk::OStringStream oss;
+  oss.str("");
+  oss<<m_Model->GetTransformParameters();
+  m_View->tTransform->value(oss.str().c_str());
+   
+  std::vector<double> values;
+  
+  OutPointListType outTranformedPoint = m_Model->TransformPoints(transf);
+  IndexesListType  indexesList        = m_Model->GetIndexesList();
+  IndexType idFix, idOut;
+
+  for(unsigned int i=0; i<indexesList.size(); i++)
+    {
+      idFix = indexesList[i].first;
+      idOut = indexesList[i].second;
+ 
+      oss.str("");
+      oss<<idFix<<" -> ";
+      values.push_back( vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
+			+  vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
+      oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);
+      m_View->tError->add( oss.str().c_str() );
+    }
+
+  double sum = 0;
+  for(unsigned int i=0; i<values.size(); i++)
+    {
+      sum += values[i];
+    }
+  sum = vcl_sqrt(sum);
+  sum = sum / static_cast<double>(values.size());
+
+  oss.str("");
+  oss<<sum;
+  m_View->tMeanError->value(oss.str().c_str());
+}
 
 } // end namespace otb

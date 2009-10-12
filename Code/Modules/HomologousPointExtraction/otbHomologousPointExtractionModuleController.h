@@ -23,6 +23,8 @@
 #include "otbHomologousPointExtractionModuleView.h"
 
 #include "otbImageWidgetController.h"
+#include "otbTransformEnumType.h"
+
 // Handlers list
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
@@ -57,8 +59,9 @@ public:
   itkTypeMacro(MouseClickedController,Superclass);
   itkNewMacro(Self);
 
-    typedef itk::Index<> IndexType;
-    void IndexClicked(IndexType index)
+  typedef itk::Index<> IndexType;
+
+  void IndexClicked(IndexType index)
     {
       if( !m_Controller.IsNotNull() )
        itkExceptionMacro(<<"Not Controller set.");
@@ -117,7 +120,13 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>                              PixelDescriptionViewType;
   typedef PixelDescriptionViewType::Pointer                                            PixelDescriptionViewPointerType;
   
+  typedef ModelType::IndexesListType     IndexesListType;
+  typedef ModelType::TransformType       TransformType;
+  typedef ModelType::OutPointListType    OutPointListType;
+  typedef ModelType::OutPointType        OutPointType;
 
+  typedef TransformType::OutputPointType OutputTransformPointType;
+  typedef TransformType::InputPointType InputTransformPointType;
 
   void SetModel(ModelType* model);
 
@@ -142,9 +151,12 @@ public:
   virtual void AddPoints( int x1, int y1, int x2, int y2 );
   virtual void ClearPointList();
   virtual void DeletePointFromList( unsigned int id );
+  virtual void ComputeTransform();
+
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId );
 
+  void UpdateStats(TransformEnumType transf);
 
 protected:
   /** Constructor */

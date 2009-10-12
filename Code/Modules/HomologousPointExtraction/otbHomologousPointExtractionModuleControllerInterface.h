@@ -48,6 +48,7 @@ public:
   virtual void ClearPointList() =0;
   virtual void DeletePointFromList( unsigned int id ) =0;
   virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId ) =0;
+  virtual void ComputeTransform() =0;
 
 protected:
   /** Constructor */

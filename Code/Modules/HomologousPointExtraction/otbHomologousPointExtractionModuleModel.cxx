@@ -19,7 +19,7 @@
 #include "otbHomologousPointExtractionModuleModel.h"
 #include "otbFltkFilterWatcher.h"
 
-
+#include "otbPointSetRegister.h"
 
 namespace otb
 {
@@ -41,10 +41,8 @@ void HomologousPointExtractionModuleModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(), m_BlendingFunction()
+HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(), m_BlendingFunction(), m_Transform()
 {
-  srand((unsigned)time(0));
-
   VisualizationModelType::Pointer visualizationModel1 = VisualizationModelType::New();
   VisualizationModelType::Pointer visualizationModel2 = VisualizationModelType::New();
   m_VisualizationModel.push_back(visualizationModel1);
@@ -69,8 +67,10 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
   m_Images.push_back(m_SecondInputImage);
 
   m_IndexesList.clear();
+  
+  m_Transform = TransformType::New() ;
 
-  m_OutputChanged = false;
+  m_OutputChanged = false;  
 
 }
 
@@ -111,7 +111,7 @@ HomologousPointExtractionModuleModel
   // Generate the layer
   m_ImageGenerator[id]->SetImage(image);
   m_ImageGenerator[id]->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   m_ImageGenerator[id]->GenerateLayer();
   
   std::vector<unsigned int> channels;
@@ -155,10 +155,10 @@ HomologousPointExtractionModuleModel
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
-       {
-         found = true;
-         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
-       }
+	{
+	  found = true;
+	  itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+	}
       j++;
     }
 
@@ -175,5 +175,138 @@ HomologousPointExtractionModuleModel
   
   m_IndexesList.erase(m_IndexesList.begin()+id);
 }
+
+
+void 
+HomologousPointExtractionModuleModel
+::ConvertList( PointSetPointerType fix, PointSetPointerType mov )
+{
+  if(m_IndexesList.size()==0)
+    itkExceptionMacro(<<"No point selected...");
+
+  PointType fixedPoint;
+  PointType movingPoint;
+  
+  for(unsigned int i=0; i<m_IndexesList.size(); i++)
+    {
+      IndexType idFix, idMov;;
+      idFix = m_IndexesList[i].first;
+      fixedPoint[0] = static_cast<float>(idFix[0]);
+      fixedPoint[1] = static_cast<float>(idFix[1]);
+      fix->SetPoint(i,fixedPoint);
+
+      idMov = m_IndexesList[i].second;
+      movingPoint[0] = static_cast<float>(idMov[0]);
+      movingPoint[1] = static_cast<float>(idMov[1]);   
+      mov->SetPoint(i,movingPoint);
+    }
+}  
+ 
+
+void 
+HomologousPointExtractionModuleModel
+::ComputeTransform( TransformEnumType transformType )
+{
+  switch (transformType)
+    {
+    case otb::TRANSLATION:
+      {	
+	this->GenericRegistration<TranslationTransformType>();
+	break;
+      }
+    case otb::AFFINE:
+      {
+	this->GenericRegistration<AffineTransformType>();
+	break;
+      }
+    default:
+      {
+	itkExceptionMacro(<<"Not supported transform type "<<transformType);
+	return;
+      }
+    }
+  return;
 }
 
+
+template<typename T>
+void 
+HomologousPointExtractionModuleModel
+::GenericRegistration()
+{
+  // Create the point set.
+  PointSetPointerType fixPointSet = PointSetType::New();
+  PointSetPointerType movingPointSet = PointSetType::New();
+  this->ConvertList( fixPointSet, movingPointSet );
+
+  typedef PointSetRegister<T> PointSetRegisterType;
+  typename PointSetRegisterType::Pointer reg = PointSetRegisterType::New();
+  reg->SetFixPointSet(fixPointSet);
+  reg->SetMovingPointSet(movingPointSet);
+  reg->ComputeTransform();
+
+  m_Transform = dynamic_cast<TransformType *>(dynamic_cast<T *>( reg->GetTransform() ));
+  m_TransformParameters = reg->GetTransformParameters();
+}
+
+
+HomologousPointExtractionModuleModel::OutPointListType 
+HomologousPointExtractionModuleModel
+::TransformPoints( TransformEnumType transformType )
+{
+  IndexListType inList;
+  OutPointListType outList;
+  for(unsigned int i=0; i<m_IndexesList.size(); i++)
+    {
+      inList.push_back(m_IndexesList[i].first);
+    }
+
+  switch (transformType)
+    {
+    case otb::TRANSLATION:
+      {	
+	outList = this->GenericTransformPoints<TranslationTransformType>(inList);
+	break;
+      }
+    case otb::AFFINE:
+      {
+	outList = this->GenericTransformPoints<AffineTransformType>(inList);
+	break;
+      }
+    default:
+      {
+	itkExceptionMacro(<<"Not supported transform type "<<transformType);
+      }
+    }
+    return outList;
+}
+
+template<typename T>
+HomologousPointExtractionModuleModel::OutPointListType 
+HomologousPointExtractionModuleModel
+::GenericTransformPoints( IndexListType inList )
+{
+  typename T::Pointer transform = T::New();
+  transform->SetParameters( m_TransformParameters);
+
+  OutPointListType            outList;
+  IndexCoupleType             couple;
+  typename T::InputPointType  inPoint; 
+  typename T::OutputPointType outPoint;
+  OutPointType                idOut;
+
+  for(unsigned int i=0; i<inList.size(); i++)
+    {
+      inPoint[0] = inList[i][0]; 
+      inPoint[1] = inList[i][1];
+      outPoint = transform->TransformPoint(inPoint);
+      idOut[0] = static_cast<double>(outPoint[0]);
+      idOut[1] = static_cast<double>(outPoint[1]);
+
+      outList.push_back(idOut);
+    }
+
+  return outList;
+}
+
+}// namespace otb

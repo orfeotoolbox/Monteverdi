@@ -234,6 +234,10 @@ HomologousPointExtractionModuleView
 
   m_FirstCrossGlComponent->Clear();
   m_SecondCrossGlComponent->Clear();
+  tTransform->value("");
+  tError->clear();
+  tMeanError->value("");
+
   this->RedrawWidgets();
 
 }
@@ -257,9 +261,19 @@ HomologousPointExtractionModuleView
       m_FirstCrossGlComponent->ClearIndex(id-1);
       m_SecondCrossGlComponent->ClearIndex(id-1);
       this->RedrawWidgets();
+
+      tTransform->value("");
+      tError->clear();
+      tMeanError->value("");
     }
 }
 
+void
+HomologousPointExtractionModuleView
+::ComputeTransform()
+{
+  m_Controller->ComputeTransform();
+}
 
 void
 HomologousPointExtractionModuleView
