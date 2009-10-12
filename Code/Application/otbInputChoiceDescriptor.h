@@ -31,6 +31,8 @@
 #include <Fl/Fl_Check_Button.H>
 
 #include "otbInputDataDescriptor.h"
+#include "otbMonteverdiModel.h"
+#include "otbMonteverdiControllerInterface.h"
 
 namespace otb
 {
@@ -63,7 +65,14 @@ public:
   // contains a module instance Id and a data key
   typedef std::pair<std::string,std::string>   StringPairType;
   typedef std::map<int, StringPairType>        StringPairMapType;
+  typedef std::vector<StringPairType>          StringPairVectorType;
  
+  itkSetObjectMacro(Model,MonteverdiModel);
+  itkGetObjectMacro(Model,MonteverdiModel);
+
+  itkSetObjectMacro(Controller,MonteverdiControllerInterface);
+  itkGetObjectMacro(Controller,MonteverdiControllerInterface);
+
   /** Set the input data descriptor */
   void SetInputDataDescriptor(const InputDataDescriptor & desc);
 
@@ -74,10 +83,22 @@ public:
   void Rebuild();
 
   /** Get the selected pair */
-  StringPairType GetSelected() const;
+  StringPairVectorType GetSelected() const;
 
-  /** Do we have a selected pair ? */
+  /** Do we have any selected pair ? */
   bool HasSelected() const;
+
+  /** Activate all */
+  void Activate();
+
+  /** Deactivate all */
+  void Deactivate();
+
+  /** Update caching progress if caching is active */
+  void UpdateCachingProgress();
+  
+  /** Check if the input is ready */
+  bool IsReady();
 
 protected:
   /** Constructor */
@@ -90,23 +111,33 @@ private:
   InputChoiceDescriptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Callbacks */
+  static void Switch(Fl_Widget *w, void * v);
+  static void AddInput(Fl_Widget * w, void * v);
+  static void RemoveInput(Fl_Widget * w, void * v);
+  static void ClearInputs(Fl_Widget * w, void * v);
+  static void InputChanged(Fl_Widget * w, void * v);
+  static void StartCaching(Fl_Widget * w, void * v);
+
+
   /** InputDataDescriptor describing the input */
   InputDataDescriptor m_InputDataDescriptor;
 
   /** if input is multiple, we keep the indexes */
-  std::vector<int>              m_Indexes;
+  std::vector<int>              m_Indices;
 
   /** The choice map */
   StringPairMapType             m_ChoiceMap;
 
   /** The GUI components */
   Fl_Choice *                   m_FlChoice;
-  Fl_Box *                      m_StatusBox;
+  Fl_Button *                   m_StatusBox;
   Fl_Browser *                  m_FlBrowser;
   Fl_Check_Button *             m_CheckButton;
   Fl_Button*                    m_AddButton;
   Fl_Button*                    m_RemoveButton;
   Fl_Button*                    m_ClearButton;
+  Fl_Progress *                 m_ProgressBar;
 
   /** Sizes */
   unsigned int m_UpperMargin;
@@ -115,6 +146,15 @@ private:
   unsigned int m_MultipleWidgetsHeight;
   unsigned int m_CentralWidgetsLength;
   unsigned int m_WidgetsMargin;
+
+  /* Model */
+  MonteverdiModel::Pointer m_Model;
+  
+  /** Controller */
+  itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
+
+  /** Is Caching in progress ? */
+  bool m_CachingInProgress;
 
 };
 

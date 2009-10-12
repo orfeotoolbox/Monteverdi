@@ -27,7 +27,7 @@ namespace otb
 OutputDataDescriptor::OutputDataDescriptor() : DataDescriptor(), m_Cached(false)
 {}
 
-OutputDataDescriptor::OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description, bool cached) : DataDescriptor(data.GetDataType(),key,description), m_Cached(false)
+OutputDataDescriptor::OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description, bool cached) : DataDescriptor(data.GetDataType(),key,description), m_Cached(cached)
 {
   m_Data.push_back(data);
 }

@@ -35,11 +35,15 @@ namespace otb
 {
 
 InputViewGUI
-::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputChoiceMap()
-{
-  std::cout<<"This: "<<this<<std::endl;
-}
+::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputChoiceMap(), m_Alive(true)
+{}
 
+InputViewGUI
+::~InputViewGUI()
+{
+  m_Alive = false;
+  wInputWindow->hide();
+}
 
 void
 InputViewGUI
@@ -70,6 +74,8 @@ InputViewGUI
       {
       InputChoiceDescriptor::Pointer inputChoice = InputChoiceDescriptor::New();
       inputChoice->SetInputDataDescriptor(it_in->second);
+      inputChoice->SetModel(m_Model);
+      inputChoice->SetController(m_Controller);
 
       // Add it to the scroll group
       std::cout<<"vindex= "<<vIndex<<std::endl;
@@ -106,91 +112,86 @@ InputViewGUI
 
       // Change the module label
       gLabel->value(m_ModuleInstanceId.c_str());
+
+      // Finally, start the watching process
+      this->StartProcess1();
       }
    }
 }
 
-// void
-// InputViewGUI
-// ::ActivateInputChoice(Fl_Widget * w, void * v)
-// {
-//   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-//   if(inputChoiceDesc->m_FlChoice->active())
-//     {
-//     inputChoiceDesc->m_FlChoice->deactivate();
-//     if(inputChoiceDesc->IsMultiple())
-//       inputChoiceDesc->m_FlBrowser->deactivate();
-//     }
-//     else
-//     {
-//     inputChoiceDesc->m_FlChoice->activate();
-//     if(inputChoiceDesc->IsMultiple())
-//       inputChoiceDesc->m_FlBrowser->activate();
-//     }
-// }
+void InputViewGUI
+::RunProcess1(void *)
+{
+  while(m_Alive)
+    {
+    bool globalOk = true;
 
+    for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+      {
+      // Update caching progress
+      mIt->second->UpdateCachingProgress();
+      globalOk =  globalOk && mIt->second->IsReady();
+      }
 
-// **        Callbacks         ** //
+    // Check if Ok button can be activated
+    if(globalOk)
+      {
+      Fl::lock();
+      bOk->activate();
+      Fl::unlock();
+      }
+    else
+      {
+      Fl::lock();
+      bOk->deactivate();
+      Fl::unlock();
+      }
+
+    // Sleep for a while
+    Sleep(500);
+    }
+}
+
 
 void
 InputViewGUI
 ::Ok()
 {
-//   unsigned int i;
+  unsigned int i;
 
-//   if(m_ModuleInstanceId != gLabel->value())
-//     {
-//       int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());
-//       if(res != 0)
-//        return;
-//       m_ModuleInstanceId = gLabel->value();
-//     }
+  if(m_ModuleInstanceId != gLabel->value())
+    {
+      int res = m_Controller->ChangeInstanceId(m_ModuleInstanceId, gLabel->value());
+      if(res != 0)
+       return;
+      m_ModuleInstanceId = gLabel->value();
+    }
 
-//   // Connect modules
-//   for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
-//   {
-//     // Multiple data
-//     if(mIt->second->IsMultiple())
-//     {
-//       if( !mIt->second->IsOptional() ||
-//           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
-//       {
-//         for(i=0;i<mIt->second->m_Indexes.size();i++)
-//         {
-//           int ind = mIt->second->m_Indexes[i];
-//           if(ind >= 0)
-//           {
-//             StringPairType spair = mIt->second->m_ChoiceMap[ind];
-//             m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
-//           }
-//         }
-//       }
-//     }
-//     else // Single data
-//     {
-//       // mandatory OR optional & active
-//       if( !mIt->second->IsOptional() ||
-//           (mIt->second->IsOptional() && mIt->second->m_FlChoice->active() ) )
-//       {
-//         if(mIt->second->HasSelected())
-//         {
-//           StringPairType spair = mIt->second->GetSelected();
-//           m_Controller->AddModuleConnection(spair.first,spair.second,m_ModuleInstanceId,mIt->first);
-//         }
-//       }
-//     }
-//   }
+  // Connect modules
+  for(InputChoiceDescriptorMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+  {
+  if(mIt->second->HasSelected())
+    {
+    InputChoiceDescriptor::StringPairVectorType inputs = mIt->second->GetSelected();
 
-//   // Start()
-//   m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
-//   wInputWindow->hide();
-
+    for (InputChoiceDescriptor::StringPairVectorType::const_iterator it = inputs.begin();
+	 it!= inputs.end();++it)
+      {
+       m_Controller->AddModuleConnection(it->first,it->second,m_ModuleInstanceId,mIt->first);
+      }
+    }
+  }
+  // Start()
+  m_Controller->StartModuleByInstanceId(m_ModuleInstanceId);
+  wInputWindow->hide();
+  m_Alive = false;
 }
 
 void
 InputViewGUI
 ::Cancel()
 {
+  m_Alive = false;
   wInputWindow->hide();
 }
 
@@ -200,122 +201,6 @@ InputViewGUI
 {
   wInputWindow->show();
 }
-
-// void
-// InputViewGUI
-// ::AddInputToList(Fl_Widget * w, void * v)
-// {
-//   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-//   int choiceVal = inputChoiceDesc->m_FlChoice->value();
-//   if(choiceVal >= 0)
-//     {
-//       inputChoiceDesc->m_FlBrowser->add(inputChoiceDesc->m_FlChoice->text(choiceVal));
-//       inputChoiceDesc->m_FlChoice->redraw();
-//       inputChoiceDesc->m_FlBrowser->redraw();
-//     }
-
-//     inputChoiceDesc->m_Indexes.push_back(choiceVal);
-// }
-
-// void
-// InputViewGUI
-// ::RemoveInputFromList(Fl_Widget * w, void * v)
-// {
-//   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-
-//   int choiceVal = inputChoiceDesc->m_FlBrowser->value();
-//   inputChoiceDesc->m_FlBrowser->remove(choiceVal);
-
-//   if( choiceVal <= inputChoiceDesc->m_FlBrowser->size() )
-//     {
-//       inputChoiceDesc->m_FlBrowser->value(choiceVal);
-//     }
-//   else
-//     {
-//       inputChoiceDesc->m_FlBrowser->value(choiceVal-1);
-//     }
-
-//   inputChoiceDesc->m_FlBrowser->redraw();
-
-//   // Erase the target index
-//   inputChoiceDesc->m_Indexes.erase(inputChoiceDesc->m_Indexes.begin()+choiceVal-1);
-
-// }
-
-// void
-// InputViewGUI
-// ::ClearList(Fl_Widget * w, void * v)
-// {
-//   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-//   inputChoiceDesc->m_FlBrowser->clear();
-//   inputChoiceDesc->m_FlBrowser->redraw();
-
-//   // Cheat the indexe is set to -1
-//   inputChoiceDesc->m_Indexes.clear();
-// }
-
-
-// void 
-// InputViewGUI
-// ::InputChoiceChanged(Fl_Widget *w, void *v)
-// {
-//   // Retrieve input choice descriptor
-//   InputChoiceDescriptor* inputChoiceDesc = (InputChoiceDescriptor *)v;
-
-//   // Retrieve the input view gui instance
-//   InputViewGUI * pthis = dynamic_cast<InputViewGUI*>(static_cast<InputViewGroup *>(w->parent()->parent()->user_data()));
-
-//   std::cout<<"Pthis: "<<pthis<<std::endl;
-
-//   if(inputChoiceDesc->m_FlChoice->value() >= 0)
-//     {
-//     std::string id = inputChoiceDesc->m_ChoiceMap[inputChoiceDesc->m_FlChoice->value()].first;
-//     std::string key = inputChoiceDesc->m_ChoiceMap[inputChoiceDesc->m_FlChoice->value()].second;
-
-//     if(pthis->GetModel()->SupportsCaching(id,key))
-//       {
-
-//       if(pthis->GetModel()->IsCached(id,key))
-// 	{
-// 	inputChoiceDesc->m_StatusBox->copy_label("cached");
-// 	inputChoiceDesc->m_StatusBox->color(FL_GREEN);
-// 	}
-//       else
-// 	{
-// 	inputChoiceDesc->m_StatusBox->copy_label("streamed");
-// 	inputChoiceDesc->m_StatusBox->color(FL_RED);
-// 	}
-
-//       inputChoiceDesc->m_StatusBox->show();
-//       }
-//     else
-//       {
-//       inputChoiceDesc->m_StatusBox->hide();
-//       }
-//     }
-
-//   // Activate Ok button if needed
-//   InputChoiceDescriptorMapType lInputChoiceMap = pthis->GetInputChoiceMap();
-//   InputChoiceDescriptorMapType::const_iterator mcIt;
-
-//   bool allInputsSet = true;
-//   // Check all the FlChoices
-//   for( mcIt=lInputChoiceMap.begin();mcIt!=lInputChoiceMap.end();mcIt++)
-//   {
-//     // If the input choice is not set
-//     if ((mcIt->second->m_FlChoice->value()<0) 
-//         // and if the input choice is active
-//         &&(mcIt->second->m_FlChoice->active()))
-//     {
-//       allInputsSet = false;
-//     }
-
-//     // TODO Multiple case (and multiple + optional)
-//   }
-//   if(allInputsSet)
-//     pthis->bOk->activate();
-
-// }
 
 } // end namespace otb
 

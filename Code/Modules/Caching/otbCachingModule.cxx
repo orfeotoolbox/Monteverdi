@@ -283,6 +283,16 @@ bool CachingModule::IsWorking() const
   return m_Working;
 }
 
+void CachingModule::Run()
+{
+  this->StartProcess2();
+
+  if(m_WatchProgress)
+    {
+    this->StartProcess1();
+    }
+}
+
 } // End namespace otb
 
 

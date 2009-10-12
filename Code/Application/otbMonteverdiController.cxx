@@ -88,6 +88,19 @@ MonteverdiController
   return 0;
 }
 
+void
+MonteverdiController
+::StartCaching(const std::string & id, const std::string & key)
+{
+  try
+    {
+    m_Model->StartCaching(id,key);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
 
 } // end namespace otb
 
