@@ -368,7 +368,7 @@ WriterViewGUI
 {
   std::string filepath = vFilePath->value();
   const bool useScale = static_cast <bool> ( guiScale->value() );
-  m_WriterController->SaveOutput(filepath, m_PixelType, useScale);
+  m_WriterController->SaveOutput(filepath, static_cast<unsigned int>(m_PixelType), useScale);
   
   //Here we need to go back to the app Monteverdi //TODO
   this->Quit();

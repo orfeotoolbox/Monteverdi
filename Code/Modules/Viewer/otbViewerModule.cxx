@@ -1098,8 +1098,8 @@ void ViewerModule::UpdatePixelInformationWindow()
 
   // Set the index 
   ImageType::IndexType     index;
-  index[0] = bX->value();
-  index[1] = bY->value();
+  index[0] = static_cast<ImageType::IndexType::IndexValueType>(bX->value());
+  index[1] = static_cast<ImageType::IndexType::IndexValueType>(bY->value());
 
   // Get the description
   itk::OStringStream oss;
