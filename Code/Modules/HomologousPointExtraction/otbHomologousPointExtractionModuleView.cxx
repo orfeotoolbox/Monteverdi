@@ -28,7 +28,7 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent()//, m_FirstCircleGlComponent()
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent(), m_FirstCircleGlComponent(), m_SecondCircleGlComponent()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
   m_FirstImageView = ImageViewType::New();
@@ -36,7 +36,8 @@ HomologousPointExtractionModuleView
   m_FirstCrossGlComponent = CrossGlComponent::New();
   m_SecondCrossGlComponent = CrossGlComponent::New();
 
-  //m_FirstCircleGlComponent = CircleGlComponent::New(); 
+  m_FirstCircleGlComponent = CircleGlComponent::New(); 
+  m_SecondCircleGlComponent = CircleGlComponent::New(); 
 
   m_ColorList.clear();
 }
@@ -109,12 +110,13 @@ HomologousPointExtractionModuleView
 
     m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
     m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
-    /////////////////m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
-    //m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCircleGlComponent );
+    m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCircleGlComponent );
 
     m_SecondImageView->GetFullWidget()->AddGlComponent( m_SecondCrossGlComponent );
     m_SecondImageView->GetScrollWidget()->AddGlComponent( m_SecondCrossGlComponent );
     m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCrossGlComponent );
+    m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCircleGlComponent );
 
     m_FirstImageView->GetFullWidget()->show();
     m_FirstImageView->GetScrollWidget()->show();
@@ -179,7 +181,8 @@ HomologousPointExtractionModuleView
  m_FirstCrossGlComponent->ChangeColor( color, m_FirstCrossGlComponent->GetColorList().size()-1 );
  m_SecondCrossGlComponent->AddIndex( id2 );
  m_SecondCrossGlComponent->ChangeColor( color, m_SecondCrossGlComponent->GetColorList().size()-1 );
- // m_FirstCircleGlComponent->Clear();
+
+
  this->RedrawWidgets();
 }
 
@@ -221,14 +224,17 @@ HomologousPointExtractionModuleView
     {
       vX1->value(index[0]);
       vY1->value(index[1]);
-      //m_FirstCircleGlComponent->Clear();
-      //m_FirstCircleGlComponent->AddIndex(index);
+      m_FirstCircleGlComponent->Clear();
+      m_FirstCircleGlComponent->AddIndex(index);
       m_FirstImageView->GetZoomWidget()->redraw();
     }
   else // viewId==1
     {
       vX2->value(index[0]);
       vY2->value(index[1]);
+      m_SecondCircleGlComponent->Clear();
+      m_SecondCircleGlComponent->AddIndex(index);
+      m_SecondImageView->GetZoomWidget()->redraw();
     }
 }
 
@@ -242,8 +248,8 @@ HomologousPointExtractionModuleView
   m_ColorList.clear();
 
   m_FirstCrossGlComponent->Clear();
-  //m_FirstCircleGlComponent->Clear();
   m_SecondCrossGlComponent->Clear();
+
   tTransform->value("");
   tError->clear();
   tMeanError->value("");
