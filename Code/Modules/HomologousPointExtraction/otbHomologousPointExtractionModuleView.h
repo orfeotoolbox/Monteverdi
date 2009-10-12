@@ -29,6 +29,7 @@
 #include "otbHomologousPointExtractionModuleControllerInterface.h"
 
 #include "otbCrossGlComponent.h"
+//#include "otbCircleGlComponent.h"
 #include "otbImageView.h"
 
 namespace otb
@@ -55,7 +56,7 @@ public:
   typedef HomologousPointExtractionModuleModel::RGBPixelType           PixelType;
   typedef HomologousPointExtractionModuleModel::IndexType              IndexType;
   typedef ImageView<VisualizationModelType>                            ImageViewType;
-  typedef CrossGlComponent::ColorType                                 ColorType;
+  typedef CrossGlComponent::ColorType                                  ColorType;
   typedef std::vector<ColorType>                                       ColorListType;
 
   /** Event from the model */
@@ -83,6 +84,7 @@ public:
   void ChangePointValue(IndexType index, unsigned int viewId );
   void AddPointsToList( IndexType id1, IndexType id2);
   void RedrawWidgets();
+  void HideAll();
 
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(FirstImageView,ImageViewType);
@@ -115,6 +117,8 @@ private:
   /** Cross Gl Component */
   CrossGlComponent::Pointer                     m_FirstCrossGlComponent;
   CrossGlComponent::Pointer                     m_SecondCrossGlComponent;
+  /** Circle Gl Component */
+  // CircleGlComponent::Pointer                    m_FirstCircleGlComponent;
   /** Point color */
   ColorListType                                 m_ColorList;
 };

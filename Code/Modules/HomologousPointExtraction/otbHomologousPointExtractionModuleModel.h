@@ -25,8 +25,9 @@
 #include "otbListenerBase.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingResampleImageFilter.h"
+#include "otbPerBandVectorImageFilter.h"
+
 //Vis
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
@@ -66,6 +67,7 @@ public:
 
   typedef double                              PixelType;
   typedef VectorImage<PixelType,2>            VectorImageType;
+  typedef Image<PixelType,2>                  ImageType;
   typedef VectorImageType::Pointer            VectorImagePointerType;
   typedef VectorImageType::IndexType          IndexType;
   typedef std::vector<VectorImagePointerType> ImageListType;    
@@ -104,6 +106,9 @@ public:
   typedef itk::AffineTransform<double, 2>      AffineTransformType;
   typedef itk::TranslationTransform<double, 2> TranslationTransformType;
 
+  /** Output */
+  typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
+  typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -141,24 +146,19 @@ public:
   template <typename T> void GenericRegistration();
 
   /** Compute the transform the point of m_IndexList */
- OutPointListType TransformPoints( TransformEnumType transformType );
-
-   /** Compute the transform of a list of i
-ndex */
+  OutPointListType TransformPoints( TransformEnumType transformType );
+  
+  /** Compute the transform of a list of index */
   template <typename T> OutPointListType GenericTransformPoints(IndexListType inList);
 
-  /** Instanciate the right transformation */
-  //void InstanciateTransform(TransformEnumType transformType, TransformPointerType myTransform);
-
-  /** Get the transformation parameters. */
-  //void UpdateTransformParameters( TransformEnumType transformType );
+  /** Update Output */
+  void OK();
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
-  
-  /** Get Transform */
-  itkGetObjectMacro(Transform, TransformType);
- 
+  /** Get Output image */
+  itkGetObjectMacro(Output, VectorImageType);
+
   /** Get Transform Parameters*/
   itkGetMacro(TransformParameters, ParametersType);
 
@@ -192,11 +192,15 @@ private:
   /** First and second input image indexes list */
   IndexesListType m_IndexesList;
 
-  /** Transform base */
-  TransformType::Pointer m_Transform;
-
   /** Store transformation parameters*/
   ParametersType m_TransformParameters;
+
+  /** Resampled  image */
+  VectorImagePointerType m_Output;
+
+  /** Resampler filter */
+  ResampleFilterType::Pointer m_Resampler;
+  PerBandFilterType::Pointer  m_PerBander;
 
   bool m_OutputChanged;
 

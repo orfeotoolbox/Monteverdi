@@ -25,6 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
+
 int main(int argc, char* argv[])
 {
   //Internationalization
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
 
   ParserType::Pointer        parser      = ParserType::New();
   ParserResultType::Pointer  parseResult = ParserResultType::New();
- 
+  //parser->AddInputImage();
   parser->AddOption("--FirstInputImage", "First Input Image.","-in1",true);
   parser->AddOption("--SecondInputImage", "Second Input Image.","-in2",true);
   //parser->AddOption("--Output", "Image Name where Output Image will be written.","-out",true);
@@ -88,7 +89,7 @@ int main(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
   std::cout<<"Input wrapper 1: "<<wrapperIn1<<std::endl;
-  std::cout<<"Input wrapper 2: "<<wrapperIn2<<std::endl;
+  std::cout<<"Input wrapper 3: "<<wrapperIn2<<std::endl;
 
   module->AddInputByKey("FirstInputImage",wrapperIn1);
   module->AddInputByKey("SecondInputImage",wrapperIn2);
@@ -96,5 +97,4 @@ int main(int argc, char* argv[])
   module->Start();
  
   Fl::run();
-  //Fl::check();
 }

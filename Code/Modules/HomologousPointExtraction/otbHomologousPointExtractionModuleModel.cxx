@@ -41,7 +41,7 @@ void HomologousPointExtractionModuleModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(), m_BlendingFunction(), m_Transform()
+HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(), m_Resampler(), m_PerBander()
 {
   VisualizationModelType::Pointer visualizationModel1 = VisualizationModelType::New();
   VisualizationModelType::Pointer visualizationModel2 = VisualizationModelType::New();
@@ -66,10 +66,11 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
   m_Images.push_back(m_FirstInputImage);
   m_Images.push_back(m_SecondInputImage);
 
+  m_Output = VectorImageType::New();
+  m_Resampler = ResampleFilterType::New();
+  m_PerBander = PerBandFilterType::New();
   m_IndexesList.clear();
   
-  m_Transform = TransformType::New() ;
-
   m_OutputChanged = false;  
 
 }
@@ -100,6 +101,8 @@ HomologousPointExtractionModuleModel
   if( id != 0 && id != 1 )
     itkExceptionMacro(<<"Invalid image id "<<id<<".");
  
+  m_OutputChanged = false;  
+
   image->UpdateOutputInformation();
   if( id == 0 )
     m_FirstInputImage = image;
@@ -141,7 +144,7 @@ HomologousPointExtractionModuleModel
   // Add the layer to the models
   m_VisualizationModel[id]->AddLayer(m_ImageGenerator[id]->GetLayer());
   m_VisualizationModel[id]->Update();
-  
+
   this->NotifyAll();
   //m_IsImageReady = true;
 }
@@ -225,6 +228,7 @@ HomologousPointExtractionModuleModel
 	return;
       }
     }
+ 
   return;
 }
 
@@ -245,8 +249,10 @@ HomologousPointExtractionModuleModel
   reg->SetMovingPointSet(movingPointSet);
   reg->ComputeTransform();
 
-  m_Transform = dynamic_cast<TransformType *>(dynamic_cast<T *>( reg->GetTransform() ));
   m_TransformParameters = reg->GetTransformParameters();
+  typename T::Pointer transform = T::New();
+  transform->SetParameters(m_TransformParameters);
+  m_Resampler->SetTransform(transform);
 }
 
 
@@ -288,6 +294,7 @@ HomologousPointExtractionModuleModel
 {
   typename T::Pointer transform = T::New();
   transform->SetParameters( m_TransformParameters);
+  m_Resampler->SetTransform(transform);
 
   OutPointListType            outList;
   IndexCoupleType             couple;
@@ -307,6 +314,18 @@ HomologousPointExtractionModuleModel
     }
 
   return outList;
+}
+
+
+void 
+HomologousPointExtractionModuleModel
+::OK()
+{
+  m_PerBander->SetInput( m_Images[0] );
+  m_PerBander->SetFilter(m_Resampler);
+  m_Output = m_PerBander->GetOutput();
+  m_OutputChanged = true;
+  this->NotifyAll();
 }
 
 }// namespace otb

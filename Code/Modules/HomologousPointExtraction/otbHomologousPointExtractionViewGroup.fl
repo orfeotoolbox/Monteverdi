@@ -76,8 +76,8 @@ class HomologousPointExtractionViewGroup {open
             xywh {5 440 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Button guiQuit {
-            label Quit
-            callback {Quit();}
+            label {Save/Quit}
+            callback {Quit();} selected
             tooltip {Quit Application} xywh {55 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
           }
         }
@@ -128,7 +128,7 @@ class HomologousPointExtractionViewGroup {open
               }
               Fl_Button guiAdd {
                 label Add
-                callback {AddPoints();} selected
+                callback {AddPoints();}
                 tooltip {Clear Feature List} xywh {466 537 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
               }
             }

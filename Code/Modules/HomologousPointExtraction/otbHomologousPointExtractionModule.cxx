@@ -95,11 +95,9 @@ void HomologousPointExtractionModule::Notify()
   if (m_Model->GetOutputChanged())
     {
       this->ClearOutputDescriptors();
-      
       // Add outputs
-
-      //FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      //this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the HomologousPointExtraction filtering");
+      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
+      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the HomologousPointExtraction filtering");
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));

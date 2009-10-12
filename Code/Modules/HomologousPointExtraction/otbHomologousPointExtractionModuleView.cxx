@@ -28,13 +28,16 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent()
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent()//, m_FirstCircleGlComponent()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
   m_FirstImageView = ImageViewType::New();
   m_SecondImageView = ImageViewType::New();
   m_FirstCrossGlComponent = CrossGlComponent::New();
   m_SecondCrossGlComponent = CrossGlComponent::New();
+
+  //m_FirstCircleGlComponent = CircleGlComponent::New(); 
+
   m_ColorList.clear();
 }
 
@@ -106,7 +109,9 @@ HomologousPointExtractionModuleView
 
     m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
     m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
-    m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    /////////////////m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
+    //m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCircleGlComponent );
+
     m_SecondImageView->GetFullWidget()->AddGlComponent( m_SecondCrossGlComponent );
     m_SecondImageView->GetScrollWidget()->AddGlComponent( m_SecondCrossGlComponent );
     m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCrossGlComponent );
@@ -174,6 +179,7 @@ HomologousPointExtractionModuleView
  m_FirstCrossGlComponent->ChangeColor( color, m_FirstCrossGlComponent->GetColorList().size()-1 );
  m_SecondCrossGlComponent->AddIndex( id2 );
  m_SecondCrossGlComponent->ChangeColor( color, m_SecondCrossGlComponent->GetColorList().size()-1 );
+ // m_FirstCircleGlComponent->Clear();
  this->RedrawWidgets();
 }
 
@@ -215,6 +221,9 @@ HomologousPointExtractionModuleView
     {
       vX1->value(index[0]);
       vY1->value(index[1]);
+      //m_FirstCircleGlComponent->Clear();
+      //m_FirstCircleGlComponent->AddIndex(index);
+      m_FirstImageView->GetZoomWidget()->redraw();
     }
   else // viewId==1
     {
@@ -233,6 +242,7 @@ HomologousPointExtractionModuleView
   m_ColorList.clear();
 
   m_FirstCrossGlComponent->Clear();
+  //m_FirstCircleGlComponent->Clear();
   m_SecondCrossGlComponent->Clear();
   tTransform->value("");
   tError->clear();
@@ -275,6 +285,7 @@ HomologousPointExtractionModuleView
   m_Controller->ComputeTransform();
 }
 
+
 void
 HomologousPointExtractionModuleView
 ::Notify()
@@ -286,10 +297,17 @@ void
 HomologousPointExtractionModuleView
 ::Quit()
 {
+  m_Model->OK();
+
+  this->HideAll();
+}
+
+void
+HomologousPointExtractionModuleView
+::HideAll()
+{
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
-
-
 
 }// end namespace
