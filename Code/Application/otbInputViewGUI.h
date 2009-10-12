@@ -36,8 +36,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_Browser.H>
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
-#include "otbInputChoiceDescriptor.h"
-
+#include "otbInputViewComponent.h"
+#include "otbAsynchronousProcessBase.h"
 
 namespace otb
 {
@@ -45,12 +45,12 @@ namespace otb
  *
  */
 class ITK_EXPORT InputViewGUI
-   : public itk::Object, public InputViewGroup
+  : public InputViewGroup, public AsynchronousProcessBase
 {
 public:
   /** Standard class typedefs */
   typedef InputViewGUI                  Self;
-  typedef itk::Object                   Superclass;
+  typedef AsynchronousProcessBase       Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -62,11 +62,11 @@ public:
   typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
   typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
 
-  typedef InputChoiceDescriptor::StringPairType           StringPairType;
-  typedef InputChoiceDescriptor::Pointer                  InputChoiceDescriptorPointerType;
+  typedef InputViewComponent::StringPairType           StringPairType;
+  typedef InputViewComponent::Pointer                  InputViewComponentPointerType;
 
   // map containing the key and the descriptor
-  typedef std::map<std::string,InputChoiceDescriptorPointerType> InputChoiceDescriptorMapType;
+  typedef std::map<std::string,InputViewComponentPointerType> InputViewComponentMapType;
 
   /** Getters/Setters */
   itkGetObjectMacro(Model,MonteverdiModel);
@@ -75,36 +75,34 @@ public:
   itkSetObjectMacro(Controller,MonteverdiControllerInterface);
   itkGetMacro(ModuleInstanceId,std::string);
   itkSetMacro(ModuleInstanceId,std::string);
-  InputChoiceDescriptorMapType GetInputChoiceMap(){ return m_InputChoiceMap; };
 
   void Show();
   void BuildInputInterface();
-  void BuildList(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc);
-  void BuildCheckBox(int cpt,int height,InputChoiceDescriptor* inputChoiceDesc);
 
 protected:
   /** Constructor */
   InputViewGUI();
   /** Destructor */
-  virtual ~InputViewGUI(){}
+  virtual ~InputViewGUI();
 
   /** Callbacks */
   virtual void Ok();
   virtual void Cancel();
-  static void ActivateInputChoice(Fl_Widget * w, void * v);
+
+  /** This is the watching process for the whole set of inputs */
+  virtual void RunProcess1(void *v);
 
 private:
   InputViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  static void AddInputToList(Fl_Widget * w, void * v);
-  static void RemoveInputFromList(Fl_Widget * w, void * v);
-  static void ClearList(Fl_Widget * w, void * v);
-  static void InputChoiceChanged(Fl_Widget * w, void * v);
+
   
   MonteverdiModel::Pointer                m_Model;
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
   std::string                             m_ModuleInstanceId;
-  InputChoiceDescriptorMapType            m_InputChoiceMap;
+  InputViewComponentMapType               m_InputChoiceMap;
+  bool                                    m_Alive;
+
 };
 }//end namespace otb
 

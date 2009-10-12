@@ -29,12 +29,12 @@ class InputViewGroup {open
           xywh {83 353 140 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Input gLabel {
-          label {Instance label} selected
+          label {Instance label}
           xywh {156 311 250 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
         }
       }
-      Fl_Scroll gScrollInput {open
-        xywh {0 0 570 285} box UP_BOX color 53 labelsize 12 labelcolor 186
+      Fl_Scroll gScrollInput {open selected
+        xywh {0 0 570 285} box UP_BOX color 53 labelsize 12 labelcolor 186 resizable
       } {
         Fl_Group {} {open
           xywh {85 0 400 25}

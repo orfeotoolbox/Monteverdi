@@ -80,6 +80,8 @@ public:
   // Return the writing progress
   double GetProgress() const;
 
+  /** Run the module */
+  virtual void Run();
 
 protected:
   /** Constructor */

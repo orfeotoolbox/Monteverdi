@@ -57,6 +57,9 @@ public:
   /** Change module InstanceId (ie. tree label) */
   virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId );
 
+  /** Starts caching */
+  virtual void StartCaching(const std::string & id, const std::string & key);
+
 protected:
   /** Constructor */
   MonteverdiController(){};

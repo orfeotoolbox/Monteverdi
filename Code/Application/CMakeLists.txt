@@ -10,7 +10,7 @@ SET(APPLICATION_SRCS
 otbMonteverdiModel.cxx
 otbMonteverdiViewGUI.cxx
 otbMonteverdiController.cxx
-otbInputChoiceDescriptor.cxx
+otbInputViewComponent.cxx
 otbInputViewGUI.cxx
 )
 

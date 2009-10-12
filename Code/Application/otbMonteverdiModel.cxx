@@ -58,7 +58,6 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     // Register module instance
     module->SetInstanceId(oss.str());
     m_ModuleMap[oss.str()] = module;
-    std::cout<<"New module with id "<<oss.str()<<" created: "<<m_ModuleMap[oss.str()]<<std::endl;
 
     // Register the main model to receive events from the new module
     module->RegisterListener(this);
@@ -222,10 +221,14 @@ void MonteverdiModel::StartCaching(const std::string & instanceId, const std::st
   // Disable individual reporting
   cache->WatchProgressOff();
 
+  // Register to receive events
+  cache->RegisterListener(this);
+
   // Create the instance id
   std::string id = BuildCachingModuleId(instanceId,outputKey,idx);
 
   // Store the module in the map
+  cache->SetInstanceId(id);
   m_CachingModuleMap[id] = cache;
   
   // Finally starts the module
@@ -241,6 +244,11 @@ void MonteverdiModel::EndCaching(const std::string & cachingModuleId)
 
     // Try to split back the string
     bool ok = SplitCachingModuleId(cachingModuleId,id,key,idx);
+
+    if(!ok)
+      {
+      itkExceptionMacro("Failed to split the caching module instance id");
+      }
 
     // Retrieve the caching module
     CachingModule::Pointer cache = m_CachingModuleMap[cachingModuleId];
@@ -285,10 +293,10 @@ std::string MonteverdiModel::BuildCachingModuleId(const std::string & instanceId
 bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::string & sourceId, std::string & key, unsigned int & idx)
 {
   // Eliminate prefix
-  std::string temp = instanceId.substr(0,8);
+  std::string temp = instanceId.substr(8,std::string::npos);
 
   // Get source id
-  size_t idPos = temp.find_first_of(':',0);
+  size_t idPos = temp.find_first_of(":");
 
   if(idPos==std::string::npos)
     {
@@ -297,10 +305,10 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
   sourceId = temp.substr(0,idPos);
 
   // Remove the sourceId part
-  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+  temp = temp.substr(idPos+1);
 
   // Get outputKey
-  size_t keyPos = temp.find_first_of(':',0);
+  size_t keyPos = temp.find_first_of(":");
 
   
   if(keyPos==std::string::npos)
@@ -310,7 +318,7 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
   key = temp.substr(0,keyPos);
   
   // Remove the outputKey part
-  temp = temp.substr(idPos+1,temp.size()-idPos-1);
+  temp = temp.substr(keyPos+1);
   
   // compute the idx from the remaining
   idx = atoi(temp.c_str());
@@ -321,7 +329,6 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
 void MonteverdiModel::Notify(const MonteverdiEvent & event)
 {
   // First, check if the notify event comes from a CachingModule
-
   CachingModuleMapType::iterator it = m_CachingModuleMap.find(event.GetInstanceId());
 
   if(it == m_CachingModuleMap.end())
