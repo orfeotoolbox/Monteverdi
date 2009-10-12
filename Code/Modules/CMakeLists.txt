@@ -35,7 +35,7 @@ FOREACH(moduleDir ${moduleList})
     ENDIF(SC_GUI_SRCS_TEMP)
 
     ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-    TARGET_LINK_LIBRARIES(${LIB_NAME} OTBLearning OTBIO OTBVisualization OTBVisu OTBGui OTBMonteverdiCommon)
+    TARGET_LINK_LIBRARIES(${LIB_NAME} OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBMonteverdiCommon)
     ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
 
     SET(LIST_MODULE_LIBRARIES "${LIST_MODULE_LIBRARIES};${LIB_NAME}" )

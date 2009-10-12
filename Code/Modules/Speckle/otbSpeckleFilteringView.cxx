@@ -71,10 +71,10 @@ SpeckleFilteringView
 {
 
   if( guiFilterType->value() == 0)
-    m_Controller->ProcessFrostFilter(guiFrostRadius->value(),guiLeeDeRamp->value());
+    m_Controller->ProcessFrostFilter(static_cast<unsigned int>(guiFrostRadius->value()),guiLeeDeRamp->value());
   else
     if(guiFilterType->value() == 1)
-      m_Controller->ProcessLeeFilter(guiLeeRadius->value());
+      m_Controller->ProcessLeeFilter(static_cast<unsigned int>(guiLeeRadius->value()));
   guiMainWindow->hide();
 }
 

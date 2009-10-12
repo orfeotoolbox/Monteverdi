@@ -145,10 +145,10 @@ void
 HomologousPointExtractionModuleView
 ::AddPoints()
 {
-  int x1 = vX1->value();
-  int y1 = vY1->value();
-  int x2 = vX2->value();
-  int y2 = vY2->value();
+  int x1 = static_cast<int>(vX1->value());
+  int y1 = static_cast<int>(vY1->value());
+  int x2 = static_cast<int>(vX2->value());
+  int y2 = static_cast<int>(vY2->value());
   m_Controller->AddPoints( x1, y1, x2, y2 );
 }
 
