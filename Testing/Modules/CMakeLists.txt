@@ -127,6 +127,17 @@ otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 )
 
+# Suppress warning Fl_RGB_Image deferencing pointeur
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(
+            ${Modules_SRCS}
+            otbModulesTests.cxx
+            otbHomologousPointExtractionApplication.cxx
+            otbMeanShiftApplication.cxx
+            PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
 

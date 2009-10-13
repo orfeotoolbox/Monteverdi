@@ -29,6 +29,14 @@ otbMonteverdiApplicationTest.cxx
 otbMonteverdiApplicationReaderViewer.cxx
 )
 
+# Suppress warning Fl_RGB_Image deferencing pointeur
+IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET_SOURCE_FILES_PROPERTIES(
+            ${Application_SRCS}
+            otbApplicationTests.cxx
+            PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
 TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting ${LIST_MODULE_LIBRARIES} )
