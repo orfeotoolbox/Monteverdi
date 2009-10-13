@@ -109,6 +109,17 @@ ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
 0
 )
 
+#------------- Point Extraction Module Tests ---------------------------
+
+ADD_TEST(hoTvHomologousPointExtractionModuleTest ${Modules_TESTS} otbHomologousPointExtractionModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif
+${TEMP}/moTvHomologousPointExtractionModule.tif	
+158 246 162 242
+110 153 114 149
+192 94  195 90
+0
+)
 
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
@@ -125,6 +136,7 @@ otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx
 otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
+otbHomologousPointExtractionModuleTest.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
@@ -132,7 +144,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(
             ${Modules_SRCS}
             otbModulesTests.cxx
-            otbHomologousPointExtractionApplication.cxx
             otbMeanShiftApplication.cxx
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -141,11 +152,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
 
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule OTBIO OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule otbHomologousPointExtractionModule OTBIO OTBCommon OTBTesting)
 
 
-ADD_EXECUTABLE(otbHomologousPointExtractionApplication otbHomologousPointExtractionApplication.cxx)
-TARGET_LINK_LIBRARIES(otbHomologousPointExtractionApplication otbMonteverdi otbHomologousPointExtractionModule)
 # CPack installation: only Monteverdi application
 #IF(NOT OTB_INSTALL_NO_LIBRARIES)
 #  INSTALL(TARGETS otbHomologousPointExtractionApplication

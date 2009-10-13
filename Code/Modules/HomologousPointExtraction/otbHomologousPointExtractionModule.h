@@ -64,6 +64,7 @@ public:
   typedef otb::HomologousPointExtractionModuleModel      ModelType;
   typedef otb::HomologousPointExtractionModuleView       ViewType;
 
+ itkGetObjectMacro(View,HomologousPointExtractionModuleView);
 
 protected:
   /** Constructor */
