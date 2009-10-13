@@ -87,6 +87,8 @@ HomologousPointExtractionModuleController
   m_SecondWidgetsController->AddActionHandler(m_SecondChangeScaledRegionHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondChangeScaleHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondLeftMouseClickedHandler);
+
+  m_TransformType = otb::UNKNOWN;
 }
 
 HomologousPointExtractionModuleController
@@ -196,6 +198,7 @@ HomologousPointExtractionModuleController
 ::ClearPointList()
 {
   m_Model->ClearIndexesList();
+  this->SetTransformationAvailable( false );
 }
 
 void
@@ -203,6 +206,7 @@ HomologousPointExtractionModuleController
 ::DeletePointFromList( unsigned int id )
 {
   m_Model->RemovePointFromList( id );
+  this->SetTransformationAvailable( false );
 }
 
 
@@ -216,34 +220,40 @@ HomologousPointExtractionModuleController
 
 void
 HomologousPointExtractionModuleController
+::FocusOn(IndexType id1, IndexType id2)
+{
+  m_FirstChangeRegionHandler->GetModel()->SetExtractRegionCenter(id1);
+  m_FirstChangeRegionHandler->GetModel()->Update();
+  m_SecondChangeRegionHandler->GetModel()->SetExtractRegionCenter(id2);
+  m_SecondChangeRegionHandler->GetModel()->Update();
+}
+
+
+void
+HomologousPointExtractionModuleController
 ::ComputeTransform()
 {
   int transformType = m_View->gTransform->value();
-  TransformEnumType transf = otb::UNKNOWN;
+  m_TransformType = otb::UNKNOWN;
   switch (transformType)
     {
     case 0:
       {
-	transf = otb::UNKNOWN;
+	m_TransformType = otb::TRANSLATION;
 	break;
       }
     case 1:
-    {
-	transf = otb::TRANSLATION;
-      break;
-    }
-    case 2:
       {
-	transf = otb::AFFINE;
+	m_TransformType = otb::AFFINE;
 	break;
       }
     default:
       {
-	return;
+	break;
       }
     }
   
-  if(transf == otb::UNKNOWN)
+  if(m_TransformType == otb::UNKNOWN)
     {
       MsgReporter::GetInstance()->SendError("Please select a transform");
       return;
@@ -255,8 +265,9 @@ HomologousPointExtractionModuleController
 
   try
     {
-      m_Model->ComputeTransform(transf);
-      this->UpdateStats(transf);
+      m_Model->ComputeTransform(m_TransformType);
+      this->SetTransformationAvailable( true );
+      this->UpdateStats();
     }
   catch (itk::ExceptionObject & err)
     {
@@ -269,8 +280,18 @@ HomologousPointExtractionModuleController
 
 void
 HomologousPointExtractionModuleController
-::UpdateStats(TransformEnumType transf)
+::UpdateStats()
 {
+  if(m_TransformType == otb::UNKNOWN)
+    {
+      MsgReporter::GetInstance()->SendError("Invalid Transform type.");
+      return;
+    }
+  if( !this->GetTransformationAvailable() )
+    {
+      MsgReporter::GetInstance()->SendError("No transformation computed.");
+      return;
+    }
   itk::OStringStream oss;
   oss.str("");
   oss<<m_Model->GetTransformParameters();
@@ -278,7 +299,7 @@ HomologousPointExtractionModuleController
    
   std::vector<double> values;
   
-  OutPointListType outTranformedPoint = m_Model->TransformPoints(transf);
+  OutPointListType outTranformedPoint = m_Model->TransformPoints(m_TransformType);
   IndexesListType  indexesList        = m_Model->GetIndexesList();
   IndexType idFix, idOut;
 
@@ -306,6 +327,64 @@ HomologousPointExtractionModuleController
   oss.str("");
   oss<<sum;
   m_View->tMeanError->value(oss.str().c_str());
+  m_View->gGuess->activate();
+}
+
+
+void
+HomologousPointExtractionModuleController
+::Evaluate( IndexType id )
+{
+  if(m_TransformType == otb::UNKNOWN)
+    {
+      MsgReporter::GetInstance()->SendError("Invalid Transform type.");
+      return;
+    }
+  if( !this->GetTransformationAvailable() )
+    {
+      MsgReporter::GetInstance()->SendError("No transformation computed.");
+      return;
+    }
+  
+  OutPointType outPoint;
+  try
+    {
+      outPoint = m_Model->TransformPoint(m_TransformType, id);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+
+  // Update view
+  IndexType idOut;
+  idOut[0] = static_cast<long>(std::floor(outPoint[0]+0.5));
+  idOut[1] = static_cast<long>(std::floor(outPoint[1]+0.5));  
+  m_View->ChangePointValue(idOut, 1);
+  m_SecondChangeRegionHandler->GetModel()->SetExtractRegionCenter(idOut);
+  m_SecondChangeRegionHandler->GetModel()->Update();
+}
+
+void
+HomologousPointExtractionModuleController
+::OK()
+{
+  if( !this->GetTransformationAvailable() )
+    {
+      MsgReporter::GetInstance()->SendError("No transformation available.");
+      return;
+    }
+  try
+    {
+      m_Model->OK();
+      m_View->HideAll();
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
 }
 
 } // end namespace otb

@@ -70,6 +70,8 @@ public:
   typedef Image<PixelType,2>                  ImageType;
   typedef VectorImageType::Pointer            VectorImagePointerType;
   typedef VectorImageType::IndexType          IndexType;
+  typedef VectorImageType::SizeType           SizeType;
+  typedef VectorImageType::PointType          ImagePointType;
   typedef std::vector<VectorImagePointerType> ImageListType;    
 
   typedef std::pair<IndexType, IndexType> IndexCoupleType;
@@ -108,6 +110,7 @@ public:
 
   /** Output */
   typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
+  typedef ResampleFilterType::TransformType                                              ResampleTransformType;
   typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
 
   /** Get the unique instanc1e of the model */
@@ -145,9 +148,14 @@ public:
   /** Perform the transform */
   template <typename T> void GenericRegistration();
 
-  /** Compute the transform the point of m_IndexList */
+
+  /** Compute the transform on one point */
+  OutPointType TransformPoint( TransformEnumType transformType, IndexType id );
+  /** Compute the transform of a list of index */
+  template <typename T> OutPointType GenericTransformPoint(IndexType index);
+
+  /** Compute the transform the points of m_IndexList */
   OutPointListType TransformPoints( TransformEnumType transformType );
-  
   /** Compute the transform of a list of index */
   template <typename T> OutPointListType GenericTransformPoints(IndexListType inList);
 
@@ -201,6 +209,8 @@ private:
   /** Resampler filter */
   ResampleFilterType::Pointer m_Resampler;
   PerBandFilterType::Pointer  m_PerBander;
+
+  TransformType::Pointer m_Transform;
 
   bool m_OutputChanged;
 

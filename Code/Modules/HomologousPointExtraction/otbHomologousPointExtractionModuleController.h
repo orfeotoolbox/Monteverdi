@@ -152,12 +152,18 @@ public:
   virtual void ClearPointList();
   virtual void DeletePointFromList( unsigned int id );
   virtual void ComputeTransform();
+  virtual void FocusOn(IndexType id1, IndexType id2);
+  virtual void Evaluate( IndexType id );
+  virtual void OK();
 
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId );
 
-  void UpdateStats(TransformEnumType transf);
+  void UpdateStats();
 
+  //itkSetMacro(TransformationAvailable, bool);
+  //itkGetMacro(TransformationAvailable, bool);
+ 
 protected:
   /** Constructor */
   HomologousPointExtractionModuleController();
@@ -201,7 +207,8 @@ private:
   PixelDescriptionModelType::Pointer         m_SecondPixelModel;
   PixelDescriptionViewType::Pointer          m_SecondPixelView;
 
-  bool m_ImageReady;
+  //bool m_TransformationAvailable;
+  TransformEnumType m_TransformType;
 
 };
 } //end namespace otb

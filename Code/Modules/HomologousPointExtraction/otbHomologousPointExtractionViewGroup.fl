@@ -40,12 +40,10 @@ class HomologousPointExtractionViewGroup {open
           xywh {0 20 200 580} box PLASTIC_DOWN_BOX color 48
         } {
           Fl_Choice gTransform {
-            label Transformation open
+            label Transformation
+            callback {ClearTransformationInfo();} open
             xywh {5 60 190 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           } {
-            MenuItem guiInitMenu {
-              tooltip {""} xywh {20 20 30 20}
-            }
             MenuItem {} {
               label Translation
               tooltip {ax+b transformation} xywh {35 35 30 20}
@@ -77,7 +75,7 @@ class HomologousPointExtractionViewGroup {open
           } {}
           Fl_Button guiQuit {
             label {Save/Quit}
-            callback {Quit();} selected
+            callback {Quit();}
             tooltip {Quit Application} xywh {55 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
           }
         }
@@ -88,7 +86,7 @@ class HomologousPointExtractionViewGroup {open
         Fl_Group {} {open
           xywh {204 0 600 605} resizable
         } {
-          Fl_Group guiImageGroup1 {
+          Fl_Group guiImageGroup1 {open
             xywh {204 0 210 600}
           } {
             Fl_Group gFull1 {
@@ -96,7 +94,7 @@ class HomologousPointExtractionViewGroup {open
               xywh {210 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gScroll1 {
-              label {Scrol 1} open
+              label {Scroll 1} open
               xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gZoom1 {
@@ -105,31 +103,41 @@ class HomologousPointExtractionViewGroup {open
             } {}
           }
           Fl_Group {} {open
-            xywh {413 0 176 600}
+            xywh {413 0 178 600}
           } {
             Fl_Group gIndexes {open
-              xywh {416 468 165 95} box PLASTIC_DOWN_BOX color 7
+              xywh {416 467 165 128} box PLASTIC_DOWN_BOX color 7
             } {
               Fl_Value_Input vX1 {
                 label X1
-                xywh {439 476 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
+                xywh {441 475 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
               }
               Fl_Value_Input vY1 {
                 label Y1
-                xywh {439 506 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
+                xywh {441 505 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 maximum 1e+06 step 1
               }
               Fl_Value_Input vX2 {
                 label X2
-                xywh {504 476 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
+                xywh {506 475 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
               }
               Fl_Value_Input vY2 {
                 label Y2
-                xywh {504 506 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
+                xywh {506 505 50 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 8 maximum 1e+06 step 1
               }
               Fl_Button guiAdd {
                 label Add
                 callback {AddPoints();}
-                tooltip {Clear Feature List} xywh {466 537 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+                tooltip {Clear Feature List} xywh {506 539 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              }
+              Fl_Button guiFocusRound {
+                label {Focus Click}
+                callback {Focus(1);}
+                tooltip {Focus on the last clicked point couple.} xywh {421 539 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              }
+              Fl_Button gGuess {
+                label Guess
+                callback {Evaluate();} selected
+                tooltip {Focus on the last clicked point couple.} xywh {464 568 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186 deactivate
               }
             }
             Fl_Browser lPointList {
@@ -150,7 +158,12 @@ class HomologousPointExtractionViewGroup {open
             Fl_Button guiComputeTransform {
               label Evaluate
               callback {this->ComputeTransform();}
-              tooltip {Quit Application} xywh {457 341 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+              tooltip {Quit Application} xywh {457 390 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            }
+            Fl_Button guiFocusPoint {
+              label {Focus Point}
+              callback {Focus(0);}
+              tooltip {Focus on the selected point couple.} xywh {463 326 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
           }
           Fl_Group guiImageGroup2 {open
@@ -189,5 +202,11 @@ class HomologousPointExtractionViewGroup {open
   Function {UpdateListSelectionColor()} {open return_type {virtual void}
   } {}
   Function {ComputeTransform()} {open return_type {virtual void}
+  } {}
+  Function {Focus(unsigned int i)} {open return_type {virtual void}
+  } {}
+  Function {ClearTransformationInfo()} {open return_type {virtual void}
+  } {}
+  Function {Evaluate()} {open return_type {virtual void}
   } {}
 } 
