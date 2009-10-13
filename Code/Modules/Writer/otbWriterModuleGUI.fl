@@ -11,7 +11,7 @@ class WriterModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Save Dataset} open
-      xywh {277 232 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {611 158 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
@@ -31,7 +31,7 @@ class WriterModuleGUI {open
         callback {this->Browse();}
         xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Progress pBar {selected
+      Fl_Progress pBar {
         xywh {0 125 365 20} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
@@ -41,5 +41,7 @@ class WriterModuleGUI {open
   Function {Browse()} {open return_type {virtual void}
   } {}
   Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {~WriterModuleGUI()} {open selected return_type virtual
   } {}
 } 

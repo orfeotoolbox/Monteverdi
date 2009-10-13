@@ -149,7 +149,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
 
 TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule otbHomologousPointExtractionModule OTBIO OTBCommon OTBTesting)

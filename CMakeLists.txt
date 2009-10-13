@@ -13,6 +13,16 @@ ADD_DEFINITIONS(
         -D_LARGEFILE64_SOURCE
         -D_LARGE_FILES
         )
+#-----------------------------------------------------------------------------
+# Montevrdi version number.  An even minor number corresponds to releases.
+SET(Monteverdi_VERSION_MAJOR "0")
+SET(Monteverdi_VERSION_MINOR "1-Beta")
+SET(Monteverdi_VERSION_PATCH "0")
+
+
+# Version string should not include patch level.  The major.minor is
+# enough to distinguish available features of the toolkit.
+SET(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
 
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
@@ -222,10 +232,10 @@ MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Monteverdi Applications")
 MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
 
-SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
-SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
+SET(CPACK_PACKAGE_VERSION  "${Monteverdi_VERSION_STRING}")
+SET(CPACK_PACKAGE_VERSION_MAJOR "${Monteverdi_VERSION_MAJOR}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${Monteverdi_VERSION_MINOR}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi_VERSION_PATCH}")
 
 SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING  "Orfeo toolbox contact email")
 
@@ -239,7 +249,7 @@ SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
 MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
 SET(CPACK_DEBIAN_PACKAGE_NAME "otb-applications" CACHE STRING "Debian package name")
 
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-Applications-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "Monteverdi-${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}")
 
 SET(CPACK_RESOURCE_FILE_LICENSE "${OTB_SOURCE_DIR}/Copyright/OTBCopyright.txt")
 
