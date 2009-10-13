@@ -37,6 +37,5 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
 TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting ${LIST_MODULE_LIBRARIES} )

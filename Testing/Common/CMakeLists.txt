@@ -16,6 +16,5 @@ otbTypeManagerTest.cxx
 otbModuleTest.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${Common_SRCS})
 TARGET_LINK_LIBRARIES(otbCommonTests OTBMonteverdiCommon OTBIO OTBTesting)
