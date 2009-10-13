@@ -79,6 +79,9 @@ public:
   virtual void ClearPointList();
   virtual void DeletePoint();
   virtual void ComputeTransform();
+  virtual void Focus(unsigned int i);
+  virtual void ClearTransformationInfo();
+  virtual void Evaluate();
 
   void UpdateListSelectionColor();
   void ChangePointValue(IndexType index, unsigned int viewId );
@@ -122,6 +125,8 @@ private:
   CircleGlComponent::Pointer                    m_SecondCircleGlComponent;
   /** Point color */
   ColorListType                                 m_ColorList;
+  /** Green color */
+  ColorType                                     m_Green;
 };
 }//end namespace otb
 

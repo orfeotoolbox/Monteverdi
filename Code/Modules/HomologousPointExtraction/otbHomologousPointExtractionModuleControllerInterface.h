@@ -49,11 +49,18 @@ public:
   virtual void DeletePointFromList( unsigned int id ) =0;
   virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId ) =0;
   virtual void ComputeTransform() =0;
+  virtual void FocusOn(IndexType id1, IndexType id2) =0;
+  virtual void Evaluate( IndexType id ) =0;
+  virtual void OK() =0;
+
+  itkSetMacro(TransformationAvailable, bool);
+  itkGetMacro(TransformationAvailable, bool);
 
 protected:
   /** Constructor */
   HomologousPointExtractionModuleControllerInterface()
   {
+    m_TransformationAvailable = false;
   }
   /** Destructor */
   ~HomologousPointExtractionModuleControllerInterface() {};
@@ -62,6 +69,7 @@ protected:
 private:
   HomologousPointExtractionModuleControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  bool m_TransformationAvailable;
 };
 } // end namespace otb
 
