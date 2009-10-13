@@ -34,40 +34,17 @@ int otbTypeManagerTest(int argc, char * argv[])
   std::cout<<typeManager<<std::endl;
 
   // Try to register twice the same type
-  try
-    {
-      typeManager->RegisterType< itk::PointSet<double,2> >("Point_Set");
-      return EXIT_FAILURE;
-    }
-  catch(itk::ExceptionObject & )
-    {
-    std::cout<<"Expected exception was caught."<<std::endl;
-    }
-
+  
+  typeManager->RegisterType< itk::PointSet<double,2> >("Point_Set");
+  
   // Try to get the name of a type
   std::cout<<"The name of the pointSet type is: "<<typeManager->GetTypeName< itk::PointSet<double,2> >()<<std::endl;
 
   // Try to get the name of an unregistered type
-  try
-    {
-    std::string name = typeManager->GetTypeName< itk::PointSet<float,2> >();
-    return EXIT_FAILURE;
-    }
-  catch(itk::ExceptionObject & )
-    {
-    std::cout<<"Expected exception was caught."<<std::endl;
-    }
+  std::string name = typeManager->GetTypeName< itk::PointSet<float,2> >();
 
-// Try to register a type with an already existing name
-  try
-    {
-    typeManager->RegisterType< itk::PointSet<float,2> >("Point_Set");
-    return EXIT_FAILURE;
-    }
-  catch(itk::ExceptionObject & )
-    {
-    std::cout<<"Expected exception was caught."<<std::endl;
-    }
-  
+  // Try to register a type with an already existing name
+  typeManager->RegisterType< itk::PointSet<float,2> >("Point_Set");
+   
   return EXIT_SUCCESS;
 }
