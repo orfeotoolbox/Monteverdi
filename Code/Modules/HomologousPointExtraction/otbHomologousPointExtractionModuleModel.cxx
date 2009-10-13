@@ -20,7 +20,9 @@
 #include "otbFltkFilterWatcher.h"
 
 #include "otbPointSetRegister.h"
+#include "itkLandmarkBasedTransformInitializer.h"
 #include "otbImageFileWriter.h"
+
 namespace otb
 {
 /** Initialize the singleton */
@@ -194,13 +196,11 @@ HomologousPointExtractionModuleModel
     {
       IndexType idFix, idMov;;
       idFix = m_IndexesList[i].first;
-      fixedPoint[0] = static_cast<float>(idFix[0]);
-      fixedPoint[1] = static_cast<float>(idFix[1]);
+      m_FirstInputImage->TransformIndexToPhysicalPoint(idFix,fixedPoint);
       fix->SetPoint(i,fixedPoint);
 
       idMov = m_IndexesList[i].second;
-      movingPoint[0] = static_cast<float>(idMov[0]);
-      movingPoint[1] = static_cast<float>(idMov[1]);   
+      m_SecondInputImage->TransformIndexToPhysicalPoint(idMov,movingPoint);
       mov->SetPoint(i,movingPoint);
     }
 }  
@@ -214,13 +214,24 @@ HomologousPointExtractionModuleModel
     {
     case otb::TRANSLATION:
       {	
-	this->GenericRegistration<TranslationTransformType>();
-	break;
+      ScalesType scales(2);
+      scales.Fill(0.01);
+      this->GenericRegistration<TranslationTransformType>(scales);
+      break;
       }
     case otb::AFFINE:
       {
-	this->GenericRegistration<AffineTransformType>();
-	break;
+      ScalesType scales(4);
+      // Scaling scale
+      scales[0] = 1.;
+      // Rotation scale
+      scales[1] = 1.;
+      // Translation scale
+      scales[2] = 1000;
+      scales[3] = 1000;
+
+      this->GenericRegistration<Similarity2DTransformType>(scales);
+      break;
       }
     default:
       {
@@ -236,33 +247,53 @@ HomologousPointExtractionModuleModel
 template<typename T>
 void 
 HomologousPointExtractionModuleModel
-::GenericRegistration()
+::GenericRegistration(const ScalesType & scales)
 {
   // Create the point set.
   PointSetPointerType fixPointSet = PointSetType::New();
   PointSetPointerType movingPointSet = PointSetType::New();
   this->ConvertList( fixPointSet, movingPointSet );
-
   typedef PointSetRegister<T> PointSetRegisterType;
   typename PointSetRegisterType::Pointer reg = PointSetRegisterType::New();
   reg->SetFixPointSet(fixPointSet);
   reg->SetMovingPointSet(movingPointSet);
+  reg->SetScales(scales);
   reg->ComputeTransform();
-
   m_TransformParameters = reg->GetTransformParameters();
-  //  m_Transform = T::New();
-  //  m_Transform = reg->GetTransform();
-
   typename T::Pointer transform = T::New();
   transform->SetParameters(m_TransformParameters);
   m_Resampler->SetTransform(transform);
+  
+/** This code is commented out because it only handles the Rigid2DTransform 
+
+  typedef itk::LandmarkBasedTransformInitializer<T,VectorImageType,VectorImageType> TransformInitializerType;
+  typename TransformInitializerType::Pointer ti = TransformInitializerType::New();
+  typename TransformInitializerType::LandmarkPointContainer fixedLandmarks, movingLandmarks;
+  typename TransformInitializerType::LandmarkPointType fixedPoint,movingPoint;
+  
+  for(IndexesListType::const_iterator it = m_IndexesList.begin(); it!=m_IndexesList.end();++it)
+    {
+    m_FirstInputImage->TransformIndexToPhysicalPoint(it->first,fixedPoint);
+    m_SecondInputImage->TransformIndexToPhysicalPoint(it->second,movingPoint);
+    
+    fixedLandmarks.push_back(fixedPoint);
+    movingLandmarks.push_back(movingPoint);
+    }
+  ti->SetFixedLandmarks(fixedLandmarks);
+  ti->SetMovingLandmarks(movingLandmarks);
+  typename T::Pointer transform = T::New();
+  ti->SetTransform(transform);
+  ti->InitializeTransform();
+  m_TransformParameters = transform->GetParameters();
+  m_Resampler->SetTransform(transform);
+*/
 }
 
-HomologousPointExtractionModuleModel::OutPointType
+HomologousPointExtractionModuleModel::IndexType
 HomologousPointExtractionModuleModel
 :: TransformPoint( TransformEnumType transformType, IndexType id )
 {
-  OutPointType out;
+  IndexType out;
   switch (transformType)
     {
     case otb::TRANSLATION:
@@ -272,7 +303,7 @@ HomologousPointExtractionModuleModel
       }
     case otb::AFFINE:
       {
-	out = this->GenericTransformPoint<AffineTransformType>(id);
+	out = this->GenericTransformPoint<Similarity2DTransformType>(id);
 	break;
       }
     default:
@@ -284,7 +315,7 @@ HomologousPointExtractionModuleModel
 }
 
 template<typename T>
-HomologousPointExtractionModuleModel::OutPointType 
+HomologousPointExtractionModuleModel::IndexType
 HomologousPointExtractionModuleModel
 ::GenericTransformPoint( IndexType index )
 {
@@ -294,24 +325,22 @@ HomologousPointExtractionModuleModel
   OutPointListType            out;
   typename T::InputPointType  inPoint; 
   typename T::OutputPointType outPoint;
-  OutPointType                idOut;
+  IndexType                   idOut;
   
-  inPoint[0] = index[0]; 
-  inPoint[1] = index[1];
+  m_FirstInputImage->TransformIndexToPhysicalPoint(index,inPoint);
   outPoint = transform->TransformPoint(inPoint);
-  idOut[0] = static_cast<double>(outPoint[0]);
-  idOut[1] = static_cast<double>(outPoint[1]);
-    
+  m_SecondInputImage->TransformPhysicalPointToIndex(outPoint,idOut);
+  
   return idOut;
 }
 
 
-HomologousPointExtractionModuleModel::OutPointListType 
+HomologousPointExtractionModuleModel::IndexListType 
 HomologousPointExtractionModuleModel
 ::TransformPoints( TransformEnumType transformType )
 {
   IndexListType inList;
-  OutPointListType outList;
+  IndexListType outList;
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
       inList.push_back(m_IndexesList[i].first);
@@ -326,7 +355,7 @@ HomologousPointExtractionModuleModel
       }
     case otb::AFFINE:
       {
-	outList = this->GenericTransformPoints<AffineTransformType>(inList);
+	outList = this->GenericTransformPoints<Similarity2DTransformType>(inList);
 	break;
       }
     default:
@@ -339,28 +368,24 @@ HomologousPointExtractionModuleModel
 
 
 template<typename T>
-HomologousPointExtractionModuleModel::OutPointListType 
+HomologousPointExtractionModuleModel::IndexListType 
 HomologousPointExtractionModuleModel
 ::GenericTransformPoints( IndexListType inList )
 {
   typename T::Pointer transform = T::New();
   transform->SetParameters( m_TransformParameters);
  
-  OutPointListType            outList;
-  IndexCoupleType             couple;
+  IndexListType               outList;
   typename T::InputPointType  inPoint; 
   typename T::OutputPointType outPoint;
-  OutPointType                idOut;
+  IndexType                   idOut;
 
   for(unsigned int i=0; i<inList.size(); i++)
     {
-      inPoint[0] = inList[i][0]; 
-      inPoint[1] = inList[i][1];
-      outPoint = transform->TransformPoint(inPoint);
-      idOut[0] = static_cast<double>(outPoint[0]);
-      idOut[1] = static_cast<double>(outPoint[1]);
-
-      outList.push_back(idOut);
+    m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
+    outPoint = transform->TransformPoint(inPoint);
+    m_SecondInputImage->TransformPhysicalPointToIndex(outPoint,idOut);
+    outList.push_back(idOut);
     }
 
   return outList;
@@ -372,66 +397,19 @@ void
 HomologousPointExtractionModuleModel
 ::OK()
 {
-//   TranslationTransformType::Pointer transfo = TranslationTransformType::New();
-//   TranslationTransformType::OutputVectorType param;
-//   std::cout<<param<<std::endl;
-//   param[0] = 1;
-//   param[1] = 1;
-//   transfo->SetOffset(param);
-//   m_Resampler->SetTransform(transfo);
-  //std::cout<<transfo->GetParameters()<<std::endl;
-  //std::cout<<"OKKKKKKKKKKKKKKKKKKKKKKKKK"<<std::endl;
-  std::cout<<m_FirstInputImage<<std::endl;
-  std::cout<<m_SecondInputImage<<std::endl;
-  m_PerBander->SetInput( m_SecondInputImage );
+  // Import parameters from fixed image
 
-  ResampleTransformType::InputPointType  inPoint; 
-  ResampleTransformType::OutputPointType outPoint;
-  OutPointType                   idOut;
-  IndexType id;
-  inPoint[0] = m_SecondInputImage->GetOrigin()[0]; 
-  inPoint[1] = m_SecondInputImage->GetOrigin()[1];
-  outPoint = m_Resampler->GetTransform()->TransformPoint(inPoint);
-  outPoint[0] = -outPoint[0];
-  outPoint[1] = -outPoint[1];
-  id[0] = static_cast<unsigned long>(outPoint[0]);
-  id[1] = static_cast<unsigned long>(outPoint[1]);
-  std::cout<<id<<std::endl;
-  m_Resampler->SetOutputStartIndex(id);
-
-//   id[0] = m_SecondInputImage->GetOrigin()[0];
-//   id[1] = m_SecondInputImage->GetOrigin()[1]; 
-//   inPoint[0] = m_SecondInputImage->GetLargestPossibleRegion().GetSize()[0];
-//   inPoint[1] = m_SecondInputImage->GetLargestPossibleRegion().GetSize()[1];
-//   outPoint = m_Resampler->GetTransform()->TransformPoint(inPoint);
-//   SizeType size;
-//   size[0] = static_cast<unsigned long>(vcl_abs(outPoint[0]));
-//   size[1] = static_cast<unsigned long>(vcl_abs(outPoint[1]));
-//   std::cout<<inPoint<<" -> "<<size<<std::endl;
-  m_Resampler->SetSize(m_FirstInputImage->GetLargestPossibleRegion().GetSize());//m_SecondInputImage->GetLargestPossibleRegion().GetSize());
-
-  ImagePointType pt;
-  pt[0] = 0;
-  pt[1] = 0;  
+  m_Resampler->SetSize(m_FirstInputImage->GetLargestPossibleRegion().GetSize());
   m_Resampler->SetOutputSpacing(m_SecondInputImage->GetSpacing());
-  m_Resampler->SetOutputOrigin( pt );//m_SecondInputImage->GetOrigin());
-  m_Resampler->SetOutputDirection(m_SecondInputImage->GetDirection());
-  //m_Resampler->SetSize(m_SecondInputImage->GetLargestPossibleRegion().GetSize());
-
+  m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
   m_Resampler->UpdateOutputInformation();
+  m_PerBander->SetInput(m_SecondInputImage);
   m_PerBander->SetFilter(m_Resampler);
   m_PerBander->UpdateOutputInformation();
   m_Output = m_PerBander->GetOutput();
 
-  typedef ImageFileWriter<VectorImageType> WType;
-  WType::Pointer writer = WType::New();
-  writer->SetInput(m_PerBander->GetOutput());
-  writer->SetFileName("tototatatititutu.tif");
-  writer->Update();
-
   m_OutputChanged = true;
   this->NotifyAll();
-std::cout<<"OKKKKKKKKKKKKKKKKKKKKKKKKK"<<std::endl;
 }
 
 }// namespace otb

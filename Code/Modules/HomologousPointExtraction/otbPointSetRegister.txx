@@ -57,14 +57,11 @@ PointSetRegister<TTransform>
   RegistrationType::Pointer registration = RegistrationType::New();
   // Scale the translation components of the Transform in the Optimizer
   
-  OptimizerType::ScalesType scales( invTransform->GetNumberOfParameters() );
-
-  scales.Fill( 0.01 );
-  unsigned long numberOfIterations = 100;
+  unsigned long numberOfIterations = 2000;
   double gradientTolerance = 1e-5; // convergence criterion
   double valueTolerance = 1e-5; // convergence criterion
   double epsilonFunction = 1e-6; // convergence criterion
-  optimizer->SetScales( scales );
+  optimizer->SetScales( m_Scales );
   optimizer->SetNumberOfIterations( numberOfIterations );
   optimizer->SetValueTolerance( valueTolerance );
   optimizer->SetGradientTolerance( gradientTolerance );

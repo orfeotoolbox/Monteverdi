@@ -299,7 +299,7 @@ HomologousPointExtractionModuleController
    
   std::vector<double> values;
   
-  OutPointListType outTranformedPoint = m_Model->TransformPoints(m_TransformType);
+  ModelType::IndexListType    outTranformedPoint = m_Model->TransformPoints(m_TransformType);
   IndexesListType  indexesList        = m_Model->GetIndexesList();
   IndexType idFix, idOut;
 
@@ -346,7 +346,7 @@ HomologousPointExtractionModuleController
       return;
     }
   
-  OutPointType outPoint;
+  IndexType outPoint;
   try
     {
       outPoint = m_Model->TransformPoint(m_TransformType, id);
@@ -358,11 +358,8 @@ HomologousPointExtractionModuleController
     }
 
   // Update view
-  IndexType idOut;
-  idOut[0] = static_cast<long>(std::floor(outPoint[0]+0.5));
-  idOut[1] = static_cast<long>(std::floor(outPoint[1]+0.5));  
-  m_View->ChangePointValue(idOut, 1);
-  m_SecondChangeRegionHandler->GetModel()->SetExtractRegionCenter(idOut);
+  m_View->ChangePointValue(outPoint,1);
+  m_SecondChangeRegionHandler->GetModel()->SetExtractRegionCenter(outPoint);
   m_SecondChangeRegionHandler->GetModel()->Update();
 }
 
