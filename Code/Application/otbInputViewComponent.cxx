@@ -446,30 +446,32 @@ bool InputViewComponent::IsReady()
     {
     resp = false;
     }
-
-  if( (m_InputDataDescriptor.IsOptional() && m_CheckButton->value() == 1)) 
+  else
     {
-    if(m_CheckButton->value() ==1)
+    if( (m_InputDataDescriptor.IsOptional() && m_CheckButton->value() == 1)) 
+      {
+      if(m_CheckButton->value() ==1)
+	{
+	if(m_InputDataDescriptor.IsMultiple())
+	  {
+	  resp = (m_FlBrowser->size() > 0);
+	  }
+	else
+	  {
+	  resp = (m_FlChoice->value()>=0);
+	  }
+	}
+      }
+    else if(!m_InputDataDescriptor.IsOptional())
       {
       if(m_InputDataDescriptor.IsMultiple())
 	{
-	resp = (m_FlBrowser->size() > 0);
+	resp =  (m_FlBrowser->size() > 0);
 	}
       else
 	{
 	resp = (m_FlChoice->value()>=0);
 	}
-      }
-    }
-  else if(!m_InputDataDescriptor.IsOptional())
-    {
-    if(m_InputDataDescriptor.IsMultiple())
-      {
-      resp =  (m_FlBrowser->size() > 0);
-      }
-    else
-      {
-      resp = (m_FlChoice->value()>=0);
       }
     }
   return resp;
