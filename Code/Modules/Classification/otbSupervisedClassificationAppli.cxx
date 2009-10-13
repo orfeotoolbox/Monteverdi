@@ -1760,6 +1760,7 @@ SupervisedClassificationAppli
 
   m_Output = m_ChangeLabelFilter->GetOutput();
   m_HasOutput = true;
+  this->NotifyAll();
 }
 
 /**
@@ -1803,16 +1804,19 @@ void
 SupervisedClassificationAppli
 ::ShowImage()
 {
-  FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
-  guiFullWindow->remove(full);
+  if(m_ResultViewer.IsNotNull())
+    {
+    FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
+    guiFullWindow->remove(full);
 
-  if (m_ImageViewer->GetUseScroll())
-  {
-    ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-    guiScrollWindow->remove(scroll);
-  }
+    if (m_ImageViewer->GetUseScroll())
+      {
+      ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+      guiScrollWindow->remove(scroll);
+      }
+    }
 
-  full = m_ImageViewer->GetFullWidget();
+  FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
   full->resize(0,0,guiFullWindow->w(),guiFullWindow->h());
   guiFullWindow->add(full);
   guiFullWindow->resizable(full);
@@ -1892,7 +1896,7 @@ SupervisedClassificationAppli
 ::DisplayResults()
 {
 
-  if (!bDisplay->value())
+  if (bDisplay->value()>0)
   {
     this->ShowImage();
   }

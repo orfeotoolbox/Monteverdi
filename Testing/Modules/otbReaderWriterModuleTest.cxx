@@ -31,19 +31,17 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   otb::Module::Pointer writerModule = specificWriterModule.GetPointer();
   
   std::cout<<"Module: "<<readerModule<<std::endl;
-
-  // Put in the tests
-//   typedef otb::VectorImage<double,2>      ImageType;
-//   typedef otb::ImageFileWriter<ImageType> WriterType;
   
   readerModule->Start();
   Fl::check();
 
   // Simulate file chooser and ok callback
   specificReaderModule->vFilePath->value(argv[1]);
+  specificReaderModule->vFilePath->do_callback();
+  specificReaderModule->vName->value("test");
   specificReaderModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test (Whole dataset)");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
@@ -51,10 +49,15 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   writerModule->AddInputByKey("InputDataSet",wrapperOut);
   writerModule->Start();
   Fl::check();
-  
-  // Simulate file chooser and ok callback
   specificWriterModule->vFilePath->value(argv[2]);
   specificWriterModule->bOk->do_callback();
+
+  // Wait for the writer to complete 
+  while (specificWriterModule->IsRunning())
+    {
+    Fl::check();
+    OpenThreads::Thread::microSleep(500);
+    }
   
   return EXIT_SUCCESS;
 }

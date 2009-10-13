@@ -37,9 +37,15 @@ int otbReaderModuleTest(int argc, char* argv[])
 
   // Simulate file chooser and ok callback
   specificModule->vFilePath->value(argv[1]);
+  specificModule->vFilePath->do_callback();
+  specificModule->vName->value("test");
+  Fl::check();
   specificModule->bOk->do_callback();
+  Fl::check();
+  
+  std::cout<<specificModule<<std::endl;
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("test (Whole dataset)");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 

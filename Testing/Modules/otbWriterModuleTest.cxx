@@ -52,6 +52,13 @@ int otbWriterModuleTest(int argc, char* argv[])
   specificModule->vFilePath->value(argv[2]);
   specificModule->bOk->do_callback();
 
+  // Wait for the writer to complete 
+  while(specificModule->IsRunning())
+    {
+    Fl::check();
+    OpenThreads::Thread::microSleep(500);
+    }
+
   return EXIT_SUCCESS;
 
 }

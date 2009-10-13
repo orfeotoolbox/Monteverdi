@@ -69,7 +69,7 @@ ${TEMP}/readerwriterModuleOuptut.tif
 #------------------  Viewer Tests ---------------------------
 ADD_TEST(moTvViewerModuleTest ${Modules_TESTS} otbViewerModuleTest
 ${INPUTDATA}/poupees.tif
-1
+0
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -106,6 +106,7 @@ ADD_TEST(PanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
 
 ADD_TEST(moTuProjectionModule ${Modules_TESTS} otbProjectionModuleTest
 ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+0
 )
 
 

@@ -76,7 +76,7 @@ class ITK_EXPORT AsynchronousProcessBase
   static ITK_THREAD_RETURN_TYPE RunProcess1_static(void * t)
     {
       struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
-      AsynchronousProcessBase* lThis = (AsynchronousProcessBase*)(pInfo->UserData);
+      AsynchronousProcessBase::Pointer lThis = (AsynchronousProcessBase*)(pInfo->UserData);
       lThis->RunProcess1(t);
       return 0;
     }
@@ -89,7 +89,7 @@ class ITK_EXPORT AsynchronousProcessBase
   static ITK_THREAD_RETURN_TYPE RunProcess2_static(void * t)
     {
       struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
-      AsynchronousProcessBase* lThis = (AsynchronousProcessBase*)(pInfo->UserData);
+      AsynchronousProcessBase::Pointer lThis = (AsynchronousProcessBase*)(pInfo->UserData);
       std::cout<<"Run static : "<<lThis<<std::endl;
       lThis->RunProcess2(t);
       return 0;

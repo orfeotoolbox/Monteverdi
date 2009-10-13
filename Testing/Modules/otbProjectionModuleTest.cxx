@@ -31,7 +31,7 @@ int otbProjectionModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  //unsigned int  run = atoi(argv[2]);
+  bool  run = atoi(argv[2]);
 
 
   typedef otb::VectorImage<double,2>          ImageType;
@@ -50,11 +50,17 @@ int otbProjectionModuleTest(int argc, char* argv[])
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
   module->AddInputByKey("InputImage",wrapperIn);
-
-  
   
   module->Start();
-  Fl::run();
+
+  if(run)
+    {
+    Fl::run();
+    }
+  else
+    {
+    Fl::check();
+    }
   
   return EXIT_SUCCESS;
 

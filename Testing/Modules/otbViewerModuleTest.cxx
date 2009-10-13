@@ -34,7 +34,7 @@ int otbViewerModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  unsigned int  run = atoi(argv[2]);
+  bool  run = atoi(argv[2]);
 
 
   typedef otb::VectorImage<double,2>          ImageType;
@@ -88,10 +88,14 @@ int otbViewerModuleTest(int argc, char* argv[])
 
   module->Start();
 
-    if(run == 0)
+    if(run)
+      {
       Fl::run();
+      }
     else
+      {
       Fl::check();
+      }
   
   return EXIT_SUCCESS;
 

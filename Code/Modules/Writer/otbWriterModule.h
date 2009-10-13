@@ -70,6 +70,12 @@ public:
   typedef VectorDataFileWriter<VectorType>         VectorWriterType;
   typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
 
+  // Is the process running ?
+  bool IsRunning() const
+  {
+    return !m_Done;
+  }
+
 protected:
   /** Constructor */
   WriterModule();
