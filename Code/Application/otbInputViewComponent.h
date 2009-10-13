@@ -100,6 +100,18 @@ public:
   /** Check if the input is ready */
   bool IsReady();
 
+  /** Get the number of available choices */
+  unsigned int GetNumberOfChoices() const
+  {
+    return m_ChoiceMap.size();
+  }
+
+  /** Select the nth choice */
+  void SelectNthChoice(unsigned int idx)
+  {
+    m_FlChoice->value(idx);
+  }
+
 protected:
   /** Constructor */
   InputViewComponent();

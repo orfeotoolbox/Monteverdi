@@ -76,6 +76,12 @@ public:
   itkGetMacro(ModuleInstanceId,std::string);
   itkSetMacro(ModuleInstanceId,std::string);
 
+  /** Returns the component map */
+  const InputViewComponentMapType & GetInputViewComponentMap() const
+  {
+    return m_InputViewComponentMap;
+  }
+
   void Show();
   void BuildInputInterface();
 
@@ -100,7 +106,7 @@ private:
   MonteverdiModel::Pointer                m_Model;
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
   std::string                             m_ModuleInstanceId;
-  InputViewComponentMapType               m_InputChoiceMap;
+  InputViewComponentMapType               m_InputViewComponentMap;
   bool                                    m_Alive;
 
 };

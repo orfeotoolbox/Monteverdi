@@ -105,18 +105,19 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
 
   std::string viewerInputKey = it_in->first;
 
-  typedef otb::InputViewGUI::InputChoiceDescriptorMapType InputChoiceDescriptorMapType;
-  InputChoiceDescriptorMapType inputChoiceMap;
-  inputChoiceMap = view->GetInputViewGUI()->GetInputChoiceMap();
+  typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
+  InputViewComponentMapType inputComponentMap;
+  inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
 
-  for(int i =0;i<inputChoiceMap[viewerInputKey]->m_FlChoice->size();i++){
-    std::cout<< "i:"<<i<<" : " <<inputChoiceMap[viewerInputKey]->m_FlChoice->value(i) <<std::endl;
-  }
+  for(unsigned int i =0;i<inputComponentMap[viewerInputKey]->GetNumberOfChoices();i++)
+    {
+    inputComponentMap[viewerInputKey]->SelectNthChoice(i);
+    }
   Fl::check();
 
   view->GetInputViewGUI()->bOk->do_callback();
   Fl::check();
-
+  
 
   if(run)
     Fl::run();

@@ -35,7 +35,7 @@ namespace otb
 {
 
 InputViewGUI
-::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputChoiceMap(), m_Alive(true)
+::InputViewGUI() : m_Model(), m_Controller(), m_ModuleInstanceId(""), m_InputViewComponentMap(), m_Alive(true)
 {}
 
 InputViewGUI
@@ -86,7 +86,7 @@ InputViewGUI
       vIndex = inputChoice->y()+inputChoice->h();
 
       // Add it to the map
-      m_InputChoiceMap[it_in->first]=inputChoice;
+      m_InputViewComponentMap[it_in->first]=inputChoice;
       
       // we check if there are convenient outputs in the modules
       std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();
@@ -121,7 +121,7 @@ void InputViewGUI
     {
     bool globalOk = true;
 
-    for(InputViewComponentMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+    for(InputViewComponentMapType::const_iterator mIt = m_InputViewComponentMap.begin(); mIt!=m_InputViewComponentMap.end();++mIt)
       {
       // Update caching progress
       mIt->second->UpdateCachingProgress();
@@ -161,7 +161,7 @@ InputViewGUI
     }
 
   // Connect modules
-  for(InputViewComponentMapType::const_iterator mIt = m_InputChoiceMap.begin(); mIt!=m_InputChoiceMap.end();++mIt)
+  for(InputViewComponentMapType::const_iterator mIt = m_InputViewComponentMap.begin(); mIt!=m_InputViewComponentMap.end();++mIt)
   {
   if(mIt->second->HasSelected())
     {
