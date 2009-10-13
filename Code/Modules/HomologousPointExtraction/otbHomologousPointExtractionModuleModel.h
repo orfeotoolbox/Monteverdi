@@ -41,6 +41,7 @@
 #include "otbTransformEnumType.h"
 #include "itkTransformBase.h"
 #include "itkAffineTransform.h"
+#include "itkSimilarity2DTransform.h"
 #include "itkTranslationTransform.h"
 
 
@@ -107,6 +108,8 @@ public:
   typedef TransformType::ParametersType        ParametersType;
   typedef itk::AffineTransform<double, 2>      AffineTransformType;
   typedef itk::TranslationTransform<double, 2> TranslationTransformType;
+  typedef itk::Similarity2DTransform<double> Similarity2DTransformType;
+  typedef itk::LevenbergMarquardtOptimizer::ScalesType ScalesType;
 
   /** Output */
   typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
@@ -146,18 +149,18 @@ public:
   void ConvertList( PointSetPointerType fix, PointSetPointerType mov );
   
   /** Perform the transform */
-  template <typename T> void GenericRegistration();
+  template <typename T> void GenericRegistration(const ScalesType & scales);
 
 
   /** Compute the transform on one point */
-  OutPointType TransformPoint( TransformEnumType transformType, IndexType id );
+  IndexType TransformPoint( TransformEnumType transformType, IndexType id );
   /** Compute the transform of a list of index */
-  template <typename T> OutPointType GenericTransformPoint(IndexType index);
+  template <typename T> IndexType GenericTransformPoint(IndexType index);
 
   /** Compute the transform the points of m_IndexList */
-  OutPointListType TransformPoints( TransformEnumType transformType );
+  IndexListType TransformPoints( TransformEnumType transformType );
   /** Compute the transform of a list of index */
-  template <typename T> OutPointListType GenericTransformPoints(IndexListType inList);
+  template <typename T> IndexListType GenericTransformPoints(IndexListType inList);
 
   /** Update Output */
   void OK();

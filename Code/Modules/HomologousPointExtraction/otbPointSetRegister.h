@@ -78,7 +78,7 @@ public:
   typedef TransformType::JacobianType                                          JacobianType;
   typedef itk::LevenbergMarquardtOptimizer                                     OptimizerType;
   typedef itk::PointSetToPointSetRegistrationMethod<PointSetType,PointSetType> RegistrationType;
-
+  typedef OptimizerType::ScalesType                                            ScalesType;
 
   itkSetObjectMacro(FixPointSet,PointSetType );
   itkGetObjectMacro(FixPointSet,PointSetType );
@@ -93,17 +93,22 @@ public:
 
   /** Compute transformation */
   virtual void ComputeTransform();
- 
+  
+  virtual void SetScales(const ScalesType & scales)
+  {
+    m_Scales = scales;
+  }
 protected:
   /** Constructor */
   PointSetRegister();
   /** Destructor */
   ~PointSetRegister(){};
   
-  
 private:
   PointSetRegister(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  OptimizerType::ScalesType m_Scales;
 
   /** Fix point set. */
   PointSetPointerType m_FixPointSet;
