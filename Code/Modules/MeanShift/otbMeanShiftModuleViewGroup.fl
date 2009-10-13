@@ -17,7 +17,7 @@ class MeanShiftModuleViewGroup {open
       callback {this->Exit();} open
       xywh {368 159 595 415} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Group gImageViewer {open selected
+      Fl_Group gImageViewer {open
         xywh {5 3 375 405} box PLASTIC_DOWN_BOX color 48
       } {}
       Fl_Group gRightGroup {open
@@ -81,5 +81,7 @@ class MeanShiftModuleViewGroup {open
   Function {SwitchBoundaries()} {open return_type {virtual void}
   } {}
   Function {Close()} {open return_type {virtual void}
+  } {}
+  Function {~MeanShiftModuleViewGroup()} {open selected return_type virtual
   } {}
 } 
