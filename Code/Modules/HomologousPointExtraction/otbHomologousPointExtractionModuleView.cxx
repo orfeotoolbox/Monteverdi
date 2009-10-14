@@ -225,7 +225,7 @@ HomologousPointExtractionModuleView
 	{
 	  lPointList->selection_color(fl_color());
 	  lPointList->redraw();
-	  if(tError->size() > selectedIndex)
+	  if(tError->size() > static_cast<int>(selectedIndex))
 	    {
 	      tError->value(selectedIndex+1);
 	      tError->selection_color(fl_color());
@@ -236,7 +236,7 @@ HomologousPointExtractionModuleView
 	{
 	  tError->selection_color(fl_color());
 	  tError->redraw();
-	  if(lPointList->size() > selectedIndex)
+	  if(lPointList->size() > static_cast<int>(selectedIndex))
 	    {
 	      lPointList->value(selectedIndex+1);
 	      lPointList->selection_color(fl_color());

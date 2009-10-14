@@ -53,6 +53,7 @@ SupervisedClassificationAppli
 
   m_HasOutput = false;
   m_HasOutputVector = false;
+  m_ResultShown = false;
 
   m_ImageViewer               = ImageViewerType::New();
   m_OutputVector              = VectorDataType::New();
@@ -136,7 +137,7 @@ SupervisedClassificationAppli
 {
   m_ImageViewer->Update();
 
-  if (bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
   {
     m_ResultViewer->Update();
   }
@@ -677,7 +678,7 @@ SupervisedClassificationAppli
 ::ResetClassification()
 {
   bLearn->clear();
-  if (bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
   {
     this->ShowImage();
   }
@@ -1274,7 +1275,7 @@ SupervisedClassificationAppli
     color[2]=static_cast<unsigned char>(theClass->GetColor()[2]*255);
     m_ChangeLabelFilter->SetChange(theClass->GetId(),color);
 
-    if (bDisplay->value())
+    if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
     {
       m_ResultViewer->Reset();
     }
@@ -1495,7 +1496,7 @@ SupervisedClassificationAppli
     (*it)->SetColor(color);
     m_ImageViewer->AddROIColorMapEntry((*it)->GetId(),color);
   }
-  if (bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)// (bDisplay->value())
   {
     m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
   }
@@ -1787,6 +1788,17 @@ void
 SupervisedClassificationAppli
 ::QuitScrollCallback()
 {
+  ScrollWidgetPointerType scroll;
+  
+   // image viewer shown or result viewer
+  if (!m_ResultShown)
+    {
+      scroll = m_ImageViewer->GetScrollWidget();
+    }
+  else
+    scroll = m_ResultViewer->GetScrollWidget();
+  
+  guiScrollWindow->remove(scroll);
   guiScrollWindow->hide();
 }
 
@@ -1794,6 +1806,17 @@ void
 SupervisedClassificationAppli
 ::QuitFullCallback()
 {
+  FullWidgetPointerType full;
+  
+  // image viewer shown or result viewer
+  if (!m_ResultShown)
+    {
+    full = m_ImageViewer->GetFullWidget();
+    }
+  else
+    full = m_ResultViewer->GetFullWidget();
+ 
+  guiFullWindow->remove(full);
   guiFullWindow->hide();
 }
 
@@ -1833,6 +1856,7 @@ SupervisedClassificationAppli
   }
   m_ImageViewer->Update();
   this->Update();
+  m_ResultShown = false;
 }
 
 /**
@@ -1857,6 +1881,7 @@ SupervisedClassificationAppli
   m_ResultViewer->SetLabel("Result image");
   m_ResultViewer->Build();
   m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
+
   this->VisualisationSetupOk();
 
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
@@ -1889,15 +1914,15 @@ SupervisedClassificationAppli
   m_ImageViewer->Hide();
   m_ResultViewer->Show();
 
+  m_ResultShown = true;
 }
 
 void
 SupervisedClassificationAppli
 ::DisplayResults()
 {
-
-  if (bDisplay->value()>0)
-  {
+  if(static_cast<int>(bDisplay->value())==0)
+  { 
     this->ShowImage();
   }
   else

@@ -287,6 +287,7 @@ private:
 
   bool m_HasOutput;
   bool m_HasOutputVector;
+  bool m_ResultShown;
   VectorDataPointerType m_OutputVector;
 };
 
