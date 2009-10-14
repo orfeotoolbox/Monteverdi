@@ -137,7 +137,7 @@ SupervisedClassificationAppli
 {
   m_ImageViewer->Update();
 
-  if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)
   {
     m_ResultViewer->Update();
   }
@@ -678,7 +678,7 @@ SupervisedClassificationAppli
 ::ResetClassification()
 {
   bLearn->clear();
-  if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)
   {
     this->ShowImage();
   }
@@ -1275,7 +1275,7 @@ SupervisedClassificationAppli
     color[2]=static_cast<unsigned char>(theClass->GetColor()[2]*255);
     m_ChangeLabelFilter->SetChange(theClass->GetId(),color);
 
-    if(static_cast<int>(bDisplay->value())==1)//(bDisplay->value())
+    if(static_cast<int>(bDisplay->value())==1)
     {
       m_ResultViewer->Reset();
     }
@@ -1496,7 +1496,7 @@ SupervisedClassificationAppli
     (*it)->SetColor(color);
     m_ImageViewer->AddROIColorMapEntry((*it)->GetId(),color);
   }
-  if(static_cast<int>(bDisplay->value())==1)// (bDisplay->value())
+  if(static_cast<int>(bDisplay->value())==1)
   {
     m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value()*255));
   }
@@ -1995,7 +1995,7 @@ void
 SupervisedClassificationAppli
 ::Validate()
 {
-  if (!bValidate->value())
+  if (static_cast<int>(bValidate->value()) != 0)
   {
     guiValidationWindow->hide();
     return;
