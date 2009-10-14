@@ -55,8 +55,8 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
  
-  module->AddInputByKey("FirstInputImage",wrapperIn1);
-  module->AddInputByKey("SecondInputImage",wrapperIn2);
+  module->AddInputByKey("FixInputImage",wrapperIn1);
+  module->AddInputByKey("MovingInputImage",wrapperIn2);
 
   module->Start();
  
@@ -102,7 +102,7 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
 
   pointModule->GetView()->guiQuit->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("Filtered Image");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("Transformed Image");
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
     //Write the image

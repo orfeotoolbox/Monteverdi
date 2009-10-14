@@ -15,7 +15,7 @@ class HomologousPointExtractionViewGroup {open
     Fl_Window wMainWindow {
       label {Homologous Point Extraction}
       callback {this->HideAll();} open
-      xywh {16 150 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {155 359 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tile {} {open
         xywh {0 0 205 600}
@@ -37,7 +37,7 @@ class HomologousPointExtractionViewGroup {open
               tooltip {ax+b transformation} xywh {45 45 30 20}
             }
             MenuItem {} {
-              label Similarity2D selected
+              label Similarity2D
               tooltip {ax+b transformation} xywh {55 55 30 20}
             }
           }
@@ -79,15 +79,15 @@ class HomologousPointExtractionViewGroup {open
             xywh {204 0 210 600}
           } {
             Fl_Group gFull1 {
-              label {Full 1}
+              label {Full fix}
               xywh {210 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gScroll1 {
-              label {Scroll 1} open
+              label {Scroll fix} open
               xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gZoom1 {
-              label {Zoom 1} open
+              label {Zoom fix} open selected
               xywh {210 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
           }
@@ -159,15 +159,15 @@ class HomologousPointExtractionViewGroup {open
             xywh {585 0 215 600}
           } {
             Fl_Group gFull2 {
-              label {Full 2} open
+              label {Full moving} open
               xywh {590 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gScroll2 {
-              label {Scroll 2} open
+              label {Scroll moving} open
               xywh {590 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gZoom2 {
-              label {Zoom 2} open
+              label {Zoom moving} open
               xywh {590 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
           }

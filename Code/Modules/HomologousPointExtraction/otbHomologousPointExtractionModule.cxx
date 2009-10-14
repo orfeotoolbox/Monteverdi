@@ -43,8 +43,8 @@ HomologousPointExtractionModule::HomologousPointExtractionModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("FirstInputImage","Image to apply HomologousPointExtraction on");
-  this->AddInputDescriptor<FloatingVectorImageType>("SecondInputImage","Image to apply HomologousPointExtraction on");
+  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage","Fix image");
+  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage","Moving Image");
 }
 
 /** Destructor */
@@ -72,8 +72,8 @@ void HomologousPointExtractionModule::Run()
   // First step is to retrieve the inputs
   
   // To handle an input with multiple supported type :
-  FloatingVectorImageType::Pointer fpvImage1 = this->GetInputData<FloatingVectorImageType>("FirstInputImage");
-  FloatingVectorImageType::Pointer fpvImage2 = this->GetInputData<FloatingVectorImageType>("SecondInputImage");
+  FloatingVectorImageType::Pointer fpvImage1 = this->GetInputData<FloatingVectorImageType>("FixInputImage");
+  FloatingVectorImageType::Pointer fpvImage2 = this->GetInputData<FloatingVectorImageType>("MovingInputImage");
   
   // One of this pointer will be NULL:
   if(fpvImage1.IsNotNull() && fpvImage2.IsNotNull() )
@@ -103,7 +103,7 @@ void HomologousPointExtractionModule::Notify()
       this->ClearOutputDescriptors();
       // Add outputs
       FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the HomologousPointExtraction filtering");
+      this->AddOutputDescriptor(filteredOutput,"Transformed Image", "Transformed moving image.");
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
