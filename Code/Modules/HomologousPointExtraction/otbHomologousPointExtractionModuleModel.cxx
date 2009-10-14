@@ -225,8 +225,8 @@ HomologousPointExtractionModuleModel
       // M11, M12, M21, M22
       scales.Fill( 1. );
       // translation X and Y
-      scales[4] = 1. / 1000000;
-      scales[5] = 1. / 1000000;
+      scales[4] = 1000;
+      scales[5] = 1000;
 
       this->GenericRegistration<AffineTransformType>(scales);
       break;
