@@ -107,7 +107,7 @@ FeatureExtractionModel
   m_VisuModel->Update();
   
   // Notify the observers
-  this->NotifyAll();
+  this->NotifyAll("SetInputImage");
 }
 
 void
@@ -128,7 +128,7 @@ void
   m_VisuModel->Update();
   
   // Notify the observers
-  this->NotifyAll();
+  this->NotifyAll("GenerateLayers");
 }
 void
 FeatureExtractionModel
@@ -701,7 +701,7 @@ FeatureExtractionModel
 
     m_OutputImage->UpdateOutputInformation();
     m_HasChanged = true;
-    this->NotifyAll();
+    this->NotifyAll("OutputsUpdated");
 
 
   }
@@ -894,7 +894,13 @@ FeatureExtractionModel
   m_ResultVisuModel->Update();
 }
 
+void
+    FeatureExtractionModel
+  ::Quit()
+{
 
+  this->NotifyAll("BusyOff");
+}
 
 }
 

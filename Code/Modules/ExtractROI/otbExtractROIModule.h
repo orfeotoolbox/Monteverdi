@@ -25,7 +25,9 @@
 #include "otbExtractROIModuleGUI.h"
 
 // include the OTB elements
+#include "otbImage.h"
 #include "otbVectorImage.h"
+#include "otbExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
 
 namespace otb
@@ -55,9 +57,12 @@ public:
   /** OTB typedefs */
   typedef double                                  InternalPixelType;
   /// Dataset
+  typedef Image<InternalPixelType,2>              FloatingImageType;
   typedef VectorImage<InternalPixelType,2>        FloatingVectorImageType;
-  /// Extract ROI filter
-  typedef MultiChannelExtractROI< InternalPixelType, InternalPixelType >  ExtractROIFilterType;
+  /// Multi channels Extract ROI filter
+  typedef MultiChannelExtractROI< InternalPixelType, InternalPixelType >  VectorImageExtractROIFilterType;
+  /// Mono channel Extract ROI filter
+  typedef ExtractROI< InternalPixelType, InternalPixelType >  ImageExtractROIFilterType;
 
 protected:
   /** Constructor */
@@ -79,8 +84,10 @@ private:
   ExtractROIModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  // Pointer to the process object
-  ExtractROIFilterType::Pointer m_ExtractROIFilter;
+  /** Pointer to the image extract ROI filter object */
+  ImageExtractROIFilterType::Pointer m_ImageExtractROIFilter;
+  /** Pointer to the vector image extract ROI filter object */
+  VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
 
 };
 
