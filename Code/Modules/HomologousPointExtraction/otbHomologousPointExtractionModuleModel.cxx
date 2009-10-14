@@ -194,7 +194,7 @@ HomologousPointExtractionModuleModel
   
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
-      IndexType idFix, idMov;;
+      IndexType idFix, idMov;
       idFix = m_IndexesList[i].first;
       m_FirstInputImage->TransformIndexToPhysicalPoint(idFix,fixedPoint);
       fix->SetPoint(i,fixedPoint);
