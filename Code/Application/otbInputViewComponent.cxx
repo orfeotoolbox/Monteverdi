@@ -100,7 +100,7 @@ InputViewComponent
 }
 
 /** Add Choice */
-void InputViewComponent::AddChoice(const StringPairType & choice)
+void InputViewComponent::AddChoice(const StringPairType & choice, bool locked, const std::string & locker)
 {
   if(m_FlChoice == NULL)
     {
@@ -109,9 +109,22 @@ void InputViewComponent::AddChoice(const StringPairType & choice)
 
   itk::OStringStream oss;
   oss<<choice.first<<"/"<<choice.second;
+
+  // Handle the locked data case
+  if(locked)
+    {
+    oss<<" (locked by module "<<locker<<")";
+    }
   
   // Add the choice in the gui
   int index = m_FlChoice->add(oss.str().c_str());
+
+  if(locked)
+    {
+    // This const_cast is necessary to be able to deactivate one menu_item
+    Fl_Menu_Item * items = const_cast<Fl_Menu_Item *>(m_FlChoice->menu());
+    items[index].deactivate();
+    }
 
   // Keep the choice in the choice map
   m_ChoiceMap[index]=choice;
