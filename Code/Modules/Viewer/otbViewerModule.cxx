@@ -251,6 +251,7 @@ void ViewerModule::Run()
   // Work with standardrenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
   m_StandardRenderingFunction->SetChannelList(channels);
+  //  m_StandardRenderingFunction->SetAutoMinMax(false);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
   
   // Add the generated layer to the rendering model
@@ -801,9 +802,9 @@ void ViewerModule::ViewerSetupOk()
 	 }
      }
      
-  // Refresh widgets
+   // Refresh widgets
    this->RedrawWidget();
-
+   
    // Update Histogram 
    this->UpdateHistogramCurve();   
    
@@ -817,17 +818,18 @@ void ViewerModule::ViewerSetupOk()
 void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
 {
   // Build the appropriate rendring function
-  StandardRenderingFunctionPointerType  gsRenderingFunction = StandardRenderingFunctionType::New();
   ChannelListType                       channels;
   
   channels.resize(3);
   channels[0]=choice;
   channels[1]=choice;
   channels[2]=choice;
-  gsRenderingFunction->SetChannelList(channels);
+  m_StandardRenderingFunction->SetChannelList(channels);
   
   // Apply the new rendering function to the Image layer
-  m_InputImageLayer->SetRenderingFunction(gsRenderingFunction);
+  m_StandardRenderingFunction->SetAutoMinMax(true);
+  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
+  m_StandardRenderingFunction->Initialize();
   m_RenderingModel->Update();  
 }
 
@@ -838,17 +840,17 @@ void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
 void ViewerModule::UpdateRGBChannelOrder(int red, int green , int blue)
 {
   // Build the appropriate rendring function
-  StandardRenderingFunctionPointerType  gsRenderingFunction = StandardRenderingFunctionType::New();
   ChannelListType                       channels;
-  
   channels.resize(3);
   channels[0]=red;
   channels[1]=green;
   channels[2]=blue;
-  gsRenderingFunction->SetChannelList(channels);
+  m_StandardRenderingFunction->SetChannelList(channels);
   
   // Apply the new rendering function to the Image layer
-  m_InputImageLayer->SetRenderingFunction(gsRenderingFunction);
+  m_StandardRenderingFunction->SetAutoMinMax(true);
+  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
+  m_StandardRenderingFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -866,7 +868,9 @@ void ViewerModule::UpdateAmplitudeChannelOrder(int realChoice, int imChoice)
   modulusFunction->SetChannelList(channels);
   
   // Apply the new rendering function to the Image layer
+  modulusFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(modulusFunction);
+  modulusFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -883,7 +887,9 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
   phaseFunction->SetChannelList(channels);
   
   // Apply the new rendering function to the Image layer
+  phaseFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(phaseFunction);
+  phaseFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -901,12 +907,12 @@ void ViewerModule::UpdateTabHistogram()
   m_BlueCurveWidgetGroup->ClearAllCurves();
   m_GreenCurveWidgetGroup->ClearAllCurves();
   m_RedCurveWidgetGroup->ClearAllCurves();
-    
+  
   /// Update the StandardRenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
   m_StandardRenderingFunction->SetChannelList(channels);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-   
+  
   //Set the rendering to the histogram handlers
   m_BlueHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
   m_GreenHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
@@ -918,7 +924,7 @@ void ViewerModule::UpdateTabHistogram()
       HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
       bhistogram->SetHistogramColor(m_Blue);
       bhistogram->SetLabelColor(m_Blue);
-      bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[2]));
+      bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
       m_BlueCurveWidgetGroup->AddCurve(bhistogram);
       
       //Add to the gHistogram group
@@ -928,11 +934,11 @@ void ViewerModule::UpdateTabHistogram()
 				     width-blank ,height-blank);
       
       // Right Asymptote
-      m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]));
+      m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(4));
       m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
       
       // Left Asymptote
-      m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[2]+1));
+      m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(5));
       m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
       
       // Add the asymptote to the curve
@@ -940,16 +946,15 @@ void ViewerModule::UpdateTabHistogram()
       m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveL);
       
       // Edit the channel we're changing
-      m_BlueHistogramHandler->SetChannel(channels[2]);
+      m_BlueHistogramHandler->SetChannel(2);
     }
-  
   /// GREEN band : draw the GREEN band histogram and the asymptote
   if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=2)
     {
       HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
       ghistogram->SetHistogramColor(m_Green);
       ghistogram->SetLabelColor(m_Green);
-      ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[1]));
+      ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
       m_GreenCurveWidgetGroup->AddCurve(ghistogram);
       
       //Add to the gHistogram group
@@ -959,11 +964,11 @@ void ViewerModule::UpdateTabHistogram()
 				      width-blank, height-blank);
       
       // Right Asymptote
-      m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]));
+      m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2));
       m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green); 
       
       // Left Asymptote
-      m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[1]+1));
+      m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(3));
       m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green);
 
       // Add the asymptote to the curve
@@ -971,9 +976,8 @@ void ViewerModule::UpdateTabHistogram()
       m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
       
       // Edit the channel we're changing
-      m_GreenHistogramHandler->SetChannel(channels[1]);
+      m_GreenHistogramHandler->SetChannel(1);
     }
-  
   /// RED band : draw the RED band histogram and the asymptote
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() == 1)
@@ -999,14 +1003,14 @@ void ViewerModule::UpdateTabHistogram()
 				    width-blank, height-blank);
     }
     
-  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(channels[0])); 
+  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0)); 
   m_RedCurveWidgetGroup->AddCurve(rhistogram);
   // Right Asymptote
-  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]));
+  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(0));
   m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor()); 
     
   // Left Asymptote
-  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2*channels[0]+1));
+  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(1));
   m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
     
   // Add the asymptote to the curve
@@ -1014,7 +1018,7 @@ void ViewerModule::UpdateTabHistogram()
   m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveL);
     
   // Edit the channel we're changing
-  m_RedHistogramHandler->SetChannel(channels[0]);
+  m_RedHistogramHandler->SetChannel(0);
 }
 
 
@@ -1044,24 +1048,28 @@ void ViewerModule::UpdateUpperQuantile()
   // Cancel the automatic computation of the quantile
   m_StandardRenderingFunction->SetAutoMinMax(false);
   
-  //  Get the extrema value for all the bands
   ParametersType    params;
   params = m_StandardRenderingFunction->GetParameters();
   
+  std::cout << "max ";
   for(unsigned int i = 1 ; i< params.Size() ; i = i+2)
     {
       double max = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
+      std::cout << max << " | ";
       params.SetElement(i,max);
     }
+  std::cout << std::endl;
   
   // Update the layer
   m_StandardRenderingFunction->SetParameters(params);
+  //m_StandardRenderingFunction->Initialize();
   m_RenderingModel->Update();
    
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
-}
 
+  this->TabSetupPosition();
+}
 
 /**
  *  
@@ -1086,6 +1094,7 @@ void ViewerModule::UpdateLowerQuantile()
   
   // Update the layer
   m_StandardRenderingFunction->SetParameters(params);
+  //m_StandardRenderingFunction->Initialize();
   m_RenderingModel->Update();
   
   // Redraw the hitogram curves
