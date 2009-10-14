@@ -16,8 +16,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __OTBORTHOENUM_H__
-#define __OTBORTHOENUM_H__
+#ifndef __OTBPROJECTIONENUM_H__
+#define __OTBPROJECTIONENUM_H__
 
 typedef enum { UTM, LAMBERT, LAMBERT2, SINUS, ECKERT4, TRANSMERCATOR, MOLLWEID}  MapType;
 typedef enum { LINEAR_, NEAREST, SINC, SPLINES}  InterpolatorType;
