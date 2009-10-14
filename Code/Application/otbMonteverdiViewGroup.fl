@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class MonteverdiViewGroup {open
 } {
@@ -25,10 +25,10 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wHelpWindow {
       label {Help me...} open
-      xywh {653 318 300 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+      xywh {234 129 830 720} type Double box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Output gHelpText {
-        xywh {0 0 300 150}
+      Fl_Text_Display gHelpText {selected
+        xywh {0 0 830 720} box PLASTIC_DOWN_BOX color 55 selection_color 186 labelfont 5 labelsize 12 labelcolor 186 textfont 4 textcolor 186
       }
     }
     Fl_Window wInputWindow {
@@ -49,8 +49,8 @@ class MonteverdiViewGroup {open
   }
   Function {Quit()} {return_type {virtual void}
   } {}
-  Function {InputsGUIOk()} {selected return_type {virtual void}
+  Function {InputsGUIOk()} {return_type {virtual void}
   } {}
   Function {InputsGUICancel()} {return_type {virtual void}
   } {}
-}
+} 
