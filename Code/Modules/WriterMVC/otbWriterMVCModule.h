@@ -77,8 +77,8 @@ namespace otb
       /** PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
-      virtual void ThreadedRun();
-      virtual void ThreadedWatch();
+//       virtual void ThreadedRun();
+//       virtual void ThreadedWatch();
       
       // Update the progress bar
 //       void UpdateProgress();
