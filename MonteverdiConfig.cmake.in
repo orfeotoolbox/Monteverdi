@@ -1,0 +1,44 @@
+#-----------------------------------------------------------------------------
+#
+# MonteverdiConfig.cmake - Monteverdi CMake configuration file for external projects.
+#
+# This file is configured by Monteverdi and used by the UseMonteverdi.cmake module
+# to load Monteverdi's settings for an external project.
+@Monteverdi_CONFIG_CODE@
+
+# The Monteverdi source tree.
+SET(Monteverdi_SOURCE_DIR "@Monteverdi_SOURCE_DIR@")
+
+# The Monteverdi include file directories.
+SET(Monteverdi_INCLUDE_DIRS "@Monteverdi_INCLUDE_DIRS@")
+
+# The Monteverdi library directories.
+SET(Monteverdi_LIBRARY_DIRS "@Monteverdi_LIBRARY_DIRS@")
+
+# The Monteverdi list of modules library
+SET(Monteverdi_MODULES_LIBRARIES "@LIST_MODULE_LIBRARIES@")
+
+# The C and C++ flags added by Monteverdi to the cmake-configured flags.
+SET(Monteverdi_REQUIRED_C_FLAGS "@Monteverdi_REQUIRED_C_FLAGS@")
+SET(Monteverdi_REQUIRED_CXX_FLAGS "@Monteverdi_REQUIRED_CXX_FLAGS@")
+SET(Monteverdi_REQUIRED_LINK_FLAGS "@Monteverdi_REQUIRED_LINK_FLAGS@")
+
+# The Monteverdi version number
+SET(Monteverdi_VERSION_MAJOR "@Monteverdi_VERSION_MAJOR@")
+SET(Monteverdi_VERSION_MINOR "@Monteverdi_VERSION_MINOR@")
+SET(Monteverdi_VERSION_PATCH "@Monteverdi_VERSION_PATCH@")
+SET(Monteverdi_VERSION_STRING "@Monteverdi_VERSION_STRING@")
+
+# The location of the UseMonteverdi.cmake file.
+SET(Monteverdi_USE_FILE "@Monteverdi_USE_FILE@")
+
+INCLUDE("@Monteverdi_LIBRARY_DEPENDS_FILE@")
+
+
+# Internationalization
+SET(Monteverdi_I18N "@Monteverdi_I18N@")
+SET(Monteverdi_LANG "@Monteverdi_LANG@")
+SET(Monteverdi_LANG_LOCATION "@Monteverdi_LANG_LOCATION@")
+
+#Configuration file
+SET(Monteverdi_CONFIG "@Monteverdi_BINARY_DIR@")

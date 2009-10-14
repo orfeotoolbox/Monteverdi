@@ -75,7 +75,8 @@ ENABLE_TESTING()
 SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 
 # Include directories
-INCLUDE_DIRECTORIES(
+SET(Monteverdi_INCLUDE_DIRS
+${OTB_INCLUDE_DIRS}
 ${Monteverdi_BINARY_DIR}/
 ${Monteverdi_SOURCE_DIR}/Code/Common
 ${Monteverdi_BINARY_DIR}/Code/Common
@@ -180,17 +181,22 @@ FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})  
     MESSAGE(STATUS  - ${moduleName})
-    INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Code/Modules/${moduleName})
-    INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules/${moduleName})
+    SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_SOURCE_DIR}/Code/Modules/${moduleName})
+    SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_BINARY_DIR}/Code/Modules/${moduleName})
   ENDIF(IS_DIRECTORY ${moduleDir})
 ENDFOREACH(moduleDir)
-INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Modules)
-INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Code/Application)
-INCLUDE_DIRECTORIES(${Monteverdi_BINARY_DIR}/Code/Application)
+
+SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_BINARY_DIR}/Code/Modules)
+SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_SOURCE_DIR}/Code/Application)
+SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_BINARY_DIR}/Code/Application)
 
 SET(LIST_MODULE_LIBRARIES "" CACHE STRING "List of alls modules libraries" FORCE)
 MARK_AS_ADVANCED(LIST_MODULE_LIBRARIES)
-#SET(LIST_MODULE_LIBRARIES "" )
+
+INCLUDE_DIRECTORIES(
+${Monteverdi_INCLUDE_DIRS}
+)
+
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Prototype1)
@@ -214,7 +220,22 @@ IF(BUILD_TESTING)
   ADD_SUBDIRECTORY(Testing)
 ENDIF(BUILD_TESTING)
 
+#-----------------------------------------------------------------------------
+# Generate MonteverdiConfig.cmake
 
+# Save library dependencies.
+SET(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
+EXPORT_LIBRARY_DEPENDENCIES(${Monteverdi_LIBRARY_DEPENDS_FILE})
+
+# Library directory.
+SET(Monteverdi_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
+
+SET(Monteverdi_USE_FILE ${Monteverdi_BINARY_DIR}/UseMonteverdi.cmake)
+
+CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
+               ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake @ONLY IMMEDIATE)
+CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
+               ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
 
 #-----------------------------------------------------------------------------
 # Set up CPack support, to be able to distribute OTB binary packages. It will
