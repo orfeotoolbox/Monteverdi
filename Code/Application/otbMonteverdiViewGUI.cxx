@@ -49,11 +49,15 @@ MonteverdiViewGUI
 
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
+
+  m_HelpTextBuffer = new Fl_Text_Buffer();
 }
 
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
-{}
+{
+  delete m_HelpTextBuffer;
+}
 
 void
 MonteverdiViewGUI
@@ -66,8 +70,53 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
-  gHelpText->value(" Someone please call 911 ");
-  gHelpText->redraw();
+ 
+  gHelpText->buffer(m_HelpTextBuffer);
+
+  gHelpText->insert("This is Monteverdi 1.0 beta. \n");
+  gHelpText->insert("============================\n\n");
+  gHelpText->insert("Monteverdi is a capacity building application aiming at providing simple\n");
+  gHelpText->insert("remote sensing data analysis tools for non-experienced users.\n\n");
+  gHelpText->insert("This small help box explains the basic behaviour of the application.\n\n");
+  gHelpText->insert("1.  Different tools can be accessed using the menu.\n");
+  gHelpText->insert("2.  Data produced using tools will appear in the tree browser under\n");
+  gHelpText->insert("    the menu.\n");
+  gHelpText->insert("3.  When a tool requires inputs, an input selection window will appear \n");
+  gHelpText->insert("    so as to allow the user to select inputs among data he has already\n");
+  gHelpText->insert("    produced using other tools. \n");
+  gHelpText->insert("4.  By default, data are streamed (meaning they are split and processed\n");
+  gHelpText->insert("    piece by piece) from one module to the other. \n");
+  gHelpText->insert("5.  Though this behaviour is rather efficient to build a processing chain,\n");
+  gHelpText->insert("    sometimes it is better to have the data \"cached\" (written to disk)\n");
+  gHelpText->insert("    before doing something with it. This way, instead of computing the\n");
+  gHelpText->insert("    requested data each time it is needed, computing is only done once\n");
+  gHelpText->insert("    for the whole dataset and written to disk. \n");
+  gHelpText->insert("6.  In the input selection window, dataset supporting caching will\n");
+  gHelpText->insert("    automatically display their state (streamed/caching in progress/cached)\n");
+  gHelpText->insert("    through a litle red/orange/green button aside. \n");
+  gHelpText->insert("7.  If dataset is already cached, the state button will be green and deactivated.\n");
+  gHelpText->insert("8.  If dataset can be cached but is not for now, the state button will be red and \n");
+  gHelpText->insert("    activated. Pushing this button will trigger the caching process. A progress-bar\n");
+  gHelpText->insert("    showing caching progress appears, and the state button turns orange. \n");
+  gHelpText->insert("9.  Once a dataset is cached, some tools will significantly speed-up (in particular\n");
+  gHelpText->insert("    tools implying dataset navigation).\n");
+  gHelpText->insert("10. Be sure to exit the application properly so as to get the cached data cleared\n");
+  gHelpText->insert("    from your disk. \n");
+  gHelpText->insert("11. Some tools (like writing tools for instance) require to lock every other tool\n");
+  gHelpText->insert("    they are plugged to so as ensure that they can complete their task safely.\n");
+  gHelpText->insert("    Dataset from a locked module will appear in grey with \"(locked by module [module_name\")\n");
+  gHelpText->insert("    in its name. \n");
+  gHelpText->insert("12. For application safety reasons, you can not unlock a dataset by yourself.\n");
+  gHelpText->insert("    If there is a task in progress, wait for it to complete. If the dataset\n");
+  gHelpText->insert("    is locked by an interactive tool, consider exiting this tool and try again.\n\n");
+  gHelpText->insert("We hope you will enjoy using this application.\n \n");
+  gHelpText->insert("We are interested in your feedback! If you: \n");
+  gHelpText->insert("  - found what looks like a bug,\n");
+  gHelpText->insert("  - Do not understand the behaviour of the application or of a given tool,\n");
+  gHelpText->insert("  - Have suggestions and feature requests,\n");
+  gHelpText->insert("  - Are enjoying the application so much that you want to share it with somebody,\n");
+  gHelpText->insert("  - Are being driven mad by the application behaviour and want to share it with somebody,\n\n");
+  gHelpText->insert("Please write to otb-users@googlegroups.com. We will be glad to answer you.");
 }
 
 /** First step of Init Widgets: creation of the menus */

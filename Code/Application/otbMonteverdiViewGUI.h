@@ -159,6 +159,9 @@ private:
   /** The module input selection interface */
   InputViewGUI::Pointer   m_InputViewGUI;
 
+  /** The help box text buffer */
+  Fl_Text_Buffer * m_HelpTextBuffer;
+
 };
 }//end namespace otb
 
