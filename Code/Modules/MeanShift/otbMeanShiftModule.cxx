@@ -22,6 +22,9 @@ namespace otb
 /** Constructor */
 MeanShiftModule::MeanShiftModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // First, do constructor stuffs
 
   m_Controller = ControllerType::New();
@@ -58,6 +61,9 @@ void MeanShiftModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void MeanShiftModule::Run()
 {
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
@@ -118,6 +124,10 @@ void MeanShiftModule::Notify()
 
       // Send an event to Monteverdi application
       this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+
+      // Once module is closed, it is no longer busy
+      this->BusyOff();
+
     }
 }
 } // End namespace otb

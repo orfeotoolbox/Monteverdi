@@ -26,6 +26,9 @@ namespace otb
 /** Constructor */
 WriterMVCModule::WriterMVCModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   //Build MVC
   m_Model      = WriterModel::New();
   m_View       = WriterViewGUI::New();
@@ -60,6 +63,9 @@ void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void WriterMVCModule::Run()
 {
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 //   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   
@@ -87,6 +93,9 @@ void WriterMVCModule::Notify()
   {
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("Dataset written",m_InstanceId));
+
+    // Once module is closed, it is no longer busy
+     this->BusyOff();
   }
 }
 
