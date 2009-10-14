@@ -100,7 +100,7 @@ MeanShiftModuleModel
 
   m_VisualizationModel->Update();
 
-  this->NotifyAll();
+  this->NotifyAll("OpenImage");
   m_IsImageReady = true;
 }
 
@@ -197,7 +197,7 @@ MeanShiftModuleModel
 
   m_VisualizationModel->Update();
 
-  this->NotifyAll();
+  this->NotifyAll("SetInputImage");
   m_IsImageReady = true;
 }
 
@@ -268,7 +268,7 @@ MeanShiftModuleModel
   
   m_VisualizationModel->Update();
   
-  this->NotifyAll();
+  this->NotifyAll("SwitchClusters");
 
 }
 
@@ -283,7 +283,7 @@ MeanShiftModuleModel
   
   m_VisualizationModel->Update();
   
-  this->NotifyAll();
+  this->NotifyAll("SwitchBoundaries");
 
 }
 
