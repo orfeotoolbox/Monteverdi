@@ -263,6 +263,8 @@ SupervisedClassificationAppli
   bExportVectorData->activate();
   bExportAllVectorData->activate();
   bImportROIsImage->activate();
+  bRandomGeneration->value(1);
+  bRandomGeneration->do_callback();
 
   Fl::check();
   this->Update();
@@ -1995,12 +1997,18 @@ void
 SupervisedClassificationAppli
 ::Validate()
 {
-  if (static_cast<int>(bValidate->value()) != 0)
+  if (static_cast<int>(bValidate->value()) == 0)
   {
     guiValidationWindow->hide();
     return;
   }
-
+  if (m_ValidationListSample->Size()==0)
+  {
+    itk::OStringStream oss;
+    oss << "No Validation samples selected..." << std::endl;
+    fl_alert(oss.str().c_str());
+    return;
+  }
   if (!bRandomGeneration->value())
   {
     this->GenerateValidationSamplesFromROIs();
