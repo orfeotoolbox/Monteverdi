@@ -40,5 +40,6 @@ void RegisterTests()
   REGISTER_TEST(otbWriterMVCModuleTest2);
   REGISTER_TEST(otbPanSharpeningModuleTest);
   REGISTER_TEST(otbProjectionModuleTest);
+  REGISTER_TEST(otbExtractROIModuleTest);
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
 }

@@ -109,6 +109,14 @@ ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
 0
 )
 
+#------------- Extract ROI Module Tests ---------------------------
+ADD_TEST(moTvExtractROIModuleTest  ${Modules_TESTS} otbExtractROIModuleTest
+${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+${TEMP}/extractROIModuleOuptut.tif
+50 60
+78 98
+)
+
 #------------- Point Extraction Module Tests ---------------------------
 
 ADD_TEST(hoTvHomologousPointExtractionModuleTest ${Modules_TESTS} otbHomologousPointExtractionModuleTest
@@ -136,6 +144,7 @@ otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx
 otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
+otbExtractROIModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 )
 
@@ -151,7 +160,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(otbModulesTests otbModulesTests.cxx ${Modules_SRCS})
 
-TARGET_LINK_LIBRARIES(otbModulesTests otbWriterMVCModule otbSpeckleModule otbReaderModule otbWriterModule otbOrthorectificationModule otbFeatureExtractionModule otbClassificationModule otbViewerModule otbWriterMVCModule otbPanSharpeningModule otbProjectionModule otbHomologousPointExtractionModule OTBIO OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 
 
 # CPack installation: only Monteverdi application
