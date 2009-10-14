@@ -53,7 +53,7 @@ int otbWriterModuleTest(int argc, char* argv[])
   specificModule->bOk->do_callback();
 
   // Wait for the writer to complete 
-  while(specificModule->IsRunning())
+  while(specificModule->IsBusy())
     {
     Fl::check();
     OpenThreads::Thread::microSleep(500);

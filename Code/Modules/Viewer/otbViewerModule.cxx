@@ -31,6 +31,9 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
 				m_View(), m_PixelDescriptionView(), m_CurveWidget(),
 				m_Controller(), m_RenderingFunction()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // Color Definition
   m_Red.Fill(0);
   m_Green.Fill(0);
@@ -192,7 +195,9 @@ void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ViewerModule::Run()
 {
-  
+  // While the viewer is shown, it is busy
+  this->BusyOn();
+
   // Get Input Image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
   // Get the description
@@ -1139,6 +1144,9 @@ void ViewerModule::Quit()
     {
       wDEM->hide();
     }
+
+  // Once module is closed, it is no longer busy
+  this->BusyOff();
 }
 
 } // End namespace otb

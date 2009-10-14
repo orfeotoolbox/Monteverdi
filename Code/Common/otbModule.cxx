@@ -23,7 +23,7 @@
 namespace otb
 {
 /** Constructor */
-Module::Module() :  m_InstanceId("Unknown"), m_InputsMap(), m_OutputsMap()
+Module::Module() :  m_InstanceId("Unknown"), m_InputsMap(), m_OutputsMap(), m_NeedsPipelineLocking(false), m_Busy(false)
 {}
 
 /** Destructor */
@@ -219,6 +219,24 @@ void Module::RunProcess1(void *)
 void Module::RunProcess2(void *)
 {
   this->ThreadedRun();
+}
+
+/** Does this module need to lock pipeline ? */
+bool Module::NeedsPipelineLocking() const
+{
+  return m_NeedsPipelineLocking;
+}
+
+/** Is this module working ? */
+bool Module::IsBusy() const
+{
+  return m_Busy;
+}
+
+/** Does this module have a lock on pipeline ? */
+bool Module::IsLockingPipeline() const
+{
+  return m_NeedsPipelineLocking && m_Busy;
 }
 
 } // End namespace otb

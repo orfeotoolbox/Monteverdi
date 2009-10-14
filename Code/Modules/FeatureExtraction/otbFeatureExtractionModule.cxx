@@ -25,6 +25,9 @@ namespace otb
 /** Constructor */
 FeatureExtractionModule::FeatureExtractionModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // Build mvc
   m_Model      = FeatureExtractionModel::New();
   m_View       = FeatureExtractionViewGUI::New();
@@ -59,6 +62,9 @@ void FeatureExtractionModule::PrintSelf(std::ostream& os, itk::Indent indent) co
 /** The custom run command */
 void FeatureExtractionModule::Run()
 {
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
 
   if(input.IsNotNull())
@@ -83,6 +89,8 @@ void FeatureExtractionModule::Notify()
     this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage","Feature image extraction.");
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    // Once module is closed, it is no longer busy
+     this->BusyOff();
   }
 }
 

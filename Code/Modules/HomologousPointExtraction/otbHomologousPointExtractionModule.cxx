@@ -22,6 +22,9 @@ namespace otb
 /** Constructor */
 HomologousPointExtractionModule::HomologousPointExtractionModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // First, do constructor stuffs
 
   m_Controller = ControllerType::New();
@@ -59,6 +62,9 @@ void HomologousPointExtractionModule::PrintSelf(std::ostream& os, itk::Indent in
 /** The custom run command */
 void HomologousPointExtractionModule::Run()
 {
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
@@ -101,6 +107,9 @@ void HomologousPointExtractionModule::Notify()
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  
+  // Once module is closed, it is no longer busy
+  this->BusyOff();
 }
 } // End namespace otb
 

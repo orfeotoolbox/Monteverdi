@@ -23,6 +23,7 @@
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 #include "otbCachingModule.h"
+#include "otbGraph.h"
 
 namespace otb
 {
@@ -59,7 +60,6 @@ class ITK_EXPORT MonteverdiModel
     ConstructorPointerType m_Constructor;
   };
 
-
   /** Map of open modules */
   typedef std::map<std::string,Module::Pointer>            ModuleMapType;
 
@@ -70,8 +70,14 @@ class ITK_EXPORT MonteverdiModel
   // Map of caching modules
   typedef std::map<std::string,CachingModule::Pointer>     CachingModuleMapType;
 
+  // Descriptors
   typedef otb::Module::OutputDataDescriptorMapType         OutputDataDescriptorMapType;
   typedef otb::Module::InputDataDescriptorMapType          InputDataDescriptorMapType;
+
+  // Connection graph
+  typedef std::string                                      CGraphVertexType;
+  typedef std::pair<std::string, std::string>              CGraphEdgeType;
+  typedef otb::Graph<CGraphVertexType, CGraphEdgeType>     ConnectionGraphType;
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -134,6 +140,9 @@ class ITK_EXPORT MonteverdiModel
   /** Is data cached ? */
   bool IsCached(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0) const;
 
+  /** Is module locked */
+  bool IsModuleLocked(const std::string & instanceId, std::string & lockingInstanceId) const;
+
   // Temporary notify stub
   virtual void Notify(const MonteverdiEvent & event);
 
@@ -180,6 +189,9 @@ protected:
 
   /** The caching modules map */
   CachingModuleMapType m_CachingModuleMap;
+
+  /** The connections graph */
+  ConnectionGraphType::Pointer m_ConnectionGraph;
 };
 
 }

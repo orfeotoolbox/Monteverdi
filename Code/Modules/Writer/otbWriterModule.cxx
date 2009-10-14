@@ -25,14 +25,15 @@ namespace otb
 /** Constructor */
 WriterModule::WriterModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
-
-  m_Done = false;
 }
 
 /** Destructor */
@@ -122,7 +123,7 @@ void WriterModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = -1;
 
-  while( (m_ProcessObject.IsNull() && !m_Done) || m_ProcessObject->GetProgress() != 1)
+  while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
     {
     if(m_ProcessObject.IsNotNull())
          {
@@ -150,6 +151,8 @@ void WriterModule::ThreadedWatch()
 
 void WriterModule::ThreadedRun()
 {
+  this->BusyOn();
+
   std::string filepath = vFilePath->value();
   
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
@@ -200,10 +203,10 @@ void WriterModule::ThreadedRun()
     }
   else
     {
-         m_Done = true;
-      itkExceptionMacro(<<"Input data are NULL.");
+    this->BusyOff();
+    itkExceptionMacro(<<"Input data are NULL.");
     }
-  m_Done = true;
+  this->BusyOff();
 }
 
 void WriterModule::HideWindow()

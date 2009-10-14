@@ -77,7 +77,7 @@ public:
   void SetInputDataDescriptor(const InputDataDescriptor & desc);
 
   /** Add Choice */
-  void AddChoice(const StringPairType & choice);
+  void AddChoice(const StringPairType & choice, bool locked = false, const std::string & locker = NULL);
 
   /** Rebuild interface */
   void Rebuild();
