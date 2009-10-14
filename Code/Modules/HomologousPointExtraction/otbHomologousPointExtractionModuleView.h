@@ -82,13 +82,13 @@ public:
   virtual void Focus(unsigned int i);
   virtual void ClearTransformationInfo();
   virtual void Evaluate();
+  virtual void HideAll();
 
-  void UpdateListSelectionColor();
+  void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(IndexType index, unsigned int viewId );
   void AddPointsToList( IndexType id1, IndexType id2);
   void RedrawWidgets();
-  void HideAll();
-
+  
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(FirstImageView,ImageViewType);
   itkGetObjectMacro(SecondImageView,ImageViewType);

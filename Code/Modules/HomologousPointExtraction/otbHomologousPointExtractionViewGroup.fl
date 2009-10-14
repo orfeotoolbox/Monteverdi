@@ -14,8 +14,8 @@ class HomologousPointExtractionViewGroup {open
   } {
     Fl_Window wMainWindow {
       label {Homologous Point Extraction}
-      callback {this->Quit();} open
-      xywh {330 185 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      callback {this->HideAll();} open
+      xywh {16 150 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tile {} {open
         xywh {0 0 205 600}
@@ -43,7 +43,8 @@ class HomologousPointExtractionViewGroup {open
           }
           Fl_Browser tError {
             label {Point Errors}
-            tooltip {Euclidean distances} xywh {5 160 190 150} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+            callback {this->UpdateListSelectionColor(false);}
+            tooltip {Euclidean distances} xywh {5 160 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Output tMeanError {
             label {Mean Error:}
@@ -78,7 +79,7 @@ class HomologousPointExtractionViewGroup {open
               xywh {210 220 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gScroll1 {
-              label {Scroll 1} open selected
+              label {Scroll 1} open
               xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gZoom1 {
@@ -89,6 +90,31 @@ class HomologousPointExtractionViewGroup {open
           Fl_Group {} {open
             xywh {413 0 178 600}
           } {
+            Fl_Browser lPointList {
+              label {Point List}
+              callback {this->UpdateListSelectionColor(true);}
+              tooltip {Contains selected points} xywh {417 21 165 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            }
+            Fl_Button guiClose {
+              label {Clear List}
+              callback {ClearPointList();}
+              tooltip {Clear Feature List} xywh {417 258 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Button guiDelete {
+              label Delete
+              callback {DeletePoint();}
+              tooltip {Clear Feature List} xywh {511 258 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Button guiFocusPoint {
+              label {Focus Point}
+              callback {Focus(0);}
+              tooltip {Focus on the selected point couple.} xywh {463 284 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Button guiComputeTransform {
+              label Evaluate
+              callback {this->ComputeTransform();}
+              tooltip {Quit Application (shortcut : Enter)} xywh {457 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 200 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            }
             Fl_Group gIndexes {open
               xywh {416 467 165 128} box PLASTIC_DOWN_BOX color 7
             } {
@@ -111,7 +137,7 @@ class HomologousPointExtractionViewGroup {open
               Fl_Button guiAdd {
                 label Add
                 callback {AddPoints();}
-                tooltip {Clear Feature List} xywh {506 539 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+                tooltip {Clear Feature List (shortcut KP_Enter)} xywh {506 539 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
               }
               Fl_Button guiFocusRound {
                 label {Focus Click}
@@ -123,31 +149,6 @@ class HomologousPointExtractionViewGroup {open
                 callback {Evaluate();}
                 tooltip {Focus on the last clicked point couple.} xywh {464 568 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186 deactivate
               }
-            }
-            Fl_Browser lPointList {
-              label {Point List}
-              callback {this->UpdateListSelectionColor();}
-              tooltip {Contains each Computed Feature} xywh {417 21 165 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
-            }
-            Fl_Button guiClose {
-              label {Clear List}
-              callback {ClearPointList();}
-              tooltip {Clear Feature List} xywh {417 258 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
-            }
-            Fl_Button guiDelete {
-              label Delete
-              callback {DeletePoint();}
-              tooltip {Clear Feature List} xywh {511 258 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
-            }
-            Fl_Button guiComputeTransform {
-              label Evaluate
-              callback {this->ComputeTransform();}
-              tooltip {Quit Application} xywh {457 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 200 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
-            }
-            Fl_Button guiFocusPoint {
-              label {Focus Point}
-              callback {Focus(0);}
-              tooltip {Focus on the selected point couple.} xywh {463 284 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
           }
           Fl_Group guiImageGroup2 {open
@@ -183,7 +184,7 @@ class HomologousPointExtractionViewGroup {open
   } {}
   Function {DeletePoint()} {open return_type {virtual void}
   } {}
-  Function {UpdateListSelectionColor()} {open return_type {virtual void}
+  Function {UpdateListSelectionColor(bool whichOne)} {open return_type {virtual void}
   } {}
   Function {ComputeTransform()} {open return_type {virtual void}
   } {}
@@ -192,5 +193,7 @@ class HomologousPointExtractionViewGroup {open
   Function {ClearTransformationInfo()} {open return_type {virtual void}
   } {}
   Function {Evaluate()} {open return_type {virtual void}
+  } {}
+  Function {HideAll()} {open selected return_type {virtual void}
   } {}
 } 

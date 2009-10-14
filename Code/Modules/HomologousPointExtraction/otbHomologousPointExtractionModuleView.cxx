@@ -183,7 +183,7 @@ HomologousPointExtractionModuleView
  m_ColorList.push_back(color);
 
  lPointList->value(lPointList->size());
- this->UpdateListSelectionColor();
+ this->UpdateListSelectionColor(true);
 
  m_FirstCrossGlComponent->AddIndex( id1 );
  m_FirstCrossGlComponent->ChangeColor( color, m_FirstCrossGlComponent->GetColorList().size()-1 );
@@ -201,11 +201,16 @@ HomologousPointExtractionModuleView
  */
 void
 HomologousPointExtractionModuleView
-::UpdateListSelectionColor()
+::UpdateListSelectionColor(bool whichOne)
 {
   //selectedIndex
-  unsigned int selectedIndex = lPointList->value()-1;
- 
+  unsigned int selectedIndex;
+  // tListPoint callback
+  if(whichOne)
+    selectedIndex = lPointList->value()-1;
+  else // tError callback
+    selectedIndex = tError->value()-1;
+
   if( selectedIndex < m_ColorList.size() )
     {
       ColorType curColor = m_ColorList[selectedIndex];
@@ -216,8 +221,29 @@ HomologousPointExtractionModuleView
               static_cast<unsigned char>(255*curColor[2]));
       
       //Update the List Point Color
-      lPointList->selection_color(fl_color());
-      lPointList->redraw();
+      if(whichOne)
+	{
+	  lPointList->selection_color(fl_color());
+	  lPointList->redraw();
+	  if(tError->size() > selectedIndex)
+	    {
+	      tError->value(selectedIndex+1);
+	      tError->selection_color(fl_color());
+	      tError->redraw();
+	    }
+	}
+      else
+	{
+	  tError->selection_color(fl_color());
+	  tError->redraw();
+	  if(lPointList->size() > selectedIndex)
+	    {
+	      lPointList->value(selectedIndex+1);
+	      lPointList->selection_color(fl_color());
+	      lPointList->redraw();
+	    }
+	}
+
     }
 }
 
@@ -285,7 +311,7 @@ HomologousPointExtractionModuleView
        lPointList->value(id);
       else
        lPointList->value(1);
-      this->UpdateListSelectionColor();
+      this->UpdateListSelectionColor(true);
       m_FirstCrossGlComponent->ClearIndex(id-1);
       m_SecondCrossGlComponent->ClearIndex(id-1);
       this->RedrawWidgets();
