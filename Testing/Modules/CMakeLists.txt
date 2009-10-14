@@ -111,8 +111,15 @@ ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
 
 #------------- Extract ROI Module Tests ---------------------------
 ADD_TEST(moTvExtractROIModuleTest  ${Modules_TESTS} otbExtractROIModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+${TEMP}/extractROIImageModuleOuptut.tif
+15 25
+42 74
+)
+
+ADD_TEST(moTvExtractROIVectorImageModuleTest  ${Modules_TESTS} otbExtractROIModuleTest
 ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-${TEMP}/extractROIModuleOuptut.tif
+${TEMP}/extractROIVectorImageModuleOuptut.tif
 50 60
 78 98
 )
@@ -145,6 +152,7 @@ otbWriterMVCModuleTest2.cxx
 otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 otbExtractROIModuleTest.cxx
+otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 )
 

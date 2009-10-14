@@ -18,11 +18,11 @@
 
 #include "otbExtractROIModule.h"
 
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbExtractROIModuleTest(int argc, char* argv[])
+int otbExtractROIVectorImageModuleTest(int argc, char* argv[])
 {
   otb::ExtractROIModule::Pointer specificModule = otb::ExtractROIModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
@@ -33,7 +33,7 @@ int otbExtractROIModuleTest(int argc, char* argv[])
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  typedef otb::Image<double,2>  ImageType;
+  typedef otb::VectorImage<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 

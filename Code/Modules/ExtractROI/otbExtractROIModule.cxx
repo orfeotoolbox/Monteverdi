@@ -18,8 +18,7 @@
 
 #include "otbExtractROIModule.h"
 #include "otbMsgReporter.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "itkImageRegion.h"
 
 namespace otb
 {
@@ -27,8 +26,9 @@ namespace otb
 ExtractROIModule::ExtractROIModule()
 {
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Image to read.");
-  m_ExtractROIFilter = ExtractROIFilterType::New();
+  this->AddInputDescriptor<FloatingImageType>("InputImage","Image to read.");
+  this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
+  m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
   this->BuildGUI();
 }
 
@@ -46,16 +46,35 @@ void ExtractROIModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ExtractROIModule::Run()
 {
+  FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  vectorImage->UpdateOutputInformation();
-  vInputImageSizeX->value(vectorImage->GetRequestedRegion().GetSize()[0]);
-  vInputImageSizeY->value(vectorImage->GetRequestedRegion().GetSize()[1]);
 
-  vStartX->minimum(static_cast<double>(vectorImage->GetRequestedRegion().GetIndex()[0]));
-  vStartX->maximum(static_cast<double>(vectorImage->GetRequestedRegion().GetSize()[0]));
+
+  itk::ImageRegion<2> imageRegion;
+
+  if(!image.IsNull() && vectorImage.IsNull())
+  {
+      image->UpdateOutputInformation();
+      imageRegion = image->GetLargestPossibleRegion();
+  }
+  else if(image.IsNull() && !vectorImage.IsNull())
+  {
+      vectorImage->UpdateOutputInformation();
+      imageRegion = vectorImage->GetLargestPossibleRegion();
+  }
+  else
+  {
+    itkExceptionMacro("The image pointer is not initialized!!");
+  }
+
+  vInputImageSizeX->value(imageRegion.GetSize()[0]);
+  vInputImageSizeY->value(imageRegion.GetSize()[1]);
+
+  vStartX->minimum(static_cast<double>(imageRegion.GetIndex()[0]));
+  vStartX->maximum(static_cast<double>(imageRegion.GetSize()[0]));
   vStartX->value(vStartX->minimum());
-  vStartY->minimum(static_cast<double>(vectorImage->GetRequestedRegion().GetIndex()[1]));
-  vStartY->maximum(static_cast<double>(vectorImage->GetRequestedRegion().GetSize()[1]));
+  vStartY->minimum(static_cast<double>(imageRegion.GetIndex()[1]));
+  vStartY->maximum(static_cast<double>(imageRegion.GetSize()[1]));
   vStartY->value(vStartY->minimum());
 
   vSizeX->minimum(vStartX->minimum());
@@ -78,20 +97,41 @@ void ExtractROIModule::Ok()
 {
   try
     {
-    // Get Input Image
-    FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+      FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
+      FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
-    m_ExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));
-    m_ExtractROIFilter->SetStartY(static_cast<unsigned long>(vStartY->value()));
-    m_ExtractROIFilter->SetSizeX(static_cast<unsigned long>(vSizeX->value()));
-    m_ExtractROIFilter->SetSizeY(static_cast<unsigned long>(vSizeY->value()));
-    m_ExtractROIFilter->SetInput(vectorImage);
-    // Notify all listener
-    // TODO: this should not be done by the user
-    this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_ExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
-    this->NotifyOutputsChange();
-    wExtractROIWindow->hide();
+
+      if(!image.IsNull() && vectorImage.IsNull())
+      {
+        // Get Input Image
+        FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
+
+        m_ImageExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));
+        m_ImageExtractROIFilter->SetStartY(static_cast<unsigned long>(vStartY->value()));
+        m_ImageExtractROIFilter->SetSizeX(static_cast<unsigned long>(vSizeX->value()));
+        m_ImageExtractROIFilter->SetSizeY(static_cast<unsigned long>(vSizeY->value()));
+        m_ImageExtractROIFilter->SetInput(image);
+        this->ClearOutputDescriptors();
+        this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
+        this->NotifyOutputsChange();
+      }
+      else if(image.IsNull() && !vectorImage.IsNull())
+
+      {
+        // Get Input Vector Image
+        FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+
+        m_VectorImageExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));
+        m_VectorImageExtractROIFilter->SetStartY(static_cast<unsigned long>(vStartY->value()));
+        m_VectorImageExtractROIFilter->SetSizeX(static_cast<unsigned long>(vSizeX->value()));
+        m_VectorImageExtractROIFilter->SetSizeY(static_cast<unsigned long>(vSizeY->value()));
+        m_VectorImageExtractROIFilter->SetInput(vectorImage);
+        this->ClearOutputDescriptors();
+        this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
+        this->NotifyOutputsChange();
+      }
+
+     wExtractROIWindow->hide();
     }
   catch(itk::ExceptionObject & err)
     {
