@@ -37,9 +37,9 @@ class EventsSender
 {
 public:
   /** Standard class typedefs */
-  typedef EventsSender    Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef EventsSender                  Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
   // Define the event type

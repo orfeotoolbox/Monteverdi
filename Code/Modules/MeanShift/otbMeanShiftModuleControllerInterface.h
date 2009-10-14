@@ -43,7 +43,8 @@ public:
   
   virtual bool IsModelUpdating() = 0;
   
-
+  virtual void Quit() = 0;
+  
 protected:
   /** Constructor */
   MeanShiftModuleControllerInterface()

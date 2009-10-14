@@ -91,29 +91,29 @@ void MeanShiftModule::Run()
 }
 
 /** The Notify */
-void MeanShiftModule::Notify()
+void MeanShiftModule::Notify(const std::string & event)
 {
 
-  if (m_Model->GetOutputChanged())
-    {
-      this->ClearOutputDescriptors();
+  if (event == "OutputsUpdated")
+  {
+    this->ClearOutputDescriptors();
       
       // Add outputs
 
 
-      if(m_Controller->GenerateFiltered())
-       {
-         FloatingVectorImageType::Pointer filteredOutput =
-           m_Controller->GetFilteredOutput();
-         this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
-       }
+    if(m_Controller->GenerateFiltered())
+    {
+      FloatingVectorImageType::Pointer filteredOutput =
+          m_Controller->GetFilteredOutput();
+      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
+    }
 
-      if(m_Controller->GenerateClustered())
-       {
-         FloatingVectorImageType::Pointer clusteredOutput =
-           m_Controller->GetClusteredOutput();
-         this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
-       }
+    if(m_Controller->GenerateClustered())
+    {
+      FloatingVectorImageType::Pointer clusteredOutput =
+          m_Controller->GetClusteredOutput();
+      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
+    }
 
       //   if(m_Controller->GenerateLabeled())
       //     {
@@ -123,12 +123,19 @@ void MeanShiftModule::Notify()
   
 
       // Send an event to Monteverdi application
-      this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 
       // Once module is closed, it is no longer busy
-      this->BusyOff();
+    this->BusyOff();
+  }
+  else if (event == "BusyOff")
+  {
+    this->BusyOff();
+  }    
+  else
+  {
+  } 
 
-    }
 }
 } // End namespace otb
 

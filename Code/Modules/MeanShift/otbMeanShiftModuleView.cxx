@@ -71,7 +71,7 @@ void MeanShiftModuleView::Build()
     SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));
     SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));
 }
-void MeanShiftModuleView::Notify()
+void MeanShiftModuleView::Notify(const std::string & event)
 {
   this->RefreshInterface();
   m_Mutex.Lock();
@@ -96,6 +96,7 @@ void MeanShiftModuleView::RefreshInterface()
 
 void MeanShiftModuleView::Exit()
 {
+  m_Controller->Quit();
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }

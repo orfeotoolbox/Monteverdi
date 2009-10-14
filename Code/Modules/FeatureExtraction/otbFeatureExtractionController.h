@@ -33,21 +33,21 @@ class ITK_EXPORT FeatureExtractionController
 {
 public:
   /** Standard class typedefs */
-  typedef FeatureExtractionController          Self;
-  typedef FeatureExtractionControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef FeatureExtractionController                                  Self;
+  typedef FeatureExtractionControllerInterface                         Superclass;
+  typedef itk::SmartPointer<Self>                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                ConstPointer;
 
-  typedef FeatureExtractionViewGUI          ViewType;
-  typedef ViewType::Pointer                 ViewPointerType;
-  typedef Superclass::InputImageType        InputImageType;
-  typedef Superclass::InputImagePointerType InputImagePointerType;
-  typedef ModelType::IndexType              IndexType;
-  typedef ModelType::SizeType               SizeType;
-  typedef ModelType::OffsetType             OffsetType;
+  typedef FeatureExtractionViewGUI                                     ViewType;
+  typedef ViewType::Pointer                                            ViewPointerType;
+  typedef Superclass::InputImageType                                   InputImageType;
+  typedef Superclass::InputImagePointerType                            InputImagePointerType;
+  typedef ModelType::IndexType                                         IndexType;
+  typedef ModelType::SizeType                                          SizeType;
+  typedef ModelType::OffsetType                                        OffsetType;
 
-  typedef ModelType::VisuModelType         VisuModelType;
-  typedef ViewType::VisuViewType           VisuViewType;
+  typedef ModelType::VisuModelType                                     VisuModelType;
+  typedef ViewType::VisuViewType                                       VisuViewType;
   typedef WidgetResizingActionHandler<VisuModelType,VisuViewType>      ResizingHandlerType;
   typedef ResizingHandlerType::Pointer                                 ResizingHandlerPointerType;
   typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType> ChangeExtractRegionHandlerType;
@@ -55,7 +55,7 @@ public:
   typedef PixelClickedActionHandler<ModelType,ViewType>                PixelClickedHandlerType;
   typedef PixelClickedHandlerType::Pointer                             PixelClickedHandlerPointerType;
 
-  typedef FeatureInfo::FeatureType         FeatureType;
+  typedef FeatureInfo::FeatureType                                     FeatureType;
 
 /** Standard type macros */
   itkTypeMacro(FeatureExtractionController,Superclass);
