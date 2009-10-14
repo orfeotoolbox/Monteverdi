@@ -105,6 +105,15 @@ public:
   /** Load cached data */
   void LoadCachedData(const DataObjectWrapper & data, const std::string & key, unsigned int idx);
 
+  /** Does this module need to lock pipeline ? */
+  bool NeedsPipelineLocking() const;
+
+  /** Is this module working ? */
+  bool IsBusy() const;
+
+  /** Does this module have a lock on pipeline ? */
+  bool IsLockingPipeline() const;
+
 protected:
   /** Constructor */
   Module();
@@ -151,6 +160,13 @@ protected:
   /** Instance id (intentionnaly left protected) */
   std::string m_InstanceId;
 
+  /** Set the NeedsPipelineLocking flag */
+  itkSetMacro(NeedsPipelineLocking,bool);
+  itkBooleanMacro(NeedsPipelineLocking);
+
+  /** Set the busy floag */
+  itkSetMacro(Busy,bool);
+  itkBooleanMacro(Busy);
 
 private:
   Module(const Self&); //purposely not implemented
@@ -160,12 +176,17 @@ private:
   virtual void RunProcess1(void *v);
   virtual void RunProcess2(void *v);
   
-
   /** Input descriptor map */
   InputDataDescriptorMapType m_InputsMap;
 
   /** Output descriptor map */
   OutputDataDescriptorMapType m_OutputsMap;
+
+  /** Does the module need to lock pipeline ? */
+  bool m_NeedsPipelineLocking;
+
+  /** Is the module busy ? */
+  bool m_Busy;
 };
 
 

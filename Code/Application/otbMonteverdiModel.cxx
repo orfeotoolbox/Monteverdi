@@ -19,6 +19,10 @@
 #define __otbMonteverdiModel_cxx
 
 #include "otbMonteverdiModel.h"
+#include "otbGraphVertexIterator.h"
+
+// For pipeline locking mechanism
+#include <boost/graph/connected_components.hpp>
 
 namespace otb
 {
@@ -29,8 +33,10 @@ MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
 /**
  * Constructor
  */
-MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap()
-{}
+MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap(), m_CachingModuleMap(), m_ConnectionGraph()
+{
+  m_ConnectionGraph = ConnectionGraphType::New();
+}
 
 MonteverdiModel::~MonteverdiModel()
 {
@@ -58,6 +64,7 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
     // Register module instance
     module->SetInstanceId(oss.str());
     m_ModuleMap[oss.str()] = module;
+    m_ConnectionGraph->AddVertex(oss.str());
 
     // Register the main model to receive events from the new module
     module->RegisterListener(this);
@@ -141,6 +148,39 @@ void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,cons
 
   // Add the given data wrapper as an input to target module
   target->AddInputByKey(inputKey,outputWrapper);
+
+  // Create an edge to add in the graph
+  CGraphEdgeType cEdge(outputKey,inputKey);
+  
+  
+  // Look for source and target in the graph
+  otb::GraphVertexIterator<ConnectionGraphType> sourceIt(m_ConnectionGraph), targetIt(m_ConnectionGraph);
+
+  // Look for the source vertex in the connection graph
+  while(!sourceIt.IsAtEnd() && sourceIt.Get() != sourceModuleId)
+    {
+    ++sourceIt;
+    }
+
+  if(sourceIt.IsAtEnd())
+    {
+    itkExceptionMacro(<<"No module found with instanceId "<<sourceModuleId<<" in the connections graph");
+    }
+
+  // Look for the target vertex in the connection graph
+  while(!targetIt.IsAtEnd() && targetIt.Get() != targetModuleId)
+    {
+    ++targetIt;
+    }
+
+  if(targetIt.IsAtEnd())
+    {
+    itkExceptionMacro(<<"No module found with instanceId "<<targetModuleId<<" in the connections graph");
+    }
+
+  // Add connection
+  m_ConnectionGraph->AddEdge(sourceIt.GetVertexDescriptor(),targetIt.GetVertexDescriptor(),cEdge);
+  
 }
 
 void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )
@@ -151,6 +191,23 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   if(mcIt == m_ModuleMap.end())
     {
     itkExceptionMacro(<<"No module found with instanceId "<<oldInstanceId);
+    }
+
+  // Look for the old instance id in the graph
+  otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
+
+  while(!vertexIt.IsAtEnd() && vertexIt.Get() != oldInstanceId)
+    {
+    ++vertexIt;
+    }
+
+  if(!vertexIt.IsAtEnd())
+    {
+    vertexIt.Set(newInstanceId);
+    }
+  else
+    {
+    itkExceptionMacro(<<"No module found with instanceId "<<oldInstanceId<<" in the connections graph");
     }
 
   // Check if the new instanceId is in use
@@ -166,8 +223,6 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   module->SetInstanceId(newInstanceId);
   m_ModuleMap[newInstanceId] = module;
   m_ModuleMap.erase( oldInstanceId );
-
-  //this->NotifyAll(MonteverdiEvent("ChangeInstanceId",newInstanceId.c_str()));
 }
 
 bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std::string & outputKey) const
@@ -324,6 +379,52 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string & instanceId, std::
   idx = atoi(temp.c_str());
 
   return true;
+}
+
+bool MonteverdiModel::IsModuleLocked(const std::string & instanceId, std::string & lockingInstanceId) const
+{
+  // First, extract the connected components of the connections graph
+  std::vector<int> component(num_vertices(m_ConnectionGraph->GetGraphContainer()));
+  connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]);
+
+  // Then, find the component to which instanceId belongs
+  otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
+  vertexIt.GoToBegin();
+
+  while(!vertexIt.IsAtEnd() && vertexIt.Get() != instanceId)
+    {
+    ++vertexIt;
+    }
+  if(vertexIt.IsAtEnd())
+    {
+    itkExceptionMacro(<<"No module found with instanceId "<<instanceId<<" in the connections graph");
+    }
+
+  // Store the component id
+  int componentId = vertexIt.GetVertexDescriptor();
+
+  // Now, look in the connection graph if another module is locking
+  // this connected component
+  vertexIt.GoToBegin();
+
+  bool resp = false;
+
+  while(!vertexIt.IsAtEnd() && !resp)
+    {
+    // If we are in the same component
+    if(component[vertexIt.GetVertexDescriptor()] == componentId)
+      {
+      Module::Pointer currentModule = this->GetModuleByInstanceId(vertexIt.Get());
+
+      if(currentModule->IsLockingPipeline())
+	{
+	resp = true;
+	lockingInstanceId = vertexIt.Get();
+	}
+      }
+    ++vertexIt;
+    }
+  return resp;
 }
 
 void MonteverdiModel::Notify(const MonteverdiEvent & event)

@@ -16,24 +16,28 @@
 
 =========================================================================*/
 
-
-#include "otbWriterModule.h"
+#include "otbExtractROIModule.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
-
-int otbWriterModuleTest(int argc, char* argv[])
+int otbExtractROIModuleTest(int argc, char* argv[])
 {
-  otb::WriterModule::Pointer specificModule = otb::WriterModule::New();
+  otb::ExtractROIModule::Pointer specificModule = otb::ExtractROIModule::New();
   otb::Module::Pointer module = specificModule.GetPointer();
-
+  
   std::cout<<"Module: "<<module<<std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
+  const char * outfname = argv[2];
+
+  std::cout<<"Set ROI values done."<<std::endl;
   typedef otb::VectorImage<double,2>  ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
+  typedef otb::ImageFileWriter<ImageType>     WriterType;
+
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -41,23 +45,31 @@ int otbWriterModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
+  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
   
-  module->AddInputByKey("InputDataSet",wrapperIn);
-  
+  module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
-  Fl::check();
-  
-  // Simulate file chooser and ok callback
-  specificModule->vFilePath->value(argv[2]);
-  specificModule->bOk->do_callback();
+  specificModule->vStartX->value(atof(argv[3]));
+  specificModule->vStartY->value(atof(argv[4]));
+  specificModule->vSizeX->value(atof(argv[5]));
+  specificModule->vSizeY->value(atof(argv[6]));
+  Fl::run();
 
-  // Wait for the writer to complete 
-  while(specificModule->IsBusy())
-    {
-    Fl::check();
-    OpenThreads::Thread::microSleep(500);
-    }
+  // Simulate Ok button callback
+  specificModule->bOk->do_callback();
+  Fl::check();
+
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+
+  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+
+  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
+
+  //Write the image
+  WriterType::Pointer  writer = WriterType::New();
+  writer->SetFileName(outfname);
+  writer->SetInput(outImage);
+  writer->Update();
 
   return EXIT_SUCCESS;
 

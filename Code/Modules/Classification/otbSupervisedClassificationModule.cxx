@@ -23,6 +23,9 @@ namespace otb
 /** Constructor */
 SupervisedClassificationModule::SupervisedClassificationModule()
 {
+  // This module needs pipeline locking (because of visualization)
+  this->NeedsPipelineLockingOn();
+
   m_SupervisedClassification = SupervisedClassificationAppli::New();
 
   m_SupervisedClassification->RegisterListener(this);
@@ -46,6 +49,9 @@ void SupervisedClassificationModule::PrintSelf(std::ostream& os, itk::Indent ind
 /** The custom run command */
 void SupervisedClassificationModule::Run()
 {
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
   std::string desc = this->GetInputDataDescription<InputImageType>("InputImage",0);
 
@@ -81,6 +87,8 @@ void SupervisedClassificationModule::Notify()
     this->EraseOutputByKey("OutputImage");
     this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
     this->NotifyOutputsChange();
+    // Once module is closed, it is no longer busy
+     this->BusyOff();
     }
 
   if(m_SupervisedClassification->GetHasOutputVector())
@@ -89,6 +97,8 @@ void SupervisedClassificationModule::Notify()
     this->EraseOutputByKey("OutputVector");
     this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputVector","Vectors of classified image.");
     this->NotifyOutputsChange();
+    // Once module is closed, it is no longer busy
+    this->BusyOff();
     }
 }
 

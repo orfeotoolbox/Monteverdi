@@ -90,17 +90,22 @@ InputViewGUI
       
       // we check if there are convenient outputs in the modules
       std::vector<std::string> moduleInstances = m_Model->GetAvailableModuleInstanceIds();
+
       for(std::vector<std::string>::const_iterator instIt = moduleInstances.begin();instIt != moduleInstances.end();instIt++)
       {
-        // look after all the outputs of each instance of module
-        OutputDataDescriptorMapType lOutputDataMap = m_Model->GetModuleOutputsByInstanceId(*instIt);
-        OutputDataDescriptorMapType::const_iterator it_out;
-        for(it_out=lOutputDataMap.begin();it_out!=lOutputDataMap.end();it_out++)
+      // Check if module is not locked
+      std::string lockingModule;
+      bool locked = m_Model->IsModuleLocked(*instIt,lockingModule);
+
+      // look after all the outputs of each instance of module
+      OutputDataDescriptorMapType lOutputDataMap = m_Model->GetModuleOutputsByInstanceId(*instIt);
+      OutputDataDescriptorMapType::const_iterator it_out;
+      for(it_out=lOutputDataMap.begin();it_out!=lOutputDataMap.end();it_out++)
         {
-          // if the type is ok, we can add the label in the Fl_Input_Choice
-          if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
+	// if the type is ok, we can add the label in the Fl_Input_Choice
+	if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-	  inputChoice->AddChoice(StringPairType(*instIt,it_out->first));
+	  inputChoice->AddChoice(StringPairType(*instIt,it_out->first),locked,lockingModule);
           }
         }
       }

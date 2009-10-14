@@ -70,12 +70,6 @@ public:
   typedef VectorDataFileWriter<VectorType>         VectorWriterType;
   typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
 
-  // Is the process running ?
-  bool IsRunning() const
-  {
-    return !m_Done;
-  }
-
 protected:
   /** Constructor */
   WriterModule();
@@ -112,9 +106,6 @@ private:
 
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
-
-  // Is writing done ?
-  bool m_Done;
 };
 
 

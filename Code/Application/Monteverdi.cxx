@@ -60,6 +60,7 @@
 #include "otbCachingModule.h"
 #include "otbSarIntensityModule.h"
 #include "otbHomologousPointExtractionModule.h"
+#include "otbExtractROIModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -89,6 +90,7 @@ int main(int argc, char* argv[])
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
   model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
+  model->RegisterModule<otb::ExtractROIModule>("ExtractROI","File/Extract ROI from dataset");
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","SAR/Despeckle image");
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity","SAR/Compute intensity and log-intensity");
@@ -102,7 +104,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
   model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
-
+  
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
