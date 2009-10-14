@@ -18,7 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbFeatureExtractionModel_h
 #define __otbFeatureExtractionModel_h
 
-#include "otbMVCModel.h"
+// #include "otbMVCModel.h"
+#include "otbEventsSender.h"
 #include "otbListenerBase.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -71,7 +72,8 @@ namespace otb
 
 
 class ITK_EXPORT FeatureExtractionModel
-      : public MVCModel<ListenerBase>, public itk::Object
+//       : public MVCModel<ListenerBase>, public itk::Object
+  : public EventsSender<std::string>, public itk::Object
 {
 
 public:
@@ -465,7 +467,7 @@ public:
   /** Get filtered single output image */
   SingleImagePointerType GetSingleImage(int i);
 
-
+  void Quit();
 protected:
 
   /** Constructor */

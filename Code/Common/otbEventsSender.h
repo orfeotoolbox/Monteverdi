@@ -18,6 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbEventsSender_h
 #define __otbEventsSender_h
 
+#include "itkObject.h"
+
 #include "otbEventsListener.h"
 
 #include <set>
@@ -31,6 +33,7 @@ namespace otb
  */
 template <class TEvent = void>
 class EventsSender
+//   : public itk::Object
 {
 public:
   /** Standard class typedefs */

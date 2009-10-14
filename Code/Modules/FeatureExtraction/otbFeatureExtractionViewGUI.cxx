@@ -197,7 +197,7 @@ FeatureExtractionViewGUI
 
 void
 FeatureExtractionViewGUI
-::Notify()
+::Notify(const std::string & event)
 {
   if (m_FeatureExtractionModel->GetHasInput())
   {
@@ -506,6 +506,8 @@ void
 FeatureExtractionViewGUI
 ::Quit()
 {
+  /** Notify that we can unlock data */
+  m_FeatureExtractionController->Quit();
   guiMainWindow->hide();
 //   MsgReporter::GetInstance()->Hide();
 }

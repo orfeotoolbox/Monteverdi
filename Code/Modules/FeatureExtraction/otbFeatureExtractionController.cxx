@@ -601,6 +601,13 @@ FeatureExtractionController
   }
 }
 
+void FeatureExtractionController::Quit()
+{
+  m_Model->Quit(); 
+}
+
+
+
 
 } // end namespace otb
 

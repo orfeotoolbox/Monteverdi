@@ -25,7 +25,8 @@
 #include "otbFeatureExtractionModel.h"
 #include "otbFeatureExtractionController.h"
 
-#include "otbListenerBase.h"
+// #include "otbListenerBase.h"
+#include "otbEventsListener.h"
 
 namespace otb
 {
@@ -36,7 +37,9 @@ namespace otb
  */
 
 class ITK_EXPORT FeatureExtractionModule
-  : public Module, public ListenerBase
+  : public Module, public EventsListener<std::string>
+    //   : public Module, public ListenerBase
+  
 {
 public:
   /** Standard class typedefs */
@@ -69,7 +72,7 @@ protected:
   virtual void Run();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify();
+  void Notify(const std::string & event);
 
 private:
   FeatureExtractionModule(const Self&); //purposely not implemented

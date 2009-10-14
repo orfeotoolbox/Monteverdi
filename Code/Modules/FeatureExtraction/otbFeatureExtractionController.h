@@ -129,6 +129,7 @@ public:
   virtual void RemoveFromOutputListOrder(int id);
   virtual void ExchangeOutputListOrder( int direction );
 
+  virtual void Quit();
 protected:
   /** Constructor */
   FeatureExtractionController();
