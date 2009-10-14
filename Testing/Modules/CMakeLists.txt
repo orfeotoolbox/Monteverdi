@@ -57,12 +57,12 @@ ${TEMP}/SupervisedClassificationModuleOuptut.tif
 ${INPUTDATA}/poupees.svm    
 )
 #------------- Writer Module Tests ---------------------------
-ADD_TEST(WriterModuleTest  ${Modules_TESTS} otbWriterModuleTest
+ADD_TEST(moTvWriterModuleTest  ${Modules_TESTS} otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
-ADD_TEST(ReaderWriterModuleTest ${Modules_TESTS} otbReaderWriterModuleTest
+ADD_TEST(moTvReaderWriterModuleTest ${Modules_TESTS} otbReaderWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerwriterModuleOuptut.tif
 )
@@ -84,7 +84,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #------------- Writer MVC Module Tests ---------------------------
-ADD_TEST(WriterMVCModuleTest  ${Modules_TESTS} otbWriterMVCModuleTest
+ADD_TEST(moTvWriterMVCModuleTest  ${Modules_TESTS} otbWriterMVCModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
@@ -96,7 +96,7 @@ ${TEMP}/readerModuleOuptut.tif
 
 #------------- PanSharpening Module Tests ---------------------------
 
-ADD_TEST(PanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
+ADD_TEST(moTvPanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
     ${TEMP}/panSharpeningModuleOutput.tif
@@ -126,7 +126,7 @@ ${TEMP}/extractROIVectorImageModuleOuptut.tif
 
 #------------- Point Extraction Module Tests ---------------------------
 
-ADD_TEST(hoTvHomologousPointExtractionModuleTest ${Modules_TESTS} otbHomologousPointExtractionModuleTest
+ADD_TEST(moTvHomologousPointExtractionModuleTest ${Modules_TESTS} otbHomologousPointExtractionModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif
 ${TEMP}/moTvHomologousPointExtractionModule.tif	
@@ -135,6 +135,21 @@ ${TEMP}/moTvHomologousPointExtractionModule.tif
 192 94  195 90
 0
 )
+
+#------------- Concatenate Module Tests ---------------------------
+
+ADD_TEST(moTvConcatenateImagesModuleTest ${Modules_TESTS} otbConcatenateModuleTest
+${INPUTDATA}/Seg1InputForRCC8Graph.tif
+${INPUTDATA}/Seg2InputForRCC8Graph.tif
+${INPUTDATA}/Seg3InputForRCC8Graph.tif
+${INPUTDATA}/Seg4InputForRCC8Graph.tif
+${TEMP}/moTvConcatenateImageModule.tif 
+)
+
+
+
+
+
 
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
@@ -154,6 +169,7 @@ otbProjectionModuleTest.cxx
 otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
+otbConcatenateModuleTest.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur

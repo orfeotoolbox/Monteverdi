@@ -61,6 +61,7 @@
 #include "otbSarIntensityModule.h"
 #include "otbHomologousPointExtractionModule.h"
 #include "otbExtractROIModule.h"
+#include "otbConcatenateModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -104,6 +105,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
   model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
+  model->RegisterModule<otb::ConcatenateModule>("Concatenate","File/Concatenate images");
   
   // Launch Monteverdi
   view->InitWidgets();
