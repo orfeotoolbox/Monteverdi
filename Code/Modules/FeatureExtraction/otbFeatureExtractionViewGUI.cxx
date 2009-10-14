@@ -179,10 +179,11 @@ void
 FeatureExtractionViewGUI
 ::UpdateFeaturePreviewFromOutputList()
 {
-  if (guiOutputFeatureList->value()>0)
+  unsigned int OutputListNb = guiOutputFeatureList->value();
+  if (OutputListNb>0)
   {
-    if( static_cast<unsigned int>(guiOutputFeatureList->value()-1) <m_FeatureExtractionModel->GetOutputListOrder().size() )
-      m_FeatureExtractionModel->GetSingleOutput( m_FeatureExtractionModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
+    if(static_cast<unsigned int>(OutputListNb-1) <m_FeatureExtractionModel->GetOutputListOrder().size() )
+      m_FeatureExtractionModel->GetSingleOutput( m_FeatureExtractionModel->GetOutputListOrder()[OutputListNb-1]);
   }
 }
 
@@ -216,7 +217,7 @@ FeatureExtractionViewGUI
   guiMainWindow->redraw();
   if (cfname == NULL || strlen(cfname)<1)
   {
-    return ;
+    return;
   }
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
@@ -514,5 +515,3 @@ FeatureExtractionViewGUI
 
 
 }
-
-

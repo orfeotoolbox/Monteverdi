@@ -2,7 +2,8 @@
 #define __otbMeanShiftModuleModel_h
 
 #include "otbMVCModel.h"
-#include "otbListenerBase.h"
+// #include "otbListenerBase.h"
+#include "otbEventsSender.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -22,7 +23,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT MeanShiftModuleModel
-      : public MVCModel<ListenerBase>, public itk::Object
+  : public EventsSender<std::string>, public itk::Object
 {
 
 public:
@@ -99,14 +100,15 @@ public:
   itkGetMacro(GenerateLabeled, bool);
 
   /** Get the output changed flag */
-  itkGetMacro(OutputChanged,bool);
+//   itkGetMacro(OutputChanged,bool);
   
 
   bool IsUpdating() const
   {
     return m_IsUpdating;
   }
-
+  
+  void Quit();
 protected:
 
   /** Constructor */
@@ -156,7 +158,7 @@ private:
   VectorImagePointerType m_OutputClusteredImage;
   LabeledImagePointerType m_OutputLabeledImage;
 
-  bool m_OutputChanged;
+//   bool m_OutputChanged;
 
 };
 

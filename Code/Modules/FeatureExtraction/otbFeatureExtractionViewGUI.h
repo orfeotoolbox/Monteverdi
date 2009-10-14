@@ -52,9 +52,9 @@ class ITK_EXPORT FeatureExtractionViewGUI
 public:
   /** Standard class typedefs */
   typedef FeatureExtractionViewGUI          Self;
-  typedef itk::Object   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                       Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
@@ -169,21 +169,21 @@ private:
   void UpdateChannelSelection();
 
   /** Pointer to the model */
-  FeatureExtractionModel::Pointer m_FeatureExtractionModel;
+  FeatureExtractionModel::Pointer               m_FeatureExtractionModel;
   /** Pointer to the controller */
   FeatureExtractionControllerInterface::Pointer m_FeatureExtractionController;
 
-  StringVectorType         m_FileNameList;
-  StringVectorType         m_ViewerNameList;
-  std::string              m_LastPath;
-  std::string              m_TemplateViewerName;
-  StringVectorType         m_DisplayedLabelList;
-  StringVectorType         m_UndisplayedLabelList;
-  std::vector<bool>        m_DisplayStatusList;
-  FeatureType              m_FeatureType;
+  StringVectorType                              m_FileNameList;
+  StringVectorType                              m_ViewerNameList;
+  std::string                                   m_LastPath;
+  std::string                                   m_TemplateViewerName;
+  StringVectorType                              m_DisplayedLabelList;
+  StringVectorType                              m_UndisplayedLabelList;
+  std::vector<bool>                             m_DisplayStatusList;
+  FeatureType                                   m_FeatureType;
   /** output/input feature list link. */
-  std::vector<int> m_InputOutputFeatureLink;
-  int m_FeatureExtractPreviewParentBrowser;
+  std::vector<int>          m_InputOutputFeatureLink;
+  int                       m_FeatureExtractPreviewParentBrowser;
   /** Value of the selected Pixel*/
   ModelInputPixelType m_SelectedPixel;
   /** Store a list avor all parameter selection group*/

@@ -43,10 +43,10 @@ class ITK_EXPORT FeatureExtractionModule
 {
 public:
   /** Standard class typedefs */
-  typedef FeatureExtractionModule        Self;
-  typedef Module                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef FeatureExtractionModule         Self;
+  typedef Module                          Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** New macro */
   itkNewMacro(Self);

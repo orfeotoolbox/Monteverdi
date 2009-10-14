@@ -18,6 +18,8 @@
 #ifndef __otbMeanShiftModule_h
 #define __otbMeanShiftModule_h
 
+#include "otbEventsListener.h"
+
 // include the base class
 #include "otbModule.h"
 
@@ -41,7 +43,8 @@ namespace otb
  */
 
 class ITK_EXPORT MeanShiftModule
-  : public Module, public ListenerBase
+//   : public Module, public ListenerBase
+  : public Module, public EventsListener<std::string> 
 {
 public:
   /** Standard class typedefs */
@@ -76,7 +79,7 @@ protected:
   virtual ~MeanShiftModule();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify();
+  void Notify(const std::string & event);
   
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
