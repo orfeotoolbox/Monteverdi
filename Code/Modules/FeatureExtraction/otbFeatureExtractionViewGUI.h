@@ -19,8 +19,8 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbFeatureExtractionViewGUI_h
 
 
-#include "otbListenerBase.h"
-
+// #include "otbListenerBase.h"
+#include "otbEventsListener.h"
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -47,7 +47,7 @@ namespace otb
  *
  */
 class ITK_EXPORT FeatureExtractionViewGUI
-      : public ListenerBase, public FeatureExtractionViewGroup, public itk::Object
+      : public EventsListener<std::string>, public FeatureExtractionViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -109,7 +109,7 @@ public:
   otbRunningMacro();
 
   /** Event from the model */
-  virtual void Notify();
+  virtual void Notify(const std::string & event);
   virtual void UpdateFeaturePreview();
   virtual void UpdateFeaturePreviewFromOutputList();
   virtual void UpdateFeatureInfo(FeatureType feat);

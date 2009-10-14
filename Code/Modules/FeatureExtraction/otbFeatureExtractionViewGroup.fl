@@ -18,13 +18,13 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {444 123 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {480 108 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
-          label Action open
+          label Action open selected
           xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice guiFeatureChoice {
@@ -1078,9 +1078,9 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
         }
       }
       Fl_Button guiOK {
-        label {Save/Quit}
+        label {Extract Feature}
         callback {OK();}
-        tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Save the Composition} xywh {525 563 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiClose {
         label {Clear List}
@@ -1088,9 +1088,9 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
         tooltip {Clear Feature List} xywh {108 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiQuit {
-        label Quit
+        label Cancel
         callback {Quit();}
-        tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Quit Application} xywh {425 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
@@ -1119,7 +1119,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
   } {}
   Function {SetFeatureType(otb::FeatureInfo::FeatureType i)} {open return_type {virtual void}
   } {}
-  Function {OK()} {open selected return_type {virtual void}
+  Function {OK()} {open return_type {virtual void}
   } {}
   Function {AddFeature()} {open return_type {virtual void}
   } {}

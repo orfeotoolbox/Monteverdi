@@ -81,17 +81,26 @@ void FeatureExtractionModule::Run()
 }
 
 /** The Notify */
-void FeatureExtractionModule::Notify()
+void FeatureExtractionModule::Notify(const std::string & event)
 {
-  if (m_Model->GetHasChanged())
+  if (event == "OutputsUpdated")
     {
     this->ClearOutputDescriptors();
     this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage","Feature image extraction.");
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
     // Once module is closed, it is no longer busy
-     this->BusyOff();
+    this->BusyOff();
   }
+  else if (event == "BusyOff")
+  {
+    this->BusyOff();
+  }
+  else
+  {
+    
+  }
+  
 }
 
 } // End namespace otb
