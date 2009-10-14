@@ -25,6 +25,7 @@ namespace otb
 typedef enum { 
   TRANSLATION,
   AFFINE,
+  SIMILARITY2D,
   UNKNOWN
 }  TransformEnumType;
 

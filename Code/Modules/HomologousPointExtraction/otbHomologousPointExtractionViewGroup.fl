@@ -36,6 +36,10 @@ class HomologousPointExtractionViewGroup {open
               label Affine
               tooltip {ax+b transformation} xywh {45 45 30 20}
             }
+            MenuItem {} {
+              label Similarity2D selected
+              tooltip {ax+b transformation} xywh {55 55 30 20}
+            }
           }
           Fl_Output tTransform {
             label {Transform Value}
@@ -47,7 +51,7 @@ class HomologousPointExtractionViewGroup {open
             tooltip {Euclidean distances} xywh {5 160 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Output tMeanError {
-            label {Mean Error:}
+            label {Mean Square Error:}
             xywh {5 349 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Group gPixelValue1 {
@@ -194,6 +198,6 @@ class HomologousPointExtractionViewGroup {open
   } {}
   Function {Evaluate()} {open return_type {virtual void}
   } {}
-  Function {HideAll()} {open selected return_type {virtual void}
+  Function {HideAll()} {open return_type {virtual void}
   } {}
 } 

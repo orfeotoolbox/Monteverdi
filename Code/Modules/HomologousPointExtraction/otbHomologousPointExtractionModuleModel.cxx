@@ -221,6 +221,18 @@ HomologousPointExtractionModuleModel
       }
     case otb::AFFINE:
       {
+      ScalesType scales(6);
+      // M11, M12, M21, M22
+      scales.Fill( 1. );
+      // translation X and Y
+      scales[4] = 1. / 1000000;
+      scales[5] = 1. / 1000000;
+
+      this->GenericRegistration<AffineTransformType>(scales);
+      break;
+      }
+    case otb::SIMILARITY2D:
+      {
       ScalesType scales(4);
       // Scaling scale
       scales[0] = 1.;
@@ -303,6 +315,11 @@ HomologousPointExtractionModuleModel
       }
     case otb::AFFINE:
       {
+	out = this->GenericTransformPoint<AffineTransformType>(id);
+	break;
+      }
+    case otb::SIMILARITY2D:
+      {
 	out = this->GenericTransformPoint<Similarity2DTransformType>(id);
 	break;
       }
@@ -354,6 +371,11 @@ HomologousPointExtractionModuleModel
 	break;
       }
     case otb::AFFINE:
+      {
+	outList = this->GenericTransformPoints<AffineTransformType>(inList);
+	break;
+      }
+    case otb::SIMILARITY2D:
       {
 	outList = this->GenericTransformPoints<Similarity2DTransformType>(inList);
 	break;
