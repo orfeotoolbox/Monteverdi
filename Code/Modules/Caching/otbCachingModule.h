@@ -74,9 +74,6 @@ public:
   itkSetMacro(WatchProgress,bool);
   itkBooleanMacro(WatchProgress);
 
-  // Is the caching process in progress ?
-  bool IsWorking() const;
-
   // Return the writing progress
   double GetProgress() const;
 
@@ -123,9 +120,6 @@ private:
   
   // The reading process
   itk::ProcessObject::Pointer m_ReadingProcess;
-
-  // Is caching done ?
-  bool m_Working;
 
   // The caching path (could be later read from parameters file)
   std::string m_CachingPath;

@@ -28,6 +28,9 @@ namespace otb
 /** Constructor */
 CachingModule::CachingModule()
 {
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
@@ -35,7 +38,6 @@ CachingModule::CachingModule()
 
   m_CachingPath = "Caching/";
   m_FilePath = "";
-  m_Working = false;
   m_WatchProgress = true;
 
   // Build gui
@@ -116,7 +118,7 @@ void CachingModule::ThreadedWatch()
   Fl::awake(&ShowWindowCallback,this);
   Fl::unlock();
 
-  while(m_Working)
+  while(this->IsBusy())
     {
        if(m_WritingProcess.IsNotNull())
        {
@@ -134,7 +136,7 @@ void CachingModule::ThreadedWatch()
     }
 
   // Wait for the reader to be set
-  while(m_Working)
+  while(this->IsBusy())
     {
     Sleep(500);
     }
@@ -148,7 +150,7 @@ void CachingModule::ThreadedWatch()
 
 void CachingModule::ThreadedRun()
 {
-  m_Working = true;
+  this->BusyOn();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
@@ -235,11 +237,11 @@ void CachingModule::ThreadedRun()
     }
   else
     {
-    m_Working = false;
+    this->BusyOff();
     itkExceptionMacro(<<"Input data are NULL.");
     }
 
-  m_Working = false;
+  this->BusyOff();
 
   // Notify new outputs
   Fl::lock();
@@ -275,12 +277,6 @@ void CachingModule::ShowWindowCallback(void * data)
     {
     caching->ShowWindow();
     }
-}
-
-
-bool CachingModule::IsWorking() const
-{
-  return m_Working;
 }
 
 void CachingModule::Run()
