@@ -92,6 +92,8 @@ public:
   {
     return m_Model->IsUpdating();
   }
+  
+  virtual void Quit();
 protected:
   /** Constructor */
   MeanShiftModuleController();

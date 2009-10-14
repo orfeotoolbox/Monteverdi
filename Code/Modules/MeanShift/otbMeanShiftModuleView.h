@@ -6,7 +6,7 @@
 
 #include "otbMeanShiftModuleViewGroup.h"
 
-#include "otbListenerBase.h"
+#include "otbEventsListener.h"
 #include "otbMeanShiftModuleModel.h"
 #include "otbMeanShiftModuleControllerInterface.h"
 #include "itkSimpleFastMutexLock.h"
@@ -19,7 +19,7 @@ namespace otb
  *
  */
 class ITK_EXPORT MeanShiftModuleView
-      : public ListenerBase, public MeanShiftModuleViewGroup, public itk::Object
+      : public EventsListener<std::string>, public MeanShiftModuleViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -40,7 +40,7 @@ public:
 
 
   /** Event from the model */
-  virtual void Notify();
+  virtual void Notify(const std::string & event);
 
   /** Fluid call backs*/
   virtual void OpenImage();

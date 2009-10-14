@@ -177,6 +177,12 @@ MeanShiftModuleController
   m_Model->SwitchBoundaries(sb);
 }
 
+void
+    MeanShiftModuleController
+  ::Quit()
+{
+  m_Model->Quit();
+}
 
 ITK_THREAD_RETURN_TYPE
 MeanShiftModuleController
