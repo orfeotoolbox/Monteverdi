@@ -27,8 +27,12 @@ OrthorectificationModule::OrthorectificationModule()
 
   m_Orthorectification->RegisterListener(this);
 
+  // Instanciation of the Image To VectorImage Filter
+  m_CastFilter = CastSingleImageFilter::New();
+
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to apply OrthoRectification on.");
+  this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
 }
 
 /** Destructor */
@@ -46,6 +50,17 @@ void OrthorectificationModule::PrintSelf(std::ostream& os, itk::Indent indent) c
 void OrthorectificationModule::Run()
 {
   ImageType::Pointer input = this->GetInputData<ImageType>("InputImage");
+
+  // Try to get a single image
+  // If the input image is an otb::Image instead of VectorImage then cast it 
+  // in Vector Image and continue the processing
+  SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
+  
+  if(!singleImage.IsNull() && input.IsNull())
+    {
+      m_CastFilter->SetInput(singleImage);
+      input = m_CastFilter->GetOutput();
+    }
 
   if(input.IsNotNull())
     {

@@ -34,6 +34,10 @@ ADD_TEST(moTvOrthorectificationModuleTest ${Modules_TESTS}  otbOrthorectificatio
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
 ${TEMP}/OrthorectificationModuleOuptut.tif
 )
+ADD_TEST(moTvOrthorectificationSingleImageModuleTest ${Modules_TESTS}  otbOrthorectificationSingleImageModuleTest
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
+${TEMP}/OrthorectificationSingleImageModuleOuptut.tif
+)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Feature Extraction Tests ---------------------------
@@ -159,6 +163,7 @@ otbSpeckleFilteringModuleTest.cxx
 otbReaderModuleTest.cxx 
 otbWriterModuleTest.cxx
 otbOrthorectificationModuleTest.cxx
+otbOrthorectificationSingleImageModuleTest.cxx
 otbFeatureExtractionModuleTest.cxx
 otbFeatureExtractionApplication.cxx
 otbSupervisedClassificationModuleTest.cxx
