@@ -75,7 +75,7 @@ public:
 
   
   // Mono Channel Image Type
-  typedef Image<double,2>                           SingleImageType;
+  typedef Image<PixelType,2>                        SingleImageType;
 
   typedef std::vector<std::string>                  StringVectorType;
   typedef std::vector<int>                          IntVectorType;

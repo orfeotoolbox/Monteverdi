@@ -22,6 +22,7 @@
 
 // Orthorectification Application
 #include "otbOrthorectification.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 namespace otb
 {
@@ -52,7 +53,11 @@ public:
   itkGetObjectMacro(Orthorectification,Orthorectification);
   
   /** Input typedef */
-  typedef Orthorectification::ImageType ImageType;
+  typedef Orthorectification::ImageType       ImageType;
+  typedef Orthorectification::SingleImageType SingleImageType;
+
+  /** Cast SingleImage to ImageType (VectorImage) */
+  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
 
 protected:
   /** Constructor */
@@ -76,6 +81,9 @@ private:
 
   // The view
   Orthorectification::Pointer        m_Orthorectification;
+
+  // Cast Filter
+  CastSingleImageFilter::Pointer     m_CastFilter;
 
 };
 

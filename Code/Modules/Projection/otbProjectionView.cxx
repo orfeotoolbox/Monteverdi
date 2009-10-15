@@ -223,6 +223,7 @@ ProjectionView
   IndexType index;
   PointType point,geoPoint;
   
+  index.Fill(0);
   // Get the transform from the model
   TransformType::ConstPointer rsTransform = m_Controller->GetModel()->GetTransform();
   
