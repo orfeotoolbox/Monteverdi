@@ -29,6 +29,7 @@ ExtractROIModule::ExtractROIModule()
   this->AddInputDescriptor<FloatingImageType>("InputImage","Image to read.");
   this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
+  m_ImageExtractROIFilter = ImageExtractROIFilterType::New();
   this->BuildGUI();
 }
 
