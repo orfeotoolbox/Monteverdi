@@ -1,5 +1,4 @@
 /*=========================================================================
-
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -28,7 +27,10 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), m_FirstImageView(), m_SecondImageView(), m_FirstCrossGlComponent(), m_SecondCrossGlComponent(), m_FirstCircleGlComponent(), m_SecondCircleGlComponent()
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), 
+     m_FirstImageView(), m_SecondImageView(), 
+     m_FirstCrossGlComponent(), m_SecondCrossGlComponent(), 
+     m_FirstCircleGlComponent(), m_SecondCircleGlComponent()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
   m_FirstImageView = ImageViewType::New();
@@ -192,8 +194,6 @@ HomologousPointExtractionModuleView
  this->RedrawWidgets();
 }
 
-
-
 /**
  *
  */
@@ -220,27 +220,27 @@ HomologousPointExtractionModuleView
 
       //Update the List Point Color
       if(whichOne)
-	{
-	  lPointList->selection_color(fl_color());
-	  lPointList->redraw();
-	  if(tError->size() > static_cast<int>(selectedIndex))
-	    {
-	      tError->value(selectedIndex+1);
-	      tError->selection_color(fl_color());
-	      tError->redraw();
-	    }
-	}
+       {
+         lPointList->selection_color(fl_color());
+         lPointList->redraw();
+         if(tError->size() > static_cast<int>(selectedIndex))
+           {
+             tError->value(selectedIndex+1);
+             tError->selection_color(fl_color());
+             tError->redraw();
+           }
+       }
       else
-	{
-	  tError->selection_color(fl_color());
-	  tError->redraw();
-	  if(lPointList->size() > static_cast<int>(selectedIndex))
-	    {
-	      lPointList->value(selectedIndex+1);
-	      lPointList->selection_color(fl_color());
-	      lPointList->redraw();
-	    }
-	}
+       {
+         tError->selection_color(fl_color());
+         tError->redraw();
+         if(lPointList->size() > static_cast<int>(selectedIndex))
+           {
+             lPointList->value(selectedIndex+1);
+             lPointList->selection_color(fl_color());
+             lPointList->redraw();
+           }
+       }
 
     }
 }
@@ -345,22 +345,24 @@ HomologousPointExtractionModuleView
   // Focus cross
   if((i == 0) && (value != 0))
     {
-      if(m_FirstCrossGlComponent->GetIndexList().size() >= value !=0 && m_SecondCrossGlComponent->GetIndexList().size() >= value)
-	{
-	  id1 = m_FirstCrossGlComponent->GetIndexList()[value-1];
-	  id2 = m_SecondCrossGlComponent->GetIndexList()[value-1];
-	  m_Controller->FocusOn(id1, id2);
-	}
+      if((m_FirstCrossGlComponent->GetIndexList().size() >= value) 
+          && m_SecondCrossGlComponent->GetIndexList().size() >= value)
+       {
+         id1 = m_FirstCrossGlComponent->GetIndexList()[value-1];
+         id2 = m_SecondCrossGlComponent->GetIndexList()[value-1];
+         m_Controller->FocusOn(id1, id2);
+       }
     }
   // Focus circles
   else if( i == 1 )
     {
-      if(  m_FirstCircleGlComponent->GetIndexList().size() !=0 && m_SecondCircleGlComponent->GetIndexList().size() !=0 )
-	{
-	  id1 = m_FirstCircleGlComponent->GetIndexList()[0];
-	  id2 = m_SecondCircleGlComponent->GetIndexList()[0];
-	  m_Controller->FocusOn(id1, id2);
-	}
+      if( (m_FirstCircleGlComponent->GetIndexList().size() != 0) 
+           && (m_SecondCircleGlComponent->GetIndexList().size() != 0) )
+       {
+         id1 = m_FirstCircleGlComponent->GetIndexList()[0];
+         id2 = m_SecondCircleGlComponent->GetIndexList()[0];
+         m_Controller->FocusOn(id1, id2);
+       }
     }
 }
 
@@ -405,7 +407,5 @@ HomologousPointExtractionModuleView
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
-
-
 
 }// end namespace
