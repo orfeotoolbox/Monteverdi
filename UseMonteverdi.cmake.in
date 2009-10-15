@@ -1,0 +1,19 @@
+#
+# This file sets up include directories, link directories, and
+# compiler settings for a project to use Monteverdi.  It should not be
+# included directly, but rather through the Monteverdi_USE_FILE setting
+# obtained from MonteverdiConfig.cmake.
+#
+
+# Add compiler flags needed to use Monteverdi.
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${Monteverdi_REQUIRED_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Monteverdi_REQUIRED_CXX_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${Monteverdi_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${Monteverdi_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${Monteverdi_REQUIRED_LINK_FLAGS}")
+
+# Add include directories needed to use Monteverdi.
+INCLUDE_DIRECTORIES(BEFORE ${Monteverdi_INCLUDE_DIRS})
+
+# Add link directories needed to use Monteverdi.
+LINK_DIRECTORIES(${Monteverdi_LIBRARY_DIRS})

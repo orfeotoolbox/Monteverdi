@@ -63,7 +63,7 @@ public:
   /// Dataset
   typedef VectorImage<double,2>         FloatingVectorImageType;
   typedef Image<double,2>               FloatingImageType;
-  typedef Image<unsigned long int,2>    LabelImageType;
+  typedef Image<unsigned short,2>       LabelImageType;
 
   /** MVC typedefs */
   typedef otb::MeanShiftModuleController ControllerType;

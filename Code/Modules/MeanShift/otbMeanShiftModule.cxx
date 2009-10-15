@@ -101,25 +101,23 @@ void MeanShiftModule::Notify(const std::string & event)
       // Add outputs
 
 
-    if(m_Controller->GenerateFiltered())
+      if(m_Model->GetGenerateFiltered())
     {
-      FloatingVectorImageType::Pointer filteredOutput =
-          m_Controller->GetFilteredOutput();
+         FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
       this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
     }
 
-    if(m_Controller->GenerateClustered())
+      if(m_Model->GetGenerateClustered())
     {
-      FloatingVectorImageType::Pointer clusteredOutput =
-          m_Controller->GetClusteredOutput();
+         FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
       this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
     }
 
-      //   if(m_Controller->GenerateLabeled())
-      //     {
-      //       LabelImageType::Pointer labeledOutput = m_Controller->GetLabeledOutput();
-      //       this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
-      //     }
+         if(m_Model->GetGenerateLabeled())
+           {
+             LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
+             this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
+           }
   
 
       // Send an event to Monteverdi application
