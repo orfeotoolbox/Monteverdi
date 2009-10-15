@@ -28,6 +28,11 @@
 #include "otbMonteverdiEvent.h"
 #include "otbTypeManager.h"
 #include "otbAsynchronousProcessBase.h"
+#include "otbVectorImage.h"
+#include "itkProcessObject.h"
+
+#include "otbVectorImage.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -139,7 +144,19 @@ protected:
   /** Add a new output descritpor (SmartPointer version) */
   template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description, bool cached = false);
 
-  /** Retrieve the actual data from the map (returns NULL if wrong DataType */
+  /** Partial specialization for the vector image case */
+  template <typename T> void AddOutputDescriptor(otb::VectorImage<T> * data,const std::string & key, const std::string & description, bool cached = false);
+
+  /** Partial specialization for the vector image case (SmartPointer version) */
+  template <typename T> void AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,const std::string & key, const std::string & description, bool cached = false);
+
+  /** Partial specialization for the complex image case */
+  template <typename T> void AddOutputDescriptor(otb::Image<std::complex<T> > * data,const std::string & key, const std::string & description, bool cached = false);
+
+  /** Partial specialization for the complex image case (SmartPointer version) */
+  template <typename T> void AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,const std::string & key, const std::string & description, bool cached = false);
+
+  /** Retrieve the actual data from the map (returns NULL if wrong DataType) */
   template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;
 
   /** Retrieve the actual data description from the map */
@@ -187,6 +204,10 @@ private:
 
   /** Is the module busy ? */
   bool m_Busy;
+
+  /** This is used to store filters used in partial specialization of
+   *  AddOutputDescriptors */
+  std::vector<itk::ProcessObject::Pointer> m_ProcessObjects;
 };
 
 
