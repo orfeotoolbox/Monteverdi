@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 // #include "otbMVCModel.h"
 #include "otbEventsSender.h"
-#include "otbListenerBase.h"
+// #include "otbListenerBase.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
