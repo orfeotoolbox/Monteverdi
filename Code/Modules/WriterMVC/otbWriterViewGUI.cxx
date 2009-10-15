@@ -155,7 +155,7 @@ WriterViewGUI
 
 void
 WriterViewGUI
-::Notify()
+::Notify(const std::string & event)
 {
   if (m_WriterModel->GetHasInput())
   {
@@ -340,6 +340,9 @@ WriterViewGUI
   m_WriterController->CreateFeature();
 //   this->UpdateChannels();
   guiMainWindow->show();
+  
+  pBar->minimum(0);
+  pBar->maximum(1);
 }
 
 void

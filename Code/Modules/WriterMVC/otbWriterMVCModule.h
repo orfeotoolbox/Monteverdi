@@ -37,7 +37,9 @@
 #include "otbWriterModel.h"
 #include "otbWriterViewGUI.h"
 
-#include "otbListenerBase.h"
+// #include "otbListenerBase.h"
+#include "otbEventsListener.h"
+
 namespace otb
 {
 /** \class WriterMVCModule
@@ -47,7 +49,7 @@ namespace otb
  */
 
   class ITK_EXPORT WriterMVCModule
-  : public Module, public ListenerBase
+  : public Module, public EventsListener<std::string>
   {
     public:
       /** Standard class typedefs */
@@ -77,21 +79,27 @@ namespace otb
       /** PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
-//       virtual void ThreadedRun();
-//       virtual void ThreadedWatch();
+      virtual void ThreadedRun();
+      virtual void ThreadedWatch();
       
       // Update the progress bar
-//       void UpdateProgress();
+      void UpdateProgress();
       
       /** The custom run command */
       virtual void Run();
       
       /** Notify Monteverdi application that Writer has a result */
-      void Notify();
+      void Notify(const std::string & event);
     private:
       WriterMVCModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
+      
+      // Callback to update the window label
+      static void UpdateProgressCallback(void * data);
 
+  // Callback to hide window
+      static void HideWindowCallback(void * data);
+      
       // The view
       WriterViewGUI::Pointer        m_View;
       // The controller

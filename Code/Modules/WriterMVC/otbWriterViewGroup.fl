@@ -18,7 +18,7 @@ class WriterViewGroup {open
     Fl_Window guiMainWindow {
       label {Writer Application}
       callback {Quit();} open
-      xywh {507 267 665 595} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {1866 314 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 7 selection_color 48 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -36,8 +36,8 @@ class WriterViewGroup {open
             xywh {448 337 80 30} box PLASTIC_DOWN_BOX color 7
           }
           Fl_Choice guiOutputPixelTypeChoice {
-            label {Output Pixel Type:} open selected
-            xywh {321 411 140 30} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+            label {Output Pixel Type:} open
+            xywh {321 411 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
           } {
             MenuItem guiInitMenu {
               callback {SetPixelType(otb::DOUBLE);}
@@ -85,7 +85,7 @@ class WriterViewGroup {open
           }
         }
         Fl_Group guiOutput {
-          label Output
+          label Output open
           tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Browser guiFeatureList {
@@ -123,12 +123,12 @@ class WriterViewGroup {open
       Fl_Button guiOK {
         label Save
         callback {OK();}
-        tooltip {Save the Composition} xywh {580 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 40 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Save the Composition} xywh {580 605 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 40 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiQuit {
         label Quit
         callback {Quit();}
-        tooltip {Quit Application} xywh {490 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 40 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Quit Application} xywh {490 605 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 40 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
@@ -145,6 +145,9 @@ class WriterViewGroup {open
           label Band open
           xywh {448 27 207 222} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
+      }
+      Fl_Progress pBar {selected
+        xywh {5 570 660 25} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
   }
