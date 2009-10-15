@@ -1,4 +1,5 @@
 /*=========================================================================
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -370,7 +371,7 @@ void
 HomologousPointExtractionModuleView
 ::Evaluate()
 {
- if(  m_FirstCircleGlComponent->GetIndexList().size() !=0 )
+ if(  m_FirstCircleGlComponent->GetIndexList().size() != 0 )
    {
      IndexType id = m_FirstCircleGlComponent->GetIndexList()[0];
      m_Controller->Evaluate( id );
