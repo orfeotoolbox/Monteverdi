@@ -10,7 +10,7 @@ class ExtractROIModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wExtractROIWindow {
-      label {Open dataset} open
+      label {Select the ROI} open selected
       xywh {148 194 265 360} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 visible
     } {
       Fl_Return_Button bOk {
@@ -31,19 +31,19 @@ class ExtractROIModuleGUI {open
           xywh {30 142 187 158}
         } {
           Fl_Value_Input vStartX {
-            label {Start X} selected
+            label {Start X}
             xywh {95 154 100 25} step 1
           }
           Fl_Value_Input vStartY {
-            label {Start Y} selected
+            label {Start Y}
             xywh {95 189 100 25} step 1
           }
           Fl_Value_Input vSizeX {
-            label {Size X} selected
+            label {Size X}
             xywh {95 224 100 25} step 1
           }
           Fl_Value_Input vSizeY {
-            label {Size Y} selected
+            label {Size Y}
             xywh {95 259 100 25} step 1
           }
         }
