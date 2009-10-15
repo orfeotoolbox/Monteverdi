@@ -36,8 +36,8 @@ HomologousPointExtractionModuleView
   m_FirstCrossGlComponent = CrossGlComponent::New();
   m_SecondCrossGlComponent = CrossGlComponent::New();
 
-  m_FirstCircleGlComponent = CircleGlComponent::New(); 
-  m_SecondCircleGlComponent = CircleGlComponent::New(); 
+  m_FirstCircleGlComponent = CircleGlComponent::New();
+  m_SecondCircleGlComponent = CircleGlComponent::New();
   m_Green.Fill(0);
   m_Green[1] = 1;
   m_Green[3] = 0.5;
@@ -77,12 +77,12 @@ HomologousPointExtractionModuleView
   // Build the fltk code
   this->CreateGUI();
   //wMainWindow->size_range(400, 300, wMainWindow->w(), wMainWindow->h(), 0, 0);
-  
-  
+
+
   // Register controllers
   m_FirstImageView->SetController(m_FirstWidgetsController);
   m_SecondImageView->SetController(m_SecondWidgetsController);
-  
+
   // Add registered visualization components from the interface
   gFull1->add(m_FirstImageView->GetFullWidget());
   gScroll1->add(m_FirstImageView->GetScrollWidget());
@@ -90,11 +90,11 @@ HomologousPointExtractionModuleView
   gFull1->resizable(m_FirstImageView->GetFullWidget());
   gScroll1->resizable(m_FirstImageView->GetScrollWidget());
   gZoom1->resizable(m_FirstImageView->GetZoomWidget());
-  
+
   m_FirstImageView->GetFullWidget()->resize(gFull1->x(),gFull1->y(),gFull1->w(),gFull1->h());
   m_FirstImageView->GetScrollWidget()->resize(gScroll1->x(),gScroll1->y(),gScroll1->w(),gScroll1->h());
   m_FirstImageView->GetZoomWidget()->resize(gZoom1->x(),gZoom1->y(),gZoom1->w(),gZoom1->h());
-  
+
   // Add registered visualization components from the interface
   gFull2->add(m_SecondImageView->GetFullWidget());
   gScroll2->add(m_SecondImageView->GetScrollWidget());
@@ -102,35 +102,35 @@ HomologousPointExtractionModuleView
   gFull2->resizable(m_SecondImageView->GetFullWidget());
   gScroll2->resizable(m_SecondImageView->GetScrollWidget());
   gZoom2->resizable(m_SecondImageView->GetZoomWidget());
-  
+
   m_SecondImageView->GetFullWidget()->resize(gFull2->x(),gFull2->y(),gFull2->w(),gFull2->h());
   m_SecondImageView->GetScrollWidget()->resize(gScroll2->x(),gScroll2->y(),gScroll2->w(),gScroll2->h());
   m_SecondImageView->GetZoomWidget()->resize(gZoom2->x(),gZoom2->y(),gZoom2->w(),gZoom2->h());
-  
+
   // Show and refresh the interface
   this->wMainWindow->show();
-  
+
   m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCircleGlComponent );
   m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCircleGlComponent );
   m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCircleGlComponent );
-  
+
   m_SecondImageView->GetFullWidget()->AddGlComponent( m_SecondCrossGlComponent );
   m_SecondImageView->GetScrollWidget()->AddGlComponent( m_SecondCrossGlComponent );
   m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCrossGlComponent );
   m_SecondImageView->GetFullWidget()->AddGlComponent( m_SecondCircleGlComponent );
   m_SecondImageView->GetScrollWidget()->AddGlComponent( m_SecondCircleGlComponent );
   m_SecondImageView->GetZoomWidget()->AddGlComponent( m_SecondCircleGlComponent );
-  
+
   m_FirstImageView->GetFullWidget()->show();
   m_FirstImageView->GetScrollWidget()->show();
   m_FirstImageView->GetZoomWidget()->show();
   m_SecondImageView->GetFullWidget()->show();
   m_SecondImageView->GetScrollWidget()->show();
   m_SecondImageView->GetZoomWidget()->show();
-  
+
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
 }
@@ -212,12 +212,12 @@ HomologousPointExtractionModuleView
   if( selectedIndex < m_ColorList.size() )
     {
       ColorType curColor = m_ColorList[selectedIndex];
-      
+
       // color To fl_color
       fl_color(static_cast<unsigned char>(255*curColor[0]),
               static_cast<unsigned char>(255*curColor[1]),
               static_cast<unsigned char>(255*curColor[2]));
-      
+
       //Update the List Point Color
       if(whichOne)
 	{
@@ -251,7 +251,7 @@ HomologousPointExtractionModuleView
 {
   if( viewId != 0 && viewId != 1 )
     itkExceptionMacro(<<"Invalid view index "<<viewId<<".");
-  
+
   if( viewId == 0 )
     {
       vX1->value(index[0]);
@@ -343,7 +343,7 @@ HomologousPointExtractionModuleView
   IndexType id1, id2;
   unsigned int value = lPointList->value();
   // Focus cross
-  if(i == 0 && value != 0 )
+  if((i == 0) && (value != 0))
     {
       if(m_FirstCrossGlComponent->GetIndexList().size() >= value !=0 && m_SecondCrossGlComponent->GetIndexList().size() >= value)
 	{
@@ -401,7 +401,7 @@ HomologousPointExtractionModuleView
   gFull2->remove(m_SecondImageView->GetFullWidget());
   gScroll2->remove(m_SecondImageView->GetScrollWidget());
   gZoom2->remove(m_SecondImageView->GetZoomWidget());
-  
+
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }

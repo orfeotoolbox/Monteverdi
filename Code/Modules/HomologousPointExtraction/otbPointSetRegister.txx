@@ -1,5 +1,4 @@
 /*=========================================================================
-
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -43,7 +42,7 @@ PointSetRegister<TTransform>
     {
       itkExceptionMacro(<<"Input set is empty");
     }
-  if(m_FixPointSet->GetNumberOfPoints() != m_MovingPointSet->GetNumberOfPoints() != 0)
+  if(m_FixPointSet->GetNumberOfPoints() != m_MovingPointSet->GetNumberOfPoints())
     {
       itkExceptionMacro(<<"Input point sets set size differs.");
     }
