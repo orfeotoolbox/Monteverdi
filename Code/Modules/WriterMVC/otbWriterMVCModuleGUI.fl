@@ -18,7 +18,7 @@ class WriterModuleGUI {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {593 47 665 595} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {593 47 665 620} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -47,7 +47,7 @@ class WriterModuleGUI {open
           }
           Fl_Button guiAddChannel {
             label {>>}
-            callback {AddOutputChannel();} selected
+            callback {AddOutputChannel();}
             tooltip {Add mono Channel Image to Intput List} xywh {305 363 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
           }
           Fl_Button guiRemoveChannel {
@@ -73,19 +73,19 @@ class WriterModuleGUI {open
         }
       }
       Fl_Button bOK {
-        label {Save/Quit}
-        callback {this->OK();}
-        tooltip {Save the Composition} xywh {355 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+        label Write
+        callback {this->OK();} selected
+        tooltip {Save the Composition} xywh {580 590 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button guiClose {
         label {Clear List}
         callback {ClearFeature();}
-        tooltip {Clear Feature List} xywh {108 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Clear Feature List} xywh {108 590 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Quit
         callback {Quit();}
-        tooltip {Quit Application} xywh {480 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 120 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+        tooltip {Quit Application} xywh {490 590 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 48 selection_color 37 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
@@ -102,6 +102,9 @@ class WriterModuleGUI {open
           label Feature open
           xywh {448 43 207 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         } {}
+      }
+      Fl_Progress pBar {
+        xywh {0 560 660 25} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
   }
