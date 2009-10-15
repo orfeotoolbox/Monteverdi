@@ -195,7 +195,22 @@ void Module::ClearOutputDescriptors()
 /** Erase an output with its key */
 void Module::EraseOutputByKey(const std::string & key)
 {
-  m_OutputsMap.erase(key);
+  // erase all the map element which key starts by "key" ("OutputImage" erases "OutputImage (ban1)", ...)
+  OutputDataDescriptorMapType::iterator it;
+  it = m_OutputsMap.begin();
+  std::vector<std::string> keyVector;
+  while( it != m_OutputsMap.end() )
+    {
+      if( (*it).first.find(key) == 0 )
+	{
+	  keyVector.push_back((*it).first);
+	}
+      ++it;
+    }
+  for(unsigned int i=0; i<keyVector.size(); i++)
+	{
+	  m_OutputsMap.erase(keyVector[i]);
+	}
 }
 
 /** The custom run command */

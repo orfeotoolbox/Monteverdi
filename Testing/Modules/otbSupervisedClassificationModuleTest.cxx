@@ -44,14 +44,19 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
 
   // Add Wrapper Input
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
+
   module->AddInputByKey("InputImage",wrapperIn);
   specificModule->SetModel(argv[3]);
   module->Start();
   Fl::check();
-
-  //Simulate Ok button callback
+  
+  specificModule->GetSupervisedClassification()->bDisplay->value(1);
+  Fl::check();
+  //Simulate Display button callback
   specificModule->GetSupervisedClassification()->bDisplay->do_callback();
+  Fl::check();
+  //Simulate Quit callback
+  specificModule->GetSupervisedClassification()->QuitCallback();
 
   // Get Output DataWrapper
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
@@ -66,7 +71,7 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
   writer->SetInput(outImage);
   writer->Update();
   
-  return 0;
+  return EXIT_SUCCESS;
 
 }
 

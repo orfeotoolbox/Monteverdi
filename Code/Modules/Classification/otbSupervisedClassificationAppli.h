@@ -163,7 +163,8 @@ public:
   virtual void LoadSVMModel();
   virtual void LoadROIsImage();
   virtual void AddClass();
-
+  /** Application callbacks*/
+  virtual void QuitCallback();
 
 protected:
   /** Constructor */
@@ -222,7 +223,6 @@ protected:
   virtual void SetupClassification();
 
   /** Application callbacks*/
-  virtual void QuitCallback();
   virtual void QuitScrollCallback();
   virtual void QuitFullCallback();
 

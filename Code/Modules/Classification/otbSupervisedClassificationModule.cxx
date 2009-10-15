@@ -83,22 +83,22 @@ void SupervisedClassificationModule::Notify()
 {
   if(m_SupervisedClassification->GetHasOutput())
     {
-    //this->ClearOutputDescriptors();
-    this->EraseOutputByKey("OutputImage");
-    this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
-    this->NotifyOutputsChange();
-    // Once module is closed, it is no longer busy
-     this->BusyOff();
+      //this->ClearOutputDescriptors();
+      this->EraseOutputByKey("OutputImage");
+      this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");
+      this->NotifyOutputsChange();
+      // Once module is closed, it is no longer busy
+      this->BusyOff();
     }
-
+  
   if(m_SupervisedClassification->GetHasOutputVector())
     {
-    //this->ClearOutputDescriptors();
-    this->EraseOutputByKey("OutputVector");
-    this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputVector","Vectors of classified image.");
-    this->NotifyOutputsChange();
-    // Once module is closed, it is no longer busy
-    this->BusyOff();
+      //this->ClearOutputDescriptors();
+      this->EraseOutputByKey("OutputVector");
+      this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputVector","Vectors of classified image.");
+      this->NotifyOutputsChange();
+      // Once module is closed, it is no longer busy
+      this->BusyOff();
     }
 }
 

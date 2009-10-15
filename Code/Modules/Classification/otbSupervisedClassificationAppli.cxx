@@ -1748,7 +1748,7 @@ SupervisedClassificationAppli
   m_ClassificationFilter->SetInput(m_InputImage);
   m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
-
+  
   for ( ClassesMapType::iterator it = m_ClassesMap.begin();it!=m_ClassesMap.end();++it)
   {
      OverlayImageType::PixelType color(3);
@@ -1758,7 +1758,7 @@ SupervisedClassificationAppli
     color[2]=static_cast<unsigned char>((*it)->GetColor()[2]*255);
     m_ChangeLabelFilter->SetChange((*it)->GetId(),color);
   }
-
+ 
   m_VectorizationFilter->SetInput(m_ClassificationFilter->GetOutput());
 
   m_Output = m_ChangeLabelFilter->GetOutput();
