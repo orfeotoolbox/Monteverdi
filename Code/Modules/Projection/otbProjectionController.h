@@ -35,8 +35,8 @@ public:
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
-  typedef ProjectionView                                 ViewType;
-  typedef ViewType::Pointer                              ViewPointerType;
+  typedef ProjectionView                           ViewType;
+  typedef ViewType::Pointer                        ViewPointerType;
 
   /** Standard type macros */
   itkTypeMacro(ProjectionController,Superclass);
@@ -53,7 +53,13 @@ public:
   virtual void UpdateUTMTransform(int zone,bool north);
   virtual void InitializeLambertIITransform();
   virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing );
-  virtual void ProjectRegion(unsigned int sizeX, unsigned int sizeY, double spacingX, double spacingY, double originX, double originY , bool isUl);
+  virtual void ProjectRegion(unsigned int sizeX, 
+			     unsigned int sizeY,
+			     double spacingX,
+			     double spacingY,
+			     double originX,
+			     double originY,
+			     bool isUl);
   
  protected:
   /** Constructor */
