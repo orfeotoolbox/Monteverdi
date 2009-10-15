@@ -189,6 +189,7 @@ void Module::NotifyOutputsChange()
 void Module::ClearOutputDescriptors()
 {
   m_OutputsMap.clear();
+  m_ProcessObjects.clear();
 }
 
 /** Erase an output with its key */
