@@ -20,6 +20,14 @@
 
 #include "otbModule.h"
 
+// Filters fir partial specialization
+#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbVectorImageToAmplitudeImageFilter.h"
+#include "itkComplexToRealImageFilter.h"
+#include "itkComplexToImaginaryImageFilter.h"
+#include "itkComplexToPhaseImageFilter.h"
+#include "itkComplexToModulusImageFilter.h"
+
 namespace otb
 {
 
@@ -80,6 +88,287 @@ template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data
   this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
 }
 
+/** Partial specialization for the vector image case */
+template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * data,const std::string & key, const std::string & description, bool cached)
+{
+  // Stringstream used to enhance descriptions
+  itk::OStringStream oss,ossId;
+
+  // Update output information
+  data->UpdateOutputInformation();
+
+  // First, add the whole dataset
+
+  // Description
+  oss.str("");
+  oss <<description<<" (Whole dataset)";
+  // Output ID
+  ossId.str("");
+  ossId<<key;
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperWhole = DataObjectWrapper::Create(data);
+  wrapperWhole.SetSourceInstanceId(m_InstanceId);
+  wrapperWhole.SetSourceOutputKey(ossId.str());
+  wrapperWhole.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descWhole(wrapperWhole,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descWhole;
+  
+  // Then, add each band
+
+  // Typedef of the extract ROI filter
+  typedef otb::MultiToMonoChannelExtractROI<T,T> ExtractROIImageFilterType;
+ 
+  // Add sub-bands
+  for(unsigned int band = 0; band<data->GetNumberOfComponentsPerPixel();++band)
+    {
+    // Extract band
+    typename ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
+    extract->SetInput(data);
+    extract->SetChannel(band+1);
+    m_ProcessObjects.push_back(extract.GetPointer());
+    
+    // Description
+    oss.str("");
+    oss <<description<< "(Band "<<band+1<<")";
+    // Output ID
+    ossId.str("");
+    ossId<<key<<" (band "<<band+1<<")";
+
+    // Check if the key already exists
+    if(m_OutputsMap.count(ossId.str()) > 0)
+      {
+      itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+      }
+
+    // Create a DataObjectWrapper
+    DataObjectWrapper wrapper = DataObjectWrapper::Create(extract->GetOutput());
+    wrapper.SetSourceInstanceId(m_InstanceId);
+    wrapper.SetSourceOutputKey(ossId.str());
+    wrapper.SetDescription(oss.str());
+
+    // Build a new descriptor
+    OutputDataDescriptor desc(wrapper,ossId.str(),oss.str(),cached);
+    
+    // Insert it into the map
+    m_OutputsMap[ossId.str()]=desc;
+    }
+  
+  // Then, if needed, add the amplitude
+ 
+  typedef otb::VectorImageToAmplitudeImageFilter<otb::VectorImage<T>,otb::Image<T> > AmplitudeFilterType;
+
+  if(data->GetNumberOfComponentsPerPixel()>1)
+     {
+     typename AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+     amplitudeFilter->SetInput(data);
+     m_ProcessObjects.push_back(amplitudeFilter.GetPointer());
+
+     oss.str("");
+     oss <<description<<" (Amplitude)";
+     ossId.str("");
+     ossId<<key<<" (amplitude)";
+
+     // Check if the key already exists
+     if(m_OutputsMap.count(ossId.str()) > 0)
+       {
+       itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+       }
+
+     // Create a DataObjectWrapper
+     DataObjectWrapper wrapper = DataObjectWrapper::Create(amplitudeFilter->GetOutput());
+     wrapper.SetSourceInstanceId(m_InstanceId);
+     wrapper.SetSourceOutputKey(ossId.str());
+     wrapper.SetDescription(oss.str());
+     
+     // Build a new descriptor
+     OutputDataDescriptor desc(wrapper,ossId.str(),oss.str(),cached);
+     
+     // Insert it into the map
+     m_OutputsMap[ossId.str()]=desc;
+     }
+}
+
+/** Partial specialization for the vector image case (SmartPointer version) */
+template <typename T> void Module::AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,const std::string & key, const std::string & description, bool cached)
+{
+  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
+}
+
+
+/** Partial specialization for the complex image case */
+template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T> > * data,const std::string & key, const std::string & description, bool cached)
+{
+  // Stringstream used to enhance descriptions
+  itk::OStringStream oss,ossId;
+
+  // Update output information
+  data->UpdateOutputInformation();
+
+  // First, add the whole dataset
+
+  // Description
+  oss.str("");
+  oss <<description<<" (Whole dataset)";
+  // Output ID
+  ossId.str("");
+  ossId<<key;
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperWhole = DataObjectWrapper::Create(data);
+  wrapperWhole.SetSourceInstanceId(m_InstanceId);
+  wrapperWhole.SetSourceOutputKey(ossId.str());
+  wrapperWhole.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descWhole(wrapperWhole,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descWhole;
+  
+  // Then, add real, imaginary, module and phase parts
+  
+  // First, some typedefs
+  typedef otb::Image<std::complex<T> >                                   ComplexImageType;
+  typedef otb::Image<T>                                                  ImageType;
+  typedef itk::ComplexToRealImageFilter<ComplexImageType,ImageType>      RealFilterType;
+  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,ImageType> ImaginaryFilterType;
+  typedef itk::ComplexToModulusImageFilter<ComplexImageType,ImageType>   ModulusFilterType;
+  typedef itk::ComplexToPhaseImageFilter<ComplexImageType,ImageType>     PhaseFilterType;
+
+  // Real part
+  typename RealFilterType::Pointer realFilter = RealFilterType::New();
+  realFilter->SetInput(data);
+  m_ProcessObjects.push_back(realFilter.GetPointer());
+  oss.str("");
+  oss <<description<<" (Real part)";
+  ossId.str("");
+  ossId<<key<<" (Real part)";
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperReal = DataObjectWrapper::Create(realFilter->GetOutput());
+  wrapperReal.SetSourceInstanceId(m_InstanceId);
+  wrapperReal.SetSourceOutputKey(ossId.str());
+  wrapperReal.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descReal(wrapperReal,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descReal;
+
+  // Imaginary part
+  typename ImaginaryFilterType::Pointer imaginaryFilter = ImaginaryFilterType::New();
+  imaginaryFilter->SetInput(data);
+  m_ProcessObjects.push_back(imaginaryFilter.GetPointer());
+  oss.str("");
+  oss <<description<<" (Imaginary part)";
+  ossId.str("");
+  ossId<<key<<" (Imaginary part)";
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperImaginary = DataObjectWrapper::Create(imaginaryFilter->GetOutput());
+  wrapperImaginary.SetSourceInstanceId(m_InstanceId);
+  wrapperImaginary.SetSourceOutputKey(ossId.str());
+  wrapperImaginary.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descImaginary(wrapperImaginary,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descImaginary;
+
+ // Modulus part
+  typename ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
+  modulusFilter->SetInput(data);
+  m_ProcessObjects.push_back(modulusFilter.GetPointer());
+  oss.str("");
+  oss <<description<<" (Modulus part)";
+  ossId.str("");
+  ossId<<key<<" (Modulus part)";
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperModulus = DataObjectWrapper::Create(modulusFilter->GetOutput());
+  wrapperModulus.SetSourceInstanceId(m_InstanceId);
+  wrapperModulus.SetSourceOutputKey(ossId.str());
+  wrapperModulus.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descModulus(wrapperModulus,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descModulus;
+   
+  // Phase part
+  typename PhaseFilterType::Pointer PhaseFilter = PhaseFilterType::New();
+  PhaseFilter->SetInput(data);
+  m_ProcessObjects.push_back(PhaseFilter.GetPointer());
+  oss.str("");
+  oss <<description<<" (Phase part)";
+  ossId.str("");
+  ossId<<key<<" (Phase part)";
+  
+  // Check if the key already exists
+  if(m_OutputsMap.count(ossId.str()) > 0)
+    {
+    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    }
+  
+  // Create a DataObjectWrapper
+  DataObjectWrapper wrapperPhase = DataObjectWrapper::Create(PhaseFilter->GetOutput());
+  wrapperPhase.SetSourceInstanceId(m_InstanceId);
+  wrapperPhase.SetSourceOutputKey(ossId.str());
+  wrapperPhase.SetDescription(oss.str());
+  
+  // Build a new descriptor
+  OutputDataDescriptor descPhase(wrapperPhase,ossId.str(),oss.str(),cached);
+  
+  // Insert it into the map
+  m_OutputsMap[ossId.str()]=descPhase;
+}
+
+/** Partial specialization for the complex image case (SmartPointer version) */
+template <typename T> void Module::AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,const std::string & key, const std::string & description, bool cached)
+{
+  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
+}
+
+
+
 /** Retrieve the actual data from the map (returns NULL if wrong DataType */
 template <typename T> T * Module::GetInputData(const std::string & key, unsigned int idx) const
 {
@@ -103,6 +392,7 @@ template <typename T> T * Module::GetInputData(const std::string & key, unsigned
  
   return resp;
 }
+
 
 /** Retrieve the actual data description from the map */
 template <typename T> std::string Module::GetInputDataDescription(const std::string & key, unsigned int idx) const
