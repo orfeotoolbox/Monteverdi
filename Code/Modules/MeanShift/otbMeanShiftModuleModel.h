@@ -38,7 +38,7 @@ public:
   typedef      double                                                            PixelType;
   typedef      VectorImage<PixelType,2>                VectorImageType;
   typedef      VectorImageType::Pointer                VectorImagePointerType;
-  typedef      Image<unsigned int>                     LabeledImageType;
+  typedef      Image<unsigned short>                   LabeledImageType;
   typedef      LabeledImageType::Pointer               LabeledImagePointerType;
   typedef      ImageFileReader<VectorImageType>        VectorReaderType;
   typedef      ImageFileWriter<VectorImageType>        VectorWriterType;
