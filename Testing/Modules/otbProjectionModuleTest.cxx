@@ -50,9 +50,16 @@ int otbProjectionModuleTest(int argc, char* argv[])
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
   module->AddInputByKey("InputImage",wrapperIn);
-  
   module->Start();
 
+  // Put OutputSize to 100,100 
+  /*module*/specificModule->GetView()->guiSizeX->value("100");
+  /*module*/specificModule->GetView()->guiSizeY->value("100");
+  
+  //Simulate click button
+  specificModule->GetView()->guiOK->do_callback();
+  
+  
   if(run)
     {
     Fl::run();
@@ -62,6 +69,19 @@ int otbProjectionModuleTest(int argc, char* argv[])
     Fl::check();
     }
   
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+
+  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+
+  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
+  
+  //Write the image
+  WriterType::Pointer  writer = WriterType::New();
+  writer->SetFileName(argv[3]);
+  writer->SetInput(outImage);
+  writer->Update();
+  
+
   return EXIT_SUCCESS;
 
 }

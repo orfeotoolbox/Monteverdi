@@ -103,11 +103,13 @@ ADD_TEST(moTvPanSharpeningModuleTest ${Modules_TESTS} otbPanSharpeningModuleTest
 )
 
 #------------- Projection Module Tests ---------------------------
-
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTuProjectionModule ${Modules_TESTS} otbProjectionModuleTest
-${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 0
+${TEMP}/projectionModuleOutput.tif
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Extract ROI Module Tests ---------------------------
 ADD_TEST(moTvExtractROIModuleTest  ${Modules_TESTS} otbExtractROIModuleTest
