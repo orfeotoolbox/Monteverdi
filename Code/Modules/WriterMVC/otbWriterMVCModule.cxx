@@ -121,7 +121,7 @@ void WriterMVCModule::ThreadedWatch()
        // Sleep for a while
     Sleep(500);
   }
-  
+  std::cout << "we QUIT " << "m_ProcessObject->GetProgress() " << m_ProcessObject->GetProgress() <<std::endl;
 //   Fl::lock();
 //   // Reactivate window buttons
 //   bBrowse->activate();
@@ -164,7 +164,7 @@ void WriterMVCModule::Notify(const std::string & event)
   {
     this->StartProcess2();
     this->StartProcess1();
-    this->BusyOff();
+//     this->BusyOff();
   }
   else
   {
