@@ -235,38 +235,38 @@ this->UpdateTMTransform();}
               } {
                 MenuItem {} {
                   label Blackman
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {35 35 100 25} labelsize 11
                 }
                 MenuItem {} {
                   label Cosine
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {45 45 100 25} labelsize 11
                 }
                 MenuItem {} {
                   label Gaussian
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {55 55 100 25} labelsize 11
                 }
                 MenuItem {} {
                   label Hamming
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {65 65 100 25} labelsize 11
                 }
                 MenuItem {} {
                   label Lanczos
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {75 75 100 25} labelsize 11
                 }
                 MenuItem {} {
                   label Welch
-                  callback {SetInterpolatorType(SINC);}
+                  callback {SetInterpolatorType(MAP_SINC);}
                   xywh {85 85 100 25} labelsize 11
                 }
               }
               Fl_Value_Input guiSincRadius {
                 label Radius
-                callback {SetInterpolatorType(SINC);}
+                callback {SetInterpolatorType(MAP_SINC);}
                 xywh {174 239 160 25}
               }
             }
@@ -275,7 +275,7 @@ this->UpdateTMTransform();}
             } {
               Fl_Counter guiSplineOrder {
                 label Radius
-                callback {SetInterpolatorType(SPLINES);}
+                callback {SetInterpolatorType(MAP_SPLINES);}
                 xywh {174 217 160 25} align 4 minimum 0 maximum 5 step 1
               }
             }
@@ -291,7 +291,7 @@ guiNearest->hide();
 guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(LINEAR_);}
+SetInterpolatorType(MAP_LINEAR_);}
               xywh {25 25 100 25} labelsize 11
             }
             MenuItem {} {
@@ -301,7 +301,7 @@ guiNearest->show();
 guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(NEAREST);}
+SetInterpolatorType(MAP_NEAREST);}
               xywh {35 35 100 25} labelsize 11
             }
             MenuItem {} {
@@ -311,7 +311,7 @@ guiNearest->hide();
 guiSinC->show();
 guiSplines->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(SINC);}
+SetInterpolatorType(MAP_SINC);}
               xywh {35 35 100 25} labelsize 11
             }
           }
@@ -332,7 +332,7 @@ SetInterpolatorType(SINC);}
   } {}
   Function {SetMapType(ProjectionMapType map)} {open return_type {virtual void}
   } {}
-  Function {SetInterpolatorType(InterpolatorType interp)} {open return_type {virtual void}
+  Function {SetInterpolatorType(ProjectionInterpolatorType interp)} {open return_type {virtual void}
   } {}
   Function {UpdateMapParam()} {open return_type {virtual void}
   } {}
