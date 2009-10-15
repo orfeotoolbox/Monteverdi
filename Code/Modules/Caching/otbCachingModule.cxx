@@ -144,7 +144,6 @@ void CachingModule::ThreadedWatch()
   // Notify new outputs
   Fl::lock();
   Fl::awake(&HideWindowCallback,this);
-  this->NotifyOutputsChange();
   Fl::unlock();
   }
 
@@ -200,6 +199,11 @@ void CachingModule::ThreadedRun()
     charVReader->UpdateOutputInformation();
     m_ReadingProcess = charVReader;
     this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description,true);
+
+    // Notify new outputs
+    Fl::lock();
+    this->NotifyOutputsChange();
+    Fl::unlock();
     }
 
   else if ( vectorImage.IsNotNull() )
@@ -218,6 +222,10 @@ void CachingModule::ThreadedRun()
     m_ReadingProcess =  fPVReader;
     this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description,true);
 
+    // Notify new outputs
+    Fl::lock();
+    this->NotifyOutputsChange();
+    Fl::unlock();
     }
   else if( singleImage.IsNotNull() )
     {
@@ -234,6 +242,11 @@ void CachingModule::ThreadedRun()
     fPReader->UpdateOutputInformation();
     m_ReadingProcess =  fPReader;
     this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description,true);
+    
+    // Notify new outputs
+    Fl::lock();
+    this->NotifyOutputsChange();
+    Fl::unlock();
     }
   else
     {
@@ -242,11 +255,6 @@ void CachingModule::ThreadedRun()
     }
 
   this->BusyOff();
-
-  // Notify new outputs
-  Fl::lock();
-  this->NotifyOutputsChange();
-  Fl::unlock();
 }
 
 void CachingModule::HideWindow()

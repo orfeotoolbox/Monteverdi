@@ -28,17 +28,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-// Optical images filters
-#include "otbObjectList.h"
-#include "otbMultiToMonoChannelExtractROI.h"
-#include "otbVectorImageToAmplitudeImageFilter.h"
-
-// Radar images filters
-#include "itkComplexToRealImageFilter.h"
-#include "itkComplexToImaginaryImageFilter.h"
-#include "itkComplexToPhaseImageFilter.h"
-#include "itkComplexToModulusImageFilter.h"
-
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
@@ -79,19 +68,6 @@ public:
   typedef VectorDataFileReader<VectorType>         VectorReaderType;
   typedef VectorDataFileReader<LabeledVectorType>  LabeledVectorReaderType;
 
-  /// Extract ROIs
-  typedef MultiToMonoChannelExtractROI<double,double> ExtractROIImageFilterType;
-  typedef ObjectList<ExtractROIImageFilterType>       ExtractROIImageFilterListType;
-  
-  // Amplitude filter
-  typedef VectorImageToAmplitudeImageFilter<FloatingVectorImageType,FloatingImageType> AmplitudeFilterType;
-
-  // Complex modulus, phase, imaginary, real filters
-  typedef itk::ComplexToRealImageFilter<ComplexImageType,FloatingImageType> RealFilterType;
-  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,FloatingImageType> ImaginaryFilterType;
-  typedef itk::ComplexToModulusImageFilter<ComplexImageType,FloatingImageType> ModulusFilterType;
-  typedef itk::ComplexToPhaseImageFilter<ComplexImageType,FloatingImageType> PhaseFilterType;
-
 protected:
   /** Constructor */
   ReaderModule();
@@ -126,16 +102,6 @@ private:
   VectorReaderType::Pointer m_VectorReader;
   ComplexImageReaderType::Pointer m_ComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
-
-  // Optical filters
-  AmplitudeFilterType::Pointer m_AmplitudeFilter;
-  ExtractROIImageFilterListType::Pointer m_ExtractROIFilterList;
-
-  // Radar filters
-  RealFilterType::Pointer m_RealFilter;
-  ImaginaryFilterType::Pointer m_ImaginaryFilter;
-  ModulusFilterType::Pointer m_ModulusFilter;
-  PhaseFilterType::Pointer m_PhaseFilter;
 };
 
 
