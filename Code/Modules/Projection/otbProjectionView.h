@@ -112,12 +112,12 @@ protected:
   virtual void OK();
   
   // Set/Get the used map projection
-  void SetMapType(MapType map);
-  MapType GetMapType();
+  void SetMapType(ProjectionMapType map);
+  ProjectionMapType GetMapType();
   
   // Set/Get the used interpolator
-  void SetInterpolatorType(InterpolatorType interp);
-  InterpolatorType GetInterpolatorType();
+  void SetInterpolatorType(ProjectionInterpolatorType interp);
+  ProjectionInterpolatorType GetInterpolatorType();
 
   // Check the map parameters.
   virtual int CheckMapParameters();
@@ -153,8 +153,8 @@ private:
   ProjectionView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  MapType                     m_MapType; 
-  InterpolatorType            m_InterpType; 
+  ProjectionMapType           m_MapType; 
+  ProjectionInterpolatorType            m_InterpType; 
   /*   InterpPointerType      m_Interp; */
   
   // Flag to determine if there is an output

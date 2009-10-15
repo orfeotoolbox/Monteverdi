@@ -176,7 +176,7 @@ ProjectionView
 
   switch (this->GetMapType())
     {
-    case UTM:
+    case MAP_UTM:
       {
 	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
@@ -187,7 +187,7 @@ ProjectionView
 	guiUTMEastSelection->value(oss.str().c_str());
 	break;
       }
-    case LAMBERT2:
+    case MAP_LAMBERT2:
       {
 	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
@@ -198,7 +198,7 @@ ProjectionView
 	guiLambertEastSelection->value(oss.str().c_str());
 	break;
       }
-    case TRANSMERCATOR:
+    case MAP_TRANSMERCATOR:
       {
 	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
@@ -566,7 +566,7 @@ ProjectionView::InitializeAction()
 
 
 void
-ProjectionView::SetMapType(MapType map)
+ProjectionView::SetMapType(ProjectionMapType map)
 {
   m_MapType = map;
   //this->SelectAtion();
@@ -574,7 +574,7 @@ ProjectionView::SetMapType(MapType map)
 }
 
 
-MapType
+ProjectionMapType
 ProjectionView::GetMapType()
 {
   return m_MapType;
@@ -582,7 +582,7 @@ ProjectionView::GetMapType()
 
 
 void
-ProjectionView::SetInterpolatorType(InterpolatorType interp)
+ProjectionView::SetInterpolatorType(ProjectionInterpolatorType interp)
 {
   //m_InterpType = interp;
   //   this->UpdateInterpolator();
@@ -590,7 +590,7 @@ ProjectionView::SetInterpolatorType(InterpolatorType interp)
 }
 
 
-InterpolatorType
+ProjectionInterpolatorType
 ProjectionView::GetInterpolatorType()
 {
   return m_InterpType;

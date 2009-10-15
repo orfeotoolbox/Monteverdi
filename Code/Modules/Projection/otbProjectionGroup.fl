@@ -186,7 +186,7 @@ this->UpdateTMTransform();}
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
-SetMapType(UTM);
+SetMapType(MAP_UTM);
 this->UpdateUTMTransform();}
               xywh {15 15 100 25} labelsize 11
             }
@@ -196,7 +196,7 @@ this->UpdateUTMTransform();}
 m_Lambert2->show();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
-SetMapType(LAMBERT2);
+SetMapType(MAP_LAMBERT2);
 this->UpdateLambertIITransform();}
               xywh {25 25 100 25} labelsize 11
             }
@@ -206,7 +206,7 @@ this->UpdateLambertIITransform();}
 m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
-SetMapType(TRANSMERCATOR);
+SetMapType(MAP_TRANSMERCATOR);
 this->UpdateTMTransform();}
               xywh {25 25 100 25} labelsize 11
             }
@@ -330,7 +330,7 @@ SetInterpolatorType(SINC);}
   } {}
   Function {SelectAction()} {open return_type {virtual void}
   } {}
-  Function {SetMapType(MapType map)} {open return_type {virtual void}
+  Function {SetMapType(ProjectionMapType map)} {open return_type {virtual void}
   } {}
   Function {SetInterpolatorType(InterpolatorType interp)} {open return_type {virtual void}
   } {}
