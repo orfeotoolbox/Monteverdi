@@ -84,19 +84,112 @@ void WriterMVCModule::Run()
   {
     itkExceptionMacro(<<"Input image is NULL.");
   }
+  
+//   pBar->minimum(0);
+//   pBar->maximum(1);
 }
 
-/** The Notify */
-void WriterMVCModule::Notify()
+void WriterMVCModule::ThreadedWatch()
 {
-  if (m_Model->GetHasChanged())
+  // Deactivate window buttons
+//   Fl::lock();
+//   bBrowse->deactivate();
+//   bCancel->deactivate();
+//   bOk->deactivate();
+//   vFilePath->deactivate();
+//   Fl::unlock();
+  
+  m_View->DeactivateWindowButtons(false);
+
+  double last = 0;
+  double updateThres = 0.01;
+  double current = -1;
+
+  while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
+  {
+    if(m_ProcessObject.IsNotNull())
+    {
+      current = m_ProcessObject->GetProgress();
+      if(current - last > updateThres)
+      {
+        // Make the main fltk loop update progress fields
+//         Fl::awake(&UpdateProgressCallback,this);
+        m_View->AwakeProgressFields(m_ProcessObject->GetProgress());
+        last = current;
+      }
+    }
+       // Sleep for a while
+    Sleep(500);
+  }
+  
+//   Fl::lock();
+//   // Reactivate window buttons
+//   bBrowse->activate();
+//   bCancel->activate();
+//   bOk->activate();
+//   vFilePath->activate();
+//   Fl::awake(&HideWindowCallback,this);
+//   Fl::unlock();
+  
+  m_View->DeactivateWindowButtons(true);
+}
+
+void WriterMVCModule::ThreadedRun()
+{
+  this->BusyOn();
+  m_ProcessObject = m_Model->GetFPVWriter();
+  m_Model->GenerateOutputImage(/*fname, pType, useScale*/);
+
+  this->BusyOff();
+}
+
+
+
+/** The Notify */
+void WriterMVCModule::Notify(const std::string & event)
+{
+  if (event == "OutputsUpdated")
   {
     // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("Dataset written",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 
     // Once module is closed, it is no longer busy
-     this->BusyOff();
+    this->BusyOff();
   }
+  else if (event == "BusyOff")
+  {
+    this->BusyOff();
+  }
+  else if (event == "SaveDataSet")
+  {
+    this->StartProcess2();
+    this->StartProcess1();
+    this->BusyOff();
+  }
+  else
+  {
+    
+  }
+}
+
+void WriterMVCModule::HideWindowCallback(void * data)
+{
+//   Self::Pointer writer = static_cast<Self *>(data);
+// 
+//   if(writer.IsNotNull())
+//   {
+//     writer->HideWindow();
+//   }
+}
+
+void WriterMVCModule::UpdateProgressCallback(void * data)
+{
+//   Self::Pointer writer = static_cast<Self *>(data);
+// 
+//   if(writer.IsNotNull())
+//   {
+//     writer->UpdateProgress();
+//   }
 }
 
 } // End namespace otb
