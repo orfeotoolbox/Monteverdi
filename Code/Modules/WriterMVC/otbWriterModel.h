@@ -18,8 +18,9 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbWriterModel_h
 #define __otbWriterModel_h
 
-#include "otbMVCModel.h"
-#include "otbListenerBase.h"
+// #include "otbMVCModel.h"
+// #include "otbListenerBase.h"
+#include "otbEventsSender.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -57,7 +58,7 @@ namespace otb
 
 
 class ITK_EXPORT WriterModel
-      : public MVCModel<ListenerBase>, public itk::Object
+  : public EventsSender<std::string>, public itk::Object
 {
 
 public:

@@ -60,6 +60,34 @@ void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
+/** The custom run command */
+void WriterMVCModule::Run()
+{
+  // Untill window closing, module will be busy
+  this->BusyOn();
+
+  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
+//   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
+  
+  if(vectorImage.IsNotNull())
+  {
+    m_Model->SetInputImage(vectorImage);
+    m_View->Show();
+    m_Model->GenerateLayers();
+  }
+//   else if (vectorData.IsNotNull())
+//   {
+//     //TODO write vectordata
+//     m_Model->GetVectorWriter()->SetInput(vectorData);
+//   }
+  else
+  {
+    itkExceptionMacro(<<"Input image is NULL.");
+  }
+  
+//   pBar->minimum(0);
+//   pBar->maximum(1);
+}
 
 void WriterMVCModule::ThreadedWatch()
 {
@@ -161,42 +189,26 @@ void WriterMVCModule::ThreadedRun()
 //   this->BusyOff();
 }
 
-/** The custom run command */
-void WriterMVCModule::Run()
-{
-  // Untill window closing, module will be busy
-  this->BusyOn();
 
-  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-//   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
-  
-  if(vectorImage.IsNotNull())
-  {
-    m_Model->SetInputImage(vectorImage);
-    m_View->Show();
-    m_Model->GenerateLayers();
-  }
-//   else if (vectorData.IsNotNull())
-//   {
-//     //TODO write vectordata
-//     m_Model->GetVectorWriter()->SetInput(vectorData);
-//   }
-  else
-  {
-    itkExceptionMacro(<<"Input image is NULL.");
-  }
-}
 
 /** The Notify */
-void WriterMVCModule::Notify()
+void WriterMVCModule::Notify(const std::string & event)
 {
-  if (m_Model->GetHasChanged())
+  if (event == "OutputsUpdated")
   {
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("Dataset written",m_InstanceId));
 
     // Once module is closed, it is no longer busy
-     this->BusyOff();
+    this->BusyOff();
+  }
+  else if (event == "BusyOff")
+  {
+    this->BusyOff();
+  }
+  else
+  {
+    
   }
 }
 

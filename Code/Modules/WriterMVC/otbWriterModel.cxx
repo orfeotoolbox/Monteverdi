@@ -104,7 +104,7 @@ WriterModel
   //Set Input Writer
   m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
-  this->NotifyAll();
+  this->NotifyAll("SetInputImage");
 }
 
 void
@@ -125,7 +125,7 @@ void
   m_VisuModel->Update();
   
   // Notify the observers
-  this->NotifyAll();
+  this->NotifyAll("GenerateLayers");
 }
 void
 WriterModel
@@ -279,7 +279,7 @@ WriterModel
     }
 //     this->UpdateWriter(fname);
     m_HasChanged = true;
-    this->NotifyAll();
+    this->NotifyAll("OutputsUpdated");
   }
   
   
