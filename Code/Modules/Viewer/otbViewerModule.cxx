@@ -483,9 +483,10 @@ ViewerModule::DisplaySelectedVectorData()
 {
   // Get the selected vectordata
   unsigned int selectedIndex = dVDList->value();
-  
-  // Dispaly the selected VD if not already dispalyed
-  if(!m_DisplayedVectorData[selectedIndex-1])
+  if( selectedIndex > 0 )
+  {
+    // Dispaly the selected VD if not already dispalyed
+    if(!m_DisplayedVectorData[selectedIndex-1])
     {
       // Hide all displayed vector datas
       m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
@@ -494,9 +495,10 @@ ViewerModule::DisplaySelectedVectorData()
       // Set visible status to selected VectorDataGl Compenents
       m_DisplayedVectorData[selectedIndex-1] = true;
     }
-  
-  //Redraw all the widgets
-  this->RedrawWidget();
+    //Redraw all the widgets
+    this->RedrawWidget();
+  }
+   
 }
 
 
