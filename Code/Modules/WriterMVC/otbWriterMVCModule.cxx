@@ -91,34 +91,37 @@ void WriterMVCModule::Run()
 
 void WriterMVCModule::ThreadedWatch()
 {
-//   // Deactivate window buttons
+  // Deactivate window buttons
 //   Fl::lock();
 //   bBrowse->deactivate();
 //   bCancel->deactivate();
 //   bOk->deactivate();
 //   vFilePath->deactivate();
 //   Fl::unlock();
-// 
-//   double last = 0;
-//   double updateThres = 0.01;
-//   double current = -1;
-// 
-//   while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
-//   {
-//     if(m_ProcessObject.IsNotNull())
-//     {
-//       current = m_ProcessObject->GetProgress();
-//       if(current - last > updateThres)
-//       {
-//         // Make the main fltk loop update progress fields
+  
+  m_View->DeactivateWindowButtons(false);
+
+  double last = 0;
+  double updateThres = 0.01;
+  double current = -1;
+
+  while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
+  {
+    if(m_ProcessObject.IsNotNull())
+    {
+      current = m_ProcessObject->GetProgress();
+      if(current - last > updateThres)
+      {
+        // Make the main fltk loop update progress fields
 //         Fl::awake(&UpdateProgressCallback,this);
-//         last = current;
-//       }
-//     }
-//        // Sleep for a while
-//     Sleep(500);
-//   }
-//   
+        m_View->AwakeProgressFields(m_ProcessObject->GetProgress());
+        last = current;
+      }
+    }
+       // Sleep for a while
+    Sleep(500);
+  }
+  
 //   Fl::lock();
 //   // Reactivate window buttons
 //   bBrowse->activate();
@@ -127,66 +130,17 @@ void WriterMVCModule::ThreadedWatch()
 //   vFilePath->activate();
 //   Fl::awake(&HideWindowCallback,this);
 //   Fl::unlock();
+  
+  m_View->DeactivateWindowButtons(true);
 }
 
 void WriterMVCModule::ThreadedRun()
 {
-//   this->BusyOn();
-// 
-//   std::string filepath = vFilePath->value();
-//   
-//   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-//   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
-//   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
-//   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-//   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
-// 
-//   if ( charVectorImage.IsNotNull() )
-//   {
-//     CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-//     charVWriter->SetInput(charVectorImage);
-//     charVWriter->SetFileName(filepath);
-//     m_ProcessObject = charVWriter;
-//     charVWriter->Update();
-//   }
-//   else if ( vectorImage.IsNotNull() )
-//   {
-//     FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-//     fPVWriter->SetInput(vectorImage);
-//     fPVWriter->SetFileName(filepath);
-//     m_ProcessObject = fPVWriter;
-//     fPVWriter->Update();
-//   }
-//   else if( singleImage.IsNotNull() )
-//   {
-//     FPWriterType::Pointer fPWriter = FPWriterType::New();
-//     fPWriter->SetInput(singleImage);
-//     fPWriter->SetFileName(filepath);
-//     m_ProcessObject = fPWriter;
-//     fPWriter->Update();
-//   }
-//   else if( vectorData.IsNotNull() )
-//   {
-//     VectorWriterType::Pointer vectorWriter = VectorWriterType::New();
-//     vectorWriter->SetInput(vectorData);
-//     vectorWriter->SetFileName(filepath);
-//     m_ProcessObject = vectorWriter;
-//     vectorWriter->Update();
-//   }
-//   else if( labeledVectorData.IsNotNull() )
-//   {
-//     LabeledVectorWriterType::Pointer labeledVectorWriter = LabeledVectorWriterType::New();
-//     labeledVectorWriter->SetInput(labeledVectorData);
-//     labeledVectorWriter->SetFileName(filepath);
-//     m_ProcessObject = labeledVectorWriter;
-//     labeledVectorWriter->Update();
-//   }
-//   else
-//   {
-//     this->BusyOff();
-//     itkExceptionMacro(<<"Input data are NULL.");
-//   }
-//   this->BusyOff();
+  this->BusyOn();
+  m_ProcessObject = m_Model->GetFPVWriter();
+  m_Model->GenerateOutputImage(/*fname, pType, useScale*/);
+
+  this->BusyOff();
 }
 
 
@@ -197,13 +151,19 @@ void WriterMVCModule::Notify(const std::string & event)
   if (event == "OutputsUpdated")
   {
     // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("Dataset written",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 
     // Once module is closed, it is no longer busy
     this->BusyOff();
   }
   else if (event == "BusyOff")
   {
+    this->BusyOff();
+  }
+  else if (event == "SaveDataSet")
+  {
+    this->StartProcess2();
+    this->StartProcess1();
     this->BusyOff();
   }
   else

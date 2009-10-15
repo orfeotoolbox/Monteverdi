@@ -258,6 +258,13 @@ public:
   itkSetMacro(InputFileName, std:: string);
   itkGetMacro(InputFileName, std:: string);
 
+  /** Input type */
+  itkSetMacro(PType, unsigned int);
+  itkGetMacro(PType, unsigned int);
+  
+  /** usescale */
+  itkSetMacro(UseScale, bool);
+  itkGetMacro(UseScale, bool);
   /** Number of channels */
   itkSetMacro(NumberOfChannels, unsigned int);
   itkGetMacro(NumberOfChannels, unsigned int);
@@ -275,7 +282,7 @@ public:
   
   /** Get writer */
   itkGetObjectMacro(FPVWriter,FPVWriterType);
-  itkGetObjectMacro(VectorWriter,VectorWriterType);
+//   itkGetObjectMacro(VectorWriter,VectorWriterType);
 
   /** Chain lsit */
   void CreateFilterList( int filterId );
@@ -285,7 +292,8 @@ public:
   void AddFeature();
 
   /** Generate output image */
-  void GenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
+  void GenerateOutputImage(/*const std::string & fname, const unsigned int pType, const bool useScale*/);
+  void ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
@@ -297,10 +305,10 @@ public:
   void InitInput();
 
   /** Convert OutputImage*/
-  template<typename CastOutputPixelType> void genericImageConverter(const std::string & fname, const bool useScale);
+  template<typename CastOutputPixelType> void genericImageConverter(/*const std::string & fname, const bool useScale*/);
   /** update writers*/
-  void UpdateWriter(const std::string & fname);
-  void UpdateVectorWriter(const std::string & fname);
+//   void UpdateWriter(const std::string & fname);
+//   void UpdateVectorWriter(const std::string & fname);
 //   void UpdateImageWriter(const std::string & fname, bool useScale);
 protected:
   /** Constructor */
@@ -334,6 +342,11 @@ private:
   unsigned int m_NumberOfChannels;
   /** Input filename*/
   std:: string m_InputFileName;
+  
+  /** Input type*/
+  unsigned int m_PType;
+  /** use scale*/
+  bool m_UseScale;
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasInput;
 
@@ -360,7 +373,7 @@ private:
   
   //Writers
   FPVWriterType::Pointer m_FPVWriter;
-  VectorWriterType::Pointer m_VectorWriter;
+//   VectorWriterType::Pointer m_VectorWriter;
   
   bool m_HasChanged;
 };

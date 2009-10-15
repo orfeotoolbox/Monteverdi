@@ -486,6 +486,65 @@ void WriterViewGUI::Browse()
   
 }
 
+void WriterViewGUI::UpdateProgress()
+{
+  double progress = this->GetProgress();
+
+  itk::OStringStream oss1, oss2;
+  oss1.str("");
+  oss1<<"Writing dataset  ("<<std::floor(100*progress)<<"%)";
+  oss2.str("");
+  oss2<<std::floor(100*progress);
+  oss2<<"%";
+  pBar->value( progress );
+  vFilePath->copy_label(oss1.str().c_str());
+  pBar->copy_label( oss2.str().c_str() );
 }
+
+void WriterViewGUI::UpdateProgressCallback(void * data)
+{
+  Self::Pointer writer = static_cast<Self *>(data);
+
+  if(writer.IsNotNull())
+  {
+    writer->UpdateProgress();
+  }
+}
+
+void WriterViewGUI::QuitCallback(void * data)
+{
+  Self::Pointer writer = static_cast<Self *>(data);
+
+  if(writer.IsNotNull())
+  {
+    writer->Quit();
+  }
+}
+
+
+void WriterViewGUI::DeactivateWindowButtons(bool withAwake)
+{
+  Fl::lock();
+  // Reactivate window buttons
+//   bBrowse->activate();
+  guiQuit->activate();
+  guiOK->activate();
+  vFilePath->activate();
+  
+  if (withAwake)
+  {
+    Fl::awake(&QuitCallback,this);
+  }
+  
+  Fl::unlock();  
+}
+ 
+
+void WriterViewGUI::AwakeProgressFields (double progress) 
+{
+  this->SetProgress(progress);
+  Fl::awake(&UpdateProgressCallback,this);
+}
+} //end namespace
 
 

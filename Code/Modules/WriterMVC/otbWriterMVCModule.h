@@ -25,8 +25,8 @@
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
+// #include "otbVectorData.h"
+// #include "otbVectorDataFileWriter.h"
 
 #include "otbImage.h"
 #include "otbImageList.h"
@@ -68,7 +68,7 @@ namespace otb
       /// Dataset
       typedef VectorImage<double,2>         FloatingVectorImageType;
       typedef FloatingVectorImageType::Pointer         FPVImagePointerType;
-      typedef VectorData<double>            VectorType;
+//       typedef VectorData<double>            VectorType;
     
       itkGetObjectMacro(View,WriterViewGUI);
     protected:
@@ -106,6 +106,9 @@ namespace otb
       WriterController::Pointer  m_Controller;
       // The model
       WriterModel::Pointer       m_Model;
+      
+       // Pointer to the process object
+      itk::ProcessObject::Pointer m_ProcessObject;
   };
 
 

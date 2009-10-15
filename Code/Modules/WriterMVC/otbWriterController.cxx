@@ -76,7 +76,9 @@ WriterController
 {
   try
   {
-    m_Model->GenerateOutputImage(fname, pType, useScale);
+//     m_Model->GenerateOutputImage(fname, pType, useScale);
+    //Try to multi thread
+    m_Model->ThreadedGenerateOutputImage(fname, pType, useScale);
   }
   catch (itk::ExceptionObject & err)
   {

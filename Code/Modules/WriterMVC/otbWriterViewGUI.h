@@ -82,6 +82,10 @@ public:
   typedef std::vector<std::string>                      StringVectorType;
 
 
+  /** progress tmp */
+  itkSetMacro(Progress, double);
+  itkGetMacro(Progress, double);
+  
   /** Set the controller */
   itkGetObjectMacro(WriterController,WriterControllerInterface);
 
@@ -143,6 +147,10 @@ public:
   virtual void ClearImage();
   
   virtual void InitFeatureOutputList();
+  
+  virtual void DeactivateWindowButtons(bool withAwake);
+  
+  virtual void AwakeProgressFields (double progress);
 protected:
 
   /** Destructor */
@@ -161,8 +169,17 @@ protected:
 
   void InitParameterGroupList();
 
+  // Update the progress bar
+  void UpdateProgress();
 
 private:
+  
+  // Callback to update the window label
+  static void UpdateProgressCallback(void * data);
+
+  // Callback to hide window
+  static void QuitCallback(void * data);
+  
   WriterViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
@@ -192,6 +209,9 @@ private:
 
   VisuViewPointerType                 m_VisuView;
   VisuViewPointerType                 m_ResultVisuView;
+  
+  /** progress tmp*/
+  double m_Progress;
 };
 }//end namespace otb
 
