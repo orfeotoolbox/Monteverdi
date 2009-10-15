@@ -33,12 +33,6 @@ ReaderModule::ReaderModule()
   m_VectorReader = VectorReaderType::New();
   m_LabeledVectorReader = LabeledVectorReaderType::New();
   m_ComplexReader = ComplexImageReaderType::New();
-  m_AmplitudeFilter = AmplitudeFilterType::New();
-  m_ExtractROIFilterList = ExtractROIImageFilterListType::New();
-  m_RealFilter = RealFilterType::New();
-  m_ImaginaryFilter = ImaginaryFilterType::New();
-  m_ModulusFilter = ModulusFilterType::New();
-  m_PhaseFilter = PhaseFilterType::New();
 
   this->BuildGUI();
 
@@ -210,35 +204,8 @@ void ReaderModule::OpenOpticalImage()
 
   // Add the full data set as a descriptor
   oss << "Image read from file: " << lFile.file();
-  ossId<<vName->value()<<" (Whole dataset)";
+  ossId<<vName->value();
   this->AddOutputDescriptor(m_FPVReader->GetOutput(),ossId.str(),oss.str(),true);
-  // Add sub-bands
-  for(unsigned int band = 0; band<m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
-    {
-    // Extract band
-    ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
-    extract->SetInput(m_FPVReader->GetOutput());
-    extract->SetChannel(band+1);
-    m_ExtractROIFilterList->PushBack(extract);
-    
-    // Description
-    oss.str("");
-    oss << "Band "<<band+1<<" read from file: " << lFile.file();
-    // Output ID
-    ossId.str("");
-    ossId<<vName->value()<<" (band "<<band+1<<")";
-    this->AddOutputDescriptor(extract->GetOutput(),ossId.str(),oss.str(),true);
-    }
-
-  if(m_FPVReader->GetOutput()->GetNumberOfComponentsPerPixel()>1)
-    {
-    m_AmplitudeFilter->SetInput(m_FPVReader->GetOutput());
-    oss.str("");
-    oss <<"Image amplitude read from file: "<< vName->value(); // lFile.file(); /
-    ossId.str("");
-    ossId<<vName->value()<<" (amplitude)";
-    this->AddOutputDescriptor(m_AmplitudeFilter->GetOutput(),ossId.str(),oss.str(),true);
-    }
 }
 
 
@@ -254,35 +221,8 @@ void ReaderModule::OpenSarImage()
   m_ComplexReader->GenerateOutputInformation();
 
   oss <<"Complex image read from file: "<<lFile.file();
-  ossId<<vName->value()<<" (whole dataset)";
+  ossId<<vName->value();
   this->AddOutputDescriptor(m_ComplexReader->GetOutput(),ossId.str(),oss.str(),true);
-   
-  m_RealFilter->SetInput(m_ComplexReader->GetOutput());
-  oss.str("");
-  oss <<"Image real part read from file: "<<lFile.file();
-  ossId.str("");
-  ossId<<vName->value()<<" (real part)";
-  this->AddOutputDescriptor(m_RealFilter->GetOutput(),ossId.str(),oss.str(),true);
-   
-  m_ImaginaryFilter->SetInput(m_ComplexReader->GetOutput());
-  oss.str("");
-  oss <<"Image Imaginary part read from file: "<<lFile.file();
-  ossId.str("");
-  ossId<<vName->value()<<" (imaginary part)";
-  this->AddOutputDescriptor(m_ImaginaryFilter->GetOutput(),ossId.str(),oss.str(),true);
-  m_ModulusFilter->SetInput(m_ComplexReader->GetOutput());
-  oss.str("");
-  oss <<"Image modulus read from file: "<<lFile.file();
-  ossId.str("");
-  ossId<<vName->value()<<" (modulus)";
-  this->AddOutputDescriptor(m_ModulusFilter->GetOutput(),ossId.str(),oss.str(),true);
-   
-  m_PhaseFilter->SetInput(m_ComplexReader->GetOutput());
-  oss.str("");
-  oss <<"Image phase part read from file: "<<lFile.file();
-  ossId.str("");
-  ossId<<vName->value()<<" (phase)";
-  this->AddOutputDescriptor(m_PhaseFilter->GetOutput(),ossId.str(),oss.str(),true);
 }
 
 void ReaderModule::OpenVector()
