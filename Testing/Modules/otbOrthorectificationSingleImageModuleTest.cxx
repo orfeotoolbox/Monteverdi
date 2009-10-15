@@ -30,9 +30,10 @@ int otbOrthorectificationSingleImageModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::Image<double,2>                ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
+  typedef otb::Image<double,2>                  ImageType;
+  typedef otb::VectorImage<double,2>            VectorImageType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   // reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -61,14 +62,14 @@ int otbOrthorectificationSingleImageModuleTest(int argc, char* argv[])
   specificModule->GetOrthorectification()->guiOK->do_callback();
   
   // Refresh
-  Fl::check();
+  Fl::run();
 
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
-  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
+  VectorImageType::Pointer outImage = dynamic_cast<VectorImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
   WriterType::Pointer  writer = WriterType::New();
