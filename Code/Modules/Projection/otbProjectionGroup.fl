@@ -14,7 +14,7 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label otbProjection open
-      xywh {657 295 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 hide resizable
+      xywh {657 295 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
         label OK
@@ -30,8 +30,8 @@ class ProjectionGroup {open
         xywh {5 14 419 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open
-          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label Coordinates open selected
+          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
             label {Geographical Coordinates} open
@@ -69,7 +69,7 @@ this->UpdateLongLat();}
         }
         Fl_Group {} {
           label {Output image} open
-          xywh {13 35 411 390} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1
+          xywh {13 35 411 390} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
             label {Size X}
@@ -186,7 +186,7 @@ this->UpdateTMTransform();}
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
-SetMapType(UTM);
+SetMapType(MAP_UTM);
 this->UpdateUTMTransform();}
               xywh {15 15 100 25} labelsize 11
             }
@@ -196,7 +196,7 @@ this->UpdateUTMTransform();}
 m_Lambert2->show();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
-SetMapType(LAMBERT2);
+SetMapType(MAP_LAMBERT2);
 this->UpdateLambertIITransform();}
               xywh {25 25 100 25} labelsize 11
             }
@@ -206,8 +206,8 @@ this->UpdateLambertIITransform();}
 m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
-SetMapType(TRANSMERCATOR);
-this->UpdateTMTransform();} selected
+SetMapType(MAP_TRANSMERCATOR);
+this->UpdateTMTransform();}
               xywh {25 25 100 25} labelsize 11
             }
           }
@@ -330,7 +330,7 @@ SetInterpolatorType(SINC);}
   } {}
   Function {SelectAction()} {open return_type {virtual void}
   } {}
-  Function {SetMapType(MapType map)} {open return_type {virtual void}
+  Function {SetMapType(ProjectionMapType map)} {open return_type {virtual void}
   } {}
   Function {SetInterpolatorType(InterpolatorType interp)} {open return_type {virtual void}
   } {}

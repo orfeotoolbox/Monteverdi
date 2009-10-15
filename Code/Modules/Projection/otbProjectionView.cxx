@@ -42,6 +42,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbBSplineInterpolateImageFunction.h"
 #include "otbMsgReporter.h"
 
+#include "itkContinuousIndex.h"
+
 
 
 namespace otb
@@ -144,12 +146,13 @@ ProjectionView
   double       originX =  atof(guiLongSelection->value());
   double       originY =  atof(guiLatSelection->value());
   bool         isUl    =  guiCenterPixel->value();
+  
+  std::cout << "View : Spacing  [" <<spacingX << "," << spacingY << "]" << std::endl;
   m_Controller->ProjectRegion(sizeX,sizeY,spacingX,spacingY,originX,originY,isUl);
 
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
 }
-
 
 /**
  *
@@ -165,7 +168,7 @@ ProjectionView
   geoPoint[1] = atof(guiLatSelection->value());
 
   // Project the new geo Point 
-  TransformType::ConstPointer                  rsTransform        = m_Controller->GetModel()->GetTransform();
+  TransformType::Pointer                  rsTransform        = m_Controller->GetModel()->GetTransform();
   
   itk::OStringStream oss;
   oss<<setiosflags(std::ios_base::fixed);
@@ -173,9 +176,9 @@ ProjectionView
 
   switch (this->GetMapType())
     {
-    case UTM:
+    case MAP_UTM:
       {
-	newCartoPoint = rsTransform->GetSecondTransform()->TransformPoint(geoPoint);
+	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
 	oss<<newCartoPoint[1];
 	guiUTMNorthSelection->value(oss.str().c_str());
@@ -184,9 +187,9 @@ ProjectionView
 	guiUTMEastSelection->value(oss.str().c_str());
 	break;
       }
-    case LAMBERT2:
+    case MAP_LAMBERT2:
       {
-	newCartoPoint = rsTransform->GetSecondTransform()->TransformPoint(geoPoint);
+	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
 	oss<<newCartoPoint[1];
 	guiLambertNorthSelection->value(oss.str().c_str());
@@ -195,9 +198,9 @@ ProjectionView
 	guiLambertEastSelection->value(oss.str().c_str());
 	break;
       }
-    case TRANSMERCATOR:
+    case MAP_TRANSMERCATOR:
       {
-	newCartoPoint = rsTransform->GetSecondTransform()->TransformPoint(geoPoint);
+	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 	oss.str("");
 	oss<<newCartoPoint[1];
 	guiTransmercatorNorthSelection->value(oss.str().c_str());
@@ -225,13 +228,14 @@ ProjectionView
   
   index.Fill(0);
   // Get the transform from the model
-  TransformType::ConstPointer rsTransform = m_Controller->GetModel()->GetTransform();
+  TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
   
   // Apply the transform to the middle point of the image
   if(guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
     {
       index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
       index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+      
     }
   else if(guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
     {
@@ -242,7 +246,9 @@ ProjectionView
   m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,point);
   
   // Transform to geo and to Choosen projection
-  geoPoint    = rsTransform->GetFirstTransform()->TransformPoint(point);
+  geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
+  
+  std::cout << std::setprecision(10) << point << " -->outputPoint " << point<< std::endl;
   
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -514,10 +520,10 @@ void
 ProjectionView::InitializeAction()
 {
   IndexType index;
-  PointType middlePoint,geoPoint,outputPoint;
+  PointType middlePoint,geoPoint,outputPoint, outputPoint1;
   
   // Get the transform from the model
-  TransformType::ConstPointer rsTransform = m_Controller->GetModel()->GetTransform();
+  TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
   
   // Apply the transform to the middle point of the image
   index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
@@ -528,8 +534,11 @@ ProjectionView::InitializeAction()
   
   // Transform to geo and to Choosen projection
   outputPoint = rsTransform->TransformPoint(middlePoint);
-  geoPoint    = rsTransform->GetFirstTransform()->TransformPoint(middlePoint);
+  geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
+  outputPoint1 = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
   
+  std::cout << std::setprecision(10) << middlePoint << " -->outputPoint " << outputPoint1<< std::endl;
+
   // Fill the datas in the GUI
   itk::OStringStream oss;
   oss<<setiosflags(std::ios_base::fixed);
@@ -557,7 +566,7 @@ ProjectionView::InitializeAction()
 
 
 void
-ProjectionView::SetMapType(MapType map)
+ProjectionView::SetMapType(ProjectionMapType map)
 {
   m_MapType = map;
   //this->SelectAtion();
@@ -565,7 +574,7 @@ ProjectionView::SetMapType(MapType map)
 }
 
 
-MapType
+ProjectionMapType
 ProjectionView::GetMapType()
 {
   return m_MapType;
@@ -573,7 +582,7 @@ ProjectionView::GetMapType()
 
 
 void
-ProjectionView::SetInterpolatorType(InterpolatorType interp)
+ProjectionView::SetInterpolatorType(ProjectionInterpolatorType interp)
 {
   //m_InterpType = interp;
   //   this->UpdateInterpolator();
@@ -581,7 +590,7 @@ ProjectionView::SetInterpolatorType(InterpolatorType interp)
 }
 
 
-InterpolatorType
+ProjectionInterpolatorType
 ProjectionView::GetInterpolatorType()
 {
   return m_InterpType;

@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __OTBPROJECTIONENUM_H__
 #define __OTBPROJECTIONENUM_H__
 
-typedef enum { UTM, LAMBERT, LAMBERT2, SINUS, ECKERT4, TRANSMERCATOR, MOLLWEID}  MapType;
-typedef enum { LINEAR_, NEAREST, SINC, SPLINES}  InterpolatorType;
+typedef enum { MAP_UTM, MAP_LAMBERT, MAP_LAMBERT2, MAP_SINUS, MAP_ECKERT4, MAP_TRANSMERCATOR, MAP_MOLLWEID}  ProjectionMapType;
+typedef enum { LINEAR_, NEAREST, SINC, SPLINES}  ProjectionInterpolatorType;
 
 #endif
