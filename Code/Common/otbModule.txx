@@ -104,7 +104,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
   oss <<description<<" (Whole dataset)";
   // Output ID
   ossId.str("");
-  ossId<<key<<" (Whole dataset)";
+  ossId<<key;
   
   // Check if the key already exists
   if(m_OutputsMap.count(ossId.str()) > 0)
@@ -222,7 +222,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   oss <<description<<" (Whole dataset)";
   // Output ID
   ossId.str("");
-  ossId<<key<<" (Whole dataset)";
+  ossId<<key;
   
   // Check if the key already exists
   if(m_OutputsMap.count(ossId.str()) > 0)
