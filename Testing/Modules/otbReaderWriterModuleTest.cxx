@@ -41,7 +41,7 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   specificReaderModule->vName->value("test");
   specificReaderModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test (Whole dataset)");
+  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
