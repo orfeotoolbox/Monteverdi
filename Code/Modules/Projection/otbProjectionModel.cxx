@@ -32,6 +32,10 @@ ProjectionModel::ProjectionModel()
   // 
   m_Resampler = ResampleFilterType::New();
   m_PerBander = PerBandFilterType::New();
+  
+  m_Transform        = TransformType::New();
+  m_InverseTransform = TransformType::New();
+  
 }
 
 /**
@@ -58,19 +62,35 @@ ProjectionModel
   oSRS.exportToWkt(&utmRef);
 
   // Build the Generic RS transform 
-  RSTransformType::Pointer     transformFilter = RSTransformType::New();
-  transformFilter->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  transformFilter->SetInputSpacing(m_InputImage->GetSpacing());
-  transformFilter->SetInputOrigin(m_InputImage->GetOrigin());
-  transformFilter->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
+  m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
+  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  transformFilter->SetOutputProjectionRef(utmRef);
-  transformFilter->InstanciateTransform();
-
-  m_Transform = transformFilter->GetTransform();
-
+  m_Transform->SetOutputProjectionRef(utmRef);
+  m_Transform->InstanciateTransform();
+  
+  // Get the transform
+  m_Transform->GetInverse(m_InverseTransform);
+  
+  
+  // Update the output image parameters
   this->UpdateOutputParameters();
 
+  //test 
+  InputImageType::PointType  point1, point2 , point3;
+
+  InputImageType::IndexType index;
+  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+  // From index to Physical Point
+  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
+    
+  point2 = m_Transform->TransformPoint(point1);
+  point3 =  m_InverseTransform->TransformPoint(point2);
+  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
+
+  //Notify the view that the transform has changed
   m_TransformChanged = true;
   this->NotifyAll();
   m_TransformChanged = false;
@@ -102,17 +122,29 @@ void ProjectionModel
   oSRS.exportToWkt(&lambertRef);
 
   // Build the Generic RS transform 
-  RSTransformType::Pointer     transformFilter = RSTransformType::New();
-  transformFilter->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  transformFilter->SetInputSpacing(m_InputImage->GetSpacing());
-  transformFilter->SetInputOrigin(m_InputImage->GetOrigin());
-  transformFilter->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
+  m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
+  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  transformFilter->SetOutputProjectionRef(lambertRef);
-  transformFilter->InstanciateTransform();
-  m_Transform = transformFilter->GetTransform();
+  m_Transform->SetOutputProjectionRef(lambertRef);
+  m_Transform->InstanciateTransform();
+  
+  // Get the inverse
+  m_Transform->GetInverse(m_InverseTransform);
   
   this->UpdateOutputParameters();
+  //test 
+  InputImageType::PointType  point1, point2 , point3;
+  InputImageType::IndexType index;
+  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+  // From index to Physical Point
+  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
+  point2 = m_Transform->TransformPoint(point1);
+  point3 =  m_InverseTransform->TransformPoint(point2);
+  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
+
   
   m_TransformChanged = true;
   this->NotifyAll();
@@ -141,17 +173,28 @@ void ProjectionModel
   char * lambertRef = NULL;
   oSRS.exportToWkt(&lambertRef);
 
-  // Build the Generic RS transform 
-  RSTransformType::Pointer     transformFilter = RSTransformType::New();
-  transformFilter->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  transformFilter->SetInputSpacing(m_InputImage->GetSpacing());
-  transformFilter->SetInputOrigin(m_InputImage->GetOrigin());
-  transformFilter->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
+  // Build the Generic RS transform  
+  m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
+  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  transformFilter->SetOutputProjectionRef(lambertRef);
-  transformFilter->InstanciateTransform();
+  m_Transform->SetOutputProjectionRef(lambertRef);
+  m_Transform->InstanciateTransform();
 
-  m_Transform = transformFilter->GetTransform();
+  //
+  m_Transform->GetInverse(m_InverseTransform);
+
+  //test 
+  InputImageType::PointType  point1, point2 , point3;
+  InputImageType::IndexType index;
+  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+  // From index to Physical Point
+  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
+  point2 = m_Transform->TransformPoint(point1);
+  point3 = m_InverseTransform->TransformPoint(point2);
+  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   this->UpdateOutputParameters();
 
@@ -180,12 +223,12 @@ void ProjectionModel
   
   // project the 4 corners
   index1.Fill(0);
-  index2[0] = size[0];
+  index2[0] = size[0]-1;
   index2[1] = 0;
-  index3[0] = 0;
-  index3[1] = size[1];
-  index4[0] = size[0];
-  index4[1] = size[1];
+  index3[0] = size[0]-1;
+  index3[1] = size[1]-1;
+  index4[0] = 0;
+  index4[1] = size[1]-1;
   
   vindex.push_back(index1);
   vindex.push_back(index2);
@@ -242,7 +285,7 @@ void ProjectionModel
 
   m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
   m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
-
+  
   // Y
   double alphaY1 = vcl_atan2( vcl_abs(voutput[up][1]-voutput[left][1]), vcl_abs(voutput[up][0]-voutput[left][0]) );
   double alphaY2 = vcl_atan2( vcl_abs(voutput[down][1]-voutput[left][1]), vcl_abs(voutput[down][0]-voutput[left][0]) );
@@ -265,12 +308,13 @@ ProjectionModel
   // Edit the spacing
   m_OutputSpacing[0] = spacingX;
   m_OutputSpacing[1] = spacingY;
+  std::cout << "Model::ProjectRegion  Spacing  [" << m_OutputSpacing[0] << "," << m_OutputSpacing[1] << "]" << std::endl;
   
   // Edit the origin in the cartographic projection
   OutputPointType      geoPoint, newCartoPoint;
   geoPoint[0] = originX;
   geoPoint[1] = originY;
-  newCartoPoint = m_Transform->GetSecondTransform()->TransformPoint(geoPoint);
+  newCartoPoint = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
   if(isUl)
     {
       m_OutputOrigin[0] = newCartoPoint[0]-m_OutputSpacing[0]*m_OutputSize[0]/2;
@@ -291,9 +335,11 @@ void
 ProjectionModel
 ::ReprojectImage()
 {
-  std::cout <<"m_Origin "<< m_OutputOrigin[0] << "," << m_OutputOrigin[1]  << std::endl;
-  
-  m_Resampler->SetTransform(m_Transform);
+  std::cout<<"Spacing: "<<m_OutputSpacing<<std::endl;
+  std::cout<<"Origin: "<<m_OutputOrigin<<std::endl;
+  std::cout<<"Size: "<<m_OutputSize<<std::endl;
+
+  m_Resampler->SetTransform(m_InverseTransform);
   m_Resampler->SetSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);

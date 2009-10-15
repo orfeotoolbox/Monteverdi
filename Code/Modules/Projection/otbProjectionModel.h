@@ -57,8 +57,8 @@ class ITK_EXPORT ProjectionModel
   typedef InputImageType::SpacingType              SpacingType;
  
   /** typedef the Remote Sensing transform*/
-  typedef GenericRSTransform<>                        RSTransformType;
-  typedef RSTransformType::TransformType              TransformType;
+  typedef GenericRSTransform<>                        TransformType;
+  //typedef RSTransformType::TransformType            TransformType;
   typedef TransformType::OutputPointType              OutputPointType; 
 
     /** Output */
@@ -80,7 +80,7 @@ class ITK_EXPORT ProjectionModel
   itkGetMacro(TransformChanged,bool);
 
   /** Get a const reference on the Transform */
-  itkGetConstReferenceMacro(Transform,TransformType::ConstPointer);
+  itkGetObjectMacro(Transform,TransformType);
 
   /** Get Spacing / Size & Origin*/
   itkGetMacro(OutputSize,SizeType);
@@ -130,7 +130,8 @@ class ITK_EXPORT ProjectionModel
   SpacingType                   m_OutputSpacing; 
   
   // Instance of the composite transform
-  TransformType::ConstPointer   m_Transform;  
+  TransformType::Pointer   m_Transform;  
+  TransformType::Pointer   m_InverseTransform;  
 
   // Outputs
   ResampleFilterType::Pointer  m_Resampler;
