@@ -67,39 +67,23 @@ void WriterMVCModule::Run()
   this->BusyOn();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-//   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
-  
+
   if(vectorImage.IsNotNull())
   {
     m_Model->SetInputImage(vectorImage);
     m_View->Show();
     m_Model->GenerateLayers();
   }
-//   else if (vectorData.IsNotNull())
-//   {
-//     //TODO write vectordata
-//     m_Model->GetVectorWriter()->SetInput(vectorData);
-//   }
   else
   {
     itkExceptionMacro(<<"Input image is NULL.");
   }
-  
-//   pBar->minimum(0);
-//   pBar->maximum(1);
 }
 
 void WriterMVCModule::ThreadedWatch()
 {
   // Deactivate window buttons
-//   Fl::lock();
-//   bBrowse->deactivate();
-//   bCancel->deactivate();
-//   bOk->deactivate();
-//   vFilePath->deactivate();
-//   Fl::unlock();
-  
-  m_View->DeactivateWindowButtons(false);
+  m_View->ManageActivationWindowButtons(false);
 
   double last = 0;
   double updateThres = 0.01;
@@ -107,38 +91,38 @@ void WriterMVCModule::ThreadedWatch()
 
   while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
   {
+    
     if(m_ProcessObject.IsNotNull())
     {
       current = m_ProcessObject->GetProgress();
       if(current - last > updateThres)
       {
         // Make the main fltk loop update progress fields
-//         Fl::awake(&UpdateProgressCallback,this);
         m_View->AwakeProgressFields(m_ProcessObject->GetProgress());
         last = current;
       }
     }
-       // Sleep for a while
+    // Sleep for a while
     Sleep(500);
+    std::cout << "while " << "m_ProcessObject->GetProgress() " << m_ProcessObject->GetProgress() <<std::endl;
+    std::cout << "while " << "this->IsBusy() " << this->IsBusy() <<std::endl;
+    std::cout << "while " << "m_ProcessObject.IsNull() " << m_ProcessObject.IsNull() <<std::endl;
+    m_ProcessObject = m_Model->GetProcessObjectModel();
   }
   std::cout << "we QUIT " << "m_ProcessObject->GetProgress() " << m_ProcessObject->GetProgress() <<std::endl;
-//   Fl::lock();
-//   // Reactivate window buttons
-//   bBrowse->activate();
-//   bCancel->activate();
-//   bOk->activate();
-//   vFilePath->activate();
-//   Fl::awake(&HideWindowCallback,this);
-//   Fl::unlock();
+  std::cout << "we QUIT " << "this->IsBusy() " << this->IsBusy() <<std::endl;
+  std::cout << "we QUIT " << "m_ProcessObject.IsNull() " << m_ProcessObject.IsNull() <<std::endl;
   
-  m_View->DeactivateWindowButtons(true);
+  // Reactivate window buttons
+  m_View->ManageActivationWindowButtons(true);
 }
 
 void WriterMVCModule::ThreadedRun()
 {
   this->BusyOn();
-  m_ProcessObject = m_Model->GetFPVWriter();
-  m_Model->GenerateOutputImage(/*fname, pType, useScale*/);
+  
+  m_ProcessObject = m_Model->GetProcessObjectModel();
+  m_Model->GenerateOutputImage();
 
   this->BusyOff();
 }
@@ -164,32 +148,11 @@ void WriterMVCModule::Notify(const std::string & event)
   {
     this->StartProcess2();
     this->StartProcess1();
-//     this->BusyOff();
   }
   else
   {
     
   }
-}
-
-void WriterMVCModule::HideWindowCallback(void * data)
-{
-//   Self::Pointer writer = static_cast<Self *>(data);
-// 
-//   if(writer.IsNotNull())
-//   {
-//     writer->HideWindow();
-//   }
-}
-
-void WriterMVCModule::UpdateProgressCallback(void * data)
-{
-//   Self::Pointer writer = static_cast<Self *>(data);
-// 
-//   if(writer.IsNotNull())
-//   {
-//     writer->UpdateProgress();
-//   }
 }
 
 } // End namespace otb
