@@ -49,16 +49,12 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   writerModule->AddInputByKey("InputDataSet",wrapperOut);
   writerModule->Start();
   Fl::check();
-  specificWriterModule->vFilePath->value(argv[2]);
+  specificWriterModule->vFilePath->value(argv[2]);  
+  Fl::check();
   specificWriterModule->bOk->do_callback();
 
-  // Wait for the writer to complete 
-  while (specificWriterModule->IsBusy())
-    {
-    Fl::check();
-    OpenThreads::Thread::microSleep(500);
-    }
-  
+  Fl::run();
+
   return EXIT_SUCCESS;
 }
 
