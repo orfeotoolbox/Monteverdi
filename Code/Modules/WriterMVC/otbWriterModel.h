@@ -47,6 +47,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "otbVectorDataFileWriter.h"
 
+#include "itkProcessObject.h"
+
 namespace otb
 {
 /** \class WriterModel
@@ -282,6 +284,10 @@ public:
   
   /** Get writer */
   itkGetObjectMacro(FPVWriter,FPVWriterType);
+  
+  /** Get ProcessObject */
+  itkGetObjectMacro(ProcessObjectModel,itk::ProcessObject);
+  itkSetObjectMacro(ProcessObjectModel,itk::ProcessObject);
 //   itkGetObjectMacro(VectorWriter,VectorWriterType);
 
   /** Chain lsit */
@@ -376,6 +382,9 @@ private:
 //   VectorWriterType::Pointer m_VectorWriter;
   
   bool m_HasChanged;
+  
+  // Pointer to the process object
+  itk::ProcessObject::Pointer m_ProcessObjectModel;
 };
 
 }

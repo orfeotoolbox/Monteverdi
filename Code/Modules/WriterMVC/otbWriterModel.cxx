@@ -62,6 +62,8 @@ WriterModel::WriterModel()
 //   m_VectorWriter = VectorWriterType::New();
   
   m_HasChanged = false;
+  
+  m_ProcessObjectModel = m_FPVWriter;
 }
 
 
@@ -361,6 +363,8 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
     
     typename CastWriterType::Pointer writer=CastWriterType::New();
     
+//     this->NotifyAll("SetWriter");
+    this->SetProcessObjectModel ( writer );
     writer->SetFileName(this->GetOutputFileName().c_str());
 
     if ( this->GetUseScale() )

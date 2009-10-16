@@ -148,7 +148,7 @@ public:
   
   virtual void InitFeatureOutputList();
   
-  virtual void DeactivateWindowButtons(bool withAwake);
+  virtual void ManageActivationWindowButtons(bool withAwake);
   
   virtual void AwakeProgressFields (double progress);
 protected:

@@ -94,12 +94,6 @@ namespace otb
       WriterMVCModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
-      // Callback to update the window label
-      static void UpdateProgressCallback(void * data);
-
-  // Callback to hide window
-      static void HideWindowCallback(void * data);
-      
       // The view
       WriterViewGUI::Pointer        m_View;
       // The controller

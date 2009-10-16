@@ -374,7 +374,7 @@ WriterViewGUI
   m_WriterController->SaveOutput(filepath, static_cast<unsigned int>(m_PixelType), useScale);
   
   //Here we need to go back to the app Monteverdi //TODO
-  this->Quit();
+//   this->Quit();
 }
 
 
@@ -522,20 +522,41 @@ void WriterViewGUI::QuitCallback(void * data)
 }
 
 
-void WriterViewGUI::DeactivateWindowButtons(bool withAwake)
+void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
 {
   Fl::lock();
-  // Reactivate window buttons
-//   bBrowse->activate();
-  guiQuit->activate();
-  guiOK->activate();
-  vFilePath->activate();
-  
+ 
   if (withAwake)
   {
+     // Reactivate window buttons
+    guiQuit->activate();
+    guiOK->activate();
+    vFilePath->activate();
+    bBrowse->activate();
+    guiScale->activate();
+    guiFeatureList->activate();
+    guiOutputFeatureList->activate();
+    guiAddChannel->activate();
+    guiRemoveChannel->activate();
+    guiUpChannel->activate();
+    guiDownChannel->activate();
     Fl::awake(&QuitCallback,this);
   }
-  
+  else
+  {
+    // Deactivate window buttons
+    guiQuit->deactivate();
+    guiOK->deactivate();
+    vFilePath->deactivate();
+    bBrowse->deactivate();
+    guiScale->deactivate();
+    guiFeatureList->deactivate();
+    guiOutputFeatureList->deactivate();
+    guiAddChannel->deactivate();
+    guiRemoveChannel->deactivate();
+    guiUpChannel->deactivate();
+    guiDownChannel->deactivate();
+  }
   Fl::unlock();  
 }
  
