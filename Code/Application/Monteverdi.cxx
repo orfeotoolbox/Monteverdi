@@ -89,10 +89,10 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
-  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
+  model->RegisterModule<otb::ReaderModule>("Reader","File/Open dataset");
+  model->RegisterModule<otb::WriterModule> ("Writer","File/Save dataset");
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI","File/Extract ROI from dataset");
-  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Export X image");
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Save X image");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","SAR/Despeckle image");
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity","SAR/Compute intensity and log-intensity");
 
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
   model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
   model->RegisterModule<otb::ConcatenateModule>("Concatenate","File/Concatenate images");
-  
+
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
