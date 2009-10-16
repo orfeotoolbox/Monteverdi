@@ -81,6 +81,9 @@ class ITK_EXPORT ProjectionModel
 
   /** Get a const reference on the Transform */
   itkGetObjectMacro(Transform,TransformType);
+  
+  /** Get the instance of the resampler*/
+  itkGetObjectMacro(Resampler,ResampleFilterType);
 
   /** Get Spacing / Size & Origin*/
   itkGetMacro(OutputSize,SizeType);

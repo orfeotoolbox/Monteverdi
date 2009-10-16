@@ -30,14 +30,14 @@ class ProjectionGroup {open
         xywh {5 14 419 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open selected
-          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+          label Coordinates open
+          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard {} {
-            label {Geographical Coordinates} open
+            label {Geographical Coordinates}
             xywh {31 72 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {33 74 353 92}
             } {
               Fl_Input guiLongSelection {
@@ -66,9 +66,133 @@ this->UpdateLongLat();}
               }
             }
           }
+          Fl_Wizard iMapType {
+            label {Input Cartographic Coordinates}
+            xywh {30 225 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5 deactivate
+          } {
+            Fl_Group iUTM {
+              xywh {30 225 360 160}
+            } {
+              Fl_Input iUTMZone {
+                label Zone
+                callback {//UpdateLongLat();
+//this->UpdateUTMTransform();}
+                tooltip {Enter the zone number} xywh {171 321 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iUTMEastSelection {
+                label Easting
+                callback {//UpdateEastNorth();
+//UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {171 241 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iUTMNorthSelection {
+                label Northing
+                callback {//UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {171 281 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Round_Button iUTMNorth {
+                label {Northern Hemisphere}
+                callback {guiUTMNorth->value(1);
+guiUTMSouth->value(0);
+//UpdateLongLat();
+this->UpdateUTMTransform();}
+                xywh {186 360 18 25} down_box ROUND_DOWN_BOX value 1 align 132
+              }
+              Fl_Round_Button iUTMSouth {
+                label {Southern Hemisphere}
+                callback {guiUTMSouth->value(1);
+guiUTMNorth->value(0);
+//UpdateLongLat();
+//this->UpdateUTMTransform();}
+                xywh {230 360 18 25} down_box ROUND_DOWN_BOX
+              }
+            }
+            Fl_Group iLambert2 {
+              xywh {36 225 360 160} hide
+            } {
+              Fl_Input iLambertEastSelection {
+                label Easting
+                callback {//UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {171 276 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iLambertNorthSelection {
+                label Northing
+                callback {//UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {171 316 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+            Fl_Group iTRANSMERCATOR {
+              xywh {36 225 360 160} hide
+            } {
+              Fl_Input iTRANSMERCATOREast {
+                label {False Easting}
+                callback {//UpdateLongLat();
+//this->UpdateTMTransform();}
+                tooltip {Enter false easting} xywh {171 296 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iTRANSMERCATORNorth {
+                label {False Northing}
+                callback {//UpdateLongLat();
+//this->UpdateTMTransform();}
+                tooltip {Enter false northing} xywh {171 327 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iTRANSMERCATORScale {
+                label {Scale Factor}
+                callback {//UpdateLongLat();
+//this->UpdateTMTransform();}
+                tooltip {Enter Scale Factor} xywh {171 358 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iTransmercatorEastSelection {
+                label Easting
+                callback {//UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {171 234 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input iTransmercatorNorthSelection {
+                label Northing
+                callback {//UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {171 265 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+          }
+          Fl_Choice iMapSelection {
+            label {Input Map Projection}
+            callback {//this->UpdateMapParam();}
+            tooltip {Select the map projection type} xywh {175 180 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186 deactivate
+          } {
+            MenuItem {} {
+              label UTM
+              callback {iUTM->show();
+iLambert2->hide();
+iTRANSMERCATOR->hide();
+this->iMapType->redraw();
+SetMapType(MAP_UTM);
+//this->UpdateUTMTransform();}
+              xywh {25 25 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label LAMBERT2
+              callback {iUTM->hide();
+iLambert2->show();
+iTRANSMERCATOR->hide();
+this->m_MapType->redraw();
+SetMapType(MAP_LAMBERT2);
+//this->UpdateLambertIITransform();}
+              xywh {35 35 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label TRANSMERCATOR
+              callback {iUTM->hide();
+iLambert2->hide();
+iTRANSMERCATOR->show();
+this->m_MapType->redraw();
+SetMapType(MAP_TRANSMERCATOR);
+//this->UpdateTMTransform();}
+              xywh {35 35 100 25} labelsize 11
+            }
+          }
         }
         Fl_Group {} {
-          label {Output image} open
+          label {Output image}
           xywh {13 35 411 390} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
@@ -88,7 +212,7 @@ this->UpdateLongLat();}
             tooltip {Enter Y spacing} xywh {177 160 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Wizard m_MapType {
-            label {Cartographic Coordinates} open
+            label {Cartographic Coordinates}
             xywh {33 239 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group m_UTM {open
@@ -213,8 +337,8 @@ this->UpdateTMTransform();}
           }
         }
         Fl_Group {} {
-          label Settings
-          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label Settings open
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard m_InterpType {
             label {Interpolator Parameters} open
@@ -230,7 +354,7 @@ this->UpdateTMTransform();}
               xywh {47 168 352 118} hide
             } {
               Fl_Choice guiSincWindow {
-                label Interpolator open
+                label Interpolator
                 tooltip {Select the Orthorectif Interpolator} xywh {174 193 160 25} box EMBOSSED_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
               } {
                 MenuItem {} {
@@ -270,7 +394,7 @@ this->UpdateTMTransform();}
                 xywh {174 239 160 25}
               }
             }
-            Fl_Group guiSplines {open
+            Fl_Group guiSplines {open selected
               xywh {50 171 347 116} hide
             } {
               Fl_Counter guiSplineOrder {

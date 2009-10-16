@@ -81,11 +81,8 @@ public:
   typedef ModelType::TransformType                    TransformType;
   typedef ModelType::OutputPointType                  PointType; 
   typedef ModelType::IndexType                        IndexType; 
+  typedef ModelType::SingleImageType                  SingleImageType;
   
-  /** Interpolator definition*/
-  //typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;  
-  //typedef InterpType::Pointer                                    InterpPointerType;  
-
   // Check the size, spacing, long and lat parameters.
   int CheckImageParameters();
   // Called before building the GUI
@@ -153,9 +150,8 @@ private:
   ProjectionView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  ProjectionMapType           m_MapType; 
+  ProjectionMapType                     m_MapType; 
   ProjectionInterpolatorType            m_InterpType; 
-  /*   InterpPointerType      m_Interp; */
   
   // Flag to determine if there is an output
   bool                                     m_HasOutput;

@@ -68,8 +68,8 @@ ProjectionModel
   std::cout <<"MODEL::UTM :: Output ProjRef \n " <<  utmRef <<std::endl;
   
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  //   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  //   m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(utmRef);
@@ -78,36 +78,9 @@ ProjectionModel
   // Get the transform
   m_Transform->GetInverse(m_InverseTransform);
   
-  
   // Update the output image parameters
   this->UpdateOutputParameters();
-
-  //test 
-  InputImageType::PointType  point1, geoPoint1,outputPoint1,point2 , point3;
-
-  InputImageType::IndexType index;
-  index[0] = 0;//m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
-  index[1] = 0;//m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
-  // From index to Physical Point
-  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-    
-
-
-  //Dissassociate the transform
-  geoPoint1    = m_Transform->GetTransform()->GetFirstTransform()->TransformPoint(point1);
-  outputPoint1 = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint1);
-
-  //The inverse
-  InputImageType::PointType igeoPoint1    = m_InverseTransform->GetTransform()->GetFirstTransform()->TransformPoint(outputPoint1);
-  InputImageType::PointType ioutputPoint1 = m_InverseTransform->GetTransform()->GetSecondTransform()->TransformPoint(igeoPoint1);
   
-  std::cout << " UTM Dissaciated : point1  " << point1 << " cartoPoint  " <<  outputPoint1 << " iCartoPoint " <<ioutputPoint1 <<  std::endl;
-
-  
-  point2 = m_Transform->GetTransform()->TransformPoint(point1);
-  point3 =  m_InverseTransform->GetTransform()->TransformPoint(point2);
-  std::cout << " UTM hole : point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
-
   //Notify the view that the transform has changed
   m_TransformChanged = true;
   this->NotifyAll();
@@ -143,8 +116,8 @@ void ProjectionModel
 
   // Build the Generic RS transform 
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  // m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  // m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(lambertRef);
@@ -154,17 +127,6 @@ void ProjectionModel
   m_Transform->GetInverse(m_InverseTransform);
   
   this->UpdateOutputParameters();
-  //test 
-  InputImageType::PointType  point1, point2 , point3;
-  InputImageType::IndexType index;
-  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
-  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
-  // From index to Physical Point
-  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-  point2 = m_Transform->GetTransform()->TransformPoint(point1);
-  point3 =  m_InverseTransform->GetTransform()->TransformPoint(point2);
-  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
-
   
   m_TransformChanged = true;
   this->NotifyAll();
@@ -195,8 +157,8 @@ void ProjectionModel
   std::cout <<"Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
   // Build the Generic RS transform  
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
+  //   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
+  //   m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(lambertRef);
@@ -380,7 +342,7 @@ ProjectionModel
   std::cout<<"Origin: "<<m_OutputOrigin<<std::endl;
   std::cout<<"Size: "<<m_OutputSize<<std::endl;
 
-  m_Resampler->SetTransform(m_InverseTransform->GetTransform());
+  m_Resampler->SetTransform(m_InverseTransform);
   m_Resampler->SetSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
