@@ -34,10 +34,6 @@ namespace otb
 WriterViewGUI
 ::WriterViewGUI()
 {
-  // Model pointer and listener registration
-//   m_WriterModel = WriterModel::GetInstance();
-//   m_WriterModel->RegisterListener(this);
-
   // Initialisation
   m_FileNameList =  StringVectorType(4, "");
   m_ViewerNameList =  StringVectorType(4, "");
@@ -80,7 +76,6 @@ WriterViewGUI
 ::InitWidgets()
 {
   assert(m_WriterController.IsNotNull() && "The controller is not created");
-
 
 // Scroll
   gScroll->add(m_VisuView->GetScrollWidget());
@@ -184,32 +179,6 @@ WriterViewGUI
   m_FeatureExtractPreviewParentBrowser = -1;
 }
 
-/*
-void
-WriterViewGUI
-::UpdateChannelSelection()
-{
-  guiChannelSelection->clear();
-  itk::OStringStream oss;InitWidgets
-  int count = 1;
-  for (unsigned int i = 0; i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
-  {
-    oss.str("");
-    oss<<"Channel "<<i+1;
-    guiChannelSelection->add(oss.str().c_str(), count);
-    count++;
-  }
-  if(m_WriterModel->GetNumberOfChannels() > 1 )
-  {
-    guiChannelSelection->add("Intensity", count);
-  }
-  // Set all check box checked
-  guiChannelSelection->check_all();
-  guiChannelSelection->redraw();
-  this->UpdateChannels();
-}
-*/
-
 
 void
 WriterViewGUI
@@ -285,23 +254,23 @@ WriterViewGUI
 ::DownOutputChannel()
 {
   if ( guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
+  {
+    int id = guiOutputFeatureList->value();
+    // exchnage the output list manager
+    m_WriterController->ExchangeOutputListOrder(-1);
+    // exchnage the list display order
+    if(id!=guiOutputFeatureList->size())
     {
-      int id = guiOutputFeatureList->value();
-      // exchnage the output list manager
-      m_WriterController->ExchangeOutputListOrder(-1);
-      // exchnage the list display order
-      if(id!=guiOutputFeatureList->size())
-       {
-         guiOutputFeatureList->swap( id, id+1 );
-         guiOutputFeatureList->value(id+1);
-       }
-      else
-       {
-         guiOutputFeatureList->swap(id, 1 );
-         guiOutputFeatureList->value(1);
-       }
-      guiOutputFeatureList->redraw();
+      guiOutputFeatureList->swap( id, id+1 );
+      guiOutputFeatureList->value(id+1);
     }
+    else
+    {
+      guiOutputFeatureList->swap(id, 1 );
+      guiOutputFeatureList->value(1);
+    }
+    guiOutputFeatureList->redraw();
+  }
 }
 
 

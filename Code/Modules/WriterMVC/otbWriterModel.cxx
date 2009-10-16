@@ -108,8 +108,8 @@ WriterModel
 }
 
 void
-    WriterModel
-  ::GenerateLayers()
+WriterModel
+::GenerateLayers()
 {
   // Generate image layers
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
@@ -127,6 +127,8 @@ void
   // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
+
+
 void
 WriterModel
 ::SetInputImage(std::string filename)
@@ -139,7 +141,6 @@ WriterModel
 }
 
 
-
 void
 WriterModel
 ::InitInput()
@@ -149,8 +150,6 @@ WriterModel
   m_InputImageList->Clear();
   m_InputImage = InputImageType::New();
 }
-
-
 
 
 /***************************************
@@ -225,8 +224,8 @@ WriterModel
 }
 
 void
-    WriterModel
-  ::ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
+WriterModel
+::ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);
@@ -246,11 +245,11 @@ WriterModel
   int i = 0;
 
   if( !m_HasInput )
-    itkExceptionMacro("Impossible to create output image : no image image selected.")
+    itkExceptionMacro("Impossible to create output image : no image image selected.");
         if( m_OutputListOrder.size()==0 )
-        itkExceptionMacro("Impossible to create output image : no feature selected.")
+        itkExceptionMacro("Impossible to create output image : no feature selected.");
 
-        for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
+  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
   {
     i = m_OutputListOrder[ii];
     todo = true;
@@ -292,7 +291,6 @@ WriterModel
     this->NotifyAll("OutputsUpdated");
   }
 }
-
 
 
 void

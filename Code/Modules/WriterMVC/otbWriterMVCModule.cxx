@@ -120,7 +120,6 @@ void WriterMVCModule::ThreadedRun()
 }
 
 
-
 /** The Notify */
 void WriterMVCModule::Notify(const std::string & event)
 {
@@ -128,7 +127,6 @@ void WriterMVCModule::Notify(const std::string & event)
   {
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-
     // Once module is closed, it is no longer busy
     this->BusyOff();
   }
@@ -143,7 +141,6 @@ void WriterMVCModule::Notify(const std::string & event)
   }
   else
   {
-    
   }
 }
 
