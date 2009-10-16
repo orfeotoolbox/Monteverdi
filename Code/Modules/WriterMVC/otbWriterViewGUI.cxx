@@ -278,36 +278,14 @@ void
 WriterViewGUI
 ::UpdateSelectedPixel(const IndexType & id)
 {
-//   itk::OStringStream oss;
-//   oss<<"("<<id[0]<<" , "<<id[1]<<")";
-//   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
-//   guiSpectAnglePixelCoordinates->redraw();
-//
-//   m_SelectedPixel = m_WriterModel->GetInputImage()->GetPixel(id);
-//   oss.str("");
-//   oss<<"[";
-//   unsigned int i = 0;
-//   for (i=0; i<m_SelectedPixel.Size()-1; i++)
-//   {
-//     oss<<m_SelectedPixel[i]<<", ";
-//   }
-//   oss<<m_SelectedPixel[i]<<"]";
-//   guiSpectAnglePixelValue->valGetViewue(oss.str().c_str());
-//   guiSpectAnglePixelValue->redraw();
 }
-
-
-
-
 
 
 void
 WriterViewGUI
 ::Show()
 {
-  //this->InitFeatureOutputList();
   m_WriterController->CreateFeature();
-//   this->UpdateChannels();
   guiMainWindow->show();
   
   pBar->minimum(0);
@@ -318,8 +296,6 @@ void
 WriterViewGUI
 ::InitFeatureOutputList()
 {
-  //this->UpdateChannels();
-  
   std::ostringstream oss;
   std::string strBase = "channel number: ";
   for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
@@ -361,15 +337,6 @@ WriterViewGUI
   m_WriterController->AddInputChannels(ckeckedList);
 }
 
-/*
-void
-WriterViewGUI
-::AddFeature()
-{
-  m_WriterController->CreateFeature(m_PixelType);
-}
-*/
-
 
 void
 WriterViewGUI
@@ -377,8 +344,6 @@ WriterViewGUI
 {
   guiFeatureList->clear();
   guiFeatureList->redraw();
-//   guiFeatureListAction->clear();
-//   guiFeatureListAction->redraw();
   guiOutputFeatureList->clear();
   guiOutputFeatureList->redraw();
   m_InputOutputFeatureLink.clear();
@@ -397,11 +362,7 @@ void
 WriterViewGUI
 ::ClearImage()
 {
-//   guiChannelSelection->clear();
-//   guiChannelSelection->redraw();
   this->ClearFeature();
-
-//   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
   this->SetPixelType(FeatureInfo::UNKNOWN);
 
@@ -413,9 +374,7 @@ WriterViewGUI
     m_VisuView->GetFullWidget()->ClearBuffer();
     m_VisuView->GetFullWidget()->redraw();
     m_WriterModel->GetVisuModel()->ClearLayers();
-
   }
-
   if (m_ResultVisuView.IsNotNull())
   {
     m_ResultVisuView->GetFullWidget()->ClearBuffer();
@@ -424,9 +383,8 @@ WriterViewGUI
   }
 
   m_WriterController->InitInput();
- // Reset the title
- guiMainWindow->label("Feature Extraction Application");
-
+  // Reset the title
+  guiMainWindow->label("Feature Extraction Application");
 }
 
 void
@@ -434,7 +392,6 @@ WriterViewGUI
 ::Quit()
 {
   guiMainWindow->hide();
-//   MsgReporter::GetInstance()->Hide();
 }
 
 void WriterViewGUI::Browse()
@@ -448,11 +405,7 @@ void WriterViewGUI::Browse()
     otbMsgDebugMacro(<<"Empty file name!");
     return ;
   }
-  vFilePath->value(filename);
-  
-  //m_WriterController->OpenInputImage(filename);
-  
-  
+  vFilePath->value(filename);  
 }
 
 void WriterViewGUI::UpdateProgress()
@@ -494,7 +447,6 @@ void WriterViewGUI::QuitCallback(void * data)
 void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
 {
   Fl::lock();
- 
   if (withAwake)
   {
      // Reactivate window buttons
@@ -536,5 +488,3 @@ void WriterViewGUI::AwakeProgressFields (double progress)
   Fl::awake(&UpdateProgressCallback,this);
 }
 } //end namespace
-
-
