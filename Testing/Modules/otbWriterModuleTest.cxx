@@ -44,6 +44,8 @@ int otbWriterModuleTest(int argc, char* argv[])
   std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
   
   module->AddInputByKey("InputDataSet",wrapperIn);
+
+    Fl::lock();
   
   module->Start();
   Fl::check();

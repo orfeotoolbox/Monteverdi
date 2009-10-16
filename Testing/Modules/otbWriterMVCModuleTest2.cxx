@@ -47,7 +47,7 @@ int otbWriterMVCModuleTest2(int argc, char* argv[])
   
   module->Start();
 
-  Fl::run();
+  Fl::check();
 
   return EXIT_SUCCESS;
 

@@ -33,6 +33,9 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   std::cout<<"Module: "<<readerModule<<std::endl;
   
   readerModule->Start();
+
+  Fl::lock();
+
   Fl::check();
 
   // Simulate file chooser and ok callback

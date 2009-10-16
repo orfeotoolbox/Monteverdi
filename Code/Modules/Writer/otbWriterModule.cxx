@@ -102,8 +102,6 @@ void WriterModule::UpdateProgress()
 
 void WriterModule::UpdateProgressCallback(void * data)
 {
-  std::cout<<"Update progress"<<std::endl;
-
   Self::Pointer writer = static_cast<Self *>(data);
 
   if(writer.IsNotNull())
@@ -124,17 +122,16 @@ void WriterModule::ThreadedWatch()
 
   double last = 0;
   double updateThres = 0.01;
-  double current = -1;
+  double current = 0;
 
-  while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
+  while( (m_ProcessObject.IsNull() || this->IsBusy()))
     {
     if(m_ProcessObject.IsNotNull())
          {
-      current = m_ProcessObject->GetProgress();
+	 current = m_ProcessObject->GetProgress();
          if(current - last > updateThres)
            {
         // Make the main fltk loop update progress fields
-	   std::cout<<"Update progress callback"<<std::endl;
 	   Fl::awake(&UpdateProgressCallback,this);
            last = current;
            }
@@ -142,6 +139,9 @@ void WriterModule::ThreadedWatch()
        // Sleep for a while
     Sleep(500);
     }
+
+  // Update progress one last time
+  Fl::awake(&UpdateProgressCallback,this);
   
   Fl::lock();
   // Reactivate window buttons
@@ -149,9 +149,9 @@ void WriterModule::ThreadedWatch()
   bCancel->activate();
   bOk->activate();
   vFilePath->activate();
-  std::cout<<"Hide window callback"<<std::endl;
-  Fl::awake(&HideWindowCallback,this);
   Fl::unlock();
+
+  Fl::awake(&HideWindowCallback,this);
   }
 
 void WriterModule::ThreadedRun()
@@ -221,8 +221,6 @@ void WriterModule::HideWindow()
 
 void WriterModule::HideWindowCallback(void * data)
 {
-  std::cout<<"Hide window"<<std::endl;
-
   Self::Pointer writer = static_cast<Self *>(data);
 
   if(writer.IsNotNull())

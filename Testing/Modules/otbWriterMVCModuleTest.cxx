@@ -46,6 +46,8 @@ int otbWriterMVCModuleTest(int argc, char* argv[])
   module->AddInputByKey("InputDataSet",wrapperIn);
   
   module->Start();
+
+  Fl::lock();
   Fl::check();
   
   // Simulate file chooser and ok callback
@@ -53,6 +55,8 @@ int otbWriterMVCModuleTest(int argc, char* argv[])
   Fl::check();
   
   specificModule->GetView()->guiOK->do_callback();
+
+  Fl::run();
 
   return EXIT_SUCCESS;
 
