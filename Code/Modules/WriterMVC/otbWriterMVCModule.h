@@ -53,10 +53,10 @@ namespace otb
   {
     public:
       /** Standard class typedefs */
-      typedef WriterMVCModule                 Self;
-      typedef Module                        Superclass;
-      typedef itk::SmartPointer<Self>       Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+      typedef WriterMVCModule                   Self;
+      typedef Module                            Superclass;
+      typedef itk::SmartPointer<Self>           Pointer;
+      typedef itk::SmartPointer<const Self>     ConstPointer;
 
       /** New macro */
       itkNewMacro(Self);
@@ -66,8 +66,8 @@ namespace otb
 
       /** OTB typedefs */
       /// Dataset
-      typedef VectorImage<double,2>         FloatingVectorImageType;
-      typedef FloatingVectorImageType::Pointer         FPVImagePointerType;
+      typedef VectorImage<double,2>             FloatingVectorImageType;
+      typedef FloatingVectorImageType::Pointer  FPVImagePointerType;
 //       typedef VectorData<double>            VectorType;
     
       itkGetObjectMacro(View,WriterViewGUI);
@@ -93,12 +93,6 @@ namespace otb
     private:
       WriterMVCModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
-      // Callback to update the window label
-      static void UpdateProgressCallback(void * data);
-
-  // Callback to hide window
-      static void HideWindowCallback(void * data);
       
       // The view
       WriterViewGUI::Pointer        m_View;

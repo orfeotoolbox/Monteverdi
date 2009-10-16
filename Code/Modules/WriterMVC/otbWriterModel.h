@@ -47,6 +47,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "otbVectorDataFileWriter.h"
 
+#include "itkProcessObject.h"
+
 namespace otb
 {
 /** \class WriterModel
@@ -63,10 +65,10 @@ class ITK_EXPORT WriterModel
 
 public:
   /** Standard class typedefs */
-  typedef WriterModel                         Self;
-  typedef MVCModel<ListenerBase> Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef WriterModel                     Self;
+  typedef MVCModel<ListenerBase>          Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(WriterModel, MVCModel);
@@ -107,7 +109,7 @@ public:
   typedef FilterType::Pointer                                                FilterPointerType;
   typedef ObjectList<FilterType>                                             FilterListType;
   typedef FilterListType::Pointer                                            FilterListPointerType;
-  typedef std::vector<PixelType>                                           FilterTypeListType;
+  typedef std::vector<PixelType>                                             FilterTypeListType;
   typedef std::vector<std::string>                                           OutputFilterInformationType;
 
   /** Concatenation typedef */
@@ -124,24 +126,24 @@ public:
   typedef itk::ConstNeighborhoodIterator<SingleImageType> IteratorType;
 
   
-  typedef itk::RGBAPixel<unsigned char>                RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>                  ViewerImageType;
-  typedef otb::ImageLayer<InputImageType, ViewerImageType> LayerType;
-  typedef otb::ImageLayerGenerator<LayerType>         LayerGeneratorType;
-  typedef LayerGeneratorType::Pointer                 LayerGeneratorPointerType;
+  typedef itk::RGBAPixel<unsigned char>                     RGBPixelType;
+  typedef otb::Image<RGBPixelType,2>                        ViewerImageType;
+  typedef otb::ImageLayer<InputImageType, ViewerImageType>  LayerType;
+  typedef otb::ImageLayerGenerator<LayerType>               LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer                       LayerGeneratorPointerType;
 
   typedef otb::ImageLayer<SingleImageType, ViewerImageType> SingleLayerType;
-  typedef otb::ImageLayerGenerator<SingleLayerType>   SingleLayerGeneratorType;
-  typedef SingleLayerGeneratorType::Pointer           SingleLayerGeneratorPointerType;
+  typedef otb::ImageLayerGenerator<SingleLayerType>         SingleLayerGeneratorType;
+  typedef SingleLayerGeneratorType::Pointer                 SingleLayerGeneratorPointerType;
 
-  typedef otb::ImageLayerRenderingModel<ViewerImageType> VisuModelType;
-  typedef VisuModelType::Pointer                         VisuModelPointerType;
+  typedef otb::ImageLayerRenderingModel<ViewerImageType>    VisuModelType;
+  typedef VisuModelType::Pointer                            VisuModelPointerType;
 
   /** inpuyt vector data */
-  typedef VectorData<double>            VectorType;
+  typedef VectorData<double>                                VectorType;
   /// Writers
-  typedef ImageFileWriter<InputImageType>    FPVWriterType;
-  typedef VectorDataFileWriter<VectorType> VectorWriterType;
+  typedef ImageFileWriter<InputImageType>                   FPVWriterType;
+  typedef VectorDataFileWriter<VectorType>                  VectorWriterType;
   
   itkNewMacro(Self);
   
@@ -269,9 +271,6 @@ public:
   itkSetMacro(NumberOfChannels, unsigned int);
   itkGetMacro(NumberOfChannels, unsigned int);
 
-  
-  /** Need to Notify Monteverdi : output has changed */
-  itkGetMacro(HasChanged, bool);
 
   itkGetMacro(HasInput,bool);
 
@@ -282,6 +281,10 @@ public:
   
   /** Get writer */
   itkGetObjectMacro(FPVWriter,FPVWriterType);
+  
+  /** Get ProcessObject */
+  itkGetObjectMacro(ProcessObjectModel,itk::ProcessObject);
+  itkSetObjectMacro(ProcessObjectModel,itk::ProcessObject);
 //   itkGetObjectMacro(VectorWriter,VectorWriterType);
 
   /** Chain lsit */
@@ -305,11 +308,8 @@ public:
   void InitInput();
 
   /** Convert OutputImage*/
-  template<typename CastOutputPixelType> void genericImageConverter(/*const std::string & fname, const bool useScale*/);
-  /** update writers*/
-//   void UpdateWriter(const std::string & fname);
-//   void UpdateVectorWriter(const std::string & fname);
-//   void UpdateImageWriter(const std::string & fname, bool useScale);
+  template<typename CastOutputPixelType> void genericImageConverter();
+
 protected:
   /** Constructor */
   WriterModel();
@@ -375,7 +375,9 @@ private:
   FPVWriterType::Pointer m_FPVWriter;
 //   VectorWriterType::Pointer m_VectorWriter;
   
-  bool m_HasChanged;
+  
+  // Pointer to the process object
+  itk::ProcessObject::Pointer m_ProcessObjectModel;
 };
 
 }

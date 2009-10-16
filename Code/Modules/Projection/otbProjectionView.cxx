@@ -65,7 +65,7 @@ ProjectionView::ProjectionView()
   
   
   //   m_InterpType = LINEAR_;
-  //   m_MapType = UTM;
+  m_MapType = MAP_UTM;
   //   m_UTMZoneRef = 0;
   //   m_UTMHemRef = 'N';
   //   m_HasOutput = false;
@@ -94,7 +94,7 @@ ProjectionView
 ::Show()
 {
   // Notify the controller that the GUI is going to be shown
-  // Note that call is useful for transform initialization and paramters initialization
+  // Note that call is useful for transform initialization and paramters initiaization
   // Get the projection initial parameters
   
   int utmZone = atoi(guiUTMZone->value());
@@ -248,7 +248,7 @@ ProjectionView
   // Transform to geo and to Choosen projection
   geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
   
-  std::cout << std::setprecision(10) << point << " -->outputPoint " << point<< std::endl;
+  std::cout << std::setprecision(10) << "View::UpdateLatLong:: index " << index << " point " << point << " -->outputPoint " <<rsTransform->TransformPoint(point) << std::endl;
   
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -533,11 +533,11 @@ ProjectionView::InitializeAction()
   m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,middlePoint);
   
   // Transform to geo and to Choosen projection
-  outputPoint = rsTransform->TransformPoint(middlePoint);
+  //outputPoint = rsTransform->TransformPoint(middlePoint);
   geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
-  outputPoint1 = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+  outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
   
-  std::cout << std::setprecision(10) << middlePoint << " -->outputPoint " << outputPoint1<< std::endl;
+  std::cout << std::setprecision(10) << middlePoint << " -->Hole Transform outputPoint " << outputPoint << " Step By Step Transform " << outputPoint1<< std::endl;
 
   // Fill the datas in the GUI
   itk::OStringStream oss;

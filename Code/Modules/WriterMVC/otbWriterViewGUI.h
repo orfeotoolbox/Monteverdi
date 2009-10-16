@@ -53,10 +53,10 @@ class ITK_EXPORT WriterViewGUI
 {
 public:
   /** Standard class typedefs */
-  typedef WriterViewGUI          Self;
-  typedef itk::Object   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WriterViewGUI                                 Self;
+  typedef itk::Object                                   Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
@@ -66,12 +66,12 @@ public:
   // Pixel type
   typedef double PixelType;
 
-  typedef WriterModel                        WriterModelType;
-  typedef WriterModel::InputImagePixelType   ModelInputPixelType;
-  typedef WriterModelType::VisuModelType     VisuModelType;
+  typedef WriterModel                                   WriterModelType;
+  typedef WriterModel::InputImagePixelType              ModelInputPixelType;
+  typedef WriterModelType::VisuModelType                VisuModelType;
   typedef ImageView<VisuModelType>                      VisuViewType;
-  typedef WriterControllerInterface::Pointer WriterControllerInterfacePointerType;
-  typedef WriterModelType::SingleImageType   ModelSingleImageType;
+  typedef WriterControllerInterface::Pointer            WriterControllerInterfacePointerType;
+  typedef WriterModelType::SingleImageType              ModelSingleImageType;
   typedef VisuViewType::ImageType                       ImageType;
   typedef VisuViewType::Pointer                         VisuViewPointerType;
   typedef ImageType::RegionType                         RegionType;
@@ -148,7 +148,7 @@ public:
   
   virtual void InitFeatureOutputList();
   
-  virtual void DeactivateWindowButtons(bool withAwake);
+  virtual void ManageActivationWindowButtons(bool withAwake);
   
   virtual void AwakeProgressFields (double progress);
 protected:
@@ -191,27 +191,27 @@ private:
   /** Pointer to the controller */
   WriterControllerInterface::Pointer m_WriterController;
 
-  StringVectorType         m_FileNameList;
-  StringVectorType         m_ViewerNameList;
-  std::string              m_LastPath;
-  std::string              m_TemplateViewerName;
-  StringVectorType         m_DisplayedLabelList;
-  StringVectorType         m_UndisplayedLabelList;
-  std::vector<bool>        m_DisplayStatusList;
-  PixelType                m_PixelType;
+  StringVectorType          m_FileNameList;
+  StringVectorType          m_ViewerNameList;
+  std::string               m_LastPath;
+  std::string               m_TemplateViewerName;
+  StringVectorType          m_DisplayedLabelList;
+  StringVectorType          m_UndisplayedLabelList;
+  std::vector<bool>         m_DisplayStatusList;
+  PixelType                 m_PixelType;
   /** output/input feature list link. */
-  std::vector<int> m_InputOutputFeatureLink;
-  int m_FeatureExtractPreviewParentBrowser;
+  std::vector<int>          m_InputOutputFeatureLink;
+  int                       m_FeatureExtractPreviewParentBrowser;
   /** Value of the selected Pixel*/
-  ModelInputPixelType m_SelectedPixel;
+  ModelInputPixelType       m_SelectedPixel;
   /** Store a list avor all parameter selection group*/
-  std::vector<Fl_Group*> m_ParameterGroupList;
+  std::vector<Fl_Group*>    m_ParameterGroupList;
 
-  VisuViewPointerType                 m_VisuView;
-  VisuViewPointerType                 m_ResultVisuView;
+  VisuViewPointerType       m_VisuView;
+  VisuViewPointerType       m_ResultVisuView;
   
   /** progress tmp*/
-  double m_Progress;
+  double                    m_Progress;
 };
 }//end namespace otb
 

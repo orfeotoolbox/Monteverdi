@@ -69,7 +69,7 @@ Orthorectification::Orthorectification()
   m_TileNumber = 0;
   m_MaxTileSize = 256.;
   guiShowDEM->hide();
-  
+
   m_HasOutput = false;
 
   //Instanciate Filter
@@ -91,7 +91,7 @@ Orthorectification
   try
   {
     this->SelectAction();
-  
+
     // test if the good parameters are available
     int resCheckImageParameters = this->CheckImageParameters();
     if (resCheckImageParameters == 1)
@@ -575,7 +575,7 @@ Orthorectification
   oss.str("");
   oss<<YfSpacing;
   guiSpacingY->value(oss.str().c_str());
- 
+
   oss.str("");
   oss<<sizeX;
   guiSizeX->value(oss.str().c_str());
@@ -631,10 +631,10 @@ Orthorectification::CheckImageParameters()
     return 1;
   }
 
-  m_OutputSize[0] = atoi(guiSizeX->value());
-  m_OutputSize[1] = atoi(guiSizeY->value());
-  m_OutputSpacing[0] = atof(guiSpacingX->value());
-  m_OutputSpacing[1] = atof(guiSpacingY->value());
+  m_OutputSize[0] = strtol(guiSizeX->value(), NULL, 10);
+  m_OutputSize[1] = strtol(guiSizeY->value(), NULL, 10);
+  m_OutputSpacing[0] = strtod(guiSpacingX->value(), NULL);
+  m_OutputSpacing[1] = strtod(guiSpacingY->value(), NULL);
 
   ForwardSensorInputPointType longLatPoint;
   longLatPoint[0] = strtod(guiLongSelection->value(), NULL);
@@ -886,7 +886,7 @@ Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
   orthoRectifFilter->SetOutputOrigin(origin);
   orthoRectifFilter->SetMapProjection(mapProj);
   orthoRectifFilter->SetInterpolator(m_Interp);
-  
+
   // Set DEM or elvation average value.
   if (guiUseAverageElevation->value()==1 && guiUseDEM->value()==0 )
   {
@@ -911,7 +911,7 @@ Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
 
   m_Output = perBandFilter->GetOutput();
   m_PerBandFilter = perBandFilter.GetPointer();
-  
+
   return 0;
 }
 

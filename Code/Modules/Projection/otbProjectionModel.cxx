@@ -56,12 +56,17 @@ ProjectionModel
   // Suppose that the transformation choosen is UTM : 31 , North:
   OGRSpatialReference oSRS;
   oSRS.SetProjCS("UTM");
+  oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetUTM(zone,north);
   
   char * utmRef = NULL;
   oSRS.exportToWkt(&utmRef);
 
   // Build the Generic RS transform 
+
+  std::cout <<"MODEL::UTM :: Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
+  std::cout <<"MODEL::UTM :: Output ProjRef \n " <<  utmRef <<std::endl;
+  
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
   m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
@@ -78,17 +83,30 @@ ProjectionModel
   this->UpdateOutputParameters();
 
   //test 
-  InputImageType::PointType  point1, point2 , point3;
+  InputImageType::PointType  point1, geoPoint1,outputPoint1,point2 , point3;
 
   InputImageType::IndexType index;
-  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
-  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+  index[0] = 0;//m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+  index[1] = 0;//m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
   // From index to Physical Point
   m_InputImage->TransformIndexToPhysicalPoint(index,point1);
     
-  point2 = m_Transform->TransformPoint(point1);
-  point3 =  m_InverseTransform->TransformPoint(point2);
-  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
+
+
+  //Dissassociate the transform
+  geoPoint1    = m_Transform->GetTransform()->GetFirstTransform()->TransformPoint(point1);
+  outputPoint1 = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint1);
+
+  //The inverse
+  InputImageType::PointType igeoPoint1    = m_InverseTransform->GetTransform()->GetFirstTransform()->TransformPoint(outputPoint1);
+  InputImageType::PointType ioutputPoint1 = m_InverseTransform->GetTransform()->GetSecondTransform()->TransformPoint(igeoPoint1);
+  
+  std::cout << " UTM Dissaciated : point1  " << point1 << " cartoPoint  " <<  outputPoint1 << " iCartoPoint " <<ioutputPoint1 <<  std::endl;
+
+  
+  point2 = m_Transform->GetTransform()->TransformPoint(point1);
+  point3 =  m_InverseTransform->GetTransform()->TransformPoint(point2);
+  std::cout << " UTM hole : point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   //Notify the view that the transform has changed
   m_TransformChanged = true;
@@ -115,11 +133,13 @@ void ProjectionModel
   // Build the Output Projection Ref
   OGRSpatialReference oSRS;
   oSRS.SetProjCS("Lambert II ");
-  //oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetLCC(stdParallel1,stdParallel2,originLat,originLong,falseEasting,falseNorthing);
   
   char * lambertRef = NULL;
   oSRS.exportToWkt(&lambertRef);
+  std::cout <<"MODEL::LAMBERT:: Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
+  std::cout <<"MODEL::LAMBERT :: Output ProjRef \n " <<  lambertRef <<std::endl;
 
   // Build the Generic RS transform 
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
@@ -141,8 +161,8 @@ void ProjectionModel
   index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
   // From index to Physical Point
   m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-  point2 = m_Transform->TransformPoint(point1);
-  point3 =  m_InverseTransform->TransformPoint(point2);
+  point2 = m_Transform->GetTransform()->TransformPoint(point1);
+  point3 =  m_InverseTransform->GetTransform()->TransformPoint(point2);
   std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   
@@ -172,7 +192,7 @@ void ProjectionModel
   
   char * lambertRef = NULL;
   oSRS.exportToWkt(&lambertRef);
-
+  std::cout <<"Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
   // Build the Generic RS transform  
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
@@ -192,8 +212,8 @@ void ProjectionModel
   index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
   // From index to Physical Point
   m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-  point2 = m_Transform->TransformPoint(point1);
-  point3 = m_InverseTransform->TransformPoint(point2);
+  point2 = m_Transform->GetTransform()->TransformPoint(point1);
+  point3 = m_InverseTransform->GetTransform()->TransformPoint(point2);
   std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   this->UpdateOutputParameters();
@@ -239,7 +259,7 @@ void ProjectionModel
     {
       OutputPointType physicalPoint;
       m_InputImage->TransformIndexToPhysicalPoint(vindex[i],physicalPoint);
-      voutput.push_back(m_Transform->TransformPoint(physicalPoint));
+      voutput.push_back(m_Transform->GetTransform()->TransformPoint(physicalPoint));
     }
 
   // Compute the boundaries
@@ -282,7 +302,7 @@ void ProjectionModel
   // X 
   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
   double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
-
+  
   m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
   m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
   
@@ -292,6 +312,27 @@ void ProjectionModel
 
   m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
   m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
+
+//   // PointType   : Compute Spacing with the new method 
+//   PointType pSpacing,pOutputSpacing,pOrigin,pOutputOrigin;
+//   pSpacing[0] = m_InputImage->GetSpacing()[0];
+//   pSpacing[1] = m_InputImage->GetSpacing()[1];
+  
+//   pOrigin = m_InputImage->GetOrigin();
+//   pOutputOrigin = m_Transform->TransformPoint(pOrigin);
+  
+  
+//   pOutputSpacing = m_Transform->TransformPoint(pSpacing);
+//   std::cout << "Image Spacing " << pSpacing << " Target Spacing " << pOutputSpacing - pOutputOrigin << std::endl;
+  
+//   double sizeOutputX = vcl_floor(std::abs(sizeXcarto/pOutputSpacing[0]));
+//   double sizeOutputY = vcl_floor(std::abs(sizeYcarto/pOutputSpacing[1]));
+  
+//   std::cout << "size Output " << sizeOutputX <<"," <<sizeOutputY<< std::endl;
+  
+ 
+
+
 }
 
 /**
@@ -339,7 +380,7 @@ ProjectionModel
   std::cout<<"Origin: "<<m_OutputOrigin<<std::endl;
   std::cout<<"Size: "<<m_OutputSize<<std::endl;
 
-  m_Resampler->SetTransform(m_InverseTransform);
+  m_Resampler->SetTransform(m_InverseTransform->GetTransform());
   m_Resampler->SetSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
