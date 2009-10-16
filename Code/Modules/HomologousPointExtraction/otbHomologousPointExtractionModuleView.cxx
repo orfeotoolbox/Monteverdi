@@ -52,6 +52,8 @@ HomologousPointExtractionModuleView
 HomologousPointExtractionModuleView
 ::~HomologousPointExtractionModuleView()
 {
+  MsgReporter::GetInstance()->Hide();
+  wMainWindow->hide();
 }
 
 void

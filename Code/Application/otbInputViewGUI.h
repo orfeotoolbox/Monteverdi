@@ -85,15 +85,16 @@ public:
   void Show();
   void BuildInputInterface();
 
+  /** Callbacks */
+  virtual void Ok();
+  virtual void Cancel();
+
 protected:
   /** Constructor */
   InputViewGUI();
   /** Destructor */
   virtual ~InputViewGUI();
 
-  /** Callbacks */
-  virtual void Ok();
-  virtual void Cancel();
 
   /** This is the watching process for the whole set of inputs */
   virtual void RunProcess1(void *v);

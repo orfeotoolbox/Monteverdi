@@ -23,6 +23,7 @@ MeanShiftModuleView::~MeanShiftModuleView()
   // Remove registered visualization components from the interface
   gImageViewer->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
+  this->Exit();
 }
 
 void MeanShiftModuleView::SetModel(MeanShiftModuleModel* model)

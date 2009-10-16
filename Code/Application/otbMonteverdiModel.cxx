@@ -40,6 +40,12 @@ MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_I
 
 MonteverdiModel::~MonteverdiModel()
 {
+  this->Close();
+}
+
+void
+MonteverdiModel::Close()
+{
   m_ModuleDescriptorMap.clear();
   m_ModuleMap.clear();
   m_InstancesCountMap.clear();

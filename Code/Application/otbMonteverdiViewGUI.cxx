@@ -26,6 +26,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
+#include "otbMsgReporter.h"
+
 #include "itkExceptionObject.h"
 #include "flu_pixmaps.h"
 
@@ -64,6 +66,7 @@ MonteverdiViewGUI
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
 {
+  this->Quit();
   delete m_HelpTextBuffer;
 }
 
@@ -405,6 +408,13 @@ MonteverdiViewGUI
   gTreeGroup->hide();
   wHelpWindow->hide();
   wMainWindow->hide();
+  m_MonteverdiModel->Close();
+  if(m_InputViewGUI.IsNotNull())
+  {
+    m_InputViewGUI->Cancel();
+  }
+  MsgReporter::GetInstance()->Hide();
+
 }
 
 void

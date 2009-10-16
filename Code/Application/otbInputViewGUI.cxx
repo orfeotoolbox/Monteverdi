@@ -43,6 +43,7 @@ InputViewGUI
 {
   m_Alive = false;
   wInputWindow->hide();
+  m_InputViewComponentMap.clear();
 }
 
 void

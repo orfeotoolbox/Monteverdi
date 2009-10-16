@@ -35,7 +35,9 @@ ExtractROIModule::ExtractROIModule()
 
 /** Destructor */
 ExtractROIModule::~ExtractROIModule()
-{}
+{
+    this->Cancel();
+}
 
 /** PrintSelf method */
 void ExtractROIModule::PrintSelf(std::ostream& os, itk::Indent indent) const

@@ -150,6 +150,7 @@ class ITK_EXPORT MonteverdiModel
   {
     return m_ModuleMap;
   }
+  virtual void Close();
 
 protected:
 
