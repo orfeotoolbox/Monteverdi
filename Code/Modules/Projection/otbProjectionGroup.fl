@@ -30,8 +30,8 @@ class ProjectionGroup {open
         xywh {5 14 419 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open
-          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label Coordinates open selected
+          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
             label {Geographical Coordinates}
@@ -95,7 +95,7 @@ this->UpdateLongLat();}
                 callback {guiUTMNorth->value(1);
 guiUTMSouth->value(0);
 //UpdateLongLat();
-this->UpdateUTMTransform();}
+//this->UpdateUTMTransform();}
                 xywh {186 360 18 25} down_box ROUND_DOWN_BOX value 1 align 132
               }
               Fl_Round_Button iUTMSouth {
@@ -338,7 +338,7 @@ this->UpdateTMTransform();}
         }
         Fl_Group {} {
           label Settings open
-          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
             label {Interpolator Parameters} open
@@ -394,7 +394,7 @@ this->UpdateTMTransform();}
                 xywh {174 239 160 25}
               }
             }
-            Fl_Group guiSplines {open selected
+            Fl_Group guiSplines {open
               xywh {50 171 347 116} hide
             } {
               Fl_Counter guiSplineOrder {

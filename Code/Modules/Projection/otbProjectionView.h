@@ -102,6 +102,9 @@ public:
 
 protected:
 
+  // 
+  virtual void RetrieveInputProjection();
+
   // Quit the application
   virtual void Quit();
   

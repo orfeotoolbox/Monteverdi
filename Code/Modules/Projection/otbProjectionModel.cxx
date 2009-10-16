@@ -217,9 +217,7 @@ void ProjectionModel
     {
       OutputPointType physicalPoint;
       m_InputImage->TransformIndexToPhysicalPoint(vindex[i],physicalPoint);
-      OutputPointType mappedPoint = m_Transform->TransformPoint(physicalPoint);
-      std::cout<<"Corner: "<<vindex[i]<<" "<<physicalPoint<<" mapped to "<<mappedPoint<<std::endl;
-      voutput.push_back(mappedPoint);
+      voutput.push_back(m_Transform->TransformPoint(physicalPoint));
     }
 
   // Compute the boundaries
@@ -258,9 +256,6 @@ void ProjectionModel
   double sizeXcarto =  maxX-minX;
   // - because of the difference of origin for Y (image vs. carto)
   double sizeYcarto =  -(maxY-minY);
-
-  std::cout<<"minx= "<<minX<<", miny= "<<minY<<", maxx= "<<maxX<<", maxY= "<<maxY<<std::endl;
-  std::cout<<"CartoX= "<<sizeXcarto<<", cartoY= "<<sizeYcarto<<std::endl;
   
   // X 
   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );

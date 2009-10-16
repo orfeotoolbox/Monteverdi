@@ -43,6 +43,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMsgReporter.h"
 
 #include "itkContinuousIndex.h"
+#include <ogr_spatialref.h>
+
 
 
 
@@ -61,14 +63,12 @@ ProjectionView::ProjectionView()
   guiTRANSMERCATOREast->value("0");
   guiTRANSMERCATORNorth->value("0");
   guiTRANSMERCATORScale->value("1");
-  
-  // m_InterpType = LINEAR_;
+  m_InterpType = MAP_LINEAR_;
   m_MapType = MAP_UTM;
-  // m_HasOutput = false;
 }
 
 /**
- * Handle the notification of the model
+ * Handle the notifications of the model
  */
 void
 ProjectionView::Notify()
@@ -83,6 +83,102 @@ ProjectionView::Notify()
 }
 
 /**
+ * Guess what is the Projection of the Origin if any
+ */
+void
+ProjectionView
+::RetrieveInputProjection()
+{
+  // The discriminative parameter to distinguish UTM and TransverseMercator
+  double scale_factor = 0.;
+  
+  // Get the projection Ref from the input Image
+  std::string  inputProjRef = m_Controller->GetModel()->GetInputImage()->GetProjectionRef();
+  
+  
+  // If the Projection is not empty : Map Projection
+  // Else perhaps a model sensor
+  if(!inputProjRef.empty())
+  {
+    // From std::string to char* : Needed for the importFromWkt(char** projRef)
+    char * inputProjchar = new char[inputProjRef.length() +1 ];
+    strcpy(inputProjchar,inputProjRef.c_str());
+    
+    // Import OGRSpatial Reference object from projectionRef
+    OGRSpatialReference oSRS;
+    oSRS.importFromWkt(&inputProjchar);
+    
+    // Get the value of the node PROJECTION
+    const char * inputMap = oSRS.GetAttrValue("PROJECTION");
+    
+    // Test the different combination we want
+    if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
+      {
+	// Fill the GUI With the  LAMBERT 2 parameters
+	std::cout <<" PROJECTION  FOUND  IS LAMBERT 2 " << std::endl;
+	iMapSelection->value(1);   
+	iLambert2->show();
+	iUTM->hide();
+	iTRANSMERCATOR->hide();
+      }
+    else if(strcmp(inputMap,"Transverse_Mercator") == 0)
+      {
+	// Get all the nodes of the Projection Ref Tree 
+	// and search for a child named : "scale_factor"
+	OGR_SRSNode*   node = oSRS.GetAttrNode("PROJCS");
+    
+	int nbChild  = node->GetChildCount();
+	for( int i = 0; i<nbChild ; i ++)
+	  {
+	    
+	    OGR_SRSNode*  curChild = node->GetChild(i);
+	    int res      = curChild->FindChild("scale_factor");
+	    if(res == 0)
+	      {
+		// scale_factor parameter found
+		scale_factor = strtod(curChild->GetChild(1)->GetValue(),NULL);
+		break;
+	      }
+	  }
+	
+	if(scale_factor == 0.9996 /** Value Specific to UTM */)
+	  {
+	    	    
+	    iMapSelection->value(0);   
+	    iUTM->show();
+	    iLambert2->hide();
+	    iTRANSMERCATOR->hide();
+	    
+	    // Get the number of the zone
+	    int zone = oSRS.GetUTMZone();
+	    
+	    itk::OStringStream oss;
+	    oss<<zone;
+	    // Fill the UTM Parameters in the GUI
+	    iUTMZone->value(oss.str().c_str());
+	    iUTMNorth->value(0);
+	    iUTMSouth->value(1);
+	  }
+	else
+	  {
+	    //Fill the TransverseMercator Parameters
+	    iMapSelection->value(2);
+	    iUTM->hide();
+	    iLambert2->hide();
+	    iTRANSMERCATOR->show();
+
+	  }
+      }
+  }
+  else
+    {
+      // SensorModel ????
+      ;
+    }
+}
+
+
+/**
  *
  */
 void
@@ -93,6 +189,8 @@ ProjectionView
   // Note that call is useful for transform initialization and paramters initiaization
   // Get the projection initial parameters
   
+  this->RetrieveInputProjection();
+
   int utmZone = atoi(guiUTMZone->value());
   bool north = guiUTMNorth->value();
   m_Controller->UpdateUTMTransform(utmZone,north);
