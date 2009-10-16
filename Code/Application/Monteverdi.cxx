@@ -62,6 +62,7 @@
 #include "otbHomologousPointExtractionModule.h"
 #include "otbExtractROIModule.h"
 #include "otbConcatenateModule.h"
+#include "otbProjectionModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -92,13 +93,14 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ReaderModule>("Reader","File/Open dataset");
   model->RegisterModule<otb::WriterModule> ("Writer","File/Save dataset");
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI","File/Extract ROI from dataset");
-  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Save X image");
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image","File/Save dataset (advanced)");
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","SAR/Despeckle image");
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity","SAR/Compute intensity and log-intensity");
 
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
+  model->RegisterModule<otb::ProjectionModule>("Projection","Geometry/Reproject image");
   model->RegisterModule<otb::HomologousPointExtractionModule>("HPEModule", "Geometry/Homologous points extraction");
 
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");

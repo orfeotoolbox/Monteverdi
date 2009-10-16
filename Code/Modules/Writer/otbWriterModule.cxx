@@ -54,6 +54,7 @@ void WriterModule::Run()
   pBar->minimum(0);
   pBar->maximum(1);
   wFileChooserWindow->show();
+  pBar->copy_label("0%");
 }
 
 void WriterModule::SaveDataSet()
@@ -101,6 +102,8 @@ void WriterModule::UpdateProgress()
 
 void WriterModule::UpdateProgressCallback(void * data)
 {
+  std::cout<<"Update progress"<<std::endl;
+
   Self::Pointer writer = static_cast<Self *>(data);
 
   if(writer.IsNotNull())
@@ -131,7 +134,8 @@ void WriterModule::ThreadedWatch()
          if(current - last > updateThres)
            {
         // Make the main fltk loop update progress fields
-        Fl::awake(&UpdateProgressCallback,this);
+	   std::cout<<"Update progress callback"<<std::endl;
+	   Fl::awake(&UpdateProgressCallback,this);
            last = current;
            }
          }
@@ -145,6 +149,7 @@ void WriterModule::ThreadedWatch()
   bCancel->activate();
   bOk->activate();
   vFilePath->activate();
+  std::cout<<"Hide window callback"<<std::endl;
   Fl::awake(&HideWindowCallback,this);
   Fl::unlock();
   }
@@ -216,6 +221,8 @@ void WriterModule::HideWindow()
 
 void WriterModule::HideWindowCallback(void * data)
 {
+  std::cout<<"Hide window"<<std::endl;
+
   Self::Pointer writer = static_cast<Self *>(data);
 
   if(writer.IsNotNull())

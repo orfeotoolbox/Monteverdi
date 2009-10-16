@@ -45,6 +45,8 @@ WriterViewGUI
 
   this->CreateGUI();
 
+  pBar->copy_label("0%");
+  
   m_SelectedPixel.SetSize(0);
   m_SelectedPixel.Fill(0);
   m_FeatureExtractPreviewParentBrowser = -1;

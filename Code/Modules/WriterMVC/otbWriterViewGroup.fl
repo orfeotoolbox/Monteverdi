@@ -24,7 +24,7 @@ class WriterViewGroup {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 7 selection_color 48 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
-          label Action open
+          label Action open selected
           xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_File_Input vFilePath {
@@ -80,8 +80,8 @@ class WriterViewGroup {open
             }
           }
           Fl_Check_Button guiScale {
-            label {Use Scale} selected
-            xywh {165 430 70 20} down_box DOWN_BOX labelfont 1 labelcolor 186
+            label {Use Scaling}
+            xywh {165 430 110 20} down_box DOWN_BOX labelfont 1 labelcolor 186
           }
         }
         Fl_Group guiOutput {
@@ -147,7 +147,7 @@ class WriterViewGroup {open
         } {}
       }
       Fl_Progress pBar {
-        xywh {5 570 660 25} box PLASTIC_DOWN_BOX selection_color 1
+        xywh {5 570 655 25} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
   }

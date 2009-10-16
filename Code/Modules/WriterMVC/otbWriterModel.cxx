@@ -351,8 +351,6 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       rescaler->SetInput(m_iL2VI->GetOutput());
       writer->SetInput(rescaler->GetOutput());
 
-      otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
-
       writer->Update();
     }
     else
@@ -360,8 +358,6 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToCastVectorImageFilterType;
       typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
       i2CastVI->SetInput( m_imageList );
-      
-      otb::StandardFilterWatcher watcher(writer,"Conversion");
       
       writer->SetInput(i2CastVI->GetOutput());
       writer->Update();
