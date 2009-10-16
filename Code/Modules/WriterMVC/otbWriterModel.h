@@ -271,9 +271,6 @@ public:
   itkSetMacro(NumberOfChannels, unsigned int);
   itkGetMacro(NumberOfChannels, unsigned int);
 
-  
-  /** Need to Notify Monteverdi : output has changed */
-  itkGetMacro(HasChanged, bool);
 
   itkGetMacro(HasInput,bool);
 
@@ -311,11 +308,8 @@ public:
   void InitInput();
 
   /** Convert OutputImage*/
-  template<typename CastOutputPixelType> void genericImageConverter(/*const std::string & fname, const bool useScale*/);
-  /** update writers*/
-//   void UpdateWriter(const std::string & fname);
-//   void UpdateVectorWriter(const std::string & fname);
-//   void UpdateImageWriter(const std::string & fname, bool useScale);
+  template<typename CastOutputPixelType> void genericImageConverter();
+
 protected:
   /** Constructor */
   WriterModel();
@@ -381,7 +375,6 @@ private:
   FPVWriterType::Pointer m_FPVWriter;
 //   VectorWriterType::Pointer m_VectorWriter;
   
-  bool m_HasChanged;
   
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObjectModel;

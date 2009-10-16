@@ -42,10 +42,8 @@ WriterMVCModule::WriterMVCModule()
   m_Controller->SetView(m_View);
    
   // Describe inputs
-  //this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
-//   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
-  
+
   m_Model->RegisterListener(this);
 }
 
@@ -104,14 +102,8 @@ void WriterMVCModule::ThreadedWatch()
     }
     // Sleep for a while
     Sleep(500);
-    std::cout << "while " << "m_ProcessObject->GetProgress() " << m_ProcessObject->GetProgress() <<std::endl;
-    std::cout << "while " << "this->IsBusy() " << this->IsBusy() <<std::endl;
-    std::cout << "while " << "m_ProcessObject.IsNull() " << m_ProcessObject.IsNull() <<std::endl;
     m_ProcessObject = m_Model->GetProcessObjectModel();
   }
-  std::cout << "we QUIT " << "m_ProcessObject->GetProgress() " << m_ProcessObject->GetProgress() <<std::endl;
-  std::cout << "we QUIT " << "this->IsBusy() " << this->IsBusy() <<std::endl;
-  std::cout << "we QUIT " << "m_ProcessObject.IsNull() " << m_ProcessObject.IsNull() <<std::endl;
   
   // Reactivate window buttons
   m_View->ManageActivationWindowButtons(true);

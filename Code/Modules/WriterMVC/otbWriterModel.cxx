@@ -61,8 +61,6 @@ WriterModel::WriterModel()
   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
   
-  m_HasChanged = false;
-  
   m_ProcessObjectModel = m_FPVWriter;
 }
 
@@ -241,7 +239,7 @@ void
 
 void
 WriterModel
-::GenerateOutputImage(/*const std::string & fname, const unsigned int pType, const bool useScale*/)
+::GenerateOutputImage()
 {
   bool todo = false;
   int outputNb = 0;
@@ -266,32 +264,31 @@ WriterModel
     switch ( this->GetPType() )
     {
       case 0:
-        genericImageConverter<unsigned char>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<unsigned char>(  );
         break;
       case 1:
-        genericImageConverter<short int>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<short int>(  );
         break;
       case 2:
-        genericImageConverter<int>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<int>(  );
         break;
       case 3:
-        genericImageConverter<float>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<float>(  );
         break;
       case 4:
-        genericImageConverter<double>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<double>(  );
         break;
       case 5:
-        genericImageConverter<unsigned short int>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<unsigned short int>(  );
         break;
       case 6:
-        genericImageConverter<unsigned int>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<unsigned int>(  );
         break;
       default:
-        genericImageConverter<unsigned char>( /*this->GetOutputFileName(), this->GetUseScale()*/ );
+        genericImageConverter<unsigned char>(  );
         break;
     }
-//     this->UpdateWriter(fname);
-    m_HasChanged = true;
+    
     this->NotifyAll("OutputsUpdated");
   }
 }
@@ -320,44 +317,10 @@ WriterModel
   m_ResultVisuModel->Update();
 }
 
-// void WriterModel
-//   ::UpdateWriter(const std::string & fname)
-// {
-//   typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
-//   OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
-//   
-//   if ( test->CanWriteFile(fname.c_str()) )
-//   {
-//     this->UpdateVectorWriter(fname);
-//   }
-//   else
-//   {
-//     //TODO refactoring to write vectordata
-//     return;
-//   }
-// }
-// void WriterModel
-//   ::UpdateVectorWriter(const std::string & fname)
-// {
-//   m_VectorWriter->SetFileName(fname);
-//   //Need tio set input //TODO
-//   m_VectorWriter->Update();
-// }
-
-
 
 template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
-//   typedef OGRVectorDataIO<VectorType> OGRVectorDataIOType;
-//   OGRVectorDataIOType::Pointer test=OGRVectorDataIOType::New() ;
-//   
-//   if ( test->CanWriteFile(fname.c_str()) )
-//   {
-//     this->UpdateVectorWriter(fname);
-//   }
-//   else
-//   {
     typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
     typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
     
