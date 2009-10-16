@@ -1,0 +1,62 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class SuperimpositionModuleGUI {open selected
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wFileChooserWindow {
+      label {Open dataset} open
+      xywh {443 191 365 195} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_File_Input vDEMPath {
+        xywh {20 35 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 1
+      }
+      Fl_Return_Button bOk {
+        label Ok
+        callback {this->Ok();}
+        xywh {217 153 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {27 153 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bBrowse {
+        label {...}
+        callback {this->Browse();}
+        xywh {301 44 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Round_Button choiceDEM {
+        label {Use DEM}
+        callback {vDEMPath->activate();
+bBrowse->activate();
+vAverageElevation->deactivate();}
+        xywh {21 13 90 15} down_box ROUND_DOWN_BOX
+      }
+      Fl_Round_Button choiceElevation {
+        label {Use average elevation}
+        xywh {21 83 170 20} down_box ROUND_DOWN_BOX value 1
+      }
+      Fl_Value_Input vAverageElevation {
+        label {Elevation value    }
+        callback {vDEMPath->deactivate();
+bBrowse->deactivate();
+vAverageElevation->activate();}
+        xywh {142 111 153 24}
+      }
+    }
+  }
+  Function {Ok()} {open protected return_type {virtual void}
+  } {}
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+  Function {~SuperimpositionModuleGUI()} {open return_type virtual
+  } {}
+  Function {Browse()} {open protected return_type {virtual void}
+  } {}
+} 

@@ -63,6 +63,7 @@
 #include "otbExtractROIModule.h"
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
+#include "otbSuperimpositionModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -101,7 +102,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
   model->RegisterModule<otb::ProjectionModule>("Projection","Geometry/Reproject image");
-  model->RegisterModule<otb::HomologousPointExtractionModule>("HPEModule", "Geometry/Homologous points extraction");
+  model->RegisterModule<otb::SuperimpositionModule>("Superimposition","Geometry/Superimpose two images");
+  model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", "Geometry/Homologous points extraction");
 
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift","Filtering/Mean shift clustering");
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening","Filtering/Pan-sharpen an image");
