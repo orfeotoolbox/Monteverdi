@@ -68,8 +68,6 @@ ProjectionModel
   std::cout <<"MODEL::UTM :: Output ProjRef \n " <<  utmRef <<std::endl;
   
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  //   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  //   m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(utmRef);
@@ -116,8 +114,6 @@ void ProjectionModel
 
   // Build the Generic RS transform 
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  // m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  // m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(lambertRef);
@@ -157,8 +153,6 @@ void ProjectionModel
   std::cout <<"Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
   // Build the Generic RS transform  
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
-  //   m_Transform->SetInputSpacing(m_InputImage->GetSpacing());
-  //   m_Transform->SetInputOrigin(m_InputImage->GetOrigin());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
   m_Transform->SetOutputProjectionRef(lambertRef);
@@ -174,8 +168,8 @@ void ProjectionModel
   index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
   // From index to Physical Point
   m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-  point2 = m_Transform->GetTransform()->TransformPoint(point1);
-  point3 = m_InverseTransform->GetTransform()->TransformPoint(point2);
+  point2 = m_Transform->TransformPoint(point1);
+  point3 = m_InverseTransform->TransformPoint(point2);
   std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   this->UpdateOutputParameters();
@@ -204,13 +198,15 @@ void ProjectionModel
   size = m_InputImage->GetLargestPossibleRegion().GetSize();
   
   // project the 4 corners
-  index1.Fill(0);
-  index2[0] = size[0]-1;
-  index2[1] = 0;
-  index3[0] = size[0]-1;
-  index3[1] = size[1]-1;
-  index4[0] = 0;
-  index4[1] = size[1]-1;
+  index1 = m_InputImage->GetLargestPossibleRegion().GetIndex();
+  index2 = m_InputImage->GetLargestPossibleRegion().GetIndex();
+  index3 = m_InputImage->GetLargestPossibleRegion().GetIndex();
+  index4 = m_InputImage->GetLargestPossibleRegion().GetIndex();
+
+  index2[0]+= size[0]-1;
+  index3[0]+= size[0]-1;
+  index3[1]+= size[1]-1;
+  index4[1]+= size[1]-1;
   
   vindex.push_back(index1);
   vindex.push_back(index2);
@@ -221,7 +217,9 @@ void ProjectionModel
     {
       OutputPointType physicalPoint;
       m_InputImage->TransformIndexToPhysicalPoint(vindex[i],physicalPoint);
-      voutput.push_back(m_Transform->GetTransform()->TransformPoint(physicalPoint));
+      OutputPointType mappedPoint = m_Transform->TransformPoint(physicalPoint);
+      std::cout<<"Corner: "<<vindex[i]<<" "<<physicalPoint<<" mapped to "<<mappedPoint<<std::endl;
+      voutput.push_back(mappedPoint);
     }
 
   // Compute the boundaries
@@ -260,6 +258,9 @@ void ProjectionModel
   double sizeXcarto =  maxX-minX;
   // - because of the difference of origin for Y (image vs. carto)
   double sizeYcarto =  -(maxY-minY);
+
+  std::cout<<"minx= "<<minX<<", miny= "<<minY<<", maxx= "<<maxX<<", maxY= "<<maxY<<std::endl;
+  std::cout<<"CartoX= "<<sizeXcarto<<", cartoY= "<<sizeYcarto<<std::endl;
   
   // X 
   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
@@ -349,6 +350,14 @@ ProjectionModel
   m_PerBander->SetInput(m_InputImage);
   m_PerBander->SetFilter(m_Resampler);
   m_Output = m_PerBander->GetOutput();
+  
+  m_Output->UpdateOutputInformation();
+
+  // Report projection ref (not done by the resample filter)
+  itk::MetaDataDictionary & dict = m_Output->GetMetaDataDictionary();
+  std::string projectionRef = m_Transform->GetOutputProjectionRef();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+
   m_OutputChanged = true;
   this->NotifyAll();
 }

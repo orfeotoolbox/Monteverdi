@@ -57,8 +57,9 @@ void ProjectionModule::Run()
   
   if(inputImage.IsNotNull())
     {
-      m_Model->SetInputImage(inputImage);
-      m_View->Show();
+    inputImage->UpdateOutputInformation();
+    m_Model->SetInputImage(inputImage);
+    m_View->Show();
     }
   else
     {
