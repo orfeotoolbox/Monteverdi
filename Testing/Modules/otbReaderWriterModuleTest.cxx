@@ -41,7 +41,7 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   specificReaderModule->vName->value("test");
   specificReaderModule->bOk->do_callback();
 
-  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test (Whole dataset)");
+  otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 
@@ -49,16 +49,12 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   writerModule->AddInputByKey("InputDataSet",wrapperOut);
   writerModule->Start();
   Fl::check();
-  specificWriterModule->vFilePath->value(argv[2]);
+  specificWriterModule->vFilePath->value(argv[2]);  
+  Fl::check();
   specificWriterModule->bOk->do_callback();
 
-  // Wait for the writer to complete 
-  while (specificWriterModule->IsBusy())
-    {
-    Fl::check();
-    OpenThreads::Thread::microSleep(500);
-    }
-  
+  Fl::run();
+
   return EXIT_SUCCESS;
 }
 

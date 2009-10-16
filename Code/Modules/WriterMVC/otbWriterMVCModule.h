@@ -25,8 +25,8 @@
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
+// #include "otbVectorData.h"
+// #include "otbVectorDataFileWriter.h"
 
 #include "otbImage.h"
 #include "otbImageList.h"
@@ -37,7 +37,9 @@
 #include "otbWriterModel.h"
 #include "otbWriterViewGUI.h"
 
-#include "otbListenerBase.h"
+// #include "otbListenerBase.h"
+#include "otbEventsListener.h"
+
 namespace otb
 {
 /** \class WriterMVCModule
@@ -47,7 +49,7 @@ namespace otb
  */
 
   class ITK_EXPORT WriterMVCModule
-  : public Module, public ListenerBase
+  : public Module, public EventsListener<std::string>
   {
     public:
       /** Standard class typedefs */
@@ -66,7 +68,7 @@ namespace otb
       /// Dataset
       typedef VectorImage<double,2>         FloatingVectorImageType;
       typedef FloatingVectorImageType::Pointer         FPVImagePointerType;
-      typedef VectorData<double>            VectorType;
+//       typedef VectorData<double>            VectorType;
     
       itkGetObjectMacro(View,WriterViewGUI);
     protected:
@@ -77,27 +79,36 @@ namespace otb
       /** PrintSelf method */
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
-//       virtual void ThreadedRun();
-//       virtual void ThreadedWatch();
+      virtual void ThreadedRun();
+      virtual void ThreadedWatch();
       
       // Update the progress bar
-//       void UpdateProgress();
+      void UpdateProgress();
       
       /** The custom run command */
       virtual void Run();
       
       /** Notify Monteverdi application that Writer has a result */
-      void Notify();
+      void Notify(const std::string & event);
     private:
       WriterMVCModule(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
+      
+      // Callback to update the window label
+      static void UpdateProgressCallback(void * data);
 
+  // Callback to hide window
+      static void HideWindowCallback(void * data);
+      
       // The view
       WriterViewGUI::Pointer        m_View;
       // The controller
       WriterController::Pointer  m_Controller;
       // The model
       WriterModel::Pointer       m_Model;
+      
+       // Pointer to the process object
+      itk::ProcessObject::Pointer m_ProcessObject;
   };
 
 

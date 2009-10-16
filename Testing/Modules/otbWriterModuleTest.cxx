@@ -50,14 +50,12 @@ int otbWriterModuleTest(int argc, char* argv[])
   
   // Simulate file chooser and ok callback
   specificModule->vFilePath->value(argv[2]);
+  Fl::check();
   specificModule->bOk->do_callback();
+  Fl::check();
 
   // Wait for the writer to complete 
-  while(specificModule->IsBusy())
-    {
-    Fl::check();
-    OpenThreads::Thread::microSleep(500);
-    }
+  Fl::run();
 
   return EXIT_SUCCESS;
 
