@@ -27,16 +27,19 @@
 #include "otbImage.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
+#include "itkContinuousIndex.h"
 
 //Vis
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
+
 // Estimation
 #include "itkEuclideanDistancePointMetric.h"
 #include "itkLevenbergMarquardtOptimizer.h"
 #include "itkPointSet.h"
 #include "itkPointSetToPointSetRegistrationMethod.h"
+
 // Transformation
 #include "otbTransformEnumType.h"
 #include "itkTransformBase.h"
@@ -74,10 +77,12 @@ public:
   typedef VectorImageType::SizeType           SizeType;
   typedef VectorImageType::PointType          ImagePointType;
   typedef std::vector<VectorImagePointerType> ImageListType;    
+  typedef itk::ContinuousIndex<>              ContinuousIndexType;
 
-  typedef std::pair<IndexType, IndexType> IndexCoupleType;
-  typedef std::vector<IndexCoupleType>    IndexesListType;
-  typedef std::vector<IndexType>          IndexListType;
+  typedef std::pair<IndexType, IndexType>  IndexCoupleType;
+  typedef std::vector<IndexCoupleType>     IndexesListType;
+  typedef std::vector<IndexType>           IndexListType;
+  typedef std::vector<ContinuousIndexType> ContinuousIndexListType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -104,11 +109,11 @@ public:
   typedef std::vector<OutPointType> OutPointListType;
 
   /** Transformation type */
-  typedef itk::Transform<double, 2>            TransformType;
-  typedef TransformType::ParametersType        ParametersType;
-  typedef itk::AffineTransform<double, 2>      AffineTransformType;
-  typedef itk::TranslationTransform<double, 2> TranslationTransformType;
-  typedef itk::Similarity2DTransform<double> Similarity2DTransformType;
+  typedef itk::Transform<double, 2>                    TransformType;
+  typedef TransformType::ParametersType                ParametersType;
+  typedef itk::AffineTransform<double, 2>              AffineTransformType;
+  typedef itk::TranslationTransform<double, 2>         TranslationTransformType;
+  typedef itk::Similarity2DTransform<double>           Similarity2DTransformType;
   typedef itk::LevenbergMarquardtOptimizer::ScalesType ScalesType;
 
   /** Output */
@@ -153,14 +158,14 @@ public:
 
 
   /** Compute the transform on one point */
-  IndexType TransformPoint( TransformEnumType transformType, IndexType id );
+  ContinuousIndexType TransformPoint( TransformEnumType transformType, IndexType id );
   /** Compute the transform of a list of index */
-  template <typename T> IndexType GenericTransformPoint(IndexType index);
+  template <typename T> ContinuousIndexType GenericTransformPoint(IndexType index);
 
   /** Compute the transform the points of m_IndexList */
-  IndexListType TransformPoints( TransformEnumType transformType );
+  ContinuousIndexListType TransformPoints( TransformEnumType transformType );
   /** Compute the transform of a list of index */
-  template <typename T> IndexListType GenericTransformPoints(IndexListType inList);
+  template <typename T> ContinuousIndexListType GenericTransformPoints(IndexListType inList);
 
   /** Update Output */
   void OK();

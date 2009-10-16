@@ -81,7 +81,6 @@ PointSetRegister<TTransform>
 
  invTransform->GetInverse( m_Transform );
 
- std::cout << "Solution = " << m_Transform->GetParameters() << std::endl;
  m_TransformParameters = m_Transform->GetParameters();
 }
 

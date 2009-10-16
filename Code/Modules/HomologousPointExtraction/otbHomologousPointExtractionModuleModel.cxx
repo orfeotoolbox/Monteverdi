@@ -23,6 +23,7 @@
 #include "itkLandmarkBasedTransformInitializer.h"
 #include "otbImageFileWriter.h"
 
+
 namespace otb
 {
 /** Initialize the singleton */
@@ -301,11 +302,11 @@ HomologousPointExtractionModuleModel
 */
 }
 
-HomologousPointExtractionModuleModel::IndexType
+HomologousPointExtractionModuleModel::ContinuousIndexType
 HomologousPointExtractionModuleModel
 :: TransformPoint( TransformEnumType transformType, IndexType id )
 {
-  IndexType out;
+  ContinuousIndexType out;
   switch (transformType)
     {
     case otb::TRANSLATION:
@@ -332,32 +333,32 @@ HomologousPointExtractionModuleModel
 }
 
 template<typename T>
-HomologousPointExtractionModuleModel::IndexType
+HomologousPointExtractionModuleModel::ContinuousIndexType
 HomologousPointExtractionModuleModel
 ::GenericTransformPoint( IndexType index )
 {
   typename T::Pointer transform = T::New();
   transform->SetParameters( m_TransformParameters);
  
-  OutPointListType            out;
+  //OutPointListType            out;
   typename T::InputPointType  inPoint; 
   typename T::OutputPointType outPoint;
-  IndexType                   idOut;
+  ContinuousIndexType         idOut;
   
   m_FirstInputImage->TransformIndexToPhysicalPoint(index,inPoint);
   outPoint = transform->TransformPoint(inPoint);
-  m_SecondInputImage->TransformPhysicalPointToIndex(outPoint,idOut);
+  m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
   
   return idOut;
 }
 
 
-HomologousPointExtractionModuleModel::IndexListType 
+HomologousPointExtractionModuleModel::ContinuousIndexListType 
 HomologousPointExtractionModuleModel
 ::TransformPoints( TransformEnumType transformType )
 {
   IndexListType inList;
-  IndexListType outList;
+  ContinuousIndexListType outList;
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
       inList.push_back(m_IndexesList[i].first);
@@ -390,23 +391,23 @@ HomologousPointExtractionModuleModel
 
 
 template<typename T>
-HomologousPointExtractionModuleModel::IndexListType 
+HomologousPointExtractionModuleModel::ContinuousIndexListType 
 HomologousPointExtractionModuleModel
 ::GenericTransformPoints( IndexListType inList )
 {
   typename T::Pointer transform = T::New();
   transform->SetParameters( m_TransformParameters);
  
-  IndexListType               outList;
+  ContinuousIndexListType     outList;
   typename T::InputPointType  inPoint; 
   typename T::OutputPointType outPoint;
-  IndexType                   idOut;
+  ContinuousIndexType         idOut;
 
   for(unsigned int i=0; i<inList.size(); i++)
     {
     m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
     outPoint = transform->TransformPoint(inPoint);
-    m_SecondInputImage->TransformPhysicalPointToIndex(outPoint,idOut);
+    m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
     outList.push_back(idOut);
     }
 

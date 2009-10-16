@@ -304,7 +304,7 @@ HomologousPointExtractionModuleController
    
   std::vector<double> values;
   
-  ModelType::IndexListType    outTranformedPoint = m_Model->TransformPoints(m_TransformType);
+  ModelType::ContinuousIndexListType    outTranformedPoint = m_Model->TransformPoints(m_TransformType);
   IndexesListType  indexesList        = m_Model->GetIndexesList();
   IndexType idFix, idOut;
 
@@ -316,8 +316,9 @@ HomologousPointExtractionModuleController
       oss.str("");
       oss<<idFix<<" -> ";
       values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
-			+  vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
-      oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);
+			 + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
+  
+     oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);
       m_View->tError->add( oss.str().c_str() );
     }
 
@@ -351,10 +352,11 @@ HomologousPointExtractionModuleController
       return;
     }
   
+  ContinuousIndexType contOutPoint;
   IndexType outPoint;
   try
     {
-      outPoint = m_Model->TransformPoint(m_TransformType, id);
+      contOutPoint = m_Model->TransformPoint(m_TransformType, id);
     }
   catch (itk::ExceptionObject & err)
     {
@@ -363,6 +365,9 @@ HomologousPointExtractionModuleController
     }
 
   // Update view
+  outPoint[0] = static_cast<long>(vcl_floor(contOutPoint[0]+0.5));
+  outPoint[1] = static_cast<long>(vcl_floor(contOutPoint[1]+0.5));
+
   m_View->ChangePointValue(outPoint,1);
   m_SecondChangeRegionHandler->GetModel()->SetExtractRegionCenter(outPoint);
   m_SecondChangeRegionHandler->GetModel()->Update();

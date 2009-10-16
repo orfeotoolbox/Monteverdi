@@ -124,6 +124,7 @@ public:
   typedef ModelType::TransformType       TransformType;
   typedef ModelType::OutPointListType    OutPointListType;
   typedef ModelType::OutPointType        OutPointType;
+  typedef ModelType::ContinuousIndexType ContinuousIndexType;
 
   typedef TransformType::OutputPointType OutputTransformPointType;
   typedef TransformType::InputPointType InputTransformPointType;
