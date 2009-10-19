@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -17,8 +17,8 @@ class WriterModuleGUI {open
         xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
-        label Ok
-        callback {this->SaveDataSet();}
+        label Save
+        callback {this->SaveDataSet();} selected
         xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
@@ -42,6 +42,6 @@ class WriterModuleGUI {open
   } {}
   Function {Cancel()} {open return_type {virtual void}
   } {}
-  Function {~WriterModuleGUI()} {open selected return_type virtual
+  Function {~WriterModuleGUI()} {open return_type virtual
   } {}
 } 

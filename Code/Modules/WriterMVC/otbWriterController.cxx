@@ -229,5 +229,11 @@ WriterController
   }
 }
 
+void
+WriterController
+::Quit()
+{
+  m_Model->Quit();
+}
 } // end namespace otb
 

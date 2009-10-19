@@ -89,7 +89,6 @@ void WriterMVCModule::ThreadedWatch()
 
   while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
   {
-    
     if(m_ProcessObject.IsNotNull())
     {
       current = m_ProcessObject->GetProgress();
@@ -130,7 +129,7 @@ void WriterMVCModule::Notify(const std::string & event)
     // Once module is closed, it is no longer busy
     this->BusyOff();
   }
-  else if (event == "BusyOff")
+  else if (event == "BusyOff" ||  event == "Quit")
   {
     this->BusyOff();
   }
@@ -139,7 +138,7 @@ void WriterMVCModule::Notify(const std::string & event)
     this->StartProcess2();
     this->StartProcess1();
   }
-  else
+  else 
   {
   }
 }

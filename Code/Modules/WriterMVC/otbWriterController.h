@@ -125,7 +125,7 @@ public:
   virtual void AddToOutputListOrder(int id);
   virtual void RemoveFromOutputListOrder(int id);
   virtual void ExchangeOutputListOrder( int direction );
-
+  virtual void Quit();
 protected:
   /** Constructor */
   WriterController();

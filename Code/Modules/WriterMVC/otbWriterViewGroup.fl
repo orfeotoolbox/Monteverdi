@@ -18,26 +18,26 @@ class WriterViewGroup {open
     Fl_Window guiMainWindow {
       label {Writer Application}
       callback {Quit();} open
-      xywh {523 27 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {523 27 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 7 selection_color 48 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group guiAction {
-          label Action open selected
-          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
+          label Action open
+          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_File_Input vFilePath {
-            xywh {165 327 300 40} box PLASTIC_DOWN_BOX
+            xywh {165 350 300 40} box PLASTIC_DOWN_BOX
           }
           Fl_Button bBrowse {
             label {...}
             callback {this->Browse();}
-            xywh {475 337 80 30} box PLASTIC_DOWN_BOX color 7
+            xywh {475 360 80 30} box PLASTIC_DOWN_BOX color 7
           }
           Fl_Choice guiOutputPixelTypeChoice {
             label {Output Pixel Type:} open
-            xywh {300 385 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
+            xywh {300 430 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
           } {
             MenuItem guiInitMenu {
               callback {SetPixelType(otb::DOUBLE);}
@@ -81,12 +81,12 @@ class WriterViewGroup {open
           }
           Fl_Check_Button guiScale {
             label {Use Scaling}
-            xywh {165 430 110 20} down_box DOWN_BOX labelfont 1 labelcolor 186
+            xywh {165 495 110 20} down_box DOWN_BOX labelfont 1 labelcolor 186
           }
         }
         Fl_Group guiOutput {
-          label Output open
-          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
+          label Output open selected
+          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Browser guiFeatureList {
             label {Feature Image List}
