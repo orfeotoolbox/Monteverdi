@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class SuperimpositionModuleGUI {open selected
+class SuperimpositionModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
@@ -31,23 +31,29 @@ class SuperimpositionModuleGUI {open selected
         callback {this->Browse();}
         xywh {301 44 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Round_Button choiceDEM {
-        label {Use DEM}
-        callback {vDEMPath->activate();
+      Fl_Value_Input vAverageElevation {
+        label {Elevation value    } selected
+        xywh {142 111 153 24}
+      }
+      Fl_Group {} {open
+        xywh {10 5 345 140}
+      } {
+        Fl_Round_Button choiceDEM {
+          label {Use DEM}
+          callback {choiceElevation->clear();
+vDEMPath->activate();
 bBrowse->activate();
 vAverageElevation->deactivate();}
-        xywh {21 13 90 15} down_box ROUND_DOWN_BOX
-      }
-      Fl_Round_Button choiceElevation {
-        label {Use average elevation}
-        xywh {21 83 170 20} down_box ROUND_DOWN_BOX value 1
-      }
-      Fl_Value_Input vAverageElevation {
-        label {Elevation value    }
-        callback {vDEMPath->deactivate();
+          xywh {26 18 90 15} down_box ROUND_DOWN_BOX
+        }
+        Fl_Round_Button choiceElevation {
+          label {Use average elevation}
+          callback {choiceDEM->clear();
+vDEMPath->deactivate();
 bBrowse->deactivate();
 vAverageElevation->activate();}
-        xywh {142 111 153 24}
+          xywh {26 88 170 20} down_box ROUND_DOWN_BOX value 1
+        }
       }
     }
   }

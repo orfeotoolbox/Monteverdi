@@ -34,8 +34,10 @@ SuperimpositionModule::SuperimpositionModule()
 
   // Describe inputs
   this->AddInputDescriptor<VectorImageType>("ReferenceImage","Reference image for reprojection.");
+  this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
   this->AddInputDescriptor<VectorImageType>("InputImage","Image to reproject.");
-  
+  this->AddTypeToInputDescriptor<ImageType>("InputImage");
+
   this->BuildGUI();
 }
 
@@ -59,29 +61,64 @@ void SuperimpositionModule::Run()
   wFileChooserWindow->show();
 }
 
-
-
 void SuperimpositionModule::Ok()
 {
-  VectorImageType::Pointer fixed = this->GetInputData<VectorImageType>("ReferenceImage");
-  VectorImageType::Pointer moving = this->GetInputData<VectorImageType>("InputImage");
-  
-  if(fixed.IsNull() || moving.IsNull())
+  VectorImageType::Pointer vfixed = this->GetInputData<VectorImageType>("ReferenceImage");
+  VectorImageType::Pointer vmoving = this->GetInputData<VectorImageType>("InputImage");
+
+  ImageType::Pointer fixed = this->GetInputData<ImageType>("ReferenceImage");
+  ImageType::Pointer moving = this->GetInputData<ImageType>("InputImage");
+
+  bool needsElevation = false;
+
+  // Handle reference image
+  if(fixed.IsNotNull())
     {
-    itkExceptionMacro(<<"One of the input filter is null");
+    fixed->UpdateOutputInformation();
+    m_Transform->SetInputProjectionRef(fixed->GetProjectionRef());
+    m_Transform->SetInputDictionary(fixed->GetMetaDataDictionary());
+    m_Transform->SetInputKeywordList(fixed->GetImageKeywordlist());
+    m_Resampler->SetSize(fixed->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputStartIndex(fixed->GetLargestPossibleRegion().GetIndex());
+    m_Resampler->SetOutputSpacing(fixed->GetSpacing());
+    m_Resampler->SetOutputOrigin(fixed->GetOrigin());
+    }
+  else if(vfixed.IsNotNull())
+    {
+    vfixed->UpdateOutputInformation();
+    m_Transform->SetInputProjectionRef(vfixed->GetProjectionRef());
+    m_Transform->SetInputDictionary(vfixed->GetMetaDataDictionary());
+    m_Transform->SetInputKeywordList(vfixed->GetImageKeywordlist());
+    m_Resampler->SetSize(vfixed->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputStartIndex(vfixed->GetLargestPossibleRegion().GetIndex());
+    m_Resampler->SetOutputSpacing(vfixed->GetSpacing());
+    m_Resampler->SetOutputOrigin(vfixed->GetOrigin());
+    }
+  else
+    {
+    itkExceptionMacro(<<"Fixed input is null");
     }
 
-  // Update input information
-  fixed->UpdateOutputInformation();
-  moving->UpdateOutputInformation();
+  // Handle moving inputs
+  if(moving.IsNotNull())
+    {
+    moving->UpdateOutputInformation();
+    m_Transform->SetOutputProjectionRef(moving->GetProjectionRef());
+    m_Transform->SetOutputDictionary(moving->GetMetaDataDictionary());
+    m_Transform->SetOutputKeywordList(moving->GetImageKeywordlist());
+    }
+  else if(vmoving.IsNotNull())
+    { 
+    vmoving->UpdateOutputInformation();
+    m_Transform->SetOutputProjectionRef(vmoving->GetProjectionRef());
+    m_Transform->SetOutputDictionary(vmoving->GetMetaDataDictionary());
+    m_Transform->SetOutputKeywordList(vmoving->GetImageKeywordlist());
+    }
+  else
+    {
+    itkExceptionMacro(<<"Moving input is null");
+    }
 
-  // Build the transform
-  m_Transform->SetInputProjectionRef(fixed->GetProjectionRef());
-  m_Transform->SetInputDictionary(fixed->GetMetaDataDictionary());
-  m_Transform->SetInputKeywordList(fixed->GetImageKeywordlist());
-  m_Transform->SetOutputProjectionRef(moving->GetProjectionRef());
-  m_Transform->SetOutputDictionary(moving->GetMetaDataDictionary());
-  m_Transform->SetOutputKeywordList(moving->GetImageKeywordlist());
 
   if(choiceDEM->value() == 1)
     {
@@ -94,28 +131,59 @@ void SuperimpositionModule::Ok()
 
   m_Transform->InstanciateTransform();
 
+
   // Copy parameters from reference image
   m_Resampler->SetTransform(m_Transform);
-  m_Resampler->SetSize(fixed->GetLargestPossibleRegion().GetSize());
-  m_Resampler->SetOutputStartIndex(fixed->GetLargestPossibleRegion().GetIndex());
-  m_Resampler->SetOutputSpacing(fixed->GetSpacing());
-  m_Resampler->SetOutputOrigin(fixed->GetOrigin());
 
-  m_PerBanderFilter->SetInput(moving);
-  m_PerBanderFilter->SetFilter(m_Resampler);
-
-  VectorImageType::Pointer output = m_PerBanderFilter->GetOutput();
+  // Do we have to resample a vector image ?
+  if(vmoving.IsNotNull())
+    {
+    m_PerBanderFilter->SetInput(vmoving);
+    m_PerBanderFilter->SetFilter(m_Resampler);
+    VectorImageType::Pointer output = m_PerBanderFilter->GetOutput();
+    output->UpdateOutputInformation();
   
-  output->UpdateOutputInformation();
+    // Report projection ref (not done by the resample filter)
+    if(fixed.IsNotNull())
+      {
+      output->CopyInformation(fixed);
+      }
+    else if(vfixed.IsNotNull())
+      {
+      output->CopyInformation(vfixed);
+      }
+
+    output->SetNumberOfComponentsPerPixel(vmoving->GetNumberOfComponentsPerPixel());
+      
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(output,"Reprojected image","Image superimposable to reference");
+    this->NotifyOutputsChange();
+    }
+  // Else produce only a single image
+  else if(moving.IsNotNull())
+    {
+    m_Resampler->SetInput(moving);
+    ImageType::Pointer output = m_Resampler->GetOutput();
+    output->UpdateOutputInformation();
   
-  // Report projection ref (not done by the resample filter)
-  output->CopyInformation(fixed);
+    // Report projection ref (not done by the resample filter)
+    if(fixed.IsNotNull())
+      {
+      output->CopyInformation(fixed);
+      }
+    else if(vfixed.IsNotNull())
+      {
+      output->CopyInformation(vfixed);
+      }
 
-  this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(output,"Reprojected image","Image superimposable to reference");
-  this->NotifyOutputsChange();
+    output->SetNumberOfComponentsPerPixel(moving->GetNumberOfComponentsPerPixel());
 
-  wFileChooserWindow->hide();
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(output,"Reprojected image","Image superimposable to reference");
+    this->NotifyOutputsChange();
+    }
+    
+    wFileChooserWindow->hide();
 }
 
 void SuperimpositionModule::Browse()

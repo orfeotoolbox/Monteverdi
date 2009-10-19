@@ -78,6 +78,8 @@ protected:
   virtual void Browse();
   virtual void Cancel();
 
+  void SetupFilters();
+
 private:
   SuperimpositionModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
