@@ -38,7 +38,6 @@ WriterController
 {}
 
 
-
 void
 WriterController
 ::OpenInputImage(const char * filename)
@@ -229,5 +228,10 @@ WriterController
   }
 }
 
+void
+WriterController
+::Quit()
+{
+  m_Model->Quit();
+}
 } // end namespace otb
-

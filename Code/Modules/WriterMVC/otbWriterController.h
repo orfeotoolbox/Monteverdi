@@ -33,12 +33,12 @@ class ITK_EXPORT WriterController
 {
 public:
   /** Standard class typedefs */
-  typedef WriterController          Self;
-  typedef WriterControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef WriterController                  Self;
+  typedef WriterControllerInterface         Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-  typedef WriterViewGUI          ViewType;
+  typedef WriterViewGUI                     ViewType;
   typedef ViewType::Pointer                 ViewPointerType;
   typedef Superclass::InputImageType        InputImageType;
   typedef Superclass::InputImagePointerType InputImagePointerType;
@@ -46,8 +46,8 @@ public:
   typedef ModelType::SizeType               SizeType;
   typedef ModelType::OffsetType             OffsetType;
 
-  typedef ModelType::VisuModelType         VisuModelType;
-  typedef ViewType::VisuViewType           VisuViewType;
+  typedef ModelType::VisuModelType          VisuModelType;
+  typedef ViewType::VisuViewType            VisuViewType;
   typedef WidgetResizingActionHandler<VisuModelType,VisuViewType>      ResizingHandlerType;
   typedef ResizingHandlerType::Pointer                                 ResizingHandlerPointerType;
   typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType> ChangeExtractRegionHandlerType;
@@ -125,7 +125,7 @@ public:
   virtual void AddToOutputListOrder(int id);
   virtual void RemoveFromOutputListOrder(int id);
   virtual void ExchangeOutputListOrder( int direction );
-
+  virtual void Quit();
 protected:
   /** Constructor */
   WriterController();
@@ -142,11 +142,6 @@ private:
 /** NewVisu */
   VisuControllerPointerType m_VisuController;
   VisuControllerPointerType m_ResultVisuController;
-
-
-
-
 };
 } //end namespace otb
-
 #endif

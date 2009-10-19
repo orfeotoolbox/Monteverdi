@@ -246,7 +246,7 @@ WriterModel
 
   if( !m_HasInput )
     itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if( m_OutputListOrder.size()==0 )
+  if( m_OutputListOrder.size() ==0 )
     itkExceptionMacro("Impossible to create output image : no feature selected.");
 
   for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
@@ -351,6 +351,8 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       rescaler->SetInput(m_iL2VI->GetOutput());
       writer->SetInput(rescaler->GetOutput());
 
+      otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
+
       writer->Update();
     }
     else
@@ -359,11 +361,18 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
       i2CastVI->SetInput( m_imageList );
       
+      otb::StandardFilterWatcher watcher(writer,"Conversion");
+      
       writer->SetInput(i2CastVI->GetOutput());
       writer->Update();
     }
 //   }
 }
 
+void
+WriterModel
+::Quit()
+{
+  this->NotifyAll("Quit");
+}
 } //end namespace otb
-

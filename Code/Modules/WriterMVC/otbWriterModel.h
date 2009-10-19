@@ -309,7 +309,8 @@ public:
 
   /** Convert OutputImage*/
   template<typename CastOutputPixelType> void genericImageConverter();
-
+  
+  void Quit();
 protected:
   /** Constructor */
   WriterModel();
