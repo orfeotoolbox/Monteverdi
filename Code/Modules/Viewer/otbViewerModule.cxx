@@ -872,7 +872,7 @@ void ViewerModule::UpdateAmplitudeChannelOrder(int realChoice, int imChoice)
   // Apply the new rendering function to the Image layer
   modulusFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(modulusFunction);
-  //modulusFunction->Initialize();
+  modulusFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -891,7 +891,7 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
   // Apply the new rendering function to the Image layer
   phaseFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(phaseFunction);
-  //phaseFunction->Initialize();
+  phaseFunction->Initialize();
   m_RenderingModel->Update();
 }
 
