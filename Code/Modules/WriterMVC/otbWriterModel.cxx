@@ -246,7 +246,7 @@ WriterModel
 
   if( !m_HasInput )
     itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if( m_OutputListOrder.size()==0 )
+  if( m_OutputListOrder.size() ==0 )
     itkExceptionMacro("Impossible to create output image : no feature selected.");
 
   for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
@@ -375,6 +375,4 @@ WriterModel
 {
   this->NotifyAll("Quit");
 }
-
 } //end namespace otb
-

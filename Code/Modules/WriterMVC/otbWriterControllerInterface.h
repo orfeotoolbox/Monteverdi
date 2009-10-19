@@ -29,20 +29,20 @@ class ITK_EXPORT  WriterControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef WriterControllerInterface Self;
-  typedef itk::ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef WriterControllerInterface             Self;
+  typedef itk::ProcessObject                    Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
-  typedef WriterModel               ModelType;
-  typedef ModelType::InputImageType            InputImageType;
-  typedef ModelType::InputImagePointerType     InputImagePointerType;
-  typedef ModelType::IndexType                 IndexType;
-  typedef ModelType::SizeType                  SizeType;
+  typedef WriterModel                           ModelType;
+  typedef ModelType::InputImageType             InputImageType;
+  typedef ModelType::InputImagePointerType      InputImagePointerType;
+  typedef ModelType::IndexType                  IndexType;
+  typedef ModelType::SizeType                   SizeType;
 
 /** NewVisu */
-  typedef ImageWidgetController                VisuControllerType;
-  typedef VisuControllerType::Pointer          VisuControllerPointerType;
+  typedef ImageWidgetController                 VisuControllerType;
+  typedef VisuControllerType::Pointer           VisuControllerPointerType;
 
 
   /** Standard type macros */

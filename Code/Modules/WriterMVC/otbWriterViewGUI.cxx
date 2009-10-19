@@ -204,10 +204,9 @@ WriterViewGUI
 ::AddOutputChannel()
 {
   unsigned int listValue = guiFeatureList->value();
-  if ( guiFeatureList->size()!=0 && listValue != 0 )
+  if ( ( guiFeatureList->size() != 0 ) && ( listValue != 0 ) )
   {
     m_InputOutputFeatureLink.push_back(listValue-1);
-//     m_WriterController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
     guiOutputFeatureList->add(guiFeatureList->text(listValue));
     m_WriterController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
     guiOutputFeatureList->redraw();
@@ -219,7 +218,7 @@ WriterViewGUI
 ::RemoveOutputChannel()
 {
   unsigned int listValue = guiOutputFeatureList->value();
-  if (guiOutputFeatureList->size()!=0 && listValue!=0)
+  if ( ( guiOutputFeatureList->size() != 0 ) && ( listValue != 0 ) )
   {
     m_WriterController->RemoveFromOutputListOrder(listValue);
     m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin()+listValue-1);
@@ -233,7 +232,7 @@ WriterViewGUI
 ::UpOutputChannel()
 {
   int id = guiOutputFeatureList->value();
-  if ( guiOutputFeatureList->size() != 0 && id != 0 )
+  if ( ( guiOutputFeatureList->size() != 0 ) && ( id != 0 ) )
     {
       
       // exchnage the output list manager
@@ -256,9 +255,9 @@ void
 WriterViewGUI
 ::DownOutputChannel()
 {
-  if ( guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
+  int id = guiOutputFeatureList->value();
+  if ( ( guiOutputFeatureList->size() != 0 ) && ( id !=0 ) )
   {
-    int id = guiOutputFeatureList->value();
     // exchnage the output list manager
     m_WriterController->ExchangeOutputListOrder(-1);
     // exchnage the list display order
