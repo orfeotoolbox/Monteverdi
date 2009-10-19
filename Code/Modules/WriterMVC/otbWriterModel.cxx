@@ -215,7 +215,9 @@ void
 WriterModel
 ::AddFeature()
 {
-  for (unsigned int i=0;i<m_NumberOfChannels;++i)
+//   for (unsigned int i=0;i<m_NumberOfChannels;++i)
+  //test manu
+  for (unsigned int i=0;i<m_NumberOfChannels+1;++i)
   {
     m_OutputIndexMap.push_back(0);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
@@ -246,7 +248,7 @@ WriterModel
 
   if( !m_HasInput )
     itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if( m_OutputListOrder.size() ==0 )
+  if( m_OutputListOrder.size() == 0 )
     itkExceptionMacro("Impossible to create output image : no feature selected.");
 
   for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)

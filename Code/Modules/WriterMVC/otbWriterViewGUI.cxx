@@ -300,7 +300,9 @@ WriterViewGUI
 {
   std::ostringstream oss;
   std::string strBase = "channel number: ";
-  for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
+//   for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
+//   test manu
+      for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel()+1;++i)
   {
     std::ostringstream oss;
     oss << i+1;
@@ -331,8 +333,11 @@ WriterViewGUI
 {
   // Gets the used channels
   unsigned int nbBand = m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
-  std::vector<unsigned int> ckeckedList(nbBand, 0);
-  for (unsigned int i=0;i<nbBand;++i)
+//   std::vector<unsigned int> ckeckedList(nbBand, 0);
+//   for (unsigned int i=0;i<nbBand;++i)
+  //test manu
+  std::vector<unsigned int> ckeckedList(nbBand+1, 0);
+  for (unsigned int i=0;i<nbBand+1;++i)
   {
     ckeckedList[i] = i+1;
   }
