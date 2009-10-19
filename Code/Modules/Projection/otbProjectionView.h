@@ -43,6 +43,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbProjectionControllerInterface.h"
 #include "otbProjectionModel.h"
 
+
+
 // Remote Sensing Transformation
 #include "otbGenericRSTransform.h"
 
@@ -83,8 +85,6 @@ public:
   typedef ModelType::IndexType                        IndexType; 
   typedef ModelType::SingleImageType                  SingleImageType;
   
-  // Check the size, spacing, long and lat parameters.
-  int CheckImageParameters();
   // Called before building the GUI
   virtual void InitializeAction();
   // Call when clic an image list
@@ -119,14 +119,14 @@ protected:
   void SetInterpolatorType(ProjectionInterpolatorType interp);
   ProjectionInterpolatorType GetInterpolatorType();
 
-  // Check the map parameters.
-  virtual int CheckMapParameters();
   // Change east/north when change Long/Lat values
   virtual void UpdateMapParam();
   // Update parameter for output image
   virtual void UpdateOutputParameters();
-  // Upadate longitude and latitude values
+  // Update longitude and latitude values
   virtual void UpdateLongLat();
+  // Update longitude and latitude values : In case of unknown input map
+  virtual void UpdateUnavailableLongLat();
   // Take care that the ortho ref and image ref are different (lower left vs upper left)
   //ForwardSensorInputPointType ChangeOrigin(ForwardSensorInputPointType point);
   // Update interpolator
@@ -139,8 +139,19 @@ protected:
   // 
   virtual void UpdateTMTransform();
 
+  virtual void UpdateInputUTMTransform();
+  //
+  virtual void UpdateInputLambertIITransform();
+  // 
+  virtual void UpdateInputTMTransform();
+  //
+  virtual void UpToDateTransform();
+
   /** Model Notificatin catcher*/
   virtual void Notify();
+
+  // Find parameter value in the projection Ref tree
+  virtual bool FindParameter(OGRSpatialReference oSRS, const char * inParam, double * paramValue);
   
   /** Constructor */
   ProjectionView();
@@ -157,7 +168,10 @@ private:
   ProjectionInterpolatorType            m_InterpType; 
   
   // Flag to determine if there is an output
-  bool                                     m_HasOutput;
+  bool                                  m_HasOutput;
+
+  // Flag to determine if the input Projection Map is unknowm
+  bool                                  m_InputProjectionUnknown; 
 
   // Controller instance
   ProjectionControllerInterface::Pointer   m_Controller;
