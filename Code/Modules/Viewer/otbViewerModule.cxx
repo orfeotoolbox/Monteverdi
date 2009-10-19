@@ -872,7 +872,7 @@ void ViewerModule::UpdateAmplitudeChannelOrder(int realChoice, int imChoice)
   // Apply the new rendering function to the Image layer
   modulusFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(modulusFunction);
-  modulusFunction->Initialize();
+  //modulusFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -891,7 +891,7 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
   // Apply the new rendering function to the Image layer
   phaseFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(phaseFunction);
-  phaseFunction->Initialize();
+  //phaseFunction->Initialize();
   m_RenderingModel->Update();
 }
 
@@ -906,9 +906,9 @@ void ViewerModule::UpdateTabHistogram()
  int  blank  = 2;
  
   // Clear the widget 
-  m_BlueCurveWidgetGroup->ClearAllCurves();
-  m_GreenCurveWidgetGroup->ClearAllCurves();
-  m_RedCurveWidgetGroup->ClearAllCurves();
+ m_BlueCurveWidgetGroup->ClearAllCurves();
+ m_GreenCurveWidgetGroup->ClearAllCurves();
+ m_RedCurveWidgetGroup->ClearAllCurves();
   
   /// Update the StandardRenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
@@ -921,7 +921,7 @@ void ViewerModule::UpdateTabHistogram()
   m_RedHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
   
   /// BLUE band : draw the BLUE band histogram and the asymptote
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=3)
+  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() >=3)
     {
       HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
       bhistogram->SetHistogramColor(m_Blue);
@@ -951,7 +951,7 @@ void ViewerModule::UpdateTabHistogram()
       m_BlueHistogramHandler->SetChannel(2);
     }
   /// GREEN band : draw the GREEN band histogram and the asymptote
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=2)
+  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() >=2)
     {
       HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
       ghistogram->SetHistogramColor(m_Green);
@@ -982,7 +982,7 @@ void ViewerModule::UpdateTabHistogram()
     }
   /// RED band : draw the RED band histogram and the asymptote
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() == 1)
+  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() == 1)
     {
       rhistogram->SetHistogramColor(m_Grey);
       rhistogram->SetLabelColor(m_Grey);
@@ -1057,7 +1057,6 @@ void ViewerModule::UpdateUpperQuantile()
   for(unsigned int i = 1 ; i< params.Size() ; i = i+2)
     {
       double max = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
-      std::cout << max << " | ";
       params.SetElement(i,max);
     }
   std::cout << std::endl;
@@ -1069,7 +1068,13 @@ void ViewerModule::UpdateUpperQuantile()
    
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
-
+  
+  // Added cause the asymptote doesn't update their position 
+  m_BlueCurveWidgetGroup->hide();
+  m_GreenCurveWidgetGroup->hide();
+  m_RedCurveWidgetGroup->hide();
+  
+  // Needed to show the curves
   this->TabSetupPosition();
 }
 
@@ -1101,6 +1106,14 @@ void ViewerModule::UpdateLowerQuantile()
   
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
+
+  // Added cause the asymptote doesn't update their position  
+  m_BlueCurveWidgetGroup->hide();
+  m_GreenCurveWidgetGroup->hide();
+  m_RedCurveWidgetGroup->hide();
+  
+  // Needed to show the curves
+  this->TabSetupPosition();
 }
 
 /**
