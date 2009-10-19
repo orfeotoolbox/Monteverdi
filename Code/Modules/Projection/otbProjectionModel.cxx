@@ -28,14 +28,13 @@ ProjectionModel::ProjectionModel()
 {
   m_OutputChanged    = false;
   m_TransformChanged = false;
+  m_TempTransformChanged = false;
 
-  // 
   m_Resampler = ResampleFilterType::New();
   m_PerBander = PerBandFilterType::New();
   
   m_Transform        = TransformType::New();
   m_InverseTransform = TransformType::New();
-  
 }
 
 /**
@@ -44,6 +43,116 @@ ProjectionModel::ProjectionModel()
 ProjectionModel::
 ~ProjectionModel()
 {}
+
+
+
+/**
+ * Update the input Projection Ref 
+ */
+void
+ProjectionModel
+::UpdateInputUTMTransform(int zone,bool north)
+{
+  // Build the Output Projection Ref
+  // Suppose that the transformation choosen is UTM : 31 , North:
+  OGRSpatialReference oSRS;
+  oSRS.SetProjCS("UTM");
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.SetUTM(zone,north);
+  
+  char * utmRef = NULL;
+  oSRS.exportToWkt(&utmRef);
+
+  // Report projection ref (not done by the resample filter)
+  itk::MetaDataDictionary & dict = m_InputImage->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, utmRef);
+
+  // Up To date the transform
+  m_Transform->SetInputProjectionRef(utmRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+
+  m_TempTransformChanged = true;
+  //m_TransformChanged = true;
+  this->NotifyAll();
+  m_TempTransformChanged = false;
+  //m_TransformChanged = false;
+}
+
+/**
+ * Update the input Projection LambertII Projection Ref
+ */
+void ProjectionModel
+::InitializeInputLambertIITransform()
+{
+  // Projection Parameters
+  double stdParallel1  = 45.89891944;
+  double stdParallel2  = 47.69601389;
+  double originLat     = 46.8;
+  double originLong    = 2.33722778;
+  double falseEasting  = 600000;
+  double falseNorthing = 2200000;
+
+  // Build the Output Projection Ref
+  OGRSpatialReference oSRS;
+  oSRS.SetProjCS("Lambert II ");
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.SetLCC(stdParallel1,stdParallel2,originLat,originLong,falseEasting,falseNorthing);
+  
+  char * lambertRef = NULL;
+  oSRS.exportToWkt(&lambertRef);
+  
+  // Report projection ref (not done by the resample filter)
+  itk::MetaDataDictionary & dict = m_InputImage->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,lambertRef );
+  
+  // Update the transform
+  m_Transform->SetInputProjectionRef(lambertRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+  
+  m_TempTransformChanged = true;
+  //m_TransformChanged = true;
+  this->NotifyAll();
+  m_TempTransformChanged = false;
+  //m_TransformChanged = false;
+}
+
+
+/**
+ * Initialize the Transmercator Projection and Transform
+ */
+void ProjectionModel
+::UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing )
+{
+  //Get the parameters
+  double originLat   = 49.83;
+  double originLong  = 6.16;
+
+  // Build the Output Projection Ref
+  // Suppose that the transformation choosen is UTM : 31 , North:
+  OGRSpatialReference oSRS;
+  oSRS.SetProjCS("Transmercator ");
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.SetTM(originLat,originLong,scale,falseEasting,falseNorthing);
+  
+  char * tmRef = NULL;
+  oSRS.exportToWkt(&tmRef);
+  
+  // Report projection ref (not done by the resample filter)
+  itk::MetaDataDictionary & dict = m_InputImage->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,tmRef);
+
+  // Up To date the transform
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+  
+  m_TempTransformChanged = true;
+  //  m_TransformChanged = true;
+  this->NotifyAll();
+  m_TempTransformChanged = false;
+  //m_TransformChanged = false;
+}
 
 /**
  *
@@ -58,19 +167,14 @@ ProjectionModel
   oSRS.SetProjCS("UTM");
   oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetUTM(zone,north);
-  
-  char * utmRef = NULL;
-  oSRS.exportToWkt(&utmRef);
+    
+  oSRS.exportToWkt(&m_OutputProjectionRef/*utmRef*/);
 
-  // Build the Generic RS transform 
-
-  std::cout <<"MODEL::UTM :: Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
-  std::cout <<"MODEL::UTM :: Output ProjRef \n " <<  utmRef <<std::endl;
-  
+  // Build the Generic RS transform   
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  m_Transform->SetOutputProjectionRef(utmRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
   
   // Get the transform
@@ -84,7 +188,6 @@ ProjectionModel
   this->NotifyAll();
   m_TransformChanged = false;
 }
-
 
 
 /**
@@ -106,17 +209,13 @@ void ProjectionModel
   oSRS.SetProjCS("Lambert II ");
   oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetLCC(stdParallel1,stdParallel2,originLat,originLong,falseEasting,falseNorthing);
-  
-  char * lambertRef = NULL;
-  oSRS.exportToWkt(&lambertRef);
-  std::cout <<"MODEL::LAMBERT:: Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
-  std::cout <<"MODEL::LAMBERT :: Output ProjRef \n " <<  lambertRef <<std::endl;
+  oSRS.exportToWkt(&m_OutputProjectionRef);
 
   // Build the Generic RS transform 
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  m_Transform->SetOutputProjectionRef(lambertRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
   
   // Get the inverse
@@ -147,30 +246,17 @@ void ProjectionModel
   oSRS.SetProjCS("Transmercator ");
   oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.SetTM(originLat,originLong,scale,falseEasting,falseNorthing);
-  
-  char * lambertRef = NULL;
-  oSRS.exportToWkt(&lambertRef);
-  std::cout <<"Image ProjRef \n " << m_InputImage->GetProjectionRef()  <<std::endl;
+  oSRS.exportToWkt(&m_OutputProjectionRef);
+
   // Build the Generic RS transform  
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
-  m_Transform->SetOutputProjectionRef(lambertRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
 
-  //
+  // Instanciate the inverse RS transform
   m_Transform->GetInverse(m_InverseTransform);
-
-  //test 
-  InputImageType::PointType  point1, point2 , point3;
-  InputImageType::IndexType index;
-  index[0] = m_InputImage->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
-  index[1] = m_InputImage->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
-  // From index to Physical Point
-  m_InputImage->TransformIndexToPhysicalPoint(index,point1);
-  point2 = m_Transform->TransformPoint(point1);
-  point3 = m_InverseTransform->TransformPoint(point2);
-  std::cout << " point1  " << point1 << " point2 " <<  point2 << " point3 " << point3<<  std::endl;
 
   this->UpdateOutputParameters();
 
@@ -270,27 +356,6 @@ void ProjectionModel
 
   m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
   m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
-
-//   // PointType   : Compute Spacing with the new method 
-//   PointType pSpacing,pOutputSpacing,pOrigin,pOutputOrigin;
-//   pSpacing[0] = m_InputImage->GetSpacing()[0];
-//   pSpacing[1] = m_InputImage->GetSpacing()[1];
-  
-//   pOrigin = m_InputImage->GetOrigin();
-//   pOutputOrigin = m_Transform->TransformPoint(pOrigin);
-  
-  
-//   pOutputSpacing = m_Transform->TransformPoint(pSpacing);
-//   std::cout << "Image Spacing " << pSpacing << " Target Spacing " << pOutputSpacing - pOutputOrigin << std::endl;
-  
-//   double sizeOutputX = vcl_floor(std::abs(sizeXcarto/pOutputSpacing[0]));
-//   double sizeOutputY = vcl_floor(std::abs(sizeYcarto/pOutputSpacing[1]));
-  
-//   std::cout << "size Output " << sizeOutputX <<"," <<sizeOutputY<< std::endl;
-  
- 
-
-
 }
 
 /**
@@ -307,7 +372,6 @@ ProjectionModel
   // Edit the spacing
   m_OutputSpacing[0] = spacingX;
   m_OutputSpacing[1] = spacingY;
-  std::cout << "Model::ProjectRegion  Spacing  [" << m_OutputSpacing[0] << "," << m_OutputSpacing[1] << "]" << std::endl;
   
   // Edit the origin in the cartographic projection
   OutputPointType      geoPoint, newCartoPoint;
@@ -334,10 +398,6 @@ void
 ProjectionModel
 ::ReprojectImage()
 {
-  std::cout<<"Spacing: "<<m_OutputSpacing<<std::endl;
-  std::cout<<"Origin: "<<m_OutputOrigin<<std::endl;
-  std::cout<<"Size: "<<m_OutputSize<<std::endl;
-
   m_Resampler->SetTransform(m_InverseTransform);
   m_Resampler->SetSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);

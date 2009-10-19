@@ -45,9 +45,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
 
-
-
-
 namespace otb
 {
 /**
@@ -63,8 +60,12 @@ ProjectionView::ProjectionView()
   guiTRANSMERCATOREast->value("0");
   guiTRANSMERCATORNorth->value("0");
   guiTRANSMERCATORScale->value("1");
+  iTRANSMERCATOREast->value("0");
+  iTRANSMERCATORNorth->value("0");
+  iTRANSMERCATORScale->value("1");
   m_InterpType = MAP_LINEAR_;
   m_MapType = MAP_UTM;
+  m_InputProjectionUnknown = false;
 }
 
 /**
@@ -79,6 +80,12 @@ ProjectionView::Notify()
       this->UpdateMapParam();
       // Update the output 
       this->UpdateOutputParameters();
+    }
+  
+  if(m_Controller->GetModel()->GetTempTransformChanged())
+    {
+      m_InputProjectionUnknown = false;
+      this->UpdateUnavailableLongLat();
     }
 }
 
@@ -95,7 +102,6 @@ ProjectionView
   // Get the projection Ref from the input Image
   std::string  inputProjRef = m_Controller->GetModel()->GetInputImage()->GetProjectionRef();
   
-  
   // If the Projection is not empty : Map Projection
   // Else perhaps a model sensor
   if(!inputProjRef.empty())
@@ -107,7 +113,7 @@ ProjectionView
     // Import OGRSpatial Reference object from projectionRef
     OGRSpatialReference oSRS;
     oSRS.importFromWkt(&inputProjchar);
-    
+
     // Get the value of the node PROJECTION
     const char * inputMap = oSRS.GetAttrValue("PROJECTION");
     
@@ -115,7 +121,6 @@ ProjectionView
     if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
       {
 	// Fill the GUI With the  LAMBERT 2 parameters
-	std::cout <<" PROJECTION  FOUND  IS LAMBERT 2 " << std::endl;
 	iMapSelection->value(1);   
 	iLambert2->show();
 	iUTM->hide();
@@ -123,60 +128,100 @@ ProjectionView
       }
     else if(strcmp(inputMap,"Transverse_Mercator") == 0)
       {
-	// Get all the nodes of the Projection Ref Tree 
-	// and search for a child named : "scale_factor"
-	OGR_SRSNode*   node = oSRS.GetAttrNode("PROJCS");
-    
-	int nbChild  = node->GetChildCount();
-	for( int i = 0; i<nbChild ; i ++)
+	// Get the value of the parameter scale_factor
+	if(this->FindParameter(oSRS,"scale_factor",&scale_factor))
 	  {
-	    
-	    OGR_SRSNode*  curChild = node->GetChild(i);
-	    int res      = curChild->FindChild("scale_factor");
-	    if(res == 0)
-	      {
-		// scale_factor parameter found
-		scale_factor = strtod(curChild->GetChild(1)->GetValue(),NULL);
-		break;
-	      }
-	  }
 	
-	if(scale_factor == 0.9996 /** Value Specific to UTM */)
-	  {
-	    	    
-	    iMapSelection->value(0);   
-	    iUTM->show();
-	    iLambert2->hide();
-	    iTRANSMERCATOR->hide();
+	    if(scale_factor == 0.9996 /** Value Specific to UTM */)
+	      {
+		iMapSelection->value(0);   
+		iUTM->show();
+		iLambert2->hide();
+		iTRANSMERCATOR->hide();
 	    
-	    // Get the number of the zone
-	    int zone = oSRS.GetUTMZone();
-	    
-	    itk::OStringStream oss;
-	    oss<<zone;
-	    // Fill the UTM Parameters in the GUI
-	    iUTMZone->value(oss.str().c_str());
-	    iUTMNorth->value(0);
-	    iUTMSouth->value(1);
-	  }
-	else
-	  {
-	    //Fill the TransverseMercator Parameters
-	    iMapSelection->value(2);
-	    iUTM->hide();
-	    iLambert2->hide();
-	    iTRANSMERCATOR->show();
+		// Get the number of the zone
+		int zone = oSRS.GetUTMZone();
+		itk::OStringStream oss;
+		oss<<zone;
+		// Fill the UTM Parameters in the GUI
+		iUTMZone->value(oss.str().c_str());
+		
+		// North Or South Hemisphere : Value filled in the falseNorthing Parameter
+		double false_northing = 0.;
+		if(this->FindParameter(oSRS,"false_northing",&false_northing))
+		  {
 
+		    if(false_northing == 0.) // North Hemisphere
+		      {
+			iUTMNorth->value(1);
+			iUTMSouth->value(0);
+			
+		      }
+		    else
+		      {
+			iUTMNorth->value(0);
+			iUTMSouth->value(1);
+		      }
+		  }
+	      }
+	    else
+	      {
+		//Fill the TransverseMercator Parameters
+		iMapSelection->value(2);
+		iUTM->hide();
+		iLambert2->hide();
+		iTRANSMERCATOR->show();
+	      }
 	  }
       }
   }
-  else
+
+  // Sensor Model :: Test if KeyWorldList is not empty 
+  if(m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
     {
-      // SensorModel ????
-      ;
+      // Select the Sensor Model in the InputMapType
+      iMapSelection->value(3);
+      iUTM->hide();
+      iLambert2->hide();
+      iTRANSMERCATOR->hide();
+    }
+
+  // Default Case : Kwl & ProjRef  empty : Give the user the possibility to fill the proj he needs
+  if(!m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
+    {
+      iMapType->activate();
+      iMapSelection->activate();
+      m_InputProjectionUnknown = true;
     }
 }
 
+
+/** 
+ * In the OGR_SRSNode : Find the value of the parameter inParam if exists
+ * 
+ */
+bool
+ProjectionView
+::FindParameter(OGRSpatialReference oSRS , const char * inParam, double * paramValue)
+{
+  // Get all the nodes of the Projection Ref Tree 
+  // and search for a child named : "scale_factor"
+  OGR_SRSNode*   node = oSRS.GetAttrNode("PROJCS");
+  
+  int nbChild  = node->GetChildCount();
+  for( int i = 0; i<nbChild ; i ++)
+    {
+      OGR_SRSNode*  curChild = node->GetChild(i);
+      int res      = curChild->FindChild(inParam);
+      if(res == 0)
+	{
+	  // scale_factor parameter found
+	  *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
+	  return true;
+	}
+    }
+  return false;
+}
 
 /**
  *
@@ -240,8 +285,7 @@ ProjectionView
   double       originX =  atof(guiLongSelection->value());
   double       originY =  atof(guiLatSelection->value());
   bool         isUl    =  guiCenterPixel->value();
-  
-  std::cout << "View : Spacing  [" <<spacingX << "," << spacingY << "]" << std::endl;
+
   m_Controller->ProjectRegion(sizeX,sizeY,spacingX,spacingY,originX,originY,isUl);
 
   // Project the image in the selected map projection
@@ -257,7 +301,6 @@ ProjectionView
 {
   ModelType::OutputPointType      geoPoint, newCartoPoint;
   // Get the new values of Long/Lat from the gui
-
   geoPoint[0] = atof(guiLongSelection->value());
   geoPoint[1] = atof(guiLatSelection->value());
 
@@ -317,12 +360,60 @@ void
 ProjectionView
 ::UpdateLongLat()
 {
+  if(!m_InputProjectionUnknown)
+    {
+
+      IndexType index;
+      PointType point,geoPoint;
+  
+      index.Fill(0);
+      // Get the transform from the model
+      TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
+  
+      // Apply the transform to the middle point of the image
+      if(guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
+	{
+	  index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+	  index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+      
+	}
+      else if(guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
+	{
+	  index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
+	}
+  
+      // From index to Physical Point
+      m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,point);
+  
+      // Transform to geo and to Choosen projection
+      geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
+  
+      // Fill the datas in the GUI
+      itk::OStringStream oss;
+      oss<<setiosflags(std::ios_base::fixed);
+      oss.str("");
+      oss<<geoPoint[0];
+      guiLongSelection->value(oss.str().c_str());
+      oss.str("");
+      oss<<geoPoint[1];
+      guiLatSelection->value(oss.str().c_str());
+  
+      //Update the Map parameters
+      this->UpdateMapParam();
+    }
+}
+
+
+/**
+ * In case of unknown input map : 
+ */
+void
+ProjectionView
+::UpdateUnavailableLongLat()
+{
   IndexType index;
   PointType point,geoPoint;
-  
   index.Fill(0);
-  // Get the transform from the model
-  TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
   
   // Apply the transform to the middle point of the image
   if(guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
@@ -340,9 +431,7 @@ ProjectionView
   m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,point);
   
   // Transform to geo and to Choosen projection
-  geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
-  
-  std::cout << std::setprecision(10) << "View::UpdateLatLong:: index " << index << " point " << point << " -->outputPoint " <<rsTransform->TransformPoint(point) << std::endl;
+  geoPoint    = m_Controller->GetModel()->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
   
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -353,9 +442,6 @@ ProjectionView
   oss.str("");
   oss<<geoPoint[1];
   guiLatSelection->value(oss.str().c_str());
-  
-  //Update the Map parameters
-  this->UpdateMapParam();
 }
 
 /**
@@ -380,122 +466,6 @@ ProjectionView
   oss.str("");
   oss<<m_Controller->GetModel()->GetOutputSize()[1];
   guiSizeY->value(oss.str().c_str());
-}
-
-
-int
-ProjectionView::CheckImageParameters()
-{
-
-//   if (strcmp("",guiSizeX->value()) == 0 || strcmp("",guiSizeY->value()) == 0)
-//   {
-//     fl_alert("Please, set Size values...");
-//     return 1;
-//   }
-//   if (strcmp("",guiSpacingX->value()) == 0 || strcmp("",guiSpacingY->value()) == 0)
-//   {
-//     fl_alert("Please, set Spacing values...");
-//     return 1;
-//   }
-
-//   m_OutputSize[0] = atoi(guiSizeX->value());
-//   m_OutputSize[1] = atoi(guiSizeY->value());
-//   m_OutputSpacing[0] = atof(guiSpacingX->value());
-//   m_OutputSpacing[1] = atof(guiSpacingY->value());
-
-//   ForwardSensorInputPointType longLatPoint;
-//   longLatPoint[0] = strtod(guiLongSelection->value(), NULL);
-//   longLatPoint[1] = strtod(guiLatSelection->value(), NULL);
-//   DoubleVectorType cartoPoint = LongLatPointToCartoInOriginRef/*LongLatPointToCarto*/(longLatPoint);
-
-//   // upper left
-//   if ( guiCenterPixel->value()==1 )
-//   {
-//     m_OutputOrigin[0] = cartoPoint[0]-m_OutputSpacing[0]*m_OutputSize[0]/2;
-//     m_OutputOrigin[1] = cartoPoint[1]-m_OutputSpacing[1]*m_OutputSize[1]/2;
-//   }
-//   else
-//   {
-//     if ( guiULPixel->value()==1 )
-//     {
-//       m_OutputOrigin[0] = cartoPoint[0];
-//       m_OutputOrigin[1] = cartoPoint[1];
-//     }
-//   }
-
-   return 0;
-}
-
-
-int
-ProjectionView
-::CheckMapParameters()
-{
-//   int res = 0;
-//   switch (this->GetMapType())
-//   {
-//   case UTM:
-//   {
-//     if (strcmp("",guiUTMZone->value()) )
-//     {
-//       char hem = 'N';
-//       if ( guiUTMSouth->value() == 1 )
-//         hem = 'S';
-//       typedef UtmInverseProjection UtmProjectionType;
-//       UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-//       utmProjection->SetZone(atoi(guiUTMZone->value()));
-//       utmProjection->SetHemisphere(hem);
-//       res = this->CreateOutput<UtmProjectionType>(utmProjection);
-//     }
-//     else
-//     {
-//       itk::OStringStream oss;
-//       oss.str("Invalid Zone parameter: ");
-//       oss<<guiUTMZone->value();
-//       fl_alert(oss.str().c_str());
-//     }
-//     break;
-//   }
-//   case LAMBERT2:
-//   {
-//     typedef Lambert2EtenduInverseProjection Lambert2Type;
-//     Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
-//     res = this->CreateOutput<Lambert2Type>(lambert2Projection);
-
-//     break;
-//   }
-//   case TRANSMERCATOR:
-//   {
-//     if (strcmp("",guiTRANSMERCATOREast->value()) != 0 && strcmp("",guiTRANSMERCATORNorth->value()) != 0 )
-//     {
-//       if (strcmp("",guiTRANSMERCATORScale->value()) != 0 )
-
-//       {
-//         typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
-//         TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
-
-//         transMercatorProjection->SetParameters(strtod(guiTRANSMERCATOREast->value(), NULL),
-//                                                strtod(guiTRANSMERCATORNorth->value(), NULL),
-//                                                strtod(guiTRANSMERCATORScale->value(), NULL));
-//         res = this->CreateOutput<TransMercatorProjectionType>(transMercatorProjection);
-//       }
-//       else
-//       {
-//         fl_alert("Invalid Scale Factor...");
-//       }
-//     }
-//     else
-//     {
-//       fl_alert("Please, set Easting and Northing values...");
-//     }
-//     break;
-//   }
-//   default:
-//     fl_alert("Problem with map projection type, please contact developpers");
-//     res = 1;
-//     break;
-//   }
-  return 0;
 }
 
 
@@ -639,8 +609,6 @@ ProjectionView::InitializeAction()
   geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
   outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
   
-  std::cout << std::setprecision(10) << middlePoint << " -->Hole Transform outputPoint " << outputPoint << " Step By Step Transform " << outputPoint1<< std::endl;
-
   // Fill the datas in the GUI
   itk::OStringStream oss;
   oss<<setiosflags(std::ios_base::fixed);
@@ -706,8 +674,6 @@ ProjectionView::UpdateUTMTransform()
   
   // Update the transform 
   m_Controller->UpdateUTMTransform(utmZone,north);
-  
-
 }
 
 
@@ -719,7 +685,6 @@ void
 ProjectionView::UpdateLambertIITransform()
 {
   m_Controller->InitializeLambertIITransform();
-
 }
 
 
@@ -732,6 +697,77 @@ ProjectionView::UpdateTMTransform()
   m_Controller->UpdateTMTransform(atof(guiTRANSMERCATORScale->value()),
 				  atof(guiTRANSMERCATOREast->value()),
 				  atof(guiTRANSMERCATORNorth->value()));
+}
+
+
+void 
+ProjectionView::UpdateInputUTMTransform()
+{
+  //Get the projection parameters
+  int utmZone = atoi(iUTMZone->value());
+  bool north = iUTMNorth->value();
+
+  // Update the transform 
+  m_Controller->UpdateInputUTMTransform(utmZone,north);
+
+  // Update the whole transformation 
+  this->UpToDateTransform();
+}
+
+
+/**
+ * Tell the model to compute the LambertII transform
+ * Done in the module cause the user is not allowed to modify this
+ */
+void 
+ProjectionView::UpdateInputLambertIITransform()
+{
+  m_Controller->InitializeInputLambertIITransform();
+  
+  // Update the whole transformation 
+  this->UpToDateTransform();
+}
+
+/**
+ * 
+ */
+void 
+ProjectionView::UpdateInputTMTransform()
+{
+  m_Controller->UpdateInputTMTransform(atof(iTRANSMERCATORScale->value()),
+				  atof(iTRANSMERCATOREast->value()),
+				  atof(iTRANSMERCATORNorth->value()));
+
+  // Update the whole transformation 
+  this->UpToDateTransform();
+}
+
+/**
+ * Update the output Information and the second transform
+ */
+void 
+ProjectionView::UpToDateTransform()
+{
+switch (this->GetMapType())
+    {
+    case MAP_UTM:
+      {
+	this->UpdateUTMTransform();
+	break;
+      }
+    case MAP_LAMBERT2:
+      {
+	this->UpdateLambertIITransform();
+	break;
+      }
+    case MAP_TRANSMERCATOR:
+      {
+	this->UpdateTMTransform();
+	break;
+      }
+    default:
+     break;
+    }
 }
 
 } // End namespace otb

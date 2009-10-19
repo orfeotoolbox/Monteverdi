@@ -53,6 +53,9 @@ public:
   virtual void UpdateUTMTransform(int zone,bool north);
   virtual void InitializeLambertIITransform();
   virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing );
+  virtual void UpdateInputUTMTransform(int zone,bool north);
+  virtual void InitializeInputLambertIITransform();
+  virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
   virtual void ProjectRegion(unsigned int sizeX, 
 			     unsigned int sizeY,
 			     double spacingX,

@@ -79,9 +79,12 @@ class ITK_EXPORT ProjectionModel
   /** Get the transform changed flag */
   itkGetMacro(TransformChanged,bool);
 
-  /** Get a const reference on the Transform */
+  /** Get the transform changed flag */
+  itkGetMacro(TempTransformChanged,bool);
+
+  /** Get a  reference on the Transform */
   itkGetObjectMacro(Transform,TransformType);
-  
+
   /** Get the instance of the resampler*/
   itkGetObjectMacro(Resampler,ResampleFilterType);
 
@@ -108,6 +111,15 @@ class ITK_EXPORT ProjectionModel
   /** Initialize the transmecator proejction */
   virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing );
 
+    /** Update the Input UTM Projection*/
+  virtual void UpdateInputUTMTransform(int zone,bool north);
+
+  /** Initialize the Input Lambert II Projection*/
+  virtual void InitializeInputLambertIITransform();
+  
+  /** Initialize the Input transmecator proejction */
+  virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
+
  protected:
   /** Constructor */
   ProjectionModel();
@@ -126,6 +138,7 @@ class ITK_EXPORT ProjectionModel
   InputImageType::Pointer       m_Output;
   bool                          m_OutputChanged;
   bool                          m_TransformChanged;
+  bool                          m_TempTransformChanged;
 
   // Output Image Information
   SizeType                      m_OutputSize; 
@@ -139,6 +152,8 @@ class ITK_EXPORT ProjectionModel
   // Outputs
   ResampleFilterType::Pointer  m_Resampler;
   PerBandFilterType::Pointer   m_PerBander;
+
+  char *                 m_OutputProjectionRef;
 };
 }
 #endif

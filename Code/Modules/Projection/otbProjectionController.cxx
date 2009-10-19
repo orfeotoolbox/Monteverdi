@@ -51,8 +51,6 @@ ProjectionController
   
 }
 
-
-
 /**
  * 
  */
@@ -118,6 +116,57 @@ ProjectionController
   try
   {
     m_Model->UpdateTMTransform(scale, falseEasting, falseNorthing );
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
+/**
+ * 
+ */
+void
+ProjectionController
+::UpdateInputUTMTransform(int zone,bool north)
+{
+  try
+  {
+    m_Model->UpdateInputUTMTransform(zone,north);
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
+/**
+ * 
+ */
+void
+ProjectionController
+::InitializeInputLambertIITransform()
+{
+  try
+  {
+    m_Model->InitializeInputLambertIITransform();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
+
+/**
+ * 
+ */
+void
+ProjectionController
+::UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing )
+{
+  try
+  {
+    m_Model->UpdateInputTMTransform(scale, falseEasting, falseNorthing );
   }
   catch (itk::ExceptionObject & err)
   {
