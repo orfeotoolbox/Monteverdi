@@ -29,7 +29,7 @@ namespace otb
 /** Constructor */
 ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
 				m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-				m_Controller(), m_RenderingFunction()
+				m_Controller(), m_RenderingFunction(),m_DisplayedLabel("+ "),m_UndisplayedLabel("- ")
 {
   // This module needs pipeline locking
   this->NeedsPipelineLockingOn();
@@ -403,8 +403,28 @@ void ViewerModule::UpdateVectorData(unsigned int index)
  */
 void ViewerModule::AddName(std::string name)
 {
-  dVDList->add(name.c_str());
+  itk::OStringStream oss;
+  oss.str("");
+  oss<<m_DisplayedLabel<<name;
+  
+  dVDList->add(oss.str().c_str());
   dVDList->redraw();
+}
+
+/**
+ *
+ */
+
+void ViewerModule::
+UpdateVectorDataListShowed(unsigned int selectedItem, std::string status)
+{
+  /* Update the ImageList using the status label "+" or "-" */
+  std::string filename = this->GetInputDataDescription<VectorDataType>("VectorData",selectedItem-1);
+  
+  itk::OStringStream oss;
+  oss<<status<<filename;
+  dVDList->text(selectedItem,oss.str().c_str());
+  oss.str("");
 }
 
 /**
@@ -450,6 +470,7 @@ void ViewerModule::DeleteVectorData()
 
       // Update the status of the selectedItem vector data
       m_DisplayedVectorData[selectedIndex-1] = false;
+      this->UpdateVectorDataListShowed(selectedIndex,m_UndisplayedLabel);
   
       //Redraw all the widgets
       this->RedrawWidget();
@@ -470,6 +491,7 @@ void ViewerModule::ClearAll()
       
       // Update the dispaly status of each vector
       m_DisplayedVectorData[i] = false;
+      this->UpdateVectorDataListShowed(i+1,m_UndisplayedLabel);
     }
   //Redraw all the widgets
   this->RedrawWidget();
@@ -494,6 +516,7 @@ ViewerModule::DisplaySelectedVectorData()
       m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(true);
       // Set visible status to selected VectorDataGl Compenents
       m_DisplayedVectorData[selectedIndex-1] = true;
+      this->UpdateVectorDataListShowed(selectedIndex,m_DisplayedLabel);
     }
     //Redraw all the widgets
     this->RedrawWidget();
@@ -518,6 +541,7 @@ ViewerModule::DisplayVectorData()
 	  m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
 	  m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
 	  m_DisplayedVectorData[i] = true;
+	  this->UpdateVectorDataListShowed(i+1,m_DisplayedLabel);
 	}
     }
   //Redraw all the widgets
@@ -661,13 +685,16 @@ void ViewerModule::UpdateDEMSettings()
      guiImaginaryChannelChoice->add(oss.str().c_str());
    }
    guiViewerSetupWindow->redraw();
+   
+   // If nbComponets > 3 : handle like RGB anyway
+    unsigned int castNbComponent = nbComponent;
+   if(nbComponent > 3 )
+     castNbComponent = 3;
+     
 
-   switch(nbComponent){
+   switch(castNbComponent){
    case 1 :
      this->GrayScaleSet();
-     break;
-   case 4 :
-     this->RGBSet();
      break;
    case 3 :
      this->RGBSet();
@@ -913,6 +940,7 @@ void ViewerModule::UpdateTabHistogram()
   /// Update the StandardRenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
   m_StandardRenderingFunction->SetChannelList(channels);
+  m_StandardRenderingFunction->Initialize();
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
   
   //Set the rendering to the histogram handlers
@@ -1026,6 +1054,8 @@ void ViewerModule::UpdateTabHistogram()
 
 void ViewerModule::TabSetupPosition()
 {
+  unsigned int nbBands = m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size();
+  
   if(strcmp(gVectorData->value()->label(),"Histogram" ))
     {
       m_BlueCurveWidgetGroup->hide();
@@ -1034,9 +1064,13 @@ void ViewerModule::TabSetupPosition()
     }
   else
     {
-      m_BlueCurveWidgetGroup->show();
-      m_GreenCurveWidgetGroup->show();
-      m_RedCurveWidgetGroup->show();
+      // Avoid Little Window Opened when nbBands less than 3 or 2
+      if(nbBands >=3)
+	m_BlueCurveWidgetGroup->show();
+      if(nbBands >= 2)
+	m_GreenCurveWidgetGroup->show();
+      if(nbBands >=1)
+	m_RedCurveWidgetGroup->show();
     }
 }
 

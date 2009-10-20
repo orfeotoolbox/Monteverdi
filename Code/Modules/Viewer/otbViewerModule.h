@@ -236,6 +236,7 @@ public:
   virtual void UpdateHistogramCurve();
   virtual void UpdateTabHistogram();
   virtual void UpdatePixelInformationWindow();
+  virtual void UpdateVectorDataListShowed(unsigned int selectedItem, std::string status);
   
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();
@@ -290,7 +291,8 @@ private:
 
   /** StandardRendering Function*/
   StandardRenderingFunctionPointerType     m_StandardRenderingFunction;
-
+  AmplitudeRenderingFunction::Pointer      m_ModulusRenderingFunction;
+  PhaseRenderingFunction::Pointer          m_PhaseRenderingFunction;
   /** */
   std::string                              m_Label;
 
@@ -333,6 +335,10 @@ private:
 
   // Cast Filter
   CastSingleImageFilter::Pointer           m_CastFilter;
+  
+  // Labels
+  std::string                                    m_DisplayedLabel;
+  std::string                                    m_UndisplayedLabel ;
 };
 
 

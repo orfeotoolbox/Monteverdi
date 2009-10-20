@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -25,8 +25,8 @@ class ViewerModuleGroup {open
       } {
         Fl_Group {} {
           label {Vector Datas}
-          callback {this->TabSetupPosition();}
-          tooltip {Vector Datas Propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
+          callback {this->TabSetupPosition();} open
+          tooltip {Vector Datas Propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {160 260 25 25} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -37,8 +37,8 @@ class ViewerModuleGroup {open
             tooltip {Change the color of the selected class} xywh {60 260 73 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Browser dVDList {
-            callback {this->UpdateListSelectionColor();}
-            tooltip {Browse and select ROI} xywh {5 31 321 125} type Hold box PLASTIC_DOWN_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1
+            callback {this->UpdateListSelectionColor();} selected
+            tooltip {Browse and select ROI} xywh {5 31 321 125} type Hold box PLASTIC_DOWN_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1 textcolor 186
           }
           Fl_Button bEraseLastROI {
             label Hide
@@ -68,13 +68,13 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiViewerSetupWindow {
           label Setup
-          callback {this->TabSetupPosition();}
+          callback {this->TabSetupPosition();} open
           xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Round_Button guiViewerSetupGrayscaleMode {
             label {Grayscale mode}
             callback {this->GrayScaleSet();}
-            tooltip {Swith the image viewer mode to grayscale} xywh {70 46 145 24} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX value 1 color 7 selection_color 22 labelcolor 186
+            tooltip {Swith the image viewer mode to grayscale} xywh {40 46 145 24} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX value 1 color 7 selection_color 22 labelcolor 186
           }
           Fl_Round_Button guiViewerSetupColorMode {
             label {RGB composition mode}
@@ -83,7 +83,7 @@ class ViewerModuleGroup {open
           }
           Fl_Input_Choice guiGrayscaleChannelChoice {
             label {Channel index} open
-            tooltip {Select the band to view in grayscale mode} xywh {160 91 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
+            tooltip {Select the band to view in grayscale mode} xywh {130 91 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
           } {}
           Fl_Input_Choice guiRedChannelChoice {
             label {Red channel} open
@@ -100,30 +100,30 @@ class ViewerModuleGroup {open
           Fl_Return_Button guiViewerSetupOk {
             label Ok
             callback {ViewerSetupOk();}
-            tooltip {Save changes and leave viewer set up interface} xywh {340 228 90 29} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Save changes and leave viewer set up interface} xywh {225 228 90 29} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Round_Button guiViewerSetupComplexMode {
             label {Complex composition mode}
             callback {ComplexSet();}
-            tooltip {Switch the image viewer mode to complex composition} xywh {10 134 210 26} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
+            tooltip {Switch the image viewer mode to complex composition} xywh {10 134 210 26} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186 hide deactivate
           }
           Fl_Input_Choice guiRealChannelChoice {
             label {Real channel index} open
-            tooltip {Select band for real channel in complex composition} xywh {165 211 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for real channel in complex composition} xywh {165 211 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 hide deactivate
           } {}
           Fl_Input_Choice guiImaginaryChannelChoice {
             label {Imaginary channel index} open
-            tooltip {Select band for imaginary channel in complex composition} xywh {165 246 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            tooltip {Select band for imaginary channel in complex composition} xywh {165 246 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 hide deactivate
           } {}
           Fl_Round_Button bAmplitude {
             label Amplitude
             callback {bPhase->clear();}
-            tooltip {Toggle modulus mode} xywh {25 175 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 deactivate
+            tooltip {Toggle modulus mode} xywh {25 175 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 hide deactivate
           }
           Fl_Round_Button bPhase {
             label Phase
             callback {bAmplitude->clear();}
-            tooltip {Toggle phase mode} xywh {125 175 80 15} down_box ROUND_DOWN_BOX labelcolor 187 deactivate
+            tooltip {Toggle phase mode} xywh {125 175 80 15} down_box ROUND_DOWN_BOX labelcolor 187 hide deactivate
           }
         }
         Fl_Group {} {
@@ -153,25 +153,25 @@ class ViewerModuleGroup {open
               Fl_Button bLowerApply {
                 label Apply
                 callback {this->UpdateLowerQuantile();}
-                xywh {574 262 90 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 192
+                xywh {574 262 90 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 184
               }
             }
           }
         }
         Fl_Group {} {
           label PixelDescription open
-          xywh {0 29 700 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          xywh {0 29 700 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
         } {
-          Fl_Text_Display bPixelInfo {selected
+          Fl_Text_Display bPixelInfo {
             xywh {25 104 325 166} box PLASTIC_DOWN_BOX color 55
           }
           Fl_Value_Input bX {
             label {X:}
-            xywh {45 56 45 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+06 step 1
+            xywh {45 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+06 step 1
           }
           Fl_Value_Input bY {
             label {Y:}
-            xywh {140 56 45 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+08 step 1
+            xywh {158 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+08 step 1
           }
           Fl_Button bPixelOK {
             label Ok
@@ -215,37 +215,9 @@ class ViewerModuleGroup {open
   Function {BuildDEM()} {open return_type {virtual void}
   } {
     Fl_Window wDEM {
-      label {DEM Selection}
+      label {DEM Selection} open
       xywh {655 540 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Check_Button gUseInputDEM {
-        label {Use DEM for Loading}
-        callback {if( gUseInputDEM->value()==1 || gUseOutputDEM->value()==1 )
-{
-gLoadDEM->activate();
-gDEMPath->activate();
-}
-else
-{
-gLoadDEM->deactivate();
-gDEMPath->deactivate();
-}}
-        xywh {15 14 64 15} down_box DOWN_BOX labelsize 12
-      }
-      Fl_Check_Button gUseOutputDEM {
-        label {Use DEM for Processing}
-        callback {if( gUseInputDEM->value()==1 || gUseOutputDEM->value()==1 )
-{
-gLoadDEM->activate();
-gDEMPath->activate();
-}
-else
-{
-gLoadDEM->deactivate();
-gDEMPath->deactivate();
-}}
-        xywh {220 14 64 15} down_box DOWN_BOX labelsize 12 hide deactivate
-      }
       Fl_Button gLoadDEM {
         label Load
         callback {const char * cfname = fl_dir_chooser("Choose DEM Directory...", "");
@@ -253,20 +225,20 @@ Fl::check();
 wDEM->redraw();
 gDEMPath->value(cfname);
 gDEMPath->redraw();}
-        xywh {16 38 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 15 labelfont 1 deactivate
+        xywh {16 22 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 15 labelfont 1
       }
       Fl_Output gDEMPath {
-        xywh {87 38 288 25} box PLASTIC_DOWN_BOX align 0 deactivate
+        xywh {87 21 288 25} box PLASTIC_DOWN_BOX align 0
       }
       Fl_Button gQuitDEM {
         label Quit
         callback {wDEM->hide();}
-        xywh {311 70 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+        xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
       }
       Fl_Button gOKDEM {
         label OK
         callback {this->UpdateDEMSettings();}
-        xywh {234 70 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+        xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
       }
     }
   }
