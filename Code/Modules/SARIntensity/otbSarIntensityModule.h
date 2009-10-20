@@ -25,7 +25,7 @@
 #include "otbImage.h"
 #include "itkComplexToModulusImageFilter.h"
 #include "itkSquareImageFilter.h"
-#include "itkLogImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
 {
@@ -35,6 +35,19 @@ namespace otb
  * Description of the module.
  *
  */
+
+namespace Functor
+{
+template <class TInput, class TOutput> class Log10Functor
+{
+public:
+  TOutput operator()(const TInput & input) const
+  {
+    return static_cast<TOutput>(10. * vcl_log10(input));
+  }
+};
+}
+
 
 class ITK_EXPORT SarIntensityModule
   : public Module
@@ -59,7 +72,9 @@ public:
   
   typedef itk::ComplexToModulusImageFilter<ComplexImageType,FloatingImageType> ModulusFilterType;
   typedef itk::SquareImageFilter<FloatingImageType,FloatingImageType>          SquareFilterType;
-  typedef itk::LogImageFilter<FloatingImageType,FloatingImageType>             LogFilterType;
+  typedef Functor::Log10Functor<double,double>                                 LogFunctorType;
+  typedef itk::UnaryFunctorImageFilter<FloatingImageType,
+				       FloatingImageType,LogFunctorType>        LogFilterType;
 
 protected:
   /** Constructor */

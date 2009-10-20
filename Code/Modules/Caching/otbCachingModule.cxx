@@ -54,12 +54,13 @@ CachingModule::~CachingModule()
 {
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
+  ossimFilename ofnameNoExtension = ofname.fileNoExtension();
 
 // try to remove the file
   if(ofname.exists())
     {
-    std::cout<<"Cleaning up cache file "<<m_FilePath<<std::endl;
-    ofname.remove();
+    std::cout<<"Cleaning up all cache files with base "<<ofnameNoExtension<<std::endl;
+    ofnameNoExtension.wildcardRemove();
     }
 }
 

@@ -62,6 +62,9 @@ void SarIntensityModule::Run()
     m_SquareFilter->SetInput(m_ModulusFilter->GetOutput());
     m_LogFilter->SetInput(m_SquareFilter->GetOutput());
 
+    m_SquareFilter->GetOutput()->UpdateOutputInformation();
+    m_LogFilter->GetOutput()->UpdateOutputInformation();
+
     // First, clear any previous output
     this->ClearOutputDescriptors();
     

@@ -30,7 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkExceptionObject.h"
 #include "flu_pixmaps.h"
-
+#include "otbMonteverdiPixmaps.h"
 
 namespace otb
 {
@@ -45,7 +45,11 @@ Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ),
           arrow_closed( (char*const*)arrow_closed_xpm ), 
           arrow_open( (char*const*)arrow_open_xpm ), 
           home( (char*const*)home_xpm ), 
-          purple_dot( (char*const*)purpledot_xpm );
+          purple_dot( (char*const*)purpledot_xpm),
+	  vectorImage( (char*const*)vectorImage_xpm),
+	  scalarImage( (char*const*)scalarImage_xpm),
+          process    ( (char*const*)process_xpm),
+          vectorData ( (char*const*)vectorData_xpm);
 
 
 MonteverdiViewGUI
@@ -160,7 +164,7 @@ MonteverdiViewGUI
 
   m_Tree->box( FL_DOWN_BOX );
   m_Tree->auto_branches( true );
-  m_Tree->label( "Tree Browser" );
+  m_Tree->label( "Datasets Browser" );
 
   // allow callback with the tree
   m_Tree->box( FL_DOWN_BOX );
@@ -181,6 +185,8 @@ MonteverdiViewGUI
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
   gTreeGroup->end();
+
+  m_Tree->show_root(false);
 
   // FileGroup and tree
   gTreeGroup->add(m_Tree);
@@ -357,8 +363,29 @@ MonteverdiViewGUI
     new_node->add(it->second.GetDataType().c_str());
 
     //new_node->open(close);
-    n->branch_icons( &book,&book );
-    new_node->branch_icons( &blue_dot,&purple_dot );
+    n->branch_icons( &process,&process );
+
+    if(it->second.GetDataType() == "Floating_Point_VectorImage"
+      || it->second.GetDataType() == "Floating_Point_Complex_Image"
+      || it->second.GetDataType() == "Labeled_Char_VectorImage")
+      {
+      new_node->branch_icons( &vectorImage,&vectorImage );
+      }
+    else if(it->second.GetDataType() == "Labeled_Short_Image"
+	    || it->second.GetDataType() == "Floating_Point_Image")
+      {
+      new_node->branch_icons( &scalarImage,&scalarImage );
+      }
+    else if(it->second.GetDataType() == "Labeled_Vector_Data" 
+	    || it->second.GetDataType() == "Vector_Data")
+      {
+      new_node->branch_icons( &vectorData,&vectorData);
+      }
+    else
+      {
+      new_node->branch_icons( &blue_dot,&blue_dot);
+      }
+
     } // end datas loop
 }
 
