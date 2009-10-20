@@ -328,7 +328,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   Node* get_selected( int index );
 
   //! Override of Fl_Widget::handle
-  int handle( int event );
+  virtual int handle( int event );
 
   //! Set the horizontal icon gap for each entry. Default is 2
   inline void horizontal_gap( int g )
@@ -732,11 +732,15 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   //! This class holds a single entry in the tree
   class FLU_EXPORT Node
     {
+      // Comment to be able to create a class that overload Handle
+    public :
+      enum { DRAW, MEASURE, MEASURE_THIS_OPEN, HANDLE, COUNT_SELECTED };  // parameters for recurse()
 
     protected:
-
+      
       enum { ADD, REMOVE, FIND, FIND_NUMBER, GET_SELECTED };  // parameters for modify()
-      enum { DRAW, MEASURE, MEASURE_THIS_OPEN, HANDLE, COUNT_SELECTED };  // parameters for recurse()
+      // Moved to public to be able to create a child class that overload Handle
+      //enum { DRAW, MEASURE, MEASURE_THIS_OPEN, HANDLE, COUNT_SELECTED };  // parameters for recurse()
 
       // flags
       enum { SELECTED = 0x0001, COLLAPSED = 0x0002, LEAF = 0x0004, SHOW_LABEL = 0x0008,
@@ -1142,6 +1146,12 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
       //! Set the widget in this node. Note that the widget is destroyed by the tree/node on clear() or the destructor
       void widget( Fl_Widget *w );
 
+
+      //MOVED from protected to public to be able to create a child class that overloads Handle()
+      void determineVisibility( bool parentVisible = true );
+      // handle/draw/measure/count      
+      int recurse( RData &rdata, int type, int event = 0 );
+
     protected:
 
       friend class Flu_Tree_Browser;
@@ -1162,12 +1172,13 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
 
       void sort();
 
-      void determineVisibility( bool parentVisible = true );
+      // handle/draw/measure/count MOVED public to be able to create a child class that overloads Handle()
+      //void determineVisibility( bool parentVisible = true );
 
       static bool isMoveValid( Node* &n1, int &where, Node* &n2 );
 
-      // handle/draw/measure/count
-      int recurse( RData &rdata, int type, int event = 0 );
+      // handle/draw/measure/count MOVED public to be able to create a child class that overloads Handle()
+      //int recurse( RData &rdata, int type, int event = 0 );
 
       void draw( RData &rdata, bool measure );
 

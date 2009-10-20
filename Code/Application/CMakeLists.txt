@@ -13,6 +13,7 @@ otbMonteverdiController.cxx
 otbInputViewComponent.cxx
 otbInputViewGUI.cxx
 otbMonteverdiPixmaps.cxx
+otbFluTreeBrowser.cxx
 )
 
 SET(VIEW_FL_SRCS

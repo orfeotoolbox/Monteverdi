@@ -60,8 +60,9 @@ public:
   /** Get the DataType */
   const std::string & GetDataType() const;
 
-  /** Get the DataKey */
+  /** Set/Get the DataKey */
   const std::string & GetDataKey() const;
+  void SetDataKey( const std::string & key);
 
   /** Get the DataDescription */
   const std::string & GetDataDescription() const;

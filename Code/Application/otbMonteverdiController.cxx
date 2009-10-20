@@ -88,6 +88,22 @@ MonteverdiController
   return 0;
 }
 
+
+void
+MonteverdiController
+::ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey)
+{
+  try
+    {
+      m_Model->ChangeOutputDataKey( instanceId, oldKey, newKey );
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+}
+
 void
 MonteverdiController
 ::StartCaching(const std::string & id, const std::string & key)

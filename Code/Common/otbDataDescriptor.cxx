@@ -57,6 +57,12 @@ const std::string & DataDescriptor::GetDataKey() const
   return m_DataKey;
 }
 
+/** Set the DataKey */
+void DataDescriptor::SetDataKey( const std::string &key )
+{
+  m_DataKey = key;
+}
+
 /** Get the DataDescription */
 const std::string & DataDescriptor::GetDataDescription() const
 {

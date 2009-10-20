@@ -379,16 +379,20 @@ HomologousPointExtractionModuleController
 {
   if( !this->GetTransformationAvailable() )
     {
+      std::cout<<"No transformation available."<<std::endl;
       MsgReporter::GetInstance()->SendError("No transformation available.");
       return;
     }
   try
     {
       m_Model->OK();
-      m_View->HideAll();
+      std::cout<<"OK DONE."<<std::endl;
+      //m_View->HideAll();
+      std::cout<<"HIDE DONE."<<std::endl;
     }
   catch (itk::ExceptionObject & err)
     {
+      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }

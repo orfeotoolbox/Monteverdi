@@ -98,6 +98,29 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned
   return wrapper;
 }
 
+void Module::ChangeOutputKey( const std::string & oldKey, const std::string & newKey )
+{
+  if(m_OutputsMap.count(newKey) > 0)
+    {
+      itkExceptionMacro(<<"Key "<<newKey<<" alredy exists.");
+    }
+  // Search for the key in the output map
+  OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(oldKey);
+
+  // If the key can not be found, throw an exception
+  if(it == m_OutputsMap.end())
+    {
+      itkExceptionMacro(<<"Module has no output with key "<<oldKey);
+    }
+
+  OutputDataDescriptor desc = it->second;
+  desc.SetDataKey(newKey);
+  
+  desc.SetDataKey( newKey );
+  m_OutputsMap[newKey] = desc;
+  m_OutputsMap.erase( oldKey );
+}
+
 /** Get the Data object descriptor corresponding to the given key */
 const InputDataDescriptor & Module::GetInputDataDescriptorByKey(const std::string & key) const
 {

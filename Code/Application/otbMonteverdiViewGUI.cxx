@@ -56,7 +56,8 @@ MonteverdiViewGUI
 ::MonteverdiViewGUI()
 {
   // Files Tree
-  m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
+  //m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
+  m_Tree = new FluTreeBrowser( 5, 30, 390, 565, "Tree " );
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
@@ -65,6 +66,8 @@ MonteverdiViewGUI
   m_MonteverdiModel->RegisterListener(this);
 
   m_HelpTextBuffer = new Fl_Text_Buffer();
+  //m_RenameWindow = new RenameViewGroup();
+  //m_RenameWindow->wRenameWindow->show();
 }
 
 MonteverdiViewGUI
@@ -159,8 +162,8 @@ void
 MonteverdiViewGUI
 ::BuildTree()
 {
-
-  wMainWindow->begin();
+  // FileGroup and tree
+  gTreeGroup->add(m_Tree);
 
   m_Tree->box( FL_DOWN_BOX );
   m_Tree->auto_branches( true );
@@ -178,19 +181,14 @@ MonteverdiViewGUI
   m_Tree->collapse_time( 0.02 );
   m_Tree->frame_rate(500);
 
-  Flu_Tree_Browser::Node* root = m_Tree->first();
+  //Flu_Tree_Browser::Node* root = m_Tree->first();
+  FluTreeBrowser::Node* root = m_Tree->first();
   root->open(true);
   root->label("Data Set");
 
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
-  gTreeGroup->end();
-
   m_Tree->show_root(false);
-
-  // FileGroup and tree
-  gTreeGroup->add(m_Tree);
-  gTreeGroup->show();
 
 }
 
@@ -264,60 +262,98 @@ void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v)
 /** TreeCallback (static) */
 void MonteverdiViewGUI::TreeCallback( Fl_Widget* w, void* v )
 {
-  Flu_Tree_Browser *t = (Flu_Tree_Browser*)w;
-  Fl_Menu_Window *coolMenu = new Fl_Menu_Window(300,100,100,300);
-  coolMenu->clear_overlay();
-  coolMenu->hide();
-  
+  FluTreeBrowser *t = (FluTreeBrowser*)w;
   int reason = t->callback_reason();
-  Flu_Tree_Browser::Node *n = t->callback_node();
-  
+  FluTreeBrowser::Node *n = t->callback_node();
+
+  MonteverdiViewGUI * pthis = dynamic_cast<MonteverdiViewGUI *>(static_cast<MonteverdiViewGroup *>(w->parent()->parent()->user_data()));
+
   switch( reason )
   {
-    case FLU_HILIGHTED:
-      printf( "%s hilighted\n", n->label() );
-      break;
-  
-    case FLU_UNHILIGHTED:
-      printf( "%s unhilighted\n", n->label() );
-      break;
-
-    case FLU_SELECTED:
-      printf( "%s selected\n", n->label() );
-      break;
-
-    case FLU_UNSELECTED:
-      printf( "%s unselected\n", n->label() );
-      break;
-
-    case FLU_OPENED:
-      printf( "%s opened\n", n->label() );
-      break;
-
-    case FLU_CLOSED:
-      printf( "%s closed\n", n->label() );
-      break;
-
-    case FLU_DOUBLE_CLICK:
-      printf( "%s double-clicked\n", n->label() );
-      coolMenu->show();
-//       gTree->remove(n);
-//       gTree->redraw();
-      break;
-
-    case FLU_WIDGET_CALLBACK:
-      printf( "%s widget callback\n", n->label() );
-      break;
-
-    case FLU_MOVED_NODE:
-      printf( "%s moved\n", n->label() );
-      break;
-
-    case FLU_NEW_NODE:
-      printf( "node '%s' added to the tree\n", n->label() );
-      break;
+  case OTB_FLU_RIGHT_MOUSE_PUSHED:
+    printf( "%s rightclickpushed\n", n->label() );
+    pthis->LaunchPopupMenu( n );
+    break;
   }
 }
+
+void
+MonteverdiViewGUI
+::LaunchPopupMenu( FluTreeBrowser::Node * n )
+{
+  if( n->is_root() )
+    {
+      return;
+    }
+  
+  const char * label = n->label();
+
+  // node is a module
+  if( n->parent()->is_root() )
+    {
+      m_Tree->GetModuleMenu()->LaunchModuleMenu();
+      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
+	{
+	  std::string papa = n->find_path();
+	  gRenameOld->value(label);
+	  gRenameNew->value(label);
+	  wRenameWindow->show();
+	}
+    }
+  // node is a output
+  else if( n->parent()->parent()->is_root() )
+    {
+      m_Tree->GetModuleMenu()->LaunchOutputMenu();
+      if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
+	{ 
+	  std::string rootPath = n->find_path();
+	  // erase the end "/"
+	  rootPath = rootPath.substr( 0, rootPath.size()-1 );
+	  // extract the path
+	  rootPath = rootPath.substr( 0, rootPath.find_last_of("/")+1 );
+	  gOutputRenameRoot->value( rootPath.c_str()  );
+	  gOutputRenameOld->value(label);
+	  gOutputRenameNew->value(label);
+	  wOutputRenameWindow->show();
+	}
+    }
+  else if( n->is_leaf() )
+    {
+    }
+  return;
+}
+
+void
+MonteverdiViewGUI
+::RenameOk()
+{
+  std::string oldId =  gRenameOld->value();
+  std::string newId =  gRenameNew->value();
+  m_MonteverdiController->ChangeInstanceId(oldId, newId);
+  this->ReplaceInTree(oldId, newId);
+  wRenameWindow->hide();
+}
+
+void
+MonteverdiViewGUI
+::OutputRenameOk()
+{
+  std::string rootPath = gOutputRenameRoot->value();
+  std::string oldId =  gOutputRenameOld->value();
+  std::string fullOldId = oldId;
+  std::string newId =  gOutputRenameNew->value();
+  // Get module instanceId thanks to the full path root, first eliminate the start "/"
+  std::string instanceId = rootPath.substr(1, rootPath.size() );
+  // keep the first chain
+  instanceId = instanceId.substr(0, instanceId.find_first_of("/") );
+  // replace uses find_full_path thus just the label can't work
+  fullOldId.insert(0, rootPath);
+  m_MonteverdiController->ChangeOutputDataKey(instanceId, oldId, newId);
+  this->ReplaceInTree(fullOldId, newId);
+  wOutputRenameWindow->hide();
+}
+
+
 
 void
 MonteverdiViewGUI
@@ -331,7 +367,7 @@ void
 MonteverdiViewGUI
 ::UpdateTree(const std::string & instanceId)
 {
-  Flu_Tree_Browser::Node* root = m_Tree->first();
+  FluTreeBrowser::Node* root = m_Tree->first();
 
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
@@ -342,28 +378,26 @@ MonteverdiViewGUI
   OutputDataDescriptorMapType::const_iterator it;
   for (it = lDataMap.begin();it != lDataMap.end();it++)
     {
-    // we look for the good node in the tree to add leaves
-    Flu_Tree_Browser::Node* n = m_Tree->find(instanceId.c_str());
-    if( !n )
-      n = m_Tree->last();
-
-    n->open(true);
-
-    // this node can receive new nodes as a result of draggind-and-dropping
-    //TODO
-    //n->droppable(true);
-    //n->movable(true);
-
-    Flu_Tree_Browser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
-
-    // add informations to the targeted module
-    new_node->add(it->second.GetDataDescription().c_str());
-
-
-    new_node->add(it->second.GetDataType().c_str());
-
-    //new_node->open(close);
-    n->branch_icons( &process,&process );
+      // we look for the good node in the tree to add leaves
+      FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
+      if( !n )
+	n = m_Tree->last();
+      
+      n->open(true);
+      
+      // this node can receive new nodes as a result of draggind-and-dropping
+      //TODO
+      //n->droppable(true);
+      //n->movable(true);
+      
+      FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
+      
+      // add informations to the targeted module
+      new_node->add(it->second.GetDataDescription().c_str());
+      new_node->add(it->second.GetDataType().c_str());
+      
+      //new_node->open(close);
+      n->branch_icons( &process,&process );
 
     if(it->second.GetDataType() == "Floating_Point_VectorImage"
       || it->second.GetDataType() == "Floating_Point_Complex_Image"
@@ -385,8 +419,16 @@ MonteverdiViewGUI
       {
       new_node->branch_icons( &blue_dot,&blue_dot);
       }
-
     } // end datas loop
+}
+
+void
+MonteverdiViewGUI
+::ReplaceInTree(const std::string & oldLabel, const std::string & newLabel)
+{
+  FluTreeBrowser::Node* n  = m_Tree->find(oldLabel.c_str());
+  if( n != NULL )
+    n->label( newLabel.c_str() );
 }
 
 void
@@ -407,12 +449,6 @@ MonteverdiViewGUI
   else if(event.GetType() == "OutputsUpdated" )
     {
     this->UpdateTree(event.GetInstanceId());
-    }
-  // event received : module instanceID has changed
-  else if(event.GetType() == "ChangeInstanceId" )
-    {
-      std::cout<<"event.GetInstanceId(): "<<event.GetInstanceId()<<std::endl;
-      this->UpdateTree(event.GetInstanceId());
     }
   // Event received : UNKNOWN EVENT
   else

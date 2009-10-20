@@ -83,6 +83,7 @@ void SupervisedClassificationModule::Notify()
 {
   if(m_SupervisedClassification->GetHasOutput())
     {
+      std::cout<<"oui, j'ai une output"<<std::endl;
       //this->ClearOutputDescriptors();
       this->EraseOutputByKey("OutputImage");
       this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage","Classified image.");

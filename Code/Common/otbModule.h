@@ -84,6 +84,9 @@ public:
    * AssignInputByKey(). */
   const DataObjectWrapper GetOutputByKey(const std::string & key, unsigned int idx = 0) const;
 
+  /**  Change the DataKey if possible from oldKey to newKey */
+  void ChangeOutputKey( const std::string & oldKey, const std::string & newKey );
+
   /** Get the Data object descriptor corresponding to the given key */
   const InputDataDescriptor & GetInputDataDescriptorByKey(const std::string & key) const;
 

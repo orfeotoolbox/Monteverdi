@@ -60,6 +60,9 @@ public:
   /** Starts caching */
   virtual void StartCaching(const std::string & id, const std::string & key);
 
+  /** Change module InstanceId (ie. tree label) output data key from oldKey to newKey */
+  virtual void ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey);
+
 protected:
   /** Constructor */
   MonteverdiController(){};

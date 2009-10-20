@@ -128,6 +128,9 @@ class ITK_EXPORT MonteverdiModel
   /** Change module InstanceId (ie. tree label) */
   void ChangeInstanceId( const std::string & oldInstanceId, const std::string & newIntanceId );
 
+  /** Change module InstanceId (ie. tree label) output data key from oldKey to newKey */
+  void ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey);
+
   /** Does the output key from the module instanceId supports caching ? */
   bool SupportsCaching(const std::string & instanceId, const std::string & outputKey) const;
 

@@ -196,7 +196,7 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
 
   if(mcIt == m_ModuleMap.end())
     {
-    itkExceptionMacro(<<"No module found with instanceId "<<oldInstanceId);
+      itkExceptionMacro(<<"No module found with instanceId "<<oldInstanceId<<".");
     }
 
   // Look for the old instance id in the graph
@@ -229,6 +229,19 @@ void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  cons
   module->SetInstanceId(newInstanceId);
   m_ModuleMap[newInstanceId] = module;
   m_ModuleMap.erase( oldInstanceId );
+}
+
+void MonteverdiModel::ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey)
+{
+  // Look for the old instance id
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(instanceId);
+  
+  if(mcIt == m_ModuleMap.end())
+    {
+      itkExceptionMacro(<<"No module found with instanceId "<<instanceId<<".");
+    }
+  
+  mcIt->second->ChangeOutputKey(oldKey, newKey);
 }
 
 bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std::string & outputKey) const

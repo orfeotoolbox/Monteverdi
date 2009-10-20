@@ -25,6 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning(disable:4996)
 #endif
 #include "otbMonteverdiViewGroup.h"
+#include "otbRenameViewGroup.h"
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -32,7 +33,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Menu_Window.H>
 #include <FL/Fl_Group.H>
-#include <FLU/Flu_Tree_Browser.h>
+//#include <FLU/Flu_Tree_Browser.h>
+#include "otbFluTreeBrowser.h"
+#include "otbMonteverdiEnum.h"
 
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiControllerInterface.h"
@@ -115,6 +118,12 @@ public:
   /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
 
+  /** OK rename window callback */
+  void RenameOk();
+
+  /** OK output rename window callback */
+  void OutputRenameOk();
+
 protected:
    /** Constructor */
   MonteverdiViewGUI();
@@ -131,11 +140,17 @@ protected:
   /** Update the tree information regarding the given instanceId */
   void UpdateTree(const std::string & instanceId);
 
+  /** Replace a label oldLabel by newLabel */
+  void ReplaceInTree(const std::string & oldLabel, const std::string & newLabel);
+
   /** Generate the gui to choose inputs for a module */
   void BuildInputsGUI(const std::string & modulekey);
 
   /** Show the help */
   void Help();
+
+  /** Show popup menu */
+  void LaunchPopupMenu(  FluTreeBrowser::Node * n );
 
   /** Static callbacks */
   static void GenericCallback(Fl_Menu_* w, void* v);
@@ -154,7 +169,8 @@ private:
   itk::WeakPointer<MonteverdiControllerInterface> m_MonteverdiController;
 
   /** The Flu tree browser */
-  Flu_Tree_Browser        *m_Tree;
+  //Flu_Tree_Browser        *m_Tree;
+  FluTreeBrowser        *m_Tree;
 
   /** The module input selection interface */
   InputViewGUI::Pointer   m_InputViewGUI;
@@ -162,6 +178,8 @@ private:
   /** The help box text buffer */
   Fl_Text_Buffer * m_HelpTextBuffer;
 
+  /** Module menu */
+  //RenameViewGroup * m_RenameWindow;
 };
 }//end namespace otb
 
