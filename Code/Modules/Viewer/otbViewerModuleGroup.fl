@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include <FL/Fl_File_Chooser.H>} {public
+decl {\#include <FLU/Flu_File_Chooser.h>} {public
 } 
 
 class ViewerModuleGroup {open
@@ -37,7 +37,7 @@ class ViewerModuleGroup {open
             tooltip {Change the color of the selected class} xywh {60 260 73 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Browser dVDList {
-            callback {this->UpdateListSelectionColor();} selected
+            callback {this->UpdateListSelectionColor();}
             tooltip {Browse and select ROI} xywh {5 31 321 125} type Hold box PLASTIC_DOWN_BOX selection_color 23 labelfont 1 labelsize 12 labelcolor 186 align 1 textcolor 186
           }
           Fl_Button bEraseLastROI {
@@ -148,12 +148,12 @@ class ViewerModuleGroup {open
               Fl_Button bUpperApply {
                 label Apply
                 callback {this->UpdateUpperQuantile();}
-                xywh {574 223 91 26} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 184
+                xywh {574 223 91 26} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
               }
               Fl_Button bLowerApply {
                 label Apply
                 callback {this->UpdateLowerQuantile();}
-                xywh {574 262 90 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 184
+                xywh {574 262 90 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
               }
             }
           }
@@ -220,7 +220,7 @@ class ViewerModuleGroup {open
     } {
       Fl_Button gLoadDEM {
         label Load
-        callback {const char * cfname = fl_dir_chooser("Choose DEM Directory...", "");
+        callback {const char *cfname = flu_dir_chooser("Choose DEM Directory...", "");
 Fl::check();
 wDEM->redraw();
 gDEMPath->value(cfname);
@@ -232,12 +232,18 @@ gDEMPath->redraw();}
       }
       Fl_Button gQuitDEM {
         label Quit
-        callback {wDEM->hide();}
+        callback {wDEM->hide();
+bDEM->value(0);}
         xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
       }
       Fl_Button gOKDEM {
         label OK
-        callback {this->UpdateDEMSettings();}
+        callback {this->UpdateDEMSettings();
+wDEM->hide();
+if(gDEMPath->size()  == 0)
+{
+bDEM->value(0);
+}} selected
         xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
       }
     }

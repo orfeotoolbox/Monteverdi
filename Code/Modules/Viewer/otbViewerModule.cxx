@@ -19,7 +19,7 @@
 #define __otbViewerModule_cxx
 
 #include "otbViewerModule.h"
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Text_Buffer.H>
 #include "otbFltkFilterWatcher.h"
@@ -248,9 +248,17 @@ void ViewerModule::Run()
   generator->GenerateLayer();
   m_InputImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();
-
+     
   // Work with standardrenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
+
+//   // Set the right channel order
+//   if(m_InputImage->GetNumberOfComponentsPerPixel() >= 4)
+//     {
+//       channels[0] = 2;
+//       channels[1] = 1;
+//       channels[2] = 0;
+//     }
   m_StandardRenderingFunction->SetChannelList(channels);
   //  m_StandardRenderingFunction->SetAutoMinMax(false);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
