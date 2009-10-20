@@ -337,8 +337,15 @@ private:
   CastSingleImageFilter::Pointer           m_CastFilter;
   
   // Labels
-  std::string                                    m_DisplayedLabel;
-  std::string                                    m_UndisplayedLabel ;
+  std::string                              m_DisplayedLabel;
+  std::string                              m_UndisplayedLabel ;
+  
+  // Color List
+  std::vector<ColorType>                   m_ColorList;
+  // 
+  bool                                     m_GenerateRandomColor;
+  
+
 };
 
 

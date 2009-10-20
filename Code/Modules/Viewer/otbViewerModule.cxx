@@ -29,7 +29,8 @@ namespace otb
 /** Constructor */
 ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
 				m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-				m_Controller(), m_RenderingFunction(),m_DisplayedLabel("+ "),m_UndisplayedLabel("- ")
+				m_Controller(), m_RenderingFunction(),m_DisplayedLabel("+ "),m_UndisplayedLabel("- "),
+				m_GenerateRandomColor(true)
 {
   // This module needs pipeline locking
   this->NeedsPipelineLockingOn();
@@ -390,8 +391,17 @@ void ViewerModule::UpdateVectorData(unsigned int index)
   // Create a VectorData gl component
   VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
   vgl->SetVectorData(vproj->GetOutput());
-  vgl->SetColor(this->SetRandomColor());
-    
+  
+  // Flag to Generate Random Color or to use saved colors (used only when DEM use is requested)
+  if(m_GenerateRandomColor)
+    {
+      vgl->SetColor(this->SetRandomColor());
+      // Add the color to the list 
+      m_ColorList.push_back(vgl->GetColor());
+    }
+  else
+    vgl->SetColor(m_ColorList[index]);
+  
   // Add it to the image view
   m_View->GetScrollWidget()->AddGlComponent(vgl);
   m_View->GetFullWidget()->AddGlComponent(vgl);
@@ -435,22 +445,25 @@ void ViewerModule::UpdateListSelectionColor()
   //selectedIndex
   unsigned int selectedIndex = dVDList->value();
 
-  if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
+  if(selectedIndex /*&& m_DisplayedVectorData[selectedIndex-1]*/)
     {
-      VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
-      ColorType                   curColor                     = selecedVectorDataGlComponent->GetColor();
+      //VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
+      //ColorType                   curColor                     = selecedVectorDataGlComponent->GetColor();
+      
+      ColorType                   curColor = m_ColorList[selectedIndex-1];
       
       // color To fl_color
       fl_color(static_cast<unsigned char>(255*curColor[0]),
 	       static_cast<unsigned char>(255*curColor[1]),
 	       static_cast<unsigned char>(255*curColor[2]));
       
-      //Update the ROIColorItem
-      dROIColor->color(fl_color());
-      dROIColor->redraw();
       //Update the text color
       dVDList->selection_color(fl_color());
       dVDList->redraw();
+      
+      //Update the ROIColorItem
+      dROIColor->color(fl_color());
+      dROIColor->redraw();
     }
 }
 
@@ -591,13 +604,14 @@ void ViewerModule::ChangeROIColor()
 		   static_cast<unsigned char>(255*curColor[1]),
 		   static_cast<unsigned char>(255*curColor[2]));
 	  
-	  // Change the color of the RoiButton 
-	  dROIColor->color(fl_color());
 	  // Change the color of the text
 	  dVDList->selection_color(fl_color());
       	  dVDList->redraw();
+	  // Change the color of the RoiButton 
+	  dROIColor->color(fl_color());
 	  // Change the color of the VectorData
 	  selecedVectorDataGlComponent->SetColor(curColor);
+	  m_ColorList[selectedIndex-1] = curColor;
 	  this->RedrawWidget();
 	}
     }
@@ -637,7 +651,10 @@ void ViewerModule::UpdateDEMSettings()
 	  m_View->GetFullWidget()->RemoveGlComponent(1);
 	  m_View->GetZoomWidget()->RemoveGlComponent(0);
 	}
-  
+      
+      // Deactivate the Random Generation of the color when render vector
+      m_GenerateRandomColor = false;
+      
       // Reproject using the DEM this time
       for(unsigned int i = 0; i < m_VectorDataList->Size();i++)
 	{
