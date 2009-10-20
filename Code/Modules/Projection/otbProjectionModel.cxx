@@ -338,24 +338,66 @@ void ProjectionModel
 	  up = i;
 	}
     }
-  // size image in carto coordinate :
-  double sizeXcarto =  maxX-minX;
-  // - because of the difference of origin for Y (image vs. carto)
-  double sizeYcarto =  -(maxY-minY);
+ //  // size image in carto coordinate :
+//   double sizeXcarto =  maxX-minX;
+//   // - because of the difference of origin for Y (image vs. carto)
+//   double sizeYcarto =  -(maxY-minY);
   
-  // X 
-  double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
-  double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
+//   // X 
+//   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
+//   double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
   
-  m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
-  m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
+//   m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
+//   m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
   
-  // Y
-  double alphaY1 = vcl_atan2( vcl_abs(voutput[up][1]-voutput[left][1]), vcl_abs(voutput[up][0]-voutput[left][0]) );
-  double alphaY2 = vcl_atan2( vcl_abs(voutput[down][1]-voutput[left][1]), vcl_abs(voutput[down][0]-voutput[left][0]) );
+//   // Y
+//   double alphaY1 = vcl_atan2( vcl_abs(voutput[up][1]-voutput[left][1]), vcl_abs(voutput[up][0]-voutput[left][0]) );
+//   double alphaY2 = vcl_atan2( vcl_abs(voutput[down][1]-voutput[left][1]), vcl_abs(voutput[down][0]-voutput[left][0]) );
 
-  m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
-  m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
+//   m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
+//   m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
+
+
+  // Compute the output size
+  double sizeCartoX = maxX - minX;
+  double sizeCartoY = minY - maxY;
+
+  OutputPointType o,oX,oY;
+  
+  // Initialize
+  o = m_OutputOrigin;
+  oX = m_OutputOrigin;
+  oY = m_OutputOrigin;
+  oX[0]+=sizeCartoX;
+  oY[1]+=sizeCartoY;
+
+  // Transform back into the input image
+  OutputPointType io = m_InverseTransform->TransformPoint(o);
+  OutputPointType ioX = m_InverseTransform->TransformPoint(oX);
+  OutputPointType ioY = m_InverseTransform->TransformPoint(oY);
+  
+  // Transform to indices
+  IndexType ioIndex, ioXIndex, ioYIndex;
+  m_InputImage->TransformPhysicalPointToIndex(io,ioIndex);
+  m_InputImage->TransformPhysicalPointToIndex(ioX,ioXIndex);
+  m_InputImage->TransformPhysicalPointToIndex(ioY,ioYIndex);
+
+  // Evaluate Ox and Oy length in number of pixels
+  double OxLength,OyLength;
+  
+  OxLength = vcl_sqrt( vcl_pow((double)ioIndex[0] - (double)ioXIndex[0],2)
+		    +  vcl_pow((double)ioIndex[1] - (double)ioXIndex[1],2));
+
+  OyLength = vcl_sqrt( vcl_pow((double)ioIndex[0] - (double)ioYIndex[0],2)
+		    +  vcl_pow((double)ioIndex[1] - (double)ioYIndex[1],2));
+
+  // Evaluate spacing
+  m_OutputSpacing[0] = sizeCartoX/OxLength;
+  m_OutputSpacing[1] = sizeCartoY/OyLength;
+
+  // Evaluate size
+  m_OutputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX/m_OutputSpacing[0])));
+  m_OutputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY/m_OutputSpacing[1])));
 }
 
 /**
