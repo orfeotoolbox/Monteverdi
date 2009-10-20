@@ -12,6 +12,7 @@ otbMonteverdiViewGUI.cxx
 otbMonteverdiController.cxx
 otbInputViewComponent.cxx
 otbInputViewGUI.cxx
+otbMonteverdiPixmaps.cxx
 )
 
 SET(VIEW_FL_SRCS
