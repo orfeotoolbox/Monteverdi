@@ -25,7 +25,6 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning(disable:4996)
 #endif
 #include "otbMonteverdiViewGroup.h"
-#include "otbRenameViewGroup.h"
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -178,8 +177,6 @@ private:
   /** The help box text buffer */
   Fl_Text_Buffer * m_HelpTextBuffer;
 
-  /** Module menu */
-  //RenameViewGroup * m_RenameWindow;
 };
 }//end namespace otb
 
