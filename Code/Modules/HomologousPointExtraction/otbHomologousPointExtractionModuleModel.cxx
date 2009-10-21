@@ -23,6 +23,9 @@
 #include "itkLandmarkBasedTransformInitializer.h"
 #include "otbImageFileWriter.h"
 
+#include <vnl/algo/vnl_lsqr.h>
+#include <vnl/vnl_sparse_matrix_linear_system.h>
+#include <vnl/vnl_least_squares_function.h>
 
 namespace otb
 {
@@ -222,14 +225,7 @@ HomologousPointExtractionModuleModel
       }
     case otb::AFFINE:
       {
-      ScalesType scales(6);
-      // M11, M12, M21, M22
-      scales.Fill( 1. );
-      // translation X and Y
-      scales[4] = 1000;
-      scales[5] = 1000;
-
-      this->GenericRegistration<AffineTransformType>(scales);
+      this->AffineLeastSquareRegistration();
       break;
       }
     case otb::SIMILARITY2D:
@@ -300,6 +296,78 @@ HomologousPointExtractionModuleModel
   m_TransformParameters = transform->GetParameters();
   m_Resampler->SetTransform(transform);
 */
+}
+
+void 
+HomologousPointExtractionModuleModel
+::AffineLeastSquareRegistration()
+{
+  unsigned int nbPoints = m_IndexesList.size();
+
+  if(nbPoints==0)
+    itkExceptionMacro(<<"No point selected...");
+
+
+  vnl_sparse_matrix<double> ax(nbPoints,3),ay(nbPoints,3);
+  vnl_vector<double> bx(nbPoints),by(nbPoints);
+
+  for(unsigned int i=0; i<nbPoints ; i++)
+    {
+   
+    ax(i,0) = m_IndexesList[i].first[0];
+    ax(i,1) = m_IndexesList[i].first[1];
+    ax(i,2) = 1.;
+    
+    ay(i,0) = m_IndexesList[i].first[0];
+    ay(i,1) = m_IndexesList[i].first[1];
+    ay(i,2) = 1.;
+
+    bx[i]= m_IndexesList[i].second[0];
+    by[i]= m_IndexesList[i].second[1];
+    }
+
+  vnl_sparse_matrix_linear_system<double> linearSystemX(ax,bx),linearSystemY(ay,by);
+  vnl_vector<double> bestXParams(3),bestYParams(3);
+
+  vnl_lsqr linearSystemSolverX(linearSystemX),linearSystemSolverY(linearSystemY);
+
+  std::cout<<"X: "<<std::endl;
+  linearSystemSolverX.minimize(bestXParams);
+  linearSystemSolverX.diagnose_outcome(std::cout);
+
+
+  std::cout<<"Number of unknown: "<<linearSystemX.get_number_of_unknowns()<<std::endl;
+  std::cout<<"RMS error: "<<linearSystemX.get_rms_error(bestXParams)<<std::endl;
+  std::cout<<"Relative residuals: "<<linearSystemX.get_relative_residual(bestXParams)<<std::endl;
+  
+  std::cout<<"Y: "<<std::endl;
+  linearSystemSolverY.minimize(bestYParams);
+  linearSystemSolverY.diagnose_outcome(std::cout);
+
+  std::cout<<"Number of unknown: "<<linearSystemY.get_number_of_unknowns()<<std::endl;
+  std::cout<<"RMS error: "<<linearSystemY.get_rms_error(bestYParams)<<std::endl;
+  std::cout<<"Relative residuals: "<<linearSystemY.get_relative_residual(bestYParams)<<std::endl;
+
+  std::cout<<"Done."<<std::endl;
+
+  itk::Vector<double,2> translation;
+  itk::Matrix<double,2,2> mat;
+
+
+  m_TransformParameters.SetSize(6);
+
+  m_TransformParameters[0] = bestXParams[0];
+  m_TransformParameters[1] = bestXParams[1];
+  m_TransformParameters[2] = bestYParams[0];
+  m_TransformParameters[3] = bestYParams[1];
+  m_TransformParameters[4] = bestXParams[2];
+  m_TransformParameters[5] = bestYParams[2];
+
+  AffineTransformType::Pointer transform = AffineTransformType::New();
+  transform->SetParameters(m_TransformParameters);
+  m_Resampler->SetTransform(transform);
+
+  std::cout<<"Best params:" <<m_TransformParameters<<std::endl;
 }
 
 HomologousPointExtractionModuleModel::ContinuousIndexType
