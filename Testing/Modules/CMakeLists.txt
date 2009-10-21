@@ -153,6 +153,15 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
+#------------- Algebra Module test
+ADD_TEST(moTvAlgebraModuleTest ${Modules_TESTS} otbAlgebraModuleTest
+${INPUTDATA}/prison_toulouse.tif
+${INPUTDATA}/prison_toulouse.tif
+${TEMP}/moTvAlgebraImageModule.tif
+0
+)	      
+
+
 
 
 
@@ -177,6 +186,7 @@ otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
+otbAlgebraModuleTest.cxx	
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur

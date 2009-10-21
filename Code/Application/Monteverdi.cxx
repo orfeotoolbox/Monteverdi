@@ -64,6 +64,8 @@
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
+#include "otbAlgebraModule.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -110,6 +112,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ViewerModule>("Viewer","Visualization/Viewer");
   model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
   model->RegisterModule<otb::ConcatenateModule>("Concatenate","File/Concatenate images");
+
+  model->RegisterModule<otb::AlgebraModule>("Algebra","Algebra/Band Math");
 
   // Launch Monteverdi
   view->InitWidgets();
