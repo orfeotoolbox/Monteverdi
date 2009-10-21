@@ -156,6 +156,7 @@ public:
   /** Perform the transform */
   template <typename T> void GenericRegistration(const ScalesType & scales);
 
+  void AffineLeastSquareRegistration();
 
   /** Compute the transform on one point */
   ContinuousIndexType TransformPoint( TransformEnumType transformType, IndexType id );
