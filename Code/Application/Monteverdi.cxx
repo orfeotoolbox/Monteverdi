@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("zCaching","File/Cache dataset");
   model->RegisterModule<otb::ConcatenateModule>("Concatenate","File/Concatenate images");
 
-  model->RegisterModule<otb::AlgebraModule>("Algebra","Algebra/Band Math");
+  model->RegisterModule<otb::AlgebraModule>("Algebra","Filtering/Band Math");
 
   // Launch Monteverdi
   view->InitWidgets();
