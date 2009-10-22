@@ -294,7 +294,6 @@ MonteverdiViewGUI
       m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
 	{
-	  std::string papa = n->find_path();
 	  gRenameOld->value(label);
 	  gRenameNew->value(label);
 	  wRenameWindow->show();
@@ -303,7 +302,7 @@ MonteverdiViewGUI
   // node is a output
   else if( n->parent()->parent()->is_root() )
     {
-      m_Tree->GetModuleMenu()->LaunchOutputMenu();
+      m_Tree->GetModuleMenu()->LaunchOutputMenu(false,false,false);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
 	{ 
 	  std::string rootPath = n->find_path();

@@ -37,12 +37,15 @@ typedef enum {
 } TreeCallBackEnumType;
 
 typedef enum{ 
-  NO_MODULE_OUTPUT, 
+    NO_MODULE_OUTPUT, 
     SHOW_MODULE, 
     RENAME_MODULE } ModuleMenuOutputEnumType;
 
 typedef enum{ 
   NO_OUTPUT,  
-    RENAME_OUTPUT } OutputMenuOutputEnumType;
+  RENAME_OUTPUT,
+  DISPLAY_OUTPUT,
+  CACHE_OUTPUT,
+  WRITE_OUTPUT} OutputMenuOutputEnumType;
 
 #endif
