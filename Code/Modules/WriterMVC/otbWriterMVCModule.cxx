@@ -87,7 +87,7 @@ void WriterMVCModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = -1;
 
-  while( (m_ProcessObject.IsNull() && this->IsBusy()) || m_ProcessObject->GetProgress() != 1)
+  while( (m_ProcessObject.IsNull() || this->IsBusy()) )
   {
     if(m_ProcessObject.IsNotNull())
     {
@@ -105,6 +105,7 @@ void WriterMVCModule::ThreadedWatch()
   }
   
   // Reactivate window buttons
+//   std::cout << "activation" <<std::endl;
   m_View->ManageActivationWindowButtons(true);
 }
 
@@ -129,8 +130,9 @@ void WriterMVCModule::Notify(const std::string & event)
     // Once module is closed, it is no longer busy
     this->BusyOff();
   }
-  else if (event == "BusyOff" ||  event == "Quit")
+  else if ( ( event == "BusyOff" ) ||  ( event == "Quit" ) )
   {
+//     std::cout << "quit module" << std::endl;
     this->BusyOff();
   }
   else if (event == "SaveDataSet")

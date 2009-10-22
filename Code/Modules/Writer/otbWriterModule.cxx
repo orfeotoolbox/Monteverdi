@@ -19,6 +19,7 @@
 #include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl.H>
 
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -124,7 +125,7 @@ void WriterModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = 0;
 
-  while( (m_ProcessObject.IsNull() || this->IsBusy()))
+  while( (m_ProcessObject.IsNull() || this->IsBusy()) )
     {
     if(m_ProcessObject.IsNotNull())
          {
@@ -166,51 +167,59 @@ void WriterModule::ThreadedRun()
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 
-  if ( charVectorImage.IsNotNull() )
-    {
-    CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-    charVWriter->SetInput(charVectorImage);
-    charVWriter->SetFileName(filepath);
-    m_ProcessObject = charVWriter;
-    charVWriter->Update();
-    }
-  else if ( vectorImage.IsNotNull() )
-    {
-    FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-    fPVWriter->SetInput(vectorImage);
-    fPVWriter->SetFileName(filepath);
-    m_ProcessObject = fPVWriter;
-    fPVWriter->Update();
-    }
-  else if( singleImage.IsNotNull() )
-    {
-    FPWriterType::Pointer fPWriter = FPWriterType::New();
-    fPWriter->SetInput(singleImage);
-    fPWriter->SetFileName(filepath);
-    m_ProcessObject = fPWriter;
-    fPWriter->Update();
-    }
-  else if( vectorData.IsNotNull() )
-    {
-    VectorWriterType::Pointer vectorWriter = VectorWriterType::New();
-    vectorWriter->SetInput(vectorData);
-    vectorWriter->SetFileName(filepath);
-    m_ProcessObject = vectorWriter;
-    vectorWriter->Update();
-    }
-  else if( labeledVectorData.IsNotNull() )
-    {
-    LabeledVectorWriterType::Pointer labeledVectorWriter = LabeledVectorWriterType::New();
-    labeledVectorWriter->SetInput(labeledVectorData);
-    labeledVectorWriter->SetFileName(filepath);
-    m_ProcessObject = labeledVectorWriter;
-    labeledVectorWriter->Update();
-    }
-  else
-    {
-    this->BusyOff();
-    itkExceptionMacro(<<"Input data are NULL.");
-    }
+  try 
+  {
+    if ( charVectorImage.IsNotNull() )
+      {
+      CharVWriterType::Pointer charVWriter = CharVWriterType::New();
+      charVWriter->SetInput(charVectorImage);
+      charVWriter->SetFileName(filepath);
+      m_ProcessObject = charVWriter;
+      charVWriter->Update();
+      }
+    else if ( vectorImage.IsNotNull() )
+      {
+      FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+      fPVWriter->SetInput(vectorImage);
+      fPVWriter->SetFileName(filepath);
+      m_ProcessObject = fPVWriter;
+      fPVWriter->Update();
+      }
+    else if( singleImage.IsNotNull() )
+      {
+      FPWriterType::Pointer fPWriter = FPWriterType::New();
+      fPWriter->SetInput(singleImage);
+      fPWriter->SetFileName(filepath);
+      m_ProcessObject = fPWriter;
+      fPWriter->Update();
+      }
+    else if( vectorData.IsNotNull() )
+      {
+      VectorWriterType::Pointer vectorWriter = VectorWriterType::New();
+      vectorWriter->SetInput(vectorData);
+      vectorWriter->SetFileName(filepath);
+      m_ProcessObject = vectorWriter;
+      vectorWriter->Update();
+      }
+    else if( labeledVectorData.IsNotNull() )
+      {
+      LabeledVectorWriterType::Pointer labeledVectorWriter = LabeledVectorWriterType::New();
+      labeledVectorWriter->SetInput(labeledVectorData);
+      labeledVectorWriter->SetFileName(filepath);
+      m_ProcessObject = labeledVectorWriter;
+      labeledVectorWriter->Update();
+      }
+    else
+      {
+      this->BusyOff();
+      itkExceptionMacro(<<"Input data are NULL.");
+      }
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    this->BusyOff();    
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
   this->BusyOff();
 }
 
