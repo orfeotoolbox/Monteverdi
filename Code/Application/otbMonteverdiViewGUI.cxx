@@ -66,8 +66,6 @@ MonteverdiViewGUI
   m_MonteverdiModel->RegisterListener(this);
 
   m_HelpTextBuffer = new Fl_Text_Buffer();
-  //m_RenameWindow = new RenameViewGroup();
-  //m_RenameWindow->wRenameWindow->show();
 }
 
 MonteverdiViewGUI
@@ -147,9 +145,21 @@ MonteverdiViewGUI
 
   mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
-  for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
+  unsigned int idx = 0;
+
+  while(idx < m_MonteverdiModel->GetNumberOfRegisteredModules())
     {
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
+    mcIt = lModuleDescriptorMap.begin();
+
+    while(mcIt != lModuleDescriptorMap.end() && (mcIt->second.m_RegistrationOrder != idx))
+    {
+    mcIt++;
+    }
+    if(mcIt !=  lModuleDescriptorMap.end())
+      {
+      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
+      }
+    ++idx;
     }
 
   // In the end

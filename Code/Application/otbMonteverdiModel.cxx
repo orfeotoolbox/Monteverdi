@@ -34,7 +34,7 @@ MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
 /**
  * Constructor
  */
-MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap(), m_CachingModuleMap(), m_ConnectionGraph()
+MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap(), m_CachingModuleMap(), m_ConnectionGraph(), m_NumberOfRegisteredModules(0)
 {
   m_ConnectionGraph = ConnectionGraphType::New();
 }

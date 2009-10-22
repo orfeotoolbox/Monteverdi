@@ -55,6 +55,8 @@ class ITK_EXPORT MonteverdiModel
     std::string m_Key;
     // Path in the application menu
     std::string m_MenuPath;
+    // Registration order
+    unsigned int m_RegistrationOrder;
   protected:
     // pointer to the constructor of the module
     ConstructorPointerType m_Constructor;
@@ -96,9 +98,13 @@ class ITK_EXPORT MonteverdiModel
     desc.m_Key = key;
     desc.m_MenuPath = menupath;
     desc.m_Constructor = (ConstructorPointerType)&T::New;
+    desc.m_RegistrationOrder = m_NumberOfRegisteredModules;
+    ++m_NumberOfRegisteredModules;
     m_ModuleDescriptorMap[key]=desc;
     m_InstancesCountMap[key]=0;
   }
+
+  itkGetMacro(NumberOfRegisteredModules,unsigned int);
 
   /** Create a module according to its key. If the key is not a
   registered module, throws an exception */
@@ -196,6 +202,9 @@ protected:
 
   /** The connections graph */
   ConnectionGraphType::Pointer m_ConnectionGraph;
+
+  /** Number of registered module */
+  unsigned int m_NumberOfRegisteredModules;
 };
 
 }
