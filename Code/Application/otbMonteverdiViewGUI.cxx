@@ -376,20 +376,21 @@ MonteverdiViewGUI
   // look after all outputdatas into each instance of module
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
   OutputDataDescriptorMapType::const_iterator it;
+
+
+  // we look for the good node in the tree to add leaves
+  FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
+  if( !n )
+    n = m_Tree->last();
+  n->open(true);
+  n->movable(true);
+
+  // this node can receive new nodes as a result of draggind-and-dropping
+  //TODO
+  //n->droppable(true);
+  
   for (it = lDataMap.begin();it != lDataMap.end();it++)
-    {
-      // we look for the good node in the tree to add leaves
-      FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
-      if( !n )
-	n = m_Tree->last();
-      
-      n->open(true);
-      
-      // this node can receive new nodes as a result of draggind-and-dropping
-      //TODO
-      //n->droppable(true);
-      //n->movable(true);
-      
+    {         
       FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
       
       // add informations to the targeted module

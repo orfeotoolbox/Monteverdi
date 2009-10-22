@@ -61,9 +61,6 @@ void OrthorectificationModule::Run()
       m_CastFilter->SetInput(singleImage);
       m_CastFilter->UpdateOutputInformation();
       input = m_CastFilter->GetOutput();
-      // TODO to remove when pb resolved (cf halfchiel mail)
-      input->SetMetaDataDictionary( singleImage->GetMetaDataDictionary() );
-
     }
 
   if(input.IsNotNull())

@@ -20,6 +20,7 @@
 
 #include "otbMonteverdiModel.h"
 #include "otbGraphVertexIterator.h"
+#include "otbGraphOutEdgeIterator.h"
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
@@ -242,8 +243,36 @@ void MonteverdiModel::ChangeOutputDataKey(const std::string & instanceId, const 
     }
   
   mcIt->second->ChangeOutputKey(oldKey, newKey);
-}
 
+  // Update connection graph as well
+
+   // Look for the instance id in the graph
+  otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
+
+  while(!vertexIt.IsAtEnd() && vertexIt.Get() != instanceId)
+    {
+    ++vertexIt;
+    }
+
+  // If found
+  if(!vertexIt.IsAtEnd())
+    {
+    otb::GraphOutEdgeIterator<ConnectionGraphType> outEdgeIt(m_ConnectionGraph,vertexIt);
+
+    while(!outEdgeIt.IsAtEnd())
+      {
+      CGraphEdgeType edge = outEdgeIt.Get();
+
+      if(edge.first == oldKey)
+	{
+	edge.first = newKey;
+	outEdgeIt.Set(edge);
+	}
+      ++outEdgeIt;
+      }
+    }
+}
+  
 bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std::string & outputKey) const
 {
   // First retrieve the data descritpor
