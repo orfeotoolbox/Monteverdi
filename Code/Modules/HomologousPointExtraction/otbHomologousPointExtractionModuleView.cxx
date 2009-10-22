@@ -173,7 +173,7 @@ HomologousPointExtractionModuleView
  oss<<id1<<" , "<<id2;
  this->lPointList->add(oss.str().c_str());
 
- srand((id2[0]+id1[1]+id2[0]+id2[1])*123456);
+ srand((id1[0]+id1[1]+id2[0]+id2[1])*123456);
  ColorType color;
  color[0]=rand()/(RAND_MAX+1.0);
  color[1]=rand()/(RAND_MAX+1.0);
@@ -400,7 +400,6 @@ void
 HomologousPointExtractionModuleView
 ::HideAll()
 {
-  std::cout<<"HideAll starts"<<std::endl;
   // Remove registered visualization components from the interface
   m_FirstImageView->GetFullWidget()->ClearGlComponents();
   m_FirstImageView->GetScrollWidget()->ClearGlComponents();
@@ -417,11 +416,8 @@ HomologousPointExtractionModuleView
   gScroll2->remove(m_SecondImageView->GetScrollWidget());
   gZoom2->remove(m_SecondImageView->GetZoomWidget());
 
-  std::cout<<"HideAll removed"<<std::endl;
   //MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
-
-  std::cout<<"HideAll stops"<<std::endl;
 }
 
 
