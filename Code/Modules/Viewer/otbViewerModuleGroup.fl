@@ -220,7 +220,7 @@ class ViewerModuleGroup {open
     } {
       Fl_Button gLoadDEM {
         label Load
-        callback {const char *cfname = flu_dir_chooser("Choose DEM Directory...", "");
+        callback {const char *cfname = flu_dir_chooser("Choose DEM directory...", "");
 Fl::check();
 wDEM->redraw();
 gDEMPath->value(cfname);

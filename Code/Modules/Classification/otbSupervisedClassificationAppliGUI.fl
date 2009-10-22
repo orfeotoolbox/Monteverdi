@@ -18,7 +18,7 @@ class SupervisedClassificationAppliGUI {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window bClassesBrowser {
-      label {Supervised Classification Application}
+      label {Supervised classification application}
       callback {this->QuitCallback();} open
       xywh {634 114 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
@@ -28,7 +28,7 @@ class SupervisedClassificationAppliGUI {open
         tooltip {Browse and select classes} xywh {6 41 280 195} type Hold box PLASTIC_DOWN_BOX color 23 selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 0 when 3
       }
       Fl_Text_Display dClassInfo {
-        label {Class Information}
+        label {Class information}
         tooltip {Display selected class information} xywh {296 45 198 32} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Menu_Bar {} {open
@@ -100,7 +100,7 @@ class SupervisedClassificationAppliGUI {open
         tooltip {Display image information} xywh {291 432 279 76} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 10
       }
       Fl_Group {} {
-        label {Edit Classes} open
+        label {Edit classes} open
         tooltip {Tools to edit classes attributes} xywh {6 250 280 93} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
         Fl_Button bAddClass {
@@ -195,7 +195,7 @@ else
           tooltip {Delete the selected region of interest} xywh {436 322 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
         }
         Fl_Button bClearROIs {
-          label ClearROIs
+          label {Clear ROIs}
           callback {ClearROIs();}
           tooltip {Clear all regions of interest} xywh {436 282 115 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
         }
@@ -237,11 +237,11 @@ else
       }
     }
     Fl_Window guiSVMSetup {
-      label {SVM Setup} open
+      label {SVM setup} open
       xywh {274 320 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide
     } {
       Fl_Choice svmSVMType {
-        label {SVM Type} open
+        label {SVM type} open
         tooltip {Set the SVM type} xywh {90 41 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         MenuItem {} {
@@ -266,7 +266,7 @@ else
         }
       }
       Fl_Choice svmKernelType {
-        label {Kernel Type} open
+        label {Kernel type} open
         tooltip {Set the kernel type} xywh {90 13 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         MenuItem {} {
@@ -287,27 +287,27 @@ else
         }
       }
       Fl_Spinner svmKernelDegree {
-        label {Kernel Degree }
+        label {Kernel degree}
         xywh {115 81 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
       }
       Fl_Value_Input svmGamma {
-        label {Gamma }
+        label {Gamma}
         xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmNu {
-        label {Nu }
+        label {Nu}
         xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmCoef0 {
-        label {Coef0 }
+        label {Coef0}
         xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmC {
-        label {C }
+        label {C}
         xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmEpsilon {
-        label {Epsilon }
+        label {Epsilon}
         xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button svmShrinking {
@@ -315,11 +315,11 @@ else
         xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button svmPE {
-        label {Probability Estimation}
+        label {Probability estimation}
         xywh {15 154 185 31} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Spinner svmCacheSize {
-        label {Cache Size }
+        label {Cache size}
         xywh {115 111 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
       }
       Fl_Button {} {
@@ -328,7 +328,7 @@ else
         xywh {30 254 195 31} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmP {
-        label {P }
+        label {P}
         xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button {} {
@@ -338,7 +338,7 @@ else
       }
     }
     Fl_Window guiVisualisationSetup {
-      label {Visualisation Setup} open
+      label {Visualisation setup} open
       xywh {511 534 645 170} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide
     } {
       Fl_Round_Button viewerGrayscaleMode {
@@ -402,12 +402,12 @@ else
       }
     }
     Fl_Window guiFullWindow {
-      label {Full Window}
+      label {Full window}
       callback {this->QuitFullCallback();} open
       xywh {266 93 780 715} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
     } {}
     Fl_Window guiScrollWindow {
-      label {Scroll Window}
+      label {Scroll window}
       callback {this->QuitScrollCallback();} open
       xywh {338 265 185 185} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 hide resizable
     } {}
