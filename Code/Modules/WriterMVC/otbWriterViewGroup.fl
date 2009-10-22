@@ -1,3 +1,4 @@
+
 # data file for the Fltk User Interface Designer (fluid)
 version 1.0110 
 i18n_type 1 
@@ -16,7 +17,7 @@ class WriterViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label {Writer Application}
+      label {Writer application}
       callback {Quit();} open
       xywh {523 27 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
@@ -36,7 +37,7 @@ class WriterViewGroup {open
             xywh {475 360 80 30} box PLASTIC_DOWN_BOX color 7
           }
           Fl_Choice guiOutputPixelTypeChoice {
-            label {Output Pixel Type:} open
+            label {Output pixel type} open
             xywh {300 430 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
           } {
             MenuItem guiInitMenu {
@@ -80,7 +81,7 @@ class WriterViewGroup {open
             }
           }
           Fl_Check_Button guiScale {
-            label {Use Scaling}
+            label {Use scaling}
             xywh {165 495 110 20} down_box DOWN_BOX labelfont 1 labelcolor 186
           }
         }
@@ -89,7 +90,7 @@ class WriterViewGroup {open
           tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 55 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Browser guiFeatureList {
-            label {Feature Image List}
+            label {Feature image list}
             callback {UpdateExtractView();}
             tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
@@ -104,7 +105,7 @@ class WriterViewGroup {open
             tooltip {Remove Mono channel Image from Output List} xywh {305 457 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 45 labelfont 1 labelsize 20 labelcolor 186
           }
           Fl_Browser guiOutputFeatureList {
-            label {Selected Output Channels}
+            label {Selected output channels}
             callback {UpdateFeaturePreviewFromOutputList();}
             tooltip {Contains each Selected Feature for Output Generation} xywh {357 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
@@ -138,7 +139,7 @@ class WriterViewGroup {open
           xywh {10 27 209 222} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFull {
-          label {Full Resolution} open
+          label {Full resolution} open
           xywh {229 27 210 222} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFeature {
