@@ -308,6 +308,12 @@ MonteverdiViewGUI
 	  gRenameNew->value(label);
 	  wRenameWindow->show();
 	}
+        
+      //Show the module with current parameters 
+      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
+        {
+          //Call controller?
+        } 
     }
   // node is a output
   else if( n->parent()->parent()->is_root() )

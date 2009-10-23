@@ -179,9 +179,6 @@ FluTreeBrowser
   if( event == FL_SHOW || event == FL_HIDE )
     this->root.determineVisibility();
 
-
-
-
   return Fl_Group::handle( event );
   //return 0;
 }

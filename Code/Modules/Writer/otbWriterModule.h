@@ -101,11 +101,17 @@ private:
   // Callback to hide window
   static void HideWindowCallback(void * data);
 
+  // Callback to Error reporter window
+  static void SendErrorCallback(void * data);
+  
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
+  
+  //error msg
+  std::string m_ErrorMsg;
 };
 
 

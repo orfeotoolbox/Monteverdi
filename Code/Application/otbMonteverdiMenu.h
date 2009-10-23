@@ -62,7 +62,11 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       MonteverdiMenu * pThis = (MonteverdiMenu *)(w);
       pThis->SetModuleMenuOutput(RENAME_MODULE);
     }
-
+//     static void handle_menu_module_open(Fl_Widget *w, void *v)
+//     {
+//       std::cout << "Open module...remove this" << std::endl;
+//       
+//     }
   /** Output menu callbacks */
   static void handle_menu_output_rename(Fl_Widget *w, void *v)
     {
@@ -89,14 +93,23 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
   }
   
 
-  void LaunchModuleMenu()
+  void LaunchModuleMenu(bool show = true)
     {
-      Fl_Menu_Item popup_menu[] = 
-	{
-	  { "Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-	  { 0 }
-	};
- 
+      const unsigned menuSize = 1 + show;
+      Fl_Menu_Item popup_menu[menuSize];
+      
+      popup_menu[0] = (Fl_Menu_Item){ "Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };	
+      
+      unsigned int idx = 1;
+      //Add Re Open menu
+      if (show)
+      {
+        popup_menu[idx] = (Fl_Menu_Item) { "Show Module",  0, this->handle_menu_module_show, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };	
+        ++idx;
+      }
+      
+      popup_menu[idx] = (Fl_Menu_Item){0};
+       
       int x, y;
       Fl::get_mouse(x, y);
       const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, this);
