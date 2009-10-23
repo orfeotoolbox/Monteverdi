@@ -56,7 +56,7 @@ class MonteverdiViewGroup {open
         xywh {60 30 250 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
       }
       Fl_Input gRenameNew {
-        label {New  instance label}
+        label {New instance label}
         xywh {60 80 250 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
       }
       Fl_Button bRenameCancel {
@@ -84,7 +84,7 @@ class MonteverdiViewGroup {open
         xywh {223 30 150 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
       }
       Fl_Input gOutputRenameNew {
-        label {New  instance label}
+        label {New instance label}
         xywh {60 81 250 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
       }
       Fl_Button bOutputRenameCancel {

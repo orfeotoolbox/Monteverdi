@@ -20,7 +20,7 @@ class OrthorectificationGUI {open selected
       xywh {155 303 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
-        label OK
+        label Ok
         callback {OK();}
         tooltip {Compute result} xywh {336 420 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }

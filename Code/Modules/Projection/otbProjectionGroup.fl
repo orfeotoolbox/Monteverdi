@@ -13,11 +13,11 @@ class ProjectionGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbProjection open
+      label Projection open
       xywh {657 295 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
-        label OK
+        label Ok
         callback {OK();}
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
