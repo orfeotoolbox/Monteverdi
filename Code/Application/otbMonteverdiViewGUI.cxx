@@ -313,7 +313,9 @@ MonteverdiViewGUI
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
         {
           //Call controller?
+            std::string moduleId   = n->label();
            std::cout << "Show now the module GUI"<< std::endl;
+           m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
         } 
     }
   // node is a output
