@@ -38,8 +38,8 @@ int main(int argc, char* argv[])
   ParserType::Pointer        parser      = ParserType::New();
   ParserResultType::Pointer  parseResult = ParserResultType::New();
   //parser->AddInputImage();
-  parser->AddOption("--FirstInputImage", "First Input Image.","-in1",true);
-  parser->AddOption("--SecondInputImage", "Second Input Image.","-in2",true);
+  parser->AddOption("--FirstInputImage", "First input image.","-in1",true);
+  parser->AddOption("--SecondInputImage", "Second input image.","-in2",true);
   //parser->AddOption("--Output", "Image Name where Output Image will be written.","-out",true);
     
   try

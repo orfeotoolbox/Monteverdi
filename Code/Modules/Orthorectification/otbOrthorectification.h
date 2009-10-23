@@ -108,7 +108,7 @@ public:
   typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;
   typedef InterpType::Pointer                       InterpPointerType;
 
-  // Input Image Accessor
+  // input image Accessor
   itkGetObjectMacro(InputImage,ImageType);
   itkSetObjectMacro(InputImage,ImageType);
   

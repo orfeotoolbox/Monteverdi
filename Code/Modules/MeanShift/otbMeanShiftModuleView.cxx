@@ -1,6 +1,7 @@
 #include "otbMeanShiftModuleView.h"
 
 #include "otbMsgReporter.h"
+#include "otbI18n.h"
 
 #include <FL/Fl_File_Chooser.H>
 #include <FL/fl_draw.H>
@@ -104,7 +105,7 @@ void MeanShiftModuleView::Exit()
 
 void MeanShiftModuleView::OpenImage()
 {
-  const char * cfname = fl_file_chooser("Select an Input Image", "*.*",".");
+  const char * cfname = fl_file_chooser(otbGetTextMacro("Select an input image"), "*.*",".");
   Fl::check();
   wMainWindow->redraw();
   if (cfname == NULL || strlen(cfname)<1)

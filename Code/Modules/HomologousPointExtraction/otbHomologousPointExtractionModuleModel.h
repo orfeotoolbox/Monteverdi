@@ -134,7 +134,7 @@ public:
     return m_VisualizationModel[id];
   }
 
-  /** Input Images Pointer */
+  /** input images Pointer */
   void SetFirstInputImage( VectorImagePointerType img );
   itkGetConstObjectMacro(FirstInputImage, VectorImageType);
   void SetSecondInputImage( VectorImagePointerType img );
@@ -201,7 +201,7 @@ private:
   VisualizationModelListType m_VisualizationModel;
   LayerGeneratorListType     m_ImageGenerator;
   BlendingFunctionListType   m_BlendingFunction;
-  /** Input Images */
+  /** input images */
   ImageListType              m_Images;
   VectorImagePointerType m_FirstInputImage;
   VectorImagePointerType m_SecondInputImage;
