@@ -313,6 +313,7 @@ MonteverdiViewGUI
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
         {
           //Call controller?
+           std::cout << "Show now the module GUI"<< std::endl;
         } 
     }
   // node is a output

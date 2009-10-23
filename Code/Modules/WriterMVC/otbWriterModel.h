@@ -37,8 +37,6 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbPixelType.h"
 
-
-
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerGenerator.h"
@@ -57,12 +55,9 @@ namespace otb
  *
  */
 
-
-
 class ITK_EXPORT WriterModel
   : public EventsSender<std::string>, public itk::Object
 {
-
 public:
   /** Standard class typedefs */
   typedef WriterModel                     Self;

@@ -62,11 +62,7 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       MonteverdiMenu * pThis = (MonteverdiMenu *)(w);
       pThis->SetModuleMenuOutput(RENAME_MODULE);
     }
-//     static void handle_menu_module_open(Fl_Widget *w, void *v)
-//     {
-//       std::cout << "Open module...remove this" << std::endl;
-//       
-//     }
+
   /** Output menu callbacks */
   static void handle_menu_output_rename(Fl_Widget *w, void *v)
     {
