@@ -17,7 +17,8 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "otbWriterViewGUI.h"
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
+#include <FL/Fl.H>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Text_Buffer.H>
 #include "base/ossimFilename.h"
@@ -25,8 +26,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 // #include "otbMsgReporter.h"
-#include "otbFeature.h"
 
+// #include "otbFeature.h"
+#include "otbPixelType.h"
 
 namespace otb
 {
@@ -41,8 +43,8 @@ WriterViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_PixelType = FeatureInfo::UNKNOWN;
-
+  m_PixelType = otb::DOUBLE;
+//   m_PixelType = 4;
   this->CreateGUI();
 
   m_SelectedPixel.SetSize(0);
@@ -159,12 +161,12 @@ WriterViewGUI
     this->UpdateInformation();
   }
 }
-
+/*
 void
 WriterViewGUI
 ::OpenImage()
 {
-  const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
+//   const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
   Fl::check();
   guiMainWindow->redraw();
   if (cfname == NULL || strlen(cfname)<1)
@@ -178,7 +180,7 @@ WriterViewGUI
   m_WriterController->OpenInputImage(cfname);
   m_FeatureExtractPreviewParentBrowser = -1;
 }
-
+*/
 
 void
 WriterViewGUI
@@ -290,8 +292,12 @@ WriterViewGUI
   m_WriterController->CreateFeature();
   guiMainWindow->show();
   
+  //Initialize progress bar
   pBar->minimum(0);
   pBar->maximum(1);
+  
+  //Initialize output pixel type
+//   guiInitMenu->value( guiDefaultDoubleMenu );
 }
 
 void
@@ -371,7 +377,7 @@ WriterViewGUI
 {
   this->ClearFeature();
   this->UpdateParameterArea(0);
-  this->SetPixelType(FeatureInfo::UNKNOWN);
+  this->SetPixelType(otb::DOUBLE);
 
   // NewVisu
   if (m_VisuView.IsNotNull())
@@ -409,14 +415,14 @@ void WriterViewGUI::Browse()
 {
   const char * filename = NULL;
 
-  filename = fl_file_chooser("Choose the dataset file...", "*.*",".");
-  Fl::check();
+  filename = flu_file_chooser("Choose the dataset file...", "*.*",".");
+  
   if (filename == NULL)
   {
     otbMsgDebugMacro(<<"Empty file name!");
-    return;
+    return ;
   }
-  vFilePath->value(filename);  
+  vFilePath->value(filename);
 }
 
 void WriterViewGUI::UpdateProgress()

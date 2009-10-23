@@ -70,6 +70,25 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       pThis->SetOutputMenuOutput(RENAME_OUTPUT);
     }
 
+   static void handle_menu_output_display(Fl_Widget *w, void *v)
+    {
+      MonteverdiMenu * pThis = (MonteverdiMenu *)(w);
+      pThis->SetOutputMenuOutput(DISPLAY_OUTPUT);
+    }
+
+  static void handle_menu_output_cache(Fl_Widget *w, void *v)
+  {
+    MonteverdiMenu * pThis = (MonteverdiMenu *)(w);
+    pThis->SetOutputMenuOutput(CACHE_OUTPUT);
+  }
+
+  static void handle_menu_output_write(Fl_Widget *w, void *v)
+  {
+    MonteverdiMenu * pThis = (MonteverdiMenu *)(w);
+    pThis->SetOutputMenuOutput(WRITE_OUTPUT);
+  }
+  
+
   void LaunchModuleMenu()
     {
       Fl_Menu_Item popup_menu[] = 
@@ -87,13 +106,31 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       return;
     }
 
-  void LaunchOutputMenu()
+  void LaunchOutputMenu(bool display = false, bool cache = false, bool write = false)
     {
-      Fl_Menu_Item popup_menu[] = 
+      const unsigned menuSize = 2 + display + cache + write;
+      Fl_Menu_Item popup_menu[menuSize];
+      
+      popup_menu[0] = (Fl_Menu_Item){ "Rename", 0, this->handle_menu_output_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+      
+      unsigned int idx = 1;
+
+      if(display)
 	{
-	  { "Rename", 0, this->handle_menu_output_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-	  { 0 }
-	};
+	popup_menu[idx] = (Fl_Menu_Item){ "Display in viewer", 0, this->handle_menu_output_display, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+	++idx;
+	}
+      if(cache)
+	{
+	popup_menu[idx] = (Fl_Menu_Item){ "Export dataset", 0, this->handle_menu_output_write, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+	++idx;
+	}
+      if(write)
+	{
+	popup_menu[idx] = (Fl_Menu_Item){ "Cache dataset", 0, this->handle_menu_output_cache, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+	++idx;
+	}
+      popup_menu[idx] = (Fl_Menu_Item){0};
  
       int x, y;
       Fl::get_mouse(x, y);

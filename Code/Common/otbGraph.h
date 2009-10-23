@@ -33,6 +33,8 @@
 #include "itkObjectFactory.h"
 
 #include "otbGraphVertexIterator.h"
+#include "otbGraphEdgeIterator.h"
+#include "otbGraphOutEdgeIterator.h"
 
 namespace otb
 {
@@ -60,6 +62,8 @@ public:
   
   // Iterators are friends
   friend class GraphVertexIterator<Self>;
+  friend class GraphEdgeIterator<Self>;
+  friend class GraphOutEdgeIterator<Self>;
 
   /** Vertex typedef */
   typedef TVertex VertexType;

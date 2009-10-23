@@ -66,8 +66,6 @@ MonteverdiViewGUI
   m_MonteverdiModel->RegisterListener(this);
 
   m_HelpTextBuffer = new Fl_Text_Buffer();
-  //m_RenameWindow = new RenameViewGroup();
-  //m_RenameWindow->wRenameWindow->show();
 }
 
 MonteverdiViewGUI
@@ -147,9 +145,21 @@ MonteverdiViewGUI
 
   mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
-  for(mcIt = lModuleDescriptorMap.begin();mcIt != lModuleDescriptorMap.end();mcIt++)
+  unsigned int idx = 0;
+
+  while(idx < m_MonteverdiModel->GetNumberOfRegisteredModules())
     {
-    mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
+    mcIt = lModuleDescriptorMap.begin();
+
+    while(mcIt != lModuleDescriptorMap.end() && (mcIt->second.m_RegistrationOrder != idx))
+    {
+    mcIt++;
+    }
+    if(mcIt !=  lModuleDescriptorMap.end())
+      {
+      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
+      }
+    ++idx;
     }
 
   // In the end
@@ -294,7 +304,6 @@ MonteverdiViewGUI
       m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
 	{
-	  std::string papa = n->find_path();
 	  gRenameOld->value(label);
 	  gRenameNew->value(label);
 	  wRenameWindow->show();
@@ -303,7 +312,7 @@ MonteverdiViewGUI
   // node is a output
   else if( n->parent()->parent()->is_root() )
     {
-      m_Tree->GetModuleMenu()->LaunchOutputMenu();
+      m_Tree->GetModuleMenu()->LaunchOutputMenu(false,false,false);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
 	{ 
 	  std::string rootPath = n->find_path();
@@ -376,20 +385,21 @@ MonteverdiViewGUI
   // look after all outputdatas into each instance of module
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
   OutputDataDescriptorMapType::const_iterator it;
+
+
+  // we look for the good node in the tree to add leaves
+  FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
+  if( !n )
+    n = m_Tree->last();
+  n->open(true);
+  n->movable(true);
+
+  // this node can receive new nodes as a result of draggind-and-dropping
+  //TODO
+  //n->droppable(true);
+  
   for (it = lDataMap.begin();it != lDataMap.end();it++)
-    {
-      // we look for the good node in the tree to add leaves
-      FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
-      if( !n )
-	n = m_Tree->last();
-      
-      n->open(true);
-      
-      // this node can receive new nodes as a result of draggind-and-dropping
-      //TODO
-      //n->droppable(true);
-      //n->movable(true);
-      
+    {         
       FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
       
       // add informations to the targeted module

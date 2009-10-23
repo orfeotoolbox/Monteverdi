@@ -27,6 +27,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
+#include "otbMsgReporter.h"
+
 namespace otb
 {
 
@@ -259,38 +261,38 @@ WriterModel
     m_imageList->PushBack( m_image );
     outputNb++;
   }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
-
+//   std::cout << "TYPE de donnees out " << this->GetPType() << std::endl;
   if (todo == true)
   {
     switch ( this->GetPType() )
     {
       case 0:
-        genericImageConverter<unsigned char>(  );
+        genericImageConverter<unsigned char>();
         break;
       case 1:
-        genericImageConverter<short int>(  );
+        genericImageConverter<short int>();
         break;
       case 2:
-        genericImageConverter<int>(  );
+        genericImageConverter<int>();
         break;
       case 3:
-        genericImageConverter<float>(  );
+        genericImageConverter<float>();
         break;
       case 4:
-        genericImageConverter<double>(  );
+        genericImageConverter<double>();
         break;
       case 5:
-        genericImageConverter<unsigned short int>(  );
+        genericImageConverter<unsigned short int>();
         break;
       case 6:
-        genericImageConverter<unsigned int>(  );
+        genericImageConverter<unsigned int>();
         break;
       default:
-        genericImageConverter<unsigned char>(  );
+        genericImageConverter<unsigned char>();
         break;
     }
     
-    this->NotifyAll("OutputsUpdated");
+//     this->NotifyAll("OutputsUpdated");
   }
 }
 
@@ -355,7 +357,15 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 
       otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
 
-      writer->Update();
+      try
+      {
+        writer->Update();
+      }
+      catch (itk::ExceptionObject & err)
+      {
+        this->NotifyAll("Quit");
+        MsgReporter::GetInstance()->SendError(err.GetDescription());
+      }
     }
     else
     {
@@ -363,12 +373,18 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
       i2CastVI->SetInput( m_imageList );
       
-      otb::StandardFilterWatcher watcher(writer,"Conversion");
+      writer->SetInput(i2CastVI->GetOutput());  
       
-      writer->SetInput(i2CastVI->GetOutput());
-      writer->Update();
+      try
+      {
+        writer->Update();
+      }
+      catch (itk::ExceptionObject & err)
+      {
+        this->NotifyAll("Quit");
+        MsgReporter::GetInstance()->SendError(err.GetDescription());
+      }
     }
-//   }
 }
 
 void

@@ -157,7 +157,7 @@ protected:
   virtual ~WriterViewGUI();
 
   /** Center the widgets */
-  virtual void OpenImage();
+//   virtual void OpenImage();
   virtual void AddOutputChannel();
   virtual void RemoveOutputChannel();
   virtual void UpOutputChannel();
