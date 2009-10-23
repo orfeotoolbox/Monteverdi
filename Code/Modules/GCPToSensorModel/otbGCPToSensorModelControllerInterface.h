@@ -50,17 +50,13 @@ public:
   virtual void FocusOn(ContinuousIndexType id) =0;
   virtual void SetDEMPath( const std::string & filePath ) =0;
   virtual void ChangeDEM() =0;
+  virtual void ReloadGCPsList() =0;
+  virtual void UpdateStats() =0;
   virtual void OK() =0;
-
-  itkSetMacro(TransformationAvailable, bool);
-  itkGetMacro(TransformationAvailable, bool);
 
 protected:
   /** Constructor */
-  GCPToSensorModelControllerInterface()
-  {
-    m_TransformationAvailable = false;
-  }
+  GCPToSensorModelControllerInterface() {}
   /** Destructor */
   ~GCPToSensorModelControllerInterface() {};
 
@@ -68,7 +64,6 @@ protected:
 private:
   GCPToSensorModelControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  bool m_TransformationAvailable;
 };
 } // end namespace otb
 

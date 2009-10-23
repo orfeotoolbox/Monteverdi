@@ -27,7 +27,7 @@
 #include "otbImage.h"
 #include "projection/ossimBilinearProjection.h"
 //#include "otbStreamingResampleImageFilter.h"
-//#include "otbPerBandVectorImageFilter.h"
+#include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
 
 //Vis
@@ -77,13 +77,15 @@ public:
   typedef VectorImageType::IndexType          IndexType;
   typedef VectorImageType::SizeType           SizeType;
   typedef VectorImageType::PointType          ImagePointType;
-  //typedef std::vector<VectorImagePointerType> ImageListType;    
   typedef itk::ContinuousIndex<>              ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 3>     Continuous3DIndexType;
 
   typedef std::pair<ContinuousIndexType, ContinuousIndexType>  IndexCoupleType;
   typedef std::vector<IndexCoupleType>     IndexesListType;
   typedef std::vector<IndexType>           IndexListType;
-  typedef std::vector<ContinuousIndexType> ContinuousIndexListType;
+  typedef std::vector<Continuous3DIndexType> Continuous3DIndexListType;
+
+  typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -91,14 +93,12 @@ public:
   typedef ImageLayer<VectorImageType,RGBImageType>                  LayerType;
   typedef ImageLayerGenerator<LayerType>                            LayerGeneratorType;
   typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
-  //typedef std::vector<LayerGeneratorPointerType>                    LayerGeneratorListType;
   typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
   typedef std::vector<VisualizationModelPointerType>                VisualizationModelListType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
-  //typedef std::vector<BlendingFunctionPointerType>                                                    BlendingFunctionListType;
-
+ 
   /** New macro */
   itkNewMacro(Self);
   
@@ -109,19 +109,6 @@ public:
   typedef itk::Point<double,2>      OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
 
-  /** Transformation type */
-  //typedef itk::Transform<double, 2>                    TransformType;
-  //typedef TransformType::ParametersType                ParametersType;
-  //typedef itk::AffineTransform<double, 2>              AffineTransformType;
-  //typedef itk::TranslationTransform<double, 2>         TranslationTransformType;
-  //typedef itk::Similarity2DTransform<double>           Similarity2DTransformType;
-  //typedef itk::LevenbergMarquardtOptimizer::ScalesType ScalesType;
-
-  /** Output */
-  //typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
-  //typedef ResampleFilterType::TransformType                                              ResampleTransformType;
-  //typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
-
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -129,36 +116,32 @@ public:
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
   /** Input Image Pointer */
-  //itkSetConstObjectMacro(InputImage, VectorImageType);
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
 
   /** Indexes list manipulation. */
   IndexesListType GetIndexesList() const { return m_IndexesList; }
-  void AddIndexesToList( ContinuousIndexType id1,  ContinuousIndexType id2 );
-  void ClearIndexesList() { m_IndexesList.clear(); }
+  void AddIndexesToList( ContinuousIndexType id1,  ContinuousIndexType id2, double elev );
+  void ClearIndexesList() 
+  { 
+    m_IndexesList.clear();
+    m_GCPsElevation.clear();
+    m_UsedElevation.clear();
+    m_DEMsElevation.clear();
+  }
   void RemovePointFromList( unsigned int id );
 
   /** Transform performing */
   void ComputeTransform();
 
-  /** Convert index list to point sets*/
-  void ConvertList( PointSetPointerType fix, PointSetPointerType mov );
-  
-  /** Perform the transform */
-  //template <typename T> void GenericRegistration(const ScalesType & scales);
-
-  //void DoRegistration();
-
   /** Compute the transform on one point */
-  ContinuousIndexType TransformPoint(ContinuousIndexType id );
-  /** Compute the transform of a list of index */
-  //template <typename T> ContinuousIndexType GenericTransformPoint(IndexType index);
+  Continuous3DIndexType TransformPoint(ContinuousIndexType id );
 
   /** Compute the transform the points of m_IndexList */
-  ContinuousIndexListType TransformPoints();
-  /** Compute the transform of a list of index */
-  //template <typename T> ContinuousIndexListType GenericTransformPoints(IndexListType inList);
+  Continuous3DIndexListType TransformPoints();
+
+  /** Load GCP */
+  void LoadGCP();
 
   /** Update Output */
   void OK();
@@ -168,21 +151,33 @@ public:
   /** Get Output image */
   itkGetObjectMacro(Output, VectorImageType);
 
-  /** Get Transform Parameters*/
-  //itkGetMacro(TransformParameters, ParametersType);
-
   /** Get/Set DEMPath */
   void SetDEMPath( const std::string & DEMPath );
   itkGetConstMacro(DEMPath, std::string);
   
   /** Set/Get Use DEM */
-  itkSetMacro(UseDEM, bool);
-  itkGetMacro(UseDEM, bool);
+  itkSetMacro(ElevMgt, ElevManagementEnumType);
+  itkGetMacro(ElevMgt, ElevManagementEnumType);
   /** Set/Get mean elevation */
   void SetMeanElevation(double meanElev);
   itkGetMacro(MeanElevation, double);
 
+  /** Get HasNewLoadedGCPs */
+  itkGetConstMacro(HasNewImage, bool);
 
+  /** Get ProjectionUpdated */
+  itkGetConstMacro(ProjectionUpdated, bool);
+
+  /** Get used elevation */
+  double GetUsedElevation(unsigned int i)
+  {
+    if( i>m_UsedElevation.size() )
+      itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
+    
+    return m_UsedElevation[i];   
+  };
+  std::vector<double> GetUsedElevation() { return m_UsedElevation; };
+  
 protected:
 
   /** Constructor */
@@ -207,31 +202,31 @@ private:
   BlendingFunctionPointerType   m_BlendingFunction;
   /** Input Images */
   VectorImagePointerType        m_InputImage;
-
   /** First and second input image indexes list */
   IndexesListType m_IndexesList;
-
-  /** Store transformation parameters*/
-  //ParametersType m_TransformParameters;
-
   /** Resampled  image */
   VectorImagePointerType m_Output;
-
-  /** Resampler filter */
-  //ResampleFilterType::Pointer m_Resampler;
-  //PerBandFilterType::Pointer  m_PerBander;
-
-  //AffineTransformType::Pointer m_Transform;
-  ossimBilinearProjection * m_Transform;
-
+  /** Projection */
+  ossimBilinearProjection * m_Projection;
   bool m_OutputChanged;
   /** DEM directory path*/
   std::string m_DEMPath;
   /** Use DEM or mean elevation */
-  bool m_UseDEM;
+  ElevManagementEnumType m_ElevMgt;
   /** Store the mea elevation value */
   double m_MeanElevation;
-
+  /** DEM handler */
+  DEMHandler::Pointer m_DEMHandler;
+  /** GCP elevation list */
+  std::vector<double> m_GCPsElevation;
+  /** Used elevation list */
+  std::vector<double> m_UsedElevation;
+  /** DEM elevations*/
+  std::vector<double> m_DEMsElevation;
+  /** GCPs were loaded from the image */
+  bool m_HasNewImage;
+  /** Projection has been updated */
+  bool m_ProjectionUpdated;
 };
 
 }//end namespace otb
