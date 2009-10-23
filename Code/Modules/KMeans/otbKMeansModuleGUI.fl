@@ -1,0 +1,53 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class KMeansModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wKMeansWindow {
+      label {KMeans setup} open
+      xywh {499 73 300 185} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Return_Button bOk {
+        label Ok
+        callback {this->Ok();}
+        xywh {175 146 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {42 146 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Progress pProgressBar {
+        label {Sampling (0%)}
+        xywh {40 74 215 20} box PLASTIC_DOWN_BOX selection_color 1
+      }
+      Fl_Spinner vNumberOfClasses {
+        label {Number of classes }
+        xywh {170 108 85 24} value 5
+      }
+      Fl_Slider vNumberOfSamples {
+        label {Number of samples}
+        callback {this->UpdateNumberOfSamples();} selected
+        xywh {40 25 215 20} type {Horz Fill} box PLASTIC_DOWN_BOX align 1 maximum 100 step 1 value 50 slider_size 1
+      }
+      Fl_Box oNumberOfSamples {
+        label {0% of image (0 samples)}
+        xywh {40 46 215 27}
+      }
+    }
+  }
+  Function {Ok()} {open return_type {virtual void}
+  } {}
+  Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {~KMeansModuleGUI()} {open return_type virtual
+  } {}
+  Function {UpdateNumberOfSamples()} {open return_type {virtual void}
+  } {}
+} 

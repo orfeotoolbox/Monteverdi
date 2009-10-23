@@ -47,7 +47,7 @@ class MeanShiftModuleViewGroup {open
           callback {SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));}
           tooltip {Set the MeanShift minimum region size} xywh {420 313 135 20} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186 align 1 when 4 minimum 1 maximum 1000 step 1 value 100 textsize 14
         }
-        Fl_Round_Button mClustersButton {
+        Fl_Check_Button mClustersButton {
           label Clusters
           callback {SwitchClusters();}
           xywh {449 344 86 15} down_box ROUND_DOWN_BOX color 7 labelfont 1 labelcolor 186

@@ -65,6 +65,7 @@
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
 #include "otbAlgebraModule.h"
+#include "otbKMeansModule.h"
 
 
 int main(int argc, char* argv[])
@@ -102,6 +103,7 @@ int main(int argc, char* argv[])
 
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM classification");
+  model->RegisterModule<otb::KMeansModule>("KMeans","Learning/KMeans clustering");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Orthorectification");
   model->RegisterModule<otb::ProjectionModule>("Projection","Geometry/Reproject image");
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition","Geometry/Superimpose two images");
