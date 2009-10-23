@@ -47,7 +47,7 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
 
-  Fl::run();
+  //Fl::run();
   /*
   // Simulate Ok button callback
   specificModule->GetView()->bOk->do_callback();
