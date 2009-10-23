@@ -161,6 +161,11 @@ ${TEMP}/moTvAlgebraImageModule.tif
 0
 )	      
 
+#------------- GCP to Sensor Model Module test -------------
+ADD_TEST(gcpTvGCPToSensorModelModuleTest ${Modules_TESTS} otbGCPToSensorModelModuleTest
+${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+${TEMP}/gcpTvGCPToSensorModelModuleTest.tif
+)
 
 
 
@@ -186,7 +191,8 @@ otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
-otbAlgebraModuleTest.cxx	
+otbAlgebraModuleTest.cxx
+otbGCPToSensorModelModuleTest.cxx	
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
