@@ -20,6 +20,7 @@
 #include <FL/Fl.H>
 #include <algorithm>
 #include "otbFileName.h"
+#include "otbMsgReporter.h"
 
 #include "otbCachingModule.h"
 
@@ -185,76 +186,85 @@ void CachingModule::ThreadedRun()
   m_FilePath = oss.str();
   oss.str("");
 
-  if ( charVectorImage.IsNotNull() )
-    {
-    // Writing
-    CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-    charVWriter->SetInput(charVectorImage);
-    charVWriter->SetFileName(m_FilePath);
-    m_WritingProcess = charVWriter;
-    charVWriter->Update();
-
-    // Reading
-    CharVReaderType::Pointer charVReader = CharVReaderType::New();
-    charVReader->SetFileName(m_FilePath);
-    charVReader->UpdateOutputInformation();
-    m_ReadingProcess = charVReader;
-    this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description,true);
-
-    // Notify new outputs
-    Fl::lock();
-    this->NotifyOutputsChange();
-    Fl::unlock();
-    }
-
-  else if ( vectorImage.IsNotNull() )
-    {
-    // Writing
-    FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-    fPVWriter->SetInput(vectorImage);
-    fPVWriter->SetFileName(m_FilePath);
-    m_WritingProcess = fPVWriter;
-    fPVWriter->Update();
-
-    // Reading
-    FPVReaderType::Pointer fPVReader = FPVReaderType::New();
-    fPVReader->SetFileName(m_FilePath);
-    fPVReader->UpdateOutputInformation();
-    m_ReadingProcess =  fPVReader;
-    this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description,true);
-
-    // Notify new outputs
-    Fl::lock();
-    this->NotifyOutputsChange();
-    Fl::unlock();
-    }
-  else if( singleImage.IsNotNull() )
-    {
-    // Writing
-    FPWriterType::Pointer fPWriter = FPWriterType::New();
-    fPWriter->SetInput(singleImage);
-    fPWriter->SetFileName(m_FilePath);
-    m_WritingProcess = fPWriter;
-    fPWriter->Update();
-
-    // Reading
-    FPReaderType::Pointer fPReader = FPReaderType::New();
-    fPReader->SetFileName(m_FilePath);
-    fPReader->UpdateOutputInformation();
-    m_ReadingProcess =  fPReader;
-    this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description,true);
-    
-    // Notify new outputs
-    Fl::lock();
-    this->NotifyOutputsChange();
-    Fl::unlock();
-    }
-  else
-    {
+  try
+  {
+    if ( charVectorImage.IsNotNull() )
+      {
+      // Writing
+      CharVWriterType::Pointer charVWriter = CharVWriterType::New();
+      charVWriter->SetInput(charVectorImage);
+      charVWriter->SetFileName(m_FilePath);
+      m_WritingProcess = charVWriter;
+      charVWriter->Update();
+  
+      // Reading
+      CharVReaderType::Pointer charVReader = CharVReaderType::New();
+      charVReader->SetFileName(m_FilePath);
+      charVReader->UpdateOutputInformation();
+      m_ReadingProcess = charVReader;
+      this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description,true);
+  
+      // Notify new outputs
+      Fl::lock();
+      this->NotifyOutputsChange();
+      Fl::unlock();
+      }
+  
+    else if ( vectorImage.IsNotNull() )
+      {
+      // Writing
+      FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+      fPVWriter->SetInput(vectorImage);
+      fPVWriter->SetFileName(m_FilePath);
+      m_WritingProcess = fPVWriter;
+      fPVWriter->Update();
+  
+      // Reading
+      FPVReaderType::Pointer fPVReader = FPVReaderType::New();
+      fPVReader->SetFileName(m_FilePath);
+      fPVReader->UpdateOutputInformation();
+      m_ReadingProcess =  fPVReader;
+      this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description,true);
+  
+      // Notify new outputs
+      Fl::lock();
+      this->NotifyOutputsChange();
+      Fl::unlock();
+      }
+    else if( singleImage.IsNotNull() )
+      {
+      // Writing
+      FPWriterType::Pointer fPWriter = FPWriterType::New();
+      fPWriter->SetInput(singleImage);
+      fPWriter->SetFileName(m_FilePath);
+      m_WritingProcess = fPWriter;
+      fPWriter->Update();
+  
+      // Reading
+      FPReaderType::Pointer fPReader = FPReaderType::New();
+      fPReader->SetFileName(m_FilePath);
+      fPReader->UpdateOutputInformation();
+      m_ReadingProcess =  fPReader;
+      this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description,true);
+      
+      // Notify new outputs
+      Fl::lock();
+      this->NotifyOutputsChange();
+      Fl::unlock();
+      }
+    else
+      {
+      this->BusyOff();
+      itkExceptionMacro(<<"Input data are NULL.");
+      }
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    // Make the main fltk loop update Msg reporter
+    m_ErrorMsg = err.GetDescription();
+    Fl::awake(&SendErrorCallback,&m_ErrorMsg);
     this->BusyOff();
-    itkExceptionMacro(<<"Input data are NULL.");
-    }
-
+  }
   this->BusyOff();
 }
 
@@ -298,6 +308,19 @@ void CachingModule::Run()
     }
 }
 
+void CachingModule::SendErrorCallback(void * data)
+{
+  std::string *  error = static_cast<std::string *>(data);
+  //TODO test if error is null
+  if ( error == NULL )
+  {
+    MsgReporter::GetInstance()->SendError("Unknown error during update");
+  }
+  else 
+  {
+    MsgReporter::GetInstance()->SendError(error->c_str());
+  }
+}
 } // End namespace otb
 
 

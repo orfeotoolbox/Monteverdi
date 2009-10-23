@@ -1,0 +1,253 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class GCPToSensorModelViewGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window wMainWindow {
+      label {GCP to sensor model module}
+      callback {this->HideAll();} open
+      xywh {9 119 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Tile {} {open
+        xywh {0 0 203 600}
+      } {
+        Fl_Group grParam {open
+          xywh {0 0 203 600} box PLASTIC_DOWN_BOX color 48
+        } {
+          Fl_Browser tError {
+            label {Point Errors}
+            callback {this->UpdateListSelectionColor(false);}
+            tooltip {Euclidean distances} xywh {5 247 190 120} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Output tMeanError {
+            label {Mean Square Error:}
+            xywh {5 390 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
+          }
+          Fl_Group gPixelValue {
+            label {Pixel Values} open
+            xywh {5 449 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+          } {}
+          Fl_Button guiQuit {
+            label {Save/Quit}
+            callback {Quit();}
+            tooltip {Quit Application} xywh {114 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button guiDEM {
+            label Elevation
+            callback {wDEMWindow->show();}
+            tooltip {Quit Application} xywh {5 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Browser lPointList {
+            label {GCPs List}
+            callback {this->UpdateListSelectionColor(true);}
+            tooltip {Contains selected points} xywh {5 20 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button guiClose {
+            label {Clear List}
+            callback {ClearPointList();}
+            tooltip {Clear Feature List} xywh {5 176 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+          }
+          Fl_Button guiDelete {
+            label Delete
+            callback {DeletePoint();}
+            tooltip {Clear Feature List} xywh {121 176 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+          }
+          Fl_Button guiFocusPoint {
+            label {Focus Point}
+            callback {Focus(0);}
+            tooltip {Focus on the selected point couple.} xywh {120 200 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+          }
+          Fl_Button guiReload {
+            label Reload
+            callback {this->Reload();}
+            tooltip {Focus on the selected point couple.} xywh {5 200 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+          }
+        }
+      }
+      Fl_Tile {} {open
+        xywh {202 0 602 601} resizable
+      } {
+        Fl_Group guiImageGroup {open
+          xywh {202 0 602 601} resizable
+        } {
+          Fl_Group gFull {
+            label {Full fix} open
+            xywh {206 275 590 250} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          } {}
+          Fl_Group gScroll {
+            label {Scroll fix} open
+            xywh {206 18 240 240} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          } {}
+          Fl_Group gZoom {
+            label {Zoom fix} open
+            xywh {449 18 348 240} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          } {}
+          Fl_Group gIndexes {open
+            xywh {206 551 592 50} box PLASTIC_DOWN_BOX color 7
+          } {
+            Fl_Value_Input vX {
+              label X
+              xywh {214 572 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 0.05
+            }
+            Fl_Value_Input vY {
+              label Y
+              xywh {269 572 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+            }
+            Fl_Button guiAdd {
+              label Add
+              callback {AddPoints();}
+              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {717 572 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Button guiFocusRound {
+              label {Focus Click}
+              callback {Focus(1);}
+              tooltip {Focus on the last clicked point couple.} xywh {325 572 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+            }
+            Fl_Value_Input vLat {
+              label Lat
+              xywh {529 572 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+            }
+            Fl_Value_Input vLong {
+              label Long
+              xywh {414 572 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+            }
+            Fl_Value_Input vElev {
+              label Elev
+              xywh {644 572 57 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+            }
+          }
+        }
+      }
+    }
+    Fl_Window wDEMWindow {
+      label {Elevation manager}
+      callback {wDEMWindow->hide();} open
+      xywh {99 241 321 258} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gDEM {
+        label {Use DEM} open
+        xywh {10 25 300 75} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5
+      } {
+        Fl_Round_Button cDEM {
+          callback {if(cDEM->value()==0)
+{
+cDEM->value(1);
+}
+else
+{
+cMean->value(0);
+cElev->value(0);
+bDEMBrowser->activate();
+tDEMFile->activate();
+vMeanElev->deactivate();
+vElev->deactivate();
+}}
+          xywh {15 30 15 15} down_box ROUND_DOWN_BOX color 7
+        }
+        Fl_Button bDEMBrowser {
+          label {...}
+          callback {this->SelectDEM();}
+          xywh {271 70 30 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186 deactivate
+        }
+        Fl_Output tDEMFile {
+          label {file:}
+          xywh {17 70 250 20} box PLASTIC_DOWN_BOX labelcolor 186 align 5 deactivate
+        }
+      }
+      Fl_Group gMean {
+        label {Use mean elevation} open
+        xywh {10 123 300 30} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5
+      } {
+        Fl_Round_Button cMean {
+          callback {if(cMean->value()==0)
+{
+cMean->value(1);
+}
+else
+{
+cDEM->value(0);
+cElev->value(0);
+bDEMBrowser->deactivate();
+tDEMFile->deactivate();
+vMeanElev->activate();
+vElev->deactivate();
+}}
+          xywh {15 131 15 15} down_box ROUND_DOWN_BOX color 7
+        }
+        Fl_Value_Input vMeanElev {
+          label {value:}
+          callback {vElev->value(vMeanElev->value());} selected
+          xywh {207 128 94 20} box PLASTIC_DOWN_BOX labelcolor 186 maximum 1e+06 step 5 deactivate
+        }
+      }
+      Fl_Group gElev {
+        label {GCPs elevation} open
+        xywh {10 182 300 30} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5
+      } {
+        Fl_Round_Button cElev {
+          callback {if(cElev->value()==0)
+{
+cElev->value(1);
+}
+else
+{
+cDEM->value(0);
+cMean->value(0);
+bDEMBrowser->deactivate();
+tDEMFile->deactivate();
+vMeanElev->deactivate();
+vElev->activate();
+}}
+          xywh {15 189 15 15} down_box ROUND_DOWN_BOX value 1 color 7
+        }
+      }
+      Fl_Button {} {
+        label OK
+        callback {this->ChangeDEM();
+wDEMWindow->hide();}
+        xywh {165 224 60 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {wDEMWindow->hide();}
+        xywh {81 224 60 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
+      }
+    }
+  }
+  Function {GCPToSensorModelViewGroup()} {} {}
+  Function {~GCPToSensorModelViewGroup()} {open return_type virtual
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {AddPoints()} {open return_type {virtual void}
+  } {}
+  Function {ClearPointList()} {open return_type {virtual void}
+  } {}
+  Function {DeletePoint()} {open return_type {virtual void}
+  } {}
+  Function {UpdateListSelectionColor(bool whichOne)} {open return_type {virtual void}
+  } {}
+  Function {Focus(unsigned int i)} {open return_type {virtual void}
+  } {}
+  Function {ClearTransformationInfo()} {open return_type {virtual void}
+  } {}
+  Function {ChangeDEM()} {open return_type {virtual void}
+  } {}
+  Function {HideAll()} {open return_type {virtual void}
+  } {}
+  Function {SelectDEM()} {open return_type {virtual void}
+  } {}
+  Function {Reload()} {open return_type {virtual void}
+  } {}
+} 

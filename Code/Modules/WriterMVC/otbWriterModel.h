@@ -379,6 +379,12 @@ private:
   
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObjectModel;
+  
+  //error msg
+  std::string m_ErrorMsg;
+  
+  // Callback to Error reporter window
+  static void SendErrorCallback(void * data);
 };
 
 }

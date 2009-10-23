@@ -386,9 +386,6 @@ HomologousPointExtractionModuleController
   try
     {
       m_Model->OK();
-      std::cout<<"OK DONE."<<std::endl;
-      //m_View->HideAll();
-      std::cout<<"HIDE DONE."<<std::endl;
     }
   catch (itk::ExceptionObject & err)
     {
