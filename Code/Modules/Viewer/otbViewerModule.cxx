@@ -209,7 +209,8 @@ void ViewerModule::Run()
   // in Vector Image and continue the processing
   SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
   
-  if(!singleImage.IsNull() && m_InputImage.IsNull())
+  // Test single image
+  if(singleImage.IsNotNull() && m_InputImage.IsNull())
     {
       m_CastFilter->SetInput(singleImage);
       m_InputImage = m_CastFilter->GetOutput();
@@ -252,13 +253,6 @@ void ViewerModule::Run()
   // Work with standardrenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
 
-//   // Set the right channel order
-//   if(m_InputImage->GetNumberOfComponentsPerPixel() >= 4)
-//     {
-//       channels[0] = 2;
-//       channels[1] = 1;
-//       channels[2] = 0;
-//     }
   m_StandardRenderingFunction->SetChannelList(channels);
   //  m_StandardRenderingFunction->SetAutoMinMax(false);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);

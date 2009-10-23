@@ -65,7 +65,7 @@
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
 #include "otbAlgebraModule.h"
-
+#include "otbChangeDetectionModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -114,7 +114,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ConcatenateModule>("Concatenate","File/Concatenate images");
 
   model->RegisterModule<otb::AlgebraModule>("Algebra","Filtering/Band Math");
-
+  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection","Filtering/Change Detection");
+  
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
