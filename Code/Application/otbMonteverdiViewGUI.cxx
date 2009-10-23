@@ -312,7 +312,14 @@ MonteverdiViewGUI
   // node is a output
   else if( n->parent()->parent()->is_root() )
     {
-      m_Tree->GetModuleMenu()->LaunchOutputMenu(false,false,false);
+    std::string instanceId = n->parent()->label();
+    std::string outputId   = n->label();
+    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId,outputId) 
+                 && !m_MonteverdiModel->IsCached(instanceId,outputId);
+    bool viewable  = m_MonteverdiModel->SupportsViewing(instanceId,outputId);
+    bool writable  = m_MonteverdiModel->SupportsWriting(instanceId,outputId);
+
+      m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
 	{ 
 	  std::string rootPath = n->find_path();
@@ -324,6 +331,18 @@ MonteverdiViewGUI
 	  gOutputRenameOld->value(label);
 	  gOutputRenameNew->value(label);
 	  wOutputRenameWindow->show();
+	}
+      else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT )
+	{ 
+	m_MonteverdiController->StartViewing(instanceId,outputId);
+	}
+      else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT )
+	{ 
+	m_MonteverdiController->StartCaching(instanceId,outputId,true);
+	}
+       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT )
+	{ 
+	m_MonteverdiController->StartWriting(instanceId,outputId);
 	}
     }
   else if( n->is_leaf() )
@@ -405,6 +424,7 @@ MonteverdiViewGUI
       // add informations to the targeted module
       new_node->add(it->second.GetDataDescription().c_str());
       new_node->add(it->second.GetDataType().c_str());
+      new_node->parent()->open(true);
       
       //new_node->open(close);
       n->branch_icons( &process,&process );

@@ -55,7 +55,14 @@ public:
   virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId ) =0;
 
   /** Starts caching */
-  virtual void StartCaching(const std::string & id, const std::string & key) = 0;
+  virtual void StartCaching(const std::string & id, const std::string & key, bool watch = false) = 0;
+
+  /** Starts caching */
+  virtual void StartWriting(const std::string & id, const std::string & key) = 0;
+
+  /** Starts caching */
+  virtual void StartViewing(const std::string & id, const std::string & key) = 0;
+
 
   /** Change module InstanceId (ie. tree label) output data key from oldKey to newKey */
   virtual void ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey) =0;

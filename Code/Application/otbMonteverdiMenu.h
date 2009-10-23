@@ -120,12 +120,12 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
 	popup_menu[idx] = (Fl_Menu_Item){ "Display in viewer", 0, this->handle_menu_output_display, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
 	++idx;
 	}
-      if(cache)
+      if(write)
 	{
 	popup_menu[idx] = (Fl_Menu_Item){ "Export dataset", 0, this->handle_menu_output_write, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
 	++idx;
 	}
-      if(write)
+      if(cache)
 	{
 	popup_menu[idx] = (Fl_Menu_Item){ "Cache dataset", 0, this->handle_menu_output_cache, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
 	++idx;

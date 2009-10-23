@@ -126,8 +126,8 @@ void CachingModule::ThreadedWatch()
       current = m_WritingProcess->GetProgress();
          if(current - last > updateThres)
          {
-      // Make the main fltk loop update progress fields
-      Fl::awake(&UpdateProgressCallback,this);
+	 // Make the main fltk loop update progress fields
+	 Fl::awake(&UpdateProgressCallback,this);
          last = current;
          }
        }

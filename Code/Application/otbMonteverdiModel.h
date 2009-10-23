@@ -24,6 +24,8 @@
 #include "otbListenerBase.h"
 #include "otbCachingModule.h"
 #include "otbGraph.h"
+#include "otbWriterModule.h"
+#include "otbViewerModule.h"
 
 namespace otb
 {
@@ -141,7 +143,19 @@ class ITK_EXPORT MonteverdiModel
   bool SupportsCaching(const std::string & instanceId, const std::string & outputKey) const;
 
   /** Start caching the given data */
-  void StartCaching(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0);
+  void StartCaching(const std::string & instanceId, const std::string & outputKey, bool watch = false,unsigned int idx = 0);
+
+  /** Does the output key from the module instanceId supports writing ? */
+  bool SupportsWriting(const std::string & instanceId, const std::string & outputKey) const;
+
+  /** Start writing the given data */
+  void StartWriting(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0);
+
+  /** Does the output key from the module instanceId supports viewing ? */
+  bool SupportsViewing(const std::string & instanceId, const std::string & outputKey) const;
+
+  /** Start writing the given data */
+  void StartViewing(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0);
 
   /** Get the caching progress for the given data */
   double GetCachingProgress(const std::string & instanceId, const std::string & outputKey, unsigned int idx = 0) const;
@@ -180,6 +194,9 @@ protected:
 
   /** End the caching process by updating the output id */
   void EndCaching(const std::string & cachingModuleId);
+
+  /** Add a graph connection */
+  void AddGraphConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey);
 
  private:
   MonteverdiModel(const Self&); //purposely not implemented

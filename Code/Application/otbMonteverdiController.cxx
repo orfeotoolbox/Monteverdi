@@ -106,11 +106,39 @@ MonteverdiController
 
 void
 MonteverdiController
-::StartCaching(const std::string & id, const std::string & key)
+::StartCaching(const std::string & id, const std::string & key,bool watch)
 {
   try
     {
-    m_Model->StartCaching(id,key);
+    m_Model->StartCaching(id,key,watch);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
+void
+MonteverdiController
+::StartViewing(const std::string & id, const std::string & key)
+{
+  try
+    {
+    m_Model->StartViewing(id,key);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
+void
+MonteverdiController
+::StartWriting(const std::string & id, const std::string & key)
+{
+  try
+    {
+    m_Model->StartWriting(id,key);
     }
   catch (itk::ExceptionObject & err)
     {

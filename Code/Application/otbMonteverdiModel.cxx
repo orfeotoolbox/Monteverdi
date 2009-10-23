@@ -155,7 +155,13 @@ void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,cons
 
   // Add the given data wrapper as an input to target module
   target->AddInputByKey(inputKey,outputWrapper);
+  
+  // Add the graph connection
+  this->AddGraphConnection(sourceModuleId,outputKey,targetModuleId,inputKey);
+}
 
+void MonteverdiModel::AddGraphConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey)
+{
   // Create an edge to add in the graph
   CGraphEdgeType cEdge(outputKey,inputKey);
   
@@ -186,8 +192,7 @@ void MonteverdiModel::AddModuleConnection(const std::string& sourceModuleId,cons
     }
 
   // Add connection
-  m_ConnectionGraph->AddEdge(sourceIt.GetVertexDescriptor(),targetIt.GetVertexDescriptor(),cEdge);
-  
+  m_ConnectionGraph->AddEdge(sourceIt.GetVertexDescriptor(),targetIt.GetVertexDescriptor(),cEdge);  
 }
 
 void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )
@@ -289,6 +294,40 @@ bool MonteverdiModel::SupportsCaching(const std::string & instanceId, const std:
   return inputDD.IsTypeCompatible(output.GetDataType());
 }
 
+bool MonteverdiModel::SupportsWriting(const std::string & instanceId, const std::string & outputKey) const
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey);
+
+  // Create a local instance of the caching module
+  WriterModule::Pointer writer = WriterModule::New();
+  
+  // Check type compatibility
+  InputDataDescriptor inputDD = writer->GetInputDataDescriptorByKey("InputDataSet");
+  return inputDD.IsTypeCompatible(output.GetDataType());
+}
+
+
+bool MonteverdiModel::SupportsViewing(const std::string & instanceId, const std::string & outputKey) const
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey);
+
+  // Create a local instance of the caching module
+  ViewerModule::Pointer viewer = ViewerModule::New();
+  
+  // Check type compatibility
+  InputDataDescriptor inputDD = viewer->GetInputDataDescriptorByKey("InputImage");
+  return inputDD.IsTypeCompatible(output.GetDataType());
+}
+
+
 /** Is data cached ? */
 bool MonteverdiModel::IsCached(const std::string & instanceId, const std::string & outputKey, unsigned int idx) const
 {
@@ -305,9 +344,90 @@ bool MonteverdiModel::IsCached(const std::string & instanceId, const std::string
   return outIt->second.IsCached();
 }
 
+/** Start caching the given data */
+void MonteverdiModel::StartWriting(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey,idx);
+
+  // Now, create a new instance of the caching module
+  WriterModule::Pointer writer = WriterModule::New();
+
+  // Pass data to the module
+  writer->AddInputByKey("InputDataSet",output);
+
+  // Build a unique key
+  itk::OStringStream oss;
+  oss<<"Writer";
+
+  if(m_InstancesCountMap.count("Writer")>0)
+    {
+    oss<<m_InstancesCountMap["Writer"];
+    // Update instances count
+    m_InstancesCountMap["Writer"]++;
+    }
+  
+    // Register module instance
+    writer->SetInstanceId(oss.str());
+    m_ModuleMap[oss.str()] = writer;
+    m_ConnectionGraph->AddVertex(oss.str());
+    
+    // Add the graph connection
+    this->AddGraphConnection(instanceId,outputKey,oss.str(),"InputDataSet");
+
+    // Register the main model to receive events from the new module
+    writer->RegisterListener(this);
+
+    // Start module
+    writer->Start();
+}
 
 /** Start caching the given data */
-void MonteverdiModel::StartCaching(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
+void MonteverdiModel::StartViewing(const std::string & instanceId, const std::string & outputKey, unsigned int idx)
+{
+  // First retrieve the data descritpor
+  Module::Pointer module = GetModuleByInstanceId(instanceId);
+
+  // Then, retrieve the ouptut
+  DataObjectWrapper output = module->GetOutputByKey(outputKey,idx);
+
+  // Now, create a new instance of the caching module
+  ViewerModule::Pointer viewer = ViewerModule::New();
+
+  // Pass data to the module
+  viewer->AddInputByKey("InputImage",output);
+
+  // Build a unique key
+  itk::OStringStream oss;
+  oss<<"Viewer";
+
+  if(m_InstancesCountMap.count("Viewer")>0)
+    {
+    oss<<m_InstancesCountMap["Viewer"];
+    // Update instances count
+    m_InstancesCountMap["Viewer"]++;
+    }
+  
+    // Register module instance
+    viewer->SetInstanceId(oss.str());
+    m_ModuleMap[oss.str()] = viewer;
+    m_ConnectionGraph->AddVertex(oss.str());
+
+    // Add the graph connection
+    this->AddGraphConnection(instanceId,outputKey,oss.str(),"InputImage");
+
+    // Register the main model to receive events from the new module
+    viewer->RegisterListener(this);
+    
+    // Start module
+    viewer->Start();
+}
+
+/** Start caching the given data */
+void MonteverdiModel::StartCaching(const std::string & instanceId, const std::string & outputKey, bool watch, unsigned int idx)
 {
   // First retrieve the data descritpor
   Module::Pointer module = GetModuleByInstanceId(instanceId);
@@ -321,15 +441,18 @@ void MonteverdiModel::StartCaching(const std::string & instanceId, const std::st
   // Pass data to the module
   cache->AddInputByKey("InputDataSet",output);
 
-  // Disable individual reporting
-  cache->WatchProgressOff();
-
   // Register to receive events
   cache->RegisterListener(this);
 
+  if(!watch)
+    {
+    // Disable individual reporting
+    cache->WatchProgressOff();
+    }
+    
   // Create the instance id
   std::string id = BuildCachingModuleId(instanceId,outputKey,idx);
-
+  
   // Store the module in the map
   cache->SetInstanceId(id);
   m_CachingModuleMap[id] = cache;
