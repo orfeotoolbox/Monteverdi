@@ -114,7 +114,9 @@ private:
   // Callback to hide window
   static void HideWindowCallback(void * data);
 
-
+  // Callback to Error reporter window
+  static void SendErrorCallback(void * data);
+  
   // The writing process
   itk::ProcessObject::Pointer m_WritingProcess;
   
@@ -129,6 +131,9 @@ private:
 
   // Report visual progress
   bool m_WatchProgress;
+  
+  //error msg
+  std::string m_ErrorMsg;
 };
 
 

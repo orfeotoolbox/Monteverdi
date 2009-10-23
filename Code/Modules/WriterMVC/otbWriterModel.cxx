@@ -363,8 +363,10 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       }
       catch (itk::ExceptionObject & err)
       {
-        this->NotifyAll("Quit");
-        MsgReporter::GetInstance()->SendError(err.GetDescription());
+        // Make the main fltk loop update Msg reporter
+        m_ErrorMsg = err.GetDescription();
+        Fl::awake(&SendErrorCallback,&m_ErrorMsg);
+        this->Quit();
       }
     }
     else
@@ -381,8 +383,10 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       }
       catch (itk::ExceptionObject & err)
       {
-        this->NotifyAll("Quit");
-        MsgReporter::GetInstance()->SendError(err.GetDescription());
+        // Make the main fltk loop update Msg reporter
+        m_ErrorMsg = err.GetDescription();
+        Fl::awake(&SendErrorCallback,&m_ErrorMsg);
+        this->Quit();
       }
     }
 }
@@ -392,5 +396,19 @@ WriterModel
 ::Quit()
 {
   this->NotifyAll("Quit");
+}
+
+void WriterModel::SendErrorCallback(void * data)
+{
+  std::string *  error = static_cast<std::string *>(data);
+  //TODO test if error is null
+  if ( error == NULL )
+  {
+    MsgReporter::GetInstance()->SendError("Unknown error during update");
+  }
+  else 
+  {
+    MsgReporter::GetInstance()->SendError(error->c_str());
+  }
 }
 } //end namespace otb
