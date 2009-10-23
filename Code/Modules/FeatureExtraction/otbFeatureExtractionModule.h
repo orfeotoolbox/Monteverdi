@@ -59,7 +59,16 @@ public:
   // Input image typedef
   typedef FeatureExtractionModel::InputImageType InputImageType;
 
-
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+//     m_Model->GenerateLayers();
+//     m_View->Show();
+    this->Run();
+//     m_View->gScroll->show();
+//     m_View->gFull->show();
+//     m_View->gFeature->show();
+  };
 protected:
   /** Constructor */
   FeatureExtractionModule();

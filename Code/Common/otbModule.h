@@ -122,6 +122,12 @@ public:
   /** Does this module have a lock on pipeline ? */
   bool IsLockingPipeline() const;
 
+  /** Show the Module GUI */
+  virtual void Show(){};
+  
+  /** Hide the Module GUI */
+  virtual void Hide(){};
+  
 protected:
   /** Constructor */
   Module();
@@ -170,7 +176,9 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-
+  
+  
+  
   /** The custom run command (asynchronous threaded version) */
   virtual void ThreadedRun();
 
