@@ -202,6 +202,7 @@ FeatureExtractionViewGUI
 {
   if (m_FeatureExtractionModel->GetHasInput())
   {
+//     std::cout << "notify to view" << std::endl;
     InitWidgets();
     this->UpdateChannelSelection();
     this->UpdateInformation();

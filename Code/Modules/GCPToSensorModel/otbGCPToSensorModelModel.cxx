@@ -44,27 +44,36 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-  GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(), m_Transform(), m_DEMPath(), m_UseDEM(), m_MeanElevation()
+  GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
+						   m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
+						   m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
+						   m_HasNewImage(), m_ProjectionUpdated()
 {
   m_VisualizationModel = VisualizationModelType::New();
-
   m_BlendingFunction = BlendingFunctionType::New();
   m_BlendingFunction->SetAlpha(0.6);
   m_ImageGenerator = LayerGeneratorType::New();
   m_InputImage = VectorImageType::New();
   m_Output = VectorImageType::New();
   m_IndexesList.clear();
-  m_Transform = new ossimBilinearProjection();
+  m_Projection = new ossimBilinearProjection();
   m_DEMPath = "";
-  m_UseDEM = false;
+  
   m_MeanElevation = 0;
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
+  m_ElevMgt = MEAN;
+  m_DEMHandler = DEMHandler::New();
+  m_GCPsElevation.clear();
+  m_DEMsElevation.clear();
+  m_UsedElevation.clear();
+  m_HasNewImage = false;
+  m_ProjectionUpdated = false;
 }
 
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
-  delete m_Transform;
+  delete m_Projection;
 }
 
 
@@ -108,7 +117,36 @@ GCPToSensorModelModel
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
 
+  m_HasNewImage = true;
   this->NotifyAll();
+  m_HasNewImage = false;
+}
+
+void 
+GCPToSensorModelModel
+::LoadGCP()
+{
+  if( m_InputImage.IsNull())
+    itkExceptionMacro(<<"No input image detected");
+
+  if( m_InputImage->GetGCPCount() == 0 )
+    itkExceptionMacro(<<"Invalid Input Image, no GCPs detected.");
+
+  ContinuousIndexType index1, index2;
+  double height;
+  this->ClearIndexesList();
+  std::cout<<"m_InputImage->GetGCPCount() : "<<m_InputImage->GetGCPCount()<<std::endl;
+  for( unsigned int i=0; i<m_InputImage->GetGCPCount(); i++ )
+    {
+      index1[0] = m_InputImage->GetGCPCol(i);
+      index1[1] = m_InputImage->GetGCPRow(i);
+      index2[0] = m_InputImage->GetGCPX(i);
+      index2[1] = m_InputImage->GetGCPY(i);
+      height =  m_InputImage->GetGCPZ(i);
+      this->AddIndexesToList( index1, index2, height );
+    }
+ std::cout<<m_IndexesList.size()<<std::endl;
+
 }
 
 void
@@ -124,7 +162,18 @@ GCPToSensorModelModel
      itkExceptionMacro("Invalid directory \""<<DEMPath<<"\", no DEM files found!");
    }
   m_DEMPath = DEMPath;
-  m_UseDEM = true;
+  m_ElevMgt = DEM;
+  m_DEMHandler->OpenDEMDirectory(DEMPath.c_str());
+
+  m_DEMsElevation.clear();
+  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
+    {
+      ImagePointType phyPoint;
+      phyPoint[0] = m_IndexesList[i].second[0];
+      phyPoint[1] = m_IndexesList[i].second[1];
+      m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );      
+    }
+
   this->Modified();
 }
 
@@ -133,17 +182,19 @@ GCPToSensorModelModel
 ::SetMeanElevation( double meanElev )
 {
   m_MeanElevation = meanElev;
-  m_UseDEM = false;
+  m_ElevMgt = MEAN;
   this->Modified();
 }
 
 
 void
 GCPToSensorModelModel
-::AddIndexesToList( ContinuousIndexType id1, ContinuousIndexType id2 )
+::AddIndexesToList( ContinuousIndexType id1, ContinuousIndexType id2, double elev )
 {
   bool found = false;
   unsigned int j=0;
+  
+  
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
@@ -156,6 +207,11 @@ GCPToSensorModelModel
 
   IndexCoupleType paire(id1, id2);
   m_IndexesList.push_back(paire);
+  m_GCPsElevation.push_back(elev);
+  ImagePointType phyPoint;
+  phyPoint[0] = id2[0];
+  phyPoint[1] = id2[1];
+  m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );
 }
   
 void
@@ -164,29 +220,20 @@ GCPToSensorModelModel
 {
   if( id>=m_IndexesList.size() )
     itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_IndexesList.size()<<").");
-  
+  if( id>=m_GCPsElevation.size() )
+    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_GCPsElevation.size()<<").");
+  if( id>=m_UsedElevation.size() )
+    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_UsedElevation.size()<<").");
+  if( id>=m_DEMsElevation.size() && m_DEMsElevation.size() != 0 )
+    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_DEMsElevation.size()<<").");
+
   m_IndexesList.erase(m_IndexesList.begin()+id);
+  m_GCPsElevation.erase(m_GCPsElevation.begin()+id);
+  m_UsedElevation.erase(m_UsedElevation.begin()+id);
+  m_DEMsElevation.erase(m_DEMsElevation.begin()+id);
 }
 
 
-void 
-GCPToSensorModelModel
-::ConvertList( PointSetPointerType fix, PointSetPointerType mov )
-{
-  if(m_IndexesList.size()==0)
-    itkExceptionMacro(<<"No point selected...");
-
-  PointType fixedPoint;
-  PointType movingPoint;
-  
-  for(unsigned int i=0; i<m_IndexesList.size(); i++)
-    {
-      ContinuousIndexType idFix, idMov;
-      idFix = m_IndexesList[i].first;
-      idMov = m_IndexesList[i].second;
-    }
-}  
- 
 
 void 
 GCPToSensorModelModel
@@ -195,71 +242,77 @@ GCPToSensorModelModel
   std::cout<<"Using ossim bilinear projection"<<std::endl;
 
   //ossimBilinearProjection bproj;
-  delete m_Transform;
-  m_Transform = new ossimBilinearProjection();
+  delete m_Projection;
+  m_Projection = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
   std::vector<ossimGpt>  geoPoints;
   ContinuousIndexType idFix, idMov;
   
+  ossimDpt spoint;
+  ossimGpt gpoint;
+
+  if( m_DEMsElevation.size() != m_GCPsElevation.size() || m_DEMsElevation.size() != m_IndexesList.size() )
+    {
+      itkExceptionMacro(<<"Invalid heights");
+    }
+
+  if(m_ElevMgt == GCP)
+    m_UsedElevation = m_GCPsElevation;
+  else if(m_ElevMgt == MEAN)
+    m_UsedElevation = std::vector<double>(m_DEMsElevation.size(), m_MeanElevation);
+  else if(m_ElevMgt == DEM)
+    m_UsedElevation = m_DEMsElevation;
 
   for(unsigned int i = 0; i<m_IndexesList.size(); i++)
     {
-    idFix =  m_IndexesList[i].first;
-    idMov =  m_IndexesList[i].second;
-    ossimDpt spoint(idFix[0],idFix[1]);
-    sensorPoints.push_back(spoint);
-    ossimGpt gpoint(idMov[0],idMov[1]);
-    geoPoints.push_back(gpoint);
+      idFix =  m_IndexesList[i].first;
+      idMov =  m_IndexesList[i].second;
+      spoint = ossimDpt(idFix[0],idFix[1]);
+      sensorPoints.push_back(spoint); 
+      gpoint = ossimGpt(idMov[0],idMov[1], m_UsedElevation[i]);
+      geoPoints.push_back(gpoint);
     }
 
-  m_Transform->setTiePoints(sensorPoints,geoPoints);
+  m_Projection->setTiePoints(sensorPoints,geoPoints);
+
+  // To avoid infinite loop (notify->notify->notify...)
+  if( m_HasNewImage == true )
+    m_HasNewImage = false;
+  m_ProjectionUpdated = true;
+  this->NotifyAll();
+  m_ProjectionUpdated = false;
+
 }
 
 
 
-GCPToSensorModelModel::ContinuousIndexType
+GCPToSensorModelModel::Continuous3DIndexType
 GCPToSensorModelModel
 ::TransformPoint(ContinuousIndexType id)
 {
-  ContinuousIndexType out;
+  Continuous3DIndexType out;
 
-  //typename AffineTransformType::InputPointType  inPoint; 
-  //typename AffineTransformType::OutputPointType outPoint;
-  
-  //m_InputImage->TransformIndexToPhysicalPoint(index,inPoint);
   ossimDpt spoint(id[0], id[1]);
   ossimGpt gpoint;
-  m_Transform->lineSampleToWorld(spoint, gpoint);
+  m_Projection->lineSampleToWorld(spoint, gpoint);
   out[0] = gpoint.lat;
   out[1] = gpoint.lon;
+  out[2] = gpoint.hgt;
   
   return out;
 }
 
 
-GCPToSensorModelModel::ContinuousIndexListType 
+GCPToSensorModelModel::Continuous3DIndexListType 
 GCPToSensorModelModel
 ::TransformPoints()
 {
-  //IndexListType inList;
-  ContinuousIndexListType outList;
+  Continuous3DIndexListType outList;
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
-      //inList.push_back(m_IndexesList[i].first);
       outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
     }
-
-  //typename AffineTransformType::InputPointType  inPoint; 
-//   typename AffineTransformType::OutputPointType outPoint;
-//   ContinuousIndexType         idOut;
-
-//   for(unsigned int i=0; i<inList.size(); i++)
-//     {
-//       //m_InputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
-//       outPoint = m_Transform->TransformPoint(inList[i]);
-//       outList.push_back(idOut);
-//     }
 
     return outList;
 }
@@ -270,7 +323,7 @@ GCPToSensorModelModel
 ::OK()
 {
   ossimKeywordlist kwl;
-  m_Transform->saveState(kwl);
+  m_Projection->saveState(kwl);
   kwl.print(std::cout);
   otb::ImageKeywordlist otb_kwl;
   otb_kwl.SetKeywordlist( kwl );

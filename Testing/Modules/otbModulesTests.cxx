@@ -46,5 +46,6 @@ void RegisterTests()
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
   REGISTER_TEST(otbConcatenateModuleTest);
   REGISTER_TEST(otbAlgebraModuleTest);
+  REGISTER_TEST(otbChangeDetectionModuleTest);
   REGISTER_TEST(otbGCPToSensorModelModuleTest);
 }

@@ -124,19 +124,22 @@ void
 GCPToSensorModelView
 ::AddPoints()
 {
-  float x = static_cast<int>(vX->value());
-  float y = static_cast<int>(vY->value());
-  float lat = static_cast<int>(vLat->value());
-  float lon = static_cast<int>(vLong->value());
+  float x = static_cast<float>(vX->value());
+  float y = static_cast<float>(vY->value());
+  float lat = static_cast<float>(vLat->value());
+  float lon = static_cast<float>(vLong->value());
   m_Controller->AddPoints( x, y, lat, lon);
 }
 
 void
 GCPToSensorModelView
-::AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2 )
+::AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height )
 {
  itk::OStringStream oss;
- oss<<id1<<" -> "<<id2;
+ IndexType id1Int;
+ id1Int[0] = static_cast<long>(id1[0]);
+ id1Int[1] = static_cast<long>(id1[1]);
+ oss<<id1Int<<" -> "<<id2;
  this->lPointList->add(oss.str().c_str());
 
  srand((id1[1]+id1[0])*123456);
@@ -262,11 +265,13 @@ GCPToSensorModelView
        lPointList->value(id);
       else
        lPointList->value(1);
+      
       this->UpdateListSelectionColor(true);
       m_CrossGlComponent->ClearIndex(id-1);
       this->RedrawWidgets();
 
       this->ClearTransformationInfo();
+      m_Controller->UpdateStats();
     }
 }
 
@@ -276,16 +281,9 @@ GCPToSensorModelView
 {
   tError->clear();
   tMeanError->value("");
-  //gGuess->deactivate();
-  m_Controller->SetTransformationAvailable(false);
 }
 
-// void
-// GCPToSensorModelView
-// ::ComputeTransform()
-// {
-//   m_Controller->ComputeTransform();
-// }
+
 
 void
 GCPToSensorModelView
@@ -313,16 +311,6 @@ GCPToSensorModelView
     }
 }
 
-// void
-// GCPToSensorModelView
-// ::Evaluate()
-// {
-//  if(  m_CircleGlComponent->GetIndexList().size() != 0 )
-//    {
-//      IndexType id = m_CircleGlComponent->GetIndexList()[0];
-//      m_Controller->Evaluate( id );
-//    }
-// }
 
 
 void
@@ -348,15 +336,30 @@ GCPToSensorModelView
 ::ChangeDEM()
 {
   m_Controller->ChangeDEM();
-
 }
 
+void
+GCPToSensorModelView
+::ReloadGCPs()
+{
+  lPointList->clear();
+  this->ClearTransformationInfo();
+  m_Controller->ReloadGCPsList();
+}
 
 void
 GCPToSensorModelView
 ::Notify()
 {
-
+  if(m_Model->GetHasNewImage())
+    {
+      this->ReloadGCPs();
+    }
+  else if(m_Model->GetProjectionUpdated())
+    {
+      this->ClearTransformationInfo();
+      m_Controller->UpdateStats();
+    }
 }
 
 void
@@ -382,7 +385,6 @@ GCPToSensorModelView
   gScroll->remove(m_ImageView->GetScrollWidget());
   gZoom->remove(m_ImageView->GetZoomWidget());
 
-  MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
   wDEMWindow->hide();
 }

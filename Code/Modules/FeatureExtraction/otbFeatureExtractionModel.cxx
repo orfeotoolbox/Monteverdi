@@ -92,7 +92,7 @@ FeatureExtractionModel
 
   // Togle the valid flag
   m_HasInput = true;
-
+  /*
   // Generate image layers
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
 
@@ -105,7 +105,7 @@ FeatureExtractionModel
 
   // Render
   m_VisuModel->Update();
-  
+  */
   // Notify the observers
   this->NotifyAll("SetInputImage");
 }
@@ -675,7 +675,9 @@ FeatureExtractionModel
     itkExceptionMacro("Impossible to create output image : no image image selected.")
   if( m_OutputListOrder.size()==0 )
     itkExceptionMacro("Impossible to create output image : no feature selected.")
-
+  
+  m_imageList->Clear();
+  
   for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
   {
     i = m_OutputListOrder[ii];

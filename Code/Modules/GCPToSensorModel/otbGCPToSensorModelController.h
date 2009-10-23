@@ -103,8 +103,8 @@ public:
   typedef GCPToSensorModelView::ImageViewType           ImageViewType;
   typedef GCPToSensorModelModel::VisualizationModelType VisualizationModelType;
   typedef GCPToSensorModelModel::VectorImageType        VectorImageType;
-  typedef VectorImageType::IndexType                                   IndexType;
-  typedef VectorImageType::PixelType                                   PixelType;
+  typedef VectorImageType::IndexType                    IndexType;
+  typedef VectorImageType::PixelType                    PixelType;
   typedef GCPToSensorModelModel::RGBImageType           RGBImageType;
  
   /** Handlers */
@@ -120,14 +120,11 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>                              PixelDescriptionViewType;
   typedef PixelDescriptionViewType::Pointer                                            PixelDescriptionViewPointerType;
   
-  typedef ModelType::IndexesListType     IndexesListType;
-  //typedef ModelType::TransformType       TransformType;
-  typedef ModelType::OutPointListType    OutPointListType;
-  typedef ModelType::OutPointType        OutPointType;
-  typedef ModelType::ContinuousIndexType ContinuousIndexType;
-
-  //typedef TransformType::OutputPointType OutputTransformPointType;
-  //typedef TransformType::InputPointType InputTransformPointType;
+  typedef ModelType::IndexesListType      IndexesListType;
+  typedef ModelType::OutPointListType     OutPointListType;
+  typedef ModelType::OutPointType         OutPointType;
+  typedef ModelType::ContinuousIndexType  ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 3> Continuous3DIndexType;
 
   void SetModel(ModelType* model);
 
@@ -150,12 +147,12 @@ public:
   virtual void FocusOn(ContinuousIndexType id);
   virtual void SetDEMPath( const std::string & filePath );
   virtual void ChangeDEM();
+  virtual void ReloadGCPsList();
   virtual void OK();
+  virtual void UpdateStats();
 
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( ContinuousIndexType index );
-
-  void UpdateStats();
 
  protected:
   /** Constructor */

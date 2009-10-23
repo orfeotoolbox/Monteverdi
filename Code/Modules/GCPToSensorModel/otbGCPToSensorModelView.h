@@ -80,10 +80,11 @@ public:
   virtual void SelectDEM();
   virtual void ChangeDEM();
   virtual void HideAll();
+  virtual void ReloadGCPs();
 
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
-  void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2 );
+  void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height );
   void RedrawWidgets();
   
   /** Get a pointer to the view parts for the controller */

@@ -72,7 +72,6 @@ void FeatureExtractionModule::Run()
     m_Model->SetInputImage(input);
     m_View->Show();
     m_Model->GenerateLayers();
-    
     }
   else
     {

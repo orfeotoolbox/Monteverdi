@@ -126,10 +126,14 @@ GCPToSensorModelController
       MsgReporter::GetInstance()->SendError(oss.str().c_str());
       return;
     }
+
   try
     {
-      m_Model->AddIndexesToList( id1, id2 );
-      m_View->AddPointsToList( id1, id2 );
+      m_Model->AddIndexesToList( id1, id2, static_cast<double>(m_View->vElev->value()) );
+      m_Model->ComputeTransform();
+      m_View->AddPointsToList( id1, id2, m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 ) );
+      if(m_Model->GetElevMgt() == ModelType::DEM)
+	m_View->vElev->value( m_Model->GetUsedElevation().size()-1 );
     }
   catch (itk::ExceptionObject & err)
     {
@@ -143,7 +147,6 @@ GCPToSensorModelController
 ::ClearPointList()
 {
   m_Model->ClearIndexesList();
-  this->SetTransformationAvailable( false );
 }
 
 void
@@ -151,7 +154,6 @@ GCPToSensorModelController
 ::DeletePointFromList( unsigned int id )
 {
   m_Model->RemovePointFromList( id );
-  this->SetTransformationAvailable( false );
 }
 
 
@@ -181,29 +183,28 @@ void
 GCPToSensorModelController
 ::UpdateStats()
 {
-  if( !this->GetTransformationAvailable() )
-    {
-      MsgReporter::GetInstance()->SendError("No transformation computed.");
-      return;
-    }
-
   itk::OStringStream oss;
   std::vector<double> values; 
-  ModelType::ContinuousIndexListType outTranformedPoint = m_Model->TransformPoints();
-  IndexesListType                    indexesList        = m_Model->GetIndexesList();
+  ModelType::Continuous3DIndexListType outTranformedPoint = m_Model->TransformPoints();
+  IndexesListType                      indexesList        = m_Model->GetIndexesList();
   ContinuousIndexType idFix, idOut;
+  Continuous3DIndexType idOut3D, idTrans3D;
 
   for(unsigned int i=0; i<indexesList.size(); i++)
     {
       idFix = indexesList[i].first;
       idOut = indexesList[i].second;
- 
+      idOut3D[0] = idOut[0];
+      idOut3D[1] = idOut[1];
+      idOut3D[0] = m_Model->GetUsedElevation()[i];
+      idTrans3D = outTranformedPoint[i];
+
       oss.str("");
       oss<<idFix<<" -> ";
-      values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
-			 + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
-  
-     oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);
+      //values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
+      //		 + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
+      values.push_back( idOut3D.EuclideanDistanceTo(idTrans3D) );
+     oss<<idTrans3D<<", error: "<<vcl_sqrt(values[values.size()-1]);
       m_View->tError->add( oss.str().c_str() );
     }
 
@@ -243,7 +244,7 @@ GCPToSensorModelController
   if( static_cast<bool>(m_View->cMean->value()) )
     {
       m_Model->SetMeanElevation( static_cast<double>(m_View->vMeanElev->value()) );
-      m_Model->SetUseDEM(false);
+      m_Model->SetElevMgt(ModelType::MEAN);
     }
   else if( static_cast<bool>(m_View->cDEM->value()) )
     {
@@ -252,20 +253,47 @@ GCPToSensorModelController
 	  MsgReporter::GetInstance()->SendError("No DEM directory path selected.");
 	  return;
 	}
-      m_Model->SetUseDEM(true);
+      m_Model->SetElevMgt(ModelType::DEM);
+    }
+  else if( static_cast<bool>(m_View->cElev->value()) )
+   {
+     m_Model->SetElevMgt(ModelType::GCP);
+   }
+}
+
+void
+GCPToSensorModelController
+::ReloadGCPsList()
+{
+  try
+    {
+      m_Model->LoadGCP();
+      m_Model->ComputeTransform();
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      std::cout<<"err : "<<err.GetDescription()<<std::endl;
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+  
+  IndexesListType     indexesList = m_Model->GetIndexesList();
+  std::cout<<indexesList.size()<<std::endl;
+
+  ContinuousIndexType idFix, idOut;
+  for(unsigned int i=0; i<indexesList.size(); i++)
+    {
+      idFix = indexesList[i].first;
+      idOut = indexesList[i].second;
+      m_View->AddPointsToList( idFix, idOut, m_Model->GetUsedElevation(i) );
     }
 }
+
 
 void
 GCPToSensorModelController
 ::OK()
 {
-  if( !this->GetTransformationAvailable() )
-    {
-      std::cout<<"No transformation available."<<std::endl;
-      MsgReporter::GetInstance()->SendError("No transformation available.");
-      return;
-    }
   try
     {
       m_Model->OK();

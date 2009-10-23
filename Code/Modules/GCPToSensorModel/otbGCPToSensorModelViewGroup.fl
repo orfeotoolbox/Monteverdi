@@ -68,7 +68,7 @@ class GCPToSensorModelViewGroup {open
           }
           Fl_Button guiReload {
             label Reload
-            callback {this->Reload();}
+            callback {this->ReloadGCPs();}
             tooltip {Focus on the selected point couple.} xywh {5 200 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
           }
         }
@@ -185,7 +185,7 @@ vElev->deactivate();
         }
         Fl_Value_Input vMeanElev {
           label {value:}
-          callback {vElev->value(vMeanElev->value());} selected
+          callback {vElev->value(vMeanElev->value());}
           xywh {207 128 94 20} box PLASTIC_DOWN_BOX labelcolor 186 maximum 1e+06 step 5 deactivate
         }
       }
@@ -248,6 +248,6 @@ wDEMWindow->hide();}
   } {}
   Function {SelectDEM()} {open return_type {virtual void}
   } {}
-  Function {Reload()} {open return_type {virtual void}
+  Function {ReloadGCPs()} {open selected return_type {virtual void}
   } {}
 } 

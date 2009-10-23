@@ -76,8 +76,8 @@ void GCPToSensorModelModule::Run()
   if(fpvImage.IsNotNull() )
     {
     // Process the input as an FloatingVectorImageType
-      m_Model->SetImage( fpvImage );
       m_View->BuildInterface();
+      m_Model->SetImage( fpvImage );
     }
   else
     {
