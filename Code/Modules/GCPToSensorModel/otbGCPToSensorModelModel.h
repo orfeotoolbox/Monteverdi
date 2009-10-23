@@ -26,7 +26,8 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "projection/ossimBilinearProjection.h"
-//#include "otbStreamingResampleImageFilter.h"
+#include "projection/ossimRpcProjection.h"
+#include "projection/ossimProjection.h"
 #include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
 
@@ -35,18 +36,7 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 
-// Estimation
-//#include "itkEuclideanDistancePointMetric.h"
-//#include "itkLevenbergMarquardtOptimizer.h"
 #include "itkPointSet.h"
-//#include "itkPointSetToPointSetRegistrationMethod.h"
-
-// Transformation
-//#include "otbTransformEnumType.h"
-//#include "itkTransformBase.h"
-#include "itkAffineTransform.h"
-//#include "itkSimilarity2DTransform.h"
-//#include "itkTranslationTransform.h"
 
 
 namespace otb {
@@ -86,6 +76,7 @@ public:
   typedef std::vector<Continuous3DIndexType> Continuous3DIndexListType;
 
   typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
+  typedef enum { BILINEAR, RPC } ProjectionEnumType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -131,9 +122,16 @@ public:
   }
   void RemovePointFromList( unsigned int id );
 
-  /** Transform performing */
-  void ComputeTransform();
-
+  /** Projection performing */
+  void ComputeBilinearProjection();
+  void ComputeRPCProjection();
+  void ComputeTransform()
+  { 
+    if(m_ProjectionType == BILINEAR)
+      this->ComputeBilinearProjection();
+    else if(m_ProjectionType == RPC)
+      this->ComputeRPCProjection();
+  };
   /** Compute the transform on one point */
   Continuous3DIndexType TransformPoint(ContinuousIndexType id );
 
@@ -157,7 +155,7 @@ public:
   
   /** Set/Get Use DEM */
   itkSetMacro(ElevMgt, ElevManagementEnumType);
-  itkGetMacro(ElevMgt, ElevManagementEnumType);
+  itkGetConstMacro(ElevMgt, ElevManagementEnumType);
   /** Set/Get mean elevation */
   void SetMeanElevation(double meanElev);
   itkGetMacro(MeanElevation, double);
@@ -178,6 +176,13 @@ public:
   };
   std::vector<double> GetUsedElevation() { return m_UsedElevation; };
   
+  /** Set/Get Projection type */
+  itkSetMacro(ProjectionType, ProjectionEnumType);
+  itkGetConstMacro(ProjectionType, ProjectionEnumType);
+ 
+  /** Get Ground error projection */
+  itkGetConstMacro(GroundError, double);
+
 protected:
 
   /** Constructor */
@@ -207,7 +212,7 @@ private:
   /** Resampled  image */
   VectorImagePointerType m_Output;
   /** Projection */
-  ossimBilinearProjection * m_Projection;
+  ossimProjection * m_Projection;
   bool m_OutputChanged;
   /** DEM directory path*/
   std::string m_DEMPath;
@@ -227,6 +232,10 @@ private:
   bool m_HasNewImage;
   /** Projection has been updated */
   bool m_ProjectionUpdated;
+  /** Projection type */
+  ProjectionEnumType m_ProjectionType;
+  /** Ground error projection */
+  double m_GroundError;
 };
 
 }//end namespace otb

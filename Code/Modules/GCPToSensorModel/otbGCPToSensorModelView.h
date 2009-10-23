@@ -81,6 +81,7 @@ public:
   virtual void ChangeDEM();
   virtual void HideAll();
   virtual void ReloadGCPs();
+  virtual void SetProjectionType();
 
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );

@@ -26,30 +26,30 @@ class GCPToSensorModelViewGroup {open
           Fl_Browser tError {
             label {Point Errors}
             callback {this->UpdateListSelectionColor(false);}
-            tooltip {Euclidean distances} xywh {5 247 190 120} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Euclidean distances} xywh {5 240 190 110} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Output tMeanError {
             label {Mean Square Error:}
-            xywh {5 390 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
+            xywh {5 417 190 20} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Group gPixelValue {
             label {Pixel Values} open
-            xywh {5 449 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+            xywh {5 461 190 100} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Button guiQuit {
             label {Save/Quit}
             callback {Quit();}
-            tooltip {Quit Application} xywh {114 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Quit Application} xywh {124 567 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button guiDEM {
             label Elevation
             callback {wDEMWindow->show();}
-            tooltip {Quit Application} xywh {5 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Quit Application} xywh {5 568 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
           Fl_Browser lPointList {
             label {GCPs List}
             callback {this->UpdateListSelectionColor(true);}
-            tooltip {Contains selected points} xywh {5 20 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Contains selected points} xywh {5 62 190 110} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiClose {
             label {Clear List}
@@ -70,6 +70,24 @@ class GCPToSensorModelViewGroup {open
             label Reload
             callback {this->ReloadGCPs();}
             tooltip {Focus on the selected point couple.} xywh {5 200 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+          }
+          Fl_Output tGroundError {
+            label {Ground Error Var (m^2):}
+            xywh {5 375 190 20} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
+          }
+          Fl_Choice cProjType {
+            label {Projection:}
+            callback {this->SetProjectionType();} open selected
+            xywh {5 23 190 20} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1
+          } {
+            MenuItem {} {
+              label Bilinear
+              xywh {0 0 31 20} labelsize 12
+            }
+            MenuItem {} {
+              label RPC
+              xywh {10 10 31 20} labelsize 12
+            }
           }
         }
       }
@@ -92,37 +110,37 @@ class GCPToSensorModelViewGroup {open
             xywh {449 18 348 240} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           } {}
           Fl_Group gIndexes {open
-            xywh {206 551 592 50} box PLASTIC_DOWN_BOX color 7
+            xywh {206 549 592 50} box PLASTIC_DOWN_BOX color 7
           } {
             Fl_Value_Input vX {
               label X
-              xywh {214 572 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 0.05
+              xywh {214 570 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 0.05
             }
             Fl_Value_Input vY {
               label Y
-              xywh {269 572 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+              xywh {269 570 50 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
             }
             Fl_Button guiAdd {
               label Add
               callback {AddPoints();}
-              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {717 572 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {717 570 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Button guiFocusRound {
               label {Focus Click}
               callback {Focus(1);}
-              tooltip {Focus on the last clicked point couple.} xywh {325 572 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Focus on the last clicked point couple.} xywh {325 570 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Value_Input vLat {
               label Lat
-              xywh {529 572 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+              xywh {529 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
             }
             Fl_Value_Input vLong {
               label Long
-              xywh {414 572 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+              xywh {414 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
             }
             Fl_Value_Input vElev {
               label Elev
-              xywh {644 572 57 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+              xywh {644 570 57 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1 hide
             }
           }
         }
@@ -248,6 +266,8 @@ wDEMWindow->hide();}
   } {}
   Function {SelectDEM()} {open return_type {virtual void}
   } {}
-  Function {ReloadGCPs()} {open selected return_type {virtual void}
+  Function {ReloadGCPs()} {open return_type {virtual void}
+  } {}
+  Function {SetProjectionType()} {open return_type {virtual void}
   } {}
 } 

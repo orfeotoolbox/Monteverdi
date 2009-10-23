@@ -22,7 +22,8 @@
 //#include "otbPointSetRegister.h"
 #include "elevation/ossimElevManager.h"
 #include "base/ossimDirectory.h"
-
+#include "base/ossimTieGpt.h"
+#include "base/ossimTieGptSet.h"
 
 namespace otb
 {
@@ -47,7 +48,7 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
 						   m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
 						   m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
-						   m_HasNewImage(), m_ProjectionUpdated()
+						   m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(), m_GroundError()
 {
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
@@ -56,7 +57,7 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   m_InputImage = VectorImageType::New();
   m_Output = VectorImageType::New();
   m_IndexesList.clear();
-  m_Projection = new ossimBilinearProjection();
+  //m_Projection = new ossimProjection();
   m_DEMPath = "";
   
   m_MeanElevation = 0;
@@ -68,6 +69,8 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   m_UsedElevation.clear();
   m_HasNewImage = false;
   m_ProjectionUpdated = false;
+  m_ProjectionType = BILINEAR;
+  m_GroundError = 0.;
 }
 
 GCPToSensorModelModel
@@ -135,7 +138,7 @@ GCPToSensorModelModel
   ContinuousIndexType index1, index2;
   double height;
   this->ClearIndexesList();
-  std::cout<<"m_InputImage->GetGCPCount() : "<<m_InputImage->GetGCPCount()<<std::endl;
+
   for( unsigned int i=0; i<m_InputImage->GetGCPCount(); i++ )
     {
       index1[0] = m_InputImage->GetGCPCol(i);
@@ -145,8 +148,6 @@ GCPToSensorModelModel
       height =  m_InputImage->GetGCPZ(i);
       this->AddIndexesToList( index1, index2, height );
     }
- std::cout<<m_IndexesList.size()<<std::endl;
-
 }
 
 void
@@ -237,13 +238,11 @@ GCPToSensorModelModel
 
 void 
 GCPToSensorModelModel
-::ComputeTransform()
+::ComputeBilinearProjection()
 {
   std::cout<<"Using ossim bilinear projection"<<std::endl;
 
-  //ossimBilinearProjection bproj;
-  delete m_Projection;
-  m_Projection = new ossimBilinearProjection();
+  ossimBilinearProjection * bproj = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
   std::vector<ossimGpt>  geoPoints;
@@ -251,6 +250,36 @@ GCPToSensorModelModel
   
   ossimDpt spoint;
   ossimGpt gpoint;
+
+  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
+    {
+      idFix =  m_IndexesList[i].first;
+      idMov =  m_IndexesList[i].second;
+      spoint = ossimDpt(idFix[0],idFix[1]);
+      sensorPoints.push_back(spoint); 
+      gpoint = ossimGpt(idMov[0],idMov[1]);
+      geoPoints.push_back(gpoint);
+    }
+
+  m_GroundError = bproj->setTiePoints(sensorPoints,geoPoints);
+
+  delete m_Projection;
+  m_Projection = bproj;
+
+  // To avoid infinite loop (notify->notify->notify...)
+  if( m_HasNewImage == false )
+    {
+      m_ProjectionUpdated = true;
+      this->NotifyAll();
+      m_ProjectionUpdated = false;
+    }
+}
+
+void 
+GCPToSensorModelModel
+::ComputeRPCProjection()
+{
+  std::cout<<"Using ossim rpc projection"<<std::endl;
 
   if( m_DEMsElevation.size() != m_GCPsElevation.size() || m_DEMsElevation.size() != m_IndexesList.size() )
     {
@@ -264,6 +293,16 @@ GCPToSensorModelModel
   else if(m_ElevMgt == DEM)
     m_UsedElevation = m_DEMsElevation;
 
+  ossimRpcProjection * bproj = new ossimRpcProjection();
+
+  std::vector<ossimDpt> sensorPoints;
+  std::vector<ossimGpt>  geoPoints;
+  ContinuousIndexType idFix, idMov;
+  ossimDpt spoint;
+  ossimGpt gpoint;
+  std::vector< ossimRefPtr<ossimTieGpt> > tieGptVect;
+  ossimTieGptSet tieGptSet;
+  ossim_float64 score = 0.0;
   for(unsigned int i = 0; i<m_IndexesList.size(); i++)
     {
       idFix =  m_IndexesList[i].first;
@@ -271,20 +310,23 @@ GCPToSensorModelModel
       spoint = ossimDpt(idFix[0],idFix[1]);
       sensorPoints.push_back(spoint); 
       gpoint = ossimGpt(idMov[0],idMov[1], m_UsedElevation[i]);
-      geoPoints.push_back(gpoint);
+      ossimTieGpt * tieGpt = new ossimTieGpt(gpoint, spoint, score);
+      tieGptVect.push_back(tieGpt);    
     }
+  tieGptSet.setTiePoints(tieGptVect);
+  m_GroundError = bproj->optimizeFit(tieGptSet);
 
-  m_Projection->setTiePoints(sensorPoints,geoPoints);
+  delete m_Projection;
+  m_Projection = bproj;
 
   // To avoid infinite loop (notify->notify->notify...)
-  if( m_HasNewImage == true )
-    m_HasNewImage = false;
-  m_ProjectionUpdated = true;
-  this->NotifyAll();
-  m_ProjectionUpdated = false;
-
+  if( m_HasNewImage == false )
+    {
+      m_ProjectionUpdated = true;
+      this->NotifyAll();
+      m_ProjectionUpdated = false;
+    }
 }
-
 
 
 GCPToSensorModelModel::Continuous3DIndexType
@@ -299,7 +341,7 @@ GCPToSensorModelModel
   out[0] = gpoint.lat;
   out[1] = gpoint.lon;
   out[2] = gpoint.hgt;
-  
+   
   return out;
 }
 
@@ -313,8 +355,7 @@ GCPToSensorModelModel
     {
       outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
     }
-
-    return outList;
+  return outList;
 }
 
 

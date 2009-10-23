@@ -131,9 +131,15 @@ GCPToSensorModelController
     {
       m_Model->AddIndexesToList( id1, id2, static_cast<double>(m_View->vElev->value()) );
       m_Model->ComputeTransform();
-      m_View->AddPointsToList( id1, id2, m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 ) );
-      if(m_Model->GetElevMgt() == ModelType::DEM)
-	m_View->vElev->value( m_Model->GetUsedElevation().size()-1 );
+      double height = 0.;
+      if(m_Model->GetProjectionType() == ModelType::RPC)
+	{
+	  height = m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 );
+	  if(m_Model->GetElevMgt() == ModelType::DEM)
+	    m_View->vElev->value( height );
+	}
+      m_View->AddPointsToList( id1, id2, height );
+    
     }
   catch (itk::ExceptionObject & err)
     {
@@ -182,29 +188,33 @@ GCPToSensorModelController
 void
 GCPToSensorModelController
 ::UpdateStats()
-{
+{ 
   itk::OStringStream oss;
   std::vector<double> values; 
   ModelType::Continuous3DIndexListType outTranformedPoint = m_Model->TransformPoints();
   IndexesListType                      indexesList        = m_Model->GetIndexesList();
   ContinuousIndexType idFix, idOut;
   Continuous3DIndexType idOut3D, idTrans3D;
-
+ 
   for(unsigned int i=0; i<indexesList.size(); i++)
     {
       idFix = indexesList[i].first;
       idOut = indexesList[i].second;
+      idTrans3D = outTranformedPoint[i];
       idOut3D[0] = idOut[0];
       idOut3D[1] = idOut[1];
-      idOut3D[0] = m_Model->GetUsedElevation()[i];
-      idTrans3D = outTranformedPoint[i];
+      if( m_Model->GetProjectionType() == ModelType::RPC)
+	idOut3D[2] = m_Model->GetUsedElevation()[i];
+      else
+	{
+	  idOut3D[2] = 0.;
+	  idTrans3D[2] = 0.;
+	}
 
       oss.str("");
       oss<<idFix<<" -> ";
-      //values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
-      //		 + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
       values.push_back( idOut3D.EuclideanDistanceTo(idTrans3D) );
-     oss<<idTrans3D<<", error: "<<vcl_sqrt(values[values.size()-1]);
+      oss<<idTrans3D<<", error: "<<vcl_sqrt(values[values.size()-1]);
       m_View->tError->add( oss.str().c_str() );
     }
 
@@ -219,6 +229,10 @@ GCPToSensorModelController
   oss.str("");
   oss<<sum;
   m_View->tMeanError->value(oss.str().c_str());
+
+  oss.str("");
+  oss<<m_Model->GetGroundError();
+  m_View->tGroundError->value(oss.str().c_str());
 }
 
 void
@@ -278,17 +292,18 @@ GCPToSensorModelController
     }
   
   IndexesListType     indexesList = m_Model->GetIndexesList();
-  std::cout<<indexesList.size()<<std::endl;
-
+  
   ContinuousIndexType idFix, idOut;
+  double height = 0.;
   for(unsigned int i=0; i<indexesList.size(); i++)
     {
       idFix = indexesList[i].first;
       idOut = indexesList[i].second;
-      m_View->AddPointsToList( idFix, idOut, m_Model->GetUsedElevation(i) );
+      if(m_Model->GetProjectionType() == ModelType::RPC)
+	height = m_Model->GetUsedElevation(i);
+      m_View->AddPointsToList( idFix, idOut, height );
     }
 }
-
 
 void
 GCPToSensorModelController

@@ -139,7 +139,13 @@ GCPToSensorModelView
  IndexType id1Int;
  id1Int[0] = static_cast<long>(id1[0]);
  id1Int[1] = static_cast<long>(id1[1]);
- oss<<id1Int<<" -> "<<id2;
+ oss<<id1Int<<" -> ";
+ if( m_Model->GetProjectionType() == GCPToSensorModelModel::RPC)
+   {
+     oss<<"["<<id2[0]<<" , "<<id2[1]<<" , "<<height<<"]";
+   }
+ else
+   oss<<id2;
  this->lPointList->add(oss.str().c_str());
 
  srand((id1[1]+id1[0])*123456);
@@ -214,7 +220,6 @@ GCPToSensorModelView
              lPointList->redraw();
            }
        }
-
     }
 }
 
@@ -260,18 +265,19 @@ GCPToSensorModelView
     {
       m_Controller->DeletePointFromList(id-1);
       lPointList->remove(id);
+      tError->remove(id);
       m_ColorList.erase(m_ColorList.begin()+id-1);
       if(id<=static_cast<unsigned int>(lPointList->size()))
        lPointList->value(id);
       else
        lPointList->value(1);
       
-      this->UpdateListSelectionColor(true);
       m_CrossGlComponent->ClearIndex(id-1);
       this->RedrawWidgets();
 
       this->ClearTransformationInfo();
       m_Controller->UpdateStats();
+      this->UpdateListSelectionColor(true);
     }
 }
 
@@ -281,6 +287,7 @@ GCPToSensorModelView
 {
   tError->clear();
   tMeanError->value("");
+  tGroundError->value("");
 }
 
 
@@ -328,7 +335,8 @@ GCPToSensorModelView
   std::string DEMfile = cfname;
   m_Controller->SetDEMPath( DEMfile );
   tDEMFile->value( cfname );
-
+  this->ClearTransformationInfo();
+  m_Controller->UpdateStats();
 }
 
 void
@@ -354,12 +362,38 @@ GCPToSensorModelView
   if(m_Model->GetHasNewImage())
     {
       this->ReloadGCPs();
+      m_Controller->UpdateStats();
     }
   else if(m_Model->GetProjectionUpdated())
     {
       this->ClearTransformationInfo();
       m_Controller->UpdateStats();
     }
+}
+
+
+void
+GCPToSensorModelView
+::SetProjectionType()
+{
+  if(cProjType->value() == 0)
+    {
+      wDEMWindow->hide();
+      guiDEM->deactivate();
+      vElev->hide();
+      m_Model->SetProjectionType(GCPToSensorModelModel::BILINEAR);
+    }
+  else if (cProjType->value() == 1)
+    {
+      guiDEM->activate();
+      vElev->show();
+      m_Model->SetProjectionType(GCPToSensorModelModel::RPC); 
+    }
+  else
+    return;
+  
+  this->ClearTransformationInfo();
+  m_Controller->UpdateStats();
 }
 
 void
