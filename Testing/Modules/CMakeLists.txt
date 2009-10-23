@@ -161,15 +161,21 @@ ${TEMP}/moTvAlgebraImageModule.tif
 0
 )	      
 
+
+#------------- Interactive Change Detection Module test
+ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS} 
+         otbChangeDetectionModuleTest
+	 ${INPUTDATA}/GomaAvant.png
+	 ${INPUTDATA}/GomaApres.png
+	 ${INPUTDATA}/icdSVMModel.svm
+	 ${TEMP}/moTvChangeDetectionModule.tif
+	 0
+)
 #------------- GCP to Sensor Model Module test -------------
 ADD_TEST(gcpTvGCPToSensorModelModuleTest ${Modules_TESTS} otbGCPToSensorModelModuleTest
 ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
 ${TEMP}/gcpTvGCPToSensorModelModuleTest.tif
 )
-
-
-
-
 
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
@@ -192,7 +198,9 @@ otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
+otbChangeDetectionModuleTest.cxx
 otbGCPToSensorModelModuleTest.cxx	
+	
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
