@@ -1,18 +1,18 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+    This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbWriterModel_h
@@ -144,7 +144,7 @@ public:
   
   
 
-  /** Input Image Pointer */
+  /** input image Pointer */
   void SetInputImage(InputImagePointerType image);
   
   /** Generate image layers */
@@ -297,9 +297,9 @@ public:
   void AddChannel(int id);
   void AddIntensityChannel();
 
-  /** Open Input Image */
+  /** Open input image */
   void SetInputImage(std::string strfilename);
-  /** Init Input Image */
+  /** Init input image */
   void InitInput();
 
   /** Convert OutputImage*/
@@ -321,7 +321,7 @@ private:
 
   /** Imput Image Pointer */
   InputImagePointerType m_InputImage;
-  /** Input Image List*/
+  /** input image List*/
   SingleImageListPointerType m_InputImageList;
   /** Output Image */
   OutputImagePointerType m_OutputImage;
@@ -330,7 +330,7 @@ private:
   OutputFilterInformationType m_OutputChannelsInformation;
   /** The instance singleton */
   static Pointer Instance;
-  /** Number Of Input Images*/
+  /** Number of input images*/
   int m_NumberOfInputImages;
   /** Output filename*/
   std:: string m_OutputFileName;

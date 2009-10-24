@@ -199,7 +199,7 @@ void ViewerModule::Run()
   // While the viewer is shown, it is busy
   this->BusyOn();
 
-  // Get Input Image
+  // Get input image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
   // Get the description
   m_Label = this->GetInputDataDescription<ImageType>("InputImage");

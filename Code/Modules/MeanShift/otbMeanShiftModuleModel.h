@@ -71,7 +71,7 @@ public:
   itkGetObjectMacro(VisualizationModel,VisualizationModelType);
 
 
-  /** Input Image Pointer */
+  /** input image Pointer */
   void SetInputImage(VectorImagePointerType image);
 
   /** Output Image Pointers */

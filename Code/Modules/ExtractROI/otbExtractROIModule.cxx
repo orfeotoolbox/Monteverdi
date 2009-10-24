@@ -106,7 +106,7 @@ void ExtractROIModule::Ok()
 
       if(!image.IsNull() && vectorImage.IsNull())
       {
-        // Get Input Image
+        // Get input image
         FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
 
         m_ImageExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));

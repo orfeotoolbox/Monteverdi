@@ -57,7 +57,7 @@ class SpeckleFilteringViewGUI {open
         }
       }
       Fl_Button bOk {
-        label OK
+        label Ok
         callback {Process();}
         tooltip {Quit the viewer manager} xywh {185 220 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }

@@ -13,7 +13,7 @@ class HomologousPointExtractionViewGroup {open
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window wMainWindow {
-      label {Homologous Point Extraction}
+      label {Homologous point extraction}
       callback {this->HideAll();} open
       xywh {155 359 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
@@ -37,35 +37,35 @@ class HomologousPointExtractionViewGroup {open
               tooltip {ax+b transformation} xywh {45 45 30 20}
             }
             MenuItem {} {
-              label Similarity2D
+              label {Similarity 2D}
               tooltip {ax+b transformation} xywh {55 55 30 20}
             }
           }
           Fl_Output tTransform {
-            label {Transform Value}
+            label {Transform value}
             xywh {5 100 190 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Browser tError {
-            label {Point Errors}
+            label {Point errors}
             callback {this->UpdateListSelectionColor(false);}
             tooltip {Euclidean distances} xywh {5 160 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Output tMeanError {
-            label {Mean Square Error:}
+            label {Mean square error}
             xywh {5 349 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Group gPixelValue1 {
-            label {Pixel Values} open
+            label {Pixel values} open
             xywh {5 421 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Group gPixelValue2 {
-            label {Pixel Values} open
+            label {Pixel values} open
             xywh {5 421 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Button guiQuit {
             label {Save/Quit}
             callback {Quit();}
-            tooltip {Quit Application} xywh {59 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Quit application} xywh {59 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
           }
         }
       }
@@ -100,24 +100,24 @@ class HomologousPointExtractionViewGroup {open
               tooltip {Contains selected points} xywh {417 21 165 226} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
             }
             Fl_Button guiClose {
-              label {Clear List}
+              label {Clear list}
               callback {ClearPointList();}
-              tooltip {Clear Feature List} xywh {417 258 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Clear feature list} xywh {417 258 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Button guiDelete {
               label Delete
               callback {DeletePoint();}
-              tooltip {Clear Feature List} xywh {511 258 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Clear feature list} xywh {511 258 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Button guiFocusPoint {
-              label {Focus Point}
+              label {Focus point}
               callback {Focus(0);}
-              tooltip {Focus on the selected point couple.} xywh {463 284 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Focus on the selected point couple} xywh {463 284 70 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Button guiComputeTransform {
               label Evaluate
               callback {this->ComputeTransform();}
-              tooltip {Quit Application (shortcut : Enter)} xywh {457 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 200 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+              tooltip {Quit application (shortcut: enter)} xywh {457 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 200 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
             }
             Fl_Group gIndexes {open
               xywh {416 467 165 128} box PLASTIC_DOWN_BOX color 7
@@ -146,12 +146,12 @@ class HomologousPointExtractionViewGroup {open
               Fl_Button guiFocusRound {
                 label {Focus Click}
                 callback {Focus(1);}
-                tooltip {Focus on the last clicked point couple.} xywh {421 539 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+                tooltip {Focus on the last clicked point couple} xywh {421 539 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
               }
               Fl_Button gGuess {
                 label Guess
                 callback {Evaluate();}
-                tooltip {Focus on the last clicked point couple.} xywh {464 568 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186 deactivate
+                tooltip {Focus on the last clicked point couple} xywh {464 568 71 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186 deactivate
               }
             }
           }

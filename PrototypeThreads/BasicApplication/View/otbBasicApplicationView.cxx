@@ -110,7 +110,7 @@ void BasicApplicationView::Exit()
 
 void BasicApplicationView::OpenImage()
 {
-  const char * cfname = fl_file_chooser("Select an Input Image", "*.*",".");
+  const char * cfname = fl_file_chooser("Select an input image", "*.*",".");
   Fl::check();
   wMainWindow->redraw();
   if (cfname == NULL || strlen(cfname)<1)

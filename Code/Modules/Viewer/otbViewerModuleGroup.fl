@@ -15,7 +15,7 @@ class ViewerModuleGroup {open
   Function {Build()} {open
   } {
     Fl_Window bSetupWindow {
-      label {Vector Datas Propreties}
+      label {Vector data propreties}
       callback {this->Quit();} open
       xywh {646 159 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
@@ -24,9 +24,9 @@ class ViewerModuleGroup {open
         xywh {0 0 700 305} box PLASTIC_DOWN_BOX resizable
       } {
         Fl_Group {} {
-          label {Vector Datas}
+          label {Vector data}
           callback {this->TabSetupPosition();} open
-          tooltip {Vector Datas Propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Vector data propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {160 260 25 25} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -138,11 +138,11 @@ class ViewerModuleGroup {open
               xywh {319 195 365 90} resizable
             } {
               Fl_Value_Input bUpperQuantile {
-                label {Upper Quantile  %:}
+                label {Upper quantile  %:}
                 xywh {524 224 41 22} box PLASTIC_DOWN_BOX maximum 100 step 0.1 value 2
               }
               Fl_Value_Input bLowerQuantile {
-                label {Lower Quantile  %:}
+                label {Lower quantile  %:}
                 xywh {524 262 41 21} box PLASTIC_DOWN_BOX maximum 100 step 0.1 value 2 resizable
               }
               Fl_Button bUpperApply {
@@ -159,18 +159,18 @@ class ViewerModuleGroup {open
           }
         }
         Fl_Group {} {
-          label PixelDescription open
+          label {Pixel description} open
           xywh {0 29 700 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Text_Display bPixelInfo {
             xywh {25 104 325 166} box PLASTIC_DOWN_BOX color 55
           }
           Fl_Value_Input bX {
-            label {X:}
+            label {X}
             xywh {45 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+06 step 1
           }
           Fl_Value_Input bY {
-            label {Y:}
+            label {Y}
             xywh {158 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+08 step 1
           }
           Fl_Button bPixelOK {
@@ -181,7 +181,7 @@ class ViewerModuleGroup {open
         }
       }
       Fl_Return_Button bQuit {
-        label {Quit }
+        label {Quit}
         callback {this->Quit();}
         xywh {617 308 70 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
@@ -237,7 +237,7 @@ bDEM->value(0);}
         xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
       }
       Fl_Button gOKDEM {
-        label OK
+        label Ok
         callback {this->UpdateDEMSettings();
 wDEM->hide();
 if(gDEMPath->size()  == 0)
