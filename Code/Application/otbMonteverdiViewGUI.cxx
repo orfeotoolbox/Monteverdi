@@ -301,7 +301,8 @@ MonteverdiViewGUI
   // node is a module
   if( n->parent()->is_root() )
     {
-      m_Tree->GetModuleMenu()->LaunchModuleMenu();
+      m_Tree->GetModuleMenu()->Reset();
+	  m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
        {
          gRenameOld->value(label);
@@ -314,7 +315,6 @@ MonteverdiViewGUI
         {
           //Call controller?
             std::string moduleId   = n->label();
-           std::cout << "Show now the module GUI"<< std::endl;
            m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
         } 
     }
@@ -328,6 +328,7 @@ MonteverdiViewGUI
     bool viewable  = m_MonteverdiModel->SupportsViewing(instanceId,outputId);
     bool writable  = m_MonteverdiModel->SupportsWriting(instanceId,outputId);
 
+	  m_Tree->GetModuleMenu()->Reset();
       m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
        { 
@@ -406,6 +407,16 @@ MonteverdiViewGUI
 {
   FluTreeBrowser::Node* root = m_Tree->first();
 
+  //Clear existing Module outputs before adding new entries
+//   for (unsigned int i=0;i<n->children();++i)
+//   {
+//     std::cout << "remove node " << n->child(i)->label() << std::endl;
+//     n->remove(n->child(i));  
+//   }
+  //Remove existing module with the same name in the tree
+  unsigned int rm = root->remove(m_Tree->find(instanceId.c_str()));
+  if ( rm != 0)
+    std::cout << "Remove existing module entry: " << instanceId.c_str() <<  std::endl;
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
   root->label("Data Set");
@@ -414,7 +425,7 @@ MonteverdiViewGUI
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
   OutputDataDescriptorMapType::const_iterator it;
 
-
+  std::cout << "Map " << lDataMap.size() <<  std::endl;
   // we look for the good node in the tree to add leaves
   FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
   if( !n )
@@ -425,6 +436,8 @@ MonteverdiViewGUI
   // this node can receive new nodes as a result of draggind-and-dropping
   //TODO
   //n->droppable(true);
+  
+  
   
   for (it = lDataMap.begin();it != lDataMap.end();it++)
     {         

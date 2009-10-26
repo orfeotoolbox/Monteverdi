@@ -149,6 +149,12 @@ void KMeansModule::ThreadedWatch()
   vNumberOfIterations->deactivate();
   Fl::unlock();
 
+  // Wait for the module to be busy
+  while(!this->IsBusy())
+  {
+	Sleep(500);
+  }
+
   while( this->IsBusy() )
     {
       Fl::awake(&UpdateProgressCallback,this);
@@ -175,7 +181,7 @@ void KMeansModule::ThreadedWatch()
 void KMeansModule::ThreadedRun()
 {
   this->BusyOn();
-  
+
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
 
   if(image.IsNull())
