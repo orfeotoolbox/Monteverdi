@@ -31,9 +31,9 @@ int otbThresholdModuleTest(int argc, char* argv[])
 
   // Inputs
   const char * infname = argv[1];
-  bool        run      = atoi(argv[2]);
+  bool         run     = atoi(argv[2]);
   
-  typedef otb::VectorImage<double,2>          ImageType;
+  typedef otb::Image<double,2>                ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
   
