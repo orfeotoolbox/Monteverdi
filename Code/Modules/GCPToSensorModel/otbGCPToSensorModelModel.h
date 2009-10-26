@@ -133,7 +133,7 @@ public:
       this->ComputeRPCProjection();
   };
   /** Compute the transform on one point */
-  Continuous3DIndexType TransformPoint(ContinuousIndexType id );
+  Continuous3DIndexType TransformPoint(ContinuousIndexType id, double height=0. );
 
   /** Compute the transform the points of m_IndexList */
   Continuous3DIndexListType TransformPoints();
@@ -175,6 +175,8 @@ public:
     return m_UsedElevation[i];   
   };
   std::vector<double> GetUsedElevation() { return m_UsedElevation; };
+  /** According to the type of elevation manageme,t generate the used list. */
+  void GenerateUsedElevation();
   
   /** Set/Get Projection type */
   itkSetMacro(ProjectionType, ProjectionEnumType);
@@ -182,6 +184,7 @@ public:
  
   /** Get Ground error projection */
   itkGetConstMacro(GroundError, double);
+
 
 protected:
 

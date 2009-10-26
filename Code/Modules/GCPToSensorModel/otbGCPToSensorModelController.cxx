@@ -183,6 +183,42 @@ GCPToSensorModelController
 }
 
 
+void
+GCPToSensorModelController
+::UpdatePointList() 
+{
+  // redraw inputlist (height or not) + compute new transform + update stats
+  IndexesListType indexesList = m_Model->GetIndexesList();
+  if( m_Model->GetProjectionType() == ModelType::RPC )
+    m_Model->GenerateUsedElevation();
+  
+  if( m_Model->GetUsedElevation().size() != indexesList.size() )
+    {
+      MsgReporter::GetInstance()->SendError("Lost in the wind... sorry start from scratch");
+      return;
+    }
+
+    // add point to the input point list
+  double height = 0.;
+  for(unsigned int i=0; i<indexesList.size(); i++)
+    {
+      if( m_Model->GetProjectionType() == ModelType::RPC )
+	height = m_Model->GetUsedElevation(i);
+      m_View->AddPointsToList( indexesList[i].first, indexesList[i].second, height );
+    }
+
+    // compute transform
+  try
+    {
+      m_Model->ComputeTransform();
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      std::cout<<"err : "<<err.GetDescription()<<std::endl;
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+}
 
 
 void

@@ -344,6 +344,7 @@ GCPToSensorModelView
 ::ChangeDEM()
 {
   m_Controller->ChangeDEM();
+  this->UpdatePointList();
 }
 
 void
@@ -380,6 +381,7 @@ GCPToSensorModelView
     {
       wDEMWindow->hide();
       guiDEM->deactivate();
+      lPointList->clear();
       vElev->hide();
       m_Model->SetProjectionType(GCPToSensorModelModel::BILINEAR);
     }
@@ -391,10 +393,19 @@ GCPToSensorModelView
     }
   else
     return;
-  
-  this->ClearTransformationInfo();
-  m_Controller->UpdateStats();
+
+  this->UpdatePointList();
 }
+
+void
+GCPToSensorModelView
+::UpdatePointList()
+{
+  lPointList->clear();
+  this->ClearTransformationInfo();
+  m_Controller->UpdatePointList();
+}
+
 
 void
 GCPToSensorModelView

@@ -53,6 +53,7 @@ public:
   virtual void ReloadGCPsList() =0;
   virtual void UpdateStats() =0;
   virtual void OK() =0;
+  virtual void UpdatePointList() =0;
 
 protected:
   /** Constructor */

@@ -275,7 +275,8 @@ GCPToSensorModelModel
     }
 }
 
-void 
+
+void
 GCPToSensorModelModel
 ::ComputeRPCProjection()
 {
@@ -286,12 +287,7 @@ GCPToSensorModelModel
       itkExceptionMacro(<<"Invalid heights");
     }
 
-  if(m_ElevMgt == GCP)
-    m_UsedElevation = m_GCPsElevation;
-  else if(m_ElevMgt == MEAN)
-    m_UsedElevation = std::vector<double>(m_DEMsElevation.size(), m_MeanElevation);
-  else if(m_ElevMgt == DEM)
-    m_UsedElevation = m_DEMsElevation;
+  this->GenerateUsedElevation();
 
   ossimRpcProjection * bproj = new ossimRpcProjection();
 
@@ -308,8 +304,9 @@ GCPToSensorModelModel
       idFix =  m_IndexesList[i].first;
       idMov =  m_IndexesList[i].second;
       spoint = ossimDpt(idFix[0],idFix[1]);
-      sensorPoints.push_back(spoint); 
+      sensorPoints.push_back(spoint);
       gpoint = ossimGpt(idMov[0],idMov[1], m_UsedElevation[i]);
+      std::cout<<gpoint<<std::endl;
       ossimTieGpt * tieGpt = new ossimTieGpt(gpoint, spoint, score);
       tieGptVect.push_back(tieGpt);    
     }
@@ -329,19 +326,37 @@ GCPToSensorModelModel
 }
 
 
+void
+GCPToSensorModelModel
+::GenerateUsedElevation()
+{
+  m_UsedElevation.clear();
+  if(m_ElevMgt == GCP)
+    m_UsedElevation = m_GCPsElevation;
+  else if(m_ElevMgt == MEAN)
+    m_UsedElevation = std::vector<double>(m_DEMsElevation.size(), m_MeanElevation);
+  else if(m_ElevMgt == DEM)
+    m_UsedElevation = m_DEMsElevation;
+  else
+    itkExceptionMacro(<<"Unknown elevation management.")
+}
+
+
 GCPToSensorModelModel::Continuous3DIndexType
 GCPToSensorModelModel
-::TransformPoint(ContinuousIndexType id)
+::TransformPoint(ContinuousIndexType id, double height)
 {
   Continuous3DIndexType out;
 
   ossimDpt spoint(id[0], id[1]);
   ossimGpt gpoint;
+  if (m_ProjectionType == RPC)
+    gpoint.hgt = height;
   m_Projection->lineSampleToWorld(spoint, gpoint);
   out[0] = gpoint.lat;
   out[1] = gpoint.lon;
   out[2] = gpoint.hgt;
-   
+ 
   return out;
 }
 
@@ -353,7 +368,10 @@ GCPToSensorModelModel
   Continuous3DIndexListType outList;
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
-      outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
+      if (m_ProjectionType == RPC)
+	outList.push_back( this->TransformPoint(m_IndexesList[i].first, m_UsedElevation[i]) );
+      else if(m_ProjectionType == BILINEAR)
+	outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
     }
   return outList;
 }

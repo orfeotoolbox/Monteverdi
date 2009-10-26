@@ -87,6 +87,8 @@ public:
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
   void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height );
   void RedrawWidgets();
+  void UpdatePointList();
+
   
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(ImageView,ImageViewType);

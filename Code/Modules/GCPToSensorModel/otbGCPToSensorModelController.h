@@ -150,6 +150,7 @@ public:
   virtual void ReloadGCPsList();
   virtual void OK();
   virtual void UpdateStats();
+  virtual void UpdatePointList();
 
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( ContinuousIndexType index );
