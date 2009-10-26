@@ -177,6 +177,19 @@ ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
 ${TEMP}/gcpTvGCPToSensorModelModuleTest.tif
 )
 
+#------------- Threshold  Module test New -------------
+ADD_TEST(moTuThresholdModuleTest ${Modules_TESTS} otbThresholdModuleTestNew
+)
+
+#------------- Threshold  Module test -------------
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS} 
+	 otbThresholdModuleTest
+	 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+	 0
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -200,7 +213,8 @@ otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
 otbChangeDetectionModuleTest.cxx
 otbGCPToSensorModelModuleTest.cxx	
-	
+otbThresholdModuleTestNew.cxx	
+otbThresholdModuleTest.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur

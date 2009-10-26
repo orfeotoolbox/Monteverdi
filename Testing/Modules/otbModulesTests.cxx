@@ -48,4 +48,6 @@ void RegisterTests()
   REGISTER_TEST(otbAlgebraModuleTest);
   REGISTER_TEST(otbChangeDetectionModuleTest);
   REGISTER_TEST(otbGCPToSensorModelModuleTest);
+  REGISTER_TEST(otbThresholdModuleTestNew);
+  REGISTER_TEST(otbThresholdModuleTest);
 }
