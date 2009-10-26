@@ -41,12 +41,12 @@ class FLU_EXPORT FluTreeBrowser : public Flu_Tree_Browser
     {
       return m_ModuleMenu;
     }
+
  protected:
 
  private:
   /** Module menu */
   MonteverdiMenu * m_ModuleMenu;
-  MonteverdiMenu * m_DescriptorMenu;
 };
 } // namespace otb
 

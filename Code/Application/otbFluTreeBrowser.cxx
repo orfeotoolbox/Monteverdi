@@ -21,14 +21,12 @@ namespace otb
 ::FluTreeBrowser( int x, int y, int w, int h, const char *label ) : Flu_Tree_Browser(x, y, w, h, label)
  {
    m_ModuleMenu = new MonteverdiMenu(0, 0, 100, 200);
-   //m_ModuleMenu->GetMenuBar()->add("toto", 0, 0, 0);
-   //m_ModuleMenu->GetMenuBar()->add("tutu", 0, 0, 0);
-   m_DescriptorMenu = new MonteverdiMenu(0, 0, 100, 200);
  }
 
  FluTreeBrowser
  ::~FluTreeBrowser()
  {
+    delete m_ModuleMenu;
  }
 
 int 
