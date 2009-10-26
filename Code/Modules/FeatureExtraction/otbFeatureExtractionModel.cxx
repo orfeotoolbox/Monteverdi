@@ -61,7 +61,7 @@ FeatureExtractionModel::FeatureExtractionModel()
   //Instantiate output image attributes
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
-  m_iL2VI = ImageListToVectorImageFilterType::New();
+//   m_iL2VI = ImageListToVectorImageFilterType::New();
 
   m_HasChanged = false;
 }
@@ -692,20 +692,15 @@ FeatureExtractionModel
 
   if (todo == true)
   {
-//     ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
+    m_iL2VI= ImageListToVectorImageFilterType::New();
     m_iL2VI->SetInput( m_imageList );
-
+    
     m_OutputImage = m_iL2VI->GetOutput();
     
-    //FIXME update during the pipeline!!!!!
-//     m_iL2VI->Update();
-//     iL2VI->UpdateOutputInformation();
-
     m_OutputImage->UpdateOutputInformation();
+    
     m_HasChanged = true;
     this->NotifyAll("OutputsUpdated");
-
-
   }
 }
 
