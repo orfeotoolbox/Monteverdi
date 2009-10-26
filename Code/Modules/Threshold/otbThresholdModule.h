@@ -24,7 +24,7 @@
 #include "otbThresholdGroup.h"
 
 //include the view elements
-#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerRenderingModel.h"
@@ -38,6 +38,10 @@
 #include "otbChangeScaleActionHandler.h"
 
 // Threshold
+#include "itkBinaryThresholdImageFilter.h"
+
+//Extract ROI
+#include "otbExtractROI.h"
 
 namespace otb
 {
@@ -53,7 +57,7 @@ class ITK_EXPORT ThresholdModule
 {
 public:
   /** Standard class typedefs */
-  typedef ThresholdModule                 Self;
+  typedef ThresholdModule               Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -65,9 +69,11 @@ public:
   itkTypeMacro(ThresholdModule,Module);
 
   typedef double                                         PrecisionType;
-  typedef unsigned short                                 LabelType;
-  typedef VectorImage<PrecisionType,2>                   ImageType;
-
+  typedef unsigned char                                  LabelType;
+  typedef Image<PrecisionType,2>                         ImageType;
+  typedef Image<LabelType,2>                             LabeledImageType;
+  
+  
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char>                  RGBPixelType;
   typedef Image<RGBPixelType,2>                          OutputImageType;
@@ -80,7 +86,7 @@ public:
   /** Image layer generator type */
   typedef ImageLayerGenerator<ImageLayerType>            ImageLayerGeneratorType;
   typedef ImageLayerGeneratorType::Pointer               ImageLayerGeneratorPointerType;
-
+  
   /** Rendering model type */
   typedef ImageLayerRenderingModel<OutputImageType>      RenderingModelType;
   typedef RenderingModelType::Pointer                    RenderingModelPointerType;
@@ -92,7 +98,7 @@ public:
   /** Widget controller */
   typedef ImageWidgetController                          WidgetControllerType;
   typedef WidgetControllerType::Pointer                  WidgetControllerPointerType;
-
+  
   /** Standard action handlers */
   typedef otb::WidgetResizingActionHandler
     <RenderingModelType,ViewType>                        ResizingHandlerType;
@@ -106,11 +112,13 @@ public:
     <RenderingModelType,ViewType>                        ArrowKeyMoveActionHandlerType;
   
   /** Filter for thresholding*/
-  //
+  typedef itk::BinaryThresholdImageFilter<ImageType,ImageType> ThresholdFilterType;
+
+  /** Extract ROI Filter */
+  typedef ExtractROI<PrecisionType,PrecisionType>        ExtractROIFilterType;
 
   /** Set the input Image*/
   itkSetObjectMacro(InputImage,ImageType);
-  
   
 protected:
   /** Constructor */
@@ -122,19 +130,29 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-
+  
   /** Callbacks */
   virtual void OK();
+
+  /** Callback on the sliders*/
+  virtual void UpdateDetails();
+
+  /** Update the sliders*/
+  virtual void UpdateSlidersExtremum();
 
 private:
   ThresholdModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  // Threshold filter
-  //ThresholdFilterType::Pointer m_ThresholdFilter;
+  /** Threshold filter */
+  ThresholdFilterType::Pointer             m_ThresholdFilter;
+  ThresholdFilterType::Pointer             m_ThresholdQuicklook;
   
   /** Pointer to the image */
   ImageType::Pointer                       m_InputImage;
+
+  /** Pointer to the image */
+  ImageType::Pointer                       m_ResultImage;
   
   /** The image layer */
   ImageLayerPointerType                    m_InputImageLayer;
@@ -147,6 +165,13 @@ private:
   
   /** The widget controller */
   WidgetControllerPointerType              m_Controller;
+
+  /** Extract ROI filter*/
+  ExtractROIFilterType::Pointer            m_ExtractROI;
+
+  /** Layer Generator*/
+  ImageLayerGeneratorType::Pointer         m_ThresholdGenerator;
+  ImageLayerGeneratorType::Pointer         m_Generator;
 };
 
 
