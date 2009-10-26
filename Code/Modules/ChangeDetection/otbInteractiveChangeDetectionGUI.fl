@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0107 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -387,7 +387,7 @@ CenterViewerColorCompositionCallback();}
           }
           Fl_Spinner svmKernelDegree {
             label {Kernel Degree }
-            xywh {200 141 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
+            xywh {200 141 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
           }
           Fl_Value_Input svmGamma {
             label {Gamma }
@@ -419,7 +419,7 @@ CenterViewerColorCompositionCallback();}
           }
           Fl_Spinner svmCacheSize {
             label {Cache Size }
-            xywh {200 171 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
+            xywh {200 171 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
           }
           Fl_Button {} {
             label {Save parameters}
