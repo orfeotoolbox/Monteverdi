@@ -120,59 +120,59 @@ ProjectionView
     // Test the different combination we want
     if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
       {
-	// Fill the GUI With the  LAMBERT 2 parameters
-	iMapSelection->value(1);   
-	iLambert2->show();
-	iUTM->hide();
-	iTRANSMERCATOR->hide();
+       // Fill the GUI With the  LAMBERT 2 parameters
+       iMapSelection->value(1);   
+       iLambert2->show();
+       iUTM->hide();
+       iTRANSMERCATOR->hide();
       }
     else if(strcmp(inputMap,"Transverse_Mercator") == 0)
       {
-	// Get the value of the parameter scale_factor
-	if(this->FindParameter(oSRS,"scale_factor",&scale_factor))
-	  {
-	
-	    if(scale_factor == 0.9996 /** Value Specific to UTM */)
-	      {
-		iMapSelection->value(0);   
-		iUTM->show();
-		iLambert2->hide();
-		iTRANSMERCATOR->hide();
-	    
-		// Get the number of the zone
-		int zone = oSRS.GetUTMZone();
-		itk::OStringStream oss;
-		oss<<zone;
-		// Fill the UTM Parameters in the GUI
-		iUTMZone->value(oss.str().c_str());
-		
-		// North Or South Hemisphere : Value filled in the falseNorthing Parameter
-		double false_northing = 0.;
-		if(this->FindParameter(oSRS,"false_northing",&false_northing))
-		  {
+       // Get the value of the parameter scale_factor
+       if(this->FindParameter(oSRS,"scale_factor",&scale_factor))
+         {
+       
+           if(scale_factor == 0.9996 /** Value Specific to UTM */)
+             {
+              iMapSelection->value(0);   
+              iUTM->show();
+              iLambert2->hide();
+              iTRANSMERCATOR->hide();
+           
+              // Get the number of the zone
+              int zone = oSRS.GetUTMZone();
+              itk::OStringStream oss;
+              oss<<zone;
+              // Fill the UTM Parameters in the GUI
+              iUTMZone->value(oss.str().c_str());
+              
+              // North Or South Hemisphere : Value filled in the falseNorthing Parameter
+              double false_northing = 0.;
+              if(this->FindParameter(oSRS,"false_northing",&false_northing))
+                {
 
-		    if(false_northing == 0.) // North Hemisphere
-		      {
-			iUTMNorth->value(1);
-			iUTMSouth->value(0);
-			
-		      }
-		    else
-		      {
-			iUTMNorth->value(0);
-			iUTMSouth->value(1);
-		      }
-		  }
-	      }
-	    else
-	      {
-		//Fill the TransverseMercator Parameters
-		iMapSelection->value(2);
-		iUTM->hide();
-		iLambert2->hide();
-		iTRANSMERCATOR->show();
-	      }
-	  }
+                  if(false_northing == 0.) // North Hemisphere
+                    {
+                     iUTMNorth->value(1);
+                     iUTMSouth->value(0);
+                     
+                    }
+                  else
+                    {
+                     iUTMNorth->value(0);
+                     iUTMSouth->value(1);
+                    }
+                }
+             }
+           else
+             {
+              //Fill the TransverseMercator Parameters
+              iMapSelection->value(2);
+              iUTM->hide();
+              iLambert2->hide();
+              iTRANSMERCATOR->show();
+             }
+         }
       }
   }
 
@@ -214,11 +214,11 @@ ProjectionView
       OGR_SRSNode*  curChild = node->GetChild(i);
       int res      = curChild->FindChild(inParam);
       if(res == 0)
-	{
-	  // scale_factor parameter found
-	  *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
-	  return true;
-	}
+       {
+         // scale_factor parameter found
+         *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
+         return true;
+       }
     }
   return false;
 }
@@ -249,7 +249,7 @@ ProjectionView
     
     if (resCheckImageParameters == 1)
       {
-	itkExceptionMacro(<<"Invalid image parameters");
+       itkExceptionMacro(<<"Invalid image parameters");
       }
     
     guiMainWindow->show();
@@ -315,36 +315,36 @@ ProjectionView
     {
     case MAP_UTM:
       {
-	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-	oss.str("");
-	oss<<newCartoPoint[1];
-	guiUTMNorthSelection->value(oss.str().c_str());
-	oss.str("");
-	oss<<newCartoPoint[0];
-	guiUTMEastSelection->value(oss.str().c_str());
-	break;
+       newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+       oss.str("");
+       oss<<newCartoPoint[1];
+       guiUTMNorthSelection->value(oss.str().c_str());
+       oss.str("");
+       oss<<newCartoPoint[0];
+       guiUTMEastSelection->value(oss.str().c_str());
+       break;
       }
     case MAP_LAMBERT2:
       {
-	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-	oss.str("");
-	oss<<newCartoPoint[1];
-	guiLambertNorthSelection->value(oss.str().c_str());
-	oss.str("");
-	oss<<newCartoPoint[0];
-	guiLambertEastSelection->value(oss.str().c_str());
-	break;
+       newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+       oss.str("");
+       oss<<newCartoPoint[1];
+       guiLambertNorthSelection->value(oss.str().c_str());
+       oss.str("");
+       oss<<newCartoPoint[0];
+       guiLambertEastSelection->value(oss.str().c_str());
+       break;
       }
     case MAP_TRANSMERCATOR:
       {
-	newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-	oss.str("");
-	oss<<newCartoPoint[1];
-	guiTransmercatorNorthSelection->value(oss.str().c_str());
-	oss.str("");
-	oss<<newCartoPoint[0];
-	guiTransmercatorEastSelection->value(oss.str().c_str());
-	break;
+       newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+       oss.str("");
+       oss<<newCartoPoint[1];
+       guiTransmercatorNorthSelection->value(oss.str().c_str());
+       oss.str("");
+       oss<<newCartoPoint[0];
+       guiTransmercatorEastSelection->value(oss.str().c_str());
+       break;
       }
     default:
       fl_alert("Problem with map projection type, please contact developpers");
@@ -372,15 +372,15 @@ ProjectionView
   
       // Apply the transform to the middle point of the image
       if(guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
-	{
-	  index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
-	  index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
+       {
+         index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0]/2 + 1;
+         index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1]/2 + 1;
       
-	}
+       }
       else if(guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
-	{
-	  index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
-	}
+       {
+         index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
+       }
   
       // From index to Physical Point
       m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,point);
@@ -508,7 +508,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
         BlackmanType::Pointer interp = BlackmanType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()) );
-	interp->Initialize();
+       interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -518,7 +518,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
         CosineType::Pointer interp = CosineType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	interp->Initialize();
+       interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -527,7 +527,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
         GaussianType::Pointer interp = GaussianType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	interp->Initialize();
+       interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -536,7 +536,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
         HammingType::Pointer interp = HammingType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+       //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -545,7 +545,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
         LanczosType::Pointer interp = LanczosType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+       //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -554,7 +554,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
         WelchType::Pointer interp = WelchType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+       //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -695,8 +695,8 @@ void
 ProjectionView::UpdateTMTransform()
 {
   m_Controller->UpdateTMTransform(atof(guiTRANSMERCATORScale->value()),
-				  atof(guiTRANSMERCATOREast->value()),
-				  atof(guiTRANSMERCATORNorth->value()));
+                              atof(guiTRANSMERCATOREast->value()),
+                              atof(guiTRANSMERCATORNorth->value()));
 }
 
 
@@ -735,8 +735,8 @@ void
 ProjectionView::UpdateInputTMTransform()
 {
   m_Controller->UpdateInputTMTransform(atof(iTRANSMERCATORScale->value()),
-				  atof(iTRANSMERCATOREast->value()),
-				  atof(iTRANSMERCATORNorth->value()));
+                              atof(iTRANSMERCATOREast->value()),
+                              atof(iTRANSMERCATORNorth->value()));
 
   // Update the whole transformation 
   this->UpToDateTransform();
@@ -752,18 +752,18 @@ switch (this->GetMapType())
     {
     case MAP_UTM:
       {
-	this->UpdateUTMTransform();
-	break;
+       this->UpdateUTMTransform();
+       break;
       }
     case MAP_LAMBERT2:
       {
-	this->UpdateLambertIITransform();
-	break;
+       this->UpdateLambertIITransform();
+       break;
       }
     case MAP_TRANSMERCATOR:
       {
-	this->UpdateTMTransform();
-	break;
+       this->UpdateTMTransform();
+       break;
       }
     default:
      break;

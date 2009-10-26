@@ -303,9 +303,9 @@ GCPToSensorModelView
     {
       if(m_CrossGlComponent->GetIndexList().size() >= value) 
         {
-	  id = m_CrossGlComponent->GetIndexList()[value-1];
-	  m_Controller->FocusOn(id);
-	}
+         id = m_CrossGlComponent->GetIndexList()[value-1];
+         m_Controller->FocusOn(id);
+       }
     }
   // Focus circles
   else if( i == 1 )

@@ -269,10 +269,10 @@ void MonteverdiModel::ChangeOutputDataKey(const std::string & instanceId, const 
       CGraphEdgeType edge = outEdgeIt.Get();
 
       if(edge.first == oldKey)
-	{
-	edge.first = newKey;
-	outEdgeIt.Set(edge);
-	}
+       {
+       edge.first = newKey;
+       outEdgeIt.Set(edge);
+       }
       ++outEdgeIt;
       }
     }
@@ -588,10 +588,10 @@ bool MonteverdiModel::IsModuleLocked(const std::string & instanceId, std::string
       Module::Pointer currentModule = this->GetModuleByInstanceId(vertexIt.Get());
 
       if(currentModule->IsLockingPipeline())
-	{
-	resp = true;
-	lockingInstanceId = vertexIt.Get();
-	}
+       {
+       resp = true;
+       lockingInstanceId = vertexIt.Get();
+       }
       }
     ++vertexIt;
     }

@@ -59,12 +59,12 @@ FluTreeBrowser
   if( !rdata.dragging && !( event == FL_MOVE && rdata.selectUnderMouse ) )
     {
       if( ! (event == FL_MOVE || event == FL_ENTER || event == FL_LEAVE ) )
-	_box->redraw();
+       _box->redraw();
 
       if( Fl_Group::handle( event ) )
-	{
-	  return 1;
-	}
+       {
+         return 1;
+       }
     }
 
   if( event == FL_RELEASE )
@@ -95,56 +95,56 @@ FluTreeBrowser
     {
       // move hilighted entry up
       if( Fl::event_key() == FL_Up )
-	{
-	  this->rdata.delta = -1;
-	  Fl::focus(this);
-	  this->redraw();
-	}
+       {
+         this->rdata.delta = -1;
+         Fl::focus(this);
+         this->redraw();
+       }
 
       // move hilighted entry down
       else if( Fl::event_key() == FL_Down )
-	{
-	  this->rdata.delta = 1;
-	  Fl::focus(this);
-	  this->redraw();
-	}
+       {
+         this->rdata.delta = 1;
+         Fl::focus(this);
+         this->redraw();
+       }
 
       // select all
       else if( Fl::event_state(FL_CTRL) && Fl::event_key() == 'a' )
-	{
-	  select_all();
-	  Fl::focus(this);
-	  this->redraw();
-	  return 1;
-	}
+       {
+         select_all();
+         Fl::focus(this);
+         this->redraw();
+         return 1;
+       }
 
       // check for the Home key
       else if( Fl::event_key() == FL_Home )
-	{
-	  // set the hilighted entry to be the first entry
-	  if( this->rdata.showRoot || ( this->rdata.root->children() == 0 ) )
-	    this->set_hilighted( rdata.root );
-	  else if( this->rdata.root->children() > 0 )
-	    this->set_hilighted( this->rdata.root->child(0) );
-	  this->redraw();
-	}
+       {
+         // set the hilighted entry to be the first entry
+         if( this->rdata.showRoot || ( this->rdata.root->children() == 0 ) )
+           this->set_hilighted( rdata.root );
+         else if( this->rdata.root->children() > 0 )
+           this->set_hilighted( this->rdata.root->child(0) );
+         this->redraw();
+       }
 
       // check for the End key
       else if( Fl::event_key() == FL_End )
-	{
-	  // set the hilighted entry to be the last visible entry
-	  if( this->rdata.showRoot && ( this->rdata.root->children() == 0 ) )
-	    this->set_hilighted( this->rdata.root );
-	  else
-	    {
-	      // find the last node by repeatedly looking for the last child until there are no more branches
-	      Node *n = &root;
-	      while( n->children() && n->open() )
-		n = n->child( n->children()-1 );
-	      set_hilighted( n );
-	    }
-	  this->redraw();
-	}
+       {
+         // set the hilighted entry to be the last visible entry
+         if( this->rdata.showRoot && ( this->rdata.root->children() == 0 ) )
+           this->set_hilighted( this->rdata.root );
+         else
+           {
+             // find the last node by repeatedly looking for the last child until there are no more branches
+             Node *n = &root;
+             while( n->children() && n->open() )
+              n = n->child( n->children()-1 );
+             set_hilighted( n );
+           }
+         this->redraw();
+       }
     }
 
    // pass the event down the tree
@@ -153,17 +153,17 @@ FluTreeBrowser
     {
       //redraw();
       if( this->rdata.visibilityChanged )
-	{
-	  this->root.determineVisibility();
-	}
+       {
+         this->root.determineVisibility();
+       }
       if( val == 1 )
-	{
-  	  if( event == FL_PUSH && Fl::event_button()==FL_RIGHT_MOUSE)
-  	    {
-  	      this->get_hilighted()->do_callback(OTB_FLU_RIGHT_MOUSE_PUSHED);
-  	    }
-	  return 1;
-	}
+       {
+           if( event == FL_PUSH && Fl::event_button()==FL_RIGHT_MOUSE)
+             {
+               this->get_hilighted()->do_callback(OTB_FLU_RIGHT_MOUSE_PUSHED);
+             }
+         return 1;
+       }
     }
   // special case: if multi-select or single-select and user clicks on no items, unselect all items
   else if( (this->rdata.selectionMode != FLU_NO_SELECT) && (event == FL_PUSH) && (!Fl::event_state(FL_CTRL)) )

@@ -103,10 +103,10 @@ InputViewGUI
       OutputDataDescriptorMapType::const_iterator it_out;
       for(it_out=lOutputDataMap.begin();it_out!=lOutputDataMap.end();it_out++)
         {
-	// if the type is ok, we can add the label in the Fl_Input_Choice
-	if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
+       // if the type is ok, we can add the label in the Fl_Input_Choice
+       if(it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
           {
-	  inputChoice->AddChoice(StringPairType(*instIt,it_out->first),locked,lockingModule);
+         inputChoice->AddChoice(StringPairType(*instIt,it_out->first),locked,lockingModule);
           }
         }
       }
@@ -174,7 +174,7 @@ InputViewGUI
     InputViewComponent::StringPairVectorType inputs = mIt->second->GetSelected();
 
     for (InputViewComponent::StringPairVectorType::const_iterator it = inputs.begin();
-	 it!= inputs.end();++it)
+        it!= inputs.end();++it)
       {
        m_Controller->AddModuleConnection(it->first,it->second,m_ModuleInstanceId,mIt->first);
       }

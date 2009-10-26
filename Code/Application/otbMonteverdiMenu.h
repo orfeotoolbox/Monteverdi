@@ -94,13 +94,13 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       const unsigned menuSize = 1 + show;
       Fl_Menu_Item popup_menu[menuSize];
       
-      popup_menu[0] = (Fl_Menu_Item){ "Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };	
+      popup_menu[0] = (Fl_Menu_Item){ "Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };       
       
       unsigned int idx = 1;
       //Add Re Open menu
       if (show)
       {
-        popup_menu[idx] = (Fl_Menu_Item) { "Show Module",  0, this->handle_menu_module_show, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };	
+        popup_menu[idx] = (Fl_Menu_Item) { "Show Module",  0, this->handle_menu_module_show, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };       
         ++idx;
       }
       
@@ -110,7 +110,7 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       Fl::get_mouse(x, y);
       const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, this);
       if ( m ) 
-	m->do_callback(this, m->user_data());
+       m->do_callback(this, m->user_data());
       
       return;
     }
@@ -125,27 +125,27 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       unsigned int idx = 1;
 
       if(display)
-	{
-	popup_menu[idx] = (Fl_Menu_Item){ "Display in viewer", 0, this->handle_menu_output_display, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
-	++idx;
-	}
+       {
+       popup_menu[idx] = (Fl_Menu_Item){ "Display in viewer", 0, this->handle_menu_output_display, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+       ++idx;
+       }
       if(write)
-	{
-	popup_menu[idx] = (Fl_Menu_Item){ "Export dataset", 0, this->handle_menu_output_write, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
-	++idx;
-	}
+       {
+       popup_menu[idx] = (Fl_Menu_Item){ "Export dataset", 0, this->handle_menu_output_write, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+       ++idx;
+       }
       if(cache)
-	{
-	popup_menu[idx] = (Fl_Menu_Item){ "Cache dataset", 0, this->handle_menu_output_cache, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
-	++idx;
-	}
+       {
+       popup_menu[idx] = (Fl_Menu_Item){ "Cache dataset", 0, this->handle_menu_output_cache, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK };
+       ++idx;
+       }
       popup_menu[idx] = (Fl_Menu_Item){0};
  
       int x, y;
       Fl::get_mouse(x, y);
       const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, this);
       if ( m ) 
-	m->do_callback(this, m->user_data());
+       m->do_callback(this, m->user_data());
       
       return;
     }

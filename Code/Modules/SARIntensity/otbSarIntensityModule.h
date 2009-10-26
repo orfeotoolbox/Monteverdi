@@ -81,7 +81,7 @@ public:
   typedef itk::SquareImageFilter<FloatingImageType,FloatingImageType>          SquareFilterType;
   typedef Functor::Log10Functor<double,double>                                 LogFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingImageType,
-				       FloatingImageType,LogFunctorType>        LogFilterType;
+                                   FloatingImageType,LogFunctorType>        LogFilterType;
 
 protected:
   /** Constructor */

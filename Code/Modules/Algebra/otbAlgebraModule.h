@@ -84,7 +84,7 @@ protected:
   virtual void MultiplyImage();
   virtual void DivideImage();
   virtual void ShiftScaleImage();
-				
+                            
   /** OK callback*/
   virtual void OK();
   

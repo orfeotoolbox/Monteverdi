@@ -118,18 +118,18 @@ void AlgebraModule::ShiftScaleImage()
   if(m_HasSecondInput)
     {
       switch(guiInputChoice->value())
-	{
-	case 0 :
-	  std::cout <<"Use First  Image" << std::endl;
-	  m_ShiftScaleFilter->SetInput(m_InputImage1);
-	  break;
-	case 1 :
-	  std::cout <<"Use Second  Image" << std::endl;
-	  m_ShiftScaleFilter->SetInput(m_InputImage2);
-	  break;
-	default:
-	  break;
-	}  
+       {
+       case 0 :
+         std::cout <<"Use First  Image" << std::endl;
+         m_ShiftScaleFilter->SetInput(m_InputImage1);
+         break;
+       case 1 :
+         std::cout <<"Use Second  Image" << std::endl;
+         m_ShiftScaleFilter->SetInput(m_InputImage2);
+         break;
+       default:
+         break;
+       }  
     }
   
   m_Output = m_ShiftScaleFilter->GetOutput();
@@ -157,9 +157,9 @@ void AlgebraModule::Run()
     {
       m_InputImage2 = this->GetInputData<ImageType>("SecondImage");
       if(m_InputImage2.IsNull())
-	{
-	  itkExceptionMacro(<<"Second image is NULL");
-	}
+       {
+         itkExceptionMacro(<<"Second image is NULL");
+       }
     }
 
   // Show the GUI
@@ -186,11 +186,11 @@ void AlgebraModule::OK()
     {
     case 0 : 
       if(m_HasSecondInput)
-	this->AddImage();
+       this->AddImage();
       break;
     case 1:
       if(m_HasSecondInput)
-	this->SubtractImage();
+       this->SubtractImage();
       break;
     case 2:
       if(m_HasSecondInput)

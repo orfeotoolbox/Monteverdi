@@ -316,27 +316,27 @@ void ProjectionModel
     {
       // Origins
       if ( minX > voutput[i][0] )
-	{
-	  minX = voutput[i][0];
-	  left = i;
-	}
+       {
+         minX = voutput[i][0];
+         left = i;
+       }
       if ( minY > voutput[i][1] )
-	{
-	  minY = voutput[i][1];
-	  down = i;
-	}
+       {
+         minY = voutput[i][1];
+         down = i;
+       }
 
       // Sizes
       if ( maxX < voutput[i][0] )
-	{
-	  maxX = voutput[i][0];
-	  right = i;
-	}
+       {
+         maxX = voutput[i][0];
+         right = i;
+       }
       if ( maxY < voutput[i][1] )
-	{
-	  maxY = voutput[i][1];
-	  up = i;
-	}
+       {
+         maxY = voutput[i][1];
+         up = i;
+       }
     }
  //  // size image in carto coordinate :
 //   double sizeXcarto =  maxX-minX;
@@ -386,10 +386,10 @@ void ProjectionModel
   double OxLength,OyLength;
   
   OxLength = vcl_sqrt( vcl_pow((double)ioIndex[0] - (double)ioXIndex[0],2)
-		    +  vcl_pow((double)ioIndex[1] - (double)ioXIndex[1],2));
+                  +  vcl_pow((double)ioIndex[1] - (double)ioXIndex[1],2));
 
   OyLength = vcl_sqrt( vcl_pow((double)ioIndex[0] - (double)ioYIndex[0],2)
-		    +  vcl_pow((double)ioIndex[1] - (double)ioYIndex[1],2));
+                  +  vcl_pow((double)ioIndex[1] - (double)ioYIndex[1],2));
 
   // Evaluate spacing
   m_OutputSpacing[0] = sizeCartoX/OxLength;

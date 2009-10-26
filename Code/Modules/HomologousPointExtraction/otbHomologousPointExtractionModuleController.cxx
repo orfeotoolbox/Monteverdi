@@ -239,22 +239,22 @@ HomologousPointExtractionModuleController
     {
     case 0:
       {
-	m_TransformType = otb::TRANSLATION;
-	break;
+       m_TransformType = otb::TRANSLATION;
+       break;
       }
     case 1:
       {
-	m_TransformType = otb::AFFINE;
-	break;
+       m_TransformType = otb::AFFINE;
+       break;
       }
     case 2:
       {
-	m_TransformType = otb::SIMILARITY2D;
-	break;
+       m_TransformType = otb::SIMILARITY2D;
+       break;
       }
     default:
       {
-	break;
+       break;
       }
     }
   
@@ -316,7 +316,7 @@ HomologousPointExtractionModuleController
       oss.str("");
       oss<<idFix<<" -> ";
       values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
-			 + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
+                      + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
   
      oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);
       m_View->tError->add( oss.str().c_str() );

@@ -46,8 +46,8 @@ Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ),
           arrow_open( (char*const*)arrow_open_xpm ), 
           home( (char*const*)home_xpm ), 
           purple_dot( (char*const*)purpledot_xpm),
-	  vectorImage( (char*const*)vectorImage_xpm),
-	  scalarImage( (char*const*)scalarImage_xpm),
+         vectorImage( (char*const*)vectorImage_xpm),
+         scalarImage( (char*const*)scalarImage_xpm),
           process    ( (char*const*)process_xpm),
           vectorData ( (char*const*)vectorData_xpm);
 
@@ -303,11 +303,11 @@ MonteverdiViewGUI
     {
       m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
-	{
-	  gRenameOld->value(label);
-	  gRenameNew->value(label);
-	  wRenameWindow->show();
-	}
+       {
+         gRenameOld->value(label);
+         gRenameNew->value(label);
+         wRenameWindow->show();
+       }
         
       //Show the module with current parameters 
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
@@ -330,29 +330,29 @@ MonteverdiViewGUI
 
       m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
-	{ 
-	  std::string rootPath = n->find_path();
-	  // erase the end "/"
-	  rootPath = rootPath.substr( 0, rootPath.size()-1 );
-	  // extract the path
-	  rootPath = rootPath.substr( 0, rootPath.find_last_of("/")+1 );
-	  gOutputRenameRoot->value( rootPath.c_str()  );
-	  gOutputRenameOld->value(label);
-	  gOutputRenameNew->value(label);
-	  wOutputRenameWindow->show();
-	}
+       { 
+         std::string rootPath = n->find_path();
+         // erase the end "/"
+         rootPath = rootPath.substr( 0, rootPath.size()-1 );
+         // extract the path
+         rootPath = rootPath.substr( 0, rootPath.find_last_of("/")+1 );
+         gOutputRenameRoot->value( rootPath.c_str()  );
+         gOutputRenameOld->value(label);
+         gOutputRenameNew->value(label);
+         wOutputRenameWindow->show();
+       }
       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT )
-	{ 
-	m_MonteverdiController->StartViewing(instanceId,outputId);
-	}
+       { 
+       m_MonteverdiController->StartViewing(instanceId,outputId);
+       }
       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT )
-	{ 
-	m_MonteverdiController->StartCaching(instanceId,outputId,true);
-	}
+       { 
+       m_MonteverdiController->StartCaching(instanceId,outputId,true);
+       }
        else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT )
-	{ 
-	m_MonteverdiController->StartWriting(instanceId,outputId);
-	}
+       { 
+       m_MonteverdiController->StartWriting(instanceId,outputId);
+       }
     }
   else if( n->is_leaf() )
     {
@@ -445,12 +445,12 @@ MonteverdiViewGUI
       new_node->branch_icons( &vectorImage,&vectorImage );
       }
     else if(it->second.GetDataType() == "Labeled_Short_Image"
-	    || it->second.GetDataType() == "Floating_Point_Image")
+           || it->second.GetDataType() == "Floating_Point_Image")
       {
       new_node->branch_icons( &scalarImage,&scalarImage );
       }
     else if(it->second.GetDataType() == "Labeled_Vector_Data" 
-	    || it->second.GetDataType() == "Vector_Data")
+           || it->second.GetDataType() == "Vector_Data")
       {
       new_node->branch_icons( &vectorData,&vectorData);
       }

@@ -130,11 +130,11 @@ void KMeansModule::ThreadedWatch()
     {
     if(m_ProcessObject.IsNotNull())
          {
-	 current = m_ProcessObject->GetProgress();
+        current = m_ProcessObject->GetProgress();
          if(current - last > updateThres)
            {
         // Make the main fltk loop update progress fields
-	   Fl::awake(&UpdateProgressCallback,this);
+          Fl::awake(&UpdateProgressCallback,this);
            last = current;
            }
          }
@@ -199,13 +199,13 @@ void KMeansModule::ThreadedRun()
     for(unsigned int i = 0; i<nbComp;++i)
       {
       if(min[i]>sample[i])
-	{
-	min[i] = sample[i];
-	}
+       {
+       min[i] = sample[i];
+       }
       if(max[i]<sample[i])
-	{
-	max[i] = sample[i];
-	}
+       {
+       max[i] = sample[i];
+       }
       }
     ++it;
     }
@@ -218,7 +218,7 @@ void KMeansModule::ThreadedRun()
     for(unsigned int compIndex = 0; compIndex < nbComp;++compIndex)
       {
       initialCentroids[compIndex + classIndex * nbComp] = min[compIndex] 
-	+ (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1);
+       + (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1);
       }
     }
   

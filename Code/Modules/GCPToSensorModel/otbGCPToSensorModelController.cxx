@@ -133,11 +133,11 @@ GCPToSensorModelController
       m_Model->ComputeTransform();
       double height = 0.;
       if(m_Model->GetProjectionType() == ModelType::RPC)
-	{
-	  height = m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 );
-	  if(m_Model->GetElevMgt() == ModelType::DEM)
-	    m_View->vElev->value( height );
-	}
+       {
+         height = m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 );
+         if(m_Model->GetElevMgt() == ModelType::DEM)
+           m_View->vElev->value( height );
+       }
       m_View->AddPointsToList( id1, id2, height );
     
     }
@@ -204,12 +204,12 @@ GCPToSensorModelController
       idOut3D[0] = idOut[0];
       idOut3D[1] = idOut[1];
       if( m_Model->GetProjectionType() == ModelType::RPC)
-	idOut3D[2] = m_Model->GetUsedElevation()[i];
+       idOut3D[2] = m_Model->GetUsedElevation()[i];
       else
-	{
-	  idOut3D[2] = 0.;
-	  idTrans3D[2] = 0.;
-	}
+       {
+         idOut3D[2] = 0.;
+         idTrans3D[2] = 0.;
+       }
 
       oss.str("");
       oss<<idFix<<" -> ";
@@ -263,10 +263,10 @@ GCPToSensorModelController
   else if( static_cast<bool>(m_View->cDEM->value()) )
     {
       if( m_Model->GetDEMPath() == "")
-	{
-	  MsgReporter::GetInstance()->SendError("No DEM directory path selected.");
-	  return;
-	}
+       {
+         MsgReporter::GetInstance()->SendError("No DEM directory path selected.");
+         return;
+       }
       m_Model->SetElevMgt(ModelType::DEM);
     }
   else if( static_cast<bool>(m_View->cElev->value()) )
@@ -300,7 +300,7 @@ GCPToSensorModelController
       idFix = indexesList[i].first;
       idOut = indexesList[i].second;
       if(m_Model->GetProjectionType() == ModelType::RPC)
-	height = m_Model->GetUsedElevation(i);
+       height = m_Model->GetUsedElevation(i);
       m_View->AddPointsToList( idFix, idOut, height );
     }
 }

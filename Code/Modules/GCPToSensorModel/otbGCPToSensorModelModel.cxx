@@ -46,9 +46,9 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 }
 
   GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
-						   m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
-						   m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
-						   m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(), m_GroundError()
+                                             m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
+                                             m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
+                                             m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(), m_GroundError()
 {
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
@@ -199,10 +199,10 @@ GCPToSensorModelModel
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
-	{
-	  found = true;
-	  itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
-	}
+       {
+         found = true;
+         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+       }
       j++;
     }
 

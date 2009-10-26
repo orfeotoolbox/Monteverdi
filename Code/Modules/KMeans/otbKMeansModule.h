@@ -64,10 +64,10 @@ public:
       double dist = m_Distance->Evaluate(sample,it->second);
 
       if(dist<minDist)
-	{
-	resp = it->first;
-	minDist = dist;
-	}
+       {
+       resp = it->first;
+       minDist = dist;
+       }
       ++it;
       }
     return resp;
@@ -131,10 +131,10 @@ public:
   typedef  TreeGeneratorType::KdTreeType                                   TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
   typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType,
-					  FloatingVectorImageType>         SamplingFilterType;
+                                     FloatingVectorImageType>         SamplingFilterType;
   typedef Functor::KMeansFunctor<SampleType,LabelType>                     KMeansFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingVectorImageType,
-				       LabeledImageType,KMeansFunctorType> KMeansFilterType;
+                                   LabeledImageType,KMeansFunctorType> KMeansFilterType;
   
 protected:
   /** Constructor */

@@ -225,15 +225,15 @@ void Module::EraseOutputByKey(const std::string & key)
   while( it != m_OutputsMap.end() )
     {
       if( (*it).first.find(key) == 0 )
-	{
-	  keyVector.push_back((*it).first);
-	}
+       {
+         keyVector.push_back((*it).first);
+       }
       ++it;
     }
   for(unsigned int i=0; i<keyVector.size(); i++)
-	{
-	  m_OutputsMap.erase(keyVector[i]);
-	}
+       {
+         m_OutputsMap.erase(keyVector[i]);
+       }
 }
 
 /** The custom run command */

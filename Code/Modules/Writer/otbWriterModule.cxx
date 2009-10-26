@@ -129,11 +129,11 @@ void WriterModule::ThreadedWatch()
     {
     if(m_ProcessObject.IsNotNull())
          {
-	 current = m_ProcessObject->GetProgress();
+        current = m_ProcessObject->GetProgress();
          if(current - last > updateThres)
            {
         // Make the main fltk loop update progress fields
-	   Fl::awake(&UpdateProgressCallback,this);
+          Fl::awake(&UpdateProgressCallback,this);
            last = current;
            }
          }

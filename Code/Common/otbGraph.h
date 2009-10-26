@@ -73,7 +73,7 @@ public:
 
   /** Boost graph typedef */
   typedef boost::adjacency_list<boost::vecS,boost::vecS,
-				TDirected,VertexType,EdgeType> GraphContainerType;
+                            TDirected,VertexType,EdgeType> GraphContainerType;
   
   /** Vertex descriptor */
   typedef typename GraphContainerType::vertex_descriptor VertexDescriptorType;

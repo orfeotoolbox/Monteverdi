@@ -131,7 +131,7 @@ public:
   typedef typename ClassificationFilterType::ModelType                                    ModelType;
   typedef typename ImageType::PixelType                                                   MeasurementVectorType;
   typedef MeasurementVectorType                                                           SampleType;
-  typedef itk::Statistics::ListSample< MeasurementVectorType > 	                          ListSampleType;
+  typedef itk::Statistics::ListSample< MeasurementVectorType >                                  ListSampleType;
   typedef itk::FixedArray<LabeledPixelType,1>                                             TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType>                                 TrainingListSampleType;
   typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>         EstimatorType;

@@ -78,14 +78,14 @@ InputViewComponent
   else
     {
     for(std::vector<int>::const_iterator lIt = m_Indices.begin();
-	lIt != m_Indices.end();++lIt)
+       lIt != m_Indices.end();++lIt)
       {
       StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(*lIt); 
       
       if(mcIt != m_ChoiceMap.end())
-	{
-	resp.push_back(mcIt->second);
-	}
+       {
+       resp.push_back(mcIt->second);
+       }
       }
     }
 
@@ -312,17 +312,17 @@ void InputViewComponent::InputChanged(Fl_Widget * w, void * v)
        {
 
        if(pthis->m_Model->IsCached(id,key))
- 	{
- 	pthis->m_StatusBox->copy_label("cached");
- 	pthis->m_StatusBox->color(FL_GREEN);
-	pthis->m_StatusBox->deactivate();
- 	}
+        {
+        pthis->m_StatusBox->copy_label("cached");
+        pthis->m_StatusBox->color(FL_GREEN);
+       pthis->m_StatusBox->deactivate();
+        }
        else
-	 {
-	 pthis->m_StatusBox->copy_label("streamed");
-	 pthis->m_StatusBox->color(FL_RED);
-	 pthis->m_StatusBox->activate();
-	 }
+        {
+        pthis->m_StatusBox->copy_label("streamed");
+        pthis->m_StatusBox->color(FL_RED);
+        pthis->m_StatusBox->activate();
+        }
        pthis->m_StatusBox->show();
        }
      else
@@ -385,20 +385,20 @@ void InputViewComponent::UpdateCachingProgress()
       Fl::unlock();
 
       if(progress == 1.)
-	{
-	Fl::lock();
-	m_CachingInProgress = false;
-	m_ProgressBar->hide();
-	m_StatusBox->copy_label("cached");
- 	m_StatusBox->color(FL_GREEN);
-	m_StatusBox->deactivate();
-	if(m_CheckButton != NULL)
-	  {
-	  m_CheckButton->deactivate();
-	  }
-	this->Activate();
-	Fl::unlock();
-	}
+       {
+       Fl::lock();
+       m_CachingInProgress = false;
+       m_ProgressBar->hide();
+       m_StatusBox->copy_label("cached");
+        m_StatusBox->color(FL_GREEN);
+       m_StatusBox->deactivate();
+       if(m_CheckButton != NULL)
+         {
+         m_CheckButton->deactivate();
+         }
+       this->Activate();
+       Fl::unlock();
+       }
       }
     }
 }
@@ -464,27 +464,27 @@ bool InputViewComponent::IsReady()
     if( (m_InputDataDescriptor.IsOptional() && m_CheckButton->value() == 1)) 
       {
       if(m_CheckButton->value() ==1)
-	{
-	if(m_InputDataDescriptor.IsMultiple())
-	  {
-	  resp = (m_FlBrowser->size() > 0);
-	  }
-	else
-	  {
-	  resp = (m_FlChoice->value()>=0);
-	  }
-	}
+       {
+       if(m_InputDataDescriptor.IsMultiple())
+         {
+         resp = (m_FlBrowser->size() > 0);
+         }
+       else
+         {
+         resp = (m_FlChoice->value()>=0);
+         }
+       }
       }
     else if(!m_InputDataDescriptor.IsOptional())
       {
       if(m_InputDataDescriptor.IsMultiple())
-	{
-	resp =  (m_FlBrowser->size() > 0);
-	}
+       {
+       resp =  (m_FlBrowser->size() > 0);
+       }
       else
-	{
-	resp = (m_FlChoice->value()>=0);
-	}
+       {
+       resp = (m_FlChoice->value()>=0);
+       }
       }
     }
   return resp;

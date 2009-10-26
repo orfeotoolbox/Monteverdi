@@ -52,9 +52,9 @@ AsynchronousProcess
     {
       long int curVal = 0;
       while( curVal<stop)
-	{
-	  curVal++;
-	}
+       {
+         curVal++;
+       }
       valStat++;
       lThis->SetProcessStatus(valStat);
       //std::cout<<lThis->GetProcessStatus()<<std::endl;

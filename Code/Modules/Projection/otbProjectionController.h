@@ -57,12 +57,12 @@ public:
   virtual void InitializeInputLambertIITransform();
   virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
   virtual void ProjectRegion(unsigned int sizeX, 
-			     unsigned int sizeY,
-			     double spacingX,
-			     double spacingY,
-			     double originX,
-			     double originY,
-			     bool isUl);
+                          unsigned int sizeY,
+                          double spacingX,
+                          double spacingY,
+                          double originX,
+                          double originY,
+                          bool isUl);
   
  protected:
   /** Constructor */

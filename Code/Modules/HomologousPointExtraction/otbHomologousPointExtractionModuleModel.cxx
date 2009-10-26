@@ -164,10 +164,10 @@ HomologousPointExtractionModuleModel
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
-	{
-	  found = true;
-	  itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
-	}
+       {
+         found = true;
+         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+       }
       j++;
     }
 
@@ -217,7 +217,7 @@ HomologousPointExtractionModuleModel
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {	
+      {       
       ScalesType scales(2);
       scales.Fill(0.01);
       this->GenericRegistration<TranslationTransformType>(scales);
@@ -244,8 +244,8 @@ HomologousPointExtractionModuleModel
       }
     default:
       {
-	itkExceptionMacro(<<"Not supported transform type "<<transformType);
-	return;
+       itkExceptionMacro(<<"Not supported transform type "<<transformType);
+       return;
       }
     }
  
@@ -378,23 +378,23 @@ HomologousPointExtractionModuleModel
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {	
-	out = this->GenericTransformPoint<TranslationTransformType>(id);
-	break;
+      {       
+       out = this->GenericTransformPoint<TranslationTransformType>(id);
+       break;
       }
     case otb::AFFINE:
       {
-	out = this->GenericTransformPoint<AffineTransformType>(id);
-	break;
+       out = this->GenericTransformPoint<AffineTransformType>(id);
+       break;
       }
     case otb::SIMILARITY2D:
       {
-	out = this->GenericTransformPoint<Similarity2DTransformType>(id);
-	break;
+       out = this->GenericTransformPoint<Similarity2DTransformType>(id);
+       break;
       }
     default:
       {
-	itkExceptionMacro(<<"Not supported transform type "<<transformType);
+       itkExceptionMacro(<<"Not supported transform type "<<transformType);
       }
     }
     return out;
@@ -435,23 +435,23 @@ HomologousPointExtractionModuleModel
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {	
-	outList = this->GenericTransformPoints<TranslationTransformType>(inList);
-	break;
+      {       
+       outList = this->GenericTransformPoints<TranslationTransformType>(inList);
+       break;
       }
     case otb::AFFINE:
       {
-	outList = this->GenericTransformPoints<AffineTransformType>(inList);
-	break;
+       outList = this->GenericTransformPoints<AffineTransformType>(inList);
+       break;
       }
     case otb::SIMILARITY2D:
       {
-	outList = this->GenericTransformPoints<Similarity2DTransformType>(inList);
-	break;
+       outList = this->GenericTransformPoints<Similarity2DTransformType>(inList);
+       break;
       }
     default:
       {
-	itkExceptionMacro(<<"Not supported transform type "<<transformType);
+       itkExceptionMacro(<<"Not supported transform type "<<transformType);
       }
     }
     return outList;
