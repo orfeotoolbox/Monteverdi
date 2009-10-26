@@ -10,22 +10,22 @@ class KMeansModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wKMeansWindow {
-      label {KMeans setup} open
-      xywh {499 73 300 185} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      label {KMeans setup} open selected
+      xywh {499 73 300 270} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Return_Button bOk {
         label Ok
         callback {this->Ok();}
-        xywh {175 146 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {175 223 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {42 146 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {42 223 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Progress pProgressBar {
         label {Sampling (0%)}
-        xywh {40 74 215 20} box PLASTIC_DOWN_BOX selection_color 1
+        xywh {40 74 215 20} box PLASTIC_DOWN_BOX selection_color 1 hide
       }
       Fl_Spinner vNumberOfClasses {
         label {Number of classes }
@@ -33,12 +33,20 @@ class KMeansModuleGUI {open
       }
       Fl_Slider vNumberOfSamples {
         label {Number of samples}
-        callback {this->UpdateNumberOfSamples();} selected
-        xywh {40 25 215 20} type {Horz Fill} box PLASTIC_DOWN_BOX align 1 maximum 100 step 1 value 50 slider_size 1
+        callback {this->UpdateNumberOfSamples();}
+        xywh {40 25 215 20} type {Horz Fill} box PLASTIC_DOWN_BOX selection_color 4 align 1 maximum 100 step 0.1 value 50 slider_size 0.060606
       }
       Fl_Box oNumberOfSamples {
         label {0% of image (0 samples)}
-        xywh {40 46 215 27}
+        xywh {0 46 300 31}
+      }
+      Fl_Spinner vNumberOfIterations {
+        label {Max. nb.  of iterations }
+        xywh {170 146 85 24} maximum 1e+06 step 1000 value 1000
+      }
+      Fl_Value_Input vConvergenceThreshold {
+        label {Convergence threshold }
+        xywh {170 181 85 23} step 1e-05 value 0.0001
       }
     }
   }

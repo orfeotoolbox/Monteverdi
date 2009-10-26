@@ -35,7 +35,7 @@
 #include "itkListSample.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
-
+#include "otbChangeLabelImageFilter.h"
 
 namespace otb
 {
@@ -131,10 +131,11 @@ public:
   typedef  TreeGeneratorType::KdTreeType                                   TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
   typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType,
-                                     FloatingVectorImageType>         SamplingFilterType;
+                                     FloatingVectorImageType>              SamplingFilterType;
   typedef Functor::KMeansFunctor<SampleType,LabelType>                     KMeansFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingVectorImageType,
-                                   LabeledImageType,KMeansFunctorType> KMeansFilterType;
+                                   LabeledImageType,KMeansFunctorType>     KMeansFilterType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType,FloatingVectorImageType> ChangeLabelFilterType;
   
 protected:
   /** Constructor */
@@ -173,8 +174,14 @@ private:
   KMeansModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  // KMeans estimator
+  EstimatorType::Pointer m_Estimator;
+
   // KMeans filter
   KMeansFilterType::Pointer m_KMeansFilter;
+
+  // Change label filter
+  ChangeLabelFilterType::Pointer m_ChangeLabelFilter;
 
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;

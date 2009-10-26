@@ -31,6 +31,8 @@ KMeansModule::KMeansModule()
   this->NeedsPipelineLockingOn();
 
   m_KMeansFilter = KMeansFilterType::New();
+  m_ChangeLabelFilter = ChangeLabelFilterType::New();
+  m_Estimator = EstimatorType::New();
 
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Image to cluster");
@@ -53,8 +55,8 @@ void KMeansModule::Run()
   this->BuildGUI();
   pProgressBar->minimum(0);
   pProgressBar->maximum(1);
-  this->UpdateNumberOfSamples();
   wKMeansWindow->show();
+  this->UpdateNumberOfSamples();
 }
 
 void KMeansModule::Ok()
@@ -70,6 +72,8 @@ void KMeansModule::Cancel()
 
 void KMeansModule::UpdateNumberOfSamples()
 {
+  vNumberOfSamples->show();
+
   int squareRatio = 100/vNumberOfSamples->value();
   
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
@@ -92,14 +96,35 @@ void KMeansModule::UpdateNumberOfSamples()
 
 void KMeansModule::UpdateProgress()
 {
-  double progress = m_ProcessObject->GetProgress();
-
   itk::OStringStream oss1;
   oss1.str("");
-  oss1<<"Sampling data  ("<<std::floor(100*progress)<<"%)"; 
-  pProgressBar->value( progress );
-  wKMeansWindow->copy_label(oss1.str().c_str());
-  pProgressBar->copy_label( oss1.str().c_str() );
+
+  pProgressBar->show();
+
+  if(m_ProcessObject.IsNotNull())
+    {
+    double progress = m_ProcessObject->GetProgress();
+
+    if(progress < 1.)
+      {
+      oss1<<"Sampling data  ("<<std::floor(100*progress)<<"%)"; 
+      pProgressBar->value( progress );
+      pProgressBar->copy_label( oss1.str().c_str() );
+      }
+    else if(m_Estimator->GetCurrentIteration() == 0)
+      {
+      pProgressBar->value(0.);
+      pProgressBar->copy_label("Generating Decision Tree");
+      }
+    else
+      {
+      oss1<<"Estimating (res="<<m_Estimator->GetCentroidPositionChanges()<<")";
+      pProgressBar->maximum(m_Estimator->GetMaximumIteration());
+      pProgressBar->minimum(0);
+      pProgressBar->value(m_Estimator->GetCurrentIteration());
+      pProgressBar->copy_label(oss1.str().c_str());
+      }
+    }
 }
 
 void KMeansModule::UpdateProgressCallback(void * data)
@@ -120,26 +145,15 @@ void KMeansModule::ThreadedWatch()
   bOk->deactivate();
   vNumberOfSamples->deactivate();
   vNumberOfClasses->deactivate();
+  vConvergenceThreshold->deactivate();
+  vNumberOfIterations->deactivate();
   Fl::unlock();
 
-  double last = 0;
-  double updateThres = 0.01;
-  double current = 0;
-
-  while( (m_ProcessObject.IsNull() || this->IsBusy()) )
+  while( this->IsBusy() )
     {
-    if(m_ProcessObject.IsNotNull())
-         {
-        current = m_ProcessObject->GetProgress();
-         if(current - last > updateThres)
-           {
-        // Make the main fltk loop update progress fields
-          Fl::awake(&UpdateProgressCallback,this);
-           last = current;
-           }
-         }
-       // Sleep for a while
-    Sleep(500);
+      Fl::awake(&UpdateProgressCallback,this);
+      // Sleep for a while
+      Sleep(500);
     }
 
   // Update progress one last time
@@ -151,6 +165,8 @@ void KMeansModule::ThreadedWatch()
   bOk->activate();
   vNumberOfSamples->activate();
   vNumberOfClasses->activate();
+  vConvergenceThreshold->activate();
+  vNumberOfIterations->activate();
   Fl::unlock();
 
   Fl::awake(&HideWindowCallback,this);
@@ -225,21 +241,24 @@ void KMeansModule::ThreadedRun()
   // Now, build the kdTree 
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   treeGenerator->SetSample(listSample);
-  treeGenerator->SetBucketSize(100);
+  treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
   treeGenerator->Update();
   
+  std::cout<<"Tree generated"<<std::endl;
+
   // Estimate the centroids
-  EstimatorType::Pointer estimator = EstimatorType::New();
-  estimator->SetKdTree(treeGenerator->GetOutput());
-  estimator->SetParameters(initialCentroids);
-  estimator->SetMaximumIteration(1000/**vNumberOfIterations->value()*/);
-  estimator->SetCentroidPositionChangesThreshold(0.001 /**vCentroidsUpdateThreshold->value()*/);
-  estimator->StartOptimization();
+  m_Estimator->SetKdTree(treeGenerator->GetOutput());
+  m_Estimator->SetParameters(initialCentroids);
+  m_Estimator->SetMaximumIteration(vNumberOfIterations->value());
+  m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
+  m_Estimator->StartOptimization();
+
+  std::cout<<"Optimization ended"<<std::endl;
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;
   
-  EstimatorType::ParametersType finalCentroids = estimator->GetParameters();
+  EstimatorType::ParametersType finalCentroids = m_Estimator->GetParameters();
 
  for(unsigned int classIndex = 0; classIndex < nbClasses;++classIndex)
     {
@@ -250,14 +269,18 @@ void KMeansModule::ThreadedRun()
       centroid[compIndex] = finalCentroids[compIndex + classIndex * nbComp];
       }
     functor.AddCentroid(classIndex,centroid);
+    m_ChangeLabelFilter->SetChange(classIndex,centroid);
     }
 
    m_KMeansFilter->SetFunctor(functor);
    m_KMeansFilter->SetInput(image);
+   m_ChangeLabelFilter->SetInput(m_KMeansFilter->GetOutput());
+   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(nbComp);
 
    Fl::lock();
    this->ClearOutputDescriptors();
-   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(),"KMeans classification","The image kmeans classification.");
+   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(),"KMeans labeled image","The labeled image from kmeans classification.");
+   this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(),"KMeans clustered image","The clustered image from kmeans classification");
    this->NotifyOutputsChange();
    Fl::unlock();
 
