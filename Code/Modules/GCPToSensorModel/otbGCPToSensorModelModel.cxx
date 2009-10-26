@@ -19,7 +19,6 @@
 #include "otbGCPToSensorModelModel.h"
 #include "otbFltkFilterWatcher.h"
 
-//#include "otbPointSetRegister.h"
 #include "elevation/ossimElevManager.h"
 #include "base/ossimDirectory.h"
 #include "base/ossimTieGpt.h"
@@ -48,13 +47,15 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
                                              m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
                                              m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
-                                             m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(), m_GroundError()
+                                             m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(),
+					     m_GroundError(), m_Extractor()
 {
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
   m_BlendingFunction->SetAlpha(0.6);
   m_ImageGenerator = LayerGeneratorType::New();
   m_InputImage = VectorImageType::New();
+  m_Extractor = ExtractorType::New();
   m_Output = VectorImageType::New();
   m_IndexesList.clear();
   //m_Projection = new ossimProjection();
@@ -118,7 +119,6 @@ GCPToSensorModelModel
   
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
-  m_VisualizationModel->Update();
 
   m_HasNewImage = true;
   this->NotifyAll();
@@ -131,9 +131,6 @@ GCPToSensorModelModel
 {
   if( m_InputImage.IsNull())
     itkExceptionMacro(<<"No input image detected");
-
-  if( m_InputImage->GetGCPCount() == 0 )
-    itkExceptionMacro(<<"Invalid Input Image, no GCPs detected.");
 
   ContinuousIndexType index1, index2;
   double height;
@@ -240,8 +237,6 @@ void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
 {
-  std::cout<<"Using ossim bilinear projection"<<std::endl;
-
   ossimBilinearProjection * bproj = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
@@ -280,8 +275,6 @@ void
 GCPToSensorModelModel
 ::ComputeRPCProjection()
 {
-  std::cout<<"Using ossim rpc projection"<<std::endl;
-
   if( m_DEMsElevation.size() != m_GCPsElevation.size() || m_DEMsElevation.size() != m_IndexesList.size() )
     {
       itkExceptionMacro(<<"Invalid heights");
@@ -376,20 +369,45 @@ GCPToSensorModelModel
   return outList;
 }
 
+#include <ossim/base/ossimKeywordNames.h>
 
 void 
 GCPToSensorModelModel
 ::OK()
 {
-  ossimKeywordlist kwl;
-  m_Projection->saveState(kwl);
-  kwl.print(std::cout);
-  otb::ImageKeywordlist otb_kwl;
-  otb_kwl.SetKeywordlist( kwl );
-  itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
-  itk::EncapsulateMetaData< otb::ImageKeywordlist >(dict,otb::MetaDataKey::OSSIMKeywordlistKey,otb_kwl);
+   m_Extractor->SetInput(m_InputImage);
+   m_Extractor->UpdateOutputInformation();
 
-  m_Output = m_InputImage;
+  ossimKeywordlist geom_kwl;
+  m_Projection->saveState(geom_kwl);
+  
+  std::cout<<"kwl.print(std::cout):"<<std::endl;
+  geom_kwl.print(std::cout);
+  
+  ImageKeywordlist otb_kwl;
+  otb_kwl.SetKeywordlist( geom_kwl );
+
+  itk::MetaDataDictionary& dict = /*m_InputImage->GetMetaDataDictionary();*/m_Extractor->GetOutput()->GetMetaDataDictionary();
+  itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
+
+  m_Output = /*m_InputImage;*/m_Extractor->GetOutput();
+  m_Output->UpdateOutputInformation(); 
+  std::cout<<" m_Output->GetImageKeywordlist()"<<std::endl;
+  m_Output->GetImageKeywordlist().Print(std::cout);
+
+
+  typedef ForwardSensorModel<double>                ForwardSensorType;
+  try
+  {
+    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+    sensor->SetImageGeometry( m_Output->GetImageKeywordlist() );
+  }
+  catch ( itk::ExceptionObject & err )
+  {
+    std::cout<<"La sortie sera invalide pour la raison suivante:"<<std::endl;
+    std::cout<<err<<std::endl;
+  }
+
 
   m_OutputChanged = true;
   this->NotifyAll();

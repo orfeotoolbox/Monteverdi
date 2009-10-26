@@ -172,10 +172,11 @@ ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS}
 	 0
 )
 #------------- GCP to Sensor Model Module test -------------
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(gcpTvGCPToSensorModelModuleTest ${Modules_TESTS} otbGCPToSensorModelModuleTest
-${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-${TEMP}/gcpTvGCPToSensorModelModuleTest.tif
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- Threshold  Module test New -------------
 ADD_TEST(moTuThresholdModuleTest ${Modules_TESTS} otbThresholdModuleTestNew

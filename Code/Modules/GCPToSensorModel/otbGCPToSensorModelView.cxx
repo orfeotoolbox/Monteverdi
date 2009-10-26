@@ -21,8 +21,6 @@
 #include "otbMsgReporter.h"
 
 #include <FL/Fl_File_Chooser.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
 
 
 namespace otb
@@ -66,12 +64,12 @@ GCPToSensorModelView
 {
   if(!m_Controller)
     {
-    itkExceptionMacro(<<"Controller is not set, can not build view.");
+      itkExceptionMacro(<<"Controller is not set, can not build view.");
     }
 
   if(!m_WidgetController)
     {
-    itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
+      itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
   this->CreateGUI();

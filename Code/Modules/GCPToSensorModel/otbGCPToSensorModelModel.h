@@ -30,8 +30,9 @@
 #include "projection/ossimProjection.h"
 #include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
+#include "otbMultiChannelExtractROI.h"
 
-//Vis
+//Visu
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
@@ -72,7 +73,6 @@ public:
 
   typedef std::pair<ContinuousIndexType, ContinuousIndexType>  IndexCoupleType;
   typedef std::vector<IndexCoupleType>     IndexesListType;
-  typedef std::vector<IndexType>           IndexListType;
   typedef std::vector<Continuous3DIndexType> Continuous3DIndexListType;
 
   typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
@@ -86,7 +86,6 @@ public:
   typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
   typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
-  typedef std::vector<VisualizationModelPointerType>                VisualizationModelListType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
  
@@ -99,6 +98,8 @@ public:
   typedef PointSetType::PointType   PointType;
   typedef itk::Point<double,2>      OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
+
+  typedef MultiChannelExtractROI<double, double> ExtractorType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -239,6 +240,8 @@ private:
   ProjectionEnumType m_ProjectionType;
   /** Ground error projection */
   double m_GroundError;
+  /** Extract ROI */
+  ExtractorType::Pointer m_Extractor;
 };
 
 }//end namespace otb

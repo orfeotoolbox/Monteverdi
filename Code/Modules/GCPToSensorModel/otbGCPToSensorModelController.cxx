@@ -19,8 +19,7 @@
 #include "otbGCPToSensorModelController.h"
 
 #include "otbMsgReporter.h"
-#include "otbFltkFilterWatcher.h"
-#include <FL/fl_ask.H>
+//#include <FL/fl_ask.H>
 
 
 

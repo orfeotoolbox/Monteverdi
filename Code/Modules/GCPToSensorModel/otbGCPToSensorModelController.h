@@ -21,9 +21,7 @@
 
 #include "otbGCPToSensorModelControllerInterface.h"
 #include "otbGCPToSensorModelView.h"
-
 #include "otbImageWidgetController.h"
-#include "otbTransformEnumType.h"
 
 // Handlers list
 #include "otbWidgetResizingActionHandler.h"
@@ -120,11 +118,9 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>                              PixelDescriptionViewType;
   typedef PixelDescriptionViewType::Pointer                                            PixelDescriptionViewPointerType;
   
-  typedef ModelType::IndexesListType      IndexesListType;
-  typedef ModelType::OutPointListType     OutPointListType;
-  typedef ModelType::OutPointType         OutPointType;
-  typedef ModelType::ContinuousIndexType  ContinuousIndexType;
-  typedef itk::ContinuousIndex<double, 3> Continuous3DIndexType;
+  typedef ModelType::IndexesListType       IndexesListType;
+  typedef ModelType::ContinuousIndexType   ContinuousIndexType;
+  typedef ModelType::Continuous3DIndexType Continuous3DIndexType;
 
   void SetModel(ModelType* model);
 
@@ -173,7 +169,7 @@ private:
   ModelType * m_Model;
 
   /** Widgets controller */
-  WidgetControllerType::Pointer             m_WidgetController;
+  WidgetControllerType::Pointer              m_WidgetController;
   MouseClickedController::Pointer            m_MouseClickedController;
 
   /** Action handlers */
