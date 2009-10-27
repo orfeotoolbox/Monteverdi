@@ -19,7 +19,7 @@ See OTBCopyright.txt for details.
 #ifndef __OTBORTHOENUM_H__
 #define __OTBORTHOENUM_H__
 
-typedef enum { UTM, LAMBERT, LAMBERT2, SINUS, ECKERT4, TRANSMERCATOR, MOLLWEID}  MapType;
+typedef enum { UTM, LAMBERT, LAMBERT2, LAMBERT3CARTOSUD, SINUS, ECKERT4, TRANSMERCATOR, MOLLWEID}  MapType;
 typedef enum { LINEAR_, NEAREST, SINC, SPLINES}  InterpolatorType;
 
 #endif
