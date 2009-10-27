@@ -438,10 +438,10 @@ Orthorectification
     m_EastNorth = this->LongLatPointToCarto( latLongPoint );
     oss.str("");
     oss<<m_EastNorth[1];
-    guiLambertNorthSelection->value(oss.str().c_str());
+    guiLambert3NorthSelection->value(oss.str().c_str());
     oss.str("");
     oss<<m_EastNorth[0];
-    guiLambertEastSelection->value(oss.str().c_str());
+    guiLambert3EastSelection->value(oss.str().c_str());
     break;
   }
   case TRANSMERCATOR:
@@ -995,9 +995,11 @@ Orthorectification::SelectAction()
   {
     guiUTMNorthSelection->value("");
     guiLambertNorthSelection->value("");
+    guiLambert3NorthSelection->value("");
     guiTransmercatorNorthSelection->value("");
     guiUTMEastSelection->value("");
     guiLambertEastSelection->value("");
+    guiLambert3EastSelection->value("");
     guiTransmercatorEastSelection->value("");
 
     // Clean extent image
@@ -1027,8 +1029,8 @@ Orthorectification
   }
   case LAMBERT3CARTOSUD:
   {
-    m_EastNorth[1] = strtod(guiLambertNorthSelection->value(), NULL);
-    m_EastNorth[0] = strtod(guiLambertEastSelection->value(), NULL);
+    m_EastNorth[1] = strtod(guiLambert3NorthSelection->value(), NULL);
+    m_EastNorth[0] = strtod(guiLambert3EastSelection->value(), NULL);
   }
   case TRANSMERCATOR:
   {
