@@ -102,7 +102,7 @@ InsightExtent();}
 			m_Lambert3CartoSud->show();
 			m_TRANSMERCATOR->hide();
 			this->m_MapType->redraw();
-		  	SetMapType(LAMBERT2);}
+		  	SetMapType(LAMBERT3CARTOSUD);}
               xywh {20 20 100 25} labelsize 11
             }
             MenuItem {} {
