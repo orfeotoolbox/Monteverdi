@@ -61,7 +61,7 @@ FeatureExtractionModel::FeatureExtractionModel()
   //Instantiate output image attributes
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
-//   m_iL2VI = ImageListToVectorImageFilterType::New();
+  m_iL2VI = ImageListToVectorImageFilterType::New();
 
   m_HasChanged = false;
 }
@@ -692,7 +692,6 @@ FeatureExtractionModel
 
   if (todo == true)
   {
-    m_iL2VI= ImageListToVectorImageFilterType::New();
     m_iL2VI->SetInput( m_imageList );
     
     m_OutputImage = m_iL2VI->GetOutput();
