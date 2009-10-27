@@ -21,15 +21,13 @@
 #include "otbMsgReporter.h"
 
 #include <FL/Fl_File_Chooser.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
 
 
 namespace otb
 {
 
 GCPToSensorModelView
-::GCPToSensorModelView(): m_Controller(), m_Model(), 
+::GCPToSensorModelView(): m_Controller(), m_Model(),
      m_ImageView(), m_CrossGlComponent(), m_CircleGlComponent()
 {
   m_Model = GCPToSensorModelModel::New();
@@ -66,12 +64,12 @@ GCPToSensorModelView
 {
   if(!m_Controller)
     {
-    itkExceptionMacro(<<"Controller is not set, can not build view.");
+      itkExceptionMacro(<<"Controller is not set, can not build view.");
     }
 
   if(!m_WidgetController)
     {
-    itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
+      itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
   this->CreateGUI();
@@ -301,7 +299,7 @@ GCPToSensorModelView
   // Focus cross
   if((i == 0) && (value != 0))
     {
-      if(m_CrossGlComponent->GetIndexList().size() >= value) 
+      if(m_CrossGlComponent->GetIndexList().size() >= value)
         {
          id = m_CrossGlComponent->GetIndexList()[value-1];
          m_Controller->FocusOn(id);
@@ -310,7 +308,7 @@ GCPToSensorModelView
   // Focus circles
   else if( i == 1 )
     {
-      if( m_CircleGlComponent->GetIndexList().size() != 0 ) 
+      if( m_CircleGlComponent->GetIndexList().size() != 0 )
        {
          id = m_CircleGlComponent->GetIndexList()[0];
          m_Controller->FocusOn(id);
@@ -389,7 +387,7 @@ GCPToSensorModelView
     {
       guiDEM->activate();
       vElev->show();
-      m_Model->SetProjectionType(GCPToSensorModelModel::RPC); 
+      m_Model->SetProjectionType(GCPToSensorModelModel::RPC);
     }
   else
     return;

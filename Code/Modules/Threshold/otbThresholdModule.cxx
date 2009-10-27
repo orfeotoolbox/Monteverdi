@@ -34,7 +34,7 @@ ThresholdModule::ThresholdModule()
   m_Generator          = ImageLayerGeneratorType::New();
   m_ThresholdGenerator = ImageLayerGeneratorType::New();
 
-  // Instanciate extract roi filter 
+  // Instanciate extract roi filter
   m_ExtractROI = ExtractROIFilterType::New();
 
   // Build a view
@@ -88,12 +88,12 @@ ThresholdModule::ThresholdModule()
   gFull->add(m_View->GetFullWidget());
   gFull->resizable(m_View->GetFullWidget());
   m_View->GetFullWidget()->resize(gFull->x(),gFull->y(),
-				  gFull->w(),gFull->h());
+                                  gFull->w(),gFull->h());
   
   gScroll->add(m_View->GetScrollWidget());
   gScroll->resizable(m_View->GetScrollWidget());
   m_View->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),
-				    gScroll->w(),gScroll->h());
+                                    gScroll->w(),gScroll->h());
   
   //Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage","Image to threshold");
@@ -187,7 +187,7 @@ void ThresholdModule::OK()
 
 
 /**
- * Update the thresholders 
+ * Update the thresholders
  */
 void ThresholdModule::UpdateDetails()
 {

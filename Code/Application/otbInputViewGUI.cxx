@@ -52,7 +52,7 @@ InputViewGUI
 {
   // Check if model and controller are available
   if( m_Model.IsNotNull() && m_Controller != NULL)
-   { 
+   {
    // Size range
    wInputWindow->size_range(wInputWindow->w(), wInputWindow->h(), wInputWindow->w(), 0, 0, 0);
    gScrollInput->type(Fl_Scroll::VERTICAL_ALWAYS);

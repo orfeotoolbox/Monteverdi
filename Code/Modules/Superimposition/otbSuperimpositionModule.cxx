@@ -108,7 +108,7 @@ void SuperimpositionModule::Ok()
     m_Transform->SetOutputKeywordList(moving->GetImageKeywordlist());
     }
   else if(vmoving.IsNotNull())
-    { 
+    {
     vmoving->UpdateOutputInformation();
     m_Transform->SetOutputProjectionRef(vmoving->GetProjectionRef());
     m_Transform->SetOutputDictionary(vmoving->GetMetaDataDictionary());

@@ -30,8 +30,9 @@
 #include "projection/ossimProjection.h"
 #include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
+#include "otbMultiChannelExtractROI.h"
 
-//Vis
+//Visu
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
@@ -72,7 +73,6 @@ public:
 
   typedef std::pair<ContinuousIndexType, ContinuousIndexType>  IndexCoupleType;
   typedef std::vector<IndexCoupleType>     IndexesListType;
-  typedef std::vector<IndexType>           IndexListType;
   typedef std::vector<Continuous3DIndexType> Continuous3DIndexListType;
 
   typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
@@ -86,7 +86,6 @@ public:
   typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
   typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
-  typedef std::vector<VisualizationModelPointerType>                VisualizationModelListType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
  
@@ -99,6 +98,8 @@ public:
   typedef PointSetType::PointType   PointType;
   typedef itk::Point<double,2>      OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
+
+  typedef MultiChannelExtractROI<double, double> ExtractorType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -113,8 +114,8 @@ public:
   /** Indexes list manipulation. */
   IndexesListType GetIndexesList() const { return m_IndexesList; }
   void AddIndexesToList( ContinuousIndexType id1,  ContinuousIndexType id2, double elev );
-  void ClearIndexesList() 
-  { 
+  void ClearIndexesList()
+  {
     m_IndexesList.clear();
     m_GCPsElevation.clear();
     m_UsedElevation.clear();
@@ -126,7 +127,7 @@ public:
   void ComputeBilinearProjection();
   void ComputeRPCProjection();
   void ComputeTransform()
-  { 
+  {
     if(m_ProjectionType == BILINEAR)
       this->ComputeBilinearProjection();
     else if(m_ProjectionType == RPC)
@@ -172,7 +173,7 @@ public:
     if( i>m_UsedElevation.size() )
       itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
     
-    return m_UsedElevation[i];   
+    return m_UsedElevation[i];
   };
   std::vector<double> GetUsedElevation() { return m_UsedElevation; };
   /** According to the type of elevation manageme,t generate the used list. */
@@ -239,6 +240,8 @@ private:
   ProjectionEnumType m_ProjectionType;
   /** Ground error projection */
   double m_GroundError;
+  /** Extract ROI */
+  ExtractorType::Pointer m_Extractor;
 };
 
 }//end namespace otb

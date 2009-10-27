@@ -375,7 +375,7 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
       i2CastVI->SetInput( m_imageList );
       
-      writer->SetInput(i2CastVI->GetOutput());  
+      writer->SetInput(i2CastVI->GetOutput());
       
       try
       {
@@ -406,7 +406,7 @@ void WriterModel::SendErrorCallback(void * data)
   {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
   }
-  else 
+  else
   {
     MsgReporter::GetInstance()->SendError(error->c_str());
   }

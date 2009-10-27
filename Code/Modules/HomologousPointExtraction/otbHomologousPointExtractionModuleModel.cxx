@@ -77,7 +77,7 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
   m_PerBander = PerBandFilterType::New();
   m_IndexesList.clear();
   
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
 }
 
@@ -107,7 +107,7 @@ HomologousPointExtractionModuleModel
   if( id != 0 && id != 1 )
     itkExceptionMacro(<<"Invalid image id "<<id<<".");
  
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
   image->UpdateOutputInformation();
   if( id == 0 )
@@ -186,7 +186,7 @@ HomologousPointExtractionModuleModel
 }
 
 
-void 
+void
 HomologousPointExtractionModuleModel
 ::ConvertList( PointSetPointerType fix, PointSetPointerType mov )
 {
@@ -207,17 +207,17 @@ HomologousPointExtractionModuleModel
       m_SecondInputImage->TransformIndexToPhysicalPoint(idMov,movingPoint);
       mov->SetPoint(i,movingPoint);
     }
-}  
+}
  
 
-void 
+void
 HomologousPointExtractionModuleModel
 ::ComputeTransform( TransformEnumType transformType )
 {
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {       
+      {
       ScalesType scales(2);
       scales.Fill(0.01);
       this->GenericRegistration<TranslationTransformType>(scales);
@@ -254,7 +254,7 @@ HomologousPointExtractionModuleModel
 
 
 template<typename T>
-void 
+void
 HomologousPointExtractionModuleModel
 ::GenericRegistration(const ScalesType & scales)
 {
@@ -273,7 +273,7 @@ HomologousPointExtractionModuleModel
   transform->SetParameters(m_TransformParameters);
   m_Resampler->SetTransform(transform);
   
-/** This code is commented out because it only handles the Rigid2DTransform 
+/** This code is commented out because it only handles the Rigid2DTransform
 
   typedef itk::LandmarkBasedTransformInitializer<T,VectorImageType,VectorImageType> TransformInitializerType;
   typename TransformInitializerType::Pointer ti = TransformInitializerType::New();
@@ -298,7 +298,7 @@ HomologousPointExtractionModuleModel
 */
 }
 
-void 
+void
 HomologousPointExtractionModuleModel
 ::AffineLeastSquareRegistration()
 {
@@ -378,7 +378,7 @@ HomologousPointExtractionModuleModel
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {       
+      {
        out = this->GenericTransformPoint<TranslationTransformType>(id);
        break;
       }
@@ -409,7 +409,7 @@ HomologousPointExtractionModuleModel
   transform->SetParameters( m_TransformParameters);
  
   //OutPointListType            out;
-  typename T::InputPointType  inPoint; 
+  typename T::InputPointType  inPoint;
   typename T::OutputPointType outPoint;
   ContinuousIndexType         idOut;
   
@@ -421,7 +421,7 @@ HomologousPointExtractionModuleModel
 }
 
 
-HomologousPointExtractionModuleModel::ContinuousIndexListType 
+HomologousPointExtractionModuleModel::ContinuousIndexListType
 HomologousPointExtractionModuleModel
 ::TransformPoints( TransformEnumType transformType )
 {
@@ -435,7 +435,7 @@ HomologousPointExtractionModuleModel
   switch (transformType)
     {
     case otb::TRANSLATION:
-      {       
+      {
        outList = this->GenericTransformPoints<TranslationTransformType>(inList);
        break;
       }
@@ -459,7 +459,7 @@ HomologousPointExtractionModuleModel
 
 
 template<typename T>
-HomologousPointExtractionModuleModel::ContinuousIndexListType 
+HomologousPointExtractionModuleModel::ContinuousIndexListType
 HomologousPointExtractionModuleModel
 ::GenericTransformPoints( IndexListType inList )
 {
@@ -467,7 +467,7 @@ HomologousPointExtractionModuleModel
   transform->SetParameters( m_TransformParameters);
  
   ContinuousIndexListType     outList;
-  typename T::InputPointType  inPoint; 
+  typename T::InputPointType  inPoint;
   typename T::OutputPointType outPoint;
   ContinuousIndexType         idOut;
 
@@ -484,7 +484,7 @@ HomologousPointExtractionModuleModel
 
 
 
-void 
+void
 HomologousPointExtractionModuleModel
 ::OK()
 {

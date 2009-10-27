@@ -59,7 +59,7 @@ public:
   /// Dataset
   typedef VectorImage<double,2>         VectorImageType;
   typedef Image<double,2>               ImageType;
-  typedef GenericRSTransform<>          TransformType; 
+  typedef GenericRSTransform<>          TransformType;
   typedef StreamingResampleImageFilter<ImageType,ImageType,double>                      ResampleFilterType;
   typedef PerBandVectorImageFilter<VectorImageType,VectorImageType, ResampleFilterType> PerBandFilterType;
 protected:

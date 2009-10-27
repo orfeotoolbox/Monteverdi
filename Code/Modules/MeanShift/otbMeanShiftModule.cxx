@@ -129,10 +129,10 @@ void MeanShiftModule::Notify(const std::string & event)
   else if (event == "BusyOff")
   {
     this->BusyOff();
-  }    
+  }
   else
   {
-  } 
+  }
 
 }
 } // End namespace otb

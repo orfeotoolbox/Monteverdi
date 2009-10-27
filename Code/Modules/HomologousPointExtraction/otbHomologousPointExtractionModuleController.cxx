@@ -315,7 +315,7 @@ HomologousPointExtractionModuleController
  
       oss.str("");
       oss<<idFix<<" -> ";
-      values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 ) 
+      values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 )
                       + vcl_pow( static_cast<double>(idOut[1])-outTranformedPoint[i][1], 2 ) );
   
      oss<<outTranformedPoint[i]<<", error: "<<vcl_sqrt(values[values.size()-1]);

@@ -107,7 +107,7 @@ void KMeansModule::UpdateProgress()
 
     if(progress < 1.)
       {
-      oss1<<"Sampling data  ("<<std::floor(100*progress)<<"%)"; 
+      oss1<<"Sampling data  ("<<std::floor(100*progress)<<"%)";
       pProgressBar->value( progress );
       pProgressBar->copy_label( oss1.str().c_str() );
       }
@@ -152,7 +152,7 @@ void KMeansModule::ThreadedWatch()
   // Wait for the module to be busy
   while(!this->IsBusy())
   {
-	Sleep(500);
+        Sleep(500);
   }
 
   while( this->IsBusy() )
@@ -239,12 +239,12 @@ void KMeansModule::ThreadedRun()
     {
     for(unsigned int compIndex = 0; compIndex < nbComp;++compIndex)
       {
-      initialCentroids[compIndex + classIndex * nbComp] = min[compIndex] 
+      initialCentroids[compIndex + classIndex * nbComp] = min[compIndex]
        + (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1);
       }
     }
   
-  // Now, build the kdTree 
+  // Now, build the kdTree
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   treeGenerator->SetSample(listSample);
   treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
@@ -316,7 +316,7 @@ void KMeansModule::SendErrorCallback(void * data)
   {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
   }
-  else 
+  else
   {
     MsgReporter::GetInstance()->SendError(error->c_str());
   }

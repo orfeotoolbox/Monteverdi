@@ -192,7 +192,7 @@ void MonteverdiModel::AddGraphConnection(const std::string& sourceModuleId,const
     }
 
   // Add connection
-  m_ConnectionGraph->AddEdge(sourceIt.GetVertexDescriptor(),targetIt.GetVertexDescriptor(),cEdge);  
+  m_ConnectionGraph->AddEdge(sourceIt.GetVertexDescriptor(),targetIt.GetVertexDescriptor(),cEdge);
 }
 
 void MonteverdiModel::ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId )

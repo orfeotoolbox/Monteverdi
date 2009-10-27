@@ -87,9 +87,9 @@ public:
   itkGetObjectMacro(MovingPointSet, PointSetType);
   
   itkSetObjectMacro(Transform, TransformationType);
-  itkGetObjectMacro(Transform, TransformationType); 
+  itkGetObjectMacro(Transform, TransformationType);
   
-  itkGetMacro(TransformParameters, ParametersType); 
+  itkGetMacro(TransformParameters, ParametersType);
 
   /** Compute transformation */
   virtual void ComputeTransform();
@@ -113,7 +113,7 @@ private:
   /** Fix point set. */
   PointSetPointerType m_FixPointSet;
   /** Moving point set. */
-  PointSetPointerType m_MovingPointSet;  
+  PointSetPointerType m_MovingPointSet;
   /** Transform base */
   TransformationPointerType m_Transform;
   /** Store transformation parameters*/

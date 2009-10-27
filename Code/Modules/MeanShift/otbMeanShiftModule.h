@@ -44,7 +44,7 @@ namespace otb
 
 class ITK_EXPORT MeanShiftModule
 //   : public Module, public ListenerBase
-  : public Module, public EventsListener<std::string> 
+  : public Module, public EventsListener<std::string>
 {
 public:
   /** Standard class typedefs */

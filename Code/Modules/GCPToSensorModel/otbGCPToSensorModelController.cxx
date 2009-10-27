@@ -19,8 +19,7 @@
 #include "otbGCPToSensorModelController.h"
 
 #include "otbMsgReporter.h"
-#include "otbFltkFilterWatcher.h"
-#include <FL/fl_ask.H>
+//#include <FL/fl_ask.H>
 
 
 
@@ -185,7 +184,7 @@ GCPToSensorModelController
 
 void
 GCPToSensorModelController
-::UpdatePointList() 
+::UpdatePointList()
 {
   // redraw inputlist (height or not) + compute new transform + update stats
   IndexesListType indexesList = m_Model->GetIndexesList();
@@ -203,7 +202,7 @@ GCPToSensorModelController
   for(unsigned int i=0; i<indexesList.size(); i++)
     {
       if( m_Model->GetProjectionType() == ModelType::RPC )
-	height = m_Model->GetUsedElevation(i);
+        height = m_Model->GetUsedElevation(i);
       m_View->AddPointsToList( indexesList[i].first, indexesList[i].second, height );
     }
 
@@ -224,9 +223,9 @@ GCPToSensorModelController
 void
 GCPToSensorModelController
 ::UpdateStats()
-{ 
+{
   itk::OStringStream oss;
-  std::vector<double> values; 
+  std::vector<double> values;
   ModelType::Continuous3DIndexListType outTranformedPoint = m_Model->TransformPoints();
   IndexesListType                      indexesList        = m_Model->GetIndexesList();
   ContinuousIndexType idFix, idOut;

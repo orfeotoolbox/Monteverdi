@@ -78,7 +78,7 @@ ProjectionView::Notify()
     {
       // Update the cartographic parameters
       this->UpdateMapParam();
-      // Update the output 
+      // Update the output
       this->UpdateOutputParameters();
     }
   
@@ -121,7 +121,7 @@ ProjectionView
     if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
       {
        // Fill the GUI With the  LAMBERT 2 parameters
-       iMapSelection->value(1);   
+       iMapSelection->value(1);
        iLambert2->show();
        iUTM->hide();
        iTRANSMERCATOR->hide();
@@ -134,7 +134,7 @@ ProjectionView
        
            if(scale_factor == 0.9996 /** Value Specific to UTM */)
              {
-              iMapSelection->value(0);   
+              iMapSelection->value(0);
               iUTM->show();
               iLambert2->hide();
               iTRANSMERCATOR->hide();
@@ -176,7 +176,7 @@ ProjectionView
       }
   }
 
-  // Sensor Model :: Test if KeyWorldList is not empty 
+  // Sensor Model :: Test if KeyWorldList is not empty
   if(m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
     {
       // Select the Sensor Model in the InputMapType
@@ -196,15 +196,15 @@ ProjectionView
 }
 
 
-/** 
+/**
  * In the OGR_SRSNode : Find the value of the parameter inParam if exists
- * 
+ *
  */
 bool
 ProjectionView
 ::FindParameter(OGRSpatialReference oSRS , const char * inParam, double * paramValue)
 {
-  // Get all the nodes of the Projection Ref Tree 
+  // Get all the nodes of the Projection Ref Tree
   // and search for a child named : "scale_factor"
   OGR_SRSNode*   node = oSRS.GetAttrNode("PROJCS");
   
@@ -278,7 +278,7 @@ ProjectionView
 ::OK()
 {
   // tell the model to project the region edited in the GUI
-  unsigned int sizeX    = atoi(guiSizeX->value());  
+  unsigned int sizeX    = atoi(guiSizeX->value());
   unsigned int sizeY    = atoi(guiSizeY->value());
   double       spacingX = atof(guiSpacingX->value());
   double       spacingY = atof(guiSpacingY->value());
@@ -304,7 +304,7 @@ ProjectionView
   geoPoint[0] = atof(guiLongSelection->value());
   geoPoint[1] = atof(guiLatSelection->value());
 
-  // Project the new geo Point 
+  // Project the new geo Point
   TransformType::Pointer                  rsTransform        = m_Controller->GetModel()->GetTransform();
   
   itk::OStringStream oss;
@@ -354,7 +354,7 @@ ProjectionView
 
 
 /**
- * 
+ *
  */
 void
 ProjectionView
@@ -405,7 +405,7 @@ ProjectionView
 
 
 /**
- * In case of unknown input map : 
+ * In case of unknown input map :
  */
 void
 ProjectionView
@@ -445,7 +445,7 @@ ProjectionView
 }
 
 /**
- * 
+ *
  */
 
 void
@@ -665,14 +665,14 @@ ProjectionView::GetInterpolatorType()
   return m_InterpType;
 }
 
-void 
+void
 ProjectionView::UpdateUTMTransform()
 {
   //Get the projection parameters
   int utmZone = atoi(guiUTMZone->value());
   bool north = guiUTMNorth->value();
   
-  // Update the transform 
+  // Update the transform
   m_Controller->UpdateUTMTransform(utmZone,north);
 }
 
@@ -681,7 +681,7 @@ ProjectionView::UpdateUTMTransform()
  * Tell the model to compute the LambertII transform
  * Done in the module cause the user is not allowed to modify this
  */
-void 
+void
 ProjectionView::UpdateLambertIITransform()
 {
   m_Controller->InitializeLambertIITransform();
@@ -689,9 +689,9 @@ ProjectionView::UpdateLambertIITransform()
 
 
 /**
- * 
+ *
  */
-void 
+void
 ProjectionView::UpdateTMTransform()
 {
   m_Controller->UpdateTMTransform(atof(guiTRANSMERCATORScale->value()),
@@ -700,17 +700,17 @@ ProjectionView::UpdateTMTransform()
 }
 
 
-void 
+void
 ProjectionView::UpdateInputUTMTransform()
 {
   //Get the projection parameters
   int utmZone = atoi(iUTMZone->value());
   bool north = iUTMNorth->value();
 
-  // Update the transform 
+  // Update the transform
   m_Controller->UpdateInputUTMTransform(utmZone,north);
 
-  // Update the whole transformation 
+  // Update the whole transformation
   this->UpToDateTransform();
 }
 
@@ -719,33 +719,33 @@ ProjectionView::UpdateInputUTMTransform()
  * Tell the model to compute the LambertII transform
  * Done in the module cause the user is not allowed to modify this
  */
-void 
+void
 ProjectionView::UpdateInputLambertIITransform()
 {
   m_Controller->InitializeInputLambertIITransform();
   
-  // Update the whole transformation 
+  // Update the whole transformation
   this->UpToDateTransform();
 }
 
 /**
- * 
+ *
  */
-void 
+void
 ProjectionView::UpdateInputTMTransform()
 {
   m_Controller->UpdateInputTMTransform(atof(iTRANSMERCATORScale->value()),
                               atof(iTRANSMERCATOREast->value()),
                               atof(iTRANSMERCATORNorth->value()));
 
-  // Update the whole transformation 
+  // Update the whole transformation
   this->UpToDateTransform();
 }
 
 /**
  * Update the output Information and the second transform
  */
-void 
+void
 ProjectionView::UpToDateTransform()
 {
 switch (this->GetMapType())

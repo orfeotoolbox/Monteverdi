@@ -22,7 +22,7 @@
 
 namespace otb
 {
-/** 
+/**
  * Constructor
  */
 AlgebraModule::AlgebraModule()
@@ -37,13 +37,13 @@ AlgebraModule::AlgebraModule()
   this->CreateGUI();
 }
 
-/** 
+/**
  * Destructor
  */
 AlgebraModule::~AlgebraModule()
 {}
 
-/** 
+/**
  * PrintSelf method
  */
 void AlgebraModule::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -129,7 +129,7 @@ void AlgebraModule::ShiftScaleImage()
          break;
        default:
          break;
-       }  
+       }
     }
   
   m_Output = m_ShiftScaleFilter->GetOutput();
@@ -176,7 +176,7 @@ void AlgebraModule::Run()
     }
 }
 
-/** 
+/**
  * OK CallBack
  */
 void AlgebraModule::OK()
@@ -184,7 +184,7 @@ void AlgebraModule::OK()
   // Apply the filter
   switch(guiOperation->value())
     {
-    case 0 : 
+    case 0 :
       if(m_HasSecondInput)
        this->AddImage();
       break;

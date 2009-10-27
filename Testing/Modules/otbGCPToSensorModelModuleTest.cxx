@@ -40,17 +40,17 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-
+  std::cout<<reader->GetOutput()->GetImageKeywordlist()<<std::endl;
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
 
-  Fl::run();
-  /*
+  //Fl::run();
+  
   // Simulate Ok button callback
-  specificModule->GetView()->bOk->do_callback();
+  gcpModule->GetView()->bOk->do_callback();
   Fl::check();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
@@ -59,12 +59,8 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
 
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
-  //Write the image
-  WriterType::Pointer  writer = WriterType::New();
-  writer->SetFileName(argv[2]);
-  writer->SetInput(outImage);
-  writer->Update();
-  */
+  std::cout<<outImage->GetImageKeywordlist()<<std::endl;
+  
   return EXIT_SUCCESS;
 
 }

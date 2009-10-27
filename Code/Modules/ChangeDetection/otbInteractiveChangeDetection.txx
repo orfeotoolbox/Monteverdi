@@ -77,7 +77,7 @@ InteractiveChangeDetection<TPixel>
   
   m_HasOutput = false;
  
-  m_LastPath = ".";  
+  m_LastPath = ".";
 }
 
 /// Destructor
@@ -646,7 +646,7 @@ InteractiveChangeDetection<TPixel>::ChangeDetectionLearn()
     m_Estimator->Update();
     m_ClassificationFilter->SetModel(m_Estimator->GetModel());
     
-    // 
+    //
     Log("Estimation completed.");
     this->bLearn->set();
     this->miSaveModel->activate();

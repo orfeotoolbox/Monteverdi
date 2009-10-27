@@ -28,9 +28,9 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(), 
-     m_FirstImageView(), m_SecondImageView(), 
-     m_FirstCrossGlComponent(), m_SecondCrossGlComponent(), 
+::HomologousPointExtractionModuleView(): m_Controller(), m_Model(),
+     m_FirstImageView(), m_SecondImageView(),
+     m_FirstCrossGlComponent(), m_SecondCrossGlComponent(),
      m_FirstCircleGlComponent(), m_SecondCircleGlComponent()
 {
   m_Model = HomologousPointExtractionModuleModel::New();
@@ -348,7 +348,7 @@ HomologousPointExtractionModuleView
   // Focus cross
   if((i == 0) && (value != 0))
     {
-      if((m_FirstCrossGlComponent->GetIndexList().size() >= value) 
+      if((m_FirstCrossGlComponent->GetIndexList().size() >= value)
           && m_SecondCrossGlComponent->GetIndexList().size() >= value)
        {
          id1 = m_FirstCrossGlComponent->GetIndexList()[value-1];
@@ -359,7 +359,7 @@ HomologousPointExtractionModuleView
   // Focus circles
   else if( i == 1 )
     {
-      if( (m_FirstCircleGlComponent->GetIndexList().size() != 0) 
+      if( (m_FirstCircleGlComponent->GetIndexList().size() != 0)
            && (m_SecondCircleGlComponent->GetIndexList().size() != 0) )
        {
          id1 = m_FirstCircleGlComponent->GetIndexList()[0];

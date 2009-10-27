@@ -342,7 +342,7 @@ private:
   
   // Color List
   std::vector<ColorType>                   m_ColorList;
-  // 
+  //
   bool                                     m_GenerateRandomColor;
   
 

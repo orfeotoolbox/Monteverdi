@@ -495,11 +495,11 @@ void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
     guiUpChannel->deactivate();
     guiDownChannel->deactivate();
   }
-  Fl::unlock();  
+  Fl::unlock();
 }
  
 
-void WriterViewGUI::AwakeProgressFields (double progress) 
+void WriterViewGUI::AwakeProgressFields (double progress)
 {
   this->SetProgress(progress);
   Fl::awake(&UpdateProgressCallback,this);

@@ -7,10 +7,10 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
+     This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE,  See the above copyright notices for more information.
 
@@ -34,17 +34,17 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ), 
-          green_dot( (char*const*)greendot_xpm ), 
-          red_dot( (char*const*)reddot_xpm ), 
+Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ),
+          green_dot( (char*const*)greendot_xpm ),
+          red_dot( (char*const*)reddot_xpm ),
           teal_dot( (char*const*)tealdot_xpm ),
-          text_doc( (char*const*)textdoc_xpm ), 
-          computer( (char*const*)computer_xpm ), 
-          book( (char*const*)book_xpm ), 
+          text_doc( (char*const*)textdoc_xpm ),
+          computer( (char*const*)computer_xpm ),
+          book( (char*const*)book_xpm ),
           cd_drive( (char*const*)cd_drive_xpm ),
-          arrow_closed( (char*const*)arrow_closed_xpm ), 
-          arrow_open( (char*const*)arrow_open_xpm ), 
-          home( (char*const*)home_xpm ), 
+          arrow_closed( (char*const*)arrow_closed_xpm ),
+          arrow_open( (char*const*)arrow_open_xpm ),
+          home( (char*const*)home_xpm ),
           purple_dot( (char*const*)purpledot_xpm),
          vectorImage( (char*const*)vectorImage_xpm),
          scalarImage( (char*const*)scalarImage_xpm),
@@ -86,7 +86,7 @@ MonteverdiViewGUI
 
   // Generate dynamicaly the tree
   this->BuildTree();
- 
+
   gHelpText->buffer(m_HelpTextBuffer);
 
   gHelpText->insert("This is Monteverdi 1.0 beta. \n");
@@ -221,7 +221,7 @@ MonteverdiViewGUI
     {
     skip =true;
     }
-  
+
   if(!skip)
     {
     m_InputViewGUI = InputViewGUI::New();
@@ -295,43 +295,43 @@ MonteverdiViewGUI
     {
       return;
     }
-  
+
   const char * label = n->label();
 
   // node is a module
   if( n->parent()->is_root() )
     {
       m_Tree->GetModuleMenu()->Reset();
-	  m_Tree->GetModuleMenu()->LaunchModuleMenu();
+          m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
        {
          gRenameOld->value(label);
          gRenameNew->value(label);
          wRenameWindow->show();
        }
-        
-      //Show the module with current parameters 
+
+      //Show the module with current parameters
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
         {
           //Call controller?
             std::string moduleId   = n->label();
            m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
-        } 
+        }
     }
   // node is a output
   else if( n->parent()->parent()->is_root() )
     {
     std::string instanceId = n->parent()->label();
     std::string outputId   = n->label();
-    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId,outputId) 
+    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId,outputId)
                  && !m_MonteverdiModel->IsCached(instanceId,outputId);
     bool viewable  = m_MonteverdiModel->SupportsViewing(instanceId,outputId);
     bool writable  = m_MonteverdiModel->SupportsWriting(instanceId,outputId);
 
-	  m_Tree->GetModuleMenu()->Reset();
+          m_Tree->GetModuleMenu()->Reset();
       m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
-       { 
+       {
          std::string rootPath = n->find_path();
          // erase the end "/"
          rootPath = rootPath.substr( 0, rootPath.size()-1 );
@@ -343,15 +343,15 @@ MonteverdiViewGUI
          wOutputRenameWindow->show();
        }
       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT )
-       { 
+       {
        m_MonteverdiController->StartViewing(instanceId,outputId);
        }
       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT )
-       { 
+       {
        m_MonteverdiController->StartCaching(instanceId,outputId,true);
        }
        else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT )
-       { 
+       {
        m_MonteverdiController->StartWriting(instanceId,outputId);
        }
     }
@@ -411,7 +411,7 @@ MonteverdiViewGUI
 //   for (unsigned int i=0;i<n->children();++i)
 //   {
 //     std::cout << "remove node " << n->child(i)->label() << std::endl;
-//     n->remove(n->child(i));  
+//     n->remove(n->child(i));
 //   }
   //Remove existing module with the same name in the tree
   unsigned int rm = root->remove(m_Tree->find(instanceId.c_str()));
@@ -436,18 +436,18 @@ MonteverdiViewGUI
   // this node can receive new nodes as a result of draggind-and-dropping
   //TODO
   //n->droppable(true);
-  
-  
-  
+
+
+
   for (it = lDataMap.begin();it != lDataMap.end();it++)
-    {         
+    {
       FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
-      
+
       // add informations to the targeted module
       new_node->add(it->second.GetDataDescription().c_str());
       new_node->add(it->second.GetDataType().c_str());
       new_node->parent()->open(true);
-      
+
       //new_node->open(close);
       n->branch_icons( &process,&process );
 
@@ -462,7 +462,7 @@ MonteverdiViewGUI
       {
       new_node->branch_icons( &scalarImage,&scalarImage );
       }
-    else if(it->second.GetDataType() == "Labeled_Vector_Data" 
+    else if(it->second.GetDataType() == "Labeled_Vector_Data"
            || it->second.GetDataType() == "Vector_Data")
       {
       new_node->branch_icons( &vectorData,&vectorData);

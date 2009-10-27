@@ -316,7 +316,7 @@ void CachingModule::SendErrorCallback(void * data)
   {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
   }
-  else 
+  else
   {
     MsgReporter::GetInstance()->SendError(error->c_str());
   }
