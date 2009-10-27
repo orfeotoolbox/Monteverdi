@@ -59,7 +59,7 @@ void ChangeDetectionModule::Run()
   ImageType::Pointer rinput = this->GetInputData<ImageType>("RightImage");
   
   // Try to get a single image
-  // If the input image is an otb::Image instead of VectorImage then cast it 
+  // If the input image is an otb::Image instead of VectorImage then cast it
   // in Vector Image and continue the processing
   SingleImageType::Pointer lsingleImage = this->GetInputData<SingleImageType>("LeftImage");
   SingleImageType::Pointer rsingleImage = this->GetInputData<SingleImageType>("RightImage");

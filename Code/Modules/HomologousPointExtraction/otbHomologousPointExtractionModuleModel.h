@@ -76,7 +76,7 @@ public:
   typedef VectorImageType::IndexType          IndexType;
   typedef VectorImageType::SizeType           SizeType;
   typedef VectorImageType::PointType          ImagePointType;
-  typedef std::vector<VectorImagePointerType> ImageListType;    
+  typedef std::vector<VectorImagePointerType> ImageListType;
   typedef itk::ContinuousIndex<>              ContinuousIndexType;
 
   typedef std::pair<IndexType, IndexType>  IndexCoupleType;

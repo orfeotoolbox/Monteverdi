@@ -52,7 +52,7 @@ void OrthorectificationModule::Run()
   ImageType::Pointer input = this->GetInputData<ImageType>("InputImage");
 
   // Try to get a single image
-  // If the input image is an otb::Image instead of VectorImage then cast it 
+  // If the input image is an otb::Image instead of VectorImage then cast it
   // in Vector Image and continue the processing
   SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
   

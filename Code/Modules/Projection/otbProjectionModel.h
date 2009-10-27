@@ -59,7 +59,7 @@ class ITK_EXPORT ProjectionModel
   /** typedef the Remote Sensing transform*/
   typedef GenericRSTransform<>                        TransformType;
   //typedef RSTransformType::TransformType            TransformType;
-  typedef TransformType::OutputPointType              OutputPointType; 
+  typedef TransformType::OutputPointType              OutputPointType;
 
     /** Output */
   typedef Image<PixelType,2>                            SingleImageType;
@@ -141,13 +141,13 @@ class ITK_EXPORT ProjectionModel
   bool                          m_TempTransformChanged;
 
   // Output Image Information
-  SizeType                      m_OutputSize; 
-  PointType                     m_OutputOrigin; 
-  SpacingType                   m_OutputSpacing; 
+  SizeType                      m_OutputSize;
+  PointType                     m_OutputOrigin;
+  SpacingType                   m_OutputSpacing;
   
   // Instance of the composite transform
-  TransformType::Pointer   m_Transform;  
-  TransformType::Pointer   m_InverseTransform;  
+  TransformType::Pointer   m_Transform;
+  TransformType::Pointer   m_InverseTransform;
 
   // Outputs
   ResampleFilterType::Pointer  m_Resampler;

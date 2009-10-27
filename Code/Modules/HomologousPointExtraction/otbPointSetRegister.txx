@@ -74,7 +74,7 @@ PointSetRegister<TTransform>
   registration->SetMetric( metric );
   registration->SetOptimizer( optimizer );
   registration->SetTransform( invTransform );
-  registration->SetFixedPointSet( m_FixPointSet ); 
+  registration->SetFixedPointSet( m_FixPointSet );
   registration->SetMovingPointSet( m_MovingPointSet );
 
   registration->StartRegistration();

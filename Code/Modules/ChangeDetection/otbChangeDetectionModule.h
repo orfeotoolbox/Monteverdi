@@ -57,7 +57,7 @@ class ITK_EXPORT ChangeDetectionModule
   typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
 
  /*  /\** Accessor to the ChangeDetection Instance *\/ */
-  itkGetObjectMacro(ChangeDetection,ChangeDetectionType); 
+  itkGetObjectMacro(ChangeDetection,ChangeDetectionType);
 
 protected:
   /** Constructor */

@@ -34,7 +34,7 @@ ThresholdModule::ThresholdModule()
   m_Generator          = ImageLayerGeneratorType::New();
   m_ThresholdGenerator = ImageLayerGeneratorType::New();
 
-  // Instanciate extract roi filter 
+  // Instanciate extract roi filter
   m_ExtractROI = ExtractROIFilterType::New();
 
   // Build a view
@@ -187,7 +187,7 @@ void ThresholdModule::OK()
 
 
 /**
- * Update the thresholders 
+ * Update the thresholders
  */
 void ThresholdModule::UpdateDetails()
 {

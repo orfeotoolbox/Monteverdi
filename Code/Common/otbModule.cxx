@@ -172,7 +172,7 @@ void Module::LoadCachedData(const DataObjectWrapper & data, const std::string & 
     itkExceptionMacro(<<"Module has no output with key "<<key);
     }
 
-  // Change the 
+  // Change the
   it->second.CacheNthData(idx,data);
 }
 

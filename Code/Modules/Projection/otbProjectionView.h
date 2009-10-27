@@ -81,8 +81,8 @@ public:
   typedef ProjectionModel                             ModelType;
   typedef ModelType::InputImageType                   ImageType;
   typedef ModelType::TransformType                    TransformType;
-  typedef ModelType::OutputPointType                  PointType; 
-  typedef ModelType::IndexType                        IndexType; 
+  typedef ModelType::OutputPointType                  PointType;
+  typedef ModelType::IndexType                        IndexType;
   typedef ModelType::SingleImageType                  SingleImageType;
   
   // Called before building the GUI
@@ -102,7 +102,7 @@ public:
 
 protected:
 
-  // 
+  //
   virtual void RetrieveInputProjection();
 
   // Quit the application
@@ -132,17 +132,17 @@ protected:
   // Update interpolator
   virtual int UpdateInterpolator();
 
-  // 
+  //
   virtual void UpdateUTMTransform();
   //
   virtual void UpdateLambertIITransform();
-  // 
+  //
   virtual void UpdateTMTransform();
 
   virtual void UpdateInputUTMTransform();
   //
   virtual void UpdateInputLambertIITransform();
-  // 
+  //
   virtual void UpdateInputTMTransform();
   //
   virtual void UpToDateTransform();
@@ -164,14 +164,14 @@ private:
   ProjectionView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  ProjectionMapType                     m_MapType; 
-  ProjectionInterpolatorType            m_InterpType; 
+  ProjectionMapType                     m_MapType;
+  ProjectionInterpolatorType            m_InterpType;
   
   // Flag to determine if there is an output
   bool                                  m_HasOutput;
 
   // Flag to determine if the input Projection Map is unknowm
-  bool                                  m_InputProjectionUnknown; 
+  bool                                  m_InputProjectionUnknown;
 
   // Controller instance
   ProjectionControllerInterface::Pointer   m_Controller;

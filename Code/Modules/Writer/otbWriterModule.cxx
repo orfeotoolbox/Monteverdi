@@ -167,7 +167,7 @@ void WriterModule::ThreadedRun()
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
 
-  try 
+  try
   {
     if ( charVectorImage.IsNotNull() )
       {
@@ -220,7 +220,7 @@ void WriterModule::ThreadedRun()
     // Make the main fltk loop update Msg reporter
     m_ErrorMsg = err.GetDescription();
     Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-    this->BusyOff();    
+    this->BusyOff();
   }
   this->BusyOff();
 }
@@ -248,7 +248,7 @@ void WriterModule::SendErrorCallback(void * data)
   {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
   }
-  else 
+  else
   {
     MsgReporter::GetInstance()->SendError(error->c_str());
   }

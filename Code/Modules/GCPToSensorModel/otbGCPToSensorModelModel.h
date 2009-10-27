@@ -114,8 +114,8 @@ public:
   /** Indexes list manipulation. */
   IndexesListType GetIndexesList() const { return m_IndexesList; }
   void AddIndexesToList( ContinuousIndexType id1,  ContinuousIndexType id2, double elev );
-  void ClearIndexesList() 
-  { 
+  void ClearIndexesList()
+  {
     m_IndexesList.clear();
     m_GCPsElevation.clear();
     m_UsedElevation.clear();
@@ -127,7 +127,7 @@ public:
   void ComputeBilinearProjection();
   void ComputeRPCProjection();
   void ComputeTransform()
-  { 
+  {
     if(m_ProjectionType == BILINEAR)
       this->ComputeBilinearProjection();
     else if(m_ProjectionType == RPC)
@@ -173,7 +173,7 @@ public:
     if( i>m_UsedElevation.size() )
       itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
     
-    return m_UsedElevation[i];   
+    return m_UsedElevation[i];
   };
   std::vector<double> GetUsedElevation() { return m_UsedElevation; };
   /** According to the type of elevation manageme,t generate the used list. */

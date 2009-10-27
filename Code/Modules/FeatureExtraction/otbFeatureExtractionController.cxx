@@ -603,7 +603,7 @@ FeatureExtractionController
 
 void FeatureExtractionController::Quit()
 {
-  m_Model->Quit(); 
+  m_Model->Quit();
 }
 
 

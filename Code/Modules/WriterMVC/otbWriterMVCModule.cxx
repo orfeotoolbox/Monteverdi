@@ -140,7 +140,7 @@ void WriterMVCModule::Notify(const std::string & event)
     this->StartProcess2();
     this->StartProcess1();
   }
-  else 
+  else
   {
   }
 }

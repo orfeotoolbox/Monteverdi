@@ -99,7 +99,7 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       int x, y;
       Fl::get_mouse(x, y);
       const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, this);
-      if ( m ) 
+      if ( m )
        m->do_callback(this, m->user_data());
       
       return;
@@ -117,7 +117,7 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
       int x, y;
       Fl::get_mouse(x, y);
       const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, this);
-      if ( m ) 
+      if ( m )
        m->do_callback(this, m->user_data());
       
       return;

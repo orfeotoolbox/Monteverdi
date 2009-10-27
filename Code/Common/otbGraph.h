@@ -41,7 +41,7 @@ namespace otb
 /**
  * \class Graph
  *
- * This class implements a generic graph container from boost graph structures. 
+ * This class implements a generic graph container from boost graph structures.
  */
 template <class TVertex, class TEdge, class TDirected = boost::undirectedS>
 class ITK_EXPORT Graph

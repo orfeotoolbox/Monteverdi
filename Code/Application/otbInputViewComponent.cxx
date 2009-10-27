@@ -68,7 +68,7 @@ InputViewComponent
 
   if(!m_InputDataDescriptor.IsMultiple())
     {
-    StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(m_FlChoice->value()); 
+    StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(m_FlChoice->value());
 
     if(mcIt != m_ChoiceMap.end())
       {
@@ -80,7 +80,7 @@ InputViewComponent
     for(std::vector<int>::const_iterator lIt = m_Indices.begin();
        lIt != m_Indices.end();++lIt)
       {
-      StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(*lIt); 
+      StringPairMapType::const_iterator mcIt = m_ChoiceMap.find(*lIt);
       
       if(mcIt != m_ChoiceMap.end())
        {
@@ -191,7 +191,7 @@ void InputViewComponent::Rebuild()
 
   // Eventually build the multiple environment
   if(m_InputDataDescriptor.IsMultiple())
-    { 
+    {
     // Build the browser
     m_FlBrowser = new Fl_Browser(m_LeftMargin,this->y()+m_UpperMargin+m_SimpleWidgetsHeight+2*m_WidgetsMargin, m_CentralWidgetsLength,m_MultipleWidgetsHeight);
     m_FlBrowser->box(FL_PLASTIC_DOWN_BOX);
@@ -226,7 +226,7 @@ void InputViewComponent::Rebuild()
     m_ClearButton->color((Fl_Color)55);
     m_ClearButton->labelfont(1);
     m_ClearButton->labelsize(12);
-    m_ClearButton->labelcolor((Fl_Color)186); 
+    m_ClearButton->labelcolor((Fl_Color)186);
     m_ClearButton->callback((Fl_Callback *)InputViewComponent::ClearInputs,(void *)this);
 
     if(m_InputDataDescriptor.IsOptional())
@@ -461,7 +461,7 @@ bool InputViewComponent::IsReady()
     }
   else
     {
-    if( (m_InputDataDescriptor.IsOptional() && m_CheckButton->value() == 1)) 
+    if( (m_InputDataDescriptor.IsOptional() && m_CheckButton->value() == 1))
       {
       if(m_CheckButton->value() ==1)
        {

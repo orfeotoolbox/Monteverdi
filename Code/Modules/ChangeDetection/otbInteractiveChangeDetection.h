@@ -236,7 +236,7 @@ private:
   /// Result widget component
   ResultImageWidgetPointerType m_ResultImageWidget;
   
-  //Added : OTMANE 
+  //Added : OTMANE
   typename ImageType::Pointer    m_RightImage;
   typename ImageType::Pointer    m_LeftImage;
   typename OverlayImageType::Pointer    m_Output;

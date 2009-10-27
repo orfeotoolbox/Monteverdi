@@ -175,7 +175,7 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
 
   // Build GUI
-  this->Build();   
+  this->Build();
 
   // build the DEM GUI
   this->BuildDEM();
@@ -205,7 +205,7 @@ void ViewerModule::Run()
   m_Label = this->GetInputDataDescription<ImageType>("InputImage");
   
   // Try to get a single image
-  // If the input image is an otb::Image instead of VectorImage then cast it 
+  // If the input image is an otb::Image instead of VectorImage then cast it
   // in Vector Image and continue the processing
   SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
   
@@ -215,7 +215,7 @@ void ViewerModule::Run()
       m_CastFilter->SetInput(singleImage);
       m_InputImage = m_CastFilter->GetOutput();
       // Get the description
-      m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");      
+      m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");
     }
 
   // Set the File Name as a label to the viewer window
@@ -284,13 +284,13 @@ void ViewerModule::Run()
  */
 void ViewerModule::UpdateHistogramCurve()
 {
-  // Clear the widget 
+  // Clear the widget
   m_CurveWidget->ClearAllCurves();
   
-  // Get the current rendering function 
+  // Get the current rendering function
   RenderingFunctionType::Pointer renderingFunction = m_InputImageLayer->GetRenderingFunction();
   
-  // 
+  //
    if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >=3)
    {
      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
@@ -398,7 +398,7 @@ void ViewerModule::UpdateVectorData(unsigned int index)
   if(m_GenerateRandomColor)
     {
       vgl->SetColor(this->SetRandomColor());
-      // Add the color to the list 
+      // Add the color to the list
       m_ColorList.push_back(vgl->GetColor());
     }
   else
@@ -481,7 +481,7 @@ void ViewerModule::DeleteVectorData()
       // Remove the VectorDataGl Compenent
       m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
       m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
-      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square wich is a GlComponent 
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square wich is a GlComponent
 
       // Update the status of the selectedItem vector data
       m_DisplayedVectorData[selectedIndex-1] = false;
@@ -515,7 +515,7 @@ void ViewerModule::ClearAll()
 /**
  *  Dispaly if Hidden VectorData
  */
-void 
+void
 ViewerModule::DisplaySelectedVectorData()
 {
   // Get the selected vectordata
@@ -543,7 +543,7 @@ ViewerModule::DisplaySelectedVectorData()
 /**
  *  Dispaly if Hidden VectorData
  */
-void 
+void
 ViewerModule::DisplayVectorData()
 {
   // loop over all the vector datas
@@ -569,7 +569,7 @@ ViewerModule::DisplayVectorData()
 ViewerModule::ColorType  ViewerModule::SetRandomColor()
 {
   ColorType   color;
-  // Update Vector Data color 
+  // Update Vector Data color
   color[0]=rand()/(RAND_MAX+1.0);
   color[1]=rand()/(RAND_MAX+1.0);
   color[2]=rand()/(RAND_MAX+1.0);
@@ -609,7 +609,7 @@ void ViewerModule::ChangeROIColor()
          // Change the color of the text
          dVDList->selection_color(fl_color());
                dVDList->redraw();
-         // Change the color of the RoiButton 
+         // Change the color of the RoiButton
          dROIColor->color(fl_color());
          // Change the color of the VectorData
          selecedVectorDataGlComponent->SetColor(curColor);
@@ -853,8 +853,8 @@ void ViewerModule::ViewerSetupOk()
    // Refresh widgets
    this->RedrawWidget();
    
-   // Update Histogram 
-   this->UpdateHistogramCurve();   
+   // Update Histogram
+   this->UpdateHistogramCurve();
    
    //
    this->UpdateTabHistogram();
@@ -878,7 +878,7 @@ void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
   m_StandardRenderingFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
   m_StandardRenderingFunction->Initialize();
-  m_RenderingModel->Update();  
+  m_RenderingModel->Update();
 }
 
 /**
@@ -903,7 +903,7 @@ void ViewerModule::UpdateRGBChannelOrder(int red, int green , int blue)
 }
 
 /**
- * Amplitude 
+ * Amplitude
  */
 
 void ViewerModule::UpdateAmplitudeChannelOrder(int realChoice, int imChoice)
@@ -946,12 +946,12 @@ void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
  */
 void ViewerModule::UpdateTabHistogram()
 {
-  //Get the number of subdivisons in the GUI 
+  //Get the number of subdivisons in the GUI
  int  width  = (int)(gHistogram->w()/2.);
  int  height = (int)(gHistogram->h()/2.);
  int  blank  = 2;
  
-  // Clear the widget 
+  // Clear the widget
  m_BlueCurveWidgetGroup->ClearAllCurves();
  m_GreenCurveWidgetGroup->ClearAllCurves();
  m_RedCurveWidgetGroup->ClearAllCurves();
@@ -1014,7 +1014,7 @@ void ViewerModule::UpdateTabHistogram()
       
       // Right Asymptote
       m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2));
-      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green); 
+      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
       
       // Left Asymptote
       m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(3));
@@ -1052,11 +1052,11 @@ void ViewerModule::UpdateTabHistogram()
                                 width-blank, height-blank);
     }
     
-  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0)); 
+  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0));
   m_RedCurveWidgetGroup->AddCurve(rhistogram);
   // Right Asymptote
   m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(0));
-  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor()); 
+  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
     
   // Left Asymptote
   m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(1));
@@ -1094,7 +1094,7 @@ void ViewerModule::TabSetupPosition()
 }
 
 /**
- * 
+ *
  */
 void ViewerModule::UpdateUpperQuantile()
 {
@@ -1122,7 +1122,7 @@ void ViewerModule::UpdateUpperQuantile()
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
   
-  // Added cause the asymptote doesn't update their position 
+  // Added cause the asymptote doesn't update their position
   m_BlueCurveWidgetGroup->hide();
   m_GreenCurveWidgetGroup->hide();
   m_RedCurveWidgetGroup->hide();
@@ -1132,7 +1132,7 @@ void ViewerModule::UpdateUpperQuantile()
 }
 
 /**
- *  
+ *
  */
 void ViewerModule::UpdateLowerQuantile()
 {
@@ -1141,7 +1141,7 @@ void ViewerModule::UpdateLowerQuantile()
   // Cancel the automatic computation of the quantile
   m_StandardRenderingFunction->SetAutoMinMax(false);
   
-  // Get the standardRenderingFunction extrema parameters 
+  // Get the standardRenderingFunction extrema parameters
   ParametersType    params;
   params = m_StandardRenderingFunction->GetParameters();
   
@@ -1160,7 +1160,7 @@ void ViewerModule::UpdateLowerQuantile()
   // Redraw the hitogram curves
   this->UpdateTabHistogram();
 
-  // Added cause the asymptote doesn't update their position  
+  // Added cause the asymptote doesn't update their position
   m_BlueCurveWidgetGroup->hide();
   m_GreenCurveWidgetGroup->hide();
   m_RedCurveWidgetGroup->hide();
@@ -1178,7 +1178,7 @@ void ViewerModule::UpdatePixelInformationWindow()
   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
   bPixelInfo->buffer(buffer);
 
-  // Set the index 
+  // Set the index
   ImageType::IndexType     index;
   index[0] = static_cast<ImageType::IndexType::IndexValueType>(bX->value());
   index[1] = static_cast<ImageType::IndexType::IndexValueType>(bY->value());
@@ -1206,7 +1206,7 @@ void ViewerModule::ShowHide()
 }
 
 /**
- *  
+ *
  */
 void ViewerModule::Quit()
 {

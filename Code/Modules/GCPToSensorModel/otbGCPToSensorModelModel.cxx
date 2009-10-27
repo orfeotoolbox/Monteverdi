@@ -85,7 +85,7 @@ void
 GCPToSensorModelModel
 ::SetImage(VectorImagePointerType image)
 {
-  m_OutputChanged = false;  
+  m_OutputChanged = false;
 
   image->UpdateOutputInformation();
   m_InputImage = image;
@@ -125,7 +125,7 @@ GCPToSensorModelModel
   m_HasNewImage = false;
 }
 
-void 
+void
 GCPToSensorModelModel
 ::LoadGCP()
 {
@@ -169,7 +169,7 @@ GCPToSensorModelModel
       ImagePointType phyPoint;
       phyPoint[0] = m_IndexesList[i].second[0];
       phyPoint[1] = m_IndexesList[i].second[1];
-      m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );      
+      m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );
     }
 
   this->Modified();
@@ -233,7 +233,7 @@ GCPToSensorModelModel
 
 
 
-void 
+void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
 {
@@ -251,7 +251,7 @@ GCPToSensorModelModel
       idFix =  m_IndexesList[i].first;
       idMov =  m_IndexesList[i].second;
       spoint = ossimDpt(idFix[0],idFix[1]);
-      sensorPoints.push_back(spoint); 
+      sensorPoints.push_back(spoint);
       gpoint = ossimGpt(idMov[0],idMov[1]);
       geoPoints.push_back(gpoint);
     }
@@ -301,7 +301,7 @@ GCPToSensorModelModel
       gpoint = ossimGpt(idMov[0],idMov[1], m_UsedElevation[i]);
       std::cout<<gpoint<<std::endl;
       ossimTieGpt * tieGpt = new ossimTieGpt(gpoint, spoint, score);
-      tieGptVect.push_back(tieGpt);    
+      tieGptVect.push_back(tieGpt);
     }
   tieGptSet.setTiePoints(tieGptVect);
   m_GroundError = bproj->optimizeFit(tieGptSet);
@@ -354,7 +354,7 @@ GCPToSensorModelModel
 }
 
 
-GCPToSensorModelModel::Continuous3DIndexListType 
+GCPToSensorModelModel::Continuous3DIndexListType
 GCPToSensorModelModel
 ::TransformPoints()
 {
@@ -371,7 +371,7 @@ GCPToSensorModelModel
 
 #include <ossim/base/ossimKeywordNames.h>
 
-void 
+void
 GCPToSensorModelModel
 ::OK()
 {
@@ -391,7 +391,7 @@ GCPToSensorModelModel
   itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
 
   m_Output = /*m_InputImage;*/m_Extractor->GetOutput();
-  m_Output->UpdateOutputInformation(); 
+  m_Output->UpdateOutputInformation();
   std::cout<<" m_Output->GetImageKeywordlist()"<<std::endl;
   m_Output->GetImageKeywordlist().Print(std::cout);
 

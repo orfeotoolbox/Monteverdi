@@ -47,7 +47,7 @@ ProjectionModel::
 
 
 /**
- * Update the input Projection Ref 
+ * Update the input Projection Ref
  */
 void
 ProjectionModel
@@ -170,7 +170,7 @@ ProjectionModel
     
   oSRS.exportToWkt(&m_OutputProjectionRef/*utmRef*/);
 
-  // Build the Generic RS transform   
+  // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
@@ -211,7 +211,7 @@ void ProjectionModel
   oSRS.SetLCC(stdParallel1,stdParallel2,originLat,originLong,falseEasting,falseNorthing);
   oSRS.exportToWkt(&m_OutputProjectionRef);
 
-  // Build the Generic RS transform 
+  // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
@@ -248,7 +248,7 @@ void ProjectionModel
   oSRS.SetTM(originLat,originLong,scale,falseEasting,falseNorthing);
   oSRS.exportToWkt(&m_OutputProjectionRef);
 
-  // Build the Generic RS transform  
+  // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
   
@@ -343,7 +343,7 @@ void ProjectionModel
 //   // - because of the difference of origin for Y (image vs. carto)
 //   double sizeYcarto =  -(maxY-minY);
   
-//   // X 
+//   // X
 //   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
 //   double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
   

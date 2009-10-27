@@ -22,7 +22,7 @@
 namespace otb
 {
 
-typedef enum { 
+typedef enum {
   TRANSLATION,
   AFFINE,
   SIMILARITY2D,
