@@ -44,9 +44,9 @@ class ThresholdGroup {open
           tooltip {Minimum size of a detected region (m2)} xywh {150 370 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 value 1000 slider_size 0.01 textsize 14
         }
         Fl_Value_Input guiOutsideValue {
-          label {Outside value:}
+          label {Outside value :}
           callback {this->UpdateDetails();}
-          xywh {145 405 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1
+          xywh {149 405 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1
         }
         Fl_Round_Button guiAbove {
           label {Threshold Above}
@@ -54,7 +54,7 @@ class ThresholdGroup {open
 guiBelow->value(0);
 guiOutside->value(0);
 this->UpdateDetails();}
-          xywh {615 372 135 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          xywh {490 375 140 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Round_Button guiBelow {
           label {Threshold Below}
@@ -62,7 +62,7 @@ this->UpdateDetails();}
 guiBelow->value(1);
 guiOutside->value(0);
 this->UpdateDetails();}
-          xywh {615 420 135 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          xywh {491 425 135 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Round_Button guiOutside {
           label {Threshold Outside}
@@ -70,12 +70,46 @@ this->UpdateDetails();}
 guiBelow->value(0);
 guiOutside->value(1);
 this->UpdateDetails();}
-          xywh {615 397 130 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          xywh {491 400 138 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Value_Slider guiAlpha {
           label {alpha :}
-          callback {this->AlphaBlending();} selected
-          xywh {530 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 14
+          callback {this->AlphaBlending();}
+          xywh {535 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 14
+        }
+        Fl_Value_Input guiInsideValue {
+          label {Inside value :}
+          callback {this->UpdateDetails();}
+          xywh {147 440 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 maximum 100000 step 1 deactivate
+        }
+        Fl_Round_Button guiGenericThreshold {
+          label {Generic Threshold}
+          callback {guiAbove->activate();
+guiBelow->activate();
+guiOutside->activate();
+
+guiAbove->value(1);
+guiBelow->value(0);
+guiOutside->value(0);
+guiGenericThreshold->value(1);
+guiBinaryThreshold->value(0);
+guiInsideValue->deactivate();
+this->UpdateLayerGenerationFlag();
+this->UpdateDetails();}
+          xywh {270 410 140 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Round_Button guiBinaryThreshold {
+          label {Binary Threshold}
+          callback {guiAbove->deactivate();
+guiBelow->deactivate();
+guiOutside->deactivate();
+guiInsideValue->activate();
+
+guiBinaryThreshold->value(1);
+guiGenericThreshold->value(0);
+this->UpdateLayerGenerationFlag();
+this->UpdateDetails();} selected
+          xywh {270 440 140 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
       }
     }
@@ -90,5 +124,7 @@ this->UpdateDetails();}
   Function {UpdateDetails()} {open return_type {virtual void}
   } {}
   Function {AlphaBlending()} {open return_type {virtual void}
+  } {}
+  Function {UpdateLayerGenerationFlag()} {open return_type {virtual void}
   } {}
 } 

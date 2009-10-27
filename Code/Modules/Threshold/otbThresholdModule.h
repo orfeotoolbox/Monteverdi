@@ -39,6 +39,7 @@
 
 // Threshold
 #include "itkThresholdImageFilter.h"
+#include "itkBinaryThresholdImageFilter.h"
 
 //Extract ROI
 #include "otbExtractROI.h"
@@ -112,7 +113,9 @@ public:
     <RenderingModelType,ViewType>                        ArrowKeyMoveActionHandlerType;
   
   /** Filter for thresholding*/
-  typedef itk::ThresholdImageFilter<ImageType> ThresholdFilterType;
+  typedef itk::ThresholdImageFilter<ImageType>           ThresholdFilterType;
+  typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>
+                                                         BinaryThresholdFilterType;
   
   /** Extract ROI Filter */
   typedef ExtractROI<PrecisionType,PrecisionType>        ExtractROIFilterType;
@@ -134,6 +137,9 @@ protected:
   /** Callbacks */
   virtual void OK();
 
+  /** UpdateThresholdLayer */
+  virtual void UpdateThresholdLayer();
+  
   /** Callback on the sliders*/
   virtual void UpdateDetails();
 
@@ -146,6 +152,9 @@ protected:
   /** */
   virtual void AlphaBlending();
   
+  /**  Update layer generation flag*/
+  virtual void UpdateLayerGenerationFlag();
+  
 private:
   ThresholdModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -153,6 +162,9 @@ private:
   /** Threshold filter */
   ThresholdFilterType::Pointer             m_ThresholdFilter;
   ThresholdFilterType::Pointer             m_ThresholdQuicklook;
+
+  BinaryThresholdFilterType::Pointer       m_BinaryThresholdFilter;
+  BinaryThresholdFilterType::Pointer       m_BinaryThresholdQuicklook;
   
   /** Pointer to the image */
   ImageType::Pointer                       m_InputImage;
@@ -177,6 +189,9 @@ private:
   /** Layer Generator*/
   ImageLayerGeneratorType::Pointer         m_ThresholdGenerator;
   ImageLayerGeneratorType::Pointer         m_Generator;
+
+  /** Flag to allow layer regeneration*/
+  bool                                     m_HasToGenerateLayer;
 };
 
 
