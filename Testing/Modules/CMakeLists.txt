@@ -183,13 +183,13 @@ ADD_TEST(moTuThresholdModuleTest ${Modules_TESTS} otbThresholdModuleTestNew
 )
 
 #------------- Threshold  Module test -------------
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS} 
 	 otbThresholdModuleTest
-	 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+	 ${INPUTDATA}/prison_toulouse.tif
 	 0
+	 ${TEMP}/moTvThresholdModule.tif
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 SET(Modules_SRCS
 otbSpeckleFilteringApplication.cxx

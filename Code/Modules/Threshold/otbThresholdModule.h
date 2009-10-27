@@ -38,7 +38,7 @@
 #include "otbChangeScaleActionHandler.h"
 
 // Threshold
-#include "itkBinaryThresholdImageFilter.h"
+#include "itkThresholdImageFilter.h"
 
 //Extract ROI
 #include "otbExtractROI.h"
@@ -112,8 +112,8 @@ public:
     <RenderingModelType,ViewType>                        ArrowKeyMoveActionHandlerType;
   
   /** Filter for thresholding*/
-  typedef itk::BinaryThresholdImageFilter<ImageType,ImageType> ThresholdFilterType;
-
+  typedef itk::ThresholdImageFilter<ImageType> ThresholdFilterType;
+  
   /** Extract ROI Filter */
   typedef ExtractROI<PrecisionType,PrecisionType>        ExtractROIFilterType;
 
@@ -139,7 +139,13 @@ protected:
 
   /** Update the sliders*/
   virtual void UpdateSlidersExtremum();
+  
+  /** Show*/
+  virtual void Show();
 
+  /** */
+  virtual void AlphaBlending();
+  
 private:
   ThresholdModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -150,12 +156,11 @@ private:
   
   /** Pointer to the image */
   ImageType::Pointer                       m_InputImage;
-
-  /** Pointer to the image */
-  ImageType::Pointer                       m_ResultImage;
   
   /** The image layer */
   ImageLayerPointerType                    m_InputImageLayer;
+  ImageLayerPointerType                    m_ThresholdImageLayer;
+  
   
   /** The rendering model */
   RenderingModelPointerType                m_RenderingModel;

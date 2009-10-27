@@ -21,6 +21,11 @@
 
 #include "itkMinimumMaximumImageCalculator.h"
 
+
+#include "otbUniformAlphaBlendingFunction.h"
+#include "otbBlendingFunction.h"
+
+
 namespace otb
 {
 /** Constructor */
@@ -121,40 +126,45 @@ void ThresholdModule::Run()
       itkExceptionMacro(<<"Input image is NULL");
     }
   
+  // Threshold the streamed region of the input
   m_ThresholdFilter->SetInput(m_InputImage);
 
   // Generate the layer
-  //ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   m_Generator->SetImage(m_InputImage);
   FltkFilterWatcher qlwatcher(m_Generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   m_Generator->GenerateLayer();
   m_InputImageLayer = m_Generator->GetLayer();
+  m_InputImageLayer->SetName("ImageLayer");
   
-  // Add the generated layer to the rendering model
-  m_RenderingModel->AddLayer(m_Generator->GetLayer());
-  
-  // Set tresholders inputs : Quicklook
-  m_ThresholdQuicklook->SetInput(m_Generator->GetQuicklook());
-
-  //ImageLayerGeneratorType::Pointer thresholdGenerator = ImageLayerGeneratorType::New();
+  // Set Quicklook thresholder input
+  m_ThresholdQuicklook->SetInput(m_InputImageLayer->GetQuicklook());
+    
+  // Generate the Thresholded layer
   m_ThresholdGenerator->SetImage(m_ThresholdFilter->GetOutput());
-  m_ThresholdGenerator->GenerateQuicklookOff();
+  m_ThresholdGenerator->GenerateQuicklookOff();  
   m_ThresholdGenerator->SetQuicklook(m_ThresholdQuicklook->GetOutput());
   m_ThresholdGenerator->GenerateLayer();
-
+  m_ThresholdGenerator->GetLayer()->SetName("ThresholdLayer");
+  m_ThresholdImageLayer = m_ThresholdGenerator->GetLayer();
+  
+  
+  // Add the generated layer to the rendering model
+  m_RenderingModel->AddLayer(m_InputImageLayer);
   m_RenderingModel->AddLayer(m_ThresholdGenerator->GetLayer());
 
   // Get the minimum & maximum values of the image
   this->UpdateSlidersExtremum();
-  
+  this->UpdateDetails();
+  this->Show();
+}
+
+void ThresholdModule::Show()
+{
   // Show the main window
   wMainWindow->show();
   m_View->GetScrollWidget()->show();
   m_View->GetFullWidget()->show();
-
-  this->UpdateDetails();
 }
-
 
 
 void ThresholdModule::UpdateSlidersExtremum()
@@ -182,6 +192,11 @@ void ThresholdModule::UpdateSlidersExtremum()
 
 void ThresholdModule::OK()
 {
+  this->ClearOutputDescriptors();
+  this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),"OutputImage","Thresholded image.");
+  this->NotifyOutputsChange();
+  
+  // Close the GUI
   wMainWindow->hide();
 }
 
@@ -191,20 +206,45 @@ void ThresholdModule::OK()
  */
 void ThresholdModule::UpdateDetails()
 {
-  m_ThresholdFilter->SetInsideValue(guiInsideValue->value());
+  // Set the outside values
   m_ThresholdFilter->SetOutsideValue(guiOutsideValue->value());
-  m_ThresholdFilter->SetLowerThreshold(guiMinDetails->value());
-  m_ThresholdFilter->SetUpperThreshold(guiMaxDetails->value());
-  
-  m_ThresholdQuicklook->SetInsideValue(guiInsideValue->value());
   m_ThresholdQuicklook->SetOutsideValue(guiOutsideValue->value());
-  m_ThresholdQuicklook->SetLowerThreshold(guiMinDetails->value());
-  m_ThresholdQuicklook->SetUpperThreshold(guiMaxDetails->value());
-  m_ThresholdQuicklook->Update();
+  
+  // Set the mode
+  if(guiOutside->value())
+    {
+      m_ThresholdFilter->ThresholdOutside(guiMinDetails->value(),guiMaxDetails->value());
+      m_ThresholdQuicklook->ThresholdOutside(guiMinDetails->value(),guiMaxDetails->value());
+    }
+  
+  if(guiAbove->value())
+    {
+      m_ThresholdFilter->ThresholdBelow(guiMinDetails->value());
+      m_ThresholdQuicklook->ThresholdBelow(guiMinDetails->value());
+    }
 
+  if(guiBelow->value())
+    {
+      m_ThresholdFilter->ThresholdAbove(guiMaxDetails->value());
+      m_ThresholdQuicklook->ThresholdAbove(guiMaxDetails->value());
+    }
+  
   m_RenderingModel->Update();
 }
 
+void ThresholdModule::AlphaBlending()
+{    
+  typedef Function::BlendingFunction<RGBPixelType>              BlendingFunctionType;
+  typedef BlendingFunctionType::Pointer                         BlendingFunctionPointerType;
+  typedef Function::UniformAlphaBlendingFunction<RGBPixelType>  UniformAlphaBlendingFunctionType;
+  typedef UniformAlphaBlendingFunctionType::Pointer             UniformAlphaBlendingFunctionPointerType;
+  
+  UniformAlphaBlendingFunctionPointerType threshBlendFunc = dynamic_cast<UniformAlphaBlendingFunctionType *>
+    (m_RenderingModel->GetLayerByName("ThresholdLayer")->GetBlendingFunction());
+  threshBlendFunc->SetAlpha(guiAlpha->value());
+  
+  m_RenderingModel->Update();
+}
 
 } // End namespace otb
 

@@ -57,6 +57,16 @@ int otbThresholdModuleTest(int argc, char* argv[])
     {
       Fl::check();
     }
+
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
+  
+  //Write the image
+  WriterType::Pointer  writer = WriterType::New();
+  writer->SetFileName(argv[3]);
+  writer->SetInput(outImage);
+  writer->Update();
   
   return EXIT_SUCCESS;
 }
