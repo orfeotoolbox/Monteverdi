@@ -218,7 +218,7 @@ void ThresholdModule::UpdateSlidersExtremum()
   guiMaxDetails->redraw();
   
   guiInsideValue->value(min);
-  guiInsideValue->value(max);
+  guiOutsideValue->value(max);
 }
 
 /**

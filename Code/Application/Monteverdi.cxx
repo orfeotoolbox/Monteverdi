@@ -68,7 +68,7 @@
 #include "otbKMeansModule.h"
 #include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
-
+#include "otbThresholdModule.h"
 
 int main(int argc, char* argv[])
 {
@@ -120,6 +120,7 @@ int main(int argc, char* argv[])
 
   model->RegisterModule<otb::AlgebraModule>("Algebra","Filtering/Band Math");
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection","Filtering/Change Detection");
+  model->RegisterModule<otb::ThresholdModule>("Threshold","Filtering/Threshold");
   
   // Launch Monteverdi
   view->InitWidgets();
