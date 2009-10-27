@@ -152,7 +152,7 @@ void KMeansModule::ThreadedWatch()
   // Wait for the module to be busy
   while(!this->IsBusy())
   {
-	Sleep(500);
+        Sleep(500);
   }
 
   while( this->IsBusy() )

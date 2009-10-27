@@ -202,7 +202,7 @@ GCPToSensorModelController
   for(unsigned int i=0; i<indexesList.size(); i++)
     {
       if( m_Model->GetProjectionType() == ModelType::RPC )
-	height = m_Model->GetUsedElevation(i);
+        height = m_Model->GetUsedElevation(i);
       m_View->AddPointsToList( indexesList[i].first, indexesList[i].second, height );
     }
 

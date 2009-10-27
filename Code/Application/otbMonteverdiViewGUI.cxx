@@ -302,7 +302,7 @@ MonteverdiViewGUI
   if( n->parent()->is_root() )
     {
       m_Tree->GetModuleMenu()->Reset();
-	  m_Tree->GetModuleMenu()->LaunchModuleMenu();
+          m_Tree->GetModuleMenu()->LaunchModuleMenu();
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
        {
          gRenameOld->value(label);
@@ -328,7 +328,7 @@ MonteverdiViewGUI
     bool viewable  = m_MonteverdiModel->SupportsViewing(instanceId,outputId);
     bool writable  = m_MonteverdiModel->SupportsWriting(instanceId,outputId);
 
-	  m_Tree->GetModuleMenu()->Reset();
+          m_Tree->GetModuleMenu()->Reset();
       m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
       if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
        { 

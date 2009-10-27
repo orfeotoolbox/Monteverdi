@@ -91,10 +91,10 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
 
   void LaunchModuleMenu(bool show = true)
     {
-		Fl_Menu_Item popup_menu[3] = {
-			{"Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+                Fl_Menu_Item popup_menu[3] = {
+                        {"Rename",  0, this->handle_menu_module_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
             { "Show Module",  0, this->handle_menu_module_show, 0, !show, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-			{0}};
+                        {0}};
        
       int x, y;
       Fl::get_mouse(x, y);
@@ -107,12 +107,12 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
 
   void LaunchOutputMenu(bool display = false, bool cache = false, bool write = false)
     {
-		Fl_Menu_Item popup_menu[5] = {
-				{ "Rename", 0, this->handle_menu_output_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+                Fl_Menu_Item popup_menu[5] = {
+                                { "Rename", 0, this->handle_menu_output_rename, 0, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
                 { "Display in viewer", 0, this->handle_menu_output_display, 0, !display, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-				{ "Export dataset", 0, this->handle_menu_output_write, 0, !write, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-				{ "Cache dataset", 0, this->handle_menu_output_cache, 0, !cache, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-				{0}};
+                                { "Export dataset", 0, this->handle_menu_output_write, 0, !write, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+                                { "Cache dataset", 0, this->handle_menu_output_cache, 0, !cache, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+                                {0}};
 
       int x, y;
       Fl::get_mouse(x, y);
@@ -137,8 +137,8 @@ class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
 
   void Reset()
   {
-	m_ModuleMenuOutput = NO_MODULE_OUTPUT;
-	m_OutputMenuOutput = NO_OUTPUT;
+        m_ModuleMenuOutput = NO_MODULE_OUTPUT;
+        m_OutputMenuOutput = NO_OUTPUT;
   }
 protected:
 

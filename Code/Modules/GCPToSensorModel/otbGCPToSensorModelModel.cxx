@@ -48,7 +48,7 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
                                              m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
                                              m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
                                              m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(),
-					     m_GroundError(), m_Extractor()
+                                             m_GroundError(), m_Extractor()
 {
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
@@ -362,9 +362,9 @@ GCPToSensorModelModel
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
       if (m_ProjectionType == RPC)
-	outList.push_back( this->TransformPoint(m_IndexesList[i].first, m_UsedElevation[i]) );
+        outList.push_back( this->TransformPoint(m_IndexesList[i].first, m_UsedElevation[i]) );
       else if(m_ProjectionType == BILINEAR)
-	outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
+        outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
     }
   return outList;
 }
