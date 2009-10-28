@@ -47,8 +47,16 @@ int otbThresholdModuleTest(int argc, char* argv[])
 
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
-
-
+  
+  // Get the extremum of the image
+  double min = specificModule->guiMinDetails->value();
+  
+  specificModule->guiMinDetails->value(min + 50);
+  specificModule->guiMaxDetails->value(min + 100);
+  specificModule->guiGenericThreshold->do_callback();
+  // Simulate OK click
+  specificModule->bOK->do_callback();
+  
   if(run)
     {
       Fl::run();

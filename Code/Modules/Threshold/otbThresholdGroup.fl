@@ -31,15 +31,15 @@ class ThresholdGroup {open
           label Full open
           xywh {400 15 395 290} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
-        Fl_Button {} {
+        Fl_Button bOK {
           label {Save Quit}
-          callback {OK();}
+          callback {OK();} selected
           xywh {685 445 70 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Value_Slider guiMinDetails {
           label {Lower Threshold :}
           callback {guiMinDetails->value( std::min(guiMinDetails->value(), guiMaxDetails->value()) );
-this->UpdateDetails();} selected
+this->UpdateDetails();}
           tooltip {Minimum size of a detected region (m2)} xywh {150 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 slider_size 0.01 textsize 14
         }
         Fl_Value_Slider guiMaxDetails {
