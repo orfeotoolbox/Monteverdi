@@ -79,7 +79,6 @@ FeatureExtractionModel
 }
 
 
-
 void
 FeatureExtractionModel
 ::SetInputImage(InputImagePointerType image)
@@ -348,7 +347,7 @@ FeatureExtractionModel
     for (unsigned int j = 0; j<size;++j)
     {
       itk::OStringStream oss;
-      oss<<"Morpho Opening: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step ;
+      oss<<"Morpho Opening: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step;
       std::string mess = oss.str();
       this->AddFeatureFilter( profileFilter, FeatureInfo::MORPHOLOGICALOPENING, i, j,  mess);
     }
@@ -374,7 +373,7 @@ FeatureExtractionModel
     for (unsigned int j = 0; j<size;++j)
     {
       itk::OStringStream oss;
-      oss<<"Morpho Closing: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step ;
+      oss<<"Morpho Closing: "<<size<<" , "<<value<<" , "<<step<<", "<<value+j*step;
       std::string mess = oss.str();
       this->AddFeatureFilter( profileFilter, FeatureInfo::MORPHOLOGICALCLOSING, i, j,  mess);
     }
@@ -672,9 +671,9 @@ FeatureExtractionModel
   int i = 0;
 
   if( !m_HasInput )
-    itkExceptionMacro("Impossible to create output image : no image image selected.")
+    itkExceptionMacro("Impossible to create output image : no image image selected.");
   if( m_OutputListOrder.size()==0 )
-    itkExceptionMacro("Impossible to create output image : no feature selected.")
+    itkExceptionMacro("Impossible to create output image : no feature selected.");
   
   m_imageList->Clear();
   
@@ -897,6 +896,4 @@ void
 
   this->NotifyAll("BusyOff");
 }
-
 }
-
