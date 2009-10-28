@@ -107,7 +107,10 @@ class ITK_EXPORT MonteverdiModel
   }
 
   itkGetMacro(NumberOfRegisteredModules,unsigned int);
-
+  
+  /** Get Connection Graph*/
+  itkGetConstObjectMacro(ConnectionGraph,ConnectionGraphType);
+  
   /** Create a module according to its key. If the key is not a
   registered module, throws an exception */
   void CreateModuleByKey(const std::string & key);
@@ -197,7 +200,7 @@ protected:
 
   /** Add a graph connection */
   void AddGraphConnection(const std::string& sourceModuleId,const std::string& outputKey, const std::string& targetModuleId, const std::string& inputKey);
-
+  
  private:
   MonteverdiModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

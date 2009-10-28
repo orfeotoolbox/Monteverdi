@@ -20,13 +20,17 @@ ADD_TEST(apTvMonteverdiReaderViewer ${Application_TESTS} otbMonteverdiApplicatio
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 0
 )
-
-
+# ADD_TEST(apTvMonteverdiGraphviz ${Application_TESTS} otbMonteverdiApplicationGraphviz
+# ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+# 0
+# ${TEMP}/graphviz.dot
+# )
 
 SET(Application_SRCS
 otbMonteverdiApplicationNew.cxx
 otbMonteverdiApplicationTest.cxx
 otbMonteverdiApplicationReaderViewer.cxx
+# otbMonteverdiApplicationGraphviz.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
