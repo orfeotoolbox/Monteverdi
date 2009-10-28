@@ -359,15 +359,19 @@ void ProjectionModel
 
 
   // Compute the output size
-  double sizeCartoX = maxX - minX;
-  double sizeCartoY = minY - maxY;
+  double sizeCartoX = vcl_abs(maxX - minX);
+  double sizeCartoY = vcl_abs(minY - maxY);
 
   OutputPointType o,oX,oY;
   
   // Initialize
-  o = m_OutputOrigin;
-  oX = m_OutputOrigin;
-  oY = m_OutputOrigin;
+  o[0] = minX;
+  o[1] = maxY;
+  oX = o;
+  oY = o;
+
+  m_OutputOrigin = o;
+
   oX[0]+=sizeCartoX;
   oY[1]+=sizeCartoY;
 
@@ -393,7 +397,7 @@ void ProjectionModel
 
   // Evaluate spacing
   m_OutputSpacing[0] = sizeCartoX/OxLength;
-  m_OutputSpacing[1] = sizeCartoY/OyLength;
+  m_OutputSpacing[1] = -sizeCartoY/OyLength;
 
   // Evaluate size
   m_OutputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX/m_OutputSpacing[0])));
