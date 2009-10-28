@@ -433,6 +433,17 @@ Orthorectification
     guiLambertEastSelection->value(oss.str().c_str());
     break;
   }
+  case LAMBERT3CARTOSUD:
+  {
+    m_EastNorth = this->LongLatPointToCarto( latLongPoint );
+    oss.str("");
+    oss<<m_EastNorth[1];
+    guiLambert3NorthSelection->value(oss.str().c_str());
+    oss.str("");
+    oss<<m_EastNorth[0];
+    guiLambert3EastSelection->value(oss.str().c_str());
+    break;
+  }
   case TRANSMERCATOR:
   {
     m_EastNorth = this->LongLatPointToCarto( latLongPoint );
@@ -694,6 +705,14 @@ Orthorectification
     typedef Lambert2EtenduInverseProjection Lambert2Type;
     Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
     res = this->CreateOutput<Lambert2Type>(lambert2Projection);
+
+    break;
+  }
+  case LAMBERT3CARTOSUD:
+  {
+    typedef Lambert3CartoSudInverseProjection Lambert3CartoSudType;
+    Lambert3CartoSudType::Pointer lambert3CartoSudProjection = Lambert3CartoSudType::New();
+    res = this->CreateOutput<Lambert3CartoSudType>(lambert3CartoSudProjection);
 
     break;
   }
@@ -976,9 +995,11 @@ Orthorectification::SelectAction()
   {
     guiUTMNorthSelection->value("");
     guiLambertNorthSelection->value("");
+    guiLambert3NorthSelection->value("");
     guiTransmercatorNorthSelection->value("");
     guiUTMEastSelection->value("");
     guiLambertEastSelection->value("");
+    guiLambert3EastSelection->value("");
     guiTransmercatorEastSelection->value("");
 
     // Clean extent image
@@ -1005,6 +1026,11 @@ Orthorectification
   {
     m_EastNorth[1] = strtod(guiLambertNorthSelection->value(), NULL);
     m_EastNorth[0] = strtod(guiLambertEastSelection->value(), NULL);
+  }
+  case LAMBERT3CARTOSUD:
+  {
+    m_EastNorth[1] = strtod(guiLambert3NorthSelection->value(), NULL);
+    m_EastNorth[0] = strtod(guiLambert3EastSelection->value(), NULL);
   }
   case TRANSMERCATOR:
   {
@@ -1154,6 +1180,19 @@ Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint
 
     break;
   }
+  case LAMBERT3CARTOSUD:
+  {
+    typedef Lambert3CartoSudForwardProjection Lambert3CartoSudType;
+    Lambert3CartoSudType::Pointer lambert3CartoSudProjection = Lambert3CartoSudType::New();
+
+    Lambert3CartoSudType::OutputPointType cartoPoint;
+    cartoPoint = lambert3CartoSudProjection->TransformPoint( latLongPoint );
+
+    outVectPoint[0] = static_cast<double>(cartoPoint[0]);
+    outVectPoint[1] = static_cast<double>(cartoPoint[1]);
+
+    break;
+  }
   case TRANSMERCATOR:
   {
     if (strcmp("",guiTRANSMERCATOREast->value()) != 0 && strcmp("",guiTRANSMERCATORNorth->value()) != 0 )
@@ -1270,6 +1309,23 @@ Orthorectification::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
 
     break;
   }
+  case LAMBERT3CARTOSUD:
+  {
+    typedef Lambert3CartoSudInverseProjection Lambert3CartoSudType;
+    Lambert3CartoSudType::Pointer lambert3CartoSudProjection = Lambert3CartoSudType::New();
+
+    typedef CompositeTransform<Lambert3CartoSudType, InverseSensorType> TransformType;
+    TransformType::Pointer transform = TransformType::New();
+    transform->SetFirstTransform(lambert3CartoSudProjection);
+    transform->SetSecondTransform(sensor);
+    TransformType::SecondTransformOutputPointType outPoint;
+    outPoint = transform->TransformPoint(cartoPoint);
+
+    outVectPoint[0] = static_cast<double>(std::floor(outPoint[0]));
+    outVectPoint[1] = static_cast<double>(std::floor(outPoint[1]));
+
+    break;
+  }
   case TRANSMERCATOR:
   {
     if (strcmp("",guiTRANSMERCATOREast->value()) != 0 && strcmp("",guiTRANSMERCATORNorth->value()) != 0 )
@@ -1345,6 +1401,19 @@ Orthorectification::CartoPointToLongLat(ForwardSensorInputPointType cartoPoint)
 
     Lambert2Type::OutputPointType latLongPoint;
     latLongPoint = lambert2Projection->TransformPoint( cartoPoint );
+
+    outVectPoint[0] = static_cast<double>(latLongPoint[0]);
+    outVectPoint[1] = static_cast<double>(latLongPoint[1]);
+
+    break;
+  }
+  case LAMBERT3CARTOSUD:
+  {
+    typedef Lambert3CartoSudInverseProjection Lambert3CartoSudType;
+    Lambert3CartoSudType::Pointer lambert3CartoSudProjection = Lambert3CartoSudType::New();
+
+    Lambert3CartoSudType::OutputPointType latLongPoint;
+    latLongPoint = lambert3CartoSudProjection->TransformPoint( cartoPoint );
 
     outVectPoint[0] = static_cast<double>(latLongPoint[0]);
     outVectPoint[1] = static_cast<double>(latLongPoint[1]);

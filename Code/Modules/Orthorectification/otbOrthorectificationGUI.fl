@@ -79,6 +79,7 @@ InsightExtent();}
               label UTM
               callback {m_UTM->show();
 			m_Lambert2->hide();
+			m_Lambert3CartoSud->hide();
  			m_TRANSMERCATOR->hide();
 		  	this->m_MapType->redraw();
 		  	SetMapType(UTM);}
@@ -88,15 +89,27 @@ InsightExtent();}
               label LAMBERT2
               callback {m_UTM->hide();
 	          	m_Lambert2->show();
+			m_Lambert3CartoSud->hide();
 			m_TRANSMERCATOR->hide();
 			this->m_MapType->redraw();
 		  	SetMapType(LAMBERT2);}
+              xywh {20 20 100 25} labelsize 11
+            }
+	    MenuItem {} {
+              label LAMBERT3CARTOSUD
+              callback {m_UTM->hide();
+	          	m_Lambert2->hide();
+			m_Lambert3CartoSud->show();
+			m_TRANSMERCATOR->hide();
+			this->m_MapType->redraw();
+		  	SetMapType(LAMBERT3CARTOSUD);}
               xywh {20 20 100 25} labelsize 11
             }
             MenuItem {} {
               label TRANSMERCATOR
               callback {m_UTM->hide();
 	          	m_Lambert2->hide();
+			m_Lambert3CartoSud->hide();
 			m_TRANSMERCATOR->show();
 			this->m_MapType->redraw();
 		  	SetMapType(TRANSMERCATOR);}
@@ -148,6 +161,22 @@ UpdateLongLat();}
                 tooltip {Enter the easting of the output image center} xywh {172 278 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiLambertNorthSelection {
+                label Northing
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the northing of the output image center} xywh {172 318 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+	    Fl_Group m_Lambert3CartoSud {open
+              xywh {37 227 360 160} hide
+            } {
+              Fl_Input guiLambert3EastSelection {
+                label Easting
+                callback {UpdateEastNorth();
+UpdateLongLat();}
+                tooltip {Enter the easting of the output image center} xywh {172 278 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiLambert3NorthSelection {
                 label Northing
                 callback {UpdateEastNorth();
 UpdateLongLat();}
