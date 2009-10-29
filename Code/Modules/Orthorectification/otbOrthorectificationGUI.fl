@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -11,7 +11,7 @@ decl {\#include "otbOrthoEnum.h"} {public
 decl {\#include "otbGUIRectangle.h"} {public
 } 
 
-class OrthorectificationGUI {open selected
+class OrthorectificationGUI {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
@@ -33,8 +33,8 @@ class OrthorectificationGUI {open selected
         xywh {18 14 398 393} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open
-          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label Coordinates open selected
+          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
             label {Geographical Coordinates} open
@@ -371,7 +371,7 @@ guiAvElev->activate();}
         }
         Fl_Group guiImageExtent {
           label {Image Extent}
-          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 44 selection_color 32 labelfont 2 labelsize 11 when 3
+          xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 44 selection_color 32 labelfont 2 labelsize 11 when 3 hide
           class {otb::GUIRectangle}
         } {}
       }

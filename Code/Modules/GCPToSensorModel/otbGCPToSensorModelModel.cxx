@@ -23,6 +23,7 @@
 #include "base/ossimDirectory.h"
 #include "base/ossimTieGpt.h"
 #include "base/ossimTieGptSet.h"
+#include "projection/ossimRpcSolver.h"
 
 namespace otb
 {
@@ -48,17 +49,21 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
                                              m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
                                              m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
                                              m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(),
-                                             m_GroundError(), m_Extractor()
+                                             m_GroundError()
 {
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
   m_BlendingFunction->SetAlpha(0.6);
   m_ImageGenerator = LayerGeneratorType::New();
   m_InputImage = VectorImageType::New();
-  m_Extractor = ExtractorType::New();
   m_Output = VectorImageType::New();
   m_IndexesList.clear();
-  //m_Projection = new ossimProjection();
+
+  m_Projection = NULL;
+  m_RpcProjection = NULL;
+  m_RpcModel = NULL;
+
+
   m_DEMPath = "";
   
   m_MeanElevation = 0;
@@ -77,7 +82,10 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
-  delete m_Projection;
+  if( m_RpcProjection != NULL )
+    delete m_RpcProjection;
+  if( m_RpcModel != NULL )
+    delete m_RpcModel;
 }
 
 
@@ -119,6 +127,7 @@ GCPToSensorModelModel
   
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
+  m_VisualizationModel->Update();
 
   m_HasNewImage = true;
   this->NotifyAll();
@@ -282,8 +291,6 @@ GCPToSensorModelModel
 
   this->GenerateUsedElevation();
 
-  ossimRpcProjection * bproj = new ossimRpcProjection();
-
   std::vector<ossimDpt> sensorPoints;
   std::vector<ossimGpt>  geoPoints;
   ContinuousIndexType idFix, idMov;
@@ -298,17 +305,39 @@ GCPToSensorModelModel
       idMov =  m_IndexesList[i].second;
       spoint = ossimDpt(idFix[0],idFix[1]);
       sensorPoints.push_back(spoint);
-      gpoint = ossimGpt(idMov[0],idMov[1], m_UsedElevation[i]);
-      std::cout<<gpoint<<std::endl;
+      gpoint = ossimGpt(idMov[1],idMov[0], m_UsedElevation[i]);
+      geoPoints.push_back(gpoint);
       ossimTieGpt * tieGpt = new ossimTieGpt(gpoint, spoint, score);
       tieGptVect.push_back(tieGpt);
     }
   tieGptSet.setTiePoints(tieGptVect);
-  m_GroundError = bproj->optimizeFit(tieGptSet);
+ 
+  // Use a solver to compute coef
+  ossimRpcSolver solver(false, false);
+  solver.solveCoefficients( sensorPoints, geoPoints);
+  m_GroundError = vcl_pow(solver.getRmsError(), 2);
 
-  delete m_Projection;
-  m_Projection = bproj;
+  // deduct the associate projection
+  if( m_RpcProjection != NULL )
+    delete m_RpcProjection;
+  m_RpcProjection = new ossimRpcProjection();
+  ossimRefPtr< ossimRpcProjection > objp = solver.createRpcProjection();
+  ossimKeywordlist kwl;
+  objp->saveState(kwl);
+  m_RpcProjection->loadState(kwl);
 
+  m_Projection = m_RpcProjection;
+
+  // deduct the associate model
+  if( m_RpcModel != NULL )
+    delete m_RpcModel;
+  m_RpcModel = new ossimRpcModel();
+  ossimRefPtr< ossimRpcModel > objm = solver.createRpcModel();
+  ossimKeywordlist kwlm;
+  objm->saveState(kwlm);
+  m_RpcModel->loadState(kwlm);
+
+  
   // To avoid infinite loop (notify->notify->notify...)
   if( m_HasNewImage == false )
     {
@@ -345,11 +374,18 @@ GCPToSensorModelModel
   ossimGpt gpoint;
   if (m_ProjectionType == RPC)
     gpoint.hgt = height;
-  m_Projection->lineSampleToWorld(spoint, gpoint);
-  out[0] = gpoint.lat;
-  out[1] = gpoint.lon;
-  out[2] = gpoint.hgt;
- 
+
+  if( m_Projection != NULL )
+    {
+      m_Projection->lineSampleToWorld(spoint, gpoint); 
+      
+      out[0] = gpoint.lon;
+      out[1] = gpoint.lat;
+      out[2] = gpoint.hgt;
+    }
+  else
+    out.Fill(0.);
+
   return out;
 }
 
@@ -369,48 +405,33 @@ GCPToSensorModelModel
   return outList;
 }
 
-#include <ossim/base/ossimKeywordNames.h>
+
 
 void
 GCPToSensorModelModel
 ::OK()
 {
-   m_Extractor->SetInput(m_InputImage);
-   m_Extractor->UpdateOutputInformation();
-
-  ossimKeywordlist geom_kwl;
-  m_Projection->saveState(geom_kwl);
-  
-  std::cout<<"kwl.print(std::cout):"<<std::endl;
-  geom_kwl.print(std::cout);
-  
-  ImageKeywordlist otb_kwl;
-  otb_kwl.SetKeywordlist( geom_kwl );
-
-  itk::MetaDataDictionary& dict = /*m_InputImage->GetMetaDataDictionary();*/m_Extractor->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
-
-  m_Output = /*m_InputImage;*/m_Extractor->GetOutput();
-  m_Output->UpdateOutputInformation();
-  std::cout<<" m_Output->GetImageKeywordlist()"<<std::endl;
-  m_Output->GetImageKeywordlist().Print(std::cout);
-
-
-  typedef ForwardSensorModel<double>                ForwardSensorType;
-  try
-  {
-    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-    sensor->SetImageGeometry( m_Output->GetImageKeywordlist() );
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-    std::cout<<"La sortie sera invalide pour la raison suivante:"<<std::endl;
-    std::cout<<err<<std::endl;
-  }
-
-
-  m_OutputChanged = true;
-  this->NotifyAll();
+  if(m_ProjectionType == RPC)
+    {
+      if( m_RpcModel == NULL )
+	return;
+    
+      ossimKeywordlist geom_kwl;
+      m_RpcModel->updateModel();
+      m_RpcModel->saveState(geom_kwl);
+      
+      ImageKeywordlist otb_kwl;
+      otb_kwl.SetKeywordlist( geom_kwl );
+      
+      itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
+      itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
+ 
+      m_Output = m_InputImage;
+      m_Output->UpdateOutputInformation();
+      
+      m_OutputChanged = true;
+      this->NotifyAll();
+    }
 }
 
 }// namespace otb
