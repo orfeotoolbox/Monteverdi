@@ -39,6 +39,9 @@ See OTBCopyright.txt for details.
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
 
+// Overlay result display
+#include "itkCastImageFilter.h"
+
 namespace otb
 {
 /// Constructor
@@ -57,7 +60,8 @@ SupervisedClassificationAppli
 
   m_ImageViewer               = ImageViewerType::New();
   m_OutputVector              = VectorDataType::New();
-  m_Output                    = OverlayImageType::New();
+  //m_Output                    = OverlayImageType::New();
+  m_Output                    = OutputImageType::New();
   m_Estimator                 = EstimatorType::New();
   m_ClassificationFilter      = ClassificationFilterType::New();
   m_ChangeLabelFilter         = ChangeLabelFilterType::New();
@@ -366,7 +370,7 @@ SupervisedClassificationAppli
     document->SetNodeId("polygon");
     DataNodePointerType folder = DataNodeType::New();
     folder->SetNodeType(FOLDER);
-
+    
     DataTreePointerType tree = vectorData->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
 
@@ -511,7 +515,7 @@ void
 SupervisedClassificationAppli
 ::SaveClassifAsVectorData()
 {
-  this->SetupClassification();
+  //this->SetupClassification();
 
   m_VectorizationFilter->Update();
 
@@ -1725,7 +1729,7 @@ SupervisedClassificationAppli
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
   m_Estimator->SetNumberOfClasses(m_ClassesMap.size());
   m_Estimator->Update();
-
+  
   m_Model = m_Estimator->GetModel();
 
 
@@ -1734,6 +1738,9 @@ SupervisedClassificationAppli
   bSaveSVMModel->activate();
   bDisplay->activate();
   bValidate->activate();
+
+  // Launch the classification
+  this->SetupClassification();
 }
 
 /**
@@ -1869,10 +1876,16 @@ SupervisedClassificationAppli
 ::ShowResults()
 {
   m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
-
+  
+  // Cast for result viewer display
+  typedef itk::CastImageFilter<OutputImageType, OverlayImageType>       CastFilterType;
+  CastFilterType::Pointer castFilter = CastFilterType::New();
+  castFilter->SetInput(m_ChangeLabelFilter->GetOutput());
+  castFilter->UpdateOutputInformation();
+  
   m_ResultViewer = ImageViewerType::New();
   m_ResultViewer->SetImage(m_InputImage);
-  m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
+  m_ResultViewer->SetImageOverlay( castFilter->GetOutput()  );
   m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
   m_ResultViewer->SetShowClass(true);
   m_ResultViewer->SetClassesMap(m_ClassesMap);
@@ -1929,7 +1942,7 @@ SupervisedClassificationAppli
   }
   else
   {
-    this->SetupClassification();
+    //this->SetupClassification();
     this->ShowResults();
   }
 }
