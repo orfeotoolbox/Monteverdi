@@ -634,15 +634,15 @@ void MonteverdiModel::GetGraphvizDotFile (const std::string & fname)
 //   otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
 //   otb::GraphOutEdgeIterator<ConnectionGraphType> outEdgeIt(m_ConnectionGraph,vertexIt);
   
-  const boost::property_map<ConnectionGraphType, boost::vertex_attribute_t>::type& vertAttr = boost::get(boost::vertex_attribute, m_ConnectionGraph->GetGraphContainer());
-  const boost::property_map<ConnectionGraphType, boost::edge_attribute_t>::type& edgeAttr = boost::get(boost::edge_attribute, m_ConnectionGraph->GetGraphContainer());
-
-  boost::dynamic_properties dp;
-  dp.property("Operation", edgeAttr );
-  dp.property("Module", vertAttr );
+//   const boost::property_map<ConnectionGraphType, boost::vertex_attribute_t>::type& vertAttr = boost::get(boost::vertex_attribute, m_ConnectionGraph->GetGraphContainer());
+//   const boost::property_map<ConnectionGraphType, boost::edge_attribute_t>::type& edgeAttr = boost::get(boost::edge_attribute, m_ConnectionGraph->GetGraphContainer());
+// 
+//   boost::dynamic_properties dp;
+//   dp.property("Operation", edgeAttr );
+//   dp.property("Module", vertAttr );
   std::ofstream ofs( fname.c_str() );
 
-  boost::write_graphviz(ofs, m_ConnectionGraph->GetGraphContainer(), dp);  
+  boost::write_graphviz(ofs, m_ConnectionGraph->GetGraphContainer()/*, dp*/);  
 }
 
 
