@@ -27,10 +27,13 @@
 #include "otbImage.h"
 #include "projection/ossimBilinearProjection.h"
 #include "projection/ossimRpcProjection.h"
+#include "projection/ossimRpcModel.h"
 #include "projection/ossimProjection.h"
+#include "projection/ossimSensorModel.h"
+
 #include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
-#include "otbMultiChannelExtractROI.h"
+
 
 //Visu
 #include "otbImageLayerRenderingModel.h"
@@ -98,8 +101,6 @@ public:
   typedef PointSetType::PointType   PointType;
   typedef itk::Point<double,2>      OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
-
-  typedef MultiChannelExtractROI<double, double> ExtractorType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -217,6 +218,12 @@ private:
   VectorImagePointerType m_Output;
   /** Projection */
   ossimProjection * m_Projection;
+  ///*ossimSensorModel*/ ossimRpcModel * m_Projection;
+  ossimRpcProjection * m_RpcProjection;
+  ossimRpcModel * m_RpcModel;
+  
+
+
   bool m_OutputChanged;
   /** DEM directory path*/
   std::string m_DEMPath;
@@ -240,8 +247,6 @@ private:
   ProjectionEnumType m_ProjectionType;
   /** Ground error projection */
   double m_GroundError;
-  /** Extract ROI */
-  ExtractorType::Pointer m_Extractor;
 };
 
 }//end namespace otb

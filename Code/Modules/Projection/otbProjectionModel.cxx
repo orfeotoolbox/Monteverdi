@@ -338,7 +338,7 @@ void ProjectionModel
          up = i;
        }
     }
- //  // size image in carto coordinate :
+//   // size image in carto coordinate :
 //   double sizeXcarto =  maxX-minX;
 //   // - because of the difference of origin for Y (image vs. carto)
 //   double sizeYcarto =  -(maxY-minY);
@@ -453,12 +453,13 @@ ProjectionModel
   m_Output = m_PerBander->GetOutput();
   
   m_Output->UpdateOutputInformation();
-
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary & dict = m_Output->GetMetaDataDictionary();
   std::string projectionRef = m_Transform->GetOutputProjectionRef();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
-
+  m_Output->SetMetaDataDictionary(dict);
+  m_Output->UpdateOutputInformation();
+  
   m_OutputChanged = true;
   this->NotifyAll();
 }

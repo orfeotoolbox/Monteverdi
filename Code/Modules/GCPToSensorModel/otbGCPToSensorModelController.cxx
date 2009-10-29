@@ -112,11 +112,11 @@ GCPToSensorModelController
 
 void
 GCPToSensorModelController
-::AddPoints( float x, float y, float lat, float lon )
+::AddPoints( float x, float y, float lon, float lat )
 {
   ContinuousIndexType id1, id2;
   id1[0] = x; id1[1] = y;
-  id2[0] = lat; id2[1] = lon;
+  id2[0] = lon; id2[1] = lat;
 
   if( !m_Model->GetInputImage()->GetLargestPossibleRegion().IsInside(id1) )
     {
@@ -131,7 +131,7 @@ GCPToSensorModelController
       m_Model->AddIndexesToList( id1, id2, static_cast<double>(m_View->vElev->value()) );
       m_Model->ComputeTransform();
       double height = 0.;
-      if(m_Model->GetProjectionType() == ModelType::RPC)
+      if( m_Model->GetProjectionType() == ModelType::RPC )
        {
          height = m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 );
          if(m_Model->GetElevMgt() == ModelType::DEM)
@@ -213,7 +213,6 @@ GCPToSensorModelController
     }
   catch (itk::ExceptionObject & err)
     {
-      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }
@@ -280,7 +279,6 @@ GCPToSensorModelController
     }
   catch (itk::ExceptionObject & err)
     {
-      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }
@@ -321,7 +319,6 @@ GCPToSensorModelController
     }
   catch (itk::ExceptionObject & err)
     {
-      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }
@@ -350,7 +347,6 @@ GCPToSensorModelController
     }
   catch (itk::ExceptionObject & err)
     {
-      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }

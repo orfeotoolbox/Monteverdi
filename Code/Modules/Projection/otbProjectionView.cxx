@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbProjectionModule.h"
@@ -41,6 +41,7 @@ See OTBCopyright.txt for details.
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbBSplineInterpolateImageFunction.h"
 #include "otbMsgReporter.h"
+#include "otbUtmMapProjection.h"
 
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
@@ -103,6 +104,8 @@ ProjectionView
   std::string  inputProjRef = m_Controller->GetModel()->GetInputImage()->GetProjectionRef();
   
   // If the Projection is not empty : Map Projection
+  OGRSpatialReference oSRS;
+  
   // Else perhaps a model sensor
   if(!inputProjRef.empty())
   {
@@ -111,7 +114,6 @@ ProjectionView
     strcpy(inputProjchar,inputProjRef.c_str());
     
     // Import OGRSpatial Reference object from projectionRef
-    OGRSpatialReference oSRS;
     oSRS.importFromWkt(&inputProjchar);
 
     // Get the value of the node PROJECTION
@@ -139,30 +141,25 @@ ProjectionView
               iLambert2->hide();
               iTRANSMERCATOR->hide();
            
-              // Get the number of the zone
-              int zone = oSRS.GetUTMZone();
-              itk::OStringStream oss;
-              oss<<zone;
-              // Fill the UTM Parameters in the GUI
-              iUTMZone->value(oss.str().c_str());
+              // Get the number of the utm zone
+	      int north = 0;
+              int zone = oSRS.GetUTMZone(&north);
               
-              // North Or South Hemisphere : Value filled in the falseNorthing Parameter
-              double false_northing = 0.;
-              if(this->FindParameter(oSRS,"false_northing",&false_northing))
-                {
-
-                  if(false_northing == 0.) // North Hemisphere
-                    {
-                     iUTMNorth->value(1);
-                     iUTMSouth->value(0);
-                     
-                    }
-                  else
-                    {
-                     iUTMNorth->value(0);
-                     iUTMSouth->value(1);
-                    }
-                }
+	      // Fill the UTM Parameters in the GUI
+	      itk::OStringStream oss;
+              oss<<zone;
+              iUTMZone->value(oss.str().c_str());
+	      
+	      if(north)
+		{
+		  iUTMNorth->value(1);
+		  iUTMSouth->value(0);
+		}
+	      else
+		{
+		  iUTMNorth->value(0);
+		  iUTMSouth->value(1);
+		}
              }
            else
              {
@@ -214,11 +211,11 @@ ProjectionView
       OGR_SRSNode*  curChild = node->GetChild(i);
       int res      = curChild->FindChild(inParam);
       if(res == 0)
-       {
-         // scale_factor parameter found
+	{
+	  // scale_factor parameter found
          *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
          return true;
-       }
+	}
     }
   return false;
 }
@@ -230,34 +227,32 @@ void
 ProjectionView
 ::Show()
 {
-  // Notify the controller that the GUI is going to be shown
-  // Note that call is useful for transform initialization and paramters initiaization
-  // Get the projection initial parameters
-  
-  this->RetrieveInputProjection();
-
-  int utmZone = atoi(guiUTMZone->value());
-  bool north = guiUTMNorth->value();
-  m_Controller->UpdateUTMTransform(utmZone,north);
-  
   try
   {
+    // Notify the controller that the GUI is going to be shown
+    // Note that call is useful for transform initialization and paramters initiaization
+    // Get the projection initial parameters
+    this->RetrieveInputProjection();
+    // Default : utm is the output projection proposed
+    this->UpdateUTMTransform();
+    // Edit the GUI following the projection computed when UpdateUTMTransform Called
     this->InitializeAction();
+    
     // test if the good parameters are available
     // int resCheckImageParameters = this->CheckImageParameters();
     int resCheckImageParameters = 0;
     
     if (resCheckImageParameters == 1)
-      {
-       itkExceptionMacro(<<"Invalid image parameters");
-      }
+    {
+      itkExceptionMacro(<<"Invalid image parameters");
+    }
     
     guiMainWindow->show();
   }
   catch (itk::ExceptionObject & err)
-    {
-      MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
 }
 
 /**
@@ -508,7 +503,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
         BlackmanType::Pointer interp = BlackmanType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()) );
-       interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -518,7 +513,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
         CosineType::Pointer interp = CosineType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-       interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -527,7 +522,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
         GaussianType::Pointer interp = GaussianType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-       interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -604,10 +599,8 @@ ProjectionView::InitializeAction()
   // From index to Physical Point
   m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index,middlePoint);
   
-  // Transform to geo and to Choosen projection
-  //outputPoint = rsTransform->TransformPoint(middlePoint);
+  // Transform to geo projection
   geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
-  outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
   
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -619,10 +612,34 @@ ProjectionView::InitializeAction()
   oss<<geoPoint[1];
   guiLatSelection->value(oss.str().c_str());
 
-  // Update map parameters
-  guiUTMZone->value("31");
-  guiUTMNorth->value(1);
-  guiUTMSouth->value(0);
+  // Update map parameters if inputTransform known
+  if(!m_InputProjectionUnknown)
+  {
+    // Get the utm Zone && hemisphere  from a long,lat point in the image
+    typedef UtmMapProjection<otb::FORWARD>              utmMapProjectionType;
+    utmMapProjectionType::Pointer    utmProjection  =   utmMapProjectionType::New();
+    int zone = utmProjection->GetZoneFromGeoPoint(geoPoint);
+    oss.str("");
+    oss<<zone;
+    guiUTMZone->value(oss.str().c_str());
+    if ( geoPoint[1] >= 0  )
+      {
+	guiUTMNorth->value(1);
+	guiUTMSouth->value(0);
+      }
+    else
+      {
+	guiUTMSouth->value(1);
+	guiUTMNorth->value(0);
+      }
+    this->UpdateUTMTransform();
+    // End of filling the utm parameters
+  }
+  
+  // Transform middle point to carto projection : it is done here cause we wait for the  
+  // update of the transform following the utm zone found
+  outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+
   oss.str("");
   oss<<outputPoint[0];
   guiUTMEastSelection->value(oss.str().c_str());
@@ -771,4 +788,3 @@ switch (this->GetMapType())
 }
 
 } // End namespace otb
-

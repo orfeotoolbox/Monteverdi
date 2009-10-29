@@ -47,6 +47,9 @@ See OTBCopyright.txt for details.
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 
+// Overlay result display
+#include "itkCastImageFilter.h"
+
 namespace otb
 {
 /** \class SupervisedClassificationAppli
@@ -76,8 +79,10 @@ public:
   typedef unsigned short LabeledPixelType;
   typedef unsigned char  ColorPixelType;
 
+  typedef VectorImage<InputPixelType,2 >                                 OutputImageType;
+
   /// Image widget
-  typedef ClassificationViewer<InputPixelType,LabeledPixelType>                   ImageViewerType;
+  typedef ClassificationViewer<InputPixelType,LabeledPixelType>          ImageViewerType;
   typedef ImageViewerType::Pointer                                       ImageViewerPointerType;
   typedef ImageViewerType::FormListType                                  FormListType;
   typedef ImageViewerType::PolygonType                                   PolygonType;
@@ -114,7 +119,7 @@ public:
   typedef itk::FixedArray<LabeledPixelType,1>                                     TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType>                         TrainingListSampleType;
   typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType> EstimatorType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,OverlayImageType>          ChangeLabelFilterType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType,OutputImageType/*OverlayImageType*/>          ChangeLabelFilterType;
   typedef otb::PersistentVectorizationImageFilter<LabeledImageType,PolygonType>   VectorizationFilterType;
   typedef EstimatorType::Pointer                                         EstimatorPointerType;
   typedef ClassificationFilterType::Pointer                              ClassificationFilterPointerType;
@@ -144,7 +149,8 @@ public:
   itkGetObjectMacro(InputImage,ImageType);
 
   itkSetStringMacro(ImageFileName);
-  itkGetMacro(Output,OverlayImageType::Pointer);
+  //itkGetMacro(Output,OverlayImageType::Pointer);
+  itkGetMacro(Output,OutputImageType::Pointer);
   itkSetStringMacro(ModelFileName);
   itkSetStringMacro(ROIsImageFileName);
 
@@ -247,7 +253,7 @@ private:
   /// input image
   ImageType::Pointer           m_InputImage;
   /// Output Classified image
-  OverlayImagePointerType      m_Output;
+  /*OverlayImagePointerType*/OutputImageType::Pointer      m_Output;
   /// Model filename
   std::string m_ModelFileName;
   /// Training ROIs filename

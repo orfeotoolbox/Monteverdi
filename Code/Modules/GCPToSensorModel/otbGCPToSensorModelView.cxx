@@ -106,6 +106,11 @@ GCPToSensorModelView
  
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
+
+  // Disable Bilinear choice possibility
+  cProjType->value(1);
+  cProjType->do_callback();
+  cProjType->hide();
 }
 
 void
@@ -126,7 +131,7 @@ GCPToSensorModelView
   float y = static_cast<float>(vY->value());
   float lat = static_cast<float>(vLat->value());
   float lon = static_cast<float>(vLong->value());
-  m_Controller->AddPoints( x, y, lat, lon);
+  m_Controller->AddPoints( x, y, lon, lat);
 }
 
 void
