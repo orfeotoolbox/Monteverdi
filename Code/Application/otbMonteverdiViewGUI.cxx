@@ -302,7 +302,11 @@ MonteverdiViewGUI
   if( n->parent()->is_root() )
     {
       m_Tree->GetModuleMenu()->Reset();
-          m_Tree->GetModuleMenu()->LaunchModuleMenu();
+      
+      std::string moduleId   = n->label();
+      
+      bool canShowModule = m_MonteverdiModel->GetModuleMap()[moduleId]->CanShow();
+      m_Tree->GetModuleMenu()->LaunchModuleMenu( canShowModule );
       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
        {
          gRenameOld->value(label);
@@ -311,11 +315,10 @@ MonteverdiViewGUI
        }
 
       //Show the module with current parameters
-      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE )
+       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE && canShowModule)
         {
           //Call controller?
-            std::string moduleId   = n->label();
-           m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
+          m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
         }
     }
   // node is a output

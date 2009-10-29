@@ -125,6 +125,8 @@ public:
   /** Show the Module GUI */
   virtual void Show(){};
   
+  /** Show the Module GUI */
+  virtual bool CanShow(){return false;};
   /** Hide the Module GUI */
   virtual void Hide(){};
   

@@ -123,6 +123,8 @@ public:
   /** Set the input Image*/
   itkSetObjectMacro(InputImage,ImageType);
   
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
 protected:
   /** Constructor */
   ThresholdModule();

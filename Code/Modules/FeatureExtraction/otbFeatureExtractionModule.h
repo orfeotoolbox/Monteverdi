@@ -60,6 +60,9 @@ public:
   typedef FeatureExtractionModel::InputImageType InputImageType;
 
   /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
   virtual void Show()
   {
     this->Run();

@@ -63,7 +63,14 @@ public:
   typedef MultiChannelExtractROI< InternalPixelType, InternalPixelType >  VectorImageExtractROIFilterType;
   /// Mono channel Extract ROI filter
   typedef ExtractROI< InternalPixelType, InternalPixelType >  ImageExtractROIFilterType;
-
+  
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    this->Run();
+  };
 protected:
   /** Constructor */
   ExtractROIModule();

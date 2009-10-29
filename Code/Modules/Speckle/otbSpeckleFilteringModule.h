@@ -53,7 +53,15 @@ public:
 
   // Input typedef
   typedef SpeckleFilteringModel::InputImageType InputImageType;
-
+  
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    this->Run();
+  };
 protected:
   /** Constructor */
   SpeckleFilteringModule();
