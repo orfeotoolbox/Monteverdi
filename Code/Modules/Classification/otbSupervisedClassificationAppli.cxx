@@ -515,7 +515,7 @@ void
 SupervisedClassificationAppli
 ::SaveClassifAsVectorData()
 {
-  this->SetupClassification();
+  //this->SetupClassification();
 
   m_VectorizationFilter->Update();
 
@@ -1729,7 +1729,7 @@ SupervisedClassificationAppli
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
   m_Estimator->SetNumberOfClasses(m_ClassesMap.size());
   m_Estimator->Update();
-
+  
   m_Model = m_Estimator->GetModel();
 
 
@@ -1738,6 +1738,9 @@ SupervisedClassificationAppli
   bSaveSVMModel->activate();
   bDisplay->activate();
   bValidate->activate();
+
+  // Launch the classification
+  this->SetupClassification();
 }
 
 /**
@@ -1939,7 +1942,7 @@ SupervisedClassificationAppli
   }
   else
   {
-    this->SetupClassification();
+    //this->SetupClassification();
     this->ShowResults();
   }
 }
