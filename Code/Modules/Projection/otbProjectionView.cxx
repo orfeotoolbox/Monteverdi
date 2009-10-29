@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbProjectionModule.h"
@@ -211,11 +211,11 @@ ProjectionView
       OGR_SRSNode*  curChild = node->GetChild(i);
       int res      = curChild->FindChild(inParam);
       if(res == 0)
-       {
-         // scale_factor parameter found
+	{
+	  // scale_factor parameter found
          *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
          return true;
-       }
+	}
     }
   return false;
 }
@@ -788,4 +788,3 @@ switch (this->GetMapType())
 }
 
 } // End namespace otb
-
