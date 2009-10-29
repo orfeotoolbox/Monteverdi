@@ -110,7 +110,7 @@ class ITK_EXPORT MonteverdiModel
   
   /** Get Connection Graph*/
   itkGetConstObjectMacro(ConnectionGraph,ConnectionGraphType);
-  
+
   /** Create a module according to its key. If the key is not a
   registered module, throws an exception */
   void CreateModuleByKey(const std::string & key);
@@ -177,6 +177,8 @@ class ITK_EXPORT MonteverdiModel
     return m_ModuleMap;
   }
   virtual void Close();
+  
+  void GetGraphvizDotFile (const std::string & fname);
 
 protected:
 

@@ -425,7 +425,6 @@ MonteverdiViewGUI
   OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
   OutputDataDescriptorMapType::const_iterator it;
 
-  std::cout << "Map " << lDataMap.size() <<  std::endl;
   // we look for the good node in the tree to add leaves
   FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
   if( !n )

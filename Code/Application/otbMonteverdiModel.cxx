@@ -24,6 +24,8 @@
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
+#include <boost/graph/graphviz.hpp>
+// #include <boost/graph/iteration_macros.hpp>
 
 namespace otb
 {
@@ -625,6 +627,25 @@ MonteverdiModel::GetInstance()
   }
   return Instance;
 }
+
+void MonteverdiModel::GetGraphvizDotFile (const std::string & fname)
+{ 
+  // Look for the old instance id in the graph
+//   otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
+//   otb::GraphOutEdgeIterator<ConnectionGraphType> outEdgeIt(m_ConnectionGraph,vertexIt);
+  
+  const boost::property_map<ConnectionGraphType, boost::vertex_attribute_t>::type& vertAttr = boost::get(boost::vertex_attribute, m_ConnectionGraph->GetGraphContainer());
+  const boost::property_map<ConnectionGraphType, boost::edge_attribute_t>::type& edgeAttr = boost::get(boost::edge_attribute, m_ConnectionGraph->GetGraphContainer());
+
+  boost::dynamic_properties dp;
+  dp.property("Operation", edgeAttr );
+  dp.property("Module", vertAttr );
+  std::ofstream ofs( fname.c_str() );
+
+  boost::write_graphviz(ofs, m_ConnectionGraph->GetGraphContainer(), dp);  
+}
+
+
 }// End namespace
 
 #endif

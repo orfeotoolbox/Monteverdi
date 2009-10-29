@@ -29,4 +29,5 @@ void RegisterTests()
   REGISTER_TEST(otbMonteverdiApplicationNew);
   REGISTER_TEST(otbMonteverdiApplicationTest);
   REGISTER_TEST(otbMonteverdiApplicationReaderViewer);
+  REGISTER_TEST(otbMonteverdiApplicationGraphviz);
 }
