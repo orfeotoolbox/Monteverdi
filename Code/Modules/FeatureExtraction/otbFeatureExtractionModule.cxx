@@ -89,7 +89,7 @@ void FeatureExtractionModule::Notify(const std::string & event)
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
     // Once module is closed, it is no longer busy
-    this->BusyOff();
+    //this->BusyOff();
   }
   else if (event == "BusyOff")
   {

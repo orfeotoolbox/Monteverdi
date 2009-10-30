@@ -53,6 +53,8 @@ public:
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
+  void Show();
+  void Hide();
 
   /** Set the controller */
   itkSetObjectMacro(Controller,MeanShiftModuleControllerInterface);

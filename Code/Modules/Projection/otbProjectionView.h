@@ -105,10 +105,7 @@ protected:
   //
   virtual void RetrieveInputProjection();
 
-  // Quit the application
-  virtual void Quit();
-  
-  // Launch the orthorectification
+  // Launch the orthorectification & Quit the application
   virtual void OK();
   
   // Set/Get the used map projection

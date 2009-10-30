@@ -82,6 +82,21 @@ protected:
   /** The custom run command */
   virtual void Run();
 
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    m_View->Show();
+  };
+
+  /** Show the Module GUI */
+  virtual void Hide()
+  {
+    m_View->HideAll();
+  };
+
 private:
   GCPToSensorModelModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

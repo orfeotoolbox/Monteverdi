@@ -52,8 +52,21 @@ HomologousPointExtractionModuleView
 HomologousPointExtractionModuleView
 ::~HomologousPointExtractionModuleView()
 {
-  MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
+  // Remove registered visualization components from the interface
+  m_FirstImageView->GetFullWidget()->ClearGlComponents();
+  m_FirstImageView->GetScrollWidget()->ClearGlComponents();
+  m_FirstImageView->GetZoomWidget()->ClearGlComponents();
+  m_SecondImageView->GetFullWidget()->ClearGlComponents();
+  m_SecondImageView->GetScrollWidget()->ClearGlComponents();
+  m_SecondImageView->GetZoomWidget()->ClearGlComponents();
+  //this->RedrawWidgets();
+
+  gFull1->remove(m_FirstImageView->GetFullWidget());
+  gScroll1->remove(m_FirstImageView->GetScrollWidget());
+  gZoom1->remove(m_FirstImageView->GetZoomWidget());
+  gFull2->remove(m_SecondImageView->GetFullWidget());
+  gScroll2->remove(m_SecondImageView->GetScrollWidget());
+  gZoom2->remove(m_SecondImageView->GetZoomWidget());
 }
 
 void
@@ -81,12 +94,35 @@ HomologousPointExtractionModuleView
     }
   // Build the fltk code
   this->CreateGUI();
-  //wMainWindow->size_range(400, 300, wMainWindow->w(), wMainWindow->h(), 0, 0);
-
 
   // Register controllers
   m_FirstImageView->SetController(m_FirstWidgetsController);
   m_SecondImageView->SetController(m_SecondWidgetsController);
+
+  this->Show();
+
+  // Link pixel descriptors (not do before because widgets have to be instanciated)
+  m_Controller->LinkPixelDescriptors();
+}
+
+void
+HomologousPointExtractionModuleView
+::RedrawWidgets()
+{
+  m_FirstImageView->GetFullWidget()->redraw();
+  m_FirstImageView->GetScrollWidget()->redraw();
+  m_FirstImageView->GetZoomWidget()->redraw();
+
+  m_SecondImageView->GetFullWidget()->redraw();
+  m_SecondImageView->GetScrollWidget()->redraw();
+  m_SecondImageView->GetZoomWidget()->redraw();
+}
+
+void
+HomologousPointExtractionModuleView
+::Show()
+{
+  wMainWindow->show();
 
   // Add registered visualization components from the interface
   gFull1->add(m_FirstImageView->GetFullWidget());
@@ -112,8 +148,7 @@ HomologousPointExtractionModuleView
   m_SecondImageView->GetScrollWidget()->resize(gScroll2->x(),gScroll2->y(),gScroll2->w(),gScroll2->h());
   m_SecondImageView->GetZoomWidget()->resize(gZoom2->x(),gZoom2->y(),gZoom2->w(),gZoom2->h());
 
-  // Show and refresh the interface
-  this->wMainWindow->show();
+
 
   m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
@@ -135,22 +170,6 @@ HomologousPointExtractionModuleView
   m_SecondImageView->GetFullWidget()->show();
   m_SecondImageView->GetScrollWidget()->show();
   m_SecondImageView->GetZoomWidget()->show();
-
-  // Link pixel descriptors (not do before because widgets have to be instanciated)
-  m_Controller->LinkPixelDescriptors();
-}
-
-void
-HomologousPointExtractionModuleView
-::RedrawWidgets()
-{
-  m_FirstImageView->GetFullWidget()->redraw();
-  m_FirstImageView->GetScrollWidget()->redraw();
-  m_FirstImageView->GetZoomWidget()->redraw();
-
-  m_SecondImageView->GetFullWidget()->redraw();
-  m_SecondImageView->GetScrollWidget()->redraw();
-  m_SecondImageView->GetZoomWidget()->redraw();
 }
 
 
@@ -400,23 +419,6 @@ void
 HomologousPointExtractionModuleView
 ::HideAll()
 {
-  // Remove registered visualization components from the interface
-  m_FirstImageView->GetFullWidget()->ClearGlComponents();
-  m_FirstImageView->GetScrollWidget()->ClearGlComponents();
-  m_FirstImageView->GetZoomWidget()->ClearGlComponents();
-  m_SecondImageView->GetFullWidget()->ClearGlComponents();
-  m_SecondImageView->GetScrollWidget()->ClearGlComponents();
-  m_SecondImageView->GetZoomWidget()->ClearGlComponents();
-  this->RedrawWidgets();
-
-  gFull1->remove(m_FirstImageView->GetFullWidget());
-  gScroll1->remove(m_FirstImageView->GetScrollWidget());
-  gZoom1->remove(m_FirstImageView->GetZoomWidget());
-  gFull2->remove(m_SecondImageView->GetFullWidget());
-  gScroll2->remove(m_SecondImageView->GetScrollWidget());
-  gZoom2->remove(m_SecondImageView->GetZoomWidget());
-
-  //MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
 

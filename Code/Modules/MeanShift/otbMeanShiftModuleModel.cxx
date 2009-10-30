@@ -205,57 +205,49 @@ void
 MeanShiftModuleModel
 ::RunSegmentation()
 {
-
   if(  m_IsImageReady )
     {
-    m_IsUpdating = true;
-    // Generate the layer
-
-    m_MeanShift->SetSpatialRadius(m_SpatialRadius);
-    m_MeanShift->SetRangeRadius(m_SpectralRadius);
-    m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
+      m_IsUpdating = true;
+      // Generate the layer
+      
+      m_MeanShift->SetSpatialRadius(m_SpatialRadius);
+      m_MeanShift->SetRangeRadius(m_SpectralRadius);
+      m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
+      
+      m_ClustersGenerator->SetImage(m_MeanShift->GetClusteredOutput());
+      m_ClustersGenerator->GenerateQuicklookOff();
+      m_ClustersGenerator->GenerateLayer();
+      
+      std::vector<unsigned int> channels;
+      if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
+	{
+	  channels.push_back(0);
+	  channels.push_back(1);
+	  channels.push_back(2);
+	}
+      else
+	{
+	  channels.push_back(2);
+	  channels.push_back(1);
+	  channels.push_back(0);
+	}
+      
+      m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
+      
+      
+      m_ClustersGenerator->GetLayer()->SetName("Segmentation");
+      m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
     
-    m_ClustersGenerator->SetImage(m_MeanShift->GetClusteredOutput());
-    m_ClustersGenerator->GenerateQuicklookOff();
-    m_ClustersGenerator->GenerateLayer();
-
-    std::vector<unsigned int> channels;
-  if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
-    {
-    channels.push_back(0);
-    channels.push_back(1);
-    channels.push_back(2);
-    }
-  else
-    {
-    channels.push_back(2);
-    channels.push_back(1);
-    channels.push_back(0);
-    }
-
-  m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-
-    
-    m_ClustersGenerator->GetLayer()->SetName("Segmentation");
-    m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
-
-    m_VisualizationModel->Update();
-
-    m_OutputFilteredImage = m_MeanShift->GetOutput();
-    m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
-    m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
-
-    m_OutputFilteredImage->UpdateOutputInformation();
-    m_OutputClusteredImage->UpdateOutputInformation();
-    m_OutputLabeledImage->UpdateOutputInformation();
-
-    m_IsUpdating = false;
-//     m_OutputChanged = true;
-    
-    this->NotifyAll("OutputsUpdated");
-    }
-  
+      m_VisualizationModel->Update();
+      
+      m_MeanShift->GetOutput()->UpdateOutputInformation();
+      m_MeanShift->GetClusteredOutput()->UpdateOutputInformation();
+      m_MeanShift->GetLabeledClusteredOutput()->UpdateOutputInformation();
+      
+      m_IsUpdating = false;
+    } 
 }
+
 
 void
 MeanShiftModuleModel
@@ -288,9 +280,16 @@ MeanShiftModuleModel
 }
 
 void
-    MeanShiftModuleModel
-  ::Quit()
+MeanShiftModuleModel
+::Quit()
 {
+  m_OutputFilteredImage = m_MeanShift->GetOutput();
+  m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
+  m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
+  
+ 
+  this->NotifyAll("OutputsUpdated");
+  
   this->NotifyAll("BusyOff");
 }
 

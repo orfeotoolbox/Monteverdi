@@ -65,7 +65,7 @@ public:
   /** Show the Module GUI */
   virtual void Show()
   {
-    this->Run();
+    m_View->Show();
   };
 
 protected:

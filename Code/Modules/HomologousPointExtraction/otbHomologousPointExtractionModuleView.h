@@ -88,7 +88,8 @@ public:
   void ChangePointValue(IndexType index, unsigned int viewId );
   void AddPointsToList( IndexType id1, IndexType id2);
   void RedrawWidgets();
-  
+  void Show();  
+
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(FirstImageView,ImageViewType);
   itkGetObjectMacro(SecondImageView,ImageViewType);

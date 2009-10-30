@@ -45,8 +45,14 @@ GCPToSensorModelView
 GCPToSensorModelView
 ::~GCPToSensorModelView()
 {
-  MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
+  // Remove registered visualization components from the interface
+  m_ImageView->GetFullWidget()->ClearGlComponents();
+  m_ImageView->GetScrollWidget()->ClearGlComponents();
+  m_ImageView->GetZoomWidget()->ClearGlComponents();
+
+  gFull->remove(m_ImageView->GetFullWidget());
+  gScroll->remove(m_ImageView->GetScrollWidget());
+  gZoom->remove(m_ImageView->GetZoomWidget());
 }
 
 void
@@ -74,35 +80,10 @@ GCPToSensorModelView
   // Build the fltk code
   this->CreateGUI();
 
-
   // Register controllers
   m_ImageView->SetController(m_WidgetController);
 
-  // Add registered visualization components from the interface
-  gFull->add(m_ImageView->GetFullWidget());
-  gScroll->add(m_ImageView->GetScrollWidget());
-  gZoom->add(m_ImageView->GetZoomWidget());
-  gFull->resizable(m_ImageView->GetFullWidget());
-  gScroll->resizable(m_ImageView->GetScrollWidget());
-  gZoom->resizable(m_ImageView->GetZoomWidget());
-
-  m_ImageView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h());
-  m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
-  m_ImageView->GetZoomWidget()->resize(gZoom->x(),gZoom->y(),gZoom->w(),gZoom->h());
-
-  // Show and refresh the interface
-  this->wMainWindow->show();
-
-  m_ImageView->GetFullWidget()->AddGlComponent( m_CrossGlComponent );
-  m_ImageView->GetScrollWidget()->AddGlComponent( m_CrossGlComponent );
-  m_ImageView->GetZoomWidget()->AddGlComponent( m_CrossGlComponent );
-  m_ImageView->GetFullWidget()->AddGlComponent( m_CircleGlComponent );
-  m_ImageView->GetScrollWidget()->AddGlComponent( m_CircleGlComponent );
-  m_ImageView->GetZoomWidget()->AddGlComponent( m_CircleGlComponent );
-
-  m_ImageView->GetFullWidget()->show();
-  m_ImageView->GetScrollWidget()->show();
-  m_ImageView->GetZoomWidget()->show();
+  this->Show();
  
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
@@ -120,6 +101,36 @@ GCPToSensorModelView
   m_ImageView->GetFullWidget()->redraw();
   m_ImageView->GetScrollWidget()->redraw();
   m_ImageView->GetZoomWidget()->redraw();
+}
+
+void
+GCPToSensorModelView
+::Show()
+{
+  wMainWindow->show();
+  
+  // Add registered visualization components from the interface
+  gFull->add(m_ImageView->GetFullWidget());
+  gScroll->add(m_ImageView->GetScrollWidget());
+  gZoom->add(m_ImageView->GetZoomWidget());
+  gFull->resizable(m_ImageView->GetFullWidget());
+  gScroll->resizable(m_ImageView->GetScrollWidget());
+  gZoom->resizable(m_ImageView->GetZoomWidget());
+
+  m_ImageView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h());
+  m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
+  m_ImageView->GetZoomWidget()->resize(gZoom->x(),gZoom->y(),gZoom->w(),gZoom->h());
+
+  m_ImageView->GetFullWidget()->AddGlComponent( m_CrossGlComponent );
+  m_ImageView->GetScrollWidget()->AddGlComponent( m_CrossGlComponent );
+  m_ImageView->GetZoomWidget()->AddGlComponent( m_CrossGlComponent );
+  m_ImageView->GetFullWidget()->AddGlComponent( m_CircleGlComponent );
+  m_ImageView->GetScrollWidget()->AddGlComponent( m_CircleGlComponent );
+  m_ImageView->GetZoomWidget()->AddGlComponent( m_CircleGlComponent );
+
+  m_ImageView->GetFullWidget()->show();
+  m_ImageView->GetScrollWidget()->show();
+  m_ImageView->GetZoomWidget()->show();
 }
 
 
@@ -422,17 +433,6 @@ void
 GCPToSensorModelView
 ::HideAll()
 {
-  // Remove registered visualization components from the interface
-  m_ImageView->GetFullWidget()->ClearGlComponents();
-  m_ImageView->GetScrollWidget()->ClearGlComponents();
-  m_ImageView->GetZoomWidget()->ClearGlComponents();
-
-  this->RedrawWidgets();
-
-  gFull->remove(m_ImageView->GetFullWidget());
-  gScroll->remove(m_ImageView->GetScrollWidget());
-  gZoom->remove(m_ImageView->GetZoomWidget());
-
   wMainWindow->hide();
   wDEMWindow->hide();
 }
