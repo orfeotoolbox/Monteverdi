@@ -61,7 +61,7 @@ class ITK_EXPORT ProjectionModel
   //typedef RSTransformType::TransformType            TransformType;
   typedef TransformType::OutputPointType              OutputPointType;
 
-    /** Output */
+  /** Output */
   typedef Image<PixelType,2>                            SingleImageType;
   typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>         ResampleFilterType;
   typedef PerBandVectorImageFilter<InputImageType, InputImageType, ResampleFilterType> PerBandFilterType;

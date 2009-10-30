@@ -140,7 +140,7 @@ ProjectionView
               iUTM->show();
               iLambert2->hide();
               iTRANSMERCATOR->hide();
-           
+	      
               // Get the number of the utm zone
 	      int north = 0;
               int zone = oSRS.GetUTMZone(&north);
@@ -260,16 +260,6 @@ ProjectionView
  */
 void
 ProjectionView
-::Quit()
-{
-  guiMainWindow->hide();
-}
-
-/**
- *
- */
-void
-ProjectionView
 ::OK()
 {
   // tell the model to project the region edited in the GUI
@@ -285,6 +275,9 @@ ProjectionView
 
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
+
+  // hide the GUI
+  guiMainWindow->hide();
 }
 
 /**
@@ -531,7 +524,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
         HammingType::Pointer interp = HammingType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-       //interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -540,7 +533,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
         LanczosType::Pointer interp = LanczosType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-       //interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -549,7 +542,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
         WelchType::Pointer interp = WelchType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-       //interp->Initialize();
+	//interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -569,9 +562,7 @@ ProjectionView
     typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
     SplineType::Pointer interp = SplineType::New();
     interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()) );
-    ////interp->Initialize();
     m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-
     break;
   }
   default:

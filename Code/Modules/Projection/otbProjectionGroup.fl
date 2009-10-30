@@ -17,16 +17,11 @@ class ProjectionGroup {open
       xywh {482 183 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
-        label Ok
-        callback {OK();}
+        label {Save / Quit}
+        callback {OK();} selected
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
-      Fl_Button guiQuit {
-        label Quit
-        callback {Quit();}
-        tooltip {Quit the viewer manager} xywh {18 427 85 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
-      }
-      Fl_Tabs m_TabsMode {selected
+      Fl_Tabs m_TabsMode {
         xywh {5 9 420 410} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
@@ -439,8 +434,6 @@ SetInterpolatorType(MAP_SPLINES);}
   Function {OpenDEM()} {open return_type {virtual void}
   } {}
   Function {OK()} {open return_type {virtual void}
-  } {}
-  Function {Quit()} {open return_type {virtual void}
   } {}
   Function {SelectAction()} {open return_type {virtual void}
   } {}
