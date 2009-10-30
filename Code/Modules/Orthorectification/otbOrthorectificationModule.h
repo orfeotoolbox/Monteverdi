@@ -78,7 +78,6 @@ protected:
   /** Show the Module GUI */
   virtual void Show()
   {
-    std::cout<<"easssssssssssssssssssssssssssyyyyyyyyyyyyyyyyyyyyyy"<<std::endl;
     m_Orthorectification->guiMainWindow->show();
   };
 
