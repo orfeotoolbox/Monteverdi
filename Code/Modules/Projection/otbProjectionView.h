@@ -87,8 +87,10 @@ public:
   
   // Called before building the GUI
   virtual void InitializeAction();
-  // Call when clic an image list
+  // Initialize transform and show the GUI
   virtual void Show();
+  //  Shpw the GUI
+  virtual void ShowGUI();
 
   // Method to set the controller
   itkGetObjectMacro(Controller,ProjectionControllerInterface);
@@ -99,6 +101,9 @@ public:
     {
       m_Controller = pController;
     }
+  
+  // Hide the GUI
+  virtual void Hide();
 
 protected:
 
@@ -107,7 +112,7 @@ protected:
 
   // Launch the orthorectification & Quit the application
   virtual void OK();
-  
+    
   // Set/Get the used map projection
   void SetMapType(ProjectionMapType map);
   ProjectionMapType GetMapType();

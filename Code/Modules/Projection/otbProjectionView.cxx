@@ -247,12 +247,23 @@ ProjectionView
       itkExceptionMacro(<<"Invalid image parameters");
     }
     
-    guiMainWindow->show();
+    this->ShowGUI();
   }
   catch (itk::ExceptionObject & err)
   {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
+}
+
+
+/**
+ *
+ */
+void
+ProjectionView
+::ShowGUI()
+{
+  guiMainWindow->show();
 }
 
 /**
@@ -276,6 +287,17 @@ ProjectionView
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
 
+  // hide the GUI
+  this->Hide();
+}
+
+/**
+ *
+ */
+void
+ProjectionView
+::Hide()
+{
   // hide the GUI
   guiMainWindow->hide();
 }

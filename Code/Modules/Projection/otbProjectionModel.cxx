@@ -18,6 +18,7 @@
 #include "otbProjectionModel.h"
 #include <ogr_spatialref.h>
 
+
 namespace otb
 {
  
@@ -43,8 +44,6 @@ ProjectionModel::ProjectionModel()
 ProjectionModel::
 ~ProjectionModel()
 {}
-
-
 
 /**
  * Update the input Projection Ref
@@ -456,12 +455,15 @@ ProjectionModel
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary & dict = m_Output->GetMetaDataDictionary();
   std::string projectionRef = m_Transform->GetOutputProjectionRef();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
   m_Output->SetMetaDataDictionary(dict);
   m_Output->UpdateOutputInformation();
   
   m_OutputChanged = true;
   this->NotifyAll();
+  
+  // The SetSizeMacro doesn't recall the update on the resampler when size is changed
+  m_Resampler = ResampleFilterType::New();
 }
 
 /**
