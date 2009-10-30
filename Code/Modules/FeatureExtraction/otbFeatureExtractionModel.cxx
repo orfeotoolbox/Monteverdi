@@ -110,25 +110,26 @@ FeatureExtractionModel
 }
 
 void
-    FeatureExtractionModel
-  ::GenerateLayers()
+FeatureExtractionModel
+::GenerateLayers()
 {
   // Generate image layers
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
-
+  
   lVisuGenerator->SetImage(m_InputImage);
   lVisuGenerator->GenerateLayer();
   lVisuGenerator->GetLayer()->SetName("Image");
   // Add the layer to the model
   m_VisuModel->ClearLayers();
   m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
-
+  
   // Render
   m_VisuModel->Update();
   
   // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
+
 void
 FeatureExtractionModel
 ::SetInputImage(std::string filename)

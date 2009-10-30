@@ -85,34 +85,9 @@ FeatureExtractionViewGUI
 {
   assert(m_FeatureExtractionController.IsNotNull() && "The controller is not created");
 
-
-// Scroll
-  gScroll->add(m_VisuView->GetScrollWidget());
-  gScroll->resizable(m_VisuView->GetScrollWidget());
-  gScroll->box(FL_NO_BOX);
-  m_VisuView->GetScrollWidget()->show();
-  m_VisuView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h() );
-
-// Full
-  gFull->add(m_VisuView->GetFullWidget());
-  gFull->resizable(m_VisuView->GetFullWidget());
-  gFull->box(FL_NO_BOX);
-  m_VisuView->GetFullWidget()->show();
-  m_VisuView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h() );
-
-// Feature
-  gFeature->add(m_ResultVisuView->GetFullWidget());
-  gFeature->resizable(m_ResultVisuView->GetFullWidget());
-  gFeature->box(FL_NO_BOX);
-  m_ResultVisuView->GetFullWidget()->show();
-  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
-
   this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
-
-  gScroll->show();
-  gFull->show();
-  gFeature->show();
-
+  
+  this->Show();
 }
 
 void
@@ -391,6 +366,35 @@ FeatureExtractionViewGUI
 ::Show()
 {
   guiMainWindow->show();
+
+  // Scroll
+  gScroll->add(m_VisuView->GetScrollWidget());
+  gScroll->resizable(m_VisuView->GetScrollWidget());
+  gScroll->box(FL_NO_BOX);
+  m_VisuView->GetScrollWidget()->show();
+  m_VisuView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h() );
+
+// Full
+  gFull->add(m_VisuView->GetFullWidget());
+  gFull->resizable(m_VisuView->GetFullWidget());
+  gFull->box(FL_NO_BOX);
+  m_VisuView->GetFullWidget()->show();
+  m_VisuView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h() );
+
+// Feature
+  gFeature->add(m_ResultVisuView->GetFullWidget());
+  gFeature->resizable(m_ResultVisuView->GetFullWidget());
+  gFeature->box(FL_NO_BOX);
+  m_ResultVisuView->GetFullWidget()->show();
+  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
+
+  m_VisuView->GetScrollWidget()->redraw();
+  m_VisuView->GetFullWidget()->redraw();
+  m_ResultVisuView->GetFullWidget()->redraw();
+ 
+  gScroll->show();
+  gFull->show();
+  gFeature->show();
 }
 
 

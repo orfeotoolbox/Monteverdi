@@ -171,7 +171,20 @@ void MeanShiftModuleView::SwitchClusters()
 
 void MeanShiftModuleView::SwitchBoundaries()
 {
+}
 
+void MeanShiftModuleView::Show()
+{
+  this->wMainWindow->show();
+  
+  m_ImageView->GetFullWidget()->show();
+  m_ImageView->GetScrollWidget()->show();
+}
+
+
+void MeanShiftModuleView::Hide()
+{
+  this->wMainWindow->hide();
 }
 
 

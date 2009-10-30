@@ -603,7 +603,14 @@ FeatureExtractionController
 
 void FeatureExtractionController::Quit()
 {
-  m_Model->Quit();
+  try
+  {
+    m_Model->Quit();
+  }
+  catch (itk::ExceptionObject & err)
+    {
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
+  } 
 }
 
 

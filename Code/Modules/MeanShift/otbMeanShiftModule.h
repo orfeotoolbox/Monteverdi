@@ -86,6 +86,22 @@ protected:
 
   /** The custom run command */
   virtual void Run();
+  
+    /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+
+  /** Show the Module GUI */
+  virtual void Show()
+    {
+      m_View->Show();
+    };
+
+  /** Hide the Module GUI */
+  virtual void Hide()
+    {
+      m_View->Hide();
+    };
+
 
 private:
   MeanShiftModule(const Self&); //purposely not implemented
