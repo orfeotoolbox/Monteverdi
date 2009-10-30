@@ -72,6 +72,22 @@ protected:
   /** The custom run command */
   virtual void Run();
 
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    m_Orthorectification->guiMainWindow->show();
+  };
+
+  /** Show the Module GUI */
+  virtual void Hide()
+  {
+    m_Orthorectification->guiShowDEM->hide();
+    m_Orthorectification->guiMainWindow->hide();
+  };
+
   /** Notify Monteverdi application that orthorectification has a result */
   void Notify();
 
