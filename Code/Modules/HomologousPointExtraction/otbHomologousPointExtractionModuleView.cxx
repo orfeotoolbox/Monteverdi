@@ -94,7 +94,10 @@ HomologousPointExtractionModuleView
     }
   // Build the fltk code
   this->CreateGUI();
-  //wMainWindow->size_range(400, 300, wMainWindow->w(), wMainWindow->h(), 0, 0);
+
+  // Register controllers
+  m_FirstImageView->SetController(m_FirstWidgetsController);
+  m_SecondImageView->SetController(m_SecondWidgetsController);
 
   this->Show();
 
@@ -120,10 +123,6 @@ HomologousPointExtractionModuleView
 ::Show()
 {
   wMainWindow->show();
-
-  // Register controllers
-  m_FirstImageView->SetController(m_FirstWidgetsController);
-  m_SecondImageView->SetController(m_SecondWidgetsController);
 
   // Add registered visualization components from the interface
   gFull1->add(m_FirstImageView->GetFullWidget());
@@ -420,23 +419,6 @@ void
 HomologousPointExtractionModuleView
 ::HideAll()
 {
-//   // Remove registered visualization components from the interface
-//   m_FirstImageView->GetFullWidget()->ClearGlComponents();
-//   m_FirstImageView->GetScrollWidget()->ClearGlComponents();
-//   m_FirstImageView->GetZoomWidget()->ClearGlComponents();
-//   m_SecondImageView->GetFullWidget()->ClearGlComponents();
-//   m_SecondImageView->GetScrollWidget()->ClearGlComponents();
-//   m_SecondImageView->GetZoomWidget()->ClearGlComponents();
-//   this->RedrawWidgets();
-
-//   gFull1->remove(m_FirstImageView->GetFullWidget());
-//   gScroll1->remove(m_FirstImageView->GetScrollWidget());
-//   gZoom1->remove(m_FirstImageView->GetZoomWidget());
-//   gFull2->remove(m_SecondImageView->GetFullWidget());
-//   gScroll2->remove(m_SecondImageView->GetScrollWidget());
-//   gZoom2->remove(m_SecondImageView->GetZoomWidget());
-
-  //MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
 

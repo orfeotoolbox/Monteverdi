@@ -88,7 +88,7 @@ public:
   void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height );
   void RedrawWidgets();
   void UpdatePointList();
-
+  void Show();
   
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(ImageView,ImageViewType);

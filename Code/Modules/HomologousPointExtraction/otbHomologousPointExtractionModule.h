@@ -94,7 +94,7 @@ protected:
   /** Show the Module GUI */
   virtual void Hide()
   {
-    m_View->wMainWindow->hide();
+    m_View->HideAll();
   };
 
 private:
