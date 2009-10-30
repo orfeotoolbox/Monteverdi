@@ -149,24 +149,28 @@ Orthorectification
 {
   try
   {
-    int resCheckImageParameters = this->CheckImageParameters();
-    if (resCheckImageParameters == 1)
-    {
-    itkExceptionMacro(<<"Invalid image parameters");
-    }
+     int resCheckImageParameters = this->CheckImageParameters();
+     if (resCheckImageParameters == 1)
+     {
+       itkExceptionMacro(<<"Invalid image parameters");
+     }
 
     this->ComputeTileNumber();
     int resCheckMapParameters = this->CheckMapParameters();
+    
+     if (resCheckMapParameters == 1)
+     {
+       itkExceptionMacro(<<"Invalid map parameters");
+     }
 
-    if (resCheckMapParameters == 1)
-    {
-    itkExceptionMacro(<<"Invalid map parameters");
-    }
 
+    //m_HasOutput = true done in GenericCreateOutput
+    this->NotifyAll();
+    m_HasOutput = false;
+    
+    guiShowDEM->hide();
     guiMainWindow->hide();
 
-    m_HasOutput = true;
-    this->NotifyAll();
   }
   catch (itk::ExceptionObject & err)
   {
@@ -859,7 +863,7 @@ Orthorectification
   {
     return res;
   }
-  this->SelectAction();
+
   return res;
 
 }
@@ -909,8 +913,10 @@ Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(image);
 
+
   m_Output = perBandFilter->GetOutput();
   m_PerBandFilter = perBandFilter.GetPointer();
+  m_HasOutput = true;
 
   return 0;
 }
