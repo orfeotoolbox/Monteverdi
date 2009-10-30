@@ -108,7 +108,7 @@ const std::vector<std::string> MonteverdiModel::GetAvailableModuleInstanceIds() 
 {
   std::vector<std::string> availableModulesInstances;
   ModuleMapType::const_iterator mcIt;
-  for(mcIt=m_ModuleMap.begin(); mcIt!=m_ModuleMap.end(); mcIt++)
+  for( mcIt=m_ModuleMap.begin(); mcIt!=m_ModuleMap.end(); mcIt++ )
     {
     availableModulesInstances.push_back(mcIt->first);
     }
