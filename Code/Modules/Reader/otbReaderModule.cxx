@@ -103,7 +103,7 @@ void ReaderModule::Analyse()
        break;
       }
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject)
     {
     // Silent catch
     }
@@ -118,7 +118,7 @@ void ReaderModule::Analyse()
       vType->value(3);
       typeFound = true;
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject)
       {
       // Silent catch
       vType->value(0);
