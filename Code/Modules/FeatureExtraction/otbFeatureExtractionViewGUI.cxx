@@ -483,7 +483,7 @@ FeatureExtractionViewGUI
   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
   this->SetFeatureType(FeatureInfo::UNKNOWN);
-
+  
   // NewVisu
   if (m_VisuView.IsNotNull())
   {
@@ -519,4 +519,12 @@ FeatureExtractionViewGUI
 }
 
 
+void
+FeatureExtractionViewGUI
+::Cancel()
+{
+  /** Notify that we can cancel module registration */
+  guiMainWindow->hide();
+  m_FeatureExtractionController->Cancel();
+}
 }

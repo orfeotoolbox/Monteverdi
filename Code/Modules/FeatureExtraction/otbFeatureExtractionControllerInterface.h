@@ -64,6 +64,7 @@ public:
   virtual void ExchangeOutputListOrder( int direction )=0;
   
   virtual void Quit()=0;
+  virtual void Cancel()=0;
 /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetResultVisuController()=0;

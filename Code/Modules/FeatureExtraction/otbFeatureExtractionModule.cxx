@@ -95,6 +95,11 @@ void FeatureExtractionModule::Notify(const std::string & event)
   {
     this->BusyOff();
   }
+  else if (event == "Cancel")
+  {
+    this->BusyOff();
+    this->NotifyAll(MonteverdiEvent("Cancel",m_InstanceId));
+  }
   else
   {
     

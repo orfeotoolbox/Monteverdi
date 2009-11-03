@@ -504,6 +504,11 @@ MonteverdiViewGUI
     {
     this->UpdateTree(event.GetInstanceId());
     }
+  else if(event.GetType() == "Cancel" )
+    {
+//       this->UpdateTree(event.GetInstanceId());
+      
+    }
   // Event received : UNKNOWN EVENT
   else
     {

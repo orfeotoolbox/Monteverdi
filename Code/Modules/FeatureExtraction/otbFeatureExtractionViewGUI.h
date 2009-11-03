@@ -154,6 +154,7 @@ protected:
   virtual void UpOutputChannel();
   virtual void DownOutputChannel();
   virtual void Quit();
+  virtual void Cancel();
   virtual void AddFeature();
   virtual void OK();
 

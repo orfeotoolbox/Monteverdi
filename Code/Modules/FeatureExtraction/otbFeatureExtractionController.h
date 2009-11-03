@@ -130,6 +130,7 @@ public:
   virtual void ExchangeOutputListOrder( int direction );
 
   virtual void Quit();
+  virtual void Cancel();
 protected:
   /** Constructor */
   FeatureExtractionController();

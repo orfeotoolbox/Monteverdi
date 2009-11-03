@@ -69,7 +69,7 @@ public:
   /** Show the Module GUI */
   virtual void Show()
   {
-    this->Run();
+    wExtractROIWindow->show();
   };
 protected:
   /** Constructor */
