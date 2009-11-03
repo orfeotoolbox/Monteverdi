@@ -254,7 +254,8 @@ public:
   virtual void ShowHide();
   virtual void Quit();
   
-  
+  /** Update image size visu */
+  virtual void UpdateInformation();
 private:
   ViewerModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

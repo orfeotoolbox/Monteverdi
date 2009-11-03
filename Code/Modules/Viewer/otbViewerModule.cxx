@@ -219,8 +219,8 @@ void ViewerModule::Run()
     }
 
   // Set the File Name as a label to the viewer window
-  m_DisplayWindow->SetLabel(m_Label.c_str());
-  bSetupWindow->copy_label(m_Label.c_str());
+//   m_DisplayWindow->SetLabel(m_Label.c_str());
+//   bSetupWindow->copy_label(m_Label.c_str());
   
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
@@ -230,7 +230,9 @@ void ViewerModule::Run()
 
   // Update image info for further use
   m_InputImage->UpdateOutputInformation();
-
+  
+  this->UpdateInformation();
+  
   // If there is a VectorData
   for(unsigned int i = 0; i < this->GetNumberOfInputDataByKey("VectorData");i++)
     {
@@ -1226,6 +1228,28 @@ void ViewerModule::Quit()
   this->BusyOff();
 }
 
+/**
+ *
+ */
+void
+ViewerModule
+::UpdateInformation()
+{
+  std::string imName = m_Label.c_str();
+  itk::OStringStream oss;
+  oss.str("");
+  oss << imName.substr(imName.find_last_of("/")+1, imName.size());
+  oss<<" ("<<m_InputImage->GetNumberOfComponentsPerPixel();
+  if(m_InputImage->GetNumberOfComponentsPerPixel() != 1)
+    oss<<" bands , ";
+  else
+    oss<<" band , ";
+
+  oss<<m_InputImage->GetLargestPossibleRegion().GetSize()<<")";
+  
+  m_DisplayWindow->SetLabel(oss.str().c_str());
+  bSetupWindow->copy_label(oss.str().c_str());
+}
 } // End namespace otb
 
 #endif
