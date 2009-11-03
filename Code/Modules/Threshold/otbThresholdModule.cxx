@@ -297,7 +297,20 @@ void ThresholdModule::UpdateLayerGenerationFlag()
 void ThresholdModule::OK()
 {
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),"OutputImage","Thresholded image.");
+
+  if(guiGenericThreshold->value() && !guiBinaryThreshold->value())
+    {
+      this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),"OutputImage","Thresholded image.");
+    }
+  if(!guiGenericThreshold->value() && guiBinaryThreshold->value())
+    {
+      this->AddOutputDescriptor(m_BinaryThresholdFilter->GetOutput(),"OutputImage","Thresholded image.");
+    }
+  else
+    {
+      return;
+    }
+
   this->NotifyOutputsChange();
   
   // Close the GUI

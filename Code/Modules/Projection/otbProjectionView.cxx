@@ -171,6 +171,7 @@ ProjectionView
              }
          }
       }
+    delete inputProjchar;
   }
 
   // Sensor Model :: Test if KeyWorldList is not empty
@@ -184,7 +185,7 @@ ProjectionView
     }
 
   // Default Case : Kwl & ProjRef  empty : Give the user the possibility to fill the proj he needs
-  if(!m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
+  if(m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() == 0 && inputProjRef.empty())
     {
       iMapType->activate();
       iMapSelection->activate();
