@@ -468,6 +468,7 @@ public:
   SingleImagePointerType GetSingleImage(int i);
 
   void Quit();
+  void Cancel();
 protected:
 
   /** Constructor */

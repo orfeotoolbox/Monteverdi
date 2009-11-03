@@ -137,6 +137,19 @@ public:
                                    LabeledImageType,KMeansFunctorType>     KMeansFilterType;
   typedef otb::ChangeLabelImageFilter<LabeledImageType,FloatingVectorImageType> ChangeLabelFilterType;
   
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    pProgressBar->minimum(0);
+    pProgressBar->maximum(1);
+    wKMeansWindow->show();
+    pProgressBar->value(0.);
+    pProgressBar->hide();
+    this->UpdateNumberOfSamples();
+  };
 protected:
   /** Constructor */
   KMeansModule();

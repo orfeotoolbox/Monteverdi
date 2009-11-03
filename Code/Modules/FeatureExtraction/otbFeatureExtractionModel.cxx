@@ -897,4 +897,11 @@ void
 
   this->NotifyAll("BusyOff");
 }
+
+void
+    FeatureExtractionModel
+  ::Cancel()
+{
+  this->NotifyAll("Cancel");
+}
 }

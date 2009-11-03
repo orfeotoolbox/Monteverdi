@@ -613,7 +613,17 @@ void FeatureExtractionController::Quit()
   } 
 }
 
-
+void FeatureExtractionController::Cancel()
+{
+  try
+  {
+    m_Model->Cancel();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  } 
+}
 
 
 } // end namespace otb

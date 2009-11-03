@@ -122,7 +122,6 @@ int otbMonteverdiApplicationGraphviz(int argc, char* argv[])
   view->GetInputViewGUI()->bOk->do_callback();
   Fl::check();
   
-
   if(run)
     Fl::run();
   else
@@ -138,4 +137,3 @@ int otbMonteverdiApplicationGraphviz(int argc, char* argv[])
 
   return 0;
 }
-
