@@ -163,7 +163,7 @@ void AlgebraModule::Run()
     }
 
   // Show the GUI
-  guiMainWindow->show();
+  this->Show();
 
   // Deactivate Filter that need 2 Inputs.
   if(!m_HasSecondInput)
@@ -212,7 +212,7 @@ void AlgebraModule::OK()
   this->NotifyOutputsChange();
   
   // close the GUI
-  guiMainWindow->hide();
+  this->Hide();
 }
 
 } // End namespace otb

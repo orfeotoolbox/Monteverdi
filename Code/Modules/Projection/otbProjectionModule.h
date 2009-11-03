@@ -68,6 +68,22 @@ protected:
 
   /** Notify Monteverdi application that featureExtraction has a result */
   void Notify();
+  
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+
+  /** Show the Module GUI */
+  void Show()
+    {
+      m_View->ShowGUI();
+    }
+  
+  /** Hide the Module GUI */
+  void Hide()
+    {
+      m_View->Hide();
+    }
+  
 
 private:
   ProjectionModule(const Self&); //purposely not implemented

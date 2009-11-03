@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbProjectionModel_h
 #define __otbProjectionModel_h
 
@@ -23,13 +22,11 @@
 #include "otbListenerBase.h"
 #include "itkObject.h"
 
-
 #include "otbVectorImage.h"
 #include "otbGenericRSTransform.h"
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
-
 
 namespace otb
 {
@@ -65,7 +62,7 @@ class ITK_EXPORT ProjectionModel
   typedef Image<PixelType,2>                            SingleImageType;
   typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>         ResampleFilterType;
   typedef PerBandVectorImageFilter<InputImageType, InputImageType, ResampleFilterType> PerBandFilterType;
-
+  
   /** SetInputImage */
   itkSetObjectMacro(InputImage,InputImageType);
   itkGetObjectMacro(InputImage,InputImageType);

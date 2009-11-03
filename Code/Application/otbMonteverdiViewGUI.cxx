@@ -522,6 +522,12 @@ void
 MonteverdiViewGUI
 ::Quit()
 {
+  ModuleMapType::iterator iter;
+  for( iter = m_MonteverdiModel->GetModuleMap().begin(); iter != m_MonteverdiModel->GetModuleMap().end(); iter++)
+    { 
+      iter->second->Hide();
+    }
+
   gTreeGroup->hide();
   wHelpWindow->hide();
   wMainWindow->hide();

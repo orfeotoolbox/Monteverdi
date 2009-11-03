@@ -78,6 +78,21 @@ protected:
   /** The custom run command */
   virtual void Run();
 
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true;};
+  
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    guiMainWindow->show();
+  };
+
+  /** Show the Module GUI */
+  virtual void Hide()
+  {
+    guiMainWindow->hide();
+  };
+
   /** Algebra Methods*/
   virtual void AddImage();
   virtual void SubtractImage();
