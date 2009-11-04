@@ -68,7 +68,7 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   
   m_MeanElevation = 0;
   m_OutputChanged = false;
-  m_ElevMgt = MEAN;
+  m_ElevMgt = GCP;
   m_DEMHandler = DEMHandler::New();
   m_GCPsElevation.clear();
   m_DEMsElevation.clear();
