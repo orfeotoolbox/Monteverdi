@@ -59,13 +59,10 @@ SupervisedClassificationAppli
   m_ResultShown = false;
 
   m_ImageViewer               = ImageViewerType::New();
-  m_OutputVector              = VectorDataType::New();
-  //m_Output                    = OverlayImageType::New();
   m_Output                    = OutputImageType::New();
   m_Estimator                 = EstimatorType::New();
   m_ClassificationFilter      = ClassificationFilterType::New();
   m_ChangeLabelFilter         = ChangeLabelFilterType::New();
-  m_VectorizationFilter       = VectorizationFilterType::New();
   m_TrainingSet               = PolygonListType::New();
   m_ValidationSet             = PolygonListType::New();
   m_TrainingListSample        = ListSampleType::New();
@@ -264,7 +261,7 @@ SupervisedClassificationAppli
   slTrainingSetOpacity->activate();
   bROIFocus->activate();
   bImportVectorData->activate();
-  bExportVectorData->activate();
+  //bExportVectorData->activate();
   bExportAllVectorData->activate();
   bImportROIsImage->activate();
   bRandomGeneration->value(1);
@@ -379,6 +376,7 @@ SupervisedClassificationAppli
 
     dataTreeVector.push_back(tree);
     dataNodeVector.push_back(folder);
+
     vectorDataVector.push_back(vectorData);
   }
    PolygonListType::Pointer list = m_ImageViewer->GetPolygonROIList();
@@ -439,73 +437,6 @@ SupervisedClassificationAppli
   m_LastPath = fname.path();
 }
 
-/**
-*
-*/
-void
-SupervisedClassificationAppli
-::ExportVectorData()
-{
-  const char * cfname = fl_file_chooser("Vector data file :", "*.shp\t*.kml",m_LastPath.c_str());
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
-  std::string filename = std::string(cfname);
-
-
-  VectorDataPointerType vectorData = VectorDataType::New();
-
-  DataNodePointerType document = DataNodeType::New();
-  document->SetNodeType(DOCUMENT);
-  document->SetNodeId("polygon");
-  DataNodePointerType folder = DataNodeType::New();
-  folder->SetNodeType(FOLDER);
-  DataNodePointerType multiPolygon = DataNodeType::New();
-  multiPolygon->SetNodeType(FEATURE_MULTIPOLYGON);
-
-  DataTreePointerType tree = vectorData->GetDataTree();
-  DataNodePointerType root = tree->GetRoot()->Get();
-
-  tree->Add(document,root);
-  tree->Add(folder,document);
-  tree->Add(multiPolygon,folder);
-
-   PolygonListType::Pointer list = m_ImageViewer->GetPolygonROIList();
-
-  for ( PolygonListType::Iterator it = list->Begin();it!=list->End();++it)
-  {
-    /* Check if vertexes are presents in the polygon to write */
-    if (it.Get()->GetVertexList()->size() != 0)
-    {
-      if (it.Get()->GetValue()==m_ImageViewer->GetNextROILabel())
-      {
-        DataNodePointerType newPolygon = DataNodeType::New();
-        newPolygon->SetNodeType(otb::FEATURE_POLYGON);
-        newPolygon->SetPolygonExteriorRing(it.Get());
-        tree->Add(newPolygon,multiPolygon);
-      }
-    }
-  }
-
-  VectorDataFileWriterPointerType writer = VectorDataFileWriterType::New();
-  writer->SetInput(vectorData);
-  writer->SetFileName(filename.c_str());
-
-  try
-  {
-    writer->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-    itk::OStringStream oss;
-    oss<<"Error while writing data file: "<<err<<std::endl;
-    fl_alert(oss.str().c_str());
-  }
-
-  ossimFilename fname(filename.c_str());
-  m_LastPath = fname.path();
-}
 
 
 /**
@@ -515,52 +446,84 @@ void
 SupervisedClassificationAppli
 ::SaveClassifAsVectorData()
 {
-  //this->SetupClassification();
-
-  m_VectorizationFilter->Update();
-
-  typedef otb::VectorData<double, 2, unsigned short> VectorDataType;
-  VectorDataType::Pointer vectorData = VectorDataType::New();
-  VectorDataType::DataTreePointerType tree = vectorData->GetDataTree();
-  VectorDataType::DataNodePointerType root = VectorDataType::DataNodeType::New();
-  root->SetNodeType(ROOT);
-  tree->SetRoot(root);
-  VectorDataType::DataNodePointerType document = VectorDataType::DataNodeType::New();
-  document->SetNodeType(DOCUMENT);
-  tree->Add(document,root);
-  VectorDataType::DataNodePointerType folder = VectorDataType::DataNodeType::New();
-  folder->SetNodeType(FOLDER);
-  tree->Add(folder,document);
-
-  for ( PolygonListType::Iterator it = m_VectorizationFilter->GetPathList()->Begin();
-       it != m_VectorizationFilter->GetPathList()->End();
-       ++it)
+  m_OutputVector.clear();
+  LabeledPixelType label;
+  // for each label, extrat 2 vector data. For this, threshold the classif to have a binary image
+  // then connectedcomponent -> relabelcomponent -> persistentvectorization
+  for ( ClassesMapType::iterator it = m_ClassesMap.begin();it!=m_ClassesMap.end();++it)
   {
-    VectorDataType::DataNodePointerType newDataNode = VectorDataType::DataNodeType::New();
-    newDataNode->SetNodeType(FEATURE_POLYGON);
-    newDataNode->SetPolygonExteriorRing(it.Get());//Vertex list ?
-    tree->Add(newDataNode,folder);
+    label = (*it)->GetId();
+    
+    ThresholderPointerType binner = ThresholderType::New();
+    binner->SetInput(m_ClassificationFilter->GetOutput());
+    binner->SetUpperThreshold(label);
+    binner->SetLowerThreshold(label);
+    binner->SetInsideValue(1);
+    binner->SetOutsideValue(0);
+    
+    ConnectedFilterPointerType connecter = ConnectedFilterType::New();
+    RelabelFilterPointerType relabelFilter = RelabelFilterType::New();
+    VectorizationFilterType::Pointer vectorizer = VectorizationFilterType::New();
+    connecter->SetInput(binner->GetOutput());
+    relabelFilter->SetInput(connecter->GetOutput());
+    relabelFilter->SetMinimumObjectSize(10);
+    vectorizer->SetInput(relabelFilter->GetOutput());
+    
+    vectorizer->Update();
+    
+    OutputVectorDataType::Pointer vectorData = OutputVectorDataType::New();
+    OutputVectorDataType::DataNodePointerType document = OutputVectorDataType::DataNodeType::New();
+    OutputVectorDataType::DataNodePointerType root = vectorData->GetDataTree()->GetRoot()->Get();
+    document->SetNodeType(otb::DOCUMENT);
+    document->SetNodeId("DOCUMENT");
+    vectorData->GetDataTree()->Add(document,root);
+    
+    OutputVectorDataType::DataNodePointerType folder = OutputVectorDataType::DataNodeType::New();
+    folder->SetNodeType(otb::FOLDER);
+    vectorData->GetDataTree()->Add(folder,document);
+    
+    // We do not clear the lists in order to add the new results
+    OutputPolygonListType::Pointer lTempPolygonsList = vectorizer->GetPathList();
+    unsigned int i=1;
+    for (OutputPolygonListType::Iterator it = lTempPolygonsList->Begin();it!=lTempPolygonsList->End();++it)
+      {
+	OutputVectorDataType::DataNodePointerType poly = OutputVectorDataType::DataNodeType::New();
+	poly->SetNodeType(otb::FEATURE_POLYGON);
+	itk::OStringStream oss;
+	oss.str("");
+	oss<<i+1;
+	poly->SetNodeId(oss.str().c_str());
+	poly->SetPolygonExteriorRing( it.Get() );
+	vectorData->GetDataTree()->Add(poly,folder);
+	i++;
+      }
+    
+    
+    typedef otb::VectorDataProjectionFilter<OutputVectorDataType,OutputVectorDataType> ProjectionFilterType;
+    ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
+    vectorDataProjection->SetInput(vectorData);
+    
+    ImageType::PointType lNewOrigin;
+    // polygons are recorded with a 0.5 shift...
+    lNewOrigin[0] = m_InputImage->GetOrigin()[0]+0.5;
+    lNewOrigin[1] = m_InputImage->GetOrigin()[1]+0.5;
+    
+    vectorDataProjection->SetInputOrigin(lNewOrigin);
+    vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
+    
+    std::string projectionRef;
+    itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey, projectionRef );
+    vectorDataProjection->SetInputProjectionRef(projectionRef);
+    vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
+    vectorDataProjection->Update();
+    
+    m_OutputVector.push_back( vectorDataProjection->GetOutput() );
   }
-
-
-  typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
-  ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
-  vectorDataProjection->SetInput(vectorData);
-  vectorDataProjection->SetInputOrigin(m_InputImage->GetOrigin());
-  vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
-
-  std::string projectionRef;
-  itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
-                                   MetaDataKey::ProjectionRefKey, projectionRef );
-  vectorDataProjection->SetInputProjectionRef(projectionRef);
-
-  vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
-
-   m_OutputVector = vectorDataProjection->GetOutput();
 
   m_HasOutputVector = true;
   this->NotifyAll();
   m_HasOutputVector = false;
+  
 }
 
 /**
@@ -1363,8 +1326,6 @@ SupervisedClassificationAppli
   this->Update();
   this->ResetClassification();
 
-
-
 }
 
 
@@ -1765,8 +1726,6 @@ SupervisedClassificationAppli
     color[2]=static_cast<unsigned char>((*it)->GetColor()[2]*255);
     m_ChangeLabelFilter->SetChange((*it)->GetId(),color);
   }
- 
-  m_VectorizationFilter->SetInput(m_ClassificationFilter->GetOutput());
 
   m_Output = m_ChangeLabelFilter->GetOutput();
   m_HasOutput = true;
@@ -1930,6 +1889,7 @@ SupervisedClassificationAppli
   m_ResultViewer->Show();
 
   m_ResultShown = true;
+
 }
 
 void

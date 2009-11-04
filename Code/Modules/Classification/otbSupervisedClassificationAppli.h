@@ -46,6 +46,10 @@ See OTBCopyright.txt for details.
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbTypeManager.h"
+#include "itkRelabelComponentImageFilter.h"
+#include "itkConnectedComponentImageFilter.h"
+#include "itkBinaryThresholdImageFilter.h"
 
 // Overlay result display
 #include "itkCastImageFilter.h"
@@ -111,51 +115,67 @@ public:
   typedef std::vector<ClassPointerType>                                  ClassesMapType;
 
   /// Classification typedefs
-  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>           ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                                     ModelType;
-  typedef ModelType::Pointer                                                      ModelPointerType;
-  typedef itk::VariableLengthVector<InputPixelType>                               SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                                 ListSampleType;
-  typedef itk::FixedArray<LabeledPixelType,1>                                     TrainingSampleType;
-  typedef itk::Statistics::ListSample<TrainingSampleType>                         TrainingListSampleType;
-  typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType> EstimatorType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,OutputImageType/*OverlayImageType*/>          ChangeLabelFilterType;
-  typedef otb::PersistentVectorizationImageFilter<LabeledImageType,PolygonType>   VectorizationFilterType;
-  typedef EstimatorType::Pointer                                         EstimatorPointerType;
-  typedef ClassificationFilterType::Pointer                              ClassificationFilterPointerType;
-  typedef ChangeLabelFilterType::Pointer                                 ChangeLabelFilterPointerType;
-  typedef VectorizationFilterType::Pointer                               VectorizationFilterPointerType;
-  typedef otb::SVMClassifier<ListSampleType,LabeledPixelType>                     ClassifierType;
-  typedef itk::VariableSizeMatrix<double>                                         ConfusionMatrixType;
-  typedef ListSampleType::Pointer                                        ListSamplePointerType;
-  typedef TrainingListSampleType::Pointer                                TrainingListSamplePointerType;
-
+  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>               ClassificationFilterType;
+  typedef ClassificationFilterType::ModelType                                         ModelType;
+  typedef ModelType::Pointer                                                          ModelPointerType;
+  typedef itk::VariableLengthVector<InputPixelType>                                   SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                                     ListSampleType;
+  typedef itk::FixedArray<LabeledPixelType,1>                                         TrainingSampleType;
+  typedef itk::Statistics::ListSample<TrainingSampleType>                             TrainingListSampleType;
+  typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>     EstimatorType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType,OutputImageType>               ChangeLabelFilterType;
+  typedef Polygon<double>                                                             OutputPolygonType;
+  typedef ObjectList<OutputPolygonType>                                               OutputPolygonListType;
+  typedef otb::PersistentVectorizationImageFilter<LabeledImageType,OutputPolygonType> VectorizationFilterType;
+  typedef EstimatorType::Pointer                                                EstimatorPointerType;
+  typedef ClassificationFilterType::Pointer                                     ClassificationFilterPointerType;
+  typedef ChangeLabelFilterType::Pointer                                        ChangeLabelFilterPointerType;
+  typedef VectorizationFilterType::Pointer                                      VectorizationFilterPointerType;
+  typedef otb::SVMClassifier<ListSampleType,LabeledPixelType>                   ClassifierType;
+  typedef itk::VariableSizeMatrix<double>                                       ConfusionMatrixType;
+  typedef ListSampleType::Pointer                                               ListSamplePointerType;
+  typedef TrainingListSampleType::Pointer                                       TrainingListSamplePointerType;
+  typedef itk::RelabelComponentImageFilter<LabeledImageType,LabeledImageType>   RelabelFilterType;
+  typedef RelabelFilterType::Pointer                                            RelabelFilterPointerType;
+  typedef itk::ConnectedComponentImageFilter<LabeledImageType,LabeledImageType> ConnectedFilterType;
+  typedef ConnectedFilterType::Pointer                                          ConnectedFilterPointerType;
+  typedef itk::BinaryThresholdImageFilter<LabeledImageType,LabeledImageType>    ThresholderType;
+  typedef ThresholderType::Pointer ThresholderPointerType;
 
   /** Vector data handling */
-  typedef VectorData<double,2,short unsigned int>                                 VectorDataType;
+  typedef TypeManager::Vector_Data                                       OutputVectorDataType;
+  typedef TypeManager::Labeled_Vector_Data                               VectorDataType;
+
   typedef VectorDataType::Pointer                                        VectorDataPointerType;
-  typedef VectorDataFileReader<VectorDataType>                                    VectorDataFileReaderType;
+  typedef VectorDataFileReader<VectorDataType>                           VectorDataFileReaderType;
   typedef VectorDataFileReaderType::Pointer                              VectorDataFileReaderPointerType;
-  typedef VectorDataFileWriter<VectorDataType>                                    VectorDataFileWriterType;
+  typedef VectorDataFileWriter<VectorDataType>                           VectorDataFileWriterType;
   typedef VectorDataFileWriterType::Pointer                              VectorDataFileWriterPointerType;
-  typedef VectorDataType::DataNodeType                                            DataNodeType;
+  typedef VectorDataType::DataNodeType                                   DataNodeType;
   typedef DataNodeType::Pointer                                          DataNodePointerType;
   typedef VectorDataType::DataTreeType                                   DataTreeType;
   typedef DataTreeType::Pointer                                          DataTreePointerType;
-  typedef itk::PreOrderTreeIterator<DataTreeType>                                 TreeIteratorType;
+  typedef itk::PreOrderTreeIterator<DataTreeType>                        TreeIteratorType;
 
   
   itkSetObjectMacro(InputImage,ImageType);
   itkGetObjectMacro(InputImage,ImageType);
 
   itkSetStringMacro(ImageFileName);
-  //itkGetMacro(Output,OverlayImageType::Pointer);
   itkGetMacro(Output,OutputImageType::Pointer);
   itkSetStringMacro(ModelFileName);
   itkSetStringMacro(ROIsImageFileName);
 
-  itkGetObjectMacro(OutputVector,VectorDataType);
+  std::vector<OutputVectorDataType::Pointer> GetOutputVector()
+    {
+      return m_OutputVector;
+    }
   
+  ClassesMapType GetClassesMap()
+    {
+      return m_ClassesMap;
+    }
+
   // Get the HasOutput flag
   itkGetMacro(HasOutput,bool);
   itkGetMacro(HasOutputVector,bool);
@@ -184,7 +204,8 @@ protected:
   virtual void OpenSVMModel();
   virtual void SaveSVMModel();
   virtual void ImportVectorData();
-  virtual void ExportVectorData();
+  // not used anymore, menu supressed
+  //virtual void ExportVectorData();
   virtual void ExportAllVectorData();
   virtual void ImportROIsImage();
 
@@ -253,7 +274,7 @@ private:
   /// input image
   ImageType::Pointer           m_InputImage;
   /// Output Classified image
-  /*OverlayImagePointerType*/OutputImageType::Pointer      m_Output;
+  OutputImageType::Pointer      m_Output;
   /// Model filename
   std::string m_ModelFileName;
   /// Training ROIs filename
@@ -268,8 +289,6 @@ private:
   ClassificationFilterPointerType m_ClassificationFilter;
   /// Change label filter
   ChangeLabelFilterPointerType m_ChangeLabelFilter;
-  /// Vectorization filter
-  VectorizationFilterPointerType m_VectorizationFilter;
   /// SVM Estimator
   EstimatorPointerType m_Estimator;
   /// SVM model
@@ -288,13 +307,14 @@ private:
   TrainingListSamplePointerType m_TrainingListLabelSample;
   /// Validation Sample list
   ListSamplePointerType m_ValidationListSample;
+  
   /// Validation label sample list
   TrainingListSamplePointerType m_ValidationListLabelSample;
 
   bool m_HasOutput;
   bool m_HasOutputVector;
   bool m_ResultShown;
-  VectorDataPointerType m_OutputVector;
+  std::vector<OutputVectorDataType::Pointer> m_OutputVector;
 };
 
 } // end namespace otb

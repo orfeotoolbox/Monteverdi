@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -20,7 +20,7 @@ class SupervisedClassificationAppliGUI {open
     Fl_Window bClassesBrowser {
       label {Supervised classification application}
       callback {this->QuitCallback();} open
-      xywh {634 114 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {286 131 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Browser dClassList {
         label {Classes list}
@@ -35,13 +35,13 @@ class SupervisedClassificationAppliGUI {open
         xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
       } {
         Submenu {} {
-          label File open selected
+          label File open
           xywh {0 0 67 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
         } {
           MenuItem bSaveClassifAsVectorData {
             label {Save classif as vector data (Experimental)}
-            callback {SaveClassifAsVectorData();}
-            tooltip {Export all ROIs of the current set into shapefiles named after the classes names} xywh {50 50 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
+            callback {SaveClassifAsVectorData();} selected
+            tooltip {Export classification results as vector data file.} xywh {50 50 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
           MenuItem {} {
             label {Open SVM model}
@@ -58,13 +58,8 @@ class SupervisedClassificationAppliGUI {open
             callback {ImportVectorData();}
             tooltip {Import ROIs from a shapefile into the selected class and set} xywh {20 20 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
-          MenuItem bExportVectorData {
-            label {Export vector data (ROI)}
-            callback {ExportVectorData();}
-            tooltip {Export ROIs from the selected class and set into a shapefile} xywh {30 30 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
-          }
           MenuItem bExportAllVectorData {
-            label {Export all vector data (ROI)}
+            label {Export selected polygons}
             callback {ExportAllVectorData();}
             tooltip {Export all ROIs of the current set into shapefiles named after the classes names} xywh {40 40 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
@@ -288,26 +283,26 @@ else
       }
       Fl_Spinner svmKernelDegree {
         label {Kernel degree}
-        xywh {115 81 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
+        xywh {115 81 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Value_Input svmGamma {
-        label {Gamma}
+        label Gamma
         xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmNu {
-        label {Nu}
+        label Nu
         xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmCoef0 {
-        label {Coef0}
+        label Coef0
         xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmC {
-        label {C}
+        label C
         xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmEpsilon {
-        label {Epsilon}
+        label Epsilon
         xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button svmShrinking {
@@ -320,7 +315,7 @@ else
       }
       Fl_Spinner svmCacheSize {
         label {Cache size}
-        xywh {115 111 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
+        xywh {115 111 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Button {} {
         label Ok
@@ -328,7 +323,7 @@ else
         xywh {30 254 195 31} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input svmP {
-        label {P}
+        label P
         xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button {} {

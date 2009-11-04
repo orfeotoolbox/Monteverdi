@@ -94,8 +94,28 @@ void SupervisedClassificationModule::Notify()
   if(m_SupervisedClassification->GetHasOutputVector())
     {
       //this->ClearOutputDescriptors();
-      this->EraseOutputByKey("OutputVector");
-      this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector(),"OutputVector","Vectors of classified image.");
+      for(unsigned int i=0; i<m_LabelsList.size(); i++)
+	{
+	  this->EraseOutputByKey(m_LabelsList[i].c_str());
+	}
+      
+      m_LabelsList.clear();
+      if( m_SupervisedClassification->GetOutputVector().size() != m_SupervisedClassification->GetClassesMap().size() )
+	{
+	  itkExceptionMacro(<<"Invalid outputs size");
+	}
+
+      unsigned int i = 0;
+      ClassesMapType myMap = m_SupervisedClassification->GetClassesMap();
+      for ( ClassesMapType::iterator it = myMap.begin();it!=myMap.end();++it)
+	{
+	   itk::OStringStream oss;
+	   oss<<"OutputVector "<<(*it)->GetName();
+	   this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector()[i], oss.str().c_str(),"Vectors of classified image.");
+	   m_LabelsList.push_back(oss.str());
+	   i++;
+	}
+      
       this->NotifyOutputsChange();
       // Once module is closed, it is no longer busy
       this->BusyOff();

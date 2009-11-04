@@ -173,6 +173,7 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   this->AddInputDescriptor<ImageType>("InputImage","Image to visualize :");
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
   this->AddInputDescriptor<VectorDataType>("VectorData","VectorData to visualize.",true,true);
+  
 
   // Build GUI
   this->Build();

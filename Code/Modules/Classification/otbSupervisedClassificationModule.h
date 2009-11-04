@@ -54,7 +54,8 @@ public:
   itkSetMacro(Model,std::string);
 
   // Input typedef
-  typedef SupervisedClassificationAppli::ImageType InputImageType;
+  typedef SupervisedClassificationAppli::ImageType      InputImageType;
+  typedef SupervisedClassificationAppli::ClassesMapType ClassesMapType;
 
 protected:
   /** Constructor */
@@ -79,7 +80,8 @@ private:
   
   // The SVM Model
   std::string                                   m_Model;
-
+  // store labels
+  std::vector< std::string >                    m_LabelsList;
 
 };
 

@@ -94,8 +94,9 @@ public:
   typedef double                                    PixelType;
   typedef Image<PixelType,2>                        SingleImageType;
   typedef VectorImage<PixelType,2>                  ImageType;
-  typedef VectorData<PixelType>                     VectorDataType;
-  
+  //typedef VectorData<PixelType>                     VectorDataType;
+  typedef TypeManager::Vector_Data                  VectorDataType;
+
   /** PackedWidgetManager typedef*/
   typedef PackedWidgetManager                       WidgetManagerType;
   typedef WidgetManagerType::Pointer                WidgetManagerPointerType;
