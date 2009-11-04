@@ -30,6 +30,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbFileName.h"
 #include "otbMsgReporter.h"
 
+// Overlay result display
+#include "itkCastImageFilter.h"
+
 namespace otb
 {
 /// Constructor
@@ -57,9 +60,6 @@ InteractiveChangeDetection<TPixel>
   m_LeftViewer = ImageViewerType::New();
   m_CenterViewer = ImageViewerType::New();
   
-  //m_RightReader = ImageReaderType::New();
-  //m_LeftReader = ImageReaderType::New();
-
   m_LeftImage = ImageType::New();
   m_RightImage = ImageType::New();
   
@@ -117,7 +117,7 @@ InteractiveChangeDetection<TPixel>
   this->svmCacheSize->value(m_Estimator->GetCacheSize());
   this->svmPE->value(m_Estimator->GetDoProbabilityEstimates());
   this->svmShrinking->value(m_Estimator->GetDoShrinking());
-  this->iviewWindowPrincipal->label("OTB-Applications: Interactive Change Detection.");
+  this->iviewWindowPrincipal->label("Interactive Change Detection.");
   Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
   this->bOutputLogs->buffer(buffer);
 
@@ -953,114 +953,119 @@ void
 InteractiveChangeDetection<TPixel>
 ::DisplayResultsButtonToggled()
 {
- //  if (bDisplayResults->value())
-//   {
-//     bDisplayResults->clear();
-//     FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
-//     iViewFullCenterWindow->remove(full);
+  if (bDisplayResults->value())
+  {
+    bDisplayResults->clear();
+    FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
+    iViewFullCenterWindow->remove(full);
 
-//     if (m_CenterViewer->GetUseScroll())
-//     {
-//       ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-//       iViewScrollCenterWindow->remove(scroll);
-//     }
+    if (m_CenterViewer->GetUseScroll())
+    {
+      ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+      iViewScrollCenterWindow->remove(scroll);
+    }
     
-//     full = m_CenterViewer->GetFullWidget();
-//     full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
-//     iViewFullCenterWindow->add(full);
-//     iViewFullCenterWindow->resizable(full);
-//     iViewFullCenterWindow->show();
-//     full->show();
+    full = m_CenterViewer->GetFullWidget();
+    full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
+    iViewFullCenterWindow->add(full);
+    iViewFullCenterWindow->resizable(full);
+    iViewFullCenterWindow->show();
+    full->show();
 
-//     if (m_CenterViewer->GetUseScroll())
-//     {
-//       ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
-//       iViewScrollCenterWindow->add(scroll);
-//       iViewScrollCenterWindow->resizable(scroll);
-//       iViewScrollCenterWindow->show();
-//       scroll->show();
-//     }
-//     m_CenterViewer->Update();
-//     OffsetType off;
-//     off.Fill(0);
-//     m_CenterViewer->Link(m_LeftViewer,off);
-//     Fl::check();
-//     this->Update();
-//     Fl::check();
-//     this->Update();
-//   }
-//   else
-//   {
-//     bDisplayResults->set();
-//     m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
+    if (m_CenterViewer->GetUseScroll())
+    {
+      ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
+      iViewScrollCenterWindow->add(scroll);
+      iViewScrollCenterWindow->resizable(scroll);
+      iViewScrollCenterWindow->show();
+      scroll->show();
+    }
+    m_CenterViewer->Update();
+    OffsetType off;
+    off.Fill(0);
+    m_CenterViewer->Link(m_LeftViewer,off);
+    Fl::check();
+    this->Update();
+    Fl::check();
+    this->Update();
+  }
+  else
+  {
+    bDisplayResults->set();
+    m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
 
-//     typename OverlayImageType::PixelType color1(3), color2(3);
+    typename OverlayImageType::PixelType color1(3), color2(3);
 
-//     color1[0]=static_cast<unsigned char>(m_Class1Color[0]*255);
-//     color1[1]=static_cast<unsigned char>(m_Class1Color[1]*255);
-//     color1[2]=static_cast<unsigned char>(m_Class1Color[2]*255);
+    color1[0]=static_cast<unsigned char>(m_Class1Color[0]*255);
+    color1[1]=static_cast<unsigned char>(m_Class1Color[1]*255);
+    color1[2]=static_cast<unsigned char>(m_Class1Color[2]*255);
 
-//     color2[0]=static_cast<unsigned char>(m_Class2Color[0]*255);
-//     color2[1]=static_cast<unsigned char>(m_Class2Color[1]*255);
-//     color2[2]=static_cast<unsigned char>(m_Class2Color[2]*255);
+    color2[0]=static_cast<unsigned char>(m_Class2Color[0]*255);
+    color2[1]=static_cast<unsigned char>(m_Class2Color[1]*255);
+    color2[2]=static_cast<unsigned char>(m_Class2Color[2]*255);
 
-//     m_ChangeLabelFilter->SetChange(m_Label1,color1);
-//     m_ChangeLabelFilter->SetChange(m_Label2,color2);
-//     m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
-//     m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
-//     m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
-
-
-//     FullWidgetPointerType full = m_CenterViewer->GetFullWidget();
-//     iViewFullCenterWindow->remove(full);
-//     iViewFullCenterWindow->redraw();
+    m_ChangeLabelFilter->SetChange(m_Label1,color1);
+    m_ChangeLabelFilter->SetChange(m_Label2,color2);
+    m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
+    m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
     
-//     if (m_CenterViewer->GetUseScroll())
-//     {
-//       ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
-//       iViewScrollCenterWindow->remove(scroll);
-//     }
+    // Cast for result viewer display
+    typedef itk::CastImageFilter<OutputImageType, OverlayImageType>     CastFilterType;
+    typename CastFilterType::Pointer castFilter = CastFilterType::New();
+    castFilter->SetInput(m_ChangeLabelFilter->GetOutput());
+    castFilter->UpdateOutputInformation();
 
-//     m_ResultViewer = ImageViewerType::New();
-//     m_ResultViewer->SetImage(/*m_LeftReader->GetOutput()*/m_LeftImage);
-//     m_ResultViewer->SetImageOverlay(m_ChangeLabelFilter->GetOutput());
-//     m_ResultViewer->SetUseImageOverlay(true);
-//     m_ResultViewer->SetShowHistograms(false);
-//     m_ResultViewer->SetInterfaceBoxesColor(m_InterfaceColor);
-//     m_ResultViewer->SetPixLocOutput(oPixLocValue);
-//     m_ResultViewer->SetShowZoomWidget(false);
-//     m_ResultViewer->SetLabel("Result image");
+
+    FullWidgetPointerType full = m_CenterViewer->GetFullWidget();
+    iViewFullCenterWindow->remove(full);
+    iViewFullCenterWindow->redraw();
     
-//     m_ResultViewer->Build();
+    if (m_CenterViewer->GetUseScroll())
+    {
+      ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
+      iViewScrollCenterWindow->remove(scroll);
+    }
+
+    m_ResultViewer = ImageViewerType::New();
+    m_ResultViewer->SetImage(/*m_LeftReader->GetOutput()*/m_LeftImage);
+    m_ResultViewer->SetImageOverlay(castFilter->GetOutput());
+    m_ResultViewer->SetUseImageOverlay(true);
+    m_ResultViewer->SetShowHistograms(false);
+    m_ResultViewer->SetInterfaceBoxesColor(m_InterfaceColor);
+    m_ResultViewer->SetPixLocOutput(oPixLocValue);
+    m_ResultViewer->SetShowZoomWidget(false);
+    m_ResultViewer->SetLabel("Result image");
     
-//     m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value()*255));
+    m_ResultViewer->Build();
     
-//     full = m_ResultViewer->GetFullWidget();
-//     full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
-//     iViewFullCenterWindow->add(full);
-//     iViewFullCenterWindow->resizable(full);
-//     iViewFullCenterWindow->show();
-//     full->show();
+    m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value()*255));
     
-//     if (m_ResultViewer->GetUseScroll())
-//     {
-//       ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-//       scroll->resize(0,0,iViewScrollCenterWindow->w(),iViewScrollCenterWindow->h());
-//       iViewScrollCenterWindow->add(scroll);
-//       iViewScrollCenterWindow->resizable(scroll);
-//       iViewScrollCenterWindow->show();
-//       scroll->show();
-//     }
-//     m_ResultViewer->Show();
-//     m_ResultViewer->Update();
-//     OffsetType off;
-//     off.Fill(0);
-//     m_ResultViewer->Link(m_LeftViewer,off);
-//     Fl::check();
-//     this->Update();
-//     Fl::check();
-//     this->Update();
-//   }
+    full = m_ResultViewer->GetFullWidget();
+    full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
+    iViewFullCenterWindow->add(full);
+    iViewFullCenterWindow->resizable(full);
+    iViewFullCenterWindow->show();
+    full->show();
+    
+    if (m_ResultViewer->GetUseScroll())
+    {
+      ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+      scroll->resize(0,0,iViewScrollCenterWindow->w(),iViewScrollCenterWindow->h());
+      iViewScrollCenterWindow->add(scroll);
+      iViewScrollCenterWindow->resizable(scroll);
+      iViewScrollCenterWindow->show();
+      scroll->show();
+    }
+    m_ResultViewer->Show();
+    m_ResultViewer->Update();
+    OffsetType off;
+    off.Fill(0);
+    m_ResultViewer->Link(m_LeftViewer,off);
+    Fl::check();
+    this->Update();
+    Fl::check();
+    this->Update();
+  }
 }
 
 

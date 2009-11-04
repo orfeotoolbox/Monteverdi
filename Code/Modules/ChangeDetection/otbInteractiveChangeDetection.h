@@ -101,8 +101,8 @@ public:
 
   /// Image Type and related typedefs
   typedef typename FullWidgetType::ImageType                   ImageType;
-  //typedef typename FullWidgetType::OverlayImageType            OverlayImageType;
-  typedef VectorImage<TPixel,2>                                OverlayImageType;
+  typedef typename FullWidgetType::OverlayImageType            OverlayImageType;
+  typedef VectorImage<TPixel,2>                                OutputImageType;
   
   typedef typename OverlayImageType::Pointer                   OverlayImagePointerType;
   typedef typename ImageType::Pointer                          ImagePointerType;
@@ -135,7 +135,7 @@ public:
   typedef itk::FixedArray<LabeledPixelType,1>                                             TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType>                                 TrainingListSampleType;
   typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>         EstimatorType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,OverlayImageType>                  ChangeLabelFilterType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType,OutputImageType>                   ChangeLabelFilterType;
   typedef typename EstimatorType::Pointer                                                 EstimatorPointerType;
   typedef typename AmplitudeFilterType::Pointer                                           AmplitudeFilterPointerType;
   typedef typename ImageToListFilterType::Pointer                                         ImageToListFilterPointerType;
@@ -169,7 +169,7 @@ public:
   //ADDED Otmane: Set Left & Right Image
   itkSetObjectMacro(RightImage,ImageType);
   itkSetObjectMacro(LeftImage ,ImageType);
-  itkGetObjectMacro(Output ,OverlayImageType);
+  itkGetObjectMacro(Output ,OutputImageType);
   
   //SVM Model FileName
   itkSetStringMacro(ModelFileName);
@@ -237,62 +237,62 @@ private:
   ResultImageWidgetPointerType m_ResultImageWidget;
   
   //Added : OTMANE
-  typename ImageType::Pointer    m_RightImage;
-  typename ImageType::Pointer    m_LeftImage;
-  typename OverlayImageType::Pointer    m_Output;
+  typename ImageType::Pointer           m_RightImage;
+  typename ImageType::Pointer           m_LeftImage;
+  typename OutputImageType::Pointer     m_Output;
   
-  std::string                 m_ModelFileName;
+  std::string                           m_ModelFileName;
 
   /// Class form list
-  FormListPointerType m_FormList;
+  FormListPointerType                   m_FormList;
 
   /// Amplitude filters
-  AmplitudeFilterPointerType m_AmplitudeFilter1;
-  AmplitudeFilterPointerType m_AmplitudeFilter2;
+  AmplitudeFilterPointerType            m_AmplitudeFilter1;
+  AmplitudeFilterPointerType            m_AmplitudeFilter2;
 
   /// VectorImage to ImageList filters
-  ImageToListFilterPointerType m_ImageToListFilter1;
-  ImageToListFilterPointerType m_ImageToListFilter2;
+  ImageToListFilterPointerType          m_ImageToListFilter1;
+  ImageToListFilterPointerType          m_ImageToListFilter2;
 
   /// Mean difference filter
-  MeanDifferenceFilterPointerType m_MeanDifferenceFilter;
+  MeanDifferenceFilterPointerType       m_MeanDifferenceFilter;
 
   /// Abs filter
-  AbsFilterPointerType            m_AbsFilter;
+  AbsFilterPointerType                  m_AbsFilter;
 
   /// Mean ratio filter
-  MeanRatioFilterPointerType      m_MeanRatioFilter;
+  MeanRatioFilterPointerType            m_MeanRatioFilter;
 
   /// ImageList to VectorImage filters
-  ListToImageFilterPointerType    m_ListToImageFilter1;
-  ListToImageFilterPointerType    m_ListToImageFitler2;
+  ListToImageFilterPointerType          m_ListToImageFilter1;
+  ListToImageFilterPointerType          m_ListToImageFitler2;
   
   /// Classification filter
-  ClassificationFilterPointerType m_ClassificationFilter;
+  ClassificationFilterPointerType       m_ClassificationFilter;
   
   /// Change label filter
-  ChangeLabelFilterPointerType m_ChangeLabelFilter;
+  ChangeLabelFilterPointerType          m_ChangeLabelFilter;
   
   /// Image list
-  SingleImageListPointerType m_ImageList;
+  SingleImageListPointerType            m_ImageList;
   
   /// SVM Estimator
-  EstimatorPointerType m_Estimator;
+  EstimatorPointerType                  m_Estimator;
   
   /// Colors
-  ColorType m_Class1Color;
-  ColorType m_Class2Color;
-  ColorType  m_InterfaceColor;
+  ColorType                             m_Class1Color;
+  ColorType                             m_Class2Color;
+  ColorType                             m_InterfaceColor;
   /// Labels
-  unsigned short m_Label1;
-  unsigned short m_Label2;
+  unsigned short                       m_Label1;
+  unsigned short                       m_Label2;
   /// Radius for the change detection filters
-  unsigned int m_Radius;
-  bool        m_DisplayResults;
-  std::string m_LastPath;
+  unsigned int                         m_Radius;
+  bool                                 m_DisplayResults;
+  std::string                          m_LastPath;
 
   // Flag to determine if there is an output
-  bool                               m_HasOutput;
+  bool                                 m_HasOutput;
 };
 
 } // end namespace otb
