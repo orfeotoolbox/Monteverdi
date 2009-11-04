@@ -32,6 +32,7 @@ WriterModule::WriterModule()
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
+  this->AddTypeToInputDescriptor<UnsignedShortImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
   this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
@@ -163,6 +164,7 @@ void WriterModule::ThreadedRun()
   
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
+  UnsignedShortImageType::Pointer usSingleImage = this->GetInputData<UnsignedShortImageType>("InputDataSet");
   VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
   LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
@@ -192,6 +194,14 @@ void WriterModule::ThreadedRun()
       fPWriter->SetFileName(filepath);
       m_ProcessObject = fPWriter;
       fPWriter->Update();
+      }
+    else if( usSingleImage.IsNotNull() )
+      {
+      USWriterType::Pointer usWriter = USWriterType::New();
+      usWriter->SetInput(usSingleImage);
+      usWriter->SetFileName(filepath);
+      m_ProcessObject = usWriter;
+      usWriter->Update();
       }
     else if( vectorData.IsNotNull() )
       {

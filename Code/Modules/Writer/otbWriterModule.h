@@ -61,12 +61,14 @@ public:
   typedef VectorImage<double,2>                    FloatingVectorImageType;
   typedef VectorImage<unsigned char,2>             CharVectorImageType;
   typedef Image<double,2>                          FloatingImageType;
+  typedef Image<unsigned short,2>                  UnsignedShortImageType;
   typedef VectorData<double>                       VectorType;
   typedef VectorData<double,2,short unsigned int>  LabeledVectorType;
   /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
   typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
   typedef ImageFileWriter<FloatingImageType>       FPWriterType;
+  typedef ImageFileWriter<UnsignedShortImageType>  USWriterType;
   typedef VectorDataFileWriter<VectorType>         VectorWriterType;
   typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
 
