@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -10,60 +10,85 @@ class ExtractROIModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wExtractROIWindow {
-      label {Select the ROI} open selected
-      xywh {148 194 265 360} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 visible
+      label {Select the ROI} open
+      xywh {830 252 320 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 hide
     } {
       Fl_Return_Button bOk {
         label Ok
         callback {this->Ok();}
-        xywh {138 320 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {230 340 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {30 321 81 22} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {140 343 81 22} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Wizard {} {
         label {Definition of the ROI extracted} open
-        xywh {14 134 233 175} box PLASTIC_DOWN_BOX align 5
+        xywh {14 156 301 178} box PLASTIC_DOWN_BOX align 5
       } {
-        Fl_Group {} {open
-          xywh {30 142 187 158}
+        Fl_Group guiPixel {open
+          xywh {45 181 255 144}
         } {
           Fl_Value_Input vStartX {
             label {Start X}
-            xywh {95 154 100 25} step 1
+            xywh {135 181 100 23} step 1
           }
           Fl_Value_Input vStartY {
             label {Start Y}
-            xywh {95 189 100 25} step 1
+            xywh {135 214 100 25} step 1
           }
           Fl_Value_Input vSizeX {
             label {Size X}
-            xywh {95 224 100 25} step 1
+            xywh {135 249 100 25} step 1
           }
           Fl_Value_Input vSizeY {
             label {Size Y}
-            xywh {95 259 100 25} step 1
+            xywh {135 284 100 25} step 1
+          }
+        }
+        Fl_Group guiLongLat {open
+          xywh {15 158 300 173} hide
+        } {
+          Fl_Value_Input vLong1 {
+            label Longitude1
+            xywh {105 175 180 25}
+          }
+          Fl_Value_Input vLatitude1 {
+            label Latitude1
+            xywh {105 205 180 25}
+          }
+          Fl_Value_Input vLong2 {
+            label Longitude2
+            xywh {105 250 180 25}
+          }
+          Fl_Value_Input vLatitude2 {
+            label Latitude2 selected
+            xywh {105 290 180 25}
           }
         }
       }
       Fl_Wizard {} {
         label {Input image size information} open
-        xywh {15 26 233 86} box PLASTIC_DOWN_BOX align 5
+        xywh {15 26 300 74} box PLASTIC_DOWN_BOX align 5
       } {
         Fl_Group {} {open
-          xywh {15 26 220 79}
+          xywh {15 26 300 68}
         } {
           Fl_Value_Output vInputImageSizeX {
             label {Size X}
-            xywh {95 40 100 24}
+            xywh {95 36 100 24}
           }
           Fl_Value_Output vInputImageSizeY {
             label {Size Y}
-            xywh {95 71 100 24}
+            xywh {95 66 100 24}
           }
         }
+      }
+      Fl_Round_Button roundLongLat {
+        label {Select Long/Lat }
+        callback {LongLatSelection();}
+        xywh {55 110 185 25} down_box ROUND_DOWN_BOX
       }
     }
   }
@@ -80,5 +105,7 @@ class ExtractROIModuleGUI {open
   Function {~ExtractROIModuleGUI()} {open return_type virtual
   } {}
   Function {Ok()} {open protected return_type {virtual void}
+  } {}
+  Function {LongLatSelection()} {open return_type {virtual void}
   } {}
 } 
