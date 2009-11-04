@@ -20,6 +20,8 @@
 #include "otbMsgReporter.h"
 #include "itkImageRegion.h"
 
+#include "otbForwardSensorModel.h"
+
 namespace otb
 {
 /** Constructor */
@@ -52,18 +54,41 @@ void ExtractROIModule::Run()
   FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
-
   itk::ImageRegion<2> imageRegion;
 
+  typedef ForwardSensorModel<double>                ForwardSensorType;
+  
+  roundLongLat->activate();
+  
   if(!image.IsNull() && vectorImage.IsNull())
   {
       image->UpdateOutputInformation();
       imageRegion = image->GetLargestPossibleRegion();
+      
+      try
+      {
+        ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+        sensor->SetImageGeometry( image->GetImageKeywordlist() );
+      }
+      catch ( itk::ExceptionObject &  )
+      {
+        roundLongLat->deactivate();
+      }
   }
   else if(image.IsNull() && !vectorImage.IsNull())
   {
       vectorImage->UpdateOutputInformation();
       imageRegion = vectorImage->GetLargestPossibleRegion();
+      
+      try
+      {
+        ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+        sensor->SetImageGeometry( vectorImage->GetImageKeywordlist() );
+      }
+      catch ( itk::ExceptionObject &  )
+      {
+        roundLongLat->deactivate();
+      }
   }
   else
   {
@@ -89,6 +114,36 @@ void ExtractROIModule::Run()
   wExtractROIWindow->show();
 }
 
+/** Test if user can select lat/long selection*/
+/*
+bool ExtractROIModule::HaveKeyWordList()
+{
+  try
+  {
+    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+    sensor->SetImageGeometry( image->GetImageKeywordlist() );
+  }
+  catch ( itk::ExceptionObject &  )
+  {
+    fl_alert("Invalid image : No ImageKeywordlist found");
+    return;
+  }
+}
+*/
+void ExtractROIModule::LongLatSelection()
+{
+//   std::cout << "toto" << std::endl;
+  if ( roundLongLat->value() == 1 )
+  {
+    guiPixel->hide();
+    guiLongLat->show();
+  }
+  else
+  {
+    guiPixel->show();
+    guiLongLat->hide();
+  }  
+}
 
 /** Cancel */
 void ExtractROIModule::Cancel()
@@ -103,16 +158,63 @@ void ExtractROIModule::Ok()
       FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
       FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
-
+      IndexType idxInit;
+      OffsetType offSize;
       if(!image.IsNull() && vectorImage.IsNull())
       {
         // Get input image
         FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
 
-        m_ImageExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));
-        m_ImageExtractROIFilter->SetStartY(static_cast<unsigned long>(vStartY->value()));
-        m_ImageExtractROIFilter->SetSizeX(static_cast<unsigned long>(vSizeX->value()));
-        m_ImageExtractROIFilter->SetSizeY(static_cast<unsigned long>(vSizeY->value()));
+        //TODO Add case of long/lat input
+        if ( roundLongLat->value() == 1 )
+        {
+          InverseSensorInputPointType pt1;
+          InverseSensorInputPointType pt2;
+          pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
+          pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
+          pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
+          pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
+
+          InverseSensorOutputPointType pto1;
+          InverseSensorOutputPointType pto2;
+          
+          InverseSensorType::Pointer sensor = InverseSensorType::New();
+          sensor->SetImageGeometry( image->GetImageKeywordlist() );
+          
+          pto1 = sensor->TransformPoint (pt1);
+          pto2 = sensor->TransformPoint (pt2);
+          
+          IndexType index1;
+          IndexType index2;
+          
+          image->TransformPhysicalPointToIndex(pto1, index1);
+          image->TransformPhysicalPointToIndex(pto2, index2);
+          
+          idxInit = index1;
+          offSize = index2 - index1;
+          
+          std::cout << "pt1"<<  pt1 << std::endl;
+          std::cout << "pt2"<<  pt2 << std::endl;
+          std::cout << "pto1"<<  pto1 << std::endl;
+          std::cout << "pto2"<<  pto2 << std::endl;
+          std::cout << "index1"<<  index1 << std::endl;
+          std::cout << "index2"<<  index2 << std::endl;
+          std::cout << "idxInit"<<  idxInit << std::endl;
+          std::cout << "offSize"<<  offSize << std::endl;
+        }
+        else
+        {
+          idxInit[0] = static_cast<unsigned long>(vStartX->value());
+          idxInit[1] = static_cast<unsigned long>(vStartY->value()); 
+           
+          offSize[0] = static_cast<unsigned long>(vSizeX->value());
+          offSize[1] = static_cast<unsigned long>(vSizeY->value()); 
+        }
+        
+        m_ImageExtractROIFilter->SetStartX(idxInit[0]);
+        m_ImageExtractROIFilter->SetStartY(idxInit[1]);
+        m_ImageExtractROIFilter->SetSizeX(offSize[0]);
+        m_ImageExtractROIFilter->SetSizeY(offSize[1]);
         m_ImageExtractROIFilter->SetInput(image);
         this->ClearOutputDescriptors();
         this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
@@ -123,11 +225,57 @@ void ExtractROIModule::Ok()
       {
         // Get Input Vector Image
         FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+        
+        //TODO Add case of long/lat input
+        if ( roundLongLat->value() == 1 )
+        {
+          InverseSensorInputPointType pt1;
+          InverseSensorInputPointType pt2;
+          pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
+          pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
+          pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
+          pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
 
-        m_VectorImageExtractROIFilter->SetStartX(static_cast<unsigned long>(vStartX->value()));
-        m_VectorImageExtractROIFilter->SetStartY(static_cast<unsigned long>(vStartY->value()));
-        m_VectorImageExtractROIFilter->SetSizeX(static_cast<unsigned long>(vSizeX->value()));
-        m_VectorImageExtractROIFilter->SetSizeY(static_cast<unsigned long>(vSizeY->value()));
+          InverseSensorOutputPointType pto1;
+          InverseSensorOutputPointType pto2;
+          
+          InverseSensorType::Pointer sensor = InverseSensorType::New();
+          sensor->SetImageGeometry( vectorImage->GetImageKeywordlist() );
+          
+          pto1 = sensor->TransformPoint (pt1);
+          pto2 = sensor->TransformPoint (pt2);
+          
+          IndexType index1;
+          IndexType index2;
+          
+          vectorImage->TransformPhysicalPointToIndex(pto1, index1);
+          vectorImage->TransformPhysicalPointToIndex(pto2, index2);
+          
+          idxInit = index1;
+          offSize = index2 - index1;
+          
+          std::cout << "pt1"<<  pt1 << std::endl;
+          std::cout << "pt2"<<  pt2 << std::endl;
+          std::cout << "pto1"<<  pto1 << std::endl;
+          std::cout << "pto2"<<  pto2 << std::endl;
+          std::cout << "index1"<<  index1 << std::endl;
+          std::cout << "index2"<<  index2 << std::endl;
+          std::cout << "idxInit"<<  idxInit << std::endl;
+          std::cout << "offSize"<<  offSize << std::endl;
+        }
+        else
+        {
+          idxInit[0] = static_cast<unsigned long>(vStartX->value());
+          idxInit[1] = static_cast<unsigned long>(vStartY->value()); 
+           
+          offSize[0] = static_cast<unsigned long>(vSizeX->value());
+          offSize[1] = static_cast<unsigned long>(vSizeY->value()); 
+        }
+        
+        m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
+        m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
+        m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
+        m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
         m_VectorImageExtractROIFilter->SetInput(vectorImage);
         this->ClearOutputDescriptors();
         this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );

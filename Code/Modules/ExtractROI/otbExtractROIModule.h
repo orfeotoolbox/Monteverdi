@@ -30,6 +30,7 @@
 #include "otbExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
 
+#include "otbInverseSensorModel.h"
 namespace otb
 {
 /** \class ExtractROIModule
@@ -64,6 +65,16 @@ public:
   /// Mono channel Extract ROI filter
   typedef ExtractROI< InternalPixelType, InternalPixelType >  ImageExtractROIFilterType;
   
+  /** Inverse sensor model typedefs */
+  typedef InverseSensorModel<double>                InverseSensorType;
+  typedef InverseSensorType::InputPointType         InverseSensorInputPointType;
+  typedef InverseSensorType::OutputPointType        InverseSensorOutputPointType;
+  
+  /** Typedef to cast physical point to index*/
+  typedef FloatingImageType::IndexType             IndexType;
+  typedef IndexType::OffsetType             OffsetType;
+  typedef FloatingImageType::PointType             PointType; 
+//   typedef FloatingVectorImageType::IndexType             FloatingVectorImageIndexType;
   /** Show the Module GUI */
   virtual bool CanShow(){return true;};
   /** Show the Module GUI */
@@ -71,6 +82,8 @@ public:
   {
     wExtractROIWindow->show();
   };
+  
+  virtual void LongLatSelection();
 protected:
   /** Constructor */
   ExtractROIModule();
