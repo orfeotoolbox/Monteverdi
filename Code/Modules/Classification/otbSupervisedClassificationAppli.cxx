@@ -1987,19 +1987,19 @@ SupervisedClassificationAppli
     this->GenerateValidationSamplesFromROIs();
   }
 
-   ClassifierType::Pointer validationClassifier = ClassifierType::New();
+  ClassifierType::Pointer validationClassifier = ClassifierType::New();
   validationClassifier->SetSample(m_ValidationListSample);
   validationClassifier->SetNumberOfClasses(m_ClassesMap.size());
   validationClassifier->SetModel(m_Model);
   validationClassifier->Update();
 
-    ClassifierType::OutputType::Pointer membershipSample = validationClassifier->GetOutput();
-   ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
-   ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
-
-   TrainingListSampleType::ConstIterator sampleValIter = m_ValidationListLabelSample->Begin();
-   TrainingListSampleType::ConstIterator sampleValEnd  = m_ValidationListLabelSample->End();
-
+  ClassifierType::OutputType::Pointer membershipSample = validationClassifier->GetOutput();
+  ClassifierType::OutputType::ConstIterator sampleIter = membershipSample->Begin();
+  ClassifierType::OutputType::ConstIterator sampleLast = membershipSample->End();
+   
+  TrainingListSampleType::ConstIterator sampleValIter = m_ValidationListLabelSample->Begin();
+  TrainingListSampleType::ConstIterator sampleValEnd  = m_ValidationListLabelSample->End();
+  
   ConfusionMatrixType confusion(m_ClassesMap.size(),m_ClassesMap.size());
   confusion.Fill(0);
 
