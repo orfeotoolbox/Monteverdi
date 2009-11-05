@@ -1041,7 +1041,7 @@ void ViewerModule::UpdateTabHistogram()
       gHistogram->add(m_RedCurveWidgetGroup);
       gHistogram->resizable(m_RedCurveWidgetGroup);
       m_RedCurveWidgetGroup->resize(gHistogram->x()+blank,gHistogram->y()+blank,
-                                gHistogram->w()-blank,height-blank);
+                                width-blank,height-blank);
     }
   else
     {
