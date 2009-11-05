@@ -489,9 +489,8 @@ HomologousPointExtractionModuleModel
 ::OK()
 {
   // Import parameters from fixed image
-
   m_Resampler->SetSize(m_FirstInputImage->GetLargestPossibleRegion().GetSize());
-  m_Resampler->SetOutputSpacing(m_SecondInputImage->GetSpacing());
+  m_Resampler->SetOutputSpacing(m_FirstInputImage->GetSpacing());
   m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
   m_Resampler->UpdateOutputInformation();
   m_PerBander->SetInput(m_SecondInputImage);
