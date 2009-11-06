@@ -32,6 +32,8 @@ ExtractROIModule::ExtractROIModule()
   this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
   m_ImageExtractROIFilter = ImageExtractROIFilterType::New();
+  m_Transform        = TransformType::New();
+  m_InverseTransform = TransformType::New();
   this->BuildGUI();
 }
 
@@ -67,10 +69,18 @@ void ExtractROIModule::Run()
       
       try
       {
-        ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-        sensor->SetImageGeometry( image->GetImageKeywordlist() );
+        const itk::MetaDataDictionary & inputDict = image->GetMetaDataDictionary();
+        m_Transform->SetInputDictionary(inputDict);
+        m_Transform->SetInputOrigin(image->GetOrigin());
+        m_Transform->SetInputSpacing(image->GetSpacing());
+        m_Transform->InstanciateTransform();
+        
+        if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
+        {
+          roundLongLat->deactivate();
+        }
       }
-      catch ( itk::ExceptionObject &  )
+      catch ( itk::ExceptionObject &  e)
       {
         roundLongLat->deactivate();
       }
@@ -82,10 +92,18 @@ void ExtractROIModule::Run()
       
       try
       {
-        ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-        sensor->SetImageGeometry( vectorImage->GetImageKeywordlist() );
+        const itk::MetaDataDictionary & inputDict = vectorImage->GetMetaDataDictionary();
+        m_Transform->SetInputDictionary(inputDict);
+        m_Transform->SetInputOrigin(vectorImage->GetOrigin());
+        m_Transform->SetInputSpacing(vectorImage->GetSpacing());
+        m_Transform->InstanciateTransform();
+        
+        if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
+        {
+          roundLongLat->deactivate();
+        }
       }
-      catch ( itk::ExceptionObject &  )
+      catch ( itk::ExceptionObject &e)
       {
         roundLongLat->deactivate();
       }
@@ -114,22 +132,7 @@ void ExtractROIModule::Run()
   wExtractROIWindow->show();
 }
 
-/** Test if user can select lat/long selection*/
-/*
-bool ExtractROIModule::HaveKeyWordList()
-{
-  try
-  {
-    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-    sensor->SetImageGeometry( image->GetImageKeywordlist() );
-  }
-  catch ( itk::ExceptionObject &  )
-  {
-    fl_alert("Invalid image : No ImageKeywordlist found");
-    return;
-  }
-}
-*/
+
 void ExtractROIModule::LongLatSelection()
 {
 //   std::cout << "toto" << std::endl;
@@ -168,39 +171,29 @@ void ExtractROIModule::Ok()
         //TODO Add case of long/lat input
         if ( roundLongLat->value() == 1 )
         {
-          InverseSensorInputPointType pt1;
-          InverseSensorInputPointType pt2;
+          OutputPointType pt1;
+          OutputPointType pt2;
+          
           pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
           pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
           pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
           pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-
-          InverseSensorOutputPointType pto1;
-          InverseSensorOutputPointType pto2;
           
-          InverseSensorType::Pointer sensor = InverseSensorType::New();
-          sensor->SetImageGeometry( image->GetImageKeywordlist() );
-          
-          pto1 = sensor->TransformPoint (pt1);
-          pto2 = sensor->TransformPoint (pt2);
+          OutputPointType pto1;
+          OutputPointType pto2;
+          m_Transform->GetInverse(m_InverseTransform);
+          pto1 = m_InverseTransform->TransformPoint(pt1);
+          pto2 = m_InverseTransform->TransformPoint(pt2);
           
           IndexType index1;
           IndexType index2;
-          
+                    
           image->TransformPhysicalPointToIndex(pto1, index1);
           image->TransformPhysicalPointToIndex(pto2, index2);
           
           idxInit = index1;
           offSize = index2 - index1;
           
-          std::cout << "pt1"<<  pt1 << std::endl;
-          std::cout << "pt2"<<  pt2 << std::endl;
-          std::cout << "pto1"<<  pto1 << std::endl;
-          std::cout << "pto2"<<  pto2 << std::endl;
-          std::cout << "index1"<<  index1 << std::endl;
-          std::cout << "index2"<<  index2 << std::endl;
-          std::cout << "idxInit"<<  idxInit << std::endl;
-          std::cout << "offSize"<<  offSize << std::endl;
         }
         else
         {
@@ -229,39 +222,28 @@ void ExtractROIModule::Ok()
         //TODO Add case of long/lat input
         if ( roundLongLat->value() == 1 )
         {
-          InverseSensorInputPointType pt1;
-          InverseSensorInputPointType pt2;
+          OutputPointType pt1;
+          OutputPointType pt2;
+          
           pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
           pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
           pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
           pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-
-          InverseSensorOutputPointType pto1;
-          InverseSensorOutputPointType pto2;
           
-          InverseSensorType::Pointer sensor = InverseSensorType::New();
-          sensor->SetImageGeometry( vectorImage->GetImageKeywordlist() );
-          
-          pto1 = sensor->TransformPoint (pt1);
-          pto2 = sensor->TransformPoint (pt2);
+          OutputPointType pto1;
+          OutputPointType pto2;
+          m_Transform->GetInverse(m_InverseTransform);
+          pto1 = m_InverseTransform->TransformPoint(pt1);
+          pto2 = m_InverseTransform->TransformPoint(pt2);
           
           IndexType index1;
           IndexType index2;
-          
+                    
           vectorImage->TransformPhysicalPointToIndex(pto1, index1);
           vectorImage->TransformPhysicalPointToIndex(pto2, index2);
           
           idxInit = index1;
           offSize = index2 - index1;
-          
-          std::cout << "pt1"<<  pt1 << std::endl;
-          std::cout << "pt2"<<  pt2 << std::endl;
-          std::cout << "pto1"<<  pto1 << std::endl;
-          std::cout << "pto2"<<  pto2 << std::endl;
-          std::cout << "index1"<<  index1 << std::endl;
-          std::cout << "index2"<<  index2 << std::endl;
-          std::cout << "idxInit"<<  idxInit << std::endl;
-          std::cout << "offSize"<<  offSize << std::endl;
         }
         else
         {
@@ -289,7 +271,6 @@ void ExtractROIModule::Ok()
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
 
 } // End namespace otb
 

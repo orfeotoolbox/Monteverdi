@@ -31,6 +31,7 @@
 #include "otbMultiChannelExtractROI.h"
 
 #include "otbInverseSensorModel.h"
+#include "otbGenericRSTransform.h"
 namespace otb
 {
 /** \class ExtractROIModule
@@ -69,6 +70,9 @@ public:
   typedef InverseSensorModel<double>                InverseSensorType;
   typedef InverseSensorType::InputPointType         InverseSensorInputPointType;
   typedef InverseSensorType::OutputPointType        InverseSensorOutputPointType;
+    
+  typedef GenericRSTransform<>                        TransformType;
+  typedef TransformType::OutputPointType              OutputPointType;
   
   /** Typedef to cast physical point to index*/
   typedef FloatingImageType::IndexType             IndexType;
@@ -84,6 +88,7 @@ public:
   };
   
   virtual void LongLatSelection();
+
 protected:
   /** Constructor */
   ExtractROIModule();
@@ -108,6 +113,9 @@ private:
   ImageExtractROIFilterType::Pointer m_ImageExtractROIFilter;
   /** Pointer to the vector image extract ROI filter object */
   VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
+  
+  TransformType::Pointer   m_Transform;
+  TransformType::Pointer   m_InverseTransform;
 
 };
 
