@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -11,7 +11,7 @@ class ExtractROIModuleGUI {open
   } {
     Fl_Window wExtractROIWindow {
       label {Select the ROI} open
-      xywh {830 252 320 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 hide
+      xywh {830 252 320 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 visible
     } {
       Fl_Return_Button bOk {
         label Ok
@@ -63,7 +63,7 @@ class ExtractROIModuleGUI {open
             xywh {105 250 180 25}
           }
           Fl_Value_Input vLatitude2 {
-            label Latitude2 selected
+            label Latitude2
             xywh {105 290 180 25}
           }
         }
@@ -86,9 +86,9 @@ class ExtractROIModuleGUI {open
         }
       }
       Fl_Round_Button roundLongLat {
-        label {Select Long/Lat }
-        callback {LongLatSelection();}
-        xywh {55 110 185 25} down_box ROUND_DOWN_BOX
+        label {Select Long/Lat (NW (1) ; SE (2))}
+        callback {LongLatSelection();} selected
+        xywh {15 110 240 25} down_box ROUND_DOWN_BOX
       }
     }
   }
