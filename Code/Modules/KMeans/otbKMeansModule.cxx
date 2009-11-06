@@ -75,9 +75,9 @@ void KMeansModule::UpdateNumberOfSamples()
   vNumberOfSamples->show();
 
   int squareRatio = 100/vNumberOfSamples->value();
-  
+
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
-  
+
   if(image.IsNull())
     {
     itkExceptionMacro("InputImage is null");
@@ -164,7 +164,7 @@ void KMeansModule::ThreadedWatch()
 
   // Update progress one last time
   Fl::awake(&UpdateProgressCallback,this);
-  
+
   Fl::lock();
   // Reactivate window buttons
   bCancel->activate();
@@ -191,14 +191,14 @@ void KMeansModule::ThreadedRun()
     this->BusyOff();
     return;
     }
-  
+
   // First, sample data
   SamplingFilterType::Pointer sampler = SamplingFilterType::New();
   sampler->SetInput(image);
   sampler->SetShrinkFactor(vcl_floor(vcl_sqrt(100/vNumberOfSamples->value())));
   m_ProcessObject = sampler;
   sampler->Update();
-  
+
   // Then, build the sample list
   unsigned int nbComp = sampler->GetOutput()->GetNumberOfComponentsPerPixel();
   unsigned int nbClasses = vNumberOfClasses->value();
@@ -217,7 +217,7 @@ void KMeansModule::ThreadedRun()
     {
     SampleType sample = it.Get();
     listSample->PushBack(sample);
-    
+
     for(unsigned int i = 0; i<nbComp;++i)
       {
       if(min[i]>sample[i])
@@ -240,16 +240,16 @@ void KMeansModule::ThreadedRun()
     for(unsigned int compIndex = 0; compIndex < nbComp;++compIndex)
       {
       initialCentroids[compIndex + classIndex * nbComp] = min[compIndex]
-       + (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1);
+       + (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1.0);
       }
     }
-  
+
   // Now, build the kdTree
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   treeGenerator->SetSample(listSample);
   treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
   treeGenerator->Update();
-  
+
   std::cout<<"Tree generated"<<std::endl;
 
   // Estimate the centroids
@@ -263,7 +263,7 @@ void KMeansModule::ThreadedRun()
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;
-  
+
   EstimatorType::ParametersType finalCentroids = m_Estimator->GetParameters();
 
  for(unsigned int classIndex = 0; classIndex < nbClasses;++classIndex)
