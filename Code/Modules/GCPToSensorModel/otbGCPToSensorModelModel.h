@@ -91,10 +91,10 @@ public:
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
- 
+
   /** New macro */
   itkNewMacro(Self);
-  
+
   /** Point Set */
   typedef itk::PointSet< float, 2 > PointSetType;
   typedef PointSetType::Pointer     PointSetPointerType;
@@ -154,7 +154,7 @@ public:
   /** Get/Set DEMPath */
   void SetDEMPath( const std::string & DEMPath );
   itkGetConstMacro(DEMPath, std::string);
-  
+
   /** Set/Get Use DEM */
   itkSetMacro(ElevMgt, ElevManagementEnumType);
   itkGetConstMacro(ElevMgt, ElevManagementEnumType);
@@ -173,17 +173,17 @@ public:
   {
     if( i>m_UsedElevation.size() )
       itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
-    
+
     return m_UsedElevation[i];
   };
   std::vector<double> GetUsedElevation() { return m_UsedElevation; };
   /** According to the type of elevation manageme,t generate the used list. */
   void GenerateUsedElevation();
-  
+
   /** Set/Get Projection type */
   itkSetMacro(ProjectionType, ProjectionEnumType);
   itkGetConstMacro(ProjectionType, ProjectionEnumType);
- 
+
   /** Get Ground error projection */
   itkGetConstMacro(GroundError, double);
 
@@ -195,7 +195,7 @@ protected:
   /** Destructor */
   ~GCPToSensorModelModel();
 
-  
+
 private:
   GCPToSensorModelModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -217,11 +217,11 @@ private:
   /** Resampled  image */
   VectorImagePointerType m_Output;
   /** Projection */
-  ossimProjection * m_Projection;
+  ossimRefPtr<ossimProjection> m_Projection;
   ///*ossimSensorModel*/ ossimRpcModel * m_Projection;
-  ossimRpcProjection * m_RpcProjection;
-  ossimRpcModel * m_RpcModel;
-  
+  ossimRefPtr<ossimRpcProjection> m_RpcProjection;
+  ossimRefPtr<ossimRpcModel> m_RpcModel;
+
 
 
   bool m_OutputChanged;

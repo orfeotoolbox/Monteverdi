@@ -65,7 +65,7 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 
 
   m_DEMPath = "";
-  
+
   m_MeanElevation = 0;
   m_OutputChanged = false;
   m_ElevMgt = GCP;
@@ -82,10 +82,8 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
-  if( m_RpcProjection != NULL )
-    delete m_RpcProjection;
-  if( m_RpcModel != NULL )
-    delete m_RpcModel;
+  m_RpcProjection = NULL;
+  m_RpcModel = NULL;
 }
 
 
@@ -97,13 +95,13 @@ GCPToSensorModelModel
 
   image->UpdateOutputInformation();
   m_InputImage = image;
-  
+
   // Generate the layer
   m_ImageGenerator->SetImage(image);
   m_ImageGenerator->GenerateQuicklookOn();
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   m_ImageGenerator->GenerateLayer();
-  
+
   std::vector<unsigned int> channels;
   if(image->GetNumberOfComponentsPerPixel()==3)
     {
@@ -119,12 +117,12 @@ GCPToSensorModelModel
     }
   if( channels.size() == 3 )
     m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-  
+
     m_ImageGenerator->GetLayer()->SetName("InputImage");
- 
+
   // Clear previous layers
   m_VisualizationModel->ClearLayers();
-  
+
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
@@ -200,8 +198,8 @@ GCPToSensorModelModel
 {
   bool found = false;
   unsigned int j=0;
-  
-  
+
+
   while( j<m_IndexesList.size() && !found )
     {
       if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
@@ -220,7 +218,7 @@ GCPToSensorModelModel
   phyPoint[1] = id2[1];
   m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );
 }
-  
+
 void
 GCPToSensorModelModel
 ::RemovePointFromList( unsigned int id )
@@ -246,12 +244,12 @@ void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
 {
-  ossimBilinearProjection * bproj = new ossimBilinearProjection();
+  ossimRefPtr<ossimBilinearProjection> bproj = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
   std::vector<ossimGpt>  geoPoints;
   ContinuousIndexType idFix, idMov;
-  
+
   ossimDpt spoint;
   ossimGpt gpoint;
 
@@ -267,8 +265,7 @@ GCPToSensorModelModel
 
   m_GroundError = bproj->setTiePoints(sensorPoints,geoPoints);
 
-  delete m_Projection;
-  m_Projection = bproj;
+  m_Projection = bproj.get();
 
   // To avoid infinite loop (notify->notify->notify...)
   if( m_HasNewImage == false )
@@ -311,33 +308,29 @@ GCPToSensorModelModel
       tieGptVect.push_back(tieGpt);
     }
   tieGptSet.setTiePoints(tieGptVect);
- 
-  // Use a solver to compute coef
-  ossimRpcSolver solver(false, false);
-  solver.solveCoefficients( sensorPoints, geoPoints);
-  m_GroundError = vcl_pow(solver.getRmsError(), 2);
 
-  // deduct the associate projection
-  if( m_RpcProjection != NULL )
-    delete m_RpcProjection;
+  // Use a solver to compute coef
+  ossimRefPtr<ossimRpcSolver> solver = new ossimRpcSolver(false, false);
+  solver->solveCoefficients( sensorPoints, geoPoints);
+  m_GroundError = vcl_pow(solver->getRmsError(), 2);
+
+  // infer the associate projection
   m_RpcProjection = new ossimRpcProjection();
-  ossimRefPtr< ossimRpcProjection > objp = solver.createRpcProjection();
+  ossimRefPtr< ossimRpcProjection > objp = dynamic_cast<ossimRpcProjection*>(solver->createRpcProjection()->getProjection());
   ossimKeywordlist kwl;
   objp->saveState(kwl);
   m_RpcProjection->loadState(kwl);
 
-  m_Projection = m_RpcProjection;
+  m_Projection = m_RpcProjection.get();
 
   // deduct the associate model
-  if( m_RpcModel != NULL )
-    delete m_RpcModel;
   m_RpcModel = new ossimRpcModel();
-  ossimRefPtr< ossimRpcModel > objm = solver.createRpcModel();
+  ossimRefPtr< ossimRpcModel > objm = dynamic_cast<ossimRpcModel*>(solver->createRpcModel()->getProjection());
   ossimKeywordlist kwlm;
   objm->saveState(kwlm);
   m_RpcModel->loadState(kwlm);
 
-  
+
   // To avoid infinite loop (notify->notify->notify...)
   if( m_HasNewImage == false )
     {
@@ -377,8 +370,8 @@ GCPToSensorModelModel
 
   if( m_Projection != NULL )
     {
-      m_Projection->lineSampleToWorld(spoint, gpoint); 
-      
+      m_Projection->lineSampleToWorld(spoint, gpoint);
+
       out[0] = gpoint.lon;
       out[1] = gpoint.lat;
       out[2] = gpoint.hgt;
@@ -415,20 +408,20 @@ GCPToSensorModelModel
     {
       if( m_RpcModel == NULL )
 	return;
-    
+
       ossimKeywordlist geom_kwl;
       m_RpcModel->updateModel();
       m_RpcModel->saveState(geom_kwl);
-      
+
       ImageKeywordlist otb_kwl;
       otb_kwl.SetKeywordlist( geom_kwl );
-      
+
       itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
       itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
- 
+
       m_Output = m_InputImage;
       m_Output->UpdateOutputInformation();
-      
+
       m_OutputChanged = true;
       this->NotifyAll();
     }
