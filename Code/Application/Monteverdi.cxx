@@ -96,31 +96,31 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>(otbGetTextMacro("Reader"),"File/Open dataset");
-  model->RegisterModule<otb::WriterModule> (otbGetTextMacro("Writer"),otbGetTextMacro("File/Save dataset"));
-  model->RegisterModule<otb::ExtractROIModule>(otbGetTextMacro("ExtractROI"),"File/Extract ROI from dataset");
-  model->RegisterModule<otb::WriterMVCModule> (otbGetTextMacro("Specific writer for X image"),"File/Save dataset (advanced)");
-  model->RegisterModule<otb::SpeckleFilteringModule>(otbGetTextMacro("Speckle"),"SAR/Despeckle image");
-  model->RegisterModule<otb::SarIntensityModule>(otbGetTextMacro("SarIntensity"),"SAR/Compute intensity and log-intensity");
+  model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
+  model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
+  model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
+  model->RegisterModule<otb::SarIntensityModule>("SarIntensity", otbGetTextMacro("SAR/Compute intensity and log-intensity"));
 
-  model->RegisterModule<otb::FeatureExtractionModule>(otbGetTextMacro("FeatureExtraction"), "Filtering/Feature extraction");
-  model->RegisterModule<otb::SupervisedClassificationModule>(otbGetTextMacro("SupervisedClassification"), "Learning/SVM classification");
-  model->RegisterModule<otb::KMeansModule>(otbGetTextMacro("KMeans"),"Learning/KMeans clustering");
-  model->RegisterModule<otb::OrthorectificationModule>(otbGetTextMacro("Orthorectification"), "Geometry/Orthorectification");
-  model->RegisterModule<otb::ProjectionModule>(otbGetTextMacro("Projection"),"Geometry/Reproject image");
-  model->RegisterModule<otb::SuperimpositionModule>(otbGetTextMacro("Superimposition"),"Geometry/Superimpose two images");
-  model->RegisterModule<otb::HomologousPointExtractionModule>(otbGetTextMacro("HomologousPoints"), "Geometry/Homologous points extraction");
-  model->RegisterModule<otb::GCPToSensorModelModule>(otbGetTextMacro("GCPToSensorModel"), "Geometry/GCP To Sensor Model");
+  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", otbGetTextMacro("Filtering/Feature extraction"));
+  model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", otbGetTextMacro("Learning/SVM classification"));
+  model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
+  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", otbGetTextMacro("Geometry/Orthorectification"));
+  model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
+  model->RegisterModule<otb::SuperimpositionModule>("Superimposition", otbGetTextMacro("Geometry/Superimpose two images"));
+  model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", otbGetTextMacro("Geometry/Homologous points extraction"));
+  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP To Sensor Model"));
 
-  model->RegisterModule<otb::MeanShiftModule> (otbGetTextMacro("MeanShift"),"Filtering/Mean shift clustering");
-  model->RegisterModule<otb::PanSharpeningModule> (otbGetTextMacro("PanSharpening"),"Filtering/Pan-sharpen an image");
-  model->RegisterModule<otb::ViewerModule>(otbGetTextMacro("Viewer"),"Visualization/Viewer");
-  model->RegisterModule<otb::CachingModule>(otbGetTextMacro("zCaching"),"File/Cache dataset");
-  model->RegisterModule<otb::ConcatenateModule>(otbGetTextMacro("Concatenate"),"File/Concatenate images");
+  model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
+  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pan-sharpen an image"));
+  model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
+  model->RegisterModule<otb::CachingModule>("zCaching", otbGetTextMacro("File/Cache dataset"));
+  model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
 
-  model->RegisterModule<otb::AlgebraModule>(otbGetTextMacro("Algebra"),"Filtering/Band Math");
-  model->RegisterModule<otb::ChangeDetectionModule>(otbGetTextMacro("ChangeDetection"),"Filtering/Change Detection");
-  model->RegisterModule<otb::ThresholdModule>(otbGetTextMacro("Threshold"),"Filtering/Threshold");
+  model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band Math"));
+  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change Detection"));
+  model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   
   // Launch Monteverdi
   view->InitWidgets();
