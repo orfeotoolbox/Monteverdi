@@ -248,14 +248,14 @@ void ThresholdModule::UpdateDetails()
 
     if(guiAbove->value())
     {
-      m_ThresholdFilter->ThresholdBelow(guiMinDetails->value());
-      m_ThresholdQuicklook->ThresholdBelow(guiMinDetails->value());
+      m_ThresholdFilter->ThresholdAbove(guiMaxDetails->value());
+      m_ThresholdQuicklook->ThresholdAbove(guiMaxDetails->value());
     }
 
     if(guiBelow->value())
     {
-      m_ThresholdFilter->ThresholdAbove(guiMaxDetails->value());
-      m_ThresholdQuicklook->ThresholdAbove(guiMaxDetails->value());
+      m_ThresholdFilter->ThresholdBelow(guiMinDetails->value());
+      m_ThresholdQuicklook->ThresholdBelow(guiMinDetails->value());
     }
   }
   // Case 2 : Binary Threshold

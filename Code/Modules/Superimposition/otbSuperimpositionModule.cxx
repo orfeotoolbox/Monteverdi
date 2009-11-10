@@ -69,8 +69,6 @@ void SuperimpositionModule::Ok()
   ImageType::Pointer fixed = this->GetInputData<ImageType>("ReferenceImage");
   ImageType::Pointer moving = this->GetInputData<ImageType>("InputImage");
 
-  bool needsElevation = false;
-
   // Handle reference image
   if(fixed.IsNotNull())
     {
