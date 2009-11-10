@@ -96,31 +96,33 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
-  model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
-  model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
-  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
+  model->RegisterModule<otb::ReaderModule>("0Reader", otbGetTextMacro("File/Open dataset"));
+  model->RegisterModule<otb::WriterModule> ("1Writer", otbGetTextMacro("File/Save dataset"));
+  model->RegisterModule<otb::WriterMVCModule> ("2Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
+  model->RegisterModule<otb::CachingModule>("3Caching", otbGetTextMacro("File/Cache dataset"));
+  model->RegisterModule<otb::ExtractROIModule>("4ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
+  model->RegisterModule<otb::ConcatenateModule>("5Concatenate", otbGetTextMacro("File/Concatenate images"));
+
+  model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
+
+  model->RegisterModule<otb::AlgebraModule>("0Algebra", otbGetTextMacro("Filtering/Band math"));
+  model->RegisterModule<otb::ThresholdModule>("1Threshold", otbGetTextMacro("Filtering/Threshold"));
+  model->RegisterModule<otb::PanSharpeningModule> ("2PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
+  model->RegisterModule<otb::MeanShiftModule> ("3MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
+  model->RegisterModule<otb::FeatureExtractionModule>("4FeatureExtraction", otbGetTextMacro("Filtering/Feature extraction"));
+  model->RegisterModule<otb::ChangeDetectionModule>("5ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
+
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity", otbGetTextMacro("SAR/Compute intensity and log-intensity"));
 
-  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", otbGetTextMacro("Learning/SVM classification"));
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
+
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", otbGetTextMacro("Geometry/Orthorectification"));
   model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition", otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", otbGetTextMacro("Geometry/Homologous points extraction"));
-  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP To Sensor Model"));
-
-  model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
-  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pan-sharpen an image"));
-  model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
-  model->RegisterModule<otb::CachingModule>("zCaching", otbGetTextMacro("File/Cache dataset"));
-  model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
-
-  model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band Math"));
-  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change Detection"));
-  model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
+  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP to sensor model"));
   
   // Launch Monteverdi
   view->InitWidgets();
