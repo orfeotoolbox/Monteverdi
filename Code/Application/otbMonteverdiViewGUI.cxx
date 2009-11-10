@@ -25,7 +25,9 @@
 
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
+
 #include "otbMacro.h"
+#include "otbI18n.h"
 #include "otbMsgReporter.h"
 
 #include "itkExceptionObject.h"
@@ -143,7 +145,7 @@ MonteverdiViewGUI
   const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
-  mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
+  mMenuBar->add(otbGetTextMacro("File"), 0, 0, 0, FL_SUBMENU);
 
   unsigned int idx = 0;
 
@@ -163,8 +165,8 @@ MonteverdiViewGUI
     }
 
   // In the end
-  mMenuBar->add("File/Quit", 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
-  mMenuBar->add("?/Help",0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
+  mMenuBar->add(otbGetTextMacro("File/Quit"), 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
+  mMenuBar->add(otbGetTextMacro("?/Help"),0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
 }
 
 /** Second step of Init Widgets : creation of the tree */
@@ -177,7 +179,7 @@ MonteverdiViewGUI
 
   m_Tree->box( FL_DOWN_BOX );
   m_Tree->auto_branches( true );
-  m_Tree->label( "Datasets Browser" );
+  m_Tree->label( otbGetTextMacro("Datasets Browser") );
 
   // allow callback with the tree
   m_Tree->box( FL_DOWN_BOX );
@@ -194,7 +196,7 @@ MonteverdiViewGUI
   //Flu_Tree_Browser::Node* root = m_Tree->first();
   FluTreeBrowser::Node* root = m_Tree->first();
   root->open(true);
-  root->label("Data Set");
+  root->label(otbGetTextMacro("Dataset"));
 
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);
@@ -322,42 +324,42 @@ MonteverdiViewGUI
         }
     }
   // node is a output
-  else if( n->parent()->parent()->is_root() )
-    {
+  else if (n->parent()->parent()->is_root())
+  {
     std::string instanceId = n->parent()->label();
-    std::string outputId   = n->label();
-    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId,outputId)
-                 && !m_MonteverdiModel->IsCached(instanceId,outputId);
-    bool viewable  = m_MonteverdiModel->SupportsViewing(instanceId,outputId);
-    bool writable  = m_MonteverdiModel->SupportsWriting(instanceId,outputId);
+    std::string outputId = n->label();
+    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId, outputId) && !m_MonteverdiModel->IsCached(
+        instanceId, outputId);
+    bool viewable = m_MonteverdiModel->SupportsViewing(instanceId, outputId);
+    bool writable = m_MonteverdiModel->SupportsWriting(instanceId, outputId);
 
-          m_Tree->GetModuleMenu()->Reset();
-      m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable,cacheable,writable);
-      if( m_Tree->GetModuleMenu()->GetOutputMenuOutput()==RENAME_OUTPUT )
-       {
-         std::string rootPath = n->find_path();
-         // erase the end "/"
-         rootPath = rootPath.substr( 0, rootPath.size()-1 );
-         // extract the path
-         rootPath = rootPath.substr( 0, rootPath.find_last_of("/")+1 );
-         gOutputRenameRoot->value( rootPath.c_str()  );
-         gOutputRenameOld->value(label);
-         gOutputRenameNew->value(label);
-         wOutputRenameWindow->show();
-       }
-      else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT )
-       {
-       m_MonteverdiController->StartViewing(instanceId,outputId);
-       }
-      else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT )
-       {
-       m_MonteverdiController->StartCaching(instanceId,outputId,true);
-       }
-       else if( m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT )
-       {
-       m_MonteverdiController->StartWriting(instanceId,outputId);
-       }
+    m_Tree->GetModuleMenu()->Reset();
+    m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable, cacheable, writable);
+    if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == RENAME_OUTPUT)
+    {
+      std::string rootPath = n->find_path();
+      // erase the end "/"
+      rootPath = rootPath.substr(0, rootPath.size() - 1);
+      // extract the path
+      rootPath = rootPath.substr(0, rootPath.find_last_of("/") + 1);
+      gOutputRenameRoot->value(rootPath.c_str());
+      gOutputRenameOld->value(label);
+      gOutputRenameNew->value(label);
+      wOutputRenameWindow->show();
     }
+    else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT)
+    {
+      m_MonteverdiController->StartViewing(instanceId, outputId);
+    }
+    else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT)
+    {
+      m_MonteverdiController->StartCaching(instanceId, outputId, true);
+    }
+    else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT)
+    {
+      m_MonteverdiController->StartWriting(instanceId, outputId);
+    }
+  }
   else if( n->is_leaf() )
     {
     }
