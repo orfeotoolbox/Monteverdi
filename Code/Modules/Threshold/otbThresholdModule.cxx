@@ -298,11 +298,17 @@ void ThresholdModule::OK()
 {
   this->ClearOutputDescriptors();
 
-  if(guiGenericThreshold->value() && !guiBinaryThreshold->value())
+  std::cout<<int(guiGenericThreshold->value())<<" "<<int(guiBinaryThreshold->value())<<std::endl;
+
+  int genValue = static_cast<int>(guiGenericThreshold->value());
+  int binValue = 
+static_cast<int>(guiBinaryThreshold->value());
+
+  if( genValue != 0 && binValue == 0 )
     {
       this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),"OutputImage",otbGetTextMacro("Thresholded image"));
     }
-  if(!guiGenericThreshold->value() && guiBinaryThreshold->value())
+  else if( genValue == 0 && binValue != 0 )
     {
       this->AddOutputDescriptor(m_BinaryThresholdFilter->GetOutput(),"OutputImage",otbGetTextMacro("Thresholded image"));
     }
