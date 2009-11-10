@@ -33,9 +33,9 @@ SuperimpositionModule::SuperimpositionModule()
   m_Transform       = TransformType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<VectorImageType>("ReferenceImage","Reference image for reprojection.");
+  this->AddInputDescriptor<VectorImageType>("ReferenceImage",otbGetTextMacro("Reference image for reprojection"));
   this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
-  this->AddInputDescriptor<VectorImageType>("InputImage","Image to reproject.");
+  this->AddInputDescriptor<VectorImageType>("InputImage",otbGetTextMacro("Image to reproject"));
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
   this->BuildGUI();
@@ -142,7 +142,7 @@ void SuperimpositionModule::Ok()
     m_PerBanderFilter->SetFilter(m_Resampler);
     VectorImageType::Pointer output = m_PerBanderFilter->GetOutput();
     output->UpdateOutputInformation();
-  
+
     // Report projection ref (not done by the resample filter)
     if(fixed.IsNotNull())
       {
@@ -154,9 +154,9 @@ void SuperimpositionModule::Ok()
       }
 
     output->SetNumberOfComponentsPerPixel(vmoving->GetNumberOfComponentsPerPixel());
-      
+
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output,"Reprojected image","Image superimposable to reference");
+    this->AddOutputDescriptor(output,"Reprojected image",otbGetTextMacro("Image superimposable to reference"));
     this->NotifyOutputsChange();
     }
   // Else produce only a single image
@@ -165,7 +165,7 @@ void SuperimpositionModule::Ok()
     m_Resampler->SetInput(moving);
     ImageType::Pointer output = m_Resampler->GetOutput();
     output->UpdateOutputInformation();
-  
+
     // Report projection ref (not done by the resample filter)
     if(fixed.IsNotNull())
       {
@@ -179,10 +179,10 @@ void SuperimpositionModule::Ok()
     output->SetNumberOfComponentsPerPixel(moving->GetNumberOfComponentsPerPixel());
 
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output,"Reprojected image","Image superimposable to reference");
+    this->AddOutputDescriptor(output,"Reprojected image",otbGetTextMacro("Image superimposable to reference"));
     this->NotifyOutputsChange();
     }
-    
+
     wFileChooserWindow->hide();
 }
 
@@ -190,8 +190,8 @@ void SuperimpositionModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_dir_chooser("Choose the dataset dir...", "*.*",".");
-  
+  filename = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "*.*",".");
+
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");

@@ -28,7 +28,7 @@ namespace otb
 ExtractROIModule::ExtractROIModule()
 {
   // Describe inputs
-  this->AddInputDescriptor<FloatingImageType>("InputImage","Image to read.");
+  this->AddInputDescriptor<FloatingImageType>("InputImage", otbGetTextMacro("Image to read"));
   this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
   m_ImageExtractROIFilter = ImageExtractROIFilterType::New();
@@ -59,14 +59,14 @@ void ExtractROIModule::Run()
   itk::ImageRegion<2> imageRegion;
 
   typedef ForwardSensorModel<double>                ForwardSensorType;
-  
+
   roundLongLat->activate();
-  
+
   if(!image.IsNull() && vectorImage.IsNull())
   {
       image->UpdateOutputInformation();
       imageRegion = image->GetLargestPossibleRegion();
-      
+
       try
       {
         const itk::MetaDataDictionary & inputDict = image->GetMetaDataDictionary();
@@ -74,7 +74,7 @@ void ExtractROIModule::Run()
         m_Transform->SetInputOrigin(image->GetOrigin());
         m_Transform->SetInputSpacing(image->GetSpacing());
         m_Transform->InstanciateTransform();
-        
+
         if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
         {
           roundLongLat->deactivate();
@@ -89,7 +89,7 @@ void ExtractROIModule::Run()
   {
       vectorImage->UpdateOutputInformation();
       imageRegion = vectorImage->GetLargestPossibleRegion();
-      
+
       try
       {
         const itk::MetaDataDictionary & inputDict = vectorImage->GetMetaDataDictionary();
@@ -97,7 +97,7 @@ void ExtractROIModule::Run()
         m_Transform->SetInputOrigin(vectorImage->GetOrigin());
         m_Transform->SetInputSpacing(vectorImage->GetSpacing());
         m_Transform->InstanciateTransform();
-        
+
         if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
         {
           roundLongLat->deactivate();
@@ -145,7 +145,7 @@ void ExtractROIModule::LongLatSelection()
   {
     guiPixel->show();
     guiLongLat->hide();
-  }  
+  }
 }
 
 /** Cancel */
@@ -173,44 +173,44 @@ void ExtractROIModule::Ok()
         {
           OutputPointType pt1;
           OutputPointType pt2;
-          
+
           pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
           pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
           pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
           pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-          
+
           OutputPointType pto1;
           OutputPointType pto2;
           m_Transform->GetInverse(m_InverseTransform);
           pto1 = m_InverseTransform->TransformPoint(pt1);
           pto2 = m_InverseTransform->TransformPoint(pt2);
-          
+
           IndexType index1;
           IndexType index2;
-                    
+
           image->TransformPhysicalPointToIndex(pto1, index1);
           image->TransformPhysicalPointToIndex(pto2, index2);
-          
+
           idxInit = index1;
           offSize = index2 - index1;
-          
+
         }
         else
         {
           idxInit[0] = static_cast<unsigned long>(vStartX->value());
-          idxInit[1] = static_cast<unsigned long>(vStartY->value()); 
-           
+          idxInit[1] = static_cast<unsigned long>(vStartY->value());
+
           offSize[0] = static_cast<unsigned long>(vSizeX->value());
-          offSize[1] = static_cast<unsigned long>(vSizeY->value()); 
+          offSize[1] = static_cast<unsigned long>(vSizeY->value());
         }
-        
+
         m_ImageExtractROIFilter->SetStartX(idxInit[0]);
         m_ImageExtractROIFilter->SetStartY(idxInit[1]);
         m_ImageExtractROIFilter->SetSizeX(offSize[0]);
         m_ImageExtractROIFilter->SetSizeY(offSize[1]);
         m_ImageExtractROIFilter->SetInput(image);
         this->ClearOutputDescriptors();
-        this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
+        this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(),"OutputImage", otbGetTextMacro("Image extracted") );
         this->NotifyOutputsChange();
       }
       else if(image.IsNull() && !vectorImage.IsNull())
@@ -218,49 +218,49 @@ void ExtractROIModule::Ok()
       {
         // Get Input Vector Image
         FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-        
+
         //TODO Add case of long/lat input
         if ( roundLongLat->value() == 1 )
         {
           OutputPointType pt1;
           OutputPointType pt2;
-          
+
           pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
           pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
           pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
           pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-          
+
           OutputPointType pto1;
           OutputPointType pto2;
           m_Transform->GetInverse(m_InverseTransform);
           pto1 = m_InverseTransform->TransformPoint(pt1);
           pto2 = m_InverseTransform->TransformPoint(pt2);
-          
+
           IndexType index1;
           IndexType index2;
-                    
+
           vectorImage->TransformPhysicalPointToIndex(pto1, index1);
           vectorImage->TransformPhysicalPointToIndex(pto2, index2);
-          
+
           idxInit = index1;
           offSize = index2 - index1;
         }
         else
         {
           idxInit[0] = static_cast<unsigned long>(vStartX->value());
-          idxInit[1] = static_cast<unsigned long>(vStartY->value()); 
-           
+          idxInit[1] = static_cast<unsigned long>(vStartY->value());
+
           offSize[0] = static_cast<unsigned long>(vSizeX->value());
-          offSize[1] = static_cast<unsigned long>(vSizeY->value()); 
+          offSize[1] = static_cast<unsigned long>(vSizeY->value());
         }
-        
+
         m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
         m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
         m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
         m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
         m_VectorImageExtractROIFilter->SetInput(vectorImage);
         this->ClearOutputDescriptors();
-        this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(),"OutputImage","Image extracted." );
+        this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(),"OutputImage", otbGetTextMacro("Image extracted") );
         this->NotifyOutputsChange();
       }
 

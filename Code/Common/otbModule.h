@@ -21,6 +21,8 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+#include "otbI18n.h"
+
 #include "otbDataObjectWrapper.h"
 #include "otbInputDataDescriptor.h"
 #include "otbOutputDataDescriptor.h"
@@ -124,12 +126,12 @@ public:
 
   /** Show the Module GUI */
   virtual void Show(){};
-  
+
   /** Show the Module GUI */
   virtual bool CanShow(){return false;};
   /** Hide the Module GUI */
   virtual void Hide(){};
-  
+
 protected:
   /** Constructor */
   Module();
@@ -178,9 +180,9 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-  
-  
-  
+
+
+
   /** The custom run command (asynchronous threaded version) */
   virtual void ThreadedRun();
 
@@ -205,7 +207,7 @@ private:
   // Hiding the Asynchronous process base methods */
   virtual void RunProcess1(void *v);
   virtual void RunProcess2(void *v);
-  
+
   /** Input descriptor map */
   InputDataDescriptorMapType m_InputsMap;
 

@@ -30,7 +30,7 @@ WriterModule::WriterModule()
   this->NeedsPipelineLockingOn();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet",otbGetTextMacro("Dataset to write"));
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<UnsignedShortImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
@@ -69,16 +69,16 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.*",".");
-  
+  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*",".");
+
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
     return ;
     }
   vFilePath->value(filename);
-  
-  
+
+
 }
 
 void WriterModule::Cancel()
@@ -93,10 +93,10 @@ void WriterModule::UpdateProgress()
 
   itk::OStringStream oss1, oss2;
   oss1.str("");
-  oss1<<"Writing dataset  ("<<std::floor(100*progress)<<"%)";
+  oss1 << otbGetTextMacro("Writing dataset") << "  ("<<std::floor(100*progress)<<"%)";
   oss2.str("");
-  oss2<<std::floor(100*progress);
-  oss2<<"%";
+  oss2 << std::floor(100*progress);
+  oss2 << "%";
   pBar->value( progress );
   wFileChooserWindow->copy_label(oss1.str().c_str());
   pBar->copy_label( oss2.str().c_str() );
@@ -144,7 +144,7 @@ void WriterModule::ThreadedWatch()
 
   // Update progress one last time
   Fl::awake(&UpdateProgressCallback,this);
-  
+
   Fl::lock();
   // Reactivate window buttons
   bBrowse->activate();
@@ -161,7 +161,7 @@ void WriterModule::ThreadedRun()
   this->BusyOn();
 
   std::string filepath = vFilePath->value();
-  
+
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   UnsignedShortImageType::Pointer usSingleImage = this->GetInputData<UnsignedShortImageType>("InputDataSet");

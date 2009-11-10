@@ -42,7 +42,7 @@ FeatureExtractionModule::FeatureExtractionModule()
 
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage","Image to apply feature extraction.");
+  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply feature extraction"));
 
   // the FeatureExtractionModel registers its module
   m_Model->RegisterListener(this);
@@ -85,7 +85,7 @@ void FeatureExtractionModule::Notify(const std::string & event)
   if (event == "OutputsUpdated")
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage","Feature image extraction.");
+    this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage", otbGetTextMacro("Feature image extraction"));
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
     // Once module is closed, it is no longer busy
@@ -102,9 +102,9 @@ void FeatureExtractionModule::Notify(const std::string & event)
   }
   else
   {
-    
+
   }
-  
+
 }
 
 } // End namespace otb

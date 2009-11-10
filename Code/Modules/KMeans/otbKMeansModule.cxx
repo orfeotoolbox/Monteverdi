@@ -35,7 +35,7 @@ KMeansModule::KMeansModule()
   m_Estimator = EstimatorType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Image to cluster");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Image to cluster"));
 }
 
 /** Destructor */
@@ -114,7 +114,7 @@ void KMeansModule::UpdateProgress()
     else if(m_Estimator->GetCurrentIteration() == 0)
       {
       pProgressBar->value(0.);
-      pProgressBar->copy_label("Generating Decision Tree");
+      pProgressBar->copy_label(otbGetTextMacro("Generating decision tree"));
       }
     else
       {
@@ -250,7 +250,7 @@ void KMeansModule::ThreadedRun()
   treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
   treeGenerator->Update();
 
-  std::cout<<"Tree generated"<<std::endl;
+  std::cout<<otbGetTextMacro("Tree generated")<<std::endl;
 
   // Estimate the centroids
   m_Estimator->SetKdTree(treeGenerator->GetOutput());
@@ -259,7 +259,7 @@ void KMeansModule::ThreadedRun()
   m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
   m_Estimator->StartOptimization();
 
-  std::cout<<"Optimization ended"<<std::endl;
+  std::cout<<otbGetTextMacro("Optimization ended")<<std::endl;
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;
@@ -285,8 +285,10 @@ void KMeansModule::ThreadedRun()
 
    Fl::lock();
    this->ClearOutputDescriptors();
-   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(),"KMeans labeled image","The labeled image from kmeans classification.");
-   this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(),"KMeans clustered image","The clustered image from kmeans classification");
+   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(),"KMeans labeled image",
+                             otbGetTextMacro("The labeled image from kmeans classification"));
+   this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(),"KMeans clustered image",
+                             otbGetTextMacro("The clustered image from kmeans classification"));
    this->NotifyOutputsChange();
    Fl::unlock();
 

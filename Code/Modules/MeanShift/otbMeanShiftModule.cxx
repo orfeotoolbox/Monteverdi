@@ -42,8 +42,8 @@ MeanShiftModule::MeanShiftModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Image to apply MeanShift on");
-  
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Image to apply MeanShift on"));
+
 }
 
 /** Destructor */
@@ -69,10 +69,10 @@ void MeanShiftModule::Run()
   // passed to the module.
 
   // First step is to retrieve the inputs
-  
+
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-    
+
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull())
     {
@@ -84,7 +84,7 @@ void MeanShiftModule::Run()
     {
       itkExceptionMacro(<<"Input image is NULL.");
     }
-  
+
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 
@@ -97,28 +97,28 @@ void MeanShiftModule::Notify(const std::string & event)
   if (event == "OutputsUpdated")
   {
     this->ClearOutputDescriptors();
-      
+
       // Add outputs
 
 
       if(m_Model->GetGenerateFiltered())
     {
          FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
-      this->AddOutputDescriptor(filteredOutput,"Filtered Image", "Result of the MeanShift filtering");
+      this->AddOutputDescriptor(filteredOutput,"Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
     }
 
       if(m_Model->GetGenerateClustered())
     {
          FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
-      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", "Result of the MeanShift clustering");
+      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
     }
 
          if(m_Model->GetGenerateLabeled())
            {
              LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-             this->AddOutputDescriptor(labeledOutput,"Labeled Image", "Result of the MeanShift labeling");
+             this->AddOutputDescriptor(labeledOutput,"Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
            }
-  
+
 
       // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));

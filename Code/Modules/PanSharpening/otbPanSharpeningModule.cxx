@@ -28,8 +28,8 @@ PanSharpeningModule::PanSharpeningModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingImageType>("PanImage","Panchromatic image");
-  this->AddInputDescriptor<FloatingVectorImageType>("XsImage","Multispectral image");
+  this->AddInputDescriptor<FloatingImageType>("PanImage", otbGetTextMacro("Panchromatic image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("XsImage", otbGetTextMacro("Multispectral image"));
   m_PanSharpeningFilter = FusionFilterType::New();
 }
 
@@ -55,7 +55,7 @@ void PanSharpeningModule::Run()
   // First step is to retrieve the inputs
   FloatingImageType::Pointer panImage = this->GetInputData<FloatingImageType>("PanImage");
   FloatingVectorImageType::Pointer xsImage = this->GetInputData<FloatingVectorImageType>("XsImage");
-  
+
 
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
@@ -71,7 +71,7 @@ void PanSharpeningModule::Run()
   this->ClearOutputDescriptors();
 
   // Add an output (single version)
-  this->AddOutputDescriptor(m_PanSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", "Pan-sharpened image");
+  this->AddOutputDescriptor(m_PanSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", otbGetTextMacro("Pansharpened image"));
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();

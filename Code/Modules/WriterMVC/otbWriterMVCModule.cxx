@@ -33,16 +33,16 @@ WriterMVCModule::WriterMVCModule()
   m_Model      = WriterModel::New();
   m_View       = WriterViewGUI::New();
   m_Controller = WriterController::New();
-  
+
   m_View->SetWriterModel(m_Model);
   m_View->InitVisu();
   m_View->SetWriterController(m_Controller);
-  
+
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
-   
+
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet","Dataset to write.");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet",otbGetTextMacro("Dataset to write"));
 
   m_Model->RegisterListener(this);
 }
@@ -103,7 +103,7 @@ void WriterMVCModule::ThreadedWatch()
     Sleep(500);
     m_ProcessObject = m_Model->GetProcessObjectModel();
   }
-  
+
   // Reactivate window buttons
 //   std::cout << "activation" <<std::endl;
   m_View->ManageActivationWindowButtons(true);
@@ -112,7 +112,7 @@ void WriterMVCModule::ThreadedWatch()
 void WriterMVCModule::ThreadedRun()
 {
   this->BusyOn();
-  
+
   m_ProcessObject = m_Model->GetProcessObjectModel();
   m_Model->GenerateOutputImage();
 

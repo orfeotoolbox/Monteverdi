@@ -28,11 +28,11 @@ namespace otb
 AlgebraModule::AlgebraModule()
 {
   m_HasSecondInput = false;
-    
+
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("FirstImage","First Image.");
-  this->AddInputDescriptor<ImageType>("SecondImage","Second Image.",true);
-  
+  this->AddInputDescriptor<ImageType>("FirstImage", otbGetTextMacro("First image"));
+  this->AddInputDescriptor<ImageType>("SecondImage", otbGetTextMacro("Second image"),true);
+
   // Build the GUI
   this->CreateGUI();
 }
@@ -108,13 +108,13 @@ void AlgebraModule::ShiftScaleImage()
   // Get the scale and the shift from the GUI
   m_ShiftScaleFilter->SetScale(guiShiftScaleProduct->value());
   m_ShiftScaleFilter->SetShift(guiShiftScaleAddition->value());
-  
+
   //If one Input deactivate the item to select second image
   if(!m_HasSecondInput)
     {
       m_ShiftScaleFilter->SetInput(m_InputImage1);
     }
-  
+
   if(m_HasSecondInput)
     {
       switch(guiInputChoice->value())
@@ -131,7 +131,7 @@ void AlgebraModule::ShiftScaleImage()
          break;
        }
     }
-  
+
   m_Output = m_ShiftScaleFilter->GetOutput();
 }
 
@@ -142,7 +142,7 @@ void AlgebraModule::Run()
   // Check if there is two inputs
   if(this->GetNumberOfInputDataByKey("SecondImage") >0)
     m_HasSecondInput = true;
-  
+
   // Get the input image
   m_InputImage1 = this->GetInputData<ImageType>("FirstImage");
 
@@ -206,11 +206,11 @@ void AlgebraModule::OK()
     default:
       break;
     }
-  
+
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_Output,"OutputImage","Result image.");
+  this->AddOutputDescriptor(m_Output,"OutputImage",otbGetTextMacro("Result image"));
   this->NotifyOutputsChange();
-  
+
   // close the GUI
   this->Hide();
 }

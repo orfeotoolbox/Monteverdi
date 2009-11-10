@@ -27,13 +27,13 @@ ChangeDetectionModule::ChangeDetectionModule()
 {
   m_ChangeDetection = ChangeDetectionType::New();
   m_ChangeDetection->RegisterListener(this);
-  
+
   // Instanciation of the Image To VectorImage Filter
   m_CastFilter = CastSingleImageFilter::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("LeftImage","Left Image.");
-  this->AddInputDescriptor<ImageType>("RightImage","Right Image.");
+  this->AddInputDescriptor<ImageType>("LeftImage",otbGetTextMacro("Left image"));
+  this->AddInputDescriptor<ImageType>("RightImage",otbGetTextMacro("Right image"));
   this->AddTypeToInputDescriptor<SingleImageType>("LeftImage");
   this->AddTypeToInputDescriptor<SingleImageType>("RightImage");
 }
@@ -57,13 +57,13 @@ void ChangeDetectionModule::Run()
 
   ImageType::Pointer linput = this->GetInputData<ImageType>("LeftImage");
   ImageType::Pointer rinput = this->GetInputData<ImageType>("RightImage");
-  
+
   // Try to get a single image
   // If the input image is an otb::Image instead of VectorImage then cast it
   // in Vector Image and continue the processing
   SingleImageType::Pointer lsingleImage = this->GetInputData<SingleImageType>("LeftImage");
   SingleImageType::Pointer rsingleImage = this->GetInputData<SingleImageType>("RightImage");
-  
+
   if(!lsingleImage.IsNull() && linput.IsNull())
     {
       m_CastFilter->SetInput(lsingleImage);
@@ -99,7 +99,7 @@ void ChangeDetectionModule::Notify()
   if(m_ChangeDetection->GetHasOutput())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(),"OutputImage","Change image Label.");
+    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(),"OutputImage",otbGetTextMacro("Change image Label"));
     this->NotifyOutputsChange();
     }
 }

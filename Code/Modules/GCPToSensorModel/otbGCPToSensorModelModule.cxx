@@ -36,13 +36,13 @@ GCPToSensorModelModule::GCPToSensorModelModule()
   m_View->SetController(m_Controller);
   m_View->SetModel(m_Model);
   m_View->SetWidgetController(m_Controller->GetWidgetController());
-  
+
   m_Model->RegisterListener(this);
 
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage","Input image");
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"));
 }
 
 /** Destructor */
@@ -68,10 +68,10 @@ void GCPToSensorModelModule::Run()
   // passed to the module.
 
   // First step is to retrieve the inputs
-  
+
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  
+
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull() )
     {
@@ -83,7 +83,7 @@ void GCPToSensorModelModule::Run()
     {
       itkExceptionMacro(<<"Input image is NULL.");
     }
-  
+
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 }
@@ -97,11 +97,11 @@ void GCPToSensorModelModule::Notify()
       this->ClearOutputDescriptors();
       // Add outputs
       FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"OutputImage", "Input image with new keyword list.");
+      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-  
+
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }

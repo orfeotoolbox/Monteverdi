@@ -36,7 +36,7 @@ ProjectionModule::ProjectionModule()
   m_Model->RegisterListener(m_View);
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage","Image to project.");
+  this->AddInputDescriptor<InputImageType>("InputImage",otbGetTextMacro("Image to project"));
 }
 
 /** Destructor */
@@ -54,7 +54,7 @@ void ProjectionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void ProjectionModule::Run()
 {
   InputImageType::Pointer inputImage = this->GetInputData<InputImageType>("InputImage");
-  
+
   if(inputImage.IsNotNull())
     {
     inputImage->UpdateOutputInformation();
@@ -73,7 +73,7 @@ void ProjectionModule::Notify()
   if (m_Model->GetOutputChanged())
     {
       this->ClearOutputDescriptors();
-      this->AddOutputDescriptor(m_Model->GetOutput(),"OutputImage","Projected image.");
+      this->AddOutputDescriptor(m_Model->GetOutput(),"OutputImage",otbGetTextMacro("Projected image"));
       // Send an event to Monteverdi application
       //this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
       this->NotifyOutputsChange();

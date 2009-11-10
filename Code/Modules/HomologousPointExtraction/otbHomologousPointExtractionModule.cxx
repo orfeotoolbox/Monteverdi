@@ -43,8 +43,8 @@ HomologousPointExtractionModule::HomologousPointExtractionModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage","Fix image");
-  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage","Moving Image");
+  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage",otbGetTextMacro("Fix image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage",otbGetTextMacro("Moving Image"));
 }
 
 /** Destructor */
@@ -70,11 +70,11 @@ void HomologousPointExtractionModule::Run()
   // passed to the module.
 
   // First step is to retrieve the inputs
-  
+
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage1 = this->GetInputData<FloatingVectorImageType>("FixInputImage");
   FloatingVectorImageType::Pointer fpvImage2 = this->GetInputData<FloatingVectorImageType>("MovingInputImage");
-  
+
   // One of this pointer will be NULL:
   if(fpvImage1.IsNotNull() && fpvImage2.IsNotNull() )
     {
@@ -88,7 +88,7 @@ void HomologousPointExtractionModule::Run()
     {
       itkExceptionMacro(<<"Input image is NULL.");
     }
-  
+
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 
@@ -103,11 +103,11 @@ void HomologousPointExtractionModule::Notify()
       this->ClearOutputDescriptors();
       // Add outputs
       FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"Transformed Image", "Transformed moving image.");
+      this->AddOutputDescriptor(filteredOutput,"Transformed Image", otbGetTextMacro("Transformed moving image"));
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-  
+
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }

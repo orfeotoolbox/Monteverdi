@@ -27,16 +27,16 @@ ExampleModule::ExampleModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage","This is my input");
-  
+  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage",otbGetTextMacro("This is my input"));
+
   // Add another supported type for this input
   this->AddTypeToInputDescriptor<FloatingImageType>("MyInputImage");
 
   // Add an optional input
-  this->AddInputDescriptor<VectorType>("MyOptionalInput","This is my optional input",true);
+  this->AddInputDescriptor<VectorType>("MyOptionalInput",otbGetTextMacro("This is my optional input"),true);
 
   // add a multiple input (multiple can also be optional)
-  this->AddInputDescriptor<VectorType>("MyMultipleInput","This is my multiple input",false,true);
+  this->AddInputDescriptor<VectorType>("MyMultipleInput",otbGetTextMacro("This is my multiple input"),false,true);
 }
 
 /** Destructor */
@@ -54,16 +54,16 @@ void ExampleModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ExampleModule::Run()
 {
-  // Here is the body of the module. 
+  // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
 
   // First step is to retrieve the inputs
-  
+
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("MyInputImage");
   FloatingImageType::Pointer fpImage = this->GetInputData<FloatingImageType>("MyInputImage");
-  
+
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull())
     {
@@ -78,7 +78,7 @@ void ExampleModule::Run()
     // Rerport error
     }
 
-  // To handle an optional input: 
+  // To handle an optional input:
 
   if(this->GetNumberOfInputDataByKey("MyOptionalInput") > 0)
     {
@@ -94,13 +94,13 @@ void ExampleModule::Run()
       // Report error
       }
     }
-  
+
   // To handle a multiple input:
 
   for(unsigned int inputIdx = 0; inputIdx < this->GetNumberOfInputDataByKey("MyMultipleInput");++inputIdx)
     {
     VectorType::Pointer nthMultipleVector = this->GetInputData<VectorType>("MyMultipleInput",inputIdx);
-    
+
     if(nthMultipleVector.IsNotNull())
       {
       // Process the nth mutliple input
@@ -110,10 +110,10 @@ void ExampleModule::Run()
       // Report error
       }
     }
-  
+
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing ...
-  
+
 
   // Then, when the module did actually produce some outputs, declare
   // them.
@@ -123,13 +123,13 @@ void ExampleModule::Run()
 
   // Add an output (single version)
   FloatingImageType::Pointer myBrandNewImageOutput = FloatingImageType::New();
-  this->AddOutputDescriptor(myBrandNewImageOutput,"MyImageOutput","This is my image output");
+  this->AddOutputDescriptor(myBrandNewImageOutput,"MyImageOutput",otbGetTextMacro("This is my image output"));
 
   // Add an output (multiple version)
-  
+
   FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
-  this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", "These are my pointset outputs");
-  
+  this->AddOutputDescriptor(pointSetOutput1,"MyPointSetOutput", otbGetTextMacro("These are my pointset outputs"));
+
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
 }

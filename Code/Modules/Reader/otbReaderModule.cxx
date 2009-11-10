@@ -22,6 +22,7 @@
 #include <FLU/Flu_File_Chooser.h>
 #include "base/ossimFilename.h"
 #include "otbMsgReporter.h"
+#include "otbI18n.h"
 
 namespace otb
 {
@@ -37,10 +38,10 @@ ReaderModule::ReaderModule()
   this->BuildGUI();
 
   // Expose supported data type:
-  vType->add("Unknown");
-  vType->add("Optical image");
-  vType->add("SAR image");
-  vType->add("Vector");
+  vType->add(otbGetTextMacro("Unknown"));
+  vType->add(otbGetTextMacro("Optical image"));
+  vType->add(otbGetTextMacro("SAR image"));
+  vType->add(otbGetTextMacro("Vector"));
   vType->value(0);
   
   // Deactivate ok for now
