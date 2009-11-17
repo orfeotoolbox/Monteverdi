@@ -351,10 +351,10 @@ void ViewerModule::UpdateVectorData(unsigned int index)
   ur = ul;
   ll = ul;
   lr = ul;
-  ur[0]+=m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0]+=m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1]+=m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1]+=m_InputImage->GetLargestPossibleRegion().GetSize()[1];
+  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
+  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
+  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
+  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
 
   // Transform to physical point
   m_InputImage->TransformIndexToPhysicalPoint(ul,pul);
@@ -484,7 +484,7 @@ void ViewerModule::DeleteVectorData()
       // Remove the VectorDataGl Compenent
       m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
       m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
-      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square wich is a GlComponent
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square which is a GlComponent
 
       // Update the status of the selectedItem vector data
       m_DisplayedVectorData[selectedIndex-1] = false;
@@ -500,7 +500,7 @@ void ViewerModule::DeleteVectorData()
  **/
 void ViewerModule::ClearAll()
 {
-  for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+  for(unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
     {
       // Hide the Gl Componenent int the view
       m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(false);
@@ -550,7 +550,7 @@ void
 ViewerModule::DisplayVectorData()
 {
   // loop over all the vector datas
-  for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+  for(unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
     {
       // Dispaly the selected VD if not already displayed
       if(!m_DisplayedVectorData[i])
@@ -590,7 +590,8 @@ void ViewerModule::ChangeROIColor()
 
   if(selectedIndex && m_DisplayedVectorData[selectedIndex-1])
     {
-      VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
+      VectorDataGlComponentType*  selecedVectorDataGlComponent =
+          dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
       ColorType curColor  = selecedVectorDataGlComponent->GetColor();
 
       double r = (double)curColor[0];
@@ -650,7 +651,7 @@ void ViewerModule::UpdateDEMSettings()
       m_DEMDirectory = gDEMPath->value();
 
       // Delete the vector data
-      for(unsigned int i = 0 ; i< m_VectorDataList->Size(); i++ )
+      for(unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
        {
          m_View->GetScrollWidget()->RemoveGlComponent(1);
          m_View->GetFullWidget()->RemoveGlComponent(1);
@@ -762,8 +763,6 @@ void ViewerModule::UpdateDEMSettings()
    guiGreenChannelChoice->value(std::min(channels[1],nbComponent-1));
    guiBlueChannelChoice->value(std::min(channels[2],nbComponent-1));
  }
-
-
 
 /**
  * Change the render function to gray scale one
@@ -1110,9 +1109,10 @@ void ViewerModule::UpdateUpperQuantile()
   params = m_StandardRenderingFunction->GetParameters();
 
   std::cout << "max ";
-  for(unsigned int i = 1 ; i< params.Size() ; i = i+2)
+  for(unsigned int i = 1; i < params.Size(); i = i+2)
     {
-      double max = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
+      double max = m_StandardRenderingFunction->GetHistogramList()
+          ->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
       params.SetElement(i,max);
     }
   std::cout << std::endl;
@@ -1149,9 +1149,10 @@ void ViewerModule::UpdateLowerQuantile()
   params = m_StandardRenderingFunction->GetParameters();
 
   // Update the parameters
-  for(unsigned int i = 0 ; i< params.Size() ; i = i+2)
+  for(unsigned int i = 0; i< params.Size(); i = i+2)
     {
-      double min = m_StandardRenderingFunction->GetHistogramList()->GetNthElement((unsigned int)(i/2))->Quantile(0,lowerQuantile);
+      double min = m_StandardRenderingFunction->GetHistogramList()
+          ->GetNthElement((unsigned int)(i/2))->Quantile(0,lowerQuantile);
       params.SetElement(i,min);
     }
 
@@ -1254,5 +1255,3 @@ ViewerModule
 } // End namespace otb
 
 #endif
-
-
