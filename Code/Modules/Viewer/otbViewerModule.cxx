@@ -170,9 +170,9 @@ ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(),m_PixelD
   m_VectorDataList = VectorDataListType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage",otbGetTextMacro("Image to visualize"));
+  this->AddInputDescriptor<ImageType>("InputImage",otbGetTextMacro("Image to display"));
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
-  this->AddInputDescriptor<VectorDataType>("VectorData",otbGetTextMacro("VectorData to visualize"),true,true);
+  this->AddInputDescriptor<VectorDataType>("VectorData",otbGetTextMacro("Vector data to display"),true,true);
 
 
   // Build GUI
