@@ -15,23 +15,38 @@ class MeanShiftModuleViewGroup {open
     Fl_Window wMainWindow {
       label {Mean shift module}
       callback {this->Exit();} open
-      xywh {360 173 690 560} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {530 342 690 560} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
+      Fl_Menu_Bar {} {
+        label Menu open
+        xywh {0 0 501 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Submenu {} {
+          label Menu open
+          xywh {0 0 63 20} labelsize 12 labelcolor 186
+        } {
+          MenuItem {} {
+            label {View Manager}
+            callback {wViewerSetupWindow->show();}
+            xywh {0 0 30 20} labelsize 12 labelcolor 186
+          }
+          MenuItem {} {
+            label {Save and quit}
+            callback {this->Exit();}
+            xywh {10 10 30 20} labelsize 12 labelcolor 186
+          }
+        }
+      }
       Fl_Group gImageViewer {open
-        xywh {0 0 501 560} box PLASTIC_DOWN_BOX color 48
+        xywh {0 20 501 540} box PLASTIC_DOWN_BOX color 48
       } {}
       Fl_Group gRightGroup {open
-        xywh {500 0 195 560} box PLASTIC_DOWN_BOX color 51 labelcolor 186
+        xywh {500 0 195 560} box PLASTIC_DOWN_BOX color 7 labelcolor 186
       } {
         Fl_Group gScroll {
           label {Navigation view} open
-          xywh {506 18 180 160} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {506 20 180 160} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
-        Fl_Button {} {
-          label Run
-          callback {RunSegmentation()}
-          xywh {509 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        }
         Fl_Group gZoom {
           label {Zoom view} open
           xywh {506 196 180 160} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
@@ -58,7 +73,7 @@ class MeanShiftModuleViewGroup {open
         }
         Fl_Value_Slider mOpacity {
           label Opcaity
-          callback {SetOpacity(this->mOpacity->value());} selected
+          callback {SetOpacity(this->mOpacity->value());}
           xywh {559 487 122 15} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 value 0.5 textsize 14
         }
         Fl_Check_Button mClustersButton {
@@ -67,16 +82,83 @@ class MeanShiftModuleViewGroup {open
           xywh {548 509 107 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button {} {
+          label Run
+          callback {RunSegmentation()}
+          xywh {509 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button {} {
           label Close
-          callback {this->Exit();}
+          callback {this->Exit();} selected
           xywh {604 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
     }
+    Fl_Window wViewerSetupWindow {
+      label {Viewer setup} open
+      xywh {796 120 425 195} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 visible
+    } {
+      Fl_Round_Button rViewerSetupGrayscaleMode {
+        label {Grayscale mode}
+        callback {if(rViewerSetupGrayscaleMode->value()==0)
+{
+rViewerSetupGrayscaleMode->value(1);
+}
+else
+{
+rViewerSetupColorMode->value(0);
+iGrayscaleChannelChoice->activate();
+iRChannelChoice->deactivate();
+iGChannelChoice->deactivate();
+iBChannelChoice->deactivate();
+}}
+        tooltip {Swith the image viewer mode to grayscale} xywh {22 17 140 24} down_box PLASTIC_DOWN_BOX color 7 selection_color 22 labelfont 1 labelcolor 186
+      }
+      Fl_Round_Button rViewerSetupColorMode {
+        label {RGB composition mode}
+        callback {if(rViewerSetupColorMode->value()==0)
+{
+rViewerSetupColorMode->value(1);
+}
+else
+{
+rViewerSetupGrayscaleMode->value(0);
+iGrayscaleChannelChoice->deactivate();
+iRChannelChoice->activate();
+iGChannelChoice->activate();
+iBChannelChoice->activate();
+}}
+        tooltip {Switch the image viewer mode to RGB composition} xywh {215 17 184 24} down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 22 labelfont 1 labelcolor 186
+      }
+      Fl_Input_Choice iGrayscaleChannelChoice {
+        label {Channel index} open
+        tooltip {Select the band to view in grayscale mode} xywh {118 78 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelcolor 186
+      } {}
+      Fl_Input_Choice iRChannelChoice {
+        label {Red channel} open
+        tooltip {Select band for red channel in RGB composition} xywh {345 51 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelcolor 186 deactivate
+      } {}
+      Fl_Input_Choice iGChannelChoice {
+        label {Green channel} open
+        tooltip {Select band for green channel in RGB composition} xywh {345 78 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelcolor 186 deactivate
+      } {}
+      Fl_Input_Choice iBChannelChoice {
+        label {Blue channel} open
+        tooltip {Select band for blue channel in RGB composition} xywh {345 105 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelcolor 186 deactivate
+      } {}
+      Fl_Return_Button bViewerSetupOk {
+        label Ok
+        callback {wViewerSetupWindow->hide();
+ViewerSetupOkCallback();}
+        tooltip {Save changes and leave viewer set up interface} xywh {105 150 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelcolor 186
+      }
+      Fl_Button bViewerSetupCancel {
+        label Cancel
+        callback {wViewerSetupWindow->hide();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {230 150 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelcolor 186
+      }
+    }
   }
   Function {Exit()} {open return_type {virtual void}
-  } {}
-  Function {OpenImage()} {open return_type {virtual void}
   } {}
   Function {RunSegmentation()} {open return_type {virtual void}
   } {}
@@ -95,5 +177,7 @@ class MeanShiftModuleViewGroup {open
   Function {~MeanShiftModuleViewGroup()} {open return_type virtual
   } {}
   Function {SetOpacity(double)} {return_type {virtual void}
+  } {}
+  Function {ViewerSetupOkCallback()} {return_type {virtual void}
   } {}
 } 

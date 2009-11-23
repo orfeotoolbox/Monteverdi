@@ -40,62 +40,63 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_IsUpdating = false;
   m_IsImageReady = false;
 
+  m_Channels.clear();
 }
 
 MeanShiftModuleModel
 ::~MeanShiftModuleModel() {}
 
 
-void
-MeanShiftModuleModel
-::OpenImage( const char * filename)
-{
-  m_Reader->SetFileName(filename);
-  m_Reader->UpdateOutputInformation();
-  m_MeanShift->SetInput(m_Reader->GetOutput());
+// void
+// MeanShiftModuleModel
+// ::OpenImage( const char * filename)
+// {
+//   m_Reader->SetFileName(filename);
+//   m_Reader->UpdateOutputInformation();
+//   m_MeanShift->SetInput(m_Reader->GetOutput());
 
-  m_OutputFilteredImage = m_MeanShift->GetOutput();
-  m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
-  m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
-  m_OutputBoundariesImage =  m_MeanShift->GetClusterBoundariesOutput();
+//   m_OutputFilteredImage = m_MeanShift->GetOutput();
+//   m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
+//   m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
+//   m_OutputBoundariesImage =  m_MeanShift->GetClusterBoundariesOutput();
 
-  // Generate the layer
-  m_ImageGenerator->SetImage(m_Reader->GetOutput());
-  m_ImageGenerator->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
-  m_ImageGenerator->GenerateLayer();
+//   // Generate the layer
+//   m_ImageGenerator->SetImage(m_Reader->GetOutput());
+//   m_ImageGenerator->GenerateQuicklookOn();
+//   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
+//   m_ImageGenerator->GenerateLayer();
 
-    std::vector<unsigned int> channels;
-  if(m_Reader->GetOutput()->GetNumberOfComponentsPerPixel()==3)
-    {
-    channels.push_back(0);
-    channels.push_back(1);
-    channels.push_back(2);
-    }
-  else
-    {
-    channels.push_back(2);
-    channels.push_back(1);
-    channels.push_back(0);
-    }
+//   m_Channels.clear();
+//   if(m_Reader->GetOutput()->GetNumberOfComponentsPerPixel()==3)
+//     {
+//       m_Channels.push_back(0);
+//       m_Channels.push_back(1);
+//       m_Channels.push_back(2);
+//     }
+//   else
+//     {
+//       m_Channels.push_back(2);
+//       m_Channels.push_back(1);
+//       m_Channels.push_back(0);
+//     }
 
-  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
+//   m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
 
   
   
-  m_ImageGenerator->GetLayer()->SetName("Image");
+//   m_ImageGenerator->GetLayer()->SetName("Image");
 
-  // Clear previous layers
-  m_VisualizationModel->ClearLayers();
+//   // Clear previous layers
+//   m_VisualizationModel->ClearLayers();
 
-  // Add the layer to the models
-  m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
+//   // Add the layer to the models
+//   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
 
-  m_VisualizationModel->Update();
+//   m_VisualizationModel->Update();
 
-  this->NotifyAll("OpenImage");
-  m_IsImageReady = true;
-}
+//   this->NotifyAll("OpenImage");
+//   m_IsImageReady = true;
+// }
 
 
 void
@@ -134,21 +135,21 @@ MeanShiftModuleModel
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
-  std::vector<unsigned int> channels;
+  m_Channels.clear();
   if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
     {
-      channels.push_back(0);
-      channels.push_back(1);
-      channels.push_back(2);
+      m_Channels.push_back(0);
+      m_Channels.push_back(1);
+      m_Channels.push_back(2);
     }
   else
     {
-      channels.push_back(2);
-      channels.push_back(1);
-      channels.push_back(0);
+      m_Channels.push_back(2);
+      m_Channels.push_back(1);
+      m_Channels.push_back(0);
     }
 
-  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
+  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
 
   
   
@@ -187,22 +188,8 @@ MeanShiftModuleModel
       m_BoundariesGenerator->GenerateQuicklookOff();
       m_BoundariesGenerator->GenerateLayer(); 
       
-
-      std::vector<unsigned int> channels;
-      if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
-	{
-	  channels.push_back(0);
-	  channels.push_back(1);
-	  channels.push_back(2);
-	}
-      else
-	{
-	  channels.push_back(2);
-	  channels.push_back(1);
-	  channels.push_back(0);
-	}
       
-      m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
+      m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
       
       m_ClustersGenerator->GetLayer()->SetName("Segmentation");
       m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
@@ -255,6 +242,35 @@ MeanShiftModuleModel
   dynamic_cast<BlendingFunctionType *>(m_BoundariesGenerator->GetLayer()->GetBlendingFunction())->SetAlpha(op);
   m_VisualizationModel->Update();
 }
+
+
+void
+MeanShiftModuleModel
+::UpdateViewerDisplay(std::vector<unsigned int> ch)
+{
+  if(!m_IsImageReady)
+    {
+      return;
+    }
+  unsigned int layerNb = m_VisualizationModel->GetNumberOfLayers();
+  if(layerNb == 0)
+    {
+      itkExceptionMacro("Invalid number of layers");
+    }
+
+  m_Channels = ch;
+  
+  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
+  
+  if(layerNb > 1)
+    {
+      m_ClustersGenerator->GetRenderingFunction()->SetChannelList(m_Channels);
+    }
+  
+  
+  m_VisualizationModel->Update();
+}
+
 
 void
 MeanShiftModuleModel

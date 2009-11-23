@@ -68,7 +68,6 @@ public:
 
 
   /** User action */
-  virtual void OpenImage( const char * filename );
   virtual void RunSegmentation();
   virtual void SwitchClusters(bool sc);
   virtual void SwitchBoundaries(bool sb);
@@ -76,7 +75,7 @@ public:
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
   virtual void SetOpacity( double op );
-
+  virtual void UpdateViewerDisplay();
 
   virtual void SetInputImage(MeanShiftModuleModel::VectorImageType* image)
   {

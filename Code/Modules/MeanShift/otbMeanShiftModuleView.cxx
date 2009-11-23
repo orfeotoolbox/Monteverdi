@@ -76,6 +76,9 @@ void MeanShiftModuleView::Build()
     SetSpatialRadius(static_cast<unsigned int>(this->mSpatialRadius->value()));
     SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));
     SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));
+
+    this->UpdateViewerSetup();
+
 }
 void MeanShiftModuleView::Notify(const std::string & event)
 {
@@ -105,18 +108,6 @@ void MeanShiftModuleView::Exit()
   m_Controller->Quit();
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
-}
-
-void MeanShiftModuleView::OpenImage()
-{
-  const char * cfname = fl_file_chooser(otbGetTextMacro("Select an input image"), "*.*",".");
-  Fl::check();
-  wMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
-  m_Controller->OpenImage( cfname );
 }
 
 
@@ -169,6 +160,60 @@ void MeanShiftModuleView::SetOpacity( double op )
   m_Controller->SetOpacity( op );
 }
 
+
+ /**
+  * Update the viewer setup window
+  */
+void MeanShiftModuleView::UpdateViewerSetup()
+ {
+   if(!m_Model->GetIsImageReady())
+   {
+     // no image selected, return
+     return;
+   }
+
+   unsigned int lNbComponent = m_Model->GetInputImage()->GetNumberOfComponentsPerPixel();
+   itk::OStringStream oss;
+   oss.str("");
+
+   //Clear all the choices
+   iGrayscaleChannelChoice->clear();
+   iRChannelChoice->clear();
+   iGChannelChoice->clear();
+   iBChannelChoice->clear();
+
+   for (unsigned int i = 0;i<lNbComponent;++i)
+   {
+     oss.str("");
+     oss<<i+1;
+     iGrayscaleChannelChoice->add(oss.str().c_str());
+     iRChannelChoice->add(oss.str().c_str());
+     iGChannelChoice->add(oss.str().c_str());
+     iBChannelChoice->add(oss.str().c_str());
+   }
+   wViewerSetupWindow->redraw();
+   //iGrayscaleChannelChoice->redraw();
+
+   std::vector<unsigned int> channels = m_Model->GetChannels();
+   if(lNbComponent > 2)
+     {
+       rViewerSetupColorMode->do_callback();
+       iRChannelChoice->value(std::min(channels[0],lNbComponent-1));
+       iGChannelChoice->value(std::min(channels[1],lNbComponent-1));
+       iBChannelChoice->value(std::min(channels[2],lNbComponent-1));
+     }
+   else
+     {
+       rViewerSetupGrayscaleMode->do_callback();
+       iGrayscaleChannelChoice->value(std::min(channels[0],lNbComponent-1));
+     }
+   wViewerSetupWindow->redraw();
+ }
+
+void MeanShiftModuleView::ViewerSetupOkCallback()
+{
+  m_Controller->UpdateViewerDisplay();
+}
 
 void MeanShiftModuleView::Show()
 {

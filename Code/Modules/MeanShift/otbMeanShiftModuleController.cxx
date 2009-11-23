@@ -58,36 +58,52 @@ void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
 }
 
+
+
 void
 MeanShiftModuleController
-::OpenImage( const char * filename )
+::SetSpatialRadius(unsigned int sr)
 {
-  try
+  m_Model->SetSpatialRadius(sr);
+}
+
+void
+MeanShiftModuleController
+::SetSpectralRadius(unsigned int sr)
+{
+  m_Model->SetSpectralRadius(sr);
+}
+
+void 
+MeanShiftModuleController
+::SetMinRegionSize(unsigned int mr)
+{
+  m_Model->SetMinRegionSize(mr);
+}
+
+void 
+MeanShiftModuleController
+::UpdateViewerDisplay()
+{
+  if(!m_Model->GetIsImageReady())
     {
-    m_ImageReady = false;
-    m_Model->OpenImage(filename);
-    m_ImageReady = true;
+      return;
     }
-  catch(itk::ExceptionObject & err)
+  
+  std::vector<unsigned int> channels;
+  if (m_View->rViewerSetupColorMode->value())
     {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
+      channels.push_back(atoi(m_View->iRChannelChoice->value())-1);
+      channels.push_back(atoi(m_View->iGChannelChoice->value())-1);
+      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);							    
     }
-}
+  else if (m_View->rViewerSetupGrayscaleMode->value())
+    {
+      channels.push_back(atoi(m_View->iGrayscaleChannelChoice->value())-1);
+    }
 
-
-void MeanShiftModuleController::SetSpatialRadius(unsigned int sr)
-{
-       m_Model->SetSpatialRadius(sr);
-}
-
-void MeanShiftModuleController::SetSpectralRadius(unsigned int sr)
-{
-       m_Model->SetSpectralRadius(sr);
-}
-
-void MeanShiftModuleController::SetMinRegionSize(unsigned int mr)
-{
-       m_Model->SetMinRegionSize(mr);
+  m_Model->UpdateViewerDisplay(channels);
+  
 }
 
 
@@ -126,9 +142,11 @@ MeanShiftModuleController
   m_Model->SwitchBoundaries(sb);
 }
 
+
+
 void
-    MeanShiftModuleController
-  ::Quit()
+MeanShiftModuleController
+::Quit()
 {
   m_Model->Quit();
 }

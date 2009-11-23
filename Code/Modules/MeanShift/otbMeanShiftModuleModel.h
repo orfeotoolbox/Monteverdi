@@ -74,15 +74,23 @@ public:
 
   /** input image Pointer */
   void SetInputImage(VectorImagePointerType image);
+  itkGetConstObjectMacro(InputImage, VectorImageType);
 
   /** Output Image Pointers */
   itkGetObjectMacro(OutputFilteredImage,VectorImageType);
   itkGetObjectMacro(OutputClusteredImage,VectorImageType);
   itkGetObjectMacro(OutputLabeledImage,LabeledImageType);
   itkGetObjectMacro(OutputBoundariesImage,LabeledImageType);
+
+  itkGetMacro(IsImageReady, bool);
  
+  std::vector<unsigned int> GetChannels()
+    {
+      return m_Channels;
+    }
+
+
   /** Open an image */
-  void OpenImage(const char * filename);
   void RunSegmentation();
   void SwitchClusters(bool sc);
   void SwitchBoundaries(bool sc);
@@ -90,13 +98,16 @@ public:
   void SetSpatialRadius(unsigned int sr);
   void SetSpectralRadius(unsigned int sr);
   void SetMinRegionSize(unsigned int mr);
+  // change opacity between the image (input or cluster) and the boundaries one
   void SetOpacity(double op);
+  // Change displayed channel order
+  void UpdateViewerDisplay(std::vector<unsigned int> ch);
 
   bool IsUpdating() const
   {
     return m_IsUpdating;
   }
-  
+
   void Quit();
 protected:
 
@@ -135,6 +146,7 @@ private:
   unsigned int m_SpatialRadius;
   unsigned int m_SpectralRadius;
   unsigned int m_MinRegionSize;
+  std::vector<unsigned int> m_Channels;
 
   BlendingFunctionType::Pointer m_BlendingFunction;
 

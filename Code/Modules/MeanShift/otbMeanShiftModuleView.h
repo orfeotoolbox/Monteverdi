@@ -34,6 +34,7 @@ public:
 
 
   typedef MeanShiftModuleModel::VisualizationModelType VisualizationModelType;
+
   typedef MeanShiftModuleModel::RGBPixelType           PixelType;
   typedef ImageView<VisualizationModelType>            ImageViewType;
 
@@ -42,7 +43,6 @@ public:
   virtual void Notify(const std::string & event);
 
   /** Fluid call backs*/
-  virtual void OpenImage();
   virtual void Exit();
   virtual void RunSegmentation();
   virtual void SwitchClusters();
@@ -51,9 +51,12 @@ public:
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
   virtual void SetOpacity(double op);
+  virtual void ViewerSetupOkCallback();
+  
   void Show();
   void Hide();
-
+  void UpdateViewerSetup();
+  
   /** Set the controller */
   itkSetObjectMacro(Controller,MeanShiftModuleControllerInterface);
   itkGetObjectMacro(Controller,MeanShiftModuleControllerInterface);
