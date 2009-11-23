@@ -74,34 +74,6 @@ MeanShiftModuleController
     }
 }
 
-void
-MeanShiftModuleController
-::SaveLabelImage( const char * filename )
-{
-  try
-    {
-    m_Model->SaveLabelImage(filename);
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
-void
-MeanShiftModuleController
-::SaveClusterImage( const char * filename )
-{
-  try
-    {
-    m_Model->SaveClusterImage(filename);
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
 
 void MeanShiftModuleController::SetSpatialRadius(unsigned int sr)
 {
@@ -119,55 +91,26 @@ void MeanShiftModuleController::SetMinRegionSize(unsigned int mr)
 }
 
 
-bool
-MeanShiftModuleController
-::GenerateFiltered()
-{
-  return m_Model->GetGenerateFiltered();
-}
-
-bool
-MeanShiftModuleController
-::GenerateClustered()
-{
-  return m_Model->GetGenerateClustered();
-}
-
-bool
-MeanShiftModuleController
-::GenerateLabeled()
-{
-  return m_Model->GetGenerateLabeled();
-}
-
-
-void
-MeanShiftModuleController
-::GenerateFiltered(bool t)
-{
-  m_Model->SetGenerateFiltered(t);
-}
-
-void
-MeanShiftModuleController
-::GenerateClustered(bool t)
-{
-  m_Model->SetGenerateClustered(t);
-}
-
-void
-MeanShiftModuleController
-::GenerateLabeled(bool t)
-{
-  m_Model->SetGenerateLabeled(t);
-}
-
 void
 MeanShiftModuleController
 ::RunSegmentation()
 {
   m_Model->RunSegmentation();
+  
+  if( m_View->mBoundButton->value() != 0 )
+    {
+      m_Model->SwitchBoundaries(true);
+    }
+  
 }
+
+void
+MeanShiftModuleController
+::SetOpacity(double op)
+{
+  m_Model->SetOpacity(op);
+}
+
 
 void
 MeanShiftModuleController
@@ -190,19 +133,6 @@ void
   m_Model->Quit();
 }
 
-ITK_THREAD_RETURN_TYPE
-MeanShiftModuleController
-::ThreadFunction( void *arg )
-{
-  try
-  {
-    ModelType::GetInstance()->RunSegmentation();
-  }
-  catch (itk::ExceptionObject & err)
-  {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-  return 0;
-}
+
 
 } // end namespace otb

@@ -98,29 +98,20 @@ void MeanShiftModule::Notify(const std::string & event)
   {
     this->ClearOutputDescriptors();
 
-      // Add outputs
-
-
-      if(m_Model->GetGenerateFiltered())
-    {
-         FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
-      this->AddOutputDescriptor(filteredOutput,"Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
-    }
-
-      if(m_Model->GetGenerateClustered())
-    {
-         FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
-      this->AddOutputDescriptor(clusteredOutput,"Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
-    }
-
-         if(m_Model->GetGenerateLabeled())
-           {
-             LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-             this->AddOutputDescriptor(labeledOutput,"Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
-           }
-
-
-      // Send an event to Monteverdi application
+    // Add outputs
+    FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
+    this->AddOutputDescriptor(filteredOutput,"Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
+    
+    FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
+    this->AddOutputDescriptor(clusteredOutput,"Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
+    
+    LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
+    this->AddOutputDescriptor(labeledOutput,"Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
+    
+    LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
+    this->AddOutputDescriptor(boundOutput,"Boundaries Image", otbGetTextMacro("Cluster image boundaries"));
+    
+    // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 
       // Once module is closed, it is no longer busy

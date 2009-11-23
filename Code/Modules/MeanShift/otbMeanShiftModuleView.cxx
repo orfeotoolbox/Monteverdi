@@ -119,36 +119,12 @@ void MeanShiftModuleView::OpenImage()
   m_Controller->OpenImage( cfname );
 }
 
-void MeanShiftModuleView::SaveLabelImage()
-{
-  const char * cfname = fl_file_chooser("Select Image Name", "*.*",".");
-  Fl::check();
-  wMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
-  m_Controller->SaveLabelImage( cfname );
-}
-
-void MeanShiftModuleView::SaveClusterImage()
-{
-  const char * cfname = fl_file_chooser("Select Image Name", "*.*",".");
-  Fl::check();
-  wMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
-  m_Controller->SaveClusterImage( cfname );
-}
-
 
 
 void MeanShiftModuleView::RunSegmentation()
 {
-       m_Controller->RunSegmentation();
-       this->mClustersButton->value(1);
+  m_Controller->RunSegmentation();
+  this->mClustersButton->value(1);
 }
 
 void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
@@ -158,24 +134,41 @@ void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
 
 void MeanShiftModuleView::SetSpectralRadius(unsigned int sr)
 {
-       m_Controller->SetSpectralRadius(sr);
+  m_Controller->SetSpectralRadius(sr);
 }
 
 void MeanShiftModuleView::SetMinRegionSize(unsigned int mr)
 {
-       m_Controller->SetMinRegionSize(mr);
+  m_Controller->SetMinRegionSize(mr);
 }
 
 
 void MeanShiftModuleView::SwitchClusters()
 {
-       m_Controller->SwitchClusters(
-         static_cast<bool>(this->mClustersButton->value()));
+  m_Controller->SwitchClusters(static_cast<bool>(this->mClustersButton->value()));
 }
 
 void MeanShiftModuleView::SwitchBoundaries()
 {
+  bool val = true;
+  if( mBoundButton->value() == 0 )
+    {
+      val = false;
+      mOpacity->deactivate();
+    }
+  else
+    {
+      mOpacity->activate();
+    }
+  
+  m_Controller->SwitchBoundaries(val);
 }
+
+void MeanShiftModuleView::SetOpacity( double op )
+{ 
+  m_Controller->SetOpacity( op );
+}
+
 
 void MeanShiftModuleView::Show()
 {

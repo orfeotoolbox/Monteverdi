@@ -23,8 +23,8 @@ class ITK_EXPORT MeanShiftModuleView
 {
 public:
   /** Standard class typedefs */
-  typedef MeanShiftModuleView          Self;
-  typedef MeanShiftModuleViewGroup   Superclass;
+  typedef MeanShiftModuleView           Self;
+  typedef MeanShiftModuleViewGroup      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -33,10 +33,9 @@ public:
   itkTypeMacro(MeanShiftModuleView,Object);
 
 
-  typedef MeanShiftModuleModel::VisualizationModelType    VisualizationModelType;
-  typedef MeanShiftModuleModel::RGBPixelType                    PixelType;
-
-  typedef ImageView<VisualizationModelType>                         ImageViewType;
+  typedef MeanShiftModuleModel::VisualizationModelType VisualizationModelType;
+  typedef MeanShiftModuleModel::RGBPixelType           PixelType;
+  typedef ImageView<VisualizationModelType>            ImageViewType;
 
 
   /** Event from the model */
@@ -44,8 +43,6 @@ public:
 
   /** Fluid call backs*/
   virtual void OpenImage();
-  virtual void SaveLabelImage();
-  virtual void SaveClusterImage();
   virtual void Exit();
   virtual void RunSegmentation();
   virtual void SwitchClusters();
@@ -53,6 +50,7 @@ public:
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
+  virtual void SetOpacity(double op);
   void Show();
   void Hide();
 

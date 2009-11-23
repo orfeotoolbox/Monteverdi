@@ -24,21 +24,13 @@ public:
 
   /** Users actions */
   virtual void OpenImage( const char * filename ) = 0;
-  virtual void SaveLabelImage( const char * filename ) = 0;
-  virtual void SaveClusterImage( const char * filename ) = 0;
   virtual void RunSegmentation() = 0;
   virtual void SwitchClusters(bool sc) = 0;
   virtual void SwitchBoundaries(bool sb) = 0;
   virtual void SetSpatialRadius(unsigned int sr) = 0;
   virtual void SetSpectralRadius(unsigned int sr) = 0;
   virtual void SetMinRegionSize(unsigned int mr) =0;
-
-  virtual bool GenerateFiltered() = 0;
-  virtual bool GenerateClustered() = 0;
-  virtual bool GenerateLabeled() = 0;
-  virtual void GenerateFiltered(bool t) = 0;
-  virtual void GenerateClustered(bool t) = 0;
-  virtual void GenerateLabeled(bool t) = 0;
+  virtual void SetOpacity( double op ) =0;
 
   
   virtual bool IsModelUpdating() = 0;

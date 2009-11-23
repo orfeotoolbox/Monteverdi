@@ -52,11 +52,9 @@ public:
   typedef MeanShiftModuleView::ImageViewType              ImageViewType;
   typedef MeanShiftModuleModel::VisualizationModelType    VisualizationModelType;
 
-  typedef ImageWidgetController                                     WidgetsControllerType;
-  typedef WidgetResizingActionHandler
-    <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
-  typedef ChangeExtractRegionActionHandler
-      <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+  typedef ImageWidgetController                                                        WidgetsControllerType;
+  typedef WidgetResizingActionHandler<VisualizationModelType,ImageViewType>            ResizingHandlerType;
+  typedef ChangeExtractRegionActionHandler<VisualizationModelType,ImageViewType>       ChangeRegionHandlerType;
   typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler<VisualizationModelType,ImageViewType>               ChangeScaleHandlerType;
 
@@ -71,43 +69,19 @@ public:
 
   /** User action */
   virtual void OpenImage( const char * filename );
-  virtual void SaveLabelImage( const char * filename );
-  virtual void SaveClusterImage( const char * filename );
   virtual void RunSegmentation();
   virtual void SwitchClusters(bool sc);
   virtual void SwitchBoundaries(bool sb);
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
-
-  virtual bool GenerateFiltered();
-  virtual bool GenerateClustered();
-  virtual bool GenerateLabeled();
-  virtual void GenerateFiltered(bool t);
-  virtual void GenerateClustered(bool t);
-  virtual void GenerateLabeled(bool t);
+  virtual void SetOpacity( double op );
 
 
   virtual void SetInputImage(MeanShiftModuleModel::VectorImageType* image)
   {
     m_Model->SetInputImage(image);
   }
-
-  MeanShiftModuleModel::VectorImageType* GetFilteredOutput()
-  {
-    return m_Model->GetOutputFilteredImage();
-  }
-
-  MeanShiftModuleModel::VectorImageType* GetClusteredOutput()
-  {
-    return m_Model->GetOutputClusteredImage();
-  }
-
-//   MeanShiftModuleModel::LabeledImageType* GetLabeledOutput()
-//   {
-//     return m_Model->GetOutputLabeledImage();
-//   }
-
 
 
   bool IsModelUpdating()
@@ -122,7 +96,6 @@ protected:
   /** Destructor */
   virtual ~MeanShiftModuleController();
 
-  static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
   MeanShiftModuleController(const Self&); //purposely not implemented

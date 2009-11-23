@@ -34,19 +34,11 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
   m_ImageGenerator = LayerGeneratorType::New();
   m_ClustersGenerator = LayerGeneratorType::New();
   m_BoundariesGenerator = LabelLayerGeneratorType::New();
-
   m_InputImage = VectorImageType::New();
   
 
   m_IsUpdating = false;
   m_IsImageReady = false;
-
-  m_GenerateFiltered = true;
-  m_GenerateClustered = true;
-  m_GenerateLabeled = true;
-
-
-//   m_OutputChanged = false;
 
 }
 
@@ -65,6 +57,7 @@ MeanShiftModuleModel
   m_OutputFilteredImage = m_MeanShift->GetOutput();
   m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
   m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
+  m_OutputBoundariesImage =  m_MeanShift->GetClusterBoundariesOutput();
 
   // Generate the layer
   m_ImageGenerator->SetImage(m_Reader->GetOutput());
@@ -102,34 +95,6 @@ MeanShiftModuleModel
 
   this->NotifyAll("OpenImage");
   m_IsImageReady = true;
-}
-
-void
-MeanShiftModuleModel
-::SaveLabelImage( const char * filename)
-{
-  m_IsUpdating = true;
-  LabeledWriterType::Pointer writer = LabeledWriterType::New();
-  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image...");
-  writer->SetFileName(filename);
-  writer->SetInput(m_MeanShift->GetLabeledClusteredOutput());
-  writer->Update();
-  m_IsUpdating = false;
-
-}
-
-void
-MeanShiftModuleModel
-::SaveClusterImage( const char * filename)
-{
-  m_IsUpdating = true;
-  VectorWriterType::Pointer writer = VectorWriterType::New();
-  FltkFilterWatcher qlwatcher(writer,0,0,200,20,"Save Image...");
-  writer->SetFileName(filename);
-  writer->SetInput(m_MeanShift->GetClusteredOutput());
-  writer->Update();
-  m_IsUpdating = false;
-
 }
 
 
@@ -213,11 +178,16 @@ MeanShiftModuleModel
       m_MeanShift->SetSpatialRadius(m_SpatialRadius);
       m_MeanShift->SetRangeRadius(m_SpectralRadius);
       m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
-      
+         
       m_ClustersGenerator->SetImage(m_MeanShift->GetClusteredOutput());
       m_ClustersGenerator->GenerateQuicklookOff();
       m_ClustersGenerator->GenerateLayer();
       
+      m_BoundariesGenerator->SetImage(m_MeanShift->GetClusterBoundariesOutput());
+      m_BoundariesGenerator->GenerateQuicklookOff();
+      m_BoundariesGenerator->GenerateLayer(); 
+      
+
       std::vector<unsigned int> channels;
       if(m_InputImage->GetNumberOfComponentsPerPixel()==3)
 	{
@@ -234,16 +204,20 @@ MeanShiftModuleModel
       
       m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
       
-      
       m_ClustersGenerator->GetLayer()->SetName("Segmentation");
+      m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
+      m_BoundariesGenerator->GetLayer()->SetVisible(false);
+
       m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
-    
+      m_VisualizationModel->AddLayer(m_BoundariesGenerator->GetLayer());
+
       m_VisualizationModel->Update();
       
       m_MeanShift->GetOutput()->UpdateOutputInformation();
       m_MeanShift->GetClusteredOutput()->UpdateOutputInformation();
       m_MeanShift->GetLabeledClusteredOutput()->UpdateOutputInformation();
-      
+      m_MeanShift->GetClusterBoundariesOutput()->UpdateOutputInformation();
+
       m_IsUpdating = false;
     } 
 }
@@ -255,13 +229,10 @@ MeanShiftModuleModel
 {
   if(m_IsImageReady)
     {
-    m_ClustersGenerator->GetLayer()->SetVisible(sc);
+      m_ClustersGenerator->GetLayer()->SetVisible(sc);
     }
   
-  m_VisualizationModel->Update();
-  
-  this->NotifyAll("SwitchClusters");
-
+  m_VisualizationModel->Update();  
 }
 
 void
@@ -270,13 +241,19 @@ MeanShiftModuleModel
 {
   if(m_IsImageReady)
     {
-    m_BoundariesGenerator->GetLayer()->SetVisible(sb);
+      m_BoundariesGenerator->GetLayer()->SetVisible(sb);
     }
   
   m_VisualizationModel->Update();
-  
-  this->NotifyAll("SwitchBoundaries");
+}
 
+
+void
+MeanShiftModuleModel
+::SetOpacity(double op)
+{
+  dynamic_cast<BlendingFunctionType *>(m_BoundariesGenerator->GetLayer()->GetBlendingFunction())->SetAlpha(op);
+  m_VisualizationModel->Update();
 }
 
 void
@@ -286,7 +263,7 @@ MeanShiftModuleModel
   m_OutputFilteredImage = m_MeanShift->GetOutput();
   m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
   m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
-  
+  m_OutputBoundariesImage = m_MeanShift->GetClusterBoundariesOutput();
  
   this->NotifyAll("OutputsUpdated");
   

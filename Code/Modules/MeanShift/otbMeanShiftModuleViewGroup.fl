@@ -15,52 +15,62 @@ class MeanShiftModuleViewGroup {open
     Fl_Window wMainWindow {
       label {Mean shift module}
       callback {this->Exit();} open
-      xywh {268 159 695 545} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {360 173 690 560} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gImageViewer {open
-        xywh {0 0 501 545} box PLASTIC_DOWN_BOX color 48
+        xywh {0 0 501 560} box PLASTIC_DOWN_BOX color 48
       } {}
       Fl_Group gRightGroup {open
-        xywh {500 0 195 545} box PLASTIC_DOWN_BOX color 51 labelcolor 186
+        xywh {500 0 195 560} box PLASTIC_DOWN_BOX color 51 labelcolor 186
       } {
         Fl_Group gScroll {
           label {Navigation view} open
-          xywh {514 14 170 170} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {506 18 180 160} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Button {} {
           label Run
           callback {RunSegmentation()}
-          xywh {512 512 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {509 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
+        Fl_Group gZoom {
+          label {Zoom view} open
+          xywh {506 196 180 160} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+        } {}
         Fl_Value_Slider mSpatialRadius {
           label {Spatial radius}
           callback {SetSpatialRadius(static_cast<unsigned int>(this->mSpatialRadius->value()));}
-          tooltip {Set the mean shift spatial radius} xywh {531 387 135 20} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 30 step 1 value 5 textsize 14
+          tooltip {Set the mean shift spatial radius} xywh {531 378 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 30 step 1 value 5 textsize 14
         }
         Fl_Value_Slider mSpectralRadius {
           label {Spectral radius}
           callback {SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));}
-          tooltip {Set the mean shift spectral radius} xywh {531 424 135 20} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 100 step 1 value 15 textsize 14
+          tooltip {Set the mean shift spectral radius} xywh {531 411 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 100 step 1 value 15 textsize 14
         }
         Fl_Value_Slider mMinRegionSize {
           label {Min region size}
           callback {SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));}
-          tooltip {Set the mean shift minimum region size} xywh {531 462 135 20} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 minimum 1 maximum 1000 step 1 value 100 textsize 14
+          tooltip {Set the mean shift minimum region size} xywh {531 444 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 minimum 1 maximum 1000 step 1 value 100 textsize 14
+        }
+        Fl_Check_Button mBoundButton {
+          label {Display Boundaries}
+          callback {SwitchBoundaries();}
+          xywh {536 469 129 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Value_Slider mOpacity {
+          label Opcaity
+          callback {SetOpacity(this->mOpacity->value());} selected
+          xywh {559 487 122 15} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 value 0.5 textsize 14
+        }
+        Fl_Check_Button mClustersButton {
+          label {Display Cluster}
+          callback {SwitchClusters();}
+          xywh {548 509 107 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button {} {
           label Close
           callback {this->Exit();}
-          xywh {607 512 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {604 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
-        Fl_Check_Button mClustersButton {
-          label {Display Cluster}
-          callback {SwitchClusters();} selected
-          xywh {540 489 126 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Group gZoom {
-          label {Zoom view} open
-          xywh {514 198 170 170} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
-        } {}
       }
     }
   }
@@ -72,20 +82,18 @@ class MeanShiftModuleViewGroup {open
   } {}
   Function {SwitchClusters()} {open return_type {virtual void}
   } {}
-  Function {SaveLabelImage()} {open return_type {virtual void}
-  } {}
-  Function {SaveClusterImage()} {open return_type {virtual void}
-  } {}
   Function {SetSpatialRadius(unsigned int)} {return_type {virtual void}
   } {}
   Function {SetSpectralRadius(unsigned int)} {open return_type {virtual void}
   } {}
-  Function {SetMinRegionSize(unsigned int)} {open return_type {virtual void}
+  Function {SetMinRegionSize(unsigned int)} {return_type {virtual void}
   } {}
   Function {SwitchBoundaries()} {open return_type {virtual void}
   } {}
   Function {Close()} {open return_type {virtual void}
   } {}
   Function {~MeanShiftModuleViewGroup()} {open return_type virtual
+  } {}
+  Function {SetOpacity(double)} {return_type {virtual void}
   } {}
 } 

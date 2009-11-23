@@ -28,38 +28,39 @@ class ITK_EXPORT MeanShiftModuleModel
 
 public:
   /** Standard class typedefs */
-  typedef MeanShiftModuleModel                         Self;
-  typedef MVCModel<ListenerBase> Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef MeanShiftModuleModel             Self;
+  typedef MVCModel<ListenerBase>           Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(MeanShiftModuleModel, Object);
 
-  typedef      double                                                            PixelType;
-  typedef      VectorImage<PixelType,2>                VectorImageType;
-  typedef      VectorImageType::Pointer                VectorImagePointerType;
-  typedef      Image<unsigned short>                   LabeledImageType;
-  typedef      LabeledImageType::Pointer               LabeledImagePointerType;
-  typedef      ImageFileReader<VectorImageType>        VectorReaderType;
-  typedef      ImageFileWriter<VectorImageType>        VectorWriterType;
-  typedef      ImageFileWriter<LabeledImageType>       LabeledWriterType;
+  typedef double                            PixelType;
+  typedef VectorImage<PixelType,2>          VectorImageType;
+  typedef VectorImageType::Pointer          VectorImagePointerType;
+  typedef Image<unsigned short>             LabeledImageType;
+  typedef LabeledImageType::Pointer         LabeledImagePointerType;
+  typedef ImageFileReader<VectorImageType>  VectorReaderType;
+  typedef ImageFileWriter<VectorImageType>  VectorWriterType;
+  typedef ImageFileWriter<LabeledImageType> LabeledWriterType;
 
 
   /** Visualization model */
-  typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef      Image<RGBPixelType,2>                                     RGBImageType;
-  typedef      ImageLayer<VectorImageType,RGBImageType>                  LayerType;
-  typedef      ImageLayer<LabeledImageType,RGBImageType>                  LabelLayerType;
-  typedef      ImageLayerGenerator<LayerType>                            LayerGeneratorType;
-  typedef      ImageLayerGenerator<LabelLayerType>                            LabelLayerGeneratorType;
-  typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
-  typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
+  typedef itk::RGBPixel<unsigned char>                                 RGBPixelType;
+  typedef Image<RGBPixelType,2>                                        RGBImageType;
+  typedef ImageLayer<VectorImageType,RGBImageType>                     LayerType;
+  typedef ImageLayer<LabeledImageType,RGBImageType>                    LabelLayerType;
+  typedef ImageLayerGenerator<LayerType>                               LayerGeneratorType;
+  typedef ImageLayerGenerator<LabelLayerType>                          LabelLayerGeneratorType;
+  typedef ImageLayerRenderingModel<RGBImageType>                       VisualizationModelType;
+  typedef LayerGeneratorType::ImageLayerType::OutputPixelType          LayerOutputPixelType;
+  typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
 
   /** Mean Shift Vector Image*/
 
   typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType>  MSFilterType;
-  typedef MSFilterType::Pointer                                                  MSFilterPointerType;
+  typedef MSFilterType::Pointer                                                           MSFilterPointerType;
 
   /** New macro */
   itkNewMacro(Self);
@@ -78,11 +79,10 @@ public:
   itkGetObjectMacro(OutputFilteredImage,VectorImageType);
   itkGetObjectMacro(OutputClusteredImage,VectorImageType);
   itkGetObjectMacro(OutputLabeledImage,LabeledImageType);
+  itkGetObjectMacro(OutputBoundariesImage,LabeledImageType);
  
   /** Open an image */
   void OpenImage(const char * filename);
-  void SaveLabelImage(const char * filename);
-  void SaveClusterImage(const char * filename);
   void RunSegmentation();
   void SwitchClusters(bool sc);
   void SwitchBoundaries(bool sc);
@@ -90,18 +90,7 @@ public:
   void SetSpatialRadius(unsigned int sr);
   void SetSpectralRadius(unsigned int sr);
   void SetMinRegionSize(unsigned int mr);
-
-  itkSetMacro(GenerateFiltered, bool);
-  itkSetMacro(GenerateClustered, bool);
-  itkSetMacro(GenerateLabeled, bool);
-
-  itkGetMacro(GenerateFiltered, bool);
-  itkGetMacro(GenerateClustered, bool);
-  itkGetMacro(GenerateLabeled, bool);
-
-  /** Get the output changed flag */
-//   itkGetMacro(OutputChanged,bool);
-  
+  void SetOpacity(double op);
 
   bool IsUpdating() const
   {
@@ -149,16 +138,11 @@ private:
 
   BlendingFunctionType::Pointer m_BlendingFunction;
 
-  bool m_GenerateFiltered;
-  bool m_GenerateClustered;
-  bool m_GenerateLabeled;
-
-  VectorImagePointerType m_InputImage;
-  VectorImagePointerType m_OutputFilteredImage;
-  VectorImagePointerType m_OutputClusteredImage;
+  VectorImagePointerType  m_InputImage;
+  VectorImagePointerType  m_OutputFilteredImage;
+  VectorImagePointerType  m_OutputClusteredImage;
   LabeledImagePointerType m_OutputLabeledImage;
-
-//   bool m_OutputChanged;
+  LabeledImagePointerType m_OutputBoundariesImage;
 
 };
 
