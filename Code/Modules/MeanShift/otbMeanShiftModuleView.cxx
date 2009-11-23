@@ -24,6 +24,7 @@ MeanShiftModuleView::~MeanShiftModuleView()
   // Remove registered visualization components from the interface
   gImageViewer->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
+  gZoom->remove(m_ImageView->GetZoomWidget());
   this->Exit();
 }
 
@@ -54,19 +55,22 @@ void MeanShiftModuleView::Build()
    // Remove registered visualization components from the interface
    gImageViewer->add(m_ImageView->GetFullWidget());
    gScroll->add(m_ImageView->GetScrollWidget());
+   gZoom->add(m_ImageView->GetZoomWidget());
 
    gImageViewer->resizable(m_ImageView->GetFullWidget());
    gScroll->resizable(m_ImageView->GetScrollWidget());
+   gScroll->resizable(m_ImageView->GetZoomWidget());
 
    m_ImageView->GetFullWidget()->resize(gImageViewer->x(),gImageViewer->y(),gImageViewer->w(),gImageViewer->h());
    m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
+   m_ImageView->GetZoomWidget()->resize(gZoom->x(),gZoom->y(),gZoom->w(),gZoom->h());
 
    // Show and refresh the interface
     this->wMainWindow->show();
 
     m_ImageView->GetFullWidget()->show();
     m_ImageView->GetScrollWidget()->show();
-
+    m_ImageView->GetZoomWidget()->show();
 
     this->RefreshInterface();
     SetSpatialRadius(static_cast<unsigned int>(this->mSpatialRadius->value()));
@@ -179,6 +183,7 @@ void MeanShiftModuleView::Show()
   
   m_ImageView->GetFullWidget()->show();
   m_ImageView->GetScrollWidget()->show();
+  m_ImageView->GetZoomWidget()->show();
 }
 
 

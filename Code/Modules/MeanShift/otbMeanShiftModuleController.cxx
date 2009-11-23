@@ -18,12 +18,14 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   // Build the action handlers
   m_ResizingHandler           = ResizingHandlerType::New();
   m_ChangeRegionHandler       = ChangeRegionHandlerType::New();
-
-
+  m_ChangeScaledRegionHandler = ChangeScaledRegionHandlerType::New();
+  m_ChangeScaleHandler        = ChangeScaleHandlerType::New();
 
   // Add the action handlers to the widgets controller
   m_WidgetsController->AddActionHandler(m_ResizingHandler);
   m_WidgetsController->AddActionHandler(m_ChangeRegionHandler);
+  m_WidgetsController->AddActionHandler(m_ChangeScaledRegionHandler);
+  m_WidgetsController->AddActionHandler(m_ChangeScaleHandler);
 
   m_Threader = itk::MultiThreader::New();
 
@@ -42,6 +44,8 @@ void MeanShiftModuleController::SetModel(ModelType* model){
   // Register the model to the action handlers
   m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
+  m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
+  m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
 
 }
 
@@ -50,6 +54,8 @@ void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
   m_View = view;
   m_ResizingHandler->SetView(m_View->GetImageView());
   m_ChangeRegionHandler->SetView(m_View->GetImageView());
+  m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
+  m_ChangeScaleHandler->SetView(m_View->GetImageView());
 }
 
 void

@@ -1,3 +1,21 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #ifndef __otbMeanShiftModuleController_h
 #define __otbMeanShiftModuleController_h
 
@@ -8,6 +26,8 @@
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbPixelDescriptionActionHandler.h"
+#include "otbChangeScaledExtractRegionActionHandler.h"
+#include "otbChangeScaleActionHandler.h"
 #include "otbMouseClickActionHandler.h"
 #include "itkMultiThreader.h"
 
@@ -37,6 +57,8 @@ public:
     <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
   typedef ChangeExtractRegionActionHandler
       <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+  typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
+  typedef ChangeScaleActionHandler<VisualizationModelType,ImageViewType>               ChangeScaleHandlerType;
 
   void SetModel(ModelType* model);
 
@@ -119,6 +141,8 @@ private:
   /** Action handlers */
   ResizingHandlerType::Pointer               m_ResizingHandler;
   ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer     m_ChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer            m_ChangeScaleHandler;
 
   itk::MultiThreader::Pointer m_Threader;
 
