@@ -82,7 +82,7 @@ class GCPToSensorModelViewGroup {open
           Fl_Button guiDEM {
             label Elevation
             callback {wDEMWindow->show();}
-            tooltip {Quit Application} xywh {5 568 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186 deactivate
+            tooltip {Set the source for the elevation information} xywh {5 568 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
           Fl_Button bOk {
             label {Save/Quit}
