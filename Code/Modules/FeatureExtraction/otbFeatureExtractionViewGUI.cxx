@@ -178,9 +178,13 @@ FeatureExtractionViewGUI
   if (m_FeatureExtractionModel->GetHasInput())
   {
 //     std::cout << "notify to view" << std::endl;
+
+  if(event != "Cancel")
+    {
     InitWidgets();
     this->UpdateChannelSelection();
     this->UpdateInformation();
+    }
   }
 }
 

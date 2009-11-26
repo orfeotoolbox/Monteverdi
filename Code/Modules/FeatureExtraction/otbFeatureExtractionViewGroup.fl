@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -13,11 +13,11 @@ decl {\#include "otbFeature.h"} {public
 
 class FeatureExtractionViewGroup {open
 } {
-  Function {CreateGUI()} {return_type void
+  Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
-      callback {Quit();}
+      callback {Quit();} open
       xywh {503 100 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
@@ -1078,7 +1078,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
         }
       }
       Fl_Button guiOK {
-        label {Extract Feature}
+        label Ok
         callback {OK();}
         tooltip {Save the Composition} xywh {525 563 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
       }
@@ -1089,8 +1089,8 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
       }
       Fl_Button guiQuit {
         label Cancel
-        callback {Cancel();}
-        tooltip {Quit Application} xywh {425 565 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+        callback {Cancel();} selected
+        tooltip {Quit Application} xywh {400 564 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
         xywh {10 25 645 240} resizable
@@ -1115,7 +1115,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
   } {}
   Function {OpenImage()} {open return_type {virtual void}
   } {}
-  Function {Quit()} {open selected return_type {virtual void}
+  Function {Quit()} {open return_type {virtual void}
   } {}
   Function {SetFeatureType(otb::FeatureInfo::FeatureType i)} {open return_type {virtual void}
   } {}
