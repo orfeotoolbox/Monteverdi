@@ -109,6 +109,9 @@ private:
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  //intensity channel management
+  void SetIntensityChannelAvailability();
+  
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
   
