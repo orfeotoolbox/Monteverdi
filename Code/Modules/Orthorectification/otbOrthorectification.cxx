@@ -120,7 +120,7 @@ Orthorectification
   const char * cfname = NULL;
 
   // Choose directory
-  cfname = flu_file_chooser(otbGetTextMacro("Pick a directory..."), "*.*",".");
+  cfname = flu_dir_chooser(otbGetTextMacro("Pick a directory..."), ".");
 
   if (cfname == NULL)
   {
