@@ -56,12 +56,8 @@ void WriterModule::Run()
   pBar->minimum(0);
   pBar->maximum(1);
   wFileChooserWindow->show();
-  pBar->copy_label("0%");
-  
-  //Change intensity channel
+  pBar->copy_label("0%"); 
 }
-
-/** intensity selection*/
 // void WriterModule::SetIntensityChannelAvailability()
 // {
 //   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
@@ -198,7 +194,6 @@ void WriterModule::ThreadedRun()
     if ( charVectorImage.IsNotNull() )
       {
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-      //TODO see we need to erase the intensity channel
       charVWriter->SetInput(charVectorImage);
       charVWriter->SetFileName(filepath);
       m_ProcessObject = charVWriter;
