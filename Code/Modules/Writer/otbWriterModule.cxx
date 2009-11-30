@@ -21,8 +21,6 @@
 
 #include "otbMsgReporter.h"
 
-#include "otbMultiChannelExtractROI.h"
-
 namespace otb
 {
 /** Constructor */
@@ -61,7 +59,6 @@ void WriterModule::Run()
   pBar->copy_label("0%");
   
   //Change intensity channel
-  this->SetIntensityChannelAvailability();
 }
 
 /** intensity selection*/
@@ -203,47 +200,18 @@ void WriterModule::ThreadedRun()
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
       //TODO see we need to erase the intensity channel
       if (saveIntensityChannel->value() == 0)
-        {
-          typedef MultiChannelExtractROI<CharVectorImageType::InternalPixelType,CharVectorImageType::InternalPixelType>                    ExtractROICharType;
-          ExtractROICharType::Pointer extractROIFilter = ExtractROICharType::New();
-          
-          extractROIFilter->SetFirstChannel( 1 );
-          extractROIFilter->SetLastChannel( charVectorImage->GetNumberOfComponentsPerPixel() - 1 );
-
-          extractROIFilter->SetInput( charVectorImage );
-          charVWriter->SetInput( extractROIFilter->GetOutput() );
-     
-          std::cout  << "Erase the intensity channel" << std::endl;
-        }
-        else
-        {
-          charVWriter->SetInput(charVectorImage);
-        }
-        
-        charVWriter->SetFileName(filepath);
-        m_ProcessObject = charVWriter;
-        charVWriter->Update();
+      {
+        std::cout  << "Erase the intensity channel" << std::endl;
+      }
+      charVWriter->SetInput(charVectorImage);
+      charVWriter->SetFileName(filepath);
+      m_ProcessObject = charVWriter;
+      charVWriter->Update();
       }
     else if ( vectorImage.IsNotNull() )
       {
       FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-      if (saveIntensityChannel->value() == 0)
-      {
-        typedef MultiChannelExtractROI<FloatingVectorImageType::InternalPixelType,FloatingVectorImageType::InternalPixelType>                    ExtractROICharType;
-        ExtractROICharType::Pointer extractROIFilter = ExtractROICharType::New();
-          
-        extractROIFilter->SetFirstChannel( 1 );
-        extractROIFilter->SetLastChannel( vectorImage->GetNumberOfComponentsPerPixel() - 1 );
-
-        extractROIFilter->SetInput( vectorImage );
-        fPVWriter->SetInput( extractROIFilter->GetOutput() );
-     
-        std::cout  << "Erase the intensity channel" << std::endl;
-      }
-      else
-      {
-        fPVWriter->SetInput(vectorImage);
-      }
+      fPVWriter->SetInput(vectorImage);
       fPVWriter->SetFileName(filepath);
       m_ProcessObject = fPVWriter;
       fPVWriter->Update();
