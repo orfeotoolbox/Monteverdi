@@ -20,7 +20,8 @@
 
 #include "otbMsgReporter.h"
 
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
+#include <FL/Fl.H>
 
 
 namespace otb
@@ -338,12 +339,15 @@ void
 GCPToSensorModelView
 ::SelectDEM()
 {
+  const char * cfname = NULL;
+
   // Choose directory
-  const char * cfname = fl_dir_chooser("Pick a directory", "*.*");
-  // Check path
-  if (cfname == NULL || strlen(cfname)<1)
+  cfname = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), ".");
+
+  if (cfname == NULL)
   {
-    return;
+    otbMsgDebugMacro(<<"Empty directory!");
+    return ;
   }
   
   std::string DEMfile = cfname;
