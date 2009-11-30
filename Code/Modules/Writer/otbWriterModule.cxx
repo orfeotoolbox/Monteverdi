@@ -57,30 +57,6 @@ void WriterModule::Run()
   pBar->maximum(1);
   wFileChooserWindow->show();
   pBar->copy_label("0%");
-  
-  //Change intensity channel
-}
-
-/** intensity selection*/
-void WriterModule::SetIntensityChannelAvailability()
-{
-  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-  
-  try
-  {
-    if ( vectorImage.IsNotNull() || charVectorImage.IsNotNull() )
-    {
-      saveIntensityChannel->activate();
-    }
-  }
-  catch (itk::ExceptionObject & err)
-  {
-    // Make the main fltk loop update Msg reporter
-    m_ErrorMsg = err.GetDescription();
-    Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-    this->BusyOff();
-  }
 }
 
 void WriterModule::SaveDataSet()
@@ -198,11 +174,6 @@ void WriterModule::ThreadedRun()
     if ( charVectorImage.IsNotNull() )
       {
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-      //TODO see we need to erase the intensity channel
-      if (saveIntensityChannel->value() == 0)
-      {
-        std::cout  << "Erase the intensity channel" << std::endl;
-      }
       charVWriter->SetInput(charVectorImage);
       charVWriter->SetFileName(filepath);
       m_ProcessObject = charVWriter;

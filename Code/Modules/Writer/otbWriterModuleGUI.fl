@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0110 
+version 1.0107 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -11,20 +11,20 @@ class WriterModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Save dataset} open
-      xywh {611 158 365 175} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+      xywh {611 158 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
         label Save
-        callback {this->SaveDataSet();}
-        xywh {214 110 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->SaveDataSet();} selected
+        xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {25 110 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {24 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
@@ -32,11 +32,7 @@ class WriterModuleGUI {open
         xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Progress pBar {
-        xywh {0 150 365 20} box PLASTIC_DOWN_BOX selection_color 1
-      }
-      Fl_Check_Button saveIntensityChannel {
-        label {Save Intensity Channel}
-        xywh {25 75 195 25} down_box DOWN_BOX deactivate
+        xywh {0 125 365 20} box PLASTIC_DOWN_BOX selection_color 1
       }
     }
   }
