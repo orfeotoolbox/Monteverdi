@@ -17,7 +17,11 @@ See OTBCopyright.txt for details.
 =========================================================================*/
 #include "otbOrthorectification.h"
 
-#include <FL/Fl_Text_Buffer.H>
+#include <FLU/Flu_File_Chooser.h>
+#include <FL/Fl.H>
+
+#include "otbI18n.h"
+// #include <FL/Fl_Text_Buffer.H>
 #include <FL/fl_ask.H>
 #include <FL/Enumerations.H>
 
@@ -112,14 +116,19 @@ void
 Orthorectification
 ::OpenDEM()
 {
+  
+  const char * cfname = NULL;
+
   // Choose directory
-  const char * cfname = fl_dir_chooser("Pick a directory", "*.*");
-  // Check path
-  if (cfname == NULL || strlen(cfname)<1)
+  cfname = flu_file_chooser(otbGetTextMacro("Pick a directory..."), "*.*",".");
+
+  if (cfname == NULL)
   {
-    return;
+    otbMsgDebugMacro(<<"Empty directory!");
+    return ;
   }
-  // Check directoy avaibility
+  
+  // Check directory availability
   ossimElevManager * elevManager = ossimElevManager::instance();
   ossimFilename ossimDEMDir;
   ossimDEMDir=ossimFilename(cfname);
