@@ -257,6 +257,9 @@ public:
   
   /** Update image size visu */
   virtual void UpdateInformation();
+
+  /** Hide every window */
+  virtual void Hide();
 private:
   ViewerModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

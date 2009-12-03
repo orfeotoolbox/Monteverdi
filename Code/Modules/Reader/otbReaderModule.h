@@ -85,6 +85,7 @@ protected:
   virtual void Cancel();
   virtual void Analyse();
   virtual void TypeChanged();
+  virtual void Hide();
 
   void OpenOpticalImage();
 

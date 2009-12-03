@@ -260,10 +260,13 @@ void ReaderModule::Browse()
 
 void ReaderModule::Cancel()
 {
-  wFileChooserWindow->hide();
+  this->Hide();
 }
 
-
+void ReaderModule::Hide()
+{
+  wFileChooserWindow->hide();
+}
 } // End namespace otb
 
 #endif

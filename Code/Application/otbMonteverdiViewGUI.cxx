@@ -73,7 +73,6 @@ MonteverdiViewGUI
 MonteverdiViewGUI
 ::~MonteverdiViewGUI()
 {
-  this->Quit();
   delete m_HelpTextBuffer;
 }
 
@@ -530,12 +529,13 @@ MonteverdiViewGUI
 ::Quit()
 {
   ModuleMapType::iterator iter;
+  ModuleMapType modMap = m_MonteverdiModel->GetModuleMap();
   // add size>0 because .begin already true -> at least one iteration is done even if size==0
-  if( m_MonteverdiModel->GetModuleMap().size() >0 )
+  if( modMap.size() >0 )
     {
-      for( iter = m_MonteverdiModel->GetModuleMap().begin(); iter != m_MonteverdiModel->GetModuleMap().end(); iter++)
+      for( iter = modMap.begin(); iter != modMap.end(); iter++)
 	{ 
-	  iter->second->Hide();
+	  (*iter).second->Hide();
 	}
     }
 
@@ -543,12 +543,13 @@ MonteverdiViewGUI
   wHelpWindow->hide();
   wMainWindow->hide();
   m_MonteverdiModel->Close();
+
   if(m_InputViewGUI.IsNotNull())
   {
     m_InputViewGUI->Cancel();
   }
-  MsgReporter::GetInstance()->Hide();
 
+  MsgReporter::GetInstance()->Hide();
 }
 
 void

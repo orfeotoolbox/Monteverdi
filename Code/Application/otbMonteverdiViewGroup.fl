@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -13,8 +13,8 @@ class MonteverdiViewGroup {open
   } {
     Fl_Window wMainWindow {
       label Monteverdi
-      callback {this->Quit();} open
-      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+      callback {this->Quit();} open selected
+      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Menu_Bar mMenuBar {open
         xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
@@ -49,7 +49,7 @@ class MonteverdiViewGroup {open
     Fl_Window wRenameWindow {
       label {Module renamer}
       callback {wRenameWindow->hide();} open
-      xywh {599 282 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+      xywh {599 282 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Output gRenameOld {
         label {Old instance label}
@@ -73,10 +73,10 @@ class MonteverdiViewGroup {open
     Fl_Window wOutputRenameWindow {
       label {Output  renamer}
       callback {wOutputRenameWindow->hide();} open
-      xywh {595 524 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+      xywh {595 524 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Output gOutputRenameRoot {
-        label {Root  instance label} selected
+        label {Root  instance label}
         xywh {8 30 200 25} box PLASTIC_ROUND_DOWN_BOX labelsize 13 labelcolor 186 align 1
       }
       Fl_Output gOutputRenameOld {

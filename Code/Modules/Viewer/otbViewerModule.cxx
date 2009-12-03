@@ -1214,18 +1214,7 @@ void ViewerModule::ShowHide()
  */
 void ViewerModule::Quit()
 {
-  // Hide the main window
-  m_DisplayWindow->Hide();
-
-  // Hide the Setup Propreties Window
-  bSetupWindow->hide();
-
-  // Hide the DEM Window
-  if(wDEM->shown() > 0)
-    {
-      wDEM->hide();
-    }
-
+  this->Hide();
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }
@@ -1252,6 +1241,20 @@ ViewerModule
   m_DisplayWindow->SetLabel(oss.str().c_str());
   bSetupWindow->copy_label(oss.str().c_str());
 }
+
+void
+ViewerModule
+::Hide()
+{
+ // Hide the main window
+  m_DisplayWindow->Hide();
+ // Hide the DEM Window
+  wDEM->hide();
+  // Hide the Setup Propreties Window
+  bSetupWindow->hide();
+}
+
+
 } // End namespace otb
 
 #endif

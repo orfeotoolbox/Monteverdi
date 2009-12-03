@@ -169,7 +169,6 @@ private:
   itk::WeakPointer<MonteverdiControllerInterface> m_MonteverdiController;
 
   /** The Flu tree browser */
-  //Flu_Tree_Browser        *m_Tree;
   FluTreeBrowser        *m_Tree;
 
   /** The module input selection interface */
