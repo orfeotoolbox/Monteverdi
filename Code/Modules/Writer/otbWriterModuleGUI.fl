@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -10,28 +10,32 @@ class WriterModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Save dataset} open
+      label {Save dataset} open selected
       xywh {611 158 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
-        xywh {24 24 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Return_Button bOk {
-        label Save
-        callback {this->SaveDataSet();} selected
-        xywh {214 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button bCancel {
-        label Cancel
-        callback {this->Cancel();}
-        xywh {25 85 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {24 19 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
         callback {this->Browse();}
-        xywh {305 33 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 28 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Progress pBar {selected
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {24 75 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Return_Button bOk {
+        label Save
+        callback {this->SaveDataSet();}
+        xywh {214 75 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button b16 {
+        label {Write image in 16bits}
+        xywh {89 106 142 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+      }
+      Fl_Progress pBar {
         xywh {0 125 365 20} box PLASTIC_DOWN_BOX selection_color 1
       }
     }

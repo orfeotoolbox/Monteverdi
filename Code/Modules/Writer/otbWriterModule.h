@@ -22,13 +22,11 @@
 #include "otbModule.h"
 // include the GUI
 #include "otbWriterModuleGUI.h"
-// include process
-//#include "otbAsynchronousProcessBase.h"
-
 // include the OTB elements
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
-
+#include "itkCastImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
@@ -59,18 +57,25 @@ public:
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>                    FloatingVectorImageType;
+  typedef VectorImage<unsigned char,2>             FloatingFloatVectorImageType;
   typedef VectorImage<unsigned char,2>             CharVectorImageType;
   typedef Image<double,2>                          FloatingImageType;
   typedef Image<unsigned short,2>                  UnsignedShortImageType;
   typedef VectorData<double>                       VectorType;
   typedef VectorData<double,2,short unsigned int>  LabeledVectorType;
+  // Casters double ->float
+  typedef itk::CastImageFilter<FloatingVectorImageType, FloatingFloatVectorImageType> DoubleToFloatCasterType;
+  typedef ImageToVectorImageCastFilter<FloatingImageType, FloatingFloatVectorImageType> ImageDoubleToVImageFloatCasterType;
   /// Writers
-  typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
-  typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
-  typedef ImageFileWriter<FloatingImageType>       FPWriterType;
-  typedef ImageFileWriter<UnsignedShortImageType>  USWriterType;
-  typedef VectorDataFileWriter<VectorType>         VectorWriterType;
-  typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
+  typedef ImageFileWriter<FloatingVectorImageType>      FPVWriterType;
+  typedef ImageFileWriter<FloatingFloatVectorImageType> FFPVWriterType;
+  typedef ImageFileWriter<CharVectorImageType>          CharVWriterType;
+  typedef ImageFileWriter<FloatingImageType>            FPWriterType;
+  typedef ImageFileWriter<UnsignedShortImageType>       USWriterType;
+  typedef VectorDataFileWriter<VectorType>              VectorWriterType;
+  typedef VectorDataFileWriter<LabeledVectorType>       LabeledVectorWriterType;
+
+
 
 protected:
   /** Constructor */
