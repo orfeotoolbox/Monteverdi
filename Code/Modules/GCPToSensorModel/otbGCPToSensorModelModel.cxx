@@ -21,8 +21,6 @@
 
 #include "elevation/ossimElevManager.h"
 #include "base/ossimDirectory.h"
-#include "base/ossimTieGpt.h"
-#include "base/ossimTieGptSet.h"
 #include "projection/ossimRpcSolver.h"
 
 namespace otb
@@ -82,8 +80,10 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
-  m_RpcProjection = NULL;
-  m_RpcModel = NULL;
+  // deleted with ossimRefPtr
+  //delete m_RpcProjection;
+  //delete m_RpcModel;
+  //delete m_Projection
 }
 
 
@@ -244,6 +244,7 @@ void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
 {
+  /* NOT USED YET...
   ossimRefPtr<ossimBilinearProjection> bproj = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
@@ -274,6 +275,7 @@ GCPToSensorModelModel
       this->NotifyAll();
       m_ProjectionUpdated = false;
     }
+  */
 }
 
 
@@ -293,8 +295,6 @@ GCPToSensorModelModel
   ContinuousIndexType idFix, idMov;
   ossimDpt spoint;
   ossimGpt gpoint;
-  std::vector< ossimRefPtr<ossimTieGpt> > tieGptVect;
-  ossimTieGptSet tieGptSet;
   ossim_float64 score = 0.0;
   for(unsigned int i = 0; i<m_IndexesList.size(); i++)
     {
@@ -304,10 +304,7 @@ GCPToSensorModelModel
       sensorPoints.push_back(spoint);
       gpoint = ossimGpt(idMov[1],idMov[0], m_UsedElevation[i]);
       geoPoints.push_back(gpoint);
-      ossimTieGpt * tieGpt = new ossimTieGpt(gpoint, spoint, score);
-      tieGptVect.push_back(tieGpt);
     }
-  tieGptSet.setTiePoints(tieGptVect);
 
   // Use a solver to compute coef
   ossimRefPtr<ossimRpcSolver> solver = new ossimRpcSolver(false, false);

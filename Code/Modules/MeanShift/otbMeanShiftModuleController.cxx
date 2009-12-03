@@ -103,7 +103,6 @@ MeanShiftModuleController
     }
 
   m_Model->UpdateViewerDisplay(channels);
-  
 }
 
 
