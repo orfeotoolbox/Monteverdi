@@ -59,8 +59,8 @@ void WriterModule::Run()
 
   if ( vectorImage.IsNotNull() || singleImage.IsNotNull() )
     {
-      b16->value(1);
       b16->show();
+      b32->show();
     }
 
 
