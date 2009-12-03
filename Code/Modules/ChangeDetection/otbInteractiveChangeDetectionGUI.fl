@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -23,7 +23,8 @@ class otbInteractiveChangeDetectionGUI {open
   } {
     Fl_Window iviewWindowPrincipal {
       label {Principal Window}
-      xywh {220 518 1245 245} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 176 resizable
+      callback {this->Quit();}
+      xywh {25 518 1245 245} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 176 resizable
       code0 {\#include <FL/Fl_Gl_Window.H>} visible
     } {
       Fl_Menu_Bar {} {open
@@ -35,7 +36,7 @@ class otbInteractiveChangeDetectionGUI {open
         } {
           MenuItem {} {
             label {Load SVM model ...}
-            callback {OpenSVMModel();} selected
+            callback {OpenSVMModel();}
             xywh {10 10 30 20}
           }
           MenuItem {} {
@@ -387,7 +388,7 @@ CenterViewerColorCompositionCallback();}
           }
           Fl_Spinner svmKernelDegree {
             label {Kernel Degree }
-            xywh {200 141 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
+            xywh {200 141 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
           }
           Fl_Value_Input svmGamma {
             label {Gamma }
@@ -419,7 +420,7 @@ CenterViewerColorCompositionCallback();}
           }
           Fl_Spinner svmCacheSize {
             label {Cache Size }
-            xywh {200 171 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 
+            xywh {200 171 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
           }
           Fl_Button {} {
             label {Save parameters}
@@ -450,7 +451,7 @@ CenterViewerColorCompositionCallback();}
   } {}
   Function {AcquireSecondClass()} {return_type {virtual void}
   } {}
-  Function {AcquireFirstClass()} {return_type {virtual void}
+  Function {AcquireFirstClass()} {selected return_type {virtual void}
   } {}
   Function {LoadLeftImage()} {return_type {virtual void}
   } {}

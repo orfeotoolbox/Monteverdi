@@ -93,6 +93,12 @@ void ChangeDetectionModule::Run()
     }
 }
 
+/** PrintSelf method */
+void ChangeDetectionModule::Hide()
+{
+  m_ChangeDetection->Hide();
+}
+
 /** The notify */
 void ChangeDetectionModule::Notify()
 {

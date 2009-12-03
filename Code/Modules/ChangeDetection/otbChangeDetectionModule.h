@@ -75,6 +75,8 @@ protected:
   /** Notify Monteverdi application that orthorectification has a result */
   virtual void Notify();
 
+  virtual void Hide();
+
 private:
   ChangeDetectionModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

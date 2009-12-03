@@ -291,8 +291,9 @@ void
 InteractiveChangeDetection<TPixel>
 ::Quit()
 {
-  exit(0);
+  this->Hide();
 }
+
 
 template <class TPixel>
 void

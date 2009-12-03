@@ -184,14 +184,13 @@ public:
   
   void LoadSVMModel();
 
+ /** Hide all Image View Windows */
+  virtual void Hide(void);
+
 protected:
   // Constructor and destructor
   InteractiveChangeDetection();
   ~InteractiveChangeDetection();
-
-  /** Hide all Image View Windows */
-  virtual void Hide(void);
-  /** Update */
 
   /*   void EraseLastClickedPoint(); */
   void EraseAllClickedPoints();
