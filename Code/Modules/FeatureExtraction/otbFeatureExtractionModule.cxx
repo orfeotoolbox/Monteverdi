@@ -66,10 +66,11 @@ void FeatureExtractionModule::Run()
   this->BusyOn();
 
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
-
+  input->UpdateOutputInformation();
   if(input.IsNotNull())
     {
     m_Model->SetInputImage(input);
+    m_View->SetFeatureExtractPreviewParentBrowser(-1);
     m_View->Show();
     m_Model->GenerateLayers();
     }

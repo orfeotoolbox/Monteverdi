@@ -18,12 +18,9 @@ See OTBCopyright.txt for details.
 #ifndef __otbFeatureExtractionModel_h
 #define __otbFeatureExtractionModel_h
 
-// #include "otbMVCModel.h"
 #include "otbEventsSender.h"
-// #include "otbListenerBase.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbImageFileReader.h"
 #include "otbObjectList.h"
 #include "itkImageSource.h"
 #include "otbImageList.h"
@@ -34,7 +31,7 @@ See OTBCopyright.txt for details.
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
-
+#include "itkContinuousIndex.h"
 #include "otbFeature.h"
 
 //Filter include:
@@ -95,6 +92,9 @@ public:
   typedef InputImageType::IndexType                                       IndexType;
   typedef InputImageType::SizeType                                        SizeType;
   typedef InputImageType::OffsetType                                      OffsetType;
+  typedef itk::ContinuousIndex<>                                          ContinuousIndexType;
+
+
   /** Vector Image Output Filter */
   typedef VectorImage<PixelType,2>                                        OutputImageType;
   typedef OutputImageType::PixelType                                      OutputImagePixelType;
@@ -132,8 +132,6 @@ public:
   typedef ObjectList<ImageListType>                                          ImageListObjectListType;
   typedef ObjectList<ImageListToVectorImageFilterType>                       ImageListToVectorObjectListType;
   typedef StreamingImageFileWriter<OutputImageType>                          WriterType;
-  typedef ImageFileReader<InputImageType>                                    ReaderType;
-  typedef ReaderType::Pointer                                                ReaderPointerType;
   typedef VectorImageToImageListFilter<OutputImageType, ImageListType>       VectorToImageListType;
   typedef ImageToVectorImageCastFilter<SingleImageType, OutputImageType>     CasterType;
 
@@ -458,7 +456,7 @@ public:
   void AddIntensityChannel();
 
   /** Open input image */
-  void SetInputImage(std::string strfilename);
+  //void SetInputImage(std::string strfilename);
   /** Init input image */
   void InitInput();
   /** Init mean shift */
@@ -513,7 +511,6 @@ private:
 
   ExtractROIFilterListType::Pointer m_ChannelExtractorList;
   IntensityFilterType::Pointer      m_IntensityFilter;
-  ReaderPointerType                 m_Reader;
   CasterType::Pointer               m_Caster;
 
   std::vector<unsigned int>         m_OutputIndexMap;

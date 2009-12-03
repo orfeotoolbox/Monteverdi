@@ -142,13 +142,14 @@ public:
   virtual void SetFeatureType(FeatureType i);
   virtual void ClearImage();
 
+  itkSetMacro(FeatureExtractPreviewParentBrowser, int);
+
 protected:
 
   /** Destructor */
   virtual ~FeatureExtractionViewGUI();
 
   /** Center the widgets */
-  virtual void OpenImage();
   virtual void AddOutputChannel();
   virtual void RemoveOutputChannel();
   virtual void UpOutputChannel();

@@ -25,34 +25,70 @@ namespace otb
 FeatureExtractionController
 ::FeatureExtractionController()
 {
-
-/** NewVisu */
+  /** NewVisu */
   // Build a "visu"controller
-  m_VisuController = VisuControllerType::New();
-  m_ResultVisuController = VisuControllerType::New();
+  m_VisuController                   = VisuControllerType::New();
+  m_ResultVisuController             = VisuControllerType::New();
+  m_MouseClickedController           = MouseClickedController::New();
+  m_LeftMouseClickedHandler          = MouseClickedHandlertype::New();
+  m_ResizingHandler                  = ResizingHandlerType::New();
+  m_ChangeExtractRegionHandler       = ChangeExtractRegionHandlerType::New();
+  m_ResultResizingHandler            = ResizingHandlerType::New();
+  m_ResultChangeExtractRegionHandler = ChangeExtractRegionHandlerType::New();
 
+ // Link pixel clicked model (controller in relity...)
+  m_MouseClickedController->SetMouseButton(1);
+  m_MouseClickedController->SetImageViewId(0);
+  m_MouseClickedController->SetController(this);
+  m_LeftMouseClickedHandler->SetModel(m_MouseClickedController);
+  m_LeftMouseClickedHandler->SetActiveOnZoomWidget(false);
+  m_LeftMouseClickedHandler->SetActiveOnScrollWidget(false);
+
+  m_VisuController->AddActionHandler(m_ResizingHandler);
+  m_VisuController->AddActionHandler(m_ChangeExtractRegionHandler);
+  m_VisuController->AddActionHandler(m_ResultChangeExtractRegionHandler); 
+  m_ResultVisuController->AddActionHandler(m_ResultResizingHandler);
+  m_VisuController->AddActionHandler(m_LeftMouseClickedHandler);
 }
 
 FeatureExtractionController
 ::~FeatureExtractionController()
 {}
 
+void
+FeatureExtractionController
+::SetModel( ModelType::Pointer model)
+{
+  m_Model = model;
+// Register the model to the action handlers
+  m_ResizingHandler->SetModel(m_Model->GetVisuModel());
+  m_ChangeExtractRegionHandler->SetModel(m_Model->GetVisuModel());
+  m_ResultResizingHandler->SetModel(m_Model->GetResultVisuModel());
+  m_ResultChangeExtractRegionHandler->SetModel(m_Model->GetResultVisuModel());
+}
+
+void
+FeatureExtractionController
+::SetView(ViewPointerType pView)
+{
+  m_View = pView;
+  
+  m_ResizingHandler->SetView(m_View->GetVisuView());
+  m_ChangeExtractRegionHandler->SetView(m_View->GetVisuView());
+  m_ResultResizingHandler->SetView(m_View->GetResultVisuView());
+  m_ResultChangeExtractRegionHandler->SetView(m_View->GetVisuView());
+  m_LeftMouseClickedHandler->SetView(m_View->GetVisuView());
+}
 
 
 void
 FeatureExtractionController
-::OpenInputImage(const char * filename)
+::LeftMouseButtonClicked( ContinuousIndexType index )
 {
-  try
-  {
-    std::string strFilename = filename;
-    this->ClearSelectedChannels();
-    m_Model->SetInputImage( strFilename );
-  }
-  catch (itk::ExceptionObject & err)
-  {
-     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+  IndexType id;
+  id[0] = index[0];
+  id[1] = index[1];
+  m_View->UpdateSelectedPixel(id);
 }
 
 
@@ -239,11 +275,6 @@ FeatureExtractionController
 {
   try
   {
-//     if( !m_Model->GetHasInput() )
-//       MsgReporter::GetInstance()->SendError("Please select an input image");
-    
-    //itkExceptionMacro(<<"Please select an input image" );
-
     int beforeSize = m_Model->GetOutputFilterInformation().size();
     std::vector<double> params;
 
@@ -267,9 +298,18 @@ FeatureExtractionController
     {
       if ( m_View->GetSelectedPixel().GetSize() != m_Model->GetNumberOfChannels() )
       {
-        itkExceptionMacro(<<"Reference pixel is not set!");
+	MsgReporter::GetInstance()->SendError("Reference pixel is not set!");
+	return;
       }
-      m_Model->AddSpectralAngleFilter(m_View->GetSelectedPixel());
+      if( m_Model->GetInputImage()->GetNumberOfComponentsPerPixel() > 1)
+	{
+	  m_Model->AddSpectralAngleFilter(m_View->GetSelectedPixel());
+	}
+      else
+	{
+	  MsgReporter::GetInstance()->SendError("Spectral Angle invalid with mono channel images");
+	  return;
+	}
       break;
     }
     case FeatureInfo::MORPHOLOGICALOPENING:

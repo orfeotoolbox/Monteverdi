@@ -24,7 +24,6 @@ See OTBCopyright.txt for details.
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
-// #include "otbMsgReporter.h"
 #include "otbFeature.h"
 
 
@@ -77,6 +76,7 @@ FeatureExtractionViewGUI
 FeatureExtractionViewGUI
 ::~FeatureExtractionViewGUI()
 {
+  
 }
 
 void
@@ -138,6 +138,17 @@ FeatureExtractionViewGUI
   for(unsigned int i=0; i<m_ParameterGroupList.size(); i++)
     m_ParameterGroupList[i]->hide();
   m_ParameterGroupList[groupId]->show();
+  if(m_ParameterGroupList[groupId]==guiSpectAngle)
+    {
+      if( m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel() < 2 )
+	{
+	  m_ParameterGroupList[groupId]->deactivate();
+	}
+      else
+	{
+	  m_ParameterGroupList[groupId]->activate();
+	}
+    }
 }
 
 void
@@ -177,36 +188,14 @@ FeatureExtractionViewGUI
 {
   if (m_FeatureExtractionModel->GetHasInput())
   {
-//     std::cout << "notify to view" << std::endl;
-
-  if(event != "Cancel")
-    {
-    InitWidgets();
-    this->UpdateChannelSelection();
-    this->UpdateInformation();
-    }
+    if(event != "Cancel")
+      {
+	InitWidgets();
+	this->UpdateChannelSelection();
+	this->UpdateInformation();
+      }
   }
 }
-
-void
-FeatureExtractionViewGUI
-::OpenImage()
-{
-  const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
-  Fl::check();
-  guiMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return;
-  }
-  ossimFilename fname(cfname);
-  m_LastPath = fname.path();
-
-  this->ClearImage();
-  m_FeatureExtractionController->OpenInputImage(cfname);
-  m_FeatureExtractPreviewParentBrowser = -1;
-}
-
 
 void
 FeatureExtractionViewGUI
@@ -336,18 +325,20 @@ FeatureExtractionViewGUI
   oss<<"("<<id[0]<<" , "<<id[1]<<")";
   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
   guiSpectAnglePixelCoordinates->redraw();
-
   m_SelectedPixel = m_FeatureExtractionModel->GetInputImage()->GetPixel(id);
   oss.str("");
   oss<<"[";
+
   unsigned int i = 0;
   for (i=0; i<m_SelectedPixel.Size()-1; i++)
-  {
-    oss<<m_SelectedPixel[i]<<", ";
-  }
+    {
+      oss<<m_SelectedPixel[i]<<", ";
+    }
+
   oss<<m_SelectedPixel[i]<<"]";
   guiSpectAnglePixelValue->value(oss.str().c_str());
   guiSpectAnglePixelValue->redraw();
+
 }
 
 
@@ -406,15 +397,6 @@ void
 FeatureExtractionViewGUI
 ::OK()
 {
-  
-  //const char * cfname = fl_file_chooser("Save as...", "*.*",m_LastPath.c_str());
-//   Fl::check();
-//   guiMainWindow->redraw();
-//   if (cfname == NULL || strlen(cfname)<1)
-//   {
-//     return;
-//   }
-//   m_FeatureExtractionController->SetOutputFileName(cfname);
   m_FeatureExtractionController->SaveOutput();
     
   this->Quit();
@@ -519,7 +501,6 @@ FeatureExtractionViewGUI
   /** Notify that we can unlock data */
   m_FeatureExtractionController->Quit();
   guiMainWindow->hide();
-//   MsgReporter::GetInstance()->Hide();
 }
 
 

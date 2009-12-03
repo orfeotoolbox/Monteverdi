@@ -23,7 +23,7 @@ See OTBCopyright.txt for details.
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
-#include "otbPixelClickedActionHandler.h"
+#include "otbMouseClickActionHandler.h"
 
 
 namespace otb
@@ -31,6 +31,51 @@ namespace otb
 class ITK_EXPORT FeatureExtractionController
       : public FeatureExtractionControllerInterface
 {
+ /** Inner model class for mouse click action handler */
+  class MouseClickedController : public itk::Object
+  {
+    //friend class GCPToSensorModelModel;
+  public:
+ /** Standard class typedefs */
+  typedef MouseClickedController        Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard type macros */
+  itkTypeMacro(MouseClickedController,Superclass);
+  itkNewMacro(Self);
+
+  typedef itk::Index<> IndexType;
+
+  void IndexClicked(ContinuousIndexType index)
+    {
+      if( !m_Controller.IsNotNull() )
+	itkExceptionMacro(<<"Not Controller set.");
+      if( m_MouseButton==1 )
+	m_Controller->LeftMouseButtonClicked(index);
+      else
+       itkExceptionMacro(<<"Mouse event not supproted yet.");
+    }
+    itkSetClampMacro(MouseButton,int,1,3);
+    itkGetMacro(MouseButton,int);
+    itkSetClampMacro(ImageViewId,int,0,1);
+    itkGetMacro(ImageViewId,int);
+    itkSetObjectMacro(Controller, FeatureExtractionControllerInterface);
+  protected:
+ /** Constructor */
+  MouseClickedController() : m_MouseButton(1), m_ImageViewId(1), m_Controller(){};
+    /** Destructor */
+    virtual ~MouseClickedController(){};
+    /** Set the mouse button used (1 = left, 2 = center, 3 = right) */
+    int m_MouseButton;
+    /** Set the associated view (0: left, 1: right) */
+    int m_ImageViewId;
+    /** Inner model class for mouse click action handler */
+    FeatureExtractionControllerInterface::Pointer m_Controller;
+  };
+
+
 public:
   /** Standard class typedefs */
   typedef FeatureExtractionController                                  Self;
@@ -52,8 +97,7 @@ public:
   typedef ResizingHandlerType::Pointer                                 ResizingHandlerPointerType;
   typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType> ChangeExtractRegionHandlerType;
   typedef ChangeExtractRegionHandlerType::Pointer                      ChangeExtractRegionHandlerPointerType;
-  typedef PixelClickedActionHandler<ModelType,ViewType>                PixelClickedHandlerType;
-  typedef PixelClickedHandlerType::Pointer                             PixelClickedHandlerPointerType;
+  typedef MouseClickActionHandler<MouseClickedController,VisuViewType> MouseClickedHandlertype;
 
   typedef FeatureInfo::FeatureType                                     FeatureType;
 
@@ -61,10 +105,9 @@ public:
   itkTypeMacro(FeatureExtractionController,Superclass);
   itkNewMacro(Self);
 
-/** Set the model */
-  itkSetObjectMacro(Model,ModelType);
-
-/** NewVisu */
+  /** Set the model */
+  void SetModel( ModelType::Pointer model);
+  
   VisuControllerPointerType GetVisuController()
   {
     return m_VisuController;
@@ -76,46 +119,8 @@ public:
   }
 
   //itkSetObjectMacro(View,ViewType);
-  void SetView(ViewPointerType pView)
-  {
-    m_View = pView;
+  void SetView(ViewPointerType pView);
 
-/* Full View Actions */
-    // Add the resizing handler
-    ResizingHandlerType::Pointer lResizingHandler = ResizingHandlerType::New();
-    lResizingHandler->SetModel(m_Model->GetVisuModel());
-    lResizingHandler->SetView(m_View->GetVisuView());
-
-    ChangeExtractRegionHandlerPointerType lChangeExtractRegionHandler = ChangeExtractRegionHandlerType::New();
-    lChangeExtractRegionHandler->SetModel(m_Model->GetVisuModel());
-    lChangeExtractRegionHandler->SetView(m_View->GetVisuView());
-
-    PixelClickedHandlerPointerType lPixelClickedHandler = PixelClickedHandlerType::New();
-    lPixelClickedHandler->SetModel(m_Model);
-    lPixelClickedHandler->SetView(m_View);
-
-    // Connect the handlers
-    m_VisuController->AddActionHandler(lResizingHandler);
-    m_VisuController->AddActionHandler(lChangeExtractRegionHandler);
-    m_VisuController->AddActionHandler(lPixelClickedHandler);
-
-/* Feature View Actions */
-    ResizingHandlerType::Pointer lResultResizingHandler = ResizingHandlerType::New();
-    lResultResizingHandler->SetModel(m_Model->GetResultVisuModel());
-    lResultResizingHandler->SetView(m_View->GetResultVisuView());
-
-    ChangeExtractRegionHandlerPointerType lResultChangeExtractRegionHandler = ChangeExtractRegionHandlerType::New();
-    lResultChangeExtractRegionHandler->SetModel(m_Model->GetResultVisuModel());
-    lResultChangeExtractRegionHandler->SetView(m_View->GetVisuView());
-
-    // Connect the handlers
-    m_ResultVisuController->AddActionHandler(lResultResizingHandler);
-    m_VisuController->AddActionHandler(lResultChangeExtractRegionHandler);
-
-  }
-
-
-  virtual void OpenInputImage(const char * filename);
   virtual void SaveOutput();
   virtual void InitInput();
   virtual void ClearFeatures();
@@ -131,6 +136,11 @@ public:
 
   virtual void Quit();
   virtual void Cancel();
+
+
+  /** Pixel Clicked method */
+  virtual void LeftMouseButtonClicked( ContinuousIndexType index );
+
 protected:
   /** Constructor */
   FeatureExtractionController();
@@ -145,13 +155,15 @@ private:
   ViewPointerType m_View;
 
 /** NewVisu */
-  VisuControllerPointerType m_VisuController;
-  VisuControllerPointerType m_ResultVisuController;
-
-
-
-
-};
+  MouseClickedController::Pointer       m_MouseClickedController;
+  MouseClickedHandlertype::Pointer      m_LeftMouseClickedHandler;
+  VisuControllerPointerType             m_VisuController;
+  VisuControllerPointerType             m_ResultVisuController;
+  ResizingHandlerType::Pointer          m_ResizingHandler;
+  ChangeExtractRegionHandlerPointerType m_ChangeExtractRegionHandler;
+  ResizingHandlerType::Pointer          m_ResultResizingHandler;
+  ChangeExtractRegionHandlerPointerType m_ResultChangeExtractRegionHandler;
+}; 
 } //end namespace otb
 
 #endif

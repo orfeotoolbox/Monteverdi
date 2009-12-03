@@ -45,11 +45,9 @@ FeatureExtractionModel::FeatureExtractionModel()
 
   m_ChannelExtractorList     = ExtractROIFilterListType::New();
   m_IntensityFilter          = IntensityFilterType::New();
-  m_Reader                   = ReaderType::New();
   m_MSImageListList          = ImageListObjectListType::New();
   m_MSListToVectorFilterList = ImageListToVectorObjectListType::New();
   m_MeanShiftFilterList      = MeanShiftFilterListType::New();
-
 
   // init input image + m_HasInput
   this->InitInput();
@@ -91,20 +89,7 @@ FeatureExtractionModel
 
   // Togle the valid flag
   m_HasInput = true;
-  /*
-  // Generate image layers
-  LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
 
-  lVisuGenerator->SetImage(image);
-  lVisuGenerator->GenerateLayer();
-  lVisuGenerator->GetLayer()->SetName("Image");
-  // Add the layer to the model
-  m_VisuModel->ClearLayers();
-  m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
-
-  // Render
-  m_VisuModel->Update();
-  */
   // Notify the observers
   this->NotifyAll("SetInputImage");
 }
@@ -128,17 +113,6 @@ FeatureExtractionModel
   
   // Notify the observers
   this->NotifyAll("GenerateLayers");
-}
-
-void
-FeatureExtractionModel
-::SetInputImage(std::string filename)
-{
-  m_Reader = ReaderType::New();
-  this->SetInputFileName(filename);
-  m_Reader->SetFileName(filename);
-  this->SetInputImage( m_Reader->GetOutput() );
-  m_Reader->GenerateOutputInformation();
 }
 
 

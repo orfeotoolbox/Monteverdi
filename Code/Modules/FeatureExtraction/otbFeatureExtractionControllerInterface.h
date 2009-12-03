@@ -39,6 +39,8 @@ public:
   typedef ModelType::InputImagePointerType     InputImagePointerType;
   typedef ModelType::IndexType                 IndexType;
   typedef ModelType::SizeType                  SizeType;
+  typedef ModelType::ContinuousIndexType       ContinuousIndexType;
+
   typedef FeatureInfo::FeatureType             FeatureType;
 /** NewVisu */
   typedef ImageWidgetController                VisuControllerType;
@@ -49,7 +51,6 @@ public:
   itkTypeMacro(FeatureExtractionControllerInterface,Superclass);
 
   /** Users actions */
-  virtual void OpenInputImage(const char * filename) =0;
   virtual void SaveOutput() =0;
   virtual void InitInput() =0;
   virtual void ClearFeatures() =0;
@@ -62,10 +63,11 @@ public:
   virtual void AddToOutputListOrder(int id)=0;
   virtual void RemoveFromOutputListOrder(int id)=0;
   virtual void ExchangeOutputListOrder( int direction )=0;
-  
+  virtual void LeftMouseButtonClicked( ContinuousIndexType index ) =0;
+
   virtual void Quit()=0;
   virtual void Cancel()=0;
-/** NewVisu */
+
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetResultVisuController()=0;
 
