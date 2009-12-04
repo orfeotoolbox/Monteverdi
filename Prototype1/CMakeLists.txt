@@ -1,2 +1,0 @@
-ADD_EXECUTABLE(Prototype1 Prototype1.cxx )
-TARGET_LINK_LIBRARIES(Prototype1 OTBIO OTBCommon)
