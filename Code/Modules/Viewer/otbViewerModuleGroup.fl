@@ -10,10 +10,9 @@ decl {\#include <FLU/Flu_File_Chooser.h>} {public
 
 class ViewerModuleGroup {open
 } {
-  Function {ViewerModuleGroup()} {open return_type void
+  Function {ViewerModuleGroup()} {return_type void
   } {}
-  Function {Build()} {open
-  } {
+  Function {Build()} {} {
     Fl_Window bSetupWindow {
       label {Vector data propreties}
       callback {this->Quit();} open
@@ -169,6 +168,42 @@ class ViewerModuleGroup {open
       }
     }
   }
+  Function {BuildDEM()} {return_type {virtual void}
+  } {
+    Fl_Window wDEM {
+      label {DEM Selection} open
+      xywh {655 540 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Button gLoadDEM {
+        label Load
+        callback {const char *cfname = flu_dir_chooser("Choose DEM directory...", "");
+Fl::check();
+wDEM->redraw();
+gDEMPath->value(cfname);
+gDEMPath->redraw();}
+        xywh {16 22 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Output gDEMPath {
+        xywh {87 21 288 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 0
+      }
+      Fl_Button gQuitDEM {
+        label Quit
+        callback {wDEM->hide();
+bDEM->value(0);}
+        xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button gOKDEM {
+        label Ok
+        callback {this->UpdateDEMSettings();
+wDEM->hide();
+if(gDEMPath->size()  == 0)
+{
+bDEM->value(0);
+}}
+        xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
+  }
   Function {UpdateListSelectionColor()} {open return_type {virtual void}
   } {}
   Function {DeleteVectorData()} {open return_type {virtual void}
@@ -185,62 +220,24 @@ class ViewerModuleGroup {open
   } {}
   Function {ViewerSetupOk()} {open return_type {virtual void}
   } {}
-  Function {ComplexSet()} {open return_type {virtual void}
+  Function {UseDEM()} {selected return_type {virtual void}
   } {}
-  Function {UseDEM()} {open return_type {virtual void}
-  } {}
-  Function {BuildDEM()} {open return_type {virtual void}
-  } {
-    Fl_Window wDEM {
-      label {DEM Selection} open
-      xywh {655 540 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
-    } {
-      Fl_Button gLoadDEM {
-        label Load
-        callback {const char *cfname = flu_dir_chooser("Choose DEM directory...", "");
-Fl::check();
-wDEM->redraw();
-gDEMPath->value(cfname);
-gDEMPath->redraw();} selected
-        xywh {16 22 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Output gDEMPath {selected
-        xywh {87 21 288 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 0
-      }
-      Fl_Button gQuitDEM {
-        label Quit
-        callback {wDEM->hide();
-bDEM->value(0);} selected
-        xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button gOKDEM {
-        label Ok
-        callback {this->UpdateDEMSettings();
-wDEM->hide();
-if(gDEMPath->size()  == 0)
-{
-bDEM->value(0);
-}} selected
-        xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-      }
-    }
-  }
   Function {UpdateDEMSettings()} {return_type {virtual void}
   } {}
-  Function {TabSetupPosition()} {open return_type {virtual void}
+  Function {TabSetupPosition()} {return_type {virtual void}
   } {}
-  Function {UpdateUpperQuantile()} {open return_type {virtual void}
+  Function {UpdateUpperQuantile()} {return_type {virtual void}
   } {}
-  Function {UpdateLowerQuantile()} {open return_type {virtual void}
+  Function {UpdateLowerQuantile()} {return_type {virtual void}
   } {}
-  Function {DisplaySelectedVectorData()} {open return_type {virtual void}
+  Function {DisplaySelectedVectorData()} {return_type {virtual void}
   } {}
-  Function {DisplayVectorData()} {open return_type {virtual void}
+  Function {DisplayVectorData()} {return_type {virtual void}
   } {}
-  Function {ShowHide()} {open return_type {virtual void}
+  Function {ShowHide()} {return_type {virtual void}
   } {}
-  Function {Quit()} {open return_type {virtual void}
+  Function {Quit()} {return_type {virtual void}
   } {}
-  Function {UpdatePixelInformationWindow()} {open return_type {virtual void}
+  Function {UpdatePixelInformationWindow()} {return_type {virtual void}
   } {}
 } 

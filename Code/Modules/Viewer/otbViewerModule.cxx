@@ -692,9 +692,7 @@ void ViewerModule::UpdateDEMSettings()
    guiRedChannelChoice->clear();
    guiGreenChannelChoice->clear();
    guiBlueChannelChoice->clear();
-   guiRealChannelChoice->clear();
-   guiImaginaryChannelChoice->clear();
-
+ 
    for (unsigned int i = 0;i<nbComponent;++i)
    {
      oss.str("");
@@ -704,8 +702,6 @@ void ViewerModule::UpdateDEMSettings()
      guiGreenChannelChoice->add(oss.str().c_str());
      guiBlueChannelChoice->add(oss.str().c_str());
      guiGrayscaleChannelChoice->add(oss.str().c_str());
-     guiRealChannelChoice->add(oss.str().c_str());
-     guiImaginaryChannelChoice->add(oss.str().c_str());
    }
    guiViewerSetupWindow->redraw();
 
@@ -722,9 +718,6 @@ void ViewerModule::UpdateDEMSettings()
    case 3 :
      this->RGBSet();
      break;
-   case 2:
-     this->ComplexSet();
-     break;
    default :
      break;
    }
@@ -739,13 +732,8 @@ void ViewerModule::UpdateDEMSettings()
    unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
 
    guiViewerSetupColorMode->set();
-   guiViewerSetupComplexMode->clear();
    guiViewerSetupGrayscaleMode->clear();
    guiGrayscaleChannelChoice->deactivate();
-   guiRealChannelChoice->deactivate();
-   guiImaginaryChannelChoice->deactivate();
-   bAmplitude->deactivate();
-   bPhase->deactivate();
 
    guiRedChannelChoice->activate();
    guiGreenChannelChoice->activate();
@@ -772,13 +760,8 @@ void ViewerModule::GrayScaleSet()
   unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
 
   guiViewerSetupGrayscaleMode->set();
-  guiViewerSetupComplexMode->clear();
   guiViewerSetupColorMode->clear();
 
-  guiRealChannelChoice->deactivate();
-  guiImaginaryChannelChoice->deactivate();
-  bAmplitude->deactivate();
-  bPhase->deactivate();
   guiRedChannelChoice->deactivate();
   guiGreenChannelChoice->deactivate();
   guiBlueChannelChoice->deactivate();
@@ -793,35 +776,6 @@ void ViewerModule::GrayScaleSet()
   guiGrayscaleChannelChoice->value(std::min(channels[0],nbComponent-1));
 }
 
-/**
- *
- */
-void ViewerModule::ComplexSet()
- {
-   unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
-
-   guiViewerSetupComplexMode->set();
-   guiViewerSetupColorMode->clear();
-   guiViewerSetupGrayscaleMode->clear();
-   guiGrayscaleChannelChoice->deactivate();
-   guiRedChannelChoice->deactivate();
-   guiGreenChannelChoice->deactivate();
-   guiBlueChannelChoice->deactivate();
-   guiRealChannelChoice->activate();
-   guiImaginaryChannelChoice->activate();
-   bAmplitude->activate();
-   bPhase->activate();
-
-   ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
-   unsigned int i=0;
-   while (channels.size() < 2)
-   {
-     channels.push_back(i);
-     ++i;
-   }
-   guiRealChannelChoice->value(std::min(channels[0],nbComponent-1));
-   guiImaginaryChannelChoice->value(std::min(channels[1],nbComponent-1));
- }
 
 /**
  *
@@ -838,19 +792,7 @@ void ViewerModule::ViewerSetupOk()
      {
       this->UpdateGrayScaleChannelOrder(atoi(guiGrayscaleChannelChoice->value())-1);
      }
-   else if (guiViewerSetupComplexMode->value())
-     {
-       if (bAmplitude->value())
-        {
-          this->UpdateAmplitudeChannelOrder(atoi(guiRealChannelChoice->value())-1,
-                                                               atoi(guiImaginaryChannelChoice->value())-1);
-        }
-       else
-        {
-          this->UpdatePhaseChannelOrder(atoi(guiRealChannelChoice->value())-1,
-                                    atoi(guiImaginaryChannelChoice->value())-1);
-        }
-     }
+ 
 
    // Refresh widgets
    this->RedrawWidget();
@@ -904,44 +846,6 @@ void ViewerModule::UpdateRGBChannelOrder(int red, int green , int blue)
   m_RenderingModel->Update();
 }
 
-/**
- * Amplitude
- */
-
-void ViewerModule::UpdateAmplitudeChannelOrder(int realChoice, int imChoice)
-{
-  AmplitudeRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
-  channels.push_back(realChoice);
-  channels.push_back(imChoice);
-
-  AmplitudeRenderingFunction::Pointer modulusFunction =  AmplitudeRenderingFunction::New();
-  modulusFunction->SetChannelList(channels);
-
-  // Apply the new rendering function to the Image layer
-  modulusFunction->SetAutoMinMax(true);
-  m_InputImageLayer->SetRenderingFunction(modulusFunction);
-  modulusFunction->Initialize();
-  m_RenderingModel->Update();
-}
-
-/**
- *
- */
-void ViewerModule::UpdatePhaseChannelOrder(int realChoice, int imChoice)
-{
-  PhaseRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
-  channels.push_back(realChoice);
-  channels.push_back(imChoice);
-
-  PhaseRenderingFunction::Pointer phaseFunction =  PhaseRenderingFunction::New();
-  phaseFunction->SetChannelList(channels);
-
-  // Apply the new rendering function to the Image layer
-  phaseFunction->SetAutoMinMax(true);
-  m_InputImageLayer->SetRenderingFunction(phaseFunction);
-  phaseFunction->Initialize();
-  m_RenderingModel->Update();
-}
 
 /**
  *

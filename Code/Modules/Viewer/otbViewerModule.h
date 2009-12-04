@@ -243,12 +243,9 @@ public:
   virtual void GrayScaleSet();
   virtual void RGBSet();
   virtual void ViewerSetupOk();
-  virtual void ComplexSet();
   virtual void UpdateViewerSetupWindow();
   virtual void UpdateGrayScaleChannelOrder(int choice);
   virtual void UpdateRGBChannelOrder(int red, int green , int blue);
-  virtual void UpdateAmplitudeChannelOrder(int realChoice, int imChoice);
-  virtual void UpdatePhaseChannelOrder(int realChoice, int imChoice);
   virtual void TabSetupPosition();
   virtual void UpdateUpperQuantile();
   virtual void UpdateLowerQuantile();
