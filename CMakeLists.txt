@@ -237,6 +237,11 @@ CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
 CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
                ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
 
+
+#-----------------------------------------------------------------------------
+# Setup valgrind option (default hard coded value is ctest is invalid)
+SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+
 #-----------------------------------------------------------------------------
 # Set up CPack support, to be able to distribute OTB binary packages. It will
 # be particulary useful to distributed prebuilt OTB.
