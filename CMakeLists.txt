@@ -237,6 +237,11 @@ CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
 CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
                ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
 
+
+#-----------------------------------------------------------------------------
+# Setup valgrind option (default hard coded value is ctest is invalid)
+SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+
 #-----------------------------------------------------------------------------
 # Set up CPack support, to be able to distribute OTB binary packages. It will
 # be particulary useful to distributed prebuilt OTB.
@@ -268,11 +273,11 @@ SET(DEBIAN_PACKAGE_MAINTAINER  "debian@orfeo-toolbox.org" CACHE STRING  "Debian 
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libotb (>= ${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}), libglu1-mesa (>=7.0.3-7)" CACHE STRING "Debian package dependance" )
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
 MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-SET(CPACK_DEBIAN_PACKAGE_NAME "otb-applications" CACHE STRING "Debian package name")
+SET(CPACK_DEBIAN_PACKAGE_NAME "monteverdi" CACHE STRING "Debian package name")
 
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "Monteverdi-${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}")
 
-SET(CPACK_RESOURCE_FILE_LICENSE "${OTB_SOURCE_DIR}/Copyright/OTBCopyright.txt")
+SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi_SOURCE_DIR}/Copyright/OTBCopyright.txt")
 
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
