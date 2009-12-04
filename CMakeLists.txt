@@ -199,7 +199,6 @@ ${Monteverdi_INCLUDE_DIRS}
 
 # Code location
 ADD_SUBDIRECTORY(Code)
-ADD_SUBDIRECTORY(Prototype1)
 ADD_SUBDIRECTORY(Utilities)
 ADD_SUBDIRECTORY(StarterKit)
 
