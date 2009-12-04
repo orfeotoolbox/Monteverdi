@@ -41,8 +41,8 @@
 #include "itkThresholdImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
-//Extract ROI
-#include "otbExtractROI.h"
+// Rescaler
+#include "itkRescaleIntensityImageFilter.h"
 
 namespace otb
 {
@@ -72,8 +72,6 @@ public:
   typedef double                                         PrecisionType;
   typedef unsigned char                                  LabelType;
   typedef Image<PrecisionType,2>                         ImageType;
-  typedef Image<LabelType,2>                             LabeledImageType;
-  
   
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char>                  RGBPixelType;
@@ -116,15 +114,18 @@ public:
   typedef itk::ThresholdImageFilter<ImageType>           ThresholdFilterType;
   typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>
                                                          BinaryThresholdFilterType;
-  
-  /** Extract ROI Filter */
-  typedef ExtractROI<PrecisionType,PrecisionType>        ExtractROIFilterType;
+  /** Filter to display a binary image at binarythreshold filter output (1 rendering function for 2 layers)*/
+  typedef itk::RescaleIntensityImageFilter<ImageType,ImageType> RescaleFilterType;
 
   /** Set the input Image*/
   itkSetObjectMacro(InputImage,ImageType);
   
   /** Show the Module GUI */
   virtual bool CanShow(){return true;};
+  
+  /** Hide window */
+  virtual void Hide();
+
 protected:
   /** Constructor */
   ThresholdModule();
@@ -185,13 +186,14 @@ private:
   /** The widget controller */
   WidgetControllerPointerType              m_Controller;
 
-  /** Extract ROI filter*/
-  ExtractROIFilterType::Pointer            m_ExtractROI;
-
   /** Layer Generator*/
   ImageLayerGeneratorType::Pointer         m_ThresholdGenerator;
   ImageLayerGeneratorType::Pointer         m_Generator;
-
+  
+  /** Recsaler for binary threshold display */
+  RescaleFilterType::Pointer               m_Rescaler;
+  RescaleFilterType::Pointer               m_RescalerQuicklook;
+  
   /** Flag to allow layer regeneration*/
   bool                                     m_HasToGenerateLayer;
 };

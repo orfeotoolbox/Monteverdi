@@ -41,7 +41,8 @@ namespace otb
   m_ThresholdGenerator = ImageLayerGeneratorType::New();
 
   // Instanciate extract roi filter
-  m_ExtractROI = ExtractROIFilterType::New();
+  m_Rescaler          = RescaleFilterType::New();
+  m_RescalerQuicklook = RescaleFilterType::New();
 
   // Build a view
   m_View                 = ViewType::New();
@@ -100,6 +101,7 @@ namespace otb
   m_View->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),
                                     gScroll->w(),gScroll->h());
 
+
   //Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage",otbGetTextMacro("Image to threshold"));
 }
@@ -120,6 +122,10 @@ void ThresholdModule::Run()
 {
   // Get input image
   m_InputImage = this->GetInputData<ImageType>("InputImage");
+
+  // link rescalers
+  m_Rescaler->SetInput( m_BinaryThresholdFilter->GetOutput() );
+  m_RescalerQuicklook->SetInput( m_BinaryThresholdQuicklook->GetOutput() );
 
   if(m_InputImage.IsNull())
     {
@@ -155,8 +161,9 @@ void ThresholdModule::UpdateThresholdLayer()
 {
   // First delete Threshold Layer if any
   m_RenderingModel->DeleteLayerByName("ThresholdLayer");
+  m_ThresholdGenerator->GenerateQuicklookOff();
 
-  if(guiGenericThreshold->value() /*&& !guiBinaryThreshold->value()*/)
+  if(guiGenericThreshold->value())
   {
     // Threshold the streamed region of the input
     m_ThresholdFilter->SetInput(m_InputImage);
@@ -165,14 +172,10 @@ void ThresholdModule::UpdateThresholdLayer()
 
     // Generate the Thresholded layer
     m_ThresholdGenerator->SetImage(m_ThresholdFilter->GetOutput());
-    m_ThresholdGenerator->GenerateQuicklookOff();
     m_ThresholdGenerator->SetQuicklook(m_ThresholdQuicklook->GetOutput());
-    m_ThresholdGenerator->GenerateLayer();
-    m_ThresholdGenerator->GetLayer()->SetName("ThresholdLayer");
-    m_ThresholdImageLayer = m_ThresholdGenerator->GetLayer();
   }
 
-  if(/*!guiGenericThreshold->value() && */guiBinaryThreshold->value())
+  if(guiBinaryThreshold->value())
   {
     // BinaryThreshold the streamed region of the input
     m_BinaryThresholdFilter->SetInput(m_InputImage);
@@ -180,14 +183,13 @@ void ThresholdModule::UpdateThresholdLayer()
     m_BinaryThresholdQuicklook->SetInput(m_InputImageLayer->GetQuicklook());
 
     // Generate the BinaryThresholded layer
-    m_ThresholdGenerator->SetImage(m_BinaryThresholdFilter->GetOutput());
-    m_ThresholdGenerator->GenerateQuicklookOff();
-    m_ThresholdGenerator->SetQuicklook(m_BinaryThresholdQuicklook->GetOutput());
-    m_ThresholdGenerator->GenerateLayer();
-    m_ThresholdGenerator->GetLayer()->SetName("ThresholdLayer");
-    m_ThresholdImageLayer = m_ThresholdGenerator->GetLayer();
+    m_ThresholdGenerator->SetImage(m_Rescaler->GetOutput());
+    m_ThresholdGenerator->SetQuicklook(m_RescalerQuicklook->GetOutput());
   }
 
+  m_ThresholdGenerator->GenerateLayer();
+  m_ThresholdGenerator->GetLayer()->SetName("ThresholdLayer");
+  m_ThresholdImageLayer = m_ThresholdGenerator->GetLayer();
   m_RenderingModel->AddLayer(m_ThresholdGenerator->GetLayer());
 
   // Update the layer genereation flag
@@ -219,6 +221,11 @@ void ThresholdModule::UpdateSlidersExtremum()
 
   guiInsideValue->value(min);
   guiOutsideValue->value(max);
+
+  m_Rescaler->SetOutputMinimum(static_cast<PrecisionType>(min));
+  m_Rescaler->SetOutputMaximum(static_cast<PrecisionType>(max));
+  m_RescalerQuicklook->SetOutputMinimum(static_cast<PrecisionType>(min));
+  m_RescalerQuicklook->SetOutputMaximum(static_cast<PrecisionType>(max));
 }
 
 /**
@@ -258,16 +265,17 @@ void ThresholdModule::UpdateDetails()
       m_ThresholdQuicklook->ThresholdBelow(guiMinDetails->value());
     }
   }
+
   // Case 2 : Binary Threshold
   if(!guiGenericThreshold->value() && guiBinaryThreshold->value())
   {
     m_BinaryThresholdFilter->SetUpperThreshold(guiMaxDetails->value());
     m_BinaryThresholdFilter->SetLowerThreshold(guiMinDetails->value());
-    m_BinaryThresholdFilter->SetInsideValue(guiInsideValue->value());
-    m_BinaryThresholdFilter->SetOutsideValue(guiOutsideValue->value());
-
     m_BinaryThresholdQuicklook->SetUpperThreshold(guiMaxDetails->value());
     m_BinaryThresholdQuicklook->SetLowerThreshold(guiMinDetails->value());
+    
+    m_BinaryThresholdFilter->SetInsideValue(guiInsideValue->value());
+    m_BinaryThresholdFilter->SetOutsideValue(guiOutsideValue->value());
     m_BinaryThresholdQuicklook->SetInsideValue(guiInsideValue->value());
     m_BinaryThresholdQuicklook->SetOutsideValue(guiOutsideValue->value());
   }
@@ -320,6 +328,11 @@ static_cast<int>(guiBinaryThreshold->value());
   this->NotifyOutputsChange();
 
   // Close the GUI
+  this->Hide();
+}
+
+void ThresholdModule::Hide()
+{
   wMainWindow->hide();
 }
 
