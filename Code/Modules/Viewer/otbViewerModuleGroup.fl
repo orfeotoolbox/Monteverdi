@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -17,7 +17,7 @@ class ViewerModuleGroup {open
     Fl_Window bSetupWindow {
       label {Vector data propreties}
       callback {this->Quit();} open
-      xywh {646 159 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
+      xywh {570 159 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
         callback {this->TabSetupPosition();} open
@@ -102,29 +102,6 @@ class ViewerModuleGroup {open
             callback {ViewerSetupOk();}
             tooltip {Save changes and leave viewer set up interface} xywh {225 228 90 29} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 186
           }
-          Fl_Round_Button guiViewerSetupComplexMode {
-            label {Complex composition mode}
-            callback {ComplexSet();}
-            tooltip {Switch the image viewer mode to complex composition} xywh {10 134 210 26} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186 hide deactivate
-          }
-          Fl_Input_Choice guiRealChannelChoice {
-            label {Real channel index} open
-            tooltip {Select band for real channel in complex composition} xywh {165 211 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 hide deactivate
-          } {}
-          Fl_Input_Choice guiImaginaryChannelChoice {
-            label {Imaginary channel index} open
-            tooltip {Select band for imaginary channel in complex composition} xywh {165 246 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 hide deactivate
-          } {}
-          Fl_Round_Button bAmplitude {
-            label Amplitude
-            callback {bPhase->clear();}
-            tooltip {Toggle modulus mode} xywh {25 175 80 15} down_box ROUND_DOWN_BOX value 1 labelcolor 187 hide deactivate
-          }
-          Fl_Round_Button bPhase {
-            label Phase
-            callback {bAmplitude->clear();}
-            tooltip {Toggle phase mode} xywh {125 175 80 15} down_box ROUND_DOWN_BOX labelcolor 187 hide deactivate
-          }
         }
         Fl_Group {} {
           label Histogram
@@ -166,11 +143,11 @@ class ViewerModuleGroup {open
             xywh {25 104 325 166} box PLASTIC_DOWN_BOX color 55
           }
           Fl_Value_Input bX {
-            label {X}
+            label X
             xywh {45 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+06 step 1
           }
           Fl_Value_Input bY {
-            label {Y}
+            label Y
             xywh {158 56 65 24} box PLASTIC_DOWN_BOX labelfont 1 maximum 1e+08 step 1
           }
           Fl_Button bPixelOK {
@@ -181,7 +158,7 @@ class ViewerModuleGroup {open
         }
       }
       Fl_Return_Button bQuit {
-        label {Quit}
+        label Quit
         callback {this->Quit();}
         xywh {617 308 70 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
@@ -224,17 +201,17 @@ class ViewerModuleGroup {open
 Fl::check();
 wDEM->redraw();
 gDEMPath->value(cfname);
-gDEMPath->redraw();}
-        xywh {16 22 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 15 labelfont 1
+gDEMPath->redraw();} selected
+        xywh {16 22 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Output gDEMPath {
-        xywh {87 21 288 25} box PLASTIC_DOWN_BOX align 0
+      Fl_Output gDEMPath {selected
+        xywh {87 21 288 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 0
       }
       Fl_Button gQuitDEM {
         label Quit
         callback {wDEM->hide();
-bDEM->value(0);}
-        xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+bDEM->value(0);} selected
+        xywh {311 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button gOKDEM {
         label Ok
@@ -244,7 +221,7 @@ if(gDEMPath->size()  == 0)
 {
 bDEM->value(0);
 }} selected
-        xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 90 labelfont 1
+        xywh {234 65 64 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
