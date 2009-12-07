@@ -195,15 +195,21 @@ HomologousPointExtractionModuleModel
 
   PointType fixedPoint;
   PointType movingPoint;
+  PointType firstOrig = m_FirstInputImage->GetOrigin();
+  PointType secondOrig = m_SecondInputImage->GetOrigin();
   
   for(unsigned int i=0; i<m_IndexesList.size(); i++)
     {
       IndexType idFix, idMov;
       idFix = m_IndexesList[i].first;
+      idFix[0] += static_cast<int>(firstOrig[0]);
+      idFix[1] += static_cast<int>(firstOrig[1]); 
       m_FirstInputImage->TransformIndexToPhysicalPoint(idFix,fixedPoint);
       fix->SetPoint(i,fixedPoint);
 
       idMov = m_IndexesList[i].second;
+      idMov[0] += static_cast<int>(secondOrig[0]);
+      idMov[1] += static_cast<int>(secondOrig[1]); 
       m_SecondInputImage->TransformIndexToPhysicalPoint(idMov,movingPoint);
       mov->SetPoint(i,movingPoint);
     }
@@ -311,19 +317,22 @@ HomologousPointExtractionModuleModel
   vnl_sparse_matrix<double> ax(nbPoints,3),ay(nbPoints,3);
   vnl_vector<double> bx(nbPoints),by(nbPoints);
 
+  PointType firstOrig = m_FirstInputImage->GetOrigin();
+  PointType secondOrig = m_SecondInputImage->GetOrigin();
+
   for(unsigned int i=0; i<nbPoints ; i++)
     {
    
-    ax(i,0) = m_IndexesList[i].first[0];
-    ax(i,1) = m_IndexesList[i].first[1];
+    ax(i,0) = m_IndexesList[i].first[0]+static_cast<int>(firstOrig[0]);
+    ax(i,1) = m_IndexesList[i].first[1]+static_cast<int>(firstOrig[1]);
     ax(i,2) = 1.;
     
-    ay(i,0) = m_IndexesList[i].first[0];
-    ay(i,1) = m_IndexesList[i].first[1];
+    ay(i,0) = m_IndexesList[i].first[0]+static_cast<int>(firstOrig[0]);
+    ay(i,1) = m_IndexesList[i].first[1]+static_cast<int>(firstOrig[1]);
     ay(i,2) = 1.;
 
-    bx[i]= m_IndexesList[i].second[0];
-    by[i]= m_IndexesList[i].second[1];
+    bx[i]= m_IndexesList[i].second[0]+static_cast<int>(secondOrig[0]);
+    by[i]= m_IndexesList[i].second[1]+static_cast<int>(secondOrig[1]);
     }
 
   vnl_sparse_matrix_linear_system<double> linearSystemX(ax,bx),linearSystemY(ay,by);
@@ -397,7 +406,8 @@ HomologousPointExtractionModuleModel
        itkExceptionMacro(<<"Not supported transform type "<<transformType);
       }
     }
-    return out;
+
+  return out;
 }
 
 template<typename T>
@@ -412,11 +422,20 @@ HomologousPointExtractionModuleModel
   typename T::InputPointType  inPoint;
   typename T::OutputPointType outPoint;
   ContinuousIndexType         idOut;
-  
+
+  PointType firstOrig = m_FirstInputImage->GetOrigin();
+  PointType secondOrig = m_SecondInputImage->GetOrigin();
+  index[0] += static_cast<int>(firstOrig[0]);
+  index[1] += static_cast<int>(firstOrig[1]);
+
   m_FirstInputImage->TransformIndexToPhysicalPoint(index,inPoint);
   outPoint = transform->TransformPoint(inPoint);
   m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
   
+  std::cout<<idOut;
+  idOut[0] -= static_cast<int>(secondOrig[0]);
+  idOut[1] -= static_cast<int>(secondOrig[1]);
+  std::cout<<index<< " -> "<<idOut<<std::endl;
   return idOut;
 }
 
@@ -470,13 +489,24 @@ HomologousPointExtractionModuleModel
   typename T::InputPointType  inPoint;
   typename T::OutputPointType outPoint;
   ContinuousIndexType         idOut;
+  IndexType idStarted;  
 
+  PointType firstOrig = m_FirstInputImage->GetOrigin();
+  PointType secondOrig = m_SecondInputImage->GetOrigin();
+  
   for(unsigned int i=0; i<inList.size(); i++)
     {
-    m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
-    outPoint = transform->TransformPoint(inPoint);
-    m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
-    outList.push_back(idOut);
+      idStarted[0] = inList[i][0] + static_cast<int>(firstOrig[0]);
+      idStarted[1] = inList[i][1] + static_cast<int>(firstOrig[1]);      
+      
+      m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
+      outPoint = transform->TransformPoint(inPoint);
+      m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
+      
+      idOut[0] -= static_cast<int>(secondOrig[0]);
+      idOut[1] -= static_cast<int>(secondOrig[1]);
+
+      outList.push_back(idOut);
     }
 
   return outList;

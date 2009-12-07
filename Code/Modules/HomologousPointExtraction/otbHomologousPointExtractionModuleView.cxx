@@ -182,6 +182,7 @@ HomologousPointExtractionModuleView
   int x2 = static_cast<int>(vX2->value());
   int y2 = static_cast<int>(vY2->value());
   m_Controller->AddPoints( x1, y1, x2, y2 );
+  // Cotroller calls AddPointsToList( id1, id2)
 }
 
 void

@@ -312,7 +312,7 @@ HomologousPointExtractionModuleController
     {
       idFix = indexesList[i].first;
       idOut = indexesList[i].second;
- 
+
       oss.str("");
       oss<<idFix<<" -> ";
       values.push_back(  vcl_pow( static_cast<double>(idOut[0])-outTranformedPoint[i][0], 2 )
@@ -353,10 +353,10 @@ HomologousPointExtractionModuleController
     }
   
   ContinuousIndexType contOutPoint;
-  IndexType outPoint;
+
   try
     {
-      contOutPoint = m_Model->TransformPoint(m_TransformType, id);
+      contOutPoint = m_Model->TransformPoint(m_TransformType, id);//correctedId);
     }
   catch (itk::ExceptionObject & err)
     {
@@ -365,6 +365,7 @@ HomologousPointExtractionModuleController
     }
 
   // Update view
+  IndexType outPoint;
   outPoint[0] = static_cast<long>(vcl_floor(contOutPoint[0]+0.5));
   outPoint[1] = static_cast<long>(vcl_floor(contOutPoint[1]+0.5));
 
