@@ -39,8 +39,6 @@ See OTBCopyright.txt for details.
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
 
-// Overlay result display
-#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -69,6 +67,7 @@ SupervisedClassificationAppli
   m_ValidationListSample      = ListSampleType::New();
   m_TrainingListLabelSample   = TrainingListSampleType::New();
   m_ValidationListLabelSample = TrainingListSampleType::New();
+  m_CastFilter                = CastFilterType::New();
 }
 
 /// Destructor
@@ -1834,17 +1833,17 @@ void
 SupervisedClassificationAppli
 ::ShowResults()
 {
+  m_ChangeLabelFilter->UpdateOutputInformation();
   m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
   
   // Cast for result viewer display
-  typedef itk::CastImageFilter<OutputImageType, OverlayImageType>       CastFilterType;
-  CastFilterType::Pointer castFilter = CastFilterType::New();
-  castFilter->SetInput(m_ChangeLabelFilter->GetOutput());
-  castFilter->UpdateOutputInformation();
+  m_CastFilter = CastFilterType::New();
+  m_CastFilter->SetInput(m_ChangeLabelFilter->GetOutput());
+  m_CastFilter->UpdateOutputInformation();
   
   m_ResultViewer = ImageViewerType::New();
   m_ResultViewer->SetImage(m_InputImage);
-  m_ResultViewer->SetImageOverlay( castFilter->GetOutput()  );
+  m_ResultViewer->SetImageOverlay( m_CastFilter->GetOutput()  );
   m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
   m_ResultViewer->SetShowClass(true);
   m_ResultViewer->SetClassesMap(m_ClassesMap);

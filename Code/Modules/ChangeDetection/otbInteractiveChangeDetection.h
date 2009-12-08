@@ -54,6 +54,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 
+// Overlay result display
+#include "itkCastImageFilter.h"
+
 namespace otb
 {
 /** \class InteractiveChangeDetection
@@ -145,6 +148,8 @@ public:
   typedef typename AbsFilterType::Pointer                                                 AbsFilterPointerType;
   typedef typename ClassificationFilterType::Pointer                                      ClassificationFilterPointerType;
   typedef typename ChangeLabelFilterType::Pointer                                         ChangeLabelFilterPointerType;
+  typedef typename itk::CastImageFilter<OutputImageType, OverlayImageType>                         CastFilterType;
+  typedef typename CastFilterType::Pointer                                                         CastFilterPointerType;
 
   /** Vector data handling */
   typedef VectorData<double,2,/*short unsigned int*/double>           VectorDataType;
@@ -278,6 +283,10 @@ private:
   /// SVM Estimator
   EstimatorPointerType                  m_Estimator;
   
+  /// Caster
+  CastFilterPointerType                 m_CastFilter
+;
+
   /// Colors
   ColorType                             m_Class1Color;
   ColorType                             m_Class2Color;

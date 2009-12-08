@@ -74,7 +74,8 @@ InteractiveChangeDetection<TPixel>
   m_AbsFilter            = AbsFilterType::New();
   m_ChangeLabelFilter    = ChangeLabelFilterType::New();
   m_Estimator = EstimatorType::New();
-  
+  m_CastFilter = CastFilterType::New();
+
   m_HasOutput = false;
  
   m_LastPath = ".";
@@ -1011,10 +1012,9 @@ InteractiveChangeDetection<TPixel>
     m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
     
     // Cast for result viewer display
-    typedef itk::CastImageFilter<OutputImageType, OverlayImageType>     CastFilterType;
-    typename CastFilterType::Pointer castFilter = CastFilterType::New();
-    castFilter->SetInput(m_ChangeLabelFilter->GetOutput());
-    castFilter->UpdateOutputInformation();
+    m_CastFilter = CastFilterType::New();
+    m_CastFilter->SetInput(m_ChangeLabelFilter->GetOutput());
+    m_CastFilter->UpdateOutputInformation();
 
 
     FullWidgetPointerType full = m_CenterViewer->GetFullWidget();
@@ -1028,8 +1028,8 @@ InteractiveChangeDetection<TPixel>
     }
 
     m_ResultViewer = ImageViewerType::New();
-    m_ResultViewer->SetImage(/*m_LeftReader->GetOutput()*/m_LeftImage);
-    m_ResultViewer->SetImageOverlay(castFilter->GetOutput());
+    m_ResultViewer->SetImage(m_LeftImage);
+    m_ResultViewer->SetImageOverlay(m_CastFilter->GetOutput());
     m_ResultViewer->SetUseImageOverlay(true);
     m_ResultViewer->SetShowHistograms(false);
     m_ResultViewer->SetInterfaceBoxesColor(m_InterfaceColor);

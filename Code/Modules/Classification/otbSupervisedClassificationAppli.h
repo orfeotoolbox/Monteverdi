@@ -141,6 +141,8 @@ public:
   typedef ConnectedFilterType::Pointer                                          ConnectedFilterPointerType;
   typedef itk::BinaryThresholdImageFilter<LabeledImageType,LabeledImageType>    ThresholderType;
   typedef ThresholderType::Pointer ThresholderPointerType;
+  typedef itk::CastImageFilter<OutputImageType, OverlayImageType>               CastFilterType;
+  typedef CastFilterType::Pointer                                               CastFilterPointerType;
 
   /** Vector data handling */
   typedef TypeManager::Vector_Data                                       OutputVectorDataType;
@@ -307,9 +309,10 @@ private:
   TrainingListSamplePointerType m_TrainingListLabelSample;
   /// Validation Sample list
   ListSamplePointerType m_ValidationListSample;
-  
   /// Validation label sample list
   TrainingListSamplePointerType m_ValidationListLabelSample;
+  /// Caster
+  CastFilterPointerType m_CastFilter;
 
   bool m_HasOutput;
   bool m_HasOutputVector;
