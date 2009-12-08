@@ -1012,14 +1012,12 @@ void ViewerModule::UpdateUpperQuantile()
   ParametersType    params;
   params = m_StandardRenderingFunction->GetParameters();
 
-  std::cout << "max ";
   for(unsigned int i = 1; i < params.Size(); i = i+2)
     {
       double max = m_StandardRenderingFunction->GetHistogramList()
           ->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
       params.SetElement(i,max);
     }
-  std::cout << std::endl;
 
   // Update the layer
   m_StandardRenderingFunction->SetParameters(params);

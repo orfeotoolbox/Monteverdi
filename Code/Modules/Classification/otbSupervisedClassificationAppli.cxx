@@ -39,7 +39,6 @@ See OTBCopyright.txt for details.
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
 
-
 namespace otb
 {
 /// Constructor

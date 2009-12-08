@@ -105,7 +105,6 @@ void WriterMVCModule::ThreadedWatch()
   }
 
   // Reactivate window buttons
-//   std::cout << "activation" <<std::endl;
   m_View->ManageActivationWindowButtons(true);
 }
 
@@ -132,7 +131,6 @@ void WriterMVCModule::Notify(const std::string & event)
   }
   else if ( ( event == "BusyOff" ) ||  ( event == "Quit" ) )
   {
-//     std::cout << "quit module" << std::endl;
     this->BusyOff();
   }
   else if (event == "SaveDataSet")

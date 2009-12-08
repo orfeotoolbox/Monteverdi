@@ -305,12 +305,9 @@ void ThresholdModule::UpdateLayerGenerationFlag()
 void ThresholdModule::OK()
 {
   this->ClearOutputDescriptors();
-
-  std::cout<<int(guiGenericThreshold->value())<<" "<<int(guiBinaryThreshold->value())<<std::endl;
-
+  
   int genValue = static_cast<int>(guiGenericThreshold->value());
-  int binValue = 
-static_cast<int>(guiBinaryThreshold->value());
+  int binValue = static_cast<int>(guiBinaryThreshold->value());
 
   if( genValue != 0 && binValue == 0 )
     {

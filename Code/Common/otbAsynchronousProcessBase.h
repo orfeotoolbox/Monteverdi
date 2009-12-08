@@ -90,7 +90,6 @@ class ITK_EXPORT AsynchronousProcessBase
     {
       struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(t);
       AsynchronousProcessBase::Pointer lThis = (AsynchronousProcessBase*)(pInfo->UserData);
-      std::cout<<"Run static : "<<lThis<<std::endl;
       lThis->RunProcess2(t);
       return 0;
     }

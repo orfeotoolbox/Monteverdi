@@ -81,13 +81,11 @@ public:
   void ComputeCheckedBoxList()
   {
     // number of tile childre
-    //std::cout<<static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->children()<<std::endl;
 
     for (unsigned int i = 0; i<static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->children(); i++)
     {
       if (static_cast<Fl_Check_Button *>(static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->child(i))->value()==1)
       {
-        std::cout<<i<<std::endl;
         m_CheckedBoxList.push_back(i);
       }
     }

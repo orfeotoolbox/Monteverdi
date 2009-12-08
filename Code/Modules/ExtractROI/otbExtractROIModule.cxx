@@ -135,7 +135,6 @@ void ExtractROIModule::Run()
 
 void ExtractROIModule::LongLatSelection()
 {
-//   std::cout << "toto" << std::endl;
   if ( roundLongLat->value() == 1 )
   {
     guiPixel->hide();

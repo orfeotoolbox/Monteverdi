@@ -350,7 +350,6 @@ InteractiveChangeDetection<TPixel>
 
   this->ReInitButtons();
   typename ModelType::Pointer model = ModelType::New();
-  std::cout <<"Model FileName " << m_ModelFileName << std::endl;
   model->LoadModel(m_ModelFileName.c_str());
   m_ClassificationFilter->SetModel(model);
   this->bLearn->value(1);

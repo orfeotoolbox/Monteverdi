@@ -250,16 +250,16 @@ void KMeansModule::ThreadedRun()
   treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
   treeGenerator->Update();
 
-  std::cout<<otbGetTextMacro("Tree generated")<<std::endl;
+  otbGenericMsgDebugMacro( <<otbGetTextMacro("Tree generated"));
 
   // Estimate the centroids
-  m_Estimator->SetKdTree(treeGenerator->GetOutput());
+  m_Estimator->SetKdTree(treeGenerator->GetOutput() );
   m_Estimator->SetParameters(initialCentroids);
   m_Estimator->SetMaximumIteration(vNumberOfIterations->value());
   m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
   m_Estimator->StartOptimization();
 
-  std::cout<<otbGetTextMacro("Optimization ended")<<std::endl;
+  otbGenericMsgDebugMacro( <<otbGetTextMacro("Optimization ended") );
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;

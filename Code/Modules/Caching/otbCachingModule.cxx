@@ -60,7 +60,7 @@ CachingModule::~CachingModule()
 // try to remove the file
   if(ofname.exists())
     {
-    std::cout<<"Cleaning up all cache files with base "<<ofnameNoExtension<<std::endl;
+    otbGenericMsgDebugMacro( <<"Cleaning up all cache files with base "<<ofnameNoExtension );
     ofnameNoExtension.wildcardRemove();
     }
 }

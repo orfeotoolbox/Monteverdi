@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
   otb::HomologousPointExtractionModule::Pointer pointModule = otb::HomologousPointExtractionModule::New();
   otb::Module::Pointer module = pointModule.GetPointer();
   
-  std::cout<<"Module: "<<pointModule<<std::endl;
+  otbGenericMsgDebugMacro( <<"Module: "<<pointModule );
 
   // Put in the tests
   typedef otb::VectorImage<double,2>  ImageType;
@@ -88,8 +88,8 @@ int main(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
-  std::cout<<"Input wrapper 1: "<<wrapperIn1<<std::endl;
-  std::cout<<"Input wrapper 3: "<<wrapperIn2<<std::endl;
+  otbGenericMsgDebugMacro( <<"Input wrapper 1: "<<wrapperIn1 );
+  otbGenericMsgDebugMacro( <<"Input wrapper 3: "<<wrapperIn2 );
 
   module->AddInputByKey("FirstInputImage",wrapperIn1);
   module->AddInputByKey("SecondInputImage",wrapperIn2);

@@ -380,7 +380,6 @@ HomologousPointExtractionModuleController
 {
   if( !this->GetTransformationAvailable() )
     {
-      std::cout<<"No transformation available."<<std::endl;
       MsgReporter::GetInstance()->SendError("No transformation available.");
       return;
     }
@@ -390,7 +389,6 @@ HomologousPointExtractionModuleController
     }
   catch (itk::ExceptionObject & err)
     {
-      std::cout<<"err : "<<err.GetDescription()<<std::endl;
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
     }

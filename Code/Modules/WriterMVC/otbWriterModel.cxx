@@ -260,8 +260,8 @@ WriterModel
     m_image = this->GetInputImageList()->GetNthElement(i);
     m_imageList->PushBack( m_image );
     outputNb++;
-  }//  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
-//   std::cout << "TYPE de donnees out " << this->GetPType() << std::endl;
+  }
+  
   if (todo == true)
   {
     switch ( this->GetPType() )
@@ -306,8 +306,6 @@ WriterModel
   SingleLayerGeneratorPointerType lResultVisuGenerator = SingleLayerGeneratorType::New();
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
-  //lResultVisuGenerator->SetImage(this->GetSingleImage(id));
-  std::cout << "mvc layer generation" << std::endl;
   lResultVisuGenerator->SetImage( this->GetInputImageList()->GetNthElement(id) );
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");

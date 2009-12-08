@@ -45,12 +45,10 @@ void
 SpeckleFilteringModel
 ::LeeFiltering(unsigned int radius)
 {
-  std::cout <<"Model : Begin Computation Lee " << std::endl;
   LeeFilterType::SizeType     lradius;
   lradius.Fill(radius);
   m_LeeFilter->SetInput(m_InputImage);
   m_LeeFilter->SetRadius(lradius);
-  std::cout <<"Model : Computation Lee Done... " << std::endl;
   m_Output = m_LeeFilter->GetOutput();
   m_OutputChanged = true;
   this->NotifyAll();

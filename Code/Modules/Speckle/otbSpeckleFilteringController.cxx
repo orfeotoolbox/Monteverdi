@@ -42,8 +42,6 @@ void
 SpeckleFilteringController
 ::ProcessLeeFilter(unsigned int radius)
 {
-
-  std::cout <<"Controller : Process Lee Filter Begin... " << std::endl;
   try
     {
       m_Model->LeeFiltering(radius );
@@ -52,8 +50,6 @@ SpeckleFilteringController
     {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-
-  std::cout <<"Controller:  Process Lee Filter done..." << std::endl;
 }
 
 void

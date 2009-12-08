@@ -340,24 +340,19 @@ HomologousPointExtractionModuleModel
 
   vnl_lsqr linearSystemSolverX(linearSystemX),linearSystemSolverY(linearSystemY);
 
-  std::cout<<"X: "<<std::endl;
   linearSystemSolverX.minimize(bestXParams);
-  linearSystemSolverX.diagnose_outcome(std::cout);
 
-
-  std::cout<<"Number of unknown: "<<linearSystemX.get_number_of_unknowns()<<std::endl;
-  std::cout<<"RMS error: "<<linearSystemX.get_rms_error(bestXParams)<<std::endl;
-  std::cout<<"Relative residuals: "<<linearSystemX.get_relative_residual(bestXParams)<<std::endl;
+  otbGenericMsgDebugMacro( <<"Number of unknown: "<<linearSystemX.get_number_of_unknowns() );
+  otbGenericMsgDebugMacro( <<"RMS error: "<<linearSystemX.get_rms_error(bestXParams) );
+  otbGenericMsgDebugMacro( <<"Relative residuals: "<<linearSystemX.get_relative_residual(bestXParams) );
   
-  std::cout<<"Y: "<<std::endl;
   linearSystemSolverY.minimize(bestYParams);
-  linearSystemSolverY.diagnose_outcome(std::cout);
 
-  std::cout<<"Number of unknown: "<<linearSystemY.get_number_of_unknowns()<<std::endl;
-  std::cout<<"RMS error: "<<linearSystemY.get_rms_error(bestYParams)<<std::endl;
-  std::cout<<"Relative residuals: "<<linearSystemY.get_relative_residual(bestYParams)<<std::endl;
+  otbGenericMsgDebugMacro( <<"Number of unknown: "<<linearSystemY.get_number_of_unknowns() );
+  otbGenericMsgDebugMacro( <<"RMS error: "<<linearSystemY.get_rms_error(bestYParams) );
+  otbGenericMsgDebugMacro( <<"Relative residuals: "<<linearSystemY.get_relative_residual(bestYParams) );
 
-  std::cout<<"Done."<<std::endl;
+  otbGenericMsgDebugMacro( <<"Done." );
 
   itk::Vector<double,2> translation;
   itk::Matrix<double,2,2> mat;
@@ -376,7 +371,7 @@ HomologousPointExtractionModuleModel
   transform->SetParameters(m_TransformParameters);
   m_Resampler->SetTransform(transform);
 
-  std::cout<<"Best params:" <<m_TransformParameters<<std::endl;
+  otbGenericMsgDebugMacro( <<"Best params:" <<m_TransformParameters );
 }
 
 HomologousPointExtractionModuleModel::ContinuousIndexType
@@ -432,10 +427,9 @@ HomologousPointExtractionModuleModel
   outPoint = transform->TransformPoint(inPoint);
   m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint,idOut);
   
-  std::cout<<idOut;
   idOut[0] -= static_cast<int>(secondOrig[0]);
   idOut[1] -= static_cast<int>(secondOrig[1]);
-  std::cout<<index<< " -> "<<idOut<<std::endl;
+
   return idOut;
 }
 

@@ -120,11 +120,9 @@ void AlgebraModule::ShiftScaleImage()
       switch(guiInputChoice->value())
        {
        case 0 :
-         std::cout <<"Use First  Image" << std::endl;
          m_ShiftScaleFilter->SetInput(m_InputImage1);
          break;
        case 1 :
-         std::cout <<"Use Second  Image" << std::endl;
          m_ShiftScaleFilter->SetInput(m_InputImage2);
          break;
        default:

@@ -414,13 +414,15 @@ MonteverdiViewGUI
   //Clear existing Module outputs before adding new entries
 //   for (unsigned int i=0;i<n->children();++i)
 //   {
-//     std::cout << "remove node " << n->child(i)->label() << std::endl;
+//     otbGenericMsgDebugMacro( << "remove node " << n->child(i)->label() );
 //     n->remove(n->child(i));
 //   }
   //Remove existing module with the same name in the tree
   unsigned int rm = root->remove(m_Tree->find(instanceId.c_str()));
   if ( rm != 0)
-    std::cout << "Remove existing module entry: " << instanceId.c_str() <<  std::endl;
+    {
+      otbGenericMsgDebugMacro(<< "Remove existing module entry: " << instanceId.c_str() );
+    }
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
   root->label("Data Set");
@@ -491,7 +493,7 @@ MonteverdiViewGUI
 ::Notify(const MonteverdiEvent & event)
 {
 
-  std::cout<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId()<<std::endl;
+  otbGenericMsgDebugMacro(<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId() );
 
 
   // Event received : new instance of module is created
