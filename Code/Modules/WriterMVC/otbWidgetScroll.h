@@ -145,19 +145,19 @@ public:
       {
       if ( (m_NumberOfColumns*m_NumberOfRows == m_LabelList.size()) 
              || (m_LabelList.size() == 0))
-	{
+        {
         int cpt = 0;
         int xx = this->x() + m_XWidgetSpacing;
         int yy = this->y() + m_YWidgetSpacing;
         Fl_Scroll * scroll = new Fl_Scroll( this->x(), this->y(), this->w(), this->h() );
         Fl_Tile * tile = new Fl_Tile(xx, yy, 
-				     m_NumberOfColumns*(m_ColumnSize+m_XWidgetSpacing), 
-				     m_NumberOfRows*(m_RowSize+m_YWidgetSpacing) );
+                                     m_NumberOfColumns*(m_ColumnSize+m_XWidgetSpacing), 
+                                     m_NumberOfRows*(m_RowSize+m_YWidgetSpacing) );
         // Create widgets
         for ( int r=0; r<m_NumberOfRows; r++ )
-	  {
+          {
           for ( int c=0; c<m_NumberOfColumns; c++ )
-	    {
+            {
             InternalWidgetType *in = new InternalWidgetType(xx, yy, m_ColumnSize, m_RowSize);
             if (m_LabelList.size()!=0)
               in->label(m_LabelList[cpt]);
@@ -165,14 +165,14 @@ public:
             in->visible();
             xx += m_ColumnSize+m_XWidgetSpacing;
             cpt++;
-	    }
+            }
           xx = this->x() + m_XWidgetSpacing;
           yy += m_RowSize + m_YWidgetSpacing;
-	  }
+          }
         tile->end();
         scroll->end();
         end();
-	}
+        }
       }
   }
 

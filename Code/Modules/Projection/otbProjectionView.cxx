@@ -140,26 +140,26 @@ ProjectionView
               iUTM->show();
               iLambert2->hide();
               iTRANSMERCATOR->hide();
-	      
+              
               // Get the number of the utm zone
-	      int north = 0;
+              int north = 0;
               int zone = oSRS.GetUTMZone(&north);
               
-	      // Fill the UTM Parameters in the GUI
-	      itk::OStringStream oss;
+              // Fill the UTM Parameters in the GUI
+              itk::OStringStream oss;
               oss<<zone;
               iUTMZone->value(oss.str().c_str());
-	      
-	      if(north)
-		{
-		  iUTMNorth->value(1);
-		  iUTMSouth->value(0);
-		}
-	      else
-		{
-		  iUTMNorth->value(0);
-		  iUTMSouth->value(1);
-		}
+              
+              if(north)
+                {
+                  iUTMNorth->value(1);
+                  iUTMSouth->value(0);
+                }
+              else
+                {
+                  iUTMNorth->value(0);
+                  iUTMSouth->value(1);
+                }
              }
            else
              {
@@ -212,11 +212,11 @@ ProjectionView
       OGR_SRSNode*  curChild = node->GetChild(i);
       int res      = curChild->FindChild(inParam);
       if(res == 0)
-	{
-	  // scale_factor parameter found
+        {
+          // scale_factor parameter found
          *paramValue = strtod(curChild->GetChild(1)->GetValue(),NULL);
          return true;
-	}
+        }
     }
   return false;
 }
@@ -519,7 +519,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
         BlackmanType::Pointer interp = BlackmanType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()) );
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -529,7 +529,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
         CosineType::Pointer interp = CosineType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -538,7 +538,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
         GaussianType::Pointer interp = GaussianType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -547,7 +547,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
         HammingType::Pointer interp = HammingType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -556,7 +556,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
         LanczosType::Pointer interp = LanczosType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -565,7 +565,7 @@ ProjectionView
         typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
         WelchType::Pointer interp = WelchType::New();
         interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-	//interp->Initialize();
+        //interp->Initialize();
         m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
         break;
       }
@@ -638,13 +638,13 @@ ProjectionView::InitializeAction()
     guiUTMZone->value(oss.str().c_str());
     if ( geoPoint[1] >= 0  )
       {
-	guiUTMNorth->value(1);
-	guiUTMSouth->value(0);
+        guiUTMNorth->value(1);
+        guiUTMSouth->value(0);
       }
     else
       {
-	guiUTMSouth->value(1);
-	guiUTMNorth->value(0);
+        guiUTMSouth->value(1);
+        guiUTMNorth->value(0);
       }
     this->UpdateUTMTransform();
     // End of filling the utm parameters

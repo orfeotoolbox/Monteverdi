@@ -485,15 +485,15 @@ SupervisedClassificationAppli
     unsigned int i=1;
     for (OutputPolygonListType::Iterator it = lTempPolygonsList->Begin();it!=lTempPolygonsList->End();++it)
       {
-	OutputVectorDataType::DataNodePointerType poly = OutputVectorDataType::DataNodeType::New();
-	poly->SetNodeType(otb::FEATURE_POLYGON);
-	itk::OStringStream oss;
-	oss.str("");
-	oss<<i+1;
-	poly->SetNodeId(oss.str().c_str());
-	poly->SetPolygonExteriorRing( it.Get() );
-	vectorData->GetDataTree()->Add(poly,folder);
-	i++;
+        OutputVectorDataType::DataNodePointerType poly = OutputVectorDataType::DataNodeType::New();
+        poly->SetNodeType(otb::FEATURE_POLYGON);
+        itk::OStringStream oss;
+        oss.str("");
+        oss<<i+1;
+        poly->SetNodeId(oss.str().c_str());
+        poly->SetPolygonExteriorRing( it.Get() );
+        vectorData->GetDataTree()->Add(poly,folder);
+        i++;
       }
     
     

@@ -298,18 +298,18 @@ FeatureExtractionController
     {
       if ( m_View->GetSelectedPixel().GetSize() != m_Model->GetNumberOfChannels() )
       {
-	MsgReporter::GetInstance()->SendError("Reference pixel is not set!");
-	return;
+        MsgReporter::GetInstance()->SendError("Reference pixel is not set!");
+        return;
       }
       if( m_Model->GetInputImage()->GetNumberOfComponentsPerPixel() > 1)
-	{
-	  m_Model->AddSpectralAngleFilter(m_View->GetSelectedPixel());
-	}
+        {
+          m_Model->AddSpectralAngleFilter(m_View->GetSelectedPixel());
+        }
       else
-	{
-	  MsgReporter::GetInstance()->SendError("Spectral Angle invalid with mono channel images");
-	  return;
-	}
+        {
+          MsgReporter::GetInstance()->SendError("Spectral Angle invalid with mono channel images");
+          return;
+        }
       break;
     }
     case FeatureInfo::MORPHOLOGICALOPENING:

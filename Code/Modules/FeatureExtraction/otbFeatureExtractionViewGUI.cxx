@@ -141,13 +141,13 @@ FeatureExtractionViewGUI
   if(m_ParameterGroupList[groupId]==guiSpectAngle)
     {
       if( m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel() < 2 )
-	{
-	  m_ParameterGroupList[groupId]->deactivate();
-	}
+        {
+          m_ParameterGroupList[groupId]->deactivate();
+        }
       else
-	{
-	  m_ParameterGroupList[groupId]->activate();
-	}
+        {
+          m_ParameterGroupList[groupId]->activate();
+        }
     }
 }
 
@@ -190,9 +190,9 @@ FeatureExtractionViewGUI
   {
     if(event != "Cancel")
       {
-	InitWidgets();
-	this->UpdateChannelSelection();
-	this->UpdateInformation();
+        InitWidgets();
+        this->UpdateChannelSelection();
+        this->UpdateInformation();
       }
   }
 }

@@ -95,7 +95,7 @@ MeanShiftModuleController
     {
       channels.push_back(atoi(m_View->iRChannelChoice->value())-1);
       channels.push_back(atoi(m_View->iGChannelChoice->value())-1);
-      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);							    
+      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);                                                            
     }
   else if (m_View->rViewerSetupGrayscaleMode->value())
     {

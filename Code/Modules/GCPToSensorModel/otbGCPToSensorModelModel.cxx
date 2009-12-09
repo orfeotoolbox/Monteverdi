@@ -404,7 +404,7 @@ GCPToSensorModelModel
   if(m_ProjectionType == RPC)
     {
       if( m_RpcModel == NULL )
-	return;
+        return;
 
       ossimKeywordlist geom_kwl;
       m_RpcModel->updateModel();

@@ -51,9 +51,9 @@ class ITK_EXPORT FeatureExtractionController
   void IndexClicked(ContinuousIndexType index)
     {
       if( !m_Controller.IsNotNull() )
-	itkExceptionMacro(<<"Not Controller set.");
+        itkExceptionMacro(<<"Not Controller set.");
       if( m_MouseButton==1 )
-	m_Controller->LeftMouseButtonClicked(index);
+        m_Controller->LeftMouseButtonClicked(index);
       else
        itkExceptionMacro(<<"Mouse event not supproted yet.");
     }

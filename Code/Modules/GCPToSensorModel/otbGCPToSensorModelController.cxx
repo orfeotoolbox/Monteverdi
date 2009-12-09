@@ -135,9 +135,9 @@ GCPToSensorModelController
        {
          height = m_Model->GetUsedElevation( m_Model->GetUsedElevation().size()-1 );
          if(m_Model->GetElevMgt() == ModelType::DEM)
-	   {
-	     m_View->vElev->value( height );
-	   }
+           {
+             m_View->vElev->value( height );
+           }
        }
       m_View->AddPointsToList( id1, id2, height );
     

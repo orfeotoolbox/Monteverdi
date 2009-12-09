@@ -212,45 +212,45 @@ void WriterModule::ThreadedRun()
       }
     else if ( vectorImage.IsNotNull() )
       {
-	if( b16->value() == 1 )
-	  {
-	    DoubleToFloatCasterType::Pointer caster = DoubleToFloatCasterType::New();
-	    caster->SetInput(vectorImage);
-	    FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
-	    ffPVWriter->SetInput(caster->GetOutput());
-	    ffPVWriter->SetFileName(filepath);
-	    m_ProcessObject = ffPVWriter;
-	    ffPVWriter->Update();
-	  }
-	else
-	  {
-	    FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-	    fPVWriter->SetInput(vectorImage);
-	    fPVWriter->SetFileName(filepath);
-	    m_ProcessObject = fPVWriter;
-	    fPVWriter->Update();
-	  }
+        if( b16->value() == 1 )
+          {
+            DoubleToFloatCasterType::Pointer caster = DoubleToFloatCasterType::New();
+            caster->SetInput(vectorImage);
+            FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
+            ffPVWriter->SetInput(caster->GetOutput());
+            ffPVWriter->SetFileName(filepath);
+            m_ProcessObject = ffPVWriter;
+            ffPVWriter->Update();
+          }
+        else
+          {
+            FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+            fPVWriter->SetInput(vectorImage);
+            fPVWriter->SetFileName(filepath);
+            m_ProcessObject = fPVWriter;
+            fPVWriter->Update();
+          }
       }
     else if( singleImage.IsNotNull() )
       {
-	if( b16->value() == 1 )
-	  {
-	    ImageDoubleToVImageFloatCasterType::Pointer caster = ImageDoubleToVImageFloatCasterType::New();
-	    caster->SetInput(singleImage);
-	    FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
-	    ffPVWriter->SetInput(caster->GetOutput());
-	    ffPVWriter->SetFileName(filepath);
-	    m_ProcessObject = ffPVWriter;
-	    ffPVWriter->Update();
-	  }
-	else
-	  {
-	    FPWriterType::Pointer fPWriter = FPWriterType::New();
-	    fPWriter->SetInput(singleImage);
-	    fPWriter->SetFileName(filepath);
-	    m_ProcessObject = fPWriter;
-	    fPWriter->Update();
-	  }
+        if( b16->value() == 1 )
+          {
+            ImageDoubleToVImageFloatCasterType::Pointer caster = ImageDoubleToVImageFloatCasterType::New();
+            caster->SetInput(singleImage);
+            FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
+            ffPVWriter->SetInput(caster->GetOutput());
+            ffPVWriter->SetFileName(filepath);
+            m_ProcessObject = ffPVWriter;
+            ffPVWriter->Update();
+          }
+        else
+          {
+            FPWriterType::Pointer fPWriter = FPWriterType::New();
+            fPWriter->SetInput(singleImage);
+            fPWriter->SetFileName(filepath);
+            m_ProcessObject = fPWriter;
+            fPWriter->Update();
+          }
       }
     else if( usSingleImage.IsNotNull() )
       {
