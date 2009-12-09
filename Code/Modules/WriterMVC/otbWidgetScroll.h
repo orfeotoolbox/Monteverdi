@@ -55,64 +55,64 @@ public:
   void SetNumberOfColumns(int nbCol)
   {
     m_NumberOfColumns = nbCol;
-  };
+  }
   void SetNumberOfRows   (int nbRows)
   {
     m_NumberOfRows = nbRows;
-  };
+  }
   void SetRowSize        (int sizeRow)
   {
     m_RowSize = sizeRow;
-  };
+  }
   void SetColumnSize     (int sizeColumn)
   {
     m_ColumnSize = sizeColumn;
-  };
+  }
   void SetYWidgetSpacing (int sizey)
   {
     m_YWidgetSpacing = sizey;
-  };
+  }
   void SetXWidgetSpacing (int sizex)
   {
     m_XWidgetSpacing = sizex;
-  };
+  }
   int GetNumberOfColumns ()
   {
     return m_NumberOfColumns;
-  };
+  }
   int GetNumberOfRows    ()
   {
     return m_NumberOfRows;
-  };
+  }
   int GetRowSize         ()
   {
     return m_RowSize;
-  };
+  }
   int GetColumnSize      ()
   {
     return m_ColumnSize;
-  };
+  }
   int GetXWidgetSpacing  ()
   {
     return m_XWidgetSpacing;
-  };
+  }
   int GetYWidgetSpacing  ()
   {
     return m_YWidgetSpacing;
-  };
+  }
 
   void SetLabelList( StringVectorType list )
   {
     m_LabelList = list;
-  };
+  }
   StringVectorType GetLabelList()
   {
     return m_LabelList;
-  };
+  }
   void AddToLabelList( const char * val)
   {
     m_LabelList.push_back(val);
-  };
+  }
   int ChangeLabelListValue( const char * val, int id)
   {
     int res = 1;
@@ -123,7 +123,7 @@ public:
     }
 
     return res;
-  };
+  }
 
 
   WidgetScroll(int X, int Y, int W, int H, const char*L=0) : Fl_Group(X,Y,W,H,L)
@@ -134,27 +134,30 @@ public:
     m_ColumnSize = 1;
     m_XWidgetSpacing = 0;
     m_YWidgetSpacing = 0;
-  };
+  }
 
   virtual ~WidgetScroll() {};
 
 
   void InitArea()
   {
-    if (m_NumberOfColumns!=0 && m_NumberOfRows!=0)
-    {
-      if ( (m_NumberOfColumns*m_NumberOfRows)==m_LabelList.size() || m_LabelList.size()==0)
+    if ((m_NumberOfColumns != 0) && (m_NumberOfRows != 0))
       {
+      if ( (m_NumberOfColumns*m_NumberOfRows == m_LabelList.size()) 
+             || (m_LabelList.size() == 0))
+	{
         int cpt = 0;
         int xx = this->x() + m_XWidgetSpacing;
         int yy = this->y() + m_YWidgetSpacing;
         Fl_Scroll * scroll = new Fl_Scroll( this->x(), this->y(), this->w(), this->h() );
-        Fl_Tile * tile = new Fl_Tile(xx, yy, m_NumberOfColumns*(m_ColumnSize+m_XWidgetSpacing), m_NumberOfRows*(m_RowSize+m_YWidgetSpacing) );
+        Fl_Tile * tile = new Fl_Tile(xx, yy, 
+				     m_NumberOfColumns*(m_ColumnSize+m_XWidgetSpacing), 
+				     m_NumberOfRows*(m_RowSize+m_YWidgetSpacing) );
         // Create widgets
         for ( int r=0; r<m_NumberOfRows; r++ )
-        {
+	  {
           for ( int c=0; c<m_NumberOfColumns; c++ )
-          {
+	    {
             InternalWidgetType *in = new InternalWidgetType(xx, yy, m_ColumnSize, m_RowSize);
             if (m_LabelList.size()!=0)
               in->label(m_LabelList[cpt]);
@@ -162,15 +165,15 @@ public:
             in->visible();
             xx += m_ColumnSize+m_XWidgetSpacing;
             cpt++;
-          }
+	    }
           xx = this->x() + m_XWidgetSpacing;
           yy += m_RowSize + m_YWidgetSpacing;
-        }
+	  }
         tile->end();
         scroll->end();
         end();
+	}
       }
-    }
   }
 
 
