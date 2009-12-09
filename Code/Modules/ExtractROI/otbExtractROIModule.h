@@ -77,7 +77,7 @@ public:
   /** Typedef to cast physical point to index*/
   typedef FloatingImageType::IndexType             IndexType;
   typedef IndexType::OffsetType             OffsetType;
-  typedef FloatingImageType::PointType             PointType; 
+  typedef FloatingImageType::PointType             PointType;
 //   typedef FloatingVectorImageType::IndexType             FloatingVectorImageIndexType;
   /** Show the Module GUI */
   virtual bool CanShow(){return true;};

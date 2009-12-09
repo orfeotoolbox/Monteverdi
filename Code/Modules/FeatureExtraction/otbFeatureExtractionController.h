@@ -163,7 +163,7 @@ private:
   ChangeExtractRegionHandlerPointerType m_ChangeExtractRegionHandler;
   ResizingHandlerType::Pointer          m_ResultResizingHandler;
   ChangeExtractRegionHandlerPointerType m_ResultChangeExtractRegionHandler;
-}; 
+};
 } //end namespace otb
 
 #endif

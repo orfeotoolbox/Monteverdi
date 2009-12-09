@@ -536,7 +536,7 @@ MonteverdiViewGUI
   if( modMap.size() >0 )
     {
       for( iter = modMap.begin(); iter != modMap.end(); iter++)
-        { 
+        {
           (*iter).second->Hide();
         }
     }

@@ -46,7 +46,7 @@ FeatureExtractionController
 
   m_VisuController->AddActionHandler(m_ResizingHandler);
   m_VisuController->AddActionHandler(m_ChangeExtractRegionHandler);
-  m_VisuController->AddActionHandler(m_ResultChangeExtractRegionHandler); 
+  m_VisuController->AddActionHandler(m_ResultChangeExtractRegionHandler);
   m_ResultVisuController->AddActionHandler(m_ResultResizingHandler);
   m_VisuController->AddActionHandler(m_LeftMouseClickedHandler);
 }
@@ -650,7 +650,7 @@ void FeatureExtractionController::Quit()
   catch (itk::ExceptionObject & err)
     {
      MsgReporter::GetInstance()->SendError(err.GetDescription());
-  } 
+  }
 }
 
 void FeatureExtractionController::Cancel()
@@ -662,7 +662,7 @@ void FeatureExtractionController::Cancel()
   catch (itk::ExceptionObject & err)
   {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  } 
+  }
 }
 
 

@@ -156,7 +156,7 @@ void MeanShiftModuleView::SwitchBoundaries()
 }
 
 void MeanShiftModuleView::SetOpacity( double op )
-{ 
+{
   m_Controller->SetOpacity( op );
 }
 

@@ -650,7 +650,7 @@ ProjectionView::InitializeAction()
     // End of filling the utm parameters
   }
   
-  // Transform middle point to carto projection : it is done here cause we wait for the  
+  // Transform middle point to carto projection : it is done here cause we wait for the
   // update of the transform following the utm zone found
   outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 

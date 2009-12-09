@@ -203,13 +203,13 @@ HomologousPointExtractionModuleModel
       IndexType idFix, idMov;
       idFix = m_IndexesList[i].first;
       idFix[0] += static_cast<int>(firstOrig[0]);
-      idFix[1] += static_cast<int>(firstOrig[1]); 
+      idFix[1] += static_cast<int>(firstOrig[1]);
       m_FirstInputImage->TransformIndexToPhysicalPoint(idFix,fixedPoint);
       fix->SetPoint(i,fixedPoint);
 
       idMov = m_IndexesList[i].second;
       idMov[0] += static_cast<int>(secondOrig[0]);
-      idMov[1] += static_cast<int>(secondOrig[1]); 
+      idMov[1] += static_cast<int>(secondOrig[1]);
       m_SecondInputImage->TransformIndexToPhysicalPoint(idMov,movingPoint);
       mov->SetPoint(i,movingPoint);
     }
@@ -483,7 +483,7 @@ HomologousPointExtractionModuleModel
   typename T::InputPointType  inPoint;
   typename T::OutputPointType outPoint;
   ContinuousIndexType         idOut;
-  IndexType idStarted;  
+  IndexType idStarted;
 
   PointType firstOrig = m_FirstInputImage->GetOrigin();
   PointType secondOrig = m_SecondInputImage->GetOrigin();
@@ -491,7 +491,7 @@ HomologousPointExtractionModuleModel
   for(unsigned int i=0; i<inList.size(); i++)
     {
       idStarted[0] = inList[i][0] + static_cast<int>(firstOrig[0]);
-      idStarted[1] = inList[i][1] + static_cast<int>(firstOrig[1]);      
+      idStarted[1] = inList[i][1] + static_cast<int>(firstOrig[1]);
       
       m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i],inPoint);
       outPoint = transform->TransformPoint(inPoint);

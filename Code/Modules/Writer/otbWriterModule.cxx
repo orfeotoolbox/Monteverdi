@@ -67,13 +67,13 @@ void WriterModule::Run()
   pBar->minimum(0);
   pBar->maximum(1);
   wFileChooserWindow->show();
-  pBar->copy_label("0%"); 
+  pBar->copy_label("0%");
 }
 // void WriterModule::SetIntensityChannelAvailability()
 // {
 //   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 //   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-//   
+//
 //   try
 //   {
 //     if ( vectorImage.IsNotNull() || charVectorImage.IsNotNull() )

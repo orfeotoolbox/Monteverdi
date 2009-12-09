@@ -186,7 +186,7 @@ MeanShiftModuleModel
       
       m_BoundariesGenerator->SetImage(m_MeanShift->GetClusterBoundariesOutput());
       m_BoundariesGenerator->GenerateQuicklookOff();
-      m_BoundariesGenerator->GenerateLayer(); 
+      m_BoundariesGenerator->GenerateLayer();
       
       
       m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
@@ -206,7 +206,7 @@ MeanShiftModuleModel
       m_MeanShift->GetClusterBoundariesOutput()->UpdateOutputInformation();
 
       m_IsUpdating = false;
-    } 
+    }
 }
 
 
@@ -219,7 +219,7 @@ MeanShiftModuleModel
       m_ClustersGenerator->GetLayer()->SetVisible(sc);
     }
   
-  m_VisualizationModel->Update();  
+  m_VisualizationModel->Update();
 }
 
 void
