@@ -188,7 +188,7 @@ void SuperimpositionModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "*.*",".");
+  filename = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "*.*","");
 
   if (filename == NULL)
     {

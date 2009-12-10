@@ -120,7 +120,7 @@ Orthorectification
   const char * cfname = NULL;
 
   // Choose directory
-  cfname = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), ".");
+  cfname = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "");
 
   if (cfname == NULL)
   {

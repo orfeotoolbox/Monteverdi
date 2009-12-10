@@ -415,7 +415,7 @@ void WriterViewGUI::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.*",".");
+  filename = flu_file_chooser("Choose the dataset file...", "*.*","");
   
   if (filename == NULL)
   {

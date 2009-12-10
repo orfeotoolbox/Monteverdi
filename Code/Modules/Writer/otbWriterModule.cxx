@@ -100,7 +100,7 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*",".");
+  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*","");
 
   if (filename == NULL)
     {

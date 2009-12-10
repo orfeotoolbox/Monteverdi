@@ -175,11 +175,11 @@ FeatureExtractionModel
   extract->SetInput( m_InputImage );
   extract->SetChannel(id);
   extract->GetOutput()->UpdateOutputInformation();
-
+  
   this->AddInputImage( extract->GetOutput() );
-
+  
   m_ChannelExtractorList->PushBack(extract);
-
+  
   itk::OStringStream oss;
   oss<<"Ch"<<id;
   m_OutputChannelsInformation.push_back(oss.str());
