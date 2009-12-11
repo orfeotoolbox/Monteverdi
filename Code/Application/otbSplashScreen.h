@@ -76,7 +76,6 @@ public:
 
             std::string splashImage(Monteverdi_SOURCE_DIR);
             splashImage +="/Data/Artwork/Monteverdi";
-         //   splashImage += out.str();
             splashImage +=".png";
             Fl_PNG_Image*   image_PNG;
             image_PNG = new Fl_PNG_Image(splashImage.c_str());
@@ -113,27 +112,24 @@ public:
 
 
         // simple case
-        timer->value(3.);
+        timer->value(m_DisplayTime);
         m_GroupVector[ui_cpt]->show();
         while( timer->value() && m_SplashWindow->visible() )
+	  {
             Fl::check();
-
-        // display several images case
-//         for(ui_cpt=0;ui_cpt<m_GroupVector.size();ui_cpt++){
-//             m_GroupVector[ui_cpt]->show();
-//             Fl::check();
-//             // wait 2 seconds
-//             Fl::wait(0.1);
-//         }
+	  }
 
         // shut down the splash
         m_SplashWindow->hide();
         delete m_SplashWindow;
-}
+  }
+
+  itkSetMacro(DisplayTime, double);
+  itkGetMacro(DisplayTime, double); 
 
  protected:
   /** Constructor */
-  SplashScreen(){};
+  SplashScreen(){m_DisplayTime = 5.;};
   /** Destructor */
   virtual ~SplashScreen(){};
 
@@ -145,7 +141,7 @@ public:
   Fl_Group*       m_Group;
   std::vector<Fl_Group*>     m_GroupVector;
   std::vector<Fl_PNG_Image*> m_ImageVector;
-
+  double m_DisplayTime;
 
 }; // end class
 } // end namespace otb

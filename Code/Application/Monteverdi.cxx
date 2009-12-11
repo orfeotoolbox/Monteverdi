@@ -69,18 +69,48 @@
 #include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
 #include "otbThresholdModule.h"
+#include "otbCommandLineArgumentParser.h"
+
 
 int main(int argc, char* argv[])
 {
   //Internationalization
   otbI18nMacro();
 
-  // Splash Screen
-  typedef otb::SplashScreen::Pointer SplashScreenPointerType;
+  // Parse command line parameters
+  typedef otb::CommandLineArgumentParser ParserType;
+  ParserType::Pointer parser = ParserType::New();
+  
+  parser->SetProgramDescription("Monteverdi launcher");
+  parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
 
- // SplashScreenPointerType splash = otb::SplashScreen::New();
- // splash->Build();
- // splash->Show();
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
+  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  
+  try
+    {
+      parser->ParseCommandLine(argc,argv,parseResult);
+    }
+  catch ( itk::ExceptionObject & err )
+    {
+      std::string descriptionException = err.GetDescription();
+      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+	{
+	  std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
+	  return EXIT_SUCCESS;
+	}
+    }
+     
+  // Splash Screen
+  if ( !parseResult->IsOptionPresent("--NoSplashScreen") )
+    {
+      typedef otb::SplashScreen::Pointer SplashScreenPointerType;
+      
+      SplashScreenPointerType splash = otb::SplashScreen::New();
+      splash->SetDisplayTime(4.);
+      splash->Build();
+      splash->Show();
+    }
 
 
   // Application
