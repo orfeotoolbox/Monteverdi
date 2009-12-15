@@ -101,16 +101,16 @@ int main(int argc, char* argv[])
 	}
     }
      
-  // Splash Screen
-  if ( !parseResult->IsOptionPresent("--NoSplashScreen") )
-    {
-      typedef otb::SplashScreen::Pointer SplashScreenPointerType;
-      
-      SplashScreenPointerType splash = otb::SplashScreen::New();
-      splash->SetDisplayTime(4.);
-      splash->Build();
-      splash->Show();
-    }
+    // Splash Screen (deactivated for now)
+//  if ( !parseResult->IsOptionPresent("--NoSplashScreen") )
+//    {
+//      typedef otb::SplashScreen::Pointer SplashScreenPointerType;
+//      
+//      SplashScreenPointerType splash = otb::SplashScreen::New();
+//      splash->SetDisplayTime(4.);
+//      splash->Build();
+//      splash->Show();
+//    }
 
 
   // Application
