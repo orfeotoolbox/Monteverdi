@@ -26,16 +26,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbSpeckleFilteringApplication);
-  REGISTER_TEST(otbSpeckleFilteringModuleTest);
-  REGISTER_TEST(otbReaderModuleTest);
-  REGISTER_TEST(otbOrthorectificationModuleTest);
-  REGISTER_TEST(otbOrthorectificationSingleImageModuleTest);
-  REGISTER_TEST(otbFeatureExtractionModuleTest);
-  REGISTER_TEST(otbFeatureExtractionModuleApplication);
-  REGISTER_TEST(otbSupervisedClassificationModuleTest);
-  REGISTER_TEST(otbWriterModuleTest);
-  REGISTER_TEST(otbReaderWriterModuleTest);
   REGISTER_TEST(otbViewerModuleTest);
   REGISTER_TEST(otbWriterMVCModuleTest);
   REGISTER_TEST(otbWriterMVCModuleTest2);
@@ -46,8 +36,4 @@ void RegisterTests()
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
   REGISTER_TEST(otbConcatenateModuleTest);
   REGISTER_TEST(otbAlgebraModuleTest);
-  REGISTER_TEST(otbChangeDetectionModuleTest);
-  REGISTER_TEST(otbGCPToSensorModelModuleTest);
-  REGISTER_TEST(otbThresholdModuleTestNew);
-  REGISTER_TEST(otbThresholdModuleTest);
 }
