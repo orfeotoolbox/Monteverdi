@@ -42,7 +42,6 @@ public:
   itkTypeMacro(HomologousPointExtractionModuleControllerInterface,Superclass);
 
   /** Users actions */
-  //virtual void GenerateLabeled(bool t) = 0;
   virtual void LinkPixelDescriptors() =0;
   virtual void AddPoints( int x1, int y1, int x2, int y2 ) =0;
   virtual void ClearPointList() =0;
