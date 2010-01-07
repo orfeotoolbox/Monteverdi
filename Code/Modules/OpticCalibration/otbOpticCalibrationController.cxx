@@ -130,7 +130,6 @@ OpticCalibrationController
     }
 }
 
-
 void
 OpticCalibrationController
 ::QuitModel()

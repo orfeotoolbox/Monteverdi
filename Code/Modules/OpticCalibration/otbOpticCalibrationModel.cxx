@@ -35,6 +35,7 @@ OpticCalibrationModel::OpticCalibrationModel()
   /** Visu */
   m_VisuModel = VisuModelType::New();
   m_RVisuModel = VisuModelType::New();
+  m_ChangeReflectanceScale = false;
 
   this->Initialization();
 
@@ -285,10 +286,34 @@ OpticCalibrationModel
 
   this->CalibrateExtract();
 
+  // Set output Image
   m_LuminanceImage          = m_ImageToLuminanceFilter->GetOutput();
-  m_ReflectanceImage        = m_ImageToReflectanceFilter->GetOutput();
-  m_SurfaceReflectanceImage = m_ReflectanceToSurfaceReflectanceFilter->GetOutput();
-  m_DifferenceImage         = m_DifferenceFilter->GetOutput();
+
+  // If scale reflectance, add a multiplier
+  if(m_ChangeReflectanceScale)
+    {
+      m_TOAMultiplier        = MultiplyByScalarImageFilterType::New();
+      m_TOCMultiplier        = MultiplyByScalarImageFilterType::New();
+      m_DiffTOATOCMultiplier = MultiplyByScalarImageFilterType::New();
+      
+      m_TOAMultiplier->SetCoef(1000.);
+      m_TOCMultiplier->SetCoef(1000.);
+      m_DiffTOATOCMultiplier->SetCoef(1000.);
+      
+      m_TOAMultiplier->SetInput(m_ImageToReflectanceFilter->GetOutput());
+      m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());    
+      m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
+
+      m_ReflectanceImage        = m_TOAMultiplier->GetOutput();
+      m_SurfaceReflectanceImage = m_TOCMultiplier->GetOutput();
+      m_DifferenceImage         = m_DiffTOATOCMultiplier->GetOutput();
+    }
+  else
+    {
+      m_ReflectanceImage        = m_ImageToReflectanceFilter->GetOutput();
+      m_SurfaceReflectanceImage = m_ReflectanceToSurfaceReflectanceFilter->GetOutput();
+      m_DifferenceImage         = m_DifferenceFilter->GetOutput();
+    }
 
   this->NotifyAll("OutputsUpdated");
   this->NotifyAll("BusyOff");

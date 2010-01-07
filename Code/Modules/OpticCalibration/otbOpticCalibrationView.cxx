@@ -382,6 +382,7 @@ OpticCalibrationView
   m_Window->hide();
   m_ViewerSetupWindow->hide();
   m_CoefSetupWindow->hide();
+  m_OpticCalibrationModel->NotifyAll("BusyOff");
 }
 
 
@@ -415,6 +416,7 @@ OpticCalibrationView
     {
       m_OpticCalibrationController->UpdateGrayscaleChannel(atoi(guiGrayscaleChannelChoice->value())-1);
     }
+  m_ViewerSetupWindow->hide();
 }
 
 void
@@ -736,6 +738,22 @@ OpticCalibrationView
   guiUDTA->redraw();
 
   gRadTerms->redraw();
+}
+
+void
+OpticCalibrationView
+::ChangeReflectanceScaleCallback()
+{
+  int val = static_cast<int>(bReflectanceScale->value());
+  if(val==1)
+    {
+      m_OpticCalibrationModel->SetChangeReflectanceScale(true);
+    }
+  else if(val==0)
+    {
+      m_OpticCalibrationModel->SetChangeReflectanceScale(false);
+    }
+
 }
 
 

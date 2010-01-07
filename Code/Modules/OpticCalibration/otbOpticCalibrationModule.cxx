@@ -100,18 +100,31 @@ void OpticCalibrationModule::Notify(const std::string & event)
     this->AddOutputDescriptor(lumOutput,"Luminance image", otbGetTextMacro("Luminance image"));
     
     FloatingVectorImageType::Pointer reflOutput = m_Model->GetReflectanceImage();
-    this->AddOutputDescriptor(reflOutput,"TOA image", otbGetTextMacro("TOA Image"));
-    
+    //this->AddOutputDescriptor(reflOutput,"TOA image", otbGetTextMacro("TOA Image"));
+	
     FloatingVectorImageType::Pointer surfReflOutput = m_Model->GetSurfaceReflectanceImage();
-    this->AddOutputDescriptor(surfReflOutput,"TOC image", otbGetTextMacro("TOC Image"));
+    //this->AddOutputDescriptor(surfReflOutput,"TOC image", otbGetTextMacro("TOC Image"));
     
     FloatingVectorImageType::Pointer diffOutput = m_Model->GetDifferenceImage();
-    this->AddOutputDescriptor(diffOutput,"Difference TOA-TOC image", otbGetTextMacro("Difference TOA-TOC image"));
+    //this->AddOutputDescriptor(diffOutput,"Difference TOA-TOC image", otbGetTextMacro("Difference TOA-TOC image"));
     
+    if(m_Model->GetChangeReflectanceScale())
+      {
+	this->AddOutputDescriptor(reflOutput,"TOA image (*1000)", otbGetTextMacro("TOA image (*1000)"));
+	this->AddOutputDescriptor(surfReflOutput,"TOC image (*1000)", otbGetTextMacro("TOC image (*1000)"));
+	this->AddOutputDescriptor(diffOutput,"Difference TOA-TOC image (*1000)", otbGetTextMacro("Difference TOA-TOC image (*1000)"));
+      }
+    else
+      {
+	this->AddOutputDescriptor(reflOutput,"TOA image", otbGetTextMacro("TOA Image"));
+	this->AddOutputDescriptor(surfReflOutput,"TOC image", otbGetTextMacro("TOC Image"));
+	this->AddOutputDescriptor(diffOutput,"Difference TOA-TOC image", otbGetTextMacro("Difference TOA-TOC image"));
+      }
+
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 
-      // Once module is closed, it is no longer busy
+    // Once module is closed, it is no longer busy
     this->BusyOff();
   }
   else if (event == "BusyOff")

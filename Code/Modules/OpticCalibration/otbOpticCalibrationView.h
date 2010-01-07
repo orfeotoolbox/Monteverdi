@@ -164,6 +164,7 @@ protected:
   virtual void UpdateRadiativeTermsCallback();
   virtual void ReloadChannelTermsCallback( bool updateIm );
   virtual void SaveAndQuitCallback();
+  virtual void ChangeReflectanceScaleCallback();
 
   void ShowInputGroup();
   void ShowResultGroup();

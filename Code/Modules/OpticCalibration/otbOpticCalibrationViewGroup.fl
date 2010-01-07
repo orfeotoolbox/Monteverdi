@@ -28,13 +28,13 @@ class OpticCalibrationViewGroup {open
   } {
     Fl_Window m_Window {
       label {Optic calibration module}
-      callback {this->QuitCallback();} open selected
+      callback {this->QuitCallback();} open
       xywh {403 171 800 600} type Double box UP_BOX color 7 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Tile {} {open
         xywh {0 0 800 600} resizable
       } {
-        Fl_Menu_Bar mMenuBar {open
+        Fl_Menu_Bar mMenuBar {
           xywh {0 0 200 22} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
         } {
           Submenu {} {
@@ -96,17 +96,36 @@ class OpticCalibrationViewGroup {open
             xywh {10 473 180 121} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
           } {}
         }
-        Fl_Group m_MainGroup {
+        Fl_Group m_MainGroup {open
           xywh {200 22 600 578} box PLASTIC_THIN_DOWN_BOX color 7
         } {
           Fl_Group m_FullGroup {
-            xywh {207 30 585 564} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
+            xywh {207 30 585 530} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
           } {}
           Fl_Group m_RFullGroup {
-            xywh {207 30 585 564} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187 hide
+            xywh {207 30 585 530} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187 hide
           } {}
+          Fl_Group {} {open
+            xywh {207 563 585 30}
+          } {
+            Fl_Button {} {
+              label {Save-Quit}
+              callback {this->SaveAndQuitCallback();}
+              xywh {600 570 80 20} box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 13 labelcolor 186
+            }
+            Fl_Button {} {
+              label Cancel
+              callback {this->QuitCallback();}
+              xywh {712 570 80 20} box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 13 labelcolor 186
+            }
+            Fl_Check_Button bReflectanceScale {
+              label {Reflectances * 1000}
+              callback {this->ChangeReflectanceScaleCallback();} selected
+              xywh {271 572 180 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 13 labelcolor 186
+            }
+          }
         }
-        Fl_Group gButtonsGroup {open
+        Fl_Group gButtonsGroup {
           xywh {200 0 600 22} color 7
         } {
           Fl_Light_Button bInput {
@@ -138,7 +157,7 @@ class OpticCalibrationViewGroup {open
       }
     }
     Fl_Window m_ViewerSetupWindow {
-      label {Viewer setup} open
+      label {Viewer setup}
       xywh {139 281 405 200} type Double box UP_BOX color 7 selection_color 7 labelcolor 187 hide
     } {
       Fl_Round_Button guiViewerSetupGrayscaleMode {
@@ -179,8 +198,8 @@ class OpticCalibrationViewGroup {open
       }
     }
     Fl_Window m_CoefSetupWindow {
-      label {Optic Coefficients Setup} open
-      xywh {227 133 590 415} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 visible
+      label {Optic Coefficients Setup}
+      xywh {227 133 590 415} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 hide
     } {
       Fl_Tabs tCoeffTab {open
         xywh {5 5 260 366} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187
@@ -357,5 +376,7 @@ teAeronetFile->redraw();}
   Function {ReloadChannelTermsCallback(bool updateImage)} {open return_type {virtual void}
   } {}
   Function {SaveAndQuitCallback()} {open return_type {virtual void}
+  } {}
+  Function {ChangeReflectanceScaleCallback()} {open return_type {virtual void}
   } {}
 } 

@@ -31,6 +31,7 @@ See OTBCopyright.txt for details.
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayerRenderingModel.h"
 #include "otbPixelDescriptionModel.h"
+#include "otbMultiplyByScalarImageFilter.h"
 
 /* example used : AtmosphericCorrectionSequencement */
 #include "otbImageToLuminanceImageFilter.h"
@@ -84,38 +85,40 @@ public:
   typedef ImageLayerType::HistogramType                  HistogramType;
 
   /** Image layer generator type */
-  typedef ImageLayerGenerator<ImageLayerType>            ImageLayerGeneratorType;
-  typedef ImageLayerGeneratorType::Pointer               ImageLayerGeneratorPointerType;
+  typedef ImageLayerGenerator<ImageLayerType> ImageLayerGeneratorType;
+  typedef ImageLayerGeneratorType::Pointer    ImageLayerGeneratorPointerType;
 
   /** Rendering functions */
-  typedef Function::RenderingFunction<ImageType::PixelType,RGBPixelType>  RenderingFunctionType;
-  typedef RenderingFunctionType::Pointer                 RenderingFunctionPointerType;
+  typedef Function::RenderingFunction<ImageType::PixelType,RGBPixelType> RenderingFunctionType;
+  typedef RenderingFunctionType::Pointer                                 RenderingFunctionPointerType;
 
-  typedef Function::StandardRenderingFunction<ImageType::PixelType,RGBPixelType>    StandardRenderingFunctionType;
-  typedef std::vector<unsigned int>                                                 ChannelListType;
+  typedef Function::StandardRenderingFunction<ImageType::PixelType,RGBPixelType> StandardRenderingFunctionType;
+  typedef std::vector<unsigned int>                                              ChannelListType;
 
   /** Visu */
   typedef otb::ImageLayerRenderingModel<ViewerImageType> VisuModelType;
   typedef VisuModelType::Pointer                         VisuModelPointerType;
 
   /** Filters typedef */
-  typedef ImageToLuminanceImageFilter<ImageType,ImageType>        ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::Pointer                ImageToLuminanceImageFilterPointerType;
-  typedef ImageToReflectanceImageFilter<ImageType,ImageType>      ImageToReflectanceImageFilterType;
-  typedef ImageToReflectanceImageFilterType::Pointer              ImageToReflectanceImageFilterPointerType;
-  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType>
-                                                                  ReflectanceToSurfaceReflectanceImageFilterType;
-  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer ReflectanceToSurfaceReflectanceImageFilterPointerType;
+  typedef ImageToLuminanceImageFilter<ImageType,ImageType>                ImageToLuminanceImageFilterType;
+  typedef ImageToLuminanceImageFilterType::Pointer                        ImageToLuminanceImageFilterPointerType;
+  typedef ImageToReflectanceImageFilter<ImageType,ImageType>              ImageToReflectanceImageFilterType;
+  typedef ImageToReflectanceImageFilterType::Pointer                      ImageToReflectanceImageFilterPointerType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer         ReflectanceToSurfaceReflectanceImageFilterPointerType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::CoefVectorType               CoefVectorType;
   typedef AtmosphericCorrectionParameters::AerosolModelType                            AerosolModelType;
 
-  typedef DifferenceImageFilter<ImageType, ImageType> DifferenceImageFilterType;
-  typedef DifferenceImageFilterType::Pointer          DifferenceImageFilterPointerType;
+  typedef DifferenceImageFilter<ImageType, ImageType>      DifferenceImageFilterType;
+  typedef DifferenceImageFilterType::Pointer               DifferenceImageFilterPointerType;
+
+  typedef MultiplyByScalarImageFilter<ImageType,ImageType> MultiplyByScalarImageFilterType;
+  typedef MultiplyByScalarImageFilterType::Pointer         MultiplyByScalarImageFilterPointerType;
 
   /** Metadatas typedef */
-  typedef ImageMetadataInterfaceBase                  ImageMetadataInterfaceType;
-  typedef ImageMetadataInterfaceBase::Pointer         ImageMetadataInterfacePointerType;
+  typedef ImageMetadataInterfaceBase          ImageMetadataInterfaceType;
+  typedef ImageMetadataInterfaceBase::Pointer ImageMetadataInterfacePointerType;
 
   /** Get/Set Input Image Pointer */
   itkSetObjectMacro(InputImage,ImageType);
@@ -169,6 +172,10 @@ public:
   /** Quit the model : set the output and call notyfication. */
   void Quit();
 
+  /** Change reflectance scale (multiply reflectance by 1000 or not)*/
+  itkSetMacro(ChangeReflectanceScale, bool);
+  itkGetMacro(ChangeReflectanceScale, bool);
+
   /** Update view channel order */
   void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice);
   void UpdateGrayscaleChannel(int choice);
@@ -211,10 +218,10 @@ private:
   ImageLayerListPointerType   m_ImageLayerList;
 
   /** Filters */
-  ImageToLuminanceImageFilterPointerType                  m_ImageToLuminanceFilter;
-  ImageToReflectanceImageFilterPointerType                m_ImageToReflectanceFilter;
-  ReflectanceToSurfaceReflectanceImageFilterPointerType   m_ReflectanceToSurfaceReflectanceFilter;
-  DifferenceImageFilterPointerType                        m_DifferenceFilter;
+  ImageToLuminanceImageFilterPointerType                m_ImageToLuminanceFilter;
+  ImageToReflectanceImageFilterPointerType              m_ImageToReflectanceFilter;
+  ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
+  DifferenceImageFilterPointerType                      m_DifferenceFilter;
 
   /** Imput Image Pointer */
   ImagePointerType m_InputImage;
@@ -228,8 +235,18 @@ private:
   /** Store Difference TOA-TOC image */
   ImagePointerType m_DifferenceImage;
 
+  /** TOA Multiplier*/
+  MultiplyByScalarImageFilterPointerType m_TOAMultiplier;
+    /** TOC Multiplier*/
+  MultiplyByScalarImageFilterPointerType m_TOCMultiplier;
+  /** Diff TOA-TOC Multiplier*/
+  MultiplyByScalarImageFilterPointerType m_DiffTOATOCMultiplier;
+  
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasNewInput;
+
+  /** Change reflectance scale (multiply reflectance by 1000 or not)*/
+  bool m_ChangeReflectanceScale;
 };
 
 }//end namespace otb

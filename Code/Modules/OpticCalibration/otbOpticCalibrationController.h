@@ -106,7 +106,7 @@ public:
   virtual void UpdateCorrectionParameters();
   virtual void UpdateRadiativeTerms( bool updateIm );
   virtual void QuitModel();
-
+ 
   void SetInputImage( ImagePointerType img );
   void LinkPixelDescriptors();
 
