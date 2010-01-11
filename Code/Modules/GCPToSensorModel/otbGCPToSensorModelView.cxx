@@ -163,7 +163,7 @@ GCPToSensorModelView
    oss<<id2;
  this->lPointList->add(oss.str().c_str());
 
- srand((id1[1]+id1[0])*123456);
+ srand(static_cast<unsigned int>(id1[1]+id1[0])*123456);
  ColorType color;
  color[0]=rand()/(RAND_MAX+1.0);
  color[1]=rand()/(RAND_MAX+1.0);

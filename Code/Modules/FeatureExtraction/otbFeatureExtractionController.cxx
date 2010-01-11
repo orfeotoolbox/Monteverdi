@@ -86,8 +86,8 @@ FeatureExtractionController
 ::LeftMouseButtonClicked( ContinuousIndexType index )
 {
   IndexType id;
-  id[0] = index[0];
-  id[1] = index[1];
+  id[0] = static_cast<long int>(index[0]);
+  id[1] = static_cast<long int>(index[1]);
   m_View->UpdateSelectedPixel(id);
 }
 

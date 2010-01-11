@@ -655,8 +655,8 @@ Orthorectification::CheckImageParameters()
     return 1;
   }
 
-  m_OutputSize[0] = strtod(guiSizeX->value(), NULL);
-  m_OutputSize[1] = strtod(guiSizeY->value(), NULL);
+  m_OutputSize[0] = static_cast<unsigned int>(strtod(guiSizeX->value(), NULL));
+  m_OutputSize[1] = static_cast<unsigned int>(strtod(guiSizeY->value(), NULL));
   m_OutputSpacing[0] = strtod(guiSpacingX->value(), NULL);
   m_OutputSpacing[1] = strtod(guiSpacingY->value(), NULL);
 

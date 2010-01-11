@@ -74,7 +74,7 @@ void KMeansModule::UpdateNumberOfSamples()
 {
   vNumberOfSamples->show();
 
-  int squareRatio = 100/vNumberOfSamples->value();
+  int squareRatio = static_cast<int>(100/vNumberOfSamples->value());
 
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
 
@@ -201,7 +201,7 @@ void KMeansModule::ThreadedRun()
 
   // Then, build the sample list
   unsigned int nbComp = sampler->GetOutput()->GetNumberOfComponentsPerPixel();
-  unsigned int nbClasses = vNumberOfClasses->value();
+  unsigned int nbClasses = static_cast<unsigned int >(vNumberOfClasses->value());
 
   itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),sampler->GetOutput()->GetLargestPossibleRegion());
   it.GoToBegin();
@@ -247,7 +247,7 @@ void KMeansModule::ThreadedRun()
   // Now, build the kdTree
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   treeGenerator->SetSample(listSample);
-  treeGenerator->SetBucketSize(vNumberOfSamples->value()/(10*nbClasses));
+  treeGenerator->SetBucketSize(static_cast<unsigned int>(vNumberOfSamples->value()/(10*nbClasses)));
   treeGenerator->Update();
 
   otbGenericMsgDebugMacro( <<otbGetTextMacro("Tree generated"));
@@ -255,7 +255,7 @@ void KMeansModule::ThreadedRun()
   // Estimate the centroids
   m_Estimator->SetKdTree(treeGenerator->GetOutput() );
   m_Estimator->SetParameters(initialCentroids);
-  m_Estimator->SetMaximumIteration(vNumberOfIterations->value());
+  m_Estimator->SetMaximumIteration(static_cast<unsigned int>(vNumberOfIterations->value()));
   m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
   m_Estimator->StartOptimization();
 
