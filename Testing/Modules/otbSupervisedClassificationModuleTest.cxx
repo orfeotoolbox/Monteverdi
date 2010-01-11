@@ -32,7 +32,7 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
   // Put in the tests
   const char * infname = argv[1];
   typedef otb::VectorImage<double,2>                 ImageType;
-  typedef otb::VectorImage<unsigned char ,2>         LabeledImageType;
+  typedef otb::VectorImage<double ,2>         LabeledImageType;
   
   typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageFileWriter<LabeledImageType>     WriterType;

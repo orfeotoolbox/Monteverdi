@@ -1895,14 +1895,14 @@ SupervisedClassificationAppli
 ::DisplayResults()
 {
   if(static_cast<int>(bDisplay->value())==0)
-  {
+    {
     this->ShowImage();
-  }
+    }
   else
-  {
-    //this->SetupClassification();
+    {
+    this->SetupClassification();
     this->ShowResults();
-  }
+    }
 }
 
 /**
