@@ -233,9 +233,9 @@ HomologousPointExtractionModuleView
       ColorType curColor = m_ColorList[selectedIndex];
 
       // color To fl_color
-      Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*curColor[0],
-				     (FL_NUM_GREEN-1)*curColor[1],
-				     (FL_NUM_BLUE-1)*curColor[2]);
+      Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*curColor[0]),
+				       static_cast<int>((FL_NUM_GREEN-1)*curColor[1]),
+				       static_cast<int>((FL_NUM_BLUE-1)*curColor[2]));
       
       //Update the List Point Color
       if(whichOne)

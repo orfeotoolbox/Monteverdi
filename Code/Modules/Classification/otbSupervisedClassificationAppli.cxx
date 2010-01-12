@@ -897,10 +897,10 @@ SupervisedClassificationAppli
   color[3]=(float)this->slTrainingSetOpacity->value();
   
   
-  Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*color[0],
-				   (FL_NUM_GREEN-1)*color[1],
-				   (FL_NUM_BLUE-1)*color[2]);
-  
+  Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*color[0]),
+				   static_cast<int>((FL_NUM_GREEN-1)*color[1]),
+				   static_cast<int>((FL_NUM_BLUE-1)*color[2]));
+						    
 
   dClassList->selection_color(flColor);
 
@@ -1094,9 +1094,9 @@ SupervisedClassificationAppli
     return;
   }
   
-  Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*theClass->GetColor()[0],
-				   (FL_NUM_GREEN-1)*theClass->GetColor()[1],
-				   (FL_NUM_BLUE-1)*theClass->GetColor()[2]);
+  Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*theClass->GetColor()[0]),
+				   static_cast<int>((FL_NUM_GREEN-1)*theClass->GetColor()[1]),
+				   static_cast<int>((FL_NUM_BLUE-1)*theClass->GetColor()[2]));
   
 
   dClassList->selection_color(flColor);
@@ -2074,10 +2074,10 @@ SupervisedClassificationAppli
     Fl_Output * piece = new Fl_Output(x0+(j+1)*w,y0,w,h);
     piece->value(oss.str().c_str());
     
-    Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*m_ClassesMap[j]->GetColor()[0],
-				     (FL_NUM_GREEN-1)*m_ClassesMap[j]->GetColor()[1],
-				     (FL_NUM_BLUE-1)*m_ClassesMap[j]->GetColor()[2]);
-    
+    Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*m_ClassesMap[j]->GetColor()[0]),
+				     static_cast<int>((FL_NUM_GREEN-1)*m_ClassesMap[j]->GetColor()[1]),
+				     static_cast<int>((FL_NUM_BLUE-1)*m_ClassesMap[j]->GetColor()[2]));
+								       
 
     piece->textcolor(flColor);
     piece->textfont(FL_HELVETICA_BOLD);
@@ -2097,9 +2097,9 @@ SupervisedClassificationAppli
     oss<<m_ClassesMap[i]->GetName();
     piece = new Fl_Output(x0,y0+(i+1)*h,w,h);
     
-    Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*m_ClassesMap[i]->GetColor()[0],
-			    (FL_NUM_GREEN-1)*m_ClassesMap[i]->GetColor()[1],
-			    (FL_NUM_BLUE-1)*m_ClassesMap[i]->GetColor()[2]);
+    Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*m_ClassesMap[i]->GetColor()[0]),
+				     static_cast<int>((FL_NUM_GREEN-1)*m_ClassesMap[i]->GetColor()[1]),
+				     static_cast<int>((FL_NUM_BLUE-1)*m_ClassesMap[i]->GetColor()[2]));
     
 
     piece->textcolor(flColor);
