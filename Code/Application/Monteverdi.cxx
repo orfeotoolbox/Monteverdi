@@ -70,6 +70,7 @@
 #include "otbGCPToSensorModelModule.h"
 #include "otbThresholdModule.h"
 #include "otbOpticCalibrationModule.h"
+#include "otbSarCalibrationModule.h"
 #include "otbCommandLineArgumentParser.h"
 
 
@@ -137,6 +138,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
 
   model->RegisterModule<otb::OpticCalibrationModule>("0OpticCalibration", otbGetTextMacro("Calibration/Optic Calibration"));
+  model->RegisterModule<otb::SarCalibrationModule>("1SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
   model->RegisterModule<otb::AlgebraModule>("0Algebra", otbGetTextMacro("Filtering/Band math"));
   model->RegisterModule<otb::ThresholdModule>("1Threshold", otbGetTextMacro("Filtering/Threshold"));

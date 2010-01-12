@@ -110,6 +110,8 @@ public:
   void SetInputImage( ImagePointerType img );
   void LinkPixelDescriptors();
 
+  itkGetMacro(IsValidImage, bool);
+
 protected:
   /** Constructor */
   OpticCalibrationController();

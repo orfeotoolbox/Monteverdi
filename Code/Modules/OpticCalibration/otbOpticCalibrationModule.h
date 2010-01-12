@@ -69,6 +69,9 @@ public:
   typedef otb::OpticCalibrationModel      ModelType;
   typedef otb::OpticCalibrationView       ViewType;
 
+  itkGetObjectMacro(View, ViewType);
+  itkGetObjectMacro(Model, ModelType);
+  itkGetObjectMacro(Controller, ControllerType);
 
 protected:
   /** Constructor */
@@ -100,7 +103,6 @@ protected:
     {
       m_View->HideAll();
     };
-
 
 private:
   OpticCalibrationModule(const Self&); //purposely not implemented
