@@ -199,10 +199,6 @@ HomologousPointExtractionModuleView
  color[1]=rand()/(RAND_MAX+1.0);
  color[2]=rand()/(RAND_MAX+1.0);
  color[3]=1.0;
-
- fl_color(static_cast<unsigned char>(255*color[0]),
-         static_cast<unsigned char>(255*color[1]),
-         static_cast<unsigned char>(255*color[2]));
  m_ColorList.push_back(color);
 
  lPointList->value(lPointList->size());
@@ -237,30 +233,30 @@ HomologousPointExtractionModuleView
       ColorType curColor = m_ColorList[selectedIndex];
 
       // color To fl_color
-      fl_color(static_cast<unsigned char>(255*curColor[0]),
-              static_cast<unsigned char>(255*curColor[1]),
-              static_cast<unsigned char>(255*curColor[2]));
-
+      Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*curColor[0],
+				     (FL_NUM_GREEN-1)*curColor[1],
+				     (FL_NUM_BLUE-1)*curColor[2]);
+      
       //Update the List Point Color
       if(whichOne)
        {
-         lPointList->selection_color(fl_color());
+         lPointList->selection_color(flColor);
          lPointList->redraw();
          if(tError->size() > static_cast<int>(selectedIndex))
            {
              tError->value(selectedIndex+1);
-             tError->selection_color(fl_color());
+             tError->selection_color(flColor);
              tError->redraw();
            }
        }
       else
        {
-         tError->selection_color(fl_color());
+         tError->selection_color(flColor);
          tError->redraw();
          if(lPointList->size() > static_cast<int>(selectedIndex))
            {
              lPointList->value(selectedIndex+1);
-             lPointList->selection_color(fl_color());
+             lPointList->selection_color(flColor);
              lPointList->redraw();
            }
        }
