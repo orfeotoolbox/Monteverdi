@@ -164,8 +164,10 @@ int main(int argc, char* argv[])
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
+  Fl::lock();
   
-  //Test if there is an input image
+
+  //Test if there is an input image (optional)
   if ( parseResult->IsOptionInputImagePresent() )
     {
           Fl::check();
@@ -188,8 +190,41 @@ int main(int argc, char* argv[])
           readerModule->Analyse();
           readerModule->bOk->do_callback();
           Fl::check();
+
+          // Create an instance of module viewer
+          model->CreateModuleByKey("Viewer");
+          moduleVector = model->GetAvailableModuleInstanceIds();
+
+          // Get the ModuleInstanceId
+          std::string viewerId = moduleVector[1];
+
+          // Get the module itself
+          otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
+
+          // Open the viewer and simulate a connexion
+          otb::ViewerModule::Pointer viewerModule = static_cast<otb::ViewerModule::Pointer>(dynamic_cast<otb::ViewerModule *>(module2.GetPointer()));
+
+          typedef otb::Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
+          InputDataDescriptorMapType lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
+          InputDataDescriptorMapType::const_iterator it_in;
+          it_in = lInputDataMap.begin();
+
+          std::string viewerInputKey = it_in->first;
+
+          typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
+          InputViewComponentMapType inputComponentMap;
+          inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
+
+          for(unsigned int i =0;i<inputComponentMap[viewerInputKey]->GetNumberOfChoices();i++)
+            {
+            inputComponentMap[viewerInputKey]->SelectNthChoice(i);
+            }
+          Fl::check();
+              
+          view->GetInputViewGUI()->bOk->do_callback();
+          Fl::check();
     }
+
   
-  Fl::lock();
   return Fl::run();
 }
