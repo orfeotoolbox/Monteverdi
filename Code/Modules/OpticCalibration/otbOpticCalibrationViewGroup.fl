@@ -108,9 +108,9 @@ class OpticCalibrationViewGroup {open
           Fl_Group {} {open
             xywh {207 563 585 30}
           } {
-            Fl_Button {} {
+            Fl_Button bSaveQuit {
               label {Save-Quit}
-              callback {this->SaveAndQuitCallback();}
+              callback {this->SaveAndQuitCallback();} selected
               xywh {600 570 80 20} box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 13 labelcolor 186
             }
             Fl_Button {} {
@@ -120,12 +120,12 @@ class OpticCalibrationViewGroup {open
             }
             Fl_Check_Button bReflectanceScale {
               label {Reflectances * 1000}
-              callback {this->ChangeReflectanceScaleCallback();} selected
+              callback {this->ChangeReflectanceScaleCallback();}
               xywh {271 572 180 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 13 labelcolor 186
             }
           }
         }
-        Fl_Group gButtonsGroup {
+        Fl_Group gButtonsGroup {open
           xywh {200 0 600 22} color 7
         } {
           Fl_Light_Button bInput {
@@ -198,8 +198,8 @@ class OpticCalibrationViewGroup {open
       }
     }
     Fl_Window m_CoefSetupWindow {
-      label {Optic Coefficients Setup}
-      xywh {227 133 590 415} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 hide
+      label {Optic Coefficients Setup} open
+      xywh {227 133 590 415} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 visible
     } {
       Fl_Tabs tCoeffTab {open
         xywh {5 5 260 366} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187

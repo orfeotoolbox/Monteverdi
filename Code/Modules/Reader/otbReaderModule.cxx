@@ -176,7 +176,7 @@ void ReaderModule::OpenDataSet()
     }
   catch(itk::ExceptionObject & err)
     {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 

@@ -84,6 +84,7 @@ int otbMonteverdiApplicationGraphviz(int argc, char* argv[])
   // Cyrille cast effect !
   otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
   readerModule->vFilePath->value(infname);
+  readerModule->Analyse();
   readerModule->bOk->do_callback();
   Fl::check();
 

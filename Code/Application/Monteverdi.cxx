@@ -70,6 +70,7 @@
 #include "otbGCPToSensorModelModule.h"
 #include "otbThresholdModule.h"
 #include "otbOpticCalibrationModule.h"
+#include "otbSarCalibrationModule.h"
 #include "otbCommandLineArgumentParser.h"
 
 
@@ -82,7 +83,10 @@ int main(int argc, char* argv[])
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   
+  parser->AddInputImage(false); //Optionnal parameter
+ 
   parser->SetProgramDescription("Monteverdi launcher");
+  parser->AddInputImage();
   parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
@@ -137,6 +141,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
 
   model->RegisterModule<otb::OpticCalibrationModule>("0OpticCalibration", otbGetTextMacro("Calibration/Optic Calibration"));
+  model->RegisterModule<otb::SarCalibrationModule>("1SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
   model->RegisterModule<otb::AlgebraModule>("0Algebra", otbGetTextMacro("Filtering/Band math"));
   model->RegisterModule<otb::ThresholdModule>("1Threshold", otbGetTextMacro("Filtering/Threshold"));
@@ -157,10 +162,71 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", otbGetTextMacro("Geometry/Homologous points extraction"));
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP to sensor model"));
   
+  
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
-
   Fl::lock();
+  
+
+  //Test if there is an input image (optional)
+  if ( parseResult->IsOptionInputImagePresent() )
+    {
+          Fl::check();
+          std::vector<std::string> moduleVector;
+
+          // Create an instance of module reader
+          model->CreateModuleByKey("0Reader");
+          moduleVector = model->GetAvailableModuleInstanceIds();
+
+          // Get the ModuleInstanceId
+          std::string readerId = moduleVector[0];
+
+          // Get the module itself
+          otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+          // Simulate file chooser and ok callback
+          // Cyrille cast effect !
+          otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+          readerModule->vFilePath->value(parseResult->GetInputImage().c_str());
+          readerModule->Analyse();
+          readerModule->bOk->do_callback();
+          Fl::check();
+
+          // Create an instance of module viewer
+          model->CreateModuleByKey("Viewer");
+          moduleVector = model->GetAvailableModuleInstanceIds();
+
+          // Get the ModuleInstanceId
+          std::string viewerId = moduleVector[1];
+
+          // Get the module itself
+          otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
+
+          // Open the viewer and simulate a connexion
+          otb::ViewerModule::Pointer viewerModule = static_cast<otb::ViewerModule::Pointer>(dynamic_cast<otb::ViewerModule *>(module2.GetPointer()));
+
+          typedef otb::Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
+          InputDataDescriptorMapType lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
+          InputDataDescriptorMapType::const_iterator it_in;
+          it_in = lInputDataMap.begin();
+
+          std::string viewerInputKey = it_in->first;
+
+          typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
+          InputViewComponentMapType inputComponentMap;
+          inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
+
+          for(unsigned int i =0;i<inputComponentMap[viewerInputKey]->GetNumberOfChoices();i++)
+            {
+            inputComponentMap[viewerInputKey]->SelectNthChoice(i);
+            }
+          Fl::check();
+              
+          view->GetInputViewGUI()->bOk->do_callback();
+          Fl::check();
+    }
+
+  
   return Fl::run();
 }

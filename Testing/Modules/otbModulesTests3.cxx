@@ -26,8 +26,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbChangeDetectionModuleTest);
-  REGISTER_TEST(otbGCPToSensorModelModuleTest);
-  REGISTER_TEST(otbThresholdModuleTestNew);
-  REGISTER_TEST(otbThresholdModuleTest);
+REGISTER_TEST(otbChangeDetectionModuleTest);
+REGISTER_TEST(otbGCPToSensorModelModuleTest);
+REGISTER_TEST(otbThresholdModuleTestNew);
+REGISTER_TEST(otbThresholdModuleTest);
+REGISTER_TEST(otbOpticCalibrationModuleTest);
+REGISTER_TEST(otbSarCalibrationModuleTest);
 }

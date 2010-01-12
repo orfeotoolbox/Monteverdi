@@ -1,0 +1,84 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class SarCalibrationModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Open dataset} open
+      xywh {443 191 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Button bOK {
+        label {Save/Quit}
+        callback {this->OK();}
+        xywh {274 111 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {174 111 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Group bMethod {
+        label {Use fast computation method} open
+        xywh {12 73 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Round_Button bFastMethodYes {
+          label Yes
+          callback {if(bFastMethodYes->value()==0)
+{
+bFastMethodNo->value(1);
+}
+else
+{
+bFastMethodNo->value(0);
+}}
+          xywh {150 80 20 15} down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        }
+        Fl_Round_Button bFastMethodNo {
+          label No
+          callback {if(bFastMethodNo->value()==0)
+{
+bFastMethodYes->value(1);
+}
+else
+{
+bFastMethodYes->value(0);
+}}
+          xywh {220 80 20 15} down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Group {} {
+        label {Output file} open
+        xywh {10 21 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Check_Button bBrightness {
+          label Brightness selected
+          xywh {275 28 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        }
+        Fl_Check_Button bCalib {
+          label Calibration
+          callback {if(bCalib->value()==1)
+{
+bMethod->activate();	
+}
+else
+{
+bMethod->deactivate();	
+}}
+          xywh {120 28 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        }
+      }
+    }
+  }
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+  Function {OK()} {open protected return_type {virtual void}
+  } {}
+  Function {~SarCalibrationModuleGUI()} {open return_type virtual
+  } {}
+} 

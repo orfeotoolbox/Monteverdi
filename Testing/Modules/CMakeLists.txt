@@ -208,6 +208,37 @@ ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS3}
 	 ${TEMP}/moTvThresholdModule.tif
 )
 
+#------------- OpticCalibration Module -------------
+ADD_TEST(moTvOpticCalibrationModuleTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+1
+${TEMP}/moTvOpticCalibrationModuleTest.tif
+)
+ADD_TEST(moTvOpticCalibrationModuleNoMDTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+${INPUTDATA}/poupees.tif
+1
+)
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvOpticCalibrationModuleQBTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+0
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+#------------- SarCalibration Module -------------
+ADD_TEST(moTvSarCalibrationModuleNoMDTest ${Modules_TESTS3} otbSarCalibrationModuleTest
+${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+0 # scalar image
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvSarCalibrationModuleCplxTest ${Modules_TESTS3} otbSarCalibrationModuleTest
+${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+1 #complex
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -241,6 +272,8 @@ otbChangeDetectionModuleTest.cxx
 otbGCPToSensorModelModuleTest.cxx	
 otbThresholdModuleTestNew.cxx	
 otbThresholdModuleTest.cxx
+otbOpticCalibrationModuleTest.cxx
+otbSarCalibrationModuleTest.cxx
 )
 
 
