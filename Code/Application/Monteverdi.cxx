@@ -82,7 +82,10 @@ int main(int argc, char* argv[])
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   
+  parser->AddInputImage(false); //Optionnal parameter
+ 
   parser->SetProgramDescription("Monteverdi launcher");
+  parser->AddInputImage();
   parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
@@ -157,10 +160,36 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", otbGetTextMacro("Geometry/Homologous points extraction"));
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP to sensor model"));
   
+  
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
+  
+  //Test if there is an input image
+  if ( parseResult->IsOptionInputImagePresent() )
+    {
+          Fl::check();
+          std::vector<std::string> moduleVector;
 
+          // Create an instance of module reader
+          model->CreateModuleByKey("0Reader");
+          moduleVector = model->GetAvailableModuleInstanceIds();
+
+          // Get the ModuleInstanceId
+          std::string readerId = moduleVector[0];
+
+          // Get the module itself
+          otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+          // Simulate file chooser and ok callback
+          // Cyrille cast effect !
+          otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+          readerModule->vFilePath->value(parseResult->GetInputImage().c_str());
+          readerModule->Analyse();
+          readerModule->bOk->do_callback();
+          Fl::check();
+    }
+  
   Fl::lock();
   return Fl::run();
 }

@@ -55,6 +55,7 @@ public:
   /** Type macro */
   itkTypeMacro(ReaderModule,Module);
 
+  virtual void Analyse();
   /** OTB typedefs */
   /// Dataset
   typedef VectorImage<double,2>                   FloatingVectorImageType;
@@ -83,7 +84,7 @@ protected:
   virtual void OpenDataSet();
   virtual void Browse();
   virtual void Cancel();
-  virtual void Analyse();
+  
   virtual void TypeChanged();
   virtual void Hide();
 
