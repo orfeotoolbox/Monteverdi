@@ -26,6 +26,9 @@
 
 int otbOpticCalibrationModuleTest(int argc, char* argv[])
 {
+  bool runIt = false;
+  if(atoi(argv[2]) == 1)
+    runIt = true;
   //Internationalization
   otbI18nMacro();
   
@@ -45,16 +48,42 @@ int otbOpticCalibrationModuleTest(int argc, char* argv[])
 
 
   //reader
-  ReaderType::Pointer reader1 = ReaderType::New();
-  reader1->SetFileName(argv[1]);
-  reader1->GenerateOutputInformation();
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
+  reader->GenerateOutputInformation();
 
-  otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
  
-  module->AddInputByKey("InputImage",wrapperIn1);
+  module->AddInputByKey("InputImage",wrapperIn);
 
   module->Start();
-  
+
   Fl::check();
- return EXIT_SUCCESS;
+
+  if(runIt && pointModule->GetController()->GetIsValidImage() )
+    {  
+      pointModule->GetView()->m_CoefSetupWindow->show();
+      Fl::check();
+      pointModule->GetView()->guiAerosolModel->value(2);
+      Fl::check();
+      pointModule->GetView()->guiCoefSetupOk->do_callback();
+      Fl::check();
+      pointModule->GetView()->bLuminance->do_callback();
+      pointModule->GetView()->bReflectanceTOA->do_callback();
+      pointModule->GetView()->bReflectanceTOC->do_callback();
+      pointModule->GetView()->bDiffRefl->do_callback();
+      pointModule->GetView()->bReflectanceScale->value(1);
+      pointModule->GetView()->bReflectanceScale->do_callback();
+      Fl::check();
+      pointModule->GetView()->bSaveQuit->do_callback();
+
+      WriterType::Pointer writer = WriterType::New();
+      writer->SetInput( pointModule->GetModel()->GetDifferenceImage());
+      writer->SetFileName(argv[3]);
+      writer->Update();
+    }
+
+  Fl::check();
+
+  return EXIT_SUCCESS;
 }
