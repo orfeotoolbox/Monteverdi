@@ -895,12 +895,14 @@ SupervisedClassificationAppli
   color[1]=rand()/(RAND_MAX+1.0);
   color[2]=rand()/(RAND_MAX+1.0);
   color[3]=(float)this->slTrainingSetOpacity->value();
+  
+  
+  Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*color[0],
+				   (FL_NUM_GREEN-1)*color[1],
+				   (FL_NUM_BLUE-1)*color[2]);
+  
 
-  fl_color(static_cast<unsigned char>(255*color[0]),
-           static_cast<unsigned char>(255*color[1]),
-           static_cast<unsigned char>(255*color[2]));
-
-  dClassList->selection_color(fl_color());
+  dClassList->selection_color(flColor);
 
   newClass->SetColor(color);
   m_ClassesMap.push_back(newClass);
@@ -1091,16 +1093,17 @@ SupervisedClassificationAppli
   {
     return;
   }
+  
+  Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*theClass->GetColor()[0],
+				   (FL_NUM_GREEN-1)*theClass->GetColor()[1],
+				   (FL_NUM_BLUE-1)*theClass->GetColor()[2]);
+  
 
-  fl_color(static_cast<unsigned char>(255*theClass->GetColor()[0]),
-           static_cast<unsigned char>(255*theClass->GetColor()[1]),
-           static_cast<unsigned char>(255*theClass->GetColor()[2]));
-
-  dClassList->selection_color(fl_color());
+  dClassList->selection_color(flColor);
   dClassList->text(dClassList->value(),theClass->GetName().c_str());
   dClassList->redraw();
 
-  dClassColor->color(fl_color());
+  dClassColor->color(flColor);
   dClassColor->redraw();
 
   dClassInfo->buffer()->remove(0,dClassInfo->buffer()->length());
@@ -2070,10 +2073,13 @@ SupervisedClassificationAppli
     oss<<m_ClassesMap[j]->GetName();
     Fl_Output * piece = new Fl_Output(x0+(j+1)*w,y0,w,h);
     piece->value(oss.str().c_str());
-    fl_color(static_cast<unsigned char>(255*m_ClassesMap[j]->GetColor()[0]),
-             static_cast<unsigned char>(255*m_ClassesMap[j]->GetColor()[1]),
-             static_cast<unsigned char>(255*m_ClassesMap[j]->GetColor()[2]));
-    piece->textcolor(fl_color());
+    
+    Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*m_ClassesMap[j]->GetColor()[0],
+				     (FL_NUM_GREEN-1)*m_ClassesMap[j]->GetColor()[1],
+				     (FL_NUM_BLUE-1)*m_ClassesMap[j]->GetColor()[2]);
+    
+
+    piece->textcolor(flColor);
     piece->textfont(FL_HELVETICA_BOLD);
     gMatrix->add(piece);
     oss.str("");
@@ -2090,10 +2096,13 @@ SupervisedClassificationAppli
     double sum = 0;
     oss<<m_ClassesMap[i]->GetName();
     piece = new Fl_Output(x0,y0+(i+1)*h,w,h);
-    fl_color(static_cast<unsigned char>(255*m_ClassesMap[i]->GetColor()[0]),
-             static_cast<unsigned char>(255*m_ClassesMap[i]->GetColor()[1]),
-             static_cast<unsigned char>(255*m_ClassesMap[i]->GetColor()[2]));
-    piece->textcolor(fl_color());
+    
+    Fl_Color flColor = fl_color_cube((FL_NUM_RED-1)*m_ClassesMap[i]->GetColor()[0],
+			    (FL_NUM_GREEN-1)*m_ClassesMap[i]->GetColor()[1],
+			    (FL_NUM_BLUE-1)*m_ClassesMap[i]->GetColor()[2]);
+    
+
+    piece->textcolor(flColor);
     piece->textfont(FL_HELVETICA_BOLD);
     piece->value(oss.str().c_str());
 
