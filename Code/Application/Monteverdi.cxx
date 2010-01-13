@@ -84,9 +84,7 @@ int main(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
   
   parser->AddInputImage(false); //Optionnal parameter
- 
   parser->SetProgramDescription("Monteverdi launcher");
-  parser->AddInputImage();
   parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;

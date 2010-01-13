@@ -195,7 +195,7 @@ void KMeansModule::ThreadedRun()
   // First, sample data
   SamplingFilterType::Pointer sampler = SamplingFilterType::New();
   sampler->SetInput(image);
-  sampler->SetShrinkFactor(vcl_floor(vcl_sqrt(100/vNumberOfSamples->value())));
+  sampler->SetShrinkFactor(static_cast<unsigned int>(vcl_floor(vcl_sqrt(100/vNumberOfSamples->value()))));
   m_ProcessObject = sampler;
   sampler->Update();
 
