@@ -44,12 +44,7 @@ public:
   TOutput operator()(const TInput & input) const
   {
     TOutput resp = static_cast<TOutput>(10. * vcl_log10(input));
-    
-    if(resp < 0.)
-    {
-    resp = 0.;
-    }
-    
+   
     return resp;
   }
 };
