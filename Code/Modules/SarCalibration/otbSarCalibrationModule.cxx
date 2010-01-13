@@ -115,7 +115,7 @@ SarCalibrationModule
     {
       itk::OStringStream oss;
       oss.str("");
-      oss << "Invalid input image medtadata. The parsing returns the following error:\n";
+      oss << "Invalid input image medadata. The parsing returns the following error:\n";
       oss << err.GetDescription();
       MsgReporter::GetInstance()->SendError(oss.str().c_str());
       return false;
@@ -138,9 +138,9 @@ SarCalibrationModule
 	  m_CalibFilter = CalibrationFilterType::New();
 	  m_CalibFilter->SetInput(m_InputImage);
 	  if( bFastMethodYes->value()==1 && bFastMethodNo->value()==0 )
-	    m_CalibFilter->SetUseFastCalibrationMethod( true );
+	    m_CalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
-	    m_CalibFilter->SetUseFastCalibrationMethod( false );
+	    m_CalibFilter->SetUseFastCalibration( false );
     
 	  this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	}
@@ -158,9 +158,9 @@ SarCalibrationModule
 	  m_ComplexCalibFilter = CalibrationComplexFilterType::New();
 	  m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
 	  if( bFastMethodYes->value()==1 && bFastMethodNo->value()==0 )
-	    m_ComplexCalibFilter->SetUseFastCalibrationMethod( true );
+	    m_ComplexCalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
-	    m_ComplexCalibFilter->SetUseFastCalibrationMethod( false );
+	    m_ComplexCalibFilter->SetUseFastCalibration( false );
 	  
 	  this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	}
