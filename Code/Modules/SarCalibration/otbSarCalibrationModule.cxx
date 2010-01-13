@@ -89,9 +89,15 @@ SarCalibrationModule
   itk::MetaDataDictionary dict;
   
   if(!m_WorkWithCplx)
-    dict = m_InputImage->GetMetaDataDictionary();
+    {
+      m_InputImage->UpdateOutputInformation();
+      dict = m_InputImage->GetMetaDataDictionary();
+    }
   else
-    dict = m_ComplexInputImage->GetMetaDataDictionary();
+    {
+      m_ComplexInputImage->UpdateOutputInformation();
+      dict = m_ComplexInputImage->GetMetaDataDictionary();
+    }
   
   if( !lImageMetadata->CanRead(dict) )
     {
