@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
   
   parser->AddInputImage(false); //Optionnal parameter
   parser->SetProgramDescription("Monteverdi launcher");
-  parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
+  //   parser->AddOption("--NoSplashScreen", "Deactivate the splach screen","-NoSplash", 0, false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -99,7 +99,6 @@ int main(int argc, char* argv[])
       std::string descriptionException = err.GetDescription();
       if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
 	{
-	  std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
 	  return EXIT_SUCCESS;
 	}
     }
