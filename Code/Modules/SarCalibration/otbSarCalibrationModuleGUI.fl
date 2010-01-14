@@ -11,21 +11,21 @@ class SarCalibrationModuleGUI {open
   } {
     Fl_Window wMainWindow {
       label {Open dataset} open
-      xywh {443 191 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {595 216 365 195} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Button bOK {
         label {Save/Quit}
         callback {this->OK();}
-        xywh {274 111 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {274 160 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {174 111 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {174 160 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group bMethod {
         label {Use fast computation method} open
-        xywh {12 73 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        xywh {12 70 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Round_Button bFastMethodYes {
           label Yes
@@ -37,7 +37,7 @@ else
 {
 bFastMethodNo->value(0);
 }}
-          xywh {150 80 20 15} down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          xywh {149 77 20 15} down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
         Fl_Round_Button bFastMethodNo {
           label No
@@ -49,16 +49,16 @@ else
 {
 bFastMethodYes->value(0);
 }}
-          xywh {220 80 20 15} down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {199 77 20 15} down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
       Fl_Group {} {
         label {Output file} open
-        xywh {10 21 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        xywh {10 20 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Check_Button bBrightness {
-          label Brightness selected
-          xywh {275 28 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          label Brightness
+          xywh {275 27 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
         Fl_Check_Button bCalib {
           label Calibration
@@ -70,7 +70,36 @@ else
 {
 bMethod->deactivate();	
 }}
-          xywh {120 28 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          xywh {120 27 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        }
+      }
+      Fl_Group {} {
+        label {Scale representation} open selected
+        xywh {12 120 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Round_Button bLin {
+          label Linear
+          callback {if(bLin->value()==0)
+{
+bdB->value(1);
+}
+else
+{
+bdB->value(0);
+}}
+          xywh {149 127 20 15} down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        }
+        Fl_Round_Button bdB {
+          label {Log(dB)}
+          callback {if(bdB->value()==0)
+{
+bLin->value(1);
+}
+else
+{
+bLin->value(0);
+}}
+          xywh {199 127 20 15} down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
     }

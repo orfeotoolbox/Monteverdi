@@ -143,18 +143,46 @@ SarCalibrationModule
 	{
 	  m_CalibFilter = CalibrationFilterType::New();
 	  m_CalibFilter->SetInput(m_InputImage);
+
+	  // Method selection (fast or classical)
 	  if( bFastMethodYes->value()==1 && bFastMethodNo->value()==0 )
 	    m_CalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
 	    m_CalibFilter->SetUseFastCalibration( false );
-    
+
+	  // Output selection (linear or dB scale)
+	  if( bLin->value()==1 && bdB->value()==0 )
+	    {
+	    m_CalibFilter->SetResultsInDecibels( false );
 	  this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
+
+	    }
+	  else if( bLin->value()==0 && bdB->value()==1 )
+	    {
+	    m_CalibFilter->SetResultsInDecibels( true );
+	  this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage dB",otbGetTextMacro("Calibrated image dB"));
+
+	    }
+    
+	  //this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	}
       if(bBrightness->value() == 1)
 	{
 	  m_BrighFilter = BrightnessFilterType::New();
 	  m_BrighFilter->SetInput(m_InputImage);
-	  this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
+	  // Output selection (linear or dB scale) and set output
+	  if( bLin->value()==1 && bdB->value()==0 )
+	    {
+	      m_BrighFilter->SetResultsInDecibels( false );
+	      this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
+	    }
+	  else if( bLin->value()==0 && bdB->value()==1 )
+	    {
+	      m_BrighFilter->SetResultsInDecibels( true );
+	      this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage dB",otbGetTextMacro("Brightness image dB"));
+	    }
+
+	  //this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
 	}
     }
   else
@@ -163,18 +191,45 @@ SarCalibrationModule
 	{
 	  m_ComplexCalibFilter = CalibrationComplexFilterType::New();
 	  m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
+
+	  // Output selection (linear or dB scale)
 	  if( bFastMethodYes->value()==1 && bFastMethodNo->value()==0 )
 	    m_ComplexCalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
 	    m_ComplexCalibFilter->SetUseFastCalibration( false );
 	  
-	  this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
+	  // Output selection (linear or dB scale) and set output
+	  if( bLin->value()==1 && bdB->value()==0 )
+	    {
+	      m_CalibFilter->SetResultsInDecibels( false );
+	       this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
+	       
+	    }
+	  else if( bLin->value()==0 && bdB->value()==1 )
+	    {
+	      m_CalibFilter->SetResultsInDecibels( true );
+	      this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage dB",otbGetTextMacro("Calibrated image dB"));		  
+	    }
+
+
+	  //this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	}
       if(bBrightness->value() == 1)
 	{
 	  m_BrighComplexFilter = BrightnessComplexFilterType::New();
 	  m_BrighComplexFilter->SetInput(m_ComplexInputImage);
-	  this->AddOutputDescriptor(m_BrighComplexFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
+
+	  // Output selection (linear or dB scale) and set output
+	  if( bLin->value()==1 && bdB->value()==0 )
+	    {
+	      m_BrighComplexFilter->SetResultsInDecibels( false );
+	      this->AddOutputDescriptor(m_BrighComplexFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
+	    }
+	  else if( bLin->value()==0 && bdB->value()==1 )
+	    {
+	      m_BrighComplexFilter->SetResultsInDecibels( true );
+	      this->AddOutputDescriptor(m_BrighComplexFilter->GetOutput(),"BrightnessOutputImage dB",otbGetTextMacro("Brightness image dB"));
+	    }
 	}
     }
 
