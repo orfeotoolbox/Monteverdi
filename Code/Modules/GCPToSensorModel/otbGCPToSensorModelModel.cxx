@@ -295,7 +295,6 @@ GCPToSensorModelModel
   ContinuousIndexType idFix, idMov;
   ossimDpt spoint;
   ossimGpt gpoint;
-  ossim_float64 score = 0.0;
   for(unsigned int i = 0; i<m_IndexesList.size(); i++)
     {
       idFix =  m_IndexesList[i].first;
