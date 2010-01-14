@@ -128,24 +128,24 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("0Reader", otbGetTextMacro("File/Open dataset"));
-  model->RegisterModule<otb::WriterModule> ("1Writer", otbGetTextMacro("File/Save dataset"));
-  model->RegisterModule<otb::WriterMVCModule> ("2Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
-  model->RegisterModule<otb::CachingModule>("3Caching", otbGetTextMacro("File/Cache dataset"));
-  model->RegisterModule<otb::ExtractROIModule>("4ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
-  model->RegisterModule<otb::ConcatenateModule>("5Concatenate", otbGetTextMacro("File/Concatenate images"));
+  model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
+  model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
+  model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
+  model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
+  model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
+  model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
 
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
 
   model->RegisterModule<otb::OpticCalibrationModule>("0OpticCalibration", otbGetTextMacro("Calibration/Optic Calibration"));
-  model->RegisterModule<otb::SarCalibrationModule>("1SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
+  model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
-  model->RegisterModule<otb::AlgebraModule>("0Algebra", otbGetTextMacro("Filtering/Band math"));
-  model->RegisterModule<otb::ThresholdModule>("1Threshold", otbGetTextMacro("Filtering/Threshold"));
-  model->RegisterModule<otb::PanSharpeningModule> ("2PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
-  model->RegisterModule<otb::MeanShiftModule> ("3MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
-  model->RegisterModule<otb::FeatureExtractionModule>("4FeatureExtraction", otbGetTextMacro("Filtering/Feature extraction"));
-  model->RegisterModule<otb::ChangeDetectionModule>("5ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
+  model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
+  model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
+  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
+  model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
+  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", otbGetTextMacro("Filtering/Feature extraction"));
+  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
 
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity", otbGetTextMacro("SAR/Compute intensity and log-intensity"));
@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
           std::vector<std::string> moduleVector;
 
           // Create an instance of module reader
-          model->CreateModuleByKey("0Reader");
+          model->CreateModuleByKey("Reader");
           moduleVector = model->GetAvailableModuleInstanceIds();
 
           // Get the ModuleInstanceId
