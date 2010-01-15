@@ -38,6 +38,7 @@
 #include "otbSimplifyPathListFilter.h"
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
+#include "base/ossimFilename.h"
 
 namespace otb
 {
@@ -345,11 +346,31 @@ void
 SupervisedClassificationAppli
 ::ExportAllVectorData()
 {
-  const char* dirname = fl_dir_chooser("Location:",m_LastPath.c_str());
+  const char* dirname = fl_dir_chooser("Select directory:",m_LastPath.c_str());
   if (dirname == NULL || strlen(dirname)<1)
   {
     return ;
   }
+
+  // If the specified directory doesn't exists, create it.
+  ossimFilename ossDir = ossimFilename(dirname);
+  if(!ossDir.exists())
+    {
+      ossDir.createDirectory();
+    }
+  else
+    {
+      // the the soecify file is not a directory -> error message
+      if(!ossDir.isDir())
+	{
+	  itk::OStringStream oss;
+	  oss.str("");
+	  oss<<ossDir.file()<<" already exists as a file.";
+	  oss<<"Please select a valid directory or set a new one name that will be created."<<std::endl;
+	  fl_alert(oss.str().c_str());
+	  return;
+	}
+    }
 
   std::vector<DataTreePointerType> dataTreeVector;
   std::vector<DataNodePointerType> dataNodeVector;
