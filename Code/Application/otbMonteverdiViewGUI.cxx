@@ -59,7 +59,7 @@ MonteverdiViewGUI
 {
   // Files Tree
   //m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
-  m_Tree = new FluTreeBrowser( 5, 30, 390, 565, "Tree " );
+  m_Tree = new FluTreeBrowser( 5, 30, 480, 575, "Tree " );
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
