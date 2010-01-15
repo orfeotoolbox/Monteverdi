@@ -24,6 +24,8 @@
 #include <FL/Fl_Text_Buffer.H>
 #include "otbFltkFilterWatcher.h"
 
+#include "otbMsgReporter.h"
+
 namespace otb
 {
 /** Constructor */
@@ -226,7 +228,10 @@ void ViewerModule::Run()
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
     {
-    itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
+      MsgReporter::GetInstance()->SendError("The image pointer is null, there is nothing to display. You probably forget to set the image.");
+      this->Quit();
+      return;
+      //itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
     }
 
   // Update image info for further use
@@ -266,20 +271,32 @@ void ViewerModule::Run()
   // Show everything
   m_DisplayWindow->Show();
 
-  // Update the rendering model
-  m_RenderingModel->Update();
-
-  // Handle Histogram
-  this->UpdateHistogramCurve();
-
-  // Update The Histogram Tab
-  this->UpdateTabHistogram();
+  try
+    {
+      // Update the rendering model
+      m_RenderingModel->Update();
+      
+      // Handle Histogram
+      this->UpdateHistogramCurve();
+      
+      // Update The Histogram Tab
+      this->UpdateTabHistogram();
+      
+      // Update the color composition window
+      this->UpdateViewerSetupWindow();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+      itk::OStringStream oss;
+      oss.str("");
+      oss << "Problem accurs while loading input image. The following error was return:\n";
+      oss << err.GetDescription();
+      MsgReporter::GetInstance()->SendError(oss.str().c_str());
+      this->Quit();
+    }
 
   // Show the interface setup
   bSetupWindow->show();
-
-  // Update the color composition window
-  this->UpdateViewerSetupWindow();
 }
 
 /**
