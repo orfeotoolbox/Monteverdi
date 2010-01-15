@@ -91,8 +91,8 @@ OpticCalibrationModel
   m_RVisuModel->Init();
 
   /// Generate input image layer
-  /*ImageLayerGeneratorPointerType */lVisuGenerator = ImageLayerGeneratorType::New();
-  FltkFilterWatcher qlwatcher(lVisuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  ImageLayerGeneratorPointerType lVisuGenerator = ImageLayerGeneratorType::New();
+  //FltkFilterWatcher qlwatcher(lVisuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
 
   StandardRenderingFunctionType::Pointer renderer1 = StandardRenderingFunctionType::New();
   lVisuGenerator->SetImage(m_InputImage);
@@ -165,7 +165,7 @@ OpticCalibrationModel
   lRTOCVisuGenerator->SetImage(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
   lRTOAVisuGenerator->SetRenderingFunction(renderer3);
   lRTOCVisuGenerator->SetGenerateQuicklook(false);
-  lRTOCVisuGenerator->SetQuicklook(m_QQLReflectanceToSurfaceReflectanceFilter->GetOutput());
+  lRTOCVisuGenerator->SetQuicklook(m_QLReflectanceToSurfaceReflectanceFilter->GetOutput());
   lRTOCVisuGenerator->GenerateLayer();
   lRTOCVisuGenerator->GetLayer()->SetName("Reflectance TOC");
   // Save the Input Image Layer

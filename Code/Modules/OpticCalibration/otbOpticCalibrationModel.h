@@ -248,7 +248,6 @@ private:
   /** Diff TOA-TOC Multiplier*/
   MultiplyByScalarImageFilterPointerType m_DiffTOATOCMultiplier;
   
-  ImageLayerGeneratorType::Pointer lVisuGenerator;
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasNewInput;
 
