@@ -59,7 +59,7 @@ MonteverdiViewGUI
 {
   // Files Tree
   //m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
-  m_Tree = new FluTreeBrowser( 5, 30, 390, 565, "Tree " );
+  m_Tree = new FluTreeBrowser( 5, 30, 480, 575, "Tree " );
 
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
@@ -308,7 +308,7 @@ MonteverdiViewGUI
       
       bool canShowModule = m_MonteverdiModel->GetModuleMap()[moduleId]->CanShow();
       m_Tree->GetModuleMenu()->LaunchModuleMenu( canShowModule );
-      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==RENAME_MODULE )
+      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput() == RENAME_MODULE )
        {
          gRenameOld->value(label);
          gRenameNew->value(label);
@@ -316,7 +316,7 @@ MonteverdiViewGUI
        }
 
       //Show the module with current parameters
-       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput()==SHOW_MODULE && canShowModule)
+       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput() == ( SHOW_MODULE && canShowModule ) )
         {
           //Call controller?
           m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
@@ -395,8 +395,6 @@ MonteverdiViewGUI
   wOutputRenameWindow->hide();
 }
 
-
-
 void
 MonteverdiViewGUI
 ::CreateModuleByKey(const char * modulekey)
@@ -441,8 +439,6 @@ MonteverdiViewGUI
   // this node can receive new nodes as a result of draggind-and-dropping
   //TODO
   //n->droppable(true);
-
-
 
   for (it = lDataMap.begin();it != lDataMap.end();it++)
     {
