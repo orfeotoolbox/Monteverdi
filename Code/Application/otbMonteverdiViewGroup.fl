@@ -13,14 +13,14 @@ class MonteverdiViewGroup {open
   } {
     Fl_Window wMainWindow {
       label Monteverdi
-      callback {this->Quit();} open selected
-      xywh {605 153 400 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      callback {this->Quit();} open
+      xywh {605 153 480 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Menu_Bar mMenuBar {open
-        xywh {0 0 400 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
+        xywh {0 0 480 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
       } {}
-      Fl_Group gTreeGroup {
-        xywh {0 25 400 575} resizable
+      Fl_Group gTreeGroup {selected
+        xywh {0 25 480 575} resizable
       } {}
     }
     Fl_Window wHelpWindow {

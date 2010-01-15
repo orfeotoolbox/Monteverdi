@@ -137,6 +137,8 @@ SarCalibrationModule
 ::OK()
 {
   this->ClearOutputDescriptors();
+
+
   if(!m_WorkWithCplx)
     {
       if(bCalib->value() == 1)
@@ -149,6 +151,11 @@ SarCalibrationModule
 	    m_CalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
 	    m_CalibFilter->SetUseFastCalibration( false );
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Yes-No values");
+ 	      return;
+	    }
 
 	  // Output selection (linear or dB scale)
 	  if( bLin->value()==1 && bdB->value()==0 )
@@ -161,7 +168,11 @@ SarCalibrationModule
 	    {
 	    m_CalibFilter->SetResultsInDecibels( true );
 	  this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage dB",otbGetTextMacro("Calibrated image dB"));
-
+	    }
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Invalid scale value ");
+ 	      return;
 	    }
     
 	  //this->AddOutputDescriptor(m_CalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
@@ -181,12 +192,17 @@ SarCalibrationModule
 	      m_BrighFilter->SetResultsInDecibels( true );
 	      this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage dB",otbGetTextMacro("Brightness image dB"));
 	    }
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Invalid scale value ");
+ 	      return;
+	    }
 
 	  //this->AddOutputDescriptor(m_BrighFilter->GetOutput(),"BrightnessOutputImage",otbGetTextMacro("Brightness image"));
 	}
     }
   else
-    {
+    { 
       if(bCalib->value() == 1)
 	{
 	  m_ComplexCalibFilter = CalibrationComplexFilterType::New();
@@ -197,20 +213,29 @@ SarCalibrationModule
 	    m_ComplexCalibFilter->SetUseFastCalibration( true );
 	  else if(  bFastMethodYes->value()==0 && bFastMethodNo->value()==1 )
 	    m_ComplexCalibFilter->SetUseFastCalibration( false );
-	  
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Yes-No values");
+ 	      return;
+	    }
+
 	  // Output selection (linear or dB scale) and set output
 	  if( bLin->value()==1 && bdB->value()==0 )
 	    {
-	      m_CalibFilter->SetResultsInDecibels( false );
+	      m_ComplexCalibFilter->SetResultsInDecibels( false );
 	       this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	       
 	    }
 	  else if( bLin->value()==0 && bdB->value()==1 )
 	    {
-	      m_CalibFilter->SetResultsInDecibels( true );
+	      m_ComplexCalibFilter->SetResultsInDecibels( true );
 	      this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage dB",otbGetTextMacro("Calibrated image dB"));		  
 	    }
-
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Invalid scale value ");
+ 	      return;
+	    }
 
 	  //this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),"CalibOutputImage",otbGetTextMacro("Calibrated image"));
 	}
@@ -230,9 +255,13 @@ SarCalibrationModule
 	      m_BrighComplexFilter->SetResultsInDecibels( true );
 	      this->AddOutputDescriptor(m_BrighComplexFilter->GetOutput(),"BrightnessOutputImage dB",otbGetTextMacro("Brightness image dB"));
 	    }
+	  else
+	    {
+	      MsgReporter::GetInstance()->SendError("Invalid scale value ");
+ 	      return;
+	    }
 	}
     }
-
 
   this->NotifyOutputsChange();
 

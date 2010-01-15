@@ -222,6 +222,12 @@ private:
   ImageToReflectanceImageFilterPointerType              m_ImageToReflectanceFilter;
   ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
   DifferenceImageFilterPointerType                      m_DifferenceFilter;
+  
+  /** Filter for QL pipeline */
+  ImageToLuminanceImageFilterPointerType                m_QLImageToLuminanceFilter;
+  ImageToReflectanceImageFilterPointerType              m_QLImageToReflectanceFilter;
+  ReflectanceToSurfaceReflectanceImageFilterPointerType m_QLReflectanceToSurfaceReflectanceFilter;
+  DifferenceImageFilterPointerType                      m_QLDifferenceFilter;
 
   /** Imput Image Pointer */
   ImagePointerType m_InputImage;
