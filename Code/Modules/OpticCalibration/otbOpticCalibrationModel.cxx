@@ -66,11 +66,16 @@ OpticCalibrationModel
   // Init the lists
   m_ImageLayerList                        = ImageLayerListType::New();
 
-  // Init Filters & metadata class
+  // Init Filters
   m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
   m_ImageToReflectanceFilter              = ImageToReflectanceImageFilterType::New();
   m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
   m_DifferenceFilter                      = DifferenceImageFilterType::New();
+
+  m_QLImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
+  m_QLImageToReflectanceFilter              = ImageToReflectanceImageFilterType::New();
+  m_QLReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  m_QLDifferenceFilter                      = DifferenceImageFilterType::New();
 }
 
 
@@ -86,8 +91,9 @@ OpticCalibrationModel
   m_RVisuModel->Init();
 
   /// Generate input image layer
-  ImageLayerGeneratorPointerType lVisuGenerator = ImageLayerGeneratorType::New();
+  /*ImageLayerGeneratorPointerType */lVisuGenerator = ImageLayerGeneratorType::New();
   FltkFilterWatcher qlwatcher(lVisuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+
   StandardRenderingFunctionType::Pointer renderer1 = StandardRenderingFunctionType::New();
   lVisuGenerator->SetImage(m_InputImage);
   lVisuGenerator->SetRenderingFunction(renderer1);
@@ -101,12 +107,35 @@ OpticCalibrationModel
   // Render
   m_VisuModel->Update();
 
+  // Init the ql pipeline
+  //lVisuGenerator->GetQuicklook()->SetMetaDataDictionary( m_InputImage->GetMetaDataDictionary() );
+  ImageType::Pointer qlImage = lVisuGenerator->GetLayer()->GetQuicklook();
+  lVisuGenerator = ImageLayerGeneratorType::New();
+
+  m_QLImageToLuminanceFilter->SetInput(qlImage);
+  m_QLImageToLuminanceFilter->Update();
+
+  m_QLImageToReflectanceFilter->SetInput(qlImage);
+  m_QLImageToReflectanceFilter->Update();
+
+  m_QLReflectanceToSurfaceReflectanceFilter->SetInput(m_QLImageToReflectanceFilter->GetOutput());
+  //m_QLReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+  m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+  m_QLReflectanceToSurfaceReflectanceFilter->Update();
+
+  m_QLDifferenceFilter->SetValidInput(m_QLImageToReflectanceFilter->GetOutput());
+  m_QLDifferenceFilter->SetTestInput(m_QLReflectanceToSurfaceReflectanceFilter->GetOutput());
+  m_QLDifferenceFilter->Update();
+
+ std::cout<<"phase 1 faite, cool"<<std::endl;
 
   /// Generate luminance image layer
   ImageLayerGeneratorPointerType lLVisuGenerator = ImageLayerGeneratorType::New();
   StandardRenderingFunctionType::Pointer renderer2 = StandardRenderingFunctionType::New();
   lLVisuGenerator->SetRenderingFunction(renderer2);
   lLVisuGenerator->SetImage(m_ImageToLuminanceFilter->GetOutput());
+  lLVisuGenerator->SetGenerateQuicklook(false);
+  lLVisuGenerator->SetQuicklook(m_QLImageToLuminanceFilter->GetOutput());
   lLVisuGenerator->GenerateLayer();
   lLVisuGenerator->GetLayer()->SetName("Luminance");
  
@@ -121,6 +150,8 @@ OpticCalibrationModel
   StandardRenderingFunctionType::Pointer renderer3 = StandardRenderingFunctionType::New();
   lRTOAVisuGenerator->SetImage(m_ImageToReflectanceFilter->GetOutput());
   lRTOAVisuGenerator->SetRenderingFunction(renderer3);
+  lRTOAVisuGenerator->SetGenerateQuicklook(false);
+  lRTOAVisuGenerator->SetQuicklook(m_QLImageToReflectanceFilter->GetOutput());
   lRTOAVisuGenerator->GenerateLayer();
   lRTOAVisuGenerator->GetLayer()->SetName("Reflectance TOA");
 
@@ -133,7 +164,8 @@ OpticCalibrationModel
   ImageLayerGeneratorPointerType lRTOCVisuGenerator = ImageLayerGeneratorType::New();
   lRTOCVisuGenerator->SetImage(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
   lRTOAVisuGenerator->SetRenderingFunction(renderer3);
- 
+  lRTOCVisuGenerator->SetGenerateQuicklook(false);
+  lRTOCVisuGenerator->SetQuicklook(m_QQLReflectanceToSurfaceReflectanceFilter->GetOutput());
   lRTOCVisuGenerator->GenerateLayer();
   lRTOCVisuGenerator->GetLayer()->SetName("Reflectance TOC");
   // Save the Input Image Layer
@@ -147,13 +179,19 @@ OpticCalibrationModel
   lDiffVisuGenerator->SetImage(m_DifferenceFilter->GetOutput());
   lDiffVisuGenerator->GenerateLayer();
   lDiffVisuGenerator->GetLayer()->SetName("Reflectances Difference");
+  lDiffVisuGenerator->SetGenerateQuicklook(false);
+  lDiffVisuGenerator->SetQuicklook(m_QLDifferenceFilter->GetOutput());
   // Save the Input Image Layer
   m_ImageLayerList->PushBack(lDiffVisuGenerator->GetLayer());
   // Add the layer
   m_RVisuModel->AddLayer(lDiffVisuGenerator->GetLayer());
 
+ std::cout<<"phase 2 faite, cool"<<std::endl;
+
   // Render
-  m_RVisuModel->Update(); 
+  m_RVisuModel->Update();
+  std::cout<<"phase 3 faite, cool"<<std::endl;
+
 }
 
 
@@ -216,6 +254,12 @@ OpticCalibrationModel
   m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
   m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
   
+  // QL pipeline
+  //m_QLImageToLuminanceFilter->SetInput(lVisuGenerator->GetQuicklook());
+  m_QLReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+  //m_QLReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+  //m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
   // Layers
   this->DisplayImage();
   this->NotifyAll("SetInputImage");
@@ -244,12 +288,19 @@ OpticCalibrationModel
 	{
 	  // loop because ObjectList to std::vector...
 	  this->GetAtmosphericCorrectionParameters()->SetWavelenghtSpectralBandWithIndex( i, spectSen->GetOutput()->GetNthElement(i));
+	  m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetWavelenghtSpectralBandWithIndex( i, spectSen->GetOutput()->GetNthElement(i));
 	}
 
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
       m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
+      // QL pipeline
+      m_QLReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+      m_QLReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
       return true;
     }
@@ -268,6 +319,13 @@ OpticCalibrationModel
     m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_ImageToReflectanceFilter->GetOutput());
     m_DifferenceFilter->SetValidInput(m_ImageToReflectanceFilter->GetOutput());
     m_DifferenceFilter->SetTestInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+
+    // QL pipeline
+    //m_ImageToLuminanceFilter->SetInput(m_InputImage);
+    m_QLImageToReflectanceFilter->SetInput(m_QLImageToLuminanceFilter->GetOutput());
+    m_QLReflectanceToSurfaceReflectanceFilter->SetInput(m_QLImageToReflectanceFilter->GetOutput());
+    m_QLDifferenceFilter->SetValidInput(m_QLImageToReflectanceFilter->GetOutput());
+    m_QLDifferenceFilter->SetTestInput(m_QLReflectanceToSurfaceReflectanceFilter->GetOutput());
   }
   else
   {
@@ -336,6 +394,17 @@ OpticCalibrationModel
       this->GetAtmosphericRadiativeTerms()->SetUpwardDiffuseTransmittanceForRayleigh( ch, uDTR );
       this->GetAtmosphericRadiativeTerms()->SetUpwardDiffuseTransmittanceForAerosol( ch, uDTA );
       
+
+      m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetIntrinsicAtmosphericReflectance( ch, intRef );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetSphericalAlbedo( ch, albebo );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetTotalGaseousTransmission( ch, gasT );
+ m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetDownwardTransmittance( ch, dT );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetUpwardTransmittance( ch, uT );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetUpwardDiffuseTransmittance( ch, uDiffT );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetUpwardDirectTransmittance( ch, uDirT );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetUpwardDiffuseTransmittanceForRayleigh( ch, uDTR );
+m_QLReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms()->SetUpwardDiffuseTransmittanceForAerosol( ch, uDTA );
+
       /** param update is done by the controller, that allows to change each channel without computed is parameters each time*/
     }
   catch (itk::ExceptionObject & err)
@@ -354,11 +423,20 @@ OpticCalibrationModel
       this->GetAtmosphericCorrectionParameters()->SetAerosolModel( static_cast<AerosolModelType>(aeroMod) );
       this->GetAtmosphericCorrectionParameters()->SetOzoneAmount( ozAmount );
       this->GetAtmosphericCorrectionParameters()->SetAtmosphericPressure( atmoPres );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetAerosolModel( static_cast<AerosolModelType>(aeroMod) );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetOzoneAmount( ozAmount );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetAtmosphericPressure( atmoPres );
 
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
       m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
+      // QL pipeline
+      m_QLReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+      m_QLReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
     }
   catch (itk::ExceptionObject & err)
     {
@@ -377,11 +455,22 @@ OpticCalibrationModel
       this->GetAtmosphericCorrectionParameters()->SetAtmosphericPressure( atmoPres );
       this->GetAtmosphericCorrectionParameters()->SetAerosolOptical(aeroTh);
       this->GetAtmosphericCorrectionParameters()->SetWaterVaporAmount(waterAm);
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetAerosolModel( static_cast<AerosolModelType>(aeroMod) );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetOzoneAmount( ozAmount );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetAtmosphericPressure( atmoPres );
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetAerosolOptical(aeroTh);
+m_QLReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters()->SetWaterVaporAmount(waterAm);
 
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
       m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
+      m_QLReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+      m_QLReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      m_QLReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
     }
   catch (itk::ExceptionObject & err)
     {

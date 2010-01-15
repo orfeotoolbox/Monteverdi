@@ -222,6 +222,12 @@ private:
   ImageToReflectanceImageFilterPointerType              m_ImageToReflectanceFilter;
   ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
   DifferenceImageFilterPointerType                      m_DifferenceFilter;
+  
+  /** Filter for QL pipeline */
+  ImageToLuminanceImageFilterPointerType                m_QLImageToLuminanceFilter;
+  ImageToReflectanceImageFilterPointerType              m_QLImageToReflectanceFilter;
+  ReflectanceToSurfaceReflectanceImageFilterPointerType m_QLReflectanceToSurfaceReflectanceFilter;
+  DifferenceImageFilterPointerType                      m_QLDifferenceFilter;
 
   /** Imput Image Pointer */
   ImagePointerType m_InputImage;
@@ -242,6 +248,7 @@ private:
   /** Diff TOA-TOC Multiplier*/
   MultiplyByScalarImageFilterPointerType m_DiffTOATOCMultiplier;
   
+  ImageLayerGeneratorType::Pointer lVisuGenerator;
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasNewInput;
 
