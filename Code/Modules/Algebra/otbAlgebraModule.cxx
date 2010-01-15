@@ -171,6 +171,8 @@ void AlgebraModule::Run()
       iMultiply->deactivate();
       iRatio->deactivate();
       iSecondImage->deactivate();
+      // Set the operation to shift-scale
+      guiOperation->value(4);
     }
 }
 
