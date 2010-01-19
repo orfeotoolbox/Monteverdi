@@ -14,13 +14,13 @@ class MonteverdiViewGroup {open
     Fl_Window wMainWindow {
       label Monteverdi
       callback {this->Quit();} open
-      xywh {605 153 480 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {436 172 480 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Menu_Bar mMenuBar {open
-        xywh {0 0 480 25} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186 textsize 12 textcolor 186
+        xywh {0 0 480 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 textsize 12 textcolor 186
       } {}
       Fl_Group gTreeGroup {selected
-        xywh {0 25 480 575} resizable
+        xywh {0 24 480 576} box PLASTIC_DOWN_BOX resizable
       } {}
     }
     Fl_Window wHelpWindow {
@@ -32,7 +32,7 @@ class MonteverdiViewGroup {open
       }
     }
     Fl_Window wInputWindow {
-      label {Set inputs} open
+      label {Set inputs}
       xywh {511 294 330 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Return_Button bOk {
@@ -48,7 +48,7 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wRenameWindow {
       label {Module renamer}
-      callback {wRenameWindow->hide();} open
+      callback {wRenameWindow->hide();}
       xywh {599 282 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Output gRenameOld {
@@ -72,7 +72,7 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wOutputRenameWindow {
       label {Output  renamer}
-      callback {wOutputRenameWindow->hide();} open
+      callback {wOutputRenameWindow->hide();}
       xywh {595 524 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Output gOutputRenameRoot {

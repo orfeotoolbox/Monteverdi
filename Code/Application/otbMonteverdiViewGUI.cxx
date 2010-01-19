@@ -57,12 +57,12 @@ Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ),
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
 {
-  // Files Tree
-  //m_Tree = new Flu_Tree_Browser( 5, 30, 390, 565, "Tree " );
-  m_Tree = new FluTreeBrowser( 5, 30, 480, 575, "Tree " );
-
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
+  // Files Tree
+  m_Tree = new FluTreeBrowser( gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree " );
+
+
 
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
