@@ -57,7 +57,8 @@ public:
   typedef std::complex<Floating_Point_Precision>       Floating_Point_Complex;
   typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
   typedef otb::Image<Label_Short_Precision,2>          Labeled_Short_Image;
-  typedef itk::FixedArray<Floating_Point_Precision,2>         Deformation_Field_Type;
+  typedef itk::FixedArray<Floating_Point_Precision,2>         Deformation_Value_Type;
+  typedef otb::Image<Deformation_Value_Type,2>          Deformation_Field_Type;
   typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
   typedef otb::VectorImage<Label_Char_Precision,2>     Labeled_Char_VectorImage;
   typedef otb::Image<Floating_Point_Complex,2>         Floating_Point_Complex_Image;
