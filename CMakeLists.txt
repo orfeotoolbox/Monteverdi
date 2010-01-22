@@ -1,6 +1,6 @@
 PROJECT(Monteverdi)
 
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.6)
 
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
@@ -15,8 +15,8 @@ ADD_DEFINITIONS(
         )
 #-----------------------------------------------------------------------------
 # Montevrdi version number.  An even minor number corresponds to releases.
-SET(Monteverdi_VERSION_MAJOR "0")
-SET(Monteverdi_VERSION_MINOR "1-Beta")
+SET(Monteverdi_VERSION_MAJOR "1")
+SET(Monteverdi_VERSION_MINOR "0")
 SET(Monteverdi_VERSION_PATCH "0")
 
 
