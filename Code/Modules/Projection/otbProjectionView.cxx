@@ -108,72 +108,77 @@ ProjectionView
   
   // Else perhaps a model sensor
   if(!inputProjRef.empty())
-  {
+    {
     // From std::string to char* : Needed for the importFromWkt(char** projRef)
     char * inputProjchar = new char[inputProjRef.length() +1 ];
     strcpy(inputProjchar,inputProjRef.c_str());
     
     // Import OGRSpatial Reference object from projectionRef
     oSRS.importFromWkt(&inputProjchar);
-
-    // Get the value of the node PROJECTION
-    const char * inputMap = oSRS.GetAttrValue("PROJECTION");
     
-    // Test the different combination we want
-    if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
+    // First test if the node Projection exists : Avoid Segfaults when
+    // uses strcmp with null values.
+    if( oSRS.GetAttrValue("PROJECTION") != NULL )
       {
-       // Fill the GUI With the  LAMBERT 2 parameters
-       iMapSelection->value(1);
-       iLambert2->show();
-       iUTM->hide();
-       iTRANSMERCATOR->hide();
+      // Get the value of the node PROJECTION
+      const char * inputMap = oSRS.GetAttrValue("PROJECTION");    
+      
+      // Test the different combination we want
+      if(strcmp(inputMap,"Lambert_Conformal_Conic_2SP") == 0 )
+	{
+	// Fill the GUI With the  LAMBERT 2 parameters
+	iMapSelection->value(1);
+	iLambert2->show();
+	iUTM->hide();
+	iTRANSMERCATOR->hide();
+	}
+      else if(strcmp(inputMap,"Transverse_Mercator") == 0)
+	{
+	// Get the value of the parameter scale_factor
+	if(this->FindParameter(oSRS,"scale_factor",&scale_factor))
+	  {
+	  
+	  if(scale_factor == 0.9996 /** Value Specific to UTM */)
+	    {
+	    iMapSelection->value(0);
+	    iUTM->show();
+	    iLambert2->hide();
+	    iTRANSMERCATOR->hide();
+              
+	    // Get the number of the utm zone
+	    int north = 0;
+	    int zone = oSRS.GetUTMZone(&north);
+	    
+	    // Fill the UTM Parameters in the GUI
+	    itk::OStringStream oss;
+	    oss<<zone;
+	    iUTMZone->value(oss.str().c_str());
+	    
+	    if(north)
+	      {
+	      iUTMNorth->value(1);
+	      iUTMSouth->value(0);
+	      }
+	    else
+	      {
+	      iUTMNorth->value(0);
+	      iUTMSouth->value(1);
+	      }
+	    }
+	  else
+	    {
+	    //Fill the TransverseMercator Parameters
+	    iMapSelection->value(2);
+	    iUTM->hide();
+	    iLambert2->hide();
+	    iTRANSMERCATOR->show();
+	    }
+	  }
+	}
+      delete inputProjchar;
       }
-    else if(strcmp(inputMap,"Transverse_Mercator") == 0)
-      {
-       // Get the value of the parameter scale_factor
-       if(this->FindParameter(oSRS,"scale_factor",&scale_factor))
-         {
-       
-           if(scale_factor == 0.9996 /** Value Specific to UTM */)
-             {
-              iMapSelection->value(0);
-              iUTM->show();
-              iLambert2->hide();
-              iTRANSMERCATOR->hide();
-              
-              // Get the number of the utm zone
-              int north = 0;
-              int zone = oSRS.GetUTMZone(&north);
-              
-              // Fill the UTM Parameters in the GUI
-              itk::OStringStream oss;
-              oss<<zone;
-              iUTMZone->value(oss.str().c_str());
-              
-              if(north)
-                {
-                  iUTMNorth->value(1);
-                  iUTMSouth->value(0);
-                }
-              else
-                {
-                  iUTMNorth->value(0);
-                  iUTMSouth->value(1);
-                }
-             }
-           else
-             {
-              //Fill the TransverseMercator Parameters
-              iMapSelection->value(2);
-              iUTM->hide();
-              iLambert2->hide();
-              iTRANSMERCATOR->show();
-             }
-         }
-      }
-    delete inputProjchar;
-  }
-
+    }
+  
   // Sensor Model :: Test if KeyWorldList is not empty
   if(m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
     {
