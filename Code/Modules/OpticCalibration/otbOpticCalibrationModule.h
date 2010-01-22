@@ -18,19 +18,22 @@
 #ifndef __otbOpticCalibration_h
 #define __otbOpticCalibration_h
 
-#include "otbEventsListener.h"
+//#include "otbEventsListener.h"
 
 // include the base class
 #include "otbModule.h"
 
-// the MVC classes
-#include "otbOpticCalibrationController.h"
-#include "otbOpticCalibrationModel.h"
-#include "otbOpticCalibrationModule.h"
+#include "otbOpticCalibrationViewGroup.h"
 
-// include the OTB/ITK elements
+// Filters
 #include "otbVectorImage.h"
-#include "otbImage.h"
+#include "otbImageToLuminanceImageFilter.h"
+#include "otbImageToReflectanceImageFilter.h"
+#include "otbReflectanceToSurfaceReflectanceImageFilter.h"
+#include "otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.h"
+#include "otbDifferenceImageFilter.h"
+#include "otbMultiplyByScalarImageFilter.h"
+
 
 namespace otb
 {
@@ -43,7 +46,7 @@ namespace otb
  */
 
 class ITK_EXPORT OpticCalibrationModule
-  : public Module, public EventsListener<std::string>
+  : public Module, public OpticCalibrationViewGroup
 {
 public:
   /** Standard class typedefs */
@@ -59,19 +62,30 @@ public:
   itkTypeMacro(OpticCalibrationModule,Module);
 
   /** Data typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
-  typedef Image<unsigned short,2>       LabelImageType;
+  typedef VectorImage<double,2>   ImageType;
 
-  /** MVC typedefs */
-  typedef otb::OpticCalibrationController ControllerType;
-  typedef otb::OpticCalibrationModel      ModelType;
-  typedef otb::OpticCalibrationView       ViewType;
+  /** Filters typedef */
+  typedef ImageToLuminanceImageFilter<ImageType,ImageType>                ImageToLuminanceImageFilterType;
+  typedef ImageToLuminanceImageFilterType::Pointer                        ImageToLuminanceImageFilterPointerType;
+  typedef ImageToReflectanceImageFilter<ImageType,ImageType>              ImageToReflectanceImageFilterType;
+  typedef ImageToReflectanceImageFilterType::Pointer                      ImageToReflectanceImageFilterPointerType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer         ReflectanceToSurfaceReflectanceImageFilterPointerType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::CoefVectorType               CoefVectorType;
+  typedef AtmosphericCorrectionParameters::AerosolModelType                            AerosolModelType;
 
-  itkGetObjectMacro(View, ViewType);
-  itkGetObjectMacro(Model, ModelType);
-  itkGetObjectMacro(Controller, ControllerType);
+  typedef DifferenceImageFilter<ImageType, ImageType>      DifferenceImageFilterType;
+  typedef DifferenceImageFilterType::Pointer               DifferenceImageFilterPointerType;
+
+  typedef MultiplyByScalarImageFilter<ImageType,ImageType> MultiplyByScalarImageFilterType;
+  typedef MultiplyByScalarImageFilterType::Pointer         MultiplyByScalarImageFilterPointerType;
+
+
+  itkGetObjectMacro(DifferenceFilter, DifferenceImageFilterType);
+
+  /** Check if the input file is a good one (QB, SPOT or Ikonos image + metadata availble). */
+  bool CheckMetadata();
 
 protected:
   /** Constructor */
@@ -81,38 +95,85 @@ protected:
   virtual ~OpticCalibrationModule();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify(const std::string & event);
-  
+  //void Notify(const std::string & event);
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** The custom run command */
-  virtual void Run();
-  
-    /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-
+  virtual void Run(); 
   /** Show the Module GUI */
-  virtual void Show()
-    {
-      m_View->Show();
-    };
-
+  virtual bool CanShow(){return true;};
+  /** Show the Module GUI */
+  virtual void Show(){ wMainWindow->show(); };
   /** Hide the Module GUI */
-  virtual void Hide()
-    {
-      m_View->HideAll();
-    };
+  virtual void Hide() { wMainWindow->hide(); };
+
+  /** GUI widget initialization. */
+  void Init();
+  /** Set the text displayed in the spectral sensitivity help window */
+  void InitHelper();
+  /** OK() */
+  void OK();
+  /** Update information displayed in the window title. */
+  void UpdateInformation();
+  /** Init correction parameters. */
+  void UpdateCoefSetup();
+  /** Init atmospheric radiative terms of the selected channel (channel index input choice)*/
+  void UpdateRadiativeTermsCallback();
+  /** Read filters attributs and display them in the text widgets. */
+  void UpdateParamDisplay();
+  /** Change the correction parameters values in filters. */
+  void UpdateCorrectionParameters();
+
+  /** GUI callbacks */
+  /** Open Aeronet file*/
+  virtual void OpenAeronetFileCallback();
+  /** Open Fiter function values (Sensitivity coefficients) */
+  virtual void OpenFFVFileCallback();
+  /** Quit callback */
+  virtual void QuitCallback();
+  /** Change filters parameters when user change it through the GUI (Save/Quit button)*/
+  virtual void SaveAndQuitCallback();
+  /** Change the radiative terms of the selected band with the users value (Reload Radiative Terms button).
+   * if updateIm==0 just update text display, else compute deducted parameters.
+   */
+  virtual void ReloadChannelTermsCallback( bool updateIm );
+  /** Update parameters (Update button). */
+  virtual void UpdateParametersCallback();
 
 private:
   OpticCalibrationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  ImageType::Pointer m_InputImage;
 
-  ControllerType::Pointer m_Controller;
-  ViewType::Pointer m_View;
-  ModelType::Pointer m_Model;
+  /** Filters */
+  /** Image to Luminance filter*/
+  ImageToLuminanceImageFilterPointerType                m_ImageToLuminanceFilter;
+  /** Image to TOA filter*/
+  ImageToReflectanceImageFilterPointerType              m_ImageToReflectanceFilter;
+  /** TOA to TOC filter*/
+  ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
+  /** Diff TOA-TOC filter*/
+  DifferenceImageFilterPointerType                      m_DifferenceFilter;
+  /** 1000* TOA filter*/
+  MultiplyByScalarImageFilterPointerType m_TOAMultiplier;
+  /** 1000* TOC filter*/
+  MultiplyByScalarImageFilterPointerType m_TOCMultiplier;
+  /** 1000* (TOA-TOC) filter*/
+  MultiplyByScalarImageFilterPointerType m_DiffTOATOCMultiplier;
+   
+  /** String to store last opened file. */
+  std::string m_LastPath;
+
+  /** bool used to detected 2 consecutive click on Update while parameters haven't been changed. */
+  bool m_CanUpdateParameters;
+
+  /** Empty buffer for text helper display. */
+  Fl_Text_Buffer * m_HelpTextBuffer;
 };
+
 
 
 } // End namespace otb

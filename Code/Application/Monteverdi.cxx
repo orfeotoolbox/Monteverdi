@@ -214,11 +214,9 @@ int main(int argc, char* argv[])
           InputViewComponentMapType inputComponentMap;
           inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
 
-          for(unsigned int i =0;i<inputComponentMap[viewerInputKey]->GetNumberOfChoices();i++)
-            {
-            inputComponentMap[viewerInputKey]->SelectNthChoice(i);
-            }
-          Fl::check();
+	  inputComponentMap[viewerInputKey]->SelectNthChoice(1);
+       
+	  Fl::check();
               
           view->GetInputViewGUI()->bOk->do_callback();
           Fl::check();

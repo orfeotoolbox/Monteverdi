@@ -60,25 +60,16 @@ int otbOpticCalibrationModuleTest(int argc, char* argv[])
 
   Fl::check();
 
-  if(runIt && pointModule->GetController()->GetIsValidImage() )
+  if(runIt && pointModule->CheckMetadata() )
     {  
-      pointModule->GetView()->m_CoefSetupWindow->show();
+      pointModule->guiAerosolModel->value(2);
       Fl::check();
-      pointModule->GetView()->guiAerosolModel->value(2);
+      pointModule->bChangeScale->value(1);
       Fl::check();
-      pointModule->GetView()->guiCoefSetupOk->do_callback();
-      Fl::check();
-      pointModule->GetView()->bLuminance->do_callback();
-      pointModule->GetView()->bReflectanceTOA->do_callback();
-      pointModule->GetView()->bReflectanceTOC->do_callback();
-      pointModule->GetView()->bDiffRefl->do_callback();
-      pointModule->GetView()->bReflectanceScale->value(1);
-      pointModule->GetView()->bReflectanceScale->do_callback();
-      Fl::check();
-      pointModule->GetView()->bSaveQuit->do_callback();
+      pointModule->bSaveQuit->do_callback();
 
       WriterType::Pointer writer = WriterType::New();
-      writer->SetInput( pointModule->GetModel()->GetDifferenceImage());
+      writer->SetInput( pointModule->GetDifferenceFilter()->GetOutput());
       writer->SetFileName(argv[3]);
       writer->Update();
     }

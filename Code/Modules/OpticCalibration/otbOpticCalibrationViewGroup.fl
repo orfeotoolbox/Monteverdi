@@ -12,205 +12,42 @@ class OpticCalibrationViewGroup {open
 } {
   Function {QuitCallback()} {open return_type {virtual void}
   } {}
-  Function {ViewerSetupCallback()} {open return_type {virtual void}
-  } {}
-  Function {ViewerSetupOkCallback()} {open return_type {virtual void}
-  } {}
-  Function {ViewerSetupCancelCallback()} {open return_type {virtual void}
-  } {}
-  Function {GrayscaleSetCallback()} {open return_type {virtual void}
-  } {}
-  Function {RGBSetCallback()} {open return_type {virtual void}
-  } {}
-  Function {SwitchCallback(otb::EnumImageType pType)} {open return_type {virtual void}
-  } {}
   Function {Build()} {open return_type {virtual void}
   } {
-    Fl_Window m_Window {
+    Fl_Window wMainWindow {
       label {Optic calibration module}
       callback {this->QuitCallback();} open
-      xywh {403 171 800 600} type Double box UP_BOX color 7 selection_color 7 labelcolor 187 resizable visible
+      xywh {611 189 660 445} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 visible
     } {
-      Fl_Tile {} {open
-        xywh {0 0 800 600} resizable
+      Fl_Menu_Bar mMenuBar {open
+        xywh {0 0 265 22} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
       } {
-        Fl_Menu_Bar mMenuBar {
-          xywh {0 0 200 22} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
+        Submenu {} {
+          label Menu open
+          xywh {15 15 67 24}
         } {
-          Submenu {} {
-            label Menu open
-            xywh {5 5 67 24}
-          } {
-            Submenu {} {
-              label Settings open
-              xywh {20 20 67 24}
-            } {
-              MenuItem bViewerSetup {
-                label {Viewer setup}
-                callback {this->ViewerSetupCallback();}
-                tooltip {Configure the viewer} xywh {60 60 34 24} deactivate
-              }
-              MenuItem bCoefSetup {
-                label {Coef. setup}
-                callback {m_CoefSetupWindow->show();}
-                tooltip {Configure the coefficients} xywh {70 70 34 24} deactivate
-              }
-            }
-            MenuItem {} {
-              label {Save and quit}
-              callback {this->SaveAndQuitCallback();}
-              tooltip {Quit the application} xywh {25 25 34 24}
-            }
-            MenuItem {} {
-              label Quit
-              callback {this->QuitCallback();}
-              tooltip {Quit the application} xywh {35 35 34 24}
-            }
+          MenuItem {} {
+            label {Save and quit}
+            callback {this->SaveAndQuitCallback();}
+            tooltip {Quit the application} xywh {35 35 34 24}
           }
-        }
-        Fl_Group m_LeftGroup {
-          xywh {0 22 200 578} box PLASTIC_THIN_DOWN_BOX color 7
-        } {
-          Fl_Group m_ScrollGroup {
-            label {Navigation view} open
-            xywh {10 40 180 135} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-          Fl_Group m_ZoomGroup {
-            label {Zoom view} open
-            xywh {10 196 180 135} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-          Fl_Group m_RZoomGroup {
-            label {Zoom view} open
-            xywh {10 196 180 135} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-          Fl_Group m_HistogramsGroup {
-            label Histograms open
-            xywh {10 348 180 109} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-          Fl_Group m_PixelDescriptionGroup {
-            label {Pixel information} open
-            xywh {10 473 180 121} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-          Fl_Group m_RPixelDescriptionGroup {
-            label {Result pixel information} open
-            xywh {10 473 180 121} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 187
-          } {}
-        }
-        Fl_Group m_MainGroup {open
-          xywh {200 22 600 578} box PLASTIC_THIN_DOWN_BOX color 7
-        } {
-          Fl_Group m_FullGroup {
-            xywh {207 30 585 530} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187
-          } {}
-          Fl_Group m_RFullGroup {
-            xywh {207 30 585 530} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 187 hide
-          } {}
-          Fl_Group {} {open
-            xywh {207 563 585 30}
-          } {
-            Fl_Button bSaveQuit {
-              label {Save-Quit}
-              callback {this->SaveAndQuitCallback();} selected
-              xywh {600 570 80 20} box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 13 labelcolor 186
-            }
-            Fl_Button {} {
-              label Cancel
-              callback {this->QuitCallback();}
-              xywh {712 570 80 20} box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 13 labelcolor 186
-            }
-            Fl_Check_Button bReflectanceScale {
-              label {Reflectances * 1000}
-              callback {this->ChangeReflectanceScaleCallback();}
-              xywh {271 572 180 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 13 labelcolor 186
-            }
-          }
-        }
-        Fl_Group gButtonsGroup {open
-          xywh {200 0 600 22} color 7
-        } {
-          Fl_Light_Button bInput {
-            label {Input image}
-            callback {this->SwitchCallback(otb::INPUT_IMAGE);}
-            xywh {200 0 120 22} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 129 labelcolor 186 hotspot
-          }
-          Fl_Light_Button bLuminance {
-            label Luminance
-            callback {this->SwitchCallback(otb::LUMINANCE);}
-            xywh {320 0 120 22} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 129 labelcolor 186 deactivate
-          }
-          Fl_Light_Button bReflectanceTOA {
-            label {TOA reflectance}
-            callback {this->SwitchCallback(otb::REFLECTANCE_TOA);}
-            xywh {440 0 120 22} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 129 labelcolor 186 deactivate
-          }
-          Fl_Light_Button bReflectanceTOC {
-            label {TOC reflectance}
-            callback {this->SwitchCallback(otb::REFLECTANCE_TOC);}
-            xywh {560 0 120 22} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 129 labelcolor 186 deactivate
-          }
-          Fl_Light_Button bDiffRefl {
-            label {TOA - TOC}
-            callback {this->SwitchCallback(otb::DIFF_REFL);}
-            xywh {680 0 120 22} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 129 labelcolor 186 deactivate
+          MenuItem {} {
+            label Quit
+            callback {this->QuitCallback();}
+            tooltip {Quit the application} xywh {45 45 34 24}
           }
         }
       }
-    }
-    Fl_Window m_ViewerSetupWindow {
-      label {Viewer setup}
-      xywh {139 281 405 200} type Double box UP_BOX color 7 selection_color 7 labelcolor 187 hide
-    } {
-      Fl_Round_Button guiViewerSetupGrayscaleMode {
-        label {Grayscale mode}
-        callback {GrayscaleSetCallback();}
-        tooltip {Swith the image viewer mode to grayscale} xywh {5 13 195 25} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX value 1 color 7 selection_color 22 labelcolor 186
-      }
-      Fl_Round_Button guiViewerSetupColorMode {
-        label {RGB composition mode}
-        callback {RGBSetCallback();}
-        tooltip {Switch the image viewer mode to RGB composition} xywh {208 13 195 25} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
-      }
-      Fl_Input_Choice guiGrayscaleChannelChoice {
-        label {Channel index} open
-        tooltip {Select the band to view in grayscale mode} xywh {106 79 57 25} box EMBOSSED_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
-      } {}
-      Fl_Input_Choice guiRedChannelChoice {
-        label {Red channel} open
-        tooltip {Select band for red channel in RGB composition} xywh {344 47 57 25} box EMBOSSED_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Input_Choice guiGreenChannelChoice {
-        label {Green channel} open
-        tooltip {Select band for green channel in RGB composition} xywh {344 79 57 25} box EMBOSSED_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Input_Choice guiBlueChannelChoice {
-        label {Blue channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {344 111 57 25} box EMBOSSED_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Return_Button guiViewerSetupOk {
-        label Ok
-        callback {ViewerSetupOkCallback();}
-        tooltip {Save changes and leave viewer set up interface} xywh {221 157 65 30} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelcolor 186
-      }
-      Fl_Button guiViewerSetupCancel {
-        label Cancel
-        callback {ViewerSetupCancelCallback();}
-        tooltip {Leave viewer set up interface without saving changes} xywh {108 157 65 30} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelcolor 186
-      }
-    }
-    Fl_Window m_CoefSetupWindow {
-      label {Optic Coefficients Setup} open
-      xywh {227 133 590 415} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 visible
-    } {
       Fl_Tabs tCoeffTab {open
-        xywh {5 5 260 366} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187
+        xywh {5 25 260 376} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187
       } {
         Fl_Group tCorrParam {
           label {Correction parameters} open
-          xywh {5 20 260 351} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 187
+          xywh {5 40 260 361} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 187
         } {
           Fl_Input_Choice guiAerosolModel {
             label {Aerosol model}
-            tooltip {Aerosol model} xywh {125 37 120 25} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 textsize 12
+            tooltip {Aerosol model} xywh {125 57 120 25} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 textsize 12
           } {
             MenuItem gmiNoAerosol {
               label {NO AEROSOL}
@@ -235,55 +72,60 @@ class OpticCalibrationViewGroup {open
           }
           Fl_Value_Input guiOzoneAmount {
             label {Ozone amount}
-            tooltip {Ozone Amount (cm.atm).} xywh {125 77 120 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 10 step 5e-08 textsize 12
+            tooltip {Ozone Amount (cm.atm).} xywh {125 97 120 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 10 step 5e-08 textsize 12
           }
           Fl_Value_Input guiAtmoPressure {
             label {Atmo. pressure}
-            tooltip {Atmospheric pressure (mbar).} xywh {125 117 120 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1e+06 step 0.5 value 1030 textsize 12
+            tooltip {Atmospheric pressure (mbar).} xywh {125 137 120 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1e+06 step 0.5 value 1030 textsize 12
           }
           Fl_Group gAero {open
-            xywh {12 157 245 146} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 7
+            xywh {12 177 245 157} box PLASTIC_THIN_DOWN_BOX color 7 selection_color 7
           } {
             Fl_Value_Input guiAeroTh {
               label {Aerosol thickness}
               callback {teAeronetFile->value("");
 teAeronetFile->redraw();}
-              tooltip {Aerosol optical thickness at 550nm..} xywh {152 167 90 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1000 step 0.0005 value 0.2 textsize 12
+              tooltip {Aerosol optical thickness at 550nm..} xywh {152 193 90 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1000 step 0.0005 value 0.2 textsize 12
             }
             Fl_Value_Input guiWater {
               label {Water amount}
               callback {teAeronetFile->value("");
 teAeronetFile->redraw();}
-              tooltip {Water vapor amount (g/cm2).} xywh {152 207 90 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1e+06 step 0.0005 value 2.5 textsize 12
+              tooltip {Water vapor amount (g/cm2).} xywh {152 233 90 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 maximum 1e+06 step 0.0005 value 2.5 textsize 12
             }
             Fl_Output teAeronetFile {
               label {Aeronet file}
-              xywh {19 267 200 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 align 5 textsize 12
+              xywh {19 292 200 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 align 5 textsize 12
             }
             Fl_Button bBrowserAF {
               label {...}
               callback {this->OpenAeronetFileCallback();}
-              xywh {224 267 25 25} box PLASTIC_DOWN_BOX
+              xywh {224 292 25 25} box PLASTIC_DOWN_BOX
             }
           }
           Fl_Output teFFVFile {
-            label {Filter function values file}
-            xywh {19 332 200 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 align 5 textsize 12
+            label {Spectral sensitivity  file}
+            xywh {10 361 200 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 187 align 5 textsize 12
           }
           Fl_Button bBrowserFFVF2 {
             label {...}
             callback {this->OpenFFVFileCallback();}
-            xywh {224 332 25 25} box PLASTIC_DOWN_BOX
+            xywh {213 361 25 25} box PLASTIC_DOWN_BOX
+          }
+          Fl_Button {} {
+            label {?}
+            callback {wHelper->show();}
+            xywh {241 361 20 25} box PLASTIC_DOWN_BOX
           }
         }
         Fl_Group tRadTerm {
-          label {Radiative terms} open
-          xywh {5 20 260 351} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 187 hide
+          label {Radiative terms}
+          xywh {5 40 260 361} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 187 hide
         } {
           Fl_Input_Choice guiBandSelection {
             label {Channel index}
             callback {this->UpdateRadiativeTermsCallback();} open
-            xywh {125 35 110 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 textsize 12
+            xywh {125 55 110 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 textsize 12
           } {
             MenuItem {} {
               label 0
@@ -291,81 +133,105 @@ teAeronetFile->redraw();}
             }
           }
           Fl_Group gRadTerms {open
-            xywh {12 66 245 270} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 align 5
+            xywh {12 86 245 270} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 align 5
           } {
             Fl_Value_Input gIntrinsicRef {
               label {Intrinsic refl}
-              tooltip {Intrinsic atmospheric reflectance} xywh {164 72 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1000 step 0.0005 value 0.04 textsize 12
+              tooltip {Intrinsic atmospheric reflectance} xywh {164 92 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1000 step 0.0005 value 0.04 textsize 12
             }
             Fl_Value_Input guiAlbedo {
               label Albedo
-              tooltip {Shperical albedo of the atmosphere} xywh {164 102 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.09 textsize 12
+              tooltip {Shperical albedo of the atmosphere} xywh {164 122 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.09 textsize 12
             }
             Fl_Value_Input guiGasT {
               label {Gaseous trans}
-              tooltip {Total gaseous transmission} xywh {164 132 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.95 textsize 12
+              tooltip {Total gaseous transmission} xywh {164 152 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.95 textsize 12
             }
             Fl_Value_Input guiDT {
               label {Down trans}
-              tooltip {Downward transmittance of the atmosphere} xywh {164 162 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.91 textsize 12
+              tooltip {Downward transmittance of the atmosphere} xywh {164 182 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.91 textsize 12
             }
             Fl_Value_Input guiUT {
               label {Up trans}
-              tooltip {Upward transmittance of the atmosphere} xywh {164 192 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.94 textsize 12
+              tooltip {Upward transmittance of the atmosphere} xywh {164 212 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.94 textsize 12
             }
             Fl_Value_Input guiUDiffT {
               label {Up diffuse trans}
-              tooltip {Upward diffuse transmittance} xywh {164 222 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.09 textsize 12
+              tooltip {Upward diffuse transmittance} xywh {164 242 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.09 textsize 12
             }
             Fl_Value_Input guiUDirT {
               label {Up direct trans}
-              tooltip {Upward direct transmittance} xywh {164 252 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.9999 textsize 12
+              tooltip {Upward direct transmittance} xywh {164 272 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.9999 textsize 12
             }
             Fl_Value_Input guiUDTR {
               label {Up diff. trans. (Rayleigh)}
-              tooltip {Upward diffuse transmittance for Rayleigh} xywh {164 282 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.05 textsize 12
+              tooltip {Upward diffuse transmittance for Rayleigh} xywh {164 302 80 20} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.05 textsize 12
             }
             Fl_Value_Input guiUDTA {
               label {Up diff trans. (aerososl)}
-              tooltip {Upward diffuse transmittance for aerosols} xywh {164 312 80 18} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.04 textsize 12
+              tooltip {Upward diffuse transmittance for aerosols} xywh {164 332 80 18} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 187 maximum 1e+06 step 0.0005 value 0.04 textsize 12
             }
           }
           Fl_Button {} {
             label {Reload channel radiative terms}
             callback {this->ReloadChannelTermsCallback( false );}
-            xywh {35 343 200 20} box PLASTIC_THIN_DOWN_BOX down_box PLASTIC_THIN_DOWN_BOX color 7 selection_color 1 labelsize 12 labelcolor 187
+            xywh {35 370 200 20} box PLASTIC_THIN_DOWN_BOX down_box PLASTIC_THIN_DOWN_BOX color 7 selection_color 50 labelsize 12 labelcolor 187
           }
         }
       }
-      Fl_Button guiCoefSetupClose {
-        label Close
-        callback {m_CoefSetupWindow->hide();}
-        tooltip {Close the window} xywh {170 378 65 30} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 186
-      }
-      Fl_Button guiCoefSetupOk {
-        label Ok
-        callback {this->CoefSetupOkCallback();}
-        tooltip {Set up radiometric parameters} xywh {35 378 65 30} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 1 labelcolor 186
-      }
       Fl_Group {} {open
-        xywh {264 20 317 394}
+        xywh {264 0 396 406}
       } {
         Fl_Text_Display tdAtmoParam {
           label {Atmospheric parameters}
-          xywh {270 20 311 180} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 textfont 4 textsize 12
+          xywh {270 15 385 180} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 textfont 4 textsize 12
         }
         Fl_Text_Display tdParam {
           label {Radiative terms}
-          xywh {270 226 311 180} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 textfont 4 textsize 12
+          xywh {270 221 385 180} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 textfont 4 textsize 12
         }
+      }
+      Fl_Button bUpdate {
+        label Update
+        callback {this->UpdateParametersCallback();}
+        tooltip {Update parameters} xywh {95 410 80 25} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 50 labelfont 1 labelsize 13 labelcolor 186
+      }
+      Fl_Check_Button bChangeScale {
+        label {*1000}
+        tooltip {Multiply output reflectance images by 1000.} xywh {270 415 16 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
+      }
+      Fl_Button bSaveQuit {
+        label {Save/Quit}
+        callback {this->SaveAndQuitCallback();}
+        tooltip {Set up radiometric parameters} xywh {358 410 80 25} box PLASTIC_THIN_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 50 labelfont 1 labelsize 13 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->QuitCallback();}
+        tooltip {Close the window} xywh {477 410 80 25} box PLASTIC_DOWN_BOX color 7 selection_color 50 labelfont 1 labelsize 13 labelcolor 186
+      }
+      Fl_Progress bProgress {
+        label Busy
+        xywh {624 410 30 25} box PLASTIC_DOWN_BOX selection_color 1 labelsize 13 labelcolor 1 align 4
+      }
+    }
+    Fl_Window wHelper {
+      label {Sensitivity helper} open selected
+      xywh {627 340 490 325} type Double box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Text_Display tHelper {
+        xywh {0 0 490 289} box NO_BOX labelfont 4
+      }
+      Fl_Button {} {
+        label Close
+        callback {wHelper->hide();}
+        tooltip {Close the window} xywh {201 295 80 25} box PLASTIC_DOWN_BOX color 7 selection_color 50 labelfont 1 labelsize 13 labelcolor 186
       }
     }
   }
   Function {~OpticCalibrationViewGroup()} {open return_type virtual
   } {}
   Function {OpticCalibrationViewGroup()} {open
-  } {}
-  Function {CoefSetupOkCallback()} {open return_type {virtual void}
   } {}
   Function {OpenAeronetFileCallback()} {open return_type {virtual void}
   } {}
@@ -377,6 +243,6 @@ teAeronetFile->redraw();}
   } {}
   Function {SaveAndQuitCallback()} {open return_type {virtual void}
   } {}
-  Function {ChangeReflectanceScaleCallback()} {open return_type {virtual void}
+  Function {UpdateParametersCallback()} {open return_type {virtual void}
   } {}
 } 
