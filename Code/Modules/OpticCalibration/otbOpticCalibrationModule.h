@@ -28,7 +28,7 @@
 // Filters
 #include "otbVectorImage.h"
 #include "otbImageToLuminanceImageFilter.h"
-#include "otbImageToReflectanceImageFilter.h"
+#include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.h"
 #include "otbDifferenceImageFilter.h"
@@ -67,8 +67,8 @@ public:
   /** Filters typedef */
   typedef ImageToLuminanceImageFilter<ImageType,ImageType>                ImageToLuminanceImageFilterType;
   typedef ImageToLuminanceImageFilterType::Pointer                        ImageToLuminanceImageFilterPointerType;
-  typedef ImageToReflectanceImageFilter<ImageType,ImageType>              ImageToReflectanceImageFilterType;
-  typedef ImageToReflectanceImageFilterType::Pointer                      ImageToReflectanceImageFilterPointerType;
+  typedef LuminanceToReflectanceImageFilter<ImageType,ImageType>          LuminanceToReflectanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilterType::Pointer                      LuminanceToReflectanceImageFilterPointerType;
   typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer         ReflectanceToSurfaceReflectanceImageFilterPointerType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
@@ -152,7 +152,7 @@ private:
   /** Image to Luminance filter*/
   ImageToLuminanceImageFilterPointerType                m_ImageToLuminanceFilter;
   /** Image to TOA filter*/
-  ImageToReflectanceImageFilterPointerType              m_ImageToReflectanceFilter;
+  LuminanceToReflectanceImageFilterPointerType              m_LuminanceToReflectanceFilter;
   /** TOA to TOC filter*/
   ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
   /** Diff TOA-TOC filter*/

@@ -133,7 +133,7 @@ OpticCalibrationModule
       lImageMetadataInterface->GetPhysicalGain(dict);
       lImageMetadataInterface->GetPhysicalBias(dict);
       
-      // ImageToReflectance
+      // LuminanceToReflectance
       lImageMetadataInterface->GetDay(dict);
       lImageMetadataInterface->GetMonth(dict);
       
@@ -161,22 +161,16 @@ OpticCalibrationModule
 {
   // Instanciate filters
   m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
-  m_ImageToReflectanceFilter              = ImageToReflectanceImageFilterType::New();
+  m_LuminanceToReflectanceFilter              = LuminanceToReflectanceImageFilterType::New();
   m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
   m_DifferenceFilter                      = DifferenceImageFilterType::New();
   // Link filters
   m_ImageToLuminanceFilter->SetInput(m_InputImage);
-  m_ImageToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
-  m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_ImageToReflectanceFilter->GetOutput());
-  m_DifferenceFilter->SetValidInput(m_ImageToReflectanceFilter->GetOutput());
+  m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+  m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+  m_DifferenceFilter->SetValidInput(m_LuminanceToReflectanceFilter->GetOutput());
   m_DifferenceFilter->SetTestInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
   
-  AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
-  radTerms->ValuesInitialization( m_InputImage->GetNumberOfComponentsPerPixel() );
-  m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
-  m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-  m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
-
   // Init aerosol model
   guiAerosolModel->value(0);
   // Init Band selection
@@ -185,11 +179,11 @@ OpticCalibrationModule
   bProgress->maximum(1); 
   bProgress->value(1);
   bProgress->hide();
+
+  this->UpdateCorrectionParameters();
   this->UpdateInformation();
   this->UpdateCoefSetup();
   this->UpdateRadiativeTermsCallback();
-   
-  this->UpdateParamDisplay();
   
   Fl_Text_Buffer *buff = new Fl_Text_Buffer();
   buff->text("");
@@ -213,7 +207,7 @@ OpticCalibrationModule
     oss<<" band , ";
 
   oss<<m_InputImage->GetLargestPossibleRegion().GetSize()<<")";
-  wMainWindow->label(oss.str().c_str());
+  wMainWindow->copy_label(oss.str().c_str());
   m_LastPath = myFile.path();
 }
 
@@ -366,6 +360,15 @@ void
 OpticCalibrationModule
 ::UpdateCorrectionParameters()
 {
+  AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
+  radTerms->ValuesInitialization( m_InputImage->GetNumberOfComponentsPerPixel() );
+  m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+  m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+  m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+  m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+  m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
+
   AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
   std::string aeroModStd = guiAerosolModel->value();
 
@@ -512,7 +515,7 @@ OpticCalibrationModule
       m_TOCMultiplier->SetCoef(1000.);
       m_DiffTOATOCMultiplier->SetCoef(1000.);
       
-      m_TOAMultiplier->SetInput(m_ImageToReflectanceFilter->GetOutput());
+      m_TOAMultiplier->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());    
       m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
 
@@ -522,7 +525,7 @@ OpticCalibrationModule
     }
   else
     {
-      this->AddOutputDescriptor(m_ImageToReflectanceFilter->GetOutput(),"TOA image", otbGetTextMacro("TOA Image"));
+      this->AddOutputDescriptor(m_LuminanceToReflectanceFilter->GetOutput(),"TOA image", otbGetTextMacro("TOA Image"));
       this->AddOutputDescriptor(m_ReflectanceToSurfaceReflectanceFilter->GetOutput(),"TOC image", otbGetTextMacro("TOC Image"));
       this->AddOutputDescriptor(m_DifferenceFilter->GetOutput(),"Difference TOA-TOC image", otbGetTextMacro("Difference TOA-TOC image"));
     }
@@ -586,7 +589,6 @@ OpticCalibrationModule
 
   if(!m_CanUpdateParameters)
     { 
-      std::cout<<"tRadTerm a pas change"<<std::endl;
       //  in Correction Parameters tab checking each value
       AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
       std::string aeroModStd = guiAerosolModel->value();
