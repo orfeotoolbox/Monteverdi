@@ -34,7 +34,7 @@ OpticCalibrationModule::OpticCalibrationModule()
   this->NeedsPipelineLockingOn();
 
   m_LastPath = "";
-  m_CanUpdateParameters = false;
+  m_CanUpdateParameters = true;
   m_HelpTextBuffer = new Fl_Text_Buffer();
 
   // Add a new input
@@ -159,6 +159,10 @@ void
 OpticCalibrationModule
 ::Init()
 {
+  Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+  tdAtmoParam->buffer(buff);
+  tdAtmoParam->redraw();
+
   // Instanciate filters
   m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
   m_LuminanceToReflectanceFilter              = LuminanceToReflectanceImageFilterType::New();
@@ -181,14 +185,7 @@ OpticCalibrationModule
   bProgress->hide();
 
   this->UpdateCorrectionParameters();
-  this->UpdateInformation();
-  this->UpdateCoefSetup();
-  this->UpdateRadiativeTermsCallback();
-  
-  Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-  buff->text("");
-  tdAtmoParam->buffer(buff);
-  tdAtmoParam->redraw();
+  this->UpdateParametersCallback();
 }
 
 void
