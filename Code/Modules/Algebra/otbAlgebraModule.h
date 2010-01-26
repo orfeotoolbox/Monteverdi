@@ -87,7 +87,7 @@ protected:
     guiMainWindow->show();
   };
 
-  /** Show the Module GUI */
+  /** Hide the Module GUI */
   virtual void Hide()
   {
     guiMainWindow->hide();
