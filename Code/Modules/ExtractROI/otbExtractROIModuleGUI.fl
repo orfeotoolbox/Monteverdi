@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class ExtractROIModuleGUI {open
 } {
@@ -11,85 +11,96 @@ class ExtractROIModuleGUI {open
   } {
     Fl_Window wExtractROIWindow {
       label {Select the ROI} open
-      xywh {830 252 320 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 visible
+      xywh {388 265 690 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable visible
     } {
-      Fl_Return_Button bOk {
-        label Ok
-        callback {this->Ok();}
-        xywh {230 340 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button bCancel {
-        label Cancel
-        callback {this->Cancel();}
-        xywh {140 343 81 22} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Wizard {} {
-        label {Definition of the ROI extracted} open
-        xywh {14 156 301 178} box PLASTIC_DOWN_BOX align 5
+      Fl_Group {} {open
+        xywh {370 0 320 370}
       } {
-        Fl_Group guiPixel {open
-          xywh {45 181 255 144}
+        Fl_Return_Button bOk {
+          label Ok
+          callback {this->Ok();}
+          xywh {592 335 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button bCancel {
+          label Cancel
+          callback {this->Cancel();}
+          xywh {502 338 81 22} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Wizard {} {
+          label {Definition of the ROI extracted} open
+          xywh {371 151 301 178} box PLASTIC_DOWN_BOX align 5
         } {
-          Fl_Value_Input vStartX {
-            label {Start X}
-            xywh {135 181 100 23} step 1
+          Fl_Group guiPixel {open
+            xywh {402 176 255 144}
+          } {
+            Fl_Value_Input vStartX {
+              label {Start X}
+              callback {this->UpdateRegion();}
+              xywh {497 176 100 23} step 1
+            }
+            Fl_Value_Input vStartY {
+              label {Start Y}
+              callback {this->UpdateRegion();}
+              xywh {497 209 100 25} step 1
+            }
+            Fl_Value_Input vSizeX {
+              label {Size X}
+              callback {this->UpdateRegion();}
+              xywh {497 244 100 25} step 1
+            }
+            Fl_Value_Input vSizeY {
+              label {Size Y}
+              callback {this->UpdateRegion();}
+              xywh {497 279 100 25} step 1
+            }
           }
-          Fl_Value_Input vStartY {
-            label {Start Y}
-            xywh {135 214 100 25} step 1
-          }
-          Fl_Value_Input vSizeX {
-            label {Size X}
-            xywh {135 249 100 25} step 1
-          }
-          Fl_Value_Input vSizeY {
-            label {Size Y}
-            xywh {135 284 100 25} step 1
+          Fl_Group guiLongLat {open
+            xywh {372 153 300 173} hide
+          } {
+            Fl_Value_Input vLong1 {
+              label Longitude1
+              xywh {467 170 180 25}
+            }
+            Fl_Value_Input vLatitude1 {
+              label Latitude1
+              xywh {467 200 180 25}
+            }
+            Fl_Value_Input vLong2 {
+              label Longitude2
+              xywh {467 245 180 25}
+            }
+            Fl_Value_Input vLatitude2 {
+              label Latitude2
+              xywh {467 285 180 25}
+            }
           }
         }
-        Fl_Group guiLongLat {open
-          xywh {15 158 300 173} hide
+        Fl_Wizard {} {
+          label {Input image size information} open
+          xywh {371 21 300 74} box PLASTIC_DOWN_BOX align 5
         } {
-          Fl_Value_Input vLong1 {
-            label Longitude1
-            xywh {105 175 180 25}
-          }
-          Fl_Value_Input vLatitude1 {
-            label Latitude1
-            xywh {105 205 180 25}
-          }
-          Fl_Value_Input vLong2 {
-            label Longitude2
-            xywh {105 250 180 25}
-          }
-          Fl_Value_Input vLatitude2 {
-            label Latitude2
-            xywh {105 290 180 25}
+          Fl_Group {} {open
+            xywh {371 21 300 68}
+          } {
+            Fl_Value_Output vInputImageSizeX {
+              label {Size X}
+              xywh {446 31 100 24}
+            }
+            Fl_Value_Output vInputImageSizeY {
+              label {Size Y}
+              xywh {446 61 100 24}
+            }
           }
         }
-      }
-      Fl_Wizard {} {
-        label {Input image size information} open
-        xywh {15 26 300 74} box PLASTIC_DOWN_BOX align 5
-      } {
-        Fl_Group {} {open
-          xywh {15 26 300 68}
-        } {
-          Fl_Value_Output vInputImageSizeX {
-            label {Size X}
-            xywh {95 36 100 24}
-          }
-          Fl_Value_Output vInputImageSizeY {
-            label {Size Y}
-            xywh {95 66 100 24}
-          }
+        Fl_Round_Button roundLongLat {
+          label {Select Long/Lat (NW (1) ; SE (2))}
+          callback {LongLatSelection();}
+          xywh {370 105 240 25} down_box ROUND_DOWN_BOX
         }
       }
-      Fl_Round_Button roundLongLat {
-        label {Select Long/Lat (NW (1) ; SE (2))}
-        callback {LongLatSelection();} selected
-        xywh {15 110 240 25} down_box ROUND_DOWN_BOX
-      }
+      Fl_Group vView {open selected
+        xywh {2 2 366 366} box PLASTIC_DOWN_BOX resizable
+      } {}
     }
   }
   Function {OpenDataSet()} {open protected return_type {virtual void}
@@ -108,4 +119,6 @@ class ExtractROIModuleGUI {open
   } {}
   Function {LongLatSelection()} {open return_type {virtual void}
   } {}
-}
+  Function {UpdateRegion()} {open protected return_type {virtual void}
+  } {}
+} 
