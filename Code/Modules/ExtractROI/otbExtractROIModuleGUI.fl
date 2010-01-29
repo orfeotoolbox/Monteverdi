@@ -11,95 +11,102 @@ class ExtractROIModuleGUI {open
   } {
     Fl_Window wExtractROIWindow {
       label {Select the ROI} open
-      xywh {388 265 690 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable visible
+      xywh {530 255 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
     } {
       Fl_Group {} {open
-        xywh {370 0 320 370}
+        xywh {400 0 400 400}
       } {
-        Fl_Return_Button bOk {
-          label Ok
-          callback {this->Ok();}
-          xywh {592 335 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Button bCancel {
-          label Cancel
-          callback {this->Cancel();}
-          xywh {502 338 81 22} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-        }
         Fl_Wizard {} {
           label {Definition of the ROI extracted} open
-          xywh {371 151 301 178} box PLASTIC_DOWN_BOX align 5
+          xywh {402 100 394 260} box PLASTIC_DOWN_BOX align 5
         } {
-          Fl_Group guiPixel {open
-            xywh {402 176 255 144}
+          Fl_Group guiSelectArea {open
+            xywh {402 100 394 260} align 0
           } {
             Fl_Value_Input vStartX {
               label {Start X}
               callback {this->UpdateRegion();}
-              xywh {497 176 100 23} step 1
+              xywh {495 115 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vStartY {
               label {Start Y}
               callback {this->UpdateRegion();}
-              xywh {497 209 100 25} step 1
+              xywh {650 115 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vSizeX {
               label {Size X}
               callback {this->UpdateRegion();}
-              xywh {497 244 100 25} step 1
+              xywh {495 145 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vSizeY {
               label {Size Y}
               callback {this->UpdateRegion();}
-              xywh {497 279 100 25} step 1
+              xywh {650 145 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
-          }
-          Fl_Group guiLongLat {open
-            xywh {372 153 300 173} hide
-          } {
-            Fl_Value_Input vLong1 {
-              label Longitude1
-              xywh {467 170 180 25}
-            }
-            Fl_Value_Input vLatitude1 {
-              label Latitude1
-              xywh {467 200 180 25}
-            }
-            Fl_Value_Input vLong2 {
-              label Longitude2
-              xywh {467 245 180 25}
-            }
-            Fl_Value_Input vLatitude2 {
-              label Latitude2
-              xywh {467 285 180 25}
+            Fl_Group {} {open
+              xywh {415 180 370 170} box PLASTIC_DOWN_BOX
+            } {
+              Fl_Value_Input vLong1 {
+                label {Upper Left Longitude}
+                xywh {580 190 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
+              }
+              Fl_Value_Input vLatitude1 {
+                label {Upper Left Latitude}
+                xywh {580 220 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
+              }
+              Fl_Value_Input vLong2 {
+                label {Lower Right Longitude}
+                xywh {580 255 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
+              }
+              Fl_Value_Input vLatitude2 {
+                label {Lower Right Latitude} selected
+                xywh {580 285 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
+              }
+              Fl_Button bUpdate {
+                label Update
+                callback {this->UpdateRegionWithLatLong();}
+                xywh {695 315 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+              }
             }
           }
         }
         Fl_Wizard {} {
           label {Input image size information} open
-          xywh {371 21 300 74} box PLASTIC_DOWN_BOX align 5
+          xywh {402 25 394 50} box PLASTIC_DOWN_BOX align 5
         } {
           Fl_Group {} {open
-            xywh {371 21 300 68}
+            xywh {402 25 394 50}
           } {
             Fl_Value_Output vInputImageSizeX {
               label {Size X}
-              xywh {446 31 100 24}
+              xywh {495 37 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
             Fl_Value_Output vInputImageSizeY {
               label {Size Y}
-              xywh {446 61 100 24}
+              xywh {650 37 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
           }
         }
-        Fl_Round_Button roundLongLat {
-          label {Select Long/Lat (NW (1) ; SE (2))}
-          callback {LongLatSelection();}
-          xywh {370 105 240 25} down_box ROUND_DOWN_BOX
+        Fl_Group {} {open
+          xywh {402 363 396 32}
+        } {
+          Fl_Return_Button bOk {
+            label Ok
+            callback {this->Ok();}
+            xywh {695 368 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bCancel {
+            label Cancel
+            callback {this->Cancel();}
+            xywh {605 368 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
         }
+        Fl_Group {} {open
+          xywh {402 395 396 5} resizable
+        } {}
       }
-      Fl_Group vView {open selected
-        xywh {2 2 366 366} box PLASTIC_DOWN_BOX resizable
+      Fl_Group vView {open
+        xywh {2 2 396 396} box PLASTIC_DOWN_BOX resizable
       } {}
     }
   }
@@ -117,8 +124,8 @@ class ExtractROIModuleGUI {open
   } {}
   Function {Ok()} {open protected return_type {virtual void}
   } {}
-  Function {LongLatSelection()} {open return_type {virtual void}
-  } {}
   Function {UpdateRegion()} {open protected return_type {virtual void}
+  } {}
+  Function {UpdateRegionWithLatLong()} {open protected return_type {virtual void}
   } {}
 } 

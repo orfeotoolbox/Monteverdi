@@ -117,8 +117,6 @@ namespace otb
       wExtractROIWindow->show();
     };
     
-    virtual void LongLatSelection();
-    
   protected:
     /** Constructor */
     ExtractROIModule();
@@ -134,6 +132,7 @@ namespace otb
     virtual void Ok();
     virtual void Cancel();
     virtual void UpdateRegion();
+    virtual void UpdateRegionWithLatLong();
     
   private:
     
@@ -168,6 +167,8 @@ namespace otb
     
     // Region for select area
     RegionGlComponentType::Pointer            m_regionGl;
+    
+    bool                                      isNotAProjection;
         
   };
   

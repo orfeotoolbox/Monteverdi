@@ -74,13 +74,14 @@ namespace otb
     
     vView->add(m_View->GetScrollWidget());
     vView->resizable(m_View->GetScrollWidget());
-    m_View->GetScrollWidget()->resize(vView->x()+1,vView->y()+1, vView->w()-2, vView->h()-2);
+    m_View->GetScrollWidget()->resize(vView->x(),vView->y(), vView->w(), vView->h());
   }
   
   /** Destructor */
   ExtractROIModule::~ExtractROIModule()
   {
     this->Cancel();
+    vView->remove(m_View->GetScrollWidget());
   }
   
   /** PrintSelf method */
@@ -100,7 +101,10 @@ namespace otb
     
     typedef ForwardSensorModel<double>  ForwardSensorType;
     
-    roundLongLat->activate();
+    vLong1->activate();
+    vLatitude1->activate();
+    vLong2->activate();
+    vLatitude2->activate();
     
     if(!image.IsNull() && vectorImage.IsNull())
     {
@@ -120,14 +124,22 @@ namespace otb
         m_Transform->SetInputSpacing(image->GetSpacing());
         m_Transform->InstanciateTransform();
         
-        if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
+        isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
+        
+        if (isNotAProjection)
         {
-          roundLongLat->deactivate();
+          vLong1->deactivate();
+          vLatitude1->deactivate();
+          vLong2->deactivate();
+          vLatitude2->deactivate();
         }
       }
       catch ( itk::ExceptionObject &  e)
       {
-        roundLongLat->deactivate();
+        vLong1->deactivate();
+        vLatitude1->deactivate();
+        vLong2->deactivate();
+        vLatitude2->deactivate();
       }
     }
     else if(image.IsNull() && !vectorImage.IsNull())
@@ -149,14 +161,22 @@ namespace otb
         m_Transform->SetInputSpacing(vectorImage->GetSpacing());
         m_Transform->InstanciateTransform();
         
-        if (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN)
+        isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
+        
+        if (isNotAProjection)
         {
-          roundLongLat->deactivate();
+          vLong1->deactivate();
+          vLatitude1->deactivate();
+          vLong2->deactivate();
+          vLatitude2->deactivate();
         }
       }
       catch ( itk::ExceptionObject &e)
       {
-        roundLongLat->deactivate();
+        vLong1->deactivate();
+        vLatitude1->deactivate();
+        vLong2->deactivate();
+        vLatitude2->deactivate();
       }
     }
     else
@@ -171,6 +191,7 @@ namespace otb
     vInputImageSizeX->value(imageRegion.GetSize()[0]);
     vInputImageSizeY->value(imageRegion.GetSize()[1]);
     
+    /** Update Start and Size for selected area */
     vStartX->minimum(static_cast<double>(imageRegion.GetIndex()[0]));
     vStartX->maximum(static_cast<double>(imageRegion.GetSize()[0]));
     vStartX->value(vStartX->minimum());
@@ -178,36 +199,158 @@ namespace otb
     vStartY->maximum(static_cast<double>(imageRegion.GetSize()[1]));
     vStartY->value(vStartY->minimum());
     
-    vSizeX->minimum(vStartX->minimum());
+    if(vStartX->minimum() <= 0)
+      vSizeX->minimum(1);      
+    else 
+      vSizeX->minimum(vStartX->minimum());
+    
     vSizeX->maximum(vStartX->maximum());
     vSizeX->value(vSizeX->maximum());
-    vSizeY->minimum(vStartY->minimum());
+    
+    if(vStartY->minimum() <= 0)
+      vSizeY->minimum(1);      
+    else 
+      vSizeY->minimum(vStartX->minimum());
+
     vSizeY->maximum(vStartY->maximum());
     vSizeY->value(vSizeY->maximum());
+    
+    /** Update Long / Lat for selected area */
+    if (!isNotAProjection)
+    {
+      IndexType lIndexStart, lIndexEnd;
+      OutputPointType pto1, pto2, pt1, pt2;
+      
+      lIndexStart[0]  = vStartX->value();
+      lIndexStart[1]  = vStartY->value();
+      lIndexEnd[0]    = lIndexStart[0] + vSizeX->value();
+      lIndexEnd[1]    = lIndexStart[1] + vSizeY->value();
+      
+      if(!image.IsNull() && vectorImage.IsNull())
+      {
+        image->TransformIndexToPhysicalPoint(lIndexStart, pto1);
+        image->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
+      }
+      else if(image.IsNull() && !vectorImage.IsNull())
+      {
+        vectorImage->TransformIndexToPhysicalPoint(lIndexStart, pto1);
+        vectorImage->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
+      }
+      
+      pt1 = m_Transform->TransformPoint(pto1);
+      pt2 = m_Transform->TransformPoint(pto2);
+      
+      vLong1->value(pt1[0]);
+      vLatitude1->value(pt1[1]);
+      vLong2->value(pt2[0]);
+      vLatitude2->value(pt2[1]);
+    }
     
     wExtractROIWindow->show();
     m_View->GetScrollWidget()->show();
     m_Model->Update();
   }
   
-  
-  void ExtractROIModule::LongLatSelection()
-  {
-    if ( roundLongLat->value() == 1 )
-    {
-      guiPixel->hide();
-      guiLongLat->show();
-    }
-    else
-    {
-      guiPixel->show();
-      guiLongLat->hide();
-    }
-  }
-  
   void ExtractROIModule::UpdateRegion()
   {
+    unsigned long startx, starty, sizex, sizey;
+    startx = static_cast<unsigned long>(vStartX->value());
+    starty = static_cast<unsigned long>(vStartY->value());
+    sizex = static_cast<unsigned long>(vSizeX->value());
+    sizey = static_cast<unsigned long>(vSizeY->value());
+    
+    if(startx < vStartX->minimum())
+      vStartX->value(vStartX->minimum());
+    if(startx >= vStartX->maximum())
+      vStartX->value(vStartX->maximum()-1);
+    
+    if(starty < vStartY->minimum())
+      vStartY->value(vStartY->minimum());
+    if(starty >= vStartY->maximum())
+      vStartY->value(vStartY->maximum()-1);
+    
+    if(sizex < vSizeX->minimum())
+      vSizeX->value(vSizeX->minimum());
+    if( (startx + sizex) > vSizeX->maximum())
+      vSizeX->value(vSizeX->maximum() - startx);
+    
+    if(sizey < vSizeY->minimum())
+      vSizeY->value(vSizeY->minimum());
+    if( (starty + sizey) > vSizeY->maximum())
+      vSizeY->value(vSizeY->maximum() - starty);
+    
+    /** Update Long / Lat for selected area */
+    if (!isNotAProjection)
+    {
+      FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
+      FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+      
+      IndexType lIndexStart, lIndexEnd;
+      OutputPointType pto1, pto2, pt1, pt2;
+      
+      lIndexStart[0]  = vStartX->value();
+      lIndexStart[1]  = vStartY->value();
+      lIndexEnd[0]    = lIndexStart[0] + vSizeX->value();
+      lIndexEnd[1]    = lIndexStart[1] + vSizeY->value();
+      
+      if(!image.IsNull() && vectorImage.IsNull())
+      {
+        image->TransformIndexToPhysicalPoint(lIndexStart, pto1);
+        image->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
+      }
+      else if(image.IsNull() && !vectorImage.IsNull())
+      {
+        vectorImage->TransformIndexToPhysicalPoint(lIndexStart, pto1);
+        vectorImage->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
+      }
+      
+      pt1 = m_Transform->TransformPoint(pto1);
+      pt2 = m_Transform->TransformPoint(pto2);
+      
+      vLong1->value(pt1[0]);
+      vLatitude1->value(pt1[1]);
+      vLong2->value(pt2[0]);
+      vLatitude2->value(pt2[1]);
+    }
+    
     m_SelectAreaHandler->UpdateGlRegion();
+  }
+  
+  void ExtractROIModule::UpdateRegionWithLatLong()
+  {
+    FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
+    FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+    
+    IndexType lIndex1, lIndex2;
+    OutputPointType pt1, pt2, pto1, pto2;
+    
+    pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
+    pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
+    pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
+    pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
+    
+    /** Check if value are in img */
+    m_Transform->GetInverse(m_InverseTransform);
+    pto1 = m_InverseTransform->TransformPoint(pt1);
+    pto2 = m_InverseTransform->TransformPoint(pt2);
+    
+    if(!image.IsNull() && vectorImage.IsNull())
+    {   
+      image->TransformPhysicalPointToIndex(pto1, lIndex1);
+      image->TransformPhysicalPointToIndex(pto2, lIndex2);
+    }
+    else if(image.IsNull() && !vectorImage.IsNull())
+    {
+      vectorImage->TransformPhysicalPointToIndex(pto1, lIndex1);
+      vectorImage->TransformPhysicalPointToIndex(pto2, lIndex2);
+    }
+    
+    vStartX->value(lIndex1[0]);
+    vStartY->value(lIndex1[1]);
+    vSizeX->value(vcl_abs(lIndex2[0] - lIndex1[0]));
+    vSizeY->value(vcl_abs(lIndex2[1] - lIndex1[1]));
+    
+    this->UpdateRegion();
   }
   
   /** Cancel */
@@ -231,7 +374,7 @@ namespace otb
         FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
         
         //TODO Add case of long/lat input
-        if ( roundLongLat->value() == 1 )
+        if ( !isNotAProjection )
         {
           OutputPointType pt1;
           OutputPointType pt2;
@@ -282,7 +425,7 @@ namespace otb
         FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
         
         //TODO Add case of long/lat input
-        if ( roundLongLat->value() == 1 )
+        if ( !isNotAProjection )
         {
           OutputPointType pt1;
           OutputPointType pt2;

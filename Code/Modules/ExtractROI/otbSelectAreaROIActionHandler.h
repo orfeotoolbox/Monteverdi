@@ -97,11 +97,16 @@ namespace otb
             imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
             
             // Transform to index
-            IndexType lIndex, lIndex2;
+            IndexType lIndex, lIndex2, lIndexLargestMin, lIndexLargestMax;
             lIndex[0]=static_cast<long int>(imagePoint[0]);
             lIndex[1]=static_cast<long int>(imagePoint[1]);
             
-            SizeType lSize;
+            SizeType lSize, lSizeLargest;
+            
+            lIndexLargestMin = m_LargestRegion.GetIndex();
+            lSizeLargest = m_LargestRegion.GetSize();
+            lIndexLargestMax[0] = lSizeLargest[0] - lIndexLargestMin[0];
+            lIndexLargestMax[1] = lSizeLargest[1] - lIndexLargestMin[1];
             
             switch (event)
             {
@@ -109,18 +114,70 @@ namespace otb
               {
                 m_FirstPush = false;
                 m_StartIndex = lIndex;
-                m_Region.SetIndex(m_StartIndex);
-                m_Region.Crop(m_LargestRegion);
-                m_RegionGlComponent->SetVisible(false);
                 
-                m_StartX->value(m_StartIndex[0]);
-                m_StartY->value(m_StartIndex[1]);
+                if((m_StartIndex[0] >= lIndexLargestMin[0]) && (m_StartIndex[1] >= lIndexLargestMin[1]) &&
+                   (m_StartIndex[0] < lIndexLargestMax[0]) && (m_StartIndex[1] < lIndexLargestMax[1]))
+                {
+                  m_Region.SetIndex(m_StartIndex);
+                  m_Region.Crop(m_LargestRegion);
+                  m_RegionGlComponent->SetVisible(false);
+                  
+                  m_StartX->value(m_StartIndex[0]);
+                  m_StartY->value(m_StartIndex[1]);
+                  m_SizeX->value(1);
+                  m_SizeY->value(1);
+                  
+                  /** Call Update Region in otbExtractROIModule.cxx */
+                  m_StartY->do_callback();
+                }
                 break;
               }
               case FL_RELEASE:
               {
                 if(m_StartIndex[0] != lIndex[0] && m_StartIndex[1] != lIndex[1])
                 {
+                  if((m_StartIndex[0] >= lIndexLargestMin[0]) && (m_StartIndex[1] >= lIndexLargestMin[1]) &&
+                     (m_StartIndex[0] < lIndexLargestMax[0]) && (m_StartIndex[1] < lIndexLargestMax[1]))
+                  {
+                    m_StopIndex = lIndex;
+                    
+                    minX = min(m_StartIndex[0],m_StopIndex[0]);
+                    minY = min(m_StartIndex[1],m_StopIndex[1]);
+                    maxX = max(m_StartIndex[0],m_StopIndex[0]);
+                    maxY = max(m_StartIndex[1],m_StopIndex[1]);
+                    
+                    lIndex2[0] = minX;
+                    lIndex2[1] = minY;
+                    
+                    lSize[0] = maxX - minX;
+                    lSize[1] = maxY - minY;
+                    
+                    m_Region.SetIndex(lIndex2);
+                    m_Region.SetSize(lSize);
+                    m_Region.Crop(m_LargestRegion);
+                    
+                    m_RegionGlComponent->SetRegion(m_Region);
+                    
+                    lIndex2 = m_Region.GetIndex();
+                    lSize = m_Region.GetSize();
+                    
+                    m_StartX->value(lIndex2[0]);
+                    m_StartY->value(lIndex2[1]);
+                    m_SizeX->value(lSize[0]);
+                    m_SizeY->value(lSize[1]);
+                    
+                    /** Call Update Region in otbExtractROIModule.cxx */
+                    m_SizeY->do_callback();
+                  }
+                }
+                break;
+              }
+              case FL_DRAG:
+              {
+                if((m_StartIndex[0] >= lIndexLargestMin[0]) && (m_StartIndex[1] >= lIndexLargestMin[1]) &&
+                   (m_StartIndex[0] < lIndexLargestMax[0]) && (m_StartIndex[1] < lIndexLargestMax[1]))
+                {
+                  // only redraw the red box in the widget
                   m_StopIndex = lIndex;
                   
                   minX = min(m_StartIndex[0],m_StopIndex[0]);
@@ -139,6 +196,7 @@ namespace otb
                   m_Region.Crop(m_LargestRegion);
                   
                   m_RegionGlComponent->SetRegion(m_Region);
+                  m_RegionGlComponent->SetVisible(true);
                   
                   lIndex2 = m_Region.GetIndex();
                   lSize = m_Region.GetSize();
@@ -147,41 +205,12 @@ namespace otb
                   m_StartY->value(lIndex2[1]);
                   m_SizeX->value(lSize[0]);
                   m_SizeY->value(lSize[1]);
+                  
+                  /** Call Update Region in otbExtractROIModule.cxx */
+                  m_SizeY->do_callback();
+                  
+                  m_Widget->redraw();
                 }
-                break;
-              }
-              case FL_DRAG:
-              {
-                // only redraw the red box in the widget
-                m_StopIndex = lIndex;
-                
-                minX = min(m_StartIndex[0],m_StopIndex[0]);
-                minY = min(m_StartIndex[1],m_StopIndex[1]);
-                maxX = max(m_StartIndex[0],m_StopIndex[0]);
-                maxY = max(m_StartIndex[1],m_StopIndex[1]);
-                
-                lIndex2[0] = minX;
-                lIndex2[1] = minY;
-                
-                lSize[0] = maxX - minX;
-                lSize[1] = maxY - minY;
-                
-                m_Region.SetIndex(lIndex2);
-                m_Region.SetSize(lSize);
-                m_Region.Crop(m_LargestRegion);
-
-                m_RegionGlComponent->SetRegion(m_Region);
-                m_RegionGlComponent->SetVisible(true);
-                
-                lIndex2 = m_Region.GetIndex();
-                lSize = m_Region.GetSize();
-                
-                m_StartX->value(lIndex2[0]);
-                m_StartY->value(lIndex2[1]);
-                m_SizeX->value(lSize[0]);
-                m_SizeY->value(lSize[1]);
-
-                m_Widget->redraw();
                 break;
               }
               default:
@@ -255,6 +284,23 @@ namespace otb
       {
         m_SizeY = fvi;
       }
+      void SetLatitute1(FlValueInputType *fvi)
+      {
+        m_Lat1 = fvi;
+      }
+      void SetLatitute2(FlValueInputType *fvi)
+      {
+        m_Lat2 = fvi;
+      }
+      void SetLongitude1(FlValueInputType *fvi)
+      {
+        m_Long1 = fvi;
+      }
+      void SetLongitude2(FlValueInputType *fvi)
+      {
+        m_Long2 = fvi;
+      }
+      
       
     protected:
       /** Constructor */
@@ -298,6 +344,10 @@ namespace otb
       FlValueInputType *m_StartY;
       FlValueInputType *m_SizeX;
       FlValueInputType *m_SizeY;
+      FlValueInputType *m_Long1;
+      FlValueInputType *m_Lat1;
+      FlValueInputType *m_Long2;
+      FlValueInputType *m_Lat2;
       
     }; // end class
 } // otb namespace 
