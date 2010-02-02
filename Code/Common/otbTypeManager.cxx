@@ -41,6 +41,7 @@ TypeManager::TypeManager() : m_IdToNameMap()
   this->RegisterType<Floating_Point_VectorImage>("Floating_Point_VectorImage");
   this->RegisterType<Vector_Data>("Vector_Data");
   this->RegisterType<Labeled_Vector_Data>("Labeled_Vector_Data");
+  this->RegisterType<Deformation_Field_Type>("Deformation_Field_Type");
   this->RegisterType<Floating_Point_Complex_Image>("Floating_Point_Complex_Image");
 }
 
