@@ -48,10 +48,10 @@ int otbExtractROIVectorImageModuleTest(int argc, char* argv[])
   
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
-  specificModule->vStartX->value(atof(argv[3]));
-  specificModule->vStartY->value(atof(argv[4]));
-  specificModule->vSizeX->value(atof(argv[5]));
-  specificModule->vSizeY->value(atof(argv[6]));
+  specificModule->vStartX->value(atoi(argv[3]));
+  specificModule->vStartY->value(atoi(argv[4]));
+  specificModule->vSizeX->value(atoi(argv[5]));
+  specificModule->vSizeY->value(atoi(argv[6]));
   Fl::check();
 
   // Simulate Ok button callback

@@ -132,6 +132,8 @@ namespace otb
           vLatitude1->deactivate();
           vLong2->deactivate();
           vLatitude2->deactivate();
+          bUpdate->deactivate();
+          bUpdate->deactivate();
         }
       }
       catch ( itk::ExceptionObject &  e)
@@ -140,6 +142,8 @@ namespace otb
         vLatitude1->deactivate();
         vLong2->deactivate();
         vLatitude2->deactivate();
+        bUpdate->deactivate();
+        bUpdate->deactivate();
       }
     }
     else if(image.IsNull() && !vectorImage.IsNull())
@@ -169,6 +173,7 @@ namespace otb
           vLatitude1->deactivate();
           vLong2->deactivate();
           vLatitude2->deactivate();
+          bUpdate->deactivate();
         }
       }
       catch ( itk::ExceptionObject &e)
@@ -177,6 +182,7 @@ namespace otb
         vLatitude1->deactivate();
         vLong2->deactivate();
         vLatitude2->deactivate();
+        bUpdate->deactivate();
       }
     }
     else
@@ -240,10 +246,24 @@ namespace otb
       pt1 = m_Transform->TransformPoint(pto1);
       pt2 = m_Transform->TransformPoint(pto2);
       
-      vLong1->value(pt1[0]);
-      vLatitude1->value(pt1[1]);
-      vLong2->value(pt2[0]);
-      vLatitude2->value(pt2[1]);
+      // Test if values are NAN
+      if ( (pt1[0] != pt1[0]) || (pt1[1] != pt1[1]) || (pt2[0] != pt2[0]) || (pt2[1] != pt2[1]) )
+      {
+        // If nan then there is no transform
+        isNotAProjection = true;
+        vLong1->deactivate();
+        vLatitude1->deactivate();
+        vLong2->deactivate();
+        vLatitude2->deactivate();
+        bUpdate->deactivate();
+      }
+      else
+      {
+        vLong1->value(pt1[0]);
+        vLatitude1->value(pt1[1]);
+        vLong2->value(pt2[0]);
+        vLatitude2->value(pt2[1]); 
+      }
     }
     
     wExtractROIWindow->show();
@@ -373,41 +393,11 @@ namespace otb
         // Get input image
         FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
         
-        //TODO Add case of long/lat input
-        if ( !isNotAProjection )
-        {
-          OutputPointType pt1;
-          OutputPointType pt2;
+        idxInit[0] = static_cast<unsigned long>(vStartX->value());
+        idxInit[1] = static_cast<unsigned long>(vStartY->value());
           
-          pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
-          pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
-          pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
-          pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-          
-          OutputPointType pto1;
-          OutputPointType pto2;
-          m_Transform->GetInverse(m_InverseTransform);
-          pto1 = m_InverseTransform->TransformPoint(pt1);
-          pto2 = m_InverseTransform->TransformPoint(pt2);
-          
-          IndexType index1;
-          IndexType index2;
-          
-          image->TransformPhysicalPointToIndex(pto1, index1);
-          image->TransformPhysicalPointToIndex(pto2, index2);
-          
-          idxInit = index1;
-          offSize = index2 - index1;
-          
-        }
-        else
-        {
-          idxInit[0] = static_cast<unsigned long>(vStartX->value());
-          idxInit[1] = static_cast<unsigned long>(vStartY->value());
-          
-          offSize[0] = static_cast<unsigned long>(vSizeX->value());
-          offSize[1] = static_cast<unsigned long>(vSizeY->value());
-        }
+        offSize[0] = static_cast<unsigned long>(vSizeX->value());
+        offSize[1] = static_cast<unsigned long>(vSizeY->value());
         
         m_ImageExtractROIFilter->SetStartX(idxInit[0]);
         m_ImageExtractROIFilter->SetStartY(idxInit[1]);
@@ -419,45 +409,15 @@ namespace otb
         this->NotifyOutputsChange();
       }
       else if(image.IsNull() && !vectorImage.IsNull())
-        
       {
         // Get Input Vector Image
         FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
         
-        //TODO Add case of long/lat input
-        if ( !isNotAProjection )
-        {
-          OutputPointType pt1;
-          OutputPointType pt2;
+        idxInit[0] = static_cast<unsigned long>(vStartX->value());
+        idxInit[1] = static_cast<unsigned long>(vStartY->value());
           
-          pt1[0] = static_cast<InternalPixelType>( vLong1->value() );
-          pt1[1] = static_cast<InternalPixelType>( vLatitude1->value() );
-          pt2[0] = static_cast<InternalPixelType>( vLong2->value() );
-          pt2[1] = static_cast<InternalPixelType>( vLatitude2->value() );
-          
-          OutputPointType pto1;
-          OutputPointType pto2;
-          m_Transform->GetInverse(m_InverseTransform);
-          pto1 = m_InverseTransform->TransformPoint(pt1);
-          pto2 = m_InverseTransform->TransformPoint(pt2);
-          
-          IndexType index1;
-          IndexType index2;
-          
-          vectorImage->TransformPhysicalPointToIndex(pto1, index1);
-          vectorImage->TransformPhysicalPointToIndex(pto2, index2);
-          
-          idxInit = index1;
-          offSize = index2 - index1;
-        }
-        else
-        {
-          idxInit[0] = static_cast<unsigned long>(vStartX->value());
-          idxInit[1] = static_cast<unsigned long>(vStartY->value());
-          
-          offSize[0] = static_cast<unsigned long>(vSizeX->value());
-          offSize[1] = static_cast<unsigned long>(vSizeY->value());
-        }
+        offSize[0] = static_cast<unsigned long>(vSizeX->value());
+        offSize[1] = static_cast<unsigned long>(vSizeY->value());
         
         m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
         m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);

@@ -138,7 +138,7 @@ ${TEMP}/extractROIImageModuleOuptut.tif
 42 74
 )
 
-ADD_TEST(moTvExtractROIVectorImageModuleTest  ${Modules_TESTS2} otbExtractROIModuleTest
+ADD_TEST(moTvExtractROIVectorImageModuleTest  ${Modules_TESTS2} otbExtractROIVectorImageModuleTest
 ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
 ${TEMP}/extractROIVectorImageModuleOuptut.tif
 50 60
