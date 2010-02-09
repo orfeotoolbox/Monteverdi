@@ -61,6 +61,7 @@
 #include "otbSarIntensityModule.h"
 #include "otbHomologousPointExtractionModule.h"
 #include "otbExtractROIModule.h"
+#include "otbTileMapImportModule.h"
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
@@ -133,6 +134,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
+  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
 
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));

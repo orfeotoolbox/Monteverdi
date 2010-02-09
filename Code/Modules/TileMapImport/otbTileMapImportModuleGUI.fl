@@ -1,0 +1,118 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class TileMapImportModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wTileMapImportWindow {
+      label {Tile Map Import} open
+      xywh {639 174 400 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {400 400 400 400} visible
+    } {
+      Fl_Group {} {open
+        xywh {0 0 400 400}
+      } {
+        Fl_Wizard {} {
+          label {Size of the ROI} open
+          xywh {3 300 394 50} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {3 300 394 50} align 0
+          } {
+            Fl_Value_Input vSizeX {
+              label {Size X} user_data_type {void*}
+              xywh {93 312 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vSizeY {
+              label {Size Y} user_data_type {void*} selected
+              xywh {248 312 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+          }
+        }
+        Fl_Wizard {} {
+          label {Choose the Place} open
+          xywh {3 25 394 175} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {3 25 394 175}
+          } {
+            Fl_Input vPlacename {
+              label Placename
+              xywh {90 35 280 25} box PLASTIC_DOWN_BOX labelcolor 186 when 1
+            }
+            Fl_Button bSearch {
+              label Search
+              callback {this->SearchPlace();}
+              xywh {310 65 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            }
+            Fl_Value_Input vLatitude {
+              label Latitude user_data_type {void*}
+              xywh {90 105 280 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+10 maximum 1e+10 step 1e-05
+            }
+            Fl_Value_Input vLongitude {
+              label Longitude user_data_type {void*}
+              xywh {90 135 280 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+10 maximum 1e+10 step 1e-05
+            }
+            Fl_Button bUpdate {
+              label Update
+              callback {this->UpdatePlace();}
+              xywh {310 165 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            }
+          }
+        }
+        Fl_Group {} {open
+          xywh {3 360 394 35}
+        } {
+          Fl_Return_Button bOk {
+            label Ok
+            callback {this->Ok();}
+            xywh {295 360 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bCancel {
+            label Cancel
+            callback {this->Cancel();}
+            xywh {210 360 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Fl_Group {} {open
+          xywh {3 395 394 5} resizable
+        } {}
+        Fl_Wizard {} {
+          label {Select Depth} open
+          xywh {3 225 394 50} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {3 225 394 50} align 0
+          } {
+            Fl_Choice vDepth {
+              label Depth open
+              xywh {160 237 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+            } {}
+          }
+        }
+      }
+    }
+  }
+  Function {OpenDataSet()} {open protected return_type {virtual void}
+  } {}
+  Function {Browse()} {open protected return_type {virtual void}
+  } {}
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+  Function {Analyse()} {open protected return_type {virtual void}
+  } {}
+  Function {TypeChanged()} {open protected return_type {virtual void}
+  } {}
+  Function {~TileMapImportModuleGUI()} {open return_type virtual
+  } {}
+  Function {Ok()} {open protected return_type {virtual void}
+  } {}
+  Function {SearchPlace()} {open protected return_type {virtual void}
+  } {}
+  Function {UpdatePlace()} {open protected return_type {virtual void}
+  } {}
+} 

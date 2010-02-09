@@ -145,6 +145,15 @@ ${TEMP}/extractROIVectorImageModuleOuptut.tif
 78 98
 )
 
+#------------- Tile Map Import Module Tests ---------------------------
+ADD_TEST(moTvTileMapImportModuleTest ${Modules_TESTS2} otbTileMapImportModuleTest
+${TEMP}/tileMapImportModuleTestOutput.tif
+Toulouse
+500
+500
+15
+)
+
 #------------- Point Extraction Module Tests ---------------------------
 
 ADD_TEST(moTvHomologousPointExtractionModuleTest ${Modules_TESTS2} otbHomologousPointExtractionModuleTest
@@ -262,6 +271,7 @@ otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
+otbTileMapImportModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
@@ -292,7 +302,7 @@ ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
 ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
 
 TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
-TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBProjections OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 
 

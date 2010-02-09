@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbProjectionModuleTest);
   REGISTER_TEST(otbExtractROIModuleTest);
   REGISTER_TEST(otbExtractROIVectorImageModuleTest);
+  REGISTER_TEST(otbTileMapImportModuleTest);
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
   REGISTER_TEST(otbConcatenateModuleTest);
   REGISTER_TEST(otbAlgebraModuleTest);
