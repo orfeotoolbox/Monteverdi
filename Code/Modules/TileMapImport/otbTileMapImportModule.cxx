@@ -37,7 +37,7 @@ namespace otb
     m_SizeY = 500;
     
     m_ServerName = "http://tile.openstreetmap.org/";
-    m_CacheDirectory = "";
+    m_CacheDirectory = ".";
     
     // Build GUI
     this->BuildGUI();
@@ -53,6 +53,14 @@ namespace otb
       label << i;
       vDepth->add(label.str().c_str(),"",NULL);
     }
+    
+    // Initialize server choice
+    std::string servername;
+    servername = "Open Street Map";  // http://tile.openstreetmap.org/
+    vServername->add(servername.c_str(),"",NULL);
+    servername = "Near Map"; // http://www.nearmap.com/maps/
+    vServername->add(servername.c_str(),"",NULL);
+    vServername->value(0);
     
     vDepth->value(m_Depth - 1);
     vSizeX->value(m_SizeX);
@@ -89,6 +97,39 @@ namespace otb
   {
    try
     {
+      std::string lFileSuffix;
+      std::string lAddressMode;
+      
+      // Get ServerName
+      switch (vServername->value())
+      {
+        // Open street map
+        case 0:
+        {
+          m_ServerName = "http://tile.openstreetmap.org/";
+          lFileSuffix = "png";
+          lAddressMode = "1";
+          break;
+        }
+        case 1:
+        {
+          m_ServerName = "http://www.nearmap.com/maps/";
+          lFileSuffix = "jpg";
+          lAddressMode = "2";
+          break;
+        }
+          // Open street map par défaut
+        default:
+        {
+          m_ServerName = "http://tile.openstreetmap.org/";
+          lFileSuffix = "png";
+          lAddressMode = "1";
+          break;
+        }
+      }
+          
+          
+      
       // Get parameters
       m_Depth = static_cast<unsigned int>(vDepth->value() + 1); // when vDepth = 0 Depth = 1;
       m_SizeX = static_cast<unsigned int>(vSizeX->value());
@@ -101,6 +142,8 @@ namespace otb
       // Configure TileIO
       m_TileIO->SetDepth( m_Depth );
       m_TileIO->SetCacheDirectory( m_CacheDirectory );
+      m_TileIO->SetFileSuffix( lFileSuffix );
+      m_TileIO->SetAddressMode( lAddressMode );
       
       // Configure reader
       m_ReaderTile->SetFileName( m_ServerName );
@@ -108,7 +151,6 @@ namespace otb
       m_ReaderTile->UpdateOutputInformation();
       
       // Create Model
-
       m_Model = ModelType::New();
       
       // Configure m_Model

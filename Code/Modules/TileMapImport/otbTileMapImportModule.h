@@ -29,8 +29,7 @@
 #include "otbCoordinateToName.h"
 
 // include the OTB elements - Extract Tile Map
-#include "itkRGBPixel.h"
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
 #include "otbInverseSensorModel.h"

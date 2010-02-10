@@ -11,10 +11,10 @@ class TileMapImportModuleGUI {open
   } {
     Fl_Window wTileMapImportWindow {
       label {Tile Map Import} open
-      xywh {639 174 400 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {400 400 400 400} visible
+      xywh {900 50 400 465} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {400 465 400 465} visible
     } {
       Fl_Group {} {open
-        xywh {0 0 400 400}
+        xywh {0 0 400 465}
       } {
         Fl_Wizard {} {
           label {Size of the ROI} open
@@ -28,7 +28,7 @@ class TileMapImportModuleGUI {open
               xywh {93 312 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vSizeY {
-              label {Size Y} user_data_type {void*} selected
+              label {Size Y} user_data_type {void*}
               xywh {248 312 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
           }
@@ -42,7 +42,8 @@ class TileMapImportModuleGUI {open
           } {
             Fl_Input vPlacename {
               label Placename
-              xywh {90 35 280 25} box PLASTIC_DOWN_BOX labelcolor 186 when 1
+              callback {this->SearchPlace();}
+              xywh {90 35 280 25} box PLASTIC_DOWN_BOX labelcolor 186 when 8
             }
             Fl_Button bSearch {
               label Search
@@ -65,21 +66,21 @@ class TileMapImportModuleGUI {open
           }
         }
         Fl_Group {} {open
-          xywh {3 360 394 35}
+          xywh {3 425 394 35}
         } {
           Fl_Return_Button bOk {
             label Ok
             callback {this->Ok();}
-            xywh {295 360 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            xywh {295 430 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button bCancel {
             label Cancel
             callback {this->Cancel();}
-            xywh {210 360 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            xywh {210 430 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {open
-          xywh {3 395 394 5} resizable
+          xywh {3 460 394 5} resizable
         } {}
         Fl_Wizard {} {
           label {Select Depth} open
@@ -90,7 +91,19 @@ class TileMapImportModuleGUI {open
           } {
             Fl_Choice vDepth {
               label Depth open
-              xywh {160 237 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+              xywh {160 237 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186 when 1
+            } {}
+          }
+        }
+        Fl_Wizard {} {
+          label {Select Tile Map Server} open
+          xywh {3 375 394 50} box PLASTIC_THIN_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {3 375 394 50}
+          } {
+            Fl_Choice vServername {open selected
+              xywh {50 387 300 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
             } {}
           }
         }
