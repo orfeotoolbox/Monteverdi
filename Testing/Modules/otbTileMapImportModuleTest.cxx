@@ -53,7 +53,7 @@ int otbTileMapImportModuleTest(int argc, char* argv[])
   specificModule->bOk->do_callback();
   Fl::check();
 
-  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
+  otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OpenStreetMap-Toulouse-15");
 
   std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
 

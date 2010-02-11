@@ -51,7 +51,7 @@ class TileMapImportModuleGUI {open
               xywh {310 65 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             }
             Fl_Value_Input vLatitude {
-              label Latitude user_data_type {void*}
+              label Latitude user_data_type {void*} selected
               xywh {90 105 280 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+10 maximum 1e+10 step 1e-05
             }
             Fl_Value_Input vLongitude {
@@ -102,7 +102,7 @@ class TileMapImportModuleGUI {open
           Fl_Group {} {open
             xywh {3 375 394 50}
           } {
-            Fl_Choice vServername {open selected
+            Fl_Choice vServername {open
               xywh {50 387 300 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
             } {}
           }

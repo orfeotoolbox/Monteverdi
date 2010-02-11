@@ -37,7 +37,13 @@ namespace otb
     m_SizeY = 500;
     
     m_ServerName = "http://tile.openstreetmap.org/";
-    m_CacheDirectory = ".";
+    m_CacheDirectory = "./Caching";
+    
+    // Create the caching dir if not already created
+    ossimFilename cachingDir(m_CacheDirectory);
+    cachingDir.createDirectory();
+    
+    m_OutputKey = "OutputImage";
     
     // Build GUI
     this->BuildGUI();
@@ -109,6 +115,8 @@ namespace otb
           m_ServerName = "http://tile.openstreetmap.org/";
           lFileSuffix = "png";
           lAddressMode = "1";
+          m_CacheDirectory += "/OSM";
+          m_OutputKey = "OpenStreetMap-";
           break;
         }
         case 1:
@@ -116,6 +124,8 @@ namespace otb
           m_ServerName = "http://www.nearmap.com/maps/";
           lFileSuffix = "jpg";
           lAddressMode = "2";
+          m_CacheDirectory += "/NM";
+          m_OutputKey = "NearMap-";
           break;
         }
           // Open street map par défaut
@@ -124,16 +134,49 @@ namespace otb
           m_ServerName = "http://tile.openstreetmap.org/";
           lFileSuffix = "png";
           lAddressMode = "1";
+          m_CacheDirectory += "/OSM";
+          m_OutputKey = "OpenStreetMap-";
           break;
         }
       }
-          
-          
       
       // Get parameters
       m_Depth = static_cast<unsigned int>(vDepth->value() + 1); // when vDepth = 0 Depth = 1;
       m_SizeX = static_cast<unsigned int>(vSizeX->value());
       m_SizeY = static_cast<unsigned int>(vSizeY->value());
+      
+      if(m_Longitude == -1000 && m_Latitude == -1000)
+      {
+        m_Longitude = static_cast<double> (vLongitude->value());
+        m_Latitude = static_cast<double> (vLatitude->value());
+        
+        this->UpdatePlace();
+      }
+      
+      if(m_PlaceName == "")
+      {
+        this->UpdatePlace();
+      }
+      
+      // Generate Output Key
+      if(m_PlaceName != "")
+      {
+        m_OutputKey += m_PlaceName;
+      }
+      else
+      {
+        std::ostringstream latlon;
+        latlon << m_Longitude;
+        latlon << ",";
+        latlon << m_Latitude;
+        m_OutputKey += latlon.str();
+      }
+      
+      std::ostringstream sdepth;
+      sdepth << m_Depth;
+      
+      m_OutputKey += "-";
+      m_OutputKey += sdepth.str();
       
       // Create ImageIO and Reader
       m_TileIO      = ImageIOType::New();
@@ -142,8 +185,6 @@ namespace otb
       // Configure TileIO
       m_TileIO->SetDepth( m_Depth );
       m_TileIO->SetCacheDirectory( m_CacheDirectory );
-      m_TileIO->SetFileSuffix( lFileSuffix );
-      m_TileIO->SetAddressMode( lAddressMode );
       
       // Configure reader
       m_ReaderTile->SetFileName( m_ServerName );
@@ -180,15 +221,31 @@ namespace otb
       // Create extract ROI
       m_ExtractROIOsmFilter = ExtractROIFilterType::New();
       
+      RegionType  region;
+      ImageType::IndexType index;
+      ImageType::SizeType size;
+      
       // Configure extract ROI
       m_ExtractROIOsmFilter->SetStartX( startX-sizeX/2 );
       m_ExtractROIOsmFilter->SetStartY( startY-sizeY/2 );
       m_ExtractROIOsmFilter->SetSizeX( sizeX );
       m_ExtractROIOsmFilter->SetSizeY( sizeY );
+      
+      size[0] = sizeX;
+      size[1] = sizeY;
+      index[0] = startX-sizeX/2;
+      index[1] = startY-sizeY/2;
+      
+      region.SetSize(size);
+      region.SetIndex(index);
+      
+      region.Crop( m_ReaderTile->GetOutput()->GetLargestPossibleRegion() );
+      
+      m_ExtractROIOsmFilter->SetExtractionRegion(region);
       m_ExtractROIOsmFilter->SetInput( m_ReaderTile->GetOutput() );
       
       this->ClearOutputDescriptors();
-      this->AddOutputDescriptor( m_ExtractROIOsmFilter->GetOutput(),"OutputImage", otbGetTextMacro("Image extracted") );
+      this->AddOutputDescriptor( m_ExtractROIOsmFilter->GetOutput(),m_OutputKey, otbGetTextMacro("Image extracted") );
       this->NotifyOutputsChange();
       
       wTileMapImportWindow->hide();

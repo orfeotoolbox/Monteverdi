@@ -65,6 +65,8 @@ namespace otb
     
     typedef otb::VectorImage<double, 2>                   ImageType;
     
+    typedef ImageType::RegionType                         RegionType;
+      
     typedef otb::ImageFileReader<ImageType>               ReaderType;
     typedef ReaderType::Pointer                           ReaderPointerType;
     
@@ -144,6 +146,9 @@ namespace otb
     /** TileIo */
     std::string                     m_ServerName;
     std::string                     m_CacheDirectory;
+    
+    /** Output Key */
+    std::string                     m_OutputKey;
   };
   
 } // End namespace otb
