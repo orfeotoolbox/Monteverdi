@@ -11,6 +11,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(Modules_TESTS1 ${CXX_TEST_PATH}/otbModulesTests1)
 SET(Modules_TESTS2 ${CXX_TEST_PATH}/otbModulesTests2)
 SET(Modules_TESTS3 ${CXX_TEST_PATH}/otbModulesTests3)
+SET(Modules_TESTS4 ${CXX_TEST_PATH}/otbModulesTests4)
 
 
 
@@ -145,15 +146,6 @@ ${TEMP}/extractROIVectorImageModuleOuptut.tif
 78 98
 )
 
-#------------- Tile Map Import Module Tests ---------------------------
-ADD_TEST(moTvTileMapImportModuleTest ${Modules_TESTS2} otbTileMapImportModuleTest
-${TEMP}/tileMapImportModuleTestOutput.tif
-Toulouse
-500
-500
-15
-)
-
 #------------- Point Extraction Module Tests ---------------------------
 
 ADD_TEST(moTvHomologousPointExtractionModuleTest ${Modules_TESTS2} otbHomologousPointExtractionModuleTest
@@ -248,6 +240,22 @@ ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.co
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#----------------------------------------------------------------------------------------------
+#------------------------------------ otbModulesTests4 ----------------------------------------
+#----------------------------------------------------------------------------------------------
+
+#------------- Tile Map Import Module Tests ---------------------------
+IF(OTB_USE_CURL)
+  ADD_TEST(moTvTileMapImportModuleTest ${Modules_TESTS4} otbTileMapImportModuleTest
+  ${TEMP}/tileMapImportModuleTestOutput.tif
+  Toulouse
+  500
+  500
+  15
+  )
+ENDIF(OTB_USE_CURL)
+
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -271,7 +279,6 @@ otbPanSharpeningModuleTest.cxx
 otbProjectionModuleTest.cxx
 otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
-otbTileMapImportModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
@@ -285,6 +292,12 @@ otbThresholdModuleTest.cxx
 otbOpticCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
 )
+
+IF(OTB_USE_CURL)
+SET(Modules_SRCS4
+  otbTileMapImportModuleTest.cxx
+)
+ENDIF(OTB_USE_CURL)
 
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
@@ -300,11 +313,16 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
 ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
 ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
+IF(OTB_USE_CURL)
+ADD_EXECUTABLE(otbModulesTests4 otbModulesTests4.cxx ${Modules_SRCS4})
+ENDIF(OTB_USE_CURL)
 
 TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
-TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBProjections OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
-
+IF(OTB_USE_CURL)
+TARGET_LINK_LIBRARIES(otbModulesTests4 ${LIST_MODULE_LIBRARIES} OTBIO OTBProjections OTBCommon OTBTesting)
+ENDIF(OTB_USE_CURL)
 
 # CPack installation: only Monteverdi application
 #IF(NOT OTB_INSTALL_NO_LIBRARIES)

@@ -61,7 +61,6 @@
 #include "otbSarIntensityModule.h"
 #include "otbHomologousPointExtractionModule.h"
 #include "otbExtractROIModule.h"
-#include "otbTileMapImportModule.h"
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
@@ -74,6 +73,9 @@
 #include "otbSarCalibrationModule.h"
 #include "otbCommandLineArgumentParser.h"
 
+#ifdef OTB_USE_CURL
+#include "otbTileMapImportModule.h"
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -134,7 +136,6 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image", otbGetTextMacro("File/Save dataset (advanced)"));
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
-  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
 
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
@@ -160,7 +161,10 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition", otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints", otbGetTextMacro("Geometry/Homologous points extraction"));
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP to sensor model"));
-  
+
+#ifdef OTB_USE_CURL
+  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
+#endif
   
   // Launch Monteverdi
   view->InitWidgets();
