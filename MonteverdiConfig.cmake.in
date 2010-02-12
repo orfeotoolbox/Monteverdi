@@ -42,3 +42,6 @@ SET(Monteverdi_LANG_LOCATION "@Monteverdi_LANG_LOCATION@")
 
 #Configuration file
 SET(Monteverdi_CONFIG "@Monteverdi_BINARY_DIR@")
+
+# OTB Bin directory
+SET(OTB_DIR "@OTB_DIR@")

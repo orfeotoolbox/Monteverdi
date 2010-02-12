@@ -17,3 +17,6 @@ INCLUDE_DIRECTORIES(BEFORE ${Monteverdi_INCLUDE_DIRS})
 
 # Add link directories needed to use Monteverdi.
 LINK_DIRECTORIES(${Monteverdi_LIBRARY_DIRS})
+
+# Where to find OTB
+INCLUDE(${OTB_DIR}/OTBConfig.cmake)
