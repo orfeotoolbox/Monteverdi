@@ -227,10 +227,10 @@ namespace otb
       IndexType lIndexStart, lIndexEnd;
       OutputPointType pto1, pto2, pt1, pt2;
       
-      lIndexStart[0]  = vStartX->value();
-      lIndexStart[1]  = vStartY->value();
-      lIndexEnd[0]    = lIndexStart[0] + vSizeX->value();
-      lIndexEnd[1]    = lIndexStart[1] + vSizeY->value();
+      lIndexStart[0]  = static_cast<long int>(vStartX->value());
+      lIndexStart[1]  = static_cast<long int>(vStartY->value());
+      lIndexEnd[0]    = static_cast<long int>(lIndexStart[0] + vSizeX->value());
+      lIndexEnd[1]    = static_cast<long int>(lIndexStart[1] + vSizeY->value());
       
       if(!image.IsNull() && vectorImage.IsNull())
       {
@@ -308,10 +308,10 @@ namespace otb
       IndexType lIndexStart, lIndexEnd;
       OutputPointType pto1, pto2, pt1, pt2;
       
-      lIndexStart[0]  = vStartX->value();
-      lIndexStart[1]  = vStartY->value();
-      lIndexEnd[0]    = lIndexStart[0] + vSizeX->value();
-      lIndexEnd[1]    = lIndexStart[1] + vSizeY->value();
+      lIndexStart[0]  = static_cast<long int>(vStartX->value());
+      lIndexStart[1]  = static_cast<long int>(vStartY->value());
+      lIndexEnd[0]    = static_cast<long int>(lIndexStart[0] + vSizeX->value());
+      lIndexEnd[1]    = static_cast<long int>(lIndexStart[1] + vSizeY->value());
       
       if(!image.IsNull() && vectorImage.IsNull())
       {
