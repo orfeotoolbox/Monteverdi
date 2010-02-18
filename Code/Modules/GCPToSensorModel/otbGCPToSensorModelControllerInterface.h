@@ -54,6 +54,10 @@ public:
   virtual void UpdateStats() =0;
   virtual void OK() =0;
   virtual void UpdatePointList() =0;
+  
+  virtual void SearchPlaceName(double latitude, double longitude) = 0;
+  virtual void SearchLatLong(std::string placename) = 0;
+  virtual void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY) = 0;
 
 protected:
   /** Constructor */

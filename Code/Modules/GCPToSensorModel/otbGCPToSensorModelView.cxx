@@ -29,10 +29,11 @@ namespace otb
 
 GCPToSensorModelView
 ::GCPToSensorModelView(): m_Controller(), m_Model(),
-     m_ImageView(), m_CrossGlComponent(), m_CircleGlComponent()
+     m_ImageView(), m_MapView(), m_CrossGlComponent(), m_CircleGlComponent()
 {
   m_Model = GCPToSensorModelModel::New();
   m_ImageView = ImageViewType::New();
+  m_MapView = ImageViewType::New();
   m_CrossGlComponent = CrossGlComponent::New();
   m_CircleGlComponent = CircleGlComponent::New();
   m_Green.Fill(0);
@@ -54,6 +55,12 @@ GCPToSensorModelView
   gFull->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
   gZoom->remove(m_ImageView->GetZoomWidget());
+  
+  m_MapView->GetFullWidget()->ClearGlComponents();
+  m_MapView->GetScrollWidget()->ClearGlComponents();
+  m_MapView->GetZoomWidget()->ClearGlComponents();
+  
+  gMFull->remove(m_MapView->GetFullWidget());
 }
 
 void
@@ -63,6 +70,8 @@ GCPToSensorModelView
   m_Model = model;
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
   m_Model->RegisterListener(this);
+  
+  m_MapView->SetModel(m_Model->GetMapVisualizationModel());
 }
 
 void
@@ -78,14 +87,35 @@ GCPToSensorModelView
     {
       itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
     }
+    
+  if(!m_MapWidgetController)
+    {
+      itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
+    }
+    
   // Build the fltk code
   this->CreateGUI();
 
   // Register controllers
   m_ImageView->SetController(m_WidgetController);
-
+  m_MapView->SetController(m_MapWidgetController);
+  
+  // Initialize Map Viewer
+  vMPlaceName->value("");
+  vMLongitude->value(0.0);
+  vMLatitude->value(0.0);
+  
+  for (int i=1; i<=18; i++)
+  {
+    std::ostringstream label;
+    label << i;
+    vMDepth->add(label.str().c_str(),"",NULL);
+  }
+  vMDepth->value(0);
+  
+  // Show
   this->Show();
- 
+  
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
 
@@ -108,7 +138,11 @@ void
 GCPToSensorModelView
 ::Show()
 {
+  wMainWindow->position(0, 44);
+  wMapWindow->position(850, 44);
+  
   wMainWindow->show();
+  wMapWindow->show();
   
   // Add registered visualization components from the interface
   gFull->add(m_ImageView->GetFullWidget());
@@ -132,6 +166,11 @@ GCPToSensorModelView
   m_ImageView->GetFullWidget()->show();
   m_ImageView->GetScrollWidget()->show();
   m_ImageView->GetZoomWidget()->show();
+
+  m_MapView->GetFullWidget()->resize(gMFull->x(),gMFull->y(),gMFull->w(),gMFull->h());
+  
+  gMFull->add(m_MapView->GetFullWidget());
+  gMFull->resizable(m_MapView->GetFullWidget());
 }
 
 
@@ -380,10 +419,33 @@ GCPToSensorModelView
       this->ReloadGCPs();
       m_Controller->UpdateStats();
     }
-  else if(m_Model->GetProjectionUpdated())
+  if(m_Model->GetProjectionUpdated())
     {
       this->ClearTransformationInfo();
       m_Controller->UpdateStats();
+    }
+  if(m_Model->GetPlaceNameChanged())
+    {
+      std::string placename = m_Model->GetPlaceName();
+      vMPlaceName->value(placename.c_str());
+    }
+  if(m_Model->GetLatLongChanged())
+    {
+      vMLatitude->value(m_Model->GetLatitude());
+      vMLongitude->value(m_Model->GetLongitude());
+    }
+  if(m_Model->GetHasNewMap())
+    {
+      this->DrawMap();
+    }
+  if(m_Model->GetDepthChanged())
+    {
+      vMDepth->value(m_Model->GetDepth()-1);
+    }
+  if(m_Model->GetSelectedPointChanged())
+    {
+      vLat->value(m_Model->GetSelectedLatitude());
+      vLong->value(m_Model->GetSelectedLongitude());
     }
 }
 
@@ -435,8 +497,63 @@ GCPToSensorModelView
 ::HideAll()
 {
   wMainWindow->hide();
+  wMapWindow->hide();
   wDEMWindow->hide();
 }
+  
+void 
+GCPToSensorModelView
+::ShowMap()
+{
+  if (wMapWindow->shown())
+    wMapWindow->hide();
+  else
+  {
+    wMapWindow->show();
+    this->DrawMap();
+  }
+}
+  
+void
+GCPToSensorModelView
+::UpdatePlaceName()
+{
+  double lLatitude = static_cast<double>(vMLatitude->value());
+  double lLongitude = static_cast<double>(vMLongitude->value());
+  
+  m_Controller->SearchPlaceName(lLatitude, lLongitude);
+}
+  
+void
+GCPToSensorModelView
+::UpdateLatLong()
+{
+  std::string lPlacename = vMPlaceName->value();
+  
+  if(lPlacename != "")
+  {
+    m_Controller->SearchLatLong(lPlacename);
+  }
+}
+  
+void 
+GCPToSensorModelView
+::DisplayMap()
+{
+  std::string lPlacename = vMPlaceName->value();
+  double lLatitude = static_cast<double>(vMLatitude->value());
+  double lLongitude = static_cast<double>(vMLongitude->value());
+  unsigned int lDepth = static_cast<unsigned int>(vMDepth->value()) + 1;
+  
+  m_Controller->DisplayMap(lPlacename, lLatitude, lLongitude, lDepth, gMFull->w(), gMFull->h());
+}
 
+void
+GCPToSensorModelView
+::DrawMap()
+{
+  m_MapView->GetFullWidget()->redraw();
+  m_MapView->GetFullWidget()->show();
+}
 
 }// end namespace

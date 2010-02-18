@@ -69,6 +69,7 @@ public:
 
   /** Set the widgets controller */
   itkSetObjectMacro(WidgetController,ImageWidgetController);
+  itkSetObjectMacro(MapWidgetController,ImageWidgetController);
 
   /** Build the interface */
   virtual void BuildInterface();
@@ -83,6 +84,12 @@ public:
   virtual void ReloadGCPs();
   virtual void SetProjectionType();
 
+  /** Street Map window */
+  virtual void ShowMap();
+  virtual void UpdatePlaceName();
+  virtual void UpdateLatLong();
+  virtual void DisplayMap();
+  
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
   void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height );
@@ -92,6 +99,7 @@ public:
   
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(ImageView,ImageViewType);
+  itkGetObjectMacro(MapView,ImageViewType);
 
   void SetModel(GCPToSensorModelModel* model);
   
@@ -108,13 +116,16 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the controller */
-  GCPToSensorModelControllerInterface::Pointer m_Controller;
+  GCPToSensorModelControllerInterface::Pointer  m_Controller;
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer                m_WidgetController;
+  /** Pointer to the widgets controller */
+  ImageWidgetController::Pointer                m_MapWidgetController;
   /** Pointer to the model */
   GCPToSensorModelModel::Pointer m_Model;
   /** Image view */
   ImageViewType::Pointer                        m_ImageView;
+  ImageViewType::Pointer                        m_MapView;
   /** Cross Gl Component */
   CrossGlComponent::Pointer                     m_CrossGlComponent;
   /** Circle Gl Component */
@@ -123,6 +134,9 @@ private:
   ColorListType                                 m_ColorList;
   /** Green color */
   ColorType                                     m_Green;
+  
+  /** Draw map */
+  void DrawMap();
 };
 }//end namespace otb
 

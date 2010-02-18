@@ -27,13 +27,15 @@ namespace otb
 {
 
 GCPToSensorModelController
-::GCPToSensorModelController(): m_View(), m_Model(), m_WidgetController(), m_MouseClickedController(),
+::GCPToSensorModelController(): m_View(), m_Model(), m_WidgetController(), m_MapWidgetController(), m_MouseClickedController(),
                                           m_ResizingHandler(), m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(),
                                           m_ChangeScaleHandler(), m_LeftMouseClickedHandler(), m_PixelActionHandler(),
-                                          m_PixelModel(), m_PixelView()
+                                          m_PixelModel(), m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
+                                          m_MapMouseMapActionHandler()
 {
   // Build the widgets controller
   m_WidgetController        = WidgetControllerType::New();
+  m_MapWidgetController     = WidgetControllerType::New();
   m_MouseClickedController   = MouseClickedController::New();
 
   // Build the action handlers
@@ -45,6 +47,10 @@ GCPToSensorModelController
   m_PixelActionHandler        = PixelDescriptionActionHandlerType::New();
   m_PixelModel                = PixelDescriptionModelType::New();
   m_PixelView                 = PixelDescriptionViewType::New();
+  
+  m_MapResizingHandler        = ResizingHandlerType::New();
+  m_MapScrollZoomHandler      = ScrollZoomHandlerType::New();
+  m_MapMouseMapActionHandler  = MouseMapActionHandlerType::New();
 
   // Link pixel clicked model (controller in relity...)
   m_MouseClickedController->SetMouseButton(1);
@@ -60,6 +66,10 @@ GCPToSensorModelController
   m_WidgetController->AddActionHandler(m_ChangeScaledRegionHandler);
   m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
   m_WidgetController->AddActionHandler(m_LeftMouseClickedHandler);
+  
+  m_MapWidgetController->AddActionHandler(m_MapResizingHandler);
+  m_MapWidgetController->AddActionHandler(m_MapScrollZoomHandler);
+  m_MapWidgetController->AddActionHandler(m_MapMouseMapActionHandler);
 }
 
 
@@ -79,6 +89,10 @@ GCPToSensorModelController
   m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
+  
+  m_MapResizingHandler->SetModel(m_Model->GetMapVisualizationModel());
+  m_MapScrollZoomHandler->SetModel(m_Model);
+  m_MapMouseMapActionHandler->SetModel(m_Model);
 }
 
 void
@@ -91,8 +105,11 @@ GCPToSensorModelController
   m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
   m_LeftMouseClickedHandler->SetView(m_View->GetImageView());
+  
+  m_MapResizingHandler->SetView(m_View->GetMapView());
+  m_MapScrollZoomHandler->SetView(m_View->GetMapView());
+  m_MapMouseMapActionHandler->SetView(m_View->GetMapView());
 }
-
 
 void
 GCPToSensorModelController
@@ -346,6 +363,51 @@ GCPToSensorModelController
   try
     {
       m_Model->OK();
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+}
+  
+void
+GCPToSensorModelController
+::SearchPlaceName(double latitude, double longitude)
+{
+  try
+    {
+      m_Model->SearchPlaceName(latitude, longitude);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+}
+
+void
+GCPToSensorModelController
+::SearchLatLong(std::string placename)
+{
+  try
+    {
+      m_Model->SearchLatLong(placename);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
+}
+
+void
+GCPToSensorModelController
+::DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY)
+{
+  try
+    {
+      m_Model->DisplayMap(placename, latitude, longitude, depth, sizeX, sizeY);
     }
   catch (itk::ExceptionObject & err)
     {

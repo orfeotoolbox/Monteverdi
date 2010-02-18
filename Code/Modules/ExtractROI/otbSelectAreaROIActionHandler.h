@@ -25,7 +25,7 @@
 #include <FL/Fl_Value_Input.H>
 
 /** \class SelectAreaROIActionHandler
- *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
+ *   \brief Draw a rectangle on ROI.
  *
  *   \sa ImageWidgetController
  *   \sa ImageWidgetActionHandler

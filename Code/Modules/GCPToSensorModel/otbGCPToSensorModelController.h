@@ -35,6 +35,9 @@
 #include "otbPixelDescriptionView.h"
 #include "otbMouseClickActionHandler.h"
 
+#include "otbScrollZoomActionHandler.h"
+#include "otbMouseMapActionHandler.h"
+
 namespace otb
 {
 class ITK_EXPORT GCPToSensorModelController
@@ -73,6 +76,7 @@ public:
     itkSetClampMacro(ImageViewId,int,0,1);
     itkGetMacro(ImageViewId,int);
     itkSetObjectMacro(Controller, GCPToSensorModelControllerInterface);
+    
   protected:
  /** Constructor */
   MouseClickedController() : m_MouseButton(1), m_ImageViewId(1), m_Controller(){};
@@ -112,6 +116,9 @@ public:
   typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler<VisualizationModelType,ImageViewType>               ChangeScaleHandlerType;
   typedef MouseClickActionHandler<MouseClickedController, ImageViewType>               MouseClickedHandlertype;
+  
+  typedef ScrollZoomActionHandler<ImageViewType, GCPToSensorModelModel>                ScrollZoomHandlerType;
+  typedef MouseMapActionHandler<ImageViewType, GCPToSensorModelModel>                  MouseMapActionHandlerType;
 
   typedef PixelDescriptionModel<RGBImageType>                                          PixelDescriptionModelType;
   typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType>      PixelDescriptionActionHandlerType;
@@ -129,6 +136,7 @@ public:
 
   /** Get the widgets controller */
   itkGetObjectMacro(WidgetController,WidgetControllerType);
+  itkGetObjectMacro(MapWidgetController,WidgetControllerType);
 
   virtual void SetInputImage(GCPToSensorModelModel::VectorImageType* image)
   {
@@ -151,6 +159,11 @@ public:
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( ContinuousIndexType index );
 
+  /** Map module */
+  void SearchPlaceName(double latitude, double longitude);
+  void SearchLatLong(std::string placename);
+  void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY);
+
  protected:
   /** Constructor */
   GCPToSensorModelController();
@@ -170,6 +183,7 @@ private:
 
   /** Widgets controller */
   WidgetControllerType::Pointer              m_WidgetController;
+  WidgetControllerType::Pointer              m_MapWidgetController;
   MouseClickedController::Pointer            m_MouseClickedController;
 
   /** Action handlers */
@@ -181,6 +195,10 @@ private:
   PixelDescriptionActionHandlerType::Pointer m_PixelActionHandler;
   PixelDescriptionModelType::Pointer         m_PixelModel;
   PixelDescriptionViewType::Pointer          m_PixelView;
+  
+  ResizingHandlerType::Pointer               m_MapResizingHandler;
+  ScrollZoomHandlerType::Pointer             m_MapScrollZoomHandler;
+  MouseMapActionHandlerType::Pointer         m_MapMouseMapActionHandler;
   
 };
 } //end namespace otb

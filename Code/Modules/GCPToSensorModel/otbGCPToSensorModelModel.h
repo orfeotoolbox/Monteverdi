@@ -34,6 +34,11 @@
 #include "otbDEMHandler.h"
 #include "itkContinuousIndex.h"
 
+#include "otbTileMapImageIO.h"
+#include "otbImageFileReader.h"
+#include "ossim/projection/ossimTileMapModel.h"
+#include "otbInverseSensorModel.h"
+#include "otbForwardSensorModel.h"
 
 //Visu
 #include "otbImageLayerRenderingModel.h"
@@ -91,6 +96,26 @@ public:
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
+
+  /** Map viewer */
+  typedef unsigned char                         MapPixelType;
+  typedef VectorImage<MapPixelType, 2>          MapImageType;
+  typedef ImageFileReader<MapImageType>         MapReaderType;
+  typedef MapReaderType::Pointer                MapReaderPointerType;
+  typedef TileMapImageIO                        TileMapType;
+  typedef TileMapType::Pointer                  TileMapPointerType;
+  
+  typedef VisualizationModelType::RegionType    RegionType;
+  
+  typedef otb::InverseSensorModel<double>       MapModelType;
+  typedef MapModelType::Pointer                 MapModelPointerType;
+
+  typedef otb::ForwardSensorModel<double>       MapForwardModelType;
+  typedef MapForwardModelType::Pointer          MapForwardModelPointerType;
+
+  typedef ImageLayer<MapImageType,RGBImageType>                        MapLayerType;
+  typedef ImageLayerGenerator<MapLayerType>                            MapLayerGeneratorType;
+  typedef MapLayerGeneratorType::Pointer                               MapLayerGeneratorPointerType;
 
   /** New macro */
   itkNewMacro(Self);
@@ -187,6 +212,40 @@ public:
   /** Get Ground error projection */
   itkGetConstMacro(GroundError, double);
 
+  /** Map Viewer */
+  void SetMap(long int sizeX, long int sizeY);
+  void SearchLatLong(std::string placename);
+  void SearchPlaceName(double latitude, double longitude);
+  void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY);
+
+  itkGetConstMacro(PlaceNameChanged, bool);
+  itkGetConstMacro(LatLongChanged, bool);
+  itkGetConstMacro(DepthChanged, bool);
+  itkGetConstMacro(HasNewMap, bool);
+  itkGetConstMacro(SelectedPointChanged, bool);
+
+  itkGetStringMacro(PlaceName);
+  itkGetMacro(Latitude, double);
+  itkGetMacro(Longitude, double);
+  
+  itkGetMacro(SelectedLatitude, double);
+  itkGetMacro(SelectedLongitude, double);
+  
+  itkGetMacro(Depth, unsigned int);
+  itkSetMacro(Depth, unsigned int);
+  
+  /** Increase Depth with a value */
+  void IncreaseDepth(int value, long int x, long y);
+  
+  /** MoveMap with on x and y axes */
+  void DragMap(long int x, long int y);
+  
+  /** Change Selected point */
+  void SetSelectedPoint(long int x, long int y);
+  
+  
+  /** Get the visualization model */
+  itkGetObjectMacro(MapVisualizationModel, VisualizationModelType);
 
 protected:
 
@@ -247,6 +306,39 @@ private:
   ProjectionEnumType m_ProjectionType;
   /** Ground error projection */
   double m_GroundError;
+  
+  /** Map viewer */
+  MapReaderPointerType            m_MapReader;
+  TileMapPointerType              m_TileIO;
+  MapModelPointerType             m_MapModel;
+  MapForwardModelPointerType      m_MapInverseModel;
+  
+  std::string m_PlaceName;
+  double m_Latitude;
+  double m_Longitude;
+  unsigned int m_Depth;
+  
+  double m_SelectedLatitude;
+  double m_SelectedLongitude;
+  
+  long int m_SizeX;
+  long int m_SizeY;
+  
+  RegionType m_Region;
+  
+  std::string m_ServerName;
+  std::string m_CacheDirectory;
+
+  /** Visualization */
+  VisualizationModelPointerType m_MapVisualizationModel;
+  MapLayerGeneratorPointerType  m_MapImageGenerator;
+  BlendingFunctionPointerType   m_MapBlendingFunction;
+  
+  bool m_PlaceNameChanged;
+  bool m_LatLongChanged;
+  bool m_DepthChanged;
+  bool m_HasNewMap;
+  bool m_SelectedPointChanged;
 };
 
 }//end namespace otb

@@ -36,6 +36,7 @@ GCPToSensorModelModule::GCPToSensorModelModule()
   m_View->SetController(m_Controller);
   m_View->SetModel(m_Model);
   m_View->SetWidgetController(m_Controller->GetWidgetController());
+  m_View->SetMapWidgetController(m_Controller->GetMapWidgetController());
 
   m_Model->RegisterListener(this);
 
@@ -78,6 +79,12 @@ void GCPToSensorModelModule::Run()
     // Process the input as an FloatingVectorImageType
       m_View->BuildInterface();
       m_Model->SetImage( fpvImage );
+#ifdef OTB_USE_CURL
+      m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
+#else
+      m_View->wMapWindow->hide();
+      m_View->guiShowMap->deactivate();
+#endif
     }
   else
     {

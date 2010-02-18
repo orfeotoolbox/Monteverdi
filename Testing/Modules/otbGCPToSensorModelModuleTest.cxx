@@ -42,12 +42,25 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
   std::cout<<reader->GetOutput()->GetImageKeywordlist()<<std::endl;
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
 
   //Fl::run();
+#ifdef OTB_USE_CURL
+  // Simulate mapSearch
+  // Set placename and update lat/long
+  std::string parisFrance = "Paris 04 Hôtel-de-Ville France";
+  std::string paris = "Paris";
+  gcpModule->GetView()->vMPlaceName->value(paris.c_str());
+  gcpModule->GetView()->bMUpdateLatLong->do_callback();
+  gcpModule->GetView()->bMUpdatePlaceName->do_callback();
+  // Check result
+  if (parisFrance != gcpModule->GetView()->vMPlaceName->value())
+  {
+    return EXIT_FAILURE;
+  }
+#endif
   
   // Simulate Ok button callback
   gcpModule->GetView()->bOk->do_callback();
