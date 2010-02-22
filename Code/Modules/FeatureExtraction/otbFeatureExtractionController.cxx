@@ -189,7 +189,6 @@ FeatureExtractionController
 }
 
 
-
 void
 FeatureExtractionController
 ::InitInput()

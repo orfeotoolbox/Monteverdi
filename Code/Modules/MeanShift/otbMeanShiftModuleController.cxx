@@ -4,7 +4,6 @@
 #include <FL/fl_ask.H>
 
 
-
 namespace otb
 {
 
@@ -57,7 +56,6 @@ void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
   m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
 }
-
 
 
 void
@@ -142,14 +140,12 @@ MeanShiftModuleController
 }
 
 
-
 void
 MeanShiftModuleController
 ::Quit()
 {
   m_Model->Quit();
 }
-
 
 
 } // end namespace otb

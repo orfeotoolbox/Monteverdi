@@ -34,8 +34,6 @@
 #include <iostream>
 
 
-
-
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
 #ifndef CALLBACK

@@ -20,8 +20,6 @@
 #define __otbHomologousPointExtractionView_h
 
 
-
-
 #include "otbHomologousPointExtractionViewGroup.h"
 
 #include "otbListenerBase.h"

@@ -12,7 +12,6 @@
  ***************************************************************/
 
 
-
 #ifndef _otbFLUTREEBROWSER_H
 #define _otbFLUTREEBROWSER_H
 

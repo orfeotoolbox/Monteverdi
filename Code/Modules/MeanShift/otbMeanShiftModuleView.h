@@ -2,8 +2,6 @@
 #define __otbBasicModuleView_h
 
 
-
-
 #include "otbMeanShiftModuleViewGroup.h"
 
 #include "otbEventsListener.h"

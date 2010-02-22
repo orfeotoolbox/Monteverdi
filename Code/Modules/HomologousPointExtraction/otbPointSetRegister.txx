@@ -20,7 +20,6 @@
 #include "otbPointSetRegister.h"
 
 
-
 namespace otb
 {
 template <class TTransform>

@@ -1170,7 +1170,6 @@ InteractiveChangeDetection<TPixel>::LoadCenterImage()
   //int offset = tTabs->h()-tHistogram->h();
 
 
-
   if (m_CenterViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
   {
     int width = aCenterViewerHistogram->w()/3;

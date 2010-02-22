@@ -261,7 +261,6 @@ GCPToSensorModelModel
 }
 
 
-
 void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
@@ -415,7 +414,6 @@ GCPToSensorModelModel
     }
   return outList;
 }
-
 
 
 void

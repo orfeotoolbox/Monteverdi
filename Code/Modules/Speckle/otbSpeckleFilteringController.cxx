@@ -67,5 +67,4 @@ SpeckleFilteringController
 }
 
 
-
 } // end namespace otb

@@ -282,7 +282,6 @@ private:
   ossimRefPtr<ossimRpcModel> m_RpcModel;
 
 
-
   bool m_OutputChanged;
   /** DEM directory path*/
   std::string m_DEMPath;

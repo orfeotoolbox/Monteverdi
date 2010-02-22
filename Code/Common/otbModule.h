@@ -182,7 +182,6 @@ protected:
   virtual void Run();
 
 
-
   /** The custom run command (asynchronous threaded version) */
   virtual void ThreadedRun();
 

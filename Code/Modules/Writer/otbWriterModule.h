@@ -76,7 +76,6 @@ public:
   typedef VectorDataFileWriter<LabeledVectorType>       LabeledVectorWriterType;
 
 
-
 protected:
   /** Constructor */
   WriterModule();

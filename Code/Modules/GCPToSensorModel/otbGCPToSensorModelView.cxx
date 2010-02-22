@@ -342,7 +342,6 @@ GCPToSensorModelView
 }
 
 
-
 void
 GCPToSensorModelView
 ::Focus(unsigned int i)
@@ -368,7 +367,6 @@ GCPToSensorModelView
        }
     }
 }
-
 
 
 void

@@ -147,7 +147,6 @@ void ReaderModule::Analyse()
 }
 
 
-
 void ReaderModule::OpenDataSet()
 {
   try

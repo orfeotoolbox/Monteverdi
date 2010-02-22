@@ -111,7 +111,6 @@ void MeanShiftModuleView::Exit()
 }
 
 
-
 void MeanShiftModuleView::RunSegmentation()
 {
   m_Controller->RunSegmentation();

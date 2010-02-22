@@ -368,7 +368,6 @@ template <typename T> void Module::AddOutputDescriptor(typename otb::Image<std::
 }
 
 
-
 /** Retrieve the actual data from the map (returns NULL if wrong DataType */
 template <typename T> T * Module::GetInputData(const std::string & key, unsigned int idx) const
 {
@@ -419,7 +418,6 @@ template <typename T> std::string Module::GetInputDataDescription(const std::str
 
   return it->second.GetNthData(idx).GetDescription();
 }
-
 
 
 } // end namespace otb

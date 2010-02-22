@@ -457,7 +457,6 @@ SupervisedClassificationAppli
 }
 
 
-
 /**
  *
  */
@@ -588,7 +587,6 @@ SupervisedClassificationAppli
   bDisplay->activate();
   bValidate->activate();
 }
-
 
 
 /**

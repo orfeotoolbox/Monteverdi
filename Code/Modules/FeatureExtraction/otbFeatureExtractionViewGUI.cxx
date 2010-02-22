@@ -222,7 +222,6 @@ FeatureExtractionViewGUI
 }
 
 
-
 void
 FeatureExtractionViewGUI
 ::UpdateInformation()
@@ -342,7 +341,6 @@ FeatureExtractionViewGUI
 }
 
 
-
 void
 FeatureExtractionViewGUI
 ::UpdateFeatureInfo(FeatureType feat)
@@ -433,7 +431,6 @@ FeatureExtractionViewGUI
 {
   m_FeatureExtractionController->CreateFeature(m_FeatureType);
 }
-
 
 
 void

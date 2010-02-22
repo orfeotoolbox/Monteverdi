@@ -228,7 +228,6 @@ void ProjectionModel
 }
 
 
-
 /**
  * Initialize the Transmercator Projection and Transform
  */

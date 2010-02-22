@@ -149,7 +149,6 @@ HomologousPointExtractionModuleView
   m_SecondImageView->GetZoomWidget()->resize(gZoom2->x(),gZoom2->y(),gZoom2->w(),gZoom2->h());
 
 
-
   m_FirstImageView->GetFullWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetScrollWidget()->AddGlComponent( m_FirstCrossGlComponent );
   m_FirstImageView->GetZoomWidget()->AddGlComponent( m_FirstCrossGlComponent );

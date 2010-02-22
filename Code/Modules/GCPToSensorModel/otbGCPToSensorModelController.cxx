@@ -22,7 +22,6 @@
 //#include <FL/fl_ask.H>
 
 
-
 namespace otb
 {
 

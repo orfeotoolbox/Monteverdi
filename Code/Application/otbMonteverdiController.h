@@ -22,7 +22,6 @@
 #include "otbMonteverdiViewGUI.h"
 
 
-
 namespace otb
 {
 class ITK_EXPORT MonteverdiController
@@ -81,8 +80,6 @@ private:
 
   /** Pointer to the view */
   ViewPointerType m_View;
-
-
 
 
 };

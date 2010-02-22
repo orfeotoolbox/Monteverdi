@@ -42,7 +42,6 @@ bool OutputDataDescriptor::IsCached() const
 }
 
 
-
 void OutputDataDescriptor::CacheNthData(unsigned int idx, const DataObjectWrapper & data)
 {
   if(idx>=m_Data.size())

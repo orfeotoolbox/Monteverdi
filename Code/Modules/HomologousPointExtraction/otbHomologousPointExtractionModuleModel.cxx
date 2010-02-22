@@ -507,7 +507,6 @@ HomologousPointExtractionModuleModel
 }
 
 
-
 void
 HomologousPointExtractionModuleModel
 ::OK()

@@ -44,7 +44,6 @@
 #include "otbProjectionModel.h"
 
 
-
 // Remote Sensing Transformation
 #include "otbGenericRSTransform.h"
 

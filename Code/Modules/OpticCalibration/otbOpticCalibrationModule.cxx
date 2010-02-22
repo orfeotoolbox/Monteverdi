@@ -352,7 +352,6 @@ OpticCalibrationModule
 }
 
 
-
 void
 OpticCalibrationModule
 ::UpdateCorrectionParameters()
@@ -653,7 +652,6 @@ OpticCalibrationModule
   wMainWindow->hide();
   this->BusyOff();
 }
-
 
 
 } // End namespace otb

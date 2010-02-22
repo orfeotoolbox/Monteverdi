@@ -116,7 +116,6 @@ FeatureExtractionModel
 }
 
 
-
 void
 FeatureExtractionModel
 ::InitInput()

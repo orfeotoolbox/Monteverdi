@@ -389,7 +389,6 @@ public:
   }
 
 
-
   /** Print little squares around interesting points */
   void PrintPoints()
   {

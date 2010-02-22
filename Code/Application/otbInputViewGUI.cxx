@@ -30,7 +30,6 @@
 #include "itkExceptionObject.h"
 
 
-
 namespace otb
 {
 

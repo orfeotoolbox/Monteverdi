@@ -175,7 +175,6 @@ private:
 };
 
 
-
 } // End namespace otb
 
 #endif

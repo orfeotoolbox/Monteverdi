@@ -2,7 +2,6 @@
 #include "otbFltkFilterWatcher.h"
 
 
-
 namespace otb
 {
 /** Initialize the singleton */

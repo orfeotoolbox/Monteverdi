@@ -67,7 +67,6 @@ namespace otb
  */
 
 
-
 class ITK_EXPORT FeatureExtractionModel
 //       : public MVCModel<ListenerBase>, public itk::Object
   : public EventsSender<std::string>, public itk::Object
@@ -324,7 +323,6 @@ public:
     }
 
   }
-
 
 
   /** Output Filter Information */

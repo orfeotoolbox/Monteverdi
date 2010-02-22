@@ -485,7 +485,6 @@ ProjectionView
 }
 
 
-
 int
 ProjectionView
 ::UpdateInterpolator()

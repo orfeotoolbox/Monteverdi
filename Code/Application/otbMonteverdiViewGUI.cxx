@@ -63,7 +63,6 @@ MonteverdiViewGUI
   m_Tree = new FluTreeBrowser( gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree " );
 
 
-
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
 

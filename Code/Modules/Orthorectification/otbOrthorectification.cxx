@@ -151,7 +151,6 @@ Orthorectification
 }
 
 
-
 void
 Orthorectification
 ::OK()
@@ -317,7 +316,6 @@ Orthorectification
 }
 
 
-
 Orthorectification::DoubleVectorType
 Orthorectification::PointToLongLat(ForwardSensorInputPointType point)
 {
@@ -335,7 +333,6 @@ Orthorectification::PointToLongLat(ForwardSensorInputPointType point)
 
   return outVectPoint;
 }
-
 
 
 void
@@ -382,7 +379,6 @@ Orthorectification
   oss<<latLongPoint[0];
   guiLatSelection->value(oss.str().c_str());
 }
-
 
 
 void
@@ -473,7 +469,6 @@ Orthorectification
     break;
   }
 }
-
 
 
 void
@@ -763,7 +758,6 @@ Orthorectification
 }
 
 
-
 int
 Orthorectification
 ::UpdateInterpolator()
@@ -873,7 +867,6 @@ Orthorectification
   }
   return res;
 }
-
 
 
 template <class TMapProjection>
@@ -1024,7 +1017,6 @@ Orthorectification::SelectAction()
 }
 
 
-
 void
 Orthorectification
 ::UpdateEastNorth()
@@ -1152,8 +1144,6 @@ Orthorectification::ImageToCarto(ForwardSensorInputPointType point)
 }
 
 
-
-
 Orthorectification::DoubleVectorType
 Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint)
 {
@@ -1238,8 +1228,6 @@ Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint
 }
 
 
-
-
 Orthorectification::DoubleVectorType
 Orthorectification::LongLatPointToCartoInOriginRef(ForwardSensorInputPointType latLongPoint)
 {
@@ -1266,7 +1254,6 @@ Orthorectification::LongLatPointToCartoInOriginRef(ForwardSensorInputPointType l
 
   return outVectPoint;
 }
-
 
 
 Orthorectification::IntVectorType
