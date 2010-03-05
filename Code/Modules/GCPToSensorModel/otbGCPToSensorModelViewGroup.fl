@@ -15,7 +15,7 @@ class GCPToSensorModelViewGroup {open
     Fl_Window wMainWindow {
       label {GCP to sensor model module}
       callback {this->HideAll();} open
-      xywh {471 63 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {80 106 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tile {} {open
         xywh {0 0 213 600}
@@ -106,11 +106,11 @@ class GCPToSensorModelViewGroup {open
             xywh {459 18 338 240} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           } {}
           Fl_Group gFull {
-            label {Full fix} open
+            label {Full fix} open selected
             xywh {216 275 580 250} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           } {}
           Fl_Group gIndexes {open
-            xywh {216 549 582 50} box PLASTIC_DOWN_BOX color 7
+            xywh {216 547 582 52} box PLASTIC_DOWN_BOX color 7
           } {
             Fl_Value_Input vX {
               label X
@@ -140,12 +140,12 @@ class GCPToSensorModelViewGroup {open
             Fl_Button guiAdd {
               label Add
               callback {AddPoints();}
-              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {655 570 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
+              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {730 550 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 10 labelcolor 186
             }
             Fl_Button guiShowMap {
               label {Street Map}
               callback {ShowMap();}
-              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {730 570 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 11 labelcolor 186
+              tooltip {Clear Feature List (shortcut KP_Enter)} xywh {730 575 65 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff8d color 7 selection_color 45 labelfont 1 labelsize 11 labelcolor 186
             }
           }
         }
@@ -294,7 +294,7 @@ wDEMWindow->hide();}
       } {
         Fl_Button {} {
           label {Display Map}
-          callback {this->DisplayMap()} selected
+          callback {this->DisplayMap()}
           xywh {337 135 225 40} box PLASTIC_DOWN_BOX down_box GTK_DOWN_BOX labelfont 1 labelsize 16 labelcolor 186
         }
       }
