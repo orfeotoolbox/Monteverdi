@@ -215,6 +215,9 @@ void ThresholdModule::UpdateSlidersExtremum()
   guiMinDetails->value(min);
   guiMaxDetails->value(max);
 
+  guiMinDetails->step(vcl_floor( ((max - min)/100.)*100)/100.);  
+  guiMaxDetails->step(vcl_floor( ((max - min)/100.)*100)/100.); 
+
   // Redraw the sliders
   guiMinDetails->redraw();
   guiMaxDetails->redraw();
