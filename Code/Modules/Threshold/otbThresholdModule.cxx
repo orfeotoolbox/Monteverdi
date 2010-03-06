@@ -336,4 +336,3 @@ void ThresholdModule::Hide()
   wMainWindow->hide();
 }
 } // End namespace otb
-
