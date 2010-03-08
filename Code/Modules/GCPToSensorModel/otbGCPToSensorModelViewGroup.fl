@@ -106,7 +106,7 @@ class GCPToSensorModelViewGroup {open
             xywh {459 18 338 240} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           } {}
           Fl_Group gFull {
-            label {Full fix} open selected
+            label {Full fix} open
             xywh {216 275 580 250} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           } {}
           Fl_Group gIndexes {open
@@ -127,11 +127,11 @@ class GCPToSensorModelViewGroup {open
             }
             Fl_Value_Input vLong {
               label Long
-              xywh {424 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+              xywh {424 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -360 maximum 360 step 1e-06
             }
             Fl_Value_Input vLat {
-              label Lat
-              xywh {539 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -1e+06 maximum 1e+06 step 0.001
+              label Lat selected
+              xywh {539 570 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -360 maximum 360 step 1e-06
             }
             Fl_Value_Input vElev {
               label Elev
