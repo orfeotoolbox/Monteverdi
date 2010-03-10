@@ -837,6 +837,29 @@ GCPToSensorModelModel
 
 }
 
+/** Center Map On selected Point */
+void
+GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int depth)
+{
+
+  if (m_Projection != NULL)
+  {
+    ContinuousIndexType input;
+    input[0] = static_cast<double>(x);
+    input[1] = static_cast<double>(y);
+    
+    Continuous3DIndexType output;
+    output = this->TransformPoint(input, 0);
+  
+    double lon = static_cast<double>(output[0]);
+    double lat = static_cast<double>(output[1]);
+    
+    SizeType size = m_Region.GetSize();
+    
+    this->DisplayMap(m_PlaceName, lat, lon, depth, size[0], size[1]);
+  }
+}
+
 #else
 void
 GCPToSensorModelModel
@@ -885,6 +908,12 @@ GCPToSensorModelModel
 void
 GCPToSensorModelModel
 ::DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY)
+{
+  itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
+}
+
+/** Center Map On selected Point */
+void CenterMapOnSelectedPoint(long int x, long int y, int depth)
 {
   itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
 }

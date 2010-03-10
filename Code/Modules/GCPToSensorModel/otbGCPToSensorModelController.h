@@ -38,6 +38,8 @@
 #include "otbScrollZoomActionHandler.h"
 #include "otbMouseMapActionHandler.h"
 
+#include "otbRightClickActionHandler.h"
+
 namespace otb
 {
 class ITK_EXPORT GCPToSensorModelController
@@ -119,6 +121,7 @@ public:
   
   typedef ScrollZoomActionHandler<ImageViewType, GCPToSensorModelModel>                ScrollZoomHandlerType;
   typedef MouseMapActionHandler<ImageViewType, GCPToSensorModelModel>                  MouseMapActionHandlerType;
+  typedef RightClickActionHandler<ImageViewType, GCPToSensorModelModel>                RightClickActionHandlerType;
 
   typedef PixelDescriptionModel<RGBImageType>                                          PixelDescriptionModelType;
   typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType>      PixelDescriptionActionHandlerType;
@@ -199,6 +202,7 @@ private:
   ResizingHandlerType::Pointer               m_MapResizingHandler;
   ScrollZoomHandlerType::Pointer             m_MapScrollZoomHandler;
   MouseMapActionHandlerType::Pointer         m_MapMouseMapActionHandler;
+  RightClickActionHandlerType::Pointer       m_RightClickActionHandler;
   
 };
 } //end namespace otb

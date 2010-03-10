@@ -243,6 +243,8 @@ public:
   /** Change Selected point */
   void SetSelectedPoint(long int x, long int y);
   
+  /** Select point on map */
+  void CenterMapOnSelectedPoint(long int x, long int y, int depth);
   
   /** Get the visualization model */
   itkGetObjectMacro(MapVisualizationModel, VisualizationModelType);

@@ -30,7 +30,7 @@ GCPToSensorModelController
                                           m_ResizingHandler(), m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(),
                                           m_ChangeScaleHandler(), m_LeftMouseClickedHandler(), m_PixelActionHandler(),
                                           m_PixelModel(), m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
-                                          m_MapMouseMapActionHandler()
+                                          m_MapMouseMapActionHandler(), m_RightClickActionHandler()
 {
   // Build the widgets controller
   m_WidgetController        = WidgetControllerType::New();
@@ -50,6 +50,7 @@ GCPToSensorModelController
   m_MapResizingHandler        = ResizingHandlerType::New();
   m_MapScrollZoomHandler      = ScrollZoomHandlerType::New();
   m_MapMouseMapActionHandler  = MouseMapActionHandlerType::New();
+  m_RightClickActionHandler   = RightClickActionHandlerType::New();
 
   // Link pixel clicked model (controller in relity...)
   m_MouseClickedController->SetMouseButton(1);
@@ -65,6 +66,7 @@ GCPToSensorModelController
   m_WidgetController->AddActionHandler(m_ChangeScaledRegionHandler);
   m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
   m_WidgetController->AddActionHandler(m_LeftMouseClickedHandler);
+  m_WidgetController->AddActionHandler(m_RightClickActionHandler);
   
   m_MapWidgetController->AddActionHandler(m_MapResizingHandler);
   m_MapWidgetController->AddActionHandler(m_MapScrollZoomHandler);
@@ -92,6 +94,7 @@ GCPToSensorModelController
   m_MapResizingHandler->SetModel(m_Model->GetMapVisualizationModel());
   m_MapScrollZoomHandler->SetModel(m_Model);
   m_MapMouseMapActionHandler->SetModel(m_Model);
+  m_RightClickActionHandler->SetModel(m_Model);
 }
 
 void
@@ -108,6 +111,7 @@ GCPToSensorModelController
   m_MapResizingHandler->SetView(m_View->GetMapView());
   m_MapScrollZoomHandler->SetView(m_View->GetMapView());
   m_MapMouseMapActionHandler->SetView(m_View->GetMapView());
+  m_RightClickActionHandler->SetView(m_View->GetImageView());
 }
 
 void
@@ -197,6 +201,12 @@ GCPToSensorModelController
  index[1] = static_cast<long>(id[1]);
   m_ChangeRegionHandler->GetModel()->SetExtractRegionCenter(index);
   m_ChangeRegionHandler->GetModel()->Update();
+
+#ifdef OTB_USE_CURL  
+  // Focus on map
+  m_Model->CenterMapOnSelectedPoint(index[0], index[1], 16);
+
+#endif
 }
 
 
