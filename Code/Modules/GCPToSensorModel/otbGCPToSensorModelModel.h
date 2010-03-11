@@ -149,6 +149,10 @@ public:
   }
   void RemovePointFromList( unsigned int id );
 
+  /// Import/Export GCPs to/from an xml file
+  void ImportGCPsFromXmlFile(const char * fname);
+  void ExportGCPsToXmlFile(const char * fname) const;
+
   /** Projection performing */
   void ComputeBilinearProjection();
   void ComputeRPCProjection();

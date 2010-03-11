@@ -23,6 +23,8 @@
 #include "base/ossimDirectory.h"
 #include "projection/ossimRpcSolver.h"
 
+#include "tinyxml.h"
+
 #ifdef OTB_USE_CURL
 #include "otbPlaceNameToLonLat.h"
 #include "otbCoordinateToName.h"
@@ -174,6 +176,140 @@ GCPToSensorModelModel
       height =  m_InputImage->GetGCPZ(i);
       this->AddIndexesToList( index1, index2, height );
     }
+}
+
+void GCPToSensorModelModel
+::ImportGCPsFromXmlFile(const char * fname)
+{
+  // Build an xml document handler
+  TiXmlDocument doc(fname);
+
+  // If the document fails to lead
+  if (!doc.LoadFile())
+    {
+    itkExceptionMacro(<<"Can't open file "<<fname);
+    }
+
+  // Build an xml handle
+  TiXmlHandle hDoc(&doc);
+
+  // Look for the GroundControlPoints tag
+  TiXmlHandle gcps = hDoc.FirstChildElement("GroundControlPoints");
+
+  // Iterate on each ground control point
+  for( TiXmlElement* currentGcp = gcps.FirstChildElement("GroundControlPoint").ToElement();
+         currentGcp != NULL;
+         currentGcp = currentGcp->NextSiblingElement() )
+      {
+      ContinuousIndexType p1, p2;
+      double elevation;
+
+      // Decode gcp column
+      TiXmlElement* currentElement = currentGcp->FirstChildElement("Column");
+      if (!currentElement)
+        {
+        itkExceptionMacro(<<"Bad XML file (<Column> not found): "<<fname);
+        }
+       p1[0] = atof(currentElement->GetText());
+
+       // Decode gcp row
+       currentElement = currentGcp->FirstChildElement("Row");
+       if (!currentElement)
+         {
+         itkExceptionMacro(<<"Bad XML file (<Row> not found): "<<fname);
+         }
+       p1[1] = atof(currentElement->GetText());
+
+       // Decode gcp latitude
+       currentElement = currentGcp->FirstChildElement("Latitude");
+       if (!currentElement)
+         {
+         itkExceptionMacro(<<"Bad XML file (<Latitude> not found): "<<fname);
+         }
+       p2[0] = atof(currentElement->GetText());
+
+       // Decode gcp longitude
+       currentElement = currentGcp->FirstChildElement("Longitude");
+       if (!currentElement)
+         {
+         itkExceptionMacro(<<"Bad XML file (<Longitude> not found): "<<fname);
+         }
+       p2[1] = atof(currentElement->GetText());
+
+       // Decode gcp elevation
+       currentElement = currentGcp->FirstChildElement("Elevation");
+       if (!currentElement)
+         {
+         itkExceptionMacro(<<"Bad XML file (<Elevation> not found): "<<fname);
+         }
+       elevation = atof(currentElement->GetText());
+
+       // Finally, add the gcp
+       this->AddIndexesToList(p1,p2,elevation);
+      }
+  this->NotifyAll();
+}
+
+void GCPToSensorModelModel
+::ExportGCPsToXmlFile(const char * fname) const
+{
+  // Declare a stringstream to be used later
+  itk::OStringStream oss;
+  oss<<fixed<<setprecision(6);
+
+  // Build an xml document
+  TiXmlDocument doc;
+  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  doc.LinkEndChild( decl );
+
+  // Build root node
+  TiXmlElement * root = new TiXmlElement( "GroundControlPoints" );
+  doc.LinkEndChild( root );
+
+  // Iterate on each gcp
+  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
+      {
+      // Add a new entry
+      TiXmlElement * currentGCP = new TiXmlElement( "GroundControlPoint" );
+      root->LinkEndChild(currentGCP);
+
+      // Store the row index
+      TiXmlElement * column = new TiXmlElement( "Column" );
+      oss.str("");
+      oss<<m_IndexesList[i].first[0];
+      column->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentGCP->LinkEndChild(column);
+
+      // Store the row index
+      TiXmlElement * row = new TiXmlElement( "Row" );
+      oss.str("");
+      oss<<m_IndexesList[i].first[1];
+      row->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentGCP->LinkEndChild(row);
+
+      // Store the latitude
+      TiXmlElement * latitude = new TiXmlElement( "Latitude" );
+      oss.str("");
+      oss<<m_IndexesList[i].second[0];
+      latitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentGCP->LinkEndChild(latitude);
+
+      // Store the longitude
+      TiXmlElement * longitude = new TiXmlElement( "Longitude" );
+      oss.str("");
+      oss<<m_IndexesList[i].second[1];
+      longitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentGCP->LinkEndChild(longitude);
+
+      // Store the elevation
+      TiXmlElement * elevation = new TiXmlElement( "Elevation" );
+      oss.str("");
+      oss<<m_UsedElevation[i];
+      elevation->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentGCP->LinkEndChild(elevation);
+      }
+    // Finally, write the file
+    doc.SaveFile( fname );
 }
 
 void

@@ -425,4 +425,35 @@ GCPToSensorModelController
     }
 }
 
+void
+GCPToSensorModelController
+::ExportGcpsToXmlFile(const char * fname)
+{
+  try
+    {
+    m_Model->ExportGCPsToXmlFile(fname);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+}
+
+void
+GCPToSensorModelController
+::ImportGcpsFromXmlFile(const char * fname)
+{
+  try
+    {
+    m_Model->ImportGCPsFromXmlFile(fname);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+    this->UpdatePointList();
+}
+
 } // end namespace otb

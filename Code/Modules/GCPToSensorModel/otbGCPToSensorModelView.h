@@ -83,6 +83,8 @@ public:
   virtual void HideAll();
   virtual void ReloadGCPs();
   virtual void SetProjectionType();
+  virtual void ImportGcpsFromXmlFile();
+  virtual void ExportGcpsToXmlFile();
 
   /** Street Map window */
   virtual void ShowMap();

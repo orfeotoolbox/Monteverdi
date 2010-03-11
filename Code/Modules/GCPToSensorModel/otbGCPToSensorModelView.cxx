@@ -554,4 +554,38 @@ GCPToSensorModelView
   m_MapView->GetFullWidget()->show();
 }
 
+void
+GCPToSensorModelView
+::ImportGcpsFromXmlFile()
+{
+  const char * fname = NULL;
+
+  // Choose file
+  fname = flu_file_chooser(otbGetTextMacro("Choose an XML file containing GCPs ..."), "*.xml","");
+
+  if (fname == NULL)
+    {
+    return ;
+    }
+
+  m_Controller->ImportGcpsFromXmlFile(fname);
+}
+
+void
+GCPToSensorModelView
+::ExportGcpsToXmlFile()
+{
+  const char * fname = NULL;
+
+    // Choose file
+    fname = flu_file_chooser(otbGetTextMacro("Choose an XML file to export GCPs ..."), "*.xml","");
+
+    if (fname == NULL)
+      {
+      return ;
+      }
+
+    m_Controller->ExportGcpsToXmlFile(fname);
+}
+
 }// end namespace

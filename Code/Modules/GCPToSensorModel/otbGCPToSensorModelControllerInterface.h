@@ -58,6 +58,8 @@ public:
   virtual void SearchPlaceName(double latitude, double longitude) = 0;
   virtual void SearchLatLong(std::string placename) = 0;
   virtual void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY) = 0;
+  virtual void ExportGcpsToXmlFile(const char * fname) = 0;
+  virtual void ImportGcpsFromXmlFile(const char * fname) = 0;
 
 protected:
   /** Constructor */
