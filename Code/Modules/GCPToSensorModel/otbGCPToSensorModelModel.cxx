@@ -611,18 +611,12 @@ GCPToSensorModelModel
       // Get elevation
       p3d[2] = m_UsedElevation[i];
       
-      std::cout<<"Adding GCP sensor: "<<p2d<<" <-> geo: "<<p3d<<std::endl;
-      
       // Add GCP
       m_GCPsToRPCSensorModelImageFilter->AddGCP(p2d, p3d);
     }
     
     m_GCPsToRPCSensorModelImageFilter->GetOutput()->UpdateOutputInformation();
-
-    std::cout << "KeywordList : " << m_GCPsToRPCSensorModelImageFilter->GetOutput()->GetImageKeywordlist()<<std::endl;
     m_Output = m_GCPsToRPCSensorModelImageFilter->GetOutput();
-    
-    
     
     m_Output->UpdateOutputInformation();
     
