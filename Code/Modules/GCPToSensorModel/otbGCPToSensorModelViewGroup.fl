@@ -137,11 +137,11 @@ class GCPToSensorModelViewGroup {open
             }
             Fl_Value_Input vLong {
               label Long
-              xywh {509 560 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -360 maximum 360 step 1e-06
+              xywh {509 560 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
             }
             Fl_Value_Input vLat {
               label Lat
-              xywh {624 560 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -360 maximum 360 step 1e-06
+              xywh {624 560 110 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
             }
             Fl_Value_Input vElev {
               label Elev
