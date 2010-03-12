@@ -38,7 +38,7 @@
 #include "otbScrollZoomActionHandler.h"
 #include "otbMouseMapActionHandler.h"
 
-#include "otbRightClickActionHandler.h"
+#include "otbGuessActionHandler.h"
 
 namespace otb
 {
@@ -121,7 +121,7 @@ public:
   
   typedef ScrollZoomActionHandler<ImageViewType, GCPToSensorModelModel>                ScrollZoomHandlerType;
   typedef MouseMapActionHandler<ImageViewType, GCPToSensorModelModel>                  MouseMapActionHandlerType;
-  typedef RightClickActionHandler<ImageViewType, GCPToSensorModelModel>                RightClickActionHandlerType;
+  typedef GuessActionHandler<ImageViewType, GCPToSensorModelModel>                     GuessActionHandlerType;
 
   typedef PixelDescriptionModel<RGBImageType>                                          PixelDescriptionModelType;
   typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType>      PixelDescriptionActionHandlerType;
@@ -204,7 +204,7 @@ private:
   ResizingHandlerType::Pointer               m_MapResizingHandler;
   ScrollZoomHandlerType::Pointer             m_MapScrollZoomHandler;
   MouseMapActionHandlerType::Pointer         m_MapMouseMapActionHandler;
-  RightClickActionHandlerType::Pointer       m_RightClickActionHandler;
+  GuessActionHandlerType::Pointer            m_GuessActionHandler;
   
 };
 } //end namespace otb

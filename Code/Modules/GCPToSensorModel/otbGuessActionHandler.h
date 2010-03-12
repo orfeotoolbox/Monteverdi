@@ -15,26 +15,26 @@
  PURPOSE.  See the above copyright notices for more information.
  
  =========================================================================*/
-#ifndef __RightClickActionHandler_h
-#define __RightClickActionHandler_h
+#ifndef __GuessActionHandler_h
+#define __GuessActionHandler_h
 
 #include "otbImageWidgetActionHandler.h"
 
-/** \class MouseMapActionHandler
- *   \brief Implements zoom on map.
+namespace otb
+{
+/** \class GuessActionHandler
+ *   \brief Implements lat/lon evaluator, a right click on image point center the map on this point.
  *
  *   \sa ImageWidgetController
  *   \sa ImageWidgetActionHandler
  *  \ingroup Visualization
  */
-namespace otb
-{
   template <class TView, class TModel>
-  class RightClickActionHandler : public ImageWidgetActionHandler
+  class GuessActionHandler : public ImageWidgetActionHandler
     {
     public:
       /** Standard class typedefs */
-      typedef RightClickActionHandler                      Self;
+      typedef GuessActionHandler                      Self;
       typedef ImageWidgetActionHandler               Superclass;
       typedef itk::SmartPointer<Self>                Pointer;
       typedef itk::SmartPointer<const Self>          ConstPointer;
@@ -43,7 +43,7 @@ namespace otb
       itkNewMacro(Self);
       
       /** Runtime information */
-      itkTypeMacro(RightClickActionHandler,ImageWidgetActionHandler);
+      itkTypeMacro(GuessActionHandler,ImageWidgetActionHandler);
 
       
       /** View typedefs */
@@ -140,12 +140,12 @@ namespace otb
       
     protected:
       /** Constructor */
-      RightClickActionHandler() : m_View()
+      GuessActionHandler() : m_View()
       {
       }
       
       /** Destructor */
-      virtual ~RightClickActionHandler(){}
+      virtual ~GuessActionHandler(){}
       /** Printself method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const
       {
@@ -153,7 +153,7 @@ namespace otb
       }
       
     private:
-      RightClickActionHandler(const Self&);    // purposely not implemented
+      GuessActionHandler(const Self&);    // purposely not implemented
       void operator=(const Self&); // purposely not implemented
       
       // Pointer to the view
