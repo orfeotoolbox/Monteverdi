@@ -40,6 +40,9 @@
 #include "otbInverseSensorModel.h"
 #include "otbForwardSensorModel.h"
 
+// GCPsToSensorModel
+#include "otbGCPsToRPCSensorModelImageFilter.h"
+
 //Visu
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
@@ -85,6 +88,13 @@ public:
 
   typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
   typedef enum { BILINEAR, RPC } ProjectionEnumType;
+
+  /** GCPToRPCSensorModel */
+  typedef GCPsToRPCSensorModelImageFilter<VectorImageType>          GCPsToRPCSensorModelImageFilterType;
+  typedef GCPsToRPCSensorModelImageFilterType::GCPsContainerType        GCPsContainerType;
+  typedef GCPsToRPCSensorModelImageFilterType::GCPType                  GCPType;
+  typedef GCPsToRPCSensorModelImageFilterType::Point2DType              Point2DType;  // Sensor coordinates
+  typedef GCPsToRPCSensorModelImageFilterType::Point3DType              Point3DType;  // Ground coordinates
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -311,6 +321,9 @@ private:
   ProjectionEnumType m_ProjectionType;
   /** Ground error projection */
   double m_GroundError;
+  
+  /** GCP To RCP Sensor Model Image Filter */
+  GCPsToRPCSensorModelImageFilterType::Pointer m_GCPsToRPCSensorModelImageFilter;
   
   /** Map viewer */
   MapReaderPointerType            m_MapReader;

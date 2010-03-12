@@ -68,7 +68,6 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   m_RpcProjection = NULL;
   m_RpcModel = NULL;
 
-
   m_DEMPath = "";
 
   m_MeanElevation = 0;
@@ -556,7 +555,7 @@ void
 GCPToSensorModelModel
 ::OK()
 {
-  if(m_ProjectionType == RPC)
+/*  if(m_ProjectionType == RPC)
     {
       if( m_RpcModel == NULL )
         return;
@@ -576,7 +575,60 @@ GCPToSensorModelModel
 
       m_OutputChanged = true;
       this->NotifyAll();
+    }*/
+  if(m_ProjectionType == RPC)
+  {
+    if( m_RpcModel == NULL )
+      return;
+    
+    // Generate Elevation
+    this->GenerateUsedElevation();
+    
+    // Create and configure filter
+    m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
+    m_GCPsToRPCSensorModelImageFilter->SetInput(m_InputImage);
+    m_GCPsToRPCSensorModelImageFilter->UseImageGCPsOff();
+    m_GCPsToRPCSensorModelImageFilter->UseDEMOff();
+    
+    ContinuousIndexType id1, id2;
+    Point2DType p2d;
+    Point3DType p3d;
+    
+    // Add GCPs
+    for (unsigned int i=0; i<m_IndexesList.size(); i++)
+    {
+      // Get elements in indexes list
+      id1 = m_IndexesList[i].first;
+      id2 = m_IndexesList[i].second;
+      
+      // Set sensor coordinates
+      p2d[0] = id1[0];
+      p2d[1] = id1[1];
+      
+      // Set ground coordinates
+      p3d[0] = id2[1];
+      p3d[1] = id2[0];
+      // Get elevation
+      p3d[2] = m_UsedElevation[i];
+      
+      std::cout<<"Adding GCP sensor: "<<p2d<<" <-> geo: "<<p3d<<std::endl;
+      
+      // Add GCP
+      m_GCPsToRPCSensorModelImageFilter->AddGCP(p2d, p3d);
     }
+    
+    m_GCPsToRPCSensorModelImageFilter->GetOutput()->UpdateOutputInformation();
+
+    std::cout << "KeywordList : " << m_GCPsToRPCSensorModelImageFilter->GetOutput()->GetImageKeywordlist()<<std::endl;
+    m_Output = m_GCPsToRPCSensorModelImageFilter->GetOutput();
+    
+    
+    
+    m_Output->UpdateOutputInformation();
+    
+    m_OutputChanged = true;
+    this->NotifyAll();
+  }
 }
 
 #ifdef OTB_USE_CURL
