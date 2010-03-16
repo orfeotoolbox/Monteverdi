@@ -1095,7 +1095,9 @@ GCPToSensorModelModel
 }
 
 /** Center Map On selected Point */
-void CenterMapOnSelectedPoint(long int x, long int y, int depth)
+void
+GCPToSensorModelModel
+::CenterMapOnSelectedPoint(long int x, long int y, int depth)
 {
   itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
 }
