@@ -18,14 +18,14 @@ class ProjectionGroup {open
     } {
       Fl_Button guiOK {
         label {Save / Quit}
-        callback {OK();} selected
+        callback {OK();}
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
-      Fl_Tabs m_TabsMode {
+      Fl_Tabs m_TabsMode {open
         xywh {5 9 420 410} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label {Input image} open
+          label {Input image} open selected
           xywh {5 30 420 389} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -188,12 +188,13 @@ this->UpdateInputTMTransform();}
           }
           Fl_Choice guiMapSelection {
             label {Map Pprojection}
-            callback {this->UpdateMapParam();}
+            callback {this->UpdateMapParam();} open
             tooltip {Select the map projection type} xywh {178 194 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
               label UTM
-              callback {m_UTM->show();
+              callback {m_MapType->show();
+m_UTM->show();
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
@@ -203,7 +204,8 @@ this->UpdateUTMTransform();}
             }
             MenuItem {} {
               label LAMBERT2
-              callback {m_UTM->hide();
+              callback {m_MapType->show();
+m_UTM->hide();
 m_Lambert2->show();
 m_TRANSMERCATOR->hide();
 this->m_MapType->redraw();
@@ -213,7 +215,8 @@ this->UpdateLambertIITransform();}
             }
             MenuItem {} {
               label TRANSMERCATOR
-              callback {m_UTM->hide();
+              callback {m_MapType->show();
+m_UTM->hide();
 m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
@@ -221,9 +224,17 @@ SetMapType(MAP_TRANSMERCATOR);
 this->UpdateTMTransform();}
               xywh {25 25 100 25} labelsize 11
             }
+            MenuItem {} {
+              label {WGS 84}
+              callback {m_MapType->hide();
+this->m_MapType->redraw();
+SetMapType(MAP_WGS84);
+this->UpdateWGS84Transform();}
+              xywh {35 35 100 25} labelsize 11
+            }
           }
           Fl_Wizard m_MapType {
-            label {Cartographic coordinates}
+            label {Cartographic coordinates} open
             xywh {33 234 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group m_UTM {
@@ -312,7 +323,7 @@ this->UpdateTMTransform();}
           }
         }
         Fl_Group {} {
-          label Settings open
+          label Settings
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
@@ -456,5 +467,7 @@ SetInterpolatorType(MAP_SPLINES);}
   Function {UpdateInputTMTransform()} {open return_type {virtual void}
   } {}
   Function {UpdateInputLambertIITransform()} {open return_type {virtual void}
+  } {}
+  Function {UpdateWGS84Transform()} {open return_type {virtual void}
   } {}
 } 
