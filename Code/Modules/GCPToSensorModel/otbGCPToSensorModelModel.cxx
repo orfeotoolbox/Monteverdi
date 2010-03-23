@@ -333,7 +333,11 @@ GCPToSensorModelModel
       ImagePointType phyPoint;
       phyPoint[0] = m_IndexesList[i].second[0];
       phyPoint[1] = m_IndexesList[i].second[1];
-      m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );
+      double height = m_DEMHandler->GetHeightAboveMSL(phyPoint);
+      // Check if elevation is nan
+      if (height != height)
+        height = 0;         // height default value
+      m_DEMsElevation.push_back( height );
     }
 
   this->Modified();
