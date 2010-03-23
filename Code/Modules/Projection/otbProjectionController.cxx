@@ -171,6 +171,21 @@ ProjectionController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
   }
 }
-
+/**
+ *
+ */
+void
+ProjectionController
+::InitializeWGS84Transform()
+{
+  try
+  {
+    m_Model->UpdateWGS84Transform();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+  }
+}
 
 } // end namespace otb

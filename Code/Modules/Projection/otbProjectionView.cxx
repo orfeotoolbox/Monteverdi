@@ -362,6 +362,10 @@ ProjectionView
        guiTransmercatorEastSelection->value(oss.str().c_str());
        break;
       }
+    case MAP_WGS84:
+      {
+       break;
+      } 
     default:
       fl_alert("Problem with map projection type, please contact developpers");
       break;
@@ -720,6 +724,16 @@ void
 ProjectionView::UpdateLambertIITransform()
 {
   m_Controller->InitializeLambertIITransform();
+}
+
+/**
+ * Tell the model to compute the LambertII transform
+ * Done in the module cause the user is not allowed to modify this
+ */
+void
+ProjectionView::UpdateWGS84Transform()
+{
+  m_Controller->InitializeWGS84Transform();
 }
 
 

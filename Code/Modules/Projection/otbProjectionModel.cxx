@@ -263,6 +263,39 @@ void ProjectionModel
   m_TransformChanged = false;
 }
 
+/**
+ *
+ */
+void
+ProjectionModel
+::UpdateWGS84Transform()
+{
+  // Build the Output Projection Ref
+  // WGS84
+  OGRSpatialReference oSRS;
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.exportToWkt(&m_OutputProjectionRef);
+  std::cout <<"m_OutputProjectionRef " << m_OutputProjectionRef << std::endl;
+
+  // Build the Generic RS transform
+  m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
+  m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
+  
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+  
+  // Get the transform
+  m_Transform->GetInverse(m_InverseTransform);
+  
+  // Update the output image parameters
+  this->UpdateOutputParameters();
+  
+  //Notify the view that the transform has changed
+  m_TransformChanged = true;
+  this->NotifyAll();
+  m_TransformChanged = false;
+}
+
 
 /**
  * Compute the new Origin, Spacing & Size of the output
@@ -396,7 +429,7 @@ void ProjectionModel
   // Evaluate spacing
   m_OutputSpacing[0] = sizeCartoX/OxLength;
   m_OutputSpacing[1] = -sizeCartoY/OyLength;
-
+  
   // Evaluate size
   m_OutputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX/m_OutputSpacing[0])));
   m_OutputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY/m_OutputSpacing[1])));

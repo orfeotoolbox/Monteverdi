@@ -139,6 +139,8 @@ protected:
   virtual void UpdateLambertIITransform();
   //
   virtual void UpdateTMTransform();
+  //  
+  virtual void UpdateWGS84Transform();  
 
   virtual void UpdateInputUTMTransform();
   //
