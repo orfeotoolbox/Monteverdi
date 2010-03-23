@@ -25,7 +25,7 @@
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-#include "otbProjectionGroup.h"
+#include "otbProjectionGroup.h" 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif

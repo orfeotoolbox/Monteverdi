@@ -263,7 +263,7 @@ ProjectionView
 
 
 /**
- *
+ * Show the main gui
  */
 void
 ProjectionView
