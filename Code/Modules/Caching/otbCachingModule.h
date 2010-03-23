@@ -80,6 +80,8 @@ public:
   /** Run the module */
   virtual void Run();
 
+  //Remove the Caching directory
+  bool RemoveCachingDirectory() const;
 protected:
   /** Constructor */
   CachingModule();
@@ -116,7 +118,7 @@ private:
 
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);
-  
+   
   // The writing process
   itk::ProcessObject::Pointer m_WritingProcess;
   

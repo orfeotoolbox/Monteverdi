@@ -110,6 +110,13 @@ double CachingModule::GetProgress() const
     }
 }
 
+bool CachingModule::RemoveCachingDirectory() const
+{
+        ossimFilename cachingDir(m_CachingPath); 
+         
+        return  cachingDir.remove();
+}
+
 void CachingModule::ThreadedWatch()
 {
   double last = 0;
