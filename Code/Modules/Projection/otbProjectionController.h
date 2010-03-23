@@ -63,6 +63,7 @@ public:
                           double originX,
                           double originY,
                           bool isUl);
+  virtual void InitializeWGS84Transform();
   
  protected:
   /** Constructor */

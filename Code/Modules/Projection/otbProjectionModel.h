@@ -117,6 +117,9 @@ class ITK_EXPORT ProjectionModel
   /** Initialize the Input transmecator proejction */
   virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
 
+  /** Initialize the WGS84 transform*/
+  void UpdateWGS84Transform();
+
  protected:
   /** Constructor */
   ProjectionModel();

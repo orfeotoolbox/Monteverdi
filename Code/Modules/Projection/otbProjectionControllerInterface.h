@@ -53,7 +53,7 @@ public:
   virtual void UpdateInputUTMTransform(int zone,bool north) = 0;
   virtual void InitializeInputLambertIITransform() = 0;
   virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing ) = 0;
-  
+  virtual void InitializeWGS84Transform() = 0;
   
 protected:
   /** Constructor */
