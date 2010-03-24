@@ -14,11 +14,11 @@ class GCPToSensorModelViewGroup {open
   } {
     Fl_Window wMainWindow {
       label {GCP to sensor model module}
-      callback {this->HideAll();} open
-      xywh {6 44 1240 870} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {1000 700 0 0} visible
+      callback {this->HideAll();} open selected
+      xywh {6 44 1235 870} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
       Fl_Group guiImageGroup {open
-        xywh {5 26 813 655}
+        xywh {5 21 813 660}
       } {
         Fl_Group gScroll {
           label {Scroll fix}
@@ -26,31 +26,31 @@ class GCPToSensorModelViewGroup {open
         } {}
         Fl_Group gZoom {
           label {Zoom fix}
-          xywh {417 233 400 435} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {417 231 400 435} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFull {
           label {Full fix}
-          xywh {6 233 400 435} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {6 231 400 435} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gIndexes {
-          label {Selected Point}
-          xywh {5 28 400 185} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          label {Selected Point} open
+          xywh {5 21 400 192} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Value_Input vLong {
             label Long
-            xywh {10 119 151 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
+            xywh {120 110 151 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
           }
           Fl_Value_Input vLat {
             label Lat
-            xywh {10 58 151 30} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
+            xywh {120 55 151 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
           }
           Fl_Value_Input vX {
             label X
-            xywh {200 54 70 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+            xywh {26 56 70 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
           }
           Fl_Value_Input vY {
             label Y
-            xywh {200 116 70 27} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
+            xywh {24 109 70 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1 maximum 1e+06 step 1
           }
           Fl_Value_Input vElev {
             label Elev
@@ -59,7 +59,7 @@ class GCPToSensorModelViewGroup {open
           Fl_Button guiFocusRound {
             label {Focus Click}
             callback {Focus(1);}
-            tooltip {Focus on the last clicked point couple.} xywh {300 114 90 34} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+            tooltip {Focus on the last clicked point couple.} xywh {300 108 90 29} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xffe1 color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button guiAdd {
             label Add
@@ -68,7 +68,7 @@ class GCPToSensorModelViewGroup {open
           }
         }
       }
-      Fl_Group grParam {
+      Fl_Group grParam {open
         xywh {6 672 1224 195} box PLASTIC_DOWN_BOX color 7
       } {
         Fl_Choice cProjType {
@@ -93,27 +93,27 @@ class GCPToSensorModelViewGroup {open
         Fl_Button guiClear {
           label {Clear List}
           callback {ClearPointList();}
-          tooltip {Clear Feature List} xywh {335 690 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Clear Feature List} xywh {335 687 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button guiDelete {
           label Delete
           callback {DeletePoint();}
-          tooltip {Clear Feature List} xywh {240 690 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Clear Feature List} xywh {240 687 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button guiReload {
           label Reload
           callback {this->ReloadGCPs();}
-          tooltip {Focus on the selected point couple.} xywh {330 820 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Focus on the selected point couple.} xywh {336 816 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button guiFocusPoint {
           label {Focus Point}
           callback {Focus(0);}
-          tooltip {Focus on the selected point couple.} xywh {235 815 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Focus on the selected point couple.} xywh {239 815 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Browser tError {
           label {Point Errors}
           callback {this->UpdateListSelectionColor(false);}
-          tooltip {Euclidean distances} xywh {475 689 220 177} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          tooltip {Euclidean distances} xywh {475 687 220 177} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
         }
         Fl_Output tGroundError {
           label {Ground Error Var (m^2):}
@@ -125,7 +125,7 @@ class GCPToSensorModelViewGroup {open
         }
         Fl_Group gPixelValue {
           label {Pixel Values} open
-          xywh {720 692 200 126} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+          tooltip {pixel information} xywh {720 689 200 126} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
         } {}
         Fl_Button guiDEM {
           label Elevation
@@ -140,16 +140,16 @@ class GCPToSensorModelViewGroup {open
         Fl_Button guiImport {
           label {Import ...}
           callback {ImportGcpsFromXmlFile();}
-          tooltip {Clear Feature List} xywh {240 735 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Clear Feature List} xywh {240 735 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button guiExport {
           label {Export ...}
           callback {ExportGcpsToXmlFile();}
-          tooltip {Focus on the selected point couple.} xywh {340 735 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Focus on the selected point couple.} xywh {336 735 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
         }
       }
       Fl_Group wMapWindow {
-        label {Street Map} open selected
+        label {Street Map} open
         xywh {830 25 402 640} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group gMFull {
@@ -185,16 +185,16 @@ class GCPToSensorModelViewGroup {open
         }
         Fl_Group {} {
           label {Map Depth} open
-          xywh {833 164 398 45} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {833 167 398 45} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice vMDepth {
             label {Select Depth}
-            xywh {928 174 100 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+            xywh {928 177 100 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
           } {}
           Fl_Button {} {
             label {Display Map}
             callback {this->DisplayMap()}
-            xywh {1070 169 150 34} box PLASTIC_DOWN_BOX down_box UP_BOX color 7 labelfont 1 labelsize 16 labelcolor 186
+            xywh {1070 172 150 34} box PLASTIC_DOWN_BOX down_box UP_BOX color 7 labelfont 1 labelsize 16 labelcolor 186
           }
         }
       }
