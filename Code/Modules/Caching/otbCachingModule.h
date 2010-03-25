@@ -74,12 +74,17 @@ public:
   itkSetMacro(WatchProgress,bool);
   itkBooleanMacro(WatchProgress);
 
+  itkSetMacro(EraseFile,bool);
+  itkBooleanMacro(EraseFile);
+  
   // Return the writing progress
   double GetProgress() const;
 
   /** Run the module */
   virtual void Run();
 
+  //Remove the Caching directory
+  bool RemoveCachingDirectory() const;
 protected:
   /** Constructor */
   CachingModule();
@@ -116,7 +121,7 @@ private:
 
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);
-  
+   
   // The writing process
   itk::ProcessObject::Pointer m_WritingProcess;
   
@@ -134,6 +139,9 @@ private:
   
   //error msg
   std::string m_ErrorMsg;
+  
+  //erase cached file
+  bool m_EraseFile;
 };
 
 

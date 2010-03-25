@@ -108,6 +108,9 @@ class ITK_EXPORT MonteverdiModel
 
   itkGetMacro(NumberOfRegisteredModules,unsigned int);
   
+  itkGetMacro(EraseCaching,bool);
+  itkSetMacro(EraseCaching,bool);
+  
   /** Get Connection Graph*/
   itkGetConstObjectMacro(ConnectionGraph,ConnectionGraphType);
 
@@ -227,6 +230,9 @@ protected:
 
   /** Number of registered module */
   unsigned int m_NumberOfRegisteredModules;
+  
+  /** Manage deletion of caching directory */
+  bool m_EraseCaching;
 };
 
 }

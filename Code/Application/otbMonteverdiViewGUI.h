@@ -115,6 +115,11 @@ public:
   /** Exit the application */
   void Quit();
 
+  /** Open the pop up image to choose if we erase the caching directory */
+  void OpenEraseCaching();
+  /** Open the pop up image to choose if we erase the caching directory */
+  void EraseCaching(bool erase);
+  
   /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
 

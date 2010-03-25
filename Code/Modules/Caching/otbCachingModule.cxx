@@ -40,6 +40,7 @@ CachingModule::CachingModule()
   m_CachingPath = "Caching/";
   m_FilePath = "";
   m_WatchProgress = true;
+  m_EraseFile = false;
 
   // Build gui
   this->BuildGUI();
@@ -55,13 +56,14 @@ CachingModule::~CachingModule()
 {
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
-  ossimFilename ofnameNoExtension = ofname.fileNoExtension();
+  //ossimFilename ofnameNoExtension = ofname.fileNoExtension();
 
 // try to remove the file
-  if(ofname.exists())
+  if(ofname.exists() && m_EraseFile)
     {
-    otbGenericMsgDebugMacro( <<"Cleaning up all cache files with base "<<ofnameNoExtension );
-    ofnameNoExtension.wildcardRemove();
+    otbGenericMsgDebugMacro( <<"Cleaning up all cache files with base "<<ofname );
+    //ofnameNoExtension.wildcardRemove();
+    ofname.wildcardRemove();
     }
 }
 
@@ -108,6 +110,12 @@ double CachingModule::GetProgress() const
     {
     return 0.;
     }
+}
+
+bool CachingModule::RemoveCachingDirectory() const
+{
+        ossimFilename cachingDir(m_CachingPath); 
+        return  cachingDir.remove();
 }
 
 void CachingModule::ThreadedWatch()

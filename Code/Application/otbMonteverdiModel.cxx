@@ -36,7 +36,7 @@ MonteverdiModel::Pointer MonteverdiModel::Instance = NULL;
 /**
  * Constructor
  */
-MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap(), m_CachingModuleMap(), m_ConnectionGraph(), m_NumberOfRegisteredModules(0)
+MonteverdiModel::MonteverdiModel() : m_ModuleDescriptorMap(), m_ModuleMap(), m_InstancesCountMap(), m_CachingModuleMap(), m_ConnectionGraph(), m_NumberOfRegisteredModules(0), m_EraseCaching(false)
 {
   m_ConnectionGraph = ConnectionGraphType::New();
 }
@@ -49,9 +49,25 @@ MonteverdiModel::~MonteverdiModel()
 void
 MonteverdiModel::Close()
 {
+  //Remove Caching directory
+  if ( m_EraseCaching )
+  {
+        // Look for the caching module instance id
+        CachingModuleMapType::const_iterator it = m_CachingModuleMap.begin();
+
+          // through all cached module instances
+          while (it != m_CachingModuleMap.end())
+            {
+            it->second->EraseFileOn();
+	    ++it;
+            }     
+  }
+  
   m_ModuleDescriptorMap.clear();
   m_ModuleMap.clear();
   m_InstancesCountMap.clear();
+  
+  
   m_CachingModuleMap.clear();
 }
 
