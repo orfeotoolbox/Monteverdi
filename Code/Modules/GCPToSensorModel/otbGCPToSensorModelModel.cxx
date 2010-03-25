@@ -423,7 +423,7 @@ GCPToSensorModelModel
   if( id>=m_GCPsContainer.size() )
     itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_GCPsContainer.size()<<").");
   // TODO
-  itkExceptionMacro(<<"TODO");
+  std::cout << "GCPToSensorModelModel::RemovePointFromGCPsContainer() - TODO" << std::endl;
   
 //  m_GCPsToRPCSensorModelImageFilter->RemoveGCP(id);
 // this->UpdateContainer();
@@ -962,7 +962,7 @@ GCPToSensorModelModel
 void
 GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int depth)
 {
-  itkExceptionMacro(<<"TODO");
+  std::cout << "GCPToSensorModelModel::CenterMapOnSelectedPoint - TODO" << std::endl;
 
 /*
   if (m_Projection != NULL)
