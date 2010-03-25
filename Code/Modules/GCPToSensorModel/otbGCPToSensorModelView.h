@@ -87,7 +87,7 @@ public:
   virtual void ExportGcpsToXmlFile();
 
   /** Street Map window */
-  virtual void ShowMap();
+  //virtual void ShowMap();
   virtual void UpdatePlaceName();
   virtual void UpdateLatLong();
   virtual void DisplayMap();

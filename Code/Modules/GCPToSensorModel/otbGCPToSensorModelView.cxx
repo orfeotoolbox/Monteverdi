@@ -138,11 +138,11 @@ void
 GCPToSensorModelView
 ::Show()
 {
-  wMainWindow->position(0, 44);
-  wMapWindow->position(850, 44);
+//   wMainWindow->position(0, 44);
+//   wMapWindow->position(850, 44);
   
   wMainWindow->show();
-  wMapWindow->show();
+  //wMapWindow->show();
   
   // Add registered visualization components from the interface
   gFull->add(m_ImageView->GetFullWidget());
@@ -499,18 +499,18 @@ GCPToSensorModelView
   wDEMWindow->hide();
 }
   
-void 
-GCPToSensorModelView
-::ShowMap()
-{
-  if (wMapWindow->shown())
-    wMapWindow->hide();
-  else
-  {
-    wMapWindow->show();
-    this->DrawMap();
-  }
-}
+// void 
+// GCPToSensorModelView
+// ::ShowMap()
+// {
+//   if (wMapWindow->shown())
+//     wMapWindow->hide();
+//   else
+//   {
+//     wMapWindow->show();
+//     this->DrawMap();
+//   }
+// }
   
 void
 GCPToSensorModelView
