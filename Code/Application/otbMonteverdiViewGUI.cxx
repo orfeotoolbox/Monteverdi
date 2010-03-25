@@ -540,9 +540,9 @@ MonteverdiViewGUI
   gTreeGroup->hide();
   wHelpWindow->hide();
   wMainWindow->hide();
-  std::cout << "Hiding main window" << std::endl;
+
   m_MonteverdiModel->Close();
-  std::cout << "close over" << std::endl;
+
   if(m_InputViewGUI.IsNotNull())
   {
     m_InputViewGUI->Cancel();
