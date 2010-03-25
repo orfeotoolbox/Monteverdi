@@ -43,7 +43,7 @@ public:
 
   /** Users actions */
   virtual void LinkPixelDescriptors() =0;
-  virtual void AddPoints( float x, float y, float lon, float lat ) =0;
+  virtual void AddPoints( float x, float y, float lon, float lat, float elev ) =0;
   virtual void ClearPointList() =0;
   virtual void DeletePointFromList( unsigned int id ) =0;
   virtual void LeftMouseButtonClicked( ContinuousIndexType index ) =0;

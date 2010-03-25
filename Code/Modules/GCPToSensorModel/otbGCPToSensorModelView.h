@@ -53,6 +53,10 @@ public:
   typedef GCPToSensorModelModel::RGBPixelType           PixelType;
   typedef GCPToSensorModelModel::IndexType              IndexType;
   typedef GCPToSensorModelModel::ContinuousIndexType    ContinuousIndexType;
+  typedef GCPToSensorModelModel::GCPType                GCPType;
+  typedef GCPToSensorModelModel::GCPsContainerType      GCPsContainerType;
+  typedef GCPToSensorModelModel::Point2DType            Point2DType;
+  typedef GCPToSensorModelModel::Point3DType            Point3DType;  
   typedef ImageView<VisualizationModelType>             ImageViewType;
   typedef CrossGlComponent::ColorType                   ColorType;
   typedef std::vector<ColorType>                        ColorListType;
@@ -94,7 +98,7 @@ public:
   
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
-  void AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height );
+  void AddPointsToList( GCPType gcp );
   void RedrawWidgets();
   void UpdatePointList();
   void Show();
@@ -116,6 +120,8 @@ protected:
 private:
   GCPToSensorModelView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  
+  void UpdateGCPView();
 
   /** Pointer to the controller */
   GCPToSensorModelControllerInterface::Pointer  m_Controller;

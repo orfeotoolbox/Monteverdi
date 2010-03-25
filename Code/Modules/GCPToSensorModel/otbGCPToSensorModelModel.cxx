@@ -51,36 +51,33 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
 }
 
   GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
-                                             m_Projection(), m_DEMPath(), m_ElevMgt(), m_MeanElevation(),
-                                             m_DEMHandler(), m_GCPsElevation(), m_UsedElevation(), m_DEMsElevation(),
-                                             m_HasNewImage(), m_ProjectionUpdated(), m_ProjectionType(),
+                                             m_DEMPath(), m_ElevMgt(), m_DEMHandler(), m_HasNewImage(),
                                              m_GroundError(), m_MapVisualizationModel(), m_MapBlendingFunction()
 {
+  // Visualization
   m_VisualizationModel = VisualizationModelType::New();
   m_BlendingFunction = BlendingFunctionType::New();
   m_BlendingFunction->SetAlpha(0.6);
   m_ImageGenerator = LayerGeneratorType::New();
+  
+  // Input & Output
   m_InputImage = VectorImageType::New();
   m_Output = VectorImageType::New();
-  m_IndexesList.clear();
-
-  m_Projection = NULL;
-  m_RpcProjection = NULL;
-  m_RpcModel = NULL;
+  
+  // Filter
+  m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
 
   m_DEMPath = "";
 
-  m_MeanElevation = 0;
   m_OutputChanged = false;
   m_ElevMgt = GCP;
-  m_DEMHandler = DEMHandler::New();
-  m_GCPsElevation.clear();
-  m_DEMsElevation.clear();
-  m_UsedElevation.clear();
   m_HasNewImage = false;
-  m_ProjectionUpdated = false;
-  m_ProjectionType = BILINEAR;
-  m_GroundError = 0.;
+
+  // Map
+  m_MapVisualizationModel = VisualizationModelType::New();
+  m_MapBlendingFunction = BlendingFunctionType::New();
+  m_MapBlendingFunction->SetAlpha(0.6);
+  m_MapImageGenerator = MapLayerGeneratorType::New();
   
   m_ServerName = "http://tile.openstreetmap.org/";
   m_CacheDirectory = "./Caching";
@@ -94,19 +91,11 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   m_Depth = 1;
   m_PlaceNameChanged = false;
   m_LatLongChanged = false;
-  m_MapVisualizationModel = VisualizationModelType::New();
-  m_MapBlendingFunction = BlendingFunctionType::New();
-  m_MapBlendingFunction->SetAlpha(0.6);
-  m_MapImageGenerator = MapLayerGeneratorType::New();
 }
 
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
-  // deleted with ossimRefPtr
-  //delete m_RpcProjection;
-  //delete m_RpcModel;
-  //delete m_Projection
 }
 
 
@@ -118,6 +107,13 @@ GCPToSensorModelModel
 
   image->UpdateOutputInformation();
   m_InputImage = image;
+  
+  // Add input image to the filter
+  m_GCPsToRPCSensorModelImageFilter->SetInput(m_InputImage);
+  
+  // Load GCPs from input image
+  m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
+  m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
 
   // Generate the layer
   m_ImageGenerator->SetImage(image);
@@ -141,7 +137,7 @@ GCPToSensorModelModel
   if( channels.size() == 3 )
     m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
 
-    m_ImageGenerator->GetLayer()->SetName("InputImage");
+  m_ImageGenerator->GetLayer()->SetName("InputImage");
 
   // Clear previous layers
   m_VisualizationModel->ClearLayers();
@@ -150,8 +146,10 @@ GCPToSensorModelModel
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
 
+  m_GCPsContainerHasChanged = true;
   m_HasNewImage = true;
   this->NotifyAll();
+  m_GCPsContainerHasChanged = false;
   m_HasNewImage = false;
 }
 
@@ -159,22 +157,11 @@ void
 GCPToSensorModelModel
 ::LoadGCP()
 {
-  if( m_InputImage.IsNull())
-    itkExceptionMacro(<<"No input image detected");
+  itkExceptionMacro(<<"GCPToSensorModelModel::LoadGCP() TODO");
 
-  ContinuousIndexType index1, index2;
-  double height;
-  this->ClearIndexesList();
-
-  for( unsigned int i=0; i<m_InputImage->GetGCPCount(); i++ )
-    {
-      index1[0] = m_InputImage->GetGCPCol(i);
-      index1[1] = m_InputImage->GetGCPRow(i);
-      index2[0] = m_InputImage->GetGCPX(i);
-      index2[1] = m_InputImage->GetGCPY(i);
-      height =  m_InputImage->GetGCPZ(i);
-      this->AddIndexesToList( index1, index2, height );
-    }
+  // Load GCPs from Input Image
+//  m_GCPsToRPCSensorModelImageFilter->ReloadGCPsFromInputImage();
+// this->UpdateContainer();
 }
 
 void GCPToSensorModelModel
@@ -199,9 +186,9 @@ void GCPToSensorModelModel
   for( TiXmlElement* currentGcp = gcps.FirstChildElement("GroundControlPoint").ToElement();
          currentGcp != NULL;
          currentGcp = currentGcp->NextSiblingElement() )
-      {
-      ContinuousIndexType p1, p2;
-      double elevation;
+  {
+      Point2DType p2d;
+      Point3DType p3d;
 
       // Decode gcp column
       TiXmlElement* currentElement = currentGcp->FirstChildElement("Column");
@@ -209,7 +196,7 @@ void GCPToSensorModelModel
         {
         itkExceptionMacro(<<"Bad XML file (<Column> not found): "<<fname);
         }
-       p1[0] = atof(currentElement->GetText());
+       p2d[0] = atof(currentElement->GetText());
 
        // Decode gcp row
        currentElement = currentGcp->FirstChildElement("Row");
@@ -217,7 +204,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Row> not found): "<<fname);
          }
-       p1[1] = atof(currentElement->GetText());
+       p2d[1] = atof(currentElement->GetText());
 
        // Decode gcp latitude
        currentElement = currentGcp->FirstChildElement("Latitude");
@@ -225,7 +212,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Latitude> not found): "<<fname);
          }
-       p2[0] = atof(currentElement->GetText());
+       p3d[0] = atof(currentElement->GetText());
 
        // Decode gcp longitude
        currentElement = currentGcp->FirstChildElement("Longitude");
@@ -233,7 +220,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Longitude> not found): "<<fname);
          }
-       p2[1] = atof(currentElement->GetText());
+       p3d[1] = atof(currentElement->GetText());
 
        // Decode gcp elevation
        currentElement = currentGcp->FirstChildElement("Elevation");
@@ -241,12 +228,13 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Elevation> not found): "<<fname);
          }
-       elevation = atof(currentElement->GetText());
+       p3d[3] = atof(currentElement->GetText());
 
        // Finally, add the gcp
-       this->AddIndexesToList(p1,p2,elevation);
-      }
-  this->NotifyAll();
+       m_GCPsToRPCSensorModelImageFilter->AddGCP(p2d, p3d);
+    }
+  // Update GCPs container
+  this->UpdateContainer();
 }
 
 void GCPToSensorModelModel
@@ -266,7 +254,7 @@ void GCPToSensorModelModel
   doc.LinkEndChild( root );
 
   // Iterate on each gcp
-  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
+  for(unsigned int i = 0; i<m_GCPsContainer.size(); i++)
       {
       // Add a new entry
       TiXmlElement * currentGCP = new TiXmlElement( "GroundControlPoint" );
@@ -275,35 +263,35 @@ void GCPToSensorModelModel
       // Store the row index
       TiXmlElement * column = new TiXmlElement( "Column" );
       oss.str("");
-      oss<<m_IndexesList[i].first[0];
+      oss<<m_GCPsContainer[i].first[0];
       column->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(column);
 
       // Store the row index
       TiXmlElement * row = new TiXmlElement( "Row" );
       oss.str("");
-      oss<<m_IndexesList[i].first[1];
+      oss<<m_GCPsContainer[i].first[1];
       row->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(row);
 
       // Store the latitude
       TiXmlElement * latitude = new TiXmlElement( "Latitude" );
       oss.str("");
-      oss<<m_IndexesList[i].second[0];
+      oss<<m_GCPsContainer[i].second[0];
       latitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(latitude);
 
       // Store the longitude
       TiXmlElement * longitude = new TiXmlElement( "Longitude" );
       oss.str("");
-      oss<<m_IndexesList[i].second[1];
+      oss<<m_GCPsContainer[i].second[1];
       longitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(longitude);
 
       // Store the elevation
       TiXmlElement * elevation = new TiXmlElement( "Elevation" );
       oss.str("");
-      oss<<m_UsedElevation[i];
+      oss<<m_GCPsContainer[i].second[2];
       elevation->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(elevation);
       }
@@ -315,32 +303,31 @@ void
 GCPToSensorModelModel
 ::SetDEMPath( const std::string & DEMPath )
 {
+  // Try to open DEM directory
   ossimElevManager * elevManager = ossimElevManager::instance();
   ossimFilename ossimDEMDir;
   ossimDEMDir=ossimFilename(DEMPath.c_str());
   ossimDirectory od(DEMPath.c_str());
   if (!elevManager->loadElevationPath(ossimDEMDir))
-   {
+  {
      itkExceptionMacro("Invalid directory \""<<DEMPath<<"\", no DEM files found!");
-   }
-  m_DEMPath = DEMPath;
+  }
+  
+  // Elevation Management
   m_ElevMgt = DEM;
+  
+  // Generate DEMHandler
+  m_DEMPath = DEMPath;
   m_DEMHandler->OpenDEMDirectory(DEMPath.c_str());
 
-  m_DEMsElevation.clear();
-  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
-    {
-      ImagePointType phyPoint;
-      phyPoint[0] = m_IndexesList[i].second[0];
-      phyPoint[1] = m_IndexesList[i].second[1];
-      double height = m_DEMHandler->GetHeightAboveMSL(phyPoint);
-      // Check if elevation is nan
-      if (height != height)
-        height = 0;         // height default value
-      m_DEMsElevation.push_back( height );
-    }
-
-  this->Modified();
+  // Add DEM to filter
+  m_GCPsToRPCSensorModelImageFilter->SetDEMHandler(m_DEMHandler);
+  
+  // Activate use DEM
+  m_GCPsToRPCSensorModelImageFilter->SetUseDEM(true);
+  
+  // Update GCPsContainer
+  this->UpdateContainer();
 }
 
 void
@@ -349,62 +336,115 @@ GCPToSensorModelModel
 {
   m_MeanElevation = meanElev;
   m_ElevMgt = MEAN;
-  this->Modified();
+  
+  // Set mean elevation to the filter
+  m_GCPsToRPCSensorModelImageFilter->SetMeanElevation(m_MeanElevation);
+  
+  // Don't use DEM
+  m_GCPsToRPCSensorModelImageFilter->SetUseDEM(false);
+  
+  // Update GCPsContainer
+  this->UpdateContainer();
 }
 
 
 void
 GCPToSensorModelModel
-::AddIndexesToList( ContinuousIndexType id1, ContinuousIndexType id2, double elev )
+::AddGCP( float x, float y, float lon, float lat, float elev )
 {
+  // Create Index
+  IndexType index;
+  index[0] = x;
+  index[1] = y;
+  
+  // Check if the point is inside the image region
+  if(!m_InputImage->GetLargestPossibleRegion().IsInside(index))
+  {
+    itkExceptionMacro(<<"Index "<<index<<" is outside the image size "<<m_InputImage->GetLargestPossibleRegion().GetSize()<<".");
+  }
+  
+  // Transform index to physical point
+  ImagePointType phyPoint;
+  m_InputImage->TransformIndexToPhysicalPoint(index, phyPoint);
+
+  // Sensor point
+  Point2DType sensorPoint;
+  sensorPoint[0] = phyPoint[0];
+  sensorPoint[1] = phyPoint[1];
+  
+  // Ground point
+  Point2DType groundPoint;
+  groundPoint[0] = lat;
+  groundPoint[1] = lon;
+  
+  // Check if GCPs allready exists
   bool found = false;
-  unsigned int j=0;
-
-
-  while( j<m_IndexesList.size() && !found )
+  unsigned int j;
+  while( j<m_GCPsContainer.size() && !found )
     {
-      if( m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2 )
+      if( m_GCPsContainer[j].first == sensorPoint || 
+          ( ( m_GCPsContainer[j].second[0] == groundPoint[0] ) &&
+            ( m_GCPsContainer[j].second[1] == groundPoint[1] )
+          ) 
+        )
        {
          found = true;
-         itkExceptionMacro(<<"At most one of the 2 given index "<<id1<<" or "<<id2<<" already appears in the list.");
+         itkExceptionMacro(<<"At most one of the 2 given index "<<sensorPoint<<" or "<<groundPoint<<" already appears in the list.");
        }
       j++;
     }
 
-  IndexCoupleType paire(id1, id2);
-  m_IndexesList.push_back(paire);
-  m_GCPsElevation.push_back(elev);
-  ImagePointType phyPoint;
-  phyPoint[0] = id2[0];
-  phyPoint[1] = id2[1];
-  m_DEMsElevation.push_back( m_DEMHandler->GetHeightAboveMSL(phyPoint) );
+  // Check if elevation management is set to GCP
+  if (m_ElevMgt == GCP)
+  {
+    // Use elev for elevation value
+    Point3DType groundPoint3D;
+    groundPoint3D[0] = groundPoint[0];
+    groundPoint3D[1] = groundPoint[1];
+    groundPoint3D[2] = elev;
+    
+    // Add GCP To the filter
+    m_GCPsToRPCSensorModelImageFilter->AddGCP(sensorPoint, groundPoint3D);
+  }
+  // Else use internal elevation manager
+  else
+  {
+    m_GCPsToRPCSensorModelImageFilter->AddGCP(sensorPoint, groundPoint);
+  }
+  
+  // Update GCPsContainer
+  this->UpdateContainer();
 }
 
 void
 GCPToSensorModelModel
-::RemovePointFromList( unsigned int id )
+::RemovePointFromGCPsContainer( unsigned int id )
 {
-  if( id>=m_IndexesList.size() )
-    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_IndexesList.size()<<").");
-  if( id>=m_GCPsElevation.size() )
-    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_GCPsElevation.size()<<").");
-  if( id>=m_UsedElevation.size() )
-    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_UsedElevation.size()<<").");
-  if( id>=m_DEMsElevation.size() && m_DEMsElevation.size() != 0 )
-    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_DEMsElevation.size()<<").");
-
-  m_IndexesList.erase(m_IndexesList.begin()+id);
-  m_GCPsElevation.erase(m_GCPsElevation.begin()+id);
-  m_UsedElevation.erase(m_UsedElevation.begin()+id);
-  m_DEMsElevation.erase(m_DEMsElevation.begin()+id);
+  if( id>=m_GCPsContainer.size() )
+    itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_GCPsContainer.size()<<").");
+  // TODO
+  itkExceptionMacro(<<"TODO");
+  
+//  m_GCPsToRPCSensorModelImageFilter->RemoveGCP(id);
+// this->UpdateContainer();
 }
 
-
 void
+GCPToSensorModelModel
+::ClearGCPsContainer()
+{
+  // Clear GCPs
+  m_GCPsToRPCSensorModelImageFilter->ClearGCPs();
+  
+  // Update local GCP container
+  this->UpdateContainer();
+}
+
+/*void
 GCPToSensorModelModel
 ::ComputeBilinearProjection()
 {
-  /* NOT USED YET...
+  //NOT USED YET...
   ossimRefPtr<ossimBilinearProjection> bproj = new ossimBilinearProjection();
 
   std::vector<ossimDpt> sensorPoints;
@@ -435,68 +475,10 @@ GCPToSensorModelModel
       this->NotifyAll();
       m_ProjectionUpdated = false;
     }
-  */
-}
 
+}*/
 
-void
-GCPToSensorModelModel
-::ComputeRPCProjection()
-{
-  if( m_DEMsElevation.size() != m_GCPsElevation.size() || m_DEMsElevation.size() != m_IndexesList.size() )
-    {
-      itkExceptionMacro(<<"Invalid heights");
-    }
-
-  this->GenerateUsedElevation();
-
-  std::vector<ossimDpt> sensorPoints;
-  std::vector<ossimGpt>  geoPoints;
-  ContinuousIndexType idFix, idMov;
-  ossimDpt spoint;
-  ossimGpt gpoint;
-  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
-    {
-      idFix =  m_IndexesList[i].first;
-      idMov =  m_IndexesList[i].second;
-      spoint = ossimDpt(idFix[0],idFix[1]);
-      sensorPoints.push_back(spoint);
-      gpoint = ossimGpt(idMov[1],idMov[0], m_UsedElevation[i]);
-      geoPoints.push_back(gpoint);
-    }
-
-  // Use a solver to compute coef
-  ossimRefPtr<ossimRpcSolver> solver = new ossimRpcSolver(false, false);
-  solver->solveCoefficients( sensorPoints, geoPoints);
-  m_GroundError = vcl_pow(solver->getRmsError(), 2);
-
-  // infer the associate projection
-  m_RpcProjection = new ossimRpcProjection();
-  ossimRefPtr< ossimRpcProjection > objp = dynamic_cast<ossimRpcProjection*>(solver->createRpcProjection()->getProjection());
-  ossimKeywordlist kwl;
-  objp->saveState(kwl);
-  m_RpcProjection->loadState(kwl);
-
-  m_Projection = m_RpcProjection.get();
-
-  // deduct the associate model
-  m_RpcModel = new ossimRpcModel();
-  ossimRefPtr< ossimRpcModel > objm = dynamic_cast<ossimRpcModel*>(solver->createRpcModel()->getProjection());
-  ossimKeywordlist kwlm;
-  objm->saveState(kwlm);
-  m_RpcModel->loadState(kwlm);
-
-
-  // To avoid infinite loop (notify->notify->notify...)
-  if( m_HasNewImage == false )
-    {
-      m_ProjectionUpdated = true;
-      this->NotifyAll();
-      m_ProjectionUpdated = false;
-    }
-}
-
-
+/*
 void
 GCPToSensorModelModel
 ::GenerateUsedElevation()
@@ -510,12 +492,12 @@ GCPToSensorModelModel
     m_UsedElevation = m_DEMsElevation;
   else
     itkExceptionMacro(<<"Unknown elevation management.")
-}
+}*/
 
-
-GCPToSensorModelModel::Continuous3DIndexType
+// TODO
+/*Point3DType
 GCPToSensorModelModel
-::TransformPoint(ContinuousIndexType id, double height)
+::TransformPoint(Point2DType id, double height)
 {
   Continuous3DIndexType out;
 
@@ -537,8 +519,9 @@ GCPToSensorModelModel
 
   return out;
 }
-
-
+*/
+// inutile
+/*
 GCPToSensorModelModel::Continuous3DIndexListType
 GCPToSensorModelModel
 ::TransformPoints()
@@ -553,80 +536,32 @@ GCPToSensorModelModel
     }
   return outList;
 }
+*/
 
+void
+GCPToSensorModelModel
+::UpdateContainer()
+{
+  // Update the container and image informations
+  m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
+  m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
+  
+  // Notify it to the view
+  m_GCPsContainerHasChanged = true;
+  this->NotifyAll();
+  m_GCPsContainerHasChanged = false;
+}
 
 void
 GCPToSensorModelModel
 ::OK()
 {
-/*  if(m_ProjectionType == RPC)
-    {
-      if( m_RpcModel == NULL )
-        return;
-
-      ossimKeywordlist geom_kwl;
-      m_RpcModel->updateModel();
-      m_RpcModel->saveState(geom_kwl);
-
-      ImageKeywordlist otb_kwl;
-      otb_kwl.SetKeywordlist( geom_kwl );
-
-      itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
-      itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );
-
-      m_Output = m_InputImage;
-      m_Output->UpdateOutputInformation();
-
-      m_OutputChanged = true;
-      this->NotifyAll();
-    }*/
-  if(m_ProjectionType == RPC)
-  {
-    if( m_RpcModel == NULL )
-      return;
-    
-    // Generate Elevation
-    this->GenerateUsedElevation();
-    
-    // Create and configure filter
-    m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
-    m_GCPsToRPCSensorModelImageFilter->SetInput(m_InputImage);
-    m_GCPsToRPCSensorModelImageFilter->UseImageGCPsOff();
-    m_GCPsToRPCSensorModelImageFilter->UseDEMOff();
-    
-    ContinuousIndexType id1, id2;
-    Point2DType p2d;
-    Point3DType p3d;
-    
-    // Add GCPs
-    for (unsigned int i=0; i<m_IndexesList.size(); i++)
-    {
-      // Get elements in indexes list
-      id1 = m_IndexesList[i].first;
-      id2 = m_IndexesList[i].second;
-      
-      // Set sensor coordinates
-      p2d[0] = id1[0];
-      p2d[1] = id1[1];
-      
-      // Set ground coordinates
-      p3d[0] = id2[1];
-      p3d[1] = id2[0];
-      // Get elevation
-      p3d[2] = m_UsedElevation[i];
-      
-      // Add GCP
-      m_GCPsToRPCSensorModelImageFilter->AddGCP(p2d, p3d);
-    }
-    
-    m_GCPsToRPCSensorModelImageFilter->GetOutput()->UpdateOutputInformation();
-    m_Output = m_GCPsToRPCSensorModelImageFilter->GetOutput();
-    
-    m_Output->UpdateOutputInformation();
-    
-    m_OutputChanged = true;
-    this->NotifyAll();
-  }
+  // Set Output
+  m_Output = m_GCPsToRPCSensorModelImageFilter->GetOutput();
+  m_Output->UpdateOutputInformation();
+  
+  m_OutputChanged = true;
+  this->NotifyAll();
 }
 
 #ifdef OTB_USE_CURL
@@ -1027,7 +962,9 @@ GCPToSensorModelModel
 void
 GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int depth)
 {
+  itkExceptionMacro(<<"TODO");
 
+/*
   if (m_Projection != NULL)
   {
     ContinuousIndexType input;
@@ -1044,6 +981,7 @@ GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int dept
     
     this->DisplayMap(m_PlaceName, lat, lon, depth, size[0], size[1]);
   }
+  */
 }
 
 #else

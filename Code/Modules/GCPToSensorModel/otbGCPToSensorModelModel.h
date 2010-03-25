@@ -25,14 +25,6 @@
 #include "otbListenerBase.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "projection/ossimBilinearProjection.h"
-#include "projection/ossimRpcProjection.h"
-#include "projection/ossimRpcModel.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimSensorModel.h"
-
-#include "otbDEMHandler.h"
-#include "itkContinuousIndex.h"
 
 #include "otbTileMapImageIO.h"
 #include "otbImageFileReader.h"
@@ -64,37 +56,37 @@ class ITK_EXPORT GCPToSensorModelModel
 
 public:
   /** Standard class typedefs */
-  typedef GCPToSensorModelModel                         Self;
-  typedef MVCModel<ListenerBase> Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef GCPToSensorModelModel                                     Self;
+  typedef MVCModel<ListenerBase>                                    Superclass;
+  typedef itk::SmartPointer<Self>                                   Pointer;
+  typedef itk::SmartPointer<const Self>                             ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(GCPToSensorModelModel, Object);
+  
+  /** New macro */
+  itkNewMacro(Self);
 
-  typedef double                              PixelType;
-  typedef VectorImage<PixelType,2>            VectorImageType;
-  typedef Image<PixelType,2>                  ImageType;
-  typedef VectorImageType::Pointer            VectorImagePointerType;
-  typedef VectorImageType::IndexType          IndexType;
-  typedef VectorImageType::SizeType           SizeType;
-  typedef VectorImageType::PointType          ImagePointType;
-  typedef itk::ContinuousIndex<>              ContinuousIndexType;
-  typedef itk::ContinuousIndex<double, 3>     Continuous3DIndexType;
+  typedef double                                                    PixelType;
+  typedef VectorImage<PixelType,2>                                  VectorImageType;
+  typedef VectorImageType::Pointer                                  VectorImagePointerType;
+  typedef VectorImageType::IndexType                                IndexType;
+  typedef VectorImageType::SizeType                                 SizeType;
+  typedef VectorImageType::PointType                                ImagePointType;
 
-  typedef std::pair<ContinuousIndexType, ContinuousIndexType>  IndexCoupleType;
-  typedef std::vector<IndexCoupleType>     IndexesListType;
-  typedef std::vector<Continuous3DIndexType> Continuous3DIndexListType;
-
-  typedef enum { MEAN, DEM, GCP } ElevManagementEnumType;
-  typedef enum { BILINEAR, RPC } ProjectionEnumType;
+  typedef enum { MEAN, DEM, GCP }                                   ElevManagementEnumType;
+  typedef enum { BILINEAR, RPC }                                    ProjectionEnumType;
 
   /** GCPToRPCSensorModel */
   typedef GCPsToRPCSensorModelImageFilter<VectorImageType>          GCPsToRPCSensorModelImageFilterType;
-  typedef GCPsToRPCSensorModelImageFilterType::GCPsContainerType        GCPsContainerType;
-  typedef GCPsToRPCSensorModelImageFilterType::GCPType                  GCPType;
-  typedef GCPsToRPCSensorModelImageFilterType::Point2DType              Point2DType;  // Sensor coordinates
-  typedef GCPsToRPCSensorModelImageFilterType::Point3DType              Point3DType;  // Ground coordinates
+  typedef GCPsToRPCSensorModelImageFilterType::Pointer              GCPsToRPCSensorModelImageFilterPointerType;
+  typedef GCPsToRPCSensorModelImageFilterType::GCPsContainerType    GCPsContainerType;
+  typedef GCPsToRPCSensorModelImageFilterType::GCPType              GCPType;    
+  typedef GCPsToRPCSensorModelImageFilterType::Point2DType          Point2DType;
+  typedef GCPsToRPCSensorModelImageFilterType::Point3DType          Point3DType;
+  
+  typedef itk::ContinuousIndex<>                                    ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 3>                           Continuous3DIndexType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
@@ -104,38 +96,36 @@ public:
   typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
   typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
-  typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
+  typedef LayerGeneratorType::ImageLayerType::OutputPixelType       OutputPixelType;
+  typedef Function::UniformAlphaBlendingFunction<OutputPixelType>   BlendingFunctionType;
+  typedef BlendingFunctionType::Pointer                             BlendingFunctionPointerType;
 
   /** Map viewer */
-  typedef unsigned char                         MapPixelType;
-  typedef VectorImage<MapPixelType, 2>          MapImageType;
-  typedef ImageFileReader<MapImageType>         MapReaderType;
-  typedef MapReaderType::Pointer                MapReaderPointerType;
-  typedef TileMapImageIO                        TileMapType;
-  typedef TileMapType::Pointer                  TileMapPointerType;
+  typedef unsigned char                                             MapPixelType;
+  typedef VectorImage<MapPixelType, 2>                              MapImageType;
+  typedef ImageFileReader<MapImageType>                             MapReaderType;
+  typedef MapReaderType::Pointer                                    MapReaderPointerType;
+  typedef TileMapImageIO                                            TileMapType;
+  typedef TileMapType::Pointer                                      TileMapPointerType;
   
-  typedef VisualizationModelType::RegionType    RegionType;
+  typedef VisualizationModelType::RegionType                        RegionType;
   
-  typedef otb::InverseSensorModel<double>       MapModelType;
-  typedef MapModelType::Pointer                 MapModelPointerType;
+  typedef otb::InverseSensorModel<double>                           MapModelType;
+  typedef MapModelType::Pointer                                     MapModelPointerType;
 
-  typedef otb::ForwardSensorModel<double>       MapForwardModelType;
-  typedef MapForwardModelType::Pointer          MapForwardModelPointerType;
+  typedef otb::ForwardSensorModel<double>                           MapForwardModelType;
+  typedef MapForwardModelType::Pointer                              MapForwardModelPointerType;
 
-  typedef ImageLayer<MapImageType,RGBImageType>                        MapLayerType;
-  typedef ImageLayerGenerator<MapLayerType>                            MapLayerGeneratorType;
-  typedef MapLayerGeneratorType::Pointer                               MapLayerGeneratorPointerType;
-
-  /** New macro */
-  itkNewMacro(Self);
+  typedef ImageLayer<MapImageType,RGBImageType>                     MapLayerType;
+  typedef ImageLayerGenerator<MapLayerType>                         MapLayerGeneratorType;
+  typedef MapLayerGeneratorType::Pointer                            MapLayerGeneratorPointerType;
 
   /** Point Set */
-  typedef itk::PointSet< float, 2 > PointSetType;
-  typedef PointSetType::Pointer     PointSetPointerType;
-  typedef PointSetType::PointType   PointType;
-  typedef itk::Point<double,2>      OutPointType;
-  typedef std::vector<OutPointType> OutPointListType;
+  typedef itk::PointSet< float, 2 >                                 PointSetType;
+  typedef PointSetType::Pointer                                     PointSetPointerType;
+  typedef PointSetType::PointType                                   PointType;
+  typedef itk::Point<double,2>                                      OutPointType;
+  typedef std::vector<OutPointType>                                 OutPointListType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -147,37 +137,15 @@ public:
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
 
-  /** Indexes list manipulation. */
-  IndexesListType GetIndexesList() const { return m_IndexesList; }
-  void AddIndexesToList( ContinuousIndexType id1,  ContinuousIndexType id2, double elev );
-  void ClearIndexesList()
-  {
-    m_IndexesList.clear();
-    m_GCPsElevation.clear();
-    m_UsedElevation.clear();
-    m_DEMsElevation.clear();
-  }
-  void RemovePointFromList( unsigned int id );
+  /** GCP list manipulation. */
+  GCPsContainerType GetGCPsContainer() const { return m_GCPsContainer; }
+  void AddGCP( float x, float y, float lon, float lat, float elev );
+  void ClearGCPsContainer();
+  void RemovePointFromGCPsContainer( unsigned int id );
 
-  /// Import/Export GCPs to/from an xml file
+  /** Import/Export GCPs to/from an xml file */
   void ImportGCPsFromXmlFile(const char * fname);
   void ExportGCPsToXmlFile(const char * fname) const;
-
-  /** Projection performing */
-  void ComputeBilinearProjection();
-  void ComputeRPCProjection();
-  void ComputeTransform()
-  {
-    if(m_ProjectionType == BILINEAR)
-      this->ComputeBilinearProjection();
-    else if(m_ProjectionType == RPC)
-      this->ComputeRPCProjection();
-  };
-  /** Compute the transform on one point */
-  Continuous3DIndexType TransformPoint(ContinuousIndexType id, double height=0. );
-
-  /** Compute the transform the points of m_IndexList */
-  Continuous3DIndexListType TransformPoints();
 
   /** Load GCP */
   void LoadGCP();
@@ -187,6 +155,7 @@ public:
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
+  
   /** Get Output image */
   itkGetObjectMacro(Output, VectorImageType);
 
@@ -197,6 +166,7 @@ public:
   /** Set/Get Use DEM */
   itkSetMacro(ElevMgt, ElevManagementEnumType);
   itkGetConstMacro(ElevMgt, ElevManagementEnumType);
+  
   /** Set/Get mean elevation */
   void SetMeanElevation(double meanElev);
   itkGetMacro(MeanElevation, double);
@@ -204,24 +174,24 @@ public:
   /** Get HasNewLoadedGCPs */
   itkGetConstMacro(HasNewImage, bool);
 
-  /** Get ProjectionUpdated */
-  itkGetConstMacro(ProjectionUpdated, bool);
+  /** Get GCPsContainer has changed */
+  itkGetConstMacro(GCPsContainerHasChanged, bool);
 
   /** Get used elevation */
-  double GetUsedElevation(unsigned int i)
+/*  double GetUsedElevation(unsigned int i)
   {
     if( i>m_UsedElevation.size() )
       itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
 
     return m_UsedElevation[i];
   };
-  std::vector<double> GetUsedElevation() { return m_UsedElevation; };
+  std::vector<double> GetUsedElevation() { return m_UsedElevation; };*/
   /** According to the type of elevation manageme,t generate the used list. */
-  void GenerateUsedElevation();
+//  void GenerateUsedElevation();
 
   /** Set/Get Projection type */
-  itkSetMacro(ProjectionType, ProjectionEnumType);
-  itkGetConstMacro(ProjectionType, ProjectionEnumType);
+//  itkSetMacro(ProjectionType, ProjectionEnumType);
+// itkGetConstMacro(ProjectionType, ProjectionEnumType);
 
   /** Get Ground error projection */
   itkGetConstMacro(GroundError, double);
@@ -232,19 +202,23 @@ public:
   void SearchPlaceName(double latitude, double longitude);
   void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY);
 
+  /** Notifiers */
   itkGetConstMacro(PlaceNameChanged, bool);
   itkGetConstMacro(LatLongChanged, bool);
   itkGetConstMacro(DepthChanged, bool);
   itkGetConstMacro(HasNewMap, bool);
   itkGetConstMacro(SelectedPointChanged, bool);
 
-  itkGetStringMacro(PlaceName);
+  /** Get Lat/Lon and placement were the map is center to */
   itkGetMacro(Latitude, double);
   itkGetMacro(Longitude, double);
+  itkGetStringMacro(PlaceName);
   
+  /** Get Lat/Lon selected in the map */
   itkGetMacro(SelectedLatitude, double);
   itkGetMacro(SelectedLongitude, double);
   
+  /** Set/Get Depth for map manipulation */
   itkGetMacro(Depth, unsigned int);
   itkSetMacro(Depth, unsigned int);
   
@@ -277,86 +251,86 @@ private:
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
+  
+  /** Update the local GCPs Container, refresh the sensor model, notify it */
+  void UpdateContainer();
 
   /** Singleton instance */
-  static Pointer                     Instance;
+  static Pointer                              Instance;
+
+  /** GCPs To RCP Sensor Model Image Filter */
+  GCPsToRPCSensorModelImageFilterPointerType  m_GCPsToRPCSensorModelImageFilter;
+  
+  /** GCP List */
+  GCPsContainerType                           m_GCPsContainer;
 
   /** Visualization */
-  VisualizationModelPointerType m_VisualizationModel;
-  LayerGeneratorPointerType     m_ImageGenerator;
-  BlendingFunctionPointerType   m_BlendingFunction;
+  VisualizationModelPointerType               m_VisualizationModel;
+  LayerGeneratorPointerType                   m_ImageGenerator;
+  BlendingFunctionPointerType                 m_BlendingFunction;
+
   /** Input Images */
-  VectorImagePointerType        m_InputImage;
-  /** First and second input image indexes list */
-  IndexesListType m_IndexesList;
+  VectorImagePointerType                      m_InputImage;
+
   /** Resampled  image */
-  VectorImagePointerType m_Output;
-  /** Projection */
-  ossimRefPtr<ossimProjection> m_Projection;
-  ///*ossimSensorModel*/ ossimRpcModel * m_Projection;
-  ossimRefPtr<ossimRpcProjection> m_RpcProjection;
-  ossimRefPtr<ossimRpcModel> m_RpcModel;
+  VectorImagePointerType                      m_Output;
 
-
-  bool m_OutputChanged;
-  /** DEM directory path*/
-  std::string m_DEMPath;
-  /** Use DEM or mean elevation */
-  ElevManagementEnumType m_ElevMgt;
-  /** Store the mea elevation value */
-  double m_MeanElevation;
-  /** DEM handler */
-  DEMHandler::Pointer m_DEMHandler;
-  /** GCP elevation list */
-  std::vector<double> m_GCPsElevation;
-  /** Used elevation list */
-  std::vector<double> m_UsedElevation;
-  /** DEM elevations*/
-  std::vector<double> m_DEMsElevation;
-  /** GCPs were loaded from the image */
-  bool m_HasNewImage;
-  /** Projection has been updated */
-  bool m_ProjectionUpdated;
-  /** Projection type */
-  ProjectionEnumType m_ProjectionType;
-  /** Ground error projection */
-  double m_GroundError;
+  /** Output changed */
+  bool                                        m_OutputChanged;
   
-  /** GCP To RCP Sensor Model Image Filter */
-  GCPsToRPCSensorModelImageFilterType::Pointer m_GCPsToRPCSensorModelImageFilter;
+  /** DEM directory path*/
+  std::string                                 m_DEMPath;
+  
+  /** Use DEM or mean elevation */
+  ElevManagementEnumType                      m_ElevMgt;
+  
+  /** Store the mean elevation value */
+  double                                      m_MeanElevation;
+  
+  /** DEM handler */
+  DEMHandler::Pointer                         m_DEMHandler;
+  
+  /** GCPs were loaded from the image */
+  bool                                        m_HasNewImage;
+
+  /** GCPs list has changed */
+  bool                                        m_GCPsContainerHasChanged;
+
+  /** Ground error projection */
+  double                                      m_GroundError;
   
   /** Map viewer */
-  MapReaderPointerType            m_MapReader;
-  TileMapPointerType              m_TileIO;
-  MapModelPointerType             m_MapModel;
-  MapForwardModelPointerType      m_MapInverseModel;
+  MapReaderPointerType                        m_MapReader;
+  TileMapPointerType                          m_TileIO;
+  MapModelPointerType                         m_MapModel;
+  MapForwardModelPointerType                  m_MapInverseModel;
   
-  std::string m_PlaceName;
-  double m_Latitude;
-  double m_Longitude;
-  unsigned int m_Depth;
+  std::string                                 m_PlaceName;
+  double                                      m_Latitude;
+  double                                      m_Longitude;
+  unsigned int                                m_Depth;
   
-  double m_SelectedLatitude;
-  double m_SelectedLongitude;
+  double                                      m_SelectedLatitude;
+  double                                      m_SelectedLongitude;
   
-  long int m_SizeX;
-  long int m_SizeY;
+  long int                                    m_SizeX;
+  long int                                    m_SizeY;
   
-  RegionType m_Region;
+  RegionType                                  m_Region;
   
-  std::string m_ServerName;
-  std::string m_CacheDirectory;
+  std::string                                 m_ServerName;
+  std::string                                 m_CacheDirectory;
 
   /** Visualization */
-  VisualizationModelPointerType m_MapVisualizationModel;
-  MapLayerGeneratorPointerType  m_MapImageGenerator;
-  BlendingFunctionPointerType   m_MapBlendingFunction;
+  VisualizationModelPointerType               m_MapVisualizationModel;
+  MapLayerGeneratorPointerType                m_MapImageGenerator;
+  BlendingFunctionPointerType                 m_MapBlendingFunction;
   
-  bool m_PlaceNameChanged;
-  bool m_LatLongChanged;
-  bool m_DepthChanged;
-  bool m_HasNewMap;
-  bool m_SelectedPointChanged;
+  bool                                        m_PlaceNameChanged;
+  bool                                        m_LatLongChanged;
+  bool                                        m_DepthChanged;
+  bool                                        m_HasNewMap;
+  bool                                        m_SelectedPointChanged;
 };
 
 }//end namespace otb

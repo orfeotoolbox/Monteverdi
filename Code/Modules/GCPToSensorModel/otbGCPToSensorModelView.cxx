@@ -69,9 +69,9 @@ GCPToSensorModelView
 {
   m_Model = model;
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
-  m_Model->RegisterListener(this);
-  
   m_MapView->SetModel(m_Model->GetMapVisualizationModel());
+  
+  m_Model->RegisterListener(this);
 }
 
 void
@@ -182,46 +182,45 @@ GCPToSensorModelView
   float y = static_cast<float>(vY->value());
   float lat = static_cast<float>(vLat->value());
   float lon = static_cast<float>(vLong->value());
-  m_Controller->AddPoints( x, y, lon, lat);
+  float elev = static_cast<float>(vElev->value());
+  m_Controller->AddPoints( x, y, lon, lat, elev);
 }
 
 void
 GCPToSensorModelView
-::AddPointsToList( ContinuousIndexType id1, ContinuousIndexType id2, double height )
+::AddPointsToList(GCPType gcp)
 {
- itk::OStringStream oss;
- IndexType id1Int;
- id1Int[0] = static_cast<long>(id1[0]);
- id1Int[1] = static_cast<long>(id1[1]);
- oss<<id1Int<<" -> ";
- if( m_Model->GetProjectionType() == GCPToSensorModelModel::RPC)
-   {
-     oss<<"["<<id2[0]<<" , "<<id2[1]<<" , "<<height<<"]";
-   }
- else
-   oss<<id2;
- this->lPointList->add(oss.str().c_str());
+  Point2DType sensorPoint;
+  Point3DType groundPoint;
+  
+  sensorPoint = gcp.first;
+  groundPoint = gcp.second;
 
- srand(static_cast<unsigned int>(id1[1]+id1[0])*123456);
- ColorType color;
- color[0]=rand()/(RAND_MAX+1.0);
- color[1]=rand()/(RAND_MAX+1.0);
- color[2]=rand()/(RAND_MAX+1.0);
- color[3]=1.0;
- 
+  itk::OStringStream oss;
+  oss << sensorPoint << " -> " << groundPoint;
+  
+  this->lPointList->add(oss.str().c_str());
+  
+  srand(static_cast<unsigned int>(sensorPoint[1]+sensorPoint[0])*123456);
+  ColorType color;
+  color[0]=rand()/(RAND_MAX+1.0);
+  color[1]=rand()/(RAND_MAX+1.0);
+  color[2]=rand()/(RAND_MAX+1.0);
+  color[3]=1.0;
+  
   m_ColorList.push_back(color);
-
- lPointList->value(lPointList->size());
- this->UpdateListSelectionColor(true);
-
- IndexType index;
- index[0] = static_cast<long>(id1[0]);
- index[1] = static_cast<long>(id1[1]);
-
- m_CrossGlComponent->AddIndex( index );
- m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
-
- this->RedrawWidgets();
+  
+  lPointList->value(lPointList->size());
+  this->UpdateListSelectionColor(true);
+  
+  IndexType index;
+  index[0] = static_cast<long>(sensorPoint[0]);
+  index[1] = static_cast<long>(sensorPoint[1]);
+  
+  m_CrossGlComponent->AddIndex( index );
+  m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
+  
+  this->RedrawWidgets();
 }
 
 /**
@@ -313,41 +312,34 @@ GCPToSensorModelView
 {
   unsigned int id = lPointList->value();
   if( id != 0 )
-    {
-      m_Controller->DeletePointFromList(id-1);
-      lPointList->remove(id);
-      tError->remove(id);
-      m_ColorList.erase(m_ColorList.begin()+id-1);
-      if(id<=static_cast<unsigned int>(lPointList->size()))
-       lPointList->value(id);
-      else
-       lPointList->value(1);
-      
-      m_CrossGlComponent->ClearIndex(id-1);
-      this->RedrawWidgets();
-
-      this->ClearTransformationInfo();
-      m_Controller->UpdateStats();
-      this->UpdateListSelectionColor(true);
-    }
+  {
+    m_Controller->DeletePointFromList(id-1);
+    lPointList->remove(id);
+    tError->remove(id);
+    m_ColorList.erase(m_ColorList.begin()+id-1);
+    if(id<=static_cast<unsigned int>(lPointList->size()))
+      lPointList->value(id);
+    else
+      lPointList->value(1);
+    
+    m_CrossGlComponent->ClearIndex(id-1);
+    this->RedrawWidgets();
+    
+    this->ClearTransformationInfo();
+    m_Controller->UpdateStats();
+    this->UpdateListSelectionColor(true);
+  }
 }
-
-void
-GCPToSensorModelView
-::ClearTransformationInfo()
-{
-  tError->clear();
-  tMeanError->value("");
-  tGroundError->value("");
-}
-
 
 void
 GCPToSensorModelView
 ::Focus(unsigned int i)
 {
   IndexType id;
+ 
+  // Element selected in list
   unsigned int value = lPointList->value();
+
   // Focus cross
   if((i == 0) && (value != 0))
     {
@@ -408,43 +400,74 @@ GCPToSensorModelView
   m_Controller->ReloadGCPsList();
 }
 
+void 
+GCPToSensorModelView
+::UpdateGCPView()
+{
+  // Clear lPointList
+  lPointList->clear();
+  
+  // Clear transformation info
+  this->ClearTransformationInfo();
+  
+  // Get the GCPsContainer
+  GCPsContainerType GCPsContainer;
+  GCPsContainer = m_Model->GetGCPsContainer();
+  
+  // Add point to list
+  for(int i=0; i<GCPsContainer.size(); i++)
+  {
+    this->AddPointsToList(GCPsContainer[i]);
+  }
+  
+  // TODO Update error
+  std::cout << "GCPToSensorModelView::UpdateGCPView() TODO : update error" << std::endl;
+}
+
+void
+GCPToSensorModelView
+::ClearTransformationInfo()
+{
+  tError->clear();
+  tMeanError->value("");
+  tGroundError->value("");
+}
+
 void
 GCPToSensorModelView
 ::Notify()
 {
+  if(m_Model->GetGCPsContainerHasChanged())
+  {
+    this->UpdateGCPView();
+  }
   if(m_Model->GetHasNewImage())
-    {
-      this->ReloadGCPs();
-      m_Controller->UpdateStats();
-    }
-  if(m_Model->GetProjectionUpdated())
-    {
-      this->ClearTransformationInfo();
-      m_Controller->UpdateStats();
-    }
+  {
+    this->ReloadGCPs();
+  }
   if(m_Model->GetPlaceNameChanged())
-    {
-      std::string placename = m_Model->GetPlaceName();
-      vMPlaceName->value(placename.c_str());
-    }
+  {
+    std::string placename = m_Model->GetPlaceName();
+    vMPlaceName->value(placename.c_str());
+  }
   if(m_Model->GetLatLongChanged())
-    {
-      vMLatitude->value(m_Model->GetLatitude());
-      vMLongitude->value(m_Model->GetLongitude());
-    }
+  {
+    vMLatitude->value(m_Model->GetLatitude());
+    vMLongitude->value(m_Model->GetLongitude());
+  }
   if(m_Model->GetHasNewMap())
-    {
-      this->DrawMap();
-    }
+  {
+    this->DrawMap();
+  }
   if(m_Model->GetDepthChanged())
-    {
-      vMDepth->value(m_Model->GetDepth()-1);
-    }
+  {
+    vMDepth->value(m_Model->GetDepth()-1);
+  }
   if(m_Model->GetSelectedPointChanged())
-    {
-      vLat->value(m_Model->GetSelectedLatitude());
-      vLong->value(m_Model->GetSelectedLongitude());
-    }
+  {
+    vLat->value(m_Model->GetSelectedLatitude());
+    vLong->value(m_Model->GetSelectedLongitude());
+  }
 }
 
 
@@ -452,7 +475,7 @@ void
 GCPToSensorModelView
 ::SetProjectionType()
 {
-  if(cProjType->value() == 0)
+/*  if(cProjType->value() == 0)
     {
       wDEMWindow->hide();
       guiDEM->deactivate();
@@ -469,7 +492,7 @@ GCPToSensorModelView
   else
     return;
 
-  this->UpdatePointList();
+  this->UpdatePointList();*/
 }
 
 void

@@ -53,21 +53,21 @@ public:
     //friend class GCPToSensorModelModel;
   public:
  /** Standard class typedefs */
-  typedef MouseClickedController        Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef MouseClickedController            Self;
+  typedef itk::Object                       Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
+
+  typedef itk::Index<>  IndexType;
 
   /** Standard type macros */
   itkTypeMacro(MouseClickedController,Superclass);
   itkNewMacro(Self);
 
-  typedef itk::Index<> IndexType;
-
   void IndexClicked(ContinuousIndexType index)
-    {
+    {  
       if( !m_Controller.IsNotNull() )
-       itkExceptionMacro(<<"Not Controller set.");
+       itkExceptionMacro(<<"No Controller set.");
       if( m_MouseButton==1 )
        m_Controller->LeftMouseButtonClicked(index);
       else
@@ -107,8 +107,8 @@ public:
   typedef GCPToSensorModelView::ImageViewType           ImageViewType;
   typedef GCPToSensorModelModel::VisualizationModelType VisualizationModelType;
   typedef GCPToSensorModelModel::VectorImageType        VectorImageType;
-  typedef VectorImageType::IndexType                    IndexType;
-  typedef VectorImageType::PixelType                    PixelType;
+  typedef GCPToSensorModelModel::IndexType              IndexType;
+  typedef GCPToSensorModelModel::PixelType              PixelType;
   typedef GCPToSensorModelModel::RGBImageType           RGBImageType;
  
   /** Handlers */
@@ -128,7 +128,7 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>                              PixelDescriptionViewType;
   typedef PixelDescriptionViewType::Pointer                                            PixelDescriptionViewPointerType;
   
-  typedef ModelType::IndexesListType       IndexesListType;
+//  typedef ModelType::IndexesListType       IndexesListType;
   typedef ModelType::ContinuousIndexType   ContinuousIndexType;
   typedef ModelType::Continuous3DIndexType Continuous3DIndexType;
 
@@ -148,7 +148,7 @@ public:
 
   /** Link module and pixel descriptor action handlers. */
   virtual void LinkPixelDescriptors();
-  virtual void AddPoints( float x, float y, float lon, float lat );
+  virtual void AddPoints( float x, float y, float lon, float lat, float elev );
   virtual void ClearPointList();
   virtual void DeletePointFromList( unsigned int id );
   virtual void FocusOn(ContinuousIndexType id);
