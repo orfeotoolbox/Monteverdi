@@ -109,6 +109,7 @@ class ITK_EXPORT MonteverdiModel
   itkGetMacro(NumberOfRegisteredModules,unsigned int);
   
   itkGetMacro(EraseCaching,bool);
+  itkSetMacro(EraseCaching,bool);
   
   /** Get Connection Graph*/
   itkGetConstObjectMacro(ConnectionGraph,ConnectionGraphType);

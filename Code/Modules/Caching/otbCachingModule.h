@@ -74,6 +74,9 @@ public:
   itkSetMacro(WatchProgress,bool);
   itkBooleanMacro(WatchProgress);
 
+  itkSetMacro(EraseFile,bool);
+  itkBooleanMacro(EraseFile);
+  
   // Return the writing progress
   double GetProgress() const;
 
@@ -136,6 +139,9 @@ private:
   
   //error msg
   std::string m_ErrorMsg;
+  
+  //erase cached file
+  bool m_EraseFile;
 };
 
 

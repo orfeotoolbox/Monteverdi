@@ -259,7 +259,7 @@ MonteverdiViewGUI
 void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v)
 {
   MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
-  lThis->Quit();
+  lThis->OpenEraseCaching();
 }
 
 /** HelpCallback (static) */
@@ -521,6 +521,7 @@ MonteverdiViewGUI
   wMainWindow->show();
 }
 
+
 void
 MonteverdiViewGUI
 ::Quit()
@@ -539,8 +540,9 @@ MonteverdiViewGUI
   gTreeGroup->hide();
   wHelpWindow->hide();
   wMainWindow->hide();
+  std::cout << "Hiding main window" << std::endl;
   m_MonteverdiModel->Close();
-
+  std::cout << "close over" << std::endl;
   if(m_InputViewGUI.IsNotNull())
   {
     m_InputViewGUI->Cancel();
@@ -549,6 +551,19 @@ MonteverdiViewGUI
   MsgReporter::GetInstance()->Hide();
 }
 
+void MonteverdiViewGUI
+::OpenEraseCaching()
+{
+    wEraseCaching2Window->show();
+}
+
+void MonteverdiViewGUI
+::EraseCaching(bool erase)
+{
+    m_MonteverdiModel->SetEraseCaching( erase );
+    wEraseCaching2Window->hide();
+    this->Quit();
+}
 void
 MonteverdiViewGUI
 ::Help()
