@@ -81,6 +81,7 @@ public:
   typedef GCPsToRPCSensorModelImageFilter<VectorImageType>          GCPsToRPCSensorModelImageFilterType;
   typedef GCPsToRPCSensorModelImageFilterType::Pointer              GCPsToRPCSensorModelImageFilterPointerType;
   typedef GCPsToRPCSensorModelImageFilterType::GCPsContainerType    GCPsContainerType;
+  typedef GCPsToRPCSensorModelImageFilterType::ErrorsContainerType  ErrorsContainerType;
   typedef GCPsToRPCSensorModelImageFilterType::GCPType              GCPType;    
   typedef GCPsToRPCSensorModelImageFilterType::Point2DType          Point2DType;
   typedef GCPsToRPCSensorModelImageFilterType::Point3DType          Point3DType;
@@ -180,24 +181,14 @@ public:
   /** Get GCPsContainer has changed */
   itkGetConstMacro(GCPsContainerHasChanged, bool);
 
-  /** Get used elevation */
-/*  double GetUsedElevation(unsigned int i)
-  {
-    if( i>m_UsedElevation.size() )
-      itkExceptionMacro("Invalid index, "<<i<<" outside vector size: "<<m_UsedElevation.size());
-
-    return m_UsedElevation[i];
-  };
-  std::vector<double> GetUsedElevation() { return m_UsedElevation; };*/
-  /** According to the type of elevation manageme,t generate the used list. */
-//  void GenerateUsedElevation();
-
-  /** Set/Get Projection type */
-//  itkSetMacro(ProjectionType, ProjectionEnumType);
-// itkGetConstMacro(ProjectionType, ProjectionEnumType);
-
   /** Get Ground error projection */
   itkGetConstMacro(GroundError, double);
+  
+  /** Get Mean error */
+  itkGetConstMacro(MeanError, double);
+  
+  /** Get errors */
+  ErrorsContainerType GetErrorsContainer() const { return m_ErrorsContainer; }
 
   /** Map Viewer */
   void SetMap(long int sizeX, long int sizeY);
@@ -267,6 +258,15 @@ private:
   /** GCP List */
   GCPsContainerType                           m_GCPsContainer;
 
+  /** Errors container */
+  ErrorsContainerType                         m_ErrorsContainer;
+  
+  /** Ground error projection */
+  double                                      m_GroundError;
+  
+  /** Mean error */
+  double                                      m_MeanError;
+
   /** Visualization */
   VisualizationModelPointerType               m_VisualizationModel;
   LayerGeneratorPointerType                   m_ImageGenerator;
@@ -298,9 +298,6 @@ private:
 
   /** GCPs list has changed */
   bool                                        m_GCPsContainerHasChanged;
-
-  /** Ground error projection */
-  double                                      m_GroundError;
   
   /** Map viewer */
   MapReaderPointerType                        m_MapReader;

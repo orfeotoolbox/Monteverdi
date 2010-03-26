@@ -55,6 +55,7 @@ public:
   typedef GCPToSensorModelModel::ContinuousIndexType    ContinuousIndexType;
   typedef GCPToSensorModelModel::GCPType                GCPType;
   typedef GCPToSensorModelModel::GCPsContainerType      GCPsContainerType;
+  typedef GCPToSensorModelModel::ErrorsContainerType    ErrorsContainerType;
   typedef GCPToSensorModelModel::Point2DType            Point2DType;
   typedef GCPToSensorModelModel::Point3DType            Point3DType;  
   typedef ImageView<VisualizationModelType>             ImageViewType;
@@ -98,7 +99,7 @@ public:
   
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
-  void AddPointsToList( GCPType gcp );
+  void AddPointsToList( GCPType gcp, double error );
   void RedrawWidgets();
   void UpdatePointList();
   void Show();

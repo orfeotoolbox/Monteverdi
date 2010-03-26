@@ -184,7 +184,7 @@ GCPToSensorModelView
 
 void
 GCPToSensorModelView
-::AddPointsToList(GCPType gcp)
+::AddPointsToList(GCPType gcp, double error)
 {
   Point2DType sensorPoint;
   Point3DType groundPoint;
@@ -193,7 +193,7 @@ GCPToSensorModelView
   groundPoint = gcp.second;
 
   itk::OStringStream oss;
-  oss << sensorPoint << " -> " << groundPoint;
+  oss << sensorPoint << " -> " << groundPoint << " err : " << error;
   
   this->lPointList->add(oss.str().c_str());
   
@@ -394,14 +394,25 @@ GCPToSensorModelView
   GCPsContainerType GCPsContainer;
   GCPsContainer = m_Model->GetGCPsContainer();
   
+  // Get the error container
+  ErrorsContainerType ErrorsContainer;
+  ErrorsContainer = m_Model->GetErrorsContainer();
+  
   // Add point to list
   for(int i=0; i<GCPsContainer.size(); i++)
   {
-    this->AddPointsToList(GCPsContainer[i]);
+    this->AddPointsToList(GCPsContainer[i], ErrorsContainer[i]);
   }
   
-  // TODO Update error
-  std::cout << "GCPToSensorModelView::UpdateGCPView() TODO : update error" << std::endl;
+  // Set the ground error
+  std::ostringstream groundError;
+  groundError << m_Model->GetGroundError();
+  tGroundError->value(groundError.str().c_str());
+  
+  // Set the mean error
+  std::ostringstream meanError;
+  meanError << m_Model->GetMeanError();
+  tMeanError->value(meanError.str().c_str());
 }
 
 void

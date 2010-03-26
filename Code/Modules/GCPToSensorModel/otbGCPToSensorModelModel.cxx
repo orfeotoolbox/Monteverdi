@@ -225,7 +225,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Elevation> not found): "<<fname);
          }
-       p3d[3] = atof(currentElement->GetText());
+       p3d[2] = atof(currentElement->GetText());
 
        // Finally, add the gcp
        m_GCPsToRPCSensorModelImageFilter->AddGCP(p2d, p3d);
@@ -580,6 +580,9 @@ GCPToSensorModelModel
   // Update the container and image informations
   m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
   m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
+  m_GroundError = m_GCPsToRPCSensorModelImageFilter->GetRMSGroundError();
+  m_ErrorsContainer = m_GCPsToRPCSensorModelImageFilter->GetErrorsContainer();
+  m_MeanError = m_GCPsToRPCSensorModelImageFilter->GetMeanError();
   
   // Notify it to the view
   m_GCPsContainerHasChanged = true;
