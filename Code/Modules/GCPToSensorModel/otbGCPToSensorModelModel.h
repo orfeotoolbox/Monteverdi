@@ -171,6 +171,9 @@ public:
   void SetMeanElevation(double meanElev);
   itkGetMacro(MeanElevation, double);
 
+  /** Set To GCP Management */
+  void SetGCPElevation();
+
   /** Get HasNewLoadedGCPs */
   itkGetConstMacro(HasNewImage, bool);
 

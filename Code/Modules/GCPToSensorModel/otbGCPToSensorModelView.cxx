@@ -119,9 +119,7 @@ GCPToSensorModelView
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
 
-  // Disable Bilinear choice possibility
-  cProjType->value(1);
-  cProjType->do_callback();
+  // Disable Bilinear choice possibility - only RPC is available
   cProjType->hide();
 }
 
@@ -138,11 +136,9 @@ void
 GCPToSensorModelView
 ::Show()
 {
-//   wMainWindow->position(0, 44);
-//   wMapWindow->position(850, 44);
+  wMainWindow->position(0, 45);
   
   wMainWindow->show();
-  //wMapWindow->show();
   
   // Add registered visualization components from the interface
   gFull->add(m_ImageView->GetFullWidget());
@@ -220,8 +216,6 @@ GCPToSensorModelView
   m_CrossGlComponent->AddIndex( index );
   m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
   
-  std::cout << "Point added : " << oss.str() << std::endl;
-  
   this->RedrawWidgets();
 }
 
@@ -296,15 +290,6 @@ GCPToSensorModelView
 ::ClearPointList()
 {
   m_Controller->ClearPointList();
-  lPointList->clear();
-  lPointList->redraw();
-  m_ColorList.clear();
-
-  m_CrossGlComponent->Clear();
-  
-  this->ClearTransformationInfo();
-
-  this->RedrawWidgets();
 }
 
 
@@ -381,7 +366,6 @@ GCPToSensorModelView
 ::ChangeDEM()
 {
   m_Controller->ChangeDEM();
-  this->UpdatePointList();
 }
 
 void
@@ -410,13 +394,9 @@ GCPToSensorModelView
   GCPsContainerType GCPsContainer;
   GCPsContainer = m_Model->GetGCPsContainer();
   
-  std::cout << "Liste des points dans le view: " << std::endl;
-
-  
   // Add point to list
   for(int i=0; i<GCPsContainer.size(); i++)
   {
-    std::cout << GCPsContainer[i].first << " -> " << GCPsContainer[i].second << std::endl;
     this->AddPointsToList(GCPsContainer[i]);
   }
   
@@ -475,33 +455,16 @@ void
 GCPToSensorModelView
 ::SetProjectionType()
 {
-/*  if(cProjType->value() == 0)
-    {
-      wDEMWindow->hide();
-      guiDEM->deactivate();
-      lPointList->clear();
-      vElev->hide();
-      m_Model->SetProjectionType(GCPToSensorModelModel::BILINEAR);
-    }
-  else if (cProjType->value() == 1)
-    {
-      guiDEM->activate();
-      vElev->show();
-      m_Model->SetProjectionType(GCPToSensorModelModel::RPC);
-    }
-  else
-    return;
-
-  this->UpdatePointList();*/
+  // Only RPC is available
 }
 
 void
 GCPToSensorModelView
 ::UpdatePointList()
 {
-  lPointList->clear();
+/*  lPointList->clear();
   this->ClearTransformationInfo();
-  m_Controller->UpdatePointList();
+  m_Controller->UpdatePointList();*/
 }
 
 

@@ -15,7 +15,7 @@ class GCPToSensorModelViewGroup {open
     Fl_Window wMainWindow {
       label {GCP to sensor model module}
       callback {this->HideAll();} open
-      xywh {6 44 1235 870} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
+      xywh {6 44 1235 870} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 hide resizable size_range {962 700 0 0}
     } {
       Fl_Group guiImageGroup {open
         xywh {5 21 813 660}
@@ -73,7 +73,7 @@ class GCPToSensorModelViewGroup {open
       } {
         Fl_Choice cProjType {
           label {Projection:}
-          callback {this->SetProjectionType();} selected
+          callback {this->SetProjectionType();}
           xywh {740 838 225 20} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1
         } {
           MenuItem {} {
@@ -129,8 +129,8 @@ class GCPToSensorModelViewGroup {open
         } {}
         Fl_Button guiDEM {
           label Elevation
-          callback {wDEMWindow->show();}
-          tooltip {Set the source for the elevation information} xywh {985 825 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          callback {wDEMWindow->show();} selected
+          tooltip {Set the source for the elevation information} xywh {985 825 70 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button bOk {
           label {Save/Quit}

@@ -19,10 +19,6 @@
 #include "otbGCPToSensorModelModel.h"
 #include "otbFltkFilterWatcher.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimDirectory.h"
-#include "projection/ossimRpcSolver.h"
-
 #include "tinyxml.h"
 
 #ifdef OTB_USE_CURL
@@ -68,9 +64,10 @@ void GCPToSensorModelModel::Notify(ListenerBase * listener)
   m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
 
   m_DEMPath = "";
+  m_DEMHandler = DEMHandler::New();
+  m_ElevMgt = GCP;
 
   m_OutputChanged = false;
-  m_ElevMgt = GCP;
   m_HasNewImage = false;
 
   // Map
@@ -303,16 +300,6 @@ void
 GCPToSensorModelModel
 ::SetDEMPath( const std::string & DEMPath )
 {
-  // Try to open DEM directory
-  ossimElevManager * elevManager = ossimElevManager::instance();
-  ossimFilename ossimDEMDir;
-  ossimDEMDir=ossimFilename(DEMPath.c_str());
-  ossimDirectory od(DEMPath.c_str());
-  if (!elevManager->loadElevationPath(ossimDEMDir))
-  {
-     itkExceptionMacro("Invalid directory \""<<DEMPath<<"\", no DEM files found!");
-  }
-  
   // Elevation Management
   m_ElevMgt = DEM;
   
@@ -320,14 +307,50 @@ GCPToSensorModelModel
   m_DEMPath = DEMPath;
   m_DEMHandler->OpenDEMDirectory(DEMPath.c_str());
 
-  // Add DEM to filter
-  m_GCPsToRPCSensorModelImageFilter->SetDEMHandler(m_DEMHandler);
-  
   // Activate use DEM
   m_GCPsToRPCSensorModelImageFilter->SetUseDEM(true);
+
+  // Add DEM to filter
+  m_GCPsToRPCSensorModelImageFilter->SetDEMHandler(m_DEMHandler);
+
+  // Clear GCPsContainer
+  m_GCPsToRPCSensorModelImageFilter->ClearGCPs();
+  
+  // Add GCPs with no elevation
+  for (unsigned int i=0; i<m_GCPsContainer.size(); i++)
+  {
+    Point2DType sensorPoint, groundPoint;
+    sensorPoint = m_GCPsContainer[i].first;
+    groundPoint[0] = m_GCPsContainer[i].second[0];
+    groundPoint[1] = m_GCPsContainer[i].second[1];
+  
+    m_GCPsToRPCSensorModelImageFilter->AddGCP(sensorPoint, groundPoint);
+  }
   
   // Update GCPsContainer
   this->UpdateContainer();
+}
+
+void
+GCPToSensorModelModel
+::SetGCPElevation()
+{
+  // Clear GCPsContainer
+  m_GCPsToRPCSensorModelImageFilter->ClearGCPs();
+  
+  // Add GCPs with no elevation
+  for (unsigned int i=0; i<m_GCPsContainer.size(); i++)
+  {
+    Point2DType sensorPoint, groundPoint;
+    sensorPoint = m_GCPsContainer[i].first;
+    groundPoint[0] = m_GCPsContainer[i].second[0];
+    groundPoint[1] = m_GCPsContainer[i].second[1];
+  
+    m_GCPsToRPCSensorModelImageFilter->AddGCP(sensorPoint, groundPoint);
+  }
+  
+  // Update GCPsContainer
+  this->UpdateContainer();  
 }
 
 void
@@ -342,6 +365,20 @@ GCPToSensorModelModel
   
   // Don't use DEM
   m_GCPsToRPCSensorModelImageFilter->SetUseDEM(false);
+  
+  // Clear GCPsContainer
+  m_GCPsToRPCSensorModelImageFilter->ClearGCPs();
+  
+  // Add GCPs with no elevation
+  for (unsigned int i=0; i<m_GCPsContainer.size(); i++)
+  {
+    Point2DType sensorPoint, groundPoint;
+    sensorPoint = m_GCPsContainer[i].first;
+    groundPoint[0] = m_GCPsContainer[i].second[0];
+    groundPoint[1] = m_GCPsContainer[i].second[1];
+  
+    m_GCPsToRPCSensorModelImageFilter->AddGCP(sensorPoint, groundPoint);
+  }
   
   // Update GCPsContainer
   this->UpdateContainer();
@@ -543,10 +580,6 @@ GCPToSensorModelModel
   // Update the container and image informations
   m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
   m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
-  
-  std::cout << "Liste des points dans le container: " << std::endl;
-  for (int i=0; i<m_GCPsContainer.size(); i++)
-    std::cout << m_GCPsContainer[i].first << " -> " << m_GCPsContainer[i].second << std::endl;
   
   // Notify it to the view
   m_GCPsContainerHasChanged = true;

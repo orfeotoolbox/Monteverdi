@@ -181,31 +181,33 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  GCPToSensorModelView * m_View;
+  GCPToSensorModelView *                      m_View;
 
   /** The instance of the model */
-  ModelType * m_Model;
+  ModelType *                                 m_Model;
 
   /** Widgets controller */
-  WidgetControllerType::Pointer              m_WidgetController;
-  WidgetControllerType::Pointer              m_MapWidgetController;
-  MouseClickedController::Pointer            m_MouseClickedController;
+  WidgetControllerType::Pointer               m_WidgetController;
+  WidgetControllerType::Pointer               m_MapWidgetController;
+  MouseClickedController::Pointer             m_MouseClickedController;
 
   /** Action handlers */
-  ResizingHandlerType::Pointer               m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
-  ChangeScaledRegionHandlerType::Pointer     m_ChangeScaledRegionHandler;
-  ChangeScaleHandlerType::Pointer            m_ChangeScaleHandler;
-  MouseClickedHandlertype::Pointer           m_LeftMouseClickedHandler;
-  PixelDescriptionActionHandlerType::Pointer m_PixelActionHandler;
-  PixelDescriptionModelType::Pointer         m_PixelModel;
-  PixelDescriptionViewType::Pointer          m_PixelView;
+  ResizingHandlerType::Pointer                m_ResizingHandler;
+  ChangeRegionHandlerType::Pointer            m_ChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer      m_ChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer             m_ChangeScaleHandler;
+  MouseClickedHandlertype::Pointer            m_LeftMouseClickedHandler;
+  PixelDescriptionActionHandlerType::Pointer  m_PixelActionHandler;
+  PixelDescriptionModelType::Pointer          m_PixelModel;
+  PixelDescriptionViewType::Pointer           m_PixelView;
   
-  ResizingHandlerType::Pointer               m_MapResizingHandler;
-  ScrollZoomHandlerType::Pointer             m_MapScrollZoomHandler;
-  MouseMapActionHandlerType::Pointer         m_MapMouseMapActionHandler;
-  GuessActionHandlerType::Pointer            m_GuessActionHandler;
+  ResizingHandlerType::Pointer                m_MapResizingHandler;
+  ScrollZoomHandlerType::Pointer              m_MapScrollZoomHandler;
+  MouseMapActionHandlerType::Pointer          m_MapMouseMapActionHandler;
+  GuessActionHandlerType::Pointer             m_GuessActionHandler;
   
+  /** DEM Path */
+  std::string                                 m_DEMPath;
 };
 } //end namespace otb
 
