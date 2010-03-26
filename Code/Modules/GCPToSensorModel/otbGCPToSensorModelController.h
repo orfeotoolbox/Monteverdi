@@ -156,8 +156,6 @@ public:
   virtual void ChangeDEM();
   virtual void ReloadGCPsList();
   virtual void OK();
-  virtual void UpdateStats();
-  virtual void UpdatePointList();
   virtual void ExportGcpsToXmlFile(const char * fname) ;
   virtual void ImportGcpsFromXmlFile(const char * fname);
 

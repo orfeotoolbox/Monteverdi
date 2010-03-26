@@ -51,9 +51,7 @@ public:
   virtual void SetDEMPath( const std::string & filePath ) =0;
   virtual void ChangeDEM() =0;
   virtual void ReloadGCPsList() =0;
-  virtual void UpdateStats() =0;
   virtual void OK() =0;
-  virtual void UpdatePointList() =0;
   
   virtual void SearchPlaceName(double latitude, double longitude) = 0;
   virtual void SearchLatLong(std::string placename) = 0;

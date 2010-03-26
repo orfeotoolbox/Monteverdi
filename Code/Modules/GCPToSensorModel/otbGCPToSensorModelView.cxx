@@ -357,8 +357,6 @@ GCPToSensorModelView
   std::string DEMfile = cfname;
   m_Controller->SetDEMPath( DEMfile );
   tDEMFile->value( cfname );
-  this->ClearTransformationInfo();
-  m_Controller->UpdateStats();
 }
 
 void
@@ -471,16 +469,6 @@ GCPToSensorModelView
 
 void
 GCPToSensorModelView
-::UpdatePointList()
-{
-/*  lPointList->clear();
-  this->ClearTransformationInfo();
-  m_Controller->UpdatePointList();*/
-}
-
-
-void
-GCPToSensorModelView
 ::Quit()
 {
   m_Controller->OK();
@@ -492,22 +480,8 @@ GCPToSensorModelView
 ::HideAll()
 {
   wMainWindow->hide();
-  wMapWindow->hide();
   wDEMWindow->hide();
 }
-  
-// void 
-// GCPToSensorModelView
-// ::ShowMap()
-// {
-//   if (wMapWindow->shown())
-//     wMapWindow->hide();
-//   else
-//   {
-//     wMapWindow->show();
-//     this->DrawMap();
-//   }
-// }
   
 void
 GCPToSensorModelView

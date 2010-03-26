@@ -154,7 +154,7 @@ void
 GCPToSensorModelModel
 ::LoadGCP()
 {
-  itkExceptionMacro(<<"GCPToSensorModelModel::LoadGCP() TODO");
+  std::cout<<"GCPToSensorModelModel::LoadGCP() TODO"<< std::endl;
 
   // Load GCPs from Input Image
 //  m_GCPsToRPCSensorModelImageFilter->ReloadGCPsFromInputImage();
@@ -474,104 +474,6 @@ GCPToSensorModelModel
   // Update local GCP container
   this->UpdateContainer();
 }
-
-/*void
-GCPToSensorModelModel
-::ComputeBilinearProjection()
-{
-  //NOT USED YET...
-  ossimRefPtr<ossimBilinearProjection> bproj = new ossimBilinearProjection();
-
-  std::vector<ossimDpt> sensorPoints;
-  std::vector<ossimGpt>  geoPoints;
-  ContinuousIndexType idFix, idMov;
-
-  ossimDpt spoint;
-  ossimGpt gpoint;
-
-  for(unsigned int i = 0; i<m_IndexesList.size(); i++)
-    {
-      idFix =  m_IndexesList[i].first;
-      idMov =  m_IndexesList[i].second;
-      spoint = ossimDpt(idFix[0],idFix[1]);
-      sensorPoints.push_back(spoint);
-      gpoint = ossimGpt(idMov[0],idMov[1]);
-      geoPoints.push_back(gpoint);
-    }
-
-  m_GroundError = bproj->setTiePoints(sensorPoints,geoPoints);
-
-  m_Projection = bproj.get();
-
-  // To avoid infinite loop (notify->notify->notify...)
-  if( m_HasNewImage == false )
-    {
-      m_ProjectionUpdated = true;
-      this->NotifyAll();
-      m_ProjectionUpdated = false;
-    }
-
-}*/
-
-/*
-void
-GCPToSensorModelModel
-::GenerateUsedElevation()
-{
-  m_UsedElevation.clear();
-  if(m_ElevMgt == GCP)
-    m_UsedElevation = m_GCPsElevation;
-  else if(m_ElevMgt == MEAN)
-    m_UsedElevation = std::vector<double>(m_DEMsElevation.size(), m_MeanElevation);
-  else if(m_ElevMgt == DEM)
-    m_UsedElevation = m_DEMsElevation;
-  else
-    itkExceptionMacro(<<"Unknown elevation management.")
-}*/
-
-// TODO
-/*Point3DType
-GCPToSensorModelModel
-::TransformPoint(Point2DType id, double height)
-{
-  Continuous3DIndexType out;
-
-  ossimDpt spoint(id[0], id[1]);
-  ossimGpt gpoint;
-  if (m_ProjectionType == RPC)
-    gpoint.hgt = height;
-
-  if( m_Projection != NULL )
-    {
-      m_Projection->lineSampleToWorld(spoint, gpoint);
-
-      out[0] = gpoint.lon;
-      out[1] = gpoint.lat;
-      out[2] = gpoint.hgt;
-    }
-  else
-    out.Fill(0.);
-
-  return out;
-}
-*/
-// inutile
-/*
-GCPToSensorModelModel::Continuous3DIndexListType
-GCPToSensorModelModel
-::TransformPoints()
-{
-  Continuous3DIndexListType outList;
-  for(unsigned int i=0; i<m_IndexesList.size(); i++)
-    {
-      if (m_ProjectionType == RPC)
-        outList.push_back( this->TransformPoint(m_IndexesList[i].first, m_UsedElevation[i]) );
-      else if(m_ProjectionType == BILINEAR)
-        outList.push_back( this->TransformPoint(m_IndexesList[i].first) );
-    }
-  return outList;
-}
-*/
 
 void
 GCPToSensorModelModel

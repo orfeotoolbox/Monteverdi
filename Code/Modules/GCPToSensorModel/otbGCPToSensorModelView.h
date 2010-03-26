@@ -92,7 +92,6 @@ public:
   virtual void ExportGcpsToXmlFile();
 
   /** Street Map window */
-  //virtual void ShowMap();
   virtual void UpdatePlaceName();
   virtual void UpdateLatLong();
   virtual void DisplayMap();
@@ -101,7 +100,6 @@ public:
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
   void AddPointsToList( GCPType gcp, double error );
   void RedrawWidgets();
-  void UpdatePointList();
   void Show();
   
   /** Get a pointer to the view parts for the controller */
