@@ -422,11 +422,9 @@ GCPToSensorModelModel
 {
   if( id>=m_GCPsContainer.size() )
     itkExceptionMacro(<<"Impossible to erase the "<<id<<" element. Out of vector size ("<<m_GCPsContainer.size()<<").");
-  // TODO
-  std::cout << "GCPToSensorModelModel::RemovePointFromGCPsContainer() - TODO" << std::endl;
   
-//  m_GCPsToRPCSensorModelImageFilter->RemoveGCP(id);
-// this->UpdateContainer();
+  m_GCPsToRPCSensorModelImageFilter->RemoveGCP(id);
+  this->UpdateContainer();
 }
 
 void
@@ -545,6 +543,10 @@ GCPToSensorModelModel
   // Update the container and image informations
   m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
   m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
+  
+  std::cout << "Liste des points dans le container: " << std::endl;
+  for (int i=0; i<m_GCPsContainer.size(); i++)
+    std::cout << m_GCPsContainer[i].first << " -> " << m_GCPsContainer[i].second << std::endl;
   
   // Notify it to the view
   m_GCPsContainerHasChanged = true;

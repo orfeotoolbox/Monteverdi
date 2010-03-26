@@ -220,6 +220,8 @@ GCPToSensorModelView
   m_CrossGlComponent->AddIndex( index );
   m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
   
+  std::cout << "Point added : " << oss.str() << std::endl;
+  
   this->RedrawWidgets();
 }
 
@@ -314,20 +316,11 @@ GCPToSensorModelView
   if( id != 0 )
   {
     m_Controller->DeletePointFromList(id-1);
-    lPointList->remove(id);
-    tError->remove(id);
-    m_ColorList.erase(m_ColorList.begin()+id-1);
+    
     if(id<=static_cast<unsigned int>(lPointList->size()))
       lPointList->value(id);
     else
       lPointList->value(1);
-    
-    m_CrossGlComponent->ClearIndex(id-1);
-    this->RedrawWidgets();
-    
-    this->ClearTransformationInfo();
-    m_Controller->UpdateStats();
-    this->UpdateListSelectionColor(true);
   }
 }
 
@@ -404,8 +397,11 @@ void
 GCPToSensorModelView
 ::UpdateGCPView()
 {
-  // Clear lPointList
+  // Clear lists
   lPointList->clear();
+  lPointList->redraw();
+  m_ColorList.clear();
+  m_CrossGlComponent->Clear();
   
   // Clear transformation info
   this->ClearTransformationInfo();
@@ -414,9 +410,13 @@ GCPToSensorModelView
   GCPsContainerType GCPsContainer;
   GCPsContainer = m_Model->GetGCPsContainer();
   
+  std::cout << "Liste des points dans le view: " << std::endl;
+
+  
   // Add point to list
   for(int i=0; i<GCPsContainer.size(); i++)
   {
+    std::cout << GCPsContainer[i].first << " -> " << GCPsContainer[i].second << std::endl;
     this->AddPointsToList(GCPsContainer[i]);
   }
   
