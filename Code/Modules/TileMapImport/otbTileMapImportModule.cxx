@@ -66,6 +66,8 @@ namespace otb
     vServername->add(servername.c_str(),"",NULL);
     servername = "Near Map"; // http://www.nearmap.com/maps/
     vServername->add(servername.c_str(),"",NULL);
+    servername = "Hill Shading"; // http://tile.orfeo-toolbox.org/hillShade/
+    vServername->add(servername.c_str(),"",NULL);
     vServername->value(0);
     
     vDepth->value(m_Depth - 1);
@@ -128,7 +130,16 @@ namespace otb
           m_OutputKey = "NearMap-";
           break;
         }
-          // Open street map par défaut
+        case 2:
+        {
+          m_ServerName = "http://tile.orfeo-toolbox.org/hillShade/";
+          lFileSuffix = "jpg";
+          lAddressMode = "3";
+          m_CacheDirectory += "/OTBHS";
+          m_OutputKey = "otbHS-";
+          break;
+        }
+        // Open street map par défaut
         default:
         {
           m_ServerName = "http://tile.openstreetmap.org/";
@@ -333,5 +344,3 @@ namespace otb
   }
   
 } // End namespace otb
-
-
