@@ -175,9 +175,6 @@ public:
   /** Set To GCP Management */
   void SetGCPElevation();
 
-  /** Get HasNewLoadedGCPs */
-  itkGetConstMacro(HasNewImage, bool);
-
   /** Get GCPsContainer has changed */
   itkGetConstMacro(GCPsContainerHasChanged, bool);
 
@@ -292,9 +289,6 @@ private:
   
   /** DEM handler */
   DEMHandler::Pointer                         m_DEMHandler;
-  
-  /** GCPs were loaded from the image */
-  bool                                        m_HasNewImage;
 
   /** GCPs list has changed */
   bool                                        m_GCPsContainerHasChanged;

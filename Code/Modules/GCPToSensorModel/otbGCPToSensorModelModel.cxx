@@ -30,9 +30,11 @@ namespace otb
 {
 /** Initialize the singleton */
 GCPToSensorModelModel::Pointer GCPToSensorModelModel::Instance = NULL;
+
 /** Manage the singleton */
 GCPToSensorModelModel::Pointer
-GCPToSensorModelModel::GetInstance()
+GCPToSensorModelModel::
+GetInstance()
 {
   if (!Instance)
   {
@@ -41,53 +43,59 @@ GCPToSensorModelModel::GetInstance()
   return Instance;
 }
 
-void GCPToSensorModelModel::Notify(ListenerBase * listener)
+void GCPToSensorModelModel::
+Notify(ListenerBase * listener)
 {
   listener->Notify();
 }
 
-  GCPToSensorModelModel::GCPToSensorModelModel() : m_VisualizationModel(), m_BlendingFunction(), m_Output(),
-                                             m_DEMPath(), m_ElevMgt(), m_DEMHandler(), m_HasNewImage(),
-                                             m_GroundError(), m_MapVisualizationModel(), m_MapBlendingFunction()
+GCPToSensorModelModel::
+GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer(), m_ErrorsContainer(),
+                          m_GroundError(0.), m_MeanError(0.), m_VisualizationModel(), m_ImageGenerator(),
+                          m_BlendingFunction(), m_InputImage(), m_Output(), m_OutputChanged(false),
+                          m_DEMPath(""), m_ElevMgt(GCP), m_MeanElevation(0.), m_DEMHandler(),
+                          m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_MapModel(),
+                          m_MapInverseModel(), m_PlaceName(""), m_Latitude(0.), m_Longitude(0.),
+                          m_Depth(0.), m_SelectedLatitude(0.), m_SelectedLongitude(0.), m_SizeX(0),
+                          m_SizeY(0), m_Region(), m_ServerName(""), m_CacheDirectory(""),
+                          m_MapVisualizationModel(), m_MapImageGenerator(), m_MapBlendingFunction(),
+                          m_PlaceNameChanged(false), m_LatLongChanged(false), m_DepthChanged(false),
+                          m_HasNewMap(false), m_SelectedPointChanged(false)
 {
   // Visualization
-  m_VisualizationModel = VisualizationModelType::New();
-  m_BlendingFunction = BlendingFunctionType::New();
+  m_VisualizationModel  = VisualizationModelType::New();
+  m_BlendingFunction    = BlendingFunctionType::New();
+  m_ImageGenerator      = LayerGeneratorType::New();
+  
   m_BlendingFunction->SetAlpha(0.6);
-  m_ImageGenerator = LayerGeneratorType::New();
   
   // Input & Output
   m_InputImage = VectorImageType::New();
-  m_Output = VectorImageType::New();
+  m_Output     = VectorImageType::New();
+
+  // DEM
+  m_DEMHandler = DEMHandler::New();
   
   // Filter
   m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
 
-  m_DEMPath = "";
-  m_DEMHandler = DEMHandler::New();
-  m_ElevMgt = GCP;
-
-  m_OutputChanged = false;
-  m_HasNewImage = false;
-
   // Map
   m_MapVisualizationModel = VisualizationModelType::New();
-  m_MapBlendingFunction = BlendingFunctionType::New();
-  m_MapBlendingFunction->SetAlpha(0.6);
-  m_MapImageGenerator = MapLayerGeneratorType::New();
+  m_MapBlendingFunction   = BlendingFunctionType::New();
+  m_MapImageGenerator     = MapLayerGeneratorType::New();
   
-  m_ServerName = "http://tile.openstreetmap.org/";
-  m_CacheDirectory = "./Caching";
+  m_MapBlendingFunction->SetAlpha(0.6);
+  
+  m_ServerName      = "http://tile.openstreetmap.org/";
+  m_CacheDirectory  = "./Caching";
   
   ossimFilename cachingDir(m_CacheDirectory);
   cachingDir.createDirectory();
   
   m_PlaceName = "Toulouse";
-  m_Latitude = 43.6043;
+  m_Latitude  = 43.6043;
   m_Longitude = 1.4433;
-  m_Depth = 1;
-  m_PlaceNameChanged = false;
-  m_LatLongChanged = false;
+  m_Depth     = 1;
 }
 
 GCPToSensorModelModel
@@ -107,10 +115,10 @@ GCPToSensorModelModel
   
   // Add input image to the filter
   m_GCPsToRPCSensorModelImageFilter->SetInput(m_InputImage);
+  m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
   
   // Load GCPs from input image
-  m_GCPsToRPCSensorModelImageFilter->UpdateOutputInformation();
-  m_GCPsContainer = m_GCPsToRPCSensorModelImageFilter->GetGCPsContainer();
+  m_GCPsToRPCSensorModelImageFilter->SetUseImageGCPs(true);
 
   // Generate the layer
   m_ImageGenerator->SetImage(image);
@@ -143,22 +151,21 @@ GCPToSensorModelModel
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
 
-  m_GCPsContainerHasChanged = true;
-  m_HasNewImage = true;
-  this->NotifyAll();
-  m_GCPsContainerHasChanged = false;
-  m_HasNewImage = false;
+  // Update the GCP & Error container
+  this->UpdateContainer();
 }
 
 void
 GCPToSensorModelModel
 ::LoadGCP()
 {
-  std::cout<<"GCPToSensorModelModel::LoadGCP() TODO"<< std::endl;
-
   // Load GCPs from Input Image
-//  m_GCPsToRPCSensorModelImageFilter->ReloadGCPsFromInputImage();
-// this->UpdateContainer();
+  m_GCPsToRPCSensorModelImageFilter->ClearGCPs();
+  m_GCPsToRPCSensorModelImageFilter->LoadImageGCPs();
+  
+  m_GCPsContainerHasChanged = true;
+  this->UpdateContainer();
+  m_GCPsContainerHasChanged = false;
 }
 
 void GCPToSensorModelModel

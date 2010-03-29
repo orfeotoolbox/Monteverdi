@@ -129,7 +129,7 @@ private:
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer                m_MapWidgetController;
   /** Pointer to the model */
-  GCPToSensorModelModel::Pointer m_Model;
+  GCPToSensorModelModel::Pointer                m_Model;
   /** Image view */
   ImageViewType::Pointer                        m_ImageView;
   ImageViewType::Pointer                        m_MapView;

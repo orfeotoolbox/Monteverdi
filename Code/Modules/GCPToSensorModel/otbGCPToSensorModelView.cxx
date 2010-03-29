@@ -28,10 +28,10 @@ namespace otb
 {
 
 GCPToSensorModelView
-::GCPToSensorModelView(): m_Controller(), m_Model(),
-     m_ImageView(), m_MapView(), m_CrossGlComponent(), m_CircleGlComponent()
+::GCPToSensorModelView() :  m_Controller(), m_WidgetController(), m_MapWidgetController(),
+                            m_Model(), m_ImageView(), m_MapView(), m_CrossGlComponent(),
+                            m_CircleGlComponent(), m_ColorList(), m_Green()
 {
-  m_Model = GCPToSensorModelModel::New();
   m_ImageView = ImageViewType::New();
   m_MapView = ImageViewType::New();
   m_CrossGlComponent = CrossGlComponent::New();
@@ -370,8 +370,6 @@ void
 GCPToSensorModelView
 ::ReloadGCPs()
 {
-  lPointList->clear();
-  this->ClearTransformationInfo();
   m_Controller->ReloadGCPsList();
 }
 
@@ -429,10 +427,6 @@ GCPToSensorModelView
   if(m_Model->GetGCPsContainerHasChanged())
   {
     this->UpdateGCPView();
-  }
-  if(m_Model->GetHasNewImage())
-  {
-    this->ReloadGCPs();
   }
   if(m_Model->GetPlaceNameChanged())
   {
