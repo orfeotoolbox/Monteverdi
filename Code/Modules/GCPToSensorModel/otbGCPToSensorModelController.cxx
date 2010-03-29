@@ -29,11 +29,12 @@ namespace otb
 {
 
 GCPToSensorModelController
-::GCPToSensorModelController(): m_View(), m_Model(), m_WidgetController(), m_MapWidgetController(), m_MouseClickedController(),
-                                          m_ResizingHandler(), m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(),
-                                          m_ChangeScaleHandler(), m_LeftMouseClickedHandler(), m_PixelActionHandler(),
-                                          m_PixelModel(), m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
-                                          m_MapMouseMapActionHandler(), m_GuessActionHandler()
+::GCPToSensorModelController(): m_View(), m_Model(), m_WidgetController(), m_MapWidgetController(),
+                                m_MouseClickedController(), m_ResizingHandler(), m_ChangeRegionHandler(),
+                                m_ChangeScaledRegionHandler(), m_ChangeScaleHandler(),
+                                m_LeftMouseClickedHandler(), m_PixelActionHandler(), m_PixelModel(),
+                                m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
+                                m_MapMouseMapActionHandler(), m_GuessActionHandler(), m_DEMPath("")
 {
   // Build the widgets controller
   m_WidgetController          = WidgetControllerType::New();

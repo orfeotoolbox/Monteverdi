@@ -60,7 +60,7 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
                           m_SizeY(0), m_Region(), m_ServerName(""), m_CacheDirectory(""),
                           m_MapVisualizationModel(), m_MapImageGenerator(), m_MapBlendingFunction(),
                           m_PlaceNameChanged(false), m_LatLongChanged(false), m_DepthChanged(false),
-                          m_HasNewMap(false), m_SelectedPointChanged(false)
+                          m_HasNewMap(false), m_SelectedPointChanged(false), m_CrossIndexesContainer()
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -492,6 +492,21 @@ GCPToSensorModelModel
   m_GroundError = m_GCPsToRPCSensorModelImageFilter->GetRMSGroundError();
   m_ErrorsContainer = m_GCPsToRPCSensorModelImageFilter->GetErrorsContainer();
   m_MeanError = m_GCPsToRPCSensorModelImageFilter->GetMeanError();
+  
+  // Generate cross point
+  m_CrossIndexesContainer.clear();
+  for (unsigned int i=0; i<m_GCPsContainer.size(); i++)
+  {
+    // Transform index to physical point
+    IndexType index;
+    ImagePointType phyPoint;
+    phyPoint[0] = m_GCPsContainer[i].first[0];
+    phyPoint[1] = m_GCPsContainer[i].first[1];    
+    m_InputImage->TransformPhysicalPointToIndex(phyPoint, index);
+    
+    // Add Point to the container
+    m_CrossIndexesContainer.push_back(index);
+  }
   
   // Notify it to the view
   m_GCPsContainerHasChanged = true;

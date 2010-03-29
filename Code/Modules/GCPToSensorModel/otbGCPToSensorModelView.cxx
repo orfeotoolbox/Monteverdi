@@ -184,7 +184,7 @@ GCPToSensorModelView
 
 void
 GCPToSensorModelView
-::AddPointsToList(GCPType gcp, double error)
+::AddPointsToList(GCPType gcp, double error, IndexType crossIndex)
 {
   Point2DType sensorPoint;
   Point3DType groundPoint;
@@ -209,11 +209,7 @@ GCPToSensorModelView
   lPointList->value(lPointList->size());
   this->UpdateListSelectionColor(true);
   
-  IndexType index;
-  index[0] = static_cast<long>(sensorPoint[0]);
-  index[1] = static_cast<long>(sensorPoint[1]);
-  
-  m_CrossGlComponent->AddIndex( index );
+  m_CrossGlComponent->AddIndex( crossIndex );
   m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
   
   this->RedrawWidgets();
@@ -394,10 +390,14 @@ GCPToSensorModelView
   ErrorsContainerType ErrorsContainer;
   ErrorsContainer = m_Model->GetErrorsContainer();
   
+  // Get the cross container
+  CrossIndexesContainerType CrossIndexesContainer;
+  CrossIndexesContainer = m_Model->GetCrossIndexesContainer();
+  
   // Add point to list
   for(int i=0; i<GCPsContainer.size(); i++)
   {
-    this->AddPointsToList(GCPsContainer[i], ErrorsContainer[i]);
+    this->AddPointsToList(GCPsContainer[i], ErrorsContainer[i], CrossIndexesContainer[i]);
   }
   
   // Set the ground error

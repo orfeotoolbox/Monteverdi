@@ -49,18 +49,19 @@ public:
   itkTypeMacro(GCPToSensorModelView,Object);
 
 
-  typedef GCPToSensorModelModel::VisualizationModelType VisualizationModelType;
-  typedef GCPToSensorModelModel::RGBPixelType           PixelType;
-  typedef GCPToSensorModelModel::IndexType              IndexType;
-  typedef GCPToSensorModelModel::ContinuousIndexType    ContinuousIndexType;
-  typedef GCPToSensorModelModel::GCPType                GCPType;
-  typedef GCPToSensorModelModel::GCPsContainerType      GCPsContainerType;
-  typedef GCPToSensorModelModel::ErrorsContainerType    ErrorsContainerType;
-  typedef GCPToSensorModelModel::Point2DType            Point2DType;
-  typedef GCPToSensorModelModel::Point3DType            Point3DType;  
-  typedef ImageView<VisualizationModelType>             ImageViewType;
-  typedef CrossGlComponent::ColorType                   ColorType;
-  typedef std::vector<ColorType>                        ColorListType;
+  typedef GCPToSensorModelModel::VisualizationModelType     VisualizationModelType;
+  typedef GCPToSensorModelModel::RGBPixelType               PixelType;
+  typedef GCPToSensorModelModel::IndexType                  IndexType;
+  typedef GCPToSensorModelModel::ContinuousIndexType        ContinuousIndexType;
+  typedef GCPToSensorModelModel::GCPType                    GCPType;
+  typedef GCPToSensorModelModel::GCPsContainerType          GCPsContainerType;
+  typedef GCPToSensorModelModel::ErrorsContainerType        ErrorsContainerType;
+  typedef GCPToSensorModelModel::CrossIndexesContainerType  CrossIndexesContainerType;
+  typedef GCPToSensorModelModel::Point2DType                Point2DType;
+  typedef GCPToSensorModelModel::Point3DType                Point3DType;  
+  typedef ImageView<VisualizationModelType>                 ImageViewType;
+  typedef CrossGlComponent::ColorType                       ColorType;
+  typedef std::vector<ColorType>                            ColorListType;
 
   /** Event from the model */
   virtual void Notify();
@@ -98,7 +99,7 @@ public:
   
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
-  void AddPointsToList( GCPType gcp, double error );
+  void AddPointsToList( GCPType gcp, double error, IndexType index );
   void RedrawWidgets();
   void Show();
   

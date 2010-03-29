@@ -82,6 +82,7 @@ public:
   typedef GCPsToRPCSensorModelImageFilterType::Pointer              GCPsToRPCSensorModelImageFilterPointerType;
   typedef GCPsToRPCSensorModelImageFilterType::GCPsContainerType    GCPsContainerType;
   typedef GCPsToRPCSensorModelImageFilterType::ErrorsContainerType  ErrorsContainerType;
+  typedef std::vector<IndexType>                                    CrossIndexesContainerType;
   typedef GCPsToRPCSensorModelImageFilterType::GCPType              GCPType;    
   typedef GCPsToRPCSensorModelImageFilterType::Point2DType          Point2DType;
   typedef GCPsToRPCSensorModelImageFilterType::Point3DType          Point3DType;
@@ -186,6 +187,9 @@ public:
   
   /** Get errors */
   ErrorsContainerType GetErrorsContainer() const { return m_ErrorsContainer; }
+  
+  /** Get Cross indexes container */
+  CrossIndexesContainerType GetCrossIndexesContainer() const { return m_CrossIndexesContainer; }
 
   /** Map Viewer */
   void SetMap(long int sizeX, long int sizeY);
@@ -315,7 +319,7 @@ private:
   std::string                                 m_ServerName;
   std::string                                 m_CacheDirectory;
 
-  /** Visualization */
+  /** Map Visualization */
   VisualizationModelPointerType               m_MapVisualizationModel;
   MapLayerGeneratorPointerType                m_MapImageGenerator;
   BlendingFunctionPointerType                 m_MapBlendingFunction;
@@ -325,6 +329,10 @@ private:
   bool                                        m_DepthChanged;
   bool                                        m_HasNewMap;
   bool                                        m_SelectedPointChanged;
+  
+  /** Cross indexes container */
+  CrossIndexesContainerType                   m_CrossIndexesContainer;
+  
 };
 
 }//end namespace otb
