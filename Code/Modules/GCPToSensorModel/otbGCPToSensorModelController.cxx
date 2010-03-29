@@ -247,6 +247,9 @@ void
 GCPToSensorModelController
 ::ChangeDEM()
 {
+  m_View->vElev->show();
+  m_View->vElevMode->hide();
+
   // If Mean 
   if( static_cast<bool>(m_View->cMean->value()) )
   {
@@ -266,6 +269,9 @@ GCPToSensorModelController
   {
     try
     {
+      m_View->vElevMode->value("DEM");
+      m_View->vElevMode->show();
+      m_View->vElev->hide();
       m_Model->SetDEMPath(m_DEMPath);
       m_Model->SetElevMgt(ModelType::DEM);
     }

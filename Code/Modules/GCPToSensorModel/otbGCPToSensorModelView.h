@@ -97,7 +97,7 @@ public:
   virtual void UpdateLatLong();
   virtual void DisplayMap();
   
-  void UpdateListSelectionColor(bool whichOne);
+  void UpdateListSelectionColor();
   void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
   void AddPointsToList( GCPType gcp, double error, IndexType index );
   void RedrawWidgets();

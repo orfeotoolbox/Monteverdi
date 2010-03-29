@@ -92,10 +92,10 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   ossimFilename cachingDir(m_CacheDirectory);
   cachingDir.createDirectory();
   
-  m_PlaceName = "Toulouse";
-  m_Latitude  = 43.6043;
-  m_Longitude = 1.4433;
-  m_Depth     = 1;
+  m_PlaceName = "";
+  m_Latitude  = 0.;
+  m_Longitude = 0.;
+  m_Depth     = 2;
 }
 
 GCPToSensorModelModel
@@ -637,7 +637,7 @@ GCPToSensorModelModel
   m_Longitude = longitude;
   m_Latitude  = latitude;
   
-  if ((m_Longitude < -1000) || (m_Longitude > 1000) || (m_Latitude < -1000) || (m_Latitude > 1000))
+  if ((m_Longitude < -180) || (m_Longitude > 180) || (m_Latitude < -90) || (m_Latitude > 90))
   {
     itkDebugMacro(<<"Latitude or Longitude is wrong.");
   }

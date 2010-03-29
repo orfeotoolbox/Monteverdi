@@ -193,7 +193,7 @@ GCPToSensorModelView
   groundPoint = gcp.second;
 
   itk::OStringStream oss;
-  oss << sensorPoint << " -> " << groundPoint << " err : " << error;
+  oss << sensorPoint << "\t->\t" << groundPoint << "\t\tError = " << error;
   
   this->lPointList->add(oss.str().c_str());
   
@@ -207,7 +207,7 @@ GCPToSensorModelView
   m_ColorList.push_back(color);
   
   lPointList->value(lPointList->size());
-  this->UpdateListSelectionColor(true);
+  this->UpdateListSelectionColor();
   
   m_CrossGlComponent->AddIndex( crossIndex );
   m_CrossGlComponent->ChangeColor( color, m_CrossGlComponent->GetColorList().size()-1 );
@@ -220,49 +220,27 @@ GCPToSensorModelView
  */
 void
 GCPToSensorModelView
-::UpdateListSelectionColor(bool whichOne)
+::UpdateListSelectionColor()
 {
   //selectedIndex
   unsigned int selectedIndex;
   // tListPoint callback
-  if(whichOne)
-    selectedIndex = lPointList->value()-1;
-  else // tError callback
-    selectedIndex = tError->value()-1;
-
+  selectedIndex = lPointList->value()-1;
+  
   if( selectedIndex < m_ColorList.size() )
-    {
-      ColorType curColor = m_ColorList[selectedIndex];
-
-      // color To fl_color
-      Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*curColor[0]),
-				       static_cast<int>((FL_NUM_GREEN-1)*curColor[1]),
-				       static_cast<int>((FL_NUM_BLUE-1)*curColor[2]));
-      
-      //Update the List Point Color
-      if(whichOne)
-       {
-         lPointList->selection_color(flColor);
-         lPointList->redraw();
-         if(tError->size() > static_cast<int>(selectedIndex))
-           {
-             tError->value(selectedIndex+1);
-             tError->selection_color(flColor);
-             tError->redraw();
-           }
-       }
-      else
-       {
-         tError->selection_color(flColor);
-         tError->redraw();
-         if(lPointList->size() > static_cast<int>(selectedIndex))
-           {
-             lPointList->value(selectedIndex+1);
-             lPointList->selection_color(flColor);
-             lPointList->redraw();
-           }
-       }
-    }
+  {
+    ColorType curColor = m_ColorList[selectedIndex];
+    
+    // color To fl_color
+    Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED-1)*curColor[0]),
+                                     static_cast<int>((FL_NUM_GREEN-1)*curColor[1]),
+                                     static_cast<int>((FL_NUM_BLUE-1)*curColor[2]));
+    
+    //Update the List Point Color
+    lPointList->selection_color(flColor);
+    lPointList->redraw();
+    
+  }
 }
 
 void
@@ -415,7 +393,6 @@ void
 GCPToSensorModelView
 ::ClearTransformationInfo()
 {
-  tError->clear();
   tMeanError->value("");
   tGroundError->value("");
 }
