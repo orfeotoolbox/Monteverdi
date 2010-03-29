@@ -20,6 +20,8 @@
 
 #include "otbImageWidgetActionHandler.h"
 
+#include "otbMsgReporter.h"
+
 namespace otb
 {
 /** \class GuessActionHandler
@@ -75,7 +77,7 @@ namespace otb
               
               if(widgetId == m_Widget->GetIdentifier())
               {                 
-                if (event == FL_PUSH)
+                if (event == FL_RELEASE)
                 {
                   // Get the clicked index
                   PointType screenPoint, imagePoint;
@@ -83,8 +85,15 @@ namespace otb
                   
                   // Transform to image point
                   imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
-                  m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 14);
-                  
+                  try
+                  {
+                    m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 14);
+                  }
+                  catch (itk::ExceptionObject & err)
+                  {
+                    MsgReporter::GetInstance()->SendError(err.GetDescription());
+                    return false;
+                  }
                   return true;
                 }
               }
@@ -93,7 +102,7 @@ namespace otb
               
               if(widgetId == m_Widget->GetIdentifier())
               {                 
-                if (event == FL_PUSH)
+                if (event == FL_RELEASE)
                 {
                   // Get the clicked index
                   PointType screenPoint, imagePoint;
@@ -101,8 +110,15 @@ namespace otb
                   
                   // Transform to image point
                   imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
-                  m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 12);
-                  
+                  try
+                  {
+                    m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 12);
+                  }
+                  catch (itk::ExceptionObject & err)
+                  {
+                    MsgReporter::GetInstance()->SendError(err.GetDescription());
+                    return false;
+                  }
                   return true;
                 }
               }
@@ -110,7 +126,7 @@ namespace otb
               
               if(widgetId == m_Widget->GetIdentifier())
               {                 
-                if (event == FL_PUSH)
+                if (event == FL_RELEASE)
                 {
                   // Get the clicked index
                   PointType screenPoint, imagePoint;
@@ -118,8 +134,15 @@ namespace otb
                   
                   // Transform to image point
                   imagePoint = m_Widget->GetScreenToImageTransform()->TransformPoint(screenPoint);
-                  m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 16);
-                  
+                  try
+                  {
+                    m_Model->CenterMapOnSelectedPoint(static_cast<long int>(imagePoint[0]), static_cast<long int>(imagePoint[1]), 16);
+                  }
+                  catch (itk::ExceptionObject & err)
+                  {
+                    MsgReporter::GetInstance()->SendError(err.GetDescription());
+                    return false;
+                  }
                   return true;
                 }
               }

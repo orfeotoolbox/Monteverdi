@@ -112,11 +112,11 @@ public:
   
   typedef VisualizationModelType::RegionType                        RegionType;
   
-  typedef otb::InverseSensorModel<double>                           MapModelType;
-  typedef MapModelType::Pointer                                     MapModelPointerType;
+  typedef otb::InverseSensorModel<double>                           InverseModelType;
+  typedef InverseModelType::Pointer                                 InverseModelPointerType;
 
-  typedef otb::ForwardSensorModel<double>                           MapForwardModelType;
-  typedef MapForwardModelType::Pointer                              MapForwardModelPointerType;
+  typedef otb::ForwardSensorModel<double>                           ForwardModelType;
+  typedef ForwardModelType::Pointer                                 ForwardModelPointerType;
 
   typedef ImageLayer<MapImageType,RGBImageType>                     MapLayerType;
   typedef ImageLayerGenerator<MapLayerType>                         MapLayerGeneratorType;
@@ -300,8 +300,6 @@ private:
   /** Map viewer */
   MapReaderPointerType                        m_MapReader;
   TileMapPointerType                          m_TileIO;
-  MapModelPointerType                         m_MapModel;
-  MapForwardModelPointerType                  m_MapInverseModel;
   
   std::string                                 m_PlaceName;
   double                                      m_Latitude;

@@ -54,13 +54,13 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
                           m_GroundError(0.), m_MeanError(0.), m_VisualizationModel(), m_ImageGenerator(),
                           m_BlendingFunction(), m_InputImage(), m_Output(), m_OutputChanged(false),
                           m_DEMPath(""), m_ElevMgt(GCP), m_MeanElevation(0.), m_DEMHandler(),
-                          m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_MapModel(),
-                          m_MapInverseModel(), m_PlaceName(""), m_Latitude(0.), m_Longitude(0.),
-                          m_Depth(0.), m_SelectedLatitude(0.), m_SelectedLongitude(0.), m_SizeX(0),
-                          m_SizeY(0), m_Region(), m_ServerName(""), m_CacheDirectory(""),
-                          m_MapVisualizationModel(), m_MapImageGenerator(), m_MapBlendingFunction(),
-                          m_PlaceNameChanged(false), m_LatLongChanged(false), m_DepthChanged(false),
-                          m_HasNewMap(false), m_SelectedPointChanged(false), m_CrossIndexesContainer()
+                          m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_PlaceName(""),
+                          m_Latitude(0.), m_Longitude(0.), m_Depth(0.), m_SelectedLatitude(0.),
+                          m_SelectedLongitude(0.), m_SizeX(0), m_SizeY(0), m_Region(), m_ServerName(""),
+                          m_CacheDirectory(""), m_MapVisualizationModel(), m_MapImageGenerator(),
+                          m_MapBlendingFunction(), m_PlaceNameChanged(false), m_LatLongChanged(false),
+                          m_DepthChanged(false), m_HasNewMap(false), m_SelectedPointChanged(false),
+                          m_CrossIndexesContainer()
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -547,12 +547,12 @@ GCPToSensorModelModel
   m_MapReader->UpdateOutputInformation();
   
   // Create Model To transform coordinates
-  m_MapModel = MapModelType::New();
+  InverseModelPointerType inverseModel = InverseModelType::New();
   
   // Configure m_Model
-  m_MapModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
-  dynamic_cast<ossimTileMapModel*>(m_MapModel->GetOssimModel())->setDepth( m_Depth );
-  if (!m_MapModel)
+  inverseModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
+  dynamic_cast<ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth( m_Depth );
+  if (!inverseModel)
   {
     itkExceptionMacro(<<"Unable to create projection.");
   }
@@ -564,7 +564,7 @@ GCPToSensorModelModel
   
   // Transform lon/lat to pixel
   OutPointType tilePoint;
-  tilePoint = m_MapModel->TransformPoint(lonLatPoint);
+  tilePoint = inverseModel->TransformPoint(lonLatPoint);
  
   VisualizationModelType::RegionType::IndexType index;
   VisualizationModelType::RegionType::SizeType  size;    
@@ -622,7 +622,7 @@ GCPToSensorModelModel
   m_PlaceNameChanged = true;
   m_DepthChanged = true;
   m_HasNewMap = true;
-    this->NotifyAll();
+  this->NotifyAll();
   m_LatLongChanged = false;
   m_PlaceNameChanged = false;
   m_DepthChanged = false;
@@ -742,13 +742,13 @@ GCPToSensorModelModel
   else 
   {
     // Create Model To transform coordinates
-    m_MapModel = MapModelType::New();
+    InverseModelPointerType inverseModel = InverseModelType::New();
     
     // Configure m_Model
-    m_MapModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
-    dynamic_cast<ossimTileMapModel*>(m_MapModel->GetOssimModel())->setDepth( depth );
+    inverseModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
+    dynamic_cast<ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth( depth );
     
-    if (!m_MapModel)
+    if (!inverseModel)
     {
       itkExceptionMacro(<<"Unable to create projection.");
     }
@@ -760,7 +760,7 @@ GCPToSensorModelModel
     
     // Transform lon/lat to pixel
     OutPointType tilePoint;
-    tilePoint = m_MapModel->TransformPoint(lonLatPoint);
+    tilePoint = inverseModel->TransformPoint(lonLatPoint);
     
     // Set parameters for extract ROI
     long int startX=static_cast<long int>( tilePoint[0] );
@@ -801,13 +801,13 @@ GCPToSensorModelModel
   m_Region.SetIndex(index);
   
   // Create Model
-  m_MapInverseModel = MapForwardModelType::New();
+  ForwardModelPointerType forwardModel = ForwardModelType::New();
     
   // Configure m_Model
-  m_MapInverseModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
-  dynamic_cast<ossimTileMapModel*>(m_MapInverseModel->GetOssimModel())->setDepth( m_Depth );
+  forwardModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
+  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth( m_Depth );
 
-  if (!m_MapInverseModel)
+  if (!forwardModel)
   {
     itkExceptionMacro(<<"Unable to create projection.");
   }
@@ -816,7 +816,7 @@ GCPToSensorModelModel
   OutPointType point, latlong;
   point[0] = index[0] + m_SizeX/2;
   point[1] = index[1] + m_SizeY/2;
-  latlong = m_MapInverseModel->TransformPoint(point);
+  latlong = forwardModel->TransformPoint(point);
   
   // Refresh LatLong
   m_Longitude = static_cast<double>(latlong[0]);
@@ -854,13 +854,13 @@ GCPToSensorModelModel
   m_Region.SetIndex(index);
   
   // Create Model
-  m_MapInverseModel = MapForwardModelType::New();
+  ForwardModelPointerType forwardModel = ForwardModelType::New();
     
   // Configure m_Model
-  m_MapInverseModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
-  dynamic_cast<ossimTileMapModel*>(m_MapInverseModel->GetOssimModel())->setDepth( m_Depth );
+  forwardModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
+  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth( m_Depth );
 
-  if (!m_MapInverseModel)
+  if (!forwardModel)
   {
     itkExceptionMacro(<<"Unable to create projection.");
   }
@@ -869,7 +869,7 @@ GCPToSensorModelModel
   OutPointType point, latlong;
   point[0] = index[0] + m_SizeX/2;
   point[1] = index[1] + m_SizeY/2;
-  latlong = m_MapInverseModel->TransformPoint(point);
+  latlong = forwardModel->TransformPoint(point);
   
   // Refresh LatLong
   m_Longitude = static_cast<double>(latlong[0]);
@@ -894,13 +894,13 @@ GCPToSensorModelModel
 {
 
   // Create Model
-  m_MapInverseModel = MapForwardModelType::New();
+  ForwardModelPointerType forwardModel = ForwardModelType::New();
     
   // Configure m_Model
-  m_MapInverseModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
-  dynamic_cast<ossimTileMapModel*>(m_MapInverseModel->GetOssimModel())->setDepth( m_Depth );
+  forwardModel->SetImageGeometry( m_MapReader->GetOutput()->GetImageKeywordlist() );
+  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth( m_Depth );
   
-  if (!m_MapInverseModel)
+  if (!forwardModel)
   {
     itkExceptionMacro(<<"Unable to create projection.");
   }
@@ -908,7 +908,7 @@ GCPToSensorModelModel
   OutPointType point, latlong;
   point[0] = x;
   point[1] = y;
-  latlong = m_MapInverseModel->TransformPoint(point);
+  latlong = forwardModel->TransformPoint(point);
   
   // Refresh LatLong
   m_SelectedLongitude = static_cast<double>(latlong[0]);
@@ -924,26 +924,43 @@ GCPToSensorModelModel
 void
 GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int depth)
 {
-  std::cout << "GCPToSensorModelModel::CenterMapOnSelectedPoint - TODO" << std::endl;
-
-/*
-  if (m_Projection != NULL)
+  // Check if there is enought point to have a Keyword list
+  if (m_GCPsContainer.size() < 3)
   {
-    ContinuousIndexType input;
-    input[0] = static_cast<double>(x);
-    input[1] = static_cast<double>(y);
-    
-    Continuous3DIndexType output;
-    output = this->TransformPoint(input, 0);
-  
-    double lon = static_cast<double>(output[0]);
-    double lat = static_cast<double>(output[1]);
-    
-    SizeType size = m_Region.GetSize();
-    
-    this->DisplayMap(m_PlaceName, lat, lon, depth, size[0], size[1]);
+    itkExceptionMacro(<<"There is not enough GCPs to generate a keywordlist.");
   }
-  */
+
+  // Transform coordinates to physical point
+  IndexType index;
+  index[0] = x;
+  index[1] = y;
+
+  ImagePointType phyPoint;
+  m_InputImage->TransformIndexToPhysicalPoint(index, phyPoint);
+  
+  // Create model
+  ForwardModelPointerType forwardModel = ForwardModelType::New();
+
+  // Configure model
+  forwardModel->SetImageGeometry( m_GCPsToRPCSensorModelImageFilter->GetKeywordlist() );
+
+  if (!forwardModel)
+  {
+    itkExceptionMacro(<<"Unable to create projection.");
+  }
+  
+  OutPointType point, latlong;
+  point[0] = phyPoint[0];
+  point[1] = phyPoint[1];
+  latlong = forwardModel->TransformPoint(point);
+  
+  // Center map on this point
+  double lon = static_cast<double>(latlong[0]);
+  double lat = static_cast<double>(latlong[1]);
+    
+  SizeType size = m_Region.GetSize();
+    
+  this->DisplayMap(m_PlaceName, lat, lon, depth, size[0], size[1]);
 }
 
 #else

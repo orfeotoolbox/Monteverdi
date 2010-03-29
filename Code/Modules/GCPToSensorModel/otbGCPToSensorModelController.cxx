@@ -154,14 +154,30 @@ void
 GCPToSensorModelController
 ::ClearPointList()
 {
-  m_Model->ClearGCPsContainer();
+  try
+  {
+    m_Model->ClearGCPsContainer();
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+  }
 }
 
 void
 GCPToSensorModelController
 ::DeletePointFromList( unsigned int id )
 {
-  m_Model->RemovePointFromGCPsContainer( id );
+  try
+  {
+    m_Model->RemovePointFromGCPsContainer( id );
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+  }
 }
 
 
@@ -189,8 +205,16 @@ GCPToSensorModelController
   m_ChangeRegionHandler->GetModel()->Update();
 
 #ifdef OTB_USE_CURL  
-  // Focus on map
-  m_Model->CenterMapOnSelectedPoint(id[0], id[1], 16);
+  try
+  {
+    // Focus on map
+    m_Model->CenterMapOnSelectedPoint(id[0], id[1], 16);
+  }
+  catch (itk::ExceptionObject & err)
+  {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+  }
 #endif
 }
 
@@ -226,19 +250,43 @@ GCPToSensorModelController
   // If Mean 
   if( static_cast<bool>(m_View->cMean->value()) )
   {
-    m_Model->SetMeanElevation( static_cast<double>(m_View->vMeanElev->value()) );
-    m_Model->SetElevMgt(ModelType::MEAN);
+    try
+    {
+      m_Model->SetMeanElevation( static_cast<double>(m_View->vMeanElev->value()) );
+      m_Model->SetElevMgt(ModelType::MEAN);
+    }
+      catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
   }
   // If DEM
   else if( static_cast<bool>(m_View->cDEM->value()) )
   {
-    m_Model->SetDEMPath(m_DEMPath);
-    m_Model->SetElevMgt(ModelType::DEM);
+    try
+    {
+      m_Model->SetDEMPath(m_DEMPath);
+      m_Model->SetElevMgt(ModelType::DEM);
+    }
+    catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
   }
   // If GCP
   else if( static_cast<bool>(m_View->cElev->value()) )
   {
-    m_Model->SetElevMgt(ModelType::GCP);
+    try
+    {
+      m_Model->SetElevMgt(ModelType::GCP);
+    }
+    catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+    }
   }
 }
 
