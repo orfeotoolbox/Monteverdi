@@ -64,7 +64,8 @@ public:
   typedef otb::GCPToSensorModelModel      ModelType;
   typedef otb::GCPToSensorModelView       ViewType;
 
- itkGetObjectMacro(View,GCPToSensorModelView);
+ itkGetObjectMacro(View,ViewType);
+ itkGetObjectMacro(Controller,ControllerType);
 
 protected:
   /** Constructor */

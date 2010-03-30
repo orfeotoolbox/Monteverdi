@@ -15,7 +15,7 @@ class GCPToSensorModelViewGroup {open
     Fl_Window wMainWindow {
       label {GCP to sensor model module}
       callback {this->HideAll();} open
-      xywh {194 44 1240 800} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
+      xywh {177 44 1240 800} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
       Fl_Group guiImageGroup {open
         xywh {5 15 815 576}
@@ -68,7 +68,7 @@ class GCPToSensorModelViewGroup {open
           }
           Fl_Button guiDEM {
             label {Elevation Mode...}
-            callback {wDEMWindow->show();} selected
+            callback {wDEMWindow->show();}
             tooltip {Set the source for the elevation information} xywh {560 130 105 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Output vElevMode {
@@ -184,7 +184,7 @@ class GCPToSensorModelViewGroup {open
             label Depth
             xywh {1110 40 100 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 1
           } {}
-          Fl_Button {} {
+          Fl_Button bRefreshMap {
             label {Refresh Map}
             callback {this->DisplayMap()}
             xywh {1110 85 100 70} box PLASTIC_DOWN_BOX down_box UP_BOX color 7 labelfont 1 labelcolor 186
@@ -195,7 +195,7 @@ class GCPToSensorModelViewGroup {open
     Fl_Window wDEMWindow {
       label {Elevation manager}
       callback {wDEMWindow->hide();} open
-      xywh {408 212 320 255} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {408 212 320 255} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gElev {
         label {GCPs elevation} open
@@ -279,10 +279,10 @@ vElev->deactivate();
         callback {wDEMWindow->hide();}
         xywh {71 224 60 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Button {} {
+      Fl_Button bOkDEM {
         label OK
         callback {this->ChangeDEM();
-wDEMWindow->hide();}
+wDEMWindow->hide();} selected
         xywh {185 224 60 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
