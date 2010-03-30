@@ -83,7 +83,6 @@ void GCPToSensorModelModule::Run()
       m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
 #else
       m_View->wMapWindow->hide();
-      m_View->guiShowMap->deactivate();
 #endif
     }
   else
