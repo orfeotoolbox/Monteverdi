@@ -193,9 +193,9 @@ public:
 
   /** Map Viewer */
   void SetMap(long int sizeX, long int sizeY);
-  void SearchLatLong(std::string placename);
-  void SearchPlaceName(double latitude, double longitude);
-  void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY);
+  void SearchLonLat(std::string placename);
+  void SearchPlaceName(double longitude, double latitude);
+  void DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY);
 
   /** Notifiers */
   itkGetConstMacro(PlaceNameChanged, bool);

@@ -328,11 +328,11 @@ GCPToSensorModelController
   
 void
 GCPToSensorModelController
-::SearchPlaceName(double latitude, double longitude)
+::SearchPlaceName(double longitude, double latitude)
 {
   try
   {
-    m_Model->SearchPlaceName(latitude, longitude);
+    m_Model->SearchPlaceName(longitude, latitude);
   }
   catch (itk::ExceptionObject & err)
   {
@@ -343,11 +343,11 @@ GCPToSensorModelController
 
 void
 GCPToSensorModelController
-::SearchLatLong(std::string placename)
+::SearchLonLat(std::string placename)
 {
   try
   {
-    m_Model->SearchLatLong(placename);
+    m_Model->SearchLonLat(placename);
   }
   catch (itk::ExceptionObject & err)
   {
@@ -358,11 +358,11 @@ GCPToSensorModelController
 
 void
 GCPToSensorModelController
-::DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY)
+::DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY)
 {
   try
   {
-    m_Model->DisplayMap(placename, latitude, longitude, depth, sizeX, sizeY);
+    m_Model->DisplayMap(placename, longitude, latitude, depth, sizeX, sizeY);
   }
   catch (itk::ExceptionObject & err)
   {

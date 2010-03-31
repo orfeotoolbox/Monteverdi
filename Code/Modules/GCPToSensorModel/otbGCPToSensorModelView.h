@@ -94,7 +94,7 @@ public:
 
   /** Street Map window */
   virtual void UpdatePlaceName();
-  virtual void UpdateLatLong();
+  virtual void UpdateLonLat();
   virtual void DisplayMap();
   
   void UpdateListSelectionColor();

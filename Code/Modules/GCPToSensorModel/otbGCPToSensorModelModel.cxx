@@ -631,7 +631,7 @@ GCPToSensorModelModel
 
 void
 GCPToSensorModelModel
-::SearchPlaceName(double latitude, double longitude)
+::SearchPlaceName(double longitude, double latitude)
 {
   // Get coordinates
   m_Longitude = longitude;
@@ -679,7 +679,7 @@ GCPToSensorModelModel
 
 void
 GCPToSensorModelModel
-::SearchLatLong(std::string placename)
+::SearchLonLat(std::string placename)
 {
   // Get placename from fluid
   m_PlaceName = placename;
@@ -717,7 +717,7 @@ GCPToSensorModelModel
 
 void
 GCPToSensorModelModel
-::DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY)
+::DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY)
 {
   m_SizeX = sizeX;
   m_SizeY = sizeY;
@@ -725,11 +725,11 @@ GCPToSensorModelModel
     // Update display
   if(placename != m_PlaceName)
   {
-    this->SearchLatLong(placename);
+    this->SearchLonLat(placename);
   }
   else if (latitude != m_Latitude || longitude != m_Longitude)
   {
-    this->SearchPlaceName(latitude, longitude);
+    this->SearchPlaceName(longitude, latitude);
   }
 
   // Update Depth
@@ -822,7 +822,7 @@ GCPToSensorModelModel
   m_Longitude = static_cast<double>(latlong[0]);
   m_Latitude = static_cast<double>(latlong[1]);
   
-  this->SearchPlaceName(m_Latitude, m_Longitude);
+  this->SearchPlaceName(m_Longitude, m_Latitude);
   
     int tempDepth = m_Depth + value;
   if (tempDepth < 1)
@@ -875,7 +875,7 @@ GCPToSensorModelModel
   m_Longitude = static_cast<double>(latlong[0]);
   m_Latitude = static_cast<double>(latlong[1]);
   
-  this->SearchPlaceName(m_Latitude, m_Longitude);
+  this->SearchPlaceName(m_Longitude, m_Latitude);
   
   // Refresh Map
   m_MapVisualizationModel->SetExtractRegion(m_Region);
@@ -960,7 +960,7 @@ GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int dept
     
   SizeType size = m_Region.GetSize();
     
-  this->DisplayMap(m_PlaceName, lat, lon, depth, size[0], size[1]);
+  this->DisplayMap(m_PlaceName, lon, lat, depth, size[0], size[1]);
 }
 
 #else
@@ -996,21 +996,21 @@ GCPToSensorModelModel
 
 void
 GCPToSensorModelModel
-::SearchPlaceName(double latitude, double longitude)
+::SearchPlaceName(double longitude, double latitude)
 {
   itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
 }
 
 void
 GCPToSensorModelModel
-::SearchLatLong(std::string placename)
+::SearchLonLat(std::string placename)
 {
   itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
 }
 
 void
 GCPToSensorModelModel
-::DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY)
+::DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY)
 {
   itkExceptionMacro(<< "OTB_USE_CURL is undefine.");
 }

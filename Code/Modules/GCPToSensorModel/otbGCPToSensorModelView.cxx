@@ -458,21 +458,21 @@ void
 GCPToSensorModelView
 ::UpdatePlaceName()
 {
-  double lLatitude = static_cast<double>(vMLatitude->value());
   double lLongitude = static_cast<double>(vMLongitude->value());
-  
-  m_Controller->SearchPlaceName(lLatitude, lLongitude);
+  double lLatitude = static_cast<double>(vMLatitude->value());
+    
+  m_Controller->SearchPlaceName(lLongitude, lLatitude);
 }
   
 void
 GCPToSensorModelView
-::UpdateLatLong()
+::UpdateLonLat()
 {
   std::string lPlacename = vMPlaceName->value();
   
   if(lPlacename != "")
   {
-    m_Controller->SearchLatLong(lPlacename);
+    m_Controller->SearchLonLat(lPlacename);
   }
 }
   
@@ -481,11 +481,11 @@ GCPToSensorModelView
 ::DisplayMap()
 {
   std::string lPlacename = vMPlaceName->value();
-  double lLatitude = static_cast<double>(vMLatitude->value());
   double lLongitude = static_cast<double>(vMLongitude->value());
+  double lLatitude = static_cast<double>(vMLatitude->value());
   unsigned int lDepth = static_cast<unsigned int>(vMDepth->value()) + 1;
   
-  m_Controller->DisplayMap(lPlacename, lLatitude, lLongitude, lDepth, gMFull->w(), gMFull->h());
+  m_Controller->DisplayMap(lPlacename, lLongitude, lLatitude, lDepth, gMFull->w(), gMFull->h());
 }
 
 void

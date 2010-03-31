@@ -163,9 +163,9 @@ public:
   virtual void LeftMouseButtonClicked( ContinuousIndexType index );
 
   /** Map module */
-  void SearchPlaceName(double latitude, double longitude);
-  void SearchLatLong(std::string placename);
-  void DisplayMap(std::string placename, double latitude, double longitude, unsigned int depth, long int sizeX, long int sizeY);
+  void SearchPlaceName(double longitude, double latitude);
+  void SearchLonLat(std::string placename);
+  void DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY);
 
  protected:
   /** Constructor */

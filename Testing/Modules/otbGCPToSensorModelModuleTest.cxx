@@ -60,7 +60,7 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   gcpModule->GetView()->vMPlaceName->value(paris.c_str());
   Fl::check();
 
-  gcpModule->GetView()->bMUpdateLatLong->do_callback();
+  gcpModule->GetView()->bMUpdateLonLat->do_callback();
   Fl::check();
 
   gcpModule->GetView()->bMUpdatePlaceName->do_callback();

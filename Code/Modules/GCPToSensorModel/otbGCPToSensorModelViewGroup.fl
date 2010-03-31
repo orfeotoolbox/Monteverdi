@@ -38,11 +38,11 @@ class GCPToSensorModelViewGroup {open
         } {
           Fl_Value_Input vLong {
             label Longitude
-            xywh {535 85 150 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
+            xywh {535 40 150 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
           }
           Fl_Value_Input vLat {
             label Latitude
-            xywh {535 40 150 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
+            xywh {535 85 150 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
           }
           Fl_Value_Input vX {
             label X
@@ -170,9 +170,9 @@ class GCPToSensorModelViewGroup {open
             label Longitude
             xywh {840 85 150 25} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
           }
-          Fl_Button bMUpdateLatLong {
-            label {Update lat/lon}
-            callback {this->UpdateLatLong()}
+          Fl_Button bMUpdateLonLat {
+            label {Update lon/lat}
+            callback {this->UpdateLonLat()}
             xywh {1005 40 90 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button bMUpdatePlaceName {
@@ -195,7 +195,7 @@ class GCPToSensorModelViewGroup {open
     Fl_Window wDEMWindow {
       label {Elevation manager}
       callback {wDEMWindow->hide();} open
-      xywh {408 212 320 255} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {1006 315 320 255} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gElev {
         label {GCPs elevation} open
@@ -282,7 +282,7 @@ vElev->deactivate();
       Fl_Button bOkDEM {
         label OK
         callback {this->ChangeDEM();
-wDEMWindow->hide();} selected
+wDEMWindow->hide();}
         xywh {185 224 60 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
@@ -320,7 +320,7 @@ wDEMWindow->hide();} selected
   } {}
   Function {ShowMap()} {open return_type {virtual void}
   } {}
-  Function {UpdateLatLong()} {open return_type {virtual void}
+  Function {UpdateLonLat()} {open selected return_type {virtual void}
   } {}
   Function {UpdatePlaceName()} {open return_type {virtual void}
   } {}
