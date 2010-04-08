@@ -398,8 +398,8 @@ GCPToSensorModelModel
 {
   // Create Index
   IndexType index;
-  index[0] = x;
-  index[1] = y;
+  index[0] = static_cast<long int>(x);
+  index[1] = static_cast<long int>(y);
   
   // Check if the point is inside the image region
   if(!m_InputImage->GetLargestPossibleRegion().IsInside(index))
@@ -423,7 +423,7 @@ GCPToSensorModelModel
   
   // Check if GCPs allready exists
   bool found = false;
-  unsigned int j;
+  unsigned int j = 0;
   while( j<m_GCPsContainer.size() && !found )
     {
       if( m_GCPsContainer[j].first == sensorPoint || 

@@ -373,7 +373,7 @@ GCPToSensorModelView
   CrossIndexesContainer = m_Model->GetCrossIndexesContainer();
   
   // Add point to list
-  for(int i=0; i<GCPsContainer.size(); i++)
+  for(unsigned int i=0; i<GCPsContainer.size(); i++)
   {
     this->AddPointsToList(GCPsContainer[i], ErrorsContainer[i], CrossIndexesContainer[i]);
   }
