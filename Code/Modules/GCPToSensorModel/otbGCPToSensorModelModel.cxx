@@ -95,7 +95,7 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_PlaceName = "";
   m_Latitude  = 0.;
   m_Longitude = 0.;
-  m_Depth     = 2;
+  m_Depth     = static_cast<unsigned int>(2);
 }
 
 GCPToSensorModelModel
