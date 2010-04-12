@@ -7,6 +7,12 @@ IF(WIN32)
 ENDIF(WIN32)
 
 FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*)
+
+#For insource compilation, the CMakeFiles directory is created by cmake inside
+#the module directory. Of course, this is not a real module and should be
+#removed from the module list
+LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/CMakeFiles)
+
 FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})
