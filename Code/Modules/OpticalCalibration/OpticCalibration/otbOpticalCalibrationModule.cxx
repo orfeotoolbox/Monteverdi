@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbOpticCalibrationModule.h"
+#include "otbOpticalCalibrationModule.h"
 
 #include "itkMetaDataDictionary.h"
 #include "otbImageMetadataInterfaceFactory.h"
@@ -28,7 +28,7 @@
 namespace otb
 {
 /** Constructor */
-OpticCalibrationModule::OpticCalibrationModule()
+OpticalCalibrationModule::OpticalCalibrationModule()
 {
   // This module needs pipeline locking
   this->NeedsPipelineLockingOn();
@@ -38,17 +38,17 @@ OpticCalibrationModule::OpticCalibrationModule()
   m_HelpTextBuffer = new Fl_Text_Buffer();
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OpticCalibration on")); 
+  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OpticalCalibration on")); 
 }
 
 /** Destructor */
-OpticCalibrationModule::~OpticCalibrationModule()
+OpticalCalibrationModule::~OpticalCalibrationModule()
 {
   delete m_HelpTextBuffer;
 }
 
 /** PrintSelf method */
-void OpticCalibrationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void OpticalCalibrationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
@@ -56,7 +56,7 @@ void OpticCalibrationModule::PrintSelf(std::ostream& os, itk::Indent indent) con
 
 
 /** The custom run command */
-void OpticCalibrationModule::Run()
+void OpticalCalibrationModule::Run()
 {
   // Untill window closing, module will be busy
   this->BusyOn();
@@ -101,7 +101,7 @@ void OpticCalibrationModule::Run()
 
 
 bool 
-OpticCalibrationModule
+OpticalCalibrationModule
 ::CheckMetadata()
 {
   // This line is rcopyed from the method that calls this method to be able to use it through the test.
@@ -156,7 +156,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::Init()
 {
   Fl_Text_Buffer *buff = new Fl_Text_Buffer();
@@ -189,7 +189,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateInformation()
 {
   itk::OStringStream oss;
@@ -209,7 +209,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::InitHelper()
 {
   tHelper->buffer(m_HelpTextBuffer);
@@ -246,7 +246,7 @@ OpticCalibrationModule
 
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateCoefSetup()
 {
   unsigned int lNbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
@@ -278,7 +278,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateRadiativeTermsCallback()
 {
   unsigned int ch = static_cast<unsigned int>(atoi(guiBandSelection->value()));
@@ -309,7 +309,7 @@ OpticCalibrationModule
 
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateParamDisplay()
 {
    itk::OStringStream oss;
@@ -342,7 +342,7 @@ OpticCalibrationModule
    std::string aeroFile = teAeronetFile->value();
    if(aeroFile != "")
      {
-       //AtmosphericCorrectionParameters::Pointer param = m_OpticCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
+       //AtmosphericCorrectionParameters::Pointer param = m_OpticalCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
 
        guiWater->value(atmoPar/*param*/->GetWaterVaporAmount());
        guiAeroTh->value(atmoPar/*param*/->GetAerosolOptical());
@@ -353,7 +353,7 @@ OpticCalibrationModule
 
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateCorrectionParameters()
 {
   AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
@@ -433,7 +433,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::ReloadChannelTermsCallback( bool updateIm )
 {
   //this->UpdateRadiativeTerms( updateIm );
@@ -493,7 +493,7 @@ OpticCalibrationModule
 
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::OK()
 {
   this->ClearOutputDescriptors();
@@ -534,7 +534,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::OpenAeronetFileCallback()
 {
   const char * cfname = fl_file_chooser("Pick an Aeronet file", "*.*",m_LastPath.c_str());
@@ -550,7 +550,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::OpenFFVFileCallback()
 {
   const char * cfname = fl_file_chooser("Pick an Filter Function Values file", "*.*",m_LastPath.c_str());
@@ -567,7 +567,7 @@ OpticCalibrationModule
 
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::SaveAndQuitCallback()
 {
   this->UpdateParametersCallback();
@@ -577,7 +577,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::UpdateParametersCallback()
 {
   // Check if some parameters have changed
@@ -646,7 +646,7 @@ OpticCalibrationModule
 }
 
 void
-OpticCalibrationModule
+OpticalCalibrationModule
 ::QuitCallback()
 {
   wMainWindow->hide();

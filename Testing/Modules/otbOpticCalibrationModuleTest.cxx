@@ -20,11 +20,11 @@
 // For internationalisation
 #include "otbI18n.h"
 
-#include "otbOpticCalibrationModule.h"
+#include "otbOpticalCalibrationModule.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbOpticCalibrationModuleTest(int argc, char* argv[])
+int otbOpticalCalibrationModuleTest(int argc, char* argv[])
 {
   bool runIt = false;
   if(atoi(argv[2]) == 1)
@@ -38,7 +38,7 @@ int otbOpticCalibrationModuleTest(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<InputImageType>   WriterType;
 
-  otb::OpticCalibrationModule::Pointer pointModule = otb::OpticCalibrationModule::New();
+  otb::OpticalCalibrationModule::Pointer pointModule = otb::OpticalCalibrationModule::New();
   otb::Module::Pointer module = pointModule.GetPointer();
   
   // Put in the tests

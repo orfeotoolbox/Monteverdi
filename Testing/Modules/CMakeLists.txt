@@ -211,18 +211,18 @@ ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS3}
 	 ${TEMP}/moTvThresholdModule.tif
 )
 
-#------------- OpticCalibration Module -------------
-ADD_TEST(moTvOpticCalibrationModuleTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+#------------- OpticalCalibration Module -------------
+ADD_TEST(moTvOpticalCalibrationModuleTest ${Modules_TESTS3} otbOpticalCalibrationModuleTest
 ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
 1
-${TEMP}/moTvOpticCalibrationModuleTest.tif
+${TEMP}/moTvOpticalCalibrationModuleTest.tif
 )
-ADD_TEST(moTvOpticCalibrationModuleNoMDTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+ADD_TEST(moTvOpticalCalibrationModuleNoMDTest ${Modules_TESTS3} otbOpticalCalibrationModuleTest
 ${INPUTDATA}/poupees.tif
 1
 )
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvOpticCalibrationModuleQBTest ${Modules_TESTS3} otbOpticCalibrationModuleTest
+ADD_TEST(moTvOpticalCalibrationModuleQBTest ${Modules_TESTS3} otbOpticalCalibrationModuleTest
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 0
 )
@@ -291,7 +291,7 @@ otbChangeDetectionModuleTest.cxx
 otbGCPToSensorModelModuleTest.cxx	
 otbThresholdModuleTestNew.cxx	
 otbThresholdModuleTest.cxx
-otbOpticCalibrationModuleTest.cxx
+otbOpticalCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
 )
 

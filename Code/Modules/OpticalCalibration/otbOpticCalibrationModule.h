@@ -15,15 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOpticCalibration_h
-#define __otbOpticCalibration_h
+#ifndef __otbOpticalCalibration_h
+#define __otbOpticalCalibration_h
 
 //#include "otbEventsListener.h"
 
 // include the base class
 #include "otbModule.h"
 
-#include "otbOpticCalibrationViewGroup.h"
+#include "otbOpticalCalibrationViewGroup.h"
 
 // Filters
 #include "otbVectorImage.h"
@@ -36,20 +36,20 @@
 
 namespace otb
 {
-/** \class OpticCalibrationModule
+/** \class OpticalCalibrationModule
  *
- *  \brief This is the OpticCalibration module, which allows to perform
- *  OpticCalibration (Luminance, TOA, TOC) for Spot4, Spot5, and QuickBird.
+ *  \brief This is the OpticalCalibration module, which allows to perform
+ *  OpticalCalibration (Luminance, TOA, TOC) for Spot4, Spot5, and QuickBird.
  *
  *
  */
 
-class ITK_EXPORT OpticCalibrationModule
-  : public Module, public OpticCalibrationViewGroup
+class ITK_EXPORT OpticalCalibrationModule
+  : public Module, public OpticalCalibrationViewGroup
 {
 public:
   /** Standard class typedefs */
-  typedef OpticCalibrationModule        Self;
+  typedef OpticalCalibrationModule        Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(OpticCalibrationModule,Module);
+  itkTypeMacro(OpticalCalibrationModule,Module);
 
   /** Data typedefs */
   typedef VectorImage<double,2>   ImageType;
@@ -88,10 +88,10 @@ public:
 
 protected:
   /** Constructor */
-  OpticCalibrationModule();
+  OpticalCalibrationModule();
 
   /** Destructor */
-  virtual ~OpticCalibrationModule();
+  virtual ~OpticalCalibrationModule();
 
   /** Notify Monteverdi application that featureExtraction has a result */
   //void Notify(const std::string & event);
@@ -142,7 +142,7 @@ protected:
   virtual void UpdateParametersCallback();
 
 private:
-  OpticCalibrationModule(const Self&); //purposely not implemented
+  OpticalCalibrationModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   ImageType::Pointer m_InputImage;

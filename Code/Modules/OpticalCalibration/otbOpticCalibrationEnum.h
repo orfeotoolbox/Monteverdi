@@ -15,8 +15,8 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOpticCalibrationEnum_h
-#define __otbOpticCalibrationEnum_h
+#ifndef __otbOpticalCalibrationEnum_h
+#define __otbOpticalCalibrationEnum_h
 
 
 namespace otb

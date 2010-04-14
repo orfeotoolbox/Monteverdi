@@ -5,10 +5,10 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include "otbOpticCalibrationEnum.h"} {public
+decl {\#include "otbOpticalCalibrationEnum.h"} {public
 } 
 
-class OpticCalibrationViewGroup {open
+class OpticalCalibrationViewGroup {open
 } {
   Function {QuitCallback()} {open return_type {virtual void}
   } {}
@@ -229,9 +229,9 @@ teAeronetFile->redraw();}
       }
     }
   }
-  Function {~OpticCalibrationViewGroup()} {open return_type virtual
+  Function {~OpticalCalibrationViewGroup()} {open return_type virtual
   } {}
-  Function {OpticCalibrationViewGroup()} {open
+  Function {OpticalCalibrationViewGroup()} {open
   } {}
   Function {OpenAeronetFileCallback()} {open return_type {virtual void}
   } {}
