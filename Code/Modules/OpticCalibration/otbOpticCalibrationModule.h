@@ -30,7 +30,6 @@
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-#include "otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.h"
 #include "otbDifferenceImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
