@@ -194,7 +194,7 @@ OpticalCalibrationModule
 {
   itk::OStringStream oss;
   oss.str("");
-  oss<<"Optic calibration module: ";
+  oss<<"Optical calibration module: ";
   ossimFilename myFile( this->GetInputDataDescription<ImageType>("InputImage",0) );
   oss<<myFile.file();
   oss<<" ("<<m_InputImage->GetNumberOfComponentsPerPixel();

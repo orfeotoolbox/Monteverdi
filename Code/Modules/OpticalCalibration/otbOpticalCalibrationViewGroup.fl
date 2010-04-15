@@ -15,7 +15,7 @@ class OpticalCalibrationViewGroup {open
   Function {Build()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {Optic calibration module}
+      label {Optical calibration module}
       callback {this->QuitCallback();} open
       xywh {611 189 660 445} type Double box PLASTIC_DOWN_BOX color 7 selection_color 1 labelcolor 187 visible
     } {
