@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
 
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
 
-  model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration", otbGetTextMacro("Calibration/Optic Calibration"));
+  model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration", otbGetTextMacro("Calibration/Optical Calibration"));
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
   model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
