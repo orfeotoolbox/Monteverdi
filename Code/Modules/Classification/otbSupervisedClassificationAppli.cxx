@@ -40,6 +40,8 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "base/ossimFilename.h"
 
+#include "otbMsgReporter.h"
+
 namespace otb
 {
 /// Constructor
@@ -367,7 +369,7 @@ SupervisedClassificationAppli
 	  oss.str("");
 	  oss<<ossDir.file()<<" already exists as a file.";
 	  oss<<"Please select a valid directory or set a new one name that will be created."<<std::endl;
-	  fl_alert(oss.str().c_str());
+          MsgReporter::GetInstance()->SendError(oss.str().c_str());
 	  return;
 	}
     }
@@ -447,7 +449,7 @@ SupervisedClassificationAppli
 
       oss.str("");
       oss<<"Error while writing data file: "<<err<<std::endl;
-      fl_alert(oss.str().c_str());
+      MsgReporter::GetInstance()->SendError(oss.str().c_str());
     }
     ++cit;
     ++vectorDataVectorIterator;
@@ -1699,7 +1701,7 @@ SupervisedClassificationAppli
     {
       itk::OStringStream oss;
       oss<<"Class "<<(*classesIt)->GetName()<<" has no training sample, cannot do SVM estimation."<<std::endl;
-      fl_alert(oss.str().c_str());
+      MsgReporter::GetInstance()->SendError(oss.str().c_str());
       return;
     }
     ++countIt;
@@ -1999,7 +2001,7 @@ SupervisedClassificationAppli
   {
     itk::OStringStream oss;
     oss << "No Validation samples selected..." << std::endl;
-    fl_alert(oss.str().c_str());
+    MsgReporter::GetInstance()->SendError(oss.str().c_str());
     return;
   }
   if (!bRandomGeneration->value())
@@ -2233,7 +2235,7 @@ SupervisedClassificationAppli
   {
     itk::OStringStream oss;
     oss << "Error while reading labeled image: "  << err << std::endl;
-    fl_alert(oss.str().c_str());
+    MsgReporter::GetInstance()->SendError(oss.str().c_str());
     return;
   }
 
