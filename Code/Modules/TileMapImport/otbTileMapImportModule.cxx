@@ -16,8 +16,8 @@
  
  =========================================================================*/
 
-
 #include "otbTileMapImportModule.h"
+#include "otbTileMapImageIOHelper.h"
 
 namespace otb
 {
@@ -53,11 +53,12 @@ namespace otb
     vPlacename->value(empty_str.c_str());
     
     // Initialize Depth choice
+    TileMapImageIOHelper myTileMapImageIOHelper;
     for (int i=1; i<=18; i++)
     {
       std::ostringstream label;
       label << i;
-      vDepth->add(label.str().c_str(),"",NULL);
+      vDepth->add(myTileMapImageIOHelper.ConvertDepthToScale(i).c_str(),"",NULL);
     }
     
     // Initialize server choice
