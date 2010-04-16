@@ -25,12 +25,19 @@ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 0
 ${TEMP}/graphviz.dot
 )
+ADD_TEST(apTvMonteverdiXML ${Application_TESTS} otbMonteverdiApplicationExportToXML
+${INPUTDATA}/qb_RoadExtract.img
+0
+${TEMP}/monteverdi_scenario.xml
+${TEMP}/graphviz.dot
+)
 
 SET(Application_SRCS
 otbMonteverdiApplicationNew.cxx
 otbMonteverdiApplicationTest.cxx
 otbMonteverdiApplicationReaderViewer.cxx
 otbMonteverdiApplicationGraphviz.cxx
+otbMonteverdiApplicationExportToXML.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
