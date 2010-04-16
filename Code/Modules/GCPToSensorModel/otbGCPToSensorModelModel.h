@@ -27,6 +27,7 @@
 #include "otbImage.h"
 
 #include "otbTileMapImageIO.h"
+#include "otbTileMapImageIOHelper.h"
 #include "otbImageFileReader.h"
 #include "ossim/projection/ossimTileMapModel.h"
 #include "otbInverseSensorModel.h"
@@ -231,7 +232,9 @@ public:
   
   /** Get the visualization model */
   itkGetObjectMacro(MapVisualizationModel, VisualizationModelType);
-
+  
+  /** Get the Scale from the depth */
+  const std::string ConvertDepthToScale(const unsigned int depth) const;
 protected:
 
   /** Constructor */

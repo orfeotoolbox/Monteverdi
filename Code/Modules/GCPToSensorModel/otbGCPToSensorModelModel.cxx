@@ -96,6 +96,9 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_Latitude  = 0.;
   m_Longitude = 0.;
   m_Depth     = static_cast<unsigned int>(2);
+  
+  // Configure Tile
+  m_TileIO = TileMapType::New();
 }
 
 GCPToSensorModelModel
@@ -526,6 +529,13 @@ GCPToSensorModelModel
   this->NotifyAll();
 }
 
+/** get scale rfom depth */
+const std::string GCPToSensorModelModel::ConvertDepthToScale(const unsigned int depth) const
+{
+  TileMapImageIOHelper myTileMapImageIOHelper;
+  return myTileMapImageIOHelper.ConvertDepthToScale( depth );
+}  
+
 #ifdef OTB_USE_CURL
 
 void
@@ -535,8 +545,7 @@ GCPToSensorModelModel
   m_SizeX = sizeX;
   m_SizeY = sizeY;
 
-  // Configure Tile
-  m_TileIO = TileMapType::New();
+  
   m_TileIO->SetDepth( m_Depth );
   m_TileIO->SetCacheDirectory( m_CacheDirectory );
   
