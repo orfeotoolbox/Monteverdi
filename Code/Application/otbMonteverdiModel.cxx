@@ -27,6 +27,8 @@
 #include <boost/graph/graphviz.hpp>
 // #include <boost/graph/iteration_macros.hpp>
 
+#include "tinyxml.h"
+
 namespace otb
 {
 /** Initialize the singleton */
@@ -644,24 +646,85 @@ MonteverdiModel::GetInstance()
   return Instance;
 }
 
-void MonteverdiModel::GetGraphvizDotFile (const std::string & fname)
+void MonteverdiModel::GetGraphvizDotFile (const std::string & fname) const
 {
-  // Look for the old instance id in the graph
-//   otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
-//   otb::GraphOutEdgeIterator<ConnectionGraphType> outEdgeIt(m_ConnectionGraph,vertexIt);
-  
-//   const boost::property_map<ConnectionGraphType, boost::vertex_attribute_t>::type& vertAttr = boost::get(boost::vertex_attribute, m_ConnectionGraph->GetGraphContainer());
-//   const boost::property_map<ConnectionGraphType, boost::edge_attribute_t>::type& edgeAttr = boost::get(boost::edge_attribute, m_ConnectionGraph->GetGraphContainer());
-//
-//   boost::dynamic_properties dp;
-//   dp.property("Operation", edgeAttr );
-//   dp.property("Module", vertAttr );
+  //TODO improve the support of exportation of Monteverdi graph to graphviz 
   std::ofstream ofs( fname.c_str() );
-
   boost::write_graphviz(ofs, m_ConnectionGraph->GetGraphContainer()/*, dp*/);
 }
 
+void MonteverdiModel::ExportGraphToXML (const std::string & fname) const
+{
+  //TODO improve the support of exportation of Monteverdi graph to XML file 
+  // Declare a stringstream to be used later
+  itk::OStringStream oss;
+  oss<<fixed<<setprecision(6);
 
+  // Build an xml document
+  TiXmlDocument doc;
+  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  doc.LinkEndChild( decl );
+
+  // Build root node
+  TiXmlElement * root = new TiXmlElement( "Monteverdi Scenario" );
+  doc.LinkEndChild( root );
+  
+  // Look for source and target in the graph
+  otb::GraphVertexIterator<ConnectionGraphType> sourceIt(m_ConnectionGraph), targetIt(m_ConnectionGraph);
+
+  // Look for the source vertex in the connection graph
+  while(!sourceIt.IsAtEnd())
+    {
+      CGraphVertexType vertex = sourceIt.Get();
+      // Add a new entry
+      TiXmlElement * currentVERTEX = new TiXmlElement( "VERTEX" );
+      root->LinkEndChild(currentVERTEX);
+
+      // Store the edge first index
+      TiXmlElement * vertex_first = new TiXmlElement( "VERTEX_FIRST" );
+      oss.str("");
+      oss << vertex;
+      vertex_first->LinkEndChild(new TiXmlText(oss.str().c_str()));
+      currentVERTEX->LinkEndChild(vertex_first);
+      
+      // Store the edge second index
+//       TiXmlElement * vertex_second = new TiXmlElement( "VERTEX_SECOND" );
+//       oss.str("");
+//       oss << vertex.second;
+//       vertex_second->LinkEndChild(new TiXmlText(oss.str().c_str()));
+//       currentVERTEX->LinkEndChild(vertex_second);
+      // Look for source and target in the graph
+      otb::GraphOutEdgeIterator<ConnectionGraphType> outEdgeIt(m_ConnectionGraph,sourceIt);
+
+      while(!outEdgeIt.IsAtEnd())
+        {
+        CGraphEdgeType edge = outEdgeIt.Get();
+        // Add a new entry
+        TiXmlElement * currentEDGE = new TiXmlElement( "EDGE" );
+        currentVERTEX->LinkEndChild(currentEDGE);
+
+        // Store the edge first index
+        TiXmlElement * edge_first = new TiXmlElement( "EDGE_FIRST" );
+        oss.str("");
+        oss << edge.first;
+        edge_first->LinkEndChild(new TiXmlText(oss.str().c_str()));
+        currentEDGE->LinkEndChild(edge_first);
+        
+        // Store the edge second index
+        TiXmlElement * edge_second = new TiXmlElement( "EDGE_SECOND" );
+        oss.str("");
+        oss << edge.second;
+        edge_second->LinkEndChild(new TiXmlText(oss.str().c_str()));
+        currentEDGE->LinkEndChild(edge_second);
+        
+        ++outEdgeIt;
+        }
+      ++sourceIt;
+    }
+  
+  // Finally, write the file
+  doc.SaveFile(fname.c_str());
+}
 }// End namespace
 
 #endif

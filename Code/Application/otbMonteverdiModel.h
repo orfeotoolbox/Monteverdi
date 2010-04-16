@@ -181,8 +181,9 @@ class ITK_EXPORT MonteverdiModel
   }
   virtual void Close();
   
-  void GetGraphvizDotFile (const std::string & fname);
+  void GetGraphvizDotFile (const std::string & fname) const;
 
+  void ExportGraphToXML (const std::string & fname) const;
 protected:
 
   /** This is protected for the singleton. Use GetInstance() instead. */
