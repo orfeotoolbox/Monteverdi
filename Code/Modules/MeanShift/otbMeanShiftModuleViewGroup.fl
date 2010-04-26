@@ -72,7 +72,7 @@ class MeanShiftModuleViewGroup {open
           xywh {536 469 129 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Value_Slider mOpacity {
-          label Opcaity
+          label Opacity
           callback {SetOpacity(this->mOpacity->value());}
           xywh {559 487 122 15} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 value 0.5 textsize 14
         }
