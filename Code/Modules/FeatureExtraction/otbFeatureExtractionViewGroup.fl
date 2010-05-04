@@ -73,7 +73,7 @@ SetFeatureType(otb::FeatureInfo::GRADIENT);}
               tooltip {Recursive Gradient ImageFilter} xywh {75 75 30 20}
             }
             Submenu {} {
-              label Textures
+              label Textures open
               tooltip {Texture Filters} xywh {0 0 63 20}
             } {
               MenuItem {} {
@@ -156,8 +156,8 @@ SetFeatureType(otb::FeatureInfo::TEXT_MEA);}
               }
               MenuItem {} {
                 label PanTex
-                callback {UpdateParameterArea(6);
-SetFeatureType(otb::FeatureInfo::TEXT_PANTEX);}
+                callback {UpdateParameterArea(4);
+SetFeatureType(otb::FeatureInfo::TEXT_PANTEX);} selected
                 tooltip {Panchromatic Texture} xywh {50 50 30 20}
               }
               MenuItem {} {
@@ -800,7 +800,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 tooltip {Central wavelength of the NIR band (0.84 for Pleiade)} xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.84
               }
             }
-            Fl_Group guiSoil {open
+            Fl_Group guiSoil {
               xywh {206 318 240 140} align 0 hide
             } {
               Fl_Counter guiSoilG {
@@ -1089,7 +1089,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
       }
       Fl_Button guiQuit {
         label Cancel
-        callback {Cancel();} selected
+        callback {Cancel();}
         tooltip {Quit Application} xywh {400 564 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group guiImageGroup {open
