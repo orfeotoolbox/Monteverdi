@@ -26,6 +26,10 @@
 #define BOOST_NO_SLIST
 #endif
 
+#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#endif
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
