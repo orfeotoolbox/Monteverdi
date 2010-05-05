@@ -1,0 +1,30 @@
+The application computes a number of object similar to a sample of examples given by the user.
+For that, it computes a classification and fuses the result with an edge boundary detection.
+
+Open an Image :
+Use the menu "Open image" on the top left window. You can also run the
+application with the option "-in myImagePth"
+
+Example Selection :
+- To create a polygon, left click over the extracted image. To enter
+the last point, left double click.
+- To erase a polygon, double click right over it.
+
+Classification :
+- SVM check box : The classification is made with a SVM.
+- Spectral angle check box : The classification is computed with a spectral angle filter (the reference pixel is the mean pixel of the selected areas), and a thresholder, the threshold limit can be fixed with the "Threshold Val" box.
+
+Boundary Computation :
+The boundaries are computed using a MeanShift filter. All its parameters can be set using the values contained in the "Mean Shift" area of the main window.
+
+If you check the check button "Use Smoothing", a smoothing will be
+applied to the input image before the processing. This smoothing is the clustered image of the same MeanShift filter used for the boundary computation. If you selected Spectral Angle, the reference pixel will be computed with the smoothed image.
+
+Once the parameters are selected, the "Preview" button will trigger
+the processing over the extracted image. The results will appear in blue.
+
+You can run the chain over the full image through the "Save Result"
+menu and save the result in shape or kml file with the "Save Polygon" menu.
+
+
+Enjoy!
