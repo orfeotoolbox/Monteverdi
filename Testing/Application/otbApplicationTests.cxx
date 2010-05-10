@@ -30,4 +30,5 @@ void RegisterTests()
   REGISTER_TEST(otbMonteverdiApplicationTest);
   REGISTER_TEST(otbMonteverdiApplicationReaderViewer);
   REGISTER_TEST(otbMonteverdiApplicationGraphviz);
+  REGISTER_TEST(otbMonteverdiApplicationExportToXML);
 }

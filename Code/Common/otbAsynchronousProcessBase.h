@@ -23,7 +23,7 @@
 #include "itkMultiThreader.h"
 #include "itkObject.h"
 #include "itkExceptionObject.h"
-#include <OpenThreads/Thread>
+#include "otbThreads.h"
 
 namespace otb
 {
@@ -100,9 +100,10 @@ class ITK_EXPORT AsynchronousProcessBase
     }
 
   // Internal call to openthread::Thread::microSleep
+  // by the intermediate of the otb class Threads
   static int Sleep(unsigned int microsec)
   {
-    return OpenThreads::Thread::microSleep(microsec);
+    return Threads::Sleep(microsec);
   }
 
  private:
