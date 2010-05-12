@@ -34,6 +34,8 @@ ObjectCountingModule::ObjectCountingModule()
   m_View->SetController(m_Controller);
 
   m_Model = ObjectCountingModel::GetInstance();
+  
+  m_Model->RegisterListener(this);
   // Then, describe inputs needed by the module
 
   // Add a new input
@@ -73,9 +75,9 @@ void ObjectCountingModule::Run()
     {
     // Process the input as an FloatingVectorImageType
       m_Model->SetInputImage( fpvImage );
-      std::cout << "model setinput image ok" << std::endl;
+      //std::cout << "model setinput image ok" << std::endl;
       m_View->Build();
-      std::cout << "Build view over" << std::endl;
+      //std::cout << "Build view over" << std::endl;
     }
   else
     {

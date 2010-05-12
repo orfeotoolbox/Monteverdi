@@ -58,6 +58,8 @@ public:
   virtual void SetOutputImageName(const char * name ) = 0;
   virtual void SetOutputVectorFileName(const char * name ) = 0;
   virtual void UseSmoothing(bool b) = 0;
+  
+  virtual void Quit() = 0;
 
 protected:
   /** Constructor */

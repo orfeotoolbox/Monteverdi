@@ -49,7 +49,7 @@ ObjectCountingController
     qlSize[1] = m_View->gScroll->h();
     m_Model->SetQuicklookSize( qlSize );
     m_Model->OpenImage();
-    std::cout << "Controller openImage continue..." << std::endl;
+    //std::cout << "Controller openImage continue..." << std::endl;
     ViewType::RegionType region;
     IndexType newIndex;
     newIndex.Fill(0);
@@ -58,10 +58,10 @@ ObjectCountingController
     newSize[1]=m_View->gImageViewer->h();
     region.SetIndex(newIndex);
     region.SetSize(newSize);
-    std::cout << "Will set the current region" << std::endl;
+    //std::cout << "Will set the current region" << std::endl;
     m_Model->SetCurrentRegion(region);
     m_IsExtractRunning = true;
-    std::cout << "Image extraction" << std::endl;
+    //std::cout << "Image extraction" << std::endl;
     m_Model->RunImageExtraction();
     m_IsExtractRunning = false;
     m_HasDoubleClicked = true;
@@ -279,6 +279,14 @@ ObjectCountingController
     m_Model->ComputeReferencePixel();
   }
 
+}
+
+void
+ObjectCountingController
+::Quit()
+{
+  m_Model->Quit();
+  MsgReporter::GetInstance()->Hide();
 }
 
 } // end namespace otb

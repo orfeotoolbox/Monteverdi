@@ -119,7 +119,7 @@ public:
 
   /** Input image typedefs*/
   typedef double                      PixelType;
-  typedef unsigned int                LabelPixelType;
+  typedef unsigned short                LabelPixelType;
   typedef int                         IntLabelPixelType;
   typedef Image<LabelPixelType, 2>    LabeledImageType;
   typedef Image<IntLabelPixelType, 2> IntLabeledImageType;
@@ -132,6 +132,8 @@ public:
   typedef ImageType::RegionType       RegionType;
   typedef ImageFileReader<ImageType>  ReaderType;
   typedef ReaderType::Pointer         ReaderPointerType;
+  
+  //typedef ImageView<VisualizationModelType>            ImageViewType;
 
   typedef InverseCosSAMKernelFunctor KernelType;
   typedef StreamingShrinkImageFilter<ImageType,ImageType>         ShrinkFilterType;
@@ -288,6 +290,8 @@ public:
   
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
+  
+  void Quit();
 protected:
   
 

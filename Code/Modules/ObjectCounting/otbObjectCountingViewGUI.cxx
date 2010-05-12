@@ -48,6 +48,11 @@ ObjectCountingViewGUI
 ObjectCountingViewGUI
 ::~ObjectCountingViewGUI()
 {
+  // Remove registered visualization components from the interface
+  gImageViewer->remove(m_FullImageWidget);
+  gScroll->remove(m_ScrollWidget);
+  //gZoom->remove(m_ImageView->GetZoomWidget());
+  this->Exit();
 }
 
 
@@ -445,11 +450,11 @@ void ObjectCountingViewGUI::Build()
     }
 
   this->Show();
-  std::cout << "Open image in the controller" << std::endl;
+  //std::cout << "Open image in the controller" << std::endl;
   this->GetController()->OpenImage();
-  std::cout << "Need to run" << std::endl;
+  //std::cout << "Need to run" << std::endl;
   //otbFlRunMacro(this->IsRunning());
-  std::cout << "Module is now running" << std::endl;
+  //std::cout << "Module is now running" << std::endl;
 }
 
 void ObjectCountingViewGUI::Hide()
@@ -464,4 +469,11 @@ void ObjectCountingViewGUI::SetModel(ObjectCountingModelType* model)
   //m_ImageView->SetModel(m_Model->GetVisualizationModel());
   m_Model->RegisterListener(this);
 }
+
+void ObjectCountingViewGUI::Exit()
+{
+  m_Controller->Quit();
+  guiMainWindow->hide();
+}
+
 }// end namespace

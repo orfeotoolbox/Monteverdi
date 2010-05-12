@@ -93,6 +93,7 @@ public:
   /** Fluid call backs*/
   virtual void OpenImage();
   virtual void Quit();
+  virtual void Exit();
   virtual void RunPreview();
   virtual void SaveResult();
   virtual void SavePolygon();

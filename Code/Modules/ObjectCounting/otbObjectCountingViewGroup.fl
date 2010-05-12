@@ -14,8 +14,8 @@ class ObjectCountingViewGroup {open
   } {
     Fl_Window guiMainWindow {
       label {Object counting application}
-      callback {this->Quit();} open
-      xywh {447 146 665 570} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      callback {this->Exit();} open
+      xywh {369 177 665 570} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gImageViewer {
         label Extract open
@@ -26,7 +26,7 @@ class ObjectCountingViewGroup {open
         tooltip {Navigate through the image} xywh {440 20 220 220} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {}
       Fl_Group {} {
-        label Parameters open
+        label Parameters open selected
         xywh {440 258 220 267} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Check_Button cbUseSVM {
@@ -90,13 +90,18 @@ class ObjectCountingViewGroup {open
         }
       }
       Fl_Button bRunPreview {
-        label Preview
-        callback {RunPreview();} selected
-        tooltip {Run over the extracted image} xywh {570 535 85 30} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186 deactivate
+        label Run
+        callback {RunPreview();}
+        tooltip {Run over the extracted image} xywh {480 535 85 30} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
       }
       Fl_Output tStat {
         label Statistics
         xywh {9 396 416 129} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      }
+      Fl_Button bRun {
+        label Close
+        callback {this->Exit();}
+        tooltip {Run over the extracted image} xywh {575 535 85 30} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
       }
     }
   }
@@ -128,5 +133,9 @@ class ObjectCountingViewGroup {open
   Function {UseSmoothing()} {open return_type {virtual void}
   } {}
   Function {UpdateNuParameter()} {open return_type {virtual void}
+  } {}
+  Function {Exit()} {open return_type {virtual void}
+  } {}
+  Function {Close()} {open return_type {virtual void}
   } {}
 } 

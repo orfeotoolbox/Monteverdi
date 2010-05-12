@@ -122,20 +122,20 @@ ObjectCountingModel
   m_Rescaler->SetWindowMaximum(CONST_PI);
   
   m_Rescaler->SetInput( m_SpectralAngleFilter->GetOutput() );
-  std::cout << "rescaling ok" << std::endl;
+  //std::cout << "rescaling ok" << std::endl;
   m_Thresholder->SetInsideValue(1);
   m_Thresholder->SetOutsideValue(0);
   m_Thresholder->SetLowerThreshold( m_ThresholdValue );
   m_Thresholder->SetUpperThreshold( 1 );
   m_Thresholder->SetInput( m_Rescaler->GetOutput() );
   
-  std::cout << "thresholding ok" << std::endl;
+  //std::cout << "thresholding ok" << std::endl;
   m_ChangeLabelFilter->SetChange(-1, 0);
   m_ChangeLabelFilter->SetInput( m_Classifier->GetOutput() );
   
   m_RelabelFilter->SetInput(m_ConnectedFilter->GetOutput());
   m_PersistentVectorizationFilter->SetInput(m_RelabelFilter->GetOutput());
-  std::cout << "init filter ok" << std::endl;
+  //std::cout << "init filter ok" << std::endl;
 }
 
 
@@ -163,13 +163,13 @@ void
 ObjectCountingModel
 ::OpenImage()
 {
-  std::cout << "Open image in the model" << std::endl;
+  //std::cout << "Open image in the model" << std::endl;
   //this->InitFilters();
-  std::cout << "Init input filter" << std::endl;
+  //std::cout << "Init input filter" << std::endl;
   //this->InitInputFilters();
 
 //   m_Reader->SetFileName( filename );
-  std::cout << "Update output information" << std::endl;
+  //std::cout << "Update output information" << std::endl;
   m_InputImage->UpdateOutputInformation();
 
   if ( m_InputImage->GetNumberOfComponentsPerPixel()<3)
@@ -177,15 +177,15 @@ ObjectCountingModel
 // 
 //   m_InputImage = m_InputImage;
 
-  std::cout << "generate quicklook" << std::endl;
+  //std::cout << "generate quicklook" << std::endl;
   this->GenerateQuicklook();
-  std::cout << "generate histogram" << std::endl;
+  //std::cout << "generate histogram" << std::endl;
   this->GenerateHistogram();
 
   m_InputPolygonListIndex = 0;
   m_InputPolyList->Clear();
   m_InputSampleList->Clear();
-  std::cout << "Open image in the model OVER" << std::endl;
+  //std::cout << "Open image in the model OVER" << std::endl;
 }
 
 
@@ -196,7 +196,7 @@ ObjectCountingModel
 {
   // Shrink factor
   SizeType largestRegionSize = m_InputImage->GetLargestPossibleRegion().GetSize();
-  std::cout << "size " << largestRegionSize << std::endl;
+  //std::cout << "size " << largestRegionSize << std::endl;
   unsigned int maxQuicklook = std::max(m_QuicklookSize[0],m_QuicklookSize[1]);
   unsigned int maxLargest   = std::max(largestRegionSize[0],largestRegionSize[1]);
 
@@ -225,20 +225,20 @@ ObjectCountingModel
 
     IteratorType it(m_Quicklook,m_Quicklook->GetLargestPossibleRegion());
     it.GoToBegin();
-    std::cout << "while iterator quicklook" << std::endl;
+    //std::cout << "while iterator quicklook" << std::endl;
     while ( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get()[j];
       sl->PushBack(pixel);
       ++it;
     }
-    std::cout << "histogramm generator" << std::endl;
+    //std::cout << "histogramm generator" << std::endl;
     HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
     generator->SetListSample(sl);
     HistogramGeneratorType::HistogramType::SizeType size;
     size.Fill(256);
     generator->SetNumberOfBins(size);
-    std::cout << "update generator" << std::endl;
+    //std::cout << "update generator" << std::endl;
     generator->Update();
     m_Histogram.push_back( const_cast<HistogramType *>(generator->GetOutput()) );
   }
@@ -265,14 +265,14 @@ ObjectCountingModel
   m_InputSampleList->Clear();
   m_InputPolygonListIndex = 0;
   m_ErasedPolygonIndex    = -1;
-  std::cout << "extract value " << EXTRACT << std::endl;
-  //std::cout << "extract value2 " << ImageToWorkType::EXTRACT << std::endl;
+  //std::cout << "extract value " << EXTRACT << std::endl;
+  ////std::cout << "extract value2 " << ImageToWorkType::EXTRACT << std::endl;
   m_WhichImage = EXTRACT;
-  std::cout << "has image value " << HAS_IMAGE << std::endl;
+  //std::cout << "has image value " << HAS_IMAGE << std::endl;
   m_State = HAS_IMAGE;
-  std::cout << "m_State " << m_State << std::endl;
+  //std::cout << "m_State " << m_State << std::endl;
   this->NotifyAll("SetInputImage");
-  std::cout << "RunImageExtraction over" << std::endl;
+  //std::cout << "RunImageExtraction over" << std::endl;
 }
 
 
@@ -378,7 +378,7 @@ ObjectCountingModel
 {
   std::string outName = cfname;
   int length = outName.size()-(outName.find_last_of('.')+1);
-  std::cout << "lenght of the file " <<   outName.size() << " Name : " << outName << " et length " << length << std::endl;
+  //std::cout << "lenght of the file " <<   outName.size() << " Name : " << outName << " et length " << length << std::endl;
   std::string ext = outName.substr(outName.find_last_of('.')+1, length);
 
   if (ext.compare("shp")==0 && ext.compare("kml")==0 )
@@ -780,6 +780,15 @@ ObjectCountingModel
 ::SetInputImage(ImagePointerType image)
 {
   m_InputImage = image;
+}
+
+void
+ObjectCountingModel
+::Quit()
+{
+  this->GetOutputLabeledImage();
+  this->NotifyAll("OutputsUpdated");
+  this->NotifyAll("BusyOff");
 }
 
 }

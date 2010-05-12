@@ -65,6 +65,8 @@ public:
   virtual void UseSmoothing(bool b);
   virtual void SaveResult( const char * cfname );
   virtual void SavePolygon( const char * cfname );
+  
+  virtual void Quit();
 
 protected:
   /** Constructor */
