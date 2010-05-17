@@ -104,7 +104,7 @@ bool
 OpticalCalibrationModule
 ::CheckMetadata()
 {
-  // This line is rcopyed from the method that calls this method to be able to use it through the test.
+  // This line is copied from the method that calls this method to be able to use it through the test.
   if(m_InputImage.IsNull())
     {
       MsgReporter::GetInstance()->SendError("No input image detected.");
@@ -117,7 +117,7 @@ OpticalCalibrationModule
 
   std::string sensorID = lImageMetadataInterface->GetSensorID(dict);
 
-  // Test the sensor : only QB, IKONOS and Spot are supproted
+  // Test the sensor : only QB, IKONOS and Spot are supported
   if( sensorID.find("QB02") == std::string::npos &&
       sensorID.find("Spot") == std::string::npos &&
       sensorID.find("IKONOS-2") == std::string::npos )
@@ -126,7 +126,7 @@ OpticalCalibrationModule
       return false;
     }
 
-  // Test if needed datas are available.
+  // Test if needed data are available.
   try
     {
       // ImageToLuminance
@@ -239,7 +239,7 @@ OpticalCalibrationModule
   tHelper->insert("- If the field UserStep is not specified, a default\n");
   tHelper->insert("  value of 0,0025.1e-6m is considered.\n");
   tHelper->insert("- Order have an importance. You have to respect the band image order.\n");
-  tHelper->insert("- If no spectral sensitivity file is specified, the module will use metadatas\n");
+  tHelper->insert("- If no spectral sensitivity file is specified, the module will use metadata\n");
   tHelper->insert("  to compute them.\n");
 
 }
@@ -319,7 +319,7 @@ OpticalCalibrationModule
    oss<<atmoTerms;
    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
    buff->text( oss.str().c_str() );
-   // Erase the first line (class name + pointer adress)
+   // Erase the first line (class name + pointer address)
    int start = buff->line_start(0);
    int stop = buff->line_end(0);
    buff->remove(start, stop+1);
@@ -332,7 +332,7 @@ OpticalCalibrationModule
    oss2<<atmoPar;
    Fl_Text_Buffer *buff2 = new Fl_Text_Buffer();
    buff2->text( oss2.str().c_str() );
-   // Erase the first line (class name + pointer adress)
+   // Erase the first line (class name + pointer address)
    start = buff2->line_start(0);
    stop = buff2->line_end(0);
    buff2->remove(start, stop+1);

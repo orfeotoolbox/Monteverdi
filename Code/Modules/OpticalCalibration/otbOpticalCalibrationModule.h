@@ -83,7 +83,7 @@ public:
 
   itkGetObjectMacro(DifferenceFilter, DifferenceImageFilterType);
 
-  /** Check if the input file is a good one (QB, SPOT or Ikonos image + metadata availble). */
+  /** Check if the input file is a good one (QB, SPOT or Ikonos image + metadata available). */
   bool CheckMetadata();
 
 protected:
