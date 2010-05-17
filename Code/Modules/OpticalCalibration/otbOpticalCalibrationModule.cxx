@@ -38,7 +38,7 @@ OpticalCalibrationModule::OpticalCalibrationModule()
   m_HelpTextBuffer = new Fl_Text_Buffer();
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OpticalCalibration on")); 
+  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OpticalCalibration on"));
 }
 
 /** Destructor */
@@ -58,7 +58,7 @@ void OpticalCalibrationModule::PrintSelf(std::ostream& os, itk::Indent indent) c
 /** The custom run command */
 void OpticalCalibrationModule::Run()
 {
-  // Untill window closing, module will be busy
+  // Until window closing, module will be busy
   this->BusyOn();
 
   // Here is the body of the module.
@@ -89,7 +89,7 @@ void OpticalCalibrationModule::Run()
  
       this->Init();
       this->InitHelper();
-      // open the GUI 
+      // open the GUI
       this->Show();
     }
   else
@@ -100,7 +100,7 @@ void OpticalCalibrationModule::Run()
 }
 
 
-bool 
+bool
 OpticalCalibrationModule
 ::CheckMetadata()
 {
@@ -118,8 +118,8 @@ OpticalCalibrationModule
   std::string sensorID = lImageMetadataInterface->GetSensorID(dict);
 
   // Test the sensor : only QB, IKONOS and Spot are supproted
-  if( sensorID.find("QB02") == std::string::npos && 
-      sensorID.find("Spot") == std::string::npos && 
+  if( sensorID.find("QB02") == std::string::npos &&
+      sensorID.find("Spot") == std::string::npos &&
       sensorID.find("IKONOS-2") == std::string::npos )
     {
       MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5 and QuickBird are supported.");
@@ -128,7 +128,7 @@ OpticalCalibrationModule
 
   // Test if needed datas are available.
   try
-    { 
+    {
       // ImageToLuminance
       lImageMetadataInterface->GetPhysicalGain(dict);
       lImageMetadataInterface->GetPhysicalBias(dict);
@@ -180,7 +180,7 @@ OpticalCalibrationModule
   // Init Band selection
   guiBandSelection->value(0);
   bProgress->minimum(0);
-  bProgress->maximum(1); 
+  bProgress->maximum(1);
   bProgress->value(1);
   bProgress->hide();
 
@@ -214,7 +214,7 @@ OpticalCalibrationModule
 {
   tHelper->buffer(m_HelpTextBuffer);
 
-  tHelper->insert("This file contains the spectal sensitivity of the sensor. \n");
+  tHelper->insert("This file contains the spectral sensitivity of the sensor. \n");
   tHelper->insert("It should respect the following a design:\n");
   tHelper->insert("Format is MinSpectralValue MaxSpectralValue UserStep\n");
   tHelper->insert("the list of coefficients for each band.\n\n");
@@ -235,14 +235,14 @@ OpticalCalibrationModule
 
   tHelper->insert("\n");
   tHelper->insert("Please note that:\n");
-  tHelper->insert("- The spectral unit is 1e-6m.\n"); 
+  tHelper->insert("- The spectral unit is 1e-6m.\n");
   tHelper->insert("- If the field UserStep is not specified, a default\n");
-  tHelper->insert("  value of 0,0025.1e-6m is considered.\n"); 
+  tHelper->insert("  value of 0,0025.1e-6m is considered.\n");
   tHelper->insert("- Order have an importance. You have to respect the band image order.\n");
   tHelper->insert("- If no spectral sensitivity file is specified, the module will use metadatas\n");
   tHelper->insert("  to compute them.\n");
 
-}  
+}
 
 
 void
@@ -266,7 +266,7 @@ OpticalCalibrationModule
 
   AtmosphericCorrectionParameters::Pointer param = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
   guiOzoneAmount->value(param->GetOzoneAmount());
-  guiAtmoPressure->value(param->GetAtmosphericPressure());	
+  guiAtmoPressure->value(param->GetAtmosphericPressure());
   guiAerosolModel->value(param->GetAerosolModel());
   guiWater->value(param->GetWaterVaporAmount());
   guiAeroTh->value(param->GetAerosolOptical());
@@ -326,7 +326,7 @@ OpticalCalibrationModule
    tdParam->buffer(buff);
    tdParam->redraw();
 
-   itk::OStringStream oss2;  
+   itk::OStringStream oss2;
    oss2.str("");
    AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
    oss2<<atmoPar;
@@ -347,7 +347,7 @@ OpticalCalibrationModule
        guiWater->value(atmoPar/*param*/->GetWaterVaporAmount());
        guiAeroTh->value(atmoPar/*param*/->GetAerosolOptical());
        guiWater->redraw();
-       guiAeroTh->redraw(); 
+       guiAeroTh->redraw();
      }
 }
 
@@ -378,10 +378,10 @@ OpticalCalibrationModule
     aeroMod = AtmosphericCorrectionParameters::URBAN;
   else if( aeroModStd == "DESERTIC")
     aeroMod = AtmosphericCorrectionParameters::DESERTIC;
-  else 
+  else
   {
     itkExceptionMacro(<<"Invalid Aerosol Model Type: "<<aeroModStd);
-  }    
+  }
 
   double ozAmount = guiOzoneAmount->value();
   double atmoPres = guiAtmoPressure->value();
@@ -409,10 +409,10 @@ OpticalCalibrationModule
       atmoPar->SetAtmosphericPressure( atmoPres );
       
         if(!aeronetFile)
-	  {
-	    atmoPar->SetAerosolOptical(aeroTh);
-	    atmoPar->SetWaterVaporAmount(waterAm);
-	  }
+         {
+           atmoPar->SetAerosolOptical(aeroTh);
+           atmoPar->SetWaterVaporAmount(waterAm);
+         }
 
       m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
@@ -429,7 +429,7 @@ OpticalCalibrationModule
   catch (itk::ExceptionObject & err)
     {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }   
+    }
 }
 
 void
@@ -466,17 +466,17 @@ OpticalCalibrationModule
       
       /** param update is done by the controller, that allows to change each channel without computed is parameters each time*/
       if(updateIm==true)
-	{
-	  m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
-	  bProgress->show();
-	  Fl::check();
-	  m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-	  bProgress->hide();
-	  Fl::check();
+       {
+         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
+         bProgress->show();
+         Fl::check();
+         m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+         bProgress->hide();
+         Fl::check();
 
-	  m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-	  m_CanUpdateParameters = false;
-	}
+         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+         m_CanUpdateParameters = false;
+       }
     }
   catch (itk::ExceptionObject & err)
     {
@@ -512,7 +512,7 @@ OpticalCalibrationModule
       m_DiffTOATOCMultiplier->SetCoef(1000.);
       
       m_TOAMultiplier->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
-      m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());    
+      m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
       m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
 
       this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(),"TOA image (*1000)", otbGetTextMacro("TOA image (*1000)"));
@@ -584,25 +584,25 @@ OpticalCalibrationModule
   // in tRadTerm tab (through m_CanUpdateParameters)
 
   if(!m_CanUpdateParameters)
-    { 
+    {
       //  in Correction Parameters tab checking each value
       AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
       std::string aeroModStd = guiAerosolModel->value();
       
       if( aeroModStd == "NO AEROSOL")
-	aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
+       aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
       else if( aeroModStd == "CONTINENTAL")
-	aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
+       aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
       else if( aeroModStd == "MARITIME")
-	aeroMod = AtmosphericCorrectionParameters::MARITIME;
+       aeroMod = AtmosphericCorrectionParameters::MARITIME;
       else if( aeroModStd == "URBAN")
-	aeroMod = AtmosphericCorrectionParameters::URBAN;
+       aeroMod = AtmosphericCorrectionParameters::URBAN;
       else if( aeroModStd == "DESERTIC")
-	aeroMod = AtmosphericCorrectionParameters::DESERTIC;
-      else 
-	{
-	  itkExceptionMacro(<<"Invalid Aerosol Model Type: "<<aeroModStd);
-	}    
+       aeroMod = AtmosphericCorrectionParameters::DESERTIC;
+      else
+       {
+         itkExceptionMacro(<<"Invalid Aerosol Model Type: "<<aeroModStd);
+       }
       
       double ozAmount = guiOzoneAmount->value();
       double atmoPres = guiAtmoPressure->value();
@@ -613,19 +613,19 @@ OpticalCalibrationModule
 
       AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
       if( static_cast<AerosolModelType>(aeroMod) != atmoPar->GetAerosolModel() )
-	m_CanUpdateParameters = true;
+       m_CanUpdateParameters = true;
       else if(ozAmount != atmoPar->GetOzoneAmount() )
-	m_CanUpdateParameters = true;
+       m_CanUpdateParameters = true;
       else if(atmoPres != atmoPar->GetAtmosphericPressure() )
-	m_CanUpdateParameters = true;
+       m_CanUpdateParameters = true;
       else if( ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName())
-	m_CanUpdateParameters = true;
+       m_CanUpdateParameters = true;
       else if( aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName() )
-	m_CanUpdateParameters = true;
+       m_CanUpdateParameters = true;
       else if(aeroTh != atmoPar->GetAerosolOptical())
-      	m_CanUpdateParameters = true;
+             m_CanUpdateParameters = true;
       else if(waterAm != atmoPar->GetWaterVaporAmount())
-      	m_CanUpdateParameters = true;
+             m_CanUpdateParameters = true;
     }
 
   if(!m_CanUpdateParameters)
