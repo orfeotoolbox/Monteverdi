@@ -200,6 +200,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
+      charVWriter->WriteGeomFileOn();
       charVWriter->SetInput(charVectorImage);
       charVWriter->SetFileName(m_FilePath);
       m_WritingProcess = charVWriter;
@@ -222,6 +223,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+      fPVWriter->WriteGeomFileOn();
       fPVWriter->SetInput(vectorImage);
       fPVWriter->SetFileName(m_FilePath);
       m_WritingProcess = fPVWriter;
@@ -243,6 +245,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       FPWriterType::Pointer fPWriter = FPWriterType::New();
+      fPWriter->WriteGeomFileOn();
       fPWriter->SetInput(singleImage);
       fPWriter->SetFileName(m_FilePath);
       m_WritingProcess = fPWriter;
