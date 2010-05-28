@@ -332,6 +332,5 @@ void CachingModule::SendErrorCallback(void * data)
     MsgReporter::GetInstance()->SendError(error->c_str());
   }
 }
+
 } // End namespace otb
-
-
