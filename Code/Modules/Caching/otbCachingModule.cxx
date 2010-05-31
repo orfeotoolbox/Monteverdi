@@ -56,15 +56,24 @@ CachingModule::~CachingModule()
 {
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
-  //ossimFilename ofnameNoExtension = ofname.fileNoExtension();
 
-// try to remove the file
+  // try to remove the file
   if(ofname.exists() && m_EraseFile)
     {
-    otbGenericMsgDebugMacro( <<"Cleaning up all cache files with base "<<ofname );
-    //ofnameNoExtension.wildcardRemove();
+    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofname );
     ofname.wildcardRemove();
     }
+
+  // if a .geom file exists, delete it also
+  ossimFilename ofnameGeom = ofname.noExtension().setExtension(".geom");
+
+  // try to remove the file
+  if(ofnameGeom.exists() && m_EraseFile)
+    {
+    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofnameGeom );
+    ofnameGeom.wildcardRemove();
+    }
+
 }
 
 /** PrintSelf method */
