@@ -16,18 +16,17 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-#include <iostream>
-#include "otbTestMain.h"
+#include "otbSupervisedClassificationSensorModel.h"
 
-void RegisterTests()
+
+int otbSupervisedClassificationModelTest(int argc, char* argv[])
 {
-#ifdef OTB_USE_CURL
-  REGISTER_TEST(otbTileMapImportModuleTest);
-#endif
-  REGISTER_TEST(otbSupervisedClassificationModelTest);
+  otb::SupervisedClassificationModel::Pointer spclModule = otb::SupervisedClassificationModel::New();
+  otb::Module::Pointer module = spclModule.GetPointer();
+  
+  std::cout<<"Module: "<<module<<std::endl;
+
+  return EXIT_SUCCESS;
+
 }
+

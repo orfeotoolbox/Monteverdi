@@ -257,6 +257,8 @@ IF(OTB_USE_CURL)
   )
 ENDIF(OTB_USE_CURL)
 
+ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS4} otbSupervisedClassificationModelTest)
+
 
 
 SET(Modules_SRCS1
@@ -298,6 +300,7 @@ otbSarCalibrationModuleTest.cxx
 IF(OTB_USE_CURL)
 SET(Modules_SRCS4
   otbTileMapImportModuleTest.cxx
+  otbSupervisedClassificationModelTest.cxx
 )
 ENDIF(OTB_USE_CURL)
 
