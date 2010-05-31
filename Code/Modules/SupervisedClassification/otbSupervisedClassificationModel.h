@@ -69,6 +69,7 @@ public:
   typedef unsigned short                                                               LabeledPixelType;
 
   typedef VectorImage<PixelType,2>                                                     ImageType;
+  typedef ImageType::Pointer                                                           ImagePointerType;
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
   typedef ImageFileReader<ImageType>                                                   ImageReaderType;
   typedef ImageFileReader<LabeledImageType>                                            LabeledImageReaderType;
@@ -89,10 +90,27 @@ public:
 
   typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
 
+  /** Visualization model */
+  typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
+  typedef Image<RGBPixelType,2>                                     RGBImageType;
+  typedef ImageLayer<ImageType,RGBImageType>                        LayerType;
+  typedef ImageLayerGenerator<LayerType>                            LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
+  typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
+  typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
+  typedef LayerGeneratorType::ImageLayerType::OutputPixelType       OutputPixelType;
+  typedef Function::UniformAlphaBlendingFunction<OutputPixelType>   BlendingFunctionType;
+  typedef BlendingFunctionType::Pointer                             BlendingFunctionPointerType;
+
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
+
+  /** Input Image Pointer */
+  itkGetConstObjectMacro(InputImage, ImageType);
+  void SetImage(ImagePointerType image);
+  
   /** ROI manipulation. */
     void RemoveROI(unsigned int ROIId);
 
@@ -101,6 +119,9 @@ public:
   /** Update Output */
   void OK();
 
+  /** Get the output changed flag */
+  itkGetMacro(OutputChanged,bool);
+  
   /** Constructor */
   SupervisedClassificationModel();
   /** Destructor */
@@ -113,13 +134,20 @@ private:
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
-  
-  /** Update the local GCPs Container, refresh the sensor model, notify it */
-  void UpdateContainer();
+
+  /** Output changed */
+  bool                                        m_OutputChanged;
 
   /** Singleton instance */
   static Pointer                              Instance;
 
+  /** Input Images */
+  ImagePointerType                      m_InputImage;
+
+  /** Visualization */
+  VisualizationModelPointerType               m_VisualizationModel;
+  LayerGeneratorPointerType                   m_ImageGenerator;
+  BlendingFunctionPointerType                 m_BlendingFunction;
 
   /** Lists of Samples */
   
