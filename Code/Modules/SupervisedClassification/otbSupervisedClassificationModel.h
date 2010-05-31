@@ -63,31 +63,31 @@ public:
   /** New macro */
   itkNewMacro(Self);
 
-  typedef enum { RANDOM, TRAINING, VALIDATION }                                   ROISelectionModeType;
+  typedef enum { RANDOM, TRAINING, VALIDATION }                                        ROISelectionModeType;
 
-  typedef float PixelType;
-  typedef unsigned short LabeledPixelType;
+  typedef float                                                                        PixelType;
+  typedef unsigned short                                                               LabeledPixelType;
 
-  typedef VectorImage<PixelType,2> ImageType;
-  typedef Image<LabeledPixelType,2> LabeledImageType;
-  typedef ImageFileReader<ImageType> ImageReaderType;
-  typedef ImageFileReader<LabeledImageType> LabeledImageReaderType;
-  typedef StreamingImageFileWriter<LabeledImageType> WriterType;
+  typedef VectorImage<PixelType,2>                                                     ImageType;
+  typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
+  typedef ImageFileReader<ImageType>                                                   ImageReaderType;
+  typedef ImageFileReader<LabeledImageType>                                            LabeledImageReaderType;
+  typedef StreamingImageFileWriter<LabeledImageType>                                   WriterType;
 
-  typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>       ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                                     ModelType;
+  typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>    ClassificationFilterType;
+  typedef ClassificationFilterType::ModelType                                          ModelType;
 
-  typedef itk::VariableLengthVector<PixelType>                                    SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                                 ListSampleType;
+  typedef itk::VariableLengthVector<PixelType>                                         SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                                      ListSampleType;
 
-  typedef SVMClassifier<ListSampleType,LabeledPixelType>                     ClassifierType;
-  typedef itk::FixedArray<LabeledPixelType,1>                                     TrainingSampleType;
-  typedef itk::Statistics::ListSample<TrainingSampleType>                         TrainingListSampleType;
-  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType> EstimatorType;
+  typedef SVMClassifier<ListSampleType,LabeledPixelType>                               ClassifierType;
+  typedef itk::FixedArray<LabeledPixelType,1>                                          TrainingSampleType;
+  typedef itk::Statistics::ListSample<TrainingSampleType>                              TrainingListSampleType;
+  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>           EstimatorType;
 
-  typedef std::map<LabeledPixelType,unsigned int>                                 ClassesMapType;
+  typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
-  typedef itk::VariableSizeMatrix<double>                                         ConfusionMatrixType;
+  typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
 
 
   /** Get the unique instanc1e of the model */
