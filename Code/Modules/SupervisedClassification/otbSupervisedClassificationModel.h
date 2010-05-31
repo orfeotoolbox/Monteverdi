@@ -93,12 +93,8 @@ public:
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
-  /** Get the visualization model */
-  itkGetObjectMacro(VisualizationModel, VisualizationModelType);
-
-
   /** ROI manipulation. */
-  unsigned int AddTOI(ROIType aRoi );
+  unsigned int AddROI(ROIType aRoi );
   void RemoveROI(unsigned int ROIId);
 
   /** SVM model manipulation */
@@ -111,8 +107,6 @@ public:
   
   /** Notifiers */
   itkGetConstMacro(SelectedPointChanged, bool);
-
-
 
   /** Constructor */
   SupervisedClassificationModel();
