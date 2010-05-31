@@ -32,4 +32,5 @@ REGISTER_TEST(otbThresholdModuleTestNew);
 REGISTER_TEST(otbThresholdModuleTest);
 REGISTER_TEST(otbOpticalCalibrationModuleTest);
 REGISTER_TEST(otbSarCalibrationModuleTest);
+REGISTER_TEST(otbSupervisedClassificationModelTest);
 }

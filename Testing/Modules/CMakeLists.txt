@@ -241,7 +241,7 @@ ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.co
 1 #complex
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
-
+ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS4} otbSupervisedClassificationModelTest)
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -257,7 +257,6 @@ IF(OTB_USE_CURL)
   )
 ENDIF(OTB_USE_CURL)
 
-ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS4} otbSupervisedClassificationModelTest)
 
 
 
@@ -295,12 +294,12 @@ otbThresholdModuleTestNew.cxx
 otbThresholdModuleTest.cxx
 otbOpticalCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
+otbSupervisedClassificationModelTest.cxx
 )
 
 IF(OTB_USE_CURL)
 SET(Modules_SRCS4
   otbTileMapImportModuleTest.cxx
-  otbSupervisedClassificationModelTest.cxx
 )
 ENDIF(OTB_USE_CURL)
 
