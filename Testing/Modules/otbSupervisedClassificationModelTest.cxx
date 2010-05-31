@@ -16,13 +16,13 @@
 
 =========================================================================*/
 
-#include "otbSupervisedClassificationSensorModel.h"
+#include "otbSupervisedClassificationModel.h"
 
 
 int otbSupervisedClassificationModelTest(int argc, char* argv[])
 {
   otb::SupervisedClassificationModel::Pointer spclModule = otb::SupervisedClassificationModel::New();
-  otb::Module::Pointer module = spclModule.GetPointer();
+  otb::SupervisedClassificationModel::Pointer module = spclModule.GetPointer();
   
   std::cout<<"Module: "<<module<<std::endl;
 

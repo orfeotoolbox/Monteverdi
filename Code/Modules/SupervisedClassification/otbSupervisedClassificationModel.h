@@ -94,19 +94,12 @@ public:
   static Pointer GetInstance();
 
   /** ROI manipulation. */
-  unsigned int AddROI(ROIType aRoi );
-  void RemoveROI(unsigned int ROIId);
+    void RemoveROI(unsigned int ROIId);
 
   /** SVM model manipulation */
 
   /** Update Output */
   void OK();
-
-  /** Get the output changed flag */
-  itkGetMacro(OutputChanged,bool);
-  
-  /** Notifiers */
-  itkGetConstMacro(SelectedPointChanged, bool);
 
   /** Constructor */
   SupervisedClassificationModel();
