@@ -26,17 +26,10 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
 #include "itkListSample.h"
-
-//Visu
-#include "otbImageLayerRenderingModel.h"
-#include "otbImageLayerGenerator.h"
-#include "otbImageLayer.h"
 
 
 namespace otb {
@@ -71,9 +64,6 @@ public:
   typedef VectorImage<PixelType,2>                                                     ImageType;
   typedef ImageType::Pointer                                                           ImagePointerType;
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
-  typedef ImageFileReader<ImageType>                                                   ImageReaderType;
-  typedef ImageFileReader<LabeledImageType>                                            LabeledImageReaderType;
-  typedef StreamingImageFileWriter<LabeledImageType>                                   WriterType;
 
   typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>    ClassificationFilterType;
   typedef ClassificationFilterType::ModelType                                          ModelType;
@@ -89,18 +79,6 @@ public:
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
   typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
-
-  /** Visualization model */
-  typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
-  typedef Image<RGBPixelType,2>                                     RGBImageType;
-  typedef ImageLayer<ImageType,RGBImageType>                        LayerType;
-  typedef ImageLayerGenerator<LayerType>                            LayerGeneratorType;
-  typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
-  typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
-  typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
-  typedef LayerGeneratorType::ImageLayerType::OutputPixelType       OutputPixelType;
-  typedef Function::UniformAlphaBlendingFunction<OutputPixelType>   BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer                             BlendingFunctionPointerType;
 
 
   /** Get the unique instanc1e of the model */
@@ -142,12 +120,7 @@ private:
   static Pointer                              Instance;
 
   /** Input Images */
-  ImagePointerType                      m_InputImage;
-
-  /** Visualization */
-  VisualizationModelPointerType               m_VisualizationModel;
-  LayerGeneratorPointerType                   m_ImageGenerator;
-  BlendingFunctionPointerType                 m_BlendingFunction;
+  ImagePointerType                            m_InputImage;
 
   /** Lists of Samples */
   

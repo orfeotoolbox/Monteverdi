@@ -241,7 +241,12 @@ ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.co
 1 #complex
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS4} otbSupervisedClassificationModelTest)
+
+ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS3}
+otbSupervisedClassificationModelTest)
+
+ADD_TEST(moTvSupervisedClassificationModelSetImageTest ${Modules_TESTS3}
+otbSupervisedClassificationModelTest ${INPUTDATA}/ROI_QB_MUL_4.tif)
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
