@@ -52,7 +52,7 @@ class ITK_EXPORT SupervisedClassificationModel
 
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationModel                                     Self;
+  typedef SupervisedClassificationModel                             Self;
   typedef MVCModel<ListenerBase>                                    Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
@@ -104,28 +104,28 @@ public:
 
 
   /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
+  static Pointer GetInstance(){};
 
 
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, ImageType);
-  void SetImage(ImagePointerType image);
+  void SetImage(ImagePointerType image){};
   
   /** ROI manipulation. */
-    void RemoveROI(unsigned int ROIId);
+  void RemoveROI(unsigned int ROIId){};
 
   /** SVM model manipulation */
 
   /** Update Output */
-  void OK();
+  void OK(){};
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
   
   /** Constructor */
-  SupervisedClassificationModel();
+  SupervisedClassificationModel(){};
   /** Destructor */
-  ~SupervisedClassificationModel();
+  ~SupervisedClassificationModel(){};
 
 
 private:
@@ -133,7 +133,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
-  virtual void Notify(ListenerBase * listener);
+  virtual void Notify(ListenerBase * listener){};
 
   /** Output changed */
   bool                                        m_OutputChanged;
