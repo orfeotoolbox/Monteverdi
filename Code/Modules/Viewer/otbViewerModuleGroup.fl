@@ -80,22 +80,22 @@ class ViewerModuleGroup {open
             callback {RGBSet();}
             tooltip {Switch the image viewer mode to RGB composition} xywh {265 47 184 24} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
           }
-          Fl_Input_Choice guiGrayscaleChannelChoice {
+          Fl_Spinner guiGrayscaleChannelChoice {
             label {Channel index} open
             tooltip {Select the band to view in grayscale mode} xywh {130 91 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
-          } {}
-          Fl_Input_Choice guiRedChannelChoice {
+          }
+          Fl_Spinner guiRedChannelChoice {
             label {Red channel} open
             tooltip {Select band for red channel in RGB composition} xywh {360 91 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-          } {}
-          Fl_Input_Choice guiGreenChannelChoice {
+          }
+          Fl_Spinner guiGreenChannelChoice {
             label {Green channel} open
             tooltip {Select band for green channel in RGB composition} xywh {360 126 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-          } {}
-          Fl_Input_Choice guiBlueChannelChoice {
+          }
+          Fl_Spinner guiBlueChannelChoice {
             label {Blue channel} open
             tooltip {Select band for blue channel in RGB composition} xywh {360 161 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
-          } {}
+          }
           Fl_Return_Button guiViewerSetupOk {
             label Ok
             callback {ViewerSetupOk();}
