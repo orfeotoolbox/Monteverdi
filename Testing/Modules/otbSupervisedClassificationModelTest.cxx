@@ -37,10 +37,10 @@ int otbSupervisedClassificationModelTest(int argc, char* argv[])
     
   std::string infname = std::string(argv[1]);
 
-  typedef float PixelType;
-  typedef unsigned short LabeledPixelType;
+  typedef float                                             PixelType;
+  typedef unsigned short                                    LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,2> ImageType;
+  typedef otb::VectorImage<PixelType,2>                     ImageType;
 
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -57,8 +57,8 @@ int otbSupervisedClassificationModelTest(int argc, char* argv[])
 
   std::string labeledfname = std::string(argv[2]);
   
-  typedef otb::Image<LabeledPixelType,2> LabeledImageType;
-  typedef otb::ImageFileReader<LabeledImageType> LabeledImageReaderType;
+  typedef otb::Image<LabeledPixelType,2>                    LabeledImageType;
+  typedef otb::ImageFileReader<LabeledImageType>            LabeledImageReaderType;
   LabeledImageReaderType::Pointer labeledReader = LabeledImageReaderType::New();
 
   labeledReader->SetFileName(labeledfname);
