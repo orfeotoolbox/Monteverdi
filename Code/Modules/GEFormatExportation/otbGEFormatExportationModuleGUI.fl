@@ -1,0 +1,104 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class GEFormatExportationModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window guiMainWindow {
+      label {Google Earth export data} open
+      xywh {393 142 490 520} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable size_range {490 520 490 520} visible
+    } {
+      Fl_Tabs {} {
+        label Informations open
+        xywh {0 15 510 510} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group {} {
+          label {Kmz Setup}
+          xywh {0 45 490 475} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          Fl_Button bCancel {
+            label Cancel
+            callback {this->Cancel();}
+            xywh {290 460 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Return_Button bOk {
+            label Save
+            callback {this->SaveDataSet();}
+            xywh {380 460 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Progress pBar {
+            xywh {10 405 450 26} box PLASTIC_DOWN_BOX selection_color 1
+          }
+          Fl_Group {} {
+            label {Output KMZ filename} open
+            xywh {10 88 450 59} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+          } {
+            Fl_File_Input vFilePath {
+              xywh {20 97 370 35} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+            }
+            Fl_Button bBrowse {
+              label {...}
+              callback {this->Browse();}
+              xywh {405 107 40 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            }
+          }
+          Fl_Group {} {
+            label {KMZ Parameters} open
+            xywh {10 282 450 55} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+          } {
+            Fl_Choice cTileSize {
+              label {Tile Size} open
+              xywh {95 297 90 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {}
+            Fl_Check_Button gExtended {
+              label {Use Extended KMZ}
+              tooltip {Uncheck if using GoogleEearth version less than 5.0} xywh {275 297 140 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 186 labelfont 1 labelsize 12 labelcolor 186
+            }
+          }
+          Fl_Progress pBarProd {
+            xywh {10 365 450 26} box PLASTIC_DOWN_BOX selection_color 1
+          }
+          Fl_Group {} {
+            label {Channels Parameters}
+            xywh {15 180 440 50} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186 align 5
+          } {
+            Fl_Choice cRedChannel {
+              label Red
+              callback {this->UpdateProductInformations();}
+              xywh {85 195 50 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+            } {}
+            Fl_Choice cGreenChannel {
+              label Green
+              callback {this->UpdateProductInformations();} open
+              xywh {215 195 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+            } {}
+            Fl_Choice cBlueChannel {
+              label Blue
+              callback {this->UpdateProductInformations();} open
+              xywh {340 195 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+            } {}
+          }
+        }
+      }
+    }
+  }
+  Function {SaveDataSet()} {open return_type {virtual void}
+  } {}
+  Function {Browse()} {open return_type {virtual void}
+  } {}
+  Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {~GEFormatExportationModuleGUI()} {open return_type virtual
+  } {}
+  Function {UpdateProductInformations()} {open return_type {virtual void}
+  } {}
+  Function {ShowClickedProductInformation()} {open return_type {virtual void}
+  } {}
+  Function {StoreAssociations()} {open selected return_type {virtual void}
+  } {}
+} 

@@ -70,6 +70,7 @@
 #include "otbOpticalCalibrationModule.h"
 #include "otbSarCalibrationModule.h"
 #include "otbCommandLineArgumentParser.h"
+#include "otbGEFormatExportationModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -135,6 +136,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
+  
+  model->RegisterModule<otb::GEFormatExportationModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
 
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
 
