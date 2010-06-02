@@ -27,6 +27,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbVectorData.h"
+#include "otbListSampleGenerator.h"
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
@@ -70,12 +71,11 @@ public:
   typedef otb::VectorData<PixelType, 2>                                                VectorDataType;
   typedef VectorDataType::Pointer                                                      VectorDataPointerType;
 
-  typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>    ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                                          ModelType;
+  typedef otb::ListSampleGenerator<ImageType, VectorDataType>                          ListSampleGeneratorType;
+  typedef ListSampleGeneratorType::Pointer                                             ListSampleGeneratorPointerType;
 
   typedef itk::VariableLengthVector<PixelType>                                         SampleType;
   typedef itk::Statistics::ListSample<SampleType>                                      ListSampleType;
-
   typedef SVMClassifier<ListSampleType,LabeledPixelType>                               ClassifierType;
   typedef itk::FixedArray<LabeledPixelType,1>                                          TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType>                              TrainingListSampleType;
@@ -137,6 +137,13 @@ private:
 
   /** Vector data for the ROIs */
   VectorDataPointerType                       m_VectorROIs;
+
+  /** The sample generator */
+  ListSampleGeneratorPointerType              m_SampleGenerator;
+
+  unsigned long int m_MaxTrainingSize;
+  unsigned long int m_MaxValidationSize;
+  unsigned long int m_ValidationTrainingRatio;
   
 };
 
