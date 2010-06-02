@@ -128,7 +128,6 @@ private:
   ImagePointerType                            m_InputImage;
   LabeledImagePointerType                     m_LabeledImage;
 
-  /** Lists of Samples */
   
 };
 
