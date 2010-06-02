@@ -19,6 +19,8 @@
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
 #include "otbSupervisedClassificationModel.h"
 
 
@@ -77,4 +79,23 @@ int otbSupervisedClassificationModelSetLabeledImageTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 
+}
+
+int otbSupervisedClassificationModelSetVectorDataTest(int argc, char* argv[])
+{
+  otb::SupervisedClassificationModel::Pointer spclModel = otb::SupervisedClassificationModel::New();
+  otb::SupervisedClassificationModel::Pointer model = spclModel.GetPointer();
+
+  std::string vectorfname = std::string(argv[1]);
+  
+  typedef otb::VectorData<float, 2>                 VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
+
+  VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
+  vectorReader->SetFileName(vectorfname);
+  vectorReader->Update();
+
+  spclModel->SetVectorROIs( vectorReader->GetOutput() );
+
+  return EXIT_SUCCESS;
 }

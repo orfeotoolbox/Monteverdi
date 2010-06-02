@@ -35,4 +35,5 @@ REGISTER_TEST(otbSarCalibrationModuleTest);
 REGISTER_TEST(otbSupervisedClassificationModelTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
+REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
 }

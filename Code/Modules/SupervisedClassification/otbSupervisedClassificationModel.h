@@ -26,6 +26,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbVectorData.h"
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
@@ -66,6 +67,9 @@ public:
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
   typedef LabeledImageType::Pointer                                                    LabeledImagePointerType;
 
+  typedef otb::VectorData<PixelType, 2>                                                VectorDataType;
+  typedef VectorDataType::Pointer                                                      VectorDataPointerType;
+
   typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>    ClassificationFilterType;
   typedef ClassificationFilterType::ModelType                                          ModelType;
 
@@ -95,7 +99,8 @@ public:
   void SetLabeledImage(LabeledImagePointerType image);
   
   /** ROI manipulation. */
-  void RemoveROI(unsigned int ROIId){};
+  itkGetConstObjectMacro(VectorROIs, VectorDataType);
+  void SetVectorROIs(VectorDataPointerType vectorData);
 
   /** SVM model manipulation */
 
@@ -118,6 +123,8 @@ private:
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
+  void GenerateSamples();
+
   /** Output changed */
   bool                                        m_OutputChanged;
 
@@ -128,6 +135,8 @@ private:
   ImagePointerType                            m_InputImage;
   LabeledImagePointerType                     m_LabeledImage;
 
+  /** Vector data for the ROIs */
+  VectorDataPointerType                       m_VectorROIs;
   
 };
 
