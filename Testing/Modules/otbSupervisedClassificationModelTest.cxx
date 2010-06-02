@@ -111,6 +111,8 @@ int otbSupervisedClassificationModelSetVectorDataTest(int argc, char* argv[])
 
   spclModel->SetVectorROIs( vectorReader->GetOutput() );
 
+  std::cout << "Number of classes = " << spclModel->GetNumberOfClasses() << std::endl;
+
   return EXIT_SUCCESS;
 }
 
