@@ -61,7 +61,7 @@ public:
   typedef enum { RANDOM, TRAINING, VALIDATION }                                        ROISelectionModeType;
 
   typedef float                                                                        PixelType;
-  typedef unsigned short                                                               LabeledPixelType;
+  typedef int                                                                          LabeledPixelType;
 
   typedef VectorImage<PixelType,2>                                                     ImageType;
   typedef ImageType::Pointer                                                           ImagePointerType;
@@ -79,7 +79,8 @@ public:
   typedef SVMClassifier<ListSampleType,LabeledPixelType>                               ClassifierType;
   typedef itk::FixedArray<LabeledPixelType,1>                                          TrainingSampleType;
   typedef itk::Statistics::ListSample<TrainingSampleType>                              TrainingListSampleType;
-  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>           EstimatorType;
+  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>           ModelEstimatorType;
+  typedef ModelEstimatorType::Pointer                                                  ModelEstimatorPointerType;
 
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
@@ -102,8 +103,13 @@ public:
   itkGetConstObjectMacro(VectorROIs, VectorDataType);
   void SetVectorROIs(VectorDataPointerType vectorData);
 
+  /** Train the classifier */
+  void Train();
+  
   /** SVM model manipulation */
-
+  itkGetMacro(NumberOfClasses,unsigned short);
+  itkSetMacro(CValue,float);
+  
   /** Update Output */
   void OK();
 
@@ -141,9 +147,15 @@ private:
   /** The sample generator */
   ListSampleGeneratorPointerType              m_SampleGenerator;
 
-  unsigned long int m_MaxTrainingSize;
-  unsigned long int m_MaxValidationSize;
-  unsigned long int m_ValidationTrainingRatio;
+  unsigned long int                           m_MaxTrainingSize;
+  unsigned long int                           m_MaxValidationSize;
+  unsigned long int                           m_ValidationTrainingRatio;
+
+  unsigned short                              m_NumberOfClasses;
+
+  /** The SVM model estimator */
+  ModelEstimatorPointerType                   m_ModelEstimator;
+  float                                       m_CValue;
   
 };
 

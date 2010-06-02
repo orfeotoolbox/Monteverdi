@@ -36,4 +36,5 @@ REGISTER_TEST(otbSupervisedClassificationModelTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
+REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
 }

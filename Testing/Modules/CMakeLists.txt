@@ -254,7 +254,13 @@ ${INPUTDATA}/ROI_QB_MUL_4_train.hd)
 
 ADD_TEST(moTvSupervisedClassificationModelSetVectorDataTest ${Modules_TESTS3}
 otbSupervisedClassificationModelSetVectorDataTest
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
+
+ADD_TEST(moTvSupervisedClassificationModelTrainTest ${Modules_TESTS3}
+otbSupervisedClassificationModelTrainTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
+
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
