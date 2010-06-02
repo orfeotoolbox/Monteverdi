@@ -246,10 +246,10 @@ ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTest)
 
 ADD_TEST(moTvSupervisedClassificationModelSetImageTest ${Modules_TESTS3}
-otbSupervisedClassificationModelTest ${INPUTDATA}/ROI_QB_MUL_4.tif)
+otbSupervisedClassificationModelSetImageTest ${INPUTDATA}/ROI_QB_MUL_4.tif)
 
 ADD_TEST(moTvSupervisedClassificationModelSetLabeledImageTest ${Modules_TESTS3}
-otbSupervisedClassificationModelTest ${INPUTDATA}/ROI_QB_MUL_4.tif ${INPUTDATA}/ROI_QB_MUL_4_train.hd)
+otbSupervisedClassificationModelSetLabeledImageTest ${INPUTDATA}/ROI_QB_MUL_4_train.hd)
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
