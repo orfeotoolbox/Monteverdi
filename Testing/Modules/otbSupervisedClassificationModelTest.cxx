@@ -55,6 +55,16 @@ int otbSupervisedClassificationModelTest(int argc, char* argv[])
     return EXIT_SUCCESS;
     }
 
+  std::string labeledfname = std::string(argv[2]);
+  
+  typedef otb::Image<LabeledPixelType,2> LabeledImageType;
+  typedef otb::ImageFileReader<LabeledImageType> LabeledImageReaderType;
+  LabeledImageReaderType::Pointer labeledReader = LabeledImageReaderType::New();
+
+  labeledReader->SetFileName(labeledfname);
+  labeledReader->UpdateOutputInformation();
+
+  spclModel->SetLabeledImage( labeledReader->GetOutput() );
   
 
   return EXIT_SUCCESS;

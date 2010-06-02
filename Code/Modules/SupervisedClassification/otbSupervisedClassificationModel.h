@@ -64,6 +64,7 @@ public:
   typedef VectorImage<PixelType,2>                                                     ImageType;
   typedef ImageType::Pointer                                                           ImagePointerType;
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
+  typedef LabeledImageType::Pointer                                                    LabeledImagePointerType;
 
   typedef SVMImageClassificationFilter<ImageType,LabeledImageType,LabeledImageType>    ClassificationFilterType;
   typedef ClassificationFilterType::ModelType                                          ModelType;
@@ -81,13 +82,17 @@ public:
   typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
 
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance(){};
+  /** Get the unique instance of the model */
+  static Pointer GetInstance();
 
 
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, ImageType);
-  void SetImage(ImagePointerType image){};
+  void SetImage(ImagePointerType image);
+
+  /** Label Image Pointer */
+  itkGetConstObjectMacro(LabeledImage, LabeledImageType);
+  void SetLabeledImage(LabeledImagePointerType image);
   
   /** ROI manipulation. */
   void RemoveROI(unsigned int ROIId){};
@@ -95,15 +100,15 @@ public:
   /** SVM model manipulation */
 
   /** Update Output */
-  void OK(){};
+  void OK();
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
   
   /** Constructor */
-  SupervisedClassificationModel(){};
+  SupervisedClassificationModel();
   /** Destructor */
-  ~SupervisedClassificationModel(){};
+  ~SupervisedClassificationModel();
 
 
 private:
@@ -111,7 +116,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
-  virtual void Notify(ListenerBase * listener){};
+  virtual void Notify(ListenerBase * listener);
 
   /** Output changed */
   bool                                        m_OutputChanged;
@@ -121,6 +126,7 @@ private:
 
   /** Input Images */
   ImagePointerType                            m_InputImage;
+  LabeledImagePointerType                     m_LabeledImage;
 
   /** Lists of Samples */
   
