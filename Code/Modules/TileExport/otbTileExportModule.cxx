@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGEFormatExportationModule_cxx
-#define __otbGEFormatExportationModule_cxx
+#ifndef __otbTileExportModule_cxx
+#define __otbTileExportModule_cxx
 
-#include "otbGEFormatExportationModule.h"
+#include "otbTileExportModule.h"
 #include "itksys/SystemTools.hxx"
 #include "base/ossimDirectory.h"
 #include <FLU/Flu_File_Chooser.h>
@@ -30,7 +30,7 @@ namespace otb
 /**
  * Constructor
  */
-GEFormatExportationModule::GEFormatExportationModule():  m_HasLegend(false), m_Cancel(false),
+TileExportModule::TileExportModule():  m_HasLegend(false), m_Cancel(false),
 							 m_CurrentProduct(0),m_HasLogo(false),
 							 m_RegionOfInterestKmlGenerated(false),
 							 m_MaxDepth(0)
@@ -47,13 +47,13 @@ GEFormatExportationModule::GEFormatExportationModule():  m_HasLegend(false), m_C
 /**
  * Destructor
  */
-GEFormatExportationModule::~GEFormatExportationModule()
+TileExportModule::~TileExportModule()
 {}
 
 /**
  * PrintSelf method
  */
-void GEFormatExportationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void TileExportModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os,indent);
@@ -61,7 +61,7 @@ void GEFormatExportationModule::PrintSelf(std::ostream& os, itk::Indent indent) 
 
 
 /** The custom run command */
-void GEFormatExportationModule::Run()
+void TileExportModule::Run()
 {
   // Get & rescale intensity of the input image
    m_VectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
@@ -154,7 +154,7 @@ void GEFormatExportationModule::Run()
 /** 
  * Browse Callback
  */
-void GEFormatExportationModule::Browse()
+void TileExportModule::Browse()
 {
   const char * filename = NULL;
 
@@ -173,7 +173,7 @@ void GEFormatExportationModule::Browse()
 /**
  * OK CallBack
  */
-void GEFormatExportationModule::SaveDataSet()
+void TileExportModule::SaveDataSet()
 {
   std::string filepath = vFilePath->value();
   if(!filepath.empty())
@@ -340,14 +340,14 @@ void GEFormatExportationModule::SaveDataSet()
 /**
  * Cancel callback
  */
-void GEFormatExportationModule::Cancel()
+void TileExportModule::Cancel()
 {
   m_Cancel = true;
   this->Hide();
 }
 
  
-void GEFormatExportationModule::Tiling(unsigned int curIdx)
+void TileExportModule::Tiling(unsigned int curIdx)
 {
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
   
@@ -703,7 +703,7 @@ void GEFormatExportationModule::Tiling(unsigned int curIdx)
  * 
  */
 void
-GEFormatExportationModule::RegionOfInterestProcess()
+TileExportModule::RegionOfInterestProcess()
 {
   // Add the region of interest kml once
   // Add the region of interest kml at the end
@@ -730,7 +730,7 @@ GEFormatExportationModule::RegionOfInterestProcess()
 /**
  */
 std::string
-GEFormatExportationModule::GetCuttenFileName(std::string description, unsigned int idx)
+TileExportModule::GetCuttenFileName(std::string description, unsigned int idx)
 {
 //  size_t found       = description.find_first_of(":");
 //  size_t found2      = description.find_first_of(".");
@@ -762,7 +762,7 @@ GEFormatExportationModule::GetCuttenFileName(std::string description, unsigned i
 * 
 */
 int
-GEFormatExportationModule::AddFileToKMZ(std::ostringstream & absolutePath ,std::ostringstream & kmz_in_path)
+TileExportModule::AddFileToKMZ(std::ostringstream & absolutePath ,std::ostringstream & kmz_in_path)
 {
   std::string  absolute = absolutePath.str();
   std::string  relative = kmz_in_path.str();
@@ -787,7 +787,7 @@ GEFormatExportationModule::AddFileToKMZ(std::ostringstream & absolutePath ,std::
  * needed. See the method Add NetworkLinkToRootKML.
  */
 void 
-GEFormatExportationModule::GenerateKMLRoot(std::string title, double north, double south, double east, double west, bool extended)
+TileExportModule::GenerateKMLRoot(std::string title, double north, double south, double east, double west, bool extended)
 {
   // Give a name to the root file
   std::ostringstream kmlname;
@@ -816,7 +816,7 @@ GEFormatExportationModule::GenerateKMLRoot(std::string title, double north, doub
  * Close the root kml 
  */
 void
-GEFormatExportationModule::
+TileExportModule::
 CloseRootKML()
 {
   if (m_HasLogo)
@@ -855,7 +855,7 @@ CloseRootKML()
  *
  */
 void
-GEFormatExportationModule::
+TileExportModule::
 AddNetworkLinkToRootKML(double north, double south, double east, double west, std::string directory, bool addRegion, unsigned int pos)
 {
   m_RootKmlFile << "\t\t<Document>" << std::endl;
@@ -958,7 +958,7 @@ AddNetworkLinkToRootKML(double north, double south, double east, double west, st
  *
  */
 void
-GEFormatExportationModule::
+TileExportModule::
 AddLegendToRootKml(double north, double south, double east, double west, unsigned int pos)
 {
   
@@ -984,7 +984,7 @@ AddLegendToRootKml(double north, double south, double east, double west, unsigne
 }
 
 void
-GEFormatExportationModule::
+TileExportModule::
 GenerateBoundingKML(double north, double south, double east, double west)
 {
   std::ostringstream kmlname;
@@ -1026,7 +1026,7 @@ GenerateBoundingKML(double north, double south, double east, double west)
 
 
 void
-GEFormatExportationModule::
+TileExportModule::
 GenerateKML(std::string pathname, int depth, int x, int y, double north, double south, double east, double west)
 {
   std::ostringstream kmlname;
@@ -1076,7 +1076,7 @@ GenerateKML(std::string pathname, int depth, int x, int y, double north, double 
 }
                                     
 void
-GEFormatExportationModule::
+TileExportModule::
 GenerateKMLWithLink(std::string pathname,
                     int depth, int x, int y, int tileStartX, int tileStartY,
                     double north, double south, double east, double west, double centerLong, double centerLat)
@@ -1262,7 +1262,7 @@ GenerateKMLWithLink(std::string pathname,
 }
 
 void
-GEFormatExportationModule::
+TileExportModule::
 GenerateKMLExtended(std::string pathname, int depth, int x, int y,
                     OutputPointType lowerLeft, OutputPointType lowerRight,
                     OutputPointType upperRight, OutputPointType upperLeft)
@@ -1315,7 +1315,7 @@ GenerateKMLExtended(std::string pathname, int depth, int x, int y,
 }
                                     
 void
-GEFormatExportationModule::
+TileExportModule::
 GenerateKMLExtendedWithLink(std::string pathname,
                             int depth, int x, int y, int tileStartX, int tileStartY,
                             OutputPointType lowerLeft, OutputPointType lowerRight,
@@ -1504,7 +1504,7 @@ GenerateKMLExtendedWithLink(std::string pathname,
 /**
  */
 void
-GEFormatExportationModule::RootKmlProcess(double north, double south, double east, double west)
+TileExportModule::RootKmlProcess(double north, double south, double east, double west)
 {
   bool extended = gExtended->value();
   this->GenerateKMLRoot(m_FileName, north, south, east, west,extended);
@@ -1591,7 +1591,7 @@ GEFormatExportationModule::RootKmlProcess(double north, double south, double eas
 
 /** Add the legend to the product*/
 void 
-GEFormatExportationModule::AddCurrentProductLegends(unsigned int curProd)
+TileExportModule::AddCurrentProductLegends(unsigned int curProd)
 {
   for(unsigned int i=0; i<m_ProductVector[curProd].m_AssociatedLegends.size();i++)
     {
@@ -1631,7 +1631,7 @@ GEFormatExportationModule::AddCurrentProductLegends(unsigned int curProd)
   */
 
 void 
-GEFormatExportationModule::BoundingBoxKmlProcess(double north,double south,double  east,double west)
+TileExportModule::BoundingBoxKmlProcess(double north,double south,double  east,double west)
 {
   // Create the bounding kml
   this->GenerateBoundingKML(north, south,  east, west);
@@ -1657,7 +1657,7 @@ GEFormatExportationModule::BoundingBoxKmlProcess(double north,double south,doubl
   * Change product name
   */
 void 
-GEFormatExportationModule::UpdateProductInformations()
+TileExportModule::UpdateProductInformations()
 {
   // Set the composition values
   if(this->CheckAndCorrectComposition(0))
@@ -1675,7 +1675,7 @@ GEFormatExportationModule::UpdateProductInformations()
   * Informations
   */
 bool 
-GEFormatExportationModule::
+TileExportModule::
 IsProductHaveMetaData(unsigned int indexClicked)
 {
   // Update Output Information for the product tested
@@ -1690,7 +1690,7 @@ IsProductHaveMetaData(unsigned int indexClicked)
  * Check that the composition is well done
  */
 bool
-GEFormatExportationModule::CheckAndCorrectComposition(unsigned int clickedIndex)
+TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
   unsigned int nbComponent = this->GetInputData<FloatingVectorImageType>("InputImage",clickedIndex)->GetNumberOfComponentsPerPixel();
 
@@ -1715,7 +1715,7 @@ GEFormatExportationModule::CheckAndCorrectComposition(unsigned int clickedIndex)
  * Check that the composition is well done
  */
 void
-GEFormatExportationModule::StoreAssociations()
+TileExportModule::StoreAssociations()
 {
   unsigned int nbLegends = this->GetNumberOfInputDataByKey("InputLegend");
   

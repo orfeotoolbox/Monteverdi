@@ -15,11 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbGEFormatExportationModule_h
-#define __otbGEFormatExportationModule_h
+#ifndef __otbTileExportModule_h
+#define __otbTileExportModule_h
 
 #include "otbModule.h"
-#include "otbGEFormatExportationModuleGUI.h"
+#include "otbTileExportModuleGUI.h"
 
 // include the OTB/ITK elements
 #include "otbVectorImage.h"
@@ -71,18 +71,18 @@ public:
 };
 
 
-/** \class GEFormatExportationModule
+/** \class TileExportModule
  *  \brief
  *
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT GEFormatExportationModule
-  : public Module, public GEFormatExportationModuleGUI
+class ITK_EXPORT TileExportModule 
+: public Module, public TileExportModuleGUI
 {
 public:
   /** Standard class typedefs */
-  typedef GEFormatExportationModule     Self;
+  typedef TileExportModule     Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -129,14 +129,14 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(GEFormatExportationModule,Module);
+  itkTypeMacro(TileExportModule,Module);
   
  
 protected:
   /** Constructor */
-  GEFormatExportationModule();
+  TileExportModule();
   /** Destructor */
-  virtual ~GEFormatExportationModule();
+  virtual ~TileExportModule();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -189,7 +189,7 @@ protected:
   virtual void StoreAssociations();
 
 private:
-  GEFormatExportationModule(const Self&); //purposely not implemented
+  TileExportModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   // Tiling

@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class GEFormatExportationModuleGUI {open
+class TileExportModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
@@ -93,12 +93,12 @@ class GEFormatExportationModuleGUI {open
   } {}
   Function {Cancel()} {open return_type {virtual void}
   } {}
-  Function {~GEFormatExportationModuleGUI()} {open return_type virtual
+  Function {~TileExportModuleGUI()} {open selected return_type virtual
   } {}
   Function {UpdateProductInformations()} {open return_type {virtual void}
   } {}
   Function {ShowClickedProductInformation()} {open return_type {virtual void}
   } {}
-  Function {StoreAssociations()} {open selected return_type {virtual void}
+  Function {StoreAssociations()} {open return_type {virtual void}
   } {}
 } 
