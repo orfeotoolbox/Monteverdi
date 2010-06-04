@@ -56,15 +56,24 @@ CachingModule::~CachingModule()
 {
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
-  //ossimFilename ofnameNoExtension = ofname.fileNoExtension();
 
-// try to remove the file
+  // try to remove the file
   if(ofname.exists() && m_EraseFile)
     {
-    otbGenericMsgDebugMacro( <<"Cleaning up all cache files with base "<<ofname );
-    //ofnameNoExtension.wildcardRemove();
+    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofname );
     ofname.wildcardRemove();
     }
+
+  // if a .geom file exists, delete it also
+  ossimFilename ofnameGeom = ofname.noExtension().setExtension(".geom");
+
+  // try to remove the file
+  if(ofnameGeom.exists() && m_EraseFile)
+    {
+    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofnameGeom );
+    ofnameGeom.wildcardRemove();
+    }
+
 }
 
 /** PrintSelf method */
@@ -200,6 +209,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
+      charVWriter->WriteGeomFileOn();
       charVWriter->SetInput(charVectorImage);
       charVWriter->SetFileName(m_FilePath);
       m_WritingProcess = charVWriter;
@@ -222,6 +232,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
+      fPVWriter->WriteGeomFileOn();
       fPVWriter->SetInput(vectorImage);
       fPVWriter->SetFileName(m_FilePath);
       m_WritingProcess = fPVWriter;
@@ -243,6 +254,7 @@ void CachingModule::ThreadedRun()
       {
       // Writing
       FPWriterType::Pointer fPWriter = FPWriterType::New();
+      fPWriter->WriteGeomFileOn();
       fPWriter->SetInput(singleImage);
       fPWriter->SetFileName(m_FilePath);
       m_WritingProcess = fPWriter;
@@ -329,6 +341,5 @@ void CachingModule::SendErrorCallback(void * data)
     MsgReporter::GetInstance()->SendError(error->c_str());
   }
 }
+
 } // End namespace otb
-
-

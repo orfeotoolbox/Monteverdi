@@ -242,6 +242,25 @@ ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.co
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(moTvSupervisedClassificationModelTest ${Modules_TESTS3}
+otbSupervisedClassificationModelTest)
+
+ADD_TEST(moTvSupervisedClassificationModelSetImageTest ${Modules_TESTS3}
+otbSupervisedClassificationModelSetImageTest ${INPUTDATA}/ROI_QB_MUL_4.tif)
+
+ADD_TEST(moTvSupervisedClassificationModelSetLabeledImageTest ${Modules_TESTS3}
+otbSupervisedClassificationModelSetLabeledImageTest
+${INPUTDATA}/ROI_QB_MUL_4_train.hd)
+
+ADD_TEST(moTvSupervisedClassificationModelSetVectorDataTest ${Modules_TESTS3}
+otbSupervisedClassificationModelSetVectorDataTest
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
+
+ADD_TEST(moTvSupervisedClassificationModelTrainTest ${Modules_TESTS3}
+otbSupervisedClassificationModelTrainTest
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
+
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -256,6 +275,7 @@ IF(OTB_USE_CURL)
   15
   )
 ENDIF(OTB_USE_CURL)
+
 
 
 
@@ -293,6 +313,7 @@ otbThresholdModuleTestNew.cxx
 otbThresholdModuleTest.cxx
 otbOpticalCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
+otbSupervisedClassificationModelTest.cxx
 )
 
 IF(OTB_USE_CURL)

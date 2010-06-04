@@ -228,7 +228,7 @@ void ViewerModule::Run()
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
     {
-      MsgReporter::GetInstance()->SendError("The image pointer is null, there is nothing to display. You probably forget to set the image.");
+      MsgReporter::GetInstance()->SendError("The image pointer is null, there is nothing to display. You probably forgot to set the image.");
       this->Quit();
       return;
       //itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
@@ -289,7 +289,7 @@ void ViewerModule::Run()
     {
       itk::OStringStream oss;
       oss.str("");
-      oss << "Problem accurs while loading input image. The following error was return:\n";
+      oss << "Problem occured while loading input image. The following error was returned:\n";
       oss << err.GetDescription();
       MsgReporter::GetInstance()->SendError(oss.str().c_str());
       this->Quit();
@@ -701,43 +701,22 @@ void ViewerModule::UpdateDEMSettings()
    //Get the number of components per pixel
    unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
 
-   itk::OStringStream oss;
-   oss.str("");
+   guiGrayscaleChannelChoice->range(1, nbComponent);
+   guiRedChannelChoice->range(1, nbComponent);
+   guiGreenChannelChoice->range(1, nbComponent);
+   guiBlueChannelChoice->range(1, nbComponent);
 
-   //Clear all the choices
-   guiGrayscaleChannelChoice->clear();
-   guiRedChannelChoice->clear();
-   guiGreenChannelChoice->clear();
-   guiBlueChannelChoice->clear();
- 
-   for (unsigned int i = 0;i<nbComponent;++i)
-   {
-     oss.str("");
-     oss<<i+1;
-     guiGrayscaleChannelChoice->add(oss.str().c_str());
-     guiRedChannelChoice->add(oss.str().c_str());
-     guiGreenChannelChoice->add(oss.str().c_str());
-     guiBlueChannelChoice->add(oss.str().c_str());
-     guiGrayscaleChannelChoice->add(oss.str().c_str());
-   }
    guiViewerSetupWindow->redraw();
 
-   // If nbComponets > 3 : handle like RGB anyway
-    unsigned int castNbComponent = nbComponent;
-   if(nbComponent > 3 )
-     castNbComponent = 3;
-
-
-   switch(castNbComponent){
-   case 1 :
+   if (nbComponent == 1)
+     {
      this->GrayScaleSet();
-     break;
-   case 3 :
+     }
+   else
+     {
      this->RGBSet();
-     break;
-   default :
-     break;
-   }
+     }
+
  }
 
 
@@ -764,9 +743,9 @@ void ViewerModule::UpdateDEMSettings()
      ++i;
    }
 
-   guiRedChannelChoice->value(std::min(channels[0],nbComponent-1));
-   guiGreenChannelChoice->value(std::min(channels[1],nbComponent-1));
-   guiBlueChannelChoice->value(std::min(channels[2],nbComponent-1));
+   guiRedChannelChoice->value(std::min(channels[0] + 1,nbComponent));
+   guiGreenChannelChoice->value(std::min(channels[1] + 1,nbComponent));
+   guiBlueChannelChoice->value(std::min(channels[2] + 1,nbComponent));
  }
 
 /**
@@ -790,7 +769,7 @@ void ViewerModule::GrayScaleSet()
     {
       channels.push_back(0);
     }
-  guiGrayscaleChannelChoice->value(std::min(channels[0],nbComponent-1));
+  guiGrayscaleChannelChoice->value(std::min(channels[0] + 1,nbComponent));
 }
 
 
@@ -801,16 +780,17 @@ void ViewerModule::ViewerSetupOk()
  {
    if (guiViewerSetupColorMode->value())
      {
-       this->UpdateRGBChannelOrder(atoi(guiRedChannelChoice->value())-1,
-                               atoi(guiGreenChannelChoice->value())-1,
-                               atoi(guiBlueChannelChoice->value())-1);
+     int redChoice = static_cast<int>(guiRedChannelChoice->value() - 1);
+     int greenChoice = static_cast<int>(guiGreenChannelChoice->value() - 1);
+     int blueChoice = static_cast<int>(guiBlueChannelChoice->value() - 1);
+     this->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice);
      }
    else if (guiViewerSetupGrayscaleMode->value())
      {
-      this->UpdateGrayScaleChannelOrder(atoi(guiGrayscaleChannelChoice->value())-1);
+     int grayChoice = static_cast<int>(guiGrayscaleChannelChoice->value() - 1);
+     this->UpdateGrayScaleChannelOrder(grayChoice);
      }
  
-
    // Refresh widgets
    this->RedrawWidget();
 
