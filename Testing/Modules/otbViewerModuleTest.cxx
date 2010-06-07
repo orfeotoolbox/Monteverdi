@@ -37,13 +37,12 @@ int otbViewerModuleTest(int argc, char* argv[])
   bool  run = atoi(argv[2]);
 
 
-  typedef otb::VectorImage<double,2>          ImageType;
+  typedef otb::ViewerModule::ImageType        ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  typedef otb::VectorData<double>                    VectorDataType;
+  typedef otb::ViewerModule::VectorDataType   VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType>  VReaderType;
-
 
   // Image reader
   ReaderType::Pointer reader = ReaderType::New();

@@ -22,7 +22,7 @@ void MeanShiftModuleModel::Notify(ListenerBase * listener)
   listener->Notify();
 }
 
-MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(), m_MeanShift(), m_BlendingFunction()
+MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_MeanShift(), m_BlendingFunction()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_MeanShift = MSFilterType::New();
@@ -43,59 +43,10 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_Reader(
 }
 
 MeanShiftModuleModel
-::~MeanShiftModuleModel() {}
+::~MeanShiftModuleModel()
+{
+}
 
-
-// void
-// MeanShiftModuleModel
-// ::OpenImage( const char * filename)
-// {
-//   m_Reader->SetFileName(filename);
-//   m_Reader->UpdateOutputInformation();
-//   m_MeanShift->SetInput(m_Reader->GetOutput());
-
-//   m_OutputFilteredImage = m_MeanShift->GetOutput();
-//   m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
-//   m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
-//   m_OutputBoundariesImage =  m_MeanShift->GetClusterBoundariesOutput();
-
-//   // Generate the layer
-//   m_ImageGenerator->SetImage(m_Reader->GetOutput());
-//   m_ImageGenerator->GenerateQuicklookOn();
-//   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
-//   m_ImageGenerator->GenerateLayer();
-
-//   m_Channels.clear();
-//   if(m_Reader->GetOutput()->GetNumberOfComponentsPerPixel()==3)
-//     {
-//       m_Channels.push_back(0);
-//       m_Channels.push_back(1);
-//       m_Channels.push_back(2);
-//     }
-//   else
-//     {
-//       m_Channels.push_back(2);
-//       m_Channels.push_back(1);
-//       m_Channels.push_back(0);
-//     }
-
-//   m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
-
-  
-  
-//   m_ImageGenerator->GetLayer()->SetName("Image");
-
-//   // Clear previous layers
-//   m_VisualizationModel->ClearLayers();
-
-//   // Add the layer to the models
-//   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
-
-//   m_VisualizationModel->Update();
-
-//   this->NotifyAll("OpenImage");
-//   m_IsImageReady = true;
-// }
 
 
 void

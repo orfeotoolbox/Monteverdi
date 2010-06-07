@@ -69,14 +69,16 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef Image<std::complex<double>,2>                                        ComplexImageType;
-  typedef Image<double,2>                                                      FloatingImageType;
+  typedef TypeManager::Floating_Point_Precision      FloatingPrecision;
+  typedef TypeManager::Floating_Point_Complex_Image  ComplexImageType;
+  typedef TypeManager::Floating_Point_Image          FloatingImageType;
   
   typedef itk::ComplexToModulusImageFilter<ComplexImageType,FloatingImageType> ModulusFilterType;
   typedef itk::SquareImageFilter<FloatingImageType,FloatingImageType>          SquareFilterType;
-  typedef Functor::Log10Functor<double,double>                                 LogFunctorType;
+  typedef Functor::Log10Functor<FloatingPrecision,FloatingPrecision>           LogFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingImageType,
-                                   FloatingImageType,LogFunctorType>        LogFilterType;
+                                       FloatingImageType,
+                                       LogFunctorType>                         LogFilterType;
 
 protected:
   /** Constructor */

@@ -52,9 +52,8 @@ public:
   itkTypeMacro(PanSharpeningModule,Module);
 
   /** Data typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Floating_Point_Image       FloatingImageType;
 
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
   <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;

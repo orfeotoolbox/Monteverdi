@@ -57,15 +57,16 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
 
   /** MVC typedefs */
   typedef otb::GCPToSensorModelController ControllerType;
   typedef otb::GCPToSensorModelModel      ModelType;
   typedef otb::GCPToSensorModelView       ViewType;
 
- itkGetObjectMacro(View,ViewType);
- itkGetObjectMacro(Controller,ControllerType);
+  typedef ModelType::VectorImageType      FloatingVectorImageType;
+
+  itkGetObjectMacro(View,ViewType);
+  itkGetObjectMacro(Controller,ControllerType);
 
 protected:
   /** Constructor */

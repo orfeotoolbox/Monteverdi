@@ -5,3 +5,5 @@
 #define Monteverdi_VERSION_STRING "@Monteverdi_VERSION_STRING@"
 
 #define Monteverdi_SOURCE_DIR "@Monteverdi_SOURCE_DIR@"
+
+#define Monteverdi_FLOATING_TYPE @Monteverdi_FLOATING_TYPE@

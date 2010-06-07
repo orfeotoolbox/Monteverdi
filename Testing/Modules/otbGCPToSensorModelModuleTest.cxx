@@ -36,9 +36,9 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::VectorImage<double,2>      ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::GCPToSensorModelModule::FloatingVectorImageType  ImageType;
+  typedef otb::ImageFileReader<ImageType>                       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                       WriterType;
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();

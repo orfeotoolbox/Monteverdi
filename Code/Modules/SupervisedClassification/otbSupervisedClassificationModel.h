@@ -23,6 +23,7 @@
 #include <utility>
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbTypeManager.h"
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -60,7 +61,7 @@ public:
 
   typedef enum { RANDOM, TRAINING, VALIDATION }                                        ROISelectionModeType;
 
-  typedef float                                                                        PixelType;
+  typedef TypeManager::Floating_Point_Precision                                        PixelType;
   typedef int                                                                          LabeledPixelType;
 
   typedef VectorImage<PixelType,2>                                                     ImageType;

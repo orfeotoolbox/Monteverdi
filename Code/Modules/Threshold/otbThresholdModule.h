@@ -69,9 +69,8 @@ public:
   /** Type macro */
   itkTypeMacro(ThresholdModule,Module);
 
-  typedef double                                         PrecisionType;
-  typedef unsigned char                                  LabelType;
-  typedef Image<PrecisionType,2>                         ImageType;
+  typedef TypeManager::Floating_Point_Precision          PrecisionType;
+  typedef TypeManager::Floating_Point_Image              ImageType;
   
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char>                  RGBPixelType;

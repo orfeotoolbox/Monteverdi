@@ -18,7 +18,6 @@
 #ifndef __otbOpticalCalibration_h
 #define __otbOpticalCalibration_h
 
-//#include "otbEventsListener.h"
 
 // include the base class
 #include "otbModule.h"
@@ -61,25 +60,22 @@ public:
   itkTypeMacro(OpticalCalibrationModule,Module);
 
   /** Data typedefs */
-  typedef VectorImage<double,2>   ImageType;
+  typedef TypeManager::Floating_Point_VectorImage ImageType;
 
   /** Filters typedef */
-  typedef ImageToLuminanceImageFilter<ImageType,ImageType>                ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::Pointer                        ImageToLuminanceImageFilterPointerType;
-  typedef LuminanceToReflectanceImageFilter<ImageType,ImageType>          LuminanceToReflectanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilterType::Pointer                      LuminanceToReflectanceImageFilterPointerType;
-  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
-  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer         ReflectanceToSurfaceReflectanceImageFilterPointerType;
+  typedef ImageToLuminanceImageFilter<ImageType,ImageType>                             ImageToLuminanceImageFilterType;
+  typedef ImageToLuminanceImageFilterType::Pointer                                     ImageToLuminanceImageFilterPointerType;
+  typedef LuminanceToReflectanceImageFilter<ImageType,ImageType>                       LuminanceToReflectanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilterType::Pointer                               LuminanceToReflectanceImageFilterPointerType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType>              ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer                      ReflectanceToSurfaceReflectanceImageFilterPointerType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::CoefVectorType               CoefVectorType;
   typedef AtmosphericCorrectionParameters::AerosolModelType                            AerosolModelType;
-
-  typedef DifferenceImageFilter<ImageType, ImageType>      DifferenceImageFilterType;
-  typedef DifferenceImageFilterType::Pointer               DifferenceImageFilterPointerType;
-
-  typedef MultiplyByScalarImageFilter<ImageType,ImageType> MultiplyByScalarImageFilterType;
-  typedef MultiplyByScalarImageFilterType::Pointer         MultiplyByScalarImageFilterPointerType;
-
+  typedef DifferenceImageFilter<ImageType, ImageType>                                  DifferenceImageFilterType;
+  typedef DifferenceImageFilterType::Pointer                                           DifferenceImageFilterPointerType;
+  typedef MultiplyByScalarImageFilter<ImageType,ImageType>                             MultiplyByScalarImageFilterType;
+  typedef MultiplyByScalarImageFilterType::Pointer                                     MultiplyByScalarImageFilterPointerType;
 
   itkGetObjectMacro(DifferenceFilter, DifferenceImageFilterType);
 

@@ -36,7 +36,7 @@ int otbVectorizationModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::VectorImage<double,2>      ImageType;
+  typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 

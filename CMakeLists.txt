@@ -24,6 +24,9 @@ SET(Monteverdi_VERSION_PATCH "1")
 # enough to distinguish available features of the toolkit.
 SET(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
 
+
+SET(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)" )
+
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
 IF(WIN32)

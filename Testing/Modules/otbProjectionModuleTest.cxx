@@ -34,10 +34,9 @@ int otbProjectionModuleTest(int argc, char* argv[])
   bool  run = atoi(argv[2]);
 
 
-  typedef otb::VectorImage<double,2>          ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
-
+  typedef otb::ProjectionModule::InputImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
   // Image reader
   ReaderType::Pointer reader = ReaderType::New();

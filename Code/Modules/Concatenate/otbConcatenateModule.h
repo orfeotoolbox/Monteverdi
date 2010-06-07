@@ -54,10 +54,10 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image                             ImageType;
-  typedef TypeManager::Floating_Point_VectorImage                       VectorImageType;
+  typedef TypeManager::Floating_Point_Image                              ImageType;
+  typedef TypeManager::Floating_Point_VectorImage                        VectorImageType;
   
-  typedef ImageList< ImageType >                                        ImageListType;
+  typedef ImageList< ImageType >                                         ImageListType;
   typedef ImageListToVectorImageFilter< ImageListType, VectorImageType > ImageListToVectorImageFilterType;
   
 protected:

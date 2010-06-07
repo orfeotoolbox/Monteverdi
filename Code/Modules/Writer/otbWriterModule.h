@@ -56,13 +56,20 @@ public:
 
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>                    FloatingVectorImageType;
-  typedef VectorImage<unsigned char,2>             FloatingFloatVectorImageType;
-  typedef VectorImage<unsigned char,2>             CharVectorImageType;
-  typedef Image<double,2>                          FloatingImageType;
-  typedef Image<unsigned short,2>                  UnsignedShortImageType;
-  typedef VectorData<double>                       VectorType;
-  typedef VectorData<double,2,short unsigned int>  LabeledVectorType;
+  typedef TypeManager::Floating_Point_Precision    FloatingPrecision;
+
+  // Single images
+  typedef TypeManager::Labeled_Short_Image         UnsignedShortImageType;
+  typedef TypeManager::Floating_Point_Image        FloatingImageType;
+
+  //Vector Image
+  typedef TypeManager::Floating_Point_VectorImage  FloatingVectorImageType;
+  typedef TypeManager::Floating_Point_VectorImage  FloatingFloatVectorImageType;
+  typedef TypeManager::Labeled_Char_VectorImage    CharVectorImageType;
+
+  typedef TypeManager::Vector_Data                 VectorType;
+  typedef TypeManager::Labeled_Vector_Data         LabeledVectorType;
+
   // Casters double ->float
   typedef itk::CastImageFilter<FloatingVectorImageType, FloatingFloatVectorImageType> DoubleToFloatCasterType;
   typedef ImageToVectorImageCastFilter<FloatingImageType, FloatingFloatVectorImageType> ImageDoubleToVImageFloatCasterType;

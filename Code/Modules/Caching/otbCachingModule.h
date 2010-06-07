@@ -56,9 +56,9 @@ public:
 
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef VectorImage<unsigned char,2>  CharVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
+  typedef TypeManager::Floating_Point_Image          FloatingImageType;
+  typedef TypeManager::Floating_Point_VectorImage    FloatingVectorImageType;
+  typedef TypeManager::Labeled_Char_VectorImage      CharVectorImageType;
 
    /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;

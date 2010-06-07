@@ -38,17 +38,14 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
   otb::Module::Pointer module = pointModule.GetPointer();
   
   // Put in the tests
-  typedef otb::Image<double,2>                   ImageType;
+  typedef otb::SarCalibrationModule::ImageType          ImageType;
+  typedef otb::SarCalibrationModule::ComplexImageType   ComplexImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::Image<std::complex<double>,2>     ComplexImageType;
   typedef otb::ImageFileReader<ComplexImageType> ComplexReaderType;
  
-
-
   //reader
   ReaderType::Pointer        reader    = ReaderType::New();
   ComplexReaderType::Pointer cplxReader = ComplexReaderType::New();
-
 
   otb::DataObjectWrapper     wrapperIn;
   if(!withComplex)
