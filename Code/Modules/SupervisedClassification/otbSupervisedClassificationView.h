@@ -63,6 +63,9 @@ public:
   virtual void Learn() {};
   virtual void Validate() {};
   virtual void HideAll();
+  virtual void Show();
+
+  void SetModel(SupervisedClassificationModel* model);
 
 protected:
   /** Constructor */
@@ -78,6 +81,9 @@ private:
 
   /** Pointer to the controller */
   SupervisedClassificationControllerInterface::Pointer  m_Controller;
+
+  /** Pointer to the model */
+  SupervisedClassificationModel::Pointer                m_Model;//FIXME why not obtained when needed from the controller?
 
 };
 } //end namespace otb
