@@ -16,18 +16,42 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-#include <iostream>
-#include "otbTestMain.h"
+#include "otbSupervisedClassificationView.h"
 
-void RegisterTests()
+namespace otb
 {
-#ifdef OTB_USE_CURL
-  REGISTER_TEST(otbTileMapImportModuleTest);
-#endif
-  REGISTER_TEST(otbVectorizationModuleTest);
+
+void
+SupervisedClassificationView
+::Quit()
+{
+//  m_Controller->OK();
+  this->HideAll();
+}
+
+void
+SupervisedClassificationView
+::HideAll()
+{
+  wMainWindow->hide();
+  wSVMSetup->hide();
+  wValidationWindow->hide();
+}
+
+void
+SupervisedClassificationView
+::Show()
+{
+  wMainWindow->show();
+}
+
+void
+SupervisedClassificationView
+::SetModel(SupervisedClassificationModel* model)
+{
+  m_Model = model;
+
+  m_Model->RegisterListener(this);
+}
+
 }

@@ -1,0 +1,219 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0110 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+declblock {\#ifdef _MSC_VER} {open public after {\#endif}
+} {
+  decl {\#pragma warning(push)} {public global
+  }
+  decl {\#pragma warning(disable:4996)} {public global
+  }
+} 
+
+class SupervisedClassificationGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window wMainWindow {
+      label {Supervised classification}
+      callback {this->Quit();} open
+      xywh {865 124 295 215} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Menu_Bar {} {open
+        xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Submenu {} {
+          label Setup open
+          xywh {5 5 67 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          MenuItem {} {
+            label SVM
+            callback {SVMSetup();}
+            tooltip {Set the SVM parameters} xywh {50 50 34 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+      }
+      Fl_Group {} {
+        label Sets open
+        xywh {5 34 280 91} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Check_Button bRandomGeneration {
+          label Random
+          callback {if(bRandomGeneration->value())
+{
+  slRandomProbability->activate();
+}
+else
+{
+  slRandomProbability->deactivate();
+}}
+          tooltip {If activated, validation sample is randomly choosen as a subset of the training samples} xywh {176 58 75 15} down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Value_Slider slRandomProbability {
+          label {Probability     }
+          tooltip {Tune the probability for a sample to be choosen as a training sample. Only available is random validation sample generation is activated} xywh {156 84 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14 deactivate
+        }
+      }
+      Fl_Group {} {
+        label Classification open
+        tooltip {Tools for classification} xywh {5 132 280 63} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+      } {
+        Fl_Light_Button bLearn {
+          label Learn
+          callback {Learn();}
+          tooltip {Learn the SVM model from training samples} xywh {15 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1 deactivate
+        }
+        Fl_Light_Button bValidate {
+          label Validate
+          callback {Validate();}
+          tooltip {Display some quality assesment on the classification} xywh {195 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+        }
+      }
+    }
+    Fl_Window wSVMSetup {
+      label {SVM setup}
+      xywh {778 400 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Choice svmSVMType {
+        label {SVM type} open
+        tooltip {Set the SVM type} xywh {90 41 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        MenuItem {} {
+          label c_svc
+          xywh {45 45 30 20} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label nu_svc
+          xywh {55 55 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label one_class
+          xywh {75 75 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label epsilon_svr
+          xywh {85 85 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label nu_svr
+          xywh {95 95 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Choice svmKernelType {
+        label {Kernel type} open
+        tooltip {Set the kernel type} xywh {90 13 111 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        MenuItem {} {
+          label linear
+          xywh {55 55 30 20} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label polynomial
+          xywh {65 65 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label rbf
+          xywh {75 75 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+        MenuItem {} {
+          label sigmoid
+          xywh {85 85 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Spinner svmKernelDegree {
+        label {Kernel degree}
+        xywh {115 81 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmGamma {
+        label Gamma
+        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmNu {
+        label Nu
+        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmCoef0 {
+        label Coef0
+        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmC {
+        label C
+        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmEpsilon {
+        label Epsilon
+        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button svmShrinking {
+        label Shrinking
+        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button svmPE {
+        label {Probability estimation}
+        xywh {15 154 185 31} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Spinner svmCacheSize {
+        label {Cache size}
+        xywh {115 111 58 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button {} {
+        label Ok
+        callback {SVMSetupOk();}
+        xywh {30 254 195 31} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input svmP {
+        label P
+        xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {SVMSetupCancel();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {260 255 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+    }
+    Fl_Window wValidationWindow {
+      label Validation open
+      xywh {826 542 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gMatrix {
+        label {Confusion matrix} open
+        xywh {5 25 385 160} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gAccuracy {
+        label Accuracy open
+        xywh {5 200 385 145} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Return_Button bCloseValidationWindow {
+        label Close
+        callback {bValidate->clear();
+wValidationWindow->hide();} selected
+        tooltip {Save changes and leave viewer set up interface} xywh {155 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+    }
+  }
+  Function {SVMSetup()} {open return_type {virtual void}
+  } {}
+  Function {SVMSetupOk()} {open return_type {virtual void}
+  } {}
+  Function {SVMSetupCancel()} {open return_type {virtual void}
+  } {}
+  Function {Learn()} {open return_type {virtual void}
+  } {}
+  Function {Validate()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {HideAll()} {open return_type {virtual void}
+  } {}
+  Function {~SupervisedClassificationGUI()} {open return_type virtual
+  } {}
+} 
+
+declblock {\#ifdef _MSC_VER} {open public after {\#endif}
+} {
+  decl {\#pragma warning(pop)} {public global
+  }
+} 

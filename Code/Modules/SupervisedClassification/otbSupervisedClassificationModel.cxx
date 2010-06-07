@@ -44,7 +44,7 @@ Notify(ListenerBase * listener)
 }
 
 SupervisedClassificationModel::
-SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingRatio(1.0), m_NumberOfClasses(2), m_CValue(4)
+SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.0), m_NumberOfClasses(2), m_CValue(4)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
@@ -115,7 +115,7 @@ SupervisedClassificationModel
 {
   m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
-  m_SampleGenerator->SetValidationTrainingRatio(m_ValidationTrainingRatio);
+  m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
 
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);

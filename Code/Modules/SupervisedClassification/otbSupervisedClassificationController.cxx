@@ -16,18 +16,9 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-#include <iostream>
-#include "otbTestMain.h"
+#include "otbSupervisedClassificationController.h"
 
-void RegisterTests()
+namespace otb
 {
-#ifdef OTB_USE_CURL
-  REGISTER_TEST(otbTileMapImportModuleTest);
-#endif
-  REGISTER_TEST(otbVectorizationModuleTest);
+
 }

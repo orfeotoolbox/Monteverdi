@@ -103,6 +103,12 @@ public:
   itkGetConstObjectMacro(VectorROIs, VectorDataType);
   void SetVectorROIs(VectorDataPointerType vectorData);
 
+  LabeledImageType::Pointer GetOutput()
+  {
+    //To be implemented
+  }
+
+
   /** Train the classifier */
   void Train();
   
@@ -149,7 +155,7 @@ private:
 
   unsigned long int                           m_MaxTrainingSize;
   unsigned long int                           m_MaxValidationSize;
-  unsigned long int                           m_ValidationTrainingRatio;
+  double                                      m_ValidationTrainingProportion;
 
   unsigned short                              m_NumberOfClasses;
 
