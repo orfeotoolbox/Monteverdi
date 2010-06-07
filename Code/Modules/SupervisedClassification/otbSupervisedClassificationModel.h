@@ -103,6 +103,12 @@ public:
   itkGetConstObjectMacro(VectorROIs, VectorDataType);
   void SetVectorROIs(VectorDataPointerType vectorData);
 
+  LabeledImageType::Pointer GetOutput()
+  {
+    //To be implemented
+  }
+
+
   /** Train the classifier */
   void Train();
   
