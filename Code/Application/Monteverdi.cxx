@@ -52,6 +52,7 @@
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
 #include "otbSupervisedClassificationModule.h"
+#include "otbSupervisedClassificationModule2.h"
 #include "otbMeanShiftModule.h"
 #include "otbPanSharpeningModule.h"
 #include "otbViewerModule.h"
@@ -155,6 +156,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity", otbGetTextMacro("SAR/Compute intensity and log-intensity"));
 
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", otbGetTextMacro("Learning/SVM classification"));
+  model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2", otbGetTextMacro("Learning/SVM classification (EXPERIMENTAL)"));
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
 
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", otbGetTextMacro("Geometry/Orthorectification"));
