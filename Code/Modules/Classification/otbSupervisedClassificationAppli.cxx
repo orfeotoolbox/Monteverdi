@@ -56,6 +56,7 @@ SupervisedClassificationAppli
 
   m_HasOutput = false;
   m_HasOutputVector = false;
+  m_HasCloseModule = false;
   m_ResultShown = false;
 
   m_ImageViewer               = ImageViewerType::New();
@@ -1761,7 +1762,9 @@ void
 SupervisedClassificationAppli
 ::QuitCallback()
 {
+  m_HasCloseModule = true;
   this->NotifyAll();
+  m_HasCloseModule = false;
   m_HasOutput = false;
 
   bClassesBrowser->hide();

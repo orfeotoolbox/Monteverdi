@@ -57,7 +57,7 @@ void SupervisedClassificationModule::Run()
 
   if(input.IsNotNull())
     {
-      m_SupervisedClassification->SetImageFileName(desc);
+    m_SupervisedClassification->SetImageFileName(desc);
     m_SupervisedClassification->SetInputImage(input);
     m_SupervisedClassification->Build();
     m_SupervisedClassification->Show();
@@ -115,11 +115,17 @@ void SupervisedClassificationModule::Notify()
           m_LabelsList.push_back(oss.str());
           i++;
        }
-
       this->NotifyOutputsChange();
       // Once module is closed, it is no longer busy
       this->BusyOff();
     }
+  
+  // When the module is closed 
+  if(m_SupervisedClassification->GetHasCloseModule())
+    {
+    this->BusyOff();
+    }
+
 }
 
 } // End namespace otb

@@ -181,6 +181,7 @@ public:
   // Get the HasOutput flag
   itkGetMacro(HasOutput,bool);
   itkGetMacro(HasOutputVector,bool);
+  itkGetMacro(HasCloseModule,bool);
   
   /** Main methods */
   virtual void Show(void);
@@ -316,6 +317,7 @@ private:
 
   bool m_HasOutput;
   bool m_HasOutputVector;
+  bool m_HasCloseModule;
   bool m_ResultShown;
   std::vector<OutputVectorDataType::Pointer> m_OutputVector;
 };
