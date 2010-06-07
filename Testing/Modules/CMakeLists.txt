@@ -276,8 +276,11 @@ IF(OTB_USE_CURL)
   )
 ENDIF(OTB_USE_CURL)
 
-
-
+#------------- Vectorization Module Tests ---------------------------
+ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
+${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
+${TEMP}/vecTvVectorizationModuleTestOutput.kml
+)
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -321,6 +324,10 @@ SET(Modules_SRCS4
   otbTileMapImportModuleTest.cxx
 )
 ENDIF(OTB_USE_CURL)
+
+SET(Modules_SRCS4 ${Modules_SRCS4}
+  otbVectorizationModuleTest.cxx
+)
 
 
 # Suppress warning Fl_RGB_Image deferencing pointeur

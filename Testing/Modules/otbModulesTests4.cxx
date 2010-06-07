@@ -29,4 +29,5 @@ void RegisterTests()
 #ifdef OTB_USE_CURL
   REGISTER_TEST(otbTileMapImportModuleTest);
 #endif
+  REGISTER_TEST(otbVectorizationModuleTest);
 }
