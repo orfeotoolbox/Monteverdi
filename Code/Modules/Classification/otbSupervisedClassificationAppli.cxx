@@ -1697,7 +1697,7 @@ SupervisedClassificationAppli
     ++sampleValIter;
   }
 
-   ClassesMapType::iterator classesIt = m_ClassesMap.begin();
+  ClassesMapType::iterator classesIt = m_ClassesMap.begin();
   std::vector<double>::iterator countIt = sampleCount.begin();
 
   while (countIt!=sampleCount.end()&&classesIt!=m_ClassesMap.end())
@@ -1712,7 +1712,8 @@ SupervisedClassificationAppli
     ++countIt;
     ++classesIt;
   }
-
+  
+  m_Estimator = EstimatorType::New();
   m_Estimator->SetInputSampleList(m_TrainingListSample);
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
   m_Estimator->SetNumberOfClasses(m_ClassesMap.size());
