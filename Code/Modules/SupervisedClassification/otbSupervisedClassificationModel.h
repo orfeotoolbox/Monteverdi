@@ -149,7 +149,7 @@ private:
 
   unsigned long int                           m_MaxTrainingSize;
   unsigned long int                           m_MaxValidationSize;
-  unsigned long int                           m_ValidationTrainingRatio;
+  double                                      m_ValidationTrainingProportion;
 
   unsigned short                              m_NumberOfClasses;
 
