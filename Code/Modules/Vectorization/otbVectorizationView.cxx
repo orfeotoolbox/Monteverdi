@@ -30,9 +30,14 @@ VectorizationView
 ::VectorizationView() :  m_Controller(),
                          m_WidgetController(),
                          m_Model(),
-                         m_ImageView()
+                         m_ImageView(),
+                         m_VectorDataGlComponent()
 {
   m_ImageView = ImageViewType::New();
+  m_VectorDataGlComponent = VectorDataGlComponentType::New();
+  m_ImageView->GetFullWidget()->AddGlComponent(m_VectorDataGlComponent);
+  m_ImageView->GetScrollWidget()->AddGlComponent(m_VectorDataGlComponent);
+  m_ImageView->GetZoomWidget()->AddGlComponent(m_VectorDataGlComponent);
 }
 
 
@@ -55,7 +60,9 @@ VectorizationView
 {
   m_Model = model;
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
+  m_VectorDataGlComponent->SetVectorData(m_Model->GetVectorDataModel()->GetVectorData());
   m_Model->RegisterListener(this);
+  m_Model->GetVectorDataModel()->RegisterListener(m_ImageView);
 }
 
 void
@@ -125,5 +132,6 @@ void VectorizationView
 ::Notify()
 {
   // Nothing done for now
+  this->RedrawWidgets();
 }
 } // end namespace

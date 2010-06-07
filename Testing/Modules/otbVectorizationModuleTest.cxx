@@ -29,7 +29,7 @@ int otbVectorizationModuleTest(int argc, char* argv[])
   
   std::cout<<"Module: "<<module<<std::endl;
 
-  if (argc != 3)
+  if (argc > 4)
   {
      return EXIT_FAILURE;
   }
@@ -50,6 +50,9 @@ int otbVectorizationModuleTest(int argc, char* argv[])
   module->AddInputByKey("InputImage",wrapperIn);
   module->Start();
   
+  if(argc==4)
+    Fl::run();
+
   return EXIT_SUCCESS;
 
 }

@@ -27,6 +27,7 @@
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaledExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
+#include "otbVectorDataActionHandler.h"
 
 namespace otb
 {
@@ -51,6 +52,8 @@ public:
   typedef VectorizationModel
     ::VisualizationModelType               VisualizationModelType;
   typedef VectorizationModel
+    ::VectorDataModelType                  VectorDataModelType;
+  typedef VectorizationModel
     ::VectorImageType                      VectorImageType;
  
   /** Handlers */
@@ -63,6 +66,9 @@ public:
     <VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler
     <VisualizationModelType,ImageViewType> ChangeScaleHandlerType;
+  typedef VectorDataActionHandler
+    <VectorDataModelType,
+     ImageViewType>                        VectorDataActionHandlerType;
 
   void SetModel(ModelType* model);
 
@@ -102,6 +108,7 @@ private:
   ChangeRegionHandlerType::Pointer         m_ChangeRegionHandler;
   ChangeScaledRegionHandlerType::Pointer   m_ChangeScaledRegionHandler;
   ChangeScaleHandlerType::Pointer          m_ChangeScaleHandler;
+  VectorDataActionHandlerType::Pointer     m_VectorDataActionHandler;
 };
 } //end namespace otb
 

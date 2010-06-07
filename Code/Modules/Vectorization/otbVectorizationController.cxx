@@ -28,7 +28,8 @@ VectorizationController
                              m_ResizingHandler(),
                              m_ChangeRegionHandler(),
                              m_ChangeScaledRegionHandler(),
-                             m_ChangeScaleHandler()
+                             m_ChangeScaleHandler(),
+                             m_VectorDataActionHandler()
 {
   // Build the widgets controller
   m_WidgetController          = WidgetControllerType::New();
@@ -38,12 +39,18 @@ VectorizationController
   m_ChangeRegionHandler       = ChangeRegionHandlerType::New();
   m_ChangeScaledRegionHandler = ChangeScaledRegionHandlerType::New();
   m_ChangeScaleHandler        = ChangeScaleHandlerType::New();
+  m_VectorDataActionHandler   = VectorDataActionHandlerType::New();
 
   // Add the action handlers to the widgets controller
   m_WidgetController->AddActionHandler(m_ResizingHandler);
   m_WidgetController->AddActionHandler(m_ChangeRegionHandler);
   m_WidgetController->AddActionHandler(m_ChangeScaledRegionHandler);
   m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
+  m_WidgetController->AddActionHandler(m_VectorDataActionHandler);
+
+  // Specific buttons mapping
+  m_ChangeRegionHandler->SetMouseButton(2);
+  m_ChangeScaledRegionHandler->SetMouseButton(2);
 }
 
 
@@ -63,6 +70,7 @@ VectorizationController
   m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
+  m_VectorDataActionHandler->SetModel(m_Model->GetVectorDataModel());
 }
 
 void
@@ -74,5 +82,6 @@ VectorizationController
   m_ChangeRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
+  m_VectorDataActionHandler->SetView(m_View->GetImageView());
 }
 } // end namespace otb

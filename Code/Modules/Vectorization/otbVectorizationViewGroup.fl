@@ -14,23 +14,23 @@ class VectorizationViewGroup {open
       callback {this->HideAll();} open
       xywh {568 191 1095 835} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
-      Fl_Group guiImageGroup {open
-        xywh {6 1 529 824}
+      Fl_Group guiImageGroup {open selected
+        xywh {8 5 529 824}
       } {
         Fl_Group gScroll {
           label Minimap
-          xywh {6 21 261 256} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {8 25 261 256} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gZoom {
           label Zoom
-          xywh {277 21 256 256} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {279 25 256 256} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFull {
           label {Full resolution}
-          xywh {6 294 526 526} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {8 298 526 526} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Group {} {open
-            xywh {30 315 15 15}
+            xywh {32 319 15 15}
           } {}
         }
       }
@@ -41,7 +41,7 @@ class VectorizationViewGroup {open
   }
   Function {VectorizationViewGroup()} {open
   } {}
-  Function {~VectorizationViewGroup()} {open selected return_type virtual
+  Function {~VectorizationViewGroup()} {open return_type virtual
   } {}
   Function {HideAll()} {open return_type virtual
   } {}

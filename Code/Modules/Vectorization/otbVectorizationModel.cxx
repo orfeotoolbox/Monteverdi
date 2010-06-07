@@ -44,7 +44,8 @@ VectorizationModel::
 VectorizationModel() : m_VisualizationModel(),
                        m_ImageGenerator(),
                        m_BlendingFunction(),
-                       m_InputImage()
+                       m_InputImage(),
+                       m_VectorDataModel()
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -55,12 +56,14 @@ VectorizationModel() : m_VisualizationModel(),
   
   // Input & Output
   m_InputImage = VectorImageType::New();
+
+  // VectorData model
+  m_VectorDataModel = VectorDataModelType::New();
 }
 
 VectorizationModel
 ::~VectorizationModel()
-{
-}
+{}
 
 
 void
@@ -75,21 +78,21 @@ VectorizationModel
   m_ImageGenerator->GenerateQuicklookOn();
   m_ImageGenerator->GenerateLayer();
 
-//  std::vector<unsigned int> channels;
-//  if(image->GetNumberOfComponentsPerPixel()==3)
-//    {
-//      channels.push_back(0);
-//      channels.push_back(1);
-//      channels.push_back(2);
-//    }
-//  else if(image->GetNumberOfComponentsPerPixel()>3)
-//    {
-//      channels.push_back(2);
-//      channels.push_back(1);
-//      channels.push_back(0);
-//    }
-//  if( channels.size() == 3 )
-//    m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
+  std::vector<unsigned int> channels;
+  if(image->GetNumberOfComponentsPerPixel()==3)
+    {
+      channels.push_back(0);
+      channels.push_back(1);
+      channels.push_back(2);
+    }
+  else if(image->GetNumberOfComponentsPerPixel()>3)
+    {
+      channels.push_back(2);
+      channels.push_back(1);
+      channels.push_back(0);
+    }
+  if( channels.size() == 3 )
+    m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
 
   m_ImageGenerator->GetLayer()->SetName("InputImage");
 

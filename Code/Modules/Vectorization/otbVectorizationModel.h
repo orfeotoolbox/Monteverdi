@@ -27,6 +27,9 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 
+// Vectorization
+#include "otbVectorDataModel.h"
+
 namespace otb {
 
 /** \class VectorizationModel
@@ -72,11 +75,19 @@ public:
   typedef BlendingFunctionType::Pointer       BlendingFunctionPointerType;
   typedef VisualizationModelType::RegionType  RegionType;
 
+  typedef TypeManager
+      ::Vector_Data                           VectorDataType;
+  typedef VectorDataModel                     VectorDataModelType;
+  typedef VectorDataModelType::Pointer        VectorDataModelPointerType;
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
+
+  /** Get the vector data model */
+  itkGetObjectMacro(VectorDataModel,VectorDataModelType);
 
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, VectorImageType);
@@ -105,6 +116,9 @@ private:
 
   /** Input Images */
   VectorImagePointerType                      m_InputImage;
+
+  /** VectorData model */
+  VectorDataModelPointerType                  m_VectorDataModel;
 };
 
 }//end namespace otb

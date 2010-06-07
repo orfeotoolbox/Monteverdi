@@ -25,9 +25,8 @@
 #include "otbVectorizationModel.h"
 #include "otbVectorizationControllerInterface.h"
 
-#include "otbCrossGlComponent.h"
-#include "otbCircleGlComponent.h"
 #include "otbImageView.h"
+#include "otbVectorDataGlComponent.h"
 
 namespace otb
 {
@@ -53,6 +52,9 @@ public:
   typedef VectorizationModel
     ::VisualizationModelType                   VisualizationModelType;
   typedef ImageView<VisualizationModelType>    ImageViewType;
+  typedef VectorizationModel::VectorDataType   VectorDataType;
+  typedef VectorDataGlComponent
+    <VectorDataType>                           VectorDataGlComponentType;
 
   /** Event from the model */
   virtual void Notify();
@@ -93,6 +95,8 @@ private:
   VectorizationModel::Pointer               m_Model;
   /** Image view */
   ImageViewType::Pointer                    m_ImageView;
+  /** VectorData Gl component */
+  VectorDataGlComponentType::Pointer        m_VectorDataGlComponent;
 };
 }//end namespace otb
 
