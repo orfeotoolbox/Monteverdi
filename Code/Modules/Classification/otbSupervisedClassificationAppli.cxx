@@ -436,6 +436,10 @@ SupervisedClassificationAppli
     std::replace(filename.begin(),filename.end(),' ','_');
 
     oss<<dirname<<"\\"<<filename<<".shp";
+    
+    // Add the projection to the vectordata
+    (*vectorDataVectorIterator)->SetProjectionRef(m_InputImage->GetProjectionRef());
+    (*vectorDataVectorIterator)->SetMetaDataDictionary(m_InputImage->GetMetaDataDictionary());
 
     VectorDataFileWriterPointerType writer = VectorDataFileWriterType::New();
     writer->SetInput(*vectorDataVectorIterator);
