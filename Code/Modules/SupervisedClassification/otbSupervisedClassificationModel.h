@@ -106,19 +106,27 @@ public:
 
   LabeledImageType::Pointer GetOutput()
   {
-    //To be implemented
+    //FIXME To be implemented
   }
 
 
   /** Train the classifier */
   void Train();
   
+  /** Train the classifier */
+  void Validate()
+  {
+    //FIXME To be implemented
+  }
+
   /** SVM model manipulation */
   itkGetMacro(NumberOfClasses,unsigned short);
   itkSetMacro(CValue,float);
   
   /** Update Output */
   void OK();
+
+  void Quit();
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);

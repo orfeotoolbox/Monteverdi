@@ -107,6 +107,15 @@ SupervisedClassificationModel
   
   m_OutputChanged = true;
   this->NotifyAll();
+
+}
+
+void
+SupervisedClassificationModel
+::Quit()
+{
+  m_OutputChanged = false;
+  this->NotifyAll();
 }
 
 void

@@ -59,13 +59,15 @@ public:
   /** Build the interface */
   virtual void BuildInterface();
 
-  virtual void SVMSetup() {};
-  virtual void SVMSetupOk() {};
-  virtual void SVMSetupCancel() {};
-  virtual void Learn() {};
-  virtual void Validate() {};
+  virtual void SVMSetup();
+  virtual void SVMSetupOk();
+  virtual void SVMSetupCancel();
+  virtual void Train();
+  virtual void Validate();
   virtual void HideAll();
   virtual void Show();
+  virtual void Ok(){/*FIXME To be implemented*/};
+  virtual void Cancel();
 
 protected:
   /** Constructor */

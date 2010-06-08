@@ -40,6 +40,12 @@ public:
   /** Standard type macros */
   itkTypeMacro(SupervisedClassificationControllerInterface,Superclass);
 
+  /** Users actions */
+  virtual void Train() = 0;
+  virtual void Validate() = 0;
+  virtual void SVMSetupOk() = 0;
+  virtual void Quit() = 0;
+
 protected:
   /** Constructor */
   SupervisedClassificationControllerInterface() {}

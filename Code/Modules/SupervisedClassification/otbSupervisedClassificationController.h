@@ -49,6 +49,12 @@ public:
     m_View = view;
   }
 
+  /** Users actions */
+  virtual void Train();
+  virtual void Validate();
+  virtual void SVMSetupOk();
+  virtual void Quit();
+
 protected:
  /** Constructor */
   SupervisedClassificationController() {/*TODO To implement*/};

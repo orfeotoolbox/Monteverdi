@@ -15,12 +15,12 @@ declblock {\#ifdef _MSC_VER} {open public after {\#endif}
 
 class SupervisedClassificationGUI {open
 } {
-  Function {CreateGUI()} {open return_type void
+  Function {CreateGUI()} {return_type void
   } {
     Fl_Window wMainWindow {
       label {Supervised classification}
       callback {this->Quit();} open
-      xywh {682 199 295 215} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {846 154 285 215} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Menu_Bar {} {open
         xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -37,40 +37,49 @@ class SupervisedClassificationGUI {open
         }
       }
       Fl_Group {} {
-        label Sets open
-        xywh {5 34 280 91} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        label {Sets repartition} open
+        xywh {5 34 280 67} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
         Fl_Value_Slider slRepartition {
-          label {Repartition  }
-          tooltip {Controls the repartition between the training and validation samples} xywh {90 65 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14
+          tooltip {Controls the repartition between the training and validation samples} xywh {85 55 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14
         }
         Fl_Box {} {
           label Training
-          xywh {20 67 65 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+          xywh {20 58 65 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
         Fl_Box {} {
           label Validation
-          xywh {210 68 70 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+          xywh {203 58 70 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
       }
       Fl_Group {} {
         label Classification open
-        tooltip {Tools for classification} xywh {5 132 280 63} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        tooltip {Tools for classification} xywh {5 107 280 106} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
-        Fl_Light_Button bLearn {
-          label Learn
-          callback {Learn();}
-          tooltip {Learn the SVM model from training samples} xywh {15 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1
+        Fl_Light_Button bTrain {
+          label Train
+          callback {Train();}
+          tooltip {Learn the SVM model from training samples} xywh {15 130 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1
         }
         Fl_Light_Button bValidate {
           label Validate
-          callback {Validate();} selected
-          tooltip {Display some quality assesment on the classification} xywh {195 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+          callback {Validate();}
+          tooltip {Display some quality assesment on the classification} xywh {150 130 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+        }
+        Fl_Button {} {
+          label Ok
+          callback {Ok();}
+          xywh {15 172 120 28} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button {} {
+          label Cancel
+          callback {Cancel();}
+          tooltip {Leave viewer set up interface without saving changes} xywh {150 170 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
         }
       }
     }
     Fl_Window wSVMSetup {
-      label {SVM setup}
+      label {SVM setup} open
       xywh {778 400 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Choice svmSVMType {
@@ -196,7 +205,7 @@ wValidationWindow->hide();}
   } {}
   Function {SVMSetupCancel()} {open return_type {virtual void}
   } {}
-  Function {Learn()} {open return_type {virtual void}
+  Function {Train()} {open return_type {virtual void}
   } {}
   Function {Validate()} {open return_type {virtual void}
   } {}
@@ -205,6 +214,10 @@ wValidationWindow->hide();}
   Function {HideAll()} {open return_type {virtual void}
   } {}
   Function {~SupervisedClassificationGUI()} {open return_type virtual
+  } {}
+  Function {Ok()} {open return_type {virtual void}
+  } {}
+  Function {Cancel()} {open selected return_type {virtual void}
   } {}
 } 
 
