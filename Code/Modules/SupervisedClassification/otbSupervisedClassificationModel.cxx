@@ -44,7 +44,10 @@ Notify(ListenerBase * listener)
 }
 
 SupervisedClassificationModel::
-SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.5), m_NumberOfClasses(2)
+SupervisedClassificationModel() : m_MaxTrainingSize(100),
+				  m_MaxValidationSize(100),
+				  m_ValidationTrainingProportion(0.5),
+				  m_NumberOfClasses(2)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
