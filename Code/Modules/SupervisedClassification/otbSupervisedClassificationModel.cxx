@@ -19,7 +19,6 @@
 #include "otbSupervisedClassificationModel.h"
 #include "otbFltkFilterWatcher.h"
 
-
 namespace otb
 {
 /** Initialize the singleton */
@@ -166,6 +165,8 @@ SupervisedClassificationModel
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
 
+  ConfusionMatrixCalculatorType::Pointer confMat = ConfusionMatrixCalculatorType::New();
+  
   // validationClassifier->GetOutput();
 }
 

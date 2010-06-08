@@ -33,6 +33,7 @@
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
 #include "itkListSample.h"
+#include "otbConfusionMatrixCalculator.h"
 
 
 namespace otb {
@@ -85,7 +86,9 @@ public:
 
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
-  typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
+  typedef otb::ConfusionMatrixCalculator< ListSampleType >                             ConfusionMatrixCalculatorType;
+  
+  typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
 
   /** Get the unique instance of the model */
