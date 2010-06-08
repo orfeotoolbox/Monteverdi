@@ -165,9 +165,18 @@ SupervisedClassificationModel
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
 
-  ConfusionMatrixCalculatorType::Pointer confMat = ConfusionMatrixCalculatorType::New();
+  ConfusionMatrixCalculatorType::Pointer confMatCalc =
+                                          ConfusionMatrixCalculatorType::New();
+
+  confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
+  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+
+  confMatCalc->Update();
+
+  m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
+
+  otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
   
-  // validationClassifier->GetOutput();
 }
 
 

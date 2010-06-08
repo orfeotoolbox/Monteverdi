@@ -86,7 +86,9 @@ public:
 
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
-  typedef otb::ConfusionMatrixCalculator< ListSampleType >                             ConfusionMatrixCalculatorType;
+  typedef ClassifierType::OutputType                                                   ValidationListSampleType;
+  typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
+                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
@@ -122,6 +124,8 @@ public:
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetMacro(NumberOfClasses,unsigned short);
+  itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
+
   
   /** Update Output */
   void OK();
@@ -170,6 +174,9 @@ private:
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
+
+  /** The confusion matrix */
+  ConfusionMatrixType                         m_ConfusionMatrix;
   
 };
 
