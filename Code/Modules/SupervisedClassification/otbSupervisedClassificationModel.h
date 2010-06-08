@@ -120,8 +120,8 @@ public:
   }
 
   /** SVM model manipulation */
+  itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetMacro(NumberOfClasses,unsigned short);
-  itkSetMacro(CValue,float);
   
   /** Update Output */
   void OK();
@@ -170,7 +170,6 @@ private:
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
-  float                                       m_CValue;
   
 };
 
