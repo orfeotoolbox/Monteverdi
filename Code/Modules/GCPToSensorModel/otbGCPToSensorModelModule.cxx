@@ -39,11 +39,15 @@ GCPToSensorModelModule::GCPToSensorModelModule()
   m_View->SetMapWidgetController(m_Controller->GetMapWidgetController());
 
   m_Model->RegisterListener(this);
-
+  
+  // Instanciation of the Image To VectorImage Filter
+  m_CastFilter = CastSingleImageFilterType::New();
+  
   // Then, describe inputs needed by the module
 
   // Add a new input
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"));
+  this->AddTypeToInputDescriptor<FloatingSingleImageType>("InputImage");
 }
 
 /** Destructor */
@@ -72,6 +76,19 @@ void GCPToSensorModelModule::Run()
 
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+
+  // Try to get a single Image
+  // If the input image is an otb::Image instead of VectorImage then cast it
+  // in Vector Image and continue the processing
+  FloatingSingleImageType::Pointer fSingleImage = this->GetInputData<FloatingSingleImageType>("InputImage");
+  
+  //Test single floating image
+  if(fSingleImage.IsNotNull() && fpvImage.IsNull())
+    {
+    //cast Image in VectorImage
+    m_CastFilter->SetInput(fSingleImage);
+    fpvImage = m_CastFilter->GetOutput();
+    }
 
   // One of this pointer will be NULL:
   if(fpvImage.IsNotNull() )
