@@ -97,6 +97,8 @@ VectorizationView
 ::RedrawWidgets()
 {
   std::cout<<"Redrawing widgets ..."<<std::endl;
+//  m_VectorDataGlComponent->SetOrigin(m_Model->GetInputImage()->GetOrigin());
+//  m_VectorDataGlComponent->SetSpacing(m_Model->GetInputImage()->GetSpacing());
   m_ImageView->GetFullWidget()->redraw();
   m_ImageView->GetScrollWidget()->redraw();
   m_ImageView->GetZoomWidget()->redraw();

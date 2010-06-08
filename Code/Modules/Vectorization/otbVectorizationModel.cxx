@@ -104,8 +104,8 @@ VectorizationModel
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
 
-  m_VectorDataModel->SetOrigin(m_InputImage->GetOrigin());
-  m_VectorDataModel->SetSpacing(m_InputImage->GetSpacing());
+//  m_VectorDataModel->SetOrigin(m_InputImage->GetOrigin());
+//  m_VectorDataModel->SetSpacing(m_InputImage->GetSpacing());
 }
 
 void
