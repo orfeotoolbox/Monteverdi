@@ -170,7 +170,6 @@ private:
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
-  float                                       m_CValue;
   
 };
 

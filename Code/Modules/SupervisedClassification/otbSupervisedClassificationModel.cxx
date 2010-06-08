@@ -44,7 +44,7 @@ Notify(ListenerBase * listener)
 }
 
 SupervisedClassificationModel::
-SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.0), m_NumberOfClasses(2), m_CValue(4)
+SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.0), m_NumberOfClasses(2)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
@@ -144,7 +144,6 @@ SupervisedClassificationModel
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
   if(m_NumberOfClasses == 1)
     m_ModelEstimator->SetSVMType(ONE_CLASS);
-  m_ModelEstimator->SetC( m_CValue );
   m_ModelEstimator->Update();
 }
 
