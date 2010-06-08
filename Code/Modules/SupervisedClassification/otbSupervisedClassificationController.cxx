@@ -66,7 +66,7 @@ void SupervisedClassificationController::SVMSetupOk()
 {
   try
   {
-    m_Model->SetCValue(m_View->svmC->value());
+  m_Model->GetModelEstimator()->SetC(m_View->svmC->value());
     //FIXME wire up all the rest
   }
   catch (itk::ExceptionObject & err)
