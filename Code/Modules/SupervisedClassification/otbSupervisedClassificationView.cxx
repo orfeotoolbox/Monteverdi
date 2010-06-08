@@ -45,13 +45,23 @@ SupervisedClassificationView
   wMainWindow->show();
 }
 
+
 void
 SupervisedClassificationView
-::SetModel(SupervisedClassificationModel* model)
+::BuildInterface()
 {
-  m_Model = model;
+  if(!m_Controller)
+    {
+      itkExceptionMacro(<<"Controller is not set, can not build view.");
+    }
 
-  m_Model->RegisterListener(this);
+  // Build the fltk code
+  this->CreateGUI();
+
+
+  // Show
+  this->Show();
+
 }
 
 }
