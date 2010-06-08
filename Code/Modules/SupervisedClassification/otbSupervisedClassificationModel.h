@@ -33,6 +33,7 @@
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
 #include "itkListSample.h"
+#include "otbConfusionMatrixCalculator.h"
 
 
 namespace otb {
@@ -85,7 +86,11 @@ public:
 
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
-  typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
+  typedef ClassifierType::OutputType                                                   ValidationListSampleType;
+  typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
+                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
+  
+  typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
 
   /** Get the unique instance of the model */
@@ -114,14 +119,13 @@ public:
   void Train();
   
   /** Train the classifier */
-  void Validate()
-  {
-    //FIXME To be implemented
-  }
+  void Validate();
 
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetMacro(NumberOfClasses,unsigned short);
+  itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
+
   
   /** Update Output */
   void OK();
@@ -170,6 +174,9 @@ private:
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
+
+  /** The confusion matrix */
+  ConfusionMatrixType                         m_ConfusionMatrix;
   
 };
 

@@ -19,7 +19,6 @@
 #include "otbSupervisedClassificationModel.h"
 #include "otbFltkFilterWatcher.h"
 
-
 namespace otb
 {
 /** Initialize the singleton */
@@ -44,7 +43,10 @@ Notify(ListenerBase * listener)
 }
 
 SupervisedClassificationModel::
-SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.5), m_NumberOfClasses(2)
+SupervisedClassificationModel() : m_MaxTrainingSize(100),
+				  m_MaxValidationSize(100),
+				  m_ValidationTrainingProportion(0.5),
+				  m_NumberOfClasses(2)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
@@ -90,8 +92,8 @@ SupervisedClassificationModel
 {
   m_OutputChanged = false;
 
-  vectorData->UpdateOutputInformation();
   m_VectorROIs = vectorData;
+  m_VectorROIs->Update();
   
 }
 
@@ -124,6 +126,9 @@ SupervisedClassificationModel
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
 
+  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
+  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
@@ -149,5 +154,30 @@ SupervisedClassificationModel
     m_ModelEstimator->SetSVMType(ONE_CLASS);
   m_ModelEstimator->Update();
 }
+
+void
+SupervisedClassificationModel
+::Validate()
+{
+  ClassifierType::Pointer validationClassifier = ClassifierType::New();
+  validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
+  validationClassifier->SetNumberOfClasses(m_NumberOfClasses);
+  validationClassifier->SetModel(m_ModelEstimator->GetModel());
+  validationClassifier->Update();
+
+  ConfusionMatrixCalculatorType::Pointer confMatCalc =
+                                          ConfusionMatrixCalculatorType::New();
+
+  confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
+  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+
+  confMatCalc->Update();
+
+  m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
+
+  otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
+  
+}
+
 
 }// namespace otb
