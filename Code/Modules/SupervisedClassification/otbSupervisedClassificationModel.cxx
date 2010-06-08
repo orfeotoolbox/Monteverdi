@@ -93,8 +93,8 @@ SupervisedClassificationModel
 {
   m_OutputChanged = false;
 
-  vectorData->UpdateOutputInformation();
   m_VectorROIs = vectorData;
+  m_VectorROIs->Update();
   
 }
 
@@ -127,6 +127,9 @@ SupervisedClassificationModel
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
 
+  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
+  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
