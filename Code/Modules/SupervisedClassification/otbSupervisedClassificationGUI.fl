@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -15,7 +15,7 @@ declblock {\#ifdef _MSC_VER} {open public after {\#endif}
 
 class SupervisedClassificationGUI {open
 } {
-  Function {CreateGUI()} {return_type void
+  Function {CreateGUI()} {open return_type void
   } {
     Fl_Window wMainWindow {
       label {Supervised classification}
@@ -80,7 +80,7 @@ class SupervisedClassificationGUI {open
     }
     Fl_Window wSVMSetup {
       label {SVM setup} open
-      xywh {778 400 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {750 556 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Choice svmSVMType {
         label {SVM type} open
@@ -134,30 +134,30 @@ class SupervisedClassificationGUI {open
       }
       Fl_Value_Input svmGamma {
         label Gamma
-        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Value_Input svmNu {
         label Nu
-        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.5
       }
       Fl_Value_Input svmCoef0 {
         label Coef0
-        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 4
       }
       Fl_Value_Input svmC {
         label C
-        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Value_Input svmEpsilon {
         label Epsilon
-        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.001
       }
       Fl_Check_Button svmShrinking {
         label Shrinking
-        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button svmPE {
-        label {Probability estimation}
+        label {Probability estimation} selected
         xywh {15 154 185 31} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Spinner svmCacheSize {
@@ -171,7 +171,7 @@ class SupervisedClassificationGUI {open
       }
       Fl_Value_Input svmP {
         label P
-        xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {306 169 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.1
       }
       Fl_Button {} {
         label Cancel
@@ -181,7 +181,7 @@ class SupervisedClassificationGUI {open
     }
     Fl_Window wValidationWindow {
       label Validation open
-      xywh {826 542 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
+      xywh {826 481 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gMatrix {
         label {Confusion matrix} open
@@ -217,7 +217,7 @@ wValidationWindow->hide();}
   } {}
   Function {Ok()} {open return_type {virtual void}
   } {}
-  Function {Cancel()} {open selected return_type {virtual void}
+  Function {Cancel()} {open return_type {virtual void}
   } {}
 } 
 

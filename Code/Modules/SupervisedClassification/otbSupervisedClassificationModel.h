@@ -125,7 +125,8 @@ public:
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetMacro(NumberOfClasses,unsigned short);
   itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
-
+  itkGetMacro(OverallAccuracy,double);
+  itkGetMacro(KappaIndex,double);
   
   /** Update Output */
   void OK();
@@ -177,6 +178,8 @@ private:
 
   /** The confusion matrix */
   ConfusionMatrixType                         m_ConfusionMatrix;
+  double                                      m_OverallAccuracy;
+  double                                      m_KappaIndex;
   
 };
 

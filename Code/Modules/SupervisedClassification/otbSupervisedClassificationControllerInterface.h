@@ -35,6 +35,7 @@ public:
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   typedef SupervisedClassificationModel               ModelType;
+  typedef ModelType::ConfusionMatrixType               ConfusionMatrixType;
   typedef itk::ContinuousIndex<>              ContinuousIndexType;
 
   /** Standard type macros */
@@ -45,6 +46,9 @@ public:
   virtual void Validate() = 0;
   virtual void SVMSetupOk() = 0;
   virtual void Quit() = 0;
+  virtual ConfusionMatrixType GetConfusionMatrix() = 0;
+  virtual double GetOverallAccuracy() = 0;
+  virtual double GetKappaIndex() = 0;
 
 protected:
   /** Constructor */

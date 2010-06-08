@@ -54,6 +54,18 @@ public:
   virtual void Validate();
   virtual void SVMSetupOk();
   virtual void Quit();
+  virtual ConfusionMatrixType GetConfusionMatrix()
+  {
+    return m_Model->GetConfusionMatrix();
+  }
+  virtual double GetOverallAccuracy()
+  {
+    return m_Model->GetOverallAccuracy();
+  }
+  virtual double GetKappaIndex()
+  {
+    return m_Model->GetKappaIndex();
+  }
 
 protected:
  /** Constructor */
