@@ -142,6 +142,8 @@ SupervisedClassificationModel
   m_ModelEstimator->SetInputSampleList(m_SampleGenerator->GetTrainingListSample());
   m_ModelEstimator->SetTrainingSampleList(m_SampleGenerator->GetTrainingListLabel());
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
+  if(m_NumberOfClasses == 1)
+    m_ModelEstimator->SetSVMType(ONE_CLASS);
   m_ModelEstimator->SetC( m_CValue );
   m_ModelEstimator->Update();
 }
