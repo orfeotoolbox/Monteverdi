@@ -86,6 +86,7 @@ int main(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
 
   parser->AddInputImage(false); //Optional parameter
+  parser->AddOption("--InputVectorData", "input vector data file name ", "-ivd", 1, false);
   parser->SetProgramDescription("Monteverdi launcher");
   //   parser->AddOption("--NoSplashScreen", "Deactivate the splash screen","-NoSplash", 0, false);
 
@@ -171,7 +172,8 @@ int main(int argc, char* argv[])
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               otbGetTextMacro("Geometry/Homologous points extraction"));
-  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel", otbGetTextMacro("Geometry/GCP to sensor model"));
+  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
+                                                     otbGetTextMacro("Geometry/GCP to sensor model"));
 
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
@@ -188,12 +190,8 @@ int main(int argc, char* argv[])
     Fl::check();
     std::vector<std::string> moduleVector;
 
-    // Create an instance of module reader
-    model->CreateModuleByKey("Reader");
-    moduleVector = model->GetAvailableModuleInstanceIds();
-
-    // Get the ModuleInstanceId
-    std::string readerId = moduleVector[0];
+    // Create an instance of module reader and get the ID
+    std::string readerId = model->CreateModuleByKey("Reader");
 
     // Get the module itself
     otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
@@ -207,12 +205,8 @@ int main(int argc, char* argv[])
     readerModule->bOk->do_callback();
     Fl::check();
 
-    // Create an instance of module viewer
-    model->CreateModuleByKey("Viewer");
-    moduleVector = model->GetAvailableModuleInstanceIds();
-
-    // Get the ModuleInstanceId
-    std::string viewerId = moduleVector[1];
+    // Create an instance of module viewer and get the ID
+    std::string viewerId = model->CreateModuleByKey("Viewer");
 
     // Get the module itself
     otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
@@ -237,6 +231,26 @@ int main(int argc, char* argv[])
     Fl::check();
 
     view->GetInputViewGUI()->bOk->do_callback();
+    Fl::check();
+    }
+
+  if (parseResult->IsOptionPresent("--InputVectorData"))
+    {
+    Fl::check();
+    std::vector<std::string> moduleVector;
+
+    // Get the ModuleInstanceId
+    std::string readerId = model->CreateModuleByKey("Reader");
+
+    // Get the module itself
+    otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+    // Simulate file chooser and ok callback
+    otb::ReaderModule::Pointer readerModule =
+      static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+    readerModule->vFilePath->value(parseResult->GetParameterString("--InputVectorData").c_str());
+    readerModule->Analyse();
+    readerModule->bOk->do_callback();
     Fl::check();
     }
 

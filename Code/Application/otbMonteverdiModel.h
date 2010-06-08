@@ -116,7 +116,7 @@ class ITK_EXPORT MonteverdiModel
 
   /** Create a module according to its key. If the key is not a
   registered module, throws an exception */
-  void CreateModuleByKey(const std::string & key);
+  std::string CreateModuleByKey(const std::string & key);
 
   /** Get available modules map */
   const ModuleDescriptorMapType & GetRegisteredModuleDescriptors() const;
