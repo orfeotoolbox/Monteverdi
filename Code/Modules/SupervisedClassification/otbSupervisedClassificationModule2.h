@@ -58,7 +58,7 @@ public:
   /** Data typedefs */
   /// Dataset
   typedef VectorImage<float,2>         FloatingVectorImageType;
-  typedef VectorData<float,2>          VectorDataType;
+  typedef VectorData<double,2>          VectorDataType;
 
   typedef Image<int,2>                 LabelImageType;
 

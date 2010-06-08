@@ -69,7 +69,7 @@ public:
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
   typedef LabeledImageType::Pointer                                                    LabeledImagePointerType;
 
-  typedef otb::VectorData<PixelType, 2>                                                VectorDataType;
+  typedef otb::VectorData<double, 2>                                                   VectorDataType;
   typedef VectorDataType::Pointer                                                      VectorDataPointerType;
 
   typedef otb::ListSampleGenerator<ImageType, VectorDataType>                          ListSampleGeneratorType;
