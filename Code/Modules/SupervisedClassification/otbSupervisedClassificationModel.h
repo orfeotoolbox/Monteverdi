@@ -92,6 +92,8 @@ public:
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
+  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
+                               LabeledImageType>       ClassificationFilterType;
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -123,6 +125,7 @@ public:
 
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
+  itkGetObjectMacro(ClassificationFilter,ClassificationFilterType);
   itkGetMacro(NumberOfClasses,unsigned short);
   itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
   itkGetMacro(OverallAccuracy,double);
@@ -180,6 +183,9 @@ private:
   ConfusionMatrixType                         m_ConfusionMatrix;
   double                                      m_OverallAccuracy;
   double                                      m_KappaIndex;
+
+  /** The SVM classifier */
+  ClassificationFilterType::Pointer           m_ClassificationFilter;
   
 };
 

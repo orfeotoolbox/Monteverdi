@@ -98,7 +98,8 @@ void SupervisedClassificationModule2::Notify()
     {
       this->ClearOutputDescriptors();
       // Add outputs
-      LabelImageType::Pointer filteredOutput = m_Model->GetOutput();
+      LabelImageType::Pointer filteredOutput =
+	                          m_Model->GetClassificationFilter()->GetOutput();
       this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
     }
 
