@@ -59,6 +59,7 @@ VectorizationModel() : m_VisualizationModel(),
 
   // VectorData model
   m_VectorDataModel = VectorDataModelType::New();
+  m_VectorDataModel->RegisterListener(this);
 }
 
 VectorizationModel
@@ -102,6 +103,13 @@ VectorizationModel
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_VisualizationModel->Update();
+}
+
+void
+VectorizationModel
+::Notify()
+{
+  this->NotifyAll();
 }
 
 }// namespace otb

@@ -31,10 +31,12 @@ VectorizationView
                          m_WidgetController(),
                          m_Model(),
                          m_ImageView(),
-                         m_VectorDataGlComponent()
+                         m_VectorDataGlComponent(),
+                         m_VectorDataTreeBrowser()
 {
   m_ImageView = ImageViewType::New();
   m_VectorDataGlComponent = VectorDataGlComponentType::New();
+  m_VectorDataTreeBrowser = VectorDataTreeBrowserType::New();
   m_ImageView->GetFullWidget()->AddGlComponent(m_VectorDataGlComponent);
   m_ImageView->GetScrollWidget()->AddGlComponent(m_VectorDataGlComponent);
   m_ImageView->GetZoomWidget()->AddGlComponent(m_VectorDataGlComponent);
@@ -52,6 +54,7 @@ VectorizationView
   gFull->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
   gZoom->remove(m_ImageView->GetZoomWidget());
+  guiVectorDataTreeGroup->remove(m_VectorDataTreeBrowser);
 }
 
 void
@@ -61,6 +64,7 @@ VectorizationView
   m_Model = model;
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
   m_VectorDataGlComponent->SetVectorData(m_Model->GetVectorDataModel()->GetVectorData());
+  m_VectorDataTreeBrowser->SetVectorData(m_Model->GetVectorDataModel()->GetVectorData());
   m_Model->RegisterListener(this);
   m_Model->GetVectorDataModel()->RegisterListener(m_ImageView);
 }
@@ -92,9 +96,11 @@ void
 VectorizationView
 ::RedrawWidgets()
 {
+  std::cout<<"Redrawing widgets ..."<<std::endl;
   m_ImageView->GetFullWidget()->redraw();
   m_ImageView->GetScrollWidget()->redraw();
   m_ImageView->GetZoomWidget()->redraw();
+  m_VectorDataTreeBrowser->Update();
 }
 
 void
@@ -119,6 +125,14 @@ VectorizationView
   m_ImageView->GetFullWidget()->show();
   m_ImageView->GetScrollWidget()->show();
   m_ImageView->GetZoomWidget()->show();
+
+  guiVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+  guiVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+  m_VectorDataTreeBrowser->resize(guiVectorDataTreeGroup->x(),
+                                  guiVectorDataTreeGroup->y(),
+                                  guiVectorDataTreeGroup->w(),
+                                  guiVectorDataTreeGroup->h());
+  m_VectorDataTreeBrowser->show();
 }
 
 void

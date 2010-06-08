@@ -36,7 +36,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT VectorizationModel
-      : public MVCModel<ListenerBase>, public itk::Object
+      : public MVCModel<ListenerBase>, public itk::Object, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -106,6 +106,9 @@ private:
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
   
+  /** Receive notifications */
+  virtual void Notify();
+
   /** Singleton instance */
   static Pointer                              Instance;
 

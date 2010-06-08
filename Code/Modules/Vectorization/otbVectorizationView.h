@@ -27,6 +27,7 @@
 
 #include "otbImageView.h"
 #include "otbVectorDataGlComponent.h"
+#include "otbVectorDataTreeBrowser.h"
 
 namespace otb
 {
@@ -55,6 +56,8 @@ public:
   typedef VectorizationModel::VectorDataType   VectorDataType;
   typedef VectorDataGlComponent
     <VectorDataType>                           VectorDataGlComponentType;
+  typedef VectorDataTreeBrowser
+    <VectorDataType>                           VectorDataTreeBrowserType;
 
   /** Event from the model */
   virtual void Notify();
@@ -97,6 +100,8 @@ private:
   ImageViewType::Pointer                    m_ImageView;
   /** VectorData Gl component */
   VectorDataGlComponentType::Pointer        m_VectorDataGlComponent;
+  /** VectorDataTreeBrowser */
+  VectorDataTreeBrowserType::Pointer        m_VectorDataTreeBrowser;
 };
 }//end namespace otb
 

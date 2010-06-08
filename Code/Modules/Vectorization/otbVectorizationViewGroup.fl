@@ -7,15 +7,15 @@ header_name {.h}
 code_name {.cxx}
 class VectorizationViewGroup {open
 } {
-  Function {CreateGUI()} {return_type void
+  Function {CreateGUI()} {open return_type void
   } {
     Fl_Window wMainWindow {
       label {Vectorization Tool}
       callback {this->HideAll();} open
-      xywh {568 191 1095 835} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
+      xywh {792 48 1095 860} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
-      Fl_Group guiImageGroup {open selected
-        xywh {8 5 529 824}
+      Fl_Group guiImageGroup {open
+        xywh {8 5 529 824} resizable
       } {
         Fl_Group gScroll {
           label Minimap
@@ -27,15 +27,82 @@ class VectorizationViewGroup {open
         } {}
         Fl_Group gFull {
           label {Full resolution}
-          xywh {8 298 526 526} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          xywh {8 297 526 526} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 resizable
         } {
           Fl_Group {} {open
-            xywh {32 319 15 15}
+            xywh {32 318 15 15}
           } {}
         }
       }
       Fl_Group guiParametersGroup {open
-        xywh {544 19 536 800}
+        xywh {544 5 536 820}
+      } {
+        Fl_Group guiVectorDataTreeGroup {
+          label {Vector Data Browser} open
+          xywh {551 27 309 798} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
+        } {}
+        Fl_Group {} {
+          label {Next geometry} open
+          xywh {869 28 205 119} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+        } {
+          Fl_Round_Button {} {
+            label Point
+            xywh {885 41 170 23} down_box ROUND_DOWN_BOX
+          }
+          Fl_Round_Button {} {
+            label Line
+            xywh {885 64 170 23} down_box ROUND_DOWN_BOX
+          }
+          Fl_Round_Button {} {
+            label {Polygon (Exterior ring)}
+            xywh {885 88 170 23} down_box ROUND_DOWN_BOX
+          }
+          Fl_Round_Button {} {
+            label {Polygon (Interior rings)} selected
+            xywh {885 112 170 23} down_box ROUND_DOWN_BOX deactivate
+          }
+        }
+        Fl_Group {} {
+          label {Color table} open
+          xywh {870 305 205 258} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+        } {
+          Fl_Button {} {
+            label {Default Color}
+            xywh {877 313 190 20} box PLASTIC_DOWN_FRAME
+          }
+        }
+        Fl_Group {} {
+          label {Edit attributes} open
+          xywh {870 164 205 121} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+        } {
+          Fl_Value_Input {} {
+            label {Name : }
+            xywh {929 171 140 23}
+          }
+          Fl_Value_Input {} {
+            label {Value : }
+            xywh {929 197 140 23}
+          }
+          Fl_Choice {} {
+            label {Type : } open
+            xywh {930 224 140 20} down_box BORDER_BOX
+          } {}
+          Fl_Button {} {
+            label Add
+            xywh {874 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+          }
+          Fl_Button {} {
+            label Remove
+            xywh {941 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+          }
+          Fl_Button {} {
+            label Update
+            xywh {1008 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+          }
+        }
+      }
+      Fl_Choice {} {open
+        xywh {10 830 1070 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
       } {}
     }
   }
