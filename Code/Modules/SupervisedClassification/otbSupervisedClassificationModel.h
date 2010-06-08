@@ -114,10 +114,7 @@ public:
   void Train();
   
   /** Train the classifier */
-  void Validate()
-  {
-    //FIXME To be implemented
-  }
+  void Validate();
 
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);

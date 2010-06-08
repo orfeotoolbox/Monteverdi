@@ -156,4 +156,18 @@ SupervisedClassificationModel
   m_ModelEstimator->Update();
 }
 
+void
+SupervisedClassificationModel
+::Validate()
+{
+  ClassifierType::Pointer validationClassifier = ClassifierType::New();
+  validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
+  validationClassifier->SetNumberOfClasses(m_NumberOfClasses);
+  validationClassifier->SetModel(m_ModelEstimator->GetModel());
+  validationClassifier->Update();
+
+  // validationClassifier->GetOutput();
+}
+
+
 }// namespace otb
