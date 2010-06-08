@@ -33,10 +33,9 @@ int otbExtractROIVectorImageModuleTest(int argc, char* argv[])
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  typedef otb::VectorImage<double,2>  ImageType;
+  typedef otb::ExtractROIModule::FloatingVectorImageType ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
-
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();

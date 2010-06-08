@@ -79,9 +79,9 @@ public:
   itkTypeMacro(SupervisedClassificationAppli,itk::ProcessObject);
 
   /// Template pixel type
-  typedef double         InputPixelType;
-  typedef unsigned short LabeledPixelType;
-  typedef unsigned char  ColorPixelType;
+  typedef TypeManager::Floating_Point_Precision InputPixelType;
+  typedef unsigned short                        LabeledPixelType;
+  typedef unsigned char                         ColorPixelType;
 
   typedef VectorImage<InputPixelType,2 >                                 OutputImageType;
 

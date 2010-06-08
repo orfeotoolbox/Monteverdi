@@ -52,8 +52,8 @@ public:
   itkTypeMacro(SarCalibrationModule,Module);
   
   // Convenient typedefs
-  typedef Image<double,2>                ImageType;
-  typedef Image<std::complex<double>, 2> ComplexImageType;
+  typedef TypeManager::Floating_Point_Image         ImageType;
+  typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
 
   // SarCalibration Class typedefs
   typedef TerraSarBrightnessImageFilter<ImageType, ImageType>                BrightnessFilterType;

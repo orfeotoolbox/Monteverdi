@@ -48,7 +48,6 @@ public:
   /** Type macro */
   itkTypeMacro(OrthorectificationModule,Module);
   
-
   /** Accessor to the Orthorectification Instance */
   itkGetObjectMacro(Orthorectification,Orthorectification);
   

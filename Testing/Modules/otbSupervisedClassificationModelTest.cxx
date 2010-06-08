@@ -43,9 +43,7 @@ int otbSupervisedClassificationModelSetImageTest(int argc, char* argv[])
 
   std::string infname = std::string(argv[1]);
 
-  typedef float                                             PixelType;
-
-  typedef otb::VectorImage<PixelType,2>                     ImageType;
+  typedef otb::SupervisedClassificationModel::ImageType ImageType;
 
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -64,12 +62,10 @@ int otbSupervisedClassificationModelSetLabeledImageTest(int argc, char* argv[])
   otb::SupervisedClassificationModel::Pointer spclModel = otb::SupervisedClassificationModel::New();
   otb::SupervisedClassificationModel::Pointer model = spclModel.GetPointer();
 
-
   std::string labeledfname = std::string(argv[1]);
 
-  typedef int                                               LabeledPixelType;
-  typedef otb::Image<LabeledPixelType,2>                    LabeledImageType;
-  typedef otb::ImageFileReader<LabeledImageType>            LabeledImageReaderType;
+  typedef otb::SupervisedClassificationModel::LabeledImageType LabeledImageType;
+  typedef otb::ImageFileReader<LabeledImageType>               LabeledImageReaderType;
   LabeledImageReaderType::Pointer labeledReader = LabeledImageReaderType::New();
 
   labeledReader->SetFileName(labeledfname);
@@ -78,7 +74,6 @@ int otbSupervisedClassificationModelSetLabeledImageTest(int argc, char* argv[])
   spclModel->SetLabeledImage( labeledReader->GetOutput() );
 
   return EXIT_SUCCESS;
-
 }
 
 int otbSupervisedClassificationModelSetVectorDataTest(int argc, char* argv[])
@@ -86,13 +81,10 @@ int otbSupervisedClassificationModelSetVectorDataTest(int argc, char* argv[])
   otb::SupervisedClassificationModel::Pointer spclModel = otb::SupervisedClassificationModel::New();
   otb::SupervisedClassificationModel::Pointer model = spclModel.GetPointer();
 
-    std::string infname = std::string(argv[1]);
+  std::string infname = std::string(argv[1]);
 
-  typedef float                                             PixelType;
-
-  typedef otb::VectorImage<PixelType,2>                     ImageType;
-
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  typedef otb::SupervisedClassificationModel::ImageType     ImageType;
+  typedef otb::ImageFileReader<ImageType>                   ImageReaderType;
   ImageReaderType::Pointer reader = ImageReaderType::New();
 
   reader->SetFileName(infname);
@@ -102,7 +94,7 @@ int otbSupervisedClassificationModelSetVectorDataTest(int argc, char* argv[])
   
   std::string vectorfname = std::string(argv[2]);
   
-  typedef otb::VectorData<float, 2>                 VectorDataType;
+  typedef otb::SupervisedClassificationModel::VectorDataType VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
   VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
@@ -121,13 +113,10 @@ int otbSupervisedClassificationModelTrainTest(int argc, char* argv[])
   otb::SupervisedClassificationModel::Pointer spclModel = otb::SupervisedClassificationModel::New();
   otb::SupervisedClassificationModel::Pointer model = spclModel.GetPointer();
 
-    std::string infname = std::string(argv[1]);
+  std::string infname = std::string(argv[1]);
 
-  typedef float                                             PixelType;
-
-  typedef otb::VectorImage<PixelType,2>                     ImageType;
-
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  typedef otb::SupervisedClassificationModel::ImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>               ImageReaderType;
   ImageReaderType::Pointer reader = ImageReaderType::New();
 
   reader->SetFileName(infname);
@@ -137,8 +126,8 @@ int otbSupervisedClassificationModelTrainTest(int argc, char* argv[])
   
   std::string vectorfname = std::string(argv[2]);
   
-  typedef otb::VectorData<float, 2>                 VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
+  typedef otb::SupervisedClassificationModel::VectorDataType VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType>          VectorDataReaderType;
 
   VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
   vectorReader->SetFileName(vectorfname);

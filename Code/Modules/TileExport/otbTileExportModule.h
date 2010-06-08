@@ -88,10 +88,10 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Image file
-  typedef double                                  InternalPixelType;
-  typedef unsigned char                           OutputPixelType;
-  typedef VectorImage<InternalPixelType,2>        FloatingVectorImageType;
-  typedef VectorImage<OutputPixelType,2>          CharVectorImageType;
+  typedef TypeManager::Floating_Point_Precision   InternalPixelType;
+  typedef TypeManager::Label_Char_Precision       OutputPixelType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Labeled_Char_VectorImage   CharVectorImageType;
   
   // Region
   typedef FloatingVectorImageType::RegionType     RegionType;

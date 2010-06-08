@@ -20,6 +20,7 @@
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbTypeManager.h"
 #include "itkObject.h"
 
 #include "otbVectorImage.h"
@@ -46,8 +47,7 @@ class ITK_EXPORT ProjectionModel
   itkNewMacro(Self);
 
   /** typedefs */
-  typedef double                                   PixelType;
-  typedef VectorImage<PixelType,2>                 InputImageType;
+  typedef TypeManager::Floating_Point_VectorImage  InputImageType;
   typedef InputImageType::IndexType                IndexType;
   typedef InputImageType::SizeType                 SizeType;
   typedef InputImageType::PointType                PointType;
@@ -59,8 +59,8 @@ class ITK_EXPORT ProjectionModel
   typedef TransformType::OutputPointType              OutputPointType;
 
   /** Output */
-  typedef Image<PixelType,2>                            SingleImageType;
-  typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>         ResampleFilterType;
+  typedef TypeManager::Floating_Point_Image           SingleImageType;
+  typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>       ResampleFilterType;
   typedef PerBandVectorImageFilter<InputImageType, InputImageType, ResampleFilterType> PerBandFilterType;
   
   /** SetInputImage */

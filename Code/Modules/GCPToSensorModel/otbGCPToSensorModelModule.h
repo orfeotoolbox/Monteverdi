@@ -25,9 +25,11 @@
 #include "otbGCPToSensorModelController.h"
 #include "otbGCPToSensorModelModel.h"
 #include "otbGCPToSensorModelModule.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 // include the OTB/ITK elements
 #include "otbVectorImage.h"
+#include "otbTypeManager.h"
 
 namespace otb
 {
@@ -57,15 +59,20 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-
+  typedef TypeManager::Floating_Point_Image                FloatingSingleImageType;
+  
   /** MVC typedefs */
   typedef otb::GCPToSensorModelController ControllerType;
   typedef otb::GCPToSensorModelModel      ModelType;
   typedef otb::GCPToSensorModelView       ViewType;
 
- itkGetObjectMacro(View,ViewType);
- itkGetObjectMacro(Controller,ControllerType);
+  typedef ModelType::VectorImageType      FloatingVectorImageType;
+
+  /** Cast SingleImage to VectorImageType*/
+  typedef ImageToVectorImageCastFilter<FloatingSingleImageType,FloatingVectorImageType>     CastSingleImageFilterType;
+      
+  itkGetObjectMacro(View,ViewType);
+  itkGetObjectMacro(Controller,ControllerType);
 
 protected:
   /** Constructor */
@@ -106,6 +113,10 @@ private:
   ControllerType::Pointer m_Controller;
   ViewType::Pointer m_View;
   ModelType::Pointer m_Model;
+
+  //Cast Filter
+  CastSingleImageFilterType::Pointer m_CastFilter;
+
 };
 
 

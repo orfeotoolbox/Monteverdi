@@ -43,8 +43,9 @@ int otbDataDescriptorTest(int argc, char * argv[])
   std::cout<<"IsTypeCompatible(Floating_Point_Image): "<<desc2.IsTypeCompatible("Floating_Point_Image")<<std::endl;
 
   // Create data
-  otb::DataObjectWrapper wrapper = otb::DataObjectWrapper::Create(otb::Image<double,2>::New());
-  
+  typedef otb::TypeManager::Floating_Point_Image ImageType;
+  otb::DataObjectWrapper wrapper = otb::DataObjectWrapper::Create(ImageType::New());
+
   // Add data
   desc2.AddData(wrapper);
   

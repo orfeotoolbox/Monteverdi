@@ -35,9 +35,9 @@ int otbChangeDetectionModuleTest(int argc, char* argv[])
   
   bool  run = atoi(argv[5]);
   
-  typedef otb::VectorImage<double,2>          ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
+  typedef otb::ChangeDetectionModule::ImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
   // reader Right
   ReaderType::Pointer reader = ReaderType::New();

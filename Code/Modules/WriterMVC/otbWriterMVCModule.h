@@ -66,11 +66,11 @@ namespace otb
 
       /** OTB typedefs */
       /// Dataset
-      typedef VectorImage<double,2>             FloatingVectorImageType;
+      typedef WriterModel::InputImageType       FloatingVectorImageType;
       typedef FloatingVectorImageType::Pointer  FPVImagePointerType;
-//       typedef VectorData<double>            VectorType;
     
       itkGetObjectMacro(View,WriterViewGUI);
+
     protected:
       /** Constructor */
       WriterMVCModule();

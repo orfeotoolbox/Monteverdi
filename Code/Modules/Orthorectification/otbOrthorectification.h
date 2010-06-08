@@ -37,6 +37,7 @@
 #include "itkInterpolateImageFunction.h"
 
 #include "otbMVCModel.h"
+#include "otbTypeManager.h"
 #include "otbListenerBase.h"
 
 
@@ -65,22 +66,19 @@ public:
   itkTypeMacro(Orthorectification,ProcessObject);
 
   /** Template parameters typedefs */
-  typedef double                                    PixelType;
-  typedef VectorImage<PixelType,2>                  ImageType;
+  typedef TypeManager::Floating_Point_Precision     PixelType;
+  typedef TypeManager::Floating_Point_VectorImage   ImageType;
   typedef ImageType::Pointer                        ImagePointerType;
   typedef ImageType::SizeType                       SizeType;
   typedef ImageType::IndexType                      IndexType;
   typedef ImageType::PointType                      PointType;
   typedef ImageType::SpacingType                    SpacingType;
 
-  
   // Mono Channel Image Type
-  typedef Image<PixelType,2>                        SingleImageType;
-
+  typedef TypeManager::Floating_Point_Image         SingleImageType;
   typedef std::vector<std::string>                  StringVectorType;
   typedef std::vector<int>                          IntVectorType;
   typedef std::vector<double>                       DoubleVectorType;
-
 
   /** DEM computation typedefs */
   typedef DEMToImageGenerator<ImageType>            DEMToImageGeneratorType;
@@ -99,10 +97,6 @@ public:
   typedef InverseSensorModel<double>                InverseSensorType;
   typedef InverseSensorType::InputPointType         InverseSensorInputPointType;
   typedef InverseSensorType::OutputPointType        InverseSensorOutputPointType;
-
-  /** OrthoRectification Filter */
-  //typedef OrthoRectificationFilter<SingleImageType, SingleImageType, >   OrthorectificationFilterType;
-  //typedef PerBandVectorImageFilter<ImageType, ImageType, OrthorectificationFilterType> PerBandFilterType;
 
   /** Interpolator definition*/
   typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;

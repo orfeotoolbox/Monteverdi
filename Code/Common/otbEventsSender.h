@@ -28,8 +28,8 @@ namespace otb
 {
 /** \class EventsSender
  *
- * Base class for events sending. Listerne may register to this class
- * to recieve the events.
+ * Base class for events sending. Listener may register to this class
+ * to receive the events.
  */
 template <class TEvent = void>
 class EventsSender
@@ -79,7 +79,7 @@ public:
     }
   }
 
-  /** Notify changes to a given listerner */
+  /** Notify changes to a given listener */
   virtual void NotifyListener(ListenerType * listener, const EventType & event = NULL)
   {
      listener->Notify(event);
@@ -96,7 +96,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-  /** Registered liteners */
+  /** Registered listeners */
   ListenersSetType m_RegisteredListeners;
 };
 }

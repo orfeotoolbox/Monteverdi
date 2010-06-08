@@ -18,6 +18,8 @@
 
 #include "otbSupervisedClassificationView.h"
 
+#include "otbMsgReporter.h"
+
 namespace otb
 {
 
@@ -45,13 +47,78 @@ SupervisedClassificationView
   wMainWindow->show();
 }
 
+
 void
 SupervisedClassificationView
-::SetModel(SupervisedClassificationModel* model)
+::BuildInterface()
 {
-  m_Model = model;
+  if(!m_Controller)
+    {
+      itkExceptionMacro(<<"Controller is not set, can not build view.");
+    }
 
-  m_Model->RegisterListener(this);
+  // Build the fltk code
+  this->CreateGUI();
+
+  // Show
+  this->Show();
 }
+
+void
+SupervisedClassificationView
+::SVMSetup()
+{
+  //FIXME get the current values from the model?
+  wSVMSetup->show();
+}
+
+void
+SupervisedClassificationView
+::SVMSetupOk()
+{
+  m_Controller->SVMSetupOk();
+  wSVMSetup->hide();
+}
+
+void
+SupervisedClassificationView
+::SVMSetupCancel()
+{
+  wSVMSetup->hide();
+}
+
+void
+SupervisedClassificationView
+::Train()
+{
+  m_Controller->Train();
+}
+
+void
+SupervisedClassificationView
+::Validate()
+{
+  m_Controller->Validate();
+  wValidationWindow->show();
+}
+
+void
+SupervisedClassificationView
+::Cancel()
+{
+  m_Controller->Quit();
+  MsgReporter::GetInstance()->Hide();
+  wMainWindow->hide();
+}
+
+void
+SupervisedClassificationView
+::Ok()
+{
+  m_Controller->Ok();
+  MsgReporter::GetInstance()->Hide();
+  wMainWindow->hide();
+}
+
 
 }

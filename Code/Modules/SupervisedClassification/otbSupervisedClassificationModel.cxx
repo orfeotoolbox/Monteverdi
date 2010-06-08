@@ -19,7 +19,6 @@
 #include "otbSupervisedClassificationModel.h"
 #include "otbFltkFilterWatcher.h"
 
-
 namespace otb
 {
 /** Initialize the singleton */
@@ -44,13 +43,19 @@ Notify(ListenerBase * listener)
 }
 
 SupervisedClassificationModel::
-SupervisedClassificationModel() : m_MaxTrainingSize(100), m_MaxValidationSize(100), m_ValidationTrainingProportion(0.0), m_NumberOfClasses(2), m_CValue(4)
+SupervisedClassificationModel() : m_MaxTrainingSize(100),
+				  m_MaxValidationSize(100),
+				  m_ValidationTrainingProportion(0.5),
+				  m_NumberOfClasses(2),
+				  m_OverallAccuracy(0.0),
+				  m_KappaIndex(0.0)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
   m_VectorROIs = VectorDataType::New();
   m_SampleGenerator = ListSampleGeneratorType::New();
   m_ModelEstimator = ModelEstimatorType::New();
+  m_ClassificationFilter = ClassificationFilterType::New();
 }
 
 SupervisedClassificationModel
@@ -90,22 +95,29 @@ SupervisedClassificationModel
 {
   m_OutputChanged = false;
 
-  vectorData->UpdateOutputInformation();
   m_VectorROIs = vectorData;
-
-  this->GenerateSamples();
+  m_VectorROIs->Update();
   
 }
 
 
 void
 SupervisedClassificationModel
-::OK()
+::Ok()
 {
-  // Set Output
-  //m_Output->UpdateOutputInformation();
-  
+
+  m_ClassificationFilter->SetInput(m_InputImage);
+  m_ClassificationFilter->SetModel(m_ModelEstimator->GetModel());
   m_OutputChanged = true;
+  this->NotifyAll();
+
+}
+
+void
+SupervisedClassificationModel
+::Quit()
+{
+  m_OutputChanged = false;
   this->NotifyAll();
 }
 
@@ -117,12 +129,19 @@ SupervisedClassificationModel
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
 
+  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
+  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
   m_SampleGenerator->Update();
 
   m_NumberOfClasses = m_SampleGenerator->GetNumberOfClasses();
+
+
+  otbGenericMsgDebugMacro(<<"Samples generated. "<< m_NumberOfClasses
+		   << " classes found ");
 }
 
 
@@ -130,11 +149,40 @@ void
 SupervisedClassificationModel
 ::Train()
 {
+  this->GenerateSamples();
   m_ModelEstimator->SetInputSampleList(m_SampleGenerator->GetTrainingListSample());
   m_ModelEstimator->SetTrainingSampleList(m_SampleGenerator->GetTrainingListLabel());
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
-  m_ModelEstimator->SetC( m_CValue );
+  if(m_NumberOfClasses == 1)
+    m_ModelEstimator->SetSVMType(ONE_CLASS);
   m_ModelEstimator->Update();
 }
+
+void
+SupervisedClassificationModel
+::Validate()
+{
+  ClassifierType::Pointer validationClassifier = ClassifierType::New();
+  validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
+  validationClassifier->SetNumberOfClasses(m_NumberOfClasses);
+  validationClassifier->SetModel(m_ModelEstimator->GetModel());
+  validationClassifier->Update();
+
+  ConfusionMatrixCalculatorType::Pointer confMatCalc =
+                                          ConfusionMatrixCalculatorType::New();
+
+  confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
+  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+
+  confMatCalc->Update();
+
+  m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
+  m_OverallAccuracy = confMatCalc->GetOverallAccuracy();
+  m_KappaIndex = confMatCalc->GetKappaIndex();
+
+  otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
+  
+}
+
 
 }// namespace otb

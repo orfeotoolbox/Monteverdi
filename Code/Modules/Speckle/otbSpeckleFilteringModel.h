@@ -20,6 +20,7 @@
 #define __otbSpeckleFilteringModel_h
 
 #include "otbMVCModel.h"
+#include "otbTypeManager.h"
 #include "otbListenerBase.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -47,8 +48,7 @@ class ITK_EXPORT SpeckleFilteringModel
   itkNewMacro(Self);
 
   /** typedefs */
-  typedef double                                   PixelType;
-  typedef Image<PixelType,2>                       InputImageType;
+  typedef TypeManager::Floating_Point_Image                   InputImageType;
 
   typedef LeeImageFilter<InputImageType,InputImageType>       LeeFilterType;
   typedef FrostImageFilter<InputImageType,InputImageType>     FrostFilterType;
@@ -83,7 +83,6 @@ class ITK_EXPORT SpeckleFilteringModel
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
 
-
   InputImageType::Pointer       m_InputImage;
   InputImageType::Pointer       m_Output;
 
@@ -91,7 +90,6 @@ class ITK_EXPORT SpeckleFilteringModel
   FrostFilterType::Pointer      m_FrostFilter;
 
   bool                          m_OutputChanged;
-
 
 };
 

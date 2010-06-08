@@ -52,17 +52,17 @@ void
 MonteverdiModel::Close()
 {
   //Remove Caching directory
-  if ( m_EraseCaching )
+  if (m_EraseCaching)
   {
-        // Look for the caching module instance id
-        CachingModuleMapType::const_iterator it = m_CachingModuleMap.begin();
+    // Look for the caching module instance id
+    CachingModuleMapType::const_iterator it = m_CachingModuleMap.begin();
 
-          // through all cached module instances
-          while (it != m_CachingModuleMap.end())
-            {
-            it->second->EraseFileOn();
-	    ++it;
-            }     
+    // through all cached module instances
+    while (it != m_CachingModuleMap.end())
+    {
+      it->second->EraseFileOn();
+      ++it;
+    }
   }
   
   m_ModuleDescriptorMap.clear();
@@ -75,7 +75,7 @@ MonteverdiModel::Close()
 
 /** Create a module according to its name. If the name is not a
   registered module, throws an exception */
-void MonteverdiModel::CreateModuleByKey(const std::string & key)
+std::string MonteverdiModel::CreateModuleByKey(const std::string & key)
 {
   ModuleDescriptorMapType::const_iterator mcIt = m_ModuleDescriptorMap.find(key);
 
@@ -101,6 +101,7 @@ void MonteverdiModel::CreateModuleByKey(const std::string & key)
 
     // Update instances count
     m_InstancesCountMap[key]++;
+    return oss.str();
     }
   else
     {

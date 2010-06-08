@@ -56,16 +56,18 @@ public:
   itkSetObjectMacro(Controller,SupervisedClassificationControllerInterface);
   itkGetObjectMacro(Controller,SupervisedClassificationControllerInterface);
 
+  /** Build the interface */
+  virtual void BuildInterface();
 
-  virtual void SVMSetup() {};
-  virtual void SVMSetupOk() {};
-  virtual void SVMSetupCancel() {};
-  virtual void Learn() {};
-  virtual void Validate() {};
+  virtual void SVMSetup();
+  virtual void SVMSetupOk();
+  virtual void SVMSetupCancel();
+  virtual void Train();
+  virtual void Validate();
   virtual void HideAll();
   virtual void Show();
-
-  void SetModel(SupervisedClassificationModel* model);
+  virtual void Ok();
+  virtual void Cancel();
 
 protected:
   /** Constructor */
@@ -81,9 +83,6 @@ private:
 
   /** Pointer to the controller */
   SupervisedClassificationControllerInterface::Pointer  m_Controller;
-
-  /** Pointer to the model */
-  SupervisedClassificationModel::Pointer                m_Model;//FIXME why not obtained when needed from the controller?
 
 };
 } //end namespace otb

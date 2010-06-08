@@ -20,6 +20,7 @@
 
 // #include "otbMVCModel.h"
 // #include "otbListenerBase.h"
+#include "otbTypeManager.h"
 #include "otbEventsSender.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -69,7 +70,7 @@ public:
   itkTypeMacro(WriterModel, MVCModel);
 
   /** Images typedefs */
-  typedef double                                                          PixelType;
+  typedef TypeManager::Floating_Point_Precision                           PixelType;
   /** Inpout Image Type*/
   typedef VectorImage<PixelType,2>                                        InputImageType;
   typedef InputImageType::Pointer                                         InputImagePointerType;
@@ -135,7 +136,7 @@ public:
   typedef VisuModelType::Pointer                            VisuModelPointerType;
 
   /** inpuyt vector data */
-  typedef VectorData<double>                                VectorType;
+  typedef TypeManager::Vector_Data                          VectorType;
   /// Writers
   typedef ImageFileWriter<InputImageType>                   FPVWriterType;
   typedef VectorDataFileWriter<VectorType>                  VectorWriterType;

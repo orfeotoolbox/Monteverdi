@@ -22,11 +22,9 @@
 #include "otbModule.h"
 // include the GUI
 #include "otbKMeansModuleGUI.h"
-// include process
-//#include "otbAsynchronousProcessBase.h"
 
-// include the OTB elements
-#include "otbVectorImage.h"
+#include "otbTypeManager.h"
+
 
 // KMeans
 #include "itkEuclideanDistance.h"
@@ -121,14 +119,16 @@ public:
   /** Type macro */
   itkTypeMacro(KMeansModule,Module);
 
-  typedef double                                                           PrecisionType;
-  typedef unsigned short                                                   LabelType;
-  typedef VectorImage<PrecisionType,2>                                     FloatingVectorImageType;
-  typedef otb::Image<LabelType,2>                                          LabeledImageType;
+  typedef TypeManager::Floating_Point_Precision   PrecisionType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+
+  typedef TypeManager::Label_Short_Precision      LabelType;
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
+
   typedef FloatingVectorImageType::PixelType                               SampleType;
   typedef itk::Statistics::ListSample<SampleType>                          ListSampleType;
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
-  typedef  TreeGeneratorType::KdTreeType                                   TreeType;
+  typedef TreeGeneratorType::KdTreeType                                    TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
   typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType,
                                      FloatingVectorImageType>              SamplingFilterType;

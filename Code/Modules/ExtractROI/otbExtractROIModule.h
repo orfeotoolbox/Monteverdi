@@ -67,10 +67,10 @@ namespace otb
     itkTypeMacro(ExtractROIModule,Module);
     
     /** OTB typedefs */
-    typedef double                                                          InternalPixelType;
-    /// Dataset
-    typedef Image<InternalPixelType,2>                                      FloatingImageType;
-    typedef VectorImage<InternalPixelType,2>                                FloatingVectorImageType;
+    typedef TypeManager::Floating_Point_Precision                           InternalPixelType;
+    typedef TypeManager::Floating_Point_Image                               FloatingImageType;
+    typedef TypeManager::Floating_Point_VectorImage                         FloatingVectorImageType;
+
     /// Multi channels Extract ROI filter
     typedef MultiChannelExtractROI< InternalPixelType, InternalPixelType >  VectorImageExtractROIFilterType;
     /// Mono channel Extract ROI filter

@@ -49,7 +49,8 @@ class ITK_EXPORT ChangeDetectionModule
   itkTypeMacro(ChangeDetectionModule,Module);
   
   /** Input typedef */
-  typedef InteractiveChangeDetection<double>         ChangeDetectionType;
+  typedef TypeManager::Floating_Point_Precision      FloatingType;
+  typedef InteractiveChangeDetection<FloatingType>   ChangeDetectionType;
   typedef ChangeDetectionType::ImageType             ImageType;
   typedef ChangeDetectionType::SingleImageType       SingleImageType;
 

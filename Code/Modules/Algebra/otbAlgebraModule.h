@@ -57,8 +57,8 @@ public:
   itkTypeMacro(AlgebraModule,Module);
   
   // Convenient typedefs
-  typedef VectorImage<double,2>         VectorImageType;
-  typedef Image<double,2>               ImageType;
+  typedef TypeManager::Floating_Point_Image          ImageType;
+  typedef TypeManager::Floating_Point_VectorImage    VectorImageType;
 
   // Algebra Class typedefs
   typedef itk::AddImageFilter<ImageType,ImageType,ImageType>              AddFilterType;

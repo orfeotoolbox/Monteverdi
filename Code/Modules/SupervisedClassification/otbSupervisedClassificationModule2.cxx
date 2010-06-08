@@ -34,8 +34,8 @@ SupervisedClassificationModule2::SupervisedClassificationModule2()
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
   m_View->SetController(m_Controller);
-  m_View->SetModel(m_Model);
 
+  m_Model->RegisterListener(m_View);
   m_Model->RegisterListener(this);
 
   // Then, describe inputs needed by the module
@@ -77,7 +77,7 @@ void SupervisedClassificationModule2::Run()
   if(fpvImage.IsNotNull() && vectorDataROIs.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-//      m_View->BuildInterface(); // FIXME activate when the method is done
+      m_View->BuildInterface();
       m_Model->SetImage( fpvImage );
       m_Model->SetVectorROIs( vectorDataROIs );
     }
@@ -98,7 +98,8 @@ void SupervisedClassificationModule2::Notify()
     {
       this->ClearOutputDescriptors();
       // Add outputs
-      LabelImageType::Pointer filteredOutput = m_Model->GetOutput();
+      LabelImageType::Pointer filteredOutput =
+	                          m_Model->GetClassificationFilter()->GetOutput();
       this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
     }
 
@@ -108,4 +109,3 @@ void SupervisedClassificationModule2::Notify()
   this->BusyOff();
 }
 } // End namespace otb
-

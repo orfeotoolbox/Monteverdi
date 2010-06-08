@@ -23,6 +23,7 @@
 #include <utility>
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbTypeManager.h"
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -32,6 +33,7 @@
 #include "otbSVMImageClassificationFilter.h"
 #include "otbSVMClassifier.h"
 #include "itkListSample.h"
+#include "otbConfusionMatrixCalculator.h"
 
 
 namespace otb {
@@ -60,7 +62,7 @@ public:
 
   typedef enum { RANDOM, TRAINING, VALIDATION }                                        ROISelectionModeType;
 
-  typedef float                                                                        PixelType;
+  typedef TypeManager::Floating_Point_Precision                                        PixelType;
   typedef int                                                                          LabeledPixelType;
 
   typedef VectorImage<PixelType,2>                                                     ImageType;
@@ -68,7 +70,7 @@ public:
   typedef Image<LabeledPixelType,2>                                                    LabeledImageType;
   typedef LabeledImageType::Pointer                                                    LabeledImagePointerType;
 
-  typedef otb::VectorData<PixelType, 2>                                                VectorDataType;
+  typedef otb::VectorData<double, 2>                                                   VectorDataType;
   typedef VectorDataType::Pointer                                                      VectorDataPointerType;
 
   typedef otb::ListSampleGenerator<ImageType, VectorDataType>                          ListSampleGeneratorType;
@@ -84,8 +86,14 @@ public:
 
   typedef std::map<LabeledPixelType,unsigned int>                                      ClassesMapType;
 
-  typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
+  typedef ClassifierType::OutputType                                                   ValidationListSampleType;
+  typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
+                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
+  
+  typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
+  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
+                               LabeledImageType>       ClassificationFilterType;
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -105,19 +113,28 @@ public:
 
   LabeledImageType::Pointer GetOutput()
   {
-    //To be implemented
+    //FIXME To be implemented
   }
 
 
   /** Train the classifier */
   void Train();
   
+  /** Train the classifier */
+  void Validate();
+
   /** SVM model manipulation */
+  itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
+  itkGetObjectMacro(ClassificationFilter,ClassificationFilterType);
   itkGetMacro(NumberOfClasses,unsigned short);
-  itkSetMacro(CValue,float);
+  itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
+  itkGetMacro(OverallAccuracy,double);
+  itkGetMacro(KappaIndex,double);
   
   /** Update Output */
-  void OK();
+  void Ok();
+
+  void Quit();
 
   /** Get the output changed flag */
   itkGetMacro(OutputChanged,bool);
@@ -161,7 +178,14 @@ private:
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
-  float                                       m_CValue;
+
+  /** The confusion matrix */
+  ConfusionMatrixType                         m_ConfusionMatrix;
+  double                                      m_OverallAccuracy;
+  double                                      m_KappaIndex;
+
+  /** The SVM classifier */
+  ClassificationFilterType::Pointer           m_ClassificationFilter;
   
 };
 

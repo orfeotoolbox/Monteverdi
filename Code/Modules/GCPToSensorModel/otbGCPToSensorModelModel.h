@@ -21,6 +21,8 @@
 
 #include <iostream>
 #include <utility>
+
+#include "otbTypeManager.h"
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 #include "otbVectorImage.h"
@@ -68,8 +70,8 @@ public:
   /** New macro */
   itkNewMacro(Self);
 
-  typedef double                                                    PixelType;
-  typedef VectorImage<PixelType,2>                                  VectorImageType;
+  typedef TypeManager::Floating_Point_Precision                     PixelType;
+  typedef TypeManager::Floating_Point_VectorImage                   VectorImageType;
   typedef VectorImageType::Pointer                                  VectorImagePointerType;
   typedef VectorImageType::IndexType                                IndexType;
   typedef VectorImageType::SizeType                                 SizeType;

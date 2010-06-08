@@ -18,6 +18,8 @@
 #ifndef __otbTypeManager_h
 #define __otbTypeManager_h
 
+#include "ConfigureMonteverdi.h"
+
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbVectorData.h"
@@ -50,19 +52,27 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  // Some basic typedefs
-  typedef double                                       Floating_Point_Precision;
+  // Pixel Types
+  typedef Monteverdi_FLOATING_TYPE                     Floating_Point_Precision;
   typedef unsigned short                               Label_Short_Precision;
   typedef unsigned char                                Label_Char_Precision;
   typedef std::complex<Floating_Point_Precision>       Floating_Point_Complex;
+  typedef itk::FixedArray<Floating_Point_Precision,2>  Deformation_Value_Type;
+
+  // Single Band Image Types
   typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
   typedef otb::Image<Label_Short_Precision,2>          Labeled_Short_Image;
-  typedef itk::FixedArray<Floating_Point_Precision,2>         Deformation_Value_Type;
-  typedef otb::Image<Deformation_Value_Type,2>          Deformation_Field_Type;
+  typedef otb::Image<Label_Char_Precision,2>           Labeled_Char_Image;
+  typedef otb::Image<Floating_Point_Complex,2>         Floating_Point_Complex_Image;
+  typedef otb::Image<Deformation_Value_Type,2>         Deformation_Field_Type;
+
+  // Vector Image Types
   typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
   typedef otb::VectorImage<Label_Char_Precision,2>     Labeled_Char_VectorImage;
-  typedef otb::Image<Floating_Point_Complex,2>         Floating_Point_Complex_Image;
-  typedef otb::VectorData<Floating_Point_Precision>    Vector_Data;
+  typedef otb::VectorImage<Label_Short_Precision,2>    Labeled_Short_VectorImage;
+
+  // Vector Data Types
+  typedef otb::VectorData<double>                      Vector_Data;
   typedef otb::VectorData<double,2,short unsigned int> Labeled_Vector_Data;
 
   /** Standard type macro */

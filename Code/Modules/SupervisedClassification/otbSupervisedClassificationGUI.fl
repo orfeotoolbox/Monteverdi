@@ -20,7 +20,7 @@ class SupervisedClassificationGUI {open
     Fl_Window wMainWindow {
       label {Supervised classification}
       callback {this->Quit();} open
-      xywh {865 124 295 215} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {846 154 285 215} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Menu_Bar {} {open
         xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -37,45 +37,50 @@ class SupervisedClassificationGUI {open
         }
       }
       Fl_Group {} {
-        label Sets open
-        xywh {5 34 280 91} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        label {Sets repartition} open
+        xywh {5 34 280 67} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
-        Fl_Check_Button bRandomGeneration {
-          label Random
-          callback {if(bRandomGeneration->value())
-{
-  slRandomProbability->activate();
-}
-else
-{
-  slRandomProbability->deactivate();
-}}
-          tooltip {If activated, validation sample is randomly choosen as a subset of the training samples} xywh {176 58 75 15} down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        Fl_Value_Slider slRepartition {
+          tooltip {Controls the repartition between the training and validation samples} xywh {85 55 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14
         }
-        Fl_Value_Slider slRandomProbability {
-          label {Probability     }
-          tooltip {Tune the probability for a sample to be choosen as a training sample. Only available is random validation sample generation is activated} xywh {156 84 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14 deactivate
+        Fl_Box {} {
+          label Training
+          xywh {20 58 65 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+        }
+        Fl_Box {} {
+          label Validation
+          xywh {203 58 70 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
       }
       Fl_Group {} {
         label Classification open
-        tooltip {Tools for classification} xywh {5 132 280 63} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        tooltip {Tools for classification} xywh {5 107 280 106} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
-        Fl_Light_Button bLearn {
-          label Learn
-          callback {Learn();}
-          tooltip {Learn the SVM model from training samples} xywh {15 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1 deactivate
+        Fl_Light_Button bTrain {
+          label Train
+          callback {Train();}
+          tooltip {Learn the SVM model from training samples} xywh {15 130 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1
         }
         Fl_Light_Button bValidate {
           label Validate
           callback {Validate();}
-          tooltip {Display some quality assesment on the classification} xywh {195 158 76 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+          tooltip {Display some quality assesment on the classification} xywh {150 130 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+        }
+        Fl_Button {} {
+          label Ok
+          callback {Ok();}
+          xywh {15 172 120 28} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button {} {
+          label Cancel
+          callback {Cancel();}
+          tooltip {Leave viewer set up interface without saving changes} xywh {150 170 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
         }
       }
     }
     Fl_Window wSVMSetup {
-      label {SVM setup}
-      xywh {778 400 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      label {SVM setup} open
+      xywh {750 556 385 295} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Choice svmSVMType {
         label {SVM type} open
@@ -129,30 +134,30 @@ else
       }
       Fl_Value_Input svmGamma {
         label Gamma
-        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 15 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Value_Input svmNu {
         label Nu
-        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 46 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.5
       }
       Fl_Value_Input svmCoef0 {
         label Coef0
-        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 77 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 4
       }
       Fl_Value_Input svmC {
         label C
-        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 108 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 1
       }
       Fl_Value_Input svmEpsilon {
         label Epsilon
-        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {305 139 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.001
       }
       Fl_Check_Button svmShrinking {
         label Shrinking
-        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {15 191 185 29} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button svmPE {
-        label {Probability estimation}
+        label {Probability estimation} selected
         xywh {15 154 185 31} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Spinner svmCacheSize {
@@ -166,7 +171,7 @@ else
       }
       Fl_Value_Input svmP {
         label P
-        xywh {306 170 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        xywh {306 169 56 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 value 0.1
       }
       Fl_Button {} {
         label Cancel
@@ -176,7 +181,7 @@ else
     }
     Fl_Window wValidationWindow {
       label Validation open
-      xywh {826 542 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
+      xywh {826 481 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gMatrix {
         label {Confusion matrix} open
@@ -189,7 +194,7 @@ else
       Fl_Return_Button bCloseValidationWindow {
         label Close
         callback {bValidate->clear();
-wValidationWindow->hide();} selected
+wValidationWindow->hide();}
         tooltip {Save changes and leave viewer set up interface} xywh {155 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
       }
     }
@@ -200,7 +205,7 @@ wValidationWindow->hide();} selected
   } {}
   Function {SVMSetupCancel()} {open return_type {virtual void}
   } {}
-  Function {Learn()} {open return_type {virtual void}
+  Function {Train()} {open return_type {virtual void}
   } {}
   Function {Validate()} {open return_type {virtual void}
   } {}
@@ -209,6 +214,10 @@ wValidationWindow->hide();} selected
   Function {HideAll()} {open return_type {virtual void}
   } {}
   Function {~SupervisedClassificationGUI()} {open return_type virtual
+  } {}
+  Function {Ok()} {open return_type {virtual void}
+  } {}
+  Function {Cancel()} {open return_type {virtual void}
   } {}
 } 
 

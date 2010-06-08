@@ -31,12 +31,12 @@ int otbConcatenateModuleTest(int argc, char* argv[])
   std::cout<<"Module: "<<module<<std::endl;
   const unsigned int NbImages(argc-2);
   // Put in the tests
-  typedef otb::Image<double,2>  ImageType;
-  typedef otb::VectorImage<double,2>  VectorImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>     WriterType;
+  typedef otb::ConcatenateModule::ImageType        ImageType;
+  typedef otb::ConcatenateModule::VectorImageType  VectorImageType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>    WriterType;
 
- std::cout << "Concat of " << NbImages << " images into a multi-band image " << std::endl;
+  std::cout << "Concat of " << NbImages << " images into a multi-band image " << std::endl;
 
   //reader
   std::vector<ReaderType::Pointer> listReader;

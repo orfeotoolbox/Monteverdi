@@ -22,6 +22,8 @@
 
 int otbInputDataDescriptorTest(int argc, char * argv[])
 {
+  typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
+
   // Case single, mandatory
   otb::InputDataDescriptor desc1;
   desc1.Set("Floating_Point_VectorImage","InputImage","This is the input image");
@@ -33,8 +35,8 @@ int otbInputDataDescriptorTest(int argc, char * argv[])
   std::cout<<"IsTypeCompatible: Data "<<desc1.IsTypeCompatible("Data")<<std::endl;
 
   std::cout<<"Desc1 consistent:" << desc1.IsConsistent()<<std::endl;
-  desc1.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
-  desc1.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
+  desc1.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
+  desc1.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
   std::cout<<"Desc1 consistent with data:" << desc1.IsConsistent()<<std::endl;
 
   // Access parameters
@@ -53,8 +55,8 @@ int otbInputDataDescriptorTest(int argc, char * argv[])
   otb::InputDataDescriptor desc3("Floating_Point_VectorImage","InputImage","This is the input image");
   desc3.SetMultiple(true);
   std::cout<<"Desc3 consistent:" << desc3.IsConsistent()<<std::endl;
-  desc3.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
-  desc3.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
+  desc3.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
+  desc3.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
   std::cout<<"Desc3 consistent with data:" << desc3.IsConsistent()<<std::endl;
 
   // Testing the << operator
@@ -65,8 +67,8 @@ int otbInputDataDescriptorTest(int argc, char * argv[])
   desc4.SetMultiple(true);
   desc4.SetOptional(true);
   std::cout<<"Desc4 consistent:" << desc4.IsConsistent()<<std::endl;
-  desc4.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
-  desc4.AddData(otb::DataObjectWrapper::Create(otb::VectorImage<double,2>::New()));
+  desc4.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
+  desc4.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
   std::cout<<"Desc4 consistent with data:" << desc4.IsConsistent()<<std::endl;
 
   // Testing the << operator

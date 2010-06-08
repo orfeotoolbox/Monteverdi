@@ -59,17 +59,14 @@ public:
   /** Type macro */
   itkTypeMacro(MeanShiftModule,Module);
 
-  /** Data typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
-  typedef Image<unsigned short,2>       LabelImageType;
-
   /** MVC typedefs */
   typedef otb::MeanShiftModuleController ControllerType;
   typedef otb::MeanShiftModuleModel      ModelType;
   typedef otb::MeanShiftModuleView       ViewType;
 
+  /** Data typedefs */
+  typedef ModelType::VectorImageType     FloatingVectorImageType;
+  typedef ModelType::LabeledImageType    LabelImageType;
 
 protected:
   /** Constructor */

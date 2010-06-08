@@ -49,6 +49,28 @@ public:
     m_View = view;
   }
 
+  /** Users actions */
+  virtual void Train();
+  virtual void Validate();
+  virtual void SVMSetupOk();
+  virtual void Quit();
+  virtual void Ok()
+  {
+    m_Model->Ok();
+  }
+  virtual ConfusionMatrixType GetConfusionMatrix()
+  {
+    return m_Model->GetConfusionMatrix();
+  }
+  virtual double GetOverallAccuracy()
+  {
+    return m_Model->GetOverallAccuracy();
+  }
+  virtual double GetKappaIndex()
+  {
+    return m_Model->GetKappaIndex();
+  }
+
 protected:
  /** Constructor */
   SupervisedClassificationController() {/*TODO To implement*/};

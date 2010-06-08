@@ -54,8 +54,9 @@ public:
   itkSetMacro(Model,std::string);
 
   // Input typedef
-  typedef SupervisedClassificationAppli::ImageType      InputImageType;
-  typedef SupervisedClassificationAppli::ClassesMapType ClassesMapType;
+  typedef SupervisedClassificationAppli::ImageType       InputImageType;
+  typedef SupervisedClassificationAppli::OutputImageType OutputImageType;
+  typedef SupervisedClassificationAppli::ClassesMapType  ClassesMapType;
 
 protected:
   /** Constructor */
