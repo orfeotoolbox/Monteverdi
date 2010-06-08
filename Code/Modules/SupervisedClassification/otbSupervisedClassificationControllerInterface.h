@@ -46,6 +46,7 @@ public:
   virtual void Validate() = 0;
   virtual void SVMSetupOk() = 0;
   virtual void Quit() = 0;
+  virtual void Ok() = 0;
   virtual ConfusionMatrixType GetConfusionMatrix() = 0;
   virtual double GetOverallAccuracy() = 0;
   virtual double GetKappaIndex() = 0;

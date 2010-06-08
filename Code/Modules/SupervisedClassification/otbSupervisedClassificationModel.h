@@ -132,7 +132,7 @@ public:
   itkGetMacro(KappaIndex,double);
   
   /** Update Output */
-  void OK();
+  void Ok();
 
   void Quit();
 

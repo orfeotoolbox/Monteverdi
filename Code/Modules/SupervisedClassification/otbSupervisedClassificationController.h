@@ -54,6 +54,10 @@ public:
   virtual void Validate();
   virtual void SVMSetupOk();
   virtual void Quit();
+  virtual void Ok()
+  {
+    m_Model->Ok();
+  }
   virtual ConfusionMatrixType GetConfusionMatrix()
   {
     return m_Model->GetConfusionMatrix();

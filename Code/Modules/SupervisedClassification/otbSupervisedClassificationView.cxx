@@ -111,4 +111,14 @@ SupervisedClassificationView
   wMainWindow->hide();
 }
 
+void
+SupervisedClassificationView
+::Ok()
+{
+  m_Controller->Ok();
+  MsgReporter::GetInstance()->Hide();
+  wMainWindow->hide();
+}
+
+
 }

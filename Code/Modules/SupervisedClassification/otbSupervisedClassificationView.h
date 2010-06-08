@@ -66,7 +66,7 @@ public:
   virtual void Validate();
   virtual void HideAll();
   virtual void Show();
-  virtual void Ok(){/*FIXME To be implemented*/};
+  virtual void Ok();
   virtual void Cancel();
 
 protected:

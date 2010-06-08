@@ -103,7 +103,7 @@ SupervisedClassificationModel
 
 void
 SupervisedClassificationModel
-::OK()
+::Ok()
 {
 
   m_ClassificationFilter->SetInput(m_InputImage);
