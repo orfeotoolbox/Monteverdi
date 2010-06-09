@@ -59,7 +59,7 @@ public:
   /// Dataset
   typedef VectorImage<float,2>         FloatingVectorImageType;
   typedef VectorData<double,2>         VectorDataType;
-  typedef Image<int,2>                 LabelImageType;
+  typedef VectorImage<float,2>                 LabelImageType;
 
   /** MVC typedefs */
   typedef otb::SupervisedClassificationController ControllerType;

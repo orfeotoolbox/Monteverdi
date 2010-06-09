@@ -27,6 +27,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorData.h"
 #include "otbListSampleGenerator.h"
 #include "otbSVMSampleListModelEstimator.h"
@@ -94,6 +95,8 @@ public:
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
                                LabeledImageType>       ClassificationFilterType;
 
+  typedef otb::ImageToVectorImageCastFilter<LabeledImageType, ImageType>               CasterType;
+
   /** Get the unique instance of the model */
   static Pointer GetInstance();
 
@@ -110,10 +113,10 @@ public:
   itkGetConstObjectMacro(VectorROIs, VectorDataType);
   void SetVectorROIs(VectorDataPointerType vectorData);
 
-  LabeledImageType::Pointer GetOutput()
+  ImageType::Pointer GetOutput()
   {
-    //FIXME To be implemented
-    return NULL;
+
+    return m_Caster->GetOutput();
   }
 
 
@@ -199,6 +202,9 @@ private:
 
   /** The SVM classifier */
   ClassificationFilterType::Pointer           m_ClassificationFilter;
+
+  /** The caster to get a vector image as output */
+  CasterType::Pointer                         m_Caster;
   
 
 };

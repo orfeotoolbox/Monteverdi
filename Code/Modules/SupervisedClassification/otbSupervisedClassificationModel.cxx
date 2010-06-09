@@ -57,6 +57,7 @@ SupervisedClassificationModel() : m_MaxTrainingSize(100),
   m_SampleGenerator = ListSampleGeneratorType::New();
   m_ModelEstimator = ModelEstimatorType::New();
   m_ClassificationFilter = ClassificationFilterType::New();
+  m_Caster = CasterType::New();
 }
 
 SupervisedClassificationModel
@@ -110,6 +111,7 @@ SupervisedClassificationModel
 
   m_ClassificationFilter->SetInput(m_InputImage);
   m_ClassificationFilter->SetModel(m_ModelEstimator->GetModel());
+  m_Caster->SetInput( m_ClassificationFilter->GetOutput() );
   m_OutputChanged = true;
   this->NotifyAll();
 
