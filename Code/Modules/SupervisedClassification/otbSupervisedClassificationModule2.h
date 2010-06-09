@@ -59,7 +59,6 @@ public:
   /// Dataset
   typedef VectorImage<float,2>         FloatingVectorImageType;
   typedef VectorData<double,2>         VectorDataType;
-  typedef VectorImage<float,2>                 LabelImageType;
 
   /** MVC typedefs */
   typedef otb::SupervisedClassificationController ControllerType;
