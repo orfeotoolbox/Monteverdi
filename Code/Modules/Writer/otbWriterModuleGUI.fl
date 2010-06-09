@@ -10,8 +10,8 @@ class WriterModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Save dataset} open
-      xywh {275 382 365 145} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      label {Save dataset} open selected
+      xywh {732 152 350 165} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_File_Input vFilePath {
         xywh {24 19 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
@@ -24,39 +24,23 @@ class WriterModuleGUI {open
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {24 75 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {180 115 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
         label Save
         callback {this->SaveDataSet();}
-        xywh {265 75 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Check_Button b16 {
-        label {Write image in 16bits}
-        callback {if(b16->value()==1)
-{
-b32->value(0);
-}
-else
-{
-b32->value(0);
-}}
-        xywh {150 106 16 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 hide
-      }
-      Fl_Check_Button b32 {
-        label {Write image in 32bits}
-        callback {if(b32->value()==1)
-{
-b16->value(0);
-}
-else
-{
-b32->value(0);
-}} selected
-        xywh {207 107 15 14} down_box PLASTIC_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+        xywh {265 115 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Progress pBar {
-        xywh {0 125 365 20} box PLASTIC_DOWN_BOX selection_color 1
+        xywh {0 145 350 20} box PLASTIC_DOWN_BOX selection_color 1
+      }
+      Fl_Choice cOutDataType {
+        label {Output Data Type} open
+        xywh {135 65 120 20} down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Check_Button bAutoScale {
+        label AutoScale
+        xywh {135 95 20 15} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4
       }
     }
   }
