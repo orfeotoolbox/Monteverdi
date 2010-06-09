@@ -113,6 +113,7 @@ public:
   LabeledImageType::Pointer GetOutput()
   {
     //FIXME To be implemented
+    return NULL;
   }
 
 
