@@ -123,13 +123,22 @@ public:
   /** Train the classifier */
   void Validate();
 
+  /** Update the description */
+  void UpdateDescription();
+
+
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetObjectMacro(ClassificationFilter,ClassificationFilterType);
-  itkGetMacro(NumberOfClasses,unsigned short);
+  itkGetConstMacro(NumberOfClasses,unsigned short);
+
+  itkSetMacro(ValidationTrainingProportion, double)
+  itkGetConstMacro(ValidationTrainingProportion, double)
+
   itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
-  itkGetMacro(OverallAccuracy,double);
-  itkGetMacro(KappaIndex,double);
+  itkGetConstMacro(OverallAccuracy,double);
+  itkGetConstMacro(KappaIndex,double);
+  itkGetStringMacro(Description);
   
   /** Update Output */
   void Ok();
@@ -154,6 +163,7 @@ private:
 
   void GenerateSamples();
 
+
   /** Output changed */
   bool                                        m_OutputChanged;
 
@@ -170,11 +180,14 @@ private:
   /** The sample generator */
   ListSampleGeneratorPointerType              m_SampleGenerator;
 
-  unsigned long int                           m_MaxTrainingSize;
-  unsigned long int                           m_MaxValidationSize;
+  long int                                    m_MaxTrainingSize;
+  long int                                    m_MaxValidationSize;
   double                                      m_ValidationTrainingProportion;
 
   unsigned short                              m_NumberOfClasses;
+
+  /** The description */
+  std::string                                 m_Description;
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
@@ -187,6 +200,7 @@ private:
   /** The SVM classifier */
   ClassificationFilterType::Pointer           m_ClassificationFilter;
   
+
 };
 
 }//end namespace otb

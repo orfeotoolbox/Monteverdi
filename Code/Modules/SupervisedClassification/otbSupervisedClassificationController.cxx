@@ -27,6 +27,7 @@ void SupervisedClassificationController::Train()
 {
   try
   {
+    m_Model->SetValidationTrainingProportion(m_View->slRepartition->value());
     m_Model->Train();
   }
   catch (itk::ExceptionObject & err)

@@ -27,8 +27,7 @@ void
 SupervisedClassificationView
 ::Quit()
 {
-//  m_Controller->OK();
-  this->HideAll();
+  this->CleanUp();
 }
 
 void
@@ -38,6 +37,7 @@ SupervisedClassificationView
   wMainWindow->hide();
   wSVMSetup->hide();
   wValidationWindow->hide();
+  MsgReporter::GetInstance()->Hide();
 }
 
 void
@@ -59,6 +59,13 @@ SupervisedClassificationView
 
   // Build the fltk code
   this->CreateGUI();
+
+  //Create the buffer for the text display
+  Fl_Text_Buffer* buffer = new Fl_Text_Buffer();
+  tDescription->buffer(buffer);
+
+  //Set the slider with the model value
+  slRepartition->value(m_Controller->GetModel()->GetValidationTrainingProportion());
 
   // Show
   this->Show();
@@ -106,19 +113,30 @@ void
 SupervisedClassificationView
 ::Cancel()
 {
-  m_Controller->Quit();
-  MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
+  this->CleanUp();
 }
 
 void
 SupervisedClassificationView
 ::Ok()
 {
-  m_Controller->Ok();
-  MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
+  this->CleanUp();
 }
 
+void
+SupervisedClassificationView
+::CleanUp()
+{
+  m_Controller->Ok();
+  free(tDescription->buffer());
+  this->HideAll();
+}
+
+void
+SupervisedClassificationView
+::Notify()
+{
+  tDescription->buffer()->text(m_Controller->GetModel()->GetDescription());
+}
 
 }

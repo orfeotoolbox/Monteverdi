@@ -47,6 +47,7 @@ SupervisedClassificationModel() : m_MaxTrainingSize(100),
 				  m_MaxValidationSize(100),
 				  m_ValidationTrainingProportion(0.5),
 				  m_NumberOfClasses(2),
+				  m_Description(""),
 				  m_OverallAccuracy(0.0),
 				  m_KappaIndex(0.0)
 {
@@ -73,8 +74,8 @@ SupervisedClassificationModel
   image->UpdateOutputInformation();
   m_InputImage = image;
   
-  // Add input image to the filter
 
+  this->UpdateDescription();
 }
 
 void
@@ -98,6 +99,7 @@ SupervisedClassificationModel
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
   
+  this->UpdateDescription();
 }
 
 
@@ -150,6 +152,7 @@ SupervisedClassificationModel
 ::Train()
 {
   this->GenerateSamples();
+  this->UpdateDescription();
   m_ModelEstimator->SetInputSampleList(m_SampleGenerator->GetTrainingListSample());
   m_ModelEstimator->SetTrainingSampleList(m_SampleGenerator->GetTrainingListLabel());
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
@@ -184,5 +187,39 @@ SupervisedClassificationModel
   
 }
 
+void
+SupervisedClassificationModel
+::UpdateDescription()
+{
+  itk::OStringStream oss;
+  oss << "Number of features: " <<  m_InputImage->GetNumberOfComponentsPerPixel() << "\n";
+  oss << "Pixels to classify: " << m_InputImage->GetLargestPossibleRegion().GetSize() << "\n\n";
+  oss << "Number of classes: " << m_NumberOfClasses << "\n\n";
+  std::map<int, int> classesSamplesNumberTraining = m_SampleGenerator->GetClassesSamplesNumberTraining();
+  std::map<int, int> classesSamplesNumberValidation = m_SampleGenerator->GetClassesSamplesNumberValidation();
+
+  if (classesSamplesNumberTraining.size() != 0)
+    {
+    oss << "Training samples:\n";
+    for (std::map<int, int>::const_iterator itmap = classesSamplesNumberTraining.begin();
+        itmap != classesSamplesNumberTraining.end(); ++itmap)
+      {
+      oss << itmap->first << ":\t" << itmap->second << "\n";
+      }
+    }
+  oss << "\n";
+  if (classesSamplesNumberValidation.size() != 0)
+    {
+    oss << "Validation samples:\n";
+    for (std::map<int, int>::const_iterator itmap = classesSamplesNumberValidation.begin();
+        itmap != classesSamplesNumberValidation.end(); ++itmap)
+      {
+      oss << itmap->first << ":\t" << itmap->second << "\n";
+      }
+    }
+
+  m_Description = oss.str();
+  this->NotifyAll();
+}
 
 }// namespace otb
