@@ -46,7 +46,6 @@ namespace otb {
 class ITK_EXPORT SupervisedClassificationModel
       : public MVCModel<ListenerBase>, public itk::Object
 {
-
 public:
   /** Standard class typedefs */
   typedef SupervisedClassificationModel                             Self;
