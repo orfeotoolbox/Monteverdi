@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -12,68 +12,68 @@ class AlgebraGroup {open
     Fl_Window guiMainWindow {
       label {Band math module}
       callback {this->Quit()} open
-      xywh {696 231 350 310} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      xywh {696 231 350 290} type Double box UP_BOX color 53 selection_color 53 labelcolor 187 resizable visible
     } {
       Fl_Choice guiOperation {
         label {Operation type} open
-        tooltip {Set the filter type} xywh {136 29 160 26} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelcolor 186
+        tooltip {Set the filter type} xywh {136 29 160 26} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
       } {
         MenuItem iAdd {
           label Addition
           callback {guiShiftScaleGroup->hide();}
-          xywh {65 65 30 20} box PLASTIC_DOWN_BOX color 23 labelcolor 186
+          xywh {65 65 30 20} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelcolor 186
         }
         MenuItem iSubtract {
           label Subtraction
           callback {guiShiftScaleGroup->hide();}
-          xywh {80 80 30 20} box PLASTIC_DOWN_BOX color 23 labelcolor 186
+          xywh {80 80 30 20} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelcolor 186
         }
         MenuItem iMultiply {
           label Multiplication
           callback {guiShiftScaleGroup->hide();}
-          xywh {80 80 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelcolor 186
+          xywh {80 80 30 20} box PLASTIC_DOWN_BOX value 1 color 55 selection_color 51 labelcolor 186
         }
         MenuItem iRatio {
           label Ratio
           callback {guiShiftScaleGroup->hide();}
-          xywh {95 95 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelcolor 186
+          xywh {95 95 30 20} box PLASTIC_DOWN_BOX value 1 color 55 selection_color 51 labelcolor 186
         }
         MenuItem iShiftScale {
           label {Shift-scale}
           callback {guiShiftScaleGroup->show();}
-          xywh {105 105 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelcolor 186
+          xywh {105 105 30 20} box PLASTIC_DOWN_BOX value 1 color 55 selection_color 51 labelcolor 186
         }
       }
       Fl_Group guiShiftScaleGroup {
-        label {Shift scale parameters : A*X + B} open
-        xywh {25 105 300 120} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186 hide
+        label {Shift scale parameters : (X + B) * A} open selected
+        xywh {25 105 300 120} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186 hide
       } {
-        Fl_Value_Input guiShiftScaleProduct {
-          label {A}
-          tooltip {Radius parameter for Frost image filter} xywh {145 160 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186 maximum 300 step 1 value 10
-        }
-        Fl_Value_Input guiShiftScaleAddition {
-          label {B}
-          tooltip {Deramp parameter for Frost image filter} xywh {145 190 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186 minimum -300 maximum 300 step 0.1 value 0.2
-        }
         Fl_Choice guiInputChoice {
           label {Choose input} open
-          tooltip {Set the filter type} xywh {146 124 179 26} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 selection_color 7 labelfont 1 labelcolor 186
+          tooltip {Set the filter type} xywh {136 124 179 26} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
         } {
           MenuItem iFirstImage {
             label {First image}
-            xywh {105 105 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelcolor 186
+            xywh {105 105 30 20} box PLASTIC_DOWN_BOX value 1 color 55 selection_color 51 labelcolor 186
           }
           MenuItem iSecondImage {
             label {Second image}
-            xywh {115 115 30 20} box PLASTIC_DOWN_BOX value 1 color 23 labelcolor 186
+            xywh {115 115 30 20} box PLASTIC_DOWN_BOX value 1 color 55 selection_color 51 labelcolor 186
           }
+        }
+        Fl_Value_Input guiShiftScaleProduct {
+          label A
+          tooltip {Radius parameter for Frost image filter} xywh {145 160 64 20} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186 maximum 300 step 1 value 10
+        }
+        Fl_Value_Input guiShiftScaleAddition {
+          label B
+          tooltip {Deramp parameter for Frost image filter} xywh {145 190 64 20} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186 minimum -300 maximum 300 step 0.1 value 0.2
         }
       }
       Fl_Button bOk {
         label {Save/Quit}
-        callback {OK();} selected
-        tooltip {Quit the viewer manager} xywh {120 230 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelfont 1 labelcolor 186
+        callback {OK();}
+        tooltip {Quit the viewer manager} xywh {130 244 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 55 selection_color 51 labelfont 1 labelcolor 186
       }
     }
   }
