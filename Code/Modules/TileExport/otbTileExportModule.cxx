@@ -1696,19 +1696,19 @@ TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
   unsigned int nbComponent = this->GetInputData<FloatingVectorImageType>("InputImage",clickedIndex)->GetNumberOfComponentsPerPixel();
 
-  if(this->cRedChannel->value() >= nbComponent)
+  if(this->cRedChannel->value() >= static_cast<int>(nbComponent))
     this->cRedChannel->value(nbComponent-1); // Set the RedChannel on
 					     // the component - 1
 					     // position if the value
 					     // exceed the number of components
   
-  if(this->cGreenChannel->value() >= nbComponent)
+  if(this->cGreenChannel->value() >= static_cast<int>(nbComponent))
     this->cGreenChannel->value(nbComponent-1);
   
-  if(this->cBlueChannel->value() >= nbComponent)
+  if(this->cBlueChannel->value() >= static_cast<int>(nbComponent))
     this->cBlueChannel->value(nbComponent-1);
   
-  Fl::flush;
+  Fl::flush();
   
   return true;
 }
