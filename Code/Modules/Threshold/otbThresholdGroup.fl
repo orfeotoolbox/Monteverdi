@@ -17,7 +17,7 @@ class ThresholdGroup {open
   } {
     Fl_Window wMainWindow {
       label {Threshold Module} open
-      xywh {469 57 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {469 57 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group {} {
         label {Inside Value :} open
@@ -40,18 +40,18 @@ class ThresholdGroup {open
           label {Lower Threshold :}
           callback {guiMinDetails->value( std::min(guiMinDetails->value(), guiMaxDetails->value()) );
 this->UpdateDetails();}
-          xywh {150 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 slider_size 0.01 textsize 14
+          xywh {150 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 slider_size 0.01 textsize 12
         }
         Fl_Value_Slider guiMaxDetails {
           label {Upper Threshold :}
           callback {guiMaxDetails->value( std::max(guiMaxDetails->value(), guiMinDetails->value()) );
-this->UpdateDetails();} selected
-          xywh {150 370 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 value 1000 slider_size 0.01 textsize 14
+this->UpdateDetails();}
+          xywh {150 370 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 maximum 1000 step 1 value 1000 slider_size 0.01 textsize 12
         }
         Fl_Value_Input guiOutsideValue {
           label {Outside value :}
           callback {this->UpdateDetails();}
-          xywh {149 405 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1
+          xywh {149 405 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1 textsize 12
         }
         Fl_Round_Button guiAbove {
           label {Threshold Above}
@@ -80,12 +80,12 @@ this->UpdateDetails();}
         Fl_Value_Slider guiAlpha {
           label {alpha :}
           callback {this->AlphaBlending();}
-          xywh {535 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 14
+          xywh {535 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 12
         }
         Fl_Value_Input guiInsideValue {
           label {Inside value :}
-          callback {this->UpdateDetails();}
-          xywh {147 440 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 maximum 100000 step 1 deactivate
+          callback {this->UpdateDetails();} selected
+          xywh {147 440 55 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 maximum 100000 textsize 12
         }
         Fl_Round_Button guiGenericThreshold {
           label {Generic Threshold}
