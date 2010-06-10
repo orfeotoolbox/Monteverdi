@@ -173,11 +173,24 @@ SupervisedClassificationModel
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
 
+// Verify outputs
+
+  ValidationListSampleType::ConstIterator it = validationClassifier->GetOutput()->Begin();
+  ValidationListSampleType::ConstIterator itEnd = validationClassifier->GetOutput()->End();
+
+  TrainingListSampleType::Pointer validationList = TrainingListSampleType::New();
+ 
+  while(it != itEnd)
+    {
+    validationList->PushBack(it.GetClassLabel());
+    ++it;
+    }
+
   ConfusionMatrixCalculatorType::Pointer confMatCalc =
                                           ConfusionMatrixCalculatorType::New();
 
   confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
-  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+  confMatCalc->SetProducedLabels( validationList );
 
   confMatCalc->Update();
 

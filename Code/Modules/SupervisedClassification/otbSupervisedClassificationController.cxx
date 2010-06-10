@@ -42,6 +42,9 @@ void SupervisedClassificationController::Validate()
   try
   {
     m_Model->Validate();
+    otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_Model->GetConfusionMatrix() );
+    otbGenericMsgDebugMacro(<<"Overall Accuracy \n" << m_Model->GetOverallAccuracy() );
+    otbGenericMsgDebugMacro(<<"Kappa Index \n" << m_Model->GetKappaIndex() );
   }
   catch (itk::ExceptionObject & err)
   {

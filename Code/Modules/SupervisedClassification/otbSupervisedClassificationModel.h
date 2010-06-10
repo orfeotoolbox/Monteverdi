@@ -88,7 +88,7 @@ public:
 
   typedef ClassifierType::OutputType                                                   ValidationListSampleType;
   typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
-                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
+                                                        TrainingListSampleType >     ConfusionMatrixCalculatorType;
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
