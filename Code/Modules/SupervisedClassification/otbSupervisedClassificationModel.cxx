@@ -197,6 +197,7 @@ SupervisedClassificationModel
   m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
   m_OverallAccuracy = confMatCalc->GetOverallAccuracy();
   m_KappaIndex = confMatCalc->GetKappaIndex();
+  m_MapOfClasses = confMatCalc->GetMapOfClasses();
 
   otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
   
@@ -234,6 +235,26 @@ SupervisedClassificationModel
     }
 
   m_Description = oss.str();
+  this->NotifyAll();
+}
+
+void
+SupervisedClassificationModel
+::UpdateMatrixString()
+{
+  itk::OStringStream oss;
+  for (std::map<ClassLabelType, int>::const_iterator itmap = m_MapOfClasses.begin();
+       itmap != m_MapOfClasses.end(); ++itmap)
+    {
+    for (std::map<ClassLabelType, int>::const_iterator itmap2 = m_MapOfClasses.begin();
+         itmap2 != m_MapOfClasses.end(); ++itmap2)
+      {
+      oss << m_ConfusionMatrix(itmap->second,itmap2->second) << "\t";
+      }
+    oss << "\n";
+    }
+
+  m_MatrixString = oss.str();
   this->NotifyAll();
 }
 
