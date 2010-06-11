@@ -1,0 +1,78 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class FieldEditorGroup {open
+} {
+  Function {FieldEditorGroup()} {} {
+    Fl_Window wFieldEditor {
+      label {Add a new field} open
+      xywh {847 166 340 200} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185 visible
+    } {
+      Fl_Choice vFieldType {
+        label {Field type:}
+        callback {if(vFieldType->value()==0)
+{
+vFieldValueString->show();
+vFieldValueInt->hide();
+vFieldValueFloat->hide();
+}
+else if(vFieldType->value()==1)
+{
+vFieldValueString->hide();
+vFieldValueInt->show();
+vFieldValueFloat->hide();
+}
+else
+{
+vFieldValueString->hide();
+vFieldValueInt->hide();
+vFieldValueFloat->show();
+}}
+        xywh {122 22 170 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 23 labelfont 1 labelsize 12 labelcolor 185
+      } {}
+      Fl_Return_Button bOk {
+        label Ok
+        callback {this->FieldEditorOkCallback();}
+        xywh {189 158 83 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {wFieldEditor->hide();}
+        xywh {79 158 83 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185
+      }
+      Fl_Input vFieldName {
+        label {Field Name:}
+        xywh {122 63 170 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185
+      }
+      Fl_Input vFieldValueString {
+        label {Field Value:}
+        xywh {122 108 170 24} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185
+      }
+      Fl_Input vFieldValueInt {
+        label {Field Value:}
+        xywh {122 108 170 24} type Int box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185 hide
+      }
+      Fl_Input vFieldValueFloat {
+        label {Field Value:}
+        xywh {122 108 170 24} type Float box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185 hide
+      }
+    }
+    code {vFieldType->add("String");
+vFieldType->add("Int");
+vFieldType->add("Float");
+vFieldType->value(0);
+vFieldName->value("Default");
+vFieldValueString->value("");
+vFieldValueInt->value(0);
+vFieldValueFloat->value(0
+);} {}
+  }
+  Function {~FieldEditorGroup()} {open return_type virtual
+  } {}
+  Function {FieldEditorOkCallback()} {open selected return_type {virtual void}
+  } {}
+} 

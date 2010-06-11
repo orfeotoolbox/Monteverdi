@@ -108,6 +108,28 @@ VectorizationModel
 //  m_VectorDataModel->SetSpacing(m_InputImage->GetSpacing());
 }
 
+void VectorizationModel
+::RemoveDataNode(DataNodeType * node)
+{
+}
+
+
+void VectorizationModel
+::SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value)
+{}
+void VectorizationModel
+::SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value)
+{}
+void VectorizationModel
+::SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value)
+{}
+void VectorizationModel
+::RemoveFieldFromDataNode(DataNodeType * node, const std::string & name)
+{}
+void VectorizationModel
+::RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex)
+{}
+
 void
 VectorizationModel
 ::Notify()
