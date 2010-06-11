@@ -27,6 +27,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorData.h"
 #include "otbListSampleGenerator.h"
 #include "otbSVMSampleListModelEstimator.h"
@@ -46,7 +47,6 @@ namespace otb {
 class ITK_EXPORT SupervisedClassificationModel
       : public MVCModel<ListenerBase>, public itk::Object
 {
-
 public:
   /** Standard class typedefs */
   typedef SupervisedClassificationModel                             Self;
@@ -88,12 +88,14 @@ public:
 
   typedef ClassifierType::OutputType                                                   ValidationListSampleType;
   typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
-                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
+                                                        TrainingListSampleType >     ConfusionMatrixCalculatorType;
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
 
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
                                LabeledImageType>       ClassificationFilterType;
+
+  typedef otb::ImageToVectorImageCastFilter<LabeledImageType, ImageType>               CasterType;
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -111,9 +113,10 @@ public:
   itkGetConstObjectMacro(VectorROIs, VectorDataType);
   void SetVectorROIs(VectorDataPointerType vectorData);
 
-  LabeledImageType::Pointer GetOutput()
+  ImageType::Pointer GetOutput()
   {
-    //FIXME To be implemented
+
+    return m_Caster->GetOutput();
   }
 
 
@@ -123,13 +126,22 @@ public:
   /** Train the classifier */
   void Validate();
 
+  /** Update the description */
+  void UpdateDescription();
+
+
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetObjectMacro(ClassificationFilter,ClassificationFilterType);
-  itkGetMacro(NumberOfClasses,unsigned short);
+  itkGetConstMacro(NumberOfClasses,unsigned short);
+
+  itkSetMacro(ValidationTrainingProportion, double)
+  itkGetConstMacro(ValidationTrainingProportion, double)
+
   itkGetConstMacro(ConfusionMatrix,ConfusionMatrixType);
-  itkGetMacro(OverallAccuracy,double);
-  itkGetMacro(KappaIndex,double);
+  itkGetConstMacro(OverallAccuracy,double);
+  itkGetConstMacro(KappaIndex,double);
+  itkGetStringMacro(Description);
   
   /** Update Output */
   void Ok();
@@ -154,6 +166,7 @@ private:
 
   void GenerateSamples();
 
+
   /** Output changed */
   bool                                        m_OutputChanged;
 
@@ -170,11 +183,14 @@ private:
   /** The sample generator */
   ListSampleGeneratorPointerType              m_SampleGenerator;
 
-  unsigned long int                           m_MaxTrainingSize;
-  unsigned long int                           m_MaxValidationSize;
+  long int                                    m_MaxTrainingSize;
+  long int                                    m_MaxValidationSize;
   double                                      m_ValidationTrainingProportion;
 
   unsigned short                              m_NumberOfClasses;
+
+  /** The description */
+  std::string                                 m_Description;
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
@@ -186,7 +202,11 @@ private:
 
   /** The SVM classifier */
   ClassificationFilterType::Pointer           m_ClassificationFilter;
+
+  /** The caster to get a vector image as output */
+  CasterType::Pointer                         m_Caster;
   
+
 };
 
 }//end namespace otb

@@ -257,7 +257,7 @@ VectorDataTreeBrowser<TVectorData>
     typename LineType::VertexListType::ConstIterator it
       = dataNode->GetLine()->GetVertexList()->Begin();
 
-    unsigned int count = 0;
+    int count = 0;
     itk::OStringStream oss;
 
     while(it!=dataNode->GetLine()->GetVertexList()->End())
@@ -270,7 +270,7 @@ VectorDataTreeBrowser<TVectorData>
       }
 
     // Remove trailing nodes if any
-    while(geoDataNode->children()>count)
+    while(geoDataNode->children() > count)
       {
       geoDataNode->remove(geoDataNode->children()-1);
       }
@@ -289,7 +289,7 @@ VectorDataTreeBrowser<TVectorData>
   typename PolygonType::VertexListType::ConstIterator it
     = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
 
-  unsigned int count = 0;
+  int count = 0;
   itk::OStringStream oss;
 
   while(it!=dataNode->GetPolygonExteriorRing()->GetVertexList()->End())

@@ -47,7 +47,7 @@ public:
 
 
   /** Event from the model */
-  virtual void Notify() {};
+  virtual void Notify();
 
   /** Fluid call backs*/
   virtual void Quit();
@@ -69,6 +69,7 @@ public:
   virtual void Ok();
   virtual void Cancel();
 
+
 protected:
   /** Constructor */
   SupervisedClassificationView() {};
@@ -76,6 +77,8 @@ protected:
   /** Destructor */
   virtual ~SupervisedClassificationView() {};
 
+  /** Clean up before leaving*/
+  virtual void CleanUp();
 
 private:
   SupervisedClassificationView(const Self&); //purposely not implemented

@@ -30,9 +30,9 @@ SupervisedClassificationModel::
 GetInstance()
 {
   if (!Instance)
-  {
+    {
     Instance = SupervisedClassificationModel::New();
-  }
+    }
   return Instance;
 }
 
@@ -44,11 +44,12 @@ Notify(ListenerBase * listener)
 
 SupervisedClassificationModel::
 SupervisedClassificationModel() : m_MaxTrainingSize(100),
-				  m_MaxValidationSize(100),
-				  m_ValidationTrainingProportion(0.5),
-				  m_NumberOfClasses(2),
-				  m_OverallAccuracy(0.0),
-				  m_KappaIndex(0.0)
+          m_MaxValidationSize(100),
+          m_ValidationTrainingProportion(0.5),
+          m_NumberOfClasses(2),
+          m_Description(""),
+          m_OverallAccuracy(0.0),
+          m_KappaIndex(0.0)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
@@ -56,6 +57,7 @@ SupervisedClassificationModel() : m_MaxTrainingSize(100),
   m_SampleGenerator = ListSampleGeneratorType::New();
   m_ModelEstimator = ModelEstimatorType::New();
   m_ClassificationFilter = ClassificationFilterType::New();
+  m_Caster = CasterType::New();
 }
 
 SupervisedClassificationModel
@@ -73,8 +75,8 @@ SupervisedClassificationModel
   image->UpdateOutputInformation();
   m_InputImage = image;
   
-  // Add input image to the filter
 
+  this->UpdateDescription();
 }
 
 void
@@ -98,6 +100,7 @@ SupervisedClassificationModel
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
   
+  this->UpdateDescription();
 }
 
 
@@ -108,6 +111,7 @@ SupervisedClassificationModel
 
   m_ClassificationFilter->SetInput(m_InputImage);
   m_ClassificationFilter->SetModel(m_ModelEstimator->GetModel());
+  m_Caster->SetInput( m_ClassificationFilter->GetOutput() );
   m_OutputChanged = true;
   this->NotifyAll();
 
@@ -141,7 +145,7 @@ SupervisedClassificationModel
 
 
   otbGenericMsgDebugMacro(<<"Samples generated. "<< m_NumberOfClasses
-		   << " classes found ");
+       << " classes found ");
 }
 
 
@@ -150,6 +154,7 @@ SupervisedClassificationModel
 ::Train()
 {
   this->GenerateSamples();
+  this->UpdateDescription();
   m_ModelEstimator->SetInputSampleList(m_SampleGenerator->GetTrainingListSample());
   m_ModelEstimator->SetTrainingSampleList(m_SampleGenerator->GetTrainingListLabel());
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
@@ -168,11 +173,24 @@ SupervisedClassificationModel
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
 
+// Verify outputs
+
+  ValidationListSampleType::ConstIterator it = validationClassifier->GetOutput()->Begin();
+  ValidationListSampleType::ConstIterator itEnd = validationClassifier->GetOutput()->End();
+
+  TrainingListSampleType::Pointer validationList = TrainingListSampleType::New();
+ 
+  while(it != itEnd)
+    {
+    validationList->PushBack(it.GetClassLabel());
+    ++it;
+    }
+
   ConfusionMatrixCalculatorType::Pointer confMatCalc =
                                           ConfusionMatrixCalculatorType::New();
 
   confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
-  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+  confMatCalc->SetProducedLabels( validationList );
 
   confMatCalc->Update();
 
@@ -184,5 +202,39 @@ SupervisedClassificationModel
   
 }
 
+void
+SupervisedClassificationModel
+::UpdateDescription()
+{
+  itk::OStringStream oss;
+  oss << "Number of features: " <<  m_InputImage->GetNumberOfComponentsPerPixel() << "\n";
+  oss << "Pixels to classify: " << m_InputImage->GetLargestPossibleRegion().GetSize() << "\n\n";
+  oss << "Number of classes: " << m_NumberOfClasses << "\n\n";
+  std::map<int, int> classesSamplesNumberTraining = m_SampleGenerator->GetClassesSamplesNumberTraining();
+  std::map<int, int> classesSamplesNumberValidation = m_SampleGenerator->GetClassesSamplesNumberValidation();
+
+  if (classesSamplesNumberTraining.size() != 0)
+    {
+    oss << "Training samples:\n";
+    for (std::map<int, int>::const_iterator itmap = classesSamplesNumberTraining.begin();
+        itmap != classesSamplesNumberTraining.end(); ++itmap)
+      {
+      oss << itmap->first << ":\t" << itmap->second << "\n";
+      }
+    }
+  oss << "\n";
+  if (classesSamplesNumberValidation.size() != 0)
+    {
+    oss << "Validation samples:\n";
+    for (std::map<int, int>::const_iterator itmap = classesSamplesNumberValidation.begin();
+        itmap != classesSamplesNumberValidation.end(); ++itmap)
+      {
+      oss << itmap->first << ":\t" << itmap->second << "\n";
+      }
+    }
+
+  m_Description = oss.str();
+  this->NotifyAll();
+}
 
 }// namespace otb

@@ -33,7 +33,7 @@ int otbWriterModuleTest(int argc, char* argv[])
   // Put in the tests
   const char * infname = argv[1];
 
-  typedef otb::WriterModule::FloatingImageType ImageType;
+  typedef otb::WriterModule::FloatImageType    ImageType;
   typedef otb::ImageFileReader<ImageType>      ReaderType;
 
   //reader
@@ -46,7 +46,7 @@ int otbWriterModuleTest(int argc, char* argv[])
   
   module->AddInputByKey("InputDataSet",wrapperIn);
 
-    Fl::lock();
+  Fl::lock();
   
   module->Start();
   Fl::check();

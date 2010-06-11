@@ -30,10 +30,12 @@ namespace otb
 /**
  * Constructor
  */
-TileExportModule::TileExportModule():  m_HasLegend(false), m_Cancel(false),
-							 m_CurrentProduct(0),m_HasLogo(false),
-							 m_RegionOfInterestKmlGenerated(false),
-							 m_MaxDepth(0)
+TileExportModule::TileExportModule(): m_Logo(NULL), m_LogoFilename(),
+    m_HasLegend(false), m_HasLogo(false), m_TileSize(-1), m_KmzFile(NULL),
+    m_RootKmlFile(), m_TempRootKmlFile(), m_Cancel(false),
+    m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0), m_CurrentProduct(0), m_CurrentDepth(-1),
+    m_RegionOfInterestKmlGenerated(false), m_CenterPointVector(), m_ProductVector()
+
 {
   // Add a multiple inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"),false);
@@ -1694,19 +1696,19 @@ TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
   unsigned int nbComponent = this->GetInputData<FloatingVectorImageType>("InputImage",clickedIndex)->GetNumberOfComponentsPerPixel();
 
-  if(this->cRedChannel->value() >= nbComponent)
+  if(this->cRedChannel->value() >= static_cast<int>(nbComponent))
     this->cRedChannel->value(nbComponent-1); // Set the RedChannel on
 					     // the component - 1
 					     // position if the value
 					     // exceed the number of components
   
-  if(this->cGreenChannel->value() >= nbComponent)
+  if(this->cGreenChannel->value() >= static_cast<int>(nbComponent))
     this->cGreenChannel->value(nbComponent-1);
   
-  if(this->cBlueChannel->value() >= nbComponent)
+  if(this->cBlueChannel->value() >= static_cast<int>(nbComponent))
     this->cBlueChannel->value(nbComponent-1);
   
-  Fl::flush;
+  Fl::flush();
   
   return true;
 }

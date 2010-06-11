@@ -29,17 +29,19 @@ class ITK_EXPORT SupervisedClassificationControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationControllerInterface Self;
+  typedef SupervisedClassificationControllerInterface        Self;
   typedef itk::Object                                        Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
-  typedef SupervisedClassificationModel               ModelType;
-  typedef ModelType::ConfusionMatrixType               ConfusionMatrixType;
-  typedef itk::ContinuousIndex<>              ContinuousIndexType;
+  typedef SupervisedClassificationModel                      ModelType;
+  typedef ModelType::ConfusionMatrixType                     ConfusionMatrixType;
+  typedef itk::ContinuousIndex<>                             ContinuousIndexType;
 
   /** Standard type macros */
   itkTypeMacro(SupervisedClassificationControllerInterface,Superclass);
+
+  virtual const ModelType* GetModel() const = 0;
 
   /** Users actions */
   virtual void Train() = 0;
