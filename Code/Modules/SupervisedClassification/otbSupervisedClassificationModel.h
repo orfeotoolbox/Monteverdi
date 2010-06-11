@@ -88,12 +88,13 @@ public:
 
   typedef ClassifierType::OutputType                                                   ValidationListSampleType;
   typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
-                                                        TrainingListSampleType >     ConfusionMatrixCalculatorType;
+                                                        TrainingListSampleType >       ConfusionMatrixCalculatorType;
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
+  typedef ConfusionMatrixCalculatorType::ClassLabelType                                ClassLabelType;
 
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
-                               LabeledImageType>       ClassificationFilterType;
+                                            LabeledImageType>                          ClassificationFilterType;
 
   typedef otb::ImageToVectorImageCastFilter<LabeledImageType, ImageType>               CasterType;
 
@@ -129,6 +130,7 @@ public:
   /** Update the description */
   void UpdateDescription();
 
+  void UpdateMatrixString();
 
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
@@ -142,6 +144,7 @@ public:
   itkGetConstMacro(OverallAccuracy,double);
   itkGetConstMacro(KappaIndex,double);
   itkGetStringMacro(Description);
+  itkGetStringMacro(MatrixString);
   
   /** Update Output */
   void Ok();
@@ -192,6 +195,8 @@ private:
   /** The description */
   std::string                                 m_Description;
 
+  std::string                                 m_MatrixString;
+
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
 
@@ -199,6 +204,7 @@ private:
   ConfusionMatrixType                         m_ConfusionMatrix;
   double                                      m_OverallAccuracy;
   double                                      m_KappaIndex;
+  std::map<ClassLabelType, int>               m_MapOfClasses;
 
   /** The SVM classifier */
   ClassificationFilterType::Pointer           m_ClassificationFilter;
