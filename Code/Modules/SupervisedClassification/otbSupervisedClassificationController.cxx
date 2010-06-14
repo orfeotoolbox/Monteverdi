@@ -27,6 +27,8 @@ void SupervisedClassificationController::Train()
 {
   try
   {
+    m_Model->SetMaxTrainingSize(m_View->slMaxTraining->value());
+    m_Model->SetMaxValidationSize(m_View->slMaxValidation->value());
     m_Model->SetValidationTrainingProportion(m_View->slRepartition->value());
     m_Model->Train();
   }

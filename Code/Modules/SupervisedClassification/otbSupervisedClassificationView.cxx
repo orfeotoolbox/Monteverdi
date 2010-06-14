@@ -70,6 +70,8 @@ SupervisedClassificationView
 
   //Set the slider with the model value
   slRepartition->value(m_Controller->GetModel()->GetValidationTrainingProportion());
+  slMaxTraining->value(m_Controller->GetModel()->GetMaxTrainingSize());
+  slMaxValidation->value(m_Controller->GetModel()->GetMaxValidationSize());
 
   // Show
   this->Show();
@@ -142,6 +144,9 @@ void
 SupervisedClassificationView
 ::Notify()
 {
+  slMaxTraining->maximum(m_Controller->GetModel()->GetClassMinSize());
+  slMaxValidation->maximum(m_Controller->GetModel()->GetClassMinSize());
+
   tDescription->buffer()->text(m_Controller->GetModel()->GetDescription());
   tConfusionMatrix->buffer()->text(m_Controller->GetModel()->GetMatrixString());
 }

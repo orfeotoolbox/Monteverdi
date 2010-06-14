@@ -46,7 +46,8 @@ SupervisedClassificationModel::
 SupervisedClassificationModel() : m_MaxTrainingSize(100),
           m_MaxValidationSize(100),
           m_ValidationTrainingProportion(0.5),
-          m_NumberOfClasses(2),
+          m_ClassKey("Class"),
+          m_NumberOfClasses(0),
           m_Description(""),
           m_OverallAccuracy(0.0),
           m_KappaIndex(0.0)
@@ -100,6 +101,7 @@ SupervisedClassificationModel
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
   
+  this->UpdateVectorDataInformation();
   this->UpdateDescription();
 }
 
@@ -132,6 +134,7 @@ SupervisedClassificationModel
   m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
+  m_SampleGenerator->SetClassKey(m_ClassKey);
 
   otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
   otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
@@ -203,6 +206,29 @@ SupervisedClassificationModel
   
   this->UpdateMatrixString();
 
+}
+
+void
+SupervisedClassificationModel
+::UpdateVectorDataInformation()
+{
+  m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
+  m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
+  m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
+  m_SampleGenerator->SetClassKey(m_ClassKey);
+
+  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
+  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
+  m_SampleGenerator->SetInput(m_InputImage);
+  m_SampleGenerator->SetInputVectorData(m_VectorROIs);
+
+  m_SampleGenerator->GenerateClassStatistics();
+  m_NumberOfClasses = m_SampleGenerator->GetNumberOfClasses();
+
+  m_ClassMinSize = vcl_ceil(m_SampleGenerator->GetClassMinSize());
+
+  this->NotifyAll();
 }
 
 void
