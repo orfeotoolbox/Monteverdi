@@ -88,7 +88,7 @@ SupervisedClassificationModel
   image->UpdateOutputInformation();
   m_LabeledImage = image;
 
-  //build ROIs from labeled image
+  this->UpdateDescription();
 }
 
 void
@@ -201,6 +201,8 @@ SupervisedClassificationModel
 
   otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
   
+  this->UpdateMatrixString();
+
 }
 
 void
@@ -242,10 +244,21 @@ void
 SupervisedClassificationModel
 ::UpdateMatrixString()
 {
+  // m_MapOfClasses contains the mapping of class name (or class number) => class index in the matrix
   itk::OStringStream oss;
+  oss << "Confusion matrix:\n\n";
+  // write the first line
+  oss << "\t";
   for (std::map<ClassLabelType, int>::const_iterator itmap = m_MapOfClasses.begin();
        itmap != m_MapOfClasses.end(); ++itmap)
     {
+    oss << itmap->first << "\t";
+    }
+  oss << "\n";
+  for (std::map<ClassLabelType, int>::const_iterator itmap = m_MapOfClasses.begin();
+       itmap != m_MapOfClasses.end(); ++itmap)
+    {
+    oss << itmap->first << "\t";
     for (std::map<ClassLabelType, int>::const_iterator itmap2 = m_MapOfClasses.begin();
          itmap2 != m_MapOfClasses.end(); ++itmap2)
       {
@@ -253,6 +266,10 @@ SupervisedClassificationModel
       }
     oss << "\n";
     }
+
+  //Also output the accuracy info
+  oss << "\nOverall accuracy:\t" << m_OverallAccuracy;
+  oss << "\nKappa:\t" << m_KappaIndex;
 
   m_MatrixString = oss.str();
   this->NotifyAll();

@@ -81,7 +81,7 @@ class SupervisedClassificationGUI {open
         label Description open
         xywh {5 105 280 210} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
-        Fl_Text_Display tDescription {selected
+        Fl_Text_Display tDescription {
           xywh {15 125 260 180} box PLASTIC_DOWN_BOX textsize 10
         }
       }
@@ -188,22 +188,17 @@ class SupervisedClassificationGUI {open
       }
     }
     Fl_Window wValidationWindow {
-      label Validation
-      xywh {826 481 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
+      label Validation open
+      xywh {826 481 320 250} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Group gMatrix {
-        label {Confusion matrix} open
-        xywh {5 25 385 160} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-      } {}
-      Fl_Group gAccuracy {
-        label Accuracy open
-        xywh {5 200 385 145} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-      } {}
+      Fl_Text_Display tConfusionMatrix {
+        xywh {5 5 310 200} box PLASTIC_DOWN_BOX textsize 10
+      }
       Fl_Return_Button bCloseValidationWindow {
         label Close
         callback {bValidate->clear();
-wValidationWindow->hide();}
-        tooltip {Save changes and leave viewer set up interface} xywh {155 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+wValidationWindow->hide();} selected
+        tooltip {Save changes and leave viewer set up interface} xywh {120 215 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
       }
     }
   }

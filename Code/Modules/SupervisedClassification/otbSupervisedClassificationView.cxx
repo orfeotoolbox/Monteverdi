@@ -64,6 +64,10 @@ SupervisedClassificationView
   Fl_Text_Buffer* buffer = new Fl_Text_Buffer();
   tDescription->buffer(buffer);
 
+  //Create the buffer for the confusion matrix display
+  Fl_Text_Buffer* buffer2 = new Fl_Text_Buffer();
+  tConfusionMatrix->buffer(buffer2);
+
   //Set the slider with the model value
   slRepartition->value(m_Controller->GetModel()->GetValidationTrainingProportion());
 
@@ -113,6 +117,7 @@ void
 SupervisedClassificationView
 ::Cancel()
 {
+  m_Controller->Quit();
   this->CleanUp();
 }
 
@@ -120,6 +125,7 @@ void
 SupervisedClassificationView
 ::Ok()
 {
+  m_Controller->Ok();
   this->CleanUp();
 }
 
@@ -127,8 +133,8 @@ void
 SupervisedClassificationView
 ::CleanUp()
 {
-  m_Controller->Ok();
-  free(tDescription->buffer());
+  delete tDescription->buffer();
+  delete tConfusionMatrix->buffer();
   this->HideAll();
 }
 
@@ -137,6 +143,7 @@ SupervisedClassificationView
 ::Notify()
 {
   tDescription->buffer()->text(m_Controller->GetModel()->GetDescription());
+  tConfusionMatrix->buffer()->text(m_Controller->GetModel()->GetMatrixString());
 }
 
 }
