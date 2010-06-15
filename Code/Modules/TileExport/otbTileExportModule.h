@@ -310,7 +310,7 @@ private:
   bool                   m_Cancel;
   
   // Max
-  unsigned int           m_MaxDepth;
+  int                    m_MaxDepth;
   unsigned int           m_CurIdx;
   unsigned int           m_NbOfInput;
   unsigned int           m_CurrentProduct;

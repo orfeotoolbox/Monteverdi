@@ -79,6 +79,7 @@ public:
       ::Vector_Data                           VectorDataType;
   typedef VectorDataModel                     VectorDataModelType;
   typedef VectorDataModelType::Pointer        VectorDataModelPointerType;
+  typedef VectorDataType::DataNodeType        DataNodeType;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -93,6 +94,13 @@ public:
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
   
+  void RemoveDataNode(DataNodeType * node);
+  void SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value);
+  void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value);
+  void SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value);
+  void RemoveFieldFromDataNode(DataNodeType * node, const std::string & name);
+  void RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex = 0);
+
 protected:
   /** Constructor */
   VectorizationModel();

@@ -88,12 +88,13 @@ public:
 
   typedef ClassifierType::OutputType                                                   ValidationListSampleType;
   typedef otb::ConfusionMatrixCalculator< TrainingListSampleType,
-                                                        ValidationListSampleType >     ConfusionMatrixCalculatorType;
+                                                        TrainingListSampleType >       ConfusionMatrixCalculatorType;
   
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType                           ConfusionMatrixType;
+  typedef ConfusionMatrixCalculatorType::ClassLabelType                                ClassLabelType;
 
   typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType,
-                               LabeledImageType>       ClassificationFilterType;
+                                            LabeledImageType>                          ClassificationFilterType;
 
   typedef otb::ImageToVectorImageCastFilter<LabeledImageType, ImageType>               CasterType;
 
@@ -126,15 +127,25 @@ public:
   /** Train the classifier */
   void Validate();
 
+  /** Update the vector data stat */
+  void UpdateVectorDataInformation();
+
   /** Update the description */
   void UpdateDescription();
 
+  /** Update the validation results */
+  void UpdateMatrixString();
 
   /** SVM model manipulation */
   itkGetObjectMacro(ModelEstimator,ModelEstimatorType);
   itkGetObjectMacro(ClassificationFilter,ClassificationFilterType);
-  itkGetConstMacro(NumberOfClasses,unsigned short);
+  itkGetConstMacro(NumberOfClasses, unsigned short);
+  itkGetConstMacro(ClassMinSize, long int);
 
+  itkSetMacro(MaxTrainingSize, long int)
+  itkGetConstMacro(MaxTrainingSize, long int)
+  itkSetMacro(MaxValidationSize, long int)
+  itkGetConstMacro(MaxValidationSize, long int)
   itkSetMacro(ValidationTrainingProportion, double)
   itkGetConstMacro(ValidationTrainingProportion, double)
 
@@ -142,6 +153,7 @@ public:
   itkGetConstMacro(OverallAccuracy,double);
   itkGetConstMacro(KappaIndex,double);
   itkGetStringMacro(Description);
+  itkGetStringMacro(MatrixString);
   
   /** Update Output */
   void Ok();
@@ -183,14 +195,23 @@ private:
   /** The sample generator */
   ListSampleGeneratorPointerType              m_SampleGenerator;
 
+  // FIXME Maybe all this should just be in the sample generator
+  // and accessed through convenient accessors
   long int                                    m_MaxTrainingSize;
   long int                                    m_MaxValidationSize;
   double                                      m_ValidationTrainingProportion;
 
+  std::string                                 m_ClassKey;
+
+  // computed from the vector data
+  long int                                    m_ClassMinSize;//this is the size of the smallest class
   unsigned short                              m_NumberOfClasses;
 
-  /** The description */
+
+  /** The description to present the results */
   std::string                                 m_Description;
+
+  std::string                                 m_MatrixString;
 
   /** The SVM model estimator */
   ModelEstimatorPointerType                   m_ModelEstimator;
@@ -199,6 +220,7 @@ private:
   ConfusionMatrixType                         m_ConfusionMatrix;
   double                                      m_OverallAccuracy;
   double                                      m_KappaIndex;
+  std::map<ClassLabelType, int>               m_MapOfClasses;
 
   /** The SVM classifier */
   ClassificationFilterType::Pointer           m_ClassificationFilter;

@@ -86,6 +86,11 @@ VectorizationView
   // Build the fltk code
   this->CreateGUI();
 
+  // Display navigation modes
+  vNavigationMode->add("Mouse left: add point, mouse middle: navigate, mouse right: end geometry, del: remove last geometry");
+  vNavigationMode->add("Mouse left: navigate, mouse middle: add point, mouse right: end geometry, del: remove last geometry");
+  vNavigationMode->value(1);
+
   // Register controllers
   m_ImageView->SetController(m_WidgetController);
   // Show
@@ -96,7 +101,6 @@ void
 VectorizationView
 ::RedrawWidgets()
 {
-  std::cout<<"Redrawing widgets ..."<<std::endl;
 //  m_VectorDataGlComponent->SetOrigin(m_Model->GetInputImage()->GetOrigin());
 //  m_VectorDataGlComponent->SetSpacing(m_Model->GetInputImage()->GetSpacing());
   m_ImageView->GetFullWidget()->redraw();

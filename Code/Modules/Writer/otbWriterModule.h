@@ -111,7 +111,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   template <typename TInputImage, typename TOutputImage>
-  itk::ProcessObject* DoWrite(TInputImage* image)
+  void DoWrite(TInputImage* image)
   {
     typedef itk::CastImageFilter<TInputImage,TOutputImage> CastFilterType;
     typedef otb::ImageFileWriter<TOutputImage> WriterType;
