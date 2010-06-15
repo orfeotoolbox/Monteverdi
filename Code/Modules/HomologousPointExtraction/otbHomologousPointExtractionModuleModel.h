@@ -22,6 +22,7 @@
 #include <iostream>
 #include <utility>
 #include "otbMVCModel.h"
+#include "otbTypeManager.h"
 #include "otbListenerBase.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
@@ -61,23 +62,24 @@ class ITK_EXPORT HomologousPointExtractionModuleModel
 
 public:
   /** Standard class typedefs */
-  typedef HomologousPointExtractionModuleModel                         Self;
-  typedef MVCModel<ListenerBase> Superclass;
+  typedef HomologousPointExtractionModuleModel           Self;
+  typedef MVCModel<ListenerBase>                         Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(HomologousPointExtractionModuleModel, Object);
 
-  typedef double                              PixelType;
-  typedef VectorImage<PixelType,2>            VectorImageType;
-  typedef Image<PixelType,2>                  ImageType;
-  typedef VectorImageType::Pointer            VectorImagePointerType;
-  typedef VectorImageType::IndexType          IndexType;
-  typedef VectorImageType::SizeType           SizeType;
-  typedef VectorImageType::PointType          ImagePointType;
-  typedef std::vector<VectorImagePointerType> ImageListType;
-  typedef itk::ContinuousIndex<>              ContinuousIndexType;
+  typedef TypeManager::Floating_Point_Precision   PixelType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+  typedef TypeManager::Floating_Point_Image       ImageType;
+
+  typedef VectorImageType::Pointer                VectorImagePointerType;
+  typedef VectorImageType::IndexType              IndexType;
+  typedef VectorImageType::SizeType               SizeType;
+  typedef VectorImageType::PointType              ImagePointType;
+  typedef std::vector<VectorImagePointerType>     ImageListType;
+  typedef itk::ContinuousIndex<>                  ContinuousIndexType;
 
   typedef std::pair<IndexType, IndexType>  IndexCoupleType;
   typedef std::vector<IndexCoupleType>     IndexesListType;

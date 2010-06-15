@@ -29,8 +29,8 @@ int otbReaderModuleTest(int argc, char* argv[])
   std::cout<<"Module: "<<module<<std::endl;
 
   // Put in the tests
-  typedef otb::VectorImage<double,2>      ImageType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ReaderModule::FloatingVectorImageType ImageType;
+  typedef otb::ImageFileWriter<ImageType>            WriterType;
   
   module->Start();
   Fl::check();

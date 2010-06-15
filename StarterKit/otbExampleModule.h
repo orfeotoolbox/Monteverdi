@@ -53,10 +53,10 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
-  typedef VectorData<double>            VectorType;
-  typedef itk::PointSet<double,2>       FloatingPointSetType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Floating_Point_Image       FloatingImageType;
+  typedef TypeManager::Vector_Data                VectorType;
+  typedef itk::PointSet<double,2>                 FloatingPointSetType;
 
 protected:
   /** Constructor */

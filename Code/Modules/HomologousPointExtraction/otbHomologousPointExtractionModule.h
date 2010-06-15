@@ -55,16 +55,14 @@ public:
   /** Type macro */
   itkTypeMacro(HomologousPointExtractionModule,Module);
 
-  /** Data typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-
   /** MVC typedefs */
   typedef otb::HomologousPointExtractionModuleController ControllerType;
   typedef otb::HomologousPointExtractionModuleModel      ModelType;
   typedef otb::HomologousPointExtractionModuleView       ViewType;
 
- itkGetObjectMacro(View,HomologousPointExtractionModuleView);
+  typedef ModelType::VectorImageType                     FloatingVectorImageType;
+
+  itkGetObjectMacro(View,HomologousPointExtractionModuleView);
 
 protected:
   /** Constructor */

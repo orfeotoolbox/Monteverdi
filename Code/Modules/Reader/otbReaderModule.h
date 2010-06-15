@@ -58,11 +58,13 @@ public:
   virtual void Analyse();
   /** OTB typedefs */
   /// Dataset
-  typedef VectorImage<double,2>                   FloatingVectorImageType;
-  typedef Image<double,2>                         FloatingImageType;
-  typedef VectorData<double>                      VectorType;
-  typedef VectorData<double,2,short unsigned int> LabeledVectorType;
-  typedef Image<std::complex<double>, 2>          ComplexImageType;
+  typedef TypeManager::Floating_Point_Image          FloatingImageType;
+  typedef TypeManager::Floating_Point_Complex_Image  ComplexImageType;
+  typedef TypeManager::Floating_Point_VectorImage    FloatingVectorImageType;
+
+  typedef TypeManager::Vector_Data                   VectorType;
+  typedef TypeManager::Labeled_Vector_Data           LabeledVectorType;
+
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
   typedef ImageFileReader<ComplexImageType>        ComplexImageReaderType;

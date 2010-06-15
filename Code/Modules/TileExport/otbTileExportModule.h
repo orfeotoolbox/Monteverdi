@@ -88,10 +88,10 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Image file
-  typedef double                                  InternalPixelType;
-  typedef unsigned char                           OutputPixelType;
-  typedef VectorImage<InternalPixelType,2>        FloatingVectorImageType;
-  typedef VectorImage<OutputPixelType,2>          CharVectorImageType;
+  typedef TypeManager::Floating_Point_Precision   InternalPixelType;
+  typedef TypeManager::Label_Char_Precision       OutputPixelType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Labeled_Char_VectorImage   CharVectorImageType;
   
   // Region
   typedef FloatingVectorImageType::RegionType     RegionType;
@@ -178,15 +178,21 @@ protected:
 
   /** Add product to the list*/
   //void AddProductToList(unsigned int id);
-
-  /** Change product name*/
-  void UpdateProductInformations();
   
   /** Method for checking and correcting color composition*/
   bool CheckAndCorrectComposition(unsigned int clickedIndex);
 
   /** CallBack to store the association*/
   virtual void StoreAssociations();
+
+  /** 
+    * Update the product informations to store the Corners values when
+    * non geo
+    */
+  virtual void UpdateProductInformations();
+  
+  /** Export non geo products*/
+  virtual void ExportNonGeoreferencedProduct(unsigned int curIdx);
 
 private:
   TileExportModule(const Self&); //purposely not implemented
@@ -304,7 +310,7 @@ private:
   bool                   m_Cancel;
   
   // Max
-  unsigned int           m_MaxDepth;
+  int                    m_MaxDepth;
   unsigned int           m_CurIdx;
   unsigned int           m_NbOfInput;
   unsigned int           m_CurrentProduct;

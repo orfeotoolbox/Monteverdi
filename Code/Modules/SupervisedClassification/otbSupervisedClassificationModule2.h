@@ -45,9 +45,9 @@ class ITK_EXPORT SupervisedClassificationModule2
 public:
   /** Standard class typedefs */
   typedef SupervisedClassificationModule2  Self;
-  typedef Module                          Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef Module                           Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** New macro */
   itkNewMacro(Self);
@@ -58,9 +58,7 @@ public:
   /** Data typedefs */
   /// Dataset
   typedef VectorImage<float,2>         FloatingVectorImageType;
-  typedef VectorData<float,2>          VectorDataType;
-
-  typedef Image<int,2>                 LabelImageType;
+  typedef VectorData<double,2>         VectorDataType;
 
   /** MVC typedefs */
   typedef otb::SupervisedClassificationController ControllerType;
@@ -93,13 +91,13 @@ protected:
   virtual void Show()
   {
     m_View->Show();
-  };
+  }
 
   /** Show the Module GUI */
   virtual void Hide()
   {
     m_View->HideAll();
-  };
+  }
 
 private:
   SupervisedClassificationModule2(const Self&); //purposely not implemented
@@ -107,8 +105,8 @@ private:
 
 
   ControllerType::Pointer m_Controller;
-  ViewType::Pointer m_View;
-  ModelType::Pointer m_Model;
+  ViewType::Pointer       m_View;
+  ModelType::Pointer      m_Model;
 };
 
 

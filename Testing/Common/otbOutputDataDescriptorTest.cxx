@@ -23,16 +23,18 @@
 
 int otbOutputDataDescriptorTest(int argc, char * argv[])
 {
+  typedef otb::TypeManager::Floating_Point_Image ImageType;
+
   // Default constructor and call to the set method
   otb::OutputDataDescriptor desc1;
   desc1.Set("Floating_Point_Image","OutputImage","This is the output image");
-  desc1.AddData(otb::DataObjectWrapper::Create(otb::Image<double,2>::New()));
+  desc1.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
 
   // Access parameters
   std::cout<<"Desc1: Number of data = "<<desc1.GetNumberOfData()<<std::endl;
 
   // Constructor with parameters
-  otb::OutputDataDescriptor desc2(otb::DataObjectWrapper::Create(otb::Image<double,2>::New()),"OutputImage","This is the output image");
+  otb::OutputDataDescriptor desc2(otb::DataObjectWrapper::Create(ImageType::New()),"OutputImage","This is the output image");
 
   // Access parameters
    std::cout<<"Desc2: number of data = "<<desc2.GetNumberOfData()<<std::endl;

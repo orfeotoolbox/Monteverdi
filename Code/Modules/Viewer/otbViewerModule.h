@@ -91,10 +91,9 @@ public:
   itkTypeMacro(ViewerModule,Module);
 
   /** Dataset */
-  typedef double                                    PixelType;
-  typedef Image<PixelType,2>                        SingleImageType;
-  typedef VectorImage<PixelType,2>                  ImageType;
-  //typedef VectorData<PixelType>                     VectorDataType;
+  typedef TypeManager::Floating_Point_Precision     PixelType;
+  typedef TypeManager::Floating_Point_Image         SingleImageType;
+  typedef TypeManager::Floating_Point_VectorImage   ImageType;
   typedef TypeManager::Vector_Data                  VectorDataType;
 
   /** PackedWidgetManager typedef*/

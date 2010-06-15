@@ -47,7 +47,7 @@ public:
 
 
   /** Event from the model */
-  virtual void Notify() {};
+  virtual void Notify();
 
   /** Fluid call backs*/
   virtual void Quit();
@@ -56,16 +56,19 @@ public:
   itkSetObjectMacro(Controller,SupervisedClassificationControllerInterface);
   itkGetObjectMacro(Controller,SupervisedClassificationControllerInterface);
 
+  /** Build the interface */
+  virtual void BuildInterface();
 
-  virtual void SVMSetup() {};
-  virtual void SVMSetupOk() {};
-  virtual void SVMSetupCancel() {};
-  virtual void Learn() {};
-  virtual void Validate() {};
+  virtual void SVMSetup();
+  virtual void SVMSetupOk();
+  virtual void SVMSetupCancel();
+  virtual void Train();
+  virtual void Validate();
   virtual void HideAll();
   virtual void Show();
+  virtual void Ok();
+  virtual void Cancel();
 
-  void SetModel(SupervisedClassificationModel* model);
 
 protected:
   /** Constructor */
@@ -74,6 +77,8 @@ protected:
   /** Destructor */
   virtual ~SupervisedClassificationView() {};
 
+  /** Clean up before leaving*/
+  virtual void CleanUp();
 
 private:
   SupervisedClassificationView(const Self&); //purposely not implemented
@@ -81,9 +86,6 @@ private:
 
   /** Pointer to the controller */
   SupervisedClassificationControllerInterface::Pointer  m_Controller;
-
-  /** Pointer to the model */
-  SupervisedClassificationModel::Pointer                m_Model;//FIXME why not obtained when needed from the controller?
 
 };
 } //end namespace otb

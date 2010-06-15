@@ -2,12 +2,11 @@
 #define __otbMeanShiftModuleModel_h
 
 #include "otbMVCModel.h"
-// #include "otbListenerBase.h"
 #include "otbEventsSender.h"
+#include "otbTypeManager.h"
+
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 
 //Vis
 #include "otbImageLayerRenderingModel.h"
@@ -36,15 +35,12 @@ public:
   /** Standard type macro */
   itkTypeMacro(MeanShiftModuleModel, Object);
 
-  typedef double                            PixelType;
-  typedef VectorImage<PixelType,2>          VectorImageType;
-  typedef VectorImageType::Pointer          VectorImagePointerType;
-  typedef Image<unsigned short>             LabeledImageType;
-  typedef LabeledImageType::Pointer         LabeledImagePointerType;
-  typedef ImageFileReader<VectorImageType>  VectorReaderType;
-  typedef ImageFileWriter<VectorImageType>  VectorWriterType;
-  typedef ImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef TypeManager::Floating_Point_Precision   PixelType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+  typedef VectorImageType::Pointer                VectorImagePointerType;
 
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
+  typedef LabeledImageType::Pointer               LabeledImagePointerType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                 RGBPixelType;
@@ -132,9 +128,6 @@ private:
 
   /** Visualization model */
   VisualizationModelType::Pointer    m_VisualizationModel;
-
-  /** Vector reader */
-  VectorReaderType::Pointer            m_Reader;
 
   /** MS filter type */
   MSFilterPointerType m_MeanShift;

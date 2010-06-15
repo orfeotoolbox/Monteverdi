@@ -33,11 +33,13 @@ int otbPanSharpeningModuleTest(int argc, char* argv[])
   // Put in the tests
   const char * panfname = argv[1];
   const char * xsfname = argv[2];
-  typedef otb::Image<double,2>                PanImageType;
-  typedef otb::VectorImage<double,2>          XsImageType;
+
+  typedef otb::PanSharpeningModule::FloatingImageType       PanImageType;
+  typedef otb::PanSharpeningModule::FloatingVectorImageType XsImageType;
   typedef otb::ImageFileReader<PanImageType>  ReaderPanType;
   typedef otb::ImageFileReader<XsImageType>   ReaderXsType;
   typedef otb::ImageFileWriter<XsImageType>   WriterType;
+
   //reader pan
   ReaderPanType::Pointer readerPan = ReaderPanType::New();
   readerPan->SetFileName(panfname);

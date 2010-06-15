@@ -34,6 +34,8 @@
 #include "itkContinuousIndex.h"
 #include "otbFeature.h"
 
+#include "otbTypeManager.h"
+
 //Filter include:
 // Feature includes
 #include "otbTouziEdgeDetectorImageFilter.h"
@@ -83,9 +85,10 @@ public:
   itkTypeMacro(FeatureExtractionModel, MVCModel);
 
   /** Images typedefs */
-  typedef double                                                          PixelType;
-  /** Inpout Image Type*/
-  typedef VectorImage<PixelType,2>                                        InputImageType;
+  typedef TypeManager::Floating_Point_Precision                           PixelType;
+
+  /** Input Image Type*/
+  typedef TypeManager::Floating_Point_VectorImage                         InputImageType;
   typedef InputImageType::Pointer                                         InputImagePointerType;
   typedef InputImageType::PixelType                                       InputImagePixelType;
   typedef InputImageType::IndexType                                       IndexType;
@@ -93,13 +96,13 @@ public:
   typedef InputImageType::OffsetType                                      OffsetType;
   typedef itk::ContinuousIndex<>                                          ContinuousIndexType;
 
-
   /** Vector Image Output Filter */
-  typedef VectorImage<PixelType,2>                                        OutputImageType;
+  typedef TypeManager::Floating_Point_VectorImage                         OutputImageType;
   typedef OutputImageType::PixelType                                      OutputImagePixelType;
   typedef OutputImageType::Pointer                                        OutputImagePointerType;
+
   /** Image Type */
-  typedef Image<PixelType,2>                                               SingleImageType;
+  typedef TypeManager::Floating_Point_Image                                SingleImageType;
   typedef SingleImageType::Pointer                                         SingleImagePointerType;
   typedef SingleImageType::PixelType                                       SinglePixelType;
   typedef SingleImageType::InternalPixelType                               SingleInternalPixelType;

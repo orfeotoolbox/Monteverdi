@@ -29,10 +29,10 @@ class ITK_EXPORT SupervisedClassificationController
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationController Self;
+  typedef SupervisedClassificationController          Self;
   typedef SupervisedClassificationControllerInterface Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
 
   /** Standard type macros */
   itkTypeMacro(SupervisedClassificationController,Superclass)
@@ -43,10 +43,37 @@ public:
     m_Model = model;
   }
 
+  const ModelType* GetModel() const
+  {
+    return this->m_Model;
+  }
+
   /** Set the pointer to the view */
   void SetView(SupervisedClassificationView * view)
   {
     m_View = view;
+  }
+
+  /** Users actions */
+  virtual void Train();
+  virtual void Validate();
+  virtual void SVMSetupOk();
+  virtual void Quit();
+  virtual void Ok()
+  {
+    m_Model->Ok();
+  }
+  virtual ConfusionMatrixType GetConfusionMatrix()
+  {
+    return m_Model->GetConfusionMatrix();
+  }
+  virtual double GetOverallAccuracy()
+  {
+    return m_Model->GetOverallAccuracy();
+  }
+  virtual double GetKappaIndex()
+  {
+    return m_Model->GetKappaIndex();
   }
 
 protected:
@@ -60,7 +87,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  SupervisedClassificationView*                      m_View;
+  SupervisedClassificationView*               m_View;
 
   /** The instance of the model */
   ModelType *                                 m_Model;

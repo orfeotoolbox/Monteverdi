@@ -63,8 +63,9 @@ namespace otb
     typedef otb::CoordinateToName                         CoordinateToNameType;
     typedef CoordinateToNameType::Pointer                 CoordinateToNamePointerType;
     
-    typedef otb::VectorImage<double, 2>                   ImageType;
+    typedef TypeManager::Floating_Point_VectorImage       ImageType;
     
+    typedef ImageType::InternalPixelType                  InternalPixelType;
     typedef ImageType::RegionType                         RegionType;
       
     typedef otb::ImageFileReader<ImageType>               ReaderType;
@@ -76,7 +77,7 @@ namespace otb
     typedef otb::InverseSensorModel<double>               ModelType;
     typedef ModelType::Pointer                            ModelPointerType;
     
-    typedef otb::MultiChannelExtractROI<double, double>   ExtractROIFilterType;
+    typedef otb::MultiChannelExtractROI<InternalPixelType, InternalPixelType>  ExtractROIFilterType;
     typedef ExtractROIFilterType::Pointer                 ExtractROIPointerType;
     
     typedef itk::Point <double, 2>                        PointType;

@@ -34,7 +34,7 @@ int otbAlgebraModuleTest(int argc, char* argv[])
   const char * infname1 = argv[2];
   bool  run = atoi(argv[4]);
   
-  typedef otb::Image<double,2>                ImageType;
+  typedef otb::AlgebraModule::ImageType       ImageType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
   

@@ -11,77 +11,112 @@ class TileExportModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {Google Earth export data} open
-      xywh {393 142 490 520} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable size_range {490 520 490 520} visible
+      xywh {83 163 480 555} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable size_range {490 520 490 520} visible
     } {
       Fl_Tabs {} {
-        label Informations open
-        xywh {0 15 510 510} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+        label Informations open selected
+        xywh {0 15 510 540} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group {} {
-          label {Kmz Setup}
-          xywh {0 45 490 475} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+          label {Kmz Setup} open
+          xywh {0 45 480 510} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Button bCancel {
             label Cancel
             callback {this->Cancel();}
-            xywh {290 460 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            xywh {290 518 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Return_Button bOk {
             label Save
             callback {this->SaveDataSet();}
-            xywh {380 460 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            xywh {380 519 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Progress pBar {
-            xywh {10 405 450 26} box PLASTIC_DOWN_BOX selection_color 1
+            xywh {18 485 450 26} box PLASTIC_DOWN_BOX selection_color 1
           }
           Fl_Group {} {
             label {Output KMZ filename} open
-            xywh {10 88 450 59} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+            xywh {18 75 450 59} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
           } {
             Fl_File_Input vFilePath {
-              xywh {20 97 370 35} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+              xywh {28 84 370 35} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
             }
             Fl_Button bBrowse {
               label {...}
               callback {this->Browse();}
-              xywh {405 107 40 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+              xywh {413 94 40 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
             }
           }
           Fl_Group {} {
             label {KMZ Parameters} open
-            xywh {10 282 450 55} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+            xywh {18 233 450 55} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
           } {
             Fl_Choice cTileSize {
               label {Tile Size} open
-              xywh {95 297 90 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {103 248 90 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Check_Button gExtended {
               label {Use Extended KMZ}
-              tooltip {Uncheck if using GoogleEearth version less than 5.0} xywh {275 297 140 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 186 labelfont 1 labelsize 12 labelcolor 186
+              tooltip {Uncheck if using GoogleEearth version less than 5.0} xywh {283 248 140 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 186 labelfont 1 labelsize 12 labelcolor 186
             }
           }
           Fl_Progress pBarProd {
-            xywh {10 365 450 26} box PLASTIC_DOWN_BOX selection_color 1
+            xywh {18 452 450 26} box PLASTIC_DOWN_BOX selection_color 1
           }
           Fl_Group {} {
             label {Channels Parameters}
-            xywh {15 180 440 50} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186 align 5
+            xywh {18 162 450 50} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186 align 5
           } {
             Fl_Choice cRedChannel {
               label Red
               callback {this->UpdateProductInformations();}
-              xywh {85 195 50 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {88 177 50 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Choice cGreenChannel {
               label Green
               callback {this->UpdateProductInformations();} open
-              xywh {215 195 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {218 177 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Choice cBlueChannel {
               label Blue
               callback {this->UpdateProductInformations();} open
-              xywh {340 195 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {343 177 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
+          }
+          Fl_Group vGELatLongBoxGroup {
+            label {No Geographical Information : please Set the bounding Box Informations} open
+            xywh {18 314 450 126} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          } {
+            Fl_Group {} {
+              label {Upper Left} open
+              xywh {21 335 155 101} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {
+              Fl_Value_Input vGELongUL {
+                label Longitude
+                callback {this->UpdateProductInformations();}
+                xywh {31 356 135 27} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
+              }
+              Fl_Value_Input vGELatUL {
+                label Latitude
+                callback {this->UpdateProductInformations();}
+                xywh {31 400 135 27} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 align 1 minimum -90 maximum 90 step 1e-06
+              }
+            }
+            Fl_Group {} {
+              label {Lower Right} open
+              xywh {293 337 155 94} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            } {
+              Fl_Value_Input vGELongLR {
+                label Longitude
+                callback {this->UpdateProductInformations();}
+                xywh {298 356 135 27} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 minimum -180 maximum 180 step 1e-06
+              }
+              Fl_Value_Input vGELatLR {
+                label Latitude
+                callback {this->UpdateProductInformations();}
+                xywh {298 400 135 27} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 align 1 when 3 minimum -90 maximum 90 step 1e-06
+              }
+            }
           }
         }
       }
@@ -93,7 +128,7 @@ class TileExportModuleGUI {open
   } {}
   Function {Cancel()} {open return_type {virtual void}
   } {}
-  Function {~TileExportModuleGUI()} {open selected return_type virtual
+  Function {~TileExportModuleGUI()} {open return_type virtual
   } {}
   Function {UpdateProductInformations()} {open return_type {virtual void}
   } {}

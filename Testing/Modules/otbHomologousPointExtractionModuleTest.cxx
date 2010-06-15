@@ -29,20 +29,13 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
   //Internationalization
   otbI18nMacro();
   
-  // Convenient typedefs
-  typedef otb::VectorImage<double,2>             InputImageType;
-  typedef InputImageType::IndexType              IndexType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>   WriterType;
-
   otb::HomologousPointExtractionModule::Pointer pointModule = otb::HomologousPointExtractionModule::New();
   otb::Module::Pointer module = pointModule.GetPointer();
   
   // Put in the tests
-  typedef otb::VectorImage<double,2>      ImageType;
+  typedef otb::HomologousPointExtractionModule::FloatingVectorImageType ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-
 
   //reader
   ReaderType::Pointer reader1 = ReaderType::New();

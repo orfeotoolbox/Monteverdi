@@ -55,26 +55,23 @@ public:
   itkTypeMacro(WriterModule,Module);
 
   /** OTB typedefs */
-  /// Dataset
-  typedef VectorImage<double,2>                    FloatingVectorImageType;
-  typedef VectorImage<unsigned char,2>             FloatingFloatVectorImageType;
-  typedef VectorImage<unsigned char,2>             CharVectorImageType;
-  typedef Image<double,2>                          FloatingImageType;
-  typedef Image<unsigned short,2>                  UnsignedShortImageType;
-  typedef VectorData<double>                       VectorType;
-  typedef VectorData<double,2,short unsigned int>  LabeledVectorType;
-  // Casters double ->float
-  typedef itk::CastImageFilter<FloatingVectorImageType, FloatingFloatVectorImageType> DoubleToFloatCasterType;
-  typedef ImageToVectorImageCastFilter<FloatingImageType, FloatingFloatVectorImageType> ImageDoubleToVImageFloatCasterType;
-  /// Writers
-  typedef ImageFileWriter<FloatingVectorImageType>      FPVWriterType;
-  typedef ImageFileWriter<FloatingFloatVectorImageType> FFPVWriterType;
-  typedef ImageFileWriter<CharVectorImageType>          CharVWriterType;
-  typedef ImageFileWriter<FloatingImageType>            FPWriterType;
-  typedef ImageFileWriter<UnsignedShortImageType>       USWriterType;
-  typedef VectorDataFileWriter<VectorType>              VectorWriterType;
-  typedef VectorDataFileWriter<LabeledVectorType>       LabeledVectorWriterType;
+  typedef otb::Image<unsigned char>        UCharImageType;
+  typedef otb::Image<unsigned short>       UShortImageType;
+  typedef otb::Image<unsigned int>         UIntImageType;
+  typedef otb::Image<float>                FloatImageType;
+  typedef otb::Image<double>               DoubleImageType;
 
+  typedef otb::VectorImage<unsigned char>  UCharVectorImageType;
+  typedef otb::VectorImage<unsigned short> UShortVectorImageType;
+  typedef otb::VectorImage<unsigned int>   UIntVectorImageType;
+  typedef otb::VectorImage<float>          FloatVectorImageType;
+  typedef otb::VectorImage<double>         DoubleVectorImageType;
+
+  typedef TypeManager::Vector_Data                 VectorType;
+  typedef TypeManager::Labeled_Vector_Data         LabeledVectorType;
+
+  typedef VectorDataFileWriter<VectorType>         VectorWriterType;
+  typedef VectorDataFileWriter<LabeledVectorType>  LabeledVectorWriterType;
 
 protected:
   /** Constructor */
@@ -113,12 +110,44 @@ private:
   WriterModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-//   void SetIntensityChannelAvailability();
+  template <typename TInputImage, typename TOutputImage>
+  void DoWrite(TInputImage* image)
+  {
+    typedef itk::CastImageFilter<TInputImage,TOutputImage> CastFilterType;
+    typedef otb::ImageFileWriter<TOutputImage> WriterType;
+
+    typename CastFilterType::Pointer caster = CastFilterType::New();
+    typename WriterType::Pointer     writer = WriterType::New();
+    caster->SetInput( image );
+    caster->SetInPlace( true );
+    writer->SetInput( caster->GetOutput() );
+    writer->SetFileName( m_Filename );
+    m_ProcessObject =  writer;
+    writer->Update();
+  }
+
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
   
   //error msg
   std::string m_ErrorMsg;
+
+  //file name
+  std::string m_Filename;
+
+  //autoscale
+  bool m_AutoScale;
+
+  typedef enum
+  {
+    UCHAR,
+    USHORT,
+    UINT,
+    FLOAT,
+    DOUBLE
+  } OutputFormat;
+
+  std::map<OutputFormat, std::string> m_OutputTypesChoices;
 };
 
 

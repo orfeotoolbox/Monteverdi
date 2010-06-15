@@ -35,7 +35,7 @@ int otbTileMapImportModuleTest(int argc, char* argv[])
   unsigned int sizeY = static_cast<unsigned int> (atoi(argv[4]));
   unsigned int depth = static_cast<unsigned int> (atoi(argv[5]));
 
-  typedef otb::VectorImage<double,2>  ImageType;
+  typedef otb::TileMapImportModule::ImageType ImageType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
   
   module->Start();

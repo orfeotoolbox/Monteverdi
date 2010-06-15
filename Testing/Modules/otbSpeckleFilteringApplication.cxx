@@ -47,7 +47,6 @@ int otbSpeckleFilteringApplication(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
