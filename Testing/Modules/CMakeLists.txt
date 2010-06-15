@@ -261,6 +261,26 @@ ADD_TEST(moTvSupervisedClassificationModelTrainTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTrainTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
 
+
+
+
+ADD_TEST(moTvSertitHaitiXTTest ${Modules_TESTS3}
+otbSertitProcessingTest
+${INPUTDATA}/Haiti1.jpeg
+${INPUTDATA}/Haiti1.xml
+${TEMP}/haiti1.kmz
+1
+80 340 4000 3000
+4245 1195 710 350
+)
+
+ADD_TEST(moTvSertitProcessingTestNonGeoProduct ${Modules_TESTS3}
+otbSertitProcessingTestNonGeoProduct
+${TEMP}/haitiNonGeoReferencedProductExportation.kmz
+0
+${INPUTDATA}/Haiti_Jacmel.png
+)
+
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -275,6 +295,8 @@ IF(OTB_USE_CURL)
   15
   )
 ENDIF(OTB_USE_CURL)
+
+
 
 #------------- Vectorization Module Tests ---------------------------
 ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
@@ -307,6 +329,7 @@ otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
+
 )
 
 SET(Modules_SRCS3
@@ -317,6 +340,8 @@ otbThresholdModuleTest.cxx
 otbOpticalCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
 otbSupervisedClassificationModelTest.cxx
+otbSertitProcessingTest.cxx
+otbSertitProcessingTestNonGeoProduct.cxx
 )
 
 IF(OTB_USE_CURL)
