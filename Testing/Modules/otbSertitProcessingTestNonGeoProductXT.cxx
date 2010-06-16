@@ -77,7 +77,7 @@ int otbSertitProcessingTestNonGeoProductXT(int argc, char* argv[])
   geFormatExportationModule->vgxGELatLR->value(18.484373);
   geFormatExportationModule->vGELatLR->do_callback();
     
-  Fl::run();
+  Fl::check();
   
   geFormatExportationModule->bOk->do_callback();
   Fl::check();
