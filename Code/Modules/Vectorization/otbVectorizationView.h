@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbVectorizationView_h
 #define __otbVectorizationView_h
 
@@ -63,7 +62,7 @@ public:
   virtual void Notify();
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,VectorizationControllerInterface);
+  void SetController(VectorizationControllerInterface * controller);
   itkGetObjectMacro(Controller,VectorizationControllerInterface);
 
   /** Set the widgets controller */

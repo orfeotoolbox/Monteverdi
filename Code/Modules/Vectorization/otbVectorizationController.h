@@ -83,6 +83,14 @@ public:
     m_Model->SetImage(image);
   }
 
+  virtual void RemoveDataNode(DataNodeType * node);
+  virtual void SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value);
+  virtual void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value);
+  virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value);
+  virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string & name);
+  virtual void RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex = 0);
+  virtual void UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex = 0);
+
  protected:
   /** Constructor */
   VectorizationController();

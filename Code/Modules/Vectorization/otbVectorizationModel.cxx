@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbVectorizationModel.h"
+#include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
@@ -111,24 +112,177 @@ VectorizationModel
 void VectorizationModel
 ::RemoveDataNode(DataNodeType * node)
 {
-}
+  // Look-up node in the graph
+  itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
+    it(m_VectorDataModel->GetVectorData()->GetDataTree());
+  it.GoToBegin();
 
+  while(!it.IsAtEnd() && it.Get()!=node)
+    {
+    ++it;
+    }
+  // If node is found, remove it
+  if(!it.IsAtEnd())
+    {
+    it.Remove();
+    this->NotifyAll();
+    }
+}
 
 void VectorizationModel
 ::SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value)
-{}
+{
+  node->SetFieldAsInt(name,value);
+  this->NotifyAll();
+}
 void VectorizationModel
 ::SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value)
-{}
+{
+  this->NotifyAll();
+}
 void VectorizationModel
 ::SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value)
-{}
+{
+  std::cout<<"Setting field "<<name<<" with value "<<value<<" to node "<<node<<std::endl;
+  node->SetFieldAsString(name,value);
+  this->NotifyAll();
+}
 void VectorizationModel
 ::RemoveFieldFromDataNode(DataNodeType * node, const std::string & name)
-{}
+{
+
+    // TODO: Not implemented yet, requires new methods in DataNode class.
+}
 void VectorizationModel
 ::RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex)
-{}
+{
+  switch(node->GetNodeType())
+  {
+  case FEATURE_POINT:
+    {
+      // If the geometry is a point, remove it
+      this->RemoveDataNode(node);
+      break;
+    }
+  case FEATURE_LINE:
+    {
+      if(node->GetLine()->GetVertexList()->Size()<3)
+        {
+        this->RemoveDataNode(node);
+        }
+      else
+        {
+        // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+        // a method to remove a given vertex, we must use a const_cast here.
+        DataNodeType::LineType::VertexListType * pointContainer
+        = const_cast<DataNodeType::LineType::VertexListType *>(node->GetLine()->GetVertexList());
+        pointContainer->DeleteIndex(index);
+        }
+      break;
+    }
+  case FEATURE_POLYGON:
+    {
+      if(!interiorRing)
+        {
+        if(node->GetPolygonExteriorRing()->GetVertexList()->Size()<4)
+          {
+          this->RemoveDataNode(node);
+          }
+        else
+          {
+          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+          // a method to remove a given vertex, we must use a const_cast here.
+          DataNodeType::PolygonType::VertexListType * pointContainer
+          = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonExteriorRing()->GetVertexList());
+          pointContainer->DeleteIndex(index);
+          }
+        }
+      else
+        {
+        if(interiorRingIndex < node->GetPolygonInteriorRings()->Size())
+          {
+          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+          // a method to remove a given vertex, we must use a const_cast here.
+          DataNodeType::PolygonType::VertexListType * pointContainer
+          = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonInteriorRings()
+              ->GetNthElement(interiorRingIndex)->GetVertexList());
+           pointContainer->DeleteIndex(index);
+          }
+        }
+      }
+     default:
+       {
+       // Not supported yet
+       break;
+       }
+     }
+     this->NotifyAll();
+}
+
+void VectorizationModel
+::UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex)
+{
+  // Cast PointType to VertexType
+  VertexType vertex;
+  vertex[0]=point[0];
+  vertex[1]=point[1];
+
+  switch(node->GetNodeType())
+  {
+  case FEATURE_POINT:
+    {
+      // If the geometry is a point, remove it
+      node->SetPoint(point);
+      break;
+    }
+  case FEATURE_LINE:
+    {
+      if(index<node->GetLine()->GetVertexList()->Size())
+        {
+        // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+        // a method to set a given vertex, we must use a const_cast here.
+        DataNodeType::LineType::VertexListType * pointContainer
+        = const_cast<DataNodeType::LineType::VertexListType *>(node->GetLine()->GetVertexList());
+        pointContainer->SetElement(index,vertex);
+        }
+      break;
+    }
+  case FEATURE_POLYGON:
+    {
+      if(!interiorRing)
+        {
+        if(index<node->GetPolygonExteriorRing()->GetVertexList()->Size())
+          {
+          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+          // a method to set a given vertex, we must use a const_cast here.
+          DataNodeType::PolygonType::VertexListType * pointContainer
+          = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonExteriorRing()->GetVertexList());
+          pointContainer->SetElement(index,vertex);
+          }
+        }
+      else
+        {
+        if(interiorRingIndex < node->GetPolygonInteriorRings()->Size()
+            && index < node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList()->Size())
+          {
+          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
+          // a method to set a given vertex, we must use a const_cast here.
+          DataNodeType::PolygonType::VertexListType * pointContainer
+          = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonInteriorRings()
+              ->GetNthElement(interiorRingIndex)->GetVertexList());
+          pointContainer->SetElement(index,vertex);
+          }
+        }
+    }
+  default:
+    {
+      // Not supported yet
+      break;
+    }
+  }
+  this->NotifyAll();
+}
+
 
 void
 VectorizationModel

@@ -93,6 +93,17 @@ VectorDataTreeBrowser<TVectorData>
 ::~VectorDataTreeBrowser()
 {}
 
+template <class TVectorData>
+void
+VectorDataTreeBrowser<TVectorData>
+::SetController(VectorizationControllerInterface * controller)
+ {
+  m_Controller = controller;
+  m_FieldEditor->SetController(controller);
+  this->Modified();
+ }
+
+
 /** Update */
 template <class TVectorData>
 void
@@ -136,7 +147,7 @@ VectorDataTreeBrowser<TVectorData>
       case DOCUMENT:
         {
         FluNodeType * fnode = this->FetchNode(parent,node);
-
+        this->ReportAttributes(fnode,node);
         if(node)
           {
           parent = fnode;
@@ -147,6 +158,7 @@ VectorDataTreeBrowser<TVectorData>
       case FOLDER:
         {
         FluNodeType * fnode = this->FetchNode(parent,node);
+        this->ReportAttributes(fnode,node);
 
         if(node)
           {
@@ -158,6 +170,7 @@ VectorDataTreeBrowser<TVectorData>
       case FEATURE_POINT:
         {
         FluNodeType * fnode = this->FetchNode(parent,node);
+        this->ReportAttributes(fnode,node);
 
         if(node)
           {
@@ -169,6 +182,7 @@ VectorDataTreeBrowser<TVectorData>
       case FEATURE_LINE:
         {
         FluNodeType * fnode = this->FetchNode(parent,node);
+        this->ReportAttributes(fnode,node);
 
         if(node)
           {
@@ -180,6 +194,7 @@ VectorDataTreeBrowser<TVectorData>
       case FEATURE_POLYGON:
         {
         FluNodeType * fnode = this->FetchNode(parent,node);
+        this->ReportAttributes(fnode,node);
 
         if(node)
           {
@@ -222,7 +237,7 @@ VectorDataTreeBrowser<TVectorData>
   if (dataNode->GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
       {
       VectorDataKeywordlist kwl;
-      itk::ExposeMetaData<VectorDataKeywordlist>(GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
+      itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
 
       FluNodeType * attNode = this->FetchSubNode(fluNode,m_AttributesKey);
 
@@ -432,21 +447,23 @@ VectorDataTreeBrowser<TVectorData>
         {
         Fl_Input * value = new Fl_Input(0,0,75,20);
         value->value(field.second.String);
-        node->add(label.c_str(),value);
+        parent->add(label.c_str(),value);
         break;
         }
       case OFTInteger:
         {
+        oss.str("");
+        oss<<field.second.Integer;
         Fl_Int_Input * value = new Fl_Int_Input(0,0,75,20);
-        value->value(field.second.Integer);
-        node->add(label.c_str(),value);
+        value->value(oss.str().c_str());
+        parent->add(label.c_str(),value);
         break;
         }
-      case OFTInteger:
+      case OFTReal:
         {
         Fl_Value_Input * value = new Fl_Value_Input(0,0,75,20);
         value->value(field.second.Real);
-        node->add(label.c_str(),value);
+        parent->add(label.c_str(),value);
         break;
         }
       default:
@@ -530,7 +547,21 @@ void
 VectorDataTreeBrowser<TVectorData>
 ::DeleteSelectedGeometry()
  {
+  // Retrieve selected flu node
+  FluNodeType * selectedFluNode = this->get_hilighted();
 
+  // Find the corresponding node from VectorData
+  typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
+
+  while(it!=m_NodeMap.end() && it->second!=selectedFluNode)
+    {
+    ++it;
+    }
+
+  if(it != m_NodeMap.end())
+    {
+    m_Controller->RemoveDataNode(it->first);
+    }
  }
 
 template <class TVectorData>
@@ -548,7 +579,45 @@ void
 VectorDataTreeBrowser<TVectorData>
 ::DeleteSelectedPoint()
  {
+  // Retrieve selected flu node
+  FluNodeType * selectedFluNode = this->get_hilighted();
+  FluNodeType * parent = selectedFluNode->parent();
 
+  unsigned int index = selectedFluNode->index();
+  bool interiorRing = false;
+  unsigned int interiorRingIndex = 0;
+  FluNodeType * geoFeatureFluNode = NULL;
+
+  if(parent->label() == m_GeometricDataKey)
+    {
+    geoFeatureFluNode = parent->parent();
+    }
+  else if(parent->label() == m_ExteriorRingKey)
+    {
+    geoFeatureFluNode = parent->parent()->parent();
+    }
+  else if(parent->parent()->label()==m_InteriorRingKey)
+    {
+    geoFeatureFluNode = parent->parent()->parent();
+    interiorRing = true;
+    interiorRingIndex = parent->index();
+    }
+
+  if(geoFeatureFluNode)
+    {
+    // Find the corresponding data node
+    typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
+
+      while(it!=m_NodeMap.end() && it->second!=geoFeatureFluNode)
+        {
+        ++it;
+        }
+
+      if(it != m_NodeMap.end())
+        {
+        m_Controller->RemovePointFromDataNode(it->first,index,interiorRing,interiorRingIndex);
+        }
+    }
  }
 
 template <class TVectorData>
@@ -566,7 +635,22 @@ void
 VectorDataTreeBrowser<TVectorData>
 ::AddFieldToSelectedGeometry()
  {
-  m_FieldEditor->wFieldEditor->show();
+  // Retrieve selected flu node
+  FluNodeType * selectedFluNode = this->get_hilighted();
+
+  // Find the corresponding node from VectorData
+  typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
+
+  while(it!=m_NodeMap.end() && it->second!=selectedFluNode)
+    {
+    ++it;
+    }
+
+  if(it != m_NodeMap.end())
+    {
+    m_FieldEditor->SetDataNode(it->first);
+    m_FieldEditor->wFieldEditor->show();
+    }
  }
 
 template <class TVectorData>

@@ -22,6 +22,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "otbFieldEditorGUI.h"
+#include "otbVectorizationControllerInterface.h"
 
 namespace otb
 {
@@ -86,6 +87,9 @@ void Clear();
 
 itkSetObjectMacro(VectorData,VectorDataType);
 itkGetObjectMacro(VectorData,VectorDataType);
+
+void SetController(VectorizationControllerInterface * controller);
+itkGetObjectMacro(Controller,VectorizationControllerInterface);
 
 protected:
 /** Constructor */
@@ -168,6 +172,7 @@ std::map<NodeType,std::string> m_NodeNameMap;
 
 FieldEditorPointerType m_FieldEditor;
 
+typename VectorizationControllerInterface::Pointer m_Controller;
 
 }; // End class VectorDataTreeBrowser
 } // End namespace otb

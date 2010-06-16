@@ -71,6 +71,15 @@ VectorizationView
 
 void
 VectorizationView
+::SetController(VectorizationControllerInterface * controller)
+{
+  m_Controller = controller;
+  m_VectorDataTreeBrowser->SetController(controller);
+  this->Modified();
+}
+
+void
+VectorizationView
 ::BuildInterface()
 {
   if(!m_Controller)

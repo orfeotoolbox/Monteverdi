@@ -80,7 +80,9 @@ public:
   typedef VectorDataModel                     VectorDataModelType;
   typedef VectorDataModelType::Pointer        VectorDataModelPointerType;
   typedef VectorDataType::DataNodeType        DataNodeType;
-
+  typedef DataNodeType::PointType             PointType;
+  typedef DataNodeType::PolygonType::VertexType
+                                              VertexType;
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -100,6 +102,7 @@ public:
   void SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value);
   void RemoveFieldFromDataNode(DataNodeType * node, const std::string & name);
   void RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex = 0);
+  void UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex = 0);
 
 protected:
   /** Constructor */

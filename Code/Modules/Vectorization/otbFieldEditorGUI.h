@@ -64,7 +64,29 @@ virtual ~FieldEditorGUI(){}
 
 virtual void FieldEditorOkCallback()
 {
-
+  switch(vFieldType->value())
+  {
+  // String case
+  case 0:
+    {
+      m_Controller->SetDataNodeFieldAsString(m_DataNode,vFieldName->value(),vFieldValueString->value());
+      break;
+    }
+  case 1:
+    {
+      m_Controller->SetDataNodeFieldAsInt(m_DataNode,vFieldName->value(),atoi(vFieldValueInt->value()));
+      break;
+    }
+  case 2:
+    {
+      m_Controller->SetDataNodeFieldAsFloat(m_DataNode,vFieldName->value(),atof(vFieldValueFloat->value()));
+      break;
+    }
+  default:
+    {
+      break;
+    }
+  }
   wFieldEditor->hide();
 }
 
