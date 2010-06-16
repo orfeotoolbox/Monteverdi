@@ -53,6 +53,24 @@ IF(NOT OTB_USE_VISU_GUI)
           "The OTB library must be compiled with Visu/Gui options. Please reinstall OTB and set OTB_USE_VISU_GUI to ON")
 ENDIF(NOT OTB_USE_VISU_GUI)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OTB_SOURCE_DIR}/CMake")
+
+FIND_PACKAGE(Mercurial)
+IF(Mercurial_FOUND)
+  Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} Monteverdi)
+  MESSAGE(STATUS "Mercurial version is ${Mercurial_VERSION_HG}")
+  MESSAGE(STATUS "Repository revision is ${Monteverdi_WC_REVISION}")
+  SET(Monteverdi_WC_REVISION ${Monteverdi_WC_REVISION} CACHE STRING "Repository version" FORCE)
+  MARK_AS_ADVANCED(Monteverdi_WC_REVISION)
+  IF(Monteverdi_WC_STATUS)
+    MESSAGE(STATUS "Local file modifications:")
+    MESSAGE(STATUS ${Monteverdi_WC_STATUS})
+  ELSE(Monteverdi_WC_STATUS)
+    MESSAGE(STATUS "No files modified locally")
+  ENDIF(Monteverdi_WC_STATUS)
+ENDIF(Mercurial_FOUND)
+
+
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
 CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/ConfigureMonteverdi.h.in
