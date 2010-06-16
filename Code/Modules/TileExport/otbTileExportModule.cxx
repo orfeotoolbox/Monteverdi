@@ -1815,8 +1815,8 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
       { 
       north = m_UpperLeftCorner[1];
       south = m_LowerLeftCorner[1];
-      west  = m_UpperLeftCorner[1];
-      east  = m_ProductVector[curIdx].m_CornerList[2];
+      west  = m_UpperLeftCorner[0];
+      east  = m_UpperRightCorner[0];
       }
     else
       {
