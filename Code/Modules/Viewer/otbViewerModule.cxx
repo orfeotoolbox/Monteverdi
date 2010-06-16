@@ -977,8 +977,8 @@ void ViewerModule::UpdateTabHistogram()
 void ViewerModule::TabSetupPosition()
 {
   unsigned int nbBands = m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size();
-
-  if(strcmp(gVectorData->value()->label(),"Histogram" ))
+  
+  if(strcmp(gVectorData->value()->label(),otbGetTextMacro("Histogram" )))
     {
       m_BlueCurveWidgetGroup->hide();
       m_GreenCurveWidgetGroup->hide();

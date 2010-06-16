@@ -37,4 +37,6 @@ REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
 REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
 REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
+REGISTER_TEST(otbSertitProcessingTest);
+REGISTER_TEST(otbSertitProcessingTestNonGeoProduct);
 }

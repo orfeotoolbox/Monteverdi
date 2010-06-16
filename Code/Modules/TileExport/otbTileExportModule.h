@@ -178,15 +178,21 @@ protected:
 
   /** Add product to the list*/
   //void AddProductToList(unsigned int id);
-
-  /** Change product name*/
-  void UpdateProductInformations();
   
   /** Method for checking and correcting color composition*/
   bool CheckAndCorrectComposition(unsigned int clickedIndex);
 
   /** CallBack to store the association*/
   virtual void StoreAssociations();
+
+  /** 
+    * Update the product informations to store the Corners values when
+    * non geo
+    */
+  virtual void UpdateProductInformations();
+  
+  /** Export non geo products*/
+  virtual void ExportNonGeoreferencedProduct(unsigned int curIdx);
 
 private:
   TileExportModule(const Self&); //purposely not implemented
