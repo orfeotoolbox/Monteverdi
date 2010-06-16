@@ -67,7 +67,7 @@ public:
   /** Vector of corners coordinates when no kWL nor porjection ref
     * available 
     */
-  CornersType     m_CornerList;
+  CornersType      m_CornerList;
 };
 
 
@@ -322,6 +322,12 @@ private:
 
   // Product Info vector type
   ProductInformationVectorType                  m_ProductVector;
+
+  // Geo Corners Coordinates
+  OutputPointType         m_UpperLeftCorner;
+  OutputPointType         m_UpperRightCorner;
+  OutputPointType         m_LowerLeftCorner;
+  OutputPointType         m_LowerRightCorner;
 };
 
 
