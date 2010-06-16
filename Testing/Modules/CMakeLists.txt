@@ -281,6 +281,14 @@ ${TEMP}/haitiNonGeoReferencedProductExportation.kmz
 ${INPUTDATA}/Haiti_Jacmel.png
 )
 
+
+ADD_TEST(moTvSertitProcessingTestXtNonGeoProduct ${Modules_TESTS3}
+otbSertitProcessingTestNonGeoProductXT
+${TEMP}/haitiNonGeoReferencedProductExportationXT.kmz
+1
+${INPUTDATA}/Haiti1.jpeg
+)
+
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -342,6 +350,7 @@ otbSarCalibrationModuleTest.cxx
 otbSupervisedClassificationModelTest.cxx
 otbSertitProcessingTest.cxx
 otbSertitProcessingTestNonGeoProduct.cxx
+otbSertitProcessingTestNonGeoProductXT.cxx
 )
 
 IF(OTB_USE_CURL)
