@@ -69,6 +69,7 @@
 #include "otbThresholdModule.h"
 #include "otbOpticalCalibrationModule.h"
 #include "otbSarCalibrationModule.h"
+#include "otbObjectCountingModule.h"
 #include "otbCommandLineArgumentParser.h"
 #include "otbTileExportModule.h"
 
@@ -153,6 +154,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
+  model->RegisterModule<otb::ObjectCountingModule>("ObjectCounting", otbGetTextMacro("Filtering/Object counting"));
 
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
