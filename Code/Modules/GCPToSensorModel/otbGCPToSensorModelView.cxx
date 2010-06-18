@@ -325,7 +325,7 @@ GCPToSensorModelView
   if (cfname == NULL)
   {
     otbMsgDebugMacro(<<"Empty directory!");
-    return ;
+    return;
   }
   
   std::string DEMfile = cfname;
@@ -507,7 +507,7 @@ GCPToSensorModelView
 
   if (fname == NULL)
     {
-    return ;
+    return;
     }
 
   m_Controller->ImportGcpsFromXmlFile(fname);
@@ -524,7 +524,7 @@ GCPToSensorModelView
 
     if (fname == NULL)
       {
-      return ;
+      return;
       }
 
     m_Controller->ExportGcpsToXmlFile(fname);
