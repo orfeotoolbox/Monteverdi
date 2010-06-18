@@ -131,13 +131,6 @@ public:
     m_InputOutputFeatureLink.push_back(i);
   };
 
-  void UpdateSelectedPixel(const IndexType & index);
-
-  ModelInputPixelType GetSelectedPixel() const
-  {
-    return m_SelectedPixel;
-  };
-
   virtual void ClearImage();
   
   virtual void InitFeatureOutputList();
