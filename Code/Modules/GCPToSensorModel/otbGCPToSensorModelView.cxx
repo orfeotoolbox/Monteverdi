@@ -193,7 +193,7 @@ GCPToSensorModelView
   groundPoint = gcp.second;
 
   itk::OStringStream oss;
-  oss << sensorPoint << "\t->\t" << groundPoint << "\t\tError = " << error;
+  oss << sensorPoint << " -> " << groundPoint << " Error=" << error;
   
   this->lPointList->add(oss.str().c_str());
   
