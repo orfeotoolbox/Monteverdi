@@ -207,7 +207,7 @@ WriterModel
 
 void
 WriterModel
-::ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
+::ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);

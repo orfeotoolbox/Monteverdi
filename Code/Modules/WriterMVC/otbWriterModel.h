@@ -290,7 +290,7 @@ public:
 
   /** Generate output image */
   void GenerateOutputImage(/*const std::string & fname, const unsigned int pType, const bool useScale*/);
-  void ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
+  void ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);

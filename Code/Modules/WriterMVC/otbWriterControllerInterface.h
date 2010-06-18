@@ -50,7 +50,7 @@ public:
 
   /** Users actions */
   virtual void OpenInputImage(const char * filename) =0;
-  virtual void SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale) =0;
+  virtual void SaveOutput(const std::string & fname, int pixelType, const bool useScale) =0;
   virtual void InitInput() =0;
   virtual void ClearFeatures() =0;
   virtual void CreateFeature() =0;
