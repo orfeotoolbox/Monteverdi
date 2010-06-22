@@ -75,6 +75,10 @@ public:
   {
     return m_Model->GetKappaIndex();
   }
+  virtual void SetClassKey(std::string key)
+  {
+    m_Model->SetClassKey(key);
+  }
 
 protected:
  /** Constructor */

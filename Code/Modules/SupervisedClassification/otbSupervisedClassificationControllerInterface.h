@@ -52,6 +52,7 @@ public:
   virtual ConfusionMatrixType GetConfusionMatrix() = 0;
   virtual double GetOverallAccuracy() = 0;
   virtual double GetKappaIndex() = 0;
+  virtual void SetClassKey(std::string key) = 0;
 
 protected:
   /** Constructor */

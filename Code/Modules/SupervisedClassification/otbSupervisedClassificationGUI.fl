@@ -43,7 +43,7 @@ class SupervisedClassificationGUI {open
         Fl_Value_Slider slRepartition {
           tooltip {Controls the repartition between the training and validation samples} xywh {85 55 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14
         }
-        Fl_Value_Slider slMaxTraining {selected
+        Fl_Value_Slider slMaxTraining {
           tooltip {Controls the maximum number of samples per class in the training set} xywh {125 90 155 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 maximum 1000 step 1 value 100 textsize 8
         }
         Fl_Value_Slider slMaxValidation {
@@ -65,6 +65,11 @@ class SupervisedClassificationGUI {open
           label {Max. validation}
           xywh {0 125 135 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
+        Fl_Input_Choice icClassKey {
+          label {Class key} user_data_type {const char *}
+          callback {SetClassKey(o->value());} open selected
+          xywh {125 165 155 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 when 1
+        } {}
       }
       Fl_Group {} {
         label Classification open
@@ -235,6 +240,8 @@ wValidationWindow->hide();}
   Function {Ok()} {open return_type {virtual void}
   } {}
   Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {SetClassKey(const char *)} {open return_type {virtual void}
   } {}
 } 
 
