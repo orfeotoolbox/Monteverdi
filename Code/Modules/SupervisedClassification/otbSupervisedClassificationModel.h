@@ -163,7 +163,12 @@ public:
     this->UpdateVectorDataInformation();
     this->UpdateDescription();
   }
-  itkGetConstMacro(ClassKeyList, std::vector<std::string>);
+
+  //itkGetConstMacro(ClassKeyList, std::vector<std::string>);
+  std::vector<std::string> GetClassKeyList() const
+    {
+    return m_ClassKeyList;
+    }
 
   /** Update Output */
   void Ok();
