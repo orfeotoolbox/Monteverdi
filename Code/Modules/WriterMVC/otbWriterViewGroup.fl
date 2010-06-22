@@ -11,7 +11,7 @@ decl {\#include <FL/Fl_Gl_Window.H>} {public
 decl {\#include "otbPixelType.h"} {public
 } 
 
-class WriterViewGroup {open selected
+class WriterViewGroup {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
@@ -41,30 +41,40 @@ class WriterViewGroup {open selected
           } {
             MenuItem {} {
               label {unsigned char}
+              callback {guiScale->show();}
               tooltip {unsigned char} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {short int}
+              callback {guiScale->show();}
               tooltip {short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label int
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip int xywh {0 0 34 21}
             }
             MenuItem {} {
               label float
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip float xywh {0 0 34 21}
             }
             MenuItem {} {
               label double
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip double xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned short int}
+              callback {guiScale->show();}
               tooltip {unsigned short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned int}
+              callback {guiScale->show();}
               tooltip {unsigned int} xywh {0 0 34 21}
             }
           }
@@ -79,7 +89,7 @@ class WriterViewGroup {open selected
         } {
           Fl_Browser guiFeatureList {
             label {Feature image list}
-            callback {UpdateExtractView();}
+            callback {UpdateExtractView();} selected
             tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiAddChannel {

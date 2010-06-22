@@ -126,6 +126,11 @@ public:
   typedef otb::ImageLayerGenerator<LayerType>               LayerGeneratorType;
   typedef LayerGeneratorType::Pointer                       LayerGeneratorPointerType;
 
+  typedef LayerType::HistogramType                          HistogramType;
+  typedef LayerType::HistogramPointerType                   HistogramPointerType;
+  typedef LayerType::HistogramListType                      HistogramListType;
+  typedef LayerType::HistogramListPointerType               HistogramListPointerType;
+
   typedef otb::ImageLayer<SingleImageType, ViewerImageType> SingleLayerType;
   typedef otb::ImageLayerGenerator<SingleLayerType>         SingleLayerGeneratorType;
   typedef SingleLayerGeneratorType::Pointer                 SingleLayerGeneratorPointerType;
@@ -359,6 +364,8 @@ private:
   VisuModelPointerType              m_VisuModel;
   VisuModelPointerType              m_ResultVisuModel;
   
+  HistogramListPointerType          m_HistogramList;
+
   
   //Generation of the output image attributes (to maintain pipeline)
   SingleImagePointerType m_image;
