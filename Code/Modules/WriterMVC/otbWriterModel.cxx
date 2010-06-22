@@ -23,7 +23,6 @@
 
 #include "otbImageFileWriter.h"
 
-#include "otbStreamingImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
@@ -170,15 +169,6 @@ WriterModel
       {
         this->AddChannel(chList[i]);
       }
-      else
-      {
-        if (chList[i] ==  m_NumberOfChannels+1)
-        {
-          this->AddIntensityChannel();
-        }
-        else
-          return;
-      }
     }
   }
 }
@@ -202,24 +192,12 @@ WriterModel
   m_OutputChannelsInformation.push_back(oss.str());
 }
 
-void
-WriterModel
-::AddIntensityChannel()
-{
-  m_IntensityFilter->SetInput( m_InputImage );
-  m_IntensityFilter->GetOutput()->UpdateOutputInformation();
-  this->AddInputImage( m_IntensityFilter->GetOutput() );
-  m_OutputChannelsInformation.push_back("Int.");
-}
-
 
 void
 WriterModel
 ::AddFeature()
 {
-//   for (unsigned int i=0;i<m_NumberOfChannels;++i)
-  //test manu
-  for (unsigned int i=0;i<m_NumberOfChannels+1;++i)
+  for (unsigned int i=0;i<m_NumberOfChannels;++i)
   {
     m_OutputIndexMap.push_back(0);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
@@ -229,7 +207,7 @@ WriterModel
 
 void
 WriterModel
-::ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
+::ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);
@@ -322,7 +300,7 @@ template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
     typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
-    typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
+    typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
     
     typename CastWriterType::Pointer writer=CastWriterType::New();
     

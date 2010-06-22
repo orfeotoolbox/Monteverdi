@@ -68,6 +68,7 @@ public:
   virtual void Show();
   virtual void Ok();
   virtual void Cancel();
+  virtual void SetClassKey(const char * key);
 
 
 protected:

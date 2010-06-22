@@ -1,0 +1,141 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class ObjectCountingViewGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Object counting application}
+      callback {this->Exit();} open
+      xywh {369 177 665 570} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gImageViewer {
+        label Extract open
+        xywh {8 23 416 347} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gScroll {
+        label Minimap
+        tooltip {Navigate through the image} xywh {440 20 220 220} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group {} {
+        label Parameters open selected
+        xywh {440 258 220 267} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Check_Button cbUseSVM {
+          label SVM
+          callback {ActivateClassifArea(0);}
+          tooltip {Use SVM for classification} xywh {452 264 90 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 color 7 labelsize 10
+        }
+        Fl_Check_Button cbUseSpectralAngle {
+          label {Spectral Angle}
+          callback {ActivateClassifArea(1);}
+          tooltip {Use spectral angle for classification} xywh {554 264 98 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 7 labelsize 10
+        }
+        Fl_Check_Button cbUseSmoothing {
+          label {Use smoothing}
+          callback {UseSmoothing();}
+          tooltip {Smooth input image before working} xywh {554 291 100 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 7 labelsize 10
+        }
+        Fl_Value_Input vMinRegionSize {
+          label {Minimum object size}
+          callback {UpdateMinRegionSize();}
+          tooltip {Minimum region size} xywh {583 318 40 20} box PLASTIC_DOWN_BOX labelsize 11 maximum 1e+06 step 1 value 10 textsize 12
+        }
+        Fl_Group gMeanShift {
+          label {Mean shift} open
+          xywh {450 353 200 78} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 10 labelcolor 56 align 5
+        } {
+          Fl_Value_Input vSpatialRadius {
+            label {Spatial radius}
+            callback {UpdateSpatialRadius();}
+            xywh {565 359 30 20} box PLASTIC_DOWN_BOX labelsize 10 maximum 1000 step 1 value 5 textsize 12
+          }
+          Fl_Value_Input vRangeRadius {
+            label {Range radius}
+            callback {UpdateRangeRadius();}
+            xywh {565 382 30 20} box PLASTIC_DOWN_BOX labelsize 11 maximum 1000 step 1 value 80 textsize 12
+          }
+          Fl_Value_Input vScale {
+            label Scale
+            callback {UpdateScale();}
+            xywh {565 406 30 20} box PLASTIC_DOWN_BOX labelsize 11 maximum 1e+10 step 1 value 1 textsize 12
+          }
+        }
+        Fl_Group gSpectralAngle {
+          label {Spectral angle} open
+          xywh {450 447 200 70} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 10 labelcolor 56 align 5 deactivate
+        } {
+          Fl_Output tRefPixel {
+            label {Reference pixel}
+            xywh {465 463 171 24} box PLASTIC_DOWN_BOX labelsize 10 align 5 textsize 12 deactivate
+          }
+          Fl_Value_Input vThresholdValue {
+            label {Threshold value}
+            callback {UpdateThresholdValue();}
+            xywh {561 491 55 20} box PLASTIC_DOWN_BOX labelsize 10 minimum 0.001 maximum 0.999 step 0.001 value 0.95 textsize 12
+          }
+        }
+        Fl_Value_Input vNuParameter {
+          label {Nu (svm)}
+          callback {UpdateNuParameter();}
+          tooltip {SVM classifier margin} xywh {497 291 45 20} box PLASTIC_DOWN_BOX labelsize 11 step 0.001 value 0.01 textsize 12
+        }
+      }
+      Fl_Button bRunPreview {
+        label Run
+        callback {RunPreview();}
+        tooltip {Run over the extracted image} xywh {480 535 85 30} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
+      }
+      Fl_Output tStat {
+        label Statistics
+        xywh {9 396 416 129} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      }
+      Fl_Button bRun {
+        label Close
+        callback {this->Exit();}
+        tooltip {Run over the extracted image} xywh {575 535 85 30} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
+      }
+    }
+  }
+  Function {ObjectCountingViewGroup()} {} {}
+  Function {~ObjectCountingViewGroup()} {open return_type virtual
+  } {}
+  Function {OpenImage()} {return_type {virtual void}
+  } {}
+  Function {Quit()} {return_type {virtual void}
+  } {}
+  Function {RunPreview()} {open return_type {virtual void}
+  } {}
+  Function {SaveResult()} {open return_type {virtual void}
+  } {}
+  Function {ActivateClassifArea(int i)} {open return_type {virtual void}
+  } {}
+  Function {UpdateThresholdValue()} {open return_type {virtual void}
+  } {}
+  Function {UpdateSpatialRadius()} {open return_type {virtual void}
+  } {}
+  Function {UpdateRangeRadius()} {open return_type {virtual void}
+  } {}
+  Function {UpdateScale()} {open return_type {virtual void}
+  } {}
+  Function {UpdateMinRegionSize()} {open return_type {virtual void}
+  } {}
+  Function {SavePolygon()} {open return_type {virtual void}
+  } {}
+  Function {UseSmoothing()} {open return_type {virtual void}
+  } {}
+  Function {UpdateNuParameter()} {open return_type {virtual void}
+  } {}
+  Function {Exit()} {open return_type {virtual void}
+  } {}
+  Function {Close()} {open return_type {virtual void}
+  } {}
+} 

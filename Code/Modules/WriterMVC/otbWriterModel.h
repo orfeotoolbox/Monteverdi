@@ -29,7 +29,6 @@
 #include "itkImageSource.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -113,7 +112,6 @@ public:
   typedef ImageListToVectorImageFilter< ImageListType, OutputImageType >     ImageListToVectorImageFilterType;
   typedef ObjectList<ImageListType>                                          ImageListObjectListType;
   typedef ObjectList<ImageListToVectorImageFilterType>                       ImageListToVectorObjectListType;
-  typedef StreamingImageFileWriter<OutputImageType>                          WriterType;
   typedef ImageFileReader<InputImageType>                                    ReaderType;
   typedef ReaderType::Pointer                                                ReaderPointerType;
   typedef VectorImageToImageListFilter<OutputImageType, ImageListType>       VectorToImageListType;
@@ -292,11 +290,10 @@ public:
 
   /** Generate output image */
   void GenerateOutputImage(/*const std::string & fname, const unsigned int pType, const bool useScale*/);
-  void ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale);
+  void ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
-  void AddIntensityChannel();
 
   /** Open input image */
   void SetInputImage(std::string strfilename);

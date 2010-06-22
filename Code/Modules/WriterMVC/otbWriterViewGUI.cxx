@@ -25,10 +25,6 @@
 #include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
-// #include "otbMsgReporter.h"
-
-// #include "otbFeature.h"
-#include "otbPixelType.h"
 
 namespace otb
 {
@@ -43,8 +39,6 @@ WriterViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_PixelType = otb::DOUBLE;
-//   m_PixelType = 4;
   this->CreateGUI();
 
   m_SelectedPixel.SetSize(0);
@@ -105,7 +99,7 @@ WriterViewGUI
   gFeature->show();
 
   //Initi Feature Model
-  
+
 }
 
 void
@@ -131,23 +125,15 @@ void
 WriterViewGUI
 ::UpdateFeaturePreviewFromOutputList()
 {
-  
+
   if (guiOutputFeatureList->value()>0)
   {
     if( static_cast<unsigned int>(guiOutputFeatureList->value()-1) <m_WriterModel->GetOutputListOrder().size() )
     {
      m_WriterModel->GetSingleOutput( m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
-      
+
     }
   }
-}
-
-
-void
-WriterViewGUI
-::SetPixelType(PixelType i)
-{
-  m_PixelType = i;
 }
 
 void
@@ -277,14 +263,6 @@ WriterViewGUI
   }
 }
 
-
-void
-WriterViewGUI
-::UpdateSelectedPixel(const IndexType & id)
-{
-}
-
-
 void
 WriterViewGUI
 ::Show()
@@ -295,9 +273,6 @@ WriterViewGUI
   //Initialize progress bar
   pBar->minimum(0);
   pBar->maximum(1);
-  
-  //Initialize output pixel type
-//   guiInitMenu->value( guiDefaultDoubleMenu );
 }
 
 void
@@ -306,9 +281,8 @@ WriterViewGUI
 {
   std::ostringstream oss;
   std::string strBase = "channel number: ";
-//   for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
-//   test manu
-      for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel()+1;++i)
+
+  for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
   {
     std::ostringstream oss;
     oss << i+1;
@@ -326,10 +300,9 @@ WriterViewGUI
 {
   std::string filepath = vFilePath->value();
   const bool useScale = static_cast <bool> ( guiScale->value() );
-  m_WriterController->SaveOutput(filepath, static_cast<unsigned int>(m_PixelType), useScale);
-  
-  //Here we need to go back to the app Monteverdi //TODO
-//   this->Quit();
+  const int pixelType = guiOutputPixelTypeChoice->value();
+
+  m_WriterController->SaveOutput(filepath, pixelType, useScale);
 }
 
 
@@ -339,11 +312,9 @@ WriterViewGUI
 {
   // Gets the used channels
   unsigned int nbBand = m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
-//   std::vector<unsigned int> ckeckedList(nbBand, 0);
-//   for (unsigned int i=0;i<nbBand;++i)
-  //test manu
-  std::vector<unsigned int> ckeckedList(nbBand+1, 0);
-  for (unsigned int i=0;i<nbBand+1;++i)
+
+  std::vector<unsigned int> ckeckedList(nbBand, 0);
+  for (unsigned int i=0;i<nbBand;++i)
   {
     ckeckedList[i] = i+1;
   }
@@ -377,7 +348,6 @@ WriterViewGUI
 {
   this->ClearFeature();
   this->UpdateParameterArea(0);
-  this->SetPixelType(otb::DOUBLE);
 
   // NewVisu
   if (m_VisuView.IsNotNull())
@@ -407,8 +377,6 @@ WriterViewGUI
   /** Unlock data*/
   m_WriterController->Quit();
   guiMainWindow->hide();
-  
-  
 }
 
 void WriterViewGUI::Browse()

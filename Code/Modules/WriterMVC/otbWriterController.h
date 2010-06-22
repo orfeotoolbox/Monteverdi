@@ -23,7 +23,6 @@
 #include "otbWidgetResizingActionHandler.h"
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
-#include "otbPixelClickedActionHandler.h"
 
 
 namespace otb
@@ -52,8 +51,6 @@ public:
   typedef ResizingHandlerType::Pointer                                 ResizingHandlerPointerType;
   typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType> ChangeExtractRegionHandlerType;
   typedef ChangeExtractRegionHandlerType::Pointer                      ChangeExtractRegionHandlerPointerType;
-  typedef PixelClickedActionHandler<ModelType,ViewType>                PixelClickedHandlerType;
-  typedef PixelClickedHandlerType::Pointer                             PixelClickedHandlerPointerType;
 
 /** Standard type macros */
   itkTypeMacro(WriterController,Superclass);
@@ -78,7 +75,7 @@ public:
   {
     m_View = pView;
 
-/* Full View Actions */
+    /* Full View Actions */
     // Add the resizing handler
     ResizingHandlerType::Pointer lResizingHandler = ResizingHandlerType::New();
     lResizingHandler->SetModel(m_Model->GetVisuModel());
@@ -88,16 +85,11 @@ public:
     lChangeExtractRegionHandler->SetModel(m_Model->GetVisuModel());
     lChangeExtractRegionHandler->SetView(m_View->GetVisuView());
 
-    PixelClickedHandlerPointerType lPixelClickedHandler = PixelClickedHandlerType::New();
-    lPixelClickedHandler->SetModel(m_Model);
-    lPixelClickedHandler->SetView(m_View);
-
     // Connect the handlers
     m_VisuController->AddActionHandler(lResizingHandler);
     m_VisuController->AddActionHandler(lChangeExtractRegionHandler);
-    m_VisuController->AddActionHandler(lPixelClickedHandler);
 
-/* Feature View Actions */
+    /* Feature View Actions */
     ResizingHandlerType::Pointer lResultResizingHandler = ResizingHandlerType::New();
     lResultResizingHandler->SetModel(m_Model->GetResultVisuModel());
     lResultResizingHandler->SetView(m_View->GetResultVisuView());
@@ -109,12 +101,10 @@ public:
     // Connect the handlers
     m_ResultVisuController->AddActionHandler(lResultResizingHandler);
     m_VisuController->AddActionHandler(lResultChangeExtractRegionHandler);
-
   }
 
-
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale);
+  virtual void SaveOutput(const std::string & fname, int pixelType, const bool useScale);
   virtual void InitInput();
   virtual void ClearFeatures();
   virtual void CreateFeature();
@@ -126,6 +116,7 @@ public:
   virtual void RemoveFromOutputListOrder(int id);
   virtual void ExchangeOutputListOrder( int direction );
   virtual void Quit();
+
 protected:
   /** Constructor */
   WriterController();
@@ -139,7 +130,7 @@ private:
   /** Pointer to the view */
   ViewPointerType m_View;
 
-/** NewVisu */
+  /** NewVisu */
   VisuControllerPointerType m_VisuController;
   VisuControllerPointerType m_ResultVisuController;
 };
