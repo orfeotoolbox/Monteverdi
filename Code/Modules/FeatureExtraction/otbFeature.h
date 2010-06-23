@@ -98,7 +98,9 @@ typedef enum
   MS_CLUSTERED,
   MS_LABELED,
   MS_BOUND,
-  UNKNOWN
+  UNKNOWN,
+  TEXT_HAR,
+  TEXT_ADV
 } FeatureType;
 
  FeatureInfo()
@@ -170,6 +172,8 @@ typedef enum
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_CLUSTERED, "Mean shift clustered image"));
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_LABELED, "Mean shift labeled image"));
      m_MapInfo.insert( std::pair<FeatureType, std::string>(MS_BOUND, "Mean shift cluster boundaries image"));
+     m_MapInfo.insert( std::pair<FeatureType, std::string>(TEXT_HAR, "Haralick's textures. Select whose wanted ones."));
+     m_MapInfo.insert( std::pair<FeatureType, std::string>(TEXT_ADV, "Advanced textures. Select whose wanted ones."));
    };
 
  virtual ~FeatureInfo(){};
