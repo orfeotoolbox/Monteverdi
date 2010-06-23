@@ -70,6 +70,7 @@ IF(Mercurial_FOUND)
   ENDIF(Monteverdi_WC_STATUS)
   STRING(REGEX REPLACE "\n" ";" Monteverdi_WC_STATUS "${Monteverdi_WC_STATUS}")
   SET(Monteverdi_WC_STATUS ${Monteverdi_WC_STATUS} CACHE STRING "Repository status" FORCE)
+  MARK_AS_ADVANCED(Monteverdi_WC_STATUS)
 ENDIF(Mercurial_FOUND)
 
 
