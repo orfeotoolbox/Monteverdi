@@ -23,6 +23,9 @@
 
 namespace otb
 {
+
+static const char* InputDataSetID = "InputDataSet";
+
 /** Constructor */
 WriterModule::WriterModule()
 {
@@ -30,17 +33,41 @@ WriterModule::WriterModule()
   this->NeedsPipelineLockingOn();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet",otbGetTextMacro("Dataset to write"));
-  this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
-  this->AddTypeToInputDescriptor<UnsignedShortImageType>("InputDataSet");
-  this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
-  this->AddTypeToInputDescriptor<VectorType>("InputDataSet");
-  this->AddTypeToInputDescriptor<LabeledVectorType>("InputDataSet");
+  // Image inputs
+  this->AddInputDescriptor<UCharImageType>(InputDataSetID,otbGetTextMacro("Dataset to write"));
+  this->AddTypeToInputDescriptor<UShortImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<ShortImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<UIntImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<IntImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<FloatImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<DoubleImageType>(InputDataSetID);
+
+  // Vector Image inputs
+  this->AddTypeToInputDescriptor<UCharVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<UShortVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<ShortVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<UIntVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<IntVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<FloatVectorImageType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<DoubleVectorImageType>(InputDataSetID);
+
+  // Vector inputs
+  this->AddTypeToInputDescriptor<VectorType>(InputDataSetID);
+  this->AddTypeToInputDescriptor<LabeledVectorType>(InputDataSetID);
+
+  m_OutputTypesChoices[otb::UNSIGNEDCHAR]     = "unsigned char (8 bits)";
+  m_OutputTypesChoices[otb::SHORTINT]         = "short (16 bits)";
+  m_OutputTypesChoices[otb::INT]              = "int (32 bits)";
+  m_OutputTypesChoices[otb::FLOAT]            = "float (32 bits)";
+  m_OutputTypesChoices[otb::DOUBLE]           = "double (64 bits)";
+  m_OutputTypesChoices[otb::UNSIGNEDSHORTINT] = "unsigned short (16 bits)";
+  m_OutputTypesChoices[otb::UNSIGNEDINT]      = "unsigned int (32 bits)";
 }
 
 /** Destructor */
 WriterModule::~WriterModule()
-{}
+{
+}
 
 /** PrintSelf method */
 void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -54,41 +81,60 @@ void WriterModule::Run()
 {
   this->BuildGUI();
 
-  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-  FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
+  cOutDataType->add(m_OutputTypesChoices[otb::UNSIGNEDCHAR].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::SHORTINT].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::INT].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::FLOAT].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::DOUBLE].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::UNSIGNEDSHORTINT].c_str());
+  cOutDataType->add(m_OutputTypesChoices[otb::UNSIGNEDINT].c_str());
 
-  if ( vectorImage.IsNotNull() || singleImage.IsNotNull() )
+  if ( this->GetInputData<UCharImageType>(InputDataSetID) != 0
+       || this->GetInputData<UCharVectorImageType>(InputDataSetID) != 0 )
     {
-      b16->show();
-      b32->show();
+    cOutDataType->value(otb::UNSIGNEDCHAR);
     }
-
+  else if ( this->GetInputData<ShortImageType>(InputDataSetID) != 0
+      || this->GetInputData<ShortVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::SHORTINT);
+    }
+  else if ( this->GetInputData<IntImageType>(InputDataSetID) != 0
+      || this->GetInputData<IntVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::INT);
+    }
+  else if ( this->GetInputData<FloatImageType>(InputDataSetID) != 0
+      || this->GetInputData<FloatVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::FLOAT);
+    }
+  else if ( this->GetInputData<DoubleImageType>(InputDataSetID) != 0
+      || this->GetInputData<DoubleVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::DOUBLE);
+    }
+  else if ( this->GetInputData<UShortImageType>(InputDataSetID) != 0
+      || this->GetInputData<UShortVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::UNSIGNEDSHORTINT);
+    }
+  else if ( this->GetInputData<UIntImageType>(InputDataSetID) != 0
+      || this->GetInputData<UIntVectorImageType>(InputDataSetID) != 0 )
+    {
+    cOutDataType->value(otb::UNSIGNEDINT);
+    }
+  else
+    {
+    // Vector Data
+    cOutDataType->hide();
+    }
 
   pBar->minimum(0);
   pBar->maximum(1);
   wFileChooserWindow->show();
   pBar->copy_label("0%");
 }
-// void WriterModule::SetIntensityChannelAvailability()
-// {
-//   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-//   CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-//
-//   try
-//   {
-//     if ( vectorImage.IsNotNull() || charVectorImage.IsNotNull() )
-//     {
-//       saveIntensityChannel->activate();
-//     }
-//   }
-//   catch (itk::ExceptionObject & err)
-//   {
-//     // Make the main fltk loop update Msg reporter
-//     m_ErrorMsg = err.GetDescription();
-//     Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-//     this->BusyOff();
-//   }
-// }
 
 void WriterModule::SaveDataSet()
 {
@@ -108,7 +154,6 @@ void WriterModule::Browse()
     return ;
     }
   vFilePath->value(filename);
-
 
 }
 
@@ -157,19 +202,19 @@ void WriterModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = 0;
 
-  while( (m_ProcessObject.IsNull() || this->IsBusy()) )
+  while ((m_ProcessObject.IsNull() || this->IsBusy()))
     {
-    if(m_ProcessObject.IsNotNull())
-         {
-        current = m_ProcessObject->GetProgress();
-         if(current - last > updateThres)
-           {
+    if (m_ProcessObject.IsNotNull())
+      {
+      current = m_ProcessObject->GetProgress();
+      if (current - last > updateThres)
+        {
         // Make the main fltk loop update progress fields
-          Fl::awake(&UpdateProgressCallback,this);
-           last = current;
-           }
-         }
-       // Sleep for a while
+        Fl::awake(&UpdateProgressCallback, this);
+        last = current;
+        }
+      }
+    // Sleep for a while
     Sleep(500);
     }
 
@@ -185,110 +230,99 @@ void WriterModule::ThreadedWatch()
   Fl::unlock();
 
   Fl::awake(&HideWindowCallback,this);
-  }
+}
 
 void WriterModule::ThreadedRun()
 {
   this->BusyOn();
 
-  std::string filepath = vFilePath->value();
-
-  FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-  FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
-  UnsignedShortImageType::Pointer usSingleImage = this->GetInputData<UnsignedShortImageType>("InputDataSet");
-  VectorType::Pointer vectorData = this->GetInputData<VectorType>("InputDataSet");
-  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
-  LabeledVectorType::Pointer labeledVectorData = this->GetInputData<LabeledVectorType>("InputDataSet");
+  m_Filename = vFilePath->value();
+  PixelType outFormat = static_cast<PixelType> (cOutDataType->value());
 
   try
-  {
-    if ( charVectorImage.IsNotNull() )
+    {
+    // Mono band images
+    if (this->GetInputData<UCharImageType> (InputDataSetID))
       {
-      CharVWriterType::Pointer charVWriter = CharVWriterType::New();
-      charVWriter->SetInput(charVectorImage);
-      charVWriter->SetFileName(filepath);
-      m_ProcessObject = charVWriter;
-      charVWriter->Update();
+      this->DoWriteSingleBand(this->GetInputData<UCharImageType> (InputDataSetID), outFormat);
       }
-    else if ( vectorImage.IsNotNull() )
+    else if (this->GetInputData<UShortImageType> (InputDataSetID))
       {
-        if( b16->value() == 1 )
-          {
-            DoubleToFloatCasterType::Pointer caster = DoubleToFloatCasterType::New();
-            caster->SetInput(vectorImage);
-            FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
-            ffPVWriter->SetInput(caster->GetOutput());
-            ffPVWriter->SetFileName(filepath);
-            m_ProcessObject = ffPVWriter;
-            ffPVWriter->Update();
-          }
-        else
-          {
-            FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
-            fPVWriter->SetInput(vectorImage);
-            fPVWriter->SetFileName(filepath);
-            m_ProcessObject = fPVWriter;
-            fPVWriter->Update();
-          }
+      this->DoWriteSingleBand(this->GetInputData<UShortImageType> (InputDataSetID), outFormat);
       }
-    else if( singleImage.IsNotNull() )
+    else if (this->GetInputData<UIntImageType> (InputDataSetID))
       {
-        if( b16->value() == 1 )
-          {
-            ImageDoubleToVImageFloatCasterType::Pointer caster = ImageDoubleToVImageFloatCasterType::New();
-            caster->SetInput(singleImage);
-            FFPVWriterType::Pointer ffPVWriter = FFPVWriterType::New();
-            ffPVWriter->SetInput(caster->GetOutput());
-            ffPVWriter->SetFileName(filepath);
-            m_ProcessObject = ffPVWriter;
-            ffPVWriter->Update();
-          }
-        else
-          {
-            FPWriterType::Pointer fPWriter = FPWriterType::New();
-            fPWriter->SetInput(singleImage);
-            fPWriter->SetFileName(filepath);
-            m_ProcessObject = fPWriter;
-            fPWriter->Update();
-          }
+      this->DoWriteSingleBand(this->GetInputData<UIntImageType> (InputDataSetID), outFormat);
       }
-    else if( usSingleImage.IsNotNull() )
+    else if (this->GetInputData<FloatImageType> (InputDataSetID))
       {
-      USWriterType::Pointer usWriter = USWriterType::New();
-      usWriter->SetInput(usSingleImage);
-      usWriter->SetFileName(filepath);
-      m_ProcessObject = usWriter;
-      usWriter->Update();
+      this->DoWriteSingleBand(this->GetInputData<FloatImageType> (InputDataSetID), outFormat);
       }
-    else if( vectorData.IsNotNull() )
+    else if (this->GetInputData<DoubleImageType> (InputDataSetID))
       {
-      VectorWriterType::Pointer vectorWriter = VectorWriterType::New();
-      vectorWriter->SetInput(vectorData);
-      vectorWriter->SetFileName(filepath);
-      m_ProcessObject = vectorWriter;
-      vectorWriter->Update();
+      this->DoWriteSingleBand(this->GetInputData<DoubleImageType> (InputDataSetID), outFormat);
       }
-    else if( labeledVectorData.IsNotNull() )
+    else if (this->GetInputData<ShortImageType> (InputDataSetID))
       {
-      LabeledVectorWriterType::Pointer labeledVectorWriter = LabeledVectorWriterType::New();
-      labeledVectorWriter->SetInput(labeledVectorData);
-      labeledVectorWriter->SetFileName(filepath);
-      m_ProcessObject = labeledVectorWriter;
-      labeledVectorWriter->Update();
+      this->DoWriteSingleBand(this->GetInputData<ShortImageType> (InputDataSetID), outFormat);
       }
-    else
+    else if (this->GetInputData<IntImageType> (InputDataSetID))
       {
-      this->BusyOff();
-      itkExceptionMacro(<<"Input data are NULL.");
+      this->DoWriteSingleBand(this->GetInputData<IntImageType> (InputDataSetID), outFormat);
       }
-  }
+    // Multi band images
+    else if (this->GetInputData<UCharVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<UCharVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<UShortVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<UShortVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<UIntVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<UIntVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<FloatVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<FloatVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<DoubleVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<DoubleVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<ShortVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<ShortVectorImageType> (InputDataSetID), outFormat);
+      }
+    else if (this->GetInputData<IntVectorImageType> (InputDataSetID))
+      {
+      this->DoWriteMultiBand(this->GetInputData<IntVectorImageType> (InputDataSetID), outFormat);
+      }
+    // Vector Data
+    else if( this->GetInputData<VectorType> (InputDataSetID) )
+      {
+      VectorWriterType::Pointer writer = VectorWriterType::New();
+      writer->SetInput(this->GetInputData<VectorType> (InputDataSetID));
+      writer->SetFileName(m_Filename);
+      m_ProcessObject = writer;
+      writer->Update();
+      }
+    else if( this->GetInputData<LabeledVectorType> (InputDataSetID) )
+      {
+      LabeledVectorWriterType::Pointer writer = LabeledVectorWriterType::New();
+      writer->SetInput( this->GetInputData<LabeledVectorType> (InputDataSetID));
+      writer->SetFileName(m_Filename);
+      m_ProcessObject = writer;
+      writer->Update();
+      }
+    }
   catch (itk::ExceptionObject & err)
-  {
-    // Make the main fltk loop update Msg reporter
-    m_ErrorMsg = err.GetDescription();
-    Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-    this->BusyOff();
-  }
+    {
+      m_ErrorMsg = err.GetDescription();
+      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+    }
+
   this->BusyOff();
 }
 

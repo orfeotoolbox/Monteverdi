@@ -39,69 +39,57 @@ class VectorizationViewGroup {open
       } {
         Fl_Group guiVectorDataTreeGroup {
           label {Vector Data Browser} open
-          xywh {551 27 309 798} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
+          xywh {551 27 529 584} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
         } {}
         Fl_Group {} {
-          label {Next geometry} open
-          xywh {869 28 205 119} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+          label {Next geometry} open selected
+          xywh {550 631 205 119} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
         } {
-          Fl_Round_Button {} {
+          Fl_Round_Button bPoint {
             label Point
-            xywh {885 41 170 23} down_box ROUND_DOWN_BOX
+            callback {bLine->clear();
+bPolygonExt->clear();
+bPolygonInt->clear();
+this->NextGeometryIsPointCallback();}
+            xywh {566 644 170 23} down_box ROUND_DOWN_BOX
           }
-          Fl_Round_Button {} {
+          Fl_Round_Button bLine {
             label Line
-            xywh {885 64 170 23} down_box ROUND_DOWN_BOX
+            callback {bPoint->clear();
+bPolygonExt->clear();
+bPolygonInt->clear();
+this->NextGeometryIsLineCallback();}
+            xywh {566 667 170 23} down_box ROUND_DOWN_BOX
           }
-          Fl_Round_Button {} {
+          Fl_Round_Button bPolygonExt {
             label {Polygon (Exterior ring)}
-            xywh {885 88 170 23} down_box ROUND_DOWN_BOX
+            callback {bPoint->clear();
+bLine->clear();
+bPolygonInt->clear();
+this->NextGeometryIsPolygonExtCallback();}
+            xywh {566 691 170 23} down_box ROUND_DOWN_BOX value 1
           }
-          Fl_Round_Button {} {
-            label {Polygon (Interior rings)} selected
-            xywh {885 112 170 23} down_box ROUND_DOWN_BOX deactivate
+          Fl_Round_Button bPolygonInt {
+            label {Polygon (Interior rings)}
+            callback {bPoint->clear();
+bLine->clear();
+bPolygonExt->clear();
+this->NextGeometryIsPolygonIntCallback();}
+            xywh {566 715 170 23} down_box ROUND_DOWN_BOX deactivate
           }
         }
         Fl_Group {} {
           label {Color table} open
-          xywh {870 305 205 258} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+          xywh {873 629 205 46} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
         } {
           Fl_Button {} {
             label {Default Color}
-            xywh {877 313 190 20} box PLASTIC_DOWN_FRAME
-          }
-        }
-        Fl_Group {} {
-          label {Edit attributes} open
-          xywh {870 164 205 121} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
-        } {
-          Fl_Value_Input {} {
-            label {Name : }
-            xywh {929 171 140 23}
-          }
-          Fl_Value_Input {} {
-            label {Value : }
-            xywh {929 197 140 23}
-          }
-          Fl_Choice {} {
-            label {Type : } open
-            xywh {930 224 140 20} down_box BORDER_BOX
-          } {}
-          Fl_Button {} {
-            label Add
-            xywh {874 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
-          }
-          Fl_Button {} {
-            label Remove
-            xywh {941 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
-          }
-          Fl_Button {} {
-            label Update
-            xywh {1008 254 64 20} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+            xywh {880 637 190 20} box PLASTIC_DOWN_FRAME
           }
         }
       }
-      Fl_Choice {} {open
+      Fl_Choice vNavigationMode {
+        callback {ChangeNavigationModeCallback();} open
         xywh {10 830 1070 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
       } {}
     }
@@ -109,6 +97,16 @@ class VectorizationViewGroup {open
   Function {VectorizationViewGroup()} {open
   } {}
   Function {~VectorizationViewGroup()} {open return_type virtual
+  } {}
+  Function {ChangeNavigationModeCallback()} {open return_type virtual
+  } {}
+  Function {NextGeometryIsPointCallback()} {open return_type virtual
+  } {}
+  Function {NextGeometryIsLineCallback()} {open return_type virtual
+  } {}
+  Function {NextGeometryIsPolygonExtCallback()} {open return_type virtual
+  } {}
+  Function {NextGeometryIsPolygonIntCallback()} {open return_type virtual
   } {}
   Function {HideAll()} {open return_type virtual
   } {}

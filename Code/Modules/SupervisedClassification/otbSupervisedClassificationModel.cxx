@@ -46,7 +46,8 @@ SupervisedClassificationModel::
 SupervisedClassificationModel() : m_MaxTrainingSize(100),
           m_MaxValidationSize(100),
           m_ValidationTrainingProportion(0.5),
-          m_NumberOfClasses(2),
+          m_ClassKey("Class"),
+          m_NumberOfClasses(0),
           m_Description(""),
           m_OverallAccuracy(0.0),
           m_KappaIndex(0.0)
@@ -57,6 +58,7 @@ SupervisedClassificationModel() : m_MaxTrainingSize(100),
   m_SampleGenerator = ListSampleGeneratorType::New();
   m_ModelEstimator = ModelEstimatorType::New();
   m_ClassificationFilter = ClassificationFilterType::New();
+  m_Caster = CasterType::New();
 }
 
 SupervisedClassificationModel
@@ -87,7 +89,7 @@ SupervisedClassificationModel
   image->UpdateOutputInformation();
   m_LabeledImage = image;
 
-  //build ROIs from labeled image
+  this->UpdateDescription();
 }
 
 void
@@ -99,6 +101,7 @@ SupervisedClassificationModel
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
   
+  this->UpdateVectorDataInformation();
   this->UpdateDescription();
 }
 
@@ -110,6 +113,7 @@ SupervisedClassificationModel
 
   m_ClassificationFilter->SetInput(m_InputImage);
   m_ClassificationFilter->SetModel(m_ModelEstimator->GetModel());
+  m_Caster->SetInput( m_ClassificationFilter->GetOutput() );
   m_OutputChanged = true;
   this->NotifyAll();
 
@@ -130,6 +134,7 @@ SupervisedClassificationModel
   m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
+  m_SampleGenerator->SetClassKey(m_ClassKey);
 
   otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
   otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
@@ -171,20 +176,73 @@ SupervisedClassificationModel
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
 
+// Verify outputs
+
+  ValidationListSampleType::ConstIterator it = validationClassifier->GetOutput()->Begin();
+  ValidationListSampleType::ConstIterator itEnd = validationClassifier->GetOutput()->End();
+
+  TrainingListSampleType::Pointer validationList = TrainingListSampleType::New();
+ 
+  while(it != itEnd)
+    {
+    validationList->PushBack(it.GetClassLabel());
+    ++it;
+    }
+
   ConfusionMatrixCalculatorType::Pointer confMatCalc =
                                           ConfusionMatrixCalculatorType::New();
 
   confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
-  confMatCalc->SetProducedLabels( validationClassifier->GetOutput() );
+  confMatCalc->SetProducedLabels( validationList );
 
   confMatCalc->Update();
 
   m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
   m_OverallAccuracy = confMatCalc->GetOverallAccuracy();
   m_KappaIndex = confMatCalc->GetKappaIndex();
+  m_MapOfClasses = confMatCalc->GetMapOfClasses();
 
   otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
   
+  this->UpdateMatrixString();
+
+}
+
+void
+SupervisedClassificationModel
+::UpdateVectorDataInformation()
+{
+
+  m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
+  m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
+  m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
+
+  VectorDataType::DataTreeType::TreeNodeType::ConstPointer node = m_VectorROIs->GetDataTree()->GetRoot();
+  //Go down the vector data tree until we reach a leaf
+  while (node->HasChildren())
+    {
+    node = node->GetChild(0);
+    }
+  m_ClassKeyList = node->Get()->GetFieldList();
+  if ((!node->Get()->HasField(m_ClassKey)) && (m_ClassKeyList.size() > 0))
+  {
+    m_ClassKey = m_ClassKeyList[0];
+  }
+
+  m_SampleGenerator->SetClassKey(m_ClassKey);
+
+  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
+  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
+  m_SampleGenerator->SetInput(m_InputImage);
+  m_SampleGenerator->SetInputVectorData(m_VectorROIs);
+
+  m_SampleGenerator->GenerateClassStatistics();
+  m_NumberOfClasses = m_SampleGenerator->GetNumberOfClasses();
+
+  m_ClassMinSize = vcl_ceil(m_SampleGenerator->GetClassMinSize());
+
+  this->NotifyAll();
 }
 
 void
@@ -219,6 +277,41 @@ SupervisedClassificationModel
     }
 
   m_Description = oss.str();
+  this->NotifyAll();
+}
+
+void
+SupervisedClassificationModel
+::UpdateMatrixString()
+{
+  // m_MapOfClasses contains the mapping of class name (or class number) => class index in the matrix
+  itk::OStringStream oss;
+  oss << "Confusion matrix:\n\n";
+  // write the first line
+  oss << "\t";
+  for (std::map<ClassLabelType, int>::const_iterator itmap = m_MapOfClasses.begin();
+       itmap != m_MapOfClasses.end(); ++itmap)
+    {
+    oss << itmap->first << "\t";
+    }
+  oss << "\n";
+  for (std::map<ClassLabelType, int>::const_iterator itmap = m_MapOfClasses.begin();
+       itmap != m_MapOfClasses.end(); ++itmap)
+    {
+    oss << itmap->first << "\t";
+    for (std::map<ClassLabelType, int>::const_iterator itmap2 = m_MapOfClasses.begin();
+         itmap2 != m_MapOfClasses.end(); ++itmap2)
+      {
+      oss << m_ConfusionMatrix(itmap->second,itmap2->second) << "\t";
+      }
+    oss << "\n";
+    }
+
+  //Also output the accuracy info
+  oss << "\nOverall accuracy:\t" << m_OverallAccuracy;
+  oss << "\nKappa:\t" << m_KappaIndex;
+
+  m_MatrixString = oss.str();
   this->NotifyAll();
 }
 

@@ -187,7 +187,7 @@ this->UpdateInputTMTransform();}
             tooltip {Enter Y spacing} xywh {177 155 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Choice guiMapSelection {
-            label {Map Pprojection}
+            label {Map Projection}
             callback {this->UpdateMapParam();} open
             tooltip {Select the map projection type} xywh {178 194 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {

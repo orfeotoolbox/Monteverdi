@@ -211,12 +211,18 @@ void ThresholdModule::UpdateSlidersExtremum()
   double max = extremumCalculator->GetMaximum();
 
   guiMinDetails->range(min,max);
+  guiMinDetailsValue->range(min,max);
   guiMaxDetails->range(min,max);
+  guiMaxDetailsValue->range(min,max);
   guiMinDetails->value(min);
+  guiMinDetailsValue->value(min);
   guiMaxDetails->value(max);
+  guiMaxDetailsValue->value(max);
 
   guiMinDetails->step(vcl_floor( ((max - min)/100.)*100)/100.);  
+  guiMinDetailsValue->step(vcl_floor( ((max - min)/100.)*100)/100.);
   guiMaxDetails->step(vcl_floor( ((max - min)/100.)*100)/100.); 
+  guiMaxDetailsValue->step(vcl_floor( ((max - min)/100.)*100)/100.);
 
   // Redraw the sliders
   guiMinDetails->redraw();

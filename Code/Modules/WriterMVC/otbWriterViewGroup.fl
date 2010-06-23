@@ -1,6 +1,5 @@
-
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -19,7 +18,7 @@ class WriterViewGroup {open
     Fl_Window guiMainWindow {
       label {Writer application}
       callback {Quit();} open
-      xywh {523 27 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {523 47 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 7 selection_color 48 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -38,51 +37,50 @@ class WriterViewGroup {open
           }
           Fl_Choice guiOutputPixelTypeChoice {
             label {Output pixel type} open
-            xywh {300 430 140 30} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
+            xywh {270 425 140 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
           } {
-            MenuItem guiInitMenu {
-              callback {SetPixelType(otb::DOUBLE);}
-              xywh {0 0 34 21}
-            }
             MenuItem {} {
               label {unsigned char}
-              callback {SetPixelType(otb::UNSIGNEDCHAR);}
+              callback {guiScale->show();}
               tooltip {unsigned char} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {short int}
-              callback {SetPixelType(otb::SHORTINT);}
+              callback {guiScale->show();}
               tooltip {short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label int
-              callback {SetPixelType(otb::INT);}
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip int xywh {0 0 34 21}
             }
             MenuItem {} {
               label float
-              callback {SetPixelType(otb::FLOAT);}
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip float xywh {0 0 34 21}
             }
-            MenuItem guiDefaultDoubleMenu {
+            MenuItem {} {
               label double
-              callback {SetPixelType(otb::DOUBLE);} selected
+              callback {guiScale->value(0);
+guiScale->hide();}
               tooltip double xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned short int}
-              callback {SetPixelType(otb::UNSIGNEDSHORTINT);}
+              callback {guiScale->show();}
               tooltip {unsigned short int} xywh {0 0 34 21}
             }
             MenuItem {} {
               label {unsigned int}
-              callback {SetPixelType(otb::UNSIGNEDINT);}
+              callback {guiScale->show();}
               tooltip {unsigned int} xywh {0 0 34 21}
             }
           }
           Fl_Check_Button guiScale {
             label {Use scaling}
-            xywh {165 495 110 20} down_box DOWN_BOX labelfont 1 labelcolor 186
+            xywh {165 460 110 20} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
           }
         }
         Fl_Group guiOutput {
@@ -91,7 +89,7 @@ class WriterViewGroup {open
         } {
           Fl_Browser guiFeatureList {
             label {Feature image list}
-            callback {UpdateExtractView();}
+            callback {UpdateExtractView();} selected
             tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiAddChannel {
@@ -158,8 +156,6 @@ class WriterViewGroup {open
   Function {OpenImage()} {open return_type {virtual void}
   } {}
   Function {Quit()} {open return_type {virtual void}
-  } {}
-  Function {SetPixelType(otb::PixelType i)} {open return_type {virtual void}
   } {}
   Function {OK()} {open return_type {virtual void}
   } {}

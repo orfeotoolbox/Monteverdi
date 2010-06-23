@@ -64,8 +64,16 @@ SupervisedClassificationView
   Fl_Text_Buffer* buffer = new Fl_Text_Buffer();
   tDescription->buffer(buffer);
 
+  //Create the buffer for the confusion matrix display
+  Fl_Text_Buffer* buffer2 = new Fl_Text_Buffer();
+  tConfusionMatrix->buffer(buffer2);
+
   //Set the slider with the model value
   slRepartition->value(m_Controller->GetModel()->GetValidationTrainingProportion());
+  slMaxTraining->value(m_Controller->GetModel()->GetMaxTrainingSize());
+  slMaxValidation->value(m_Controller->GetModel()->GetMaxValidationSize());
+
+  icClassKey->clear();
 
   // Show
   this->Show();
@@ -113,6 +121,7 @@ void
 SupervisedClassificationView
 ::Cancel()
 {
+  m_Controller->Quit();
   this->CleanUp();
 }
 
@@ -120,6 +129,7 @@ void
 SupervisedClassificationView
 ::Ok()
 {
+  m_Controller->Ok();
   this->CleanUp();
 }
 
@@ -127,16 +137,34 @@ void
 SupervisedClassificationView
 ::CleanUp()
 {
-  m_Controller->Ok();
-  free(tDescription->buffer());
+  delete tDescription->buffer();
+  delete tConfusionMatrix->buffer();
   this->HideAll();
+}
+
+void
+SupervisedClassificationView
+::SetClassKey(const char * key)
+{
+  m_Controller->SetClassKey(key);
 }
 
 void
 SupervisedClassificationView
 ::Notify()
 {
+  slMaxTraining->maximum(m_Controller->GetModel()->GetClassMinSize());
+  slMaxValidation->maximum(m_Controller->GetModel()->GetClassMinSize());
+
   tDescription->buffer()->text(m_Controller->GetModel()->GetDescription());
+  tConfusionMatrix->buffer()->text(m_Controller->GetModel()->GetMatrixString());
+
+  std::vector<std::string> classKeyList =  m_Controller->GetModel()->GetClassKeyList();
+  for (unsigned int i = 0; i < classKeyList.size(); ++i)
+  {
+    icClassKey->add(classKeyList[i].c_str());
+  }
+  icClassKey->value(m_Controller->GetModel()->GetClassKey());
 }
 
 }

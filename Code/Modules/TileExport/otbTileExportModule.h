@@ -67,7 +67,7 @@ public:
   /** Vector of corners coordinates when no kWL nor porjection ref
     * available 
     */
-  CornersType     m_CornerList;
+  CornersType      m_CornerList;
 };
 
 
@@ -178,15 +178,24 @@ protected:
 
   /** Add product to the list*/
   //void AddProductToList(unsigned int id);
-
-  /** Change product name*/
-  void UpdateProductInformations();
   
   /** Method for checking and correcting color composition*/
   bool CheckAndCorrectComposition(unsigned int clickedIndex);
 
   /** CallBack to store the association*/
   virtual void StoreAssociations();
+
+  /** 
+    * Update the product informations to store the Corners values when
+    * non geo
+    */
+  virtual void UpdateProductInformations();
+  
+  /** Export non geo products*/
+  virtual void ExportNonGeoreferencedProduct(unsigned int curIdx);
+
+  /** Handle Corners coordinates group*/
+  virtual void HandleCornersGroup();
 
 private:
   TileExportModule(const Self&); //purposely not implemented
@@ -304,7 +313,7 @@ private:
   bool                   m_Cancel;
   
   // Max
-  unsigned int           m_MaxDepth;
+  int                    m_MaxDepth;
   unsigned int           m_CurIdx;
   unsigned int           m_NbOfInput;
   unsigned int           m_CurrentProduct;
@@ -316,6 +325,12 @@ private:
 
   // Product Info vector type
   ProductInformationVectorType                  m_ProductVector;
+
+  // Geo Corners Coordinates
+  OutputPointType         m_UpperLeftCorner;
+  OutputPointType         m_UpperRightCorner;
+  OutputPointType         m_LowerLeftCorner;
+  OutputPointType         m_LowerRightCorner;
 };
 
 

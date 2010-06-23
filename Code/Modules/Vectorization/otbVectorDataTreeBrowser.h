@@ -21,6 +21,7 @@
 #include <FLU/Flu_Tree_Browser.h>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "otbFieldEditorGUI.h"
 
 namespace otb
 {
@@ -58,6 +59,21 @@ typedef typename DataNodeType
 ::PolygonType                         PolygonType;
 typedef typename DataNodeType
 ::LineType                            LineType;
+
+typedef std::map<DataNodeType *,
+  FluNodeType *>                      DataToFluNodeMapType;
+
+typedef std::map<NodeType,
+  unsigned int>                       NumberingMapType;
+
+typedef std::vector<FluNodeType *>    FluNodeVectorType;
+
+typedef typename VectorDataKeywordlist
+  ::FieldType                         FieldType;
+
+typedef FieldEditorGUI                FieldEditorType;
+typedef typename FieldEditorType
+::Pointer                             FieldEditorPointerType;
 
 /** RTT type info */
 itkTypeMacro(VectorDataTreeBrowser,itk::Object);
@@ -98,13 +114,60 @@ VectorDataTreeBrowser(const Self&); //purposely not implemented
 void operator=(const Self&); //purposely not implemented
 
 /** Find or create new node */
-FluNodeType * FindExistingOrCreateNew(FluNodeType * parent,const char * label);
+FluNodeType * FetchNode(FluNodeType * parent,DataNodeType * dataNode);
+
+FluNodeType * FetchSubNode(FluNodeType * parent, const std::string & label);
 
 /** Create an x/y point field */
 FluNodeType * UpdateOrCreatePointField(FluNodeType * parent, const char * label,const PointType & point);
 
+/** Create an attribute field */
+FluNodeType * UpdateOrCreateAttributeField(FluNodeType * parent, const FieldType & field);
+
+/** Clear unused nodes */
+void RemoveUnusedNodes(const FluNodeVectorType & nodes);
+
+/** Main callbacks */
+static void TreeCallback( Fl_Widget* w, void* );
+
+static void DeleteGeometryCallback( Fl_Widget* w, void* data);
+
+void DeleteSelectedGeometry();
+
+static void DeletePointCallback( Fl_Widget* w, void* data );
+
+void DeleteSelectedPoint();
+
+static void AddFieldCallback(Fl_Widget* w, void* data);
+
+void AddFieldToSelectedGeometry();
+
+static void DeleteFieldCallback(Fl_Widget*w, void *data);
+
+void DeleteSelectedField();
+
+void PopupMenu(FluNodeType * node);
+
+int handle(int event);
+
 /** VectorData pointer */
 VectorDataPointerType m_VectorData;
+
+/** Correspondance between data node and flu node */
+DataToFluNodeMapType m_NodeMap;
+
+/** The numbering map */
+NumberingMapType m_NumberingMap;
+
+std::string m_GeometricDataKey;
+std::string m_AttributesKey;
+std::string m_ExteriorRingKey;
+std::string m_InteriorRingsKey;
+std::string m_InteriorRingKey;
+std::map<NodeType,std::string> m_NodeNameMap;
+
+FieldEditorPointerType m_FieldEditor;
+
 
 }; // End class VectorDataTreeBrowser
 } // End namespace otb

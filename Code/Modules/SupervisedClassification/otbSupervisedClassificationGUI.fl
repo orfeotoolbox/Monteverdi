@@ -20,7 +20,7 @@ class SupervisedClassificationGUI {open
     Fl_Window wMainWindow {
       label {Supervised classification}
       callback {this->Quit();} open
-      xywh {846 154 285 430} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {761 155 300 535} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Menu_Bar {} {open
         xywh {2 0 571 30} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -38,10 +38,16 @@ class SupervisedClassificationGUI {open
       }
       Fl_Group {} {
         label {Sets repartition} open
-        xywh {5 34 280 67} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        xywh {0 34 285 168} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
         Fl_Value_Slider slRepartition {
           tooltip {Controls the repartition between the training and validation samples} xywh {85 55 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14
+        }
+        Fl_Value_Slider slMaxTraining {
+          tooltip {Controls the maximum number of samples per class in the training set} xywh {125 90 155 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 maximum 1000 step 1 value 100 textsize 8
+        }
+        Fl_Value_Slider slMaxValidation {
+          tooltip {Controls the maximum number of samples per class in the validation set} xywh {125 125 155 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 176 align 16 maximum 1000 step 1 value 100 textsize 8
         }
         Fl_Box {} {
           label Training
@@ -51,38 +57,51 @@ class SupervisedClassificationGUI {open
           label Validation
           xywh {203 58 70 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
+        Fl_Box {} {
+          label {Max. training}
+          xywh {5 95 135 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+        }
+        Fl_Box {} {
+          label {Max. validation}
+          xywh {0 125 135 25} color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+        }
+        Fl_Input_Choice icClassKey {
+          label {Class key} user_data_type {const char *}
+          callback {SetClassKey(o->value());} open selected
+          xywh {125 165 155 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 when 1
+        } {}
       }
       Fl_Group {} {
         label Classification open
-        tooltip {Tools for classification} xywh {5 319 280 106} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        tooltip {Tools for classification} xywh {5 424 280 106} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
         Fl_Light_Button bTrain {
           label Train
           callback {Train();}
-          tooltip {Learn the SVM model from training samples} xywh {15 342 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1
+          tooltip {Learn the SVM model from training samples} xywh {15 447 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 when 1
         }
         Fl_Light_Button bValidate {
           label Validate
           callback {Validate();}
-          tooltip {Display some quality assesment on the classification} xywh {150 342 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
+          tooltip {Display some quality assesment on the classification} xywh {150 447 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16
         }
         Fl_Button {} {
           label Ok
           callback {Ok();}
-          xywh {15 384 120 28} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          xywh {15 489 120 28} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button {} {
           label Cancel
           callback {Cancel();}
-          tooltip {Leave viewer set up interface without saving changes} xywh {150 382 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
+          tooltip {Leave viewer set up interface without saving changes} xywh {150 487 120 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 selection_color 23 labelsize 12 labelcolor 186
         }
       }
       Fl_Group Description {
         label Description open
-        xywh {5 105 280 210} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
+        xywh {5 205 280 210} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 17
       } {
-        Fl_Text_Display tDescription {selected
-          xywh {15 125 260 180} box PLASTIC_DOWN_BOX textsize 10
+        Fl_Text_Display tDescription {
+          xywh {15 225 260 180} box PLASTIC_DOWN_BOX textsize 10
         }
       }
     }
@@ -188,22 +207,17 @@ class SupervisedClassificationGUI {open
       }
     }
     Fl_Window wValidationWindow {
-      label Validation
-      xywh {826 481 390 415} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
+      label Validation open
+      xywh {826 481 320 250} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Group gMatrix {
-        label {Confusion matrix} open
-        xywh {5 25 385 160} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-      } {}
-      Fl_Group gAccuracy {
-        label Accuracy open
-        xywh {5 200 385 145} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-      } {}
+      Fl_Text_Display tConfusionMatrix {
+        xywh {5 5 310 200} box PLASTIC_DOWN_BOX textsize 10
+      }
       Fl_Return_Button bCloseValidationWindow {
         label Close
         callback {bValidate->clear();
 wValidationWindow->hide();}
-        tooltip {Save changes and leave viewer set up interface} xywh {155 365 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+        tooltip {Save changes and leave viewer set up interface} xywh {120 215 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
       }
     }
   }
@@ -226,6 +240,8 @@ wValidationWindow->hide();}
   Function {Ok()} {open return_type {virtual void}
   } {}
   Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {SetClassKey(const char *)} {open return_type {virtual void}
   } {}
 } 
 

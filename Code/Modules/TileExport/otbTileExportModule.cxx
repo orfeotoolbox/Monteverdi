@@ -42,6 +42,12 @@ TileExportModule::TileExportModule(): m_Logo(NULL), m_LogoFilename(),
   this->AddInputDescriptor<FloatingVectorImageType>("InputLegend",otbGetTextMacro("Input Legend"),true,true);
   this->AddInputDescriptor<FloatingVectorImageType>("InputLogo",otbGetTextMacro("Input Logos"), true);
 
+  // Initialize some values
+  m_UpperLeftCorner.Fill(1000.);
+  m_UpperRightCorner.Fill(1000.);	      
+  m_LowerLeftCorner.Fill(1000.);	          
+  m_LowerRightCorner.Fill(1000.);	      
+
   // Build the GUI
   this->BuildGUI();
 }
@@ -117,6 +123,12 @@ void TileExportModule::Run()
     newProduct.m_Id   = i;
     newProduct.m_Name = cuttenName;
     newProduct.m_Description = "Image Product";
+
+    // Activate or not the Geo group
+    if(!this->IsProductHaveMetaData(i) && gExtended->value())
+      {
+      vgxGELatLongBoxGroup->activate();
+      }
 
     // Get the current input
     FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage",i);
@@ -311,7 +323,9 @@ void TileExportModule::SaveDataSet()
       // Do the tiling for the current image
       if(this->IsProductHaveMetaData(i))
 	this->Tiling(i);
-
+      else
+	this->ExportNonGeoreferencedProduct(i);
+      
       // Progress bar
       float progressValue = i + 1;
 
@@ -917,12 +931,27 @@ AddNetworkLinkToRootKML(double north, double south, double east, double west, st
     m_RootKmlFile <<"\t\t\t\t<Icon>"<< std::endl; 
     m_RootKmlFile <<"\t\t\t\t\t<href>"<<directory<<"/0.jpg"<<"</href>"<<std::endl; 
     m_RootKmlFile <<"\t\t\t\t</Icon>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t<LatLonBox>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<north>"<<north<<"</north>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<south>"<<south<<"</south>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<east>"<<east<<"</east>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<west>"<<west<<"</west>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t</LatLonBox>"<<std::endl;
+
+    if(!gExtended->value())
+      {
+      m_RootKmlFile <<"\t\t\t\t<LatLonBox>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<north>"<<north<<"</north>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<south>"<<south<<"</south>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<east>"<<east<<"</east>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<west>"<<west<<"</west>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t</LatLonBox>"<<std::endl;
+      }
+    else
+      {
+      m_RootKmlFile << "\t\t\t<gx:LatLonQuad>" << std::endl;
+      m_RootKmlFile << "\t\t\t\t<coordinates>" << std::endl;
+      m_RootKmlFile << " " << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1];
+      m_RootKmlFile << " " << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1];
+      m_RootKmlFile << " " << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1];
+      m_RootKmlFile << " " << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
+      m_RootKmlFile << "\t\t\t\t</coordinates>" << std::endl;
+      m_RootKmlFile << "\t\t\t</gx:LatLonQuad>" << std::endl;
+      }
     m_RootKmlFile <<"\t\t\t</GroundOverlay>"<< std::endl; 
     }
   
@@ -1011,11 +1040,34 @@ GenerateBoundingKML(double north, double south, double east, double west)
   fileTest << "\t\t\t<tessellate>1</tessellate>" << std::endl;
   fileTest << "\t\t\t<altitudeMode>clampedToGround</altitudeMode>" << std::endl;
   fileTest << "\t\t\t<coordinates>" << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
-  fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
-  fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+
+  if(this->IsProductHaveMetaData(m_CurrentProduct))
+    {
+    fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
+    fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
+    fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
+    fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
+    fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+    }
+  else
+    {
+    if(!gExtended->value())
+      {
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+      }
+    else
+      {
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      }
+    }
   fileTest << "\t\t\t</coordinates>" << std::endl;
   fileTest << "\t\t</LineString>" << std::endl;
   fileTest << "\t\t</Placemark>" << std::endl;
@@ -1566,6 +1618,21 @@ TileExportModule::RootKmlProcess(double north, double south, double east, double
 				    tempOutputPoint[0], currentImageName,false,
 				    i);
       }
+    else
+      {
+      if(vcl_abs(m_ProductVector[i].m_CornerList[0]-1000.)>1e-15 && 
+	 vcl_abs(m_ProductVector[i].m_CornerList[1]-1000.)>1e-15 && 
+	 vcl_abs(m_ProductVector[i].m_CornerList[2]-1000.)>1e-15 && 
+	 vcl_abs(m_ProductVector[i].m_CornerList[3]-1000.)>1e-15)
+	{
+	double northi = vGELatUL->value();
+	double southi = vGELatLR->value();
+	double easti  = vGELongLR->value();
+	double westi  = vGELongUL->value();
+	
+	this->AddNetworkLinkToRootKML(northi, southi, easti, westi, currentImageName,false,i);
+	}
+      }
     }
 	    
   // Last thing to do is to close the root kml 
@@ -1655,20 +1722,6 @@ TileExportModule::BoundingBoxKmlProcess(double north,double south,double  east,d
 }
 
 
-/** 
-  * Change product name
-  */
-void 
-TileExportModule::UpdateProductInformations()
-{
-  // Set the composition values
-  if(this->CheckAndCorrectComposition(0))
-    {
-    m_ProductVector[0].m_Composition[0] = this->cRedChannel->value();
-    m_ProductVector[0].m_Composition[1] = this->cGreenChannel->value();
-    m_ProductVector[0].m_Composition[2] = this->cBlueChannel->value();
-    }
-}
 
 
 
@@ -1696,19 +1749,19 @@ TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
   unsigned int nbComponent = this->GetInputData<FloatingVectorImageType>("InputImage",clickedIndex)->GetNumberOfComponentsPerPixel();
 
-  if(this->cRedChannel->value() >= nbComponent)
+  if(this->cRedChannel->value() >= static_cast<int>(nbComponent))
     this->cRedChannel->value(nbComponent-1); // Set the RedChannel on
 					     // the component - 1
 					     // position if the value
 					     // exceed the number of components
   
-  if(this->cGreenChannel->value() >= nbComponent)
+  if(this->cGreenChannel->value() >= static_cast<int>(nbComponent))
     this->cGreenChannel->value(nbComponent-1);
   
-  if(this->cBlueChannel->value() >= nbComponent)
+  if(this->cBlueChannel->value() >= static_cast<int>(nbComponent))
     this->cBlueChannel->value(nbComponent-1);
   
-  Fl::flush;
+  Fl::flush();
   
   return true;
 }
@@ -1725,6 +1778,183 @@ TileExportModule::StoreAssociations()
   for(unsigned int i = 0; i < nbLegends; i++)
     m_ProductVector[0].m_AssociatedLegends.push_back(i);
 }
+
+
+
+/**
+ */
+void
+TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
+{
+  // Get the values selected by the user
+  double north, south, east, west;
+  
+  if(!gExtended->value())
+    {
+    if(vcl_abs(m_ProductVector[curIdx].m_CornerList[0]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[1]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[2]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[3]-1000.)>1e-15)
+      {
+      // Get the corners values
+      north = m_ProductVector[curIdx].m_CornerList[1];
+      south = m_ProductVector[curIdx].m_CornerList[3];
+      east  = m_ProductVector[curIdx].m_CornerList[0];
+      west  = m_ProductVector[curIdx].m_CornerList[2];
+      }
+    else
+      {
+      itkExceptionMacro(<<"Product "<<m_ProductVector[curIdx].m_Name<<" have no geographical informations, please set the upper left and lower right corners coordinates");
+      }
+    }
+  
+  // The other case : extended mode
+  if(gExtended->value())
+    {
+    // A trick to see if all the value have been updated
+    // Since all the corners are initialized with 1000.
+    // and are updated if value edited in the GUI changed, 
+    // this comparaison did the trick
+    if(vcl_abs(m_UpperLeftCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_UpperLeftCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_UpperRightCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_UpperRightCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_LowerLeftCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_LowerLeftCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_LowerRightCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_LowerRightCorner[1]-1000.)>1e-15
+      )
+      { 
+      north = m_UpperLeftCorner[1];
+      south = m_LowerLeftCorner[1];
+      west  = m_UpperLeftCorner[0];
+      east  = m_UpperRightCorner[0];
+      }
+    else
+      {
+      itkExceptionMacro(<<"Product "<<m_ProductVector[curIdx].m_Name<<" have no geographical informations, please set all the coordinates");
+      }
+    }
+  
+
+  // Add the headers and the basic stuffs in the kml only once.
+  if(curIdx == 0)
+    {
+    // Generate the root kml
+    this->RootKmlProcess(north,south,east,west);
+    }
+
+  // Generate the bounding box kml
+  this->BoundingBoxKmlProcess(north,south, east, west);
+
+  // Add the files to the kmz file
+  // Relative path to the root directory  in the kmz file
+  std::ostringstream  jpg_in_kmz;
+  jpg_in_kmz<<m_CurrentImageName<<"/0.jpg";
+        
+  // Absolute path where are stored the files
+  std::ostringstream  jpg_absolute_path;
+  jpg_absolute_path<<m_Path<<"/0.jpg";
+
+  // Write the file on the disk 
+  FloatingVectorImageType::Pointer nonGeoImage = this->GetInputData<FloatingVectorImageType>("InputImage",curIdx);
+  CastFilterType::Pointer castFiler = CastFilterType::New();
+  castFiler->SetInput(nonGeoImage);
+    
+  m_VectorWriter = VectorWriterType::New();
+  m_VectorWriter->SetFileName(jpg_absolute_path.str().c_str());
+  m_VectorWriter->SetInput(castFiler->GetOutput());
+  m_VectorWriter->Update();
+        
+  //Add the files to the kmz
+  this->AddFileToKMZ(jpg_absolute_path, jpg_in_kmz);
+        
+  // Remove the unecessary files with stdio method :remove 
+  if (remove(jpg_absolute_path.str().c_str()))
+    {
+    itkExceptionMacro(<<"Error while deleting the file "<<jpg_absolute_path.str());
+    }
+}
+
+
+/** 
+  * Update Product Information
+  */
+void 
+TileExportModule::UpdateProductInformations()
+{
+  // Get the indexClicked product
+  ProductInformationType  product = m_ProductVector[0];
+  unsigned int indexClicked = 0;   // This module take only one
+				   // product as input
+ 
+  // Set the composition values
+  if(this->CheckAndCorrectComposition(0))
+    {
+    m_ProductVector[indexClicked].m_Composition[0] = this->cRedChannel->value();
+    m_ProductVector[indexClicked].m_Composition[1] = this->cGreenChannel->value();
+    m_ProductVector[indexClicked].m_Composition[2] = this->cBlueChannel->value();
+    }
+
+  // If non geo Product, Fill the corners 
+  if(!IsProductHaveMetaData(indexClicked))
+    {
+    // The case we export the product in a GX:LatLong box
+    if(gExtended->value())
+      {
+      if(vgxGELongUL->value()) m_UpperLeftCorner[0]  = vgxGELongUL->value();
+      if(vgxGELatUL->value())  m_UpperLeftCorner[1]  = vgxGELatUL->value();
+      
+      if(vgxGELongUR->value()) m_UpperRightCorner[0] = vgxGELongUR->value();
+      if(vgxGELatUR->value())  m_UpperRightCorner[1] = vgxGELatUR->value();      
+
+      if(vgxGELongLL->value()) m_LowerLeftCorner[0]  = vgxGELongLL->value();
+      if(vgxGELatLL->value())  m_LowerLeftCorner[1]  = vgxGELatLL->value();
+      
+      if(vgxGELongLR->value()) m_LowerRightCorner[0] = vgxGELongLR->value();
+      if(vgxGELatLR->value())  m_LowerRightCorner[1] = vgxGELatLR->value();      
+      }
+    else
+      {
+      if(vGELongUL->value()) m_ProductVector[indexClicked].m_CornerList[0] = vGELongUL->value();
+      if(vGELatUL->value())  m_ProductVector[indexClicked].m_CornerList[1] = vGELatUL->value();
+      if(vGELongLR->value()) m_ProductVector[indexClicked].m_CornerList[2] = vGELongLR->value();
+      if(vGELatLR->value())  m_ProductVector[indexClicked].m_CornerList[3] = vGELatLR->value();
+      }
+    }
+}
+
+
+/**
+ * CallBack to handle the coordinate group 
+ */
+void 
+TileExportModule::HandleCornersGroup()
+{
+  // Case 1 : Product geo : don't show the group
+  if(this->IsProductHaveMetaData(0))
+    {
+    vgxGELatLongBoxGroup->deactivate();
+    vGELatLongBoxGroup->hide();
+    }
+  
+  // Case 2 : Product non geo : Depends on the extend button
+  if(!this->IsProductHaveMetaData(0))
+    {
+    if(gExtended->value())
+      {
+      vGELatLongBoxGroup->hide();
+      vgxGELatLongBoxGroup->show();
+      }
+    else
+      {
+      vGELatLongBoxGroup->show();
+      vgxGELatLongBoxGroup->hide();
+      }
+    }
+}
+
+
 
 
 } // End namespace otb

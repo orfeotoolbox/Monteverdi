@@ -242,7 +242,10 @@ namespace otb
         vectorImage->TransformIndexToPhysicalPoint(lIndexStart, pto1);
         vectorImage->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
       }
-      
+	  else 
+	  {
+		  itkExceptionMacro(<<"Input image is NULL.");
+	  }
       pt1 = m_Transform->TransformPoint(pto1);
       pt2 = m_Transform->TransformPoint(pto2);
       
@@ -364,7 +367,11 @@ namespace otb
       vectorImage->TransformPhysicalPointToIndex(pto1, lIndex1);
       vectorImage->TransformPhysicalPointToIndex(pto2, lIndex2);
     }
-    
+    else 
+    {
+	  itkExceptionMacro(<<"Input image is NULL.");
+	}
+	  
     vStartX->value(lIndex1[0]);
     vStartY->value(lIndex1[1]);
     vSizeX->value(vcl_abs(lIndex2[0] - lIndex1[0]));

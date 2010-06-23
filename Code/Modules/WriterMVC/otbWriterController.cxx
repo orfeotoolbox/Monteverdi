@@ -71,13 +71,13 @@ WriterController
 
 void
 WriterController
-::SaveOutput(const std::string & fname, const unsigned int pType, const bool useScale)
+::SaveOutput(const std::string & fname, int pixelType, const bool useScale)
 {
   try
   {
 //     m_Model->GenerateOutputImage(fname, pType, useScale);
     //Try to multi thread
-    m_Model->ThreadedGenerateOutputImage(fname, pType, useScale);
+    m_Model->ThreadedGenerateOutputImage(fname, pixelType, useScale);
   }
   catch (itk::ExceptionObject & err)
   {
