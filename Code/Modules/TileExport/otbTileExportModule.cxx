@@ -1040,7 +1040,8 @@ GenerateBoundingKML(double north, double south, double east, double west)
   fileTest << "\t\t\t<tessellate>1</tessellate>" << std::endl;
   fileTest << "\t\t\t<altitudeMode>clampedToGround</altitudeMode>" << std::endl;
   fileTest << "\t\t\t<coordinates>" << std::endl;
-  if(!gExtended->value())
+
+  if(this->IsProductHaveMetaData(m_CurrentProduct))
     {
     fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
     fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
@@ -1050,11 +1051,22 @@ GenerateBoundingKML(double north, double south, double east, double west)
     }
   else
     {
-    fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
-    fileTest << "\t\t\t\t\t" << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1] << std::endl;
-    fileTest << "\t\t\t\t\t" << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1] << std::endl;
-    fileTest << "\t\t\t\t\t" << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
-    fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+    if(!gExtended->value())
+      {
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+      }
+    else
+      {
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      }
     }
   fileTest << "\t\t\t</coordinates>" << std::endl;
   fileTest << "\t\t</LineString>" << std::endl;
