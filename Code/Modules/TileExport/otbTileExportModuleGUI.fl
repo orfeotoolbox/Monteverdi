@@ -24,15 +24,15 @@ class TileExportModuleGUI {open
           Fl_Button bCancel {
             label Cancel
             callback {this->Cancel();}
-            xywh {290 566 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {297 567 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Return_Button bOk {
             label Save
             callback {this->SaveDataSet();}
-            xywh {380 567 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {387 568 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
           }
-          Fl_Progress pBar {
-            xywh {18 533 450 26} box PLASTIC_DOWN_BOX selection_color 1
+          Fl_Progress pBar {selected
+            xywh {18 534 450 26} box PLASTIC_DOWN_BOX selection_color 1
           }
           Fl_Group {} {
             label {Output KMZ filename} open
@@ -57,40 +57,31 @@ class TileExportModuleGUI {open
             } {}
             Fl_Check_Button gExtended {
               label {Use Extended KMZ}
-              callback {if(gExtended->value())
-{
-vGELatLongBoxGroup->hide();
-vgxGELatLongBoxGroup->show();
-}
-else
-{
-vgxGELatLongBoxGroup->hide();
-vGELatLongBoxGroup->show();
-}}
+              callback {this->HandleCornersGroup();}
               tooltip {Uncheck if using GoogleEearth version less than 5.0} xywh {283 248 140 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 186 labelfont 1 labelsize 12 labelcolor 186
             }
           }
-          Fl_Progress pBarProd {
-            xywh {18 500 450 26} box PLASTIC_DOWN_BOX selection_color 1
+          Fl_Progress pBarProd {selected
+            xywh {18 501 450 26} box PLASTIC_DOWN_BOX selection_color 1
           }
           Fl_Group {} {
             label {Channels Parameters}
-            xywh {18 161 450 50} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 5
+            xywh {18 159 450 50} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 5
           } {
             Fl_Choice cRedChannel {
               label Red
               callback {this->UpdateProductInformations();}
-              xywh {88 176 50 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {88 174 50 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Choice cGreenChannel {
               label Green
               callback {this->UpdateProductInformations();} open
-              xywh {218 176 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {218 174 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Choice cBlueChannel {
               label Blue
               callback {this->UpdateProductInformations();} open
-              xywh {343 176 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {343 174 50 24} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
           }
           Fl_Group vGELatLongBoxGroup {
@@ -130,66 +121,66 @@ vGELatLongBoxGroup->show();
           }
           Fl_Group vgxGELatLongBoxGroup {
             label {No Geographical Information : please Set the 4 corners coordinates} open
-            xywh {18 308 450 179} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+            xywh {18 310 450 179} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 5 deactivate
           } {
             Fl_Group {} {
               label {Upper Left} open
-              xywh {25 328 195 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {25 330 195 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELatUL {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 367 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -90 maximum 90 step 1e-06
+                xywh {90 369 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -90 maximum 90 step 1e-06
               }
               Fl_Value_Input vgxGELongUL {
                 label Longitude
-                callback {this->UpdateProductInformations();} selected
-                xywh {90 338 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                callback {this->UpdateProductInformations();}
+                xywh {90 340 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
             }
             Fl_Group {} {
               label {Lower Right} open
-              xywh {245 417 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {245 419 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongLR {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 426 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {303 428 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatLR {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 453 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {303 455 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
             }
             Fl_Group {} {
               label {Upper Right} open
-              xywh {245 333 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {245 335 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongUR {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 340 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {303 342 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatUR {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 367 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {303 369 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
             }
             Fl_Group {} {
               label {Lower Left} open
-              xywh {25 414 205 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {25 416 205 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongLL {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 427 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {90 429 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatLL {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 454 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {90 456 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
             }
           }
@@ -210,5 +201,7 @@ vGELatLongBoxGroup->show();
   Function {ShowClickedProductInformation()} {open return_type {virtual void}
   } {}
   Function {StoreAssociations()} {open return_type {virtual void}
+  } {}
+  Function {HandleCornersGroup()} {open return_type {virtual void}
   } {}
 } 

@@ -194,6 +194,9 @@ protected:
   /** Export non geo products*/
   virtual void ExportNonGeoreferencedProduct(unsigned int curIdx);
 
+  /** Handle Corners coordinates group*/
+  virtual void HandleCornersGroup();
+
 private:
   TileExportModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

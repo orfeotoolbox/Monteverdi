@@ -124,10 +124,10 @@ void TileExportModule::Run()
     newProduct.m_Name = cuttenName;
     newProduct.m_Description = "Image Product";
 
-    // Activate or not the Geo group 
-    if(!this->IsProductHaveMetaData(i))
+    // Activate or not the Geo group
+    if(!this->IsProductHaveMetaData(i) && gExtended->value())
       {
-      vGELatLongBoxGroup->activate();
+      vgxGELatLongBoxGroup->activate();
       }
 
     // Get the current input
@@ -1912,6 +1912,35 @@ TileExportModule::UpdateProductInformations()
     }
 }
 
+
+/**
+ * CallBack to handle the coordinate group 
+ */
+void 
+TileExportModule::HandleCornersGroup()
+{
+  // Case 1 : Product geo : don't show the group
+  if(this->IsProductHaveMetaData(0))
+    {
+    vgxGELatLongBoxGroup->deactivate();
+    vGELatLongBoxGroup->hide();
+    }
+  
+  // Case 2 : Product non geo : Depends on the extend button
+  if(!this->IsProductHaveMetaData(0))
+    {
+    if(gExtended->value())
+      {
+      vGELatLongBoxGroup->hide();
+      vgxGELatLongBoxGroup->show();
+      }
+    else
+      {
+      vGELatLongBoxGroup->show();
+      vgxGELatLongBoxGroup->hide();
+      }
+    }
+}
 
 
 
