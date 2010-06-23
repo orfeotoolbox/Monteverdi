@@ -20,7 +20,7 @@ class SupervisedClassificationAppliGUI {open
     Fl_Window bClassesBrowser {
       label {Supervised classification}
       callback {this->QuitCallback();} open
-      xywh {793 53 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+      xywh {695 53 575 510} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
     } {
       Fl_Browser dClassList {
         label {Classes list}
@@ -128,17 +128,17 @@ class SupervisedClassificationAppliGUI {open
           callback {bTrainingSet->value(1);
 bValidationSet->value(0);
 TrainingSetSelected();}
-          tooltip {Display the training set} xywh {20 366 115 30} down_box ROUND_DOWN_BOX value 1 color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+          tooltip {Display the training set} xywh {7 370 115 30} down_box ROUND_DOWN_BOX value 1 color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 deactivate
         }
         Fl_Round_Button bValidationSet {
-          label {Validation Set}
+          label {Display Validation Set}
           callback {bValidationSet->value(1);
 bTrainingSet->value(0);
-ValidationSetSelected();} selected
-          tooltip {Display the validation set. Only available if random validation samples is not activated} xywh {20 405 115 30} down_box ROUND_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 align 16 deactivate
+ValidationSetSelected();}
+          tooltip {Display the validation set. Only available if random validation samples is not activated} xywh {7 405 115 30} down_box ROUND_DOWN_BOX color 23 selection_color 63 labelfont 1 labelsize 12 labelcolor 186 deactivate
         }
         Fl_Check_Button bRandomGeneration {
-          label Random
+          label {Random Validation Set}
           callback {if(bRandomGeneration->value())
 {
   bTrainingSet->set();
@@ -151,12 +151,12 @@ else
 {
   bValidationSet->activate();
   slRandomProbability->deactivate();
-}}
-          tooltip {If activated, validation sample is randomly choosen as a subset of the training samples} xywh {175 374 75 15} down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+}} selected
+          tooltip {If activated, validation sample is randomly choosen as a subset of the training samples} xywh {127 371 154 29} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Value_Slider slRandomProbability {
           label {Probability     }
-          tooltip {Tune the probability for a sample to be choosen as a training sample. Only available is random validation sample generation is activated} xywh {155 400 115 30} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 14 deactivate
+          tooltip {Tune the probability for a sample to be choosen as a training sample. Only available is random validation sample generation is activated} xywh {166 410 115 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 176 align 16 value 0.75 textsize 12 deactivate
         }
       }
       Fl_Group {} {
