@@ -62,12 +62,6 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  /*
-  typedef VectorImage<double,2>         FloatingVectorImageType;
-  typedef Image<double,2>               FloatingImageType;
-  typedef Image<unsigned short,2>       LabelImageType;
-  */
-
   typedef TypeManager::Floating_Point_Image         FloatingImageType;
   typedef TypeManager::Floating_Point_VectorImage   FloatingVectorImageType;
   typedef TypeManager::Labeled_Short_Image            LabelImageType;

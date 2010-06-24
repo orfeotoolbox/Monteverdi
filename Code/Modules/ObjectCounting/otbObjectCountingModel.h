@@ -119,16 +119,6 @@ public:
   typedef ImageToWorkType                     WhichImageType;
 
   /** Input image typedefs*/
-  /*
-  typedef TypeManager::Floating_Point_Precision       PixelType;
-  typedef unsigned short                              LabelPixelType;
-  typedef int                                         IntLabelPixelType;
-  typedef Image<LabelPixelType, 2>                    LabeledImageType;
-  typedef Image<IntLabelPixelType, 2>                 IntLabeledImageType;
-  typedef Image<PixelType, 2>                         SingleImageType;
-  typedef TypeManager::Floating_Point_VectorImage     ImageType;
-  typedef ImageType::Pointer                          ImagePointerType;
-  */
   typedef TypeManager::Floating_Point_Precision       PixelType;
   typedef TypeManager::Label_Short_Precision          LabelPixelType;
   typedef int                                         IntLabelPixelType;
