@@ -28,7 +28,7 @@ class FeatureExtractionViewGroup {open
           xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice guiFeatureChoice {
-            label {Feature Choice} open
+            label {Feature Choice}
             xywh {15 318 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           } {
             MenuItem guiInitMenu {
@@ -240,7 +240,7 @@ guiSFSRatMaxConsNb->deactivate();}
               MenuItem {} {
                 label Haralick
                 callback {UpdateParameterArea(31);
-SetFeatureType(otb::FeatureInfo::TEXT_HAR);} selected
+SetFeatureType(otb::FeatureInfo::TEXT_HAR);}
                 tooltip {Haralick textures.} xywh {10 10 30 20}
               }
               MenuItem {} {
@@ -580,7 +580,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {288 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
               }
             }
-            Fl_Group guiTextures {open
+            Fl_Group guiTextures {
               xywh {206 318 240 140} hide
             } {
               Fl_Counter guiTextRadiusX {
@@ -1032,7 +1032,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
               }
             }
-            Fl_Group guiHaralick {
+            Fl_Group guiHaralick {open
               xywh {206 318 240 140} hide
             } {
               Fl_Check_Browser guiHarList {
@@ -1057,32 +1057,41 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               } {
                 Fl_Value_Input guiHarRadiusX {
                   label X
-                  xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
+                  xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
                 }
                 Fl_Value_Input guiHarRadiusY {
                   label Y
-                  xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
+                  xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
                 }
               }
               Fl_Group {} {
-                label Histo open
+                label {Quantization levels} open
                 xywh {324 405 120 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
-                Fl_Value_Input guiHarMin {
-                  label Min
-                  tooltip {Image minimum value.} xywh {355 410 40 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
-                }
-                Fl_Value_Input guiHarMax {
-                  label Max
-                  tooltip {Image maximum value.} xywh {354 433 40 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
-                }
-                Fl_Value_Input guiHarBin {
-                  label Bin
-                  tooltip {Histogram bin size.} xywh {399 430 41 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 align 1 minimum 1 step 1 value 2
+                Fl_Input_Choice guiHarBin {
+                  label Bin open
+                  tooltip {Histogram bin size.} xywh {363 421 65 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 textsize 12
+                } {
+                  MenuItem {} {
+                    label 8
+                    xywh {0 0 30 20}
+                  }
+                  MenuItem {} {
+                    label 16
+                    xywh {10 10 30 20}
+                  }
+                  MenuItem {} {
+                    label 32
+                    xywh {20 20 30 20}
+                  }
+                  MenuItem {} {
+                    label 64
+                    xywh {30 30 30 20}
+                  }
                 }
               }
             }
-            Fl_Group guiAdvanced {
+            Fl_Group guiAdvanced {open
               xywh {206 318 240 140} hide
             } {
               Fl_Check_Browser guiAdvList {
@@ -1107,28 +1116,37 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               } {
                 Fl_Value_Input guiAdvRadiusX {
                   label X
-                  xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
+                  xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
                 }
                 Fl_Value_Input guiAdvRadiusY {
                   label Y
-                  xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
+                  xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
                 }
               }
               Fl_Group {} {
-                label Histo open
+                label {Quantization levels} open
                 xywh {324 405 120 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
-                Fl_Value_Input guiAdvMin {
-                  label Min
-                  tooltip {Image minimum value.} xywh {355 410 40 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
-                }
-                Fl_Value_Input guiAdvMax {
-                  label Max
-                  tooltip {Image maximum value.} xywh {354 433 40 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 step 1 value 2
-                }
-                Fl_Value_Input guiAdvBin {
-                  label Bin
-                  tooltip {Histogram bin size.} xywh {399 430 41 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 align 1 minimum 1 step 1 value 2
+                Fl_Input_Choice guiAdvBin {
+                  label Bin open selected
+                  tooltip {Histogram bin size.} xywh {363 421 65 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 textsize 12
+                } {
+                  MenuItem {} {
+                    label 8
+                    xywh {10 10 30 20}
+                  }
+                  MenuItem {} {
+                    label 16
+                    xywh {20 20 30 20}
+                  }
+                  MenuItem {} {
+                    label 32
+                    xywh {30 30 30 20}
+                  }
+                  MenuItem {} {
+                    label 64
+                    xywh {40 40 30 20}
+                  }
                 }
               }
             }
