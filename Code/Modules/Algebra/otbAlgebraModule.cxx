@@ -173,6 +173,8 @@ void AlgebraModule::Run()
       iSecondImage->deactivate();
       // Set the operation to shift-scale
       guiOperation->value(4);
+      // Display the shift scale group
+      guiShiftScaleGroup->show();
     }
 }
 

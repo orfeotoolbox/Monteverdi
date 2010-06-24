@@ -155,6 +155,21 @@ public:
   itkGetStringMacro(Description);
   itkGetStringMacro(MatrixString);
   
+  itkGetStringMacro(ClassKey);
+  void SetClassKey(std::string key)
+  {
+    otbMsgDevMacro( << "Setting the key to " << key);
+    m_ClassKey = key;
+    this->UpdateVectorDataInformation();
+    this->UpdateDescription();
+  }
+
+  //itkGetConstMacro(ClassKeyList, std::vector<std::string>);
+  std::vector<std::string> GetClassKeyList() const
+    {
+    return m_ClassKeyList;
+    }
+
   /** Update Output */
   void Ok();
 
@@ -202,6 +217,8 @@ private:
   double                                      m_ValidationTrainingProportion;
 
   std::string                                 m_ClassKey;
+  std::vector<std::string>                    m_ClassKeyList;
+
 
   // computed from the vector data
   long int                                    m_ClassMinSize;//this is the size of the smallest class

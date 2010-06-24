@@ -22,6 +22,9 @@
 #include "otbModule.h"
 // include the GUI
 #include "otbWriterModuleGUI.h"
+
+#include "otbPixelType.h"
+
 // include the OTB elements
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
@@ -57,13 +60,17 @@ public:
   /** OTB typedefs */
   typedef otb::Image<unsigned char>        UCharImageType;
   typedef otb::Image<unsigned short>       UShortImageType;
+  typedef otb::Image<short>                ShortImageType;
   typedef otb::Image<unsigned int>         UIntImageType;
+  typedef otb::Image<int>                  IntImageType;
   typedef otb::Image<float>                FloatImageType;
   typedef otb::Image<double>               DoubleImageType;
 
   typedef otb::VectorImage<unsigned char>  UCharVectorImageType;
   typedef otb::VectorImage<unsigned short> UShortVectorImageType;
+  typedef otb::VectorImage<short>          ShortVectorImageType;
   typedef otb::VectorImage<unsigned int>   UIntVectorImageType;
+  typedef otb::VectorImage<int>            IntVectorImageType;
   typedef otb::VectorImage<float>          FloatVectorImageType;
   typedef otb::VectorImage<double>         DoubleVectorImageType;
 
@@ -126,6 +133,66 @@ private:
     writer->Update();
   }
 
+
+  template <typename TInputImage>
+  void DoWriteSingleBand(TInputImage* image, PixelType pixType)
+  {
+    switch (pixType) {
+    case otb::UNSIGNEDCHAR:
+      this->DoWrite<TInputImage, UCharImageType> (image);
+      break;
+    case otb::SHORTINT:
+      this->DoWrite<TInputImage, ShortImageType> (image);
+      break;
+    case otb::INT:
+      this->DoWrite<TInputImage, IntImageType> (image);
+      break;
+    case otb::FLOAT:
+      this->DoWrite<TInputImage, FloatImageType> (image);
+      break;
+    case otb::DOUBLE:
+      this->DoWrite<TInputImage, DoubleImageType> (image);
+      break;
+    case otb::UNSIGNEDSHORTINT:
+      this->DoWrite<TInputImage, UShortImageType> (image);
+      break;
+    case otb::UNSIGNEDINT:
+      this->DoWrite<TInputImage, UIntImageType> (image);
+      break;
+    default:
+      break;
+    }
+  }
+
+  template <typename TInputImage>
+  void DoWriteMultiBand(TInputImage* image, PixelType pixType)
+  {
+    switch (pixType) {
+    case otb::UNSIGNEDCHAR:
+      this->DoWrite<TInputImage, UCharVectorImageType> (image);
+      break;
+    case otb::SHORTINT:
+      this->DoWrite<TInputImage, ShortVectorImageType> (image);
+      break;
+    case otb::INT:
+      this->DoWrite<TInputImage, IntVectorImageType> (image);
+      break;
+    case otb::FLOAT:
+      this->DoWrite<TInputImage, FloatVectorImageType> (image);
+      break;
+    case otb::DOUBLE:
+      this->DoWrite<TInputImage, DoubleVectorImageType> (image);
+      break;
+    case otb::UNSIGNEDSHORTINT:
+      this->DoWrite<TInputImage, UShortVectorImageType> (image);
+      break;
+    case otb::UNSIGNEDINT:
+      this->DoWrite<TInputImage, UIntVectorImageType> (image);
+      break;
+    default:
+      break;
+    }
+  }
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
   
@@ -135,19 +202,8 @@ private:
   //file name
   std::string m_Filename;
 
-  //autoscale
-  bool m_AutoScale;
 
-  typedef enum
-  {
-    UCHAR,
-    USHORT,
-    UINT,
-    FLOAT,
-    DOUBLE
-  } OutputFormat;
-
-  std::map<OutputFormat, std::string> m_OutputTypesChoices;
+  std::map<otb::PixelType, std::string> m_OutputTypesChoices;
 };
 
 

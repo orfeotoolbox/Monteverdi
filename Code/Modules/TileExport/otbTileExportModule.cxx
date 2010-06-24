@@ -42,6 +42,12 @@ TileExportModule::TileExportModule(): m_Logo(NULL), m_LogoFilename(),
   this->AddInputDescriptor<FloatingVectorImageType>("InputLegend",otbGetTextMacro("Input Legend"),true,true);
   this->AddInputDescriptor<FloatingVectorImageType>("InputLogo",otbGetTextMacro("Input Logos"), true);
 
+  // Initialize some values
+  m_UpperLeftCorner.Fill(1000.);
+  m_UpperRightCorner.Fill(1000.);	      
+  m_LowerLeftCorner.Fill(1000.);	          
+  m_LowerRightCorner.Fill(1000.);	      
+
   // Build the GUI
   this->BuildGUI();
 }
@@ -118,10 +124,10 @@ void TileExportModule::Run()
     newProduct.m_Name = cuttenName;
     newProduct.m_Description = "Image Product";
 
-    // Activate or not the Geo group 
-    if(!this->IsProductHaveMetaData(i))
+    // Activate or not the Geo group
+    if(!this->IsProductHaveMetaData(i) && gExtended->value())
       {
-      vGELatLongBoxGroup->activate();
+      vgxGELatLongBoxGroup->activate();
       }
 
     // Get the current input
@@ -925,12 +931,27 @@ AddNetworkLinkToRootKML(double north, double south, double east, double west, st
     m_RootKmlFile <<"\t\t\t\t<Icon>"<< std::endl; 
     m_RootKmlFile <<"\t\t\t\t\t<href>"<<directory<<"/0.jpg"<<"</href>"<<std::endl; 
     m_RootKmlFile <<"\t\t\t\t</Icon>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t<LatLonBox>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<north>"<<north<<"</north>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<south>"<<south<<"</south>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<east>"<<east<<"</east>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t\t<west>"<<west<<"</west>"<<std::endl;
-    m_RootKmlFile <<"\t\t\t\t</LatLonBox>"<<std::endl;
+
+    if(!gExtended->value())
+      {
+      m_RootKmlFile <<"\t\t\t\t<LatLonBox>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<north>"<<north<<"</north>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<south>"<<south<<"</south>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<east>"<<east<<"</east>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t\t<west>"<<west<<"</west>"<<std::endl;
+      m_RootKmlFile <<"\t\t\t\t</LatLonBox>"<<std::endl;
+      }
+    else
+      {
+      m_RootKmlFile << "\t\t\t<gx:LatLonQuad>" << std::endl;
+      m_RootKmlFile << "\t\t\t\t<coordinates>" << std::endl;
+      m_RootKmlFile << " " << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1];
+      m_RootKmlFile << " " << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1];
+      m_RootKmlFile << " " << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1];
+      m_RootKmlFile << " " << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
+      m_RootKmlFile << "\t\t\t\t</coordinates>" << std::endl;
+      m_RootKmlFile << "\t\t\t</gx:LatLonQuad>" << std::endl;
+      }
     m_RootKmlFile <<"\t\t\t</GroundOverlay>"<< std::endl; 
     }
   
@@ -1019,11 +1040,34 @@ GenerateBoundingKML(double north, double south, double east, double west)
   fileTest << "\t\t\t<tessellate>1</tessellate>" << std::endl;
   fileTest << "\t\t\t<altitudeMode>clampedToGround</altitudeMode>" << std::endl;
   fileTest << "\t\t\t<coordinates>" << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
-  fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
-  fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
-  fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+
+  if(this->IsProductHaveMetaData(m_CurrentProduct))
+    {
+    fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
+    fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
+    fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
+    fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
+    fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+    }
+  else
+    {
+    if(!gExtended->value())
+      {
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< north << std::endl;
+      fileTest << "\t\t\t\t\t" <<  east<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west<< ","<< south << std::endl;
+      fileTest << "\t\t\t\t\t" <<  west <<","<< north << std::endl;
+      }
+    else
+      {
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerRightCorner[0] << "," << m_LowerRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperRightCorner[0] << "," << m_UpperRightCorner[1] << std::endl;
+      fileTest << "\t\t\t\t\t" << m_UpperLeftCorner[0]  << "," << m_UpperRightCorner[1]  << std::endl;
+      fileTest << "\t\t\t\t\t" << m_LowerLeftCorner[0]  << "," << m_LowerLeftCorner[1] << std::endl;
+      }
+    }
   fileTest << "\t\t\t</coordinates>" << std::endl;
   fileTest << "\t\t</LineString>" << std::endl;
   fileTest << "\t\t</Placemark>" << std::endl;
@@ -1745,21 +1789,53 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
   // Get the values selected by the user
   double north, south, east, west;
   
-  if(vcl_abs(m_ProductVector[curIdx].m_CornerList[0]-1000.)>1e-15 && 
-     vcl_abs(m_ProductVector[curIdx].m_CornerList[1]-1000.)>1e-15 && 
-     vcl_abs(m_ProductVector[curIdx].m_CornerList[2]-1000.)>1e-15 && 
-     vcl_abs(m_ProductVector[curIdx].m_CornerList[3]-1000.)>1e-15)
+  if(!gExtended->value())
     {
-    // Get the corners values
-    north = m_ProductVector[curIdx].m_CornerList[1];
-    south = m_ProductVector[curIdx].m_CornerList[3];
-    east  = m_ProductVector[curIdx].m_CornerList[0];
-    west  = m_ProductVector[curIdx].m_CornerList[2];
+    if(vcl_abs(m_ProductVector[curIdx].m_CornerList[0]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[1]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[2]-1000.)>1e-15 && 
+       vcl_abs(m_ProductVector[curIdx].m_CornerList[3]-1000.)>1e-15)
+      {
+      // Get the corners values
+      north = m_ProductVector[curIdx].m_CornerList[1];
+      south = m_ProductVector[curIdx].m_CornerList[3];
+      east  = m_ProductVector[curIdx].m_CornerList[0];
+      west  = m_ProductVector[curIdx].m_CornerList[2];
+      }
+    else
+      {
+      itkExceptionMacro(<<"Product "<<m_ProductVector[curIdx].m_Name<<" have no geographical informations, please set the upper left and lower right corners coordinates");
+      }
     }
-  else
+  
+  // The other case : extended mode
+  if(gExtended->value())
     {
-    itkExceptionMacro(<<"Product "<<m_ProductVector[curIdx].m_Name<<" have no geographical informations, please set the upper left and lower right corners coordinates");
+    // A trick to see if all the value have been updated
+    // Since all the corners are initialized with 1000.
+    // and are updated if value edited in the GUI changed, 
+    // this comparaison did the trick
+    if(vcl_abs(m_UpperLeftCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_UpperLeftCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_UpperRightCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_UpperRightCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_LowerLeftCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_LowerLeftCorner[1]-1000.)>1e-15 && 
+       vcl_abs(m_LowerRightCorner[0]-1000.)>1e-15 && 
+       vcl_abs(m_LowerRightCorner[1]-1000.)>1e-15
+      )
+      { 
+      north = m_UpperLeftCorner[1];
+      south = m_LowerLeftCorner[1];
+      west  = m_UpperLeftCorner[0];
+      east  = m_UpperRightCorner[0];
+      }
+    else
+      {
+      itkExceptionMacro(<<"Product "<<m_ProductVector[curIdx].m_Name<<" have no geographical informations, please set all the coordinates");
+      }
     }
+  
 
   // Add the headers and the basic stuffs in the kml only once.
   if(curIdx == 0)
@@ -1802,7 +1878,7 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
 
 
 /** 
-  * Change product name
+  * Update Product Information
   */
 void 
 TileExportModule::UpdateProductInformations()
@@ -1823,15 +1899,63 @@ TileExportModule::UpdateProductInformations()
   // If non geo Product, Fill the corners 
   if(!IsProductHaveMetaData(indexClicked))
     {
-    if(vGELongUL->value()) m_ProductVector[indexClicked].m_CornerList[0] = vGELongUL->value();
-    if(vGELatUL->value())  m_ProductVector[indexClicked].m_CornerList[1] = vGELatUL->value();
-    if(vGELongLR->value()) m_ProductVector[indexClicked].m_CornerList[2] = vGELongLR->value();
-    if(vGELatLR->value())  m_ProductVector[indexClicked].m_CornerList[3] = vGELatLR->value();
+    // The case we export the product in a GX:LatLong box
+    if(gExtended->value())
+      {
+      if(vgxGELongUL->value()) m_UpperLeftCorner[0]  = vgxGELongUL->value();
+      if(vgxGELatUL->value())  m_UpperLeftCorner[1]  = vgxGELatUL->value();
+      
+      if(vgxGELongUR->value()) m_UpperRightCorner[0] = vgxGELongUR->value();
+      if(vgxGELatUR->value())  m_UpperRightCorner[1] = vgxGELatUR->value();      
+
+      if(vgxGELongLL->value()) m_LowerLeftCorner[0]  = vgxGELongLL->value();
+      if(vgxGELatLL->value())  m_LowerLeftCorner[1]  = vgxGELatLL->value();
+      
+      if(vgxGELongLR->value()) m_LowerRightCorner[0] = vgxGELongLR->value();
+      if(vgxGELatLR->value())  m_LowerRightCorner[1] = vgxGELatLR->value();      
+      }
+    else
+      {
+      if(vGELongUL->value()) m_ProductVector[indexClicked].m_CornerList[0] = vGELongUL->value();
+      if(vGELatUL->value())  m_ProductVector[indexClicked].m_CornerList[1] = vGELatUL->value();
+      if(vGELongLR->value()) m_ProductVector[indexClicked].m_CornerList[2] = vGELongLR->value();
+      if(vGELatLR->value())  m_ProductVector[indexClicked].m_CornerList[3] = vGELatLR->value();
+      }
+    }
+}
+
+
+/**
+ * CallBack to handle the coordinate group 
+ */
+void 
+TileExportModule::HandleCornersGroup()
+{
+  // Case 1 : Product geo : don't show the group
+  if(this->IsProductHaveMetaData(0))
+    {
+    vgxGELatLongBoxGroup->deactivate();
+    vGELatLongBoxGroup->hide();
     }
   
-  // Show the new informations
-  this->ShowClickedProductInformation();
+  // Case 2 : Product non geo : Depends on the extend button
+  if(!this->IsProductHaveMetaData(0))
+    {
+    if(gExtended->value())
+      {
+      vGELatLongBoxGroup->hide();
+      vgxGELatLongBoxGroup->show();
+      }
+    else
+      {
+      vGELatLongBoxGroup->show();
+      vgxGELatLongBoxGroup->hide();
+      }
+    }
 }
+
+
+
 
 } // End namespace otb
 

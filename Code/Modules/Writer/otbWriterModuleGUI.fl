@@ -38,10 +38,6 @@ class WriterModuleGUI {open
         label {Output Data Type} open
         xywh {135 65 120 20} down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
       } {}
-      Fl_Check_Button bAutoScale {
-        label AutoScale
-        xywh {135 95 20 15} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4
-      }
     }
   }
   Function {SaveDataSet()} {open return_type {virtual void}

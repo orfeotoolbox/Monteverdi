@@ -73,6 +73,8 @@ SupervisedClassificationView
   slMaxTraining->value(m_Controller->GetModel()->GetMaxTrainingSize());
   slMaxValidation->value(m_Controller->GetModel()->GetMaxValidationSize());
 
+  icClassKey->clear();
+
   // Show
   this->Show();
 }
@@ -142,6 +144,13 @@ SupervisedClassificationView
 
 void
 SupervisedClassificationView
+::SetClassKey(const char * key)
+{
+  m_Controller->SetClassKey(key);
+}
+
+void
+SupervisedClassificationView
 ::Notify()
 {
   slMaxTraining->maximum(m_Controller->GetModel()->GetClassMinSize());
@@ -149,6 +158,13 @@ SupervisedClassificationView
 
   tDescription->buffer()->text(m_Controller->GetModel()->GetDescription());
   tConfusionMatrix->buffer()->text(m_Controller->GetModel()->GetMatrixString());
+
+  std::vector<std::string> classKeyList =  m_Controller->GetModel()->GetClassKeyList();
+  for (unsigned int i = 0; i < classKeyList.size(); ++i)
+  {
+    icClassKey->add(classKeyList[i].c_str());
+  }
+  icClassKey->value(m_Controller->GetModel()->GetClassKey());
 }
 
 }

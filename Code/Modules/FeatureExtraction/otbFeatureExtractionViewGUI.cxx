@@ -55,6 +55,7 @@ FeatureExtractionViewGUI
   m_SelectedPixel.Fill(0);
   m_FeatureExtractPreviewParentBrowser = -1;
   this->InitParameterGroupList();
+  this->InitTextureLists();
 
 }
 
@@ -126,9 +127,37 @@ FeatureExtractionViewGUI
   m_ParameterGroupList.push_back(guiSFS);
   m_ParameterGroupList.push_back(guiEdgeSobel);
   m_ParameterGroupList.push_back(guiMS);
+  m_ParameterGroupList.push_back(guiHaralick);
+  m_ParameterGroupList.push_back(guiAdvanced);
   // for original data, uses guiNothing, ie.m_ParameterGroupList[0]
   //m_ParameterGroupList.push_back(guiEdgeCanny);
 
+}
+
+void
+FeatureExtractionViewGUI
+::InitTextureLists()
+{
+  guiHarList->add("Energy", 1);
+  guiHarList->add("Entropy", 2);
+  guiHarList->add("Correlation", 3);
+  guiHarList->add("Inverse dif. moment", 4);
+  guiHarList->add("Inertia", 5);
+  guiHarList->add("Cluster Prominence", 6);
+  guiHarList->add("Cluster Shade", 7);
+  guiHarList->add("Haralick Correlation", 8);
+  guiHarList->redraw();
+
+  guiAdvList->add("Variance", 1);
+  guiAdvList->add("Sum average", 2);
+  guiAdvList->add("Sum variance", 3);
+  guiAdvList->add("Sum entropy", 4);
+  guiAdvList->add("Difference entropy", 5);
+  guiAdvList->add("Diffifference variance", 6);
+  guiAdvList->add("Infrmation. Correlation 1", 7);
+  guiAdvList->add("Information Correlation 2", 8);
+  guiAdvList->redraw();
+  
 }
 
 void
@@ -137,6 +166,7 @@ FeatureExtractionViewGUI
 {
   for(unsigned int i=0; i<m_ParameterGroupList.size(); i++)
     m_ParameterGroupList[i]->hide();
+
   m_ParameterGroupList[groupId]->show();
   if(m_ParameterGroupList[groupId]==guiSpectAngle)
     {

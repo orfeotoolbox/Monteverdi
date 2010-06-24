@@ -23,7 +23,6 @@
 
 #include "otbImageFileWriter.h"
 
-#include "otbStreamingImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
@@ -125,7 +124,11 @@ WriterModel
 
   // Render
   m_VisuModel->Update();
-  
+
+  // keep a reference to the histogram list, to handle UseScale
+  m_HistogramList = lVisuGenerator->GetLayer()->GetHistogramList();
+
+
   // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
@@ -170,15 +173,6 @@ WriterModel
       {
         this->AddChannel(chList[i]);
       }
-      else
-      {
-        if (chList[i] ==  m_NumberOfChannels+1)
-        {
-          this->AddIntensityChannel();
-        }
-        else
-          return;
-      }
     }
   }
 }
@@ -202,24 +196,12 @@ WriterModel
   m_OutputChannelsInformation.push_back(oss.str());
 }
 
-void
-WriterModel
-::AddIntensityChannel()
-{
-  m_IntensityFilter->SetInput( m_InputImage );
-  m_IntensityFilter->GetOutput()->UpdateOutputInformation();
-  this->AddInputImage( m_IntensityFilter->GetOutput() );
-  m_OutputChannelsInformation.push_back("Int.");
-}
-
 
 void
 WriterModel
 ::AddFeature()
 {
-//   for (unsigned int i=0;i<m_NumberOfChannels;++i)
-  //test manu
-  for (unsigned int i=0;i<m_NumberOfChannels+1;++i)
+  for (unsigned int i=0;i<m_NumberOfChannels;++i)
   {
     m_OutputIndexMap.push_back(0);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
@@ -229,7 +211,7 @@ WriterModel
 
 void
 WriterModel
-::ThreadedGenerateOutputImage(const std::string & fname, const unsigned int pType, const bool useScale)
+::ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);
@@ -252,6 +234,8 @@ WriterModel
     itkExceptionMacro("Impossible to create output image : no image image selected.");
   if( m_OutputListOrder.size() == 0 )
     itkExceptionMacro("Impossible to create output image : no feature selected.");
+
+  //m_VisuModel->GetLayer(0)->
 
   for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
   {
@@ -322,7 +306,7 @@ template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
     typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
-    typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
+    typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
     
     typename CastWriterType::Pointer writer=CastWriterType::New();
     
@@ -332,16 +316,35 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 
     if ( this->GetUseScale() )
     {
-      m_iL2VI->SetInput( m_imageList );
-      
+      typedef ImageListToVectorImageFilter< ImageListType, InputImageType >               ImageListToVectorImageFilterType;
       typedef otb::VectorRescaleIntensityImageFilter<InputImageType, CastOutputImageType> RescalerType;
-      
-      m_iL2VI->UpdateOutputInformation();
-      
-      typename OutputImageType::PixelType minimum;
-      typename OutputImageType::PixelType maximum;
-      minimum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
-      maximum.SetSize(m_iL2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+
+      typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
+      i2VI->SetInput( m_imageList );
+      i2VI->UpdateOutputInformation();
+
+      typedef typename InputImageType::PixelType InputPixelType;
+      typedef typename InputImageType::InternalPixelType InputInternalPixelType;
+      InputPixelType inputMinimum;
+      InputPixelType inputMaximum;
+      inputMinimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      inputMaximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+
+      int i = 0;
+      typename HistogramListType::ConstIterator it;
+      for (it = m_HistogramList->Begin(); it != m_HistogramList->End(); ++it, ++i )
+        {
+        double iMin = it.Get()->Quantile(0, 0.02);
+        double iMax = it.Get()->Quantile(0, 0.98);
+        inputMinimum[ m_OutputListOrder[i] ] = static_cast<InputInternalPixelType>(iMin);
+        inputMaximum[ m_OutputListOrder[i] ] = static_cast<InputInternalPixelType>(iMax);
+        }
+
+      typedef typename OutputImageType::PixelType OutputPixelType;
+      OutputPixelType minimum;
+      OutputPixelType maximum;
+      minimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+      maximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
       minimum.Fill(itk::NumericTraits<CastOutputPixelType>::min());
       maximum.Fill(itk::NumericTraits<CastOutputPixelType>::max());
 
@@ -350,10 +353,8 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       rescaler->SetOutputMinimum(minimum);
       rescaler->SetOutputMaximum(maximum);
 
-      rescaler->SetInput(m_iL2VI->GetOutput());
+      rescaler->SetInput(i2VI->GetOutput());
       writer->SetInput(rescaler->GetOutput());
-
-      otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
 
       try
       {
@@ -369,11 +370,11 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
     }
     else
     {
-      typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToCastVectorImageFilterType;
-      typename ImageListToCastVectorImageFilterType::Pointer i2CastVI = ImageListToCastVectorImageFilterType::New();
-      i2CastVI->SetInput( m_imageList );
+      typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToVectorImageFilterType;
+      typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
+      i2VI->SetInput( m_imageList );
       
-      writer->SetInput(i2CastVI->GetOutput());
+      writer->SetInput(i2VI->GetOutput());
       
       try
       {

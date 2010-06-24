@@ -219,7 +219,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Latitude> not found): "<<fname);
          }
-       p3d[0] = atof(currentElement->GetText());
+       p3d[1] = atof(currentElement->GetText());
 
        // Decode gcp longitude
        currentElement = currentGcp->FirstChildElement("Longitude");
@@ -227,7 +227,7 @@ void GCPToSensorModelModel
          {
          itkExceptionMacro(<<"Bad XML file (<Longitude> not found): "<<fname);
          }
-       p3d[1] = atof(currentElement->GetText());
+       p3d[0] = atof(currentElement->GetText());
 
        // Decode gcp elevation
        currentElement = currentGcp->FirstChildElement("Elevation");
@@ -284,14 +284,14 @@ void GCPToSensorModelModel
       // Store the latitude
       TiXmlElement * latitude = new TiXmlElement( "Latitude" );
       oss.str("");
-      oss<<m_GCPsContainer[i].second[0];
+      oss<<m_GCPsContainer[i].second[1];
       latitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(latitude);
 
       // Store the longitude
       TiXmlElement * longitude = new TiXmlElement( "Longitude" );
       oss.str("");
-      oss<<m_GCPsContainer[i].second[1];
+      oss<<m_GCPsContainer[i].second[0];
       longitude->LinkEndChild(new TiXmlText(oss.str().c_str()));
       currentGCP->LinkEndChild(longitude);
 

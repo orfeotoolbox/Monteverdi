@@ -161,7 +161,7 @@ protected:
 
 
   void InitParameterGroupList();
-
+  void InitTextureLists();
 
 private:
   FeatureExtractionViewGUI(const Self&); //purposely not implemented

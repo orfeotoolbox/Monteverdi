@@ -212,9 +212,23 @@ void
 SupervisedClassificationModel
 ::UpdateVectorDataInformation()
 {
+
   m_SampleGenerator->SetMaxTrainingSize(m_MaxTrainingSize);
   m_SampleGenerator->SetMaxValidationSize(m_MaxValidationSize);
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
+
+  VectorDataType::DataTreeType::TreeNodeType::ConstPointer node = m_VectorROIs->GetDataTree()->GetRoot();
+  //Go down the vector data tree until we reach a leaf
+  while (node->HasChildren())
+    {
+    node = node->GetChild(0);
+    }
+  m_ClassKeyList = node->Get()->GetFieldList();
+  if ((!node->Get()->HasField(m_ClassKey)) && (m_ClassKeyList.size() > 0))
+  {
+    m_ClassKey = m_ClassKeyList[0];
+  }
+
   m_SampleGenerator->SetClassKey(m_ClassKey);
 
   otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);

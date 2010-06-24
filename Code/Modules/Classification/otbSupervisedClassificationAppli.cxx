@@ -129,6 +129,7 @@ SupervisedClassificationAppli
   bSaveSVMModel->deactivate();
   bVisualisationSetup->deactivate();
   bDisplay->deactivate();
+  bEraseLastPoint->deactivate();
 }
 
 /**
@@ -254,7 +255,6 @@ SupervisedClassificationAppli
   bTrainingSet->activate();
   bValidationSet->activate();
   bLearn->activate();
-  bEraseLastPoint->activate();
   bEraseLastROI->activate();
   bClearROIs->activate();
   bEndPolygon->activate();
@@ -937,9 +937,12 @@ SupervisedClassificationAppli
   m_ImageViewer->AddROIColorMapEntry(m_CurrentLabel,color);
   ++m_CurrentLabel;
 
+  bEraseLastPoint->activate();
+
   this->ResetClassification();
   this->ClassSelected();
   this->UsePolygon();
+
 }
 
 /**
@@ -1087,8 +1090,8 @@ SupervisedClassificationAppli
 
   int ClassROICounter = 0;
   unsigned int ROICounter = 0;
-   PolygonListType::Iterator it = polygonList->Begin();
-
+  PolygonListType::Iterator it = polygonList->Begin();
+ 
   while (it!=polygonList->End() && ClassROICounter < dROIList->value())
   {
     if (it.Get()->GetValue() == theClass->GetId())
@@ -1103,6 +1106,7 @@ SupervisedClassificationAppli
   {
     return -1;
   }
+
   return (ROICounter-1);
 }
 
@@ -1398,15 +1402,10 @@ SupervisedClassificationAppli
 :: EraseLastPoint()
 {
   ROIFocus();
-  int index = GetSelectedROI();
 
-  if (index<0)
+  if (static_cast<int>(m_ImageViewer->GetPolygonROIList()->Size())>0)//index)
   {
-    return;
-  }
-
-  if (static_cast<int>(m_ImageViewer->GetPolygonROIList()->Size())>index)
-  {
+    int index = m_ImageViewer->GetPolygonROIList()->Size()-1;
     unsigned int sizeOfThePolygon = m_ImageViewer->GetPolygonROIList()->GetNthElement(index)->GetVertexList()->Size();
     if (sizeOfThePolygon>0)
     {
@@ -1418,8 +1417,10 @@ SupervisedClassificationAppli
       list->pop_back();
     }
   }
-  this->Update();
-  this->ResetClassification();
+  else
+    return;
+
+  m_ImageViewer->Update();
 }
 
 /**

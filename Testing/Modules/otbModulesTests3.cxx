@@ -39,4 +39,5 @@ REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
 REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
 REGISTER_TEST(otbSertitProcessingTest);
 REGISTER_TEST(otbSertitProcessingTestNonGeoProduct);
+REGISTER_TEST(otbSertitProcessingTestNonGeoProductXT);
 }

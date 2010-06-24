@@ -62,10 +62,6 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(WriterViewGUI,itk::Object);
 
-
-  // Pixel type
-  typedef double PixelType;
-
   typedef WriterModel                                   WriterModelType;
   typedef WriterModel::InputImagePixelType              ModelInputPixelType;
   typedef WriterModelType::VisuModelType                VisuModelType;
@@ -80,7 +76,6 @@ public:
   typedef ImageType::Pointer                            ImagePointerType;
 
   typedef std::vector<std::string>                      StringVectorType;
-
 
   /** progress tmp */
   itkSetMacro(Progress, double);
@@ -136,14 +131,6 @@ public:
     m_InputOutputFeatureLink.push_back(i);
   };
 
-  void UpdateSelectedPixel(const IndexType & index);
-
-  ModelInputPixelType GetSelectedPixel() const
-  {
-    return m_SelectedPixel;
-  };
-
-  virtual void SetPixelType(PixelType i);
   virtual void ClearImage();
   
   virtual void InitFeatureOutputList();
@@ -198,7 +185,6 @@ private:
   StringVectorType          m_DisplayedLabelList;
   StringVectorType          m_UndisplayedLabelList;
   std::vector<bool>         m_DisplayStatusList;
-  PixelType                 m_PixelType;
   /** output/input feature list link. */
   std::vector<int>          m_InputOutputFeatureLink;
   int                       m_FeatureExtractPreviewParentBrowser;

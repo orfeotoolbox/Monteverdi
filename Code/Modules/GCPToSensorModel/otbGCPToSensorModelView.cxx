@@ -193,7 +193,7 @@ GCPToSensorModelView
   groundPoint = gcp.second;
 
   itk::OStringStream oss;
-  oss << sensorPoint << "\t->\t" << groundPoint << "\t\tError = " << error;
+  oss << sensorPoint << " -> " << groundPoint << " Error=" << error;
   
   this->lPointList->add(oss.str().c_str());
   
@@ -325,7 +325,7 @@ GCPToSensorModelView
   if (cfname == NULL)
   {
     otbMsgDebugMacro(<<"Empty directory!");
-    return ;
+    return;
   }
   
   std::string DEMfile = cfname;
@@ -507,7 +507,7 @@ GCPToSensorModelView
 
   if (fname == NULL)
     {
-    return ;
+    return;
     }
 
   m_Controller->ImportGcpsFromXmlFile(fname);
@@ -524,7 +524,7 @@ GCPToSensorModelView
 
     if (fname == NULL)
       {
-      return ;
+      return;
       }
 
     m_Controller->ExportGcpsToXmlFile(fname);

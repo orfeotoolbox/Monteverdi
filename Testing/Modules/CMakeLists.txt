@@ -281,6 +281,14 @@ ${TEMP}/haitiNonGeoReferencedProductExportation.kmz
 ${INPUTDATA}/Haiti_Jacmel.png
 )
 
+
+ADD_TEST(moTvSertitProcessingTestXtNonGeoProduct ${Modules_TESTS3}
+otbSertitProcessingTestNonGeoProductXT
+${TEMP}/haitiNonGeoReferencedProductExportationXT.kmz
+1
+${INPUTDATA}/Haiti1.jpeg
+)
+
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -342,6 +350,7 @@ otbSarCalibrationModuleTest.cxx
 otbSupervisedClassificationModelTest.cxx
 otbSertitProcessingTest.cxx
 otbSertitProcessingTestNonGeoProduct.cxx
+otbSertitProcessingTestNonGeoProductXT.cxx
 )
 
 IF(OTB_USE_CURL)
@@ -361,6 +370,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             ${Modules_SRCS}
             otbModulesTests.cxx
             otbMeanShiftApplication.cxx
+            otbObjectCountingApplication.cxx
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
@@ -389,6 +399,9 @@ ENDIF(OTB_USE_CURL)
 
 ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
 TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule otbReaderModule)
+
+ADD_EXECUTABLE(otbObjectCountingApplication otbObjectCountingApplication.cxx)
+TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCountingModule otbReaderModule)
 # CPack installation: only Monteverdi application
 #IF(NOT OTB_INSTALL_NO_LIBRARIES)
 #  INSTALL(TARGETS otbMeanShiftApplication
