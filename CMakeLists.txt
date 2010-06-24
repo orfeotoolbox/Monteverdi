@@ -312,19 +312,23 @@ SET(CPACK_PACKAGE_EXECUTABLES
 
 IF(WIN32 AND NOT UNIX)
 
-#Find gdal dll files
-GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
-
-#Find gdal dll files, localized in the GDAL_LIBRARY directory
-GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
-SET(GDAL_LIB_DIR "${GDAL_LIB_DIR}/" )
-INSTALL(DIRECTORY ${GDAL_LIB_DIR}
-        DESTINATION                 bin
-        FILES_MATCHING  PATTERN     "*.dll")
-
 SET(CPACK_NSIS_MODIFY_PATH ON)
-FIND_PATH(CPACK_OTB_DLL_PATH gdal16.dll gdal15.dll gdal13.dll)
+
+# Find path to GDAL DLL
+FIND_PATH(CPACK_OTB_DLL_PATH gdal16.dll)
 MARK_AS_ADVANCED(CPACK_OTB_DLL_PATH)
+
+# Install DLL needed by Monteverdi
+# This part is "OSGeo specific" because it makes assumption about the naming of the DLLs,
+# and the fact that they can all be found in the GDAL bin directory
+# It supposes that GDAL version is 1.6
+INSTALL(FILES ${CPACK_OTB_DLL_PATH}/gdal16.dll
+              ${CPACK_OTB_DLL_PATH}/libtiff.dll
+              ${CPACK_OTB_DLL_PATH}/geotiff.dll
+              ${CPACK_OTB_DLL_PATH}/jpeg_osgeo.dll
+              ${CPACK_OTB_DLL_PATH}/libcurl.dll
+        DESTINATION bin )
+
 
 ENDIF(WIN32 AND NOT UNIX)
 
