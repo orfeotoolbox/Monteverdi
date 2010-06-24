@@ -154,8 +154,6 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
-  model->RegisterModule<otb::ObjectCountingModule>("ObjectCounting", otbGetTextMacro("Filtering/Object counting"));
-
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
