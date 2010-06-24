@@ -35,6 +35,7 @@ AlgebraModule::AlgebraModule()
 
   // Build the GUI
   this->CreateGUI();
+  guiRatioInput2->value(1);
 }
 
 /**
@@ -91,10 +92,21 @@ void AlgebraModule::MultiplyImage()
  */
 void AlgebraModule::DivideImage()
 {
-  m_DivideFilter   = DivideFilterType::New();
-  m_DivideFilter->SetInput1(m_InputImage1);
-  m_DivideFilter->SetInput2(m_InputImage2);
-  m_Output = m_DivideFilter->GetOutput();
+ m_DivideFilter = DivideFilterType::New();
+ if(guiRatioInput1->value()==0)
+   {
+     std::cout<<"A/B"<<std::endl;
+     m_DivideFilter->SetInput1(m_InputImage1);
+     m_DivideFilter->SetInput2(m_InputImage2);
+    }
+ else
+    {
+      std::cout<<"B/A"<<std::endl;
+      m_DivideFilter->SetInput1(m_InputImage2);
+      m_DivideFilter->SetInput2(m_InputImage1);
+    }
+ 
+ m_Output = m_DivideFilter->GetOutput();
 }
 
 
@@ -173,8 +185,19 @@ void AlgebraModule::Run()
       iSecondImage->deactivate();
       // Set the operation to shift-scale
       guiOperation->value(4);
+      guiOperation->deactivate();
       // Display the shift scale group
       guiShiftScaleGroup->show();
+    }
+  else
+    {
+      iAdd->activate();
+      iSubtract->activate();
+      iMultiply->activate();
+      iRatio->activate();
+      iSecondImage->activate();
+      guiOperation->activate();
+      guiShiftScaleGroup->hide();
     }
 }
 
