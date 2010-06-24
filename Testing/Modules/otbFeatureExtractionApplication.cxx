@@ -36,7 +36,6 @@ int otbFeatureExtractionModuleApplication(int argc, char* argv[])
   ControllerType::Pointer controller = ControllerType::New();
   ModelType::Pointer      model      = ModelType::New();
 
-  view->SetFeatureExtractionModel(model);
   view->InitVisu();
   view->SetFeatureExtractionController(controller);
   
