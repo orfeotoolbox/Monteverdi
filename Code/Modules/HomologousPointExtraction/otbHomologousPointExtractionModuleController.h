@@ -157,6 +157,8 @@ public:
   virtual void Evaluate( IndexType id );
   virtual void OK();
 
+  ModelType* GetModel();
+
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( IndexType index, unsigned int viewId );
 

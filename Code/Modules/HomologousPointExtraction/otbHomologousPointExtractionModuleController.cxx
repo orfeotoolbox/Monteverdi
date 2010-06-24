@@ -96,6 +96,12 @@ HomologousPointExtractionModuleController
   MsgReporter::GetInstance()->Hide();
 }
 
+HomologousPointExtractionModuleControllerInterface::ModelType*
+HomologousPointExtractionModuleController::GetModel()
+{
+  return m_Model;
+}
+
 void
 HomologousPointExtractionModuleController
 ::SetModel(ModelType* model)

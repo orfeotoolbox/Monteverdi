@@ -64,8 +64,8 @@ public:
   virtual void Quit();
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,HomologousPointExtractionModuleControllerInterface);
-  itkGetObjectMacro(Controller,HomologousPointExtractionModuleControllerInterface);
+  void SetController(HomologousPointExtractionModuleControllerInterface*);
+  HomologousPointExtractionModuleControllerInterface* GetController();
 
   /** Set the widgets controller */
   itkSetObjectMacro(FirstWidgetsController,ImageWidgetController);
@@ -91,8 +91,6 @@ public:
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(FirstImageView,ImageViewType);
   itkGetObjectMacro(SecondImageView,ImageViewType);
-
-  void SetModel(HomologousPointExtractionModuleModel* model);
   
 protected:
   /** Constructor */
@@ -106,13 +104,15 @@ private:
   HomologousPointExtractionModuleView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  HomologousPointExtractionModuleModel* GetModel();
+
   /** Pointer to the controller */
   HomologousPointExtractionModuleControllerInterface::Pointer m_Controller;
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer                m_FirstWidgetsController;
   ImageWidgetController::Pointer                m_SecondWidgetsController;
   /** Pointer to the model */
-  HomologousPointExtractionModuleModel::Pointer m_Model;
+  //HomologousPointExtractionModuleModel::Pointer m_Model;
   /** Image view */
   ImageViewType::Pointer                        m_FirstImageView;
   ImageViewType::Pointer                        m_SecondImageView;

@@ -52,6 +52,8 @@ public:
   virtual void Evaluate( IndexType id ) =0;
   virtual void OK() =0;
 
+  virtual ModelType* GetModel() = 0;
+
   itkSetMacro(TransformationAvailable, bool);
   itkGetMacro(TransformationAvailable, bool);
 

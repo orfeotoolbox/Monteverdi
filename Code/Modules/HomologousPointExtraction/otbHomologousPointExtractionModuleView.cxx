@@ -28,12 +28,11 @@ namespace otb
 {
 
 HomologousPointExtractionModuleView
-::HomologousPointExtractionModuleView(): m_Controller(), m_Model(),
+::HomologousPointExtractionModuleView(): m_Controller(),
      m_FirstImageView(), m_SecondImageView(),
      m_FirstCrossGlComponent(), m_SecondCrossGlComponent(),
      m_FirstCircleGlComponent(), m_SecondCircleGlComponent()
 {
-  m_Model = HomologousPointExtractionModuleModel::New();
   m_FirstImageView = ImageViewType::New();
   m_SecondImageView = ImageViewType::New();
   m_FirstCrossGlComponent = CrossGlComponent::New();
@@ -71,12 +70,21 @@ HomologousPointExtractionModuleView
 
 void
 HomologousPointExtractionModuleView
-::SetModel(HomologousPointExtractionModuleModel* model)
+::SetController(HomologousPointExtractionModuleControllerInterface* controller)
 {
-  m_Model = model;
-  m_FirstImageView->SetModel(m_Model->GetVisualizationModel(0));
-  m_SecondImageView->SetModel(m_Model->GetVisualizationModel(1));
-  m_Model->RegisterListener(this);
+  m_Controller = controller;
+
+  m_FirstImageView->SetModel(GetModel()->GetVisualizationModel(0));
+  m_SecondImageView->SetModel(GetModel()->GetVisualizationModel(1));
+
+  GetModel()->RegisterListener(this);
+}
+
+HomologousPointExtractionModuleModel*
+HomologousPointExtractionModuleView
+::GetModel()
+{
+  return m_Controller->GetModel();
 }
 
 void
