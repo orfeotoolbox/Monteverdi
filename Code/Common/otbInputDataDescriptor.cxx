@@ -67,7 +67,7 @@ void InputDataDescriptor::AddSupportedType(const std::string & type)
   if(!IsTypeCompatible(type))
     {
     // If not, add the new type
-    m_DataType = m_DataType+','+type;
+    m_DataType = m_DataType+'|'+type;
     }
 }
 
@@ -75,7 +75,7 @@ void InputDataDescriptor::AddSupportedType(const std::string & type)
 bool InputDataDescriptor::IsTypeCompatible(const std::string & type) const
 {
   // Split the string into types substring
-  StringVectorType typesStringVector = SplitTypeName(m_DataType);
+  StringVectorType typesStringVector = SplitTypeName(m_DataType,'|');
 
   // Searh for the type in the vector
   StringVectorType::const_iterator it = std::find(typesStringVector.begin(),typesStringVector.end(),type);
