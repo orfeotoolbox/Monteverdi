@@ -18,6 +18,7 @@ See OTBCopyright.txt for details.
 #ifndef __otbObjectCountingModel_h
 #define __otbObjectCountingModel_h
 
+#include "otbTypeManager.h"
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
 #include "otbEventsSender.h"
@@ -102,8 +103,8 @@ class ITK_EXPORT ObjectCountingModel
 
 public:
   /** Standard class typedefs */
-  typedef ObjectCountingModel                         Self;
-  typedef MVCModel<ListenerBase> Superclass;
+  typedef ObjectCountingModel                            Self;
+  typedef MVCModel<ListenerBase>                         Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
@@ -118,20 +119,31 @@ public:
   typedef ImageToWorkType                     WhichImageType;
 
   /** Input image typedefs*/
-  typedef double                      PixelType;
-  typedef unsigned short                LabelPixelType;
-  typedef int                         IntLabelPixelType;
-  typedef Image<LabelPixelType, 2>    LabeledImageType;
-  typedef Image<IntLabelPixelType, 2> IntLabeledImageType;
-  typedef Image<PixelType, 2>         SingleImageType;
-  typedef VectorImage<PixelType, 2>   ImageType;
-  typedef ImageType::Pointer          ImagePointerType;
-  typedef ImageType::SizeType         SizeType;
-  typedef ImageType::PixelType        InputPixelType;
-  typedef ImageType::IndexType        IndexType;
-  typedef ImageType::RegionType       RegionType;
-  typedef ImageFileReader<ImageType>  ReaderType;
-  typedef ReaderType::Pointer         ReaderPointerType;
+  /*
+  typedef TypeManager::Floating_Point_Precision       PixelType;
+  typedef unsigned short                              LabelPixelType;
+  typedef int                                         IntLabelPixelType;
+  typedef Image<LabelPixelType, 2>                    LabeledImageType;
+  typedef Image<IntLabelPixelType, 2>                 IntLabeledImageType;
+  typedef Image<PixelType, 2>                         SingleImageType;
+  typedef TypeManager::Floating_Point_VectorImage     ImageType;
+  typedef ImageType::Pointer                          ImagePointerType;
+  */
+  typedef TypeManager::Floating_Point_Precision       PixelType;
+  typedef TypeManager::Label_Short_Precision          LabelPixelType;
+  typedef int                                         IntLabelPixelType;
+  typedef TypeManager::Labeled_Short_Image            LabeledImageType;
+  typedef Image<IntLabelPixelType,2>                  IntLabeledImageType;
+  typedef TypeManager::Floating_Point_Image           SingleImageType;
+  typedef TypeManager::Floating_Point_VectorImage     ImageType;
+
+  typedef ImageType::Pointer                          ImagePointerType;  
+  typedef ImageType::SizeType                         SizeType;
+  typedef ImageType::PixelType                        InputPixelType;
+  typedef ImageType::IndexType                        IndexType;
+  typedef ImageType::RegionType                       RegionType;
+  typedef ImageFileReader<ImageType>                  ReaderType;
+  typedef ReaderType::Pointer                         ReaderPointerType;
   
   //typedef ImageView<VisualizationModelType>            ImageViewType;
 
