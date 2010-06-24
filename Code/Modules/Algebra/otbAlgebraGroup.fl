@@ -11,7 +11,7 @@ class AlgebraGroup {open
   } {
     Fl_Window guiMainWindow {
       label {Band math module}
-      callback {this->Quit()} open selected
+      callback {this->Quit()} open
       xywh {275 432 350 290} type Double box UP_BOX color 53 selection_color 53 labelcolor 187 resizable visible
     } {
       Fl_Choice guiOperation {
@@ -81,8 +81,8 @@ guiShiftScaleGroup->show();}
         tooltip {Quit the viewer manager} xywh {130 244 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 55 selection_color 51 labelfont 1 labelcolor 186
       }
       Fl_Group guiRatioGroup {
-        label {Ratio A/B} open
-        xywh {25 106 300 120} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
+        label {Ratio A/B} open selected
+        xywh {25 106 300 120} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186 hide
       } {
         Fl_Choice guiRatioInput1 {
           label {A input} open
