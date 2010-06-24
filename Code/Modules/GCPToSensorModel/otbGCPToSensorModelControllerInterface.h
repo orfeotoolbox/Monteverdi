@@ -59,6 +59,8 @@ public:
   virtual void ExportGcpsToXmlFile(const char * fname) = 0;
   virtual void ImportGcpsFromXmlFile(const char * fname) = 0;
 
+  virtual ModelType* GetModel() = 0;
+
 protected:
   /** Constructor */
   GCPToSensorModelControllerInterface() {}

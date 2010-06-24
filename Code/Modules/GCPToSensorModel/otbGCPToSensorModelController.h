@@ -159,6 +159,8 @@ public:
   virtual void ExportGcpsToXmlFile(const char * fname) ;
   virtual void ImportGcpsFromXmlFile(const char * fname);
 
+  ModelType* GetModel();
+
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked( ContinuousIndexType index );
 

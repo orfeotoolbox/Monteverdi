@@ -101,6 +101,12 @@ GCPToSensorModelController
   m_GuessActionHandler->SetModel(m_Model);
 }
 
+GCPToSensorModelControllerInterface::ModelType*
+GCPToSensorModelController::GetModel()
+{
+  return m_Model;
+}
+
 void
 GCPToSensorModelController
 ::SetView(GCPToSensorModelView * view)

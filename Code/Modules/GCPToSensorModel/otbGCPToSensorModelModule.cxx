@@ -33,8 +33,9 @@ GCPToSensorModelModule::GCPToSensorModelModule()
 
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
+
   m_View->SetController(m_Controller);
-  m_View->SetModel(m_Model);
+  //m_View->SetModel(m_Model);
   m_View->SetWidgetController(m_Controller->GetWidgetController());
   m_View->SetMapWidgetController(m_Controller->GetMapWidgetController());
 

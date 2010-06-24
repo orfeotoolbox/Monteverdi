@@ -28,21 +28,16 @@ namespace otb
 {
 
 GCPToSensorModelView
-::GCPToSensorModelView() :  m_Controller(), m_WidgetController(), m_MapWidgetController(),
-                            m_Model(), m_ImageView(), m_MapView(), m_CrossGlComponent(),
-                            m_CircleGlComponent(), m_ColorList(), m_Green()
+::GCPToSensorModelView()
+  :  m_ImageView(ImageViewType::New()),
+     m_MapView(ImageViewType::New()),
+     m_CrossGlComponent(CrossGlComponent::New()),
+     m_CircleGlComponent(CircleGlComponent::New())
 {
-  m_ImageView = ImageViewType::New();
-  m_MapView = ImageViewType::New();
-  m_CrossGlComponent = CrossGlComponent::New();
-  m_CircleGlComponent = CircleGlComponent::New();
   m_Green.Fill(0);
   m_Green[1] = 1;
   m_Green[3] = 0.5;
-
-  m_ColorList.clear();
 }
-
 
 GCPToSensorModelView
 ::~GCPToSensorModelView()
@@ -63,15 +58,30 @@ GCPToSensorModelView
   gMFull->remove(m_MapView->GetFullWidget());
 }
 
+GCPToSensorModelModel*
+GCPToSensorModelView
+::GetModel()
+{
+  return m_Controller->GetModel();
+}
+
 void
 GCPToSensorModelView
-::SetModel(GCPToSensorModelModel* model)
+::SetController(GCPToSensorModelControllerInterface* controller)
 {
-  m_Model = model;
-  m_ImageView->SetModel(m_Model->GetVisualizationModel());
-  m_MapView->SetModel(m_Model->GetMapVisualizationModel());
-  
-  m_Model->RegisterListener(this);
+  m_Controller = controller;
+
+  m_ImageView->SetModel(GetModel()->GetVisualizationModel());
+  m_MapView->SetModel(GetModel()->GetMapVisualizationModel());
+
+  GetModel()->RegisterListener(this);
+}
+
+GCPToSensorModelControllerInterface*
+GCPToSensorModelView
+::GetController()
+{
+  return m_Controller;
 }
 
 void
@@ -362,15 +372,15 @@ GCPToSensorModelView
   
   // Get the GCPsContainer
   GCPsContainerType GCPsContainer;
-  GCPsContainer = m_Model->GetGCPsContainer();
+  GCPsContainer = GetModel()->GetGCPsContainer();
   
   // Get the error container
   ErrorsContainerType ErrorsContainer;
-  ErrorsContainer = m_Model->GetErrorsContainer();
+  ErrorsContainer = GetModel()->GetErrorsContainer();
   
   // Get the cross container
   CrossIndexesContainerType CrossIndexesContainer;
-  CrossIndexesContainer = m_Model->GetCrossIndexesContainer();
+  CrossIndexesContainer = GetModel()->GetCrossIndexesContainer();
   
   // Add point to list
   for(unsigned int i=0; i<GCPsContainer.size(); i++)
@@ -380,12 +390,12 @@ GCPToSensorModelView
   
   // Set the ground error
   std::ostringstream groundError;
-  groundError << m_Model->GetGroundError();
+  groundError << GetModel()->GetGroundError();
   tGroundError->value(groundError.str().c_str());
   
   // Set the mean error
   std::ostringstream meanError;
-  meanError << m_Model->GetMeanError();
+  meanError << GetModel()->GetMeanError();
   tMeanError->value(meanError.str().c_str());
 }
 
@@ -401,32 +411,32 @@ void
 GCPToSensorModelView
 ::Notify()
 {
-  if(m_Model->GetGCPsContainerHasChanged())
+  if(GetModel()->GetGCPsContainerHasChanged())
   {
     this->UpdateGCPView();
   }
-  if(m_Model->GetPlaceNameChanged())
+  if(GetModel()->GetPlaceNameChanged())
   {
-    std::string placename = m_Model->GetPlaceName();
+    std::string placename = GetModel()->GetPlaceName();
     vMPlaceName->value(placename.c_str());
   }
-  if(m_Model->GetLatLongChanged())
+  if(GetModel()->GetLatLongChanged())
   {
-    vMLatitude->value(m_Model->GetLatitude());
-    vMLongitude->value(m_Model->GetLongitude());
+    vMLatitude->value(GetModel()->GetLatitude());
+    vMLongitude->value(GetModel()->GetLongitude());
   }
-  if(m_Model->GetHasNewMap())
+  if(GetModel()->GetHasNewMap())
   {
     this->DrawMap();
   }
-  if(m_Model->GetDepthChanged())
+  if(GetModel()->GetDepthChanged())
   {
-    vMDepth->value(m_Model->GetDepth()-1);
+    vMDepth->value(GetModel()->GetDepth()-1);
   }
-  if(m_Model->GetSelectedPointChanged())
+  if(GetModel()->GetSelectedPointChanged())
   {
-    vLat->value(m_Model->GetSelectedLatitude());
-    vLong->value(m_Model->GetSelectedLongitude());
+    vLat->value(GetModel()->GetSelectedLatitude());
+    vLong->value(GetModel()->GetSelectedLongitude());
   }
 }
 

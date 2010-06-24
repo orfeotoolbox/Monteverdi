@@ -48,7 +48,6 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(GCPToSensorModelView,Object);
 
-
   typedef GCPToSensorModelModel::VisualizationModelType     VisualizationModelType;
   typedef GCPToSensorModelModel::RGBPixelType               PixelType;
   typedef GCPToSensorModelModel::IndexType                  IndexType;
@@ -70,8 +69,8 @@ public:
   virtual void Quit();
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,GCPToSensorModelControllerInterface);
-  itkGetObjectMacro(Controller,GCPToSensorModelControllerInterface);
+  void SetController(GCPToSensorModelControllerInterface*);
+  GCPToSensorModelControllerInterface* GetController();
 
   /** Set the widgets controller */
   itkSetObjectMacro(WidgetController,ImageWidgetController);
@@ -106,8 +105,6 @@ public:
   /** Get a pointer to the view parts for the controller */
   itkGetObjectMacro(ImageView,ImageViewType);
   itkGetObjectMacro(MapView,ImageViewType);
-
-  void SetModel(GCPToSensorModelModel* model);
   
 protected:
   /** Constructor */
@@ -123,6 +120,8 @@ private:
   
   void UpdateGCPView();
 
+  GCPToSensorModelModel* GetModel();
+
   /** Pointer to the controller */
   GCPToSensorModelControllerInterface::Pointer  m_Controller;
   /** Pointer to the widgets controller */
@@ -130,7 +129,7 @@ private:
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer                m_MapWidgetController;
   /** Pointer to the model */
-  GCPToSensorModelModel::Pointer                m_Model;
+  //GCPToSensorModelModel::Pointer                m_Model;
   /** Image view */
   ImageViewType::Pointer                        m_ImageView;
   ImageViewType::Pointer                        m_MapView;
