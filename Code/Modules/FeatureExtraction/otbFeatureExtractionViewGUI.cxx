@@ -83,6 +83,8 @@ FeatureExtractionViewGUI
   assert(m_FeatureExtractionController.IsNotNull() && "The controller is not created");
 
   this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
+  guiHarBin->value(0);
+  guiAdvBin->value(0);
   
   this->Show();
 }
@@ -149,8 +151,8 @@ FeatureExtractionViewGUI
   guiAdvList->add("Sum variance", 3);
   guiAdvList->add("Sum entropy", 4);
   guiAdvList->add("Difference entropy", 5);
-  guiAdvList->add("Diffifference variance", 6);
-  guiAdvList->add("Infrmation. Correlation 1", 7);
+  guiAdvList->add("Difference variance", 6);
+  guiAdvList->add("Information. Correlation 1", 7);
   guiAdvList->add("Information Correlation 2", 8);
   guiAdvList->redraw();
   
@@ -193,7 +195,7 @@ FeatureExtractionViewGUI
 {
   unsigned int OutputListNb = guiOutputFeatureList->value();
   if (OutputListNb>0)
-  {
+    {
     if(static_cast<unsigned int>(OutputListNb-1) <GetModel()->GetOutputListOrder().size() )
       GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
   }
@@ -435,17 +437,15 @@ FeatureExtractionViewGUI
   std::vector<unsigned int> ckeckedList(guiChannelSelection->nchecked(), 0);
   int j = 1;
   int count = 0;
-  while ( j<guiChannelSelection->nitems() || count<guiChannelSelection->nchecked() )
+  while ( j<=guiChannelSelection->nitems() && count<guiChannelSelection->nchecked() )
   {
-    if (guiChannelSelection->checked(j) == 1)
+    if (guiChannelSelection->checked(j) != 0)
     {
       ckeckedList[count] = j;
       count++;
     }
-
     j++;
   }
-
 
   m_FeatureExtractionController->AddInputChannels(ckeckedList);
 }

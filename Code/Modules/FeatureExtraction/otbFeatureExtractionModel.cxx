@@ -26,6 +26,8 @@
 #include "otbTextureFilterGenerator.h"
 #include "otbSFSTexturesGenerator.h"
 #include "otbEdgeDensityGenerator.h"
+#include "otbHaralickTexturesGenerator.h"
+
 
 namespace otb
 {
@@ -215,6 +217,7 @@ FeatureExtractionModel
   m_SelectedFilters.push_back(true);
   m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
 }
+
 
 void
 FeatureExtractionModel
@@ -417,19 +420,35 @@ FeatureExtractionModel
 ::AddTextureFilter( FeatureType featureType, SizeType radius, OffsetType offset )
 {
   for (unsigned int i = 0; i<m_InputImageList->Size(); i++)
-  {
-     TextureFilterGenerator generator;
-     generator.GenerateTextureFilter( this, featureType, i, radius, offset);
-  }
+    {
+      TextureFilterGenerator generator;
+      generator.GenerateTextureFilter( this, featureType, i, radius, offset);
+    }
 }
 
 void
 FeatureExtractionModel
 ::AddSFSTexturesFilter(FeatureType type, double spectralThr, unsigned int spatialThr, unsigned int nbDirection, double alpha, unsigned int ratioMaxConsNb)
 {
-     SFSTexturesGenerator lSFSTexturesGenerator;
-     lSFSTexturesGenerator.AddSFSTexturesFilter(this,type,spectralThr, spatialThr, nbDirection, alpha, ratioMaxConsNb);
+  SFSTexturesGenerator lSFSTexturesGenerator;
+  lSFSTexturesGenerator.AddSFSTexturesFilter(this,type,spectralThr, spatialThr, nbDirection, alpha, ratioMaxConsNb);
 }
+
+
+void
+FeatureExtractionModel
+::AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin)
+{
+  HaralickTexturesGenerator lHarTexturesGenerator;
+  lHarTexturesGenerator.AddHarTexturesFilter(this, harList, radius, offset, bin);
+}
+
+void
+FeatureExtractionModel
+::AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin)
+{
+}
+
 
 /** Radiometric Indices */
 /** RAndNIR */
@@ -685,6 +704,7 @@ FeatureExtractionModel
   TextureFilterGenerator featureGenerator;
   RadiometricIndicesGenerator lRadiometricIndicesGenrator;
   SFSTexturesGenerator lSFSTexturesGenerator;
+  HaralickTexturesGenerator lHarTexturesGenerator;
   EdgeDensityGenerator lEdgeDensityGenerator;
   SingleImagePointerType image = SingleImageType::New();
 
@@ -761,6 +781,18 @@ FeatureExtractionModel
       case FeatureInfo::TEXT_VAR:
       {
         image = featureGenerator.GenerateTextureOutputImage( this, m_FilterTypeList[i], i);
+        break;
+      }
+    case FeatureInfo::TEXT_HAR_ENERGY:
+    case FeatureInfo::TEXT_HAR_ENTROPY:
+    case FeatureInfo::TEXT_HAR_CORR:
+    case FeatureInfo::TEXT_HAR_INVDIFMO:
+    case FeatureInfo::TEXT_HAR_CLUSPRO:
+    case FeatureInfo::TEXT_HAR_CLUSHA:
+    case FeatureInfo::TEXT_HAR_HARCORR:
+    case FeatureInfo::TEXT_HAR_INERTIA:
+      {
+        image = lHarTexturesGenerator.GenerateHaralickTextureOutputImage( this, m_FilterTypeList[i], i);
         break;
       }
       case FeatureInfo::NDVI:

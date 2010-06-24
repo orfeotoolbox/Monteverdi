@@ -124,9 +124,15 @@ public:
   typedef FilterType::Pointer                                                FilterPointerType;
   typedef ObjectList<FilterType>                                             FilterListType;
   typedef FilterListType::Pointer                                            FilterListPointerType;
+  
+  /** Textures enumeration */
   typedef FeatureInfo::FeatureType                                           FeatureType;
   typedef std::vector<FeatureType>                                           FilterTypeListType;
   typedef std::vector<std::string>                                           OutputFilterInformationType;
+  typedef HaralickTexture::TextureType                                 HaralickTextureType;
+  typedef AdvancedTexture::TextureType                                 AdvancedTextureType;
+  typedef std::vector<HaralickTextureType>                             HaralickTextureVectorType;
+  typedef std::vector<AdvancedTextureType>                             AdvancedTextureVectorType;
 
   /** Concatenation typedef */
   typedef ImageList< SingleImageType >                                       ImageListType;
@@ -446,6 +452,12 @@ public:
 
   /** This have for aim to factorized the previous AddFunctions code*/
   void AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess);
+
+  /** Add Haralick testure */
+  void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
+
+  /** Add Haralick testure */
+  void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin);
 
   template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 

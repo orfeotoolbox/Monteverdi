@@ -392,6 +392,59 @@ FeatureExtractionController
       m_Model->AddTextureFilter(featureType, rad, off);
       break;
       }
+    case FeatureInfo::TEXT_HAR:
+      {
+	  std::cout<<"haralick"<<std::endl;
+        SizeType rad;
+	rad[0] = static_cast<unsigned int>(m_View->guiHarRadiusX->value());
+	rad[1] = static_cast<unsigned int>(m_View->guiHarRadiusY->value());
+	// set offset to be able to call the generic texture add filter
+	OffsetType off;
+	off[0] = static_cast<int>(m_View->guiHarOffsetX->value());
+	off[1] = static_cast<int>(m_View->guiHarOffsetY->value());
+	HaralickTextureVectorType harList;
+	harList = this->GetHaralickTextList();
+
+
+	unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiHarBin->value()));
+	std::cout<<"Offset :"<<off[0]<<"  "<<off[1]<<std::endl;
+	std::cout<<"Radius : "<<rad[0]<<"  "<<rad[1]<<std::endl;
+	std::cout<<"bin : "<<bin<<std::endl;
+	std::cout<<"list : "<<std::endl;
+	for(unsigned int i=0; i<harList.size(); i++)
+	  std::cout<<harList.at(i)<<"  ";
+	std::cout<<std::endl;
+
+	m_Model->AddHaralickTextureFilter(harList, rad, off, bin);
+	break;
+      }
+    case FeatureInfo::TEXT_ADV:
+      {
+ std::cout<<"advanced"<<std::endl;
+        SizeType rad;
+	rad[0] = static_cast<unsigned int>(m_View->guiAdvRadiusX->value());
+	rad[1] = static_cast<unsigned int>(m_View->guiAdvRadiusY->value());
+	// set offset to be able to call the generic texture add filter
+	OffsetType off;
+	off[0] = static_cast<int>(m_View->guiAdvOffsetX->value());
+	off[1] = static_cast<int>(m_View->guiAdvOffsetY->value());
+	AdvancedTextureVectorType advList;
+	advList = this->GetAdvancedTextList();
+
+	unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiAdvBin->value()));
+
+	std::cout<<"Offset :"<<off[0]<<"  "<<off[1]<<std::endl;
+	std::cout<<"Radius : "<<rad[0]<<"  "<<rad[1]<<std::endl;
+	std::cout<<"bin : "<<bin<<std::endl;
+	std::cout<<"list : "<<std::endl;
+	for(unsigned int i=0; i<advList.size(); i++)
+	  std::cout<<advList.at(i)<<"  ";
+	std::cout<<std::endl;
+
+	m_Model->AddAdvancedTextureFilter(advList, rad, off, bin);
+
+	break;
+      }
     case FeatureInfo::NDVI:
     case FeatureInfo::RVI:
     case FeatureInfo::GEMI:
@@ -624,6 +677,7 @@ FeatureExtractionController
     }
     default:
     {
+      std::cout<<"dafauuuuuuuuuuuuuuuuuuuuuult"<<std::endl;
       return;
     }
     }
@@ -647,6 +701,45 @@ FeatureExtractionController
   }
 }
 
+ FeatureExtractionController::HaralickTextureVectorType FeatureExtractionController::GetHaralickTextList()
+{
+  HaralickTextureVectorType harList(m_View->guiHarList->nchecked(), HaralickTexture::UNKNOWN);
+  int j = 1;
+  int count = 0;
+
+  while ( j<=m_View->guiHarList->nitems() && count<m_View->guiHarList->nchecked() )
+  {
+    if (m_View->guiHarList->checked(j) != 0)
+    {
+      harList[count] = HaralickTexture::FindTextureType(j-1);
+      count++;
+    }
+    j++;
+  }
+
+  return harList;
+}
+
+FeatureExtractionController::AdvancedTextureVectorType FeatureExtractionController::GetAdvancedTextList()
+{
+  AdvancedTextureVectorType advList(m_View->guiAdvList->nchecked(), AdvancedTexture::UNKNOWN);
+ 
+  int j = 1;
+  int count = 0;
+
+  while ( j<=m_View->guiAdvList->nitems() && count<m_View->guiAdvList->nchecked() )
+  {
+    if (m_View->guiAdvList->checked(j) != 0)
+    {
+      advList[count] = AdvancedTexture::FindTextureType(j-1);
+      count++;
+    }
+    j++;
+  }
+
+  return advList;
+}
+
 void FeatureExtractionController::Quit()
 {
   try
@@ -655,8 +748,8 @@ void FeatureExtractionController::Quit()
   }
   catch (itk::ExceptionObject & err)
     {
-     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
 }
 
 void FeatureExtractionController::Cancel()
