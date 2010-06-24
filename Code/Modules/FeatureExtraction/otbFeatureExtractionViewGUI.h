@@ -90,15 +90,17 @@ public:
    // Set the model
     m_VisuView->SetController(m_FeatureExtractionController->GetVisuController());
     m_ResultVisuView->SetController(m_FeatureExtractionController->GetResultVisuController());
+
+    m_FeatureExtractionController->GetModel()->RegisterListener(this);
   }
 
   /** Set the model and register the view to the model */
-  void SetFeatureExtractionModel(FeatureExtractionModel *pModel)
+  /*  void SetFeatureExtractionModel(FeatureExtractionModel *pModel)
   {
     m_FeatureExtractionModel = pModel;
     m_FeatureExtractionModel->RegisterListener(this);
   }
-
+*/
   itkGetMacro(VisuView,VisuViewPointerType);
   itkGetMacro(ResultVisuView,VisuViewPointerType);
 
@@ -169,9 +171,10 @@ private:
 
   void UpdateInformation();
   void UpdateChannelSelection();
+  FeatureExtractionModel* GetModel();
 
   /** Pointer to the model */
-  FeatureExtractionModel::Pointer               m_FeatureExtractionModel;
+  //FeatureExtractionModel::Pointer               m_FeatureExtractionModel;
   /** Pointer to the controller */
   FeatureExtractionControllerInterface::Pointer m_FeatureExtractionController;
 

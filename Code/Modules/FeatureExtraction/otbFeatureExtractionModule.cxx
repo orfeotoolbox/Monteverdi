@@ -33,12 +33,13 @@ FeatureExtractionModule::FeatureExtractionModule()
   m_View       = FeatureExtractionViewGUI::New();
   m_Controller = FeatureExtractionController::New();
 
-  m_View->SetFeatureExtractionModel(m_Model);
-  m_View->InitVisu();
-  m_View->SetFeatureExtractionController(m_Controller);
-
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
+
+  //m_View->SetFeatureExtractionModel(m_Model);
+
+  m_View->SetFeatureExtractionController(m_Controller);
+  m_View->InitVisu();
 
 
   // Describe inputs

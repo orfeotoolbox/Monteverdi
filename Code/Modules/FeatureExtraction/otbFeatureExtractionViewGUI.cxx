@@ -33,9 +33,6 @@ namespace otb
 FeatureExtractionViewGUI
 ::FeatureExtractionViewGUI()
 {
-  // Model pointer and listener registration
-  //m_FeatureExtractionModel = FeatureExtractionModel::GetInstance();
-  
 
   // Initialisation
   m_FileNameList =  StringVectorType(4, "");
@@ -57,21 +54,20 @@ FeatureExtractionViewGUI
   this->InitParameterGroupList();
   this->InitTextureLists();
 
+  // Instanstiate the views
+  m_VisuView = VisuViewType::New();
+  m_ResultVisuView = VisuViewType::New();
 }
 
 void
 FeatureExtractionViewGUI
 ::InitVisu()
 {
-   /** NewVisu */
-  // Instanstiate the view
-  m_VisuView = VisuViewType::New();
   // Set the model
-  m_VisuView->SetModel(m_FeatureExtractionModel->GetVisuModel());
-  // Instanstiate the view
-  m_ResultVisuView = VisuViewType::New();
+  m_VisuView->SetModel(GetModel()->GetVisuModel());
+
   // Set the model
-  m_ResultVisuView->SetModel(m_FeatureExtractionModel->GetResultVisuModel());
+  m_ResultVisuView->SetModel(GetModel()->GetResultVisuModel());
 }
 
 FeatureExtractionViewGUI
@@ -170,7 +166,7 @@ FeatureExtractionViewGUI
   m_ParameterGroupList[groupId]->show();
   if(m_ParameterGroupList[groupId]==guiSpectAngle)
     {
-      if( m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel() < 2 )
+      if( GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() < 2 )
         {
           m_ParameterGroupList[groupId]->deactivate();
         }
@@ -187,7 +183,7 @@ FeatureExtractionViewGUI
 {
   if (guiFeatureListAction->value()>0)
   {
-    m_FeatureExtractionModel->GetSingleOutput(guiFeatureListAction->value()-1);
+    GetModel()->GetSingleOutput(guiFeatureListAction->value()-1);
   }
 }
 
@@ -198,8 +194,8 @@ FeatureExtractionViewGUI
   unsigned int OutputListNb = guiOutputFeatureList->value();
   if (OutputListNb>0)
   {
-    if(static_cast<unsigned int>(OutputListNb-1) <m_FeatureExtractionModel->GetOutputListOrder().size() )
-      m_FeatureExtractionModel->GetSingleOutput( m_FeatureExtractionModel->GetOutputListOrder()[OutputListNb-1]);
+    if(static_cast<unsigned int>(OutputListNb-1) <GetModel()->GetOutputListOrder().size() )
+      GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
   }
 }
 
@@ -216,7 +212,7 @@ void
 FeatureExtractionViewGUI
 ::Notify(const std::string & event)
 {
-  if (m_FeatureExtractionModel->GetHasInput())
+  if (GetModel()->GetHasInput())
   {
     if(event != "Cancel")
       {
@@ -234,14 +230,14 @@ FeatureExtractionViewGUI
   guiChannelSelection->clear();
   itk::OStringStream oss;
   int count = 1;
-  for (unsigned int i = 0; i<m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
+  for (unsigned int i = 0; i<GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
   {
     oss.str("");
     oss<<"Channel "<<i+1;
     guiChannelSelection->add(oss.str().c_str(), count);
     count++;
   }
-  if(m_FeatureExtractionModel->GetNumberOfChannels() > 1 )
+  if(GetModel()->GetNumberOfChannels() > 1 )
   {
     guiChannelSelection->add("Intensity", count);
   }
@@ -256,18 +252,18 @@ void
 FeatureExtractionViewGUI
 ::UpdateInformation()
 {
-  std::string imName = m_FeatureExtractionModel->GetInputFileName();
+  std::string imName = GetModel()->GetInputFileName();
   itk::OStringStream oss;
   oss.str("");
   oss<<"Feature Extraction Application";
   oss<<" : "<<imName.substr(imName.find_last_of("/")+1, imName.size());
-  oss<<" ("<<m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel();
-  if(m_FeatureExtractionModel->GetInputImage()->GetNumberOfComponentsPerPixel() != 1)
+  oss<<" ("<<GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel();
+  if(GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() != 1)
     oss<<" bands , ";
   else
     oss<<" band , ";
 
-  oss<<m_FeatureExtractionModel->GetInputImage()->GetLargestPossibleRegion().GetSize()<<")";
+  oss<<GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()<<")";
   guiMainWindow->label(oss.str().c_str());
 }
 
@@ -354,7 +350,7 @@ FeatureExtractionViewGUI
   oss<<"("<<id[0]<<" , "<<id[1]<<")";
   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
   guiSpectAnglePixelCoordinates->redraw();
-  m_SelectedPixel = m_FeatureExtractionModel->GetInputImage()->GetPixel(id);
+  m_SelectedPixel = GetModel()->GetInputImage()->GetPixel(id);
   oss.str("");
   oss<<"[";
 
@@ -480,7 +476,7 @@ FeatureExtractionViewGUI
     {
       m_ResultVisuView->GetFullWidget()->ClearBuffer();
       m_ResultVisuView->GetFullWidget()->redraw();
-      m_FeatureExtractionModel->GetResultVisuModel()->ClearLayers();
+      GetModel()->GetResultVisuModel()->ClearLayers();
     }
 }
 
@@ -504,7 +500,7 @@ FeatureExtractionViewGUI
     m_VisuView->GetScrollWidget()->redraw();
     m_VisuView->GetFullWidget()->ClearBuffer();
     m_VisuView->GetFullWidget()->redraw();
-    m_FeatureExtractionModel->GetVisuModel()->ClearLayers();
+    GetModel()->GetVisuModel()->ClearLayers();
 
   }
 
@@ -512,7 +508,7 @@ FeatureExtractionViewGUI
   {
     m_ResultVisuView->GetFullWidget()->ClearBuffer();
     m_ResultVisuView->GetFullWidget()->redraw();
-    m_FeatureExtractionModel->GetResultVisuModel()->ClearLayers();
+    GetModel()->GetResultVisuModel()->ClearLayers();
   }
 
   m_FeatureExtractionController->InitInput();
@@ -539,4 +535,12 @@ FeatureExtractionViewGUI
   guiMainWindow->hide();
   m_FeatureExtractionController->Cancel();
 }
+
+FeatureExtractionModel*
+FeatureExtractionViewGUI
+::GetModel()
+{
+  return m_FeatureExtractionController->GetModel();
+}
+
 }

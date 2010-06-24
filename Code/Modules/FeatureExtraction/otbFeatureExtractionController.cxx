@@ -55,6 +55,13 @@ FeatureExtractionController
 ::~FeatureExtractionController()
 {}
 
+FeatureExtractionControllerInterface::ModelType*
+FeatureExtractionController::
+GetModel()
+{
+  return m_Model;
+}
+
 void
 FeatureExtractionController
 ::SetModel( ModelType::Pointer model)

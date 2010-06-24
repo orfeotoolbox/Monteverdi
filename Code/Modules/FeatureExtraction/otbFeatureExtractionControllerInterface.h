@@ -64,6 +64,7 @@ public:
   virtual void RemoveFromOutputListOrder(int id)=0;
   virtual void ExchangeOutputListOrder( int direction )=0;
   virtual void LeftMouseButtonClicked( ContinuousIndexType index ) =0;
+  virtual ModelType* GetModel() = 0;
 
   virtual void Quit()=0;
   virtual void Cancel()=0;
