@@ -427,8 +427,9 @@ VectorDataTreeBrowser<TVectorData>
  }
 
 template <class TVectorData>
-typename VectorDataTreeBrowser<TVectorData>
-::FluNodeType *
+// typename VectorDataTreeBrowser<TVectorData>
+// ::FluNodeType *
+void
 VectorDataTreeBrowser<TVectorData>
 ::UpdateOrCreateAttributeField(FluNodeType * parent, const FieldType & field)
 {

@@ -126,7 +126,7 @@ FluNodeType * FetchSubNode(FluNodeType * parent, const std::string & label);
 FluNodeType * UpdateOrCreatePointField(FluNodeType * parent, const char * label,const PointType & point);
 
 /** Create an attribute field */
-FluNodeType * UpdateOrCreateAttributeField(FluNodeType * parent, const FieldType & field);
+/*FluNodeType **/ void UpdateOrCreateAttributeField(FluNodeType * parent, const FieldType & field);
 
 /** Clear unused nodes */
 void RemoveUnusedNodes(const FluNodeVectorType & nodes);
