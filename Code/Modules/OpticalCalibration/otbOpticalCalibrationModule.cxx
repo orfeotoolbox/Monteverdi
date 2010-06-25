@@ -89,6 +89,7 @@ void OpticalCalibrationModule::Run()
  
       this->Init();
       this->InitHelper();
+      this->UpdateCoefSetup();
       // open the GUI
       this->Show();
     }
