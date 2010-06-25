@@ -32,7 +32,6 @@ void RegisterTests()
   REGISTER_TEST(otbOrthorectificationModuleTest);
   REGISTER_TEST(otbOrthorectificationSingleImageModuleTest);
   REGISTER_TEST(otbFeatureExtractionModuleTest);
-  REGISTER_TEST(otbFeatureExtractionModuleApplication);
   REGISTER_TEST(otbSupervisedClassificationModuleTest);
   REGISTER_TEST(otbWriterModuleTest);
   REGISTER_TEST(otbReaderWriterModuleTest);

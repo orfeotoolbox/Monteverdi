@@ -44,6 +44,10 @@ FeatureExtractionModel::FeatureExtractionModel()
   m_FilterTypeList.clear();
   m_OutputFilterInformation.clear();
   m_OutputListOrder.clear();
+  m_MinValues.clear();
+  m_MaxValues.clear();
+  m_SelectedMinValues.clear();
+  m_SelectedMaxValues.clear();
 
   m_ChannelExtractorList     = ExtractROIFilterListType::New();
   m_IntensityFilter          = IntensityFilterType::New();
@@ -91,15 +95,18 @@ FeatureExtractionModel
 
   // Togle the valid flag
   m_HasInput = true;
-
+std::cout<<"SetInputImage notificaztion "<<std::endl;
   // Notify the observers
   this->NotifyAll("SetInputImage");
+std::cout<<"SetInputImage notificaztion done "<<std::endl;
+
 }
 
 void
 FeatureExtractionModel
 ::GenerateLayers()
 {
+  std::cout<<"GenerateLayers"<<std::endl;
   // Generate image layers
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
   
@@ -109,10 +116,25 @@ FeatureExtractionModel
   // Add the layer to the model
   m_VisuModel->ClearLayers();
   m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
+   std::cout<<"GenerateLayers2"<<std::endl;
   
   // Render
   m_VisuModel->Update();
-  
+
+  // Compute Min and max of the input image through the generated QL
+  VectorImageMinMaxFilterType::Pointer stater = VectorImageMinMaxFilterType::New();
+  stater->SetInput(lVisuGenerator->GetLayer()->GetQuicklook());
+  std::cout<<"GenerateLayers21"<<std::endl;
+  stater->Update();
+  std::cout<<"GenerateLayers23"<<std::endl;
+  for(unsigned int i=0; i<m_NumberOfChannels; i++)
+    {
+      m_MinValues.push_back(stater->GetMinimum()[i] );
+      m_MaxValues.push_back( stater->GetMaximum()[i] );
+      std::cout<<stater->GetMinimum()[i]<<"   "<<stater->GetMaximum()[i]<<std::endl;
+    }
+   std::cout<<"GenerateLayers3"<<std::endl;
+
   // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
@@ -144,28 +166,37 @@ FeatureExtractionModel
 void
 FeatureExtractionModel
 ::AddChannels(std::vector<unsigned int> chList)
-{
+{ 
+ std::cout<<"AddChannelsAddChannelsAddChannelsAddChannels"<<std::endl;
   m_OutputChannelsInformation.clear();
   if (m_NumberOfChannels != 0 )
-  {
-    for ( unsigned int i = 0; i<chList.size(); i++)
     {
-      if (chList[i] <=  m_NumberOfChannels)
-      {
-        this->AddChannel(chList[i]);
-      }
-      else
-      {
-        if (chList[i] ==  m_NumberOfChannels+1)
-        {
-          this->AddIntensityChannel();
-        }
-        else
-          return;
-      }
+      unsigned int size = chList.size();
+      m_SelectedMinValues.clear();
+      m_SelectedMaxValues.clear();
+      
+      for ( unsigned int i = 0; i<size; i++)
+	{
+	  if (chList[i] <=  m_NumberOfChannels)
+	    {
+	      this->AddChannel(chList[i]);
+	    }
+	  else if (chList[i] ==  m_NumberOfChannels+1)
+	    {
+	      this->AddIntensityChannel();
+	    }
+	  else
+	    {
+	      return;
+	    }
+	  
+	  // Add min, max values
+	  m_SelectedMinValues.push_back( static_cast<double>(m_MinValues[chList[i]-1]) );
+	  m_SelectedMaxValues.push_back( static_cast<double>(m_MaxValues[chList[i]-1]) );
+	}
     }
-  }
 }
+
 
 
 void
@@ -194,6 +225,16 @@ FeatureExtractionModel
   m_IntensityFilter->GetOutput()->UpdateOutputInformation();
   this->AddInputImage( m_IntensityFilter->GetOutput() );
   m_OutputChannelsInformation.push_back("Int.");
+
+  // Compute Min and max of the intensity image, onmy once
+  if( m_MinValues.size() != m_NumberOfChannels+1 && m_MaxValues.size() != m_NumberOfChannels+1 )
+    {
+      ImageMinMaxFilterType::Pointer stater = ImageMinMaxFilterType::New();
+      stater->SetInput(m_IntensityFilter->GetOutput());
+      stater->Update();
+      m_MinValues.push_back(static_cast<double>(stater->GetMinimum()));
+      m_MaxValues.push_back(static_cast<double>(stater->GetMaximum()));
+    }
 }
 
 

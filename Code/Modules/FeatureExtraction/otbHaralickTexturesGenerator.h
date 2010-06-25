@@ -22,7 +22,6 @@
 #include "otbFeatureExtractionModel.h"
 #include "otbScalarImageToTexturesFilter.h"
 #include "otbScalarImageToAdvancedTexturesFilter.h"
-#include "itkMinimumMaximumImageCalculator.h"
 
 
 namespace otb
@@ -43,6 +42,7 @@ public:
   typedef ModelType::OffsetType                                                    OffsetType;
   typedef ModelType::SingleImageType                                               SingleImageType;
   typedef ModelType::SingleImagePointerType                                        SingleImagePointerType;
+  typedef ModelType::SinglePixelType                                          SinglePixelType;
 
   typedef FeatureInfo::FeatureType                                                 FeatureType;
   typedef HaralickTexture::TextureType                                             TextureType;
@@ -53,11 +53,24 @@ public:
   /** Filter type declaration*/
   /***************************/
 
-  typedef itk::MinimumMaximumImageCalculator<SingleImageType>                       MinMaxCalculatorType;
+  //typedef itk::MinimumMaximumImageCalculator<SingleImageType>                       MinMaxCalculatorType;
 
   typedef ScalarImageToTexturesFilter<SingleImageType,SingleImageType>              HarTexturesFilterType;
   typedef ScalarImageToAdvancedTexturesFilter<SingleImageType,SingleImageType>      AdvTexturesFilterType;
 
+  HaralickTexturesGenerator()
+    {
+      m_TextToHarMap[HaralickTexture::ENERGY] = FeatureInfo::TEXT_HAR_ENERGY;
+      m_TextToHarMap[HaralickTexture::ENTROPY] = FeatureInfo::TEXT_HAR_ENTROPY;
+      m_TextToHarMap[HaralickTexture::CORRELATION] = FeatureInfo::TEXT_HAR_CORR;
+      m_TextToHarMap[HaralickTexture::INERTIA] = FeatureInfo::TEXT_HAR_INERTIA;
+      m_TextToHarMap[HaralickTexture::INVDIFMO] = FeatureInfo::TEXT_HAR_INVDIFMO;
+      m_TextToHarMap[HaralickTexture::CLUSPRO] = FeatureInfo::TEXT_HAR_CLUSPRO;
+      m_TextToHarMap[HaralickTexture::CLUSHA] = FeatureInfo::TEXT_HAR_CLUSHA;
+      m_TextToHarMap[HaralickTexture::HARCORR] = FeatureInfo::TEXT_HAR_HARCORR;
+      m_TextToHarMap[HaralickTexture::UNKNOWN] = FeatureInfo::TEXT_HAR_UNKNOWN;
+    };
+  virtual ~HaralickTexturesGenerator(){};
 
   /************/
   /** Methods */
@@ -68,34 +81,15 @@ public:
   // AddHarTexturesFilter
   void AddHarTexturesFilter( ModelPointerType pModel, TextureVectorType pHarList, SizeType pRadius, OffsetType pOff, unsigned int pBin)
     { 
-      std::map<TextureType, FeatureType> textToHarMap;
-      textToHarMap[HaralickTexture::ENERGY] = FeatureInfo::TEXT_HAR_ENERGY;
-      textToHarMap[HaralickTexture::ENTROPY] = FeatureInfo::TEXT_HAR_ENTROPY;
-      textToHarMap[HaralickTexture::CORRELATION] = FeatureInfo::TEXT_HAR_CORR;
-      textToHarMap[HaralickTexture::INERTIA] = FeatureInfo::TEXT_HAR_INERTIA;
-      textToHarMap[HaralickTexture::INVDIFMO] = FeatureInfo::TEXT_HAR_INVDIFMO;
-      textToHarMap[HaralickTexture::CLUSPRO] = FeatureInfo::TEXT_HAR_CLUSPRO;
-      textToHarMap[HaralickTexture::CLUSHA] = FeatureInfo::TEXT_HAR_CLUSHA;
-      textToHarMap[HaralickTexture::HARCORR] = FeatureInfo::TEXT_HAR_HARCORR;
-      textToHarMap[HaralickTexture::UNKNOWN] = FeatureInfo::TEXT_HAR_UNKNOWN;
-
-
       for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
 	{
 	  HarTexturesFilterType::Pointer filter = HarTexturesFilterType::New();
 	  filter->SetRadius(pRadius);
 	  filter->SetOffset(pOff);
 	  filter->SetNumberOfBinsPerAxis(pBin);
-	  // Compute input min, max
-	 /*  MinMaxCalculatorType::Pointer minMaxFilter = MinMaxCalculatorType::New(); */
-/* 	  minMaxFilter->SetImage(pModel->GetInputImageList()->GetNthElement(i)); */
-/* 	  std::cout<<"avant"<<std::endl; */
-/* 	  std::cout<<pModel->GetInputImageList()->GetNthElement(i)<<std::endl; */
-/* 	  minMaxFilter->Compute(); */
-/* 	  std::cout<<"avant"<<std::endl; */
 	  
-	  filter->SetInputImageMinimum(0);//minMaxFilter->GetMinimum());
-	  filter->SetInputImageMaximum(255);//minMaxFilter->GetMaximum());
+	  filter->SetInputImageMinimum(static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]));
+	  filter->SetInputImageMaximum(static_cast<SinglePixelType>(pModel->GetSelectedMaxValues()[i]));
 	  filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
 	  
 	  for(unsigned int textId = 0; textId<pHarList.size(); textId++)
@@ -146,13 +140,17 @@ public:
 		  }
 		default:
 		  {
+ std::cout<<"~~~~~~~~~~~~~~~~~"<<std::endl;
+		    std::cout<<pHarList[textId]<<std::endl;
+ std::cout<<m_TextToHarMap[pHarList.at(textId)]<<std::endl;
+ std::cout<<"~~~~~~~~~~~~~~~~~"<<std::endl;
 		  }
 		}
 	      
 	      oss<<"Haralick Text : ";
 		oss<<pRadius<<","<<pOff<<","<<pBin;
 	      std::string mess = oss.str();
-	      pModel->AddFeatureFilter( filter, textToHarMap[pHarList.at(textId)], i, 0, mess);
+	      pModel->AddFeatureFilter( filter, m_TextToHarMap[pHarList.at(textId)], i, 0, mess);
 	    }
 	}
     }
@@ -215,7 +213,7 @@ public:
 protected:
 
 private:
-
+  std::map<TextureType, FeatureType> m_TextToHarMap;
 };
 
 

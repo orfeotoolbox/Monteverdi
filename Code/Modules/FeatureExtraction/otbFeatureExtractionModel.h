@@ -53,6 +53,9 @@
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbMeanShiftVectorImageFilter.h"
+// Min max filter
+#include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbStreamingStatisticsImageFilter.h"
 
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
@@ -91,6 +94,7 @@ public:
   typedef TypeManager::Floating_Point_VectorImage                         InputImageType;
   typedef InputImageType::Pointer                                         InputImagePointerType;
   typedef InputImageType::PixelType                                       InputImagePixelType;
+  typedef InputImageType::InternalPixelType                               InputImageInternalPixelType;
   typedef InputImageType::IndexType                                       IndexType;
   typedef InputImageType::SizeType                                        SizeType;
   typedef InputImageType::OffsetType                                      OffsetType;
@@ -168,8 +172,14 @@ public:
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<SingleImageType>                       GradientFilterType;
   // Mean Shift
   typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType>              MeanShiftFilterType;
-  typedef otb::ObjectList<MeanShiftFilterType>                                                      MeanShiftFilterListType;
+  typedef ObjectList<MeanShiftFilterType>                                                           MeanShiftFilterListType;
 
+
+  // Min max filter
+  typedef StreamingStatisticsVectorImageFilter<InputImageType>                                      VectorImageMinMaxFilterType;
+  typedef StreamingStatisticsImageFilter<SingleImageType>                                           ImageMinMaxFilterType;
+   
+  
 
   typedef itk::RGBAPixel<unsigned char>                RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                  ViewerImageType;
@@ -424,6 +434,18 @@ public:
   itkGetMacro(VisuModel,VisuModelPointerType );
   itkGetMacro(ResultVisuModel,VisuModelPointerType );
 
+  /** Image selected max accessors*/
+  const std::vector<double> GetSelectedMinValues()
+    {
+      return m_SelectedMinValues;
+    }
+  /** Image selected min accessors*/
+  const std::vector<double> GetSelectedMaxValues()
+    {
+      return m_SelectedMaxValues;
+    }
+
+
   /** Chain lsit */
   void CreateFilterList( int filterId );
 
@@ -458,8 +480,6 @@ public:
 
   /** Add Haralick testure */
   void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin);
-
-  template <class TFilterTypeMethod> void GenericConnectFilter(int id);
 
   /** Generate output image */
   void GenerateOutputImage();
@@ -521,6 +541,15 @@ private:
   std::vector<bool> m_SelectedFilters;
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasInput;
+  /** Min channels value, the last one is the value off the intensity image */
+  std::vector<double> m_MinValues;
+  /** Max channels value, the last one is the value off the intensity image */
+  std::vector<double> m_MaxValues;
+  /** Min of the select channel */
+  std::vector<double> m_SelectedMinValues;
+  /** Min of the select channel */
+  std::vector<double> m_SelectedMaxValues;
+
 
   ExtractROIFilterListType::Pointer m_ChannelExtractorList;
   IntensityFilterType::Pointer      m_IntensityFilter;
@@ -537,8 +566,7 @@ private:
 
   // Instantiate the model
   VisuModelPointerType              m_VisuModel;
-  VisuModelPointerType              m_ResultVisuModel;
-  
+  VisuModelPointerType              m_ResultVisuModel; 
   
   //Generation of the output image attributes (to maintain pipeline)
   SingleImagePointerType m_image;

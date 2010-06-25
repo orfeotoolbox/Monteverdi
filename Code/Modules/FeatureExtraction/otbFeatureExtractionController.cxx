@@ -168,6 +168,7 @@ void
 FeatureExtractionController
 ::AddInputChannels(std::vector<unsigned int> chList)
 {
+std::cout<<" cpontrolle AddChannelsAddChannelsAddChannelsAddChannels"<<std::endl;
   try
   {
     // channel index starts at 1

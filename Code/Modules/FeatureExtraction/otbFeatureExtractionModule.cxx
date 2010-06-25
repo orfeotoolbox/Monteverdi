@@ -70,10 +70,15 @@ void FeatureExtractionModule::Run()
   input->UpdateOutputInformation();
   if(input.IsNotNull())
     {
-    m_Model->SetInputImage(input);
+std::cout<<"hophophop "<<std::endl;
+    m_Model->SetInputImage(input); 
+std::cout<<"SetInputImage done "<<std::endl;
     m_View->SetFeatureExtractPreviewParentBrowser(-1);
+std::cout<<"browser machin "<<std::endl;
     m_View->Show();
+std::cout<<"shwo "<<std::endl;
     m_Model->GenerateLayers();
+std::cout<<"sGenerateLayers "<<std::endl;
     }
   else
     {
@@ -84,6 +89,7 @@ void FeatureExtractionModule::Run()
 /** The Notify */
 void FeatureExtractionModule::Notify(const std::string & event)
 {
+  std::cout<<"Module notification "<<event<<std::endl;
   if (event == "OutputsUpdated")
     {
     this->ClearOutputDescriptors();

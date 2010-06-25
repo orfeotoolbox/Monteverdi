@@ -214,12 +214,17 @@ void
 FeatureExtractionViewGUI
 ::Notify(const std::string & event)
 {
+ std::cout<<"ModuleView notification "<<event<<std::endl;
   if (GetModel()->GetHasInput())
   {
     if(event != "Cancel")
       {
-        InitWidgets();
+        this->InitWidgets();
         this->UpdateChannelSelection();
+	 if(event != "SetInputImage")
+	   {
+	     this->UpdateChannels();
+	   }
         this->UpdateInformation();
       }
   }
@@ -246,7 +251,6 @@ FeatureExtractionViewGUI
   // Set all check box checked
   guiChannelSelection->check_all();
   guiChannelSelection->redraw();
-  this->UpdateChannels();
 }
 
 

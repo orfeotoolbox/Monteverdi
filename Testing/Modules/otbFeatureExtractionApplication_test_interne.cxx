@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbFeatureExtractionModuleApplication(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
   typedef otb::FeatureExtractionViewGUI              ViewType;
   typedef otb::FeatureExtractionController           ControllerType;

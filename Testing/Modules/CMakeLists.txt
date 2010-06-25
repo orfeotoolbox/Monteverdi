@@ -59,8 +59,8 @@ ${INPUTDATA}/qb_RoadExtract.img
 ${TEMP}/featModelTest.tif
 )
 
-# ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
-# TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
+ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
 
 #------------- Supervised Classification Tests ---------------------------
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS1}  otbSupervisedClassificationModuleTest
@@ -320,7 +320,6 @@ otbWriterModuleTest.cxx
 otbOrthorectificationModuleTest.cxx
 otbOrthorectificationSingleImageModuleTest.cxx
 otbFeatureExtractionModuleTest.cxx
-otbFeatureExtractionApplication.cxx
 otbSupervisedClassificationModuleTest.cxx
 otbReaderWriterModuleTest.cxx
 )
@@ -403,7 +402,7 @@ TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule o
 ADD_EXECUTABLE(otbObjectCountingApplication otbObjectCountingApplication.cxx)
 TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCountingModule otbReaderModule)
 # CPack installation: only Monteverdi application
-#IF(NOT OTB_INSTALL_NO_LIBRARIES)
+#IF(NOT OTB_INSTALL_NO_LIBRARIES) 
 #  INSTALL(TARGETS otbMeanShiftApplication
 #    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
 #    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
@@ -413,3 +412,6 @@ TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCounti
 #ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
 #TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)
 
+
+ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionApplication_test_interne.cxx)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionApplication otbMonteverdi otbFeatureExtractionModule otbReaderModule)
