@@ -15,22 +15,22 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHaralickTexturesGenerator_h
-#define __otbHaralickTexturesGenerator_h
+#ifndef __otbAdvancedTexturesGenerator_h
+#define __otbAdvancedTexturesGenerator_h
 
 #include "otbFeature.h"
 #include "otbFeatureExtractionModel.h"
-#include "otbScalarImageToTexturesFilter.h"
+#include "otbScalarImageToAdvancedTexturesFilter.h"
 
 
 namespace otb
 {
-/** \class HaralickTexturesGenerator
+/** \class AdvancedTexturesGenerator
  *
  *
  *
  */
-class HaralickTexturesGenerator
+class AdvancedTexturesGenerator
 {
 public:
   typedef FeatureExtractionModel                                               ModelType;
@@ -44,40 +44,40 @@ public:
   typedef ModelType::SinglePixelType                                           SinglePixelType;
 
   typedef FeatureInfo::FeatureType                                             FeatureType;
-  typedef HaralickTexture::TextureType                                         TextureType;
+  typedef AdvancedTexture::TextureType                                         TextureType;
   typedef std::vector<TextureType>                                             TextureVectorType;
 
 
   /***************************/
   /** Filter type declaration*/
   /***************************/
-  typedef ScalarImageToTexturesFilter<SingleImageType,SingleImageType>         HarTexturesFilterType;
+  typedef ScalarImageToAdvancedTexturesFilter<SingleImageType,SingleImageType> AdvTexturesFilterType;
 
-  HaralickTexturesGenerator()
+  AdvancedTexturesGenerator()
     {
-      m_TextToHarMap[HaralickTexture::ENERGY] = FeatureInfo::TEXT_HAR_ENERGY;
-      m_TextToHarMap[HaralickTexture::ENTROPY] = FeatureInfo::TEXT_HAR_ENTROPY;
-      m_TextToHarMap[HaralickTexture::CORRELATION] = FeatureInfo::TEXT_HAR_CORR;
-      m_TextToHarMap[HaralickTexture::INERTIA] = FeatureInfo::TEXT_HAR_INERTIA;
-      m_TextToHarMap[HaralickTexture::INVDIFMO] = FeatureInfo::TEXT_HAR_INVDIFMO;
-      m_TextToHarMap[HaralickTexture::CLUSPRO] = FeatureInfo::TEXT_HAR_CLUSPRO;
-      m_TextToHarMap[HaralickTexture::CLUSHA] = FeatureInfo::TEXT_HAR_CLUSHA;
-      m_TextToHarMap[HaralickTexture::HARCORR] = FeatureInfo::TEXT_HAR_HARCORR;
-      m_TextToHarMap[HaralickTexture::UNKNOWN] = FeatureInfo::TEXT_HAR_UNKNOWN;
+      m_TextToHarMap[AdvancedTexture::VARIANCE] = FeatureInfo::TEXT_ADV_VARIANCE;
+      m_TextToHarMap[AdvancedTexture::MEAN] = FeatureInfo::TEXT_ADV_MEAN;
+      m_TextToHarMap[AdvancedTexture::SUMAV] = FeatureInfo::TEXT_ADV_SUMAV;
+      m_TextToHarMap[AdvancedTexture::SUMVAR] = FeatureInfo::TEXT_ADV_SUMVAR;
+      m_TextToHarMap[AdvancedTexture::SUMENT] = FeatureInfo::TEXT_ADV_SUMENT;
+      m_TextToHarMap[AdvancedTexture::DIFFENT] = FeatureInfo::TEXT_ADV_DIFFENT;
+      m_TextToHarMap[AdvancedTexture::DIFFVAR] = FeatureInfo::TEXT_ADV_DIFFVAR;
+      m_TextToHarMap[AdvancedTexture::IC1] = FeatureInfo::TEXT_ADV_IC1;
+      m_TextToHarMap[AdvancedTexture::IC2] = FeatureInfo::TEXT_ADV_IC2;
+      m_TextToHarMap[AdvancedTexture::UNKNOWN] = FeatureInfo::TEXT_ADV_UNKNOWN;
     };
   
-  virtual ~HaralickTexturesGenerator(){};
+  virtual ~AdvancedTexturesGenerator(){};
 
   /************/
   /** Methods */
   /************/
 
-  // AddHarTexturesFilter
-  void AddHarTexturesFilter( ModelPointerType pModel, TextureVectorType pHarList, SizeType pRadius, OffsetType pOff, unsigned int pBin)
+  void AddAdvTexturesFilter( ModelPointerType pModel, TextureVectorType pHarList, SizeType pRadius, OffsetType pOff, unsigned int pBin)
     { 
       for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
 	{
-	  HarTexturesFilterType::Pointer filter = HarTexturesFilterType::New();
+	  AdvTexturesFilterType::Pointer filter = AdvTexturesFilterType::New();
 	  filter->SetRadius(pRadius);
 	  filter->SetOffset(pOff);
 	  filter->SetNumberOfBinsPerAxis(pBin);
@@ -90,48 +90,53 @@ public:
 	  for(unsigned int textId = 0; textId<pHarList.size(); textId++)
 	    {     
 	      itk::OStringStream oss;
-	      oss<<"Haralick Text : ";
+	      oss<<"Advanced Text : ";
 	      
 	      switch(pHarList[textId])
 		{
-		case HaralickTexture::ENERGY:
+		case AdvancedTexture::VARIANCE:
 		  {
-		    oss<<"Energy : ";
+		    oss<<"Variance : ";
 		    break;
 		  }
-		case HaralickTexture::ENTROPY:
+		case AdvancedTexture::MEAN:
 		  {
-		    oss<<"Entropy : ";
+		    oss<<"Mean : ";
 		    break;
 		  }
-		case HaralickTexture::CORRELATION:
+		case AdvancedTexture::SUMAV:
 		  {
-		    oss<<"Correlation : ";
+		    oss<<"Sum average : ";
 		    break;
 		  }
-		case HaralickTexture::INERTIA:
+		case AdvancedTexture::SUMVAR:
 		  {
-		    oss<<"Inertia : ";
+		    oss<<"Sum varaiance : ";
 		    break;
 		  }
-		case HaralickTexture::INVDIFMO:
+		case AdvancedTexture::SUMENT:
 		  {
-		    oss<<"Inv. Diff. Moment : ";
+		    oss<<"Sum entropy : ";
 		    break;
 		  }
-		case HaralickTexture::CLUSPRO:
+		case AdvancedTexture::DIFFENT:
 		  {
-		    oss<<"Cluster Pro. : ";
+		    oss<<"Diff. entropy : ";
 		    break;
 		  }
-		case HaralickTexture::CLUSHA:
+		case AdvancedTexture::DIFFVAR:
 		  {
-		    oss<<"Cluster Shade : ";
+		    oss<<"Diff. variance : ";
 		    break;
 		  }
-		case HaralickTexture::HARCORR:
+		case AdvancedTexture::IC1:
 		  {
-		    oss<<"Har. Corr : ";
+		    oss<<"Inf. correlation 1: ";
+		    break;
+		  }
+		case AdvancedTexture::IC2:
+		  {
+		    oss<<"Inf. correlation 2: ";
 		    break;
 		  }
 		default:
@@ -148,54 +153,59 @@ public:
     }
 
 
-  SingleImagePointerType GenerateHaralickTextureOutputImage( ModelPointerType pModel,  FeatureType pType, unsigned int pInputListId  )
+  SingleImagePointerType GenerateAdvancedTextureOutputImage( ModelPointerType pModel,  FeatureType pType, unsigned int pInputListId  )
   {
     SingleImagePointerType image =  SingleImageType::New();
-    HarTexturesFilterType::Pointer filter = dynamic_cast<HarTexturesFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(pInputListId)));
+    AdvTexturesFilterType::Pointer filter = dynamic_cast<AdvTexturesFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(pInputListId)));
     switch (pType)
-    {
-      case FeatureInfo::TEXT_HAR_ENERGY:
       {
-        image = filter->GetEnergyOutput();
+      case FeatureInfo::TEXT_ADV_VARIANCE:
+	{
+	  image = filter->GetVarianceOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_MEAN:
+	{
+	  image = filter->GetMeanOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_SUMAV:
+	{
+	  image = filter->GetSumAverageOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_SUMVAR:
+	{
+	  image = filter->GetSumVarianceOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_SUMENT:
+	{
+	  image = filter->GetSumEntropyOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_DIFFENT:
+	{
+	  image = filter->GetDifferenceEntropyOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_DIFFVAR:
+	{
+	  image = filter->GetDifferenceVarianceOutput();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_IC1:
+	{
+	  image = filter->GetIC1Output();
+	  break;
+	}
+      case FeatureInfo::TEXT_ADV_IC2:
+	{
+	  image = filter->GetIC2Output();
         break;
-      }
-      case FeatureInfo::TEXT_HAR_ENTROPY:
-      {
-        image = filter->GetEntropyOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_HAR_CORR:
-      {
-        image = filter->GetCorrelationOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_HAR_INVDIFMO:
-      {
-        image = filter->GetInverseDifferenceMomentOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_HAR_CLUSPRO:
-      {
-        image = filter->GetClusterProminenceOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_HAR_CLUSHA:
-      {
-        image = filter->GetClusterShadeOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_HAR_HARCORR:
-      {
-        image = filter->GetHaralickCorrelationOutput();
-        break;
-      }
-    case FeatureInfo::TEXT_HAR_INERTIA:
-      {
-        image = filter->GetInertiaOutput();
-        break;
-      }
+	}
       default:
-      {
+	{
       }
     }
     return image;

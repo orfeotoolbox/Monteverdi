@@ -147,13 +147,14 @@ FeatureExtractionViewGUI
   guiHarList->redraw();
 
   guiAdvList->add("Variance", 1);
-  guiAdvList->add("Sum average", 2);
-  guiAdvList->add("Sum variance", 3);
-  guiAdvList->add("Sum entropy", 4);
-  guiAdvList->add("Difference entropy", 5);
-  guiAdvList->add("Difference variance", 6);
-  guiAdvList->add("Information. Correlation 1", 7);
-  guiAdvList->add("Information Correlation 2", 8);
+  guiAdvList->add("Mean", 2);
+  guiAdvList->add("Sum average", 3);
+  guiAdvList->add("Sum variance", 4);
+  guiAdvList->add("Sum entropy", 5);
+  guiAdvList->add("Difference entropy", 6);
+  guiAdvList->add("Difference variance", 7);
+  guiAdvList->add("Information. Correlation 1", 8);
+  guiAdvList->add("Information Correlation 2", 9);
   guiAdvList->redraw();
   
 }

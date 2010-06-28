@@ -111,6 +111,7 @@ typedef enum
   TEXT_HAR_HARCORR,
   TEXT_HAR_UNKNOWN,
   TEXT_ADV_VARIANCE,
+  TEXT_ADV_MEAN,
   TEXT_ADV_SUMAV,
   TEXT_ADV_SUMVAR,
   TEXT_ADV_SUMENT,
@@ -220,10 +221,10 @@ class HaralickTexture
       ENTROPY,
       CORRELATION,
       INVDIFMO,
-      CLUSPRO,
-      CLUSHA,
-      HARCORR, //6
       INERTIA,
+      CLUSPRO,
+      CLUSHA, // 6
+      HARCORR,
       UNKNOWN
     } TextureType;
   
@@ -245,12 +246,15 @@ static TextureType FindTextureType(unsigned int i)
       res = INVDIFMO;
       break; }
     case 4: {
-      res = CLUSPRO;
+      res = INERTIA;
       break; }
     case 5: {
-      res = CLUSHA;
+      res = CLUSPRO;
       break; }
     case 6: {
+      res = CLUSHA;
+      break; }
+    case 7: {
       res = HARCORR;
       break; }
     default: {
@@ -270,12 +274,13 @@ class AdvancedTexture
 typedef enum
 {
   VARIANCE, //0
+  MEAN,
   SUMAV,
   SUMVAR,
   SUMENT,
-  DIFFENT,
+  DIFFENT, //6
   DIFFVAR,
-  IC1,    //6
+  IC1,    
   IC2,
   UNKNOWN
 } TextureType;
@@ -289,24 +294,27 @@ static TextureType FindTextureType(unsigned int i)
       res = VARIANCE;
       break; }
     case 1: {
-      res = SUMAV;
+      res = MEAN;
       break; }
     case 2: {
-      res = SUMVAR;
+      res = SUMAV;
       break; }
     case 3: {
-      res = SUMENT;
+      res = SUMVAR;
       break; }
     case 4: {
-      res = DIFFENT;
+      res = SUMENT;
       break; }
     case 5: {
-      res = DIFFVAR;
+      res = DIFFENT;
       break; }
     case 6: {
-      res = IC1;
+      res = DIFFVAR;
       break; }
     case 7: {
+      res = IC1;
+      break; }
+    case 8: {
       res = IC2;
       break; }
     default: {

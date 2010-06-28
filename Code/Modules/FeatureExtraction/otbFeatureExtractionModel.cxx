@@ -27,6 +27,7 @@
 #include "otbSFSTexturesGenerator.h"
 #include "otbEdgeDensityGenerator.h"
 #include "otbHaralickTexturesGenerator.h"
+#include "otbAdvancedTexturesGenerator.h"
 
 
 namespace otb
@@ -488,6 +489,8 @@ void
 FeatureExtractionModel
 ::AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin)
 {
+  AdvancedTexturesGenerator lAdvTexturesGenerator;
+  lAdvTexturesGenerator.AddAdvTexturesFilter(this, advList, radius, offset, bin);
 }
 
 
@@ -746,6 +749,7 @@ FeatureExtractionModel
   RadiometricIndicesGenerator lRadiometricIndicesGenrator;
   SFSTexturesGenerator lSFSTexturesGenerator;
   HaralickTexturesGenerator lHarTexturesGenerator;
+  AdvancedTexturesGenerator lAdvTexturesGenerator;
   EdgeDensityGenerator lEdgeDensityGenerator;
   SingleImagePointerType image = SingleImageType::New();
 
@@ -834,6 +838,19 @@ FeatureExtractionModel
     case FeatureInfo::TEXT_HAR_INERTIA:
       {
         image = lHarTexturesGenerator.GenerateHaralickTextureOutputImage( this, m_FilterTypeList[i], i);
+        break;
+      }
+    case FeatureInfo::TEXT_ADV_VARIANCE:
+    case FeatureInfo::TEXT_ADV_MEAN:
+    case FeatureInfo::TEXT_ADV_SUMAV:
+    case FeatureInfo::TEXT_ADV_SUMVAR:
+    case FeatureInfo::TEXT_ADV_SUMENT:
+    case FeatureInfo::TEXT_ADV_DIFFENT:
+    case FeatureInfo::TEXT_ADV_DIFFVAR:
+    case FeatureInfo::TEXT_ADV_IC1:
+    case FeatureInfo::TEXT_ADV_IC2:
+      {
+        image = lAdvTexturesGenerator.GenerateAdvancedTextureOutputImage( this, m_FilterTypeList[i], i);
         break;
       }
       case FeatureInfo::NDVI:

@@ -709,13 +709,17 @@ FeatureExtractionController
   int count = 0;
 
   while ( j<=m_View->guiHarList->nitems() && count<m_View->guiHarList->nchecked() )
-  {
+  {   
+    std::cout<< j <<": ";
+
     if (m_View->guiHarList->checked(j) != 0)
     {
       harList[count] = HaralickTexture::FindTextureType(j-1);
       count++;
+      std::cout<< harList[count-1];
     }
     j++;
+    std::cout<<std::endl;
   }
 
   return harList;
