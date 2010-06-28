@@ -10,8 +10,8 @@ class WriterModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Save dataset} open selected
-      xywh {732 152 350 165} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+      label {Save dataset} open
+      xywh {732 152 350 165} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         xywh {24 19 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
@@ -36,11 +36,11 @@ class WriterModuleGUI {open
       }
       Fl_Choice cOutDataType {
         label {Output Data Type} open
-        xywh {135 65 120 20} down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186
+        xywh {152 65 120 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       } {}
     }
   }
-  Function {SaveDataSet()} {open return_type {virtual void}
+  Function {SaveDataSet()} {open selected return_type {virtual void}
   } {}
   Function {Browse()} {open return_type {virtual void}
   } {}

@@ -196,6 +196,7 @@ void WriterModule::ThreadedWatch()
   bCancel->deactivate();
   bOk->deactivate();
   vFilePath->deactivate();
+  cOUtDataType->deactivate();
   Fl::unlock();
 
   double last = 0;
@@ -227,6 +228,7 @@ void WriterModule::ThreadedWatch()
   bCancel->activate();
   bOk->activate();
   vFilePath->activate();
+  cOUtDataType->activate();
   Fl::unlock();
 
   Fl::awake(&HideWindowCallback,this);
