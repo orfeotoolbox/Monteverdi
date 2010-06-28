@@ -25,7 +25,6 @@
 #include "itkImageSource.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -142,7 +141,6 @@ public:
   typedef ImageListToVectorImageFilter< ImageListType, OutputImageType >     ImageListToVectorImageFilterType;
   typedef ObjectList<ImageListType>                                          ImageListObjectListType;
   typedef ObjectList<ImageListToVectorImageFilterType>                       ImageListToVectorObjectListType;
-  typedef StreamingImageFileWriter<OutputImageType>                          WriterType;
   typedef VectorImageToImageListFilter<OutputImageType, ImageListType>       VectorToImageListType;
   typedef ImageToVectorImageCastFilter<SingleImageType, OutputImageType>     CasterType;
 
