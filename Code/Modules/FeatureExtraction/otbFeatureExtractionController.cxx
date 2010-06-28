@@ -168,7 +168,6 @@ void
 FeatureExtractionController
 ::AddInputChannels(std::vector<unsigned int> chList)
 {
-std::cout<<" cpontrolle AddChannelsAddChannelsAddChannelsAddChannels"<<std::endl;
   try
   {
     // channel index starts at 1
@@ -355,34 +354,7 @@ FeatureExtractionController
       m_Model->AddGradientFilter(sigma);
       break;
     }
-    case FeatureInfo::TEXT_ASM:
-    case FeatureInfo::TEXT_CSH:
-    case FeatureInfo::TEXT_CPR:
-    case FeatureInfo::TEXT_CON:
-    case FeatureInfo::TEXT_COR:
-    case FeatureInfo::TEXT_DEN:
-    case FeatureInfo::TEXT_DVA:
-    case FeatureInfo::TEXT_ENJ:
-    case FeatureInfo::TEXT_ENT:
-    case FeatureInfo::TEXT_IC1:
-    case FeatureInfo::TEXT_IC2:
-    case FeatureInfo::TEXT_IDM:
-    case FeatureInfo::TEXT_MEA:
-    case FeatureInfo::TEXT_SAV:
-    case FeatureInfo::TEXT_SEN:
-    case FeatureInfo::TEXT_SVA:
-    case FeatureInfo::TEXT_VAR:
-    {
-      SizeType rad;
-      rad[0] = static_cast<unsigned int>(m_View->guiTextRadiusX->value());
-      rad[1] = static_cast<unsigned int>(m_View->guiTextRadiusY->value());
-      OffsetType off;
-      off[0] = static_cast<int>(m_View->guiTextOffsetX->value());
-      off[1] = static_cast<int>(m_View->guiTextOffsetY->value());
-      m_Model->AddTextureFilter(featureType, rad, off);
-      break;
-    }
-    case FeatureInfo::TEXT_PANTEX:
+   case FeatureInfo::TEXT_PANTEX:
       {
         SizeType rad;
       rad[0] = static_cast<unsigned int>(m_View->guiRadiusX->value());
@@ -395,8 +367,7 @@ FeatureExtractionController
       }
     case FeatureInfo::TEXT_HAR:
       {
-	  std::cout<<"haralick"<<std::endl;
-        SizeType rad;
+	SizeType rad;
 	rad[0] = static_cast<unsigned int>(m_View->guiHarRadiusX->value());
 	rad[1] = static_cast<unsigned int>(m_View->guiHarRadiusY->value());
 	// set offset to be able to call the generic texture add filter
@@ -406,22 +377,13 @@ FeatureExtractionController
 	HaralickTextureVectorType harList;
 	harList = this->GetHaralickTextList();
 
-
 	unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiHarBin->value()));
-	std::cout<<"Offset :"<<off[0]<<"  "<<off[1]<<std::endl;
-	std::cout<<"Radius : "<<rad[0]<<"  "<<rad[1]<<std::endl;
-	std::cout<<"bin : "<<bin<<std::endl;
-	std::cout<<"list : "<<std::endl;
-	for(unsigned int i=0; i<harList.size(); i++)
-	  std::cout<<harList.at(i)<<"  ";
-	std::cout<<std::endl;
 
 	m_Model->AddHaralickTextureFilter(harList, rad, off, bin);
 	break;
       }
     case FeatureInfo::TEXT_ADV:
       {
- std::cout<<"advanced"<<std::endl;
         SizeType rad;
 	rad[0] = static_cast<unsigned int>(m_View->guiAdvRadiusX->value());
 	rad[1] = static_cast<unsigned int>(m_View->guiAdvRadiusY->value());
@@ -433,14 +395,6 @@ FeatureExtractionController
 	advList = this->GetAdvancedTextList();
 
 	unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiAdvBin->value()));
-
-	std::cout<<"Offset :"<<off[0]<<"  "<<off[1]<<std::endl;
-	std::cout<<"Radius : "<<rad[0]<<"  "<<rad[1]<<std::endl;
-	std::cout<<"bin : "<<bin<<std::endl;
-	std::cout<<"list : "<<std::endl;
-	for(unsigned int i=0; i<advList.size(); i++)
-	  std::cout<<advList.at(i)<<"  ";
-	std::cout<<std::endl;
 
 	m_Model->AddAdvancedTextureFilter(advList, rad, off, bin);
 
@@ -678,7 +632,6 @@ FeatureExtractionController
     }
     default:
     {
-      std::cout<<"dafauuuuuuuuuuuuuuuuuuuuuult"<<std::endl;
       return;
     }
     }
@@ -710,16 +663,12 @@ FeatureExtractionController
 
   while ( j<=m_View->guiHarList->nitems() && count<m_View->guiHarList->nchecked() )
   {   
-    std::cout<< j <<": ";
-
     if (m_View->guiHarList->checked(j) != 0)
     {
       harList[count] = HaralickTexture::FindTextureType(j-1);
       count++;
-      std::cout<< harList[count-1];
     }
     j++;
-    std::cout<<std::endl;
   }
 
   return harList;
@@ -744,6 +693,25 @@ FeatureExtractionController::AdvancedTextureVectorType FeatureExtractionControll
 
   return advList;
 }
+
+void 
+FeatureExtractionController::UpdateFeaturePreview(unsigned int id)
+{
+  try
+    {
+      m_View->pBar->value(1);
+      m_View->pBar->show();
+      Fl::check();
+      m_Model->GetSingleOutput(id);
+    }
+  catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+  m_View->pBar->hide();
+  Fl::check();
+}
+
 
 void FeatureExtractionController::Quit()
 {

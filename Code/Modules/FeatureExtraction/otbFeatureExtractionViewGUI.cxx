@@ -85,7 +85,11 @@ FeatureExtractionViewGUI
   this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
   guiHarBin->value(0);
   guiAdvBin->value(0);
-  
+
+  pBar->minimum(0);
+  pBar->maximum(1);
+  pBar->hide();
+
   this->Show();
 }
 
@@ -100,28 +104,27 @@ FeatureExtractionViewGUI
   m_ParameterGroupList.push_back(guiSpectAngle);
   m_ParameterGroupList.push_back(guiRadius);
   m_ParameterGroupList.push_back(guiGrad);
-  m_ParameterGroupList.push_back(guiTextures);
   m_ParameterGroupList.push_back(guiMorpho);
-  m_ParameterGroupList.push_back(guiRAndNIR); // panel 8
+  m_ParameterGroupList.push_back(guiRAndNIR); // panel 7
   m_ParameterGroupList.push_back(guiPVI);
   m_ParameterGroupList.push_back(guiSAVI);
   m_ParameterGroupList.push_back(guiMSAVI);
   m_ParameterGroupList.push_back(guiTSAVI);
   m_ParameterGroupList.push_back(guiWDVI);
   m_ParameterGroupList.push_back(guiARVI);
-  m_ParameterGroupList.push_back(guiEVI); // 15
+  m_ParameterGroupList.push_back(guiEVI); // 14
   m_ParameterGroupList.push_back(guiTSARVI);
   m_ParameterGroupList.push_back(guiAVI);
   m_ParameterGroupList.push_back(guiSoil);
   m_ParameterGroupList.push_back(guiIB2);
   m_ParameterGroupList.push_back(guiNDBI);
-  m_ParameterGroupList.push_back(guiISU); // 21
+  m_ParameterGroupList.push_back(guiISU); // 20
   m_ParameterGroupList.push_back(guiSRWI);
   m_ParameterGroupList.push_back(guiNDWI);
   m_ParameterGroupList.push_back(guiNDWI2);
   m_ParameterGroupList.push_back(guiMNDWI);
   m_ParameterGroupList.push_back(guiNDPI);
-  m_ParameterGroupList.push_back(guiNDTI); // 27
+  m_ParameterGroupList.push_back(guiNDTI); // 26
   m_ParameterGroupList.push_back(guiSFS);
   m_ParameterGroupList.push_back(guiEdgeSobel);
   m_ParameterGroupList.push_back(guiMS);
@@ -186,7 +189,8 @@ FeatureExtractionViewGUI
 {
   if (guiFeatureListAction->value()>0)
   {
-    GetModel()->GetSingleOutput(guiFeatureListAction->value()-1);
+    //GetModel()->GetSingleOutput(guiFeatureListAction->value()-1);
+    m_FeatureExtractionController->UpdateFeaturePreview(guiFeatureListAction->value()-1);
   }
 }
 
@@ -198,7 +202,10 @@ FeatureExtractionViewGUI
   if (OutputListNb>0)
     {
     if(static_cast<unsigned int>(OutputListNb-1) <GetModel()->GetOutputListOrder().size() )
-      GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
+      {
+	//GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
+	m_FeatureExtractionController->UpdateFeaturePreview(GetModel()->GetOutputListOrder()[OutputListNb-1]);
+      }
   }
 }
 
@@ -215,7 +222,6 @@ void
 FeatureExtractionViewGUI
 ::Notify(const std::string & event)
 {
- std::cout<<"ModuleView notification "<<event<<std::endl;
   if (GetModel()->GetHasInput())
   {
     if(event != "Cancel")

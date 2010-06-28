@@ -56,7 +56,6 @@
 // Min max filter
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
-
 #include "itkRGBAPixel.h"
 #include "otbImageLayer.h"
 #include "otbImageLayerGenerator.h"

@@ -140,7 +140,7 @@ public:
 		  }
 		}
 	      
-	      oss<<pRadius<<","<<pOff<<","<<pBin<<", min: "<<pModel->GetSelectedMinValues()[i]<<", max: "<<pModel->GetSelectedMaxValues()[i];
+	      oss<<pOff<<", "<<pRadius<<", "<<pBin<<", min: "<<pModel->GetSelectedMinValues()[i]<<", max: "<<pModel->GetSelectedMaxValues()[i];
 	      std::string mess = oss.str();
 	      pModel->AddFeatureFilter( filter, m_TextToHarMap[pHarList.at(textId)], i, 0, mess);
 	    }

@@ -60,35 +60,35 @@ int main(int argc, char* argv[])
   Fl::check();
   
   // ------------ Chose Text feature (entropy)
-  view->UpdateParameterArea(6);
-  view->SetFeatureType(otb::FeatureInfo::TEXT_ENT);
-  Fl::check();
+//   view->UpdateParameterArea(6);
+//   view->SetFeatureType(otb::FeatureInfo::TEXT_ENT);
+//   Fl::check();
 
-  view->guiTextures->show();
-  Fl::check();
-  view->guiTextRadiusX->value(3);
-  view->guiTextRadiusY->value(1);
-  view->guiTextOffsetX->value(2);
-  view->guiTextOffsetY->value(1);
-  view->guiParameter->redraw();
-  Fl::check();
+//   view->guiTextures->show();
+//   Fl::check();
+//   view->guiTextRadiusX->value(3);
+//   view->guiTextRadiusY->value(1);
+//   view->guiTextOffsetX->value(2);
+//   view->guiTextOffsetY->value(1);
+//   view->guiParameter->redraw();
+//   Fl::check();
   
-  // Uncheck channels
-  view->guiChannelSelection->checked(1,false);
-  view->guiChannelSelection->checked(2,false);
-  view->guiChannelSelection->checked(3,false);
-  view->guiChannelSelection->checked(4,false);
+//   // Uncheck channels
+//   view->guiChannelSelection->checked(1,false);
+//   view->guiChannelSelection->checked(2,false);
+//   view->guiChannelSelection->checked(3,false);
+//   view->guiChannelSelection->checked(4,false);
 
-  // Update Channels
-  view->UpdateChannels();
+//   // Update Channels
+//   view->UpdateChannels();
 
-  //Add the feature
-  view->guiAdd->do_callback();
-  view->guiFeatureListAction->redraw();
-  Fl::check();
+//   //Add the feature
+//   view->guiAdd->do_callback();
+//   view->guiFeatureListAction->redraw();
+//   Fl::check();
 
-  view->guiOK->do_callback();
-  Fl::check();
+//   view->guiOK->do_callback();
+//   Fl::check();
 
   //Write the image
   WriterType::Pointer  writer = WriterType::New();

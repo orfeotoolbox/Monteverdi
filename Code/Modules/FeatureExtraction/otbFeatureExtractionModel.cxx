@@ -96,18 +96,14 @@ FeatureExtractionModel
 
   // Togle the valid flag
   m_HasInput = true;
-std::cout<<"SetInputImage notificaztion "<<std::endl;
   // Notify the observers
   this->NotifyAll("SetInputImage");
-std::cout<<"SetInputImage notificaztion done "<<std::endl;
-
 }
 
 void
 FeatureExtractionModel
 ::GenerateLayers()
 {
-  std::cout<<"GenerateLayers"<<std::endl;
   // Generate image layers
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
   
@@ -117,26 +113,25 @@ FeatureExtractionModel
   // Add the layer to the model
   m_VisuModel->ClearLayers();
   m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
-   std::cout<<"GenerateLayers2"<<std::endl;
   
   // Render
-  m_VisuModel->Update();
+   m_VisuModel->Update();
 
+  lVisuGenerator->GetLayer()->GetQuicklook()->Update();
+  lVisuGenerator->GetLayer()->GetQuicklook()->UpdateOutputInformation();
   // Compute Min and max of the input image through the generated QL
   VectorImageMinMaxFilterType::Pointer stater = VectorImageMinMaxFilterType::New();
   stater->SetInput(lVisuGenerator->GetLayer()->GetQuicklook());
-  std::cout<<"GenerateLayers21"<<std::endl;
+
   stater->Update();
-  std::cout<<"GenerateLayers23"<<std::endl;
+
   for(unsigned int i=0; i<m_NumberOfChannels; i++)
     {
       m_MinValues.push_back(stater->GetMinimum()[i] );
       m_MaxValues.push_back( stater->GetMaximum()[i] );
-      std::cout<<stater->GetMinimum()[i]<<"   "<<stater->GetMaximum()[i]<<std::endl;
     }
-   std::cout<<"GenerateLayers3"<<std::endl;
 
-  // Notify the observers
+ // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
 
@@ -168,7 +163,6 @@ void
 FeatureExtractionModel
 ::AddChannels(std::vector<unsigned int> chList)
 { 
- std::cout<<"AddChannelsAddChannelsAddChannelsAddChannels"<<std::endl;
   m_OutputChannelsInformation.clear();
   if (m_NumberOfChannels != 0 )
     {
@@ -804,28 +798,6 @@ FeatureExtractionModel
       {
         GradientFilterType::Pointer grad = dynamic_cast<GradientFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = grad->GetOutput();
-        break;
-      }
-      case FeatureInfo::TEXT_ASM:
-      case FeatureInfo::TEXT_CSH:
-      case FeatureInfo::TEXT_CPR:
-      case FeatureInfo::TEXT_CON:
-      case FeatureInfo::TEXT_COR:
-      case FeatureInfo::TEXT_DEN:
-      case FeatureInfo::TEXT_DVA:
-      case FeatureInfo::TEXT_ENJ:
-      case FeatureInfo::TEXT_ENT:
-      case FeatureInfo::TEXT_IC1:
-      case FeatureInfo::TEXT_IC2:
-      case FeatureInfo::TEXT_IDM:
-      case FeatureInfo::TEXT_MEA:
-      case FeatureInfo::TEXT_PANTEX:
-      case FeatureInfo::TEXT_SAV:
-      case FeatureInfo::TEXT_SEN:
-      case FeatureInfo::TEXT_SVA:
-      case FeatureInfo::TEXT_VAR:
-      {
-        image = featureGenerator.GenerateTextureOutputImage( this, m_FilterTypeList[i], i);
         break;
       }
     case FeatureInfo::TEXT_HAR_ENERGY:

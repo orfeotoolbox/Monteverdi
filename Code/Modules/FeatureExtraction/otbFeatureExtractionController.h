@@ -139,6 +139,7 @@ public:
   virtual void RemoveFromOutputListOrder(int id);
   virtual void ExchangeOutputListOrder( int direction );
   virtual ModelType* GetModel();
+  virtual void UpdateFeaturePreview(unsigned int id);
 
   virtual void Quit();
   virtual void Cancel();
