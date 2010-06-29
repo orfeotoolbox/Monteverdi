@@ -18,7 +18,7 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {26 179 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {26 179 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -78,7 +78,7 @@ SetFeatureType(otb::FeatureInfo::GRADIENT);}
             } {
               MenuItem {} {
                 label PanTex
-                callback {UpdateParameterArea(4);
+                callback {UpdateParameterArea(32);
 SetFeatureType(otb::FeatureInfo::TEXT_PANTEX);}
                 tooltip {Panchromatic Texture} xywh {50 50 30 20}
               }
@@ -149,7 +149,7 @@ SetFeatureType(otb::FeatureInfo::TEXT_ADV);}
               }
             }
             Submenu {} {
-              label Morphology open
+              label Morphology
               xywh {10 10 63 20}
             } {
               MenuItem {} {
@@ -166,7 +166,7 @@ SetFeatureType(otb::FeatureInfo::MORPHOLOGICALCLOSING);}
               }
             }
             Submenu {} {
-              label {Radiometry Indexes} open
+              label {Radiometry Indexes}
               tooltip {Radiometirc Indexes} xywh {10 10 63 20}
             } {
               Submenu {} {
@@ -353,7 +353,7 @@ SetFeatureType(otb::FeatureInfo::NDTI);}
               }
             }
             Submenu {} {
-              label {Edge Density} open
+              label {Edge Density}
               tooltip {Edge Density} xywh {20 20 63 20}
             } {
               MenuItem {} {
@@ -364,7 +364,7 @@ SetFeatureType(otb::FeatureInfo::EDGE_SOBEL);}
               }
             }
             Submenu {} {
-              label {Mean Shift} open
+              label {Mean Shift}
               tooltip {Edge Density} xywh {30 30 63 20}
             } {
               MenuItem {} {
@@ -403,7 +403,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             label {Feature Parameters} open
             xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
-            Fl_Group guiNothing {
+            Fl_Group guiNothing {selected
               xywh {206 318 240 140} color 7
             } {}
             Fl_Group guiTouzi {
@@ -910,7 +910,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
               }
             }
-            Fl_Group guiHaralick {open
+            Fl_Group guiHaralick {
               xywh {206 318 240 140} hide
             } {
               Fl_Check_Browser guiHarList {
@@ -969,7 +969,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 }
               }
             }
-            Fl_Group guiAdvanced {open
+            Fl_Group guiAdvanced {
               xywh {206 318 240 140} hide
             } {
               Fl_Check_Browser guiAdvList {
@@ -1028,6 +1028,39 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 }
               }
             }
+            Fl_Group guiPanTex {open
+              xywh {206 318 240 140} hide
+            } {
+              Fl_Value_Input guiPanTexRadiusX {
+                label {Radius X}
+                tooltip {Neighborhood radius.} xywh {276 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+              }
+              Fl_Value_Input guiPanTexRadiusY {
+                label {Radius Y}
+                tooltip {Neighborhood radius.} xywh {388 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+              }
+              Fl_Input_Choice guiPanTexBin {
+                label {Bin length} open
+                tooltip {Quantization levels.} xywh {301 402 96 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 32 textsize 12
+              } {
+                MenuItem {} {
+                  label 8
+                  xywh {25 25 30 20}
+                }
+                MenuItem {} {
+                  label 16
+                  xywh {35 35 30 20}
+                }
+                MenuItem {} {
+                  label 32
+                  xywh {45 45 30 20}
+                }
+                MenuItem {} {
+                  label 64
+                  xywh {55 55 30 20}
+                }
+              }
+            }
           }
           Fl_Check_Browser guiChannelSelection {
             label {Channels Selection}
@@ -1049,7 +1082,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             xywh {15 479 432 35} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 12 textcolor 7
           }
           Fl_Progress pBar {
-            label {Updating feature preview} selected
+            label {Updating feature preview}
             xywh {456 528 200 17} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186
           }
         }

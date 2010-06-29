@@ -18,12 +18,9 @@
 #ifndef __otbTextureFilterGenerator_h
 #define __otbTextureFilterGenerator_h
 
-#include "otbTextureFunctors.h"
-#include "otbTextureImageFunction.h"
-#include "otbFunctionWithNeighborhoodToImageFilter.h"
 #include "otbFeature.h"
 #include "otbFeatureExtractionModel.h"
-#include "otbPanTexTextureImageFunctionFilter.h"
+#include "otbScalarImageToPanTexTextureFilter.h"
 
 
 namespace otb
@@ -44,34 +41,45 @@ class TextureFilterGenerator
   typedef FeatureInfo::FeatureType          FeatureType;
 
   // Pan Tax
-  typedef PanTexTextureImageFunctionFilter<SingleImageType, SingleImageType>                        PanTexFilterType;
+  typedef ScalarImageToPanTexTextureFilter<SingleImageType, SingleImageType>                        PanTexFilterType;
  
 
-template <class TFilterTypeMethod> void GenericAddTextureFilter( ModelPointerType model, FeatureType type, unsigned int inputListId, SizeType radius, OffsetType offset, std::string msg);
+template <class TFilterTypeMethod> void GenericAddTextureFilter( ModelPointerType pModel, FeatureType pType, unsigned int inputListId, SizeType pRadius, OffsetType pOff, unsigned int pBin, double pMin, double pMax, std::string pMsg);
 
-void GenerateTextureFilter( ModelPointerType model, FeatureType type, unsigned int inputListId, SizeType radius, OffsetType offset )
+void GenerateTextureFilter( ModelPointerType pModel, FeatureType pType, SizeType pRadius, OffsetType pOff, unsigned int pBin )
 {
-  //itk::OStringStream oss;
-  std::string mess;
-  switch (type)
+  for (unsigned int i = 0; i<pModel->GetInputImageList()->Size(); i++)
     {
-    case FeatureInfo::TEXT_PANTEX:
-      {
-        // Don't call generic method because don't take offset as input
-        itk::OStringStream oss;
-        oss<<"PanTex: "<<radius;
-        PanTexFilterType::Pointer panTexFilter = PanTexFilterType::New();
-        panTexFilter->SetInput(model->GetInputImageList()->GetNthElement(inputListId));
-        panTexFilter->SetRadius(radius);
-        std::string mess = oss.str();
-        model->AddFeatureFilter( panTexFilter, type, inputListId, 0, mess);
-        break;
-      }
-    default:
-      {
-        return;
-      }
-    }// if switch (type)
+      std::string mess;
+      switch (pType)
+	{
+	case FeatureInfo::TEXT_PANTEX:
+	  {
+	    // Don't call the generic method, no offset set in this filter
+	    SinglePixelType min = static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]);
+	    SinglePixelType max = static_cast<SinglePixelType>(pModel->GetSelectedMaxValues()[i]);
+
+	    itk::OStringStream oss;
+	    oss<<"PanTex: "<<pRadius<<", "<<pBin<<", min: "<<min<<", max: "<<max;
+
+	    PanTexFilterType::Pointer filter = PanTexFilterType::New();
+	    filter->SetRadius(pRadius);
+	    filter->SetNumberOfBinsPerAxis(pBin); 
+	    filter->SetInputImageMinimum(static_cast<SinglePixelType>(min));
+	    filter->SetInputImageMaximum(static_cast<SinglePixelType>(max));
+	    filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
+	    
+	    std::string mess = oss.str();
+	    pModel->AddFeatureFilter( filter, pType, i, 0, mess);
+	  
+	    break;
+	  }
+	default:
+	  {
+	    return;
+	  }
+	}// if switch (type)
+    } //  for
 }
 
 SingleImagePointerType GenerateTextureOutputImage( ModelPointerType model,  FeatureType type, unsigned int inputListId  )
@@ -83,49 +91,38 @@ SingleImagePointerType GenerateTextureOutputImage( ModelPointerType model,  Feat
       {
         PanTexFilterType::Pointer panTexFilter = dynamic_cast<PanTexFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
         image = panTexFilter->GetOutput();
+
         break;
       }
     default:
       {
+	break;
       }
     }// if switch (type)
   return image;
 }
-
-/*
-void GenericTextureConnectFilter( ModelPointerType model,  FeatureType type, int filterIndex )
-{
-switch (type)
-    {
-    case TEXT_PANTEX:
-      {
-        model->GenericConnectFilter<PanTexFilterType>(filterIndex);
-        break;
-      }
-    default:
-      {
-        return;
-      }
-    }// if switch (type)
-}
-*/
 
 };
 
 
 template <class TFilterTypeMethod>
 void
-TextureFilterGenerator::GenericAddTextureFilter( ModelPointerType model, FeatureType type, unsigned int inputListId, SizeType radius, OffsetType offset, std::string msg)
+TextureFilterGenerator::GenericAddTextureFilter( ModelPointerType pModel, FeatureType pType, unsigned int inputListId, SizeType pRadius, OffsetType pOff, unsigned int pBin, double pMin, double pMax, std::string pMsg)
 {
   itk::OStringStream oss;
-  oss<<msg;
-  oss<<radius<<" , "<<offset;
+  oss<<pMsg;
+  oss<<pOff<<", "<<pRadius<<", "<<pBin<<", min: "<<pMin<<", max: "<<pMax;
   typename TFilterTypeMethod::Pointer filter = TFilterTypeMethod::New();
-  filter->SetInput(model->GetInputImageList()->GetNthElement(inputListId));
-  filter->SetRadius(radius);
-  filter->SetOffset(offset);
+
+  filter->SetRadius(pRadius);
+  filter->SetOffset(pOff);
+  filter->SetNumberOfBinsPerAxis(pBin); 
+  filter->SetInputImageMinimum(static_cast<SinglePixelType>(pMin));
+  filter->SetInputImageMaximum(static_cast<SinglePixelType>(pMax));
+  filter->SetInput(pModel->GetInputImageList()->GetNthElement(inputListId));
+  
   std::string mess = oss.str();
-  model->AddFeatureFilter( filter, type, inputListId, 0, mess);
+  pModel->AddFeatureFilter( filter, pType, inputListId, 0, mess);
 }
 
 }

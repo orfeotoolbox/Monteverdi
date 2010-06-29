@@ -28,7 +28,7 @@
 #include "otbEdgeDensityGenerator.h"
 #include "otbHaralickTexturesGenerator.h"
 #include "otbAdvancedTexturesGenerator.h"
-
+#include "itkExtractImageFilter.h"
 
 namespace otb
 {
@@ -117,9 +117,7 @@ FeatureExtractionModel
   // Render
    m_VisuModel->Update();
 
-  lVisuGenerator->GetLayer()->GetQuicklook()->Update();
-  lVisuGenerator->GetLayer()->GetQuicklook()->UpdateOutputInformation();
-  // Compute Min and max of the input image through the generated QL
+   // Compute Min and max of the input image through the generated QL
   VectorImageMinMaxFilterType::Pointer stater = VectorImageMinMaxFilterType::New();
   stater->SetInput(lVisuGenerator->GetLayer()->GetQuicklook());
 
@@ -453,13 +451,13 @@ FeatureExtractionModel
 
 void
 FeatureExtractionModel
-::AddTextureFilter( FeatureType featureType, SizeType radius, OffsetType offset )
+::AddTextureFilter( FeatureType featureType, SizeType radius, OffsetType offset, unsigned int bin )
 {
-  for (unsigned int i = 0; i<m_InputImageList->Size(); i++)
-    {
+  //for (unsigned int i = 0; i<m_InputImageList->Size(); i++)
+  //{
       TextureFilterGenerator generator;
-      generator.GenerateTextureFilter( this, featureType, i, radius, offset);
-    }
+      generator.GenerateTextureFilter( this, featureType,radius, offset, bin);
+      //}
 }
 
 void
@@ -739,7 +737,7 @@ FeatureExtractionModel
 ::GetSingleImage(int i)
 {
 
-  TextureFilterGenerator featureGenerator;
+  TextureFilterGenerator lTextureGenerator;
   RadiometricIndicesGenerator lRadiometricIndicesGenrator;
   SFSTexturesGenerator lSFSTexturesGenerator;
   HaralickTexturesGenerator lHarTexturesGenerator;
@@ -798,6 +796,11 @@ FeatureExtractionModel
       {
         GradientFilterType::Pointer grad = dynamic_cast<GradientFilterType*>(static_cast<FilterType *>(m_FilterList->GetNthElement(i)));
         image = grad->GetOutput();
+        break;
+      }
+   case FeatureInfo::TEXT_PANTEX:
+      {
+        image = lTextureGenerator.GenerateTextureOutputImage( this, m_FilterTypeList[i], i);
         break;
       }
     case FeatureInfo::TEXT_HAR_ENERGY:
@@ -909,11 +912,11 @@ void
 FeatureExtractionModel
 ::GetSingleOutput(int id)
 {
-
   // Generate image layers
   SingleLayerGeneratorPointerType lResultVisuGenerator = SingleLayerGeneratorType::New();
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
+
   lResultVisuGenerator->SetImage(this->GetSingleImage(id));
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");
@@ -922,7 +925,6 @@ FeatureExtractionModel
   m_ResultVisuModel->ClearLayers();
   m_ResultVisuModel->AddLayer(lResultVisuGenerator->GetLayer());
   // Render
-  m_ResultVisuModel->Update();
 }
 
 void

@@ -357,13 +357,16 @@ FeatureExtractionController
    case FeatureInfo::TEXT_PANTEX:
       {
         SizeType rad;
-      rad[0] = static_cast<unsigned int>(m_View->guiRadiusX->value());
-      rad[1] = static_cast<unsigned int>(m_View->guiRadiusY->value());
-      // set offset to be able to call the generic texture add filter
-      OffsetType off;
-      off.Fill(0);
-      m_Model->AddTextureFilter(featureType, rad, off);
-      break;
+	rad[0] = static_cast<unsigned int>(m_View->guiPanTexRadiusX->value());
+	rad[1] = static_cast<unsigned int>(m_View->guiPanTexRadiusY->value());
+	// set offset to be able to call the generic texture add filter
+	OffsetType off;
+	off.Fill(0);
+
+	unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiPanTexBin->value()));
+
+	m_Model->AddTextureFilter(featureType, rad, off, bin);
+	break;
       }
     case FeatureInfo::TEXT_HAR:
       {

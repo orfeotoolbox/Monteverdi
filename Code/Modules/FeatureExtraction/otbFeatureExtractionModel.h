@@ -463,7 +463,7 @@ public:
   void AddMeanFilter(int radiusX, int radiusY);
   void AddGradientFilter(double sigma);
   /** Generic method to create a texture filter*/
-  void AddTextureFilter( FeatureType featureType, SizeType radius, OffsetType offset );
+  void AddTextureFilter( FeatureType featureType, SizeType radius, OffsetType offset, unsigned int bin );
 
   void AddSFSTexturesFilter( FeatureType type, double spectralThr, unsigned int spatialThr, unsigned int nbDirection, double alpha, unsigned int ratioMaxConsNb );
   void AddEdgeDensityFilter( FeatureType type, std::vector<double> params );

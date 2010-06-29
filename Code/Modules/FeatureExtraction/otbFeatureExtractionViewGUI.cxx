@@ -130,8 +130,8 @@ FeatureExtractionViewGUI
   m_ParameterGroupList.push_back(guiMS);
   m_ParameterGroupList.push_back(guiHaralick);
   m_ParameterGroupList.push_back(guiAdvanced);
+  m_ParameterGroupList.push_back(guiPanTex);
   // for original data, uses guiNothing, ie.m_ParameterGroupList[0]
-  //m_ParameterGroupList.push_back(guiEdgeCanny);
 
 }
 
