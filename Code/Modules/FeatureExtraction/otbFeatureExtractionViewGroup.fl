@@ -17,8 +17,8 @@ class FeatureExtractionViewGroup {open
   } {
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
-      callback {Quit();} open
-      xywh {26 179 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      callback {Quit();} open selected
+      xywh {37 267 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -28,7 +28,7 @@ class FeatureExtractionViewGroup {open
           xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Choice guiFeatureChoice {
-            label {Feature Choice} open
+            label {Feature Choice}
             xywh {15 318 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           } {
             MenuItem guiInitMenu {
@@ -403,7 +403,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             label {Feature Parameters} open
             xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
-            Fl_Group guiNothing {selected
+            Fl_Group guiNothing {
               xywh {206 318 240 140} color 7
             } {}
             Fl_Group guiTouzi {
@@ -917,29 +917,29 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {210 323 233 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
               }
               Fl_Group {} {
-                label Offset open
-                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
-              } {
-                Fl_Value_Input guiHarOffsetX {
-                  label X
-                  tooltip {Used offset value.} xywh {226 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
-                }
-                Fl_Value_Input guiHarOffsetY {
-                  label Y
-                  tooltip {Used offset value.} xywh {225 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
-                }
-              }
-              Fl_Group {} {
                 label Radius open
-                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarRadiusX {
                   label X
-                  tooltip {Neighborhood radius.} xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                  tooltip {Neighborhood radius.} xywh {227 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
                 Fl_Value_Input guiHarRadiusY {
                   label Y
-                  tooltip {Neighborhood radius.} xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                  tooltip {Neighborhood radius.} xywh {227 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                }
+              }
+              Fl_Group {} {
+                label Offset open
+                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+              } {
+                Fl_Value_Input guiHarOffsetX {
+                  label X
+                  tooltip {Used offset value.} xywh {283 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                }
+                Fl_Value_Input guiHarOffsetY {
+                  label Y
+                  tooltip {Used offset value.} xywh {282 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
               }
               Fl_Group {} {
@@ -976,29 +976,29 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {210 323 233 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
               }
               Fl_Group {} {
-                label Offset open
-                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
-              } {
-                Fl_Value_Input guiAdvOffsetX {
-                  label X
-                  tooltip {Used offset value.} xywh {226 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
-                }
-                Fl_Value_Input guiAdvOffsetY {
-                  label Y
-                  tooltip {Used offset value.} xywh {225 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
-                }
-              }
-              Fl_Group {} {
                 label Radius open
-                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiAdvRadiusX {
                   label X
-                  tooltip {Neighborhood radius.} xywh {284 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                  tooltip {Neighborhood radius.} xywh {227 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
                 Fl_Value_Input guiAdvRadiusY {
                   label Y
-                  tooltip {Neighborhood radius.} xywh {284 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                  tooltip {Neighborhood radius.} xywh {227 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                }
+              }
+              Fl_Group {} {
+                label Offset open
+                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+              } {
+                Fl_Value_Input guiAdvOffsetX {
+                  label X
+                  tooltip {Used offset value.} xywh {283 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                }
+                Fl_Value_Input guiAdvOffsetY {
+                  label Y
+                  tooltip {Used offset value.} xywh {282 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
               }
               Fl_Group {} {
@@ -1033,11 +1033,11 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             } {
               Fl_Value_Input guiPanTexRadiusX {
                 label {Radius X}
-                tooltip {Neighborhood radius.} xywh {276 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                tooltip {Neighborhood radius.} xywh {276 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
               }
               Fl_Value_Input guiPanTexRadiusY {
                 label {Radius Y}
-                tooltip {Neighborhood radius.} xywh {388 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 1
+                tooltip {Neighborhood radius.} xywh {388 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
               }
               Fl_Input_Choice guiPanTexBin {
                 label {Bin length} open

@@ -85,6 +85,7 @@ FeatureExtractionViewGUI
   this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
   guiHarBin->value(0);
   guiAdvBin->value(0);
+  guiPanTexBin->value(0);
 
   pBar->minimum(0);
   pBar->maximum(1);
