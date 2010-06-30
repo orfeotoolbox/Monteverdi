@@ -114,7 +114,9 @@ ProjectionView
     strcpy(inputProjchar,inputProjRef.c_str());
     
     // Import OGRSpatial Reference object from projectionRef
-    oSRS.importFromWkt(&inputProjchar);
+    // Warning : importFromWkt modifies the passed pointer !
+    char* inputProjcharForImport = inputProjchar;
+    oSRS.importFromWkt(&inputProjcharForImport);
     
     // First test if the node Projection exists : Avoid Segfaults when
     // uses strcmp with null values.
