@@ -111,7 +111,7 @@ public:
 		  }
 		case AdvancedTexture::SUMVAR:
 		  {
-		    oss<<"Sum varaiance : ";
+		    oss<<"Sum variance : ";
 		    break;
 		  }
 		case AdvancedTexture::SUMENT:
