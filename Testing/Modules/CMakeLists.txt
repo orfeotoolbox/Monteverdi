@@ -54,10 +54,10 @@ ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/FeatureExtractionModuleOuptut.hdr
 )
 
-ADD_TEST(moTvFeatureExtractionModuleApplication  ${Modules_TESTS1} otbFeatureExtractionModuleApplication
-${INPUTDATA}/qb_RoadExtract.img
-${TEMP}/featModelTest.tif
-)
+#ADD_TEST(moTvFeatureExtractionModuleApplication  ${Modules_TESTS1} otbFeatureExtractionModuleApplication
+#${INPUTDATA}/qb_RoadExtract.img
+#${TEMP}/featModelTest.tif
+#)
 
 ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
@@ -412,6 +412,3 @@ TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCounti
 #ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
 #TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)
 
-
-ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionApplication_test_interne.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionApplication otbMonteverdi otbFeatureExtractionModule otbReaderModule)
