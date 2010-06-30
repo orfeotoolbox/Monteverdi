@@ -66,6 +66,9 @@ public:
   virtual void LeftMouseButtonClicked( ContinuousIndexType index ) =0;
   virtual ModelType* GetModel() = 0;
   virtual void UpdateFeaturePreview(unsigned int id) =0;
+  virtual void ShowBarStatus() =0;
+  virtual void HideBarStatus() =0; 
+
 
   virtual void Quit()=0;
   virtual void Cancel()=0;

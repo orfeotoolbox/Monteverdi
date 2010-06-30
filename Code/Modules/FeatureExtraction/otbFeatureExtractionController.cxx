@@ -34,9 +34,11 @@ FeatureExtractionController
   m_ResizingHandler                  = ResizingHandlerType::New();
   m_ChangeExtractRegionHandler       = ChangeExtractRegionHandlerType::New();
   m_ResultResizingHandler            = ResizingHandlerType::New();
-  m_ResultChangeExtractRegionHandler = ChangeExtractRegionHandlerType::New();
+  m_ResultChangeExtractRegionHandler = MyChangeExtractRegionHandlerType::New();
 
- // Link pixel clicked model (controller in relity...)
+  m_ResultChangeExtractRegionHandler->SetController(this);
+
+  // Link pixel clicked model (controller in relity...)
   m_MouseClickedController->SetMouseButton(1);
   m_MouseClickedController->SetImageViewId(0);
   m_MouseClickedController->SetController(this);
@@ -96,6 +98,23 @@ FeatureExtractionController
   id[0] = static_cast<long int>(index[0]);
   id[1] = static_cast<long int>(index[1]);
   m_View->UpdateSelectedPixel(id);
+}
+
+void
+FeatureExtractionController
+::ShowBarStatus()
+{
+  m_View->pBar->value(1);
+  m_View->pBar->show();
+  Fl::check();
+}
+
+void
+FeatureExtractionController
+::HideBarStatus()
+{
+  m_View->pBar->hide();
+  Fl::check();
 }
 
 
@@ -702,17 +721,14 @@ FeatureExtractionController::UpdateFeaturePreview(unsigned int id)
 {
   try
     {
-      m_View->pBar->value(1);
-      m_View->pBar->show();
-      Fl::check();
+      this->ShowBarStatus();
       m_Model->GetSingleOutput(id);
     }
   catch (itk::ExceptionObject & err)
     {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-  m_View->pBar->hide();
-  Fl::check();
+  this->HideBarStatus();
 }
 
 

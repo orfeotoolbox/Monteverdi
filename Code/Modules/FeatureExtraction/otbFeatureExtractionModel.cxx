@@ -924,7 +924,9 @@ FeatureExtractionModel
   // Add the layer to the model
   m_ResultVisuModel->ClearLayers();
   m_ResultVisuModel->AddLayer(lResultVisuGenerator->GetLayer());
+
   // Render
+  m_ResultVisuModel->Update();
 }
 
 void
