@@ -135,7 +135,7 @@ Orthorectification
   ossimDirectory od(cfname);
   if (!elevManager->loadElevationPath(ossimDEMDir))
   {
-    fl_alert("Invalid directory, no DEM files found!");
+    MsgReporter::GetInstance()->SendError("Invalid directory, no DEM files found!");
     this->OpenDEM();
     return;
 
@@ -465,7 +465,7 @@ Orthorectification
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     break;
   }
 }
@@ -641,12 +641,12 @@ Orthorectification::CheckImageParameters()
   }
   if (strcmp("",guiSizeX->value()) == 0 || strcmp("",guiSizeY->value()) == 0)
   {
-    fl_alert("Please, set Size values...");
+    MsgReporter::GetInstance()->SendError("Please, set Size values...");
     return 1;
   }
   if (strcmp("",guiSpacingX->value()) == 0 || strcmp("",guiSpacingY->value()) == 0)
   {
-    fl_alert("Please, set Spacing values...");
+    MsgReporter::GetInstance()->SendError("Please, set Spacing values...");
     return 1;
   }
 
@@ -704,7 +704,7 @@ Orthorectification
       itk::OStringStream oss;
       oss.str("Invalid Zone parameter: ");
       oss<<guiUTMZone->value();
-      fl_alert(oss.str().c_str());
+      MsgReporter::GetInstance()->SendError(oss.str().c_str());
     }
     break;
   }
@@ -740,17 +740,17 @@ Orthorectification
       }
       else
       {
-        fl_alert("Invalid Scale Factor...");
+        MsgReporter::GetInstance()->SendError("Invalid Scale Factor...");
       }
     }
     else
     {
-      fl_alert("Please, set Easting and Northing values...");
+      MsgReporter::GetInstance()->SendError("Please, set Easting and Northing values...");
     }
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     res = 1;
     break;
   }
@@ -841,13 +841,13 @@ Orthorectification
         break;
       }
       default:
-        fl_alert("Problem with interpolator type, please contact developpers");
+        MsgReporter::GetInstance()->SendError("Problem with interpolator type, please contact developpers");
         break;
       }
     }
     else
     {
-      fl_alert("Invalid ionterpolator Radius...");
+      MsgReporter::GetInstance()->SendError("Invalid ionterpolator Radius...");
     }
     break;
   }
@@ -861,7 +861,7 @@ Orthorectification
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     res = 1;
     break;
   }
@@ -921,7 +921,7 @@ Orthorectification::GenericCreateOutput( TMapProjection *mapProj)
   {
     if (strcmp("",guiDEMPath->value())==0)
     {
-      fl_alert("Please, select DEM directory.");
+      MsgReporter::GetInstance()->SendError("Please, select DEM directory.");
     }
     else
     {
@@ -1100,7 +1100,7 @@ Orthorectification
   }
   catch ( itk::ExceptionObject &  )
   {
-    fl_alert("Invalid image : No ImageKeywordlist found");
+    MsgReporter::GetInstance()->SendError("Invalid image : No ImageKeywordlist found");
     return;
   }
   ForwardSensorInputPointType  point;
@@ -1220,7 +1220,7 @@ Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     break;
   }
 
@@ -1355,7 +1355,7 @@ Orthorectification::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     break;
   }
 
@@ -1444,7 +1444,7 @@ Orthorectification::CartoPointToLongLat(ForwardSensorInputPointType cartoPoint)
     break;
   }
   default:
-    fl_alert("Problem with map projection type, please contact developpers");
+    MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
     break;
   }
 
