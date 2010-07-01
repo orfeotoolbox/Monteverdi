@@ -90,7 +90,7 @@ public:
 	  for(unsigned int textId = 0; textId<pHarList.size(); textId++)
 	    {     
 	      itk::OStringStream oss;
-	      oss<<"Advanced Text : ";
+	      //oss<<"Advanced Text : ";
 	      
 	      switch(pHarList[textId])
 		{
