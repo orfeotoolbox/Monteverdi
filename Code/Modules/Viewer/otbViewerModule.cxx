@@ -818,7 +818,7 @@ void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
   // Apply the new rendering function to the Image layer
   m_StandardRenderingFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-  m_StandardRenderingFunction->Initialize();
+  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
   m_RenderingModel->Update();
 }
 
@@ -839,7 +839,7 @@ void ViewerModule::UpdateRGBChannelOrder(int red, int green , int blue)
   // Apply the new rendering function to the Image layer
   m_StandardRenderingFunction->SetAutoMinMax(true);
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-  m_StandardRenderingFunction->Initialize();
+  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
   m_RenderingModel->Update();
 }
 
@@ -862,7 +862,7 @@ void ViewerModule::UpdateTabHistogram()
   /// Update the StandardRenderingFunction
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
   m_StandardRenderingFunction->SetChannelList(channels);
-  m_StandardRenderingFunction->Initialize();
+  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
 
   //Set the rendering to the histogram handlers
