@@ -221,17 +221,12 @@ void ViewerModule::Run()
       m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");
     }
 
-  // Set the File Name as a label to the viewer window
-//   m_DisplayWindow->SetLabel(m_Label.c_str());
-//   bSetupWindow->copy_label(m_Label.c_str());
-
   // First check if there is actually an input image
   if(m_InputImage.IsNull())
     {
       MsgReporter::GetInstance()->SendError("The image pointer is null, there is nothing to display. You probably forgot to set the image.");
       this->Quit();
       return;
-      //itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
     }
 
   // Update image info for further use
@@ -262,7 +257,12 @@ void ViewerModule::Run()
   ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
 
   m_StandardRenderingFunction->SetChannelList(channels);
-  //  m_StandardRenderingFunction->SetAutoMinMax(false);
+  m_StandardRenderingFunction->SetAutoMinMax(true);
+
+  double autoMinMaxQuantile = m_StandardRenderingFunction->GetAutoMinMaxQuantile();
+  bLowerQuantile->value(100 * autoMinMaxQuantile);
+  bUpperQuantile->value(100 * autoMinMaxQuantile);
+
   m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
 
   // Add the generated layer to the rendering model
@@ -996,6 +996,65 @@ void ViewerModule::TabSetupPosition()
     }
 }
 
+void ViewerModule::UpdateEnableScaling()
+{
+  bool enableScaling = bEnableScaling->value();
+
+  if (enableScaling)
+    {
+    // Use the Histogram & quantile settings  to scale intensity values
+
+    bLowerQuantile->activate();
+    bUpperQuantile->activate();
+    bLowerApply->activate();
+    bUpperApply->activate();
+
+    // Update both lower and upper quantile
+    double upperQuantile = bUpperQuantile->value() / 100.;
+    double lowerQuantile = bLowerQuantile->value() / 100.;
+    m_StandardRenderingFunction->SetAutoMinMax(false);
+
+
+    ParametersType    params;
+    params = m_StandardRenderingFunction->GetParameters();
+
+    for(unsigned int i = 0; i < params.Size(); i = i+2)
+      {
+        double min = m_StandardRenderingFunction->GetHistogramList()
+            ->GetNthElement((unsigned int)(i/2))->Quantile(0,lowerQuantile);
+        double max = m_StandardRenderingFunction->GetHistogramList()
+            ->GetNthElement((unsigned int)(i/2))->Quantile(0,1-upperQuantile);
+
+        params.SetElement(i,min);
+        params.SetElement(i+1,max);
+      }
+
+    this->UpdateIntensityScaling(params);
+
+    }
+  else
+    {
+    // Display raw intensity values. Dynamic is limited to [0..255]
+
+    bLowerQuantile->deactivate();
+    bUpperQuantile->deactivate();
+    bLowerApply->deactivate();
+    bUpperApply->deactivate();
+
+    m_StandardRenderingFunction->SetAutoMinMax(false);
+
+    ParametersType params = m_StandardRenderingFunction->GetParameters();
+    for(unsigned int i = 0; i < params.Size(); i = i+2)
+      {
+        params.SetElement(i,0);
+        params.SetElement(i+1,255);
+      }
+
+    this->UpdateIntensityScaling(params);
+
+    }
+}
+
 /**
  *
  */
@@ -1016,21 +1075,7 @@ void ViewerModule::UpdateUpperQuantile()
       params.SetElement(i,max);
     }
 
-  // Update the layer
-  m_StandardRenderingFunction->SetParameters(params);
-  //m_StandardRenderingFunction->Initialize();
-  m_RenderingModel->Update();
-
-  // Redraw the hitogram curves
-  this->UpdateTabHistogram();
-
-  // Added cause the asymptote doesn't update their position
-  m_BlueCurveWidgetGroup->hide();
-  m_GreenCurveWidgetGroup->hide();
-  m_RedCurveWidgetGroup->hide();
-
-  // Needed to show the curves
-  this->TabSetupPosition();
+  this->UpdateIntensityScaling(params);
 }
 
 /**
@@ -1055,12 +1100,16 @@ void ViewerModule::UpdateLowerQuantile()
       params.SetElement(i,min);
     }
 
+  this->UpdateIntensityScaling(params);
+}
+
+void ViewerModule::UpdateIntensityScaling(ParametersType& renderingFunctionParams)
+{
   // Update the layer
-  m_StandardRenderingFunction->SetParameters(params);
-  //m_StandardRenderingFunction->Initialize();
+  m_StandardRenderingFunction->SetParameters(renderingFunctionParams);
   m_RenderingModel->Update();
 
-  // Redraw the hitogram curves
+  // Redraw the histogram curves
   this->UpdateTabHistogram();
 
   // Added cause the asymptote doesn't update their position

@@ -246,8 +246,11 @@ public:
   virtual void UpdateGrayScaleChannelOrder(int choice);
   virtual void UpdateRGBChannelOrder(int red, int green , int blue);
   virtual void TabSetupPosition();
+  virtual void UpdateEnableScaling();
   virtual void UpdateUpperQuantile();
   virtual void UpdateLowerQuantile();
+  virtual void UpdateIntensityScaling(ParametersType& renderingFunctionParams);
+
   virtual void ShowHide();
   virtual void Quit();
   
