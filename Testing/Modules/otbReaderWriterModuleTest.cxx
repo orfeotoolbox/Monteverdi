@@ -25,13 +25,13 @@
 int otbReaderWriterModuleTest(int argc, char* argv[])
 {
   otb::ReaderModule::Pointer specificReaderModule = otb::ReaderModule::New();
-  otb::Module::Pointer readerModule = specificReaderModule.GetPointer();
-  
+  otb::Module::Pointer       readerModule = specificReaderModule.GetPointer();
+
   otb::WriterModule::Pointer specificWriterModule = otb::WriterModule::New();
-  otb::Module::Pointer writerModule = specificWriterModule.GetPointer();
-  
-  std::cout<<"Module: "<<readerModule<<std::endl;
-  
+  otb::Module::Pointer       writerModule = specificWriterModule.GetPointer();
+
+  std::cout << "Module: " << readerModule << std::endl;
+
   readerModule->Start();
 
   Fl::lock();
@@ -46,13 +46,13 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test");
 
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
 
   //Writer module now
-  writerModule->AddInputByKey("InputDataSet",wrapperOut);
+  writerModule->AddInputByKey("InputDataSet", wrapperOut);
   writerModule->Start();
   Fl::check();
-  specificWriterModule->vFilePath->value(argv[2]);  
+  specificWriterModule->vFilePath->value(argv[2]);
   Fl::check();
   specificWriterModule->bOk->do_callback();
 
@@ -60,4 +60,3 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

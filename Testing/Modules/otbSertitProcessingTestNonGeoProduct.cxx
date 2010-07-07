@@ -27,39 +27,38 @@
 
 /**
  * Sertit Processing Test
- */ 
+ */
 int otbSertitProcessingTestNonGeoProduct(int argc, char* argv[])
 {
   // Input
   const char * outputFilename = argv[1];
   unsigned int useExtended    = atoi(argv[2]);
-  
+
   const char * inputFilename1 = argv[3];
 
   // Open Image
-  typedef otb::TypeManager::Floating_Point_VectorImage      ImageType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                   WriterType;
+  typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
+  typedef otb::ImageFileWriter<ImageType>              WriterType;
 
 /** READER 1 */
   ReaderType::Pointer imageReader1 = ReaderType::New();
   imageReader1->SetFileName(inputFilename1);
   imageReader1->GenerateOutputInformation();
-  
+
   // Input Wrapper 1
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(imageReader1->GetOutput());
   std::cout << "Input wrapper : " << wrapperIn1 << std::endl << std::endl;
-  
-  
+
 /** GE Format Exportation Module */
   otb::TileExportModule::Pointer geFormatExportationModule = otb::TileExportModule::New();
-  otb::Module::Pointer exportationModule  = geFormatExportationModule.GetPointer();
+  otb::Module::Pointer           exportationModule  = geFormatExportationModule.GetPointer();
   std::cout << "Module: " << exportationModule << std::endl << std::endl;
 
   // Configure GE Format Exportation Module
   geFormatExportationModule->AddInputByKey("InputImage", wrapperIn1);
   geFormatExportationModule->Start();
-  
+
   geFormatExportationModule->vFilePath->value(outputFilename);
   geFormatExportationModule->gExtended->value(useExtended);
 
@@ -70,13 +69,11 @@ int otbSertitProcessingTestNonGeoProduct(int argc, char* argv[])
   geFormatExportationModule->vGELongLR->value(-72.47093406);
   geFormatExportationModule->vGELatLR->value(18.21087435);
   geFormatExportationModule->vGELatLR->do_callback();
-  
-  
+
   Fl::check();
-  
+
   geFormatExportationModule->bOk->do_callback();
   Fl::check();
-  
+
   return EXIT_SUCCESS;
 }
-

@@ -24,13 +24,13 @@ TypeManager::Pointer TypeManager::Instance  = NULL;
 
 /** Ensure instance uniqueness */
 TypeManager * TypeManager::GetInstance()
-  {
-    if(!Instance)
-      {
-      Instance = TypeManager::New();
-      }
-    return Instance;
-  }
+{
+  if (!Instance)
+    {
+    Instance = TypeManager::New();
+    }
+  return Instance;
+}
 
 TypeManager::TypeManager() : m_IdToNameMap()
 {
@@ -51,19 +51,19 @@ TypeManager::TypeManager() : m_IdToNameMap()
 
 /** Destructor */
 TypeManager::~TypeManager() {}
- 
+
 /** PrintSelf */
 void TypeManager::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call the superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Display registered type info
-  os<<"Registered types: "<<std::endl;
-  for(IdToNameMapType::const_iterator it = m_IdToNameMap.begin();
-      it!=m_IdToNameMap.end();++it)
+  os << "Registered types: " << std::endl;
+  for (IdToNameMapType::const_iterator it = m_IdToNameMap.begin();
+       it != m_IdToNameMap.end(); ++it)
     {
-    os<<indent<<"typeId: "<<it->first<<", name: "<<it->second<<std::endl;
+    os << indent << "typeId: " << it->first << ", name: " << it->second << std::endl;
     }
 }
 } // End namespace otb

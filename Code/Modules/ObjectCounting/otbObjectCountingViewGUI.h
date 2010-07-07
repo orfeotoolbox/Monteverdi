@@ -18,7 +18,6 @@ See OTBCopyright.txt for details.
 #ifndef __otbObjectCountingViewGUI_h
 #define __otbObjectCountingViewGUI_h
 
-
 #include "otbEventsListener.h"
 // Disabling deprecation warning
 #ifdef _MSC_VER
@@ -39,56 +38,54 @@ See OTBCopyright.txt for details.
 #include "otbImageWidgetPolygonForm.h"
 #include "otbImageWidgetPolylineForm.h"
 
-
 namespace otb
 {
 /** \class ObjectCountingViewGUI
  *
  */
 class ITK_EXPORT ObjectCountingViewGUI
-      : public EventsListener<std::string>, public ObjectCountingViewGroup, public itk::Object
+  : public EventsListener<std::string>, public ObjectCountingViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectCountingViewGUI          Self;
-  typedef itk::Object   Superclass;
+  typedef ObjectCountingViewGUI         Self;
+  typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(ObjectCountingViewGUI,itk::Object);
+  itkTypeMacro(ObjectCountingViewGUI, itk::Object);
 
+  typedef ObjectCountingModel                                                                ObjectCountingModelType;
+  typedef ObjectCountingModel::PixelType                                                     PixelType;
+  typedef ObjectCountingModel::ImageType                                                     SingleImageType;
+  typedef InteractiveScrollWidget<PixelType, ObjectCountingControllerInterface>              ScrollWidgetType;
+  typedef InteractiveFullResolutionImageWidget<PixelType, ObjectCountingControllerInterface> FullWidgetType;
 
-  typedef ObjectCountingModel                                                                 ObjectCountingModelType;
-  typedef ObjectCountingModel::PixelType                                                      PixelType;
-  typedef ObjectCountingModel::ImageType                                                      SingleImageType;
-  typedef InteractiveScrollWidget<PixelType, ObjectCountingControllerInterface>               ScrollWidgetType;
-  typedef InteractiveFullResolutionImageWidget<PixelType, ObjectCountingControllerInterface>  FullWidgetType;
+  typedef FullWidgetType::ImageType ImageType;
+  typedef ImageType::IndexType      IndexType;
+  typedef ImageType::SizeType       SizeType;
+  typedef ImageType::RegionType     RegionType;
+  typedef ImageWidgetBoxForm        BoxType;
 
-  typedef FullWidgetType::ImageType      ImageType;
-  typedef ImageType::IndexType           IndexType;
-  typedef ImageType::SizeType            SizeType;
-  typedef ImageType::RegionType          RegionType;
-  typedef ImageWidgetBoxForm             BoxType;
-
-  typedef ImageWidgetPolygonForm<>      PolygonType;
-  typedef PolygonType::Pointer          PolygonPointerType;
-  typedef ImageWidgetPolylineForm<>     PolylineType;
-  typedef PolylineType::Pointer         PolylinePointerType;
+  typedef ImageWidgetPolygonForm<>  PolygonType;
+  typedef PolygonType::Pointer      PolygonPointerType;
+  typedef ImageWidgetPolylineForm<> PolylineType;
+  typedef PolylineType::Pointer     PolylinePointerType;
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,ObjectCountingControllerInterface);
-  itkGetObjectMacro(Controller,ObjectCountingControllerInterface);
+  itkSetObjectMacro(Controller, ObjectCountingControllerInterface);
+  itkGetObjectMacro(Controller, ObjectCountingControllerInterface);
   /** Display window accessors */
-  itkGetObjectMacro(FullImageWidget,FullWidgetType);
-  itkGetObjectMacro(ScrollWidget,ScrollWidgetType);
+  itkGetObjectMacro(FullImageWidget, FullWidgetType);
+  itkGetObjectMacro(ScrollWidget, ScrollWidgetType);
 
   /** Standard Running macro */
   otbRunningMacro();
 
   /** Event from the model */
-  virtual void Notify(const std::string & event);
+  virtual void Notify(const std::string& event);
 
   /** Fluid call backs*/
   virtual void OpenImage();
@@ -122,7 +119,7 @@ public:
 
   /** Build the interface */
   virtual void Build();
-  
+
   void SetModel(ObjectCountingModelType* model);
 protected:
 
@@ -134,7 +131,7 @@ protected:
 
 private:
   ObjectCountingViewGUI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   //void ReInitAllViews();
 
@@ -143,9 +140,9 @@ private:
   /** Pointer to the controller */
   ObjectCountingControllerInterface::Pointer m_Controller;
 
-  ScrollWidgetType::Pointer         m_ScrollWidget;
-  FullWidgetType::Pointer           m_FullImageWidget;
+  ScrollWidgetType::Pointer m_ScrollWidget;
+  FullWidgetType::Pointer   m_FullImageWidget;
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

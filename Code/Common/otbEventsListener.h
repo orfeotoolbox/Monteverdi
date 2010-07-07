@@ -35,17 +35,17 @@ public:
   typedef EventsListener Self;
 
   // Update the display
-  virtual void Notify(const TEvent & event) = 0;
+  virtual void Notify(const TEvent& event) = 0;
 
 protected:
   /** Constructor */
-  EventsListener() {};
+  EventsListener() {}
   /** Destructor */
-  virtual ~EventsListener() {};
+  virtual ~EventsListener() {}
 
 private:
   EventsListener(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

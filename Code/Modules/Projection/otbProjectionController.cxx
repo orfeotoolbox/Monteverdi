@@ -22,12 +22,10 @@
 namespace otb
 {
 
-
 ProjectionController
 ::ProjectionController()
 {
 }
-
 
 ProjectionController
 ::~ProjectionController()
@@ -41,14 +39,14 @@ ProjectionController
 ::ReprojectImage()
 {
   try
-  {
+    {
     m_Model->ReprojectImage();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-  
+    }
+
 }
 
 /**
@@ -56,35 +54,40 @@ ProjectionController
  */
 void
 ProjectionController
-::ProjectRegion(unsigned int sizeX, unsigned int sizeY, double spacingX, double spacingY, double originX, double originY , bool isUl)
+::ProjectRegion(unsigned int sizeX,
+                unsigned int sizeY,
+                double spacingX,
+                double spacingY,
+                double originX,
+                double originY,
+                bool isUl)
 {
   try
-  {
-    m_Model->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY,isUl);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY, isUl);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
-  
-}
+    }
 
+}
 
 /**
  *
  */
 void
 ProjectionController
-::UpdateUTMTransform(int zone,bool north)
+::UpdateUTMTransform(int zone, bool north)
 {
   try
-  {
-    m_Model->UpdateUTMTransform(zone,north);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->UpdateUTMTransform(zone, north);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 /**
@@ -95,13 +98,13 @@ ProjectionController
 ::InitializeLambertIITransform()
 {
   try
-  {
+    {
     m_Model->InitializeLambertIITransform();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 /**
@@ -109,16 +112,16 @@ ProjectionController
  */
 void
 ProjectionController
-::UpdateTMTransform(double scale, double falseEasting , double falseNorthing )
+::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   try
-  {
-    m_Model->UpdateTMTransform(scale, falseEasting, falseNorthing );
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->UpdateTMTransform(scale, falseEasting, falseNorthing);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 /**
@@ -126,16 +129,16 @@ ProjectionController
  */
 void
 ProjectionController
-::UpdateInputUTMTransform(int zone,bool north)
+::UpdateInputUTMTransform(int zone, bool north)
 {
   try
-  {
-    m_Model->UpdateInputUTMTransform(zone,north);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->UpdateInputUTMTransform(zone, north);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 /**
@@ -146,13 +149,13 @@ ProjectionController
 ::InitializeInputLambertIITransform()
 {
   try
-  {
+    {
     m_Model->InitializeInputLambertIITransform();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 /**
@@ -160,16 +163,16 @@ ProjectionController
  */
 void
 ProjectionController
-::UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing )
+::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   try
-  {
-    m_Model->UpdateInputTMTransform(scale, falseEasting, falseNorthing );
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->UpdateInputTMTransform(scale, falseEasting, falseNorthing);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 /**
  *
@@ -179,13 +182,13 @@ ProjectionController
 ::InitializeWGS84Transform()
 {
   try
-  {
+    {
     m_Model->UpdateWGS84Transform();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
 } // end namespace otb

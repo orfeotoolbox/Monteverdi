@@ -20,7 +20,6 @@
 
 #include "otbWriterMVCModule.h"
 
-
 namespace otb
 {
 /** Constructor */
@@ -42,7 +41,7 @@ WriterMVCModule::WriterMVCModule()
   m_Controller->SetView(m_View);
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet",otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
 
   m_Model->RegisterListener(this);
 }
@@ -55,7 +54,7 @@ WriterMVCModule::~WriterMVCModule()
 void WriterMVCModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -66,16 +65,16 @@ void WriterMVCModule::Run()
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 
-  if(vectorImage.IsNotNull())
-  {
+  if (vectorImage.IsNotNull())
+    {
     m_Model->SetInputImage(vectorImage);
     m_View->Show();
     m_Model->GenerateLayers();
-  }
+    }
   else
-  {
-    itkExceptionMacro(<<"Input image is NULL.");
-  }
+    {
+    itkExceptionMacro(<< "Input image is NULL.");
+    }
 }
 
 void WriterMVCModule::ThreadedWatch()
@@ -87,22 +86,22 @@ void WriterMVCModule::ThreadedWatch()
   double updateThres = 0.01;
   double current = -1;
 
-  while( (m_ProcessObject.IsNull() || this->IsBusy()) )
-  {
-    if(m_ProcessObject.IsNotNull())
+  while ((m_ProcessObject.IsNull() || this->IsBusy()))
     {
-      current = m_ProcessObject->GetProgress();
-      if(current - last > updateThres)
+    if (m_ProcessObject.IsNotNull())
       {
+      current = m_ProcessObject->GetProgress();
+      if (current - last > updateThres)
+        {
         // Make the main fltk loop update progress fields
         m_View->AwakeProgressFields(m_ProcessObject->GetProgress());
         last = current;
+        }
       }
-    }
     // Sleep for a while
     Sleep(500);
     m_ProcessObject = m_Model->GetProcessObjectModel();
-  }
+    }
 
   // Reactivate window buttons
   m_View->ManageActivationWindowButtons(true);
@@ -118,29 +117,28 @@ void WriterMVCModule::ThreadedRun()
   this->BusyOff();
 }
 
-
 /** The Notify */
-void WriterMVCModule::Notify(const std::string & event)
+void WriterMVCModule::Notify(const std::string& event)
 {
   if (event == "OutputsUpdated")
-  {
+    {
     // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     // Once module is closed, it is no longer busy
     this->BusyOff();
-  }
-  else if ( ( event == "BusyOff" ) ||  ( event == "Quit" ) )
-  {
+    }
+  else if ((event == "BusyOff") ||  (event == "Quit"))
+    {
     this->BusyOff();
-  }
+    }
   else if (event == "SaveDataSet")
-  {
+    {
     this->StartProcess2();
     this->StartProcess1();
-  }
+    }
   else
-  {
-  }
+    {
+    }
 }
 
 } // End namespace otb

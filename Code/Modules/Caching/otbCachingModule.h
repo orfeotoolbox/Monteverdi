@@ -29,7 +29,6 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-
 namespace otb
 {
 /** \class CachingModule
@@ -52,15 +51,15 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(CachingModule,Module);
+  itkTypeMacro(CachingModule, Module);
 
   /** OTB typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image          FloatingImageType;
-  typedef TypeManager::Floating_Point_VectorImage    FloatingVectorImageType;
-  typedef TypeManager::Labeled_Char_VectorImage      CharVectorImageType;
+  typedef TypeManager::Floating_Point_Image       FloatingImageType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Labeled_Char_VectorImage   CharVectorImageType;
 
-   /// Writers
+  /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
   typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
   typedef ImageFileWriter<FloatingImageType>       FPWriterType;
@@ -70,13 +69,12 @@ public:
   typedef ImageFileReader<CharVectorImageType>     CharVReaderType;
   typedef ImageFileReader<FloatingImageType>       FPReaderType;
 
-
-  itkSetMacro(WatchProgress,bool);
+  itkSetMacro(WatchProgress, bool);
   itkBooleanMacro(WatchProgress);
 
-  itkSetMacro(EraseFile,bool);
+  itkSetMacro(EraseFile, bool);
   itkBooleanMacro(EraseFile);
-  
+
   // Return the writing progress
   double GetProgress() const;
 
@@ -108,8 +106,8 @@ protected:
 
 private:
   CachingModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
+  void operator =(const Self&); //purposely not implemented
+
   // Callback to update the window label
   static void UpdateProgressCallback(void * data);
 
@@ -121,10 +119,10 @@ private:
 
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);
-   
+
   // The writing process
   itk::ProcessObject::Pointer m_WritingProcess;
-  
+
   // The reading process
   itk::ProcessObject::Pointer m_ReadingProcess;
 
@@ -136,14 +134,13 @@ private:
 
   // Report visual progress
   bool m_WatchProgress;
-  
+
   //error msg
   std::string m_ErrorMsg;
-  
+
   //erase cached file
   bool m_EraseFile;
 };
-
 
 } // End namespace otb
 

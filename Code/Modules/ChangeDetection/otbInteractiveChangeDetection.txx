@@ -45,24 +45,24 @@ InteractiveChangeDetection<TPixel>
   m_Label1 = 1;
   m_Label2 = 2;
 
-  m_Class1Color[0]=1.0;
-  m_Class1Color[1]=0;
-  m_Class1Color[2]=0;
-  m_Class2Color[0]=0;
-  m_Class2Color[1]=0;
-  m_Class2Color[2]=1.;
+  m_Class1Color[0] = 1.0;
+  m_Class1Color[1] = 0;
+  m_Class1Color[2] = 0;
+  m_Class2Color[0] = 0;
+  m_Class2Color[1] = 0;
+  m_Class2Color[2] = 1.;
 
   m_Radius = 2;
 
   m_ImageList = SingleImageListType::New();
-  
+
   m_RightViewer = ImageViewerType::New();
   m_LeftViewer = ImageViewerType::New();
   m_CenterViewer = ImageViewerType::New();
-  
+
   m_LeftImage = ImageType::New();
   m_RightImage = ImageType::New();
-  
+
   m_AmplitudeFilter1 = AmplitudeFilterType::New();
   m_AmplitudeFilter2 = AmplitudeFilterType::New();
   m_ImageToListFilter1 = ImageToListFilterType::New();
@@ -77,7 +77,7 @@ InteractiveChangeDetection<TPixel>
   m_CastFilter = CastFilterType::New();
 
   m_HasOutput = false;
- 
+
   m_LastPath = ".";
 }
 
@@ -93,7 +93,7 @@ void
 InteractiveChangeDetection<TPixel>
 ::Build(void)
 {
-  SizeType size;
+  SizeType  size;
   IndexType index;
   size.Fill(10);
   index.Fill(0);
@@ -105,8 +105,8 @@ InteractiveChangeDetection<TPixel>
   blackPixel.Fill(0);
 
   CreateGUI();
-  
-   this->svmSVMType->value(m_Estimator->GetSVMType());
+
+  this->svmSVMType->value(m_Estimator->GetSVMType());
   this->svmKernelType->value(m_Estimator->GetKernelType());
   this->svmKernelDegree->value(m_Estimator->GetPolynomialKernelDegree());
   this->svmGamma->value(m_Estimator->GetKernelGamma());
@@ -141,27 +141,27 @@ InteractiveChangeDetection<TPixel>
   ROIDefaultColor[2] = 0;
   ROIDefaultColor[3] = 0;
 
-  m_Class1Color[3]= (float)this->slTrainingSetOpacity->value();
-  m_Class2Color[3]= (float)this->slTrainingSetOpacity->value();
+  m_Class1Color[3] = (float) this->slTrainingSetOpacity->value();
+  m_Class2Color[3] = (float) this->slTrainingSetOpacity->value();
 
   m_LeftViewer->SetInterfaceBoxesColor(m_InterfaceColor);
   m_LeftViewer->SetDefaultROIColor(ROIDefaultColor);
-  m_LeftViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-  m_LeftViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
+  m_LeftViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+  m_LeftViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
   m_LeftViewer->SetScrollMaxInitialSize(iViewScrollLeftWindow->w());
   m_LeftViewer->SetLabel("Before image");
 
   m_RightViewer->SetInterfaceBoxesColor(m_InterfaceColor);
   m_RightViewer->SetDefaultROIColor(ROIDefaultColor);
-  m_RightViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-  m_RightViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
+  m_RightViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+  m_RightViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
   m_RightViewer->SetScrollMaxInitialSize(iViewScrollRightWindow->w());
   m_RightViewer->SetLabel("After image");
 
   m_CenterViewer->SetInterfaceBoxesColor(m_InterfaceColor);
   m_CenterViewer->SetDefaultROIColor(ROIDefaultColor);
-  m_CenterViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-  m_CenterViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
+  m_CenterViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+  m_CenterViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
   m_CenterViewer->SetScrollMaxInitialSize(iViewScrollCenterWindow->w());
   m_CenterViewer->SetLabel("Center image");
 
@@ -190,7 +190,7 @@ InteractiveChangeDetection<TPixel>
   m_LeftViewer->GetPolygonROIList()->PushBack(pol);
 
   if (bPolygonalROI->value())
-  {
+    {
     m_LeftViewer->SetPolygonalROISelectionMode(true);
     m_RightViewer->SetPolygonalROISelectionMode(true);
     m_CenterViewer->SetPolygonalROISelectionMode(true);
@@ -201,9 +201,9 @@ InteractiveChangeDetection<TPixel>
     bEndPolygon->activate();
     bEraseLastPoint->activate();
 
-  }
+    }
   else
-  {
+    {
     m_LeftViewer->SetPolygonalROISelectionMode(false);
     m_RightViewer->SetPolygonalROISelectionMode(false);
     m_CenterViewer->SetPolygonalROISelectionMode(false);
@@ -213,14 +213,14 @@ InteractiveChangeDetection<TPixel>
     Log("Switching to rectangular ROI selection mode.");
     bEndPolygon->deactivate();
     bEraseLastPoint->deactivate();
-  }
+    }
 
 }
 /// What to do on principal action
 template <class TPixel>
 void
 InteractiveChangeDetection<TPixel>
-::PrincipalAction(const IndexType & )
+::PrincipalAction(const IndexType&)
 {
   Update();
 }
@@ -261,27 +261,27 @@ InteractiveChangeDetection<TPixel>
 {
   Fl::check();
   if (m_LeftViewer->GetBuilt())
-  {
+    {
     m_LeftViewer->Update();
-  }
+    }
   if (m_RightViewer->GetBuilt())
-  {
+    {
     m_RightViewer->Update();
-  }
+    }
   if (bDisplayResults->value())
-  {
+    {
     if (m_ResultViewer->GetBuilt())
-    {
+      {
       m_ResultViewer->Update();
+      }
     }
-  }
   else
-  {
-    if (m_CenterViewer->GetBuilt())
     {
+    if (m_CenterViewer->GetBuilt())
+      {
       m_CenterViewer->Update();
+      }
     }
-  }
 
   Fl::check();
 }
@@ -294,7 +294,6 @@ InteractiveChangeDetection<TPixel>
 {
   this->Hide();
 }
-
 
 template <class TPixel>
 void
@@ -312,14 +311,13 @@ void
 InteractiveChangeDetection<TPixel>
 ::SaveSVMModel()
 {
-  const char* filename = fl_file_chooser("SVM model file :", "*.svm",m_LastPath.c_str());
-  if (filename == NULL || strlen(filename)<1)
-  {
-    return ;
-  }
+  const char* filename = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  if (filename == NULL || strlen(filename) < 1)
+    {
+    return;
+    }
   Log("Saving SVM model.");
   m_Estimator->GetModel()->SaveModel(filename);
-
 
   ossimFilename fname(filename);
   m_LastPath = fname.path();
@@ -330,17 +328,16 @@ void
 InteractiveChangeDetection<TPixel>
 ::OpenSVMModel()
 {
-  const char* filename = fl_file_chooser("SVM model file :", "*.svm",m_LastPath.c_str());
-  if (filename == NULL || strlen(filename)<1)
+  const char* filename = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  if (filename == NULL || strlen(filename) < 1)
     {
-      return ;
-  }
+    return;
+    }
   m_ModelFileName = std::string(filename);
   ossimFilename fname(m_ModelFileName.c_str());
   m_LastPath = fname.path();
   this->LoadSVMModel();
 }
-
 
 template <class TPixel>
 void
@@ -366,26 +363,26 @@ InteractiveChangeDetection<TPixel>
 {
   // Pipeline wiring (correction bug #98)
   m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
-  
+
   typename OverlayImageType::PixelType color1(3), color2(3);
-  
-  color1[0]=static_cast<unsigned char>(m_Class1Color[0]*255);
-  color1[1]=static_cast<unsigned char>(m_Class1Color[1]*255);
-  color1[2]=static_cast<unsigned char>(m_Class1Color[2]*255);
-  
-  color2[0]=static_cast<unsigned char>(m_Class2Color[0]*255);
-  color2[1]=static_cast<unsigned char>(m_Class2Color[1]*255);
-  color2[2]=static_cast<unsigned char>(m_Class2Color[2]*255);
-  
-  m_ChangeLabelFilter->SetChange(m_Label1,color1);
-  m_ChangeLabelFilter->SetChange(m_Label2,color2);
+
+  color1[0] = static_cast<unsigned char>(m_Class1Color[0] * 255);
+  color1[1] = static_cast<unsigned char>(m_Class1Color[1] * 255);
+  color1[2] = static_cast<unsigned char>(m_Class1Color[2] * 255);
+
+  color2[0] = static_cast<unsigned char>(m_Class2Color[0] * 255);
+  color2[1] = static_cast<unsigned char>(m_Class2Color[1] * 255);
+  color2[2] = static_cast<unsigned char>(m_Class2Color[2] * 255);
+
+  m_ChangeLabelFilter->SetChange(m_Label1, color1);
+  m_ChangeLabelFilter->SetChange(m_Label2, color2);
   m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
   m_Output = m_ChangeLabelFilter->GetOutput();
-  
+
   m_HasOutput = true;
   this->NotifyAll();
-  
+
   //hide the gui
   this->Hide();
 }
@@ -395,11 +392,11 @@ void
 InteractiveChangeDetection<TPixel>
 ::ImportVectorData()
 {
-  const char* filename = fl_file_chooser("Vector data file :", "*.shp\t*.kml",m_LastPath.c_str());
-  if (filename == NULL || strlen(filename)<1)
-  {
-    return ;
-  }
+  const char* filename = fl_file_chooser("Vector data file :", "*.shp\t*.kml", m_LastPath.c_str());
+  if (filename == NULL || strlen(filename) < 1)
+    {
+    return;
+    }
 
   VectorDataFileReaderPointerType reader = VectorDataFileReaderType::New();
   reader->SetFileName(filename);
@@ -410,28 +407,28 @@ InteractiveChangeDetection<TPixel>
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-  {
-    if (it.Get()->IsPolygonFeature())
     {
+    if (it.Get()->IsPolygonFeature())
+      {
       m_LeftViewer->GetPolygonROIList()->PushBack(it.Get()->GetPolygonExteriorRing());
       m_LeftViewer->GetPolygonROIList()->Back()->SetValue(m_LeftViewer->GetNextROILabel());
-    }
+      }
     ++it;
-  }
+    }
   m_LeftViewer->GetPolygonROIList()->PushBack(PolygonType::New());
   m_LeftViewer->GetPolygonROIList()->Back()->SetValue(m_LeftViewer->GetNextROILabel());
 
   try
-  {
+    {
     this->Update();
     Log("Polygons imported from vector file.");
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-    
+    }
+  catch (itk::ExceptionObject & err)
+    {
+
     Log("Error while reading data file.");
     Log(err.GetDescription());
-  }
+    }
 
   ossimFilename fname(filename);
   m_LastPath = fname.path();
@@ -442,11 +439,11 @@ void
 InteractiveChangeDetection<TPixel>
 ::ExportVectorData()
 {
-  const char* filename = fl_file_chooser("Vector data file :", "*.shp",m_LastPath.c_str());
-  if (filename == NULL || strlen(filename)<1)
-  {
-    return ;
-  }
+  const char* filename = fl_file_chooser("Vector data file :", "*.shp", m_LastPath.c_str());
+  if (filename == NULL || strlen(filename) < 1)
+    {
+    return;
+    }
 
   VectorDataPointerType vectorData = VectorDataType::New();
 
@@ -461,41 +458,40 @@ InteractiveChangeDetection<TPixel>
   DataTreePointerType tree = vectorData->GetDataTree();
   DataNodePointerType root = tree->GetRoot()->Get();
 
-  tree->Add(document,root);
-  tree->Add(folder,document);
-  tree->Add(multiPolygon,folder);
+  tree->Add(document, root);
+  tree->Add(folder, document);
+  tree->Add(multiPolygon, folder);
 
   typename PolygonListType::Pointer list = m_LeftViewer->GetPolygonROIList();
 
-  for (typename PolygonListType::Iterator it = list->Begin();it!=list->End();++it)
-  {
-    if (it.Get()->GetValue()==m_LeftViewer->GetNextROILabel())
+  for (typename PolygonListType::Iterator it = list->Begin(); it != list->End(); ++it)
     {
+    if (it.Get()->GetValue() == m_LeftViewer->GetNextROILabel())
+      {
       DataNodePointerType newPolygon = DataNodeType::New();
       newPolygon->SetPolygonExteriorRing(it.Get());
-      tree->Add(newPolygon,multiPolygon);
+      tree->Add(newPolygon, multiPolygon);
+      }
     }
-  }
 
   VectorDataFileWriterPointerType writer = VectorDataFileWriterType::New();
   writer->SetInput(vectorData);
   writer->SetFileName(filename);
 
   try
-  {
+    {
     writer->Update();
     Log("Vector data file written");
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject & err)
+    {
     Log("Error while writing data file.");
     Log(err.GetDescription());
-  }
+    }
 
   ossimFilename fname(filename);
   m_LastPath = fname.path();
 }
-
 
 template <class TPixel>
 void
@@ -511,19 +507,20 @@ template <class TPixel>
 void
 InteractiveChangeDetection<TPixel>::EraseLastPoint()
 {
-  if (m_LeftViewer->GetPolygonROIList()->Size()>0)
-  {
-    unsigned int sizeOfThePolygon = m_LeftViewer->GetPolygonROIList()->Back()->GetVertexList()->Size();
-    if (sizeOfThePolygon>0)
+  if (m_LeftViewer->GetPolygonROIList()->Size() > 0)
     {
+    unsigned int sizeOfThePolygon = m_LeftViewer->GetPolygonROIList()->Back()->GetVertexList()->Size();
+    if (sizeOfThePolygon > 0)
+      {
       typedef typename PolygonType::VertexListType VertexListType;
-      typedef typename VertexListType::Pointer VertexListPointerType;
+      typedef typename VertexListType::Pointer     VertexListPointerType;
 
       // itk::PolylineParametricPath does not provide a RemoveVertex() method, and the access to the vertex list is const, so we have no other choice to remove a vertex.
-      VertexListPointerType list = const_cast<VertexListType *>(m_LeftViewer->GetPolygonROIList()->Back()->GetVertexList());
+      VertexListPointerType list = const_cast<VertexListType *>(
+        m_LeftViewer->GetPolygonROIList()->Back()->GetVertexList());
       list->pop_back();
+      }
     }
-  }
   this->Update();
   this->ReInitButtons();
   Log("Last polygon point erased.");
@@ -534,14 +531,13 @@ void
 InteractiveChangeDetection<TPixel>::EraseLastPolygon()
 {
   if (m_LeftViewer->GetPolygonROIList()->Size() > 0)
-  {
-    m_LeftViewer->GetPolygonROIList()->Erase(m_LeftViewer->GetPolygonROIList()->Size()-1);
-  }
+    {
+    m_LeftViewer->GetPolygonROIList()->Erase(m_LeftViewer->GetPolygonROIList()->Size() - 1);
+    }
   this->Update();
   this->ReInitButtons();
   Log("Last polygon erased.");
 }
-
 
 template <class TPixel>
 void
@@ -594,69 +590,69 @@ InteractiveChangeDetection<TPixel>::ChangeDetectionLearn()
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  typename ListSampleType::Pointer sampleList = ListSampleType::New();
+  typename ListSampleType::Pointer         sampleList = ListSampleType::New();
   typename TrainingListSampleType::Pointer trainingSampleList = TrainingListSampleType::New();
-  typename PolygonListType::Pointer polygonList = m_LeftViewer->GetPolygonROIList();
-  ImagePointerType image = m_ListToImageFilter1->GetOutput();
-  unsigned int sampleSize = image->GetNumberOfComponentsPerPixel();
+  typename PolygonListType::Pointer        polygonList = m_LeftViewer->GetPolygonROIList();
+  ImagePointerType                         image = m_ListToImageFilter1->GetOutput();
+  unsigned int                             sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for (typename PolygonListType::Iterator polygIt = polygonList->Begin();
-       polygIt!=polygonList->End();++polygIt)
-  {
+       polygIt != polygonList->End(); ++polygIt)
+    {
     image->SetRequestedRegion(polygIt.Get()->GetBoundingRegion().GetImageRegion());
     image->PropagateRequestedRegion();
     image->UpdateOutputData();
 
-    IteratorType imageIt(image,polygIt.Get()->GetBoundingRegion().GetImageRegion());
+    IteratorType imageIt(image, polygIt.Get()->GetBoundingRegion().GetImageRegion());
     imageIt.GoToBegin();
 
     while (!imageIt.IsAtEnd())
-    {
+      {
       typename PolygonType::VertexType point;
-      point[0]=imageIt.GetIndex()[0];
-      point[1]=imageIt.GetIndex()[1];
+      point[0] = imageIt.GetIndex()[0];
+      point[1] = imageIt.GetIndex()[1];
 
       if (polygIt.Get()->IsInside(point))
-      {
+        {
 
         SampleType newSample(sampleSize);
         TrainingSampleType newTrainingSample;
 
         newSample.Fill(0);
 
-        for (unsigned int i = 0;i<sampleSize;++i)
-        {
-          newSample[i]=imageIt.Get()[i];
-        }
+        for (unsigned int i = 0; i < sampleSize; ++i)
+          {
+          newSample[i] = imageIt.Get()[i];
+          }
 
-        newTrainingSample[0]=polygIt.Get()->GetValue();
+        newTrainingSample[0] = polygIt.Get()->GetValue();
 
         sampleList->PushBack(newSample);
         trainingSampleList->PushBack(newTrainingSample);
-      }
+        }
       ++imageIt;
+      }
     }
-  }
-  
+
   try
-  {
+    {
 
     m_Estimator->SetInputSampleList(sampleList);
     m_Estimator->SetTrainingSampleList(trainingSampleList);
     m_Estimator->SetNumberOfClasses(2);
     m_Estimator->Update();
     m_ClassificationFilter->SetModel(m_Estimator->GetModel());
-    
+
     //
     Log("Estimation completed.");
     this->bLearn->set();
     this->miSaveModel->activate();
     this->bDisplayResults->activate();
-  }
+    }
   catch(itk::ExceptionObject & err)
-  {
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 
 }
 
@@ -673,31 +669,29 @@ InteractiveChangeDetection<TPixel>::AcquireFirstClass()
   m_LeftViewer->GetPolygonROIList()->PushBack(pol);
 }
 
-
 template <class TPixel>
 void
 InteractiveChangeDetection<TPixel>
 ::ChangeClass1Color()
 {
-  double r = (double)m_Class1Color[0];
-  double g = (double)m_Class1Color[1];
-  double b = (double)m_Class1Color[2];
+  double r = (double) m_Class1Color[0];
+  double g = (double) m_Class1Color[1];
+  double b = (double) m_Class1Color[2];
 
-  int ok = fl_color_chooser("Changed class color:",r,g,b);
+  int ok = fl_color_chooser("Changed class color:", r, g, b);
 
   if (ok)
-  {
-    m_Class1Color[0]=(float)r;
-    m_Class1Color[1]=(float)g;
-    m_Class1Color[2]=(float)b;
-    m_Class1Color[3]= (float)this->slTrainingSetOpacity->value();
-    m_LeftViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-    m_RightViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-    m_CenterViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
+    {
+    m_Class1Color[0] = (float) r;
+    m_Class1Color[1] = (float) g;
+    m_Class1Color[2] = (float) b;
+    m_Class1Color[3] = (float) this->slTrainingSetOpacity->value();
+    m_LeftViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+    m_RightViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+    m_CenterViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
     this->Update();
-  }
+    }
 }
-
 
 template <class TPixel>
 void
@@ -717,23 +711,23 @@ void
 InteractiveChangeDetection<TPixel>
 ::ChangeClass2Color()
 {
-  double r = (double)m_Class2Color[0];
-  double g = (double)m_Class2Color[1];
-  double b = (double)m_Class2Color[2];
+  double r = (double) m_Class2Color[0];
+  double g = (double) m_Class2Color[1];
+  double b = (double) m_Class2Color[2];
 
-  int ok = fl_color_chooser("Changed class color:",r,g,b);
+  int ok = fl_color_chooser("Changed class color:", r, g, b);
 
   if (ok)
-  {
-    m_Class2Color[0]=(float)r;
-    m_Class2Color[1]=(float)g;
-    m_Class2Color[2]=(float)b;
-    m_Class2Color[3]= (float)this->slTrainingSetOpacity->value();
-    m_LeftViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
-    m_RightViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
-    m_CenterViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
+    {
+    m_Class2Color[0] = (float) r;
+    m_Class2Color[1] = (float) g;
+    m_Class2Color[2] = (float) b;
+    m_Class2Color[3] = (float) this->slTrainingSetOpacity->value();
+    m_LeftViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
+    m_RightViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
+    m_CenterViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
     this->Update();
-  }
+    }
 }
 
 template <class TPixel>
@@ -741,21 +735,20 @@ void
 InteractiveChangeDetection<TPixel>
 ::ChangeTrainingSetOpacity()
 {
-  m_Class1Color[3]=(float)this->slTrainingSetOpacity->value();
-  m_Class2Color[3]=(float)this->slTrainingSetOpacity->value();
-  m_LeftViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-  m_LeftViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
-  m_RightViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
-  m_RightViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
-  m_CenterViewer->AddROIColorMapEntry(m_Label2,m_Class2Color);
-  m_CenterViewer->AddROIColorMapEntry(m_Label1,m_Class1Color);
+  m_Class1Color[3] = (float) this->slTrainingSetOpacity->value();
+  m_Class2Color[3] = (float) this->slTrainingSetOpacity->value();
+  m_LeftViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+  m_LeftViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
+  m_RightViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
+  m_RightViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
+  m_CenterViewer->AddROIColorMapEntry(m_Label2, m_Class2Color);
+  m_CenterViewer->AddROIColorMapEntry(m_Label1, m_Class1Color);
   if (bDisplayResults->value())
-  {
-    m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value()*255));
-  }
+    {
+    m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value() * 255));
+    }
   this->Update();
 }
-
 
 template <class TPixel>
 void
@@ -763,11 +756,11 @@ InteractiveChangeDetection<TPixel>
 ::Setup()
 {
   if (this->iViewSetup->visible())
-  {
+    {
     this->iViewSetup->hide();
-  }
+    }
   else
-  {
+    {
     this->svmSVMType->value(m_Estimator->GetSVMType());
     this->svmKernelType->value(m_Estimator->GetKernelType());
     this->svmKernelDegree->value(m_Estimator->GetPolynomialKernelDegree());
@@ -782,10 +775,9 @@ InteractiveChangeDetection<TPixel>
     this->svmShrinking->value(m_Estimator->GetDoShrinking());
     this->iViewSetup->show();
 
-
     this->iViewSetup->redraw();
     HistogramTabSetup();
-  }
+    }
 }
 
 template <class TPixel>
@@ -794,67 +786,66 @@ InteractiveChangeDetection<TPixel>
 ::HistogramTabSetup()
 {
   if (this->tHistogram->visible())
-  {
-    if (m_LeftViewer->GetBuilt())
     {
-      m_LeftViewer->GetRedHistogramWidget()->show();
-      if (m_LeftViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
+    if (m_LeftViewer->GetBuilt())
       {
+      m_LeftViewer->GetRedHistogramWidget()->show();
+      if (m_LeftViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_LeftViewer->GetGreenHistogramWidget()->show();
         m_LeftViewer->GetBlueHistogramWidget()->show();
+        }
       }
-    }
     if (m_RightViewer->GetBuilt())
-    {
-      m_RightViewer->GetRedHistogramWidget()->show();
-      if (m_RightViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
       {
+      m_RightViewer->GetRedHistogramWidget()->show();
+      if (m_RightViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_RightViewer->GetGreenHistogramWidget()->show();
         m_RightViewer->GetBlueHistogramWidget()->show();
+        }
       }
-    }
     if (m_CenterViewer->GetBuilt())
-    {
-      m_CenterViewer->GetRedHistogramWidget()->show();
-      if (m_CenterViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
       {
+      m_CenterViewer->GetRedHistogramWidget()->show();
+      if (m_CenterViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_CenterViewer->GetGreenHistogramWidget()->show();
         m_CenterViewer->GetBlueHistogramWidget()->show();
+        }
       }
     }
-  }
   else
-  {
-    if (m_LeftViewer->GetBuilt())
     {
-      m_LeftViewer->GetRedHistogramWidget()->hide();
-      if (m_LeftViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
+    if (m_LeftViewer->GetBuilt())
       {
+      m_LeftViewer->GetRedHistogramWidget()->hide();
+      if (m_LeftViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_LeftViewer->GetGreenHistogramWidget()->hide();
         m_LeftViewer->GetBlueHistogramWidget()->hide();
+        }
       }
-    }
     if (m_RightViewer->GetBuilt())
-    {
-      m_RightViewer->GetRedHistogramWidget()->hide();
-      if (m_RightViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
       {
+      m_RightViewer->GetRedHistogramWidget()->hide();
+      if (m_RightViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_RightViewer->GetGreenHistogramWidget()->hide();
         m_RightViewer->GetBlueHistogramWidget()->hide();
+        }
       }
-    }
     if (m_CenterViewer->GetBuilt())
-    {
-      m_CenterViewer->GetRedHistogramWidget()->hide();
-      if (m_CenterViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
       {
+      m_CenterViewer->GetRedHistogramWidget()->hide();
+      if (m_CenterViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+        {
         m_CenterViewer->GetGreenHistogramWidget()->hide();
         m_CenterViewer->GetBlueHistogramWidget()->hide();
+        }
       }
     }
-  }
 }
-
 
 template <class TPixel>
 void
@@ -862,19 +853,23 @@ InteractiveChangeDetection<TPixel>
 ::LeftViewerColorCompositionCallback()
 {
   if (bLeftViewerColorRGB->value())
-  {
+    {
     m_LeftViewer->SetRedChannelIndex(bLeftViewerRedChannel->value());
     m_LeftViewer->SetGreenChannelIndex(bLeftViewerGreenChannel->value());
     m_LeftViewer->SetBlueChannelIndex(bLeftViewerBlueChannel->value());
-    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),aLeftViewerHistogram->w()/3,aLeftViewerHistogram->h());
+    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),
+                                                  aLeftViewerHistogram->y(),
+                                                  aLeftViewerHistogram->w() / 3, aLeftViewerHistogram->h());
     m_LeftViewer->SetViewModel(ImageViewerType::ScrollWidgetType::RGB);
-  }
+    }
   else
-  {
+    {
     m_LeftViewer->SetRedChannelIndex(bLeftViewerGrayscaleChannel->value());
-    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),aLeftViewerHistogram->w(),aLeftViewerHistogram->h());
+    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),
+                                                  aLeftViewerHistogram->y(),
+                                                  aLeftViewerHistogram->w(), aLeftViewerHistogram->h());
     m_LeftViewer->SetViewModel(ImageViewerType::ScrollWidgetType::GRAYSCALE);
-  }
+    }
 
   m_LeftViewer->Reset();
   m_LeftViewer->Update();
@@ -886,19 +881,23 @@ InteractiveChangeDetection<TPixel>
 ::RightViewerColorCompositionCallback()
 {
   if (bRightViewerColorRGB->value())
-  {
+    {
     m_RightViewer->SetRedChannelIndex(bRightViewerRedChannel->value());
     m_RightViewer->SetGreenChannelIndex(bRightViewerGreenChannel->value());
     m_RightViewer->SetBlueChannelIndex(bRightViewerBlueChannel->value());
-    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),aRightViewerHistogram->y(),aRightViewerHistogram->w()/3,aRightViewerHistogram->h());
+    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),
+                                                   aRightViewerHistogram->y(),
+                                                   aRightViewerHistogram->w() / 3, aRightViewerHistogram->h());
     m_RightViewer->SetViewModel(ImageViewerType::ScrollWidgetType::RGB);
-  }
+    }
   else
-  {
+    {
     m_RightViewer->SetRedChannelIndex(bRightViewerGrayscaleChannel->value());
-    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),aRightViewerHistogram->y(),aRightViewerHistogram->w(),aRightViewerHistogram->h());
+    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),
+                                                   aRightViewerHistogram->y(),
+                                                   aRightViewerHistogram->w(), aRightViewerHistogram->h());
     m_RightViewer->SetViewModel(ImageViewerType::ScrollWidgetType::GRAYSCALE);
-  }
+    }
 
   m_RightViewer->Reset();
   m_RightViewer->Update();
@@ -910,24 +909,27 @@ InteractiveChangeDetection<TPixel>
 ::CenterViewerColorCompositionCallback()
 {
   if (bCenterViewerColorRGB->value())
-  {
+    {
     m_CenterViewer->SetRedChannelIndex(bCenterViewerRedChannel->value());
     m_CenterViewer->SetGreenChannelIndex(bCenterViewerGreenChannel->value());
     m_CenterViewer->SetBlueChannelIndex(bCenterViewerBlueChannel->value());
-    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),aCenterViewerHistogram->y(),aCenterViewerHistogram->w()/3,aCenterViewerHistogram->h());
+    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),
+                                                    aCenterViewerHistogram->y(),
+                                                    aCenterViewerHistogram->w() / 3, aCenterViewerHistogram->h());
     m_CenterViewer->SetViewModel(ImageViewerType::ScrollWidgetType::RGB);
-  }
+    }
   else
-  {
+    {
     m_CenterViewer->SetRedChannelIndex(bCenterViewerGrayscaleChannel->value());
-    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),aCenterViewerHistogram->y(),aCenterViewerHistogram->w(),aCenterViewerHistogram->h());
+    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),
+                                                    aCenterViewerHistogram->y(),
+                                                    aCenterViewerHistogram->w(), aCenterViewerHistogram->h());
     m_CenterViewer->SetViewModel(ImageViewerType::ScrollWidgetType::GRAYSCALE);
-  }
+    }
 
   m_CenterViewer->Reset();
   m_CenterViewer->Update();
 }
-
 
 template <class TPixel>
 void
@@ -955,76 +957,75 @@ InteractiveChangeDetection<TPixel>
 ::DisplayResultsButtonToggled()
 {
   if (bDisplayResults->value())
-  {
+    {
     bDisplayResults->clear();
     FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
     iViewFullCenterWindow->remove(full);
 
     if (m_CenterViewer->GetUseScroll())
-    {
+      {
       ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
       iViewScrollCenterWindow->remove(scroll);
-    }
-    
+      }
+
     full = m_CenterViewer->GetFullWidget();
-    full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
+    full->resize(0, 0, iViewFullCenterWindow->w(), iViewFullCenterWindow->h());
     iViewFullCenterWindow->add(full);
     iViewFullCenterWindow->resizable(full);
     iViewFullCenterWindow->show();
     full->show();
 
     if (m_CenterViewer->GetUseScroll())
-    {
+      {
       ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
       iViewScrollCenterWindow->add(scroll);
       iViewScrollCenterWindow->resizable(scroll);
       iViewScrollCenterWindow->show();
       scroll->show();
-    }
+      }
     m_CenterViewer->Update();
     OffsetType off;
     off.Fill(0);
-    m_CenterViewer->Link(m_LeftViewer,off);
+    m_CenterViewer->Link(m_LeftViewer, off);
     Fl::check();
     this->Update();
     Fl::check();
     this->Update();
-  }
+    }
   else
-  {
+    {
     bDisplayResults->set();
     m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
 
     typename OverlayImageType::PixelType color1(3), color2(3);
 
-    color1[0]=static_cast<unsigned char>(m_Class1Color[0]*255);
-    color1[1]=static_cast<unsigned char>(m_Class1Color[1]*255);
-    color1[2]=static_cast<unsigned char>(m_Class1Color[2]*255);
+    color1[0] = static_cast<unsigned char>(m_Class1Color[0] * 255);
+    color1[1] = static_cast<unsigned char>(m_Class1Color[1] * 255);
+    color1[2] = static_cast<unsigned char>(m_Class1Color[2] * 255);
 
-    color2[0]=static_cast<unsigned char>(m_Class2Color[0]*255);
-    color2[1]=static_cast<unsigned char>(m_Class2Color[1]*255);
-    color2[2]=static_cast<unsigned char>(m_Class2Color[2]*255);
+    color2[0] = static_cast<unsigned char>(m_Class2Color[0] * 255);
+    color2[1] = static_cast<unsigned char>(m_Class2Color[1] * 255);
+    color2[2] = static_cast<unsigned char>(m_Class2Color[2] * 255);
 
-    m_ChangeLabelFilter->SetChange(m_Label1,color1);
-    m_ChangeLabelFilter->SetChange(m_Label2,color2);
+    m_ChangeLabelFilter->SetChange(m_Label1, color1);
+    m_ChangeLabelFilter->SetChange(m_Label2, color2);
     m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
     m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
-    
+
     // Cast for result viewer display
     m_CastFilter = CastFilterType::New();
     m_CastFilter->SetInput(m_ChangeLabelFilter->GetOutput());
     m_CastFilter->UpdateOutputInformation();
 
-
     FullWidgetPointerType full = m_CenterViewer->GetFullWidget();
     iViewFullCenterWindow->remove(full);
     iViewFullCenterWindow->redraw();
-    
+
     if (m_CenterViewer->GetUseScroll())
-    {
+      {
       ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
       iViewScrollCenterWindow->remove(scroll);
-    }
+      }
 
     m_ResultViewer = ImageViewerType::New();
     m_ResultViewer->SetImage(m_LeftImage);
@@ -1035,39 +1036,38 @@ InteractiveChangeDetection<TPixel>
     m_ResultViewer->SetPixLocOutput(oPixLocValue);
     m_ResultViewer->SetShowZoomWidget(false);
     m_ResultViewer->SetLabel("Result image");
-    
+
     m_ResultViewer->Build();
-    
-    m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value()*255));
-    
+
+    m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(this->slTrainingSetOpacity->value() * 255));
+
     full = m_ResultViewer->GetFullWidget();
-    full->resize(0,0,iViewFullCenterWindow->w(),iViewFullCenterWindow->h());
+    full->resize(0, 0, iViewFullCenterWindow->w(), iViewFullCenterWindow->h());
     iViewFullCenterWindow->add(full);
     iViewFullCenterWindow->resizable(full);
     iViewFullCenterWindow->show();
     full->show();
-    
+
     if (m_ResultViewer->GetUseScroll())
-    {
+      {
       ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-      scroll->resize(0,0,iViewScrollCenterWindow->w(),iViewScrollCenterWindow->h());
+      scroll->resize(0, 0, iViewScrollCenterWindow->w(), iViewScrollCenterWindow->h());
       iViewScrollCenterWindow->add(scroll);
       iViewScrollCenterWindow->resizable(scroll);
       iViewScrollCenterWindow->show();
       scroll->show();
-    }
+      }
     m_ResultViewer->Show();
     m_ResultViewer->Update();
     OffsetType off;
     off.Fill(0);
-    m_ResultViewer->Link(m_LeftViewer,off);
+    m_ResultViewer->Link(m_LeftViewer, off);
     Fl::check();
     this->Update();
     Fl::check();
     this->Update();
-  }
+    }
 }
-
 
 template <class TPixel>
 void
@@ -1077,7 +1077,7 @@ InteractiveChangeDetection<TPixel>::LoadCenterImage()
   m_ImageToListFilter2->GetOutput()->UpdateOutputInformation();
   m_AbsFilter->GetOutput()->UpdateOutputInformation();
   m_MeanRatioFilter->GetOutput()->UpdateOutputInformation();
-  
+
   m_ImageList->PushBack(m_AbsFilter->GetOutput());
   m_ImageList->PushBack(m_MeanRatioFilter->GetOutput());
 
@@ -1086,99 +1086,100 @@ InteractiveChangeDetection<TPixel>::LoadCenterImage()
   for (it =  m_ImageToListFilter1->GetOutput()->Begin();
        it != m_ImageToListFilter1->GetOutput()->End();
        ++it)
-  {
+    {
     it.Get()->UpdateOutputInformation();
     m_ImageList->PushBack(it.Get());
-  }
+    }
 
   for (it =  m_ImageToListFilter2->GetOutput()->Begin();
        it != m_ImageToListFilter2->GetOutput()->End();
        ++it)
-  {
+    {
     it.Get()->UpdateOutputInformation();
     m_ImageList->PushBack(it.Get());
-  }
+    }
 
   m_ListToImageFilter1->SetInput(m_ImageList);
   m_ListToImageFilter1->GetOutput()->UpdateOutputInformation();
 
   m_CenterViewer->SetImage(m_ListToImageFilter1->GetOutput());
   m_CenterViewer->Build();
-  
+
   FullWidgetPointerType full = m_CenterViewer->GetFullWidget();
-  full->resize(0,0,iViewFullCenterWindow->h(),iViewFullCenterWindow->w());
-  iViewFullCenterWindow->resize(iViewFullCenterWindow->x(),iViewFullCenterWindow->y(),full->w(),full->h());
+  full->resize(0, 0, iViewFullCenterWindow->h(), iViewFullCenterWindow->w());
+  iViewFullCenterWindow->resize(iViewFullCenterWindow->x(), iViewFullCenterWindow->y(), full->w(), full->h());
   iViewFullCenterWindow->add(full);
   iViewFullCenterWindow->resizable(full);
   iViewFullCenterWindow->show();
   full->show();
 
   if (m_CenterViewer->GetUseScroll())
-  {
+    {
     ScrollWidgetPointerType scroll = m_CenterViewer->GetScrollWidget();
-    iViewScrollCenterWindow->resize(iViewScrollCenterWindow->x(),iViewScrollCenterWindow->y(),scroll->w(),scroll->h());
+    iViewScrollCenterWindow->resize(iViewScrollCenterWindow->x(), iViewScrollCenterWindow->y(), scroll->w(), scroll->h());
     iViewScrollCenterWindow->add(scroll);
     iViewScrollCenterWindow->resizable(scroll);
     iViewScrollCenterWindow->show();
     scroll->show();
-  }
+    }
 
   //  /// Add the choice for color composition
   itk::OStringStream oss;
 
-  oss<<"Intensity difference";
+  oss << "Intensity difference";
   bCenterViewerGrayscaleChannel->add(oss.str().c_str());
   bCenterViewerRedChannel->add(oss.str().c_str());
   bCenterViewerGreenChannel->add(oss.str().c_str());
   bCenterViewerBlueChannel->add(oss.str().c_str());
   oss.str("");
 
-  oss<<"Intensity ratio";
+  oss << "Intensity ratio";
   bCenterViewerGrayscaleChannel->add(oss.str().c_str());
   bCenterViewerRedChannel->add(oss.str().c_str());
   bCenterViewerGreenChannel->add(oss.str().c_str());
   bCenterViewerBlueChannel->add(oss.str().c_str());
   oss.str("");
 
-  for (unsigned int i = 0; i<m_LeftImage->GetNumberOfComponentsPerPixel();++i)
-  {
-    oss<<"Left image channel "<<i+1;
+  for (unsigned int i = 0; i < m_LeftImage->GetNumberOfComponentsPerPixel(); ++i)
+    {
+    oss << "Left image channel " << i + 1;
     bCenterViewerGrayscaleChannel->add(oss.str().c_str());
     bCenterViewerRedChannel->add(oss.str().c_str());
     bCenterViewerGreenChannel->add(oss.str().c_str());
     bCenterViewerBlueChannel->add(oss.str().c_str());
     oss.str("");
-  }
+    }
 
-  for (unsigned int i = 0; i<m_RightImage->GetNumberOfComponentsPerPixel();++i)
-  {
-    oss<<"Right image channel "<<i+1;
+  for (unsigned int i = 0; i < m_RightImage->GetNumberOfComponentsPerPixel(); ++i)
+    {
+    oss << "Right image channel " << i + 1;
     bCenterViewerGrayscaleChannel->add(oss.str().c_str());
     bCenterViewerRedChannel->add(oss.str().c_str());
     bCenterViewerGreenChannel->add(oss.str().c_str());
     bCenterViewerBlueChannel->add(oss.str().c_str());
     oss.str("");
-  }
+    }
 
   bCenterViewerRedChannel->value(m_CenterViewer->GetRedChannelIndex());
   bCenterViewerGreenChannel->value(m_CenterViewer->GetGreenChannelIndex());
   bCenterViewerBlueChannel->value(m_CenterViewer->GetBlueChannelIndex());
   bCenterViewerGrayscaleChannel->value(m_CenterViewer->GetRedChannelIndex());
 
-
   aCenterViewerHistogram->add(m_CenterViewer->GetRedHistogramWidget());
   //int offset = tTabs->h()-tHistogram->h();
 
-
-  if (m_CenterViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
-  {
-    int width = aCenterViewerHistogram->w()/3;
+  if (m_CenterViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+    {
+    int width = aCenterViewerHistogram->w() / 3;
     aCenterViewerHistogram->add(m_CenterViewer->GetGreenHistogramWidget());
     aCenterViewerHistogram->add(m_CenterViewer->GetBlueHistogramWidget());
 
-    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),aCenterViewerHistogram->y(),width,aCenterViewerHistogram->h());
-    m_CenterViewer->GetGreenHistogramWidget()->resize(aCenterViewerHistogram->x()+width,aCenterViewerHistogram->y(),width,aCenterViewerHistogram->h());
-    m_CenterViewer->GetBlueHistogramWidget()->resize(2*width+aCenterViewerHistogram->x(),aCenterViewerHistogram->y(),width,aCenterViewerHistogram->h());
+    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),
+                                                    aCenterViewerHistogram->y(), width, aCenterViewerHistogram->h());
+    m_CenterViewer->GetGreenHistogramWidget()->resize(aCenterViewerHistogram->x() + width,
+                                                      aCenterViewerHistogram->y(), width, aCenterViewerHistogram->h());
+    m_CenterViewer->GetBlueHistogramWidget()->resize(2 * width + aCenterViewerHistogram->x(), aCenterViewerHistogram->y(
+                                                       ), width, aCenterViewerHistogram->h());
 
     bCenterViewerColorGrayscale->clear();
     bCenterViewerColorRGB->set();
@@ -1186,23 +1187,25 @@ InteractiveChangeDetection<TPixel>::LoadCenterImage()
     bCenterViewerGreenChannel->activate();
     bCenterViewerBlueChannel->activate();
     bCenterViewerGrayscaleChannel->deactivate();
-  }
+    }
   else
-  {
+    {
     bCenterViewerColorGrayscale->set();
     bCenterViewerColorRGB->clear();
     bCenterViewerRedChannel->deactivate();
     bCenterViewerGreenChannel->deactivate();
     bCenterViewerBlueChannel->deactivate();
     bCenterViewerGrayscaleChannel->activate();
-    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),aCenterViewerHistogram->y(),aCenterViewerHistogram->w(),aCenterViewerHistogram->h());
-  }
+    m_CenterViewer->GetRedHistogramWidget()->resize(aCenterViewerHistogram->x(),
+                                                    aCenterViewerHistogram->y(),
+                                                    aCenterViewerHistogram->w(), aCenterViewerHistogram->h());
+    }
 
   m_CenterViewer->Update();
 
   OffsetType off;
   off.Fill(0);
-  m_CenterViewer->Link(m_LeftViewer,off);
+  m_CenterViewer->Link(m_LeftViewer, off);
   Fl::check();
   this->Update();
   Fl::check();
@@ -1218,36 +1221,35 @@ InteractiveChangeDetection<TPixel>::LoadLeftImage()
   m_LeftViewer->Build();
 
   FullWidgetPointerType full = m_LeftViewer->GetFullWidget();
-  full->resize(0,0,iViewFullLeftWindow->h(),iViewFullLeftWindow->w());
-  iViewFullLeftWindow->resize(iViewFullLeftWindow->x(),iViewFullLeftWindow->y(),full->w(),full->h());
+  full->resize(0, 0, iViewFullLeftWindow->h(), iViewFullLeftWindow->w());
+  iViewFullLeftWindow->resize(iViewFullLeftWindow->x(), iViewFullLeftWindow->y(), full->w(), full->h());
   iViewFullLeftWindow->add(full);
   iViewFullLeftWindow->resizable(full);
   iViewFullLeftWindow->show();
   full->show();
 
   if (m_LeftViewer->GetUseScroll())
-  {
+    {
     ScrollWidgetPointerType scroll = m_LeftViewer->GetScrollWidget();
-    iViewScrollLeftWindow->resize(iViewScrollLeftWindow->x(),iViewScrollLeftWindow->y(),scroll->w(),scroll->h());
+    iViewScrollLeftWindow->resize(iViewScrollLeftWindow->x(), iViewScrollLeftWindow->y(), scroll->w(), scroll->h());
     iViewScrollLeftWindow->add(scroll);
     iViewScrollLeftWindow->resizable(scroll);
     iViewScrollLeftWindow->show();
     scroll->show();
-  }
+    }
   aLeftViewerHistogram->add(m_LeftViewer->GetRedHistogramWidget());
-
 
   /// Add the choice for color composition
   itk::OStringStream oss;
-  for (unsigned int i = 0; i<m_LeftImage->GetNumberOfComponentsPerPixel();++i)
-  {
-    oss<<"Left image channel "<<i+1;
+  for (unsigned int i = 0; i < m_LeftImage->GetNumberOfComponentsPerPixel(); ++i)
+    {
+    oss << "Left image channel " << i + 1;
     bLeftViewerGrayscaleChannel->add(oss.str().c_str());
     bLeftViewerRedChannel->add(oss.str().c_str());
     bLeftViewerGreenChannel->add(oss.str().c_str());
     bLeftViewerBlueChannel->add(oss.str().c_str());
     oss.str("");
-  }
+    }
 
   bLeftViewerRedChannel->value(m_LeftViewer->GetRedChannelIndex());
   bLeftViewerGreenChannel->value(m_LeftViewer->GetGreenChannelIndex());
@@ -1255,23 +1257,26 @@ InteractiveChangeDetection<TPixel>::LoadLeftImage()
   bLeftViewerGrayscaleChannel->value(m_LeftViewer->GetRedChannelIndex());
 
   if (m_LeftViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
-  {
-    int width = aLeftViewerHistogram->w()/3;
+    {
+    int width = aLeftViewerHistogram->w() / 3;
     aLeftViewerHistogram->add(m_LeftViewer->GetGreenHistogramWidget());
     aLeftViewerHistogram->add(m_LeftViewer->GetBlueHistogramWidget());
 
-    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),width,aLeftViewerHistogram->h());
-    m_LeftViewer->GetGreenHistogramWidget()->resize(width+aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),width,aLeftViewerHistogram->h());
-    m_LeftViewer->GetBlueHistogramWidget()->resize(2*width+aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),width,aLeftViewerHistogram->h());
+    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),
+                                                  aLeftViewerHistogram->y(), width, aLeftViewerHistogram->h());
+    m_LeftViewer->GetGreenHistogramWidget()->resize(width + aLeftViewerHistogram->x(),
+                                                    aLeftViewerHistogram->y(), width, aLeftViewerHistogram->h());
+    m_LeftViewer->GetBlueHistogramWidget()->resize(2 * width + aLeftViewerHistogram->x(),
+                                                   aLeftViewerHistogram->y(), width, aLeftViewerHistogram->h());
     bLeftViewerColorGrayscale->clear();
     bLeftViewerGrayscaleChannel->deactivate();
     bLeftViewerRedChannel->activate();
     bLeftViewerGreenChannel->activate();
     bLeftViewerBlueChannel->activate();
     bLeftViewerColorRGB->set();
-  }
+    }
   else
-  {
+    {
     bLeftViewerColorGrayscale->set();
     bLeftViewerColorRGB->clear();
     bLeftViewerRedChannel->deactivate();
@@ -1279,17 +1284,19 @@ InteractiveChangeDetection<TPixel>::LoadLeftImage()
     bLeftViewerBlueChannel->deactivate();
     bLeftViewerGrayscaleChannel->activate();
     bLeftViewerGrayscaleChannel->value(m_LeftViewer->GetRedChannelIndex());
-    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),aLeftViewerHistogram->y(),aLeftViewerHistogram->w(),aLeftViewerHistogram->h());
-  }
+    m_LeftViewer->GetRedHistogramWidget()->resize(aLeftViewerHistogram->x(),
+                                                  aLeftViewerHistogram->y(),
+                                                  aLeftViewerHistogram->w(), aLeftViewerHistogram->h());
+    }
 
   oss.str("");
   m_LeftViewer->Update();
   if (m_RightViewer->GetBuilt())
-  {
+    {
     OffsetType off;
     off.Fill(0);
-    m_LeftViewer->Link(m_RightViewer,off);
-  }
+    m_LeftViewer->Link(m_RightViewer, off);
+    }
 
   this->ReInitButtons();
   Fl::check();
@@ -1306,52 +1313,54 @@ InteractiveChangeDetection<TPixel>::LoadRightImage()
   m_RightViewer->Build();
 
   FullWidgetPointerType full = m_RightViewer->GetFullWidget();
-  full->resize(0,0,iViewFullRightWindow->h(),iViewFullRightWindow->w());
-  iViewFullRightWindow->resize(iViewFullRightWindow->x(),iViewFullRightWindow->y(),full->w(),full->h());
+  full->resize(0, 0, iViewFullRightWindow->h(), iViewFullRightWindow->w());
+  iViewFullRightWindow->resize(iViewFullRightWindow->x(), iViewFullRightWindow->y(), full->w(), full->h());
   iViewFullRightWindow->add(full);
-  iViewFullRightWindow->resizable(full) ;
+  iViewFullRightWindow->resizable(full);
   iViewFullRightWindow->show();
   full->show();
 
   if (m_RightViewer->GetUseScroll())
-  {
+    {
     ScrollWidgetPointerType scroll = m_RightViewer->GetScrollWidget();
-    iViewScrollRightWindow->resize(iViewScrollRightWindow->x(),iViewScrollRightWindow->y(),scroll->w(),scroll->h());
+    iViewScrollRightWindow->resize(iViewScrollRightWindow->x(), iViewScrollRightWindow->y(), scroll->w(), scroll->h());
     iViewScrollRightWindow->add(scroll);
     iViewScrollRightWindow->resizable(scroll);
     iViewScrollRightWindow->show();
     scroll->show();
-  }
+    }
 
   /// Add the choice for color composition
   itk::OStringStream oss;
-  for (unsigned int i = 0; i<m_RightImage->GetNumberOfComponentsPerPixel();++i)
-  {
-    oss<<"Right image channel "<<i+1;
+  for (unsigned int i = 0; i < m_RightImage->GetNumberOfComponentsPerPixel(); ++i)
+    {
+    oss << "Right image channel " << i + 1;
     bRightViewerGrayscaleChannel->add(oss.str().c_str());
     bRightViewerRedChannel->add(oss.str().c_str());
     bRightViewerGreenChannel->add(oss.str().c_str());
     bRightViewerBlueChannel->add(oss.str().c_str());
     oss.str("");
-  }
+    }
 
   bRightViewerRedChannel->value(m_RightViewer->GetRedChannelIndex());
   bRightViewerGreenChannel->value(m_RightViewer->GetGreenChannelIndex());
   bRightViewerBlueChannel->value(m_RightViewer->GetBlueChannelIndex());
   bRightViewerGrayscaleChannel->value(m_RightViewer->GetRedChannelIndex());
 
-
   // histogram rendering
   aRightViewerHistogram->add(m_RightViewer->GetRedHistogramWidget());
-  if (m_RightViewer->GetFullWidget()->GetViewModel()==ImageViewerType::ScrollWidgetType::RGB)
-  {
-    int width = aRightViewerHistogram->w()/3;
+  if (m_RightViewer->GetFullWidget()->GetViewModel() == ImageViewerType::ScrollWidgetType::RGB)
+    {
+    int width = aRightViewerHistogram->w() / 3;
     aRightViewerHistogram->add(m_RightViewer->GetGreenHistogramWidget());
     aRightViewerHistogram->add(m_RightViewer->GetBlueHistogramWidget());
 
-    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),aRightViewerHistogram->y(),width,aRightViewerHistogram->h());
-    m_RightViewer->GetGreenHistogramWidget()->resize(width+aRightViewerHistogram->x(),aRightViewerHistogram->y(),width,aRightViewerHistogram->h());
-    m_RightViewer->GetBlueHistogramWidget()->resize(2*width+aRightViewerHistogram->x(),aRightViewerHistogram->y(),width,aRightViewerHistogram->h());
+    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),
+                                                   aRightViewerHistogram->y(), width, aRightViewerHistogram->h());
+    m_RightViewer->GetGreenHistogramWidget()->resize(width + aRightViewerHistogram->x(),
+                                                     aRightViewerHistogram->y(), width, aRightViewerHistogram->h());
+    m_RightViewer->GetBlueHistogramWidget()->resize(2 * width + aRightViewerHistogram->x(),
+                                                    aRightViewerHistogram->y(), width, aRightViewerHistogram->h());
 
     bRightViewerColorGrayscale->clear();
     bRightViewerColorRGB->set();
@@ -1360,9 +1369,9 @@ InteractiveChangeDetection<TPixel>::LoadRightImage()
     bRightViewerGreenChannel->activate();
     bRightViewerBlueChannel->activate();
     bRightViewerGrayscaleChannel->deactivate();
-  }
+    }
   else
-  {
+    {
     bRightViewerColorGrayscale->set();
     bRightViewerColorRGB->clear();
 
@@ -1371,17 +1380,19 @@ InteractiveChangeDetection<TPixel>::LoadRightImage()
     bRightViewerBlueChannel->deactivate();
     bRightViewerGrayscaleChannel->activate();
 
-    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),aRightViewerHistogram->y(),aRightViewerHistogram->w(),aRightViewerHistogram->h());
-  }
+    m_RightViewer->GetRedHistogramWidget()->resize(aRightViewerHistogram->x(),
+                                                   aRightViewerHistogram->y(),
+                                                   aRightViewerHistogram->w(), aRightViewerHistogram->h());
+    }
 
   m_RightViewer->Update();
 
   if (m_LeftViewer->GetBuilt())
-  {
+    {
     OffsetType off;
     off.Fill(0);
-    m_RightViewer->Link(m_LeftViewer,off);
-  }
+    m_RightViewer->Link(m_LeftViewer, off);
+    }
 
   this->ReInitButtons();
   Fl::check();
@@ -1402,14 +1413,11 @@ InteractiveChangeDetection<TPixel>
   iViewFullRightWindow->hide();
   iViewFullLeftWindow->hide();
   iViewFullCenterWindow->hide();
-  
+
   // hide scrolls if any
-  if (m_RightViewer->GetUseScroll())
-    iViewScrollRightWindow->hide();
-  if (m_LeftViewer->GetUseScroll())
-    iViewScrollLeftWindow->hide();
-  if (m_CenterViewer->GetUseScroll())
-    iViewScrollCenterWindow->hide();
+  if (m_RightViewer->GetUseScroll()) iViewScrollRightWindow->hide();
+  if (m_LeftViewer->GetUseScroll()) iViewScrollLeftWindow->hide();
+  if (m_CenterViewer->GetUseScroll()) iViewScrollCenterWindow->hide();
 
   // hide the Setup Window
   tTabs->hide();
@@ -1417,4 +1425,3 @@ InteractiveChangeDetection<TPixel>
 
 } // end namespace otb
 #endif
-

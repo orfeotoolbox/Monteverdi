@@ -27,7 +27,7 @@ typedef enum {
   AFFINE,
   SIMILARITY2D,
   UNKNOWN
-}  TransformEnumType;
+  }  TransformEnumType;
 
 }
 

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiViewGUI.h"
 #include "otbMonteverdiController.h"
@@ -29,30 +28,29 @@
 #include "otbWriterModule.h"
 #include "otbSupervisedClassificationModule.h"
 
-
 int otbMonteverdiApplicationTest(int argc, char* argv[])
 {
 
-   // Application
-  typedef otb::MonteverdiModel       ModelType;
-  typedef otb::MonteverdiController  ControllerType;
-  typedef otb::MonteverdiViewGUI     ViewType;
+  // Application
+  typedef otb::MonteverdiModel      ModelType;
+  typedef otb::MonteverdiController ControllerType;
+  typedef otb::MonteverdiViewGUI    ViewType;
 
   // Create the MVC
-  ModelType::Pointer model = otb::MonteverdiModel::GetInstance();
-  ViewType::Pointer view = ViewType::New();
+  ModelType::Pointer      model = otb::MonteverdiModel::GetInstance();
+  ViewType::Pointer       view = ViewType::New();
   ControllerType::Pointer controller = ControllerType::New();
   controller->SetView(view);
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
+  model->RegisterModule<otb::ReaderModule>("Reader", "File/Import dataset");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", "Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Ortho Rectification");
-  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
-  model->RegisterModule<otb::ViewerModule> ("Viewer","Visualization/View image");
+  model->RegisterModule<otb::WriterModule> ("Writer", "File/Export dataset");
+  model->RegisterModule<otb::ViewerModule> ("Viewer", "Visualization/View image");
 
   // Launch Monteverdi
   view->InitWidgets();
@@ -64,4 +62,3 @@ int otbMonteverdiApplicationTest(int argc, char* argv[])
 
   return 0;
 }
-

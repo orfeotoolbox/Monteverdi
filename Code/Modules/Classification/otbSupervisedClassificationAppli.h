@@ -63,126 +63,125 @@ namespace otb
  *
  */
 class ITK_EXPORT SupervisedClassificationAppli
-      : public itk::ProcessObject, public SupervisedClassificationAppliGUI, public MVCModel<ListenerBase>
+  : public itk::ProcessObject, public SupervisedClassificationAppliGUI, public MVCModel<ListenerBase>
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationAppli      Self;
-  typedef itk::ProcessObject                 Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef SupervisedClassificationAppli Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SupervisedClassificationAppli,itk::ProcessObject);
+  itkTypeMacro(SupervisedClassificationAppli, itk::ProcessObject);
 
   /// Template pixel type
   typedef TypeManager::Floating_Point_Precision InputPixelType;
   typedef unsigned short                        LabeledPixelType;
   typedef unsigned char                         ColorPixelType;
 
-  typedef VectorImage<InputPixelType,2 >                                 OutputImageType;
+  typedef VectorImage<InputPixelType, 2> OutputImageType;
 
   /// Image widget
-  typedef ClassificationViewer<InputPixelType,LabeledPixelType>          ImageViewerType;
-  typedef ImageViewerType::Pointer                                       ImageViewerPointerType;
-  typedef ImageViewerType::FormListType                                  FormListType;
-  typedef ImageViewerType::PolygonType                                   PolygonType;
-  typedef ImageViewerType::PolygonListType                               PolygonListType;
-  typedef ImageViewerType::FullWidgetType                                FullWidgetType;
-  typedef FullWidgetType::Pointer                                        FullWidgetPointerType;
-  typedef ImageViewerType::ScrollWidgetType                              ScrollWidgetType;
-  typedef ScrollWidgetType::Pointer                                      ScrollWidgetPointerType;
-  typedef PolygonListType::Pointer                                       PolygonListPointerType;
+  typedef ClassificationViewer<InputPixelType, LabeledPixelType> ImageViewerType;
+  typedef ImageViewerType::Pointer                               ImageViewerPointerType;
+  typedef ImageViewerType::FormListType                          FormListType;
+  typedef ImageViewerType::PolygonType                           PolygonType;
+  typedef ImageViewerType::PolygonListType                       PolygonListType;
+  typedef ImageViewerType::FullWidgetType                        FullWidgetType;
+  typedef FullWidgetType::Pointer                                FullWidgetPointerType;
+  typedef ImageViewerType::ScrollWidgetType                      ScrollWidgetType;
+  typedef ScrollWidgetType::Pointer                              ScrollWidgetPointerType;
+  typedef PolygonListType::Pointer                               PolygonListPointerType;
 
   /// Image Type and related typedefs
-  typedef FullWidgetType::ImageType                                      ImageType;
-  typedef FullWidgetType::OverlayImageType                               OverlayImageType;
-  typedef OverlayImageType::Pointer                                      OverlayImagePointerType;
-  typedef otb::Image<LabeledPixelType,2>                                 LabeledImageType;
-  typedef ImageType::Pointer                                             ImagePointerType;
-  typedef ImageType::ConstPointer                                        ImageConstPointerType;
-  typedef ImageType::RegionType                                          RegionType;
-  typedef ImageType::SizeType                                            SizeType;
-  typedef ImageType::IndexType                                           IndexType;
-  typedef ImageType::OffsetType                                          OffsetType;
-  typedef ImageType::PixelType                                           PixelType;
-  typedef FullWidgetType::ColorType                                      ColorType;
-  typedef otb::Class<LabeledPixelType,ColorType>                         ClassType;
-  typedef ClassType::Pointer                                             ClassPointerType;
-  typedef std::vector<ClassPointerType>                                  ClassesMapType;
+  typedef FullWidgetType::ImageType               ImageType;
+  typedef FullWidgetType::OverlayImageType        OverlayImageType;
+  typedef OverlayImageType::Pointer               OverlayImagePointerType;
+  typedef otb::Image<LabeledPixelType, 2>         LabeledImageType;
+  typedef ImageType::Pointer                      ImagePointerType;
+  typedef ImageType::ConstPointer                 ImageConstPointerType;
+  typedef ImageType::RegionType                   RegionType;
+  typedef ImageType::SizeType                     SizeType;
+  typedef ImageType::IndexType                    IndexType;
+  typedef ImageType::OffsetType                   OffsetType;
+  typedef ImageType::PixelType                    PixelType;
+  typedef FullWidgetType::ColorType               ColorType;
+  typedef otb::Class<LabeledPixelType, ColorType> ClassType;
+  typedef ClassType::Pointer                      ClassPointerType;
+  typedef std::vector<ClassPointerType>           ClassesMapType;
 
   /// Classification typedefs
-  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>               ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                                         ModelType;
-  typedef ModelType::Pointer                                                          ModelPointerType;
-  typedef itk::VariableLengthVector<InputPixelType>                                   SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                                     ListSampleType;
-  typedef itk::FixedArray<LabeledPixelType,1>                                         TrainingSampleType;
-  typedef itk::Statistics::ListSample<TrainingSampleType>                             TrainingListSampleType;
-  typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType>     EstimatorType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,OutputImageType>               ChangeLabelFilterType;
-  typedef Polygon<double>                                                             OutputPolygonType;
-  typedef ObjectList<OutputPolygonType>                                               OutputPolygonListType;
-  typedef otb::PersistentVectorizationImageFilter<LabeledImageType,OutputPolygonType> VectorizationFilterType;
-  typedef EstimatorType::Pointer                                                EstimatorPointerType;
-  typedef ClassificationFilterType::Pointer                                     ClassificationFilterPointerType;
-  typedef ChangeLabelFilterType::Pointer                                        ChangeLabelFilterPointerType;
-  typedef VectorizationFilterType::Pointer                                      VectorizationFilterPointerType;
-  typedef otb::SVMClassifier<ListSampleType,LabeledPixelType>                   ClassifierType;
-  typedef itk::VariableSizeMatrix<double>                                       ConfusionMatrixType;
-  typedef ListSampleType::Pointer                                               ListSamplePointerType;
-  typedef TrainingListSampleType::Pointer                                       TrainingListSamplePointerType;
-  typedef itk::RelabelComponentImageFilter<LabeledImageType,LabeledImageType>   RelabelFilterType;
-  typedef RelabelFilterType::Pointer                                            RelabelFilterPointerType;
-  typedef itk::ConnectedComponentImageFilter<LabeledImageType,LabeledImageType> ConnectedFilterType;
-  typedef ConnectedFilterType::Pointer                                          ConnectedFilterPointerType;
-  typedef itk::BinaryThresholdImageFilter<LabeledImageType,LabeledImageType>    ThresholderType;
-  typedef ThresholderType::Pointer ThresholderPointerType;
-  typedef itk::CastImageFilter<OutputImageType, OverlayImageType>               CastFilterType;
-  typedef CastFilterType::Pointer                                               CastFilterPointerType;
+  typedef otb::SVMImageClassificationFilter<ImageType, LabeledImageType>               ClassificationFilterType;
+  typedef ClassificationFilterType::ModelType                                          ModelType;
+  typedef ModelType::Pointer                                                           ModelPointerType;
+  typedef itk::VariableLengthVector<InputPixelType>                                    SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                                      ListSampleType;
+  typedef itk::FixedArray<LabeledPixelType, 1>                                         TrainingSampleType;
+  typedef itk::Statistics::ListSample<TrainingSampleType>                              TrainingListSampleType;
+  typedef otb::SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType>     EstimatorType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType, OutputImageType>               ChangeLabelFilterType;
+  typedef Polygon<double>                                                              OutputPolygonType;
+  typedef ObjectList<OutputPolygonType>                                                OutputPolygonListType;
+  typedef otb::PersistentVectorizationImageFilter<LabeledImageType, OutputPolygonType> VectorizationFilterType;
+  typedef EstimatorType::Pointer                                                       EstimatorPointerType;
+  typedef ClassificationFilterType::Pointer                                            ClassificationFilterPointerType;
+  typedef ChangeLabelFilterType::Pointer                                               ChangeLabelFilterPointerType;
+  typedef VectorizationFilterType::Pointer                                             VectorizationFilterPointerType;
+  typedef otb::SVMClassifier<ListSampleType, LabeledPixelType>                         ClassifierType;
+  typedef itk::VariableSizeMatrix<double>                                              ConfusionMatrixType;
+  typedef ListSampleType::Pointer                                                      ListSamplePointerType;
+  typedef TrainingListSampleType::Pointer                                              TrainingListSamplePointerType;
+  typedef itk::RelabelComponentImageFilter<LabeledImageType, LabeledImageType>         RelabelFilterType;
+  typedef RelabelFilterType::Pointer                                                   RelabelFilterPointerType;
+  typedef itk::ConnectedComponentImageFilter<LabeledImageType, LabeledImageType>       ConnectedFilterType;
+  typedef ConnectedFilterType::Pointer                                                 ConnectedFilterPointerType;
+  typedef itk::BinaryThresholdImageFilter<LabeledImageType, LabeledImageType>          ThresholderType;
+  typedef ThresholderType::Pointer                                                     ThresholderPointerType;
+  typedef itk::CastImageFilter<OutputImageType, OverlayImageType>                      CastFilterType;
+  typedef CastFilterType::Pointer                                                      CastFilterPointerType;
 
   /** Vector data handling */
-  typedef TypeManager::Vector_Data                                       OutputVectorDataType;
-  typedef TypeManager::Labeled_Vector_Data                               VectorDataType;
+  typedef TypeManager::Vector_Data         OutputVectorDataType;
+  typedef TypeManager::Labeled_Vector_Data VectorDataType;
 
-  typedef VectorDataType::Pointer                                        VectorDataPointerType;
-  typedef VectorDataFileReader<VectorDataType>                           VectorDataFileReaderType;
-  typedef VectorDataFileReaderType::Pointer                              VectorDataFileReaderPointerType;
-  typedef VectorDataFileWriter<VectorDataType>                           VectorDataFileWriterType;
-  typedef VectorDataFileWriterType::Pointer                              VectorDataFileWriterPointerType;
-  typedef VectorDataType::DataNodeType                                   DataNodeType;
-  typedef DataNodeType::Pointer                                          DataNodePointerType;
-  typedef VectorDataType::DataTreeType                                   DataTreeType;
-  typedef DataTreeType::Pointer                                          DataTreePointerType;
-  typedef itk::PreOrderTreeIterator<DataTreeType>                        TreeIteratorType;
+  typedef VectorDataType::Pointer                 VectorDataPointerType;
+  typedef VectorDataFileReader<VectorDataType>    VectorDataFileReaderType;
+  typedef VectorDataFileReaderType::Pointer       VectorDataFileReaderPointerType;
+  typedef VectorDataFileWriter<VectorDataType>    VectorDataFileWriterType;
+  typedef VectorDataFileWriterType::Pointer       VectorDataFileWriterPointerType;
+  typedef VectorDataType::DataNodeType            DataNodeType;
+  typedef DataNodeType::Pointer                   DataNodePointerType;
+  typedef VectorDataType::DataTreeType            DataTreeType;
+  typedef DataTreeType::Pointer                   DataTreePointerType;
+  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
 
-  
-  itkSetObjectMacro(InputImage,ImageType);
-  itkGetObjectMacro(InputImage,ImageType);
+  itkSetObjectMacro(InputImage, ImageType);
+  itkGetObjectMacro(InputImage, ImageType);
 
   itkSetStringMacro(ImageFileName);
-  itkGetMacro(Output,OutputImageType::Pointer);
+  itkGetMacro(Output, OutputImageType::Pointer);
   itkSetStringMacro(ModelFileName);
   itkSetStringMacro(ROIsImageFileName);
 
   std::vector<OutputVectorDataType::Pointer> GetOutputVector()
-    {
-      return m_OutputVector;
-    }
-  
+  {
+    return m_OutputVector;
+  }
+
   ClassesMapType GetClassesMap()
-    {
-      return m_ClassesMap;
-    }
+  {
+    return m_ClassesMap;
+  }
 
   // Get the HasOutput flag
-  itkGetMacro(HasOutput,bool);
-  itkGetMacro(HasOutputVector,bool);
-  itkGetMacro(HasCloseModule,bool);
-  
+  itkGetMacro(HasOutput, bool);
+  itkGetMacro(HasOutputVector, bool);
+  itkGetMacro(HasCloseModule, bool);
+
   /** Main methods */
   virtual void Show(void);
   virtual void Build(void);
@@ -270,14 +269,14 @@ protected:
 
 private:
   SupervisedClassificationAppli(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /// Image filename
   std::string m_ImageFileName;
   /// input image
-  ImageType::Pointer           m_InputImage;
+  ImageType::Pointer m_InputImage;
   /// Output Classified image
-  OutputImageType::Pointer      m_Output;
+  OutputImageType::Pointer m_Output;
   /// Model filename
   std::string m_ModelFileName;
   /// Training ROIs filename
@@ -315,14 +314,13 @@ private:
   /// Caster
   CastFilterPointerType m_CastFilter;
 
-  bool m_HasOutput;
-  bool m_HasOutputVector;
-  bool m_HasCloseModule;
-  bool m_ResultShown;
+  bool                                       m_HasOutput;
+  bool                                       m_HasOutputVector;
+  bool                                       m_HasCloseModule;
+  bool                                       m_ResultShown;
   std::vector<OutputVectorDataType::Pointer> m_OutputVector;
 };
 
 } // end namespace otb
-
 
 #endif

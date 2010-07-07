@@ -23,19 +23,17 @@
 int otbMonteverdiApplicationNew(int argc, char* argv[])
 {
 
-   // Application
-  typedef otb::MonteverdiModel       ModelType;
-  typedef otb::MonteverdiController  ControllerType;
-  typedef otb::MonteverdiViewGUI     ViewType;
+  // Application
+  typedef otb::MonteverdiModel      ModelType;
+  typedef otb::MonteverdiController ControllerType;
+  typedef otb::MonteverdiViewGUI    ViewType;
 
   // Create the MVC
-  ModelType::Pointer model = otb::MonteverdiModel::GetInstance();
-  ViewType::Pointer view = ViewType::New();
+  ModelType::Pointer      model = otb::MonteverdiModel::GetInstance();
+  ViewType::Pointer       view = ViewType::New();
   ControllerType::Pointer controller = ControllerType::New();
   controller->SetView(view);
   view->SetMonteverdiController(controller);
 
-
   return 0;
 }
-

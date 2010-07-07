@@ -33,7 +33,7 @@ CachingModule::CachingModule()
   this->NeedsPipelineLockingOn();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet",otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
 
@@ -49,7 +49,7 @@ CachingModule::CachingModule()
   pBar->maximum(1);
 
   pBar->label(otbGetTextMacro("Caching dataset (0%)"));
-  }
+}
 
 /** Destructor */
 CachingModule::~CachingModule()
@@ -58,9 +58,9 @@ CachingModule::~CachingModule()
   ossimFilename ofname(m_FilePath);
 
   // try to remove the file
-  if(ofname.exists() && m_EraseFile)
+  if (ofname.exists() && m_EraseFile)
     {
-    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofname );
+    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << ofname);
     ofname.wildcardRemove();
     }
 
@@ -68,9 +68,9 @@ CachingModule::~CachingModule()
   ossimFilename ofnameGeom = ofname.noExtension().setExtension(".geom");
 
   // try to remove the file
-  if(ofnameGeom.exists() && m_EraseFile)
+  if (ofnameGeom.exists() && m_EraseFile)
     {
-    otbGenericMsgDebugMacro( << "Cleaning up all cache files with base " << ofnameGeom );
+    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << ofnameGeom);
     ofnameGeom.wildcardRemove();
     }
 
@@ -80,9 +80,8 @@ CachingModule::~CachingModule()
 void CachingModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 void CachingModule::UpdateProgress()
 {
@@ -90,20 +89,20 @@ void CachingModule::UpdateProgress()
 
   itk::OStringStream oss1, oss2;
   oss1.str("");
-  oss1<<otbGetTextMacro("Caching dataset") << "  ("<<std::floor(100*progress)<<"%)";
+  oss1 << otbGetTextMacro("Caching dataset") << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
-  oss2<<std::floor(100*progress);
-  oss2<<"%";
-  pBar->value( progress );
+  oss2 << std::floor(100 * progress);
+  oss2 << "%";
+  pBar->value(progress);
   wCachingWindow->copy_label(oss1.str().c_str());
-  pBar->copy_label( oss2.str().c_str() );
+  pBar->copy_label(oss2.str().c_str());
 }
 
 void CachingModule::UpdateProgressCallback(void * data)
 {
   Self::Pointer caching = static_cast<Self *>(data);
 
-  if(caching.IsNotNull())
+  if (caching.IsNotNull())
     {
     caching->UpdateProgress();
     }
@@ -111,7 +110,7 @@ void CachingModule::UpdateProgressCallback(void * data)
 
 double CachingModule::GetProgress() const
 {
-  if(m_WritingProcess.IsNotNull())
+  if (m_WritingProcess.IsNotNull())
     {
     return m_WritingProcess->GetProgress();
     }
@@ -123,8 +122,8 @@ double CachingModule::GetProgress() const
 
 bool CachingModule::RemoveCachingDirectory() const
 {
-        ossimFilename cachingDir(m_CachingPath); 
-        return  cachingDir.remove();
+  ossimFilename cachingDir(m_CachingPath);
+  return cachingDir.remove();
 }
 
 void CachingModule::ThreadedWatch()
@@ -134,51 +133,51 @@ void CachingModule::ThreadedWatch()
   double current = -1;
 
   Fl::lock();
-  Fl::awake(&ShowWindowCallback,this);
+  Fl::awake(&ShowWindowCallback, this);
   Fl::unlock();
 
-  while(this->IsBusy())
+  while (this->IsBusy())
     {
-       if(m_WritingProcess.IsNotNull())
-       {
+    if (m_WritingProcess.IsNotNull())
+      {
       current = m_WritingProcess->GetProgress();
-         if(current - last > updateThres)
-         {
+      if (current - last > updateThres)
+        {
         // Make the main fltk loop update progress fields
-        Fl::awake(&UpdateProgressCallback,this);
-         last = current;
-         }
-       }
+        Fl::awake(&UpdateProgressCallback, this);
+        last = current;
+        }
+      }
 
     // Sleep for a while
     Sleep(500);
     }
 
   // Wait for the reader to be set
-  while(this->IsBusy())
+  while (this->IsBusy())
     {
     Sleep(500);
     }
 
   // Notify new outputs
   Fl::lock();
-  Fl::awake(&HideWindowCallback,this);
+  Fl::awake(&HideWindowCallback, this);
   Fl::unlock();
-  }
+}
 
 void CachingModule::ThreadedRun()
 {
   this->BusyOn();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
-  FloatingImageType::Pointer singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
-  CharVectorImageType::Pointer charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
+  FloatingImageType::Pointer       singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
+  CharVectorImageType::Pointer     charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
 
   Superclass::InputDataDescriptorMapType::const_iterator inputIt = this->GetInputsMap().find("InputDataSet");
 
-  if(inputIt == this->GetInputsMap().end())
+  if (inputIt == this->GetInputsMap().end())
     {
-    itkExceptionMacro(<<"Could not find input with key InputDataSet");
+    itkExceptionMacro(<< "Could not find input with key InputDataSet");
     }
 
   std::string sourceId = inputIt->second.GetNthData(0).GetSourceInstanceId();
@@ -190,22 +189,22 @@ void CachingModule::ThreadedRun()
 
   // Create description
   itk::OStringStream oss;
-  oss << otbGetTextMacro("Cached data from") << " "<<sourceId<<" ("<<outputKey<<")";
+  oss << otbGetTextMacro("Cached data from") << " " << sourceId << " (" << outputKey << ")";
   std::string description = oss.str();
   oss.str("");
 
   // Ensure no white spaces
-  std::replace(sourceId.begin(),sourceId.end(),' ','_');
-  std::replace(outputKey.begin(),outputKey.end(),' ','_');
+  std::replace(sourceId.begin(), sourceId.end(), ' ', '_');
+  std::replace(outputKey.begin(), outputKey.end(), ' ', '_');
 
   // Build cached file name
-  oss<<m_CachingPath<<sourceId<<outputKey<<".tif";
+  oss << m_CachingPath << sourceId << outputKey << ".tif";
   m_FilePath = oss.str();
   oss.str("");
 
   try
-  {
-    if ( charVectorImage.IsNotNull() )
+    {
+    if (charVectorImage.IsNotNull())
       {
       // Writing
       CharVWriterType::Pointer charVWriter = CharVWriterType::New();
@@ -220,7 +219,7 @@ void CachingModule::ThreadedRun()
       charVReader->SetFileName(m_FilePath);
       charVReader->UpdateOutputInformation();
       m_ReadingProcess = charVReader;
-      this->AddOutputDescriptor(charVReader->GetOutput(),"CachedData",description,true);
+      this->AddOutputDescriptor(charVReader->GetOutput(), "CachedData", description, true);
 
       // Notify new outputs
       Fl::lock();
@@ -228,7 +227,7 @@ void CachingModule::ThreadedRun()
       Fl::unlock();
       }
 
-    else if ( vectorImage.IsNotNull() )
+    else if (vectorImage.IsNotNull())
       {
       // Writing
       FPVWriterType::Pointer fPVWriter = FPVWriterType::New();
@@ -243,14 +242,14 @@ void CachingModule::ThreadedRun()
       fPVReader->SetFileName(m_FilePath);
       fPVReader->UpdateOutputInformation();
       m_ReadingProcess =  fPVReader;
-      this->AddOutputDescriptor(fPVReader->GetOutput(),"CachedData",description,true);
+      this->AddOutputDescriptor(fPVReader->GetOutput(), "CachedData", description, true);
 
       // Notify new outputs
       Fl::lock();
       this->NotifyOutputsChange();
       Fl::unlock();
       }
-    else if( singleImage.IsNotNull() )
+    else if (singleImage.IsNotNull())
       {
       // Writing
       FPWriterType::Pointer fPWriter = FPWriterType::New();
@@ -265,7 +264,7 @@ void CachingModule::ThreadedRun()
       fPReader->SetFileName(m_FilePath);
       fPReader->UpdateOutputInformation();
       m_ReadingProcess =  fPReader;
-      this->AddOutputDescriptor(fPReader->GetOutput(),"CachedData",description,true);
+      this->AddOutputDescriptor(fPReader->GetOutput(), "CachedData", description, true);
 
       // Notify new outputs
       Fl::lock();
@@ -275,16 +274,16 @@ void CachingModule::ThreadedRun()
     else
       {
       this->BusyOff();
-      itkExceptionMacro(<<"Input data are NULL.");
+      itkExceptionMacro(<< "Input data are NULL.");
       }
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     // Make the main fltk loop update Msg reporter
     m_ErrorMsg = err.GetDescription();
-    Fl::awake(&SendErrorCallback,&m_ErrorMsg);
+    Fl::awake(&SendErrorCallback, &m_ErrorMsg);
     this->BusyOff();
-  }
+    }
   this->BusyOff();
 }
 
@@ -297,7 +296,7 @@ void CachingModule::HideWindowCallback(void * data)
 {
   Self::Pointer caching = static_cast<Self *>(data);
 
-  if(caching.IsNotNull())
+  if (caching.IsNotNull())
     {
     caching->HideWindow();
     }
@@ -312,7 +311,7 @@ void CachingModule::ShowWindowCallback(void * data)
 {
   Self::Pointer caching = static_cast<Self *>(data);
 
-  if(caching.IsNotNull())
+  if (caching.IsNotNull())
     {
     caching->ShowWindow();
     }
@@ -322,7 +321,7 @@ void CachingModule::Run()
 {
   this->StartProcess2();
 
-  if(m_WatchProgress)
+  if (m_WatchProgress)
     {
     this->StartProcess1();
     }
@@ -330,16 +329,16 @@ void CachingModule::Run()
 
 void CachingModule::SendErrorCallback(void * data)
 {
-  std::string *  error = static_cast<std::string *>(data);
+  std::string * error = static_cast<std::string *>(data);
   //TODO test if error is null
-  if ( error == NULL )
-  {
+  if (error == NULL)
+    {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
-  }
+    }
   else
-  {
+    {
     MsgReporter::GetInstance()->SendError(error->c_str());
-  }
+    }
 }
 
 } // End namespace otb

@@ -25,14 +25,13 @@
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-#include "otbProjectionGroup.h" 
+#include "otbProjectionGroup.h"
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
 #include  "itkObject.h"
 #include  "itkObjectFactory.h"
-
 
 #include "otbObjectList.h"
 #include "otbVectorImage.h"
@@ -42,7 +41,6 @@
 #include "itkInterpolateImageFunction.h"
 #include "otbProjectionControllerInterface.h"
 #include "otbProjectionModel.h"
-
 
 // Remote Sensing Transformation
 #include "otbGenericRSTransform.h"
@@ -62,7 +60,7 @@ namespace otb
  */
 class ITK_EXPORT ProjectionView
   : public ListenerBase, public ProjectionGroup, public itk::Object
-  {
+{
 public:
   /** Standard typedefs */
   typedef ProjectionView                Self;
@@ -74,16 +72,16 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ProjectionView,itk::Object);
+  itkTypeMacro(ProjectionView, itk::Object);
 
   /** typedef projection model*/
-  typedef ProjectionModel                             ModelType;
-  typedef ModelType::InputImageType                   ImageType;
-  typedef ModelType::TransformType                    TransformType;
-  typedef ModelType::OutputPointType                  PointType;
-  typedef ModelType::IndexType                        IndexType;
-  typedef ModelType::SingleImageType                  SingleImageType;
-  
+  typedef ProjectionModel            ModelType;
+  typedef ModelType::InputImageType  ImageType;
+  typedef ModelType::TransformType   TransformType;
+  typedef ModelType::OutputPointType PointType;
+  typedef ModelType::IndexType       IndexType;
+  typedef ModelType::SingleImageType SingleImageType;
+
   // Called before building the GUI
   virtual void InitializeAction();
   // Initialize transform and show the GUI
@@ -92,15 +90,15 @@ public:
   virtual void ShowGUI();
 
   // Method to set the controller
-  itkGetObjectMacro(Controller,ProjectionControllerInterface);
-  itkSetObjectMacro(Controller,ProjectionControllerInterface);
+  itkGetObjectMacro(Controller, ProjectionControllerInterface);
+  itkSetObjectMacro(Controller, ProjectionControllerInterface);
 
   // Set the controller
   void SetProjectionController(ProjectionControllerInterface::Pointer pController)
-    {
-      m_Controller = pController;
-    }
-  
+  {
+    m_Controller = pController;
+  }
+
   // Hide the GUI
   virtual void Hide();
 
@@ -111,11 +109,11 @@ protected:
 
   // Launch the orthorectification & Quit the application
   virtual void OK();
-    
+
   // Set/Get the used map projection
   void SetMapType(ProjectionMapType map);
   ProjectionMapType GetMapType();
-  
+
   // Set/Get the used interpolator
   void SetInterpolatorType(ProjectionInterpolatorType interp);
   ProjectionInterpolatorType GetInterpolatorType();
@@ -139,8 +137,8 @@ protected:
   virtual void UpdateLambertIITransform();
   //
   virtual void UpdateTMTransform();
-  //  
-  virtual void UpdateWGS84Transform();  
+  //
+  virtual void UpdateWGS84Transform();
 
   virtual void UpdateInputUTMTransform();
   //
@@ -155,32 +153,31 @@ protected:
 
   // Find parameter value in the projection Ref tree
   virtual bool FindParameter(OGRSpatialReference oSRS, const char * inParam, double * paramValue);
-  
+
   /** Constructor */
   ProjectionView();
   /** Destructor */
   virtual ~ProjectionView()
   {
-  };
+  }
 
 private:
   ProjectionView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
-  ProjectionMapType                     m_MapType;
-  ProjectionInterpolatorType            m_InterpType;
-  
+  void operator =(const Self&); //purposely not implemented
+
+  ProjectionMapType          m_MapType;
+  ProjectionInterpolatorType m_InterpType;
+
   // Flag to determine if there is an output
-  bool                                  m_HasOutput;
+  bool m_HasOutput;
 
   // Flag to determine if the input Projection Map is unknowm
-  bool                                  m_InputProjectionUnknown;
+  bool m_InputProjectionUnknown;
 
   // Controller instance
-  ProjectionControllerInterface::Pointer   m_Controller;
+  ProjectionControllerInterface::Pointer m_Controller;
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #endif
-

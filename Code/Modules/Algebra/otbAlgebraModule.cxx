@@ -31,7 +31,7 @@ AlgebraModule::AlgebraModule()
 
   // Describe inputs
   this->AddInputDescriptor<ImageType>("FirstImage", otbGetTextMacro("First image"));
-  this->AddInputDescriptor<ImageType>("SecondImage", otbGetTextMacro("Second image"),true);
+  this->AddInputDescriptor<ImageType>("SecondImage", otbGetTextMacro("Second image"), true);
 
   // Build the GUI
   this->CreateGUI();
@@ -50,7 +50,7 @@ AlgebraModule::~AlgebraModule()
 void AlgebraModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /**
@@ -64,10 +64,9 @@ void AlgebraModule::AddImage()
   m_Output = m_AddFilter->GetOutput();
 }
 
-
- /**
- * Subtract Filter
- */
+/**
+* Subtract Filter
+*/
 void AlgebraModule::SubtractImage()
 {
   m_SubtractFilter   = SubtractFilterType::New();
@@ -92,23 +91,22 @@ void AlgebraModule::MultiplyImage()
  */
 void AlgebraModule::DivideImage()
 {
- m_DivideFilter = DivideFilterType::New();
- if(guiRatioInput1->value()==0)
-   {
-     std::cout<<"A/B"<<std::endl;
-     m_DivideFilter->SetInput1(m_InputImage1);
-     m_DivideFilter->SetInput2(m_InputImage2);
-    }
- else
+  m_DivideFilter = DivideFilterType::New();
+  if (guiRatioInput1->value() == 0)
     {
-      std::cout<<"B/A"<<std::endl;
-      m_DivideFilter->SetInput1(m_InputImage2);
-      m_DivideFilter->SetInput2(m_InputImage1);
+    std::cout << "A/B" << std::endl;
+    m_DivideFilter->SetInput1(m_InputImage1);
+    m_DivideFilter->SetInput2(m_InputImage2);
     }
- 
- m_Output = m_DivideFilter->GetOutput();
-}
+  else
+    {
+    std::cout << "B/A" << std::endl;
+    m_DivideFilter->SetInput1(m_InputImage2);
+    m_DivideFilter->SetInput2(m_InputImage1);
+    }
 
+  m_Output = m_DivideFilter->GetOutput();
+}
 
 /**
  * ShiftScale  Filter
@@ -122,82 +120,80 @@ void AlgebraModule::ShiftScaleImage()
   m_ShiftScaleFilter->SetShift(guiShiftScaleAddition->value());
 
   //If one Input deactivate the item to select second image
-  if(!m_HasSecondInput)
+  if (!m_HasSecondInput)
     {
-      m_ShiftScaleFilter->SetInput(m_InputImage1);
+    m_ShiftScaleFilter->SetInput(m_InputImage1);
     }
 
-  if(m_HasSecondInput)
+  if (m_HasSecondInput)
     {
-      switch(guiInputChoice->value())
-       {
-       case 0 :
-         m_ShiftScaleFilter->SetInput(m_InputImage1);
-         break;
-       case 1 :
-         m_ShiftScaleFilter->SetInput(m_InputImage2);
-         break;
-       default:
-         break;
-       }
+    switch (guiInputChoice->value())
+      {
+      case 0:
+        m_ShiftScaleFilter->SetInput(m_InputImage1);
+        break;
+      case 1:
+        m_ShiftScaleFilter->SetInput(m_InputImage2);
+        break;
+      default:
+        break;
+      }
     }
 
   m_Output = m_ShiftScaleFilter->GetOutput();
 }
 
-
 /** The custom run command */
 void AlgebraModule::Run()
 {
   // Check if there is two inputs
-  if(this->GetNumberOfInputDataByKey("SecondImage") >0)
-    m_HasSecondInput = true;
+  if (this->GetNumberOfInputDataByKey("SecondImage") > 0) m_HasSecondInput = true;
 
   // Get the input image
   m_InputImage1 = this->GetInputData<ImageType>("FirstImage");
 
   // Check if not null
-  if(m_InputImage1.IsNull())
+  if (m_InputImage1.IsNull())
     {
-      itkExceptionMacro(<<"First image is NULL");
+    itkExceptionMacro(<< "First image is NULL");
     }
 
   // Check if there is a second image
-  if(m_HasSecondInput)
+  if (m_HasSecondInput)
     {
-      m_InputImage2 = this->GetInputData<ImageType>("SecondImage");
-      if(m_InputImage2.IsNull())
-       {
-         itkExceptionMacro(<<"Second image is NULL");
-       }
+    m_InputImage2 = this->GetInputData<ImageType>("SecondImage");
+    if (m_InputImage2.IsNull())
+      {
+      itkExceptionMacro(<< "Second image is NULL");
+      }
     }
 
   // Show the GUI
   this->Show();
 
   // Deactivate Filter that need 2 Inputs.
-  if(!m_HasSecondInput)
+  if (!m_HasSecondInput)
     {
-      iAdd->deactivate();
-      iSubtract->deactivate();
-      iMultiply->deactivate();
-      iRatio->deactivate();
-      iSecondImage->deactivate();
-      // Set the operation to shift-scale
-      guiOperation->value(4);
-      guiOperation->deactivate();
-      // Display the shift scale group
-      guiShiftScaleGroup->show();
+    iAdd->deactivate();
+    iSubtract->deactivate();
+    iMultiply->deactivate();
+    iRatio->deactivate();
+    iSecondImage->deactivate();
+    // Set the operation to shift-scale
+    guiOperation->value(4);
+    guiOperation->deactivate();
+    // Display the shift scale group
+    guiShiftScaleGroup->show();
     }
   else
     {
-      iAdd->activate();
-      iSubtract->activate();
-      iMultiply->activate();
-      iRatio->activate();
-      iSecondImage->activate();
-      guiOperation->activate();
-      guiShiftScaleGroup->hide();
+    iAdd->activate();
+    iSubtract->activate();
+    iMultiply->activate();
+    iRatio->activate();
+    iSecondImage->activate();
+    guiOperation->activate();
+    guiShiftScaleGroup->hide();
     }
 }
 
@@ -207,23 +203,19 @@ void AlgebraModule::Run()
 void AlgebraModule::OK()
 {
   // Apply the filter
-  switch(guiOperation->value())
+  switch (guiOperation->value())
     {
-    case 0 :
-      if(m_HasSecondInput)
-       this->AddImage();
+    case 0:
+      if (m_HasSecondInput) this->AddImage();
       break;
     case 1:
-      if(m_HasSecondInput)
-       this->SubtractImage();
+      if (m_HasSecondInput) this->SubtractImage();
       break;
     case 2:
-      if(m_HasSecondInput)
-      this->MultiplyImage();
+      if (m_HasSecondInput) this->MultiplyImage();
       break;
     case 3:
-      if(m_HasSecondInput)
-      this->DivideImage();
+      if (m_HasSecondInput) this->DivideImage();
       break;
     case 4:
       this->ShiftScaleImage();
@@ -233,7 +225,7 @@ void AlgebraModule::OK()
     }
 
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_Output,"OutputImage",otbGetTextMacro("Result image"));
+  this->AddOutputDescriptor(m_Output, "OutputImage", otbGetTextMacro("Result image"));
   this->NotifyOutputsChange();
 
   // close the GUI

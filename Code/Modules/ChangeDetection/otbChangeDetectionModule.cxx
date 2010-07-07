@@ -32,8 +32,8 @@ ChangeDetectionModule::ChangeDetectionModule()
   m_CastFilter = CastSingleImageFilter::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("LeftImage",otbGetTextMacro("Left image"));
-  this->AddInputDescriptor<ImageType>("RightImage",otbGetTextMacro("Right image"));
+  this->AddInputDescriptor<ImageType>("LeftImage", otbGetTextMacro("Left image"));
+  this->AddInputDescriptor<ImageType>("RightImage", otbGetTextMacro("Right image"));
   this->AddTypeToInputDescriptor<SingleImageType>("LeftImage");
   this->AddTypeToInputDescriptor<SingleImageType>("RightImage");
 }
@@ -46,7 +46,7 @@ ChangeDetectionModule::~ChangeDetectionModule()
 void ChangeDetectionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -64,20 +64,20 @@ void ChangeDetectionModule::Run()
   SingleImageType::Pointer lsingleImage = this->GetInputData<SingleImageType>("LeftImage");
   SingleImageType::Pointer rsingleImage = this->GetInputData<SingleImageType>("RightImage");
 
-  if(!lsingleImage.IsNull() && linput.IsNull())
+  if (!lsingleImage.IsNull() && linput.IsNull())
     {
-      m_CastFilter->SetInput(lsingleImage);
-      m_CastFilter->UpdateOutputInformation();
-      linput = m_CastFilter->GetOutput();
+    m_CastFilter->SetInput(lsingleImage);
+    m_CastFilter->UpdateOutputInformation();
+    linput = m_CastFilter->GetOutput();
     }
-  if(!rsingleImage.IsNull() && rinput.IsNull())
+  if (!rsingleImage.IsNull() && rinput.IsNull())
     {
-      m_CastFilter->SetInput(rsingleImage);
-      m_CastFilter->UpdateOutputInformation();
-      rinput = m_CastFilter->GetOutput();
+    m_CastFilter->SetInput(rsingleImage);
+    m_CastFilter->UpdateOutputInformation();
+    rinput = m_CastFilter->GetOutput();
     }
 
-  if(rinput.IsNotNull() &&  linput.IsNotNull())
+  if (rinput.IsNotNull() &&  linput.IsNotNull())
     {
     m_ChangeDetection->SetRightImage(rinput);
     m_ChangeDetection->SetLeftImage(linput);
@@ -89,7 +89,7 @@ void ChangeDetectionModule::Run()
     }
   else
     {
-    itkExceptionMacro(<<"InputImage are NULL");
+    itkExceptionMacro(<< "InputImage are NULL");
     }
 }
 
@@ -102,10 +102,10 @@ void ChangeDetectionModule::Hide()
 /** The notify */
 void ChangeDetectionModule::Notify()
 {
-  if(m_ChangeDetection->GetHasOutput())
+  if (m_ChangeDetection->GetHasOutput())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(),"OutputImage",otbGetTextMacro("Change image Label"));
+    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(), "OutputImage", otbGetTextMacro("Change image Label"));
     this->NotifyOutputsChange();
     }
 }

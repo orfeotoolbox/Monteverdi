@@ -21,60 +21,59 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbThresholdModuleTest(int argc, char* argv[])
 {
   otb::ThresholdModule::Pointer specificModule = otb::ThresholdModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer          module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Inputs
   const char * infname = argv[1];
   bool         run     = atoi(argv[2]);
-  
-  typedef otb::ThresholdModule::ImageType     ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
-  
+
+  typedef otb::ThresholdModule::ImageType ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-  
-  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
 
-  module->AddInputByKey("InputImage",wrapperIn);
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
+
+  module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
-  
+
   // Get the extremum of the image
   double min = specificModule->guiMinDetails->value();
-  
+
   specificModule->guiMinDetails->value(min + 50);
   specificModule->guiMaxDetails->value(min + 100);
   specificModule->guiGenericThreshold->do_callback();
   // Simulate OK click
   specificModule->bOK->do_callback();
-  
-  if(run)
+
+  if (run)
     {
-      Fl::run();
+    Fl::run();
     }
   else
     {
-      Fl::check();
+    Fl::check();
     }
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
-  
+
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(outImage);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

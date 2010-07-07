@@ -1,7 +1,6 @@
 #include "otbMeanShiftModuleModel.h"
 #include "otbFltkFilterWatcher.h"
 
-
 namespace otb
 {
 /** Initialize the singleton */
@@ -11,9 +10,9 @@ MeanShiftModuleModel::Pointer
 MeanShiftModuleModel::GetInstance()
 {
   if (!Instance)
-  {
+    {
     Instance = MeanShiftModuleModel::New();
-  }
+    }
   return Instance;
 }
 
@@ -34,7 +33,6 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_MeanShi
   m_ClustersGenerator = LayerGeneratorType::New();
   m_BoundariesGenerator = LabelLayerGeneratorType::New();
   m_InputImage = VectorImageType::New();
-  
 
   m_IsUpdating = false;
   m_IsImageReady = false;
@@ -46,8 +44,6 @@ MeanShiftModuleModel
 ::~MeanShiftModuleModel()
 {
 }
-
-
 
 void
 MeanShiftModuleModel
@@ -69,42 +65,39 @@ MeanShiftModuleModel
   m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
 }
 
-
 void
 MeanShiftModuleModel
 ::SetInputImage(VectorImagePointerType image)
 {
   m_InputImage = image;
-  
+
   m_InputImage->UpdateOutputInformation();
   m_MeanShift->SetInput(m_InputImage);
 
   // Generate the layer
   m_ImageGenerator->SetImage(m_InputImage);
   m_ImageGenerator->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(),0,0,200,20,"Generating QuickLook...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
   m_Channels.clear();
-  if(m_InputImage->GetNumberOfComponentsPerPixel()>3)
+  if (m_InputImage->GetNumberOfComponentsPerPixel() > 3)
     {
-        m_Channels.clear();
-      m_Channels.push_back(2);
-      m_Channels.push_back(1);
-      m_Channels.push_back(0);
+    m_Channels.clear();
+    m_Channels.push_back(2);
+    m_Channels.push_back(1);
+    m_Channels.push_back(0);
     }
   else
-     {
-       for(unsigned int i=0; i<m_InputImage->GetNumberOfComponentsPerPixel(); i++)
-	 {
-	   m_Channels.push_back(i);
-	 }
-     }
+    {
+    for (unsigned int i = 0; i < m_InputImage->GetNumberOfComponentsPerPixel(); i++)
+      {
+      m_Channels.push_back(i);
+      }
+    }
 
   m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
 
-  
-  
   m_ImageGenerator->GetLayer()->SetName("Image");
 
   // Clear previous layers
@@ -123,54 +116,52 @@ void
 MeanShiftModuleModel
 ::RunSegmentation()
 {
-  if(  m_IsImageReady )
+  if (m_IsImageReady)
     {
-      m_IsUpdating = true;
-      // Generate the layer
-      
-      m_MeanShift->SetSpatialRadius(m_SpatialRadius);
-      m_MeanShift->SetRangeRadius(m_SpectralRadius);
-      m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
-         
-      m_ClustersGenerator->SetImage(m_MeanShift->GetClusteredOutput());
-      m_ClustersGenerator->GenerateQuicklookOff();
-      m_ClustersGenerator->GenerateLayer();
-      
-      m_BoundariesGenerator->SetImage(m_MeanShift->GetClusterBoundariesOutput());
-      m_BoundariesGenerator->GenerateQuicklookOff();
-      m_BoundariesGenerator->GenerateLayer();
-      
-      
-      m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
-      
-      m_ClustersGenerator->GetLayer()->SetName("Segmentation");
-      m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
-      m_BoundariesGenerator->GetLayer()->SetVisible(false);
+    m_IsUpdating = true;
+    // Generate the layer
 
-      m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
-      m_VisualizationModel->AddLayer(m_BoundariesGenerator->GetLayer());
+    m_MeanShift->SetSpatialRadius(m_SpatialRadius);
+    m_MeanShift->SetRangeRadius(m_SpectralRadius);
+    m_MeanShift->SetMinimumRegionSize(m_MinRegionSize);
 
-      m_VisualizationModel->Update();
-      
-      m_MeanShift->GetOutput()->UpdateOutputInformation();
-      m_MeanShift->GetClusteredOutput()->UpdateOutputInformation();
-      m_MeanShift->GetLabeledClusteredOutput()->UpdateOutputInformation();
-      m_MeanShift->GetClusterBoundariesOutput()->UpdateOutputInformation();
+    m_ClustersGenerator->SetImage(m_MeanShift->GetClusteredOutput());
+    m_ClustersGenerator->GenerateQuicklookOff();
+    m_ClustersGenerator->GenerateLayer();
 
-      m_IsUpdating = false;
+    m_BoundariesGenerator->SetImage(m_MeanShift->GetClusterBoundariesOutput());
+    m_BoundariesGenerator->GenerateQuicklookOff();
+    m_BoundariesGenerator->GenerateLayer();
+
+    m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
+
+    m_ClustersGenerator->GetLayer()->SetName("Segmentation");
+    m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
+    m_BoundariesGenerator->GetLayer()->SetVisible(false);
+
+    m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
+    m_VisualizationModel->AddLayer(m_BoundariesGenerator->GetLayer());
+
+    m_VisualizationModel->Update();
+
+    m_MeanShift->GetOutput()->UpdateOutputInformation();
+    m_MeanShift->GetClusteredOutput()->UpdateOutputInformation();
+    m_MeanShift->GetLabeledClusteredOutput()->UpdateOutputInformation();
+    m_MeanShift->GetClusterBoundariesOutput()->UpdateOutputInformation();
+
+    m_IsUpdating = false;
     }
 }
-
 
 void
 MeanShiftModuleModel
 ::SwitchClusters(bool sc)
 {
-  if(m_IsImageReady)
+  if (m_IsImageReady)
     {
-      m_ClustersGenerator->GetLayer()->SetVisible(sc);
+    m_ClustersGenerator->GetLayer()->SetVisible(sc);
     }
-  
+
   m_VisualizationModel->Update();
 }
 
@@ -178,14 +169,13 @@ void
 MeanShiftModuleModel
 ::SwitchBoundaries(bool sb)
 {
-  if(m_IsImageReady)
+  if (m_IsImageReady)
     {
-      m_BoundariesGenerator->GetLayer()->SetVisible(sb);
+    m_BoundariesGenerator->GetLayer()->SetVisible(sb);
     }
-  
+
   m_VisualizationModel->Update();
 }
-
 
 void
 MeanShiftModuleModel
@@ -195,34 +185,31 @@ MeanShiftModuleModel
   m_VisualizationModel->Update();
 }
 
-
 void
 MeanShiftModuleModel
 ::UpdateViewerDisplay(std::vector<unsigned int> ch)
 {
-  if(!m_IsImageReady)
+  if (!m_IsImageReady)
     {
-      return;
+    return;
     }
   unsigned int layerNb = m_VisualizationModel->GetNumberOfLayers();
-  if(layerNb == 0)
+  if (layerNb == 0)
     {
-      itkExceptionMacro("Invalid number of layers");
+    itkExceptionMacro("Invalid number of layers");
     }
 
   m_Channels = ch;
-  
+
   m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
-  
-  if(layerNb > 1)
+
+  if (layerNb > 1)
     {
-      m_ClustersGenerator->GetRenderingFunction()->SetChannelList(m_Channels);
+    m_ClustersGenerator->GetRenderingFunction()->SetChannelList(m_Channels);
     }
-  
-  
+
   m_VisualizationModel->Update();
 }
-
 
 void
 MeanShiftModuleModel
@@ -232,9 +219,9 @@ MeanShiftModuleModel
   m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
   m_OutputLabeledImage = m_MeanShift->GetLabeledClusteredOutput();
   m_OutputBoundariesImage = m_MeanShift->GetClusterBoundariesOutput();
- 
+
   this->NotifyAll("OutputsUpdated");
-  
+
   this->NotifyAll("BusyOff");
 }
 

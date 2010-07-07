@@ -46,7 +46,7 @@ KMeansModule::~KMeansModule()
 void KMeansModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -74,25 +74,24 @@ void KMeansModule::UpdateNumberOfSamples()
 {
   vNumberOfSamples->show();
 
-  int squareRatio = static_cast<int>(100/vNumberOfSamples->value());
+  int squareRatio = static_cast<int>(100 / vNumberOfSamples->value());
 
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
 
-  if(image.IsNull())
+  if (image.IsNull())
     {
     itkExceptionMacro("InputImage is null");
     }
 
   image->UpdateOutputInformation();
 
-  unsigned int nbSamples = image->GetLargestPossibleRegion().GetNumberOfPixels()/squareRatio;
+  unsigned int nbSamples = image->GetLargestPossibleRegion().GetNumberOfPixels() / squareRatio;
 
   itk::OStringStream oss;
   oss.str("");
-  oss<<vNumberOfSamples->value()<<"% of image ("<<nbSamples<<" samples)";
+  oss << vNumberOfSamples->value() << "% of image (" << nbSamples << " samples)";
   oNumberOfSamples->copy_label(oss.str().c_str());
 }
-
 
 void KMeansModule::UpdateProgress()
 {
@@ -101,24 +100,24 @@ void KMeansModule::UpdateProgress()
 
   pProgressBar->show();
 
-  if(m_ProcessObject.IsNotNull())
+  if (m_ProcessObject.IsNotNull())
     {
     double progress = m_ProcessObject->GetProgress();
 
-    if(progress < 1.)
+    if (progress < 1.)
       {
-      oss1<<"Sampling data  ("<<std::floor(100*progress)<<"%)";
-      pProgressBar->value( progress );
-      pProgressBar->copy_label( oss1.str().c_str() );
+      oss1 << "Sampling data  (" << std::floor(100 * progress) << "%)";
+      pProgressBar->value(progress);
+      pProgressBar->copy_label(oss1.str().c_str());
       }
-    else if(m_Estimator->GetCurrentIteration() == 0)
+    else if (m_Estimator->GetCurrentIteration() == 0)
       {
       pProgressBar->value(0.);
       pProgressBar->copy_label(otbGetTextMacro("Generating decision tree"));
       }
     else
       {
-      oss1<<"Estimating (res="<<m_Estimator->GetCentroidPositionChanges()<<")";
+      oss1 << "Estimating (res=" << m_Estimator->GetCentroidPositionChanges() << ")";
       pProgressBar->maximum(m_Estimator->GetMaximumIteration());
       pProgressBar->minimum(0);
       pProgressBar->value(m_Estimator->GetCurrentIteration());
@@ -131,7 +130,7 @@ void KMeansModule::UpdateProgressCallback(void * data)
 {
   Self::Pointer pthis = static_cast<Self *>(data);
 
-  if(pthis.IsNotNull())
+  if (pthis.IsNotNull())
     {
     pthis->UpdateProgress();
     }
@@ -150,20 +149,20 @@ void KMeansModule::ThreadedWatch()
   Fl::unlock();
 
   // Wait for the module to be busy
-  while(!this->IsBusy())
-  {
-        Sleep(500);
-  }
-
-  while( this->IsBusy() )
+  while (!this->IsBusy())
     {
-      Fl::awake(&UpdateProgressCallback,this);
-      // Sleep for a while
-      Sleep(500);
+    Sleep(500);
+    }
+
+  while (this->IsBusy())
+    {
+    Fl::awake(&UpdateProgressCallback, this);
+    // Sleep for a while
+    Sleep(500);
     }
 
   // Update progress one last time
-  Fl::awake(&UpdateProgressCallback,this);
+  Fl::awake(&UpdateProgressCallback, this);
 
   Fl::lock();
   // Reactivate window buttons
@@ -175,8 +174,8 @@ void KMeansModule::ThreadedWatch()
   vNumberOfIterations->activate();
   Fl::unlock();
 
-  Fl::awake(&HideWindowCallback,this);
-  }
+  Fl::awake(&HideWindowCallback, this);
+}
 
 void KMeansModule::ThreadedRun()
 {
@@ -184,10 +183,10 @@ void KMeansModule::ThreadedRun()
 
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
 
-  if(image.IsNull())
+  if (image.IsNull())
     {
     m_ErrorMsg = "InputImage is null";
-    Fl::awake(&SendErrorCallback,&m_ErrorMsg);
+    Fl::awake(&SendErrorCallback, &m_ErrorMsg);
     this->BusyOff();
     return;
     }
@@ -195,15 +194,16 @@ void KMeansModule::ThreadedRun()
   // First, sample data
   SamplingFilterType::Pointer sampler = SamplingFilterType::New();
   sampler->SetInput(image);
-  sampler->SetShrinkFactor(static_cast<unsigned int>(vcl_floor(vcl_sqrt(100/vNumberOfSamples->value()))));
+  sampler->SetShrinkFactor(static_cast<unsigned int>(vcl_floor(vcl_sqrt(100 / vNumberOfSamples->value()))));
   m_ProcessObject = sampler;
   sampler->Update();
 
   // Then, build the sample list
   unsigned int nbComp = sampler->GetOutput()->GetNumberOfComponentsPerPixel();
-  unsigned int nbClasses = static_cast<unsigned int >(vNumberOfClasses->value());
+  unsigned int nbClasses = static_cast<unsigned int>(vNumberOfClasses->value());
 
-  itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),sampler->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),
+                                                       sampler->GetOutput()->GetLargestPossibleRegion());
   it.GoToBegin();
   ListSampleType::Pointer listSample = ListSampleType::New();
 
@@ -213,86 +213,87 @@ void KMeansModule::ThreadedRun()
 
   ++it;
 
-  while(!it.IsAtEnd())
+  while (!it.IsAtEnd())
     {
     SampleType sample = it.Get();
     listSample->PushBack(sample);
 
-    for(unsigned int i = 0; i<nbComp;++i)
+    for (unsigned int i = 0; i < nbComp; ++i)
       {
-      if(min[i]>sample[i])
-       {
-       min[i] = sample[i];
-       }
-      if(max[i]<sample[i])
-       {
-       max[i] = sample[i];
-       }
+      if (min[i] > sample[i])
+        {
+        min[i] = sample[i];
+        }
+      if (max[i] < sample[i])
+        {
+        max[i] = sample[i];
+        }
       }
     ++it;
     }
 
   // Next, intialiaze centroids
-  EstimatorType::ParametersType initialCentroids(nbComp*nbClasses);
+  EstimatorType::ParametersType initialCentroids(nbComp * nbClasses);
 
-  for(unsigned int classIndex = 0; classIndex < nbClasses;++classIndex)
+  for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
     {
-    for(unsigned int compIndex = 0; compIndex < nbComp;++compIndex)
+    for (unsigned int compIndex = 0; compIndex < nbComp; ++compIndex)
       {
       initialCentroids[compIndex + classIndex * nbComp] = min[compIndex]
-       + (max[compIndex]-min[compIndex])*rand()/(RAND_MAX+1.0);
+                                                          + (max[compIndex] -
+                                                             min[compIndex]) * rand() / (RAND_MAX + 1.0);
       }
     }
 
   // Now, build the kdTree
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
   treeGenerator->SetSample(listSample);
-  treeGenerator->SetBucketSize(static_cast<unsigned int>(vNumberOfSamples->value()/(10*nbClasses)));
+  treeGenerator->SetBucketSize(static_cast<unsigned int>(vNumberOfSamples->value() / (10 * nbClasses)));
   treeGenerator->Update();
 
-  otbGenericMsgDebugMacro( <<otbGetTextMacro("Tree generated"));
+  otbGenericMsgDebugMacro(<< otbGetTextMacro("Tree generated"));
 
   // Estimate the centroids
-  m_Estimator->SetKdTree(treeGenerator->GetOutput() );
+  m_Estimator->SetKdTree(treeGenerator->GetOutput());
   m_Estimator->SetParameters(initialCentroids);
   m_Estimator->SetMaximumIteration(static_cast<unsigned int>(vNumberOfIterations->value()));
   m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
   m_Estimator->StartOptimization();
 
-  otbGenericMsgDebugMacro( <<otbGetTextMacro("Optimization ended") );
+  otbGenericMsgDebugMacro(<< otbGetTextMacro("Optimization ended"));
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;
 
   EstimatorType::ParametersType finalCentroids = m_Estimator->GetParameters();
 
- for(unsigned int classIndex = 0; classIndex < nbClasses;++classIndex)
+  for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
     {
     SampleType centroid(nbComp);
 
-    for(unsigned int compIndex = 0; compIndex < nbComp;++compIndex)
+    for (unsigned int compIndex = 0; compIndex < nbComp; ++compIndex)
       {
       centroid[compIndex] = finalCentroids[compIndex + classIndex * nbComp];
       }
-    functor.AddCentroid(classIndex,centroid);
-    m_ChangeLabelFilter->SetChange(classIndex,centroid);
+    functor.AddCentroid(classIndex, centroid);
+    m_ChangeLabelFilter->SetChange(classIndex, centroid);
     }
 
-   m_KMeansFilter->SetFunctor(functor);
-   m_KMeansFilter->SetInput(image);
-   m_ChangeLabelFilter->SetInput(m_KMeansFilter->GetOutput());
-   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(nbComp);
+  m_KMeansFilter->SetFunctor(functor);
+  m_KMeansFilter->SetInput(image);
+  m_ChangeLabelFilter->SetInput(m_KMeansFilter->GetOutput());
+  m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(nbComp);
 
-   Fl::lock();
-   this->ClearOutputDescriptors();
-   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(),"KMeans labeled image",
-                             otbGetTextMacro("The labeled image from kmeans classification"));
-   this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(),"KMeans clustered image",
-                             otbGetTextMacro("The clustered image from kmeans classification"));
-   this->NotifyOutputsChange();
-   Fl::unlock();
+  Fl::lock();
+  this->ClearOutputDescriptors();
+  this->AddOutputDescriptor(m_KMeansFilter->GetOutput(), "KMeans labeled image",
+                            otbGetTextMacro("The labeled image from kmeans classification"));
+  this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(), "KMeans clustered image",
+                            otbGetTextMacro("The clustered image from kmeans classification"));
+  this->NotifyOutputsChange();
+  Fl::unlock();
 
-   this->BusyOff();
+  this->BusyOff();
 }
 
 void KMeansModule::HideWindow()
@@ -304,7 +305,7 @@ void KMeansModule::HideWindowCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
 
-  if(writer.IsNotNull())
+  if (writer.IsNotNull())
     {
     writer->HideWindow();
     }
@@ -312,17 +313,15 @@ void KMeansModule::HideWindowCallback(void * data)
 
 void KMeansModule::SendErrorCallback(void * data)
 {
-  std::string *  error = static_cast<std::string *>(data);
+  std::string * error = static_cast<std::string *>(data);
   //TODO test if error is null
-  if ( error == NULL )
-  {
+  if (error == NULL)
+    {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
-  }
+    }
   else
-  {
+    {
     MsgReporter::GetInstance()->SendError(error->c_str());
-  }
+    }
 }
 } // End namespace otb
-
-

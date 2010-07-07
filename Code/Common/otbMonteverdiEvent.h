@@ -18,7 +18,6 @@
 #ifndef __otbMonteverdiEvent_h
 #define __otbMonteverdiEvent_h
 
-
 namespace otb
 {
 
@@ -27,25 +26,25 @@ class ITK_EXPORT MonteverdiEvent
 public:
   /** Constructor */
   MonteverdiEvent() : m_Type("Unknown"), m_InstanceId("Unknown") {}
-  MonteverdiEvent(const std::string & type, const std::string & id) : m_Type(type), m_InstanceId(id) {}
+  MonteverdiEvent(const std::string& type, const std::string& id) : m_Type(type), m_InstanceId(id) {}
   virtual ~MonteverdiEvent(){}
 
-  void SetType(const std::string & type)
+  void SetType(const std::string& type)
   {
     m_Type = type;
   }
-  
-  const std::string & GetType() const
+
+  const std::string& GetType() const
   {
     return m_Type;
   }
 
-  void SetInstanceId(const std::string & id)
+  void SetInstanceId(const std::string& id)
   {
     m_InstanceId = id;
   }
 
-  const std::string & GetInstanceId() const
+  const std::string& GetInstanceId() const
   {
     return m_InstanceId;
   }
@@ -60,5 +59,3 @@ private:
 
 }
 #endif
-
-

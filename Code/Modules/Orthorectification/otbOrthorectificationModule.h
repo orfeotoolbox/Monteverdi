@@ -37,7 +37,7 @@ class ITK_EXPORT OrthorectificationModule
 {
 public:
   /** Standard class typedefs */
-  typedef OrthorectificationModule             Self;
+  typedef OrthorectificationModule      Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -46,17 +46,17 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(OrthorectificationModule,Module);
-  
+  itkTypeMacro(OrthorectificationModule, Module);
+
   /** Accessor to the Orthorectification Instance */
-  itkGetObjectMacro(Orthorectification,Orthorectification);
-  
+  itkGetObjectMacro(Orthorectification, Orthorectification);
+
   /** Input typedef */
   typedef Orthorectification::ImageType       ImageType;
   typedef Orthorectification::SingleImageType SingleImageType;
 
   /** Cast SingleImage to ImageType (VectorImage) */
-  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
+  typedef ImageToVectorImageCastFilter<SingleImageType, ImageType> CastSingleImageFilter;
 
 protected:
   /** Constructor */
@@ -72,36 +72,35 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
     m_Orthorectification->guiMainWindow->show();
-  };
+  }
 
   /** Show the Module GUI */
   virtual void Hide()
   {
     m_Orthorectification->guiShowDEM->hide();
     m_Orthorectification->guiMainWindow->hide();
-  };
+  }
 
   /** Notify Monteverdi application that orthorectification has a result */
   void Notify();
 
 private:
   OrthorectificationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // The view
-  Orthorectification::Pointer        m_Orthorectification;
+  Orthorectification::Pointer m_Orthorectification;
 
   // Cast Filter
-  CastSingleImageFilter::Pointer     m_CastFilter;
+  CastSingleImageFilter::Pointer m_CastFilter;
 
 };
-
 
 } // End namespace otb
 

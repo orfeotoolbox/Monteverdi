@@ -62,8 +62,8 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Graph,itk::DataObject);
-  
+  itkTypeMacro(Graph, itk::DataObject);
+
   // Iterators are friends
   friend class GraphVertexIterator<Self>;
   friend class GraphEdgeIterator<Self>;
@@ -73,24 +73,24 @@ public:
   typedef TVertex VertexType;
 
   /** Edge typedef */
-  typedef TEdge   EdgeType;
+  typedef TEdge EdgeType;
 
   /** Boost graph typedef */
-  typedef boost::adjacency_list<boost::vecS,boost::vecS,
-                            TDirected,VertexType,EdgeType> GraphContainerType;
-  
+  typedef boost::adjacency_list<boost::vecS, boost::vecS,
+      TDirected, VertexType, EdgeType> GraphContainerType;
+
   /** Vertex descriptor */
   typedef typename GraphContainerType::vertex_descriptor VertexDescriptorType;
 
   /** Edge descriptor */
-  typedef typename GraphContainerType::edge_descriptor   EdgeDescriptorType;
+  typedef typename GraphContainerType::edge_descriptor EdgeDescriptorType;
 
   /** Clear all vertices and edges of the graph */
   void Clear()
   {
     m_GraphContainer.clear();
   }
-  
+
   /** Returns the number of vertices */
   unsigned long int GetNumberOfVertices() const
   {
@@ -102,39 +102,39 @@ public:
   {
     return num_edges(m_GraphContainer);
   }
-  
+
   /** Add a new vertex and return its vertex descriptor */
-  virtual VertexDescriptorType AddVertex(const VertexType & vertex)
+  virtual VertexDescriptorType AddVertex(const VertexType& vertex)
   {
-    return add_vertex(vertex,m_GraphContainer);
+    return add_vertex(vertex, m_GraphContainer);
   }
 
   /** Add a new edge and return its edge descriptor */
-  EdgeDescriptorType AddEdge(VertexDescriptorType source, VertexDescriptorType destination, const EdgeType & edge)
+  EdgeDescriptorType AddEdge(VertexDescriptorType source, VertexDescriptorType destination, const EdgeType& edge)
   {
-    std::pair<EdgeDescriptorType,bool> resp = add_edge(source,destination,edge,m_GraphContainer);
+    std::pair<EdgeDescriptorType, bool> resp = add_edge(source, destination, edge, m_GraphContainer);
     return resp.first;
   }
 
   /** Get the internal graph container */
-  const GraphContainerType & GetGraphContainer() const
+  const GraphContainerType& GetGraphContainer() const
   {
     return m_GraphContainer;
   }
 
 protected:
   /** Constructor */
-  Graph(){};
+  Graph(){}
 
   /** Destructor */
-  ~Graph(){};
+  ~Graph(){}
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"Number of vertices: "<<this->GetNumberOfVertices()<<std::endl;
-    os<<indent<<"Number of edges   : "<<this->GetNumberOfEdges()<<std::endl;
+    Superclass::PrintSelf(os, indent);
+    os << indent << "Number of vertices: " << this->GetNumberOfVertices() << std::endl;
+    os << indent << "Number of edges   : " << this->GetNumberOfEdges() << std::endl;
   }
 
 private:

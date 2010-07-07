@@ -28,11 +28,11 @@ namespace otb
 
 VectorizationView
 ::VectorizationView() :  m_Controller(),
-                         m_WidgetController(),
-                         m_Model(),
-                         m_ImageView(),
-                         m_VectorDataGlComponent(),
-                         m_VectorDataTreeBrowser()
+  m_WidgetController(),
+  m_Model(),
+  m_ImageView(),
+  m_VectorDataGlComponent(),
+  m_VectorDataTreeBrowser()
 {
   m_ImageView = ImageViewType::New();
   m_VectorDataGlComponent = VectorDataGlComponentType::New();
@@ -41,7 +41,6 @@ VectorizationView
   m_ImageView->GetScrollWidget()->AddGlComponent(m_VectorDataGlComponent);
   m_ImageView->GetZoomWidget()->AddGlComponent(m_VectorDataGlComponent);
 }
-
 
 VectorizationView
 ::~VectorizationView()
@@ -82,22 +81,24 @@ void
 VectorizationView
 ::BuildInterface()
 {
-  if(!m_Controller)
+  if (!m_Controller)
     {
-      itkExceptionMacro(<<"Controller is not set, can not build view.");
+    itkExceptionMacro(<< "Controller is not set, can not build view.");
     }
 
-  if(!m_WidgetController)
+  if (!m_WidgetController)
     {
-      itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
+    itkExceptionMacro(<< "Widgets controller is not set, can not build view.");
     }
-    
+
   // Build the fltk code
   this->CreateGUI();
 
   // Display navigation modes
-  vNavigationMode->add("Mouse left: add point, mouse middle: navigate, mouse right: end geometry, del: remove last geometry");
-  vNavigationMode->add("Mouse left: navigate, mouse middle: add point, mouse right: end geometry, del: remove last geometry");
+  vNavigationMode->add(
+    "Mouse left: add point, mouse middle: navigate, mouse right: end geometry, del: remove last geometry");
+  vNavigationMode->add(
+    "Mouse left: navigate, mouse middle: add point, mouse right: end geometry, del: remove last geometry");
   vNavigationMode->value(1);
 
   // Register controllers
@@ -124,7 +125,7 @@ VectorizationView
 {
   wMainWindow->position(0, 45);
   wMainWindow->show();
-  
+
   // Add registered visualization components from the interface
   gFull->add(m_ImageView->GetFullWidget());
   gScroll->add(m_ImageView->GetScrollWidget());
@@ -133,9 +134,9 @@ VectorizationView
   gScroll->resizable(m_ImageView->GetScrollWidget());
   gZoom->resizable(m_ImageView->GetZoomWidget());
 
-  m_ImageView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h());
-  m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
-  m_ImageView->GetZoomWidget()->resize(gZoom->x(),gZoom->y(),gZoom->w(),gZoom->h());
+  m_ImageView->GetFullWidget()->resize(gFull->x(), gFull->y(), gFull->w(), gFull->h());
+  m_ImageView->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h());
+  m_ImageView->GetZoomWidget()->resize(gZoom->x(), gZoom->y(), gZoom->w(), gZoom->h());
 
   m_ImageView->GetFullWidget()->show();
   m_ImageView->GetScrollWidget()->show();
@@ -154,7 +155,7 @@ void
 VectorizationView
 ::HideAll()
 {
- wMainWindow->hide();
+  wMainWindow->hide();
 }
 
 void VectorizationView

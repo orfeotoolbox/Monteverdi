@@ -18,7 +18,6 @@
 #ifndef __otbInputViewGUI_h
 #define __otbInputViewGUI_h
 
-
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -28,7 +27,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -56,28 +54,27 @@ public:
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(InputViewGUI,Object);
+  itkTypeMacro(InputViewGUI, Object);
 
+  typedef Module::OutputDataDescriptorMapType OutputDataDescriptorMapType;
+  typedef Module::InputDataDescriptorMapType  InputDataDescriptorMapType;
 
-  typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
-  typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
-
-  typedef InputViewComponent::StringPairType           StringPairType;
-  typedef InputViewComponent::Pointer                  InputViewComponentPointerType;
+  typedef InputViewComponent::StringPairType StringPairType;
+  typedef InputViewComponent::Pointer        InputViewComponentPointerType;
 
   // map containing the key and the descriptor
-  typedef std::map<std::string,InputViewComponentPointerType> InputViewComponentMapType;
+  typedef std::map<std::string, InputViewComponentPointerType> InputViewComponentMapType;
 
   /** Getters/Setters */
-  itkGetObjectMacro(Model,MonteverdiModel);
-  itkSetObjectMacro(Model,MonteverdiModel);
-  itkGetObjectMacro(Controller,MonteverdiControllerInterface);
-  itkSetObjectMacro(Controller,MonteverdiControllerInterface);
-  itkGetMacro(ModuleInstanceId,std::string);
-  itkSetMacro(ModuleInstanceId,std::string);
+  itkGetObjectMacro(Model, MonteverdiModel);
+  itkSetObjectMacro(Model, MonteverdiModel);
+  itkGetObjectMacro(Controller, MonteverdiControllerInterface);
+  itkSetObjectMacro(Controller, MonteverdiControllerInterface);
+  itkGetMacro(ModuleInstanceId, std::string);
+  itkSetMacro(ModuleInstanceId, std::string);
 
   /** Returns the component map */
-  const InputViewComponentMapType & GetInputViewComponentMap() const
+  const InputViewComponentMapType& GetInputViewComponentMap() const
   {
     return m_InputViewComponentMap;
   }
@@ -95,22 +92,20 @@ protected:
   /** Destructor */
   virtual ~InputViewGUI();
 
-
   /** This is the watching process for the whole set of inputs */
   virtual void RunProcess1(void *v);
 
 private:
   InputViewGUI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  
-  MonteverdiModel::Pointer                m_Model;
+  MonteverdiModel::Pointer                        m_Model;
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
-  std::string                             m_ModuleInstanceId;
-  InputViewComponentMapType               m_InputViewComponentMap;
-  bool                                    m_Alive;
+  std::string                                     m_ModuleInstanceId;
+  InputViewComponentMapType                       m_InputViewComponentMap;
+  bool                                            m_Alive;
 
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

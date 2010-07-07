@@ -22,51 +22,55 @@
 #include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbProjectionModel.h"
 
-
 namespace otb
 {
-class ITK_EXPORT  ProjectionControllerInterface
-      : public ImageViewerFullResolutionEventsInterface
+class ITK_EXPORT ProjectionControllerInterface
+  : public ImageViewerFullResolutionEventsInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ProjectionControllerInterface             Self;
-  typedef ImageViewerFullResolutionEventsInterface  Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ProjectionControllerInterface            Self;
+  typedef ImageViewerFullResolutionEventsInterface Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
-
-  typedef ProjectionModel                           ModelType;
+  typedef ProjectionModel ModelType;
 
   /** Standard type macros */
-  itkTypeMacro(ProjectionControllerInterface,Superclass);
+  itkTypeMacro(ProjectionControllerInterface, Superclass);
 
-  itkSetObjectMacro(Model,ProjectionModel);
-  itkGetObjectMacro(Model,ProjectionModel);
+  itkSetObjectMacro(Model, ProjectionModel);
+  itkGetObjectMacro(Model, ProjectionModel);
 
   /** Virtual pure Methods*/
   virtual void ReprojectImage() = 0;
-  virtual void UpdateUTMTransform(int zone,bool north) = 0;
+  virtual void UpdateUTMTransform(int zone, bool north) = 0;
   virtual void InitializeLambertIITransform() = 0;
-  virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing ) = 0;
-  virtual void ProjectRegion(unsigned int sizeX, unsigned int sizeY, double spacingX, double spacingY, double originX, double originY , bool isUl)  = 0;
-  virtual void UpdateInputUTMTransform(int zone,bool north) = 0;
+  virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing) = 0;
+  virtual void ProjectRegion(unsigned int sizeX,
+                             unsigned int sizeY,
+                             double spacingX,
+                             double spacingY,
+                             double originX,
+                             double originY,
+                             bool isUl)  = 0;
+  virtual void UpdateInputUTMTransform(int zone, bool north) = 0;
   virtual void InitializeInputLambertIITransform() = 0;
-  virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing ) = 0;
+  virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing) = 0;
   virtual void InitializeWGS84Transform() = 0;
-  
+
 protected:
   /** Constructor */
   ProjectionControllerInterface() {}
   /** Destructor */
-  virtual ~ProjectionControllerInterface() {};
+  virtual ~ProjectionControllerInterface() {}
 
   /** The instance of the model (for commodity) */
   ModelType::Pointer m_Model;
 
 private:
   ProjectionControllerInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 

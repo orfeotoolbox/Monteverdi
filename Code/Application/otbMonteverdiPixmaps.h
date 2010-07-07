@@ -28,7 +28,6 @@ FLU_EXPORT extern const char* scalarImage_xpm[];
 FLU_EXPORT extern const char* vectorData_xpm[];
 FLU_EXPORT extern const char* process_xpm[];
 
-
 } // end namespace otb
 
 #endif

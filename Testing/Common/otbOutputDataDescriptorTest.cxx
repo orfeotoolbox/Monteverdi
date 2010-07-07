@@ -27,20 +27,21 @@ int otbOutputDataDescriptorTest(int argc, char * argv[])
 
   // Default constructor and call to the set method
   otb::OutputDataDescriptor desc1;
-  desc1.Set("Floating_Point_Image","OutputImage","This is the output image");
+  desc1.Set("Floating_Point_Image", "OutputImage", "This is the output image");
   desc1.AddData(otb::DataObjectWrapper::Create(ImageType::New()));
 
   // Access parameters
-  std::cout<<"Desc1: Number of data = "<<desc1.GetNumberOfData()<<std::endl;
+  std::cout << "Desc1: Number of data = " << desc1.GetNumberOfData() << std::endl;
 
   // Constructor with parameters
-  otb::OutputDataDescriptor desc2(otb::DataObjectWrapper::Create(ImageType::New()),"OutputImage","This is the output image");
+  otb::OutputDataDescriptor desc2(otb::DataObjectWrapper::Create(
+                                    ImageType::New()), "OutputImage", "This is the output image");
 
   // Access parameters
-   std::cout<<"Desc2: number of data = "<<desc2.GetNumberOfData()<<std::endl;
+  std::cout << "Desc2: number of data = " << desc2.GetNumberOfData() << std::endl;
 
   // Testing the << operator
-  std::cout<<"Testing << operator: "<<desc2<<std::endl;
+  std::cout << "Testing << operator: " << desc2 << std::endl;
 
   return EXIT_SUCCESS;
 }

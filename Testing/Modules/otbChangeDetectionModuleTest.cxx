@@ -24,17 +24,17 @@
 int otbChangeDetectionModuleTest(int argc, char* argv[])
 {
   otb::ChangeDetectionModule::Pointer specificModule = otb::ChangeDetectionModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer                module = specificModule.GetPointer();
 
-  // 
+  std::cout << "Module: " << module << std::endl;
+
+  //
   const char * rinfname = argv[1];
   const char * linfname = argv[2];
   const char * svmmodel = argv[3];
-  
-  bool  run = atoi(argv[5]);
-  
+
+  bool run = atoi(argv[5]);
+
   typedef otb::ChangeDetectionModule::ImageType ImageType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
@@ -51,39 +51,38 @@ int otbChangeDetectionModuleTest(int argc, char* argv[])
 
   // Add Wrapper Input
   otb::DataObjectWrapper lwrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<lwrapperIn<<std::endl;
-  module->AddInputByKey("RightImage",lwrapperIn);
+  std::cout << "Input wrapper: " << lwrapperIn << std::endl;
+  module->AddInputByKey("RightImage", lwrapperIn);
 
   // Add Wrapper Input1
   otb::DataObjectWrapper rwrapperIn = otb::DataObjectWrapper::Create(reader1->GetOutput());
-  std::cout<<"Input wrapper: "<<rwrapperIn<<std::endl;
-  module->AddInputByKey("LeftImage",rwrapperIn);
+  std::cout << "Input wrapper: " << rwrapperIn << std::endl;
+  module->AddInputByKey("LeftImage", rwrapperIn);
 
   //Start the module
   module->Start();
-  
+
   // Load SVMModel
   specificModule->GetChangeDetection()->SetModelFileName(svmmodel);
   specificModule->GetChangeDetection()->LoadSVMModel();
   // Simulate OK Click
   specificModule->GetChangeDetection()->bOK->do_callback();
 
-  if(run)
+  if (run)
     {
-      Fl::run();
+    Fl::run();
     }
   else
     {
-      Fl::check();
+    Fl::check();
     }
 
-
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[4]);
   writer->SetInput(outImage);
   writer->Update();
@@ -91,4 +90,3 @@ int otbChangeDetectionModuleTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 
 }
-

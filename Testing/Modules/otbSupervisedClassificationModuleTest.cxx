@@ -25,18 +25,18 @@
 int otbSupervisedClassificationModuleTest(int argc, char* argv[])
 {
   otb::SupervisedClassificationModule::Pointer specificModule = otb::SupervisedClassificationModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer                         module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
-  
+
   typedef otb::SupervisedClassificationModule::InputImageType  ImageType;
   typedef otb::SupervisedClassificationModule::OutputImageType LabeledImageType;
 
-  typedef otb::ImageFileReader<ImageType>            ReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType>     WriterType;
+  typedef otb::ImageFileReader<ImageType>        ReaderType;
+  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 
   // reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -46,11 +46,11 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
   // Add Wrapper Input
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
 
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage", wrapperIn);
   specificModule->SetModel(argv[3]);
   module->Start();
   Fl::check();
-  
+
   specificModule->GetSupervisedClassification()->bDisplay->value(1);
   Fl::check();
   //Simulate Display button callback
@@ -61,18 +61,17 @@ int otbSupervisedClassificationModuleTest(int argc, char* argv[])
 
   // Get Output DataWrapper
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
-  
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
-  
+
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
+
   LabeledImageType::Pointer outImage = dynamic_cast<LabeledImageType *>(wrapperOut.GetDataObject());
-  
+
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(outImage);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 
 }
-

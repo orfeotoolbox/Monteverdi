@@ -31,7 +31,6 @@
 namespace otb
 {
 
-
 WriterModel::WriterModel()
 {
   /** Initial parameters */
@@ -44,27 +43,26 @@ WriterModel::WriterModel()
   m_ChannelExtractorList     = ExtractROIFilterListType::New();
   m_IntensityFilter          = IntensityFilterType::New();
   m_Reader                   = ReaderType::New();
-  
+
   // init input image + m_HasInput
   this->InitInput();
 
   // Instantiate the model
   m_VisuModel = VisuModelType::New();
   m_ResultVisuModel = VisuModelType::New();
-  
+
   //Instantiate output image attributes
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
   m_iL2VI = ImageListToVectorImageFilterType::New();
-  
+
   //Input and Writers
   m_InputImage = InputImageType::New();
   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
-  
+
   m_ProcessObjectModel = m_FPVWriter;
 }
-
 
 WriterModel
 ::~WriterModel() {}
@@ -101,7 +99,7 @@ WriterModel
 
   // Render
   m_VisuModel->Update();
-  
+
   //Set Input Writer
   m_FPVWriter->SetInput(m_InputImage);
   // Notify the observers
@@ -128,11 +126,9 @@ WriterModel
   // keep a reference to the histogram list, to handle UseScale
   m_HistogramList = lVisuGenerator->GetLayer()->GetHistogramList();
 
-
   // Notify the observers
   this->NotifyAll("GenerateLayers");
 }
-
 
 void
 WriterModel
@@ -141,10 +137,9 @@ WriterModel
   m_Reader = ReaderType::New();
   this->SetInputFileName(filename);
   m_Reader->SetFileName(filename);
-  this->SetInputImage( m_Reader->GetOutput() );
+  this->SetInputImage(m_Reader->GetOutput());
   m_Reader->GenerateOutputInformation();
 }
-
 
 void
 WriterModel
@@ -156,7 +151,6 @@ WriterModel
   m_InputImage = InputImageType::New();
 }
 
-
 /***************************************
  ****** SINGLE INPUT GENERATION ********
  ***************************************/
@@ -165,91 +159,86 @@ WriterModel
 ::AddChannels(std::vector<unsigned int> chList)
 {
   m_OutputChannelsInformation.clear();
-  if (m_NumberOfChannels != 0 )
-  {
-    for ( unsigned int i = 0; i<chList.size(); i++)
+  if (m_NumberOfChannels != 0)
     {
-      if (chList[i] <=  m_NumberOfChannels)
+    for (unsigned int i = 0; i < chList.size(); i++)
       {
+      if (chList[i] <=  m_NumberOfChannels)
+        {
         this->AddChannel(chList[i]);
+        }
       }
     }
-  }
 }
-
 
 void
 WriterModel
 ::AddChannel(int id)
 {
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
-  extract->SetInput( m_InputImage );
+  extract->SetInput(m_InputImage);
   extract->SetChannel(id);
   extract->GetOutput()->UpdateOutputInformation();
 
-  this->AddInputImage( extract->GetOutput() );
+  this->AddInputImage(extract->GetOutput());
 
   m_ChannelExtractorList->PushBack(extract);
 
   itk::OStringStream oss;
-  oss<<"Ch"<<id;
+  oss << "Ch" << id;
   m_OutputChannelsInformation.push_back(oss.str());
 }
-
 
 void
 WriterModel
 ::AddFeature()
 {
-  for (unsigned int i=0;i<m_NumberOfChannels;++i)
-  {
+  for (unsigned int i = 0; i < m_NumberOfChannels; ++i)
+    {
     m_OutputIndexMap.push_back(0);
     m_OutputListOrder.push_back(std::max(0, static_cast<int>(m_OutputListOrder.size())));
-  }
-  
+    }
+
 }
 
 void
 WriterModel
-::ThreadedGenerateOutputImage(const std::string & fname, int pType, bool useScale)
+::ThreadedGenerateOutputImage(const std::string& fname, int pType, bool useScale)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);
   this->SetPType(pType);
   this->SetUseScale(useScale);
-  
+
   this->NotifyAll("SaveDataSet");
 }
-
 
 void
 WriterModel
 ::GenerateOutputImage()
 {
   bool todo = false;
-  int outputNb = 0;
-  int i = 0;
+  int  outputNb = 0;
+  int  i = 0;
 
-  if( !m_HasInput )
-    itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if( m_OutputListOrder.size() == 0 )
-    itkExceptionMacro("Impossible to create output image : no feature selected.");
+  if (!m_HasInput) itkExceptionMacro("Impossible to create output image : no image image selected.");
+  if (m_OutputListOrder.size() == 0) itkExceptionMacro("Impossible to create output image : no feature selected.");
 
   //m_VisuModel->GetLayer(0)->
 
-  for (unsigned int ii = 0; ii<m_OutputListOrder.size(); ii++)
-  {
+  for (unsigned int ii = 0; ii < m_OutputListOrder.size(); ii++)
+    {
     i = m_OutputListOrder[ii];
     todo = true;
     m_image = this->GetInputImageList()->GetNthElement(i);
-    m_imageList->PushBack( m_image );
+    m_imageList->PushBack(m_image);
     outputNb++;
-  }
-  
+    }
+
   if (todo == true)
-  {
-    switch ( this->GetPType() )
     {
+    switch (this->GetPType())
+      {
       case 0:
         genericImageConverter<unsigned char>();
         break;
@@ -274,12 +263,11 @@ WriterModel
       default:
         genericImageConverter<unsigned char>();
         break;
-    }
-    
-//     this->NotifyAll("OutputsUpdated");
-  }
-}
+      }
 
+//     this->NotifyAll("OutputsUpdated");
+    }
+}
 
 void
 WriterModel
@@ -290,7 +278,7 @@ WriterModel
   SingleLayerGeneratorPointerType lResultVisuGenerator = SingleLayerGeneratorType::New();
   // To avoid drawing a quicklook( ScrollView) for nothing
   lResultVisuGenerator->SetGenerateQuicklook(false);
-  lResultVisuGenerator->SetImage( this->GetInputImageList()->GetNthElement(id) );
+  lResultVisuGenerator->SetImage(this->GetInputImageList()->GetNthElement(id));
   lResultVisuGenerator->GenerateLayer();
   lResultVisuGenerator->GetLayer()->SetName("FeatureImage");
 
@@ -301,91 +289,92 @@ WriterModel
   m_ResultVisuModel->Update();
 }
 
-
 template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
-    typedef otb::VectorImage<CastOutputPixelType, 2> CastOutputImageType;
-    typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
-    
-    typename CastWriterType::Pointer writer=CastWriterType::New();
-    
+  typedef otb::VectorImage<CastOutputPixelType, 2>  CastOutputImageType;
+  typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
+
+  typename CastWriterType::Pointer writer = CastWriterType::New();
+
 //     this->NotifyAll("SetWriter");
-    this->SetProcessObjectModel ( writer );
-    writer->SetFileName(this->GetOutputFileName().c_str());
+  this->SetProcessObjectModel (writer);
+  writer->SetFileName(this->GetOutputFileName().c_str());
 
-    if ( this->GetUseScale() )
+  if (this->GetUseScale())
     {
-      typedef ImageListToVectorImageFilter< ImageListType, InputImageType >               ImageListToVectorImageFilterType;
-      typedef otb::VectorRescaleIntensityImageFilter<InputImageType, CastOutputImageType> RescalerType;
+    typedef ImageListToVectorImageFilter<ImageListType,
+        InputImageType>
+                                                                                        ImageListToVectorImageFilterType;
+    typedef otb::VectorRescaleIntensityImageFilter<InputImageType, CastOutputImageType> RescalerType;
 
-      typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
-      i2VI->SetInput( m_imageList );
-      i2VI->UpdateOutputInformation();
+    typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
+    i2VI->SetInput(m_imageList);
+    i2VI->UpdateOutputInformation();
 
-      typedef typename InputImageType::PixelType InputPixelType;
-      typedef typename InputImageType::InternalPixelType InputInternalPixelType;
-      InputPixelType inputMinimum;
-      InputPixelType inputMaximum;
-      inputMinimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
-      inputMaximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+    typedef typename InputImageType::PixelType         InputPixelType;
+    typedef typename InputImageType::InternalPixelType InputInternalPixelType;
+    InputPixelType inputMinimum;
+    InputPixelType inputMaximum;
+    inputMinimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+    inputMaximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
 
-      int i = 0;
-      typename HistogramListType::ConstIterator it;
-      for (it = m_HistogramList->Begin(); it != m_HistogramList->End(); ++it, ++i )
-        {
-        double iMin = it.Get()->Quantile(0, 0.02);
-        double iMax = it.Get()->Quantile(0, 0.98);
-        inputMinimum[ m_OutputListOrder[i] ] = static_cast<InputInternalPixelType>(iMin);
-        inputMaximum[ m_OutputListOrder[i] ] = static_cast<InputInternalPixelType>(iMax);
-        }
-
-      typedef typename OutputImageType::PixelType OutputPixelType;
-      OutputPixelType minimum;
-      OutputPixelType maximum;
-      minimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
-      maximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
-      minimum.Fill(itk::NumericTraits<CastOutputPixelType>::min());
-      maximum.Fill(itk::NumericTraits<CastOutputPixelType>::max());
-
-      typename RescalerType::Pointer rescaler=RescalerType::New();
-
-      rescaler->SetOutputMinimum(minimum);
-      rescaler->SetOutputMaximum(maximum);
-
-      rescaler->SetInput(i2VI->GetOutput());
-      writer->SetInput(rescaler->GetOutput());
-
-      try
+    int i = 0;
+    typename HistogramListType::ConstIterator it;
+    for (it = m_HistogramList->Begin(); it != m_HistogramList->End(); ++it, ++i)
       {
-        writer->Update();
+      double iMin = it.Get()->Quantile(0, 0.02);
+      double iMax = it.Get()->Quantile(0, 0.98);
+      inputMinimum[m_OutputListOrder[i]] = static_cast<InputInternalPixelType>(iMin);
+      inputMaximum[m_OutputListOrder[i]] = static_cast<InputInternalPixelType>(iMax);
       }
-      catch (itk::ExceptionObject & err)
+
+    typedef typename OutputImageType::PixelType OutputPixelType;
+    OutputPixelType minimum;
+    OutputPixelType maximum;
+    minimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+    maximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
+    minimum.Fill(itk::NumericTraits<CastOutputPixelType>::min());
+    maximum.Fill(itk::NumericTraits<CastOutputPixelType>::max());
+
+    typename RescalerType::Pointer rescaler = RescalerType::New();
+
+    rescaler->SetOutputMinimum(minimum);
+    rescaler->SetOutputMaximum(maximum);
+
+    rescaler->SetInput(i2VI->GetOutput());
+    writer->SetInput(rescaler->GetOutput());
+
+    try
       {
-        // Make the main fltk loop update Msg reporter
-        m_ErrorMsg = err.GetDescription();
-        Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-        this->Quit();
+      writer->Update();
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      // Make the main fltk loop update Msg reporter
+      m_ErrorMsg = err.GetDescription();
+      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+      this->Quit();
       }
     }
-    else
+  else
     {
-      typedef ImageListToVectorImageFilter< ImageListType, CastOutputImageType >     ImageListToVectorImageFilterType;
-      typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
-      i2VI->SetInput( m_imageList );
-      
-      writer->SetInput(i2VI->GetOutput());
-      
-      try
+    typedef ImageListToVectorImageFilter<ImageListType, CastOutputImageType> ImageListToVectorImageFilterType;
+    typename ImageListToVectorImageFilterType::Pointer i2VI = ImageListToVectorImageFilterType::New();
+    i2VI->SetInput(m_imageList);
+
+    writer->SetInput(i2VI->GetOutput());
+
+    try
       {
-        writer->Update();
+      writer->Update();
       }
-      catch (itk::ExceptionObject & err)
+    catch (itk::ExceptionObject& err)
       {
-        // Make the main fltk loop update Msg reporter
-        m_ErrorMsg = err.GetDescription();
-        Fl::awake(&SendErrorCallback,&m_ErrorMsg);
-        this->Quit();
+      // Make the main fltk loop update Msg reporter
+      m_ErrorMsg = err.GetDescription();
+      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+      this->Quit();
       }
     }
 }
@@ -399,15 +388,15 @@ WriterModel
 
 void WriterModel::SendErrorCallback(void * data)
 {
-  std::string *  error = static_cast<std::string *>(data);
+  std::string * error = static_cast<std::string *>(data);
   //TODO test if error is null
-  if ( error == NULL )
-  {
+  if (error == NULL)
+    {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
-  }
+    }
   else
-  {
+    {
     MsgReporter::GetInstance()->SendError(error->c_str());
-  }
+    }
 }
 } //end namespace otb

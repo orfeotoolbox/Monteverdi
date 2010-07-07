@@ -24,7 +24,6 @@
 #include <FL/Fl_File_Chooser.H>
 #include "otbMsgReporter.h"
 
-
 namespace otb
 {
 /** Constructor */
@@ -51,9 +50,8 @@ OpticalCalibrationModule::~OpticalCalibrationModule()
 void OpticalCalibrationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void OpticalCalibrationModule::Run()
@@ -71,89 +69,87 @@ void OpticalCalibrationModule::Run()
   m_InputImage = this->GetInputData<ImageType>("InputImage");
 
   // One of this pointer will be NULL:
-  if(m_InputImage.IsNotNull())
+  if (m_InputImage.IsNotNull())
     {
-      m_InputImage->UpdateOutputInformation();
-      // Build the GUI
-      this->Build();
+    m_InputImage->UpdateOutputInformation();
+    // Build the GUI
+    this->Build();
     }
   else
     {
-      this->BusyOff();
-      itkExceptionMacro(<<"Input image is NULL.");
+    this->BusyOff();
+    itkExceptionMacro(<< "Input image is NULL.");
     }
-  
-  if( this->CheckMetadata() )
+
+  if (this->CheckMetadata())
     {
-      m_LastPath = this->GetInputDataDescription<ImageType>("InputImage",0);
- 
-      this->Init();
-      this->InitHelper();
-      this->UpdateCoefSetup();
-      // open the GUI
-      this->Show();
+    m_LastPath = this->GetInputDataDescription<ImageType>("InputImage", 0);
+
+    this->Init();
+    this->InitHelper();
+    this->UpdateCoefSetup();
+    // open the GUI
+    this->Show();
     }
   else
     {
-      this->BusyOff();
-      return;
+    this->BusyOff();
+    return;
     }
 }
-
 
 bool
 OpticalCalibrationModule
 ::CheckMetadata()
 {
   // This line is copied from the method that calls this method to be able to use it through the test.
-  if(m_InputImage.IsNull())
+  if (m_InputImage.IsNull())
     {
-      MsgReporter::GetInstance()->SendError("No input image detected.");
-      return false;
+    MsgReporter::GetInstance()->SendError("No input image detected.");
+    return false;
     }
 
-  itk::MetaDataDictionary dict = m_InputImage->GetMetaDataDictionary();
+  itk::MetaDataDictionary             dict = m_InputImage->GetMetaDataDictionary();
   ImageMetadataInterfaceBase::Pointer lImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
-  
 
   std::string sensorID = lImageMetadataInterface->GetSensorID(dict);
 
   // Test the sensor : only QB, IKONOS and Spot are supported
-  if( sensorID.find("QB02") == std::string::npos &&
+  if (sensorID.find("QB02") == std::string::npos &&
       sensorID.find("Spot") == std::string::npos &&
-      sensorID.find("IKONOS-2") == std::string::npos )
+      sensorID.find("IKONOS-2") == std::string::npos)
     {
-      MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5 and QuickBird are supported.");
-      return false;
+    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5 and QuickBird are supported.");
+    return false;
     }
 
   // Test if needed data are available.
   try
     {
-      // ImageToLuminance
-      lImageMetadataInterface->GetPhysicalGain(dict);
-      lImageMetadataInterface->GetPhysicalBias(dict);
-      
-      // LuminanceToReflectance
-      lImageMetadataInterface->GetDay(dict);
-      lImageMetadataInterface->GetMonth(dict);
-      
-      lImageMetadataInterface->GetSolarIrradiance(dict);
-      lImageMetadataInterface->GetSunElevation(dict);
-      
+    // ImageToLuminance
+    lImageMetadataInterface->GetPhysicalGain(dict);
+    lImageMetadataInterface->GetPhysicalBias(dict);
+
+    // LuminanceToReflectance
+    lImageMetadataInterface->GetDay(dict);
+    lImageMetadataInterface->GetMonth(dict);
+
+    lImageMetadataInterface->GetSolarIrradiance(dict);
+    lImageMetadataInterface->GetSunElevation(dict);
+
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      itk::OStringStream oss;
-      oss.str("");
-      oss << "Invalid input image medadata. The parsing returns the following error:\n";
-      oss << err.GetDescription();
-      MsgReporter::GetInstance()->SendError(oss.str().c_str());
-      return false;
+    itk::OStringStream oss;
+    oss.str("");
+    oss << "Invalid input image medadata. The parsing returns the following error:\n";
+    oss << err.GetDescription();
+    MsgReporter::GetInstance()->SendError(oss.str().c_str());
+    return false;
     }
 
   return true;
-  
+
 }
 
 void
@@ -175,7 +171,7 @@ OpticalCalibrationModule
   m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
   m_DifferenceFilter->SetValidInput(m_LuminanceToReflectanceFilter->GetOutput());
   m_DifferenceFilter->SetTestInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-  
+
   // Init aerosol model
   guiAerosolModel->value(0);
   // Init Band selection
@@ -195,16 +191,14 @@ OpticalCalibrationModule
 {
   itk::OStringStream oss;
   oss.str("");
-  oss<<"Optical calibration module: ";
-  ossimFilename myFile( this->GetInputDataDescription<ImageType>("InputImage",0) );
-  oss<<myFile.file();
-  oss<<" ("<<m_InputImage->GetNumberOfComponentsPerPixel();
-  if(m_InputImage->GetNumberOfComponentsPerPixel() != 1)
-    oss<<" bands , ";
-  else
-    oss<<" band , ";
+  oss << "Optical calibration module: ";
+  ossimFilename myFile(this->GetInputDataDescription<ImageType>("InputImage", 0));
+  oss << myFile.file();
+  oss << " (" << m_InputImage->GetNumberOfComponentsPerPixel();
+  if (m_InputImage->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
+  else oss << " band , ";
 
-  oss<<m_InputImage->GetLargestPossibleRegion().GetSize()<<")";
+  oss << m_InputImage->GetLargestPossibleRegion().GetSize() << ")";
   wMainWindow->copy_label(oss.str().c_str());
   m_LastPath = myFile.path();
 }
@@ -219,7 +213,7 @@ OpticalCalibrationModule
   tHelper->insert("It should respect the following a design:\n");
   tHelper->insert("Format is MinSpectralValue MaxSpectralValue UserStep\n");
   tHelper->insert("the list of coefficients for each band.\n\n");
-  
+
   tHelper->insert("Here is an imaginary example:\n");
   tHelper->insert("0.475 0.655 0.0026\n");
   tHelper->insert("0.000\n");
@@ -245,23 +239,22 @@ OpticalCalibrationModule
 
 }
 
-
 void
 OpticalCalibrationModule
 ::UpdateCoefSetup()
 {
-  unsigned int lNbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
+  unsigned int       lNbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
   itk::OStringStream oss;
   oss.str("");
 
   guiBandSelection->clear();
 
-  for (unsigned int i = 0;i<lNbComponent;++i)
-  {
+  for (unsigned int i = 0; i < lNbComponent; ++i)
+    {
     oss.str("");
-    oss<<i;
+    oss << i;
     guiBandSelection->add(oss.str().c_str());
-  }
+    }
 
   tdAtmoParam->activate();
 
@@ -283,19 +276,19 @@ OpticalCalibrationModule
 ::UpdateRadiativeTermsCallback()
 {
   unsigned int ch = static_cast<unsigned int>(atoi(guiBandSelection->value()));
- 
+
   AtmosphericRadiativeTerms::Pointer terms = m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
- 
-  gIntrinsicRef->value( terms->GetIntrinsicAtmosphericReflectance(ch) );
-  guiAlbedo->value( terms->GetSphericalAlbedo(ch) );
-  guiGasT->value( terms->GetTotalGaseousTransmission(ch) );
-  guiDT->value( terms->GetDownwardTransmittance(ch) );
-  guiUT->value( terms->GetUpwardTransmittance(ch) );
-  guiUDiffT->value( terms->GetUpwardDiffuseTransmittance(ch) );
-  guiUDirT->value( terms->GetUpwardDirectTransmittance(ch) );
-  guiUDTR->value( terms->GetUpwardDiffuseTransmittanceForRayleigh(ch) );
-  guiUDTA->value( terms->GetUpwardDiffuseTransmittanceForAerosol(ch) );
-  
+
+  gIntrinsicRef->value(terms->GetIntrinsicAtmosphericReflectance(ch));
+  guiAlbedo->value(terms->GetSphericalAlbedo(ch));
+  guiGasT->value(terms->GetTotalGaseousTransmission(ch));
+  guiDT->value(terms->GetDownwardTransmittance(ch));
+  guiUT->value(terms->GetUpwardTransmittance(ch));
+  guiUDiffT->value(terms->GetUpwardDiffuseTransmittance(ch));
+  guiUDirT->value(terms->GetUpwardDirectTransmittance(ch));
+  guiUDTR->value(terms->GetUpwardDiffuseTransmittanceForRayleigh(ch));
+  guiUDTA->value(terms->GetUpwardDiffuseTransmittanceForAerosol(ch));
+
   gIntrinsicRef->redraw();
   guiAlbedo->redraw();
   guiGasT->redraw();
@@ -308,180 +301,173 @@ OpticalCalibrationModule
   gRadTerms->redraw();
 }
 
-
 void
 OpticalCalibrationModule
 ::UpdateParamDisplay()
 {
-   itk::OStringStream oss;
-   oss.str("");
-   AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+  itk::OStringStream oss;
+  oss.str("");
+  AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
 
-   oss<<atmoTerms;
-   Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-   buff->text( oss.str().c_str() );
-   // Erase the first line (class name + pointer address)
-   int start = buff->line_start(0);
-   int stop = buff->line_end(0);
-   buff->remove(start, stop+1);
-   tdParam->buffer(buff);
-   tdParam->redraw();
+  oss << atmoTerms;
+  Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+  buff->text(oss.str().c_str());
+  // Erase the first line (class name + pointer address)
+  int start = buff->line_start(0);
+  int stop = buff->line_end(0);
+  buff->remove(start, stop + 1);
+  tdParam->buffer(buff);
+  tdParam->redraw();
 
-   itk::OStringStream oss2;
-   oss2.str("");
-   AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-   oss2<<atmoPar;
-   Fl_Text_Buffer *buff2 = new Fl_Text_Buffer();
-   buff2->text( oss2.str().c_str() );
-   // Erase the first line (class name + pointer address)
-   start = buff2->line_start(0);
-   stop = buff2->line_end(0);
-   buff2->remove(start, stop+1);
-   tdAtmoParam->buffer(buff2);
-   tdAtmoParam->redraw();
+  itk::OStringStream oss2;
+  oss2.str("");
+  AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+  oss2 << atmoPar;
+  Fl_Text_Buffer *buff2 = new Fl_Text_Buffer();
+  buff2->text(oss2.str().c_str());
+  // Erase the first line (class name + pointer address)
+  start = buff2->line_start(0);
+  stop = buff2->line_end(0);
+  buff2->remove(start, stop + 1);
+  tdAtmoParam->buffer(buff2);
+  tdAtmoParam->redraw();
 
-   std::string aeroFile = teAeronetFile->value();
-   if(aeroFile != "")
-     {
-       //AtmosphericCorrectionParameters::Pointer param = m_OpticalCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
+  std::string aeroFile = teAeronetFile->value();
+  if (aeroFile != "")
+    {
+    //AtmosphericCorrectionParameters::Pointer param = m_OpticalCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
 
-       guiWater->value(atmoPar/*param*/->GetWaterVaporAmount());
-       guiAeroTh->value(atmoPar/*param*/->GetAerosolOptical());
-       guiWater->redraw();
-       guiAeroTh->redraw();
-     }
+    guiWater->value(atmoPar /*param*/->GetWaterVaporAmount());
+    guiAeroTh->value(atmoPar /*param*/->GetAerosolOptical());
+    guiWater->redraw();
+    guiAeroTh->redraw();
+    }
 }
-
 
 void
 OpticalCalibrationModule
 ::UpdateCorrectionParameters()
 {
   AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
-  radTerms->ValuesInitialization( m_InputImage->GetNumberOfComponentsPerPixel() );
+  radTerms->ValuesInitialization(m_InputImage->GetNumberOfComponentsPerPixel());
   m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
   m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
   m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
   m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
   m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-
   AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
-  std::string aeroModStd = guiAerosolModel->value();
+  std::string      aeroModStd = guiAerosolModel->value();
 
-  if( aeroModStd == "NO AEROSOL")
-    aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
-  else if( aeroModStd == "CONTINENTAL")
-    aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
-  else if( aeroModStd == "MARITIME")
-    aeroMod = AtmosphericCorrectionParameters::MARITIME;
-  else if( aeroModStd == "URBAN")
-    aeroMod = AtmosphericCorrectionParameters::URBAN;
-  else if( aeroModStd == "DESERTIC")
-    aeroMod = AtmosphericCorrectionParameters::DESERTIC;
+  if (aeroModStd == "NO AEROSOL") aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
+  else if (aeroModStd == "CONTINENTAL") aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
+  else if (aeroModStd == "MARITIME") aeroMod = AtmosphericCorrectionParameters::MARITIME;
+  else if (aeroModStd == "URBAN") aeroMod = AtmosphericCorrectionParameters::URBAN;
+  else if (aeroModStd == "DESERTIC") aeroMod = AtmosphericCorrectionParameters::DESERTIC;
   else
-  {
-    itkExceptionMacro(<<"Invalid Aerosol Model Type: "<<aeroModStd);
-  }
+    {
+    itkExceptionMacro(<< "Invalid Aerosol Model Type: " << aeroModStd);
+    }
 
   double ozAmount = guiOzoneAmount->value();
   double atmoPres = guiAtmoPressure->value();
   double aeroTh   = guiAeroTh->value();
   double waterAm  = guiWater->value();
 
-  bool aeronetFile = false;
+  bool        aeronetFile = false;
   std::string aeroFile = teAeronetFile->value();
-  if( aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName() && aeroFile != "")
+  if (aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName() && aeroFile != "")
     {
-      m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(aeroFile);
-      aeronetFile = true;
+    m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(aeroFile);
+    aeronetFile = true;
     }
-    
+
   std::string ffvFile = teFFVFile->value();
-  if( ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName() &&  ffvFile != "" )
-    m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(ffvFile);
+  if (ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName() &&  ffvFile !=
+      "") m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(ffvFile);
 
   try
     {
-      AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+    AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
 
-      atmoPar->SetAerosolModel( static_cast<AerosolModelType>(aeroMod) );
-      atmoPar->SetOzoneAmount( ozAmount );
-      atmoPar->SetAtmosphericPressure( atmoPres );
-      
-        if(!aeronetFile)
-         {
-           atmoPar->SetAerosolOptical(aeroTh);
-           atmoPar->SetWaterVaporAmount(waterAm);
-         }
+    atmoPar->SetAerosolModel(static_cast<AerosolModelType>(aeroMod));
+    atmoPar->SetOzoneAmount(ozAmount);
+    atmoPar->SetAtmosphericPressure(atmoPres);
 
-      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-      bProgress->show();
-      Fl::check();
-      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-      bProgress->hide();
-      Fl::check();
-      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+    if (!aeronetFile)
+      {
+      atmoPar->SetAerosolOptical(aeroTh);
+      atmoPar->SetWaterVaporAmount(waterAm);
+      }
 
+    m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+    m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+    bProgress->show();
+    Fl::check();
+    m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+    bProgress->hide();
+    Fl::check();
+    m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-      this->UpdateParamDisplay();
+    this->UpdateParamDisplay();
     }
-  catch (itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 
 void
 OpticalCalibrationModule
-::ReloadChannelTermsCallback( bool updateIm )
+::ReloadChannelTermsCallback(bool updateIm)
 {
   //this->UpdateRadiativeTerms( updateIm );
   unsigned int ch = static_cast<unsigned int>(atoi(guiBandSelection->value()));
-  double intRef   = gIntrinsicRef->value();
-  double albedo   = guiAlbedo->value();
-  double gasT     = guiGasT->value();
-  double dT       = guiDT->value();
-  double uT       = guiUT->value();
-  double uDiffT   = guiUDiffT->value();
-  double uDirR    = guiUDirT->value();
-  double uDTR     = guiUDTR->value();
-  double uDTA     = guiUDTA->value();
+  double       intRef   = gIntrinsicRef->value();
+  double       albedo   = guiAlbedo->value();
+  double       gasT     = guiGasT->value();
+  double       dT       = guiDT->value();
+  double       uT       = guiUT->value();
+  double       uDiffT   = guiUDiffT->value();
+  double       uDirR    = guiUDirT->value();
+  double       uDTR     = guiUDTR->value();
+  double       uDTA     = guiUDTA->value();
 
   try
     {
-      //m_Model->UpdateRadiativeTerm( ch, intRef, albedo, gasT, dT, uT, uDiffT, uDirR, uDTR, uDTA );
-      AtmosphericRadiativeTerms::Pointer atmoTerms = m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
-      atmoTerms->SetIntrinsicAtmosphericReflectance( ch, intRef );
-      atmoTerms->SetSphericalAlbedo( ch, albedo );
-      atmoTerms->SetTotalGaseousTransmission( ch, gasT );
-      atmoTerms->SetDownwardTransmittance( ch, dT );
-      atmoTerms->SetUpwardTransmittance( ch, uT );
-      atmoTerms->SetUpwardDiffuseTransmittance( ch, uDiffT );
-      atmoTerms->SetUpwardDirectTransmittance( ch, uDirR );
-      atmoTerms->SetUpwardDiffuseTransmittanceForRayleigh( ch, uDTR );
-      atmoTerms->SetUpwardDiffuseTransmittanceForAerosol( ch, uDTA );
+    //m_Model->UpdateRadiativeTerm( ch, intRef, albedo, gasT, dT, uT, uDiffT, uDirR, uDTR, uDTA );
+    AtmosphericRadiativeTerms::Pointer atmoTerms =
+      m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+    atmoTerms->SetIntrinsicAtmosphericReflectance(ch, intRef);
+    atmoTerms->SetSphericalAlbedo(ch, albedo);
+    atmoTerms->SetTotalGaseousTransmission(ch, gasT);
+    atmoTerms->SetDownwardTransmittance(ch, dT);
+    atmoTerms->SetUpwardTransmittance(ch, uT);
+    atmoTerms->SetUpwardDiffuseTransmittance(ch, uDiffT);
+    atmoTerms->SetUpwardDirectTransmittance(ch, uDirR);
+    atmoTerms->SetUpwardDiffuseTransmittanceForRayleigh(ch, uDTR);
+    atmoTerms->SetUpwardDiffuseTransmittanceForAerosol(ch, uDTA);
 
-      m_CanUpdateParameters = true;
-      
-      /** param update is done by the controller, that allows to change each channel without computed is parameters each time*/
-      if(updateIm==true)
-       {
-         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
-         bProgress->show();
-         Fl::check();
-         m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-         bProgress->hide();
-         Fl::check();
+    m_CanUpdateParameters = true;
 
-         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-         m_CanUpdateParameters = false;
-       }
+    /** param update is done by the controller, that allows to change each channel without computed is parameters each time*/
+    if (updateIm == true)
+      {
+      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
+      bProgress->show();
+      Fl::check();
+      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      bProgress->hide();
+      Fl::check();
+
+      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+      m_CanUpdateParameters = false;
+      }
     }
-  catch (itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      MsgReporter::GetInstance()->SendError("The Input Image of the ReflectanceToSurfaceReflectanceFilter is not initialized.");
+    MsgReporter::GetInstance()->SendError(
+      "The Input Image of the ReflectanceToSurfaceReflectanceFilter is not initialized.");
     }
 
   this->UpdateParamDisplay();
@@ -492,7 +478,6 @@ OpticalCalibrationModule
   tdAtmoParam->redraw();
 }
 
-
 void
 OpticalCalibrationModule
 ::OK()
@@ -500,36 +485,39 @@ OpticalCalibrationModule
   this->ClearOutputDescriptors();
 
   // Add outputs
-  this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(),"Luminance image", otbGetTextMacro("Luminance image"));
-  
-  if(bChangeScale->value() == 1)
-    {
-      m_TOAMultiplier        = MultiplyByScalarImageFilterType::New();
-      m_TOCMultiplier        = MultiplyByScalarImageFilterType::New();
-      m_DiffTOATOCMultiplier = MultiplyByScalarImageFilterType::New();
-      
-      m_TOAMultiplier->SetCoef(1000.);
-      m_TOCMultiplier->SetCoef(1000.);
-      m_DiffTOATOCMultiplier->SetCoef(1000.);
-      
-      m_TOAMultiplier->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
-      m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-      m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
+  this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(), "Luminance image", otbGetTextMacro("Luminance image"));
 
-      this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(),"TOA image (*1000)", otbGetTextMacro("TOA image (*1000)"));
-      this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(),"TOC image (*1000)", otbGetTextMacro("TOC image (*1000)"));
-      this->AddOutputDescriptor(m_DiffTOATOCMultiplier->GetOutput(),"Difference TOA-TOC image (*1000)", otbGetTextMacro("Difference TOA-TOC image (*1000)"));
+  if (bChangeScale->value() == 1)
+    {
+    m_TOAMultiplier        = MultiplyByScalarImageFilterType::New();
+    m_TOCMultiplier        = MultiplyByScalarImageFilterType::New();
+    m_DiffTOATOCMultiplier = MultiplyByScalarImageFilterType::New();
+
+    m_TOAMultiplier->SetCoef(1000.);
+    m_TOCMultiplier->SetCoef(1000.);
+    m_DiffTOATOCMultiplier->SetCoef(1000.);
+
+    m_TOAMultiplier->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+    m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+    m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
+
+    this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(), "TOA image (*1000)", otbGetTextMacro("TOA image (*1000)"));
+    this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(), "TOC image (*1000)", otbGetTextMacro("TOC image (*1000)"));
+    this->AddOutputDescriptor(m_DiffTOATOCMultiplier->GetOutput(), "Difference TOA-TOC image (*1000)",
+                              otbGetTextMacro("Difference TOA-TOC image (*1000)"));
     }
   else
     {
-      this->AddOutputDescriptor(m_LuminanceToReflectanceFilter->GetOutput(),"TOA image", otbGetTextMacro("TOA Image"));
-      this->AddOutputDescriptor(m_ReflectanceToSurfaceReflectanceFilter->GetOutput(),"TOC image", otbGetTextMacro("TOC Image"));
-      this->AddOutputDescriptor(m_DifferenceFilter->GetOutput(),"Difference TOA-TOC image", otbGetTextMacro("Difference TOA-TOC image"));
+    this->AddOutputDescriptor(m_LuminanceToReflectanceFilter->GetOutput(), "TOA image", otbGetTextMacro("TOA Image"));
+    this->AddOutputDescriptor(m_ReflectanceToSurfaceReflectanceFilter->GetOutput(), "TOC image",
+                              otbGetTextMacro("TOC Image"));
+    this->AddOutputDescriptor(m_DifferenceFilter->GetOutput(), "Difference TOA-TOC image",
+                              otbGetTextMacro("Difference TOA-TOC image"));
     }
-  
+
   // Send an event to Monteverdi application
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-  
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }
@@ -538,12 +526,12 @@ void
 OpticalCalibrationModule
 ::OpenAeronetFileCallback()
 {
-  const char * cfname = fl_file_chooser("Pick an Aeronet file", "*.*",m_LastPath.c_str());
+  const char * cfname = fl_file_chooser("Pick an Aeronet file", "*.*", m_LastPath.c_str());
   Fl::check();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
+  if (cfname == NULL || strlen(cfname) < 1)
+    {
+    return;
+    }
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teAeronetFile->value(cfname);
@@ -554,18 +542,17 @@ void
 OpticalCalibrationModule
 ::OpenFFVFileCallback()
 {
-  const char * cfname = fl_file_chooser("Pick an Filter Function Values file", "*.*",m_LastPath.c_str());
+  const char * cfname = fl_file_chooser("Pick an Filter Function Values file", "*.*", m_LastPath.c_str());
   Fl::check();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
-    return ;
-  }
+  if (cfname == NULL || strlen(cfname) < 1)
+    {
+    return;
+    }
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teFFVFile->value(cfname);
   teFFVFile->redraw();
 }
-
 
 void
 OpticalCalibrationModule
@@ -584,64 +571,51 @@ OpticalCalibrationModule
   // Check if some parameters have changed
   // in tRadTerm tab (through m_CanUpdateParameters)
 
-  if(!m_CanUpdateParameters)
+  if (!m_CanUpdateParameters)
     {
-      //  in Correction Parameters tab checking each value
-      AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
-      std::string aeroModStd = guiAerosolModel->value();
-      
-      if( aeroModStd == "NO AEROSOL")
-       aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
-      else if( aeroModStd == "CONTINENTAL")
-       aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
-      else if( aeroModStd == "MARITIME")
-       aeroMod = AtmosphericCorrectionParameters::MARITIME;
-      else if( aeroModStd == "URBAN")
-       aeroMod = AtmosphericCorrectionParameters::URBAN;
-      else if( aeroModStd == "DESERTIC")
-       aeroMod = AtmosphericCorrectionParameters::DESERTIC;
-      else
-       {
-         itkExceptionMacro(<<"Invalid Aerosol Model Type: "<<aeroModStd);
-       }
-      
-      double ozAmount = guiOzoneAmount->value();
-      double atmoPres = guiAtmoPressure->value();
-      double aeroTh   = guiAeroTh->value();
-      double waterAm  = guiWater->value();
-      std::string aeroFile = teAeronetFile->value();
-      std::string ffvFile = teFFVFile->value();
+    //  in Correction Parameters tab checking each value
+    AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
+    std::string      aeroModStd = guiAerosolModel->value();
 
-      AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-      if( static_cast<AerosolModelType>(aeroMod) != atmoPar->GetAerosolModel() )
-       m_CanUpdateParameters = true;
-      else if(ozAmount != atmoPar->GetOzoneAmount() )
-       m_CanUpdateParameters = true;
-      else if(atmoPres != atmoPar->GetAtmosphericPressure() )
-       m_CanUpdateParameters = true;
-      else if( ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName())
-       m_CanUpdateParameters = true;
-      else if( aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName() )
-       m_CanUpdateParameters = true;
-      else if(aeroTh != atmoPar->GetAerosolOptical())
-             m_CanUpdateParameters = true;
-      else if(waterAm != atmoPar->GetWaterVaporAmount())
-             m_CanUpdateParameters = true;
+    if (aeroModStd == "NO AEROSOL") aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
+    else if (aeroModStd == "CONTINENTAL") aeroMod = AtmosphericCorrectionParameters::CONTINENTAL;
+    else if (aeroModStd == "MARITIME") aeroMod = AtmosphericCorrectionParameters::MARITIME;
+    else if (aeroModStd == "URBAN") aeroMod = AtmosphericCorrectionParameters::URBAN;
+    else if (aeroModStd == "DESERTIC") aeroMod = AtmosphericCorrectionParameters::DESERTIC;
+    else
+      {
+      itkExceptionMacro(<< "Invalid Aerosol Model Type: " << aeroModStd);
+      }
+
+    double      ozAmount = guiOzoneAmount->value();
+    double      atmoPres = guiAtmoPressure->value();
+    double      aeroTh   = guiAeroTh->value();
+    double      waterAm  = guiWater->value();
+    std::string aeroFile = teAeronetFile->value();
+    std::string ffvFile = teFFVFile->value();
+
+    AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+    if (static_cast<AerosolModelType>(aeroMod) != atmoPar->GetAerosolModel()) m_CanUpdateParameters = true;
+    else if (ozAmount != atmoPar->GetOzoneAmount()) m_CanUpdateParameters = true;
+    else if (atmoPres != atmoPar->GetAtmosphericPressure()) m_CanUpdateParameters = true;
+    else if (ffvFile !=
+             m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName()) m_CanUpdateParameters = true;
+    else if (aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName()) m_CanUpdateParameters = true;
+    else if (aeroTh != atmoPar->GetAerosolOptical()) m_CanUpdateParameters = true;
+    else if (waterAm != atmoPar->GetWaterVaporAmount()) m_CanUpdateParameters = true;
     }
 
-  if(!m_CanUpdateParameters)
-    return;
+  if (!m_CanUpdateParameters) return;
 
-   // Don't update if nothing changed
-  if( tCorrParam->visible() == 1)
+  // Don't update if nothing changed
+  if (tCorrParam->visible() == 1)
     {
-      this->UpdateCorrectionParameters();
-      tdAtmoParam->show();
-      // update the displayed channel radiative terms value
-      this->UpdateRadiativeTermsCallback();
+    this->UpdateCorrectionParameters();
+    tdAtmoParam->show();
+    // update the displayed channel radiative terms value
+    this->UpdateRadiativeTermsCallback();
     }
-  else if( tRadTerm->visible() == 1 )
-    this->ReloadChannelTermsCallback( true );
+  else if (tRadTerm->visible() == 1) this->ReloadChannelTermsCallback(true);
 
   m_CanUpdateParameters = false;
 }
@@ -654,6 +628,4 @@ OpticalCalibrationModule
   this->BusyOff();
 }
 
-
 } // End namespace otb
-

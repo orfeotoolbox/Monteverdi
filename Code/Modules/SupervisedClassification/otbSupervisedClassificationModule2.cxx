@@ -41,8 +41,8 @@ SupervisedClassificationModule2::SupervisedClassificationModule2()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"));
-  this->AddInputDescriptor<VectorDataType>("VectorDataROIs",otbGetTextMacro("Training/validation ROIs"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<VectorDataType>("VectorDataROIs", otbGetTextMacro("Training/validation ROIs"));
 }
 
 /** Destructor */
@@ -53,9 +53,8 @@ SupervisedClassificationModule2::~SupervisedClassificationModule2()
 void SupervisedClassificationModule2::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void SupervisedClassificationModule2::Run()
@@ -71,19 +70,19 @@ void SupervisedClassificationModule2::Run()
 
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  VectorDataType::Pointer vectorDataROIs = this->GetInputData<VectorDataType>("VectorDataROIs");
+  VectorDataType::Pointer          vectorDataROIs = this->GetInputData<VectorDataType>("VectorDataROIs");
 
   // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull() && vectorDataROIs.IsNotNull())
+  if (fpvImage.IsNotNull() && vectorDataROIs.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_View->BuildInterface();
-      m_Model->SetImage( fpvImage );
-      m_Model->SetVectorROIs( vectorDataROIs );
+    m_View->BuildInterface();
+    m_Model->SetImage(fpvImage);
+    m_Model->SetVectorROIs(vectorDataROIs);
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -96,13 +95,13 @@ void SupervisedClassificationModule2::Notify()
 
   if (m_Model->GetOutputChanged())
     {
-      this->ClearOutputDescriptors();
-      // Add outputs
-      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
+    this->ClearOutputDescriptors();
+    // Add outputs
+    FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
+    this->AddOutputDescriptor(filteredOutput, "OutputImage", otbGetTextMacro("Input image with new keyword list"));
     }
 
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 
   // Once module is closed, it is no longer busy
   this->BusyOff();

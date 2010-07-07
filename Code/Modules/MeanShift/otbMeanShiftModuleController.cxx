@@ -3,13 +3,12 @@
 #include "otbFltkFilterWatcher.h"
 #include <FL/fl_ask.H>
 
-
 namespace otb
 {
 
 MeanShiftModuleController
-::MeanShiftModuleController(): m_View(), m_Model(), m_WidgetsController(),
-m_ResizingHandler(), m_ChangeRegionHandler()
+::MeanShiftModuleController() : m_View(), m_Model(), m_WidgetsController(),
+  m_ResizingHandler(), m_ChangeRegionHandler()
 {
   // Build the widgets controller
   m_WidgetsController         = WidgetsControllerType::New();
@@ -57,7 +56,6 @@ void MeanShiftModuleController::SetView(MeanShiftModuleView * view)
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
 }
 
-
 void
 MeanShiftModuleController
 ::SetSpatialRadius(unsigned int sr)
@@ -83,38 +81,37 @@ void
 MeanShiftModuleController
 ::UpdateViewerDisplay()
 {
-  if(!m_Model->GetIsImageReady())
+  if (!m_Model->GetIsImageReady())
     {
-      return;
+    return;
     }
-  
+
   std::vector<unsigned int> channels;
   if (m_View->rViewerSetupColorMode->value())
     {
-      channels.push_back(atoi(m_View->iRChannelChoice->value())-1);
-      channels.push_back(atoi(m_View->iGChannelChoice->value())-1);
-      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);
+    channels.push_back(atoi(m_View->iRChannelChoice->value()) - 1);
+    channels.push_back(atoi(m_View->iGChannelChoice->value()) - 1);
+    channels.push_back(atoi(m_View->iBChannelChoice->value()) - 1);
     }
   else if (m_View->rViewerSetupGrayscaleMode->value())
     {
-      channels.push_back(atoi(m_View->iGrayscaleChannelChoice->value())-1);
+    channels.push_back(atoi(m_View->iGrayscaleChannelChoice->value()) - 1);
     }
 
   m_Model->UpdateViewerDisplay(channels);
 }
-
 
 void
 MeanShiftModuleController
 ::RunSegmentation()
 {
   m_Model->RunSegmentation();
-  
-  if( m_View->mBoundButton->value() != 0 )
+
+  if (m_View->mBoundButton->value() != 0)
     {
-      m_Model->SwitchBoundaries(true);
+    m_Model->SwitchBoundaries(true);
     }
-  
+
 }
 
 void
@@ -123,7 +120,6 @@ MeanShiftModuleController
 {
   m_Model->SetOpacity(op);
 }
-
 
 void
 MeanShiftModuleController
@@ -139,13 +135,11 @@ MeanShiftModuleController
   m_Model->SwitchBoundaries(sb);
 }
 
-
 void
 MeanShiftModuleController
 ::Quit()
 {
   m_Model->Quit();
 }
-
 
 } // end namespace otb

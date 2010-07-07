@@ -18,7 +18,6 @@
 #ifndef __otbWriterViewGUI_h
 #define __otbWriterViewGUI_h
 
-
 // #include "otbListenerBase.h"
 #include "otbEventsListener.h"
 
@@ -53,41 +52,41 @@ class ITK_EXPORT WriterViewGUI
 {
 public:
   /** Standard class typedefs */
-  typedef WriterViewGUI                                 Self;
-  typedef itk::Object                                   Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef WriterViewGUI                 Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(WriterViewGUI,itk::Object);
+  itkTypeMacro(WriterViewGUI, itk::Object);
 
-  typedef WriterModel                                   WriterModelType;
-  typedef WriterModel::InputImagePixelType              ModelInputPixelType;
-  typedef WriterModelType::VisuModelType                VisuModelType;
-  typedef ImageView<VisuModelType>                      VisuViewType;
-  typedef WriterControllerInterface::Pointer            WriterControllerInterfacePointerType;
-  typedef WriterModelType::SingleImageType              ModelSingleImageType;
-  typedef VisuViewType::ImageType                       ImageType;
-  typedef VisuViewType::Pointer                         VisuViewPointerType;
-  typedef ImageType::RegionType                         RegionType;
-  typedef RegionType::SizeType                          SizeType;
-  typedef RegionType::IndexType                         IndexType;
-  typedef ImageType::Pointer                            ImagePointerType;
+  typedef WriterModel                        WriterModelType;
+  typedef WriterModel::InputImagePixelType   ModelInputPixelType;
+  typedef WriterModelType::VisuModelType     VisuModelType;
+  typedef ImageView<VisuModelType>           VisuViewType;
+  typedef WriterControllerInterface::Pointer WriterControllerInterfacePointerType;
+  typedef WriterModelType::SingleImageType   ModelSingleImageType;
+  typedef VisuViewType::ImageType            ImageType;
+  typedef VisuViewType::Pointer              VisuViewPointerType;
+  typedef ImageType::RegionType              RegionType;
+  typedef RegionType::SizeType               SizeType;
+  typedef RegionType::IndexType              IndexType;
+  typedef ImageType::Pointer                 ImagePointerType;
 
-  typedef std::vector<std::string>                      StringVectorType;
+  typedef std::vector<std::string> StringVectorType;
 
   /** progress tmp */
   itkSetMacro(Progress, double);
   itkGetMacro(Progress, double);
-  
+
   /** Set the controller */
-  itkGetObjectMacro(WriterController,WriterControllerInterface);
+  itkGetObjectMacro(WriterController, WriterControllerInterface);
 
   void SetWriterController(WriterControllerInterface *pController)
   {
     m_WriterController = pController;
-   // Set the model
+    // Set the model
     m_VisuView->SetController(m_WriterController->GetVisuController());
     m_ResultVisuView->SetController(m_WriterController->GetResultVisuController());
   }
@@ -98,9 +97,9 @@ public:
     m_WriterModel = pModel;
     m_WriterModel->RegisterListener(this);
   }
-  
-  itkGetMacro(VisuView,VisuViewPointerType);
-  itkGetMacro(ResultVisuView,VisuViewPointerType);
+
+  itkGetMacro(VisuView, VisuViewPointerType);
+  itkGetMacro(ResultVisuView, VisuViewPointerType);
 
   void InitWidgets();
   void InitVisu();
@@ -109,7 +108,7 @@ public:
   otbRunningMacro();
 
   /** Event from the model */
-  virtual void Notify(const std::string & event);
+  virtual void Notify(const std::string& event);
   virtual void UpdateFeaturePreview();
   virtual void UpdateFeaturePreviewFromOutputList();
   virtual void UpdateParameterArea(unsigned int groupId);
@@ -125,19 +124,19 @@ public:
   std::vector<int> GetInputOutputFeatureLink()
   {
     return m_InputOutputFeatureLink;
-  };
+  }
   void AddToInputOutputFeatureLink(int i)
   {
     m_InputOutputFeatureLink.push_back(i);
-  };
+  }
 
   virtual void ClearImage();
-  
+
   virtual void InitFeatureOutputList();
-  
+
   virtual void ManageActivationWindowButtons(bool withAwake);
-  
-  virtual void AwakeProgressFields (double progress);
+
+  virtual void AwakeProgressFields(double progress);
 protected:
 
   /** Destructor */
@@ -160,15 +159,15 @@ protected:
   void UpdateProgress();
 
 private:
-  
+
   // Callback to update the window label
   static void UpdateProgressCallback(void * data);
 
   // Callback to hide window
   static void QuitCallback(void * data);
-  
+
   WriterViewGUI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   void UpdateInformation();
 //   void UpdateChannelSelection();
@@ -178,27 +177,27 @@ private:
   /** Pointer to the controller */
   WriterControllerInterface::Pointer m_WriterController;
 
-  StringVectorType          m_FileNameList;
-  StringVectorType          m_ViewerNameList;
-  std::string               m_LastPath;
-  std::string               m_TemplateViewerName;
-  StringVectorType          m_DisplayedLabelList;
-  StringVectorType          m_UndisplayedLabelList;
-  std::vector<bool>         m_DisplayStatusList;
+  StringVectorType  m_FileNameList;
+  StringVectorType  m_ViewerNameList;
+  std::string       m_LastPath;
+  std::string       m_TemplateViewerName;
+  StringVectorType  m_DisplayedLabelList;
+  StringVectorType  m_UndisplayedLabelList;
+  std::vector<bool> m_DisplayStatusList;
   /** output/input feature list link. */
-  std::vector<int>          m_InputOutputFeatureLink;
-  int                       m_FeatureExtractPreviewParentBrowser;
+  std::vector<int> m_InputOutputFeatureLink;
+  int              m_FeatureExtractPreviewParentBrowser;
   /** Value of the selected Pixel*/
-  ModelInputPixelType       m_SelectedPixel;
+  ModelInputPixelType m_SelectedPixel;
   /** Store a list avor all parameter selection group*/
-  std::vector<Fl_Group*>    m_ParameterGroupList;
+  std::vector<Fl_Group*> m_ParameterGroupList;
 
-  VisuViewPointerType       m_VisuView;
-  VisuViewPointerType       m_ResultVisuView;
-  
+  VisuViewPointerType m_VisuView;
+  VisuViewPointerType m_ResultVisuView;
+
   /** progress tmp*/
-  double                    m_Progress;
+  double m_Progress;
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

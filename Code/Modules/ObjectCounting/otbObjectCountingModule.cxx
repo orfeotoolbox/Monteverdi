@@ -29,12 +29,12 @@ ObjectCountingModule::ObjectCountingModule()
 
   m_Controller = ControllerType::New();
   m_View = ViewType::New();
-  
+
   m_Controller->SetView(m_View);
   m_View->SetController(m_Controller);
 
   m_Model = ObjectCountingModel::GetInstance();
-  
+
   m_Model->RegisterListener(this);
   // Then, describe inputs needed by the module
 
@@ -51,9 +51,8 @@ ObjectCountingModule::~ObjectCountingModule()
 void ObjectCountingModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void ObjectCountingModule::Run()
@@ -71,17 +70,17 @@ void ObjectCountingModule::Run()
   ImageType::Pointer fpvImage = this->GetInputData<ImageType>("InputImage");
 
   // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull())
+  if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_Model->SetInputImage( fpvImage );
-      //std::cout << "model setinput image ok" << std::endl;
-      m_View->Build();
-      //std::cout << "Build view over" << std::endl;
+    m_Model->SetInputImage(fpvImage);
+    //std::cout << "model setinput image ok" << std::endl;
+    m_View->Build();
+    //std::cout << "Build view over" << std::endl;
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -90,31 +89,30 @@ void ObjectCountingModule::Run()
 }
 
 /** The Notify */
-void ObjectCountingModule::Notify(const std::string & event)
+void ObjectCountingModule::Notify(const std::string& event)
 {
 
   if (event == "OutputsUpdated")
-  {
+    {
     this->ClearOutputDescriptors();
 
     // Add outputs
     LabeledImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-    this->AddOutputDescriptor(labeledOutput,"Labeled Image", otbGetTextMacro("Result of the ObjectCounting labeling"));
-    
-    // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->AddOutputDescriptor(labeledOutput, "Labeled Image", otbGetTextMacro("Result of the ObjectCounting labeling"));
 
-      // Once module is closed, it is no longer busy
+    // Send an event to Monteverdi application
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+
+    // Once module is closed, it is no longer busy
     this->BusyOff();
-  }
+    }
   else if (event == "BusyOff")
-  {
+    {
     this->BusyOff();
-  }
+    }
   else
-  {
-  }
+    {
+    }
 
 }
 } // End namespace otb
-

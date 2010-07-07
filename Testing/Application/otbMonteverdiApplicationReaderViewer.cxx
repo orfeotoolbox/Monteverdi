@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbMonteverdiModel.h"
 #include "otbMonteverdiViewGUI.h"
 #include "otbMonteverdiController.h"
@@ -30,34 +29,33 @@
 #include "otbSupervisedClassificationModule.h"
 #include "otbInputViewGUI.h"
 
-
 int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
 {
 
   // Parameters of the tests
   const char * infname = argv[1];
-  unsigned int  run = atoi(argv[2]);
+  unsigned int run = atoi(argv[2]);
 
-   // Application
-  typedef otb::MonteverdiModel       ModelType;
-  typedef otb::MonteverdiController  ControllerType;
-  typedef otb::MonteverdiViewGUI     ViewType;
+  // Application
+  typedef otb::MonteverdiModel      ModelType;
+  typedef otb::MonteverdiController ControllerType;
+  typedef otb::MonteverdiViewGUI    ViewType;
 
   // Create the MVC
-  ModelType::Pointer model = otb::MonteverdiModel::GetInstance();
-  ViewType::Pointer view = ViewType::New();
+  ModelType::Pointer      model = otb::MonteverdiModel::GetInstance();
+  ViewType::Pointer       view = ViewType::New();
   ControllerType::Pointer controller = ControllerType::New();
   controller->SetView(view);
   view->SetMonteverdiController(controller);
 
   // Register modules
-  model->RegisterModule<otb::ReaderModule>("Reader","File/Import dataset");
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
+  model->RegisterModule<otb::ReaderModule>("Reader", "File/Import dataset");
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", "Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Ortho Rectification");
-  model->RegisterModule<otb::WriterModule> ("Writer","File/Export dataset");
-  model->RegisterModule<otb::ViewerModule> ("Viewer","Visualization/View image");
+  model->RegisterModule<otb::WriterModule> ("Writer", "File/Export dataset");
+  model->RegisterModule<otb::ViewerModule> ("Viewer", "Visualization/View image");
 
   // Launch Monteverdi
   view->InitWidgets();
@@ -78,13 +76,12 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
 
   // Simulate file chooser and ok callback
   // Cyrille cast effect !
-  otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+  otb::ReaderModule::Pointer readerModule =
+    static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
   readerModule->vFilePath->value(infname);
   readerModule->Analyse();
   readerModule->bOk->do_callback();
   Fl::check();
-
-
 
   // Create an instance of module viewer
   model->CreateModuleByKey("Viewer");
@@ -97,10 +94,11 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
   otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
 
   // Open the viewer and simulate a connexion
-  otb::ViewerModule::Pointer viewerModule = static_cast<otb::ViewerModule::Pointer>(dynamic_cast<otb::ViewerModule *>(module2.GetPointer()));
+  otb::ViewerModule::Pointer viewerModule =
+    static_cast<otb::ViewerModule::Pointer>(dynamic_cast<otb::ViewerModule *>(module2.GetPointer()));
 
-  typedef otb::Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
-  InputDataDescriptorMapType lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
+  typedef otb::Module::InputDataDescriptorMapType InputDataDescriptorMapType;
+  InputDataDescriptorMapType                 lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
   InputDataDescriptorMapType::const_iterator it_in;
   it_in = lInputDataMap.begin();
 
@@ -110,24 +108,20 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
   InputViewComponentMapType inputComponentMap;
   inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
 
-  for(unsigned int i =0;i<inputComponentMap[viewerInputKey]->GetNumberOfChoices();i++)
+  for (unsigned int i = 0; i < inputComponentMap[viewerInputKey]->GetNumberOfChoices(); i++)
     {
     inputComponentMap[viewerInputKey]->SelectNthChoice(i);
     }
   Fl::check();
-      
+
   view->GetInputViewGUI()->bOk->do_callback();
   Fl::check();
-  
 
-  if(run)
-    Fl::run();
-  else
-    Fl::check();
+  if (run) Fl::run();
+  else Fl::check();
 
   //viewerModule->bQuit->do_callback();
   view->Quit();
 
   return 0;
 }
-

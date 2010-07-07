@@ -18,7 +18,6 @@
 #ifndef __otbFeatureExtractionViewGUI_h
 #define __otbFeatureExtractionViewGUI_h
 
-
 // #include "otbListenerBase.h"
 #include "otbEventsListener.h"
 // Disabling deprecation warning
@@ -47,19 +46,18 @@ namespace otb
  *
  */
 class ITK_EXPORT FeatureExtractionViewGUI
-      : public EventsListener<std::string>, public FeatureExtractionViewGroup, public itk::Object
+  : public EventsListener<std::string>, public FeatureExtractionViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef FeatureExtractionViewGUI          Self;
-  typedef itk::Object                       Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef FeatureExtractionViewGUI      Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(FeatureExtractionViewGUI,itk::Object);
-
+  itkTypeMacro(FeatureExtractionViewGUI, itk::Object);
 
   // Pixel type
   typedef double PixelType;
@@ -78,16 +76,15 @@ public:
   typedef ImageType::Pointer                            ImagePointerType;
   typedef FeatureInfo::FeatureType                      FeatureType;
 
-  typedef std::vector<std::string>                      StringVectorType;
-
+  typedef std::vector<std::string> StringVectorType;
 
   /** Set the controller */
-  itkGetObjectMacro(FeatureExtractionController,FeatureExtractionControllerInterface);
+  itkGetObjectMacro(FeatureExtractionController, FeatureExtractionControllerInterface);
 
   void SetFeatureExtractionController(FeatureExtractionControllerInterface *pController)
   {
     m_FeatureExtractionController = pController;
-   // Set the model
+    // Set the model
     m_VisuView->SetController(m_FeatureExtractionController->GetVisuController());
     m_ResultVisuView->SetController(m_FeatureExtractionController->GetResultVisuController());
 
@@ -101,8 +98,8 @@ public:
     m_FeatureExtractionModel->RegisterListener(this);
   }
 */
-  itkGetMacro(VisuView,VisuViewPointerType);
-  itkGetMacro(ResultVisuView,VisuViewPointerType);
+  itkGetMacro(VisuView, VisuViewPointerType);
+  itkGetMacro(ResultVisuView, VisuViewPointerType);
 
   void InitWidgets();
   void InitVisu();
@@ -111,7 +108,7 @@ public:
   otbRunningMacro();
 
   /** Event from the model */
-  virtual void Notify(const std::string & event);
+  virtual void Notify(const std::string& event);
   virtual void UpdateFeaturePreview();
   virtual void UpdateFeaturePreviewFromOutputList();
   virtual void UpdateFeatureInfo(FeatureType feat);
@@ -128,18 +125,18 @@ public:
   std::vector<int> GetInputOutputFeatureLink()
   {
     return m_InputOutputFeatureLink;
-  };
+  }
   void AddToInputOutputFeatureLink(int i)
   {
     m_InputOutputFeatureLink.push_back(i);
-  };
+  }
 
-  void UpdateSelectedPixel(const IndexType & index);
+  void UpdateSelectedPixel(const IndexType& index);
 
   ModelInputPixelType GetSelectedPixel() const
   {
     return m_SelectedPixel;
-  };
+  }
 
   virtual void SetFeatureType(FeatureType i);
   virtual void ClearImage();
@@ -161,13 +158,12 @@ protected:
   virtual void AddFeature();
   virtual void OK();
 
-
   void InitParameterGroupList();
   void InitTextureLists();
 
 private:
   FeatureExtractionViewGUI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   void UpdateInformation();
   void UpdateChannelSelection();
@@ -178,25 +174,25 @@ private:
   /** Pointer to the controller */
   FeatureExtractionControllerInterface::Pointer m_FeatureExtractionController;
 
-  StringVectorType                              m_FileNameList;
-  StringVectorType                              m_ViewerNameList;
-  std::string                                   m_LastPath;
-  std::string                                   m_TemplateViewerName;
-  StringVectorType                              m_DisplayedLabelList;
-  StringVectorType                              m_UndisplayedLabelList;
-  std::vector<bool>                             m_DisplayStatusList;
-  FeatureType                                   m_FeatureType;
+  StringVectorType  m_FileNameList;
+  StringVectorType  m_ViewerNameList;
+  std::string       m_LastPath;
+  std::string       m_TemplateViewerName;
+  StringVectorType  m_DisplayedLabelList;
+  StringVectorType  m_UndisplayedLabelList;
+  std::vector<bool> m_DisplayStatusList;
+  FeatureType       m_FeatureType;
   /** output/input feature list link. */
-  std::vector<int>          m_InputOutputFeatureLink;
-  int                       m_FeatureExtractPreviewParentBrowser;
+  std::vector<int> m_InputOutputFeatureLink;
+  int              m_FeatureExtractPreviewParentBrowser;
   /** Value of the selected Pixel*/
   ModelInputPixelType m_SelectedPixel;
   /** Store a list avor all parameter selection group*/
   std::vector<Fl_Group*> m_ParameterGroupList;
 
-  VisuViewPointerType                 m_VisuView;
-  VisuViewPointerType                 m_ResultVisuView;
+  VisuViewPointerType m_VisuView;
+  VisuViewPointerType m_ResultVisuView;
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

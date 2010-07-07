@@ -28,21 +28,20 @@
 int otbViewerModuleTest(int argc, char* argv[])
 {
   otb::ViewerModule::Pointer specificModule = otb::ViewerModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer       module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
-  bool  run = atoi(argv[2]);
+  bool         run = atoi(argv[2]);
 
+  typedef otb::ViewerModule::ImageType    ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::ViewerModule::ImageType        ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
-
-  typedef otb::ViewerModule::VectorDataType   VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>  VReaderType;
+  typedef otb::ViewerModule::VectorDataType         VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VReaderType;
 
   // Image reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -50,27 +49,27 @@ int otbViewerModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  ossimFilename vcutIn(infname);
+  ossimFilename          vcutIn(infname);
   wrapperIn.SetDescription(vcutIn.file());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
 
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage", wrapperIn);
 
   VReaderType::Pointer vreader = VReaderType::New();
   VReaderType::Pointer vreader1 = VReaderType::New();
 
-  if(argc > 3)
-  {
+  if (argc > 3)
+    {
     const char * vfname  = argv[3];
     // VectorData Reader
     vreader->SetFileName(vfname);
     vreader->GenerateOutputInformation();
 
     otb::DataObjectWrapper wrapperVector = otb::DataObjectWrapper::Create(vreader->GetOutput());
-    ossimFilename vcut(vfname);
+    ossimFilename          vcut(vfname);
     wrapperVector.SetDescription(vcut.file());
-    std::cout <<"Input VectorData Wrapper " <<wrapperVector << std::endl;
-    module->AddInputByKey("VectorData",wrapperVector);
+    std::cout << "Input VectorData Wrapper " << wrapperVector << std::endl;
+    module->AddInputByKey("VectorData", wrapperVector);
 
     const char * vfname1  = argv[4];
     // VectorData Reader
@@ -78,24 +77,24 @@ int otbViewerModuleTest(int argc, char* argv[])
     vreader1->GenerateOutputInformation();
 
     otb::DataObjectWrapper wrapperVector1 = otb::DataObjectWrapper::Create(vreader1->GetOutput());
-    ossimFilename vcut1(vfname1);
+    ossimFilename          vcut1(vfname1);
     wrapperVector1.SetDescription(vcut1.file());
-    std::cout <<"Input VectorData Wrapper " <<wrapperVector1 << std::endl;
-    module->AddInputByKey("VectorData",wrapperVector1);
+    std::cout << "Input VectorData Wrapper " << wrapperVector1 << std::endl;
+    module->AddInputByKey("VectorData", wrapperVector1);
 
-  }
+    }
 
   module->Start();
 
-    if(run)
-      {
-      Fl::run();
-      }
-    else
-      {
-      Fl::check();
-      }
-  
+  if (run)
+    {
+    Fl::run();
+    }
+  else
+    {
+    Fl::check();
+    }
+
   return EXIT_SUCCESS;
 
 }

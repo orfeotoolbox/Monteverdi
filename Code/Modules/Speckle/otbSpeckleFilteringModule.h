@@ -47,21 +47,21 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SpeckleFilteringModule,Module);
+  itkTypeMacro(SpeckleFilteringModule, Module);
 
-  itkGetObjectMacro(View,SpeckleFilteringView);
+  itkGetObjectMacro(View, SpeckleFilteringView);
 
   // Input typedef
   typedef SpeckleFilteringModel::InputImageType InputImageType;
-  
+
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
     this->Run();
-  };
+  }
 protected:
   /** Constructor */
   SpeckleFilteringModule();
@@ -78,18 +78,17 @@ protected:
 
 private:
   SpeckleFilteringModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // The view
-  SpeckleFilteringView::Pointer        m_View;
+  SpeckleFilteringView::Pointer m_View;
 
   // The controller
-  SpeckleFilteringController::Pointer  m_Controller;
+  SpeckleFilteringController::Pointer m_Controller;
 
   // The model
-  SpeckleFilteringModel::Pointer       m_Model;
+  SpeckleFilteringModel::Pointer m_Model;
 };
-
 
 } // End namespace otb
 

@@ -50,16 +50,16 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ConcatenateModule,Module);
+  itkTypeMacro(ConcatenateModule, Module);
 
   /** Data typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image                              ImageType;
-  typedef TypeManager::Floating_Point_VectorImage                        VectorImageType;
-  
-  typedef ImageList< ImageType >                                         ImageListType;
-  typedef ImageListToVectorImageFilter< ImageListType, VectorImageType > ImageListToVectorImageFilterType;
-  
+  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+
+  typedef ImageList<ImageType>                                         ImageListType;
+  typedef ImageListToVectorImageFilter<ImageListType, VectorImageType> ImageListToVectorImageFilterType;
+
 protected:
   /** Constructor */
   ConcatenateModule();
@@ -75,12 +75,11 @@ protected:
 
 private:
   ConcatenateModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   ImageListToVectorImageFilterType::Pointer m_ImageListToVectorImageFilter;
   ImageListType::Pointer                    m_ImageList;
 };
-
 
 } // End namespace otb
 

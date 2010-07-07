@@ -22,14 +22,14 @@ namespace otb
 {
 
 VectorizationController
-::VectorizationController(): m_View(),
-                             m_Model(),
-                             m_WidgetController(),
-                             m_ResizingHandler(),
-                             m_ChangeRegionHandler(),
-                             m_ChangeScaledRegionHandler(),
-                             m_ChangeScaleHandler(),
-                             m_VectorDataActionHandler()
+::VectorizationController() : m_View(),
+  m_Model(),
+  m_WidgetController(),
+  m_ResizingHandler(),
+  m_ChangeRegionHandler(),
+  m_ChangeScaledRegionHandler(),
+  m_ChangeScaleHandler(),
+  m_VectorDataActionHandler()
 {
   // Build the widgets controller
   m_WidgetController          = WidgetControllerType::New();
@@ -52,7 +52,6 @@ VectorizationController
   m_ChangeRegionHandler->SetMouseButton(2);
   m_ChangeScaledRegionHandler->SetMouseButton(2);
 }
-
 
 VectorizationController
 ::~VectorizationController()
@@ -88,79 +87,88 @@ VectorizationController
 void VectorizationController::RemoveDataNode(DataNodeType * node)
 {
   try
-  {
+    {
     m_Model->RemoveDataNode(node);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
-void VectorizationController::SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value)
+void VectorizationController::SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value)
 {
   try
-  {
-    m_Model->SetDataNodeFieldAsInt(node,name,value);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->SetDataNodeFieldAsInt(node, name, value);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
-void VectorizationController::SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value)
+void VectorizationController::SetDataNodeFieldAsFloat(DataNodeType * node, const std::string& name, float value)
 {
   try
-  {
-    m_Model->SetDataNodeFieldAsFloat(node,name,value);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->SetDataNodeFieldAsFloat(node, name, value);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
-void VectorizationController::SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value)
+void VectorizationController::SetDataNodeFieldAsString(DataNodeType* node,
+                                                       const std::string& name,
+                                                       const std::string& value)
 {
   try
-  {
-    m_Model->SetDataNodeFieldAsString(node,name,value);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->SetDataNodeFieldAsString(node, name, value);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
-void VectorizationController::RemoveFieldFromDataNode(DataNodeType * node, const std::string & name)
+void VectorizationController::RemoveFieldFromDataNode(DataNodeType * node, const std::string& name)
 {
   try
-  {
-    m_Model->RemoveFieldFromDataNode(node,name);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->RemoveFieldFromDataNode(node, name);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 
-void VectorizationController::RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex)
+void VectorizationController::RemovePointFromDataNode(DataNodeType * node,
+                                                      const long& index,
+                                                      bool interiorRing,
+                                                      const unsigned int& interiorRingIndex)
 {
   try
-  {
-    m_Model->RemovePointFromDataNode(node,index,interiorRing,interiorRingIndex);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->RemovePointFromDataNode(node, index, interiorRing, interiorRingIndex);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
-void VectorizationController::UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex)
+void VectorizationController::UpdatePointFromDataNode(DataNodeType * node,
+                                                      const long& index,
+                                                      const PointType& point,
+                                                      bool interiorRing,
+                                                      const unsigned int& interiorRingIndex)
 {
   try
-  {
-    m_Model->UpdatePointFromDataNode(node,index,point,interiorRing,interiorRingIndex);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->UpdatePointFromDataNode(node, index, point, interiorRing, interiorRingIndex);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-  }
+    }
 }
 } // end namespace otb

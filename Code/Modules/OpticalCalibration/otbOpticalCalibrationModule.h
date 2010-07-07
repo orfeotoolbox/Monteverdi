@@ -18,7 +18,6 @@
 #ifndef __otbOpticalCalibration_h
 #define __otbOpticalCalibration_h
 
-
 // include the base class
 #include "otbModule.h"
 
@@ -31,7 +30,6 @@
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbDifferenceImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
-
 
 namespace otb
 {
@@ -48,7 +46,7 @@ class ITK_EXPORT OpticalCalibrationModule
 {
 public:
   /** Standard class typedefs */
-  typedef OpticalCalibrationModule        Self;
+  typedef OpticalCalibrationModule      Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -57,25 +55,31 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(OpticalCalibrationModule,Module);
+  itkTypeMacro(OpticalCalibrationModule, Module);
 
   /** Data typedefs */
   typedef TypeManager::Floating_Point_VectorImage ImageType;
 
   /** Filters typedef */
-  typedef ImageToLuminanceImageFilter<ImageType,ImageType>                             ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::Pointer                                     ImageToLuminanceImageFilterPointerType;
-  typedef LuminanceToReflectanceImageFilter<ImageType,ImageType>                       LuminanceToReflectanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilterType::Pointer                               LuminanceToReflectanceImageFilterPointerType;
-  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,ImageType>              ReflectanceToSurfaceReflectanceImageFilterType;
-  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer                      ReflectanceToSurfaceReflectanceImageFilterPointerType;
+  typedef ImageToLuminanceImageFilter<ImageType, ImageType> ImageToLuminanceImageFilterType;
+  typedef ImageToLuminanceImageFilterType::Pointer
+  ImageToLuminanceImageFilterPointerType;
+  typedef LuminanceToReflectanceImageFilter<ImageType,
+      ImageType>                      LuminanceToReflectanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilterType::Pointer
+  LuminanceToReflectanceImageFilterPointerType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<ImageType,
+      ImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer
+  ReflectanceToSurfaceReflectanceImageFilterPointerType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::CoefVectorType               CoefVectorType;
   typedef AtmosphericCorrectionParameters::AerosolModelType                            AerosolModelType;
   typedef DifferenceImageFilter<ImageType, ImageType>                                  DifferenceImageFilterType;
   typedef DifferenceImageFilterType::Pointer                                           DifferenceImageFilterPointerType;
-  typedef MultiplyByScalarImageFilter<ImageType,ImageType>                             MultiplyByScalarImageFilterType;
-  typedef MultiplyByScalarImageFilterType::Pointer                                     MultiplyByScalarImageFilterPointerType;
+  typedef MultiplyByScalarImageFilter<ImageType, ImageType>                            MultiplyByScalarImageFilterType;
+  typedef MultiplyByScalarImageFilterType::Pointer
+  MultiplyByScalarImageFilterPointerType;
 
   itkGetObjectMacro(DifferenceFilter, DifferenceImageFilterType);
 
@@ -96,13 +100,13 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** The custom run command */
-  virtual void Run(); 
+  virtual void Run();
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
+  virtual bool CanShow(){return true; }
   /** Show the Module GUI */
-  virtual void Show(){ wMainWindow->show(); };
+  virtual void Show(){ wMainWindow->show(); }
   /** Hide the Module GUI */
-  virtual void Hide() { wMainWindow->hide(); };
+  virtual void Hide() { wMainWindow->hide(); }
 
   /** GUI widget initialization. */
   void Init();
@@ -133,32 +137,32 @@ protected:
   /** Change the radiative terms of the selected band with the users value (Reload Radiative Terms button).
    * if updateIm==0 just update text display, else compute deducted parameters.
    */
-  virtual void ReloadChannelTermsCallback( bool updateIm );
+  virtual void ReloadChannelTermsCallback(bool updateIm);
   /** Update parameters (Update button). */
   virtual void UpdateParametersCallback();
 
 private:
   OpticalCalibrationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   ImageType::Pointer m_InputImage;
 
   /** Filters */
   /** Image to Luminance filter*/
-  ImageToLuminanceImageFilterPointerType                m_ImageToLuminanceFilter;
+  ImageToLuminanceImageFilterPointerType m_ImageToLuminanceFilter;
   /** Image to TOA filter*/
-  LuminanceToReflectanceImageFilterPointerType              m_LuminanceToReflectanceFilter;
+  LuminanceToReflectanceImageFilterPointerType m_LuminanceToReflectanceFilter;
   /** TOA to TOC filter*/
   ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
   /** Diff TOA-TOC filter*/
-  DifferenceImageFilterPointerType                      m_DifferenceFilter;
+  DifferenceImageFilterPointerType m_DifferenceFilter;
   /** 1000* TOA filter*/
   MultiplyByScalarImageFilterPointerType m_TOAMultiplier;
   /** 1000* TOC filter*/
   MultiplyByScalarImageFilterPointerType m_TOCMultiplier;
   /** 1000* (TOA-TOC) filter*/
   MultiplyByScalarImageFilterPointerType m_DiffTOATOCMultiplier;
-   
+
   /** String to store last opened file. */
   std::string m_LastPath;
 
@@ -168,7 +172,6 @@ private:
   /** Empty buffer for text helper display. */
   Fl_Text_Buffer * m_HelpTextBuffer;
 };
-
 
 } // End namespace otb
 

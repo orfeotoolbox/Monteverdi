@@ -24,17 +24,16 @@
 #include "otbMsgReporter.h"
 //#include <FL/fl_ask.H>
 
-
 namespace otb
 {
 
 GCPToSensorModelController
-::GCPToSensorModelController(): m_View(), m_Model(), m_WidgetController(), m_MapWidgetController(),
-                                m_MouseClickedController(), m_ResizingHandler(), m_ChangeRegionHandler(),
-                                m_ChangeScaledRegionHandler(), m_ChangeScaleHandler(),
-                                m_LeftMouseClickedHandler(), m_PixelActionHandler(), m_PixelModel(),
-                                m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
-                                m_MapMouseMapActionHandler(), m_GuessActionHandler(), m_DEMPath("")
+::GCPToSensorModelController() : m_View(), m_Model(), m_WidgetController(), m_MapWidgetController(),
+  m_MouseClickedController(), m_ResizingHandler(), m_ChangeRegionHandler(),
+  m_ChangeScaledRegionHandler(), m_ChangeScaleHandler(),
+  m_LeftMouseClickedHandler(), m_PixelActionHandler(), m_PixelModel(),
+  m_PixelView(), m_MapResizingHandler(), m_MapScrollZoomHandler(),
+  m_MapMouseMapActionHandler(), m_GuessActionHandler(), m_DEMPath("")
 {
   // Build the widgets controller
   m_WidgetController          = WidgetControllerType::New();
@@ -50,7 +49,7 @@ GCPToSensorModelController
   m_PixelActionHandler        = PixelDescriptionActionHandlerType::New();
   m_PixelModel                = PixelDescriptionModelType::New();
   m_PixelView                 = PixelDescriptionViewType::New();
-  
+
   m_MapResizingHandler        = ResizingHandlerType::New();
   m_MapScrollZoomHandler      = ScrollZoomHandlerType::New();
   m_MapMouseMapActionHandler  = MouseMapActionHandlerType::New();
@@ -71,12 +70,11 @@ GCPToSensorModelController
   m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
   m_WidgetController->AddActionHandler(m_LeftMouseClickedHandler);
   m_WidgetController->AddActionHandler(m_GuessActionHandler);
-  
+
   m_MapWidgetController->AddActionHandler(m_MapResizingHandler);
   m_MapWidgetController->AddActionHandler(m_MapScrollZoomHandler);
   m_MapWidgetController->AddActionHandler(m_MapMouseMapActionHandler);
 }
-
 
 GCPToSensorModelController
 ::~GCPToSensorModelController()
@@ -94,7 +92,7 @@ GCPToSensorModelController
   m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
-  
+
   m_MapResizingHandler->SetModel(m_Model->GetMapVisualizationModel());
   m_MapScrollZoomHandler->SetModel(m_Model);
   m_MapMouseMapActionHandler->SetModel(m_Model);
@@ -117,7 +115,7 @@ GCPToSensorModelController
   m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
   m_LeftMouseClickedHandler->SetView(m_View->GetImageView());
-  
+
   m_MapResizingHandler->SetView(m_View->GetMapView());
   m_MapScrollZoomHandler->SetView(m_View->GetMapView());
   m_MapMouseMapActionHandler->SetView(m_View->GetMapView());
@@ -136,24 +134,25 @@ GCPToSensorModelController
   m_PixelActionHandler->SetView(m_View->GetImageView());
   m_View->gPixelValue->add(m_PixelView->GetPixelDescriptionWidget());
   m_PixelView->GetPixelDescriptionWidget()->show();
-  m_PixelView->GetPixelDescriptionWidget()->resize(m_View->gPixelValue->x(),m_View->gPixelValue->y(), m_View->gPixelValue->w(), m_View->gPixelValue->h());
+  m_PixelView->GetPixelDescriptionWidget()->resize(m_View->gPixelValue->x(),
+                                                   m_View->gPixelValue->y(),
+                                                   m_View->gPixelValue->w(), m_View->gPixelValue->h());
 }
-
 
 void
 GCPToSensorModelController
-::AddPoints( float x, float y, float lon, float lat, float elev )
+::AddPoints(float x, float y, float lon, float lat, float elev)
 {
   // Try to add GCP
   try
-  {
+    {
     m_Model->AddGCP(x, y, lon, lat, elev);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -161,43 +160,41 @@ GCPToSensorModelController
 ::ClearPointList()
 {
   try
-  {
+    {
     m_Model->ClearGCPsContainer();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
 GCPToSensorModelController
-::DeletePointFromList( unsigned int id )
+::DeletePointFromList(unsigned int id)
 {
   try
-  {
-    m_Model->RemovePointFromGCPsContainer( id );
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    {
+    m_Model->RemovePointFromGCPsContainer(id);
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
-
 
 void
 GCPToSensorModelController
-::LeftMouseButtonClicked( ContinuousIndexType index )
+::LeftMouseButtonClicked(ContinuousIndexType index)
 {
   IndexType id;
   id[0] = static_cast<long>(index[0]);
   id[1] = static_cast<long>(index[1]);
-  
+
   m_View->ChangePointValue(id);
 }
-
 
 void
 GCPToSensorModelController
@@ -210,43 +207,43 @@ GCPToSensorModelController
   m_ChangeRegionHandler->GetModel()->SetExtractRegionCenter(id);
   m_ChangeRegionHandler->GetModel()->Update();
 
-#ifdef OTB_USE_CURL  
+#ifdef OTB_USE_CURL
   try
-  {
+    {
     // Focus on map
     m_Model->CenterMapOnSelectedPoint(id[0], id[1], 16);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 #endif
 }
 
 void
 GCPToSensorModelController
-::SetDEMPath( const std::string & DEMPath )
+::SetDEMPath(const std::string& DEMPath)
 {
   // Check if DEM path is valid
   try
-  {
+    {
     // Try to open DEM directory
     ossimElevManager * elevManager = ossimElevManager::instance();
-    ossimFilename ossimDEMDir;
-    ossimDEMDir=ossimFilename(DEMPath.c_str());
+    ossimFilename      ossimDEMDir;
+    ossimDEMDir = ossimFilename(DEMPath.c_str());
     ossimDirectory od(DEMPath.c_str());
     if (!elevManager->loadElevationPath(ossimDEMDir))
-    {
-      itkExceptionMacro("Invalid directory \""<<DEMPath<<"\", no DEM files found!");
-    }
+      {
+      itkExceptionMacro("Invalid directory \"" << DEMPath << "\", no DEM files found!");
+      }
     m_DEMPath = DEMPath;
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -256,50 +253,50 @@ GCPToSensorModelController
   m_View->vElev->show();
   m_View->vElevMode->hide();
 
-  // If Mean 
-  if( static_cast<bool>(m_View->cMean->value()) )
-  {
+  // If Mean
+  if (static_cast<bool>(m_View->cMean->value()))
+    {
     try
-    {
-      m_Model->SetMeanElevation( static_cast<double>(m_View->vMeanElev->value()) );
+      {
+      m_Model->SetMeanElevation(static_cast<double>(m_View->vMeanElev->value()));
       m_Model->SetElevMgt(ModelType::MEAN);
-    }
-      catch (itk::ExceptionObject & err)
-    {
+      }
+    catch (itk::ExceptionObject& err)
+      {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
+      }
     }
-  }
   // If DEM
-  else if( static_cast<bool>(m_View->cDEM->value()) )
-  {
-    try
+  else if (static_cast<bool>(m_View->cDEM->value()))
     {
+    try
+      {
       m_View->vElevMode->value("DEM");
       m_View->vElevMode->show();
       m_View->vElev->hide();
       m_Model->SetDEMPath(m_DEMPath);
       m_Model->SetElevMgt(ModelType::DEM);
-    }
-    catch (itk::ExceptionObject & err)
-    {
+      }
+    catch (itk::ExceptionObject& err)
+      {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
+      }
     }
-  }
   // If GCP
-  else if( static_cast<bool>(m_View->cElev->value()) )
-  {
+  else if (static_cast<bool>(m_View->cElev->value()))
+    {
     try
-    {
+      {
       m_Model->SetElevMgt(ModelType::GCP);
-    }
-    catch (itk::ExceptionObject & err)
-    {
+      }
+    catch (itk::ExceptionObject& err)
+      {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       return;
+      }
     }
-  }
 }
 
 void
@@ -307,14 +304,14 @@ GCPToSensorModelController
 ::ReloadGCPsList()
 {
   try
-  {
+    {
     m_Model->LoadGCP();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -322,29 +319,29 @@ GCPToSensorModelController
 ::OK()
 {
   try
-  {
+    {
     m_Model->OK();
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
-  
+
 void
 GCPToSensorModelController
 ::SearchPlaceName(double longitude, double latitude)
 {
   try
-  {
+    {
     m_Model->SearchPlaceName(longitude, latitude);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -352,29 +349,34 @@ GCPToSensorModelController
 ::SearchLonLat(std::string placename)
 {
   try
-  {
+    {
     m_Model->SearchLonLat(placename);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
 GCPToSensorModelController
-::DisplayMap(std::string placename, double longitude, double latitude, unsigned int depth, long int sizeX, long int sizeY)
+::DisplayMap(std::string placename,
+             double longitude,
+             double latitude,
+             unsigned int depth,
+             long int sizeX,
+             long int sizeY)
 {
   try
-  {
+    {
     m_Model->DisplayMap(placename, longitude, latitude, depth, sizeX, sizeY);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -382,14 +384,14 @@ GCPToSensorModelController
 ::ExportGcpsToXmlFile(const char * fname)
 {
   try
-  {
+    {
     m_Model->ExportGCPsToXmlFile(fname);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 void
@@ -397,14 +399,14 @@ GCPToSensorModelController
 ::ImportGcpsFromXmlFile(const char * fname)
 {
   try
-  {
+    {
     m_Model->ImportGCPsFromXmlFile(fname);
-  }
-  catch (itk::ExceptionObject & err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
-  }
+    }
 }
 
 } // end namespace otb

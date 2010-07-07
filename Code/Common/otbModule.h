@@ -68,10 +68,10 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(Module,itk::Object);
+  itkTypeMacro(Module, itk::Object);
 
   /** Input data description map */
-  typedef std::map<std::string, InputDataDescriptor>  InputDataDescriptorMapType;
+  typedef std::map<std::string, InputDataDescriptor> InputDataDescriptorMapType;
 
   /** Output data description map */
   typedef std::map<std::string, OutputDataDescriptor> OutputDataDescriptorMapType;
@@ -79,24 +79,24 @@ public:
   /** Add an input data by its key. This method performs key and type
    * checking before invoking the protected method
    * AssignInputByKey(). */
-  void AddInputByKey(const std::string & key, const DataObjectWrapper & data);
+  void AddInputByKey(const std::string& key, const DataObjectWrapper& data);
 
   /** Get an output by its key. This method performs key and type
    * checking before invoking the protected method
    * AssignInputByKey(). */
-  const DataObjectWrapper GetOutputByKey(const std::string & key, unsigned int idx = 0) const;
+  const DataObjectWrapper GetOutputByKey(const std::string& key, unsigned int idx = 0) const;
 
   /**  Change the DataKey if possible from oldKey to newKey */
-  void ChangeOutputKey( const std::string & oldKey, const std::string & newKey );
+  void ChangeOutputKey(const std::string& oldKey, const std::string& newKey);
 
   /** Get the Data object descriptor corresponding to the given key */
-  const InputDataDescriptor & GetInputDataDescriptorByKey(const std::string & key) const;
+  const InputDataDescriptor& GetInputDataDescriptorByKey(const std::string& key) const;
 
   /** Get the input data descriptors map */
-  const InputDataDescriptorMapType  & GetInputsMap() const;
+  const InputDataDescriptorMapType& GetInputsMap() const;
 
   /** Get the output data descriptors map */
-  const OutputDataDescriptorMapType & GetOutputsMap() const;
+  const OutputDataDescriptorMapType& GetOutputsMap() const;
 
   /** Check that every mandatory input has been filled and call the
    * protected virtual run method */
@@ -110,10 +110,10 @@ public:
   itkGetStringMacro(InstanceId);
 
   /** Erase an output with its key */
-  void EraseOutputByKey(const std::string & key);
+  void EraseOutputByKey(const std::string& key);
 
   /** Load cached data */
-  void LoadCachedData(const DataObjectWrapper & data, const std::string & key, unsigned int idx);
+  void LoadCachedData(const DataObjectWrapper& data, const std::string& key, unsigned int idx);
 
   /** Does this module need to lock pipeline ? */
   bool NeedsPipelineLocking() const;
@@ -125,12 +125,12 @@ public:
   bool IsLockingPipeline() const;
 
   /** Show the Module GUI */
-  virtual void Show(){};
+  virtual void Show(){}
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return false;};
+  virtual bool CanShow(){return false; }
   /** Hide the Module GUI */
-  virtual void Hide(){};
+  virtual void Hide(){}
 
 protected:
   /** Constructor */
@@ -146,41 +146,61 @@ protected:
   void ClearOutputDescriptors();
 
   /** Add a new input descriptor */
-  template <typename T> void AddInputDescriptor(const std::string & key, const std::string & description, bool optional = false, bool multiple = false);
+  template <typename T> void AddInputDescriptor(const std::string& key,
+                                                const std::string& description,
+                                                bool optional = false,
+                                                bool multiple = false);
 
   /** Add additional supported types for a given input descriptors */
-  template <typename T> void AddTypeToInputDescriptor(const std::string & key);
+  template <typename T> void AddTypeToInputDescriptor(const std::string& key);
 
   /** Add a new output descriptor */
-  template <typename T> void AddOutputDescriptor(T* data, const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(T* data,
+                                                 const std::string& key,
+                                                 const std::string& description,
+                                                 bool cached = false);
 
   /** Add a new output descritpor (SmartPointer version) */
-  template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(itk::SmartPointer<T> data,
+                                                 const std::string& key,
+                                                 const std::string& description,
+                                                 bool cached = false);
 
   /** Partial specialization for the vector image case */
-  template <typename T> void AddOutputDescriptor(otb::VectorImage<T> * data,const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(otb::VectorImage<T> * data,
+                                                 const std::string& key,
+                                                 const std::string& description,
+                                                 bool cached = false);
 
   /** Partial specialization for the vector image case (SmartPointer version) */
-  template <typename T> void AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,
+                                                 const std::string & key,
+                                                 const std::string & description,
+                                                 bool cached = false);
 
   /** Partial specialization for the complex image case */
-  template <typename T> void AddOutputDescriptor(otb::Image<std::complex<T> > * data,const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(otb::Image<std::complex<T> > * data,
+                                                 const std::string& key,
+                                                 const std::string& description,
+                                                 bool cached = false);
 
   /** Partial specialization for the complex image case (SmartPointer version) */
-  template <typename T> void AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,const std::string & key, const std::string & description, bool cached = false);
+  template <typename T> void AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,
+                                                 const std::string & key,
+                                                 const std::string & description,
+                                                 bool cached = false);
 
   /** Retrieve the actual data from the map (returns NULL if wrong DataType) */
-  template <typename T> T * GetInputData(const std::string & key, unsigned int idx = 0) const;
+  template <typename T> T * GetInputData(const std::string& key, unsigned int idx = 0) const;
 
   /** Retrieve the actual data description from the map */
-  template <typename T> std::string GetInputDataDescription(const std::string & key, unsigned int idx = 0) const;
+  template <typename T> std::string GetInputDataDescription(const std::string& key, unsigned int idx = 0) const;
 
   /** Get the number of input data by key */
-  unsigned int GetNumberOfInputDataByKey(const std::string & key) const;
+  unsigned int GetNumberOfInputDataByKey(const std::string& key) const;
 
   /** The custom run command */
   virtual void Run();
-
 
   /** The custom run command (asynchronous threaded version) */
   virtual void ThreadedRun();
@@ -192,16 +212,16 @@ protected:
   std::string m_InstanceId;
 
   /** Set the NeedsPipelineLocking flag */
-  itkSetMacro(NeedsPipelineLocking,bool);
+  itkSetMacro(NeedsPipelineLocking, bool);
   itkBooleanMacro(NeedsPipelineLocking);
 
   /** Set the busy floag */
-  itkSetMacro(Busy,bool);
+  itkSetMacro(Busy, bool);
   itkBooleanMacro(Busy);
 
 private:
   Module(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Hiding the Asynchronous process base methods */
   virtual void RunProcess1(void *v);
@@ -223,7 +243,6 @@ private:
    *  AddOutputDescriptors */
   std::vector<itk::ProcessObject::Pointer> m_ProcessObjects;
 };
-
 
 } // End namespace otb
 

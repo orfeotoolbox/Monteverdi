@@ -45,39 +45,39 @@ namespace otb
  *  The Multiple flag allows to define unbounded multiple inputs.
  *
  */
- 
+
 class ITK_EXPORT InputViewComponent
   : public itk::Object, public Fl_Group
 {
 public:
 
- /** Standard class typedefs */
-  typedef InputViewComponent         Self;
+  /** Standard class typedefs */
+  typedef InputViewComponent            Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(InputViewComponent,itk::Object);
+  itkTypeMacro(InputViewComponent, itk::Object);
 
   /** Typedefs */
   // contains a module instance Id and a data key
-  typedef std::pair<std::string,std::string>   StringPairType;
-  typedef std::map<int, StringPairType>        StringPairMapType;
-  typedef std::vector<StringPairType>          StringPairVectorType;
- 
-  itkSetObjectMacro(Model,MonteverdiModel);
-  itkGetObjectMacro(Model,MonteverdiModel);
+  typedef std::pair<std::string, std::string> StringPairType;
+  typedef std::map<int, StringPairType>       StringPairMapType;
+  typedef std::vector<StringPairType>         StringPairVectorType;
 
-  itkSetObjectMacro(Controller,MonteverdiControllerInterface);
-  itkGetObjectMacro(Controller,MonteverdiControllerInterface);
+  itkSetObjectMacro(Model, MonteverdiModel);
+  itkGetObjectMacro(Model, MonteverdiModel);
+
+  itkSetObjectMacro(Controller, MonteverdiControllerInterface);
+  itkGetObjectMacro(Controller, MonteverdiControllerInterface);
 
   /** Set the input data descriptor */
-  void SetInputDataDescriptor(const InputDataDescriptor & desc);
+  void SetInputDataDescriptor(const InputDataDescriptor& desc);
 
   /** Add Choice */
-  void AddChoice(const StringPairType & choice, bool locked = false, const std::string & locker = NULL);
+  void AddChoice(const StringPairType& choice, bool locked = false, const std::string& locker = NULL);
 
   /** Rebuild interface */
   void Rebuild();
@@ -96,7 +96,7 @@ public:
 
   /** Update caching progress if caching is active */
   void UpdateCachingProgress();
-  
+
   /** Check if the input is ready */
   bool IsReady();
 
@@ -118,10 +118,9 @@ protected:
   /** Destructor */
   virtual ~InputViewComponent();
 
-
 private:
   InputViewComponent(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Callbacks */
   static void Switch(Fl_Widget *w, void * v);
@@ -131,25 +130,24 @@ private:
   static void InputChanged(Fl_Widget * w, void * v);
   static void StartCaching(Fl_Widget * w, void * v);
 
-
   /** InputDataDescriptor describing the input */
   InputDataDescriptor m_InputDataDescriptor;
 
   /** if input is multiple, we keep the indexes */
-  std::vector<int>              m_Indices;
+  std::vector<int> m_Indices;
 
   /** The choice map */
-  StringPairMapType             m_ChoiceMap;
+  StringPairMapType m_ChoiceMap;
 
   /** The GUI components */
-  Fl_Choice *                   m_FlChoice;
-  Fl_Button *                   m_StatusBox;
-  Fl_Browser *                  m_FlBrowser;
-  Fl_Check_Button *             m_CheckButton;
-  Fl_Button*                    m_AddButton;
-  Fl_Button*                    m_RemoveButton;
-  Fl_Button*                    m_ClearButton;
-  Fl_Progress *                 m_ProgressBar;
+  Fl_Choice *       m_FlChoice;
+  Fl_Button *       m_StatusBox;
+  Fl_Browser *      m_FlBrowser;
+  Fl_Check_Button * m_CheckButton;
+  Fl_Button*        m_AddButton;
+  Fl_Button*        m_RemoveButton;
+  Fl_Button*        m_ClearButton;
+  Fl_Progress *     m_ProgressBar;
 
   /** Sizes */
   unsigned int m_UpperMargin;
@@ -161,7 +159,7 @@ private:
 
   /* Model */
   MonteverdiModel::Pointer m_Model;
-  
+
   /** Controller */
   itk::WeakPointer<MonteverdiControllerInterface> m_Controller;
 

@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbPanSharpeningModule.h"
 
-
 namespace otb
 {
 /** Constructor */
@@ -41,9 +40,8 @@ PanSharpeningModule::~PanSharpeningModule()
 void PanSharpeningModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void PanSharpeningModule::Run()
@@ -53,13 +51,11 @@ void PanSharpeningModule::Run()
   // passed to the module.
 
   // First step is to retrieve the inputs
-  FloatingImageType::Pointer panImage = this->GetInputData<FloatingImageType>("PanImage");
+  FloatingImageType::Pointer       panImage = this->GetInputData<FloatingImageType>("PanImage");
   FloatingVectorImageType::Pointer xsImage = this->GetInputData<FloatingVectorImageType>("XsImage");
-
 
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
-
 
   m_PanSharpeningFilter->SetPanInput(panImage);
   m_PanSharpeningFilter->SetXsInput(xsImage);
@@ -71,10 +67,10 @@ void PanSharpeningModule::Run()
   this->ClearOutputDescriptors();
 
   // Add an output (single version)
-  this->AddOutputDescriptor(m_PanSharpeningFilter->GetOutput(), "PanSharpenedImageOutput", otbGetTextMacro("Pansharpened image"));
+  this->AddOutputDescriptor(m_PanSharpeningFilter->GetOutput(), "PanSharpenedImageOutput",
+                            otbGetTextMacro("Pansharpened image"));
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
 }
 } // End namespace otb
-

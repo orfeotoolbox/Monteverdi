@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifndef __otbSpeckleFilteringView_h
 #define __otbSpeckleFilteringView_h
 
@@ -51,16 +50,16 @@ class ITK_EXPORT SpeckleFilteringView
 {
 public:
   /** Standard typedefs */
-  typedef SpeckleFilteringView                  Self;
-  typedef itk::Object                              Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef SpeckleFilteringView          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SpeckleFilteringView,itk::Object);
+  itkTypeMacro(SpeckleFilteringView, itk::Object);
 
   //typedef ImageView<VisualizationModelType>      ImageViewType;
   typedef SpeckleFilteringControllerInterface::Pointer ControllerPointerType;
@@ -79,25 +78,24 @@ public:
   virtual void LeeFilterUpdate();
 
   // Method to set the controller
-  itkGetObjectMacro(Controller,SpeckleFilteringControllerInterface);
-  itkSetObjectMacro(Controller,SpeckleFilteringControllerInterface);
+  itkGetObjectMacro(Controller, SpeckleFilteringControllerInterface);
+  itkSetObjectMacro(Controller, SpeckleFilteringControllerInterface);
 
-  protected:
+protected:
   /** Constructor */
   SpeckleFilteringView();
   /** Destructor */
-  virtual ~SpeckleFilteringView(){};
+  virtual ~SpeckleFilteringView(){}
   /** PrintSelf*/
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- private:
+private:
   SpeckleFilteringView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  ControllerPointerType    m_Controller;
+  ControllerPointerType m_Controller;
 
-  };
-}//end namespace otb
+};
+} //end namespace otb
 
 #endif
-

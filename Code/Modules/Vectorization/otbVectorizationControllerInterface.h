@@ -24,7 +24,7 @@
 namespace otb
 {
 class ITK_EXPORT VectorizationControllerInterface
-      : public itk::Object
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -33,21 +33,28 @@ public:
   typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
 
-  typedef VectorizationModel               ModelType;
-  typedef ModelType::DataNodeType          DataNodeType;
-  typedef ModelType::PointType             PointType;
+  typedef VectorizationModel      ModelType;
+  typedef ModelType::DataNodeType DataNodeType;
+  typedef ModelType::PointType    PointType;
 
   /** Standard type macros */
-  itkTypeMacro(VectorizationControllerInterface,Superclass);
+  itkTypeMacro(VectorizationControllerInterface, Superclass);
 
   /** Users actions */
   virtual void RemoveDataNode(DataNodeType * node) = 0;
-  virtual void SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value) = 0;
-  virtual void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value) = 0;
-  virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value) = 0;
-  virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string & name) = 0;
-  virtual void RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex = 0) = 0;
-  virtual void UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex = 0) = 0;
+  virtual void SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value) = 0;
+  virtual void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string& name, float value) = 0;
+  virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value) = 0;
+  virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name) = 0;
+  virtual void RemovePointFromDataNode(DataNodeType * node,
+                                       const long& index,
+                                       bool interiorRing,
+                                       const unsigned int& interiorRingIndex = 0) = 0;
+  virtual void UpdatePointFromDataNode(DataNodeType * node,
+                                       const long& index,
+                                       const PointType& point,
+                                       bool interiorRing,
+                                       const unsigned int& interiorRingIndex = 0) = 0;
 
 protected:
   /** Constructor */
@@ -55,10 +62,9 @@ protected:
   /** Destructor */
   ~VectorizationControllerInterface() {}
 
-
 private:
   VectorizationControllerInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 

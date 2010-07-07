@@ -22,9 +22,8 @@
 
 namespace otb
 {
-  //namespace Process
-  //{
-
+//namespace Process
+//{
 
 /** Constructor */
 AsynchronousProcessBase
@@ -32,7 +31,6 @@ AsynchronousProcessBase
 {
   m_Threader = ThreaderType::New();
 }
-
 
 /** Destructor */
 
@@ -47,7 +45,7 @@ void
 AsynchronousProcessBase
 ::StopProcess1()
 {
-  m_Threader->TerminateThread( m_ThreadId1 );
+  m_Threader->TerminateThread(m_ThreadId1);
 }
 
 void
@@ -61,7 +59,7 @@ void
 AsynchronousProcessBase
 ::StopProcess2()
 {
-  m_Threader->TerminateThread( m_ThreadId2 );
+  m_Threader->TerminateThread(m_ThreadId2);
 }
 
 //} // namespace Process

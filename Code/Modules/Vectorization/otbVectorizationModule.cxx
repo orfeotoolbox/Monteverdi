@@ -40,7 +40,7 @@ VectorizationModule::VectorizationModule()
 
   // Then, describe inputs needed by the module
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
 }
 
 /** Destructor */
@@ -51,9 +51,8 @@ VectorizationModule::~VectorizationModule()
 void VectorizationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void VectorizationModule::Run()
@@ -71,15 +70,15 @@ void VectorizationModule::Run()
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
   // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull() )
+  if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_View->BuildInterface();
-      m_Model->SetImage( fpvImage );
+    m_View->BuildInterface();
+    m_Model->SetImage(fpvImage);
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -98,10 +97,9 @@ void VectorizationModule::Notify()
 //      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
 //    }
 
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }
 } // End namespace otb
-

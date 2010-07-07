@@ -21,40 +21,39 @@ See OTBCopyright.txt for details.
 #include "otbObjectCountingControllerInterface.h"
 #include "otbObjectCountingViewGUI.h"
 
-
 namespace otb
 {
 class ITK_EXPORT ObjectCountingController
-      : public ObjectCountingControllerInterface
+  : public ObjectCountingControllerInterface
 {
 public:
   /** Standard class typedefs */
   typedef ObjectCountingController          Self;
   typedef ObjectCountingControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-  typedef ObjectCountingViewGUI          ViewType;
-  typedef ViewType::Pointer              ViewPointerType;
+  typedef ObjectCountingViewGUI ViewType;
+  typedef ViewType::Pointer     ViewPointerType;
   typedef Superclass::ModelType ModelType;
-  typedef ModelType::SizeType SizeType;
-  typedef ModelType::PixelType PixelType;
+  typedef ModelType::SizeType   SizeType;
+  typedef ModelType::PixelType  PixelType;
 
   /** Standard type macros */
-  itkTypeMacro(ObjectCountingController,Superclass);
+  itkTypeMacro(ObjectCountingController, Superclass);
   itkNewMacro(Self);
 
-  itkSetObjectMacro(View,ViewType);
+  itkSetObjectMacro(View, ViewType);
 
   virtual void OpenImage();
-  virtual void IndexClicked(const IndexType & index);
-  virtual IndexType TransformIndex(const IndexType & index);
-  virtual void DoubleLeftClick(const IndexType & index);
-  virtual void SimpleLeftClick(const IndexType & index);
-  virtual void DoubleRightClick(const IndexType & index);
+  virtual void IndexClicked(const IndexType& index);
+  virtual IndexType TransformIndex(const IndexType& index);
+  virtual void DoubleLeftClick(const IndexType& index);
+  virtual void SimpleLeftClick(const IndexType& index);
+  virtual void DoubleRightClick(const IndexType& index);
   virtual void ComputeOverExtract();
   virtual void UseSVM(bool b);
-  virtual void UpdateThresholdValue( double val );
+  virtual void UpdateThresholdValue(double val);
   virtual void UpdateSpatialRadius(int val);
   virtual void UpdateRangeRadius(int val);
   virtual void UpdateScale(int val);
@@ -63,9 +62,9 @@ public:
   virtual void SetOutputImageName(const char * name);
   virtual void SetOutputVectorFileName(const char * name);
   virtual void UseSmoothing(bool b);
-  virtual void SaveResult( const char * cfname );
-  virtual void SavePolygon( const char * cfname );
-  
+  virtual void SaveResult(const char * cfname);
+  virtual void SavePolygon(const char * cfname);
+
   virtual void Quit();
 
 protected:
@@ -76,7 +75,7 @@ protected:
 
 private:
   ObjectCountingController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   ViewPointerType m_View;

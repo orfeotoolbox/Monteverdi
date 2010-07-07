@@ -27,7 +27,7 @@
 
 /**
  * Sertit Processing Test
- */ 
+ */
 int otbSertitProcessingTest(int argc, char* argv[])
 {
   // Input
@@ -43,25 +43,25 @@ int otbSertitProcessingTest(int argc, char* argv[])
   unsigned int startyl        = atoi(argv[10]);
   unsigned int sizexl         = atoi(argv[11]);
   unsigned int sizeyl         = atoi(argv[12]);
-  
+
   // Open Image
-  typedef otb::TypeManager::Floating_Point_VectorImage      ImageType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                   WriterType;
-  
+  typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
+  typedef otb::ImageFileWriter<ImageType>              WriterType;
+
   ReaderType::Pointer imageReader = ReaderType::New();
   imageReader->SetFileName(inputFilename);
   imageReader->GenerateOutputInformation();
-  
+
   // Input Wrapper
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(imageReader->GetOutput());
   std::cout << "Input wrapper : " << wrapperIn << std::endl << std::endl;
-  
+
   // Extract Legend
   otb::ExtractROIModule::Pointer extractLegend = otb::ExtractROIModule::New();
-  otb::Module::Pointer extractLModule = extractLegend.GetPointer();
+  otb::Module::Pointer           extractLModule = extractLegend.GetPointer();
   std::cout << "Module : " << extractLModule << std::endl << std::endl;
-  
+
   // Configure extract legend
   extractLegend->AddInputByKey("InputImage", wrapperIn);
   extractLegend->Start();
@@ -70,20 +70,20 @@ int otbSertitProcessingTest(int argc, char* argv[])
   extractLegend->vSizeX->value(sizexl);
   extractLegend->vSizeY->value(sizeyl);
   Fl::check();
-  
+
   // Launch extract ROI module
   extractLegend->bOk->do_callback();
   Fl::check();
-  
+
   // Output wrapper
   otb::DataObjectWrapper wrapperExtractLegend = extractLegend->GetOutputByKey("OutputImage");
-  std::cout << "Extract ROI output wrapper : " << wrapperExtractLegend << std::endl << std::endl;  
-   
+  std::cout << "Extract ROI output wrapper : " << wrapperExtractLegend << std::endl << std::endl;
+
   // Extract ROI module
   otb::ExtractROIModule::Pointer extractROImodule = otb::ExtractROIModule::New();
-  otb::Module::Pointer extractModule = extractROImodule.GetPointer();
+  otb::Module::Pointer           extractModule = extractROImodule.GetPointer();
   std::cout << "Module : " << extractModule << std::endl << std::endl;
-  
+
   // Configure extract ROI module
   extractROImodule->AddInputByKey("InputImage", wrapperIn);
   extractROImodule->Start();
@@ -92,20 +92,20 @@ int otbSertitProcessingTest(int argc, char* argv[])
   extractROImodule->vSizeX->value(sizex);
   extractROImodule->vSizeY->value(sizey);
   Fl::check();
-  
+
   // Launch extract ROI module
   extractROImodule->bOk->do_callback();
   Fl::check();
-  
+
   // Output wrapper
   otb::DataObjectWrapper wrapperExtractOut = extractROImodule->GetOutputByKey("OutputImage");
   std::cout << "Extract ROI output wrapper : " << wrapperExtractOut << std::endl << std::endl;
-  
+
   // GCP to Sensor Model Module
   otb::GCPToSensorModelModule::Pointer gcpToSensorModelModule = otb::GCPToSensorModelModule::New();
-  otb::Module::Pointer GCPModule = gcpToSensorModelModule.GetPointer();
+  otb::Module::Pointer                 GCPModule = gcpToSensorModelModule.GetPointer();
   std::cout << "Module : " << GCPModule << std::endl << std::endl;
-  
+
   // Configure GCP To Sensor Model module
   gcpToSensorModelModule->AddInputByKey("InputImage", wrapperExtractOut);
   gcpToSensorModelModule->Start();
@@ -117,28 +117,27 @@ int otbSertitProcessingTest(int argc, char* argv[])
   // Launch GCP To sensor Model module
   gcpToSensorModelModule->GetView()->bOk->do_callback();
   Fl::check();
-  
+
   // Output wrapper
   otb::DataObjectWrapper wrapperGCPToSensorModuleOut = gcpToSensorModelModule->GetOutputByKey("OutputImage");
   std::cout << "GCPToSensorModel module output wrapper : " << wrapperGCPToSensorModuleOut << std::endl << std::endl;
-  
+
   // GE Format Exportation Module
   otb::TileExportModule::Pointer geFormatExportationModule = otb::TileExportModule::New();
-  otb::Module::Pointer exportationModule  = geFormatExportationModule.GetPointer();
+  otb::Module::Pointer           exportationModule  = geFormatExportationModule.GetPointer();
   std::cout << "Module: " << exportationModule << std::endl << std::endl;
 
   // Configure GE Format Exportation Module
   geFormatExportationModule->AddInputByKey("InputImage", wrapperGCPToSensorModuleOut);
   geFormatExportationModule->AddInputByKey("InputLegend", wrapperExtractLegend);
   geFormatExportationModule->Start();
-  
+
   geFormatExportationModule->vFilePath->value(outputFilename);
   geFormatExportationModule->gExtended->value(useExtended);
   Fl::check();
-  
+
   geFormatExportationModule->bOk->do_callback();
   Fl::check();
-  
+
   return EXIT_SUCCESS;
 }
-

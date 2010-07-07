@@ -22,15 +22,13 @@
 namespace otb
 {
 
-
 SpeckleFilteringController
 ::SpeckleFilteringController()
 {
 
 /** NewVisu */
-  // Build a "visu"controller
+// Build a "visu"controller
 }
-
 
 SpeckleFilteringController
 ::~SpeckleFilteringController()
@@ -44,11 +42,11 @@ SpeckleFilteringController
 {
   try
     {
-      m_Model->LeeFiltering(radius );
+    m_Model->LeeFiltering(radius);
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 
@@ -56,15 +54,14 @@ void
 SpeckleFilteringController
 ::ProcessFrostFilter(unsigned int radius, double DeRamp)
 {
-    try
+  try
     {
-      m_Model->FrostFiltering(radius, DeRamp);
+    m_Model->FrostFiltering(radius, DeRamp);
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
 
 } // end namespace otb

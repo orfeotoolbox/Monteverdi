@@ -20,9 +20,9 @@
 int otbThresholdModuleTestNew(int argc, char* argv[])
 {
   otb::ThresholdModule::Pointer specificModule = otb::ThresholdModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer          module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   return EXIT_SUCCESS;
 }

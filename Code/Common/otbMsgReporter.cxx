@@ -34,16 +34,15 @@ MsgReporter
   this->textArea->buffer(buffer);
 }
 
-
 /** Manage the singleton */
 MsgReporter::Pointer
 MsgReporter
 ::GetInstance()
 {
   if (!m_Instance)
-  {
+    {
     m_Instance = MsgReporter::New();
-  }
+    }
   return m_Instance;
 }
 //Show
@@ -63,7 +62,7 @@ MsgReporter
 //Set title
 void
 MsgReporter
-::SetTitle(const std::string & title)
+::SetTitle(const std::string& title)
 {
   std::string str(title);
   str = str + " message reporter window";
@@ -72,7 +71,7 @@ MsgReporter
 //Send Msg
 void
 MsgReporter
-::SendMsg(const std::string & msg)
+::SendMsg(const std::string& msg)
 {
   std::string str(msg);
   str = str + "\n";
@@ -84,7 +83,7 @@ MsgReporter
 //Send Error
 void
 MsgReporter
-::SendError(const std::string & msg)
+::SendError(const std::string& msg)
 {
   std::string str(msg);
   str = str + "\n";

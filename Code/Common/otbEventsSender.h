@@ -41,10 +41,10 @@ public:
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   // Define the event type
   typedef TEvent EventType;
-  
+
   // Define the listener type
   typedef EventsListener<EventType> ListenerType;
 
@@ -54,7 +54,7 @@ public:
   /** Register a new listener */
   virtual bool RegisterListener(ListenerType * listener)
   {
-    return(m_RegisteredListeners.insert(listener).second);
+    return (m_RegisteredListeners.insert(listener).second);
   }
 
   /** Unregister a listener */
@@ -69,21 +69,21 @@ public:
   }
 
   /** Notify changes to all registered listeners */
-  virtual void NotifyAll(const EventType & event = NULL)
+  virtual void NotifyAll(const EventType& event = NULL)
   {
     for (typename ListenersSetType::iterator it = m_RegisteredListeners.begin();
-         it!=m_RegisteredListeners.end();
+         it != m_RegisteredListeners.end();
          ++it)
-    {
-      this->NotifyListener(*it,event);
-    }
+      {
+      this->NotifyListener(*it, event);
+      }
   }
 
   /** Notify changes to a given listener */
-  virtual void NotifyListener(ListenerType * listener, const EventType & event = NULL)
+  virtual void NotifyListener(ListenerType * listener, const EventType& event = NULL)
   {
-     listener->Notify(event);
-  };
+    listener->Notify(event);
+  }
 
 protected:
   /** Constructor */
@@ -93,8 +93,7 @@ protected:
 
 private:
   EventsSender(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  void operator =(const Self&); //purposely not implemented
 
   /** Registered listeners */
   ListenersSetType m_RegisteredListeners;

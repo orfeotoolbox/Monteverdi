@@ -31,7 +31,7 @@ OrthorectificationModule::OrthorectificationModule()
   m_CastFilter = CastSingleImageFilter::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage",otbGetTextMacro("Image to apply OrthoRectification on"));
+  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OrthoRectification on"));
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
 }
 
@@ -43,7 +43,7 @@ OrthorectificationModule::~OrthorectificationModule()
 void OrthorectificationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -56,14 +56,14 @@ void OrthorectificationModule::Run()
   // in Vector Image and continue the processing
   SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
 
-  if(!singleImage.IsNull() && input.IsNull())
+  if (!singleImage.IsNull() && input.IsNull())
     {
-      m_CastFilter->SetInput(singleImage);
-      m_CastFilter->UpdateOutputInformation();
-      input = m_CastFilter->GetOutput();
+    m_CastFilter->SetInput(singleImage);
+    m_CastFilter->UpdateOutputInformation();
+    input = m_CastFilter->GetOutput();
     }
 
-  if(input.IsNotNull())
+  if (input.IsNotNull())
     {
     m_Orthorectification->SetInputImage(input);
     m_Orthorectification->Show();
@@ -71,20 +71,19 @@ void OrthorectificationModule::Run()
     }
   else
     {
-    itkExceptionMacro(<<"InputImage is NULL");
+    itkExceptionMacro(<< "InputImage is NULL");
     }
 }
 
 /** The notify */
 void OrthorectificationModule::Notify()
 {
-  if(m_Orthorectification->GetHasOutput())
+  if (m_Orthorectification->GetHasOutput())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Orthorectification->GetOutput(),"OutputImage", otbGetTextMacro("Orthorectified image"));
+    this->AddOutputDescriptor(m_Orthorectification->GetOutput(), "OutputImage", otbGetTextMacro("Orthorectified image"));
     this->NotifyOutputsChange();
     }
 }
 
 } // End namespace otb
-

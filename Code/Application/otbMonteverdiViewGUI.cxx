@@ -36,23 +36,22 @@
 
 namespace otb
 {
-Fl_Pixmap blue_dot( (char*const*)bluedot_xpm ),
-          green_dot( (char*const*)greendot_xpm ),
-          red_dot( (char*const*)reddot_xpm ),
-          teal_dot( (char*const*)tealdot_xpm ),
-          text_doc( (char*const*)textdoc_xpm ),
-          computer( (char*const*)computer_xpm ),
-          book( (char*const*)book_xpm ),
-          cd_drive( (char*const*)cd_drive_xpm ),
-          arrow_closed( (char*const*)arrow_closed_xpm ),
-          arrow_open( (char*const*)arrow_open_xpm ),
-          home( (char*const*)home_xpm ),
-          purple_dot( (char*const*)purpledot_xpm),
-         vectorImage( (char*const*)vectorImage_xpm),
-         scalarImage( (char*const*)scalarImage_xpm),
-          process    ( (char*const*)process_xpm),
-          vectorData ( (char*const*)vectorData_xpm);
-
+Fl_Pixmap blue_dot((char*const*) bluedot_xpm),
+green_dot((char*const*) greendot_xpm),
+red_dot((char*const*) reddot_xpm),
+teal_dot((char*const*) tealdot_xpm),
+text_doc((char*const*) textdoc_xpm),
+computer((char*const*) computer_xpm),
+book((char*const*) book_xpm),
+cd_drive((char*const*) cd_drive_xpm),
+arrow_closed((char*const*) arrow_closed_xpm),
+arrow_open((char*const*) arrow_open_xpm),
+home((char*const*) home_xpm),
+purple_dot((char*const*) purpledot_xpm),
+vectorImage((char*const*) vectorImage_xpm),
+scalarImage((char*const*) scalarImage_xpm),
+process    ((char*const*) process_xpm),
+vectorData ((char*const*) vectorData_xpm);
 
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
@@ -60,8 +59,7 @@ MonteverdiViewGUI
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
   // Files Tree
-  m_Tree = new FluTreeBrowser( gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree " );
-
+  m_Tree = new FluTreeBrowser(gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree ");
 
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
@@ -79,7 +77,7 @@ void
 MonteverdiViewGUI
 ::InitWidgets()
 {
-  assert(m_MonteverdiController!=NULL && "The controller is not created");
+  assert(m_MonteverdiController != NULL && "The controller is not created");
 
   // Generate dynamicaly the menus with the Model informations
   this->BuildMenus();
@@ -140,31 +138,32 @@ void
 MonteverdiViewGUI
 ::BuildMenus()
 {
-  const ModuleDescriptorMapType & lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
+  const ModuleDescriptorMapType&          lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
   mMenuBar->add(otbGetTextMacro("File"), 0, 0, 0, FL_SUBMENU);
 
   unsigned int idx = 0;
 
-  while(idx < m_MonteverdiModel->GetNumberOfRegisteredModules())
+  while (idx < m_MonteverdiModel->GetNumberOfRegisteredModules())
     {
     mcIt = lModuleDescriptorMap.begin();
 
-    while(mcIt != lModuleDescriptorMap.end() && (mcIt->second.m_RegistrationOrder != idx))
-    {
-    mcIt++;
-    }
-    if(mcIt !=  lModuleDescriptorMap.end())
+    while (mcIt != lModuleDescriptorMap.end() && (mcIt->second.m_RegistrationOrder != idx))
       {
-      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *)MonteverdiViewGUI::GenericCallback,(void *)(mcIt->second.m_Key.c_str()));
+      mcIt++;
+      }
+    if (mcIt !=  lModuleDescriptorMap.end())
+      {
+      mMenuBar->add(mcIt->second.m_MenuPath.c_str(), 0, (Fl_Callback *) MonteverdiViewGUI::GenericCallback,
+                    (void *) (mcIt->second.m_Key.c_str()));
       }
     ++idx;
     }
 
   // In the end
-  mMenuBar->add(otbGetTextMacro("File/Quit"), 0, (Fl_Callback *)MonteverdiViewGUI::QuitCallback, (void*)(this));
-  mMenuBar->add(otbGetTextMacro("?/Help"),0, (Fl_Callback *)MonteverdiViewGUI::HelpCallback, (void*)(this));
+  mMenuBar->add(otbGetTextMacro("File/Quit"), 0, (Fl_Callback *) MonteverdiViewGUI::QuitCallback, (void*) (this));
+  mMenuBar->add(otbGetTextMacro("?/Help"), 0, (Fl_Callback *) MonteverdiViewGUI::HelpCallback, (void*) (this));
 }
 
 /** Second step of Init Widgets : creation of the tree */
@@ -175,20 +174,20 @@ MonteverdiViewGUI
   // FileGroup and tree
   gTreeGroup->add(m_Tree);
 
-  m_Tree->box( FL_DOWN_BOX );
-  m_Tree->auto_branches( true );
-  m_Tree->label( otbGetTextMacro("Datasets Browser") );
+  m_Tree->box(FL_DOWN_BOX);
+  m_Tree->auto_branches(true);
+  m_Tree->label(otbGetTextMacro("Datasets Browser"));
 
   // allow callback with the tree
-  m_Tree->box( FL_DOWN_BOX );
-  m_Tree->allow_dnd( true );
+  m_Tree->box(FL_DOWN_BOX);
+  m_Tree->allow_dnd(true);
 
   //m_Tree->when( FL_WHEN_RELEASE );
-  m_Tree->callback( TreeCallback );
+  m_Tree->callback(TreeCallback);
 
   // animate the tree
-  m_Tree->animate( true );
-  m_Tree->collapse_time( 0.02 );
+  m_Tree->animate(true);
+  m_Tree->collapse_time(0.02);
   m_Tree->frame_rate(500);
 
   //Flu_Tree_Browser::Node* root = m_Tree->first();
@@ -209,20 +208,19 @@ MonteverdiViewGUI
   */
 void
 MonteverdiViewGUI
-::BuildInputsGUI(const std::string & moduleInstanceId)
+::BuildInputsGUI(const std::string& moduleInstanceId)
 {
 
   bool skip  = false;
 
-
   // look after all expected or optionnal input datas
   InputDataDescriptorMapType lInputDataMap = m_MonteverdiModel->GetModuleInputsByInstanceId(moduleInstanceId);
-  if(lInputDataMap.size() == 0)
+  if (lInputDataMap.size() == 0)
     {
-    skip =true;
+    skip = true;
     }
 
-  if(!skip)
+  if (!skip)
     {
     m_InputViewGUI = InputViewGUI::New();
     m_InputViewGUI->SetModel(m_MonteverdiModel);
@@ -249,7 +247,7 @@ MonteverdiViewGUI
 ::GenericCallback(Fl_Menu_* w, void* v)
 {
   MonteverdiViewGUI * pthis = static_cast<MonteverdiViewGUI *>(w->parent()->user_data());
-  const char* moduleKey = static_cast<const char *>(v);
+  const char*         moduleKey = static_cast<const char *>(v);
 
   // each call to this callback create a new instance of a module
   pthis->CreateModuleByKey(moduleKey);
@@ -258,83 +256,84 @@ MonteverdiViewGUI
 /** QuitCallback (static) */
 void MonteverdiViewGUI::QuitCallback(Fl_Menu_* o, void* v)
 {
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *) v;
   lThis->OpenEraseCaching();
 }
 
 /** HelpCallback (static) */
 void MonteverdiViewGUI::HelpCallback(Fl_Menu_* o, void* v)
 {
-  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *)v;
+  MonteverdiViewGUI *lThis = (MonteverdiViewGUI *) v;
   lThis->Help();
 }
 
 /** TreeCallback (static) */
-void MonteverdiViewGUI::TreeCallback( Fl_Widget* w, void* v )
+void MonteverdiViewGUI::TreeCallback(Fl_Widget* w, void* v)
 {
-  FluTreeBrowser *t = (FluTreeBrowser*)w;
-  int reason = t->callback_reason();
+  FluTreeBrowser *      t = (FluTreeBrowser*) w;
+  int                   reason = t->callback_reason();
   FluTreeBrowser::Node *n = t->callback_node();
 
-  MonteverdiViewGUI * pthis = dynamic_cast<MonteverdiViewGUI *>(static_cast<MonteverdiViewGroup *>(w->parent()->parent()->user_data()));
+  MonteverdiViewGUI * pthis =
+    dynamic_cast<MonteverdiViewGUI *>(static_cast<MonteverdiViewGroup *>(w->parent()->parent()->user_data()));
 
-  switch( reason )
-  {
-  case OTB_FLU_RIGHT_MOUSE_PUSHED:
-    printf( "%s rightclickpushed\n", n->label() );
-    pthis->LaunchPopupMenu( n );
-    break;
-  }
+  switch (reason)
+    {
+    case OTB_FLU_RIGHT_MOUSE_PUSHED:
+      printf("%s rightclickpushed\n", n->label());
+      pthis->LaunchPopupMenu(n);
+      break;
+    }
 }
 
 void
 MonteverdiViewGUI
-::LaunchPopupMenu( FluTreeBrowser::Node * n )
+::LaunchPopupMenu(FluTreeBrowser::Node * n)
 {
-  if( n->is_root() )
+  if (n->is_root())
     {
-      return;
+    return;
     }
 
   const char * label = n->label();
 
   // node is a module
-  if( n->parent()->is_root() )
+  if (n->parent()->is_root())
     {
-      m_Tree->GetModuleMenu()->Reset();
-      
-      std::string moduleId   = n->label();
-      
-      bool canShowModule = m_MonteverdiModel->GetModuleMap()[moduleId]->CanShow();
-      m_Tree->GetModuleMenu()->LaunchModuleMenu( canShowModule );
-      if( m_Tree->GetModuleMenu()->GetModuleMenuOutput() == RENAME_MODULE )
-       {
-         gRenameOld->value(label);
-         gRenameNew->value(label);
-         wRenameWindow->show();
-       }
+    m_Tree->GetModuleMenu()->Reset();
 
-      //Show the module with current parameters
-       if( m_Tree->GetModuleMenu()->GetModuleMenuOutput() == ( SHOW_MODULE && canShowModule ) )
-        {
-          //Call controller?
-          m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
-        }
+    std::string moduleId   = n->label();
+
+    bool canShowModule = m_MonteverdiModel->GetModuleMap()[moduleId]->CanShow();
+    m_Tree->GetModuleMenu()->LaunchModuleMenu(canShowModule);
+    if (m_Tree->GetModuleMenu()->GetModuleMenuOutput() == RENAME_MODULE)
+      {
+      gRenameOld->value(label);
+      gRenameNew->value(label);
+      wRenameWindow->show();
+      }
+
+    //Show the module with current parameters
+    if (m_Tree->GetModuleMenu()->GetModuleMenuOutput() == (SHOW_MODULE && canShowModule))
+      {
+      //Call controller?
+      m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
+      }
     }
   // node is a output
   else if (n->parent()->parent()->is_root())
-  {
+    {
     std::string instanceId = n->parent()->label();
     std::string outputId = n->label();
-    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId, outputId) && !m_MonteverdiModel->IsCached(
-        instanceId, outputId);
+    bool        cacheable = m_MonteverdiModel->SupportsCaching(instanceId, outputId) && !m_MonteverdiModel->IsCached(
+      instanceId, outputId);
     bool viewable = m_MonteverdiModel->SupportsViewing(instanceId, outputId);
     bool writable = m_MonteverdiModel->SupportsWriting(instanceId, outputId);
 
     m_Tree->GetModuleMenu()->Reset();
     m_Tree->GetModuleMenu()->LaunchOutputMenu(viewable, cacheable, writable);
     if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == RENAME_OUTPUT)
-    {
+      {
       std::string rootPath = n->find_path();
       // erase the end "/"
       rootPath = rootPath.substr(0, rootPath.size() - 1);
@@ -344,21 +343,21 @@ MonteverdiViewGUI
       gOutputRenameOld->value(label);
       gOutputRenameNew->value(label);
       wOutputRenameWindow->show();
-    }
+      }
     else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == DISPLAY_OUTPUT)
-    {
+      {
       m_MonteverdiController->StartViewing(instanceId, outputId);
-    }
+      }
     else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT)
-    {
+      {
       m_MonteverdiController->StartCaching(instanceId, outputId, true);
-    }
+      }
     else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT)
-    {
+      {
       m_MonteverdiController->StartWriting(instanceId, outputId);
+      }
     }
-  }
-  else if( n->is_leaf() )
+  else if (n->is_leaf())
     {
     }
   return;
@@ -384,9 +383,9 @@ MonteverdiViewGUI
   std::string fullOldId = oldId;
   std::string newId =  gOutputRenameNew->value();
   // Get module instanceId thanks to the full path root, first eliminate the start "/"
-  std::string instanceId = rootPath.substr(1, rootPath.size() );
+  std::string instanceId = rootPath.substr(1, rootPath.size());
   // keep the first chain
-  instanceId = instanceId.substr(0, instanceId.find_first_of("/") );
+  instanceId = instanceId.substr(0, instanceId.find_first_of("/"));
   // replace uses find_full_path thus just the label can't work
   fullOldId.insert(0, rootPath);
   m_MonteverdiController->ChangeOutputDataKey(instanceId, oldId, newId);
@@ -404,7 +403,7 @@ MonteverdiViewGUI
 /** The tree is updated when a notifaction is received with the Event type "Output" */
 void
 MonteverdiViewGUI
-::UpdateTree(const std::string & instanceId)
+::UpdateTree(const std::string& instanceId)
 {
   FluTreeBrowser::Node* root = m_Tree->first();
 
@@ -414,24 +413,23 @@ MonteverdiViewGUI
 //     otbGenericMsgDebugMacro( << "remove node " << n->child(i)->label() );
 //     n->remove(n->child(i));
 //   }
-  //Remove existing module with the same name in the tree
+//Remove existing module with the same name in the tree
   unsigned int rm = root->remove(m_Tree->find(instanceId.c_str()));
-  if ( rm != 0)
+  if (rm != 0)
     {
-      otbGenericMsgDebugMacro(<< "Remove existing module entry: " << instanceId.c_str() );
+    otbGenericMsgDebugMacro(<< "Remove existing module entry: " << instanceId.c_str());
     }
   // add a new branch for a new instance of module
   root->add_branch(instanceId.c_str());
   root->label("Data Set");
 
   // look after all outputdatas into each instance of module
-  OutputDataDescriptorMapType lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
+  OutputDataDescriptorMapType                 lDataMap = m_MonteverdiModel->GetModuleOutputsByInstanceId(instanceId);
   OutputDataDescriptorMapType::const_iterator it;
 
   // we look for the good node in the tree to add leaves
   FluTreeBrowser::Node* n = m_Tree->find(instanceId.c_str());
-  if( !n )
-    n = m_Tree->last();
+  if (!n) n = m_Tree->last();
   n->open(true);
   n->movable(true);
 
@@ -439,78 +437,76 @@ MonteverdiViewGUI
   //TODO
   //n->droppable(true);
 
-  for (it = lDataMap.begin();it != lDataMap.end();it++)
+  for (it = lDataMap.begin(); it != lDataMap.end(); it++)
     {
-      FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
+    FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
 
-      // add informations to the targeted module
-      new_node->add(it->second.GetDataDescription().c_str());
-      new_node->add(it->second.GetDataType().c_str());
-      new_node->parent()->open(true);
+    // add informations to the targeted module
+    new_node->add(it->second.GetDataDescription().c_str());
+    new_node->add(it->second.GetDataType().c_str());
+    new_node->parent()->open(true);
 
-      //new_node->open(close);
-      n->branch_icons( &process,&process );
+    //new_node->open(close);
+    n->branch_icons(&process, &process);
 
-    if(it->second.GetDataType() == "Floating_Point_VectorImage"
-      || it->second.GetDataType() == "Floating_Point_Complex_Image"
-      || it->second.GetDataType() == "Labeled_Char_VectorImage")
+    if (it->second.GetDataType() == "Floating_Point_VectorImage"
+        || it->second.GetDataType() == "Floating_Point_Complex_Image"
+        || it->second.GetDataType() == "Labeled_Char_VectorImage")
       {
-      new_node->branch_icons( &vectorImage,&vectorImage );
+      new_node->branch_icons(&vectorImage, &vectorImage);
       }
-    else if(it->second.GetDataType() == "Labeled_Short_Image"
-           || it->second.GetDataType() == "Floating_Point_Image")
+    else if (it->second.GetDataType() == "Labeled_Short_Image"
+             || it->second.GetDataType() == "Floating_Point_Image")
       {
-      new_node->branch_icons( &scalarImage,&scalarImage );
+      new_node->branch_icons(&scalarImage, &scalarImage);
       }
-    else if(it->second.GetDataType() == "Labeled_Vector_Data"
-           || it->second.GetDataType() == "Vector_Data")
+    else if (it->second.GetDataType() == "Labeled_Vector_Data"
+             || it->second.GetDataType() == "Vector_Data")
       {
-      new_node->branch_icons( &vectorData,&vectorData);
+      new_node->branch_icons(&vectorData, &vectorData);
       }
     else
       {
-      new_node->branch_icons( &blue_dot,&blue_dot);
+      new_node->branch_icons(&blue_dot, &blue_dot);
       }
     } // end datas loop
 }
 
 void
 MonteverdiViewGUI
-::ReplaceInTree(const std::string & oldLabel, const std::string & newLabel)
+::ReplaceInTree(const std::string& oldLabel, const std::string& newLabel)
 {
   FluTreeBrowser::Node* n  = m_Tree->find(oldLabel.c_str());
-  if( n != NULL )
-    n->label( newLabel.c_str() );
+  if (n != NULL) n->label(newLabel.c_str());
 }
 
 void
 MonteverdiViewGUI
-::Notify(const MonteverdiEvent & event)
+::Notify(const MonteverdiEvent& event)
 {
 
-  otbGenericMsgDebugMacro(<<"View: Received event "<<event.GetType()<<" from module "<<event.GetInstanceId() );
-
+  otbGenericMsgDebugMacro(<< "View: Received event " << event.GetType() << " from module " << event.GetInstanceId());
 
   // Event received : new instance of module is created
   // -> Open a inputs Window
-  if(event.GetType() == "InstanceCreated" )
+  if (event.GetType() == "InstanceCreated")
     {
     this->BuildInputsGUI(event.GetInstanceId());
     }
   // event received : module has changed
-  else if(event.GetType() == "OutputsUpdated" )
+  else if (event.GetType() == "OutputsUpdated")
     {
     this->UpdateTree(event.GetInstanceId());
     }
-  else if(event.GetType() == "Cancel" )
+  else if (event.GetType() == "Cancel")
     {
 //       this->UpdateTree(event.GetInstanceId());
-      
+
     }
   // Event received : UNKNOWN EVENT
   else
     {
-    itkExceptionMacro(<<event.GetType()<<" is an unknown event.");
+    itkExceptionMacro(<< event.GetType() << " is an unknown event.");
     }
 }
 
@@ -521,20 +517,19 @@ MonteverdiViewGUI
   wMainWindow->show();
 }
 
-
 void
 MonteverdiViewGUI
 ::Quit()
 {
   ModuleMapType::iterator iter;
-  ModuleMapType modMap = m_MonteverdiModel->GetModuleMap();
+  ModuleMapType           modMap = m_MonteverdiModel->GetModuleMap();
   // add size>0 because .begin already true -> at least one iteration is done even if size==0
-  if( modMap.size() >0 )
+  if (modMap.size() > 0)
     {
-      for( iter = modMap.begin(); iter != modMap.end(); iter++)
-        {
-          (*iter).second->Hide();
-        }
+    for (iter = modMap.begin(); iter != modMap.end(); iter++)
+      {
+      (*iter).second->Hide();
+      }
     }
 
   gTreeGroup->hide();
@@ -543,10 +538,10 @@ MonteverdiViewGUI
 
   m_MonteverdiModel->Close();
 
-  if(m_InputViewGUI.IsNotNull())
-  {
+  if (m_InputViewGUI.IsNotNull())
+    {
     m_InputViewGUI->Cancel();
-  }
+    }
 
   MsgReporter::GetInstance()->Hide();
 }
@@ -554,15 +549,15 @@ MonteverdiViewGUI
 void MonteverdiViewGUI
 ::OpenEraseCaching()
 {
-    wEraseCaching2Window->show();
+  wEraseCaching2Window->show();
 }
 
 void MonteverdiViewGUI
 ::EraseCaching(bool erase)
 {
-    m_MonteverdiModel->SetEraseCaching( erase );
-    wEraseCaching2Window->hide();
-    this->Quit();
+  m_MonteverdiModel->SetEraseCaching(erase);
+  wEraseCaching2Window->hide();
+  this->Quit();
 }
 void
 MonteverdiViewGUI

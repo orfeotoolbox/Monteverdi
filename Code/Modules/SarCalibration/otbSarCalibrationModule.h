@@ -26,7 +26,6 @@
 #include "otbTerraSarBrightnessImageFilter.h"
 #include "otbTerraSarCalibrationImageFilter.h"
 
-
 namespace otb
 {
 /** \class SarCalibrationModule
@@ -49,19 +48,19 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SarCalibrationModule,Module);
-  
+  itkTypeMacro(SarCalibrationModule, Module);
+
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image         ImageType;
   typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
 
   // SarCalibration Class typedefs
-  typedef TerraSarBrightnessImageFilter<ImageType, ImageType>                BrightnessFilterType;
-  typedef TerraSarBrightnessImageFilter<ComplexImageType, ComplexImageType>  BrightnessComplexFilterType;
+  typedef TerraSarBrightnessImageFilter<ImageType, ImageType>               BrightnessFilterType;
+  typedef TerraSarBrightnessImageFilter<ComplexImageType, ComplexImageType> BrightnessComplexFilterType;
 
   typedef TerraSarCalibrationImageFilter<ImageType, ImageType>               CalibrationFilterType;
   typedef TerraSarCalibrationImageFilter<ComplexImageType, ComplexImageType> CalibrationComplexFilterType;
-  
+
   /** Check metadat validity */
   bool CheckMetadata();
 
@@ -75,43 +74,41 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
     wMainWindow->show();
-  };
+  }
 
   /** Show the Module GUI */
   virtual void Hide()
   {
     wMainWindow->hide();
-  };
+  }
 
   /** SarCalibration Methods*/
-                            
+
   /** OK callback*/
   virtual void OK();
 
 private:
   SarCalibrationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Class attributes
-  ImageType::Pointer         m_InputImage;
-  ComplexImageType::Pointer  m_ComplexInputImage;
+  ImageType::Pointer        m_InputImage;
+  ComplexImageType::Pointer m_ComplexInputImage;
 
   BrightnessFilterType::Pointer         m_BrighFilter;
   BrightnessComplexFilterType::Pointer  m_BrighComplexFilter;
   CalibrationFilterType::Pointer        m_CalibFilter;
   CalibrationComplexFilterType::Pointer m_ComplexCalibFilter;
 
-
   /** Modulus input image or complex one */
-  bool                       m_WorkWithCplx;
+  bool m_WorkWithCplx;
 };
-
 
 } // End namespace otb
 

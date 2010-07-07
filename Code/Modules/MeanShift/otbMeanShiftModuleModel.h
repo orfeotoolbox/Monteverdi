@@ -27,10 +27,10 @@ class ITK_EXPORT MeanShiftModuleModel
 
 public:
   /** Standard class typedefs */
-  typedef MeanShiftModuleModel             Self;
-  typedef MVCModel<ListenerBase>           Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef MeanShiftModuleModel          Self;
+  typedef MVCModel<ListenerBase>        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(MeanShiftModuleModel, Object);
@@ -39,14 +39,14 @@ public:
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
   typedef VectorImageType::Pointer                VectorImagePointerType;
 
-  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
-  typedef LabeledImageType::Pointer               LabeledImagePointerType;
+  typedef TypeManager::Labeled_Short_Image LabeledImageType;
+  typedef LabeledImageType::Pointer        LabeledImagePointerType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                 RGBPixelType;
-  typedef Image<RGBPixelType,2>                                        RGBImageType;
-  typedef ImageLayer<VectorImageType,RGBImageType>                     LayerType;
-  typedef ImageLayer<LabeledImageType,RGBImageType>                    LabelLayerType;
+  typedef Image<RGBPixelType, 2>                                       RGBImageType;
+  typedef ImageLayer<VectorImageType, RGBImageType>                    LayerType;
+  typedef ImageLayer<LabeledImageType, RGBImageType>                   LabelLayerType;
   typedef ImageLayerGenerator<LayerType>                               LayerGeneratorType;
   typedef ImageLayerGenerator<LabelLayerType>                          LabelLayerGeneratorType;
   typedef ImageLayerRenderingModel<RGBImageType>                       VisualizationModelType;
@@ -55,36 +55,34 @@ public:
 
   /** Mean Shift Vector Image*/
 
-  typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType>  MSFilterType;
-  typedef MSFilterType::Pointer                                                           MSFilterPointerType;
+  typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType> MSFilterType;
+  typedef MSFilterType::Pointer                                                          MSFilterPointerType;
 
   /** New macro */
   itkNewMacro(Self);
-  
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
   /** Get the visualization models */
-  itkGetObjectMacro(VisualizationModel,VisualizationModelType);
-
+  itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
   /** input image Pointer */
   void SetInputImage(VectorImagePointerType image);
   itkGetConstObjectMacro(InputImage, VectorImageType);
 
   /** Output Image Pointers */
-  itkGetObjectMacro(OutputFilteredImage,VectorImageType);
-  itkGetObjectMacro(OutputClusteredImage,VectorImageType);
-  itkGetObjectMacro(OutputLabeledImage,LabeledImageType);
-  itkGetObjectMacro(OutputBoundariesImage,LabeledImageType);
+  itkGetObjectMacro(OutputFilteredImage, VectorImageType);
+  itkGetObjectMacro(OutputClusteredImage, VectorImageType);
+  itkGetObjectMacro(OutputLabeledImage, LabeledImageType);
+  itkGetObjectMacro(OutputBoundariesImage, LabeledImageType);
 
   itkGetMacro(IsImageReady, bool);
- 
-  std::vector<unsigned int> GetChannels()
-    {
-      return m_Channels;
-    }
 
+  std::vector<unsigned int> GetChannels()
+  {
+    return m_Channels;
+  }
 
   /** Open an image */
   void RunSegmentation();
@@ -115,30 +113,30 @@ protected:
   bool m_IsUpdating;
   bool m_ShowingResult;
   bool m_IsImageReady;
-  
+
 private:
   MeanShiftModuleModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
   /** Singleton instance */
-  static Pointer                     Instance;
+  static Pointer Instance;
 
   /** Visualization model */
-  VisualizationModelType::Pointer    m_VisualizationModel;
+  VisualizationModelType::Pointer m_VisualizationModel;
 
   /** MS filter type */
   MSFilterPointerType m_MeanShift;
 
-  LayerGeneratorType::Pointer m_ImageGenerator;
-  LayerGeneratorType::Pointer m_ClustersGenerator;
+  LayerGeneratorType::Pointer      m_ImageGenerator;
+  LayerGeneratorType::Pointer      m_ClustersGenerator;
   LabelLayerGeneratorType::Pointer m_BoundariesGenerator;
 
-  unsigned int m_SpatialRadius;
-  unsigned int m_SpectralRadius;
-  unsigned int m_MinRegionSize;
+  unsigned int              m_SpatialRadius;
+  unsigned int              m_SpectralRadius;
+  unsigned int              m_MinRegionSize;
   std::vector<unsigned int> m_Channels;
 
   BlendingFunctionType::Pointer m_BlendingFunction;
@@ -151,5 +149,5 @@ private:
 
 };
 
-}//end namespace otb
+} //end namespace otb
 #endif

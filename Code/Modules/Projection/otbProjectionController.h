@@ -22,50 +22,49 @@
 #include "otbProjectionControllerInterface.h"
 #include "otbProjectionView.h"
 
-
 namespace otb
 {
 class ITK_EXPORT ProjectionController
-      : public ProjectionControllerInterface
+  : public ProjectionControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ProjectionController                     Self;
-  typedef ProjectionControllerInterface            Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef ProjectionController          Self;
+  typedef ProjectionControllerInterface Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ProjectionView                           ViewType;
-  typedef ViewType::Pointer                        ViewPointerType;
+  typedef ProjectionView    ViewType;
+  typedef ViewType::Pointer ViewPointerType;
 
   /** Standard type macros */
-  itkTypeMacro(ProjectionController,Superclass);
+  itkTypeMacro(ProjectionController, Superclass);
   itkNewMacro(Self);
 
   // Set the view
   void SetView(ViewPointerType pView)
-    {
-      m_View = pView;
-    }
-  
+  {
+    m_View = pView;
+  }
+
   // Methods
   virtual void ReprojectImage();
-  virtual void UpdateUTMTransform(int zone,bool north);
+  virtual void UpdateUTMTransform(int zone, bool north);
   virtual void InitializeLambertIITransform();
-  virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing );
-  virtual void UpdateInputUTMTransform(int zone,bool north);
+  virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing);
+  virtual void UpdateInputUTMTransform(int zone, bool north);
   virtual void InitializeInputLambertIITransform();
-  virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
+  virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
   virtual void ProjectRegion(unsigned int sizeX,
-                          unsigned int sizeY,
-                          double spacingX,
-                          double spacingY,
-                          double originX,
-                          double originY,
-                          bool isUl);
+                             unsigned int sizeY,
+                             double spacingX,
+                             double spacingY,
+                             double originX,
+                             double originY,
+                             bool isUl);
   virtual void InitializeWGS84Transform();
-  
- protected:
+
+protected:
   /** Constructor */
   ProjectionController();
   /** Destructor */
@@ -73,7 +72,7 @@ public:
 
 private:
   ProjectionController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   ViewPointerType m_View;
@@ -81,4 +80,3 @@ private:
 } //end namespace otb
 
 #endif
-

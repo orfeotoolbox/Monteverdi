@@ -49,37 +49,37 @@ class DataDescriptor
 public:
   /** Constructors */
   DataDescriptor();
-  DataDescriptor(const std::string & type, const std::string & key, const std::string & description);
+  DataDescriptor(const std::string& type, const std::string& key, const std::string& description);
 
   /** Destructor */
   virtual ~DataDescriptor();
 
   /** Set the data object mandatory types */
-  void Set(const std::string & type, const std::string & key, const std::string & description);
+  void Set(const std::string& type, const std::string& key, const std::string& description);
 
   /** Get the DataType */
-  const std::string & GetDataType() const;
+  const std::string& GetDataType() const;
 
   /** Set/Get the DataKey */
-  const std::string & GetDataKey() const;
-  void SetDataKey( const std::string & key);
+  const std::string& GetDataKey() const;
+  void SetDataKey(const std::string& key);
 
   /** Get the DataDescription */
-  const std::string & GetDataDescription() const;
+  const std::string& GetDataDescription() const;
 
- /** Check if the given type is compatible with the input (virtual
-  * because behaviour depends on subclasses) */
-  virtual bool IsTypeCompatible(const std::string & type) const;
-  
+  /** Check if the given type is compatible with the input (virtual
+   * because behaviour depends on subclasses) */
+  virtual bool IsTypeCompatible(const std::string& type) const;
+
   /** Get number of data */
   unsigned int GetNumberOfData() const;
 
   /** Add data (virtual because behaviour depends
    *  on subclasses) */
-  virtual void AddData(const DataObjectWrapper & wrapper);
+  virtual void AddData(const DataObjectWrapper& wrapper);
 
   /** Get nth data */
-  const DataObjectWrapper & GetNthData(const unsigned int& idx) const;
+  const DataObjectWrapper& GetNthData(const unsigned int& idx) const;
 
   /** Clear data */
   void ClearData();
@@ -99,7 +99,7 @@ protected:
 };
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const DataDescriptor & descriptor);
+std::ostream& operator <<(std::ostream& ostr, const DataDescriptor& descriptor);
 
 } // End namespace otb
 

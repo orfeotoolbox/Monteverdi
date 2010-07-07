@@ -25,7 +25,8 @@ namespace otb
 {
 
 /** Constructors */
-  DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"), m_SourceOutputKey("Unknown"), m_Description("Unknown")
+DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"),
+  m_SourceOutputKey("Unknown"), m_Description("Unknown")
 {}
 
 /** Destructor */
@@ -39,13 +40,13 @@ itk::DataObject * DataObjectWrapper::GetDataObject() const
 }
 
 /** Get the DataType */
-const std::string & DataObjectWrapper::GetDataType() const
+const std::string& DataObjectWrapper::GetDataType() const
 {
   return m_DataType;
 }
 
 /** Set the source instance id */
-void DataObjectWrapper::SetSourceInstanceId(const std::string & id)
+void DataObjectWrapper::SetSourceInstanceId(const std::string& id)
 {
   m_SourceInstanceId = id;
 }
@@ -57,7 +58,7 @@ const std::string& DataObjectWrapper::GetSourceInstanceId() const
 }
 
 /** Set the source output Key */
-void DataObjectWrapper::SetSourceOutputKey(const std::string & key)
+void DataObjectWrapper::SetSourceOutputKey(const std::string& key)
 {
   m_SourceOutputKey = key;
 }
@@ -69,7 +70,7 @@ const std::string& DataObjectWrapper::GetSourceOutputKey() const
 }
 
 /** Set the description */
-void DataObjectWrapper::SetDescription(const std::string & desc)
+void DataObjectWrapper::SetDescription(const std::string& desc)
 {
   m_Description = desc;
 }
@@ -81,13 +82,13 @@ const std::string& DataObjectWrapper::GetDescription() const
 }
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper)
+std::ostream& operator <<(std::ostream& ostr, const DataObjectWrapper& wrapper)
 {
-  ostr<<"DataObjectWrapper: type= "<<wrapper.GetDataType()
-      <<", object= "<<wrapper.GetDataObject()
-      <<", source id= "<<wrapper.GetSourceInstanceId()
-      <<", output key= "<<wrapper.GetSourceOutputKey()
-      <<", description= "<<wrapper.GetDescription();
+  ostr << "DataObjectWrapper: type= " << wrapper.GetDataType()
+  << ", object= " << wrapper.GetDataObject()
+  << ", source id= " << wrapper.GetSourceInstanceId()
+  << ", output key= " << wrapper.GetSourceOutputKey()
+  << ", description= " << wrapper.GetDescription();
 
   return ostr;
 }

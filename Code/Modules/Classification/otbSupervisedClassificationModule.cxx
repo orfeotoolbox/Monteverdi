@@ -31,7 +31,8 @@ SupervisedClassificationModule::SupervisedClassificationModule()
   m_SupervisedClassification->RegisterListener(this);
 
   // Describe inputs
-  this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage", otbGetTextMacro("Image to apply Classification on"));
+  this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage",
+                                                                     otbGetTextMacro("Image to apply Classification on"));
 
 }
 
@@ -43,7 +44,7 @@ SupervisedClassificationModule::~SupervisedClassificationModule()
 void SupervisedClassificationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -53,9 +54,9 @@ void SupervisedClassificationModule::Run()
   this->BusyOn();
 
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
-  std::string desc = this->GetInputDataDescription<InputImageType>("InputImage",0);
+  std::string             desc = this->GetInputDataDescription<InputImageType>("InputImage", 0);
 
-  if(input.IsNotNull())
+  if (input.IsNotNull())
     {
     m_SupervisedClassification->SetImageFileName(desc);
     m_SupervisedClassification->SetInputImage(input);
@@ -65,7 +66,7 @@ void SupervisedClassificationModule::Run()
     m_SupervisedClassification->LoadImage();
 
     // Check For SVMModel
-    if(!m_Model.empty())
+    if (!m_Model.empty())
       {
       m_SupervisedClassification->SetModelFileName(m_Model);
       m_SupervisedClassification->LoadSVMModel();
@@ -74,54 +75,56 @@ void SupervisedClassificationModule::Run()
     }
   else
     {
-    itkExceptionMacro(<<"InputImage is NULL");
+    itkExceptionMacro(<< "InputImage is NULL");
     }
 }
 
 /** The notify */
 void SupervisedClassificationModule::Notify()
 {
-  if(m_SupervisedClassification->GetHasOutput())
+  if (m_SupervisedClassification->GetHasOutput())
     {
-      //this->ClearOutputDescriptors();
-      this->EraseOutputByKey("OutputImage");
-      this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(),"OutputImage", otbGetTextMacro("Classified image"));
-      this->NotifyOutputsChange();
-      // Once module is closed, it is no longer busy
-      this->BusyOff();
+    //this->ClearOutputDescriptors();
+    this->EraseOutputByKey("OutputImage");
+    this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(), "OutputImage",
+                              otbGetTextMacro("Classified image"));
+    this->NotifyOutputsChange();
+    // Once module is closed, it is no longer busy
+    this->BusyOff();
     }
 
-  if(m_SupervisedClassification->GetHasOutputVector())
+  if (m_SupervisedClassification->GetHasOutputVector())
     {
-      //this->ClearOutputDescriptors();
-      for(unsigned int i=0; i<m_LabelsList.size(); i++)
-       {
-         this->EraseOutputByKey(m_LabelsList[i].c_str());
-       }
+    //this->ClearOutputDescriptors();
+    for (unsigned int i = 0; i < m_LabelsList.size(); i++)
+      {
+      this->EraseOutputByKey(m_LabelsList[i].c_str());
+      }
 
-      m_LabelsList.clear();
-      if( m_SupervisedClassification->GetOutputVector().size() != m_SupervisedClassification->GetClassesMap().size() )
-       {
-         itkExceptionMacro(<<"Invalid outputs size");
-       }
+    m_LabelsList.clear();
+    if (m_SupervisedClassification->GetOutputVector().size() != m_SupervisedClassification->GetClassesMap().size())
+      {
+      itkExceptionMacro(<< "Invalid outputs size");
+      }
 
-      unsigned int i = 0;
-      ClassesMapType myMap = m_SupervisedClassification->GetClassesMap();
-      for ( ClassesMapType::iterator it = myMap.begin();it!=myMap.end();++it)
-       {
-          itk::OStringStream oss;
-          oss<<"OutputVector "<<(*it)->GetName();
-          this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector()[i], oss.str().c_str(), otbGetTextMacro("Vectors of classified image"));
-          m_LabelsList.push_back(oss.str());
-          i++;
-       }
-      this->NotifyOutputsChange();
-      // Once module is closed, it is no longer busy
-      this->BusyOff();
+    unsigned int   i = 0;
+    ClassesMapType myMap = m_SupervisedClassification->GetClassesMap();
+    for (ClassesMapType::iterator it = myMap.begin(); it != myMap.end(); ++it)
+      {
+      itk::OStringStream oss;
+      oss << "OutputVector " << (*it)->GetName();
+      this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector()[i], oss.str().c_str(),
+                                otbGetTextMacro("Vectors of classified image"));
+      m_LabelsList.push_back(oss.str());
+      i++;
+      }
+    this->NotifyOutputsChange();
+    // Once module is closed, it is no longer busy
+    this->BusyOff();
     }
-  
-  // When the module is closed 
-  if(m_SupervisedClassification->GetHasCloseModule())
+
+  // When the module is closed
+  if (m_SupervisedClassification->GetHasCloseModule())
     {
     this->BusyOff();
     }
@@ -129,4 +132,3 @@ void SupervisedClassificationModule::Notify()
 }
 
 } // End namespace otb
-

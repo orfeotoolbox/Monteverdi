@@ -27,7 +27,7 @@ ConcatenateModule::ConcatenateModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to concatenate"), false,true);
+  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to concatenate"), false, true);
   m_ImageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
   m_ImageList = ImageListType::New();
 }
@@ -40,9 +40,8 @@ ConcatenateModule::~ConcatenateModule()
 void ConcatenateModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void ConcatenateModule::Run()
@@ -50,31 +49,32 @@ void ConcatenateModule::Run()
   // First step is to retrieve the inputs
   // Get the number of input image
   unsigned int numberOfInputsImages = this->GetNumberOfInputDataByKey("InputImage");
-  if( numberOfInputsImages == 0 )
-  {
-    itkExceptionMacro(<<"The number of inputs images is Null.");
-  }
-  // Init the list of inputs image
-  for (unsigned int i = 0; i<numberOfInputsImages; i++)
-  {
-    ImageType::Pointer image = this->GetInputData<ImageType>("InputImage",i);
-    if( image.IsNull())
+  if (numberOfInputsImages == 0)
     {
-      itkExceptionMacro(<<"The input image number "<<i<<" is Null.");
+    itkExceptionMacro(<< "The number of inputs images is Null.");
     }
+  // Init the list of inputs image
+  for (unsigned int i = 0; i < numberOfInputsImages; i++)
+    {
+    ImageType::Pointer image = this->GetInputData<ImageType>("InputImage", i);
+    if (image.IsNull())
+      {
+      itkExceptionMacro(<< "The input image number " << i << " is Null.");
+      }
     image->UpdateOutputInformation();
-    m_ImageList->PushBack( image );
-  }
+    m_ImageList->PushBack(image);
+    }
 
   // Wire filters
   m_ImageListToVectorImageFilter->SetInput(m_ImageList);
 
- // First, clear any previous output
- this->ClearOutputDescriptors();
- // Add an output (single version)
- this->AddOutputDescriptor(m_ImageListToVectorImageFilter->GetOutput(), "OutputImage", otbGetTextMacro("Image concatenated"));
- // Last, when all outputs where declared, notify listeners
- this->NotifyOutputsChange();
+  // First, clear any previous output
+  this->ClearOutputDescriptors();
+  // Add an output (single version)
+  this->AddOutputDescriptor(m_ImageListToVectorImageFilter->GetOutput(), "OutputImage",
+                            otbGetTextMacro("Image concatenated"));
+  // Last, when all outputs where declared, notify listeners
+  this->NotifyOutputsChange();
 }
 
 } // End namespace otb

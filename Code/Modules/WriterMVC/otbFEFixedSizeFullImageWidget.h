@@ -21,7 +21,6 @@
 #include "otbFixedSizeFullImageWidget.h"
 #include "otbImageWidgetBoxForm.h"
 
-
 namespace otb
 {
 /** \class FEFixedSizeFullImageWidget
@@ -32,10 +31,10 @@ class ITK_EXPORT FEFixedSizeFullImageWidget : public FixedSizeFullImageWidget<TP
 {
 public:
   /** Standard class typedefs */
-  typedef FEFixedSizeFullImageWidget        Self;
-  typedef FixedSizeFullImageWidget<TPixel>  Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef FEFixedSizeFullImageWidget       Self;
+  typedef FixedSizeFullImageWidget<TPixel> Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -44,17 +43,16 @@ public:
   itkTypeMacro(FEFixedSizeFullImageWidget, FixedSizeFullImageWidget);
 
   typedef TController                      ControllerType;
-  typedef typename ControllerType::Pointer          ControllerPointerType;
+  typedef typename ControllerType::Pointer ControllerPointerType;
   typedef typename Superclass::IndexType   IndexType;
-  typedef typename Superclass::SizeType   SizeType;
-  typedef ImageWidgetBoxForm BoxType;
+  typedef typename Superclass::SizeType    SizeType;
+  typedef ImageWidgetBoxForm               BoxType;
 
-  itkSetObjectMacro(Controller,ControllerType);
-  itkGetObjectMacro(Controller,ControllerType);
+  itkSetObjectMacro(Controller, ControllerType);
+  itkGetObjectMacro(Controller, ControllerType);
 
   itkSetMacro(CustomHandle, bool);
   itkSetMacro(PixelSelection, bool);
-
 
   itkSetMacro(ClickIndex, IndexType);
   itkGetMacro(ClickIndex, IndexType);
@@ -66,72 +64,66 @@ public:
   virtual int handle(int event)
   {
     if (m_Controller.IsNotNull())
-    {
+      {
       switch (event)
-      {
-      case FL_RELEASE:
-      {
-        if (m_CustomHandle)
         {
-          // in case of mouse click, change the point of view
-          int x = Fl::event_x();
-          int y = Fl::event_y();
-          int w = this->GetInput()->GetLargestPossibleRegion().GetSize()[0];
-          int h = this->GetInput()->GetLargestPossibleRegion().GetSize()[1];
-          m_BoxSize[0] = this->w()-2;
-          m_BoxSize[1] = this->h()-2;
+        case FL_RELEASE:
+          {
+          if (m_CustomHandle)
+            {
+            // in case of mouse click, change the point of view
+            int x = Fl::event_x();
+            int y = Fl::event_y();
+            int w = this->GetInput()->GetLargestPossibleRegion().GetSize()[0];
+            int h = this->GetInput()->GetLargestPossibleRegion().GetSize()[1];
+            m_BoxSize[0] = this->w() - 2;
+            m_BoxSize[1] = this->h() - 2;
 
-          m_ClickIndex[0] = x;
-          m_ClickIndex[1] = y;
+            m_ClickIndex[0] = x;
+            m_ClickIndex[1] = y;
 
-          m_ClickIndex = this->WindowToImageCoordinates(m_ClickIndex);
+            m_ClickIndex = this->WindowToImageCoordinates(m_ClickIndex);
 
-          int ulx = static_cast<int>(static_cast<double>(m_BoxSize[0])/2-1);
-          int uly = static_cast<int>(static_cast<double>(m_BoxSize[1])/2-1);
+            int ulx = static_cast<int>(static_cast<double>(m_BoxSize[0]) / 2 - 1);
+            int uly = static_cast<int>(static_cast<double>(m_BoxSize[1]) / 2 - 1);
 
-          if (m_ClickIndex[0] - ulx < 0)
-            m_ClickIndex[0] = 0;
-          else if ((m_ClickIndex[0] + ulx) > w)
-            m_ClickIndex[0] = w - m_BoxSize[0];
-          else
-            m_ClickIndex[0] -= ulx;
+            if (m_ClickIndex[0] - ulx < 0) m_ClickIndex[0] = 0;
+            else if ((m_ClickIndex[0] + ulx) > w) m_ClickIndex[0] = w - m_BoxSize[0];
+            else m_ClickIndex[0] -= ulx;
 
-          if (m_ClickIndex[1] - uly < 0)
-            m_ClickIndex[1] = 0;
-          else if ((m_ClickIndex[1] + uly) > h)
-            m_ClickIndex[1] = h - m_BoxSize[1];
-          else
-            m_ClickIndex[1] -= uly;
+            if (m_ClickIndex[1] - uly < 0) m_ClickIndex[1] = 0;
+            else if ((m_ClickIndex[1] + uly) > h) m_ClickIndex[1] = h - m_BoxSize[1];
+            else m_ClickIndex[1] -= uly;
 
-          m_Box->SetIndex(m_ClickIndex);
-          m_Box->SetSize(m_BoxSize);
+            m_Box->SetIndex(m_ClickIndex);
+            m_Box->SetSize(m_BoxSize);
 
-          this->redraw();
+            this->redraw();
 
-          m_Controller->SetExtractInput(m_ClickIndex, m_BoxSize);
+            m_Controller->SetExtractInput(m_ClickIndex, m_BoxSize);
+            }
+          else if (m_PixelSelection)
+            {
+            m_SelectedPixel[0] = Fl::event_x();
+            m_SelectedPixel[1] = Fl::event_y();
+            m_SelectedPixel = this->WindowToImageCoordinates(m_SelectedPixel);
+            IndexType id;
+            id[0] = m_SelectedPixel[0] - 1;
+            id[1] = m_SelectedPixel[1] - 1;
+            SizeType size;
+            size[0] = 3;
+            size[1] = 3;
+            m_Box->SetIndex(id);
+            m_Box->SetSize(size);
+
+            this->redraw();
+
+            m_Controller->ChangePixelSelection();
+            }
+          break;
+          }
         }
-        else if (m_PixelSelection)
-        {
-          m_SelectedPixel[0] = Fl::event_x();
-          m_SelectedPixel[1] = Fl::event_y();
-          m_SelectedPixel = this->WindowToImageCoordinates(m_SelectedPixel);
-          IndexType id;
-          id[0] = m_SelectedPixel[0]-1;
-          id[1] = m_SelectedPixel[1]-1;
-          SizeType size;
-          size[0] = 3;
-          size[1] = 3;
-          m_Box->SetIndex(id);
-          m_Box->SetSize(size);
-
-          this->redraw();
-
-          m_Controller->ChangePixelSelection();
-        }
-        break;
       }
-      }
-    }
 
     return Superclass::handle(event);
   }
@@ -159,14 +151,14 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~FEFixedSizeFullImageWidget() {};
+  virtual ~FEFixedSizeFullImageWidget() {}
 
 private:
-  bool m_CustomHandle;
-  bool m_PixelSelection;
-  IndexType m_ClickIndex;
-  IndexType m_SelectedPixel;
-  SizeType m_BoxSize;
+  bool             m_CustomHandle;
+  bool             m_PixelSelection;
+  IndexType        m_ClickIndex;
+  IndexType        m_SelectedPixel;
+  SizeType         m_BoxSize;
   BoxType::Pointer m_Box;
 // Pointer to the controller
   ControllerPointerType m_Controller;

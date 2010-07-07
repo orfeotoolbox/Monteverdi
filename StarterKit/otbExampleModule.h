@@ -30,7 +30,7 @@ namespace otb
 {
 /** \class ExampleModule
  *  \brief This is the Example module
- * 
+ *
  * Description of the module.
  *
  */
@@ -49,14 +49,14 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ExampleModule,Module);
+  itkTypeMacro(ExampleModule, Module);
 
   /** Data typedefs */
   /// Dataset
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
   typedef TypeManager::Vector_Data                VectorType;
-  typedef itk::PointSet<double,2>                 FloatingPointSetType;
+  typedef itk::PointSet<double, 2>                FloatingPointSetType;
 
 protected:
   /** Constructor */
@@ -73,9 +73,8 @@ protected:
 
 private:
   ExampleModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-
 
 } // End namespace otb
 

@@ -11,7 +11,6 @@
  *
  ***************************************************************/
 
-
 #ifndef _otbFLUTREEBROWSER_H
 #define _otbFLUTREEBROWSER_H
 
@@ -23,10 +22,10 @@ namespace otb
 {
 class FLU_EXPORT FluTreeBrowser : public Flu_Tree_Browser
 {
- public:
+public:
 
   //! Normal FLTK widget constructor
-  FluTreeBrowser( int x, int y, int w, int h, const char *label = 0 );
+  FluTreeBrowser(int x, int y, int w, int h, const char *label = 0);
 
   //! Default destructor
   virtual ~FluTreeBrowser();
@@ -34,16 +33,16 @@ class FLU_EXPORT FluTreeBrowser : public Flu_Tree_Browser
   typedef Flu_Tree_Browser::Node NodeType;
 
   //! Override of Fl_Widget::handle
-  int handle( int event );
-  
+  int handle(int event);
+
   MonteverdiMenu * GetModuleMenu()
-    {
-      return m_ModuleMenu;
-    }
+  {
+    return m_ModuleMenu;
+  }
 
- protected:
+protected:
 
- private:
+private:
   /** Module menu */
   MonteverdiMenu * m_ModuleMenu;
 };

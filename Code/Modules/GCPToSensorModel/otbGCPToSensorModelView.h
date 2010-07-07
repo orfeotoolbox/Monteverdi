@@ -35,32 +35,32 @@ namespace otb
  *
  */
 class ITK_EXPORT GCPToSensorModelView
-      : public ListenerBase, public GCPToSensorModelViewGroup, public itk::Object
+  : public ListenerBase, public GCPToSensorModelViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef GCPToSensorModelView  Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef GCPToSensorModelView          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(GCPToSensorModelView,Object);
+  itkTypeMacro(GCPToSensorModelView, Object);
 
-  typedef GCPToSensorModelModel::VisualizationModelType     VisualizationModelType;
-  typedef GCPToSensorModelModel::RGBPixelType               PixelType;
-  typedef GCPToSensorModelModel::IndexType                  IndexType;
-  typedef GCPToSensorModelModel::ContinuousIndexType        ContinuousIndexType;
-  typedef GCPToSensorModelModel::GCPType                    GCPType;
-  typedef GCPToSensorModelModel::GCPsContainerType          GCPsContainerType;
-  typedef GCPToSensorModelModel::ErrorsContainerType        ErrorsContainerType;
-  typedef GCPToSensorModelModel::CrossIndexesContainerType  CrossIndexesContainerType;
-  typedef GCPToSensorModelModel::Point2DType                Point2DType;
-  typedef GCPToSensorModelModel::Point3DType                Point3DType;  
-  typedef ImageView<VisualizationModelType>                 ImageViewType;
-  typedef CrossGlComponent::ColorType                       ColorType;
-  typedef std::vector<ColorType>                            ColorListType;
+  typedef GCPToSensorModelModel::VisualizationModelType    VisualizationModelType;
+  typedef GCPToSensorModelModel::RGBPixelType              PixelType;
+  typedef GCPToSensorModelModel::IndexType                 IndexType;
+  typedef GCPToSensorModelModel::ContinuousIndexType       ContinuousIndexType;
+  typedef GCPToSensorModelModel::GCPType                   GCPType;
+  typedef GCPToSensorModelModel::GCPsContainerType         GCPsContainerType;
+  typedef GCPToSensorModelModel::ErrorsContainerType       ErrorsContainerType;
+  typedef GCPToSensorModelModel::CrossIndexesContainerType CrossIndexesContainerType;
+  typedef GCPToSensorModelModel::Point2DType               Point2DType;
+  typedef GCPToSensorModelModel::Point3DType               Point3DType;
+  typedef ImageView<VisualizationModelType>                ImageViewType;
+  typedef CrossGlComponent::ColorType                      ColorType;
+  typedef std::vector<ColorType>                           ColorListType;
 
   /** Event from the model */
   virtual void Notify();
@@ -73,8 +73,8 @@ public:
   GCPToSensorModelControllerInterface* GetController();
 
   /** Set the widgets controller */
-  itkSetObjectMacro(WidgetController,ImageWidgetController);
-  itkSetObjectMacro(MapWidgetController,ImageWidgetController);
+  itkSetObjectMacro(WidgetController, ImageWidgetController);
+  itkSetObjectMacro(MapWidgetController, ImageWidgetController);
 
   /** Build the interface */
   virtual void BuildInterface();
@@ -95,17 +95,17 @@ public:
   virtual void UpdatePlaceName();
   virtual void UpdateLonLat();
   virtual void DisplayMap();
-  
+
   void UpdateListSelectionColor();
-  void ChangePointValue(ContinuousIndexType index );//, unsigned int viewId );
-  void AddPointsToList( GCPType gcp, double error, IndexType index );
+  void ChangePointValue(ContinuousIndexType index); //, unsigned int viewId );
+  void AddPointsToList(GCPType gcp, double error, IndexType index);
   void RedrawWidgets();
   void Show();
-  
+
   /** Get a pointer to the view parts for the controller */
-  itkGetObjectMacro(ImageView,ImageViewType);
-  itkGetObjectMacro(MapView,ImageViewType);
-  
+  itkGetObjectMacro(ImageView, ImageViewType);
+  itkGetObjectMacro(MapView, ImageViewType);
+
 protected:
   /** Constructor */
   GCPToSensorModelView();
@@ -113,38 +113,37 @@ protected:
   /** Destructor */
   virtual ~GCPToSensorModelView();
 
-
 private:
   GCPToSensorModelView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
+  void operator =(const Self&); //purposely not implemented
+
   void UpdateGCPView();
 
   GCPToSensorModelModel* GetModel();
 
   /** Pointer to the controller */
-  GCPToSensorModelControllerInterface::Pointer  m_Controller;
+  GCPToSensorModelControllerInterface::Pointer m_Controller;
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer                m_WidgetController;
+  ImageWidgetController::Pointer m_WidgetController;
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer                m_MapWidgetController;
+  ImageWidgetController::Pointer m_MapWidgetController;
   /** Pointer to the model */
   //GCPToSensorModelModel::Pointer                m_Model;
   /** Image view */
-  ImageViewType::Pointer                        m_ImageView;
-  ImageViewType::Pointer                        m_MapView;
+  ImageViewType::Pointer m_ImageView;
+  ImageViewType::Pointer m_MapView;
   /** Cross Gl Component */
-  CrossGlComponent::Pointer                     m_CrossGlComponent;
+  CrossGlComponent::Pointer m_CrossGlComponent;
   /** Circle Gl Component */
-  CircleGlComponent::Pointer                    m_CircleGlComponent;
+  CircleGlComponent::Pointer m_CircleGlComponent;
   /** Point color */
-  ColorListType                                 m_ColorList;
+  ColorListType m_ColorList;
   /** Green color */
-  ColorType                                     m_Green;
-  
+  ColorType m_Green;
+
   /** Draw map */
   void DrawMap();
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

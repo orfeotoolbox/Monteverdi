@@ -24,48 +24,50 @@
 
 namespace otb
 {
-class ITK_EXPORT  MonteverdiControllerInterface
-: public itk::ProcessObject
+class ITK_EXPORT MonteverdiControllerInterface
+  : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef MonteverdiControllerInterface          Self;
-  typedef itk::ProcessObject                     Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef MonteverdiControllerInterface Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef MonteverdiModel                        ModelType;
-  typedef ModelType::ModuleDescriptorMapType     ModuleDescriptorMapType;
-  typedef ModelType::ModuleMapType               ModuleMapType;
-
+  typedef MonteverdiModel                    ModelType;
+  typedef ModelType::ModuleDescriptorMapType ModuleDescriptorMapType;
+  typedef ModelType::ModuleMapType           ModuleMapType;
 
   /** Standard type macros */
-  itkTypeMacro(MonteverdiControllerInterface,Superclass);
+  itkTypeMacro(MonteverdiControllerInterface, Superclass);
 
   /** Users actions */
-  virtual void CreateModuleByKey(const char * modulekey)=0;
+  virtual void CreateModuleByKey(const char * modulekey) = 0;
 
   /** Start module by instance id */
   virtual void StartModuleByInstanceId(const std::string& id) = 0;
 
   /** Add a new module connection */
-  virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey) = 0;
+  virtual void AddModuleConnection(const std::string& src,
+                                   const std::string& outKey,
+                                   const std::string& dest,
+                                   const std::string& inKey) = 0;
 
   /** Change module InstanceId (ie. tree label) */
-  virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId ) =0;
+  virtual int ChangeInstanceId(const std::string& oldInstanceId,  const std::string& newInstanceId) = 0;
 
   /** Starts caching */
-  virtual void StartCaching(const std::string & id, const std::string & key, bool watch = false) = 0;
+  virtual void StartCaching(const std::string& id, const std::string& key, bool watch = false) = 0;
 
   /** Starts caching */
-  virtual void StartWriting(const std::string & id, const std::string & key) = 0;
+  virtual void StartWriting(const std::string& id, const std::string& key) = 0;
 
   /** Starts caching */
-  virtual void StartViewing(const std::string & id, const std::string & key) = 0;
-
+  virtual void StartViewing(const std::string& id, const std::string& key) = 0;
 
   /** Change module InstanceId (ie. tree label) output data key from oldKey to newKey */
-  virtual void ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey) =0;
+  virtual void ChangeOutputDataKey(const std::string& instanceId, const std::string& oldKey,
+                                   const std::string& newKey) = 0;
 
 protected:
   /** Constructor */
@@ -74,14 +76,14 @@ protected:
     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  virtual ~MonteverdiControllerInterface() {};
+  virtual ~MonteverdiControllerInterface() {}
 
   /** The instance of the model (for commodity) */
   ModelType * m_Model;
 
 private:
   MonteverdiControllerInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 

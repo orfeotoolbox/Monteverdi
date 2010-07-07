@@ -45,7 +45,7 @@ class ITK_EXPORT AlgebraModule
 {
 public:
   /** Standard class typedefs */
-  typedef AlgebraModule        Self;
+  typedef AlgebraModule                 Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -54,19 +54,19 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(AlgebraModule,Module);
-  
+  itkTypeMacro(AlgebraModule, Module);
+
   // Convenient typedefs
-  typedef TypeManager::Floating_Point_Image          ImageType;
-  typedef TypeManager::Floating_Point_VectorImage    VectorImageType;
+  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
 
   // Algebra Class typedefs
-  typedef itk::AddImageFilter<ImageType,ImageType,ImageType>              AddFilterType;
-  typedef itk::SubtractImageFilter<ImageType,ImageType>                   SubtractFilterType;
-  typedef itk::MultiplyImageFilter<ImageType,ImageType,ImageType>         MultiplyFilterType;
-  typedef itk::DivideImageFilter<ImageType,ImageType,ImageType>           DivideFilterType;
-  typedef itk::ShiftScaleImageFilter<ImageType,ImageType>                 ShiftScaleFilterType;
-  
+  typedef itk::AddImageFilter<ImageType, ImageType, ImageType>      AddFilterType;
+  typedef itk::SubtractImageFilter<ImageType, ImageType>            SubtractFilterType;
+  typedef itk::MultiplyImageFilter<ImageType, ImageType, ImageType> MultiplyFilterType;
+  typedef itk::DivideImageFilter<ImageType, ImageType, ImageType>   DivideFilterType;
+  typedef itk::ShiftScaleImageFilter<ImageType, ImageType>          ShiftScaleFilterType;
+
 protected:
   /** Constructor */
   AlgebraModule();
@@ -79,19 +79,19 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
     guiMainWindow->show();
-  };
+  }
 
   /** Hide the Module GUI */
   virtual void Hide()
   {
     guiMainWindow->hide();
-  };
+  }
 
   /** Algebra Methods*/
   virtual void AddImage();
@@ -99,28 +99,27 @@ protected:
   virtual void MultiplyImage();
   virtual void DivideImage();
   virtual void ShiftScaleImage();
-                            
+
   /** OK callback*/
   virtual void OK();
-  
+
 private:
   AlgebraModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Class attributes
-  AddFilterType::Pointer           m_AddFilter;
-  SubtractFilterType::Pointer      m_SubtractFilter;
-  MultiplyFilterType::Pointer      m_MultiplyFilter;
-  DivideFilterType::Pointer        m_DivideFilter;
-  ShiftScaleFilterType::Pointer    m_ShiftScaleFilter;
-  
-  ImageType::Pointer         m_InputImage1;
-  ImageType::Pointer         m_InputImage2;
-  ImageType::Pointer         m_Output;
+  AddFilterType::Pointer        m_AddFilter;
+  SubtractFilterType::Pointer   m_SubtractFilter;
+  MultiplyFilterType::Pointer   m_MultiplyFilter;
+  DivideFilterType::Pointer     m_DivideFilter;
+  ShiftScaleFilterType::Pointer m_ShiftScaleFilter;
 
-  bool                      m_HasSecondInput;
+  ImageType::Pointer m_InputImage1;
+  ImageType::Pointer m_InputImage2;
+  ImageType::Pointer m_Output;
+
+  bool m_HasSecondInput;
 };
-
 
 } // End namespace otb
 

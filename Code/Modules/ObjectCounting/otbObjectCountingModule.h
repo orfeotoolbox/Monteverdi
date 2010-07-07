@@ -49,7 +49,7 @@ class ITK_EXPORT ObjectCountingModule
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectCountingModule                 Self;
+  typedef ObjectCountingModule          Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,13 +58,13 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ObjectCountingModule,Module);
+  itkTypeMacro(ObjectCountingModule, Module);
 
   /** Data typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image         FloatingImageType;
-  typedef TypeManager::Floating_Point_VectorImage   FloatingVectorImageType;
-  typedef TypeManager::Labeled_Short_Image            LabelImageType;
+  typedef TypeManager::Floating_Point_Image       FloatingImageType;
+  typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
+  typedef TypeManager::Labeled_Short_Image        LabelImageType;
 
   /** MVC typedefs */
   typedef otb::ObjectCountingController ControllerType;
@@ -72,9 +72,9 @@ public:
   typedef otb::ObjectCountingViewGUI    ViewType;
 
   /** Dataset*/
-  typedef ModelType::LabeledImageType   LabeledImageType;   
-  typedef ModelType::ImageType          ImageType;
-  
+  typedef ModelType::LabeledImageType LabeledImageType;
+  typedef ModelType::ImageType        ImageType;
+
 protected:
   /** Constructor */
   ObjectCountingModule();
@@ -83,40 +83,37 @@ protected:
   virtual ~ObjectCountingModule();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify(const std::string & event);
-  
+  void Notify(const std::string& event);
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** The custom run command */
   virtual void Run();
-  
-    /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
+
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true; }
 
   /** Show the Module GUI */
   virtual void Show()
-    {
-      m_View->Show();
-    };
+  {
+    m_View->Show();
+  }
 
   /** Hide the Module GUI */
   virtual void Hide()
-    {
-      m_View->Hide();
-    };
-
+  {
+    m_View->Hide();
+  }
 
 private:
   ObjectCountingModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  void operator =(const Self&); //purposely not implemented
 
   ControllerType::Pointer m_Controller;
-  ViewType::Pointer m_View;
-  ModelType::Pointer m_Model;
+  ViewType::Pointer       m_View;
+  ModelType::Pointer      m_Model;
 };
-
 
 } // End namespace otb
 

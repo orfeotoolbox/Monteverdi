@@ -27,42 +27,41 @@ namespace otb
 
 template <class TLabel, class TColor>
 class Class
-      : public itk::Object
+  : public itk::Object
 {
 public:
   /// Standard class typedefs
-  typedef Class Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef Class                         Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef std::vector<unsigned int> ROIIndexVectorType;
+  typedef std::vector<unsigned int>     ROIIndexVectorType;
 
   /// Standard macros
   itkNewMacro(Self);
-  itkTypeMacro(Class,Object);
+  itkTypeMacro(Class, Object);
 
   /// Label type
   typedef TLabel LabelType;
   /// Color type
   typedef TColor ColorType;
 
-  itkGetMacro(Name,std::string);
-  itkSetMacro(Name,std::string);
-  itkGetMacro(Id,LabelType);
-  itkSetMacro(Id,LabelType);
-  itkGetMacro(Color,ColorType);
-  itkSetMacro(Color,ColorType);
+  itkGetMacro(Name, std::string);
+  itkSetMacro(Name, std::string);
+  itkGetMacro(Id, LabelType);
+  itkSetMacro(Id, LabelType);
+  itkGetMacro(Color, ColorType);
+  itkSetMacro(Color, ColorType);
 
 protected:
   /// Constructor
-  Class() {};
+  Class() {}
   /// Destructor
-  virtual ~Class() {};
+  virtual ~Class() {}
 
 private:
   Class(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
-
+  void operator =(const Self&); // purposely not implemented
 
   /// Name of the class
   std::string m_Name;
