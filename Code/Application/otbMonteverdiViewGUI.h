@@ -19,7 +19,6 @@
 #ifndef __otbMonteverdiViewGUI_h
 #define __otbMonteverdiViewGUI_h
 
-
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -46,7 +45,6 @@
 
 #include "itkObject.h"
 
-
 namespace otb
 {
 /** \class MonteverdiViewGUI
@@ -58,38 +56,38 @@ class MonteverdiViewGUI
 public:
 
   /** Standard class typedefs */
-  typedef MonteverdiViewGUI                               Self;
-  typedef itk::Object                                     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef MonteverdiViewGUI             Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macros */
   itkNewMacro(Self);
-  itkTypeMacro(MonteverdiViewGUI,itk::Object);
+  itkTypeMacro(MonteverdiViewGUI, itk::Object);
 
   /** Typedefs */
-  typedef MonteverdiModel                                 MonteverdiModelType;
-  typedef MonteverdiControllerInterface::Pointer          MonteverdiControllerInterfacePointerType;
-  typedef MonteverdiModelType::ModuleDescriptorMapType    ModuleDescriptorMapType;
-  typedef MonteverdiModelType::ModuleMapType              ModuleMapType;
-  typedef Module::OutputDataDescriptorMapType             OutputDataDescriptorMapType;
-  typedef Module::InputDataDescriptorMapType              InputDataDescriptorMapType;
+  typedef MonteverdiModel                              MonteverdiModelType;
+  typedef MonteverdiControllerInterface::Pointer       MonteverdiControllerInterfacePointerType;
+  typedef MonteverdiModelType::ModuleDescriptorMapType ModuleDescriptorMapType;
+  typedef MonteverdiModelType::ModuleMapType           ModuleMapType;
+  typedef Module::OutputDataDescriptorMapType          OutputDataDescriptorMapType;
+  typedef Module::InputDataDescriptorMapType           InputDataDescriptorMapType;
 
   /** Inner class to represent the content of a node */
   class NodeDescriptor
   {
     friend class MonteverdiViewGUI;
-  public:
+public:
     /** Setters */
     void SetModuleInstanceId(std::string id){ m_ModuleInstanceId = id; }
     void SetOutputKey(std::string id){ m_OutputKey = id; }
 
     /** Getters */
-    const std::string GetOutputKey(){return m_OutputKey;}
-    const std::string GetModuleInstanceId(){return m_ModuleInstanceId;}
+    const std::string GetOutputKey(){return m_OutputKey; }
+    const std::string GetModuleInstanceId(){return m_ModuleInstanceId; }
 
-  protected:
-   // key to identify the module instance
+protected:
+    // key to identify the module instance
     std::string m_ModuleInstanceId;
 
     // key to identify the output
@@ -97,14 +95,14 @@ public:
   };
 
   /** Get/Set the controller */
-  itkGetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
-  itkSetObjectMacro(MonteverdiController,MonteverdiControllerInterface);
+  itkGetObjectMacro(MonteverdiController, MonteverdiControllerInterface);
+  itkSetObjectMacro(MonteverdiController, MonteverdiControllerInterface);
 
   /** Get the inputViewGUI */
-  itkGetObjectMacro(InputViewGUI,InputViewGUI);
+  itkGetObjectMacro(InputViewGUI, InputViewGUI);
 
   /** Process event from the model */
-  virtual void Notify(const MonteverdiEvent & event);
+  virtual void Notify(const MonteverdiEvent& event);
 
   /** Init the widgets (could be moved in the constructor */
   void InitWidgets();
@@ -119,7 +117,7 @@ public:
   void OpenEraseCaching();
   /** Open the pop up image to choose if we erase the caching directory */
   void EraseCaching(bool erase);
-  
+
   /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
 
@@ -130,7 +128,7 @@ public:
   void OutputRenameOk();
 
 protected:
-   /** Constructor */
+  /** Constructor */
   MonteverdiViewGUI();
 
   /** Destructor */
@@ -143,30 +141,29 @@ protected:
   void BuildTree();
 
   /** Update the tree information regarding the given instanceId */
-  void UpdateTree(const std::string & instanceId);
+  void UpdateTree(const std::string& instanceId);
 
   /** Replace a label oldLabel by newLabel */
-  void ReplaceInTree(const std::string & oldLabel, const std::string & newLabel);
+  void ReplaceInTree(const std::string& oldLabel, const std::string& newLabel);
 
   /** Generate the gui to choose inputs for a module */
-  void BuildInputsGUI(const std::string & modulekey);
+  void BuildInputsGUI(const std::string& modulekey);
 
   /** Show the help */
   void Help();
 
   /** Show popup menu */
-  void LaunchPopupMenu(  FluTreeBrowser::Node * n );
+  void LaunchPopupMenu(FluTreeBrowser::Node * n);
 
   /** Static callbacks */
   static void GenericCallback(Fl_Menu_* w, void* v);
   static void HelpCallback(Fl_Menu_ *, void*);
   static void QuitCallback(Fl_Menu_ *, void*);
-  static void TreeCallback( Fl_Widget* w, void* );
-
+  static void TreeCallback(Fl_Widget* w, void*);
 
 private:
   MonteverdiViewGUI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the model */
   MonteverdiModel::Pointer m_MonteverdiModel;
@@ -174,15 +171,15 @@ private:
   itk::WeakPointer<MonteverdiControllerInterface> m_MonteverdiController;
 
   /** The Flu tree browser */
-  FluTreeBrowser        *m_Tree;
+  FluTreeBrowser *m_Tree;
 
   /** The module input selection interface */
-  InputViewGUI::Pointer   m_InputViewGUI;
+  InputViewGUI::Pointer m_InputViewGUI;
 
   /** The help box text buffer */
   Fl_Text_Buffer * m_HelpTextBuffer;
 
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

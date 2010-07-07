@@ -21,28 +21,26 @@
 #include "otbMonteverdiControllerInterface.h"
 #include "otbMonteverdiViewGUI.h"
 
-
 namespace otb
 {
 class ITK_EXPORT MonteverdiController
-      : public MonteverdiControllerInterface
+  : public MonteverdiControllerInterface
 {
 public:
   /** Standard class typedefs */
   typedef MonteverdiController          Self;
   typedef MonteverdiControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef MonteverdiViewGUI                 ViewType;
-  typedef ViewType::Pointer                 ViewPointerType;
-
+  typedef MonteverdiViewGUI ViewType;
+  typedef ViewType::Pointer ViewPointerType;
 
   /** Standard type macros */
-  itkTypeMacro(MonteverdiController,Superclass);
+  itkTypeMacro(MonteverdiController, Superclass);
   itkNewMacro(Self);
 
-  itkSetObjectMacro(View,ViewType);
+  itkSetObjectMacro(View, ViewType);
 
   /** User actions */
   virtual void CreateModuleByKey(const char * modulekey);
@@ -51,36 +49,38 @@ public:
   virtual void StartModuleByInstanceId(const std::string& id);
 
   /** Add a module connection */
-  virtual void AddModuleConnection(const std::string& src, const std::string& outKey, const std::string & dest, const std::string & inKey);
+  virtual void AddModuleConnection(const std::string& src,
+                                   const std::string& outKey,
+                                   const std::string& dest,
+                                   const std::string& inKey);
 
   /** Change module InstanceId (ie. tree label) */
-  virtual int ChangeInstanceId( const std::string & oldInstanceId,  const std::string & newInstanceId );
+  virtual int ChangeInstanceId(const std::string& oldInstanceId,  const std::string& newInstanceId);
 
   /** Starts caching */
-  virtual void StartCaching(const std::string & id, const std::string & key, bool watch);
+  virtual void StartCaching(const std::string& id, const std::string& key, bool watch);
 
   /** Starts caching */
-  virtual void StartWriting(const std::string & id, const std::string & key);
+  virtual void StartWriting(const std::string& id, const std::string& key);
 
   /** Starts caching */
-  virtual void StartViewing(const std::string & id, const std::string & key);
-  
+  virtual void StartViewing(const std::string& id, const std::string& key);
+
   /** Change module InstanceId (ie. tree label) output data key from oldKey to newKey */
-  virtual void ChangeOutputDataKey(const std::string & instanceId, const std::string & oldKey, const std::string & newKey);
+  virtual void ChangeOutputDataKey(const std::string& instanceId, const std::string& oldKey, const std::string& newKey);
 
 protected:
   /** Constructor */
-  MonteverdiController(){};
+  MonteverdiController(){}
   /** Destructor */
-  virtual ~MonteverdiController(){};
+  virtual ~MonteverdiController(){}
 
 private:
   MonteverdiController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   ViewPointerType m_View;
-
 
 };
 } //end namespace otb

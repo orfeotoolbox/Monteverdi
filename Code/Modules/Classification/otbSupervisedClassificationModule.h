@@ -36,22 +36,21 @@ class ITK_EXPORT SupervisedClassificationModule
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationModule             Self;
-  typedef Module                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SupervisedClassificationModule Self;
+  typedef Module                         Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** New macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SupervisedClassificationModule,Module);
-    
+  itkTypeMacro(SupervisedClassificationModule, Module);
 
   /** Accessor to the SupervisedClassification Instance */
-  itkGetObjectMacro(SupervisedClassification,SupervisedClassificationAppli);
+  itkGetObjectMacro(SupervisedClassification, SupervisedClassificationAppli);
   /** Get the SVM model if any*/
-  itkSetMacro(Model,std::string);
+  itkSetMacro(Model, std::string);
 
   // Input typedef
   typedef SupervisedClassificationAppli::ImageType       InputImageType;
@@ -74,18 +73,17 @@ protected:
 
 private:
   SupervisedClassificationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // The view
-  SupervisedClassificationAppli::Pointer        m_SupervisedClassification;
-  
+  SupervisedClassificationAppli::Pointer m_SupervisedClassification;
+
   // The SVM Model
-  std::string                                   m_Model;
+  std::string m_Model;
   // store labels
-  std::vector< std::string >                    m_LabelsList;
+  std::vector<std::string> m_LabelsList;
 
 };
-
 
 } // End namespace otb
 

@@ -24,18 +24,17 @@
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
 
-
 namespace otb
 {
 class ITK_EXPORT WriterController
-      : public WriterControllerInterface
+  : public WriterControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef WriterController                  Self;
-  typedef WriterControllerInterface         Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef WriterController              Self;
+  typedef WriterControllerInterface     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef WriterViewGUI                     ViewType;
   typedef ViewType::Pointer                 ViewPointerType;
@@ -45,26 +44,26 @@ public:
   typedef ModelType::SizeType               SizeType;
   typedef ModelType::OffsetType             OffsetType;
 
-  typedef ModelType::VisuModelType          VisuModelType;
-  typedef ViewType::VisuViewType            VisuViewType;
-  typedef WidgetResizingActionHandler<VisuModelType,VisuViewType>      ResizingHandlerType;
-  typedef ResizingHandlerType::Pointer                                 ResizingHandlerPointerType;
-  typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType> ChangeExtractRegionHandlerType;
-  typedef ChangeExtractRegionHandlerType::Pointer                      ChangeExtractRegionHandlerPointerType;
+  typedef ModelType::VisuModelType                                      VisuModelType;
+  typedef ViewType::VisuViewType                                        VisuViewType;
+  typedef WidgetResizingActionHandler<VisuModelType, VisuViewType>      ResizingHandlerType;
+  typedef ResizingHandlerType::Pointer                                  ResizingHandlerPointerType;
+  typedef ChangeExtractRegionActionHandler<VisuModelType, VisuViewType> ChangeExtractRegionHandlerType;
+  typedef ChangeExtractRegionHandlerType::Pointer                       ChangeExtractRegionHandlerPointerType;
 
 /** Standard type macros */
-  itkTypeMacro(WriterController,Superclass);
+  itkTypeMacro(WriterController, Superclass);
   itkNewMacro(Self);
 
   /** Set the model */
-  itkSetObjectMacro(Model,ModelType);
-  
+  itkSetObjectMacro(Model, ModelType);
+
 /** NewVisu */
   VisuControllerPointerType GetVisuController()
   {
     return m_VisuController;
   }
-  
+
   VisuControllerPointerType GetResultVisuController()
   {
     return m_ResultVisuController;
@@ -104,17 +103,17 @@ public:
   }
 
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput(const std::string & fname, int pixelType, const bool useScale);
+  virtual void SaveOutput(const std::string& fname, int pixelType, const bool useScale);
   virtual void InitInput();
   virtual void ClearFeatures();
   virtual void CreateFeature();
   virtual void ClearSelectedChannels();
-  virtual void SetOutputFileName( const char * name );
+  virtual void SetOutputFileName(const char * name);
   virtual void AddInputChannels(std::vector<unsigned int> list);
   virtual void ViewedRegionChanged();
   virtual void AddToOutputListOrder(int id);
   virtual void RemoveFromOutputListOrder(int id);
-  virtual void ExchangeOutputListOrder( int direction );
+  virtual void ExchangeOutputListOrder(int direction);
   virtual void Quit();
 
 protected:
@@ -125,7 +124,7 @@ protected:
 
 private:
   WriterController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   ViewPointerType m_View;

@@ -48,7 +48,7 @@ class ITK_EXPORT MeanShiftModule
 {
 public:
   /** Standard class typedefs */
-  typedef MeanShiftModule                 Self;
+  typedef MeanShiftModule               Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(MeanShiftModule,Module);
+  itkTypeMacro(MeanShiftModule, Module);
 
   /** MVC typedefs */
   typedef otb::MeanShiftModuleController ControllerType;
@@ -65,8 +65,8 @@ public:
   typedef otb::MeanShiftModuleView       ViewType;
 
   /** Data typedefs */
-  typedef ModelType::VectorImageType     FloatingVectorImageType;
-  typedef ModelType::LabeledImageType    LabelImageType;
+  typedef ModelType::VectorImageType  FloatingVectorImageType;
+  typedef ModelType::LabeledImageType LabelImageType;
 
 protected:
   /** Constructor */
@@ -76,40 +76,37 @@ protected:
   virtual ~MeanShiftModule();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify(const std::string & event);
-  
+  void Notify(const std::string& event);
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** The custom run command */
   virtual void Run();
-  
-    /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
+
+  /** Show the Module GUI */
+  virtual bool CanShow(){return true; }
 
   /** Show the Module GUI */
   virtual void Show()
-    {
-      m_View->Show();
-    };
+  {
+    m_View->Show();
+  }
 
   /** Hide the Module GUI */
   virtual void Hide()
-    {
-      m_View->Hide();
-    };
-
+  {
+    m_View->Hide();
+  }
 
 private:
   MeanShiftModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  void operator =(const Self&); //purposely not implemented
 
   ControllerType::Pointer m_Controller;
-  ViewType::Pointer m_View;
-  ModelType::Pointer m_Model;
+  ViewType::Pointer       m_View;
+  ModelType::Pointer      m_Model;
 };
-
 
 } // End namespace otb
 

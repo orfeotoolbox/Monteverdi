@@ -53,16 +53,16 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SuperimpositionModule,Module);
+  itkTypeMacro(SuperimpositionModule, Module);
 
   /** OTB typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image          ImageType;
-  typedef TypeManager::Floating_Point_VectorImage    VectorImageType;
+  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
 
-  typedef GenericRSTransform<>          TransformType;
-  typedef StreamingResampleImageFilter<ImageType,ImageType,double>                      ResampleFilterType;
-  typedef PerBandVectorImageFilter<VectorImageType,VectorImageType, ResampleFilterType> PerBandFilterType;
+  typedef GenericRSTransform<>                                                           TransformType;
+  typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
+  typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
 
 protected:
   /** Constructor */
@@ -84,13 +84,12 @@ protected:
 
 private:
   SuperimpositionModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   ResampleFilterType::Pointer m_Resampler;
   PerBandFilterType::Pointer  m_PerBanderFilter;
   TransformType::Pointer      m_Transform;
 };
-
 
 } // End namespace otb
 

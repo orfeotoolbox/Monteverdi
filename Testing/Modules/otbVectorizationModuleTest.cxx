@@ -25,20 +25,20 @@
 int otbVectorizationModuleTest(int argc, char* argv[])
 {
   otb::VectorizationModule::Pointer vecModule = otb::VectorizationModule::New();
-  otb::Module::Pointer module = vecModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer              module = vecModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   if (argc > 4)
-  {
-     return EXIT_FAILURE;
-  }
+    {
+    return EXIT_FAILURE;
+    }
 
   // Put in the tests
   const char * infname = argv[1];
   typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
+  typedef otb::ImageFileWriter<ImageType>              WriterType;
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -47,13 +47,11 @@ int otbVectorizationModuleTest(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
 
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
-  
-  if(argc==4)
-    Fl::run();
+
+  if (argc == 4) Fl::run();
 
   return EXIT_SUCCESS;
 
 }
-

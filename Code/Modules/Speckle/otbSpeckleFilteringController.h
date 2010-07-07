@@ -22,31 +22,29 @@
 #include "otbSpeckleFilteringControllerInterface.h"
 #include "otbSpeckleFilteringView.h"
 
-
 namespace otb
 {
 class ITK_EXPORT SpeckleFilteringController
-      : public SpeckleFilteringControllerInterface
+  : public SpeckleFilteringControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef SpeckleFilteringController                     Self;
-  typedef SpeckleFilteringControllerInterface            Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef SpeckleFilteringController          Self;
+  typedef SpeckleFilteringControllerInterface Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
-  typedef SpeckleFilteringView                        ViewType;
-  typedef ViewType::Pointer                              ViewPointerType;
-
+  typedef SpeckleFilteringView ViewType;
+  typedef ViewType::Pointer    ViewPointerType;
 
   /** Standard type macros */
-  itkTypeMacro(SpeckleFilteringController,Superclass);
+  itkTypeMacro(SpeckleFilteringController, Superclass);
   itkNewMacro(Self);
 
   void SetView(ViewPointerType pView)
-    {
-      m_View = pView;
-    }
+  {
+    m_View = pView;
+  }
 
   /** */
   virtual void ProcessLeeFilter(unsigned int radius);
@@ -60,14 +58,12 @@ protected:
 
 private:
   SpeckleFilteringController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   ViewPointerType m_View;
-
 
 };
 } //end namespace otb
 
 #endif
-

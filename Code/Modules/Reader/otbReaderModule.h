@@ -44,7 +44,7 @@ class ITK_EXPORT ReaderModule
 {
 public:
   /** Standard class typedefs */
-  typedef ReaderModule                 Self;
+  typedef ReaderModule                  Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -53,17 +53,17 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ReaderModule,Module);
+  itkTypeMacro(ReaderModule, Module);
 
   virtual void Analyse();
   /** OTB typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Image          FloatingImageType;
-  typedef TypeManager::Floating_Point_Complex_Image  ComplexImageType;
-  typedef TypeManager::Floating_Point_VectorImage    FloatingVectorImageType;
+  typedef TypeManager::Floating_Point_Image         FloatingImageType;
+  typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
+  typedef TypeManager::Floating_Point_VectorImage   FloatingVectorImageType;
 
-  typedef TypeManager::Vector_Data                   VectorType;
-  typedef TypeManager::Labeled_Vector_Data           LabeledVectorType;
+  typedef TypeManager::Vector_Data         VectorType;
+  typedef TypeManager::Labeled_Vector_Data LabeledVectorType;
 
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
@@ -86,7 +86,7 @@ protected:
   virtual void OpenDataSet();
   virtual void Browse();
   virtual void Cancel();
-  
+
   virtual void TypeChanged();
   virtual void Hide();
 
@@ -95,19 +95,17 @@ protected:
   void OpenSarImage();
 
   void OpenVector();
-  
 
 private:
   ReaderModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Readers
-  FPVReaderType::Pointer m_FPVReader;
-  VectorReaderType::Pointer m_VectorReader;
-  ComplexImageReaderType::Pointer m_ComplexReader;
+  FPVReaderType::Pointer           m_FPVReader;
+  VectorReaderType::Pointer        m_VectorReader;
+  ComplexImageReaderType::Pointer  m_ComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
 };
-
 
 } // End namespace otb
 

@@ -40,7 +40,6 @@
 #include "otbTypeManager.h"
 #include "otbListenerBase.h"
 
-
 namespace otb
 {
 /** \class Orthorectification
@@ -50,11 +49,11 @@ namespace otb
  * \ingroup
  */
 class ITK_EXPORT Orthorectification
-      : public itk::ProcessObject, public OrthorectificationGUI, public MVCModel<ListenerBase>
+  : public itk::ProcessObject, public OrthorectificationGUI, public MVCModel<ListenerBase>
 {
 public:
   /** Standard typedefs */
-  typedef Orthorectification                   Self;
+  typedef Orthorectification            Self;
   typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -63,54 +62,53 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(Orthorectification,ProcessObject);
+  itkTypeMacro(Orthorectification, ProcessObject);
 
   /** Template parameters typedefs */
-  typedef TypeManager::Floating_Point_Precision     PixelType;
-  typedef TypeManager::Floating_Point_VectorImage   ImageType;
-  typedef ImageType::Pointer                        ImagePointerType;
-  typedef ImageType::SizeType                       SizeType;
-  typedef ImageType::IndexType                      IndexType;
-  typedef ImageType::PointType                      PointType;
-  typedef ImageType::SpacingType                    SpacingType;
+  typedef TypeManager::Floating_Point_Precision   PixelType;
+  typedef TypeManager::Floating_Point_VectorImage ImageType;
+  typedef ImageType::Pointer                      ImagePointerType;
+  typedef ImageType::SizeType                     SizeType;
+  typedef ImageType::IndexType                    IndexType;
+  typedef ImageType::PointType                    PointType;
+  typedef ImageType::SpacingType                  SpacingType;
 
   // Mono Channel Image Type
-  typedef TypeManager::Floating_Point_Image         SingleImageType;
-  typedef std::vector<std::string>                  StringVectorType;
-  typedef std::vector<int>                          IntVectorType;
-  typedef std::vector<double>                       DoubleVectorType;
+  typedef TypeManager::Floating_Point_Image SingleImageType;
+  typedef std::vector<std::string>          StringVectorType;
+  typedef std::vector<int>                  IntVectorType;
+  typedef std::vector<double>               DoubleVectorType;
 
   /** DEM computation typedefs */
-  typedef DEMToImageGenerator<ImageType>            DEMToImageGeneratorType;
-  typedef DEMToImageGeneratorType::DEMHandlerType   DEMHandlerType;
-  typedef DEMHandlerType::PointType                 DEMPointType;
-  typedef DEMToImageGeneratorType::SizeType         DEMSizeType;
-  typedef DEMToImageGeneratorType::SpacingType      DEMSpacingType;
-
+  typedef DEMToImageGenerator<ImageType>          DEMToImageGeneratorType;
+  typedef DEMToImageGeneratorType::DEMHandlerType DEMHandlerType;
+  typedef DEMHandlerType::PointType               DEMPointType;
+  typedef DEMToImageGeneratorType::SizeType       DEMSizeType;
+  typedef DEMToImageGeneratorType::SpacingType    DEMSpacingType;
 
   /** Forward sensor model typedefs */
-  typedef ForwardSensorModel<double>                ForwardSensorType;
-  typedef ForwardSensorType::InputPointType         ForwardSensorInputPointType;
-  typedef ForwardSensorType::OutputPointType        ForwardSensorOutputPointType;
+  typedef ForwardSensorModel<double>         ForwardSensorType;
+  typedef ForwardSensorType::InputPointType  ForwardSensorInputPointType;
+  typedef ForwardSensorType::OutputPointType ForwardSensorOutputPointType;
 
   /** Inverse sensor model typedefs */
-  typedef InverseSensorModel<double>                InverseSensorType;
-  typedef InverseSensorType::InputPointType         InverseSensorInputPointType;
-  typedef InverseSensorType::OutputPointType        InverseSensorOutputPointType;
+  typedef InverseSensorModel<double>         InverseSensorType;
+  typedef InverseSensorType::InputPointType  InverseSensorInputPointType;
+  typedef InverseSensorType::OutputPointType InverseSensorOutputPointType;
 
   /** Interpolator definition*/
   typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;
-  typedef InterpType::Pointer                       InterpPointerType;
+  typedef InterpType::Pointer                                    InterpPointerType;
 
   // input image Accessor
-  itkGetObjectMacro(InputImage,ImageType);
-  itkSetObjectMacro(InputImage,ImageType);
-  
+  itkGetObjectMacro(InputImage, ImageType);
+  itkSetObjectMacro(InputImage, ImageType);
+
   //Get Output Image
-  itkGetObjectMacro(Output,ImageType);
-  
+  itkGetObjectMacro(Output, ImageType);
+
   // Get the HasOutput flag
-  itkGetMacro(HasOutput,bool);
+  itkGetMacro(HasOutput, bool);
 
   // Show the GUI
   virtual void Show();
@@ -146,29 +144,30 @@ protected:
 
   // Compute number of tiles used.
   void ComputeTileNumber();
-  
+
   // Check the map parameters.
   int CheckMapParameters();
-  
+
   // Create the output
   template<class TMapProjection> int CreateOutput(TMapProjection* mapProj);
-  
+
   // Create output with template image type (for multiple possible working pixel type)
-  template<class TSingleInputImage, class TSingleOutputImage, class TInputVectorImage, class TOutputVectorImage, class TMapProjection>
+  template<class TSingleInputImage, class TSingleOutputImage, class TInputVectorImage, class TOutputVectorImage,
+      class TMapProjection>
   int GenericCreateOutput(TMapProjection* mapProj);
-  
+
   // Change from image to carto point
   DoubleVectorType ImageToCarto(ForwardSensorInputPointType point);
-  
+
   // Change from geo to carto point
   DoubleVectorType LongLatPointToCarto(ForwardSensorInputPointType latLongPoint);
-  
+
   // Change from image point to geo point
   DoubleVectorType PointToLongLat(ForwardSensorInputPointType point);
 
   // Change carto point into geo point.
   DoubleVectorType CartoPointToLongLat(ForwardSensorInputPointType cartoPoint);
-  
+
   // Change carto point into image point.
   IntVectorType CartoToImagePoint(InverseSensorInputPointType cartoPoint);
 
@@ -203,33 +202,33 @@ protected:
   /** Destructor */
   virtual ~Orthorectification()
   {
-  };
+  }
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   Orthorectification(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
 
-  SizeType                 m_MainWindowInitSize;
-  MapType                  m_MapType;
-  InterpolatorType         m_InterpType;
-  InterpPointerType        m_Interp;
-  SizeType                 m_OutputSize;
-  PointType                m_OutputOrigin;
-  SpacingType              m_OutputSpacing;
-  DoubleVectorType         m_EastNorth;
-  SpacingType              m_DEMSpacing;
-  
+  SizeType          m_MainWindowInitSize;
+  MapType           m_MapType;
+  InterpolatorType  m_InterpType;
+  InterpPointerType m_Interp;
+  SizeType          m_OutputSize;
+  PointType         m_OutputOrigin;
+  SpacingType       m_OutputSpacing;
+  DoubleVectorType  m_EastNorth;
+  SpacingType       m_DEMSpacing;
+
   // Store ref Zone and Hemisphere
-  int                      m_UTMZoneRef;
-  char                     m_UTMHemRef;
-  int                      m_TileNumber;
-  double                   m_MaxTileSize;
-  
+  int    m_UTMZoneRef;
+  char   m_UTMHemRef;
+  int    m_TileNumber;
+  double m_MaxTileSize;
+
   //Filter Instanciation
   //OrthorectificationFilterType::Pointer m_OrthorectificationFilter;
 
@@ -237,14 +236,13 @@ private:
   itk::ProcessObject::Pointer m_PerBandFilter;
 
   //Input & Outputs Images
-  ImagePointerType            m_InputImage;
-  ImagePointerType            m_Output;
+  ImagePointerType m_InputImage;
+  ImagePointerType m_Output;
 
   // Flag to determine if there is an output
   bool m_HasOutput;
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #endif
-

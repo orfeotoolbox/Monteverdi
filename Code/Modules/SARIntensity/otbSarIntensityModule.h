@@ -41,22 +41,21 @@ namespace Functor
 template <class TInput, class TOutput> class Log10Functor
 {
 public:
-  TOutput operator()(const TInput & input) const
+  TOutput operator ()(const TInput& input) const
   {
     TOutput resp = static_cast<TOutput>(10. * vcl_log10(input));
-   
+
     return resp;
   }
 };
 }
-
 
 class ITK_EXPORT SarIntensityModule
   : public Module
 {
 public:
   /** Standard class typedefs */
-  typedef SarIntensityModule           Self;
+  typedef SarIntensityModule            Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -65,20 +64,20 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SarIntensityModule,Module);
+  itkTypeMacro(SarIntensityModule, Module);
 
   /** Data typedefs */
   /// Dataset
-  typedef TypeManager::Floating_Point_Precision      FloatingPrecision;
-  typedef TypeManager::Floating_Point_Complex_Image  ComplexImageType;
-  typedef TypeManager::Floating_Point_Image          FloatingImageType;
-  
-  typedef itk::ComplexToModulusImageFilter<ComplexImageType,FloatingImageType> ModulusFilterType;
-  typedef itk::SquareImageFilter<FloatingImageType,FloatingImageType>          SquareFilterType;
-  typedef Functor::Log10Functor<FloatingPrecision,FloatingPrecision>           LogFunctorType;
+  typedef TypeManager::Floating_Point_Precision     FloatingPrecision;
+  typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
+  typedef TypeManager::Floating_Point_Image         FloatingImageType;
+
+  typedef itk::ComplexToModulusImageFilter<ComplexImageType, FloatingImageType> ModulusFilterType;
+  typedef itk::SquareImageFilter<FloatingImageType, FloatingImageType>          SquareFilterType;
+  typedef Functor::Log10Functor<FloatingPrecision, FloatingPrecision>           LogFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingImageType,
-                                       FloatingImageType,
-                                       LogFunctorType>                         LogFilterType;
+      FloatingImageType,
+      LogFunctorType>                         LogFilterType;
 
 protected:
   /** Constructor */
@@ -95,13 +94,12 @@ protected:
 
 private:
   SarIntensityModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   ModulusFilterType::Pointer m_ModulusFilter;
   SquareFilterType::Pointer  m_SquareFilter;
   LogFilterType::Pointer     m_LogFilter;
 };
-
 
 } // End namespace otb
 

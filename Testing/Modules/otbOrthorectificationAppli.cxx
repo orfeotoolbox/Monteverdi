@@ -25,7 +25,6 @@
 //
 #include "otbOrthorectification.h"
 
-
 #include "otbI18n.h"
 
 int main(int argc, char* argv[])
@@ -33,45 +32,45 @@ int main(int argc, char* argv[])
   otbI18nMacro();
 
   // Parse command line parameters
-  typedef otb::CommandLineArgumentParser           ParserType;
-  typedef otb::CommandLineArgumentParseResult      ParserResultType;
+  typedef otb::CommandLineArgumentParser      ParserType;
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
 
-  ParserType::Pointer        parser      = ParserType::New();
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  ParserType::Pointer       parser      = ParserType::New();
+  ParserResultType::Pointer parseResult = ParserResultType::New();
   parser->AddInputImage();
-  parser->AddOption("--Output", "Image Name where Output Image will be written.","-out",true);
-    
+  parser->AddOption("--Output", "Image Name where Output Image will be written.", "-out", true);
+
   try
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-       {
-         return EXIT_SUCCESS;
-       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-       {
-         return EXIT_SUCCESS;
-       }
-      return EXIT_FAILURE;
+    std::string descriptionException = err.GetDescription();
+    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      {
+      return EXIT_SUCCESS;
+      }
+    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      {
+      return EXIT_SUCCESS;
+      }
+    return EXIT_FAILURE;
     }
-    
-  // Convenient typedefs
-  typedef otb::Orthorectification                OrthoType;
-  typedef OrthoType::ImageType                   ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
 
-  ReaderType::Pointer   reader = ReaderType::New();
-  OrthoType::Pointer    rectif = OrthoType::New();
-    
+  // Convenient typedefs
+  typedef otb::Orthorectification         OrthoType;
+  typedef OrthoType::ImageType            ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+
+  ReaderType::Pointer reader = ReaderType::New();
+  OrthoType::Pointer  rectif = OrthoType::New();
+
   //Read The input Image
   reader->SetFileName(parseResult->GetInputImage());
   reader->Update();
-    
+
   // Edit The input Image
   rectif->SetInputImage(reader->GetOutput());
   rectif->Show();
@@ -82,7 +81,6 @@ int main(int argc, char* argv[])
   writer->SetInput(rectif->GetOutput());
   writer->SetFileName(parseResult->GetParameterString("--Output"));
   writer->Update();
-    
-    
+
   return EXIT_SUCCESS;
 }

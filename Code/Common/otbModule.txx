@@ -32,41 +32,47 @@ namespace otb
 {
 
 /** Add a new input descriptor */
-template <typename T> void Module::AddInputDescriptor(const std::string & key, const std::string & description, bool optional, bool multiple)
+template <typename T> void Module::AddInputDescriptor(const std::string& key,
+                                                      const std::string& description,
+                                                      bool optional,
+                                                      bool multiple)
 {
   // Check if the key already exists
-  if(m_InputsMap.count(key) > 0)
+  if (m_InputsMap.count(key) > 0)
     {
-    itkExceptionMacro(<<"An input with key "<<key<<" already exists !");
+    itkExceptionMacro(<< "An input with key " << key << " already exists !");
     }
 
   // Else build a new descriptor
-  InputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(),key,description);
+  InputDataDescriptor desc(TypeManager::GetInstance()->GetTypeName<T>(), key, description);
   desc.SetOptional(optional);
   desc.SetMultiple(multiple);
 
   // Insert it into the map
-  m_InputsMap[key]=desc;
+  m_InputsMap[key] = desc;
 }
 
 /** Add additional supported types for a given input descriptors */
-template <typename T> void Module::AddTypeToInputDescriptor(const std::string & key)
+template <typename T> void Module::AddTypeToInputDescriptor(const std::string& key)
 {
   // Check if the key already exists
-  if(m_InputsMap.count(key) <= 0)
+  if (m_InputsMap.count(key) <= 0)
     {
-    itkExceptionMacro(<<"No input with key "<<key);
+    itkExceptionMacro(<< "No input with key " << key);
     }
   m_InputsMap[key].AddSupportedType(TypeManager::GetInstance()->GetTypeName<T>());
 }
 
 /** Add a new output descriptor */
-template <typename T> void Module::AddOutputDescriptor(T* data, const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(T* data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
   // Check if the key already exists
-  if(m_OutputsMap.count(key) > 0)
+  if (m_OutputsMap.count(key) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<key<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << key << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -76,23 +82,29 @@ template <typename T> void Module::AddOutputDescriptor(T* data, const std::strin
   wrapper.SetDescription(description);
 
   // Else build a new descriptor
-  OutputDataDescriptor desc(wrapper,key,description,cached);
+  OutputDataDescriptor desc(wrapper, key, description, cached);
 
   // Insert it into the map
-  m_OutputsMap[key]=desc;
+  m_OutputsMap[key] = desc;
 }
 
 /** Add a new output descritpor (SmartPointer version) */
-template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data, const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(itk::SmartPointer<T> data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
-  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
+  this->AddOutputDescriptor(data.GetPointer(), key, description, cached);
 }
 
 /** Partial specialization for the vector image case */
-template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * data,const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
   // Stringstream used to enhance descriptions
-  itk::OStringStream oss,ossId;
+  itk::OStringStream oss, ossId;
 
   // Update output information
   data->UpdateOutputInformation();
@@ -101,15 +113,15 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
 
   // Description
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Whole dataset") << ")";
+  oss << description << " (" << otbGetTextMacro("Whole dataset") << ")";
   // Output ID
   ossId.str("");
-  ossId<<key;
+  ossId << key;
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -119,36 +131,36 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
   wrapperWhole.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descWhole(wrapperWhole,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descWhole(wrapperWhole, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descWhole;
+  m_OutputsMap[ossId.str()] = descWhole;
 
   // Then, add each band
 
   // Typedef of the extract ROI filter
-  typedef otb::MultiToMonoChannelExtractROI<T,T> ExtractROIImageFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<T, T> ExtractROIImageFilterType;
 
   // Add sub-bands
-  for(unsigned int band = 0; band<data->GetNumberOfComponentsPerPixel();++band)
+  for (unsigned int band = 0; band < data->GetNumberOfComponentsPerPixel(); ++band)
     {
     // Extract band
     typename ExtractROIImageFilterType::Pointer extract = ExtractROIImageFilterType::New();
     extract->SetInput(data);
-    extract->SetChannel(band+1);
+    extract->SetChannel(band + 1);
     m_ProcessObjects.push_back(extract.GetPointer());
 
     // Description
     oss.str("");
-    oss <<description<< "(" << otbGetTextMacro("Band") << " "<<band+1<<")";
+    oss << description << "(" << otbGetTextMacro("Band") << " " << band + 1 << ")";
     // Output ID
     ossId.str("");
-    ossId<<key<<" (" << otbGetTextMacro("band") << " "<<band+1<<")";
+    ossId << key << " (" << otbGetTextMacro("band") << " " << band + 1 << ")";
 
     // Check if the key already exists
-    if(m_OutputsMap.count(ossId.str()) > 0)
+    if (m_OutputsMap.count(ossId.str()) > 0)
       {
-      itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+      itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
       }
 
     // Create a DataObjectWrapper
@@ -158,59 +170,64 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     wrapper.SetDescription(oss.str());
 
     // Build a new descriptor
-    OutputDataDescriptor desc(wrapper,ossId.str(),oss.str(),cached);
+    OutputDataDescriptor desc(wrapper, ossId.str(), oss.str(), cached);
 
     // Insert it into the map
-    m_OutputsMap[ossId.str()]=desc;
+    m_OutputsMap[ossId.str()] = desc;
     }
 
   // Then, if needed, add the amplitude
 
-  typedef otb::VectorImageToAmplitudeImageFilter<otb::VectorImage<T>,otb::Image<T> > AmplitudeFilterType;
+  typedef otb::VectorImageToAmplitudeImageFilter<otb::VectorImage<T>, otb::Image<T> > AmplitudeFilterType;
 
-  if(data->GetNumberOfComponentsPerPixel()>1)
-     {
-     typename AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
-     amplitudeFilter->SetInput(data);
-     m_ProcessObjects.push_back(amplitudeFilter.GetPointer());
+  if (data->GetNumberOfComponentsPerPixel() > 1)
+    {
+    typename AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
+    amplitudeFilter->SetInput(data);
+    m_ProcessObjects.push_back(amplitudeFilter.GetPointer());
 
-     oss.str("");
-     oss <<description<<" (" << otbGetTextMacro("Amplitude") <<")";
-     ossId.str("");
-     ossId<<key<<" (" << otbGetTextMacro("amplitude") <<")";
+    oss.str("");
+    oss << description << " (" << otbGetTextMacro("Amplitude") << ")";
+    ossId.str("");
+    ossId << key << " (" << otbGetTextMacro("amplitude") << ")";
 
-     // Check if the key already exists
-     if(m_OutputsMap.count(ossId.str()) > 0)
-       {
-       itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
-       }
+    // Check if the key already exists
+    if (m_OutputsMap.count(ossId.str()) > 0)
+      {
+      itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
+      }
 
-     // Create a DataObjectWrapper
-     DataObjectWrapper wrapper = DataObjectWrapper::Create(amplitudeFilter->GetOutput());
-     wrapper.SetSourceInstanceId(m_InstanceId);
-     wrapper.SetSourceOutputKey(ossId.str());
-     wrapper.SetDescription(oss.str());
+    // Create a DataObjectWrapper
+    DataObjectWrapper wrapper = DataObjectWrapper::Create(amplitudeFilter->GetOutput());
+    wrapper.SetSourceInstanceId(m_InstanceId);
+    wrapper.SetSourceOutputKey(ossId.str());
+    wrapper.SetDescription(oss.str());
 
-     // Build a new descriptor
-     OutputDataDescriptor desc(wrapper,ossId.str(),oss.str(),cached);
+    // Build a new descriptor
+    OutputDataDescriptor desc(wrapper, ossId.str(), oss.str(), cached);
 
-     // Insert it into the map
-     m_OutputsMap[ossId.str()]=desc;
-     }
+    // Insert it into the map
+    m_OutputsMap[ossId.str()] = desc;
+    }
 }
 
 /** Partial specialization for the vector image case (SmartPointer version) */
-template <typename T> void Module::AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(typename otb::VectorImage<T>::Pointer data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
-  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
+  this->AddOutputDescriptor(data.GetPointer(), key, description, cached);
 }
 
-
 /** Partial specialization for the complex image case */
-template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T> > * data,const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T> > * data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
   // Stringstream used to enhance descriptions
-  itk::OStringStream oss,ossId;
+  itk::OStringStream oss, ossId;
 
   // Update output information
   data->UpdateOutputInformation();
@@ -219,15 +236,15 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
 
   // Description
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Whole dataset") << ")";
+  oss << description << " (" << otbGetTextMacro("Whole dataset") << ")";
   // Output ID
   ossId.str("");
-  ossId<<key;
+  ossId << key;
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -237,34 +254,34 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   wrapperWhole.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descWhole(wrapperWhole,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descWhole(wrapperWhole, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descWhole;
+  m_OutputsMap[ossId.str()] = descWhole;
 
   // Then, add real, imaginary, module and phase parts
 
   // First, some typedefs
-  typedef otb::Image<std::complex<T> >                                   ComplexImageType;
-  typedef otb::Image<T>                                                  ImageType;
-  typedef itk::ComplexToRealImageFilter<ComplexImageType,ImageType>      RealFilterType;
-  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType,ImageType> ImaginaryFilterType;
-  typedef itk::ComplexToModulusImageFilter<ComplexImageType,ImageType>   ModulusFilterType;
-  typedef itk::ComplexToPhaseImageFilter<ComplexImageType,ImageType>     PhaseFilterType;
+  typedef otb::Image<std::complex<T> >                                    ComplexImageType;
+  typedef otb::Image<T>                                                   ImageType;
+  typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType>      RealFilterType;
+  typedef itk::ComplexToImaginaryImageFilter<ComplexImageType, ImageType> ImaginaryFilterType;
+  typedef itk::ComplexToModulusImageFilter<ComplexImageType, ImageType>   ModulusFilterType;
+  typedef itk::ComplexToPhaseImageFilter<ComplexImageType, ImageType>     PhaseFilterType;
 
   // Real part
   typename RealFilterType::Pointer realFilter = RealFilterType::New();
   realFilter->SetInput(data);
   m_ProcessObjects.push_back(realFilter.GetPointer());
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Real part") << ")";
+  oss << description << " (" << otbGetTextMacro("Real part") << ")";
   ossId.str("");
-  ossId<<key<<" (" << otbGetTextMacro("Real part") << ")";
+  ossId << key << " (" << otbGetTextMacro("Real part") << ")";
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -274,24 +291,24 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   wrapperReal.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descReal(wrapperReal,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descReal(wrapperReal, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descReal;
+  m_OutputsMap[ossId.str()] = descReal;
 
   // Imaginary part
   typename ImaginaryFilterType::Pointer imaginaryFilter = ImaginaryFilterType::New();
   imaginaryFilter->SetInput(data);
   m_ProcessObjects.push_back(imaginaryFilter.GetPointer());
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Imaginary part") << ")";
+  oss << description << " (" << otbGetTextMacro("Imaginary part") << ")";
   ossId.str("");
-  ossId<<key<<" (" << otbGetTextMacro("Imaginary part") << ")";
+  ossId << key << " (" << otbGetTextMacro("Imaginary part") << ")";
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -301,24 +318,24 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   wrapperImaginary.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descImaginary(wrapperImaginary,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descImaginary(wrapperImaginary, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descImaginary;
+  m_OutputsMap[ossId.str()] = descImaginary;
 
- // Modulus part
+  // Modulus part
   typename ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
   modulusFilter->SetInput(data);
   m_ProcessObjects.push_back(modulusFilter.GetPointer());
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Modulus part") << ")";
+  oss << description << " (" << otbGetTextMacro("Modulus part") << ")";
   ossId.str("");
-  ossId<<key<<" (" << otbGetTextMacro("Modulus part") << ")";
+  ossId << key << " (" << otbGetTextMacro("Modulus part") << ")";
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -328,24 +345,24 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   wrapperModulus.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descModulus(wrapperModulus,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descModulus(wrapperModulus, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descModulus;
+  m_OutputsMap[ossId.str()] = descModulus;
 
   // Phase part
   typename PhaseFilterType::Pointer PhaseFilter = PhaseFilterType::New();
   PhaseFilter->SetInput(data);
   m_ProcessObjects.push_back(PhaseFilter.GetPointer());
   oss.str("");
-  oss <<description<<" (" << otbGetTextMacro("Phase part") << ")";
+  oss << description << " (" << otbGetTextMacro("Phase part") << ")";
   ossId.str("");
-  ossId<<key<<" (" << otbGetTextMacro("Phase part") << ")";
+  ossId << key << " (" << otbGetTextMacro("Phase part") << ")";
 
   // Check if the key already exists
-  if(m_OutputsMap.count(ossId.str()) > 0)
+  if (m_OutputsMap.count(ossId.str()) > 0)
     {
-    itkExceptionMacro(<<"An Output with key "<<ossId.str()<<" already exists !");
+    itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
 
   // Create a DataObjectWrapper
@@ -355,35 +372,39 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   wrapperPhase.SetDescription(oss.str());
 
   // Build a new descriptor
-  OutputDataDescriptor descPhase(wrapperPhase,ossId.str(),oss.str(),cached);
+  OutputDataDescriptor descPhase(wrapperPhase, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()]=descPhase;
+  m_OutputsMap[ossId.str()] = descPhase;
 }
 
 /** Partial specialization for the complex image case (SmartPointer version) */
-template <typename T> void Module::AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,const std::string & key, const std::string & description, bool cached)
+template <typename T> void Module::AddOutputDescriptor(typename otb::Image<std::complex<T> >::Pointer data,
+                                                       const std::string& key,
+                                                       const std::string& description,
+                                                       bool cached)
 {
-  this->AddOutputDescriptor(data.GetPointer(),key,description,cached);
+  this->AddOutputDescriptor(data.GetPointer(), key, description, cached);
 }
 
-
 /** Retrieve the actual data from the map (returns NULL if wrong DataType */
-template <typename T> T * Module::GetInputData(const std::string & key, unsigned int idx) const
+template <typename T> T * Module::GetInputData(const std::string& key, unsigned int idx) const
 {
   // Search for the key in the input map
   InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if (it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no input with key "<<key);
+    itkExceptionMacro(<< "Module has no input with key " << key);
     }
 
   // Check if type are compatible
-  if(!it->second.IsTypeCompatible(TypeManager::GetInstance()->GetTypeName<T>()))
+  if (!it->second.IsTypeCompatible(TypeManager::GetInstance()->GetTypeName<T>()))
     {
-    itkExceptionMacro(<<"Type "<<TypeManager::GetInstance()->GetTypeName<T>()<<" incompatible with available types for this input: "<<it->second.GetDataType());
+    itkExceptionMacro(
+      << "Type " << TypeManager::GetInstance()->GetTypeName<T>() <<
+      " incompatible with available types for this input: " << it->second.GetDataType());
     }
 
   // If type is compatible, try to convert
@@ -392,9 +413,8 @@ template <typename T> T * Module::GetInputData(const std::string & key, unsigned
   return resp;
 }
 
-
 /** Retrieve the actual data description from the map */
-template <typename T> std::string Module::GetInputDataDescription(const std::string & key, unsigned int idx) const
+template <typename T> std::string Module::GetInputDataDescription(const std::string& key, unsigned int idx) const
 {
   /*
   T * data = this->GetInputData<T>(key, idx);
@@ -405,20 +425,21 @@ template <typename T> std::string Module::GetInputDataDescription(const std::str
   InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if (it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no input with key "<<key);
+    itkExceptionMacro(<< "Module has no input with key " << key);
     }
 
   // Check if type are compatible
-  if(!it->second.IsTypeCompatible(TypeManager::GetInstance()->GetTypeName<T>()))
+  if (!it->second.IsTypeCompatible(TypeManager::GetInstance()->GetTypeName<T>()))
     {
-    itkExceptionMacro(<<"Type "<<TypeManager::GetInstance()->GetTypeName<T>()<<" incompatible with available types for this input: "<<it->second.GetDataType());
+    itkExceptionMacro(
+      << "Type " << TypeManager::GetInstance()->GetTypeName<T>() <<
+      " incompatible with available types for this input: " << it->second.GetDataType());
     }
 
   return it->second.GetNthData(idx).GetDescription();
 }
-
 
 } // end namespace otb
 

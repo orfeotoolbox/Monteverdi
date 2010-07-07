@@ -40,7 +40,10 @@ class OutputDataDescriptor
 public:
   /** Constructors */
   OutputDataDescriptor();
-  OutputDataDescriptor(const DataObjectWrapper& data, const std::string & key, const std::string & description, bool cached = false);
+  OutputDataDescriptor(const DataObjectWrapper& data,
+                       const std::string& key,
+                       const std::string& description,
+                       bool cached = false);
 
   /** Destructor */
   virtual ~OutputDataDescriptor();
@@ -56,7 +59,7 @@ private:
 };
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const OutputDataDescriptor & descriptor);
+std::ostream& operator <<(std::ostream& ostr, const OutputDataDescriptor& descriptor);
 
 } // End namespace otb
 

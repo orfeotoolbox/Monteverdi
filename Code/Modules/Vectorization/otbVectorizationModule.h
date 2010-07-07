@@ -29,7 +29,6 @@
 
 // include the OTB/ITK elements
 
-
 namespace otb
 {
 /** \class VectorizationModule
@@ -43,30 +42,30 @@ class ITK_EXPORT VectorizationModule
 {
 public:
   /** Standard class typedefs */
-  typedef VectorizationModule             Self;
-  typedef Module                          Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef VectorizationModule           Self;
+  typedef Module                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(VectorizationModule,Module);
+  itkTypeMacro(VectorizationModule, Module);
 
   /** Data typedefs */
   typedef TypeManager
-    ::Floating_Point_VectorImage       FloatingVectorImageType;
+  ::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager
-    ::Vector_Data                      VectorDataType;
+  ::Vector_Data VectorDataType;
 
   /** MVC typedefs */
   typedef otb::VectorizationController ControllerType;
   typedef otb::VectorizationModel      ModelType;
   typedef otb::VectorizationView       ViewType;
 
- itkGetObjectMacro(View,ViewType);
- itkGetObjectMacro(Controller,ControllerType);
+  itkGetObjectMacro(View, ViewType);
+  itkGetObjectMacro(Controller, ControllerType);
 
 protected:
   /** Constructor */
@@ -77,7 +76,7 @@ protected:
 
   /** Notify Monteverdi application that featureExtraction has a result */
   void Notify();
-  
+
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -85,30 +84,29 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
 //    m_View->Show();
-  };
+  }
 
   /** Show the Module GUI */
   virtual void Hide()
   {
     m_View->HideAll();
-  };
+  }
 
 private:
   VectorizationModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // MVC members
   ControllerType::Pointer m_Controller;
   ViewType::Pointer       m_View;
   ModelType::Pointer      m_Model;
 };
-
 
 } // End namespace otb
 

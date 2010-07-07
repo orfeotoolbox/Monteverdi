@@ -34,7 +34,7 @@ WriterModule::WriterModule()
 
   // Describe inputs
   // Image inputs
-  this->AddInputDescriptor<UCharImageType>(InputDataSetID,otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<UCharImageType>(InputDataSetID, otbGetTextMacro("Dataset to write"));
   this->AddTypeToInputDescriptor<UShortImageType>(InputDataSetID);
   this->AddTypeToInputDescriptor<ShortImageType>(InputDataSetID);
   this->AddTypeToInputDescriptor<UIntImageType>(InputDataSetID);
@@ -73,7 +73,7 @@ WriterModule::~WriterModule()
 void WriterModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -89,38 +89,38 @@ void WriterModule::Run()
   cOutDataType->add(m_OutputTypesChoices[otb::UNSIGNEDSHORTINT].c_str());
   cOutDataType->add(m_OutputTypesChoices[otb::UNSIGNEDINT].c_str());
 
-  if ( this->GetInputData<UCharImageType>(InputDataSetID) != 0
-       || this->GetInputData<UCharVectorImageType>(InputDataSetID) != 0 )
+  if (this->GetInputData<UCharImageType>(InputDataSetID) != 0
+      || this->GetInputData<UCharVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::UNSIGNEDCHAR);
     }
-  else if ( this->GetInputData<ShortImageType>(InputDataSetID) != 0
-      || this->GetInputData<ShortVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<ShortImageType>(InputDataSetID) != 0
+           || this->GetInputData<ShortVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::SHORTINT);
     }
-  else if ( this->GetInputData<IntImageType>(InputDataSetID) != 0
-      || this->GetInputData<IntVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<IntImageType>(InputDataSetID) != 0
+           || this->GetInputData<IntVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::INT);
     }
-  else if ( this->GetInputData<FloatImageType>(InputDataSetID) != 0
-      || this->GetInputData<FloatVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<FloatImageType>(InputDataSetID) != 0
+           || this->GetInputData<FloatVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::FLOAT);
     }
-  else if ( this->GetInputData<DoubleImageType>(InputDataSetID) != 0
-      || this->GetInputData<DoubleVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<DoubleImageType>(InputDataSetID) != 0
+           || this->GetInputData<DoubleVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::DOUBLE);
     }
-  else if ( this->GetInputData<UShortImageType>(InputDataSetID) != 0
-      || this->GetInputData<UShortVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<UShortImageType>(InputDataSetID) != 0
+           || this->GetInputData<UShortVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::UNSIGNEDSHORTINT);
     }
-  else if ( this->GetInputData<UIntImageType>(InputDataSetID) != 0
-      || this->GetInputData<UIntVectorImageType>(InputDataSetID) != 0 )
+  else if (this->GetInputData<UIntImageType>(InputDataSetID) != 0
+           || this->GetInputData<UIntVectorImageType>(InputDataSetID) != 0)
     {
     cOutDataType->value(otb::UNSIGNEDINT);
     }
@@ -146,12 +146,12 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*","");
+  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
 
   if (filename == NULL)
     {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    otbMsgDebugMacro(<< "Empty file name!");
+    return;
     }
   vFilePath->value(filename);
 
@@ -162,27 +162,26 @@ void WriterModule::Cancel()
   wFileChooserWindow->hide();
 }
 
-
 void WriterModule::UpdateProgress()
 {
   double progress = m_ProcessObject->GetProgress();
 
   itk::OStringStream oss1, oss2;
   oss1.str("");
-  oss1 << otbGetTextMacro("Writing dataset") << "  ("<<std::floor(100*progress)<<"%)";
+  oss1 << otbGetTextMacro("Writing dataset") << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
-  oss2 << std::floor(100*progress);
+  oss2 << std::floor(100 * progress);
   oss2 << "%";
-  pBar->value( progress );
+  pBar->value(progress);
   wFileChooserWindow->copy_label(oss1.str().c_str());
-  pBar->copy_label( oss2.str().c_str() );
+  pBar->copy_label(oss2.str().c_str());
 }
 
 void WriterModule::UpdateProgressCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
 
-  if(writer.IsNotNull())
+  if (writer.IsNotNull())
     {
     writer->UpdateProgress();
     }
@@ -220,7 +219,7 @@ void WriterModule::ThreadedWatch()
     }
 
   // Update progress one last time
-  Fl::awake(&UpdateProgressCallback,this);
+  Fl::awake(&UpdateProgressCallback, this);
 
   Fl::lock();
   // Reactivate window buttons
@@ -231,7 +230,7 @@ void WriterModule::ThreadedWatch()
   cOutDataType->activate();
   Fl::unlock();
 
-  Fl::awake(&HideWindowCallback,this);
+  Fl::awake(&HideWindowCallback, this);
 }
 
 void WriterModule::ThreadedRun()
@@ -302,7 +301,7 @@ void WriterModule::ThreadedRun()
       this->DoWriteMultiBand(this->GetInputData<IntVectorImageType> (InputDataSetID), outFormat);
       }
     // Vector Data
-    else if( this->GetInputData<VectorType> (InputDataSetID) )
+    else if (this->GetInputData<VectorType> (InputDataSetID))
       {
       VectorWriterType::Pointer writer = VectorWriterType::New();
       writer->SetInput(this->GetInputData<VectorType> (InputDataSetID));
@@ -310,19 +309,19 @@ void WriterModule::ThreadedRun()
       m_ProcessObject = writer;
       writer->Update();
       }
-    else if( this->GetInputData<LabeledVectorType> (InputDataSetID) )
+    else if (this->GetInputData<LabeledVectorType> (InputDataSetID))
       {
       LabeledVectorWriterType::Pointer writer = LabeledVectorWriterType::New();
-      writer->SetInput( this->GetInputData<LabeledVectorType> (InputDataSetID));
+      writer->SetInput(this->GetInputData<LabeledVectorType> (InputDataSetID));
       writer->SetFileName(m_Filename);
       m_ProcessObject = writer;
       writer->Update();
       }
     }
-  catch (itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      m_ErrorMsg = err.GetDescription();
-      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+    m_ErrorMsg = err.GetDescription();
+    Fl::awake(&SendErrorCallback, &m_ErrorMsg);
     }
 
   this->BusyOff();
@@ -337,7 +336,7 @@ void WriterModule::HideWindowCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
 
-  if(writer.IsNotNull())
+  if (writer.IsNotNull())
     {
     writer->HideWindow();
     }
@@ -345,17 +344,15 @@ void WriterModule::HideWindowCallback(void * data)
 
 void WriterModule::SendErrorCallback(void * data)
 {
-  std::string *  error = static_cast<std::string *>(data);
+  std::string * error = static_cast<std::string *>(data);
   //TODO test if error is null
-  if ( error == NULL )
-  {
+  if (error == NULL)
+    {
     MsgReporter::GetInstance()->SendError("Unknown error during update");
-  }
+    }
   else
-  {
+    {
     MsgReporter::GetInstance()->SendError(error->c_str());
-  }
+    }
 }
 } // End namespace otb
-
-

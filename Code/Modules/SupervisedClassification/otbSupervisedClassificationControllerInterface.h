@@ -25,21 +25,21 @@
 namespace otb
 {
 class ITK_EXPORT SupervisedClassificationControllerInterface
-      : public itk::Object
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationControllerInterface        Self;
-  typedef itk::Object                                        Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef SupervisedClassificationControllerInterface Self;
+  typedef itk::Object                                 Superclass;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
 
-  typedef SupervisedClassificationModel                      ModelType;
-  typedef ModelType::ConfusionMatrixType                     ConfusionMatrixType;
-  typedef itk::ContinuousIndex<>                             ContinuousIndexType;
+  typedef SupervisedClassificationModel  ModelType;
+  typedef ModelType::ConfusionMatrixType ConfusionMatrixType;
+  typedef itk::ContinuousIndex<>         ContinuousIndexType;
 
   /** Standard type macros */
-  itkTypeMacro(SupervisedClassificationControllerInterface,Superclass);
+  itkTypeMacro(SupervisedClassificationControllerInterface, Superclass);
 
   virtual const ModelType* GetModel() const = 0;
 
@@ -58,15 +58,13 @@ protected:
   /** Constructor */
   SupervisedClassificationControllerInterface() {}
   /** Destructor */
-  ~SupervisedClassificationControllerInterface() {};
-
+  ~SupervisedClassificationControllerInterface() {}
 
 private:
   SupervisedClassificationControllerInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 } // end namespace otb
-
 
 #endif

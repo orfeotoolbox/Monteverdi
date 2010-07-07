@@ -27,14 +27,13 @@
 int otbOpticalCalibrationModuleTest(int argc, char* argv[])
 {
   bool runIt = false;
-  if(atoi(argv[2]) == 1)
-    runIt = true;
+  if (atoi(argv[2]) == 1) runIt = true;
   //Internationalization
   otbI18nMacro();
-  
+
   otb::OpticalCalibrationModule::Pointer pointModule = otb::OpticalCalibrationModule::New();
-  otb::Module::Pointer module = pointModule.GetPointer();
-  
+  otb::Module::Pointer                   module = pointModule.GetPointer();
+
   // Put in the tests
   typedef otb::OpticalCalibrationModule::ImageType ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
@@ -46,25 +45,25 @@ int otbOpticalCalibrationModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
- 
-  module->AddInputByKey("InputImage",wrapperIn);
+
+  module->AddInputByKey("InputImage", wrapperIn);
 
   module->Start();
 
   Fl::check();
 
-  if(runIt && pointModule->CheckMetadata() )
-    {  
-      pointModule->guiAerosolModel->value(2);
-      Fl::check();
-      pointModule->bChangeScale->value(1);
-      Fl::check();
-      pointModule->bSaveQuit->do_callback();
+  if (runIt && pointModule->CheckMetadata())
+    {
+    pointModule->guiAerosolModel->value(2);
+    Fl::check();
+    pointModule->bChangeScale->value(1);
+    Fl::check();
+    pointModule->bSaveQuit->do_callback();
 
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetInput( pointModule->GetDifferenceFilter()->GetOutput());
-      writer->SetFileName(argv[3]);
-      writer->Update();
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetInput(pointModule->GetDifferenceFilter()->GetOutput());
+    writer->SetFileName(argv[3]);
+    writer->Update();
     }
 
   Fl::check();

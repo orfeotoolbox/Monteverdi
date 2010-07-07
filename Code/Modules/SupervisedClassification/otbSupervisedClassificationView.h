@@ -30,21 +30,20 @@ namespace otb
  *
  */
 class ITK_EXPORT SupervisedClassificationView
-      : public ListenerBase,
-        public SupervisedClassificationGUI,
-        public itk::Object
+  : public ListenerBase,
+  public SupervisedClassificationGUI,
+  public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef SupervisedClassificationView         Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef SupervisedClassificationView  Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(SupervisedClassificationView,Object);
-
+  itkTypeMacro(SupervisedClassificationView, Object);
 
   /** Event from the model */
   virtual void Notify();
@@ -53,8 +52,8 @@ public:
   virtual void Quit();
 
   /** Set the controller */
-  itkSetObjectMacro(Controller,SupervisedClassificationControllerInterface);
-  itkGetObjectMacro(Controller,SupervisedClassificationControllerInterface);
+  itkSetObjectMacro(Controller, SupervisedClassificationControllerInterface);
+  itkGetObjectMacro(Controller, SupervisedClassificationControllerInterface);
 
   /** Build the interface */
   virtual void BuildInterface();
@@ -70,23 +69,22 @@ public:
   virtual void Cancel();
   virtual void SetClassKey(const char * key);
 
-
 protected:
   /** Constructor */
-  SupervisedClassificationView() {};
+  SupervisedClassificationView() {}
 
   /** Destructor */
-  virtual ~SupervisedClassificationView() {};
+  virtual ~SupervisedClassificationView() {}
 
   /** Clean up before leaving*/
   virtual void CleanUp();
 
 private:
   SupervisedClassificationView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the controller */
-  SupervisedClassificationControllerInterface::Pointer  m_Controller;
+  SupervisedClassificationControllerInterface::Pointer m_Controller;
 
 };
 } //end namespace otb

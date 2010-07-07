@@ -19,7 +19,6 @@
 #ifndef __otbPointSetRegister_h
 #define __otbPointSetRegister_h
 
-
 #include "itkProcessObject.h"
 
 // Estimation
@@ -32,7 +31,6 @@
 #include "itkTransformBase.h"
 #include "itkAffineTransform.h"
 #include "itkTranslationTransform.h"
-
 
 namespace otb {
 
@@ -47,7 +45,7 @@ class ITK_EXPORT PointSetRegister : public itk::ProcessObject
 
 public:
   /** Standard class typedefs */
-  typedef PointSetRegister          Self;
+  typedef PointSetRegister              Self;
   typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,43 +56,42 @@ public:
   /** New macro */
   itkNewMacro(Self);
 
-  typedef itk::ProcessObject             ProcessObjectType;
+  typedef itk::ProcessObject ProcessObjectType;
 
   /** Point Set */
-  typedef itk::PointSet< float, 2 > PointSetType;
-  typedef PointSetType::Pointer     PointSetPointerType;
-  typedef PointSetType::PointType   PointType;
-
+  typedef itk::PointSet<float, 2> PointSetType;
+  typedef PointSetType::Pointer   PointSetPointerType;
+  typedef PointSetType::PointType PointType;
 
   /** Transformation type */
-  typedef TTransform                                   TransformationType;
-  typedef typename TransformationType::Pointer         TransformationPointerType;
-  typedef typename TransformationType::ParametersType  ParametersType;
+  typedef TTransform                                  TransformationType;
+  typedef typename TransformationType::Pointer        TransformationPointerType;
+  typedef typename TransformationType::ParametersType ParametersType;
 
   /** Transform estimation typedefs */
-  typedef itk::EuclideanDistancePointMetric< PointSetType, PointSetType>       MetricType;
-  typedef MetricType::TransformType                                            TransformType;
-  typedef TransformType::Pointer                                               TransformPointerType;
-  typedef TransformType::JacobianType                                          JacobianType;
-  typedef itk::LevenbergMarquardtOptimizer                                     OptimizerType;
-  typedef itk::PointSetToPointSetRegistrationMethod<PointSetType,PointSetType> RegistrationType;
-  typedef OptimizerType::ScalesType                                            ScalesType;
+  typedef itk::EuclideanDistancePointMetric<PointSetType, PointSetType>         MetricType;
+  typedef MetricType::TransformType                                             TransformType;
+  typedef TransformType::Pointer                                                TransformPointerType;
+  typedef TransformType::JacobianType                                           JacobianType;
+  typedef itk::LevenbergMarquardtOptimizer                                      OptimizerType;
+  typedef itk::PointSetToPointSetRegistrationMethod<PointSetType, PointSetType> RegistrationType;
+  typedef OptimizerType::ScalesType                                             ScalesType;
 
-  itkSetObjectMacro(FixPointSet,PointSetType );
-  itkGetObjectMacro(FixPointSet,PointSetType );
+  itkSetObjectMacro(FixPointSet, PointSetType);
+  itkGetObjectMacro(FixPointSet, PointSetType);
 
   itkSetObjectMacro(MovingPointSet, PointSetType);
   itkGetObjectMacro(MovingPointSet, PointSetType);
-  
+
   itkSetObjectMacro(Transform, TransformationType);
   itkGetObjectMacro(Transform, TransformationType);
-  
+
   itkGetMacro(TransformParameters, ParametersType);
 
   /** Compute transformation */
   virtual void ComputeTransform();
-  
-  virtual void SetScales(const ScalesType & scales)
+
+  virtual void SetScales(const ScalesType& scales)
   {
     m_Scales = scales;
   }
@@ -102,11 +99,11 @@ protected:
   /** Constructor */
   PointSetRegister();
   /** Destructor */
-  ~PointSetRegister(){};
-  
+  ~PointSetRegister(){}
+
 private:
   PointSetRegister(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   OptimizerType::ScalesType m_Scales;
 
@@ -121,7 +118,7 @@ private:
 
 };
 
-}//end namespace otb
+} //end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPointSetRegister.txx"

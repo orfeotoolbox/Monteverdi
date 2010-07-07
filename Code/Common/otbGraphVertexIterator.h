@@ -37,7 +37,7 @@ public:
   typedef GraphVertexIterator Self;
 
   /** Graph typedef */
-  typedef TGraph GraphType;
+  typedef TGraph                                   GraphType;
   typedef typename GraphType::GraphContainerType   GraphContainerType;
   typedef typename GraphType::VertexType           VertexType;
   typedef typename GraphType::VertexDescriptorType VertexDescriptorType;
@@ -50,28 +50,28 @@ public:
   GraphVertexIterator()
   {
     m_Graph = GraphType::New();
-    tie(m_Iter,m_End)= vertices(*(m_Graph->m_GraphContainer));
+    tie(m_Iter, m_End) = vertices(*(m_Graph->m_GraphContainer));
   }
-  
+
   /** Copy constructor */
   GraphVertexIterator(const Self& iter)
   {
-    m_Iter=iter.m_Iter;
-    m_Graph=iter.m_Graph;
-    m_End=iter.m_End;
+    m_Iter = iter.m_Iter;
+    m_Graph = iter.m_Graph;
+    m_End = iter.m_End;
   }
 
   /**  Constructor with input graph */
   GraphVertexIterator(TGraph * graph)
   {
-    m_Graph=graph;
-    boost::tie(m_Iter,m_End)=boost::vertices(m_Graph->m_GraphContainer);
+    m_Graph = graph;
+    boost::tie(m_Iter, m_End) = boost::vertices(m_Graph->m_GraphContainer);
   }
   /**
    * Get the current vertex.
    * \return The current vertex pointed by the iterator.
    */
-  const VertexType & Get(void) const
+  const VertexType& Get(void) const
   {
     return m_Graph->m_GraphContainer[*m_Iter];
   }
@@ -80,9 +80,9 @@ public:
    * Set the current vertex.
    * \param vertex The vertex to set.
    */
-  void Set(const VertexType & vertex)
+  void Set(const VertexType& vertex)
   {
-    m_Graph->m_GraphContainer[*m_Iter]=vertex;
+    m_Graph->m_GraphContainer[*m_Iter] = vertex;
   }
   /**
    * Get the current vertex index.
@@ -98,19 +98,19 @@ public:
    */
   bool IsAtEnd(void)
   {
-    return (m_Iter==m_End);
+    return (m_Iter == m_End);
   }
   /**
    * Go to the beginning.
    */
   void GoToBegin(void)
   {
-    boost::tie(m_Iter,m_End)=boost::vertices(m_Graph->m_GraphContainer);
+    boost::tie(m_Iter, m_End) = boost::vertices(m_Graph->m_GraphContainer);
   }
   /**
    * Increment.
    */
-  Self& operator++()
+  Self& operator ++()
   {
     ++m_Iter;
     return *this;
@@ -118,7 +118,7 @@ public:
   /**
    * Decrement.
    */
-  Self& operator--()
+  Self& operator --()
   {
     --m_Iter;
     return *this;
@@ -126,37 +126,37 @@ public:
   /**
    * Add
    */
-  Self& operator+(int i)
+  Self& operator +(int i)
   {
-    m_Iter = m_Iter+i;
+    m_Iter = m_Iter + i;
     return *this;
   }
   /**
    * Remove
    */
-  Self& operator-(int i)
+  Self& operator -(int i)
   {
-     m_Iter = m_Iter-i;
-     return *this;
+    m_Iter = m_Iter - i;
+    return *this;
   }
   /**
    * Difference comparison operator.
    */
-  bool operator!=(const Self& iter)
+  bool operator !=(const Self& iter)
   {
     return (m_Iter != iter.m_Iter);
   }
   /**
    * Equality comparison operator.
    */
-  bool operator==(const Self& iter)
+  bool operator ==(const Self& iter)
   {
     return (m_Iter == iter.m_Iter);
   }
   /**
    * Instantiation operator.
    */
-  Self& operator=(const Self& iter)
+  Self& operator =(const Self& iter)
   {
     m_Iter = iter.m_Iter;
     m_End  = iter.m_End;

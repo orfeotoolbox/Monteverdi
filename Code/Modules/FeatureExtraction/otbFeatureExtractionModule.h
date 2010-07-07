@@ -38,35 +38,35 @@ namespace otb
 
 class ITK_EXPORT FeatureExtractionModule
   : public Module, public EventsListener<std::string>
-    //   : public Module, public ListenerBase
-  
+  //   : public Module, public ListenerBase
+
 {
 public:
   /** Standard class typedefs */
-  typedef FeatureExtractionModule         Self;
-  typedef Module                          Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef FeatureExtractionModule       Self;
+  typedef Module                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(FeatureExtractionModule,Module);
+  itkTypeMacro(FeatureExtractionModule, Module);
 
-  itkGetObjectMacro(View,FeatureExtractionViewGUI);
-  
+  itkGetObjectMacro(View, FeatureExtractionViewGUI);
+
   // Input image typedef
   typedef FeatureExtractionModel::InputImageType InputImageType;
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
     m_View->Show();
-  };
+  }
 
 protected:
   /** Constructor */
@@ -80,22 +80,21 @@ protected:
   virtual void Run();
 
   /** Notify Monteverdi application that featureExtraction has a result */
-  void Notify(const std::string & event);
+  void Notify(const std::string& event);
 
 private:
   FeatureExtractionModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // The view
-  FeatureExtractionViewGUI::Pointer        m_View;
+  FeatureExtractionViewGUI::Pointer m_View;
 
   // The controller
-  FeatureExtractionController::Pointer  m_Controller;
+  FeatureExtractionController::Pointer m_Controller;
 
   // The model
-  FeatureExtractionModel::Pointer       m_Model;
+  FeatureExtractionModel::Pointer m_Model;
 };
-
 
 } // End namespace otb
 

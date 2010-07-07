@@ -49,14 +49,14 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(PanSharpeningModule,Module);
+  itkTypeMacro(PanSharpeningModule, Module);
 
   /** Data typedefs */
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
 
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <FloatingImageType,FloatingVectorImageType,FloatingVectorImageType> FusionFilterType;
+  <FloatingImageType, FloatingVectorImageType, FloatingVectorImageType> FusionFilterType;
 
 protected:
   /** Constructor */
@@ -73,12 +73,11 @@ protected:
 
 private:
   PanSharpeningModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FusionFilterType::Pointer m_PanSharpeningFilter;
 
 };
-
 
 } // End namespace otb
 

@@ -43,7 +43,7 @@ namespace otb
  */
 
 class TypeManager
-: public itk::Object
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -57,57 +57,57 @@ public:
   typedef unsigned short                               Label_Short_Precision;
   typedef unsigned char                                Label_Char_Precision;
   typedef std::complex<Floating_Point_Precision>       Floating_Point_Complex;
-  typedef itk::FixedArray<Floating_Point_Precision,2>  Deformation_Value_Type;
+  typedef itk::FixedArray<Floating_Point_Precision, 2> Deformation_Value_Type;
 
   // Single Band Image Types
-  typedef otb::Image<Floating_Point_Precision,2>       Floating_Point_Image;
-  typedef otb::Image<Label_Short_Precision,2>          Labeled_Short_Image;
-  typedef otb::Image<Label_Char_Precision,2>           Labeled_Char_Image;
-  typedef otb::Image<Floating_Point_Complex,2>         Floating_Point_Complex_Image;
-  typedef otb::Image<Deformation_Value_Type,2>         Deformation_Field_Type;
+  typedef otb::Image<Floating_Point_Precision, 2> Floating_Point_Image;
+  typedef otb::Image<Label_Short_Precision, 2>    Labeled_Short_Image;
+  typedef otb::Image<Label_Char_Precision, 2>     Labeled_Char_Image;
+  typedef otb::Image<Floating_Point_Complex, 2>   Floating_Point_Complex_Image;
+  typedef otb::Image<Deformation_Value_Type, 2>   Deformation_Field_Type;
 
   // Vector Image Types
-  typedef otb::VectorImage<Floating_Point_Precision,2> Floating_Point_VectorImage;
-  typedef otb::VectorImage<Label_Char_Precision,2>     Labeled_Char_VectorImage;
-  typedef otb::VectorImage<Label_Short_Precision,2>    Labeled_Short_VectorImage;
+  typedef otb::VectorImage<Floating_Point_Precision, 2> Floating_Point_VectorImage;
+  typedef otb::VectorImage<Label_Char_Precision, 2>     Labeled_Char_VectorImage;
+  typedef otb::VectorImage<Label_Short_Precision, 2>    Labeled_Short_VectorImage;
 
   // Vector Data Types
-  typedef otb::VectorData<double>                      Vector_Data;
-  typedef otb::VectorData<double,2,short unsigned int> Labeled_Vector_Data;
+  typedef otb::VectorData<double>                        Vector_Data;
+  typedef otb::VectorData<double, 2, short unsigned int> Labeled_Vector_Data;
 
   /** Standard type macro */
-  itkTypeMacro(TypeManager,itk::Object);
+  itkTypeMacro(TypeManager, itk::Object);
 
   /** Get the unique instance of type manager */
   static TypeManager * GetInstance();
 
   /** Register a new type */
-  template <typename T> void RegisterType(const std::string & name)
+  template <typename T> void RegisterType(const std::string& name)
   {
     // Retrieve typeId
     std::string typeId = GetTypeId<T>();
 
     // Check if that type is allready registered
-    if(m_IdToNameMap.count(typeId)==0)
+    if (m_IdToNameMap.count(typeId) == 0)
       {
       // If not, check if a type is already registered with this name
       IdToNameMapType::const_iterator mIt = m_IdToNameMap.begin();
-      bool found = false;
-      while(!found && mIt!=m_IdToNameMap.end())
-       {
-       found = (mIt->second == name);
-       ++mIt;
-       }
+      bool                            found = false;
+      while (!found && mIt != m_IdToNameMap.end())
+        {
+        found = (mIt->second == name);
+        ++mIt;
+        }
       // If not, register the type under the given name
-      if(!found)
-       {
-       m_IdToNameMap[typeId]=name;
-       }
+      if (!found)
+        {
+        m_IdToNameMap[typeId] = name;
+        }
       else
-       {
-       // If name is already in use, use the typeid instead
-       m_IdToNameMap[typeId]=typeId;
-       }
+        {
+        // If name is already in use, use the typeid instead
+        m_IdToNameMap[typeId] = typeId;
+        }
       }
     // If typeid is already registered, do nothing
   }
@@ -119,7 +119,7 @@ public:
     std::string typeId = GetTypeId<T>();
 
     // Check if that type is  registered
-    if(m_IdToNameMap.count(typeId)>0)
+    if (m_IdToNameMap.count(typeId) > 0)
       {
       // If it is, return its name
       return m_IdToNameMap[typeId];
@@ -153,7 +153,7 @@ private:
   itkNewMacro(Self);
 
   /** Type of the id to name map */
-  typedef std::map<std::string,std::string> IdToNameMapType;
+  typedef std::map<std::string, std::string> IdToNameMapType;
 
   /** The id to name map */
   IdToNameMapType m_IdToNameMap;

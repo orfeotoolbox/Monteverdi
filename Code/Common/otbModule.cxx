@@ -34,41 +34,43 @@ Module::~Module()
 void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Print inputs
-  os<<indent<<"Number of inputs: "<<m_InputsMap.size()<<std::endl;
-  for(InputDataDescriptorMapType::const_iterator inIt = m_InputsMap.begin(); inIt != m_InputsMap.end(); ++inIt)
+  os << indent << "Number of inputs: " << m_InputsMap.size() << std::endl;
+  for (InputDataDescriptorMapType::const_iterator inIt = m_InputsMap.begin(); inIt != m_InputsMap.end(); ++inIt)
     {
-    os<<indent<<indent<<inIt->second<<std::endl;
+    os << indent << indent << inIt->second << std::endl;
     }
 
   // Print outputs
-  os<<indent<<"Number of outputs: "<<m_OutputsMap.size()<<std::endl;
-  for(OutputDataDescriptorMapType::const_iterator outIt = m_OutputsMap.begin(); outIt != m_OutputsMap.end(); ++outIt)
+  os << indent << "Number of outputs: " << m_OutputsMap.size() << std::endl;
+  for (OutputDataDescriptorMapType::const_iterator outIt = m_OutputsMap.begin(); outIt != m_OutputsMap.end(); ++outIt)
     {
-    os<<indent<<indent<<outIt->second<<std::endl;
+    os << indent << indent << outIt->second << std::endl;
     }
 }
 
 /** Add an input data by its key */
-void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & data)
+void Module::AddInputByKey(const std::string& key, const DataObjectWrapper& data)
 {
-  otbGenericMsgDebugMacro(<<"AddInputByKey:key : " << key<<" data : "<<data);
+  otbGenericMsgDebugMacro(<< "AddInputByKey:key : " << key << " data : " << data);
 
   // Search for the key in the input map
   InputDataDescriptorMapType::iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if (it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no input with key "<<key);
+    itkExceptionMacro(<< "Module has no input with key " << key);
     }
 
   // Else, check for type matching and eventually throw an exception
-  if(!it->second.IsTypeCompatible(data.GetDataType()))
+  if (!it->second.IsTypeCompatible(data.GetDataType()))
     {
-    itkExceptionMacro(<<"Type mismatch for input with key "<<key<<": expected "<<it->second.GetDataType()<<", received "<<data.GetDataType());
+    itkExceptionMacro(
+      << "Type mismatch for input with key " << key << ": expected " << it->second.GetDataType() << ", received " <<
+      data.GetDataType());
     }
 
   /** Add the data to the input descriptor */
@@ -77,103 +79,105 @@ void Module::AddInputByKey(const std::string & key, const DataObjectWrapper & da
 }
 
 /** Get an output by its key */
-const DataObjectWrapper Module::GetOutputByKey(const std::string & key, unsigned int idx) const
+const DataObjectWrapper Module::GetOutputByKey(const std::string& key, unsigned int idx) const
 {
   // Search for the key in the output map
   OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_OutputsMap.end())
+  if (it == m_OutputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no output with key "<<key);
+    itkExceptionMacro(<< "Module has no output with key " << key);
     }
 
   // Then if everything is ok, call the assign method
   DataObjectWrapper wrapper = it->second.GetNthData(idx);
 
-  if(!it->second.IsTypeCompatible(wrapper.GetDataType()))
-  {
-  itkExceptionMacro(<<"Type mismatch for output with key "<<key<<": expected "<<it->second.GetDataType()<<", received "<<wrapper.GetDataType());
-  }
+  if (!it->second.IsTypeCompatible(wrapper.GetDataType()))
+    {
+    itkExceptionMacro(
+      << "Type mismatch for output with key " << key << ": expected " << it->second.GetDataType() << ", received " <<
+      wrapper.GetDataType());
+    }
   return wrapper;
 }
 
-void Module::ChangeOutputKey( const std::string & oldKey, const std::string & newKey )
+void Module::ChangeOutputKey(const std::string& oldKey, const std::string& newKey)
 {
-  if(m_OutputsMap.count(newKey) > 0)
+  if (m_OutputsMap.count(newKey) > 0)
     {
-      itkExceptionMacro(<<"Key "<<newKey<<" alredy exists.");
+    itkExceptionMacro(<< "Key " << newKey << " alredy exists.");
     }
   // Search for the key in the output map
   OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(oldKey);
 
   // If the key can not be found, throw an exception
-  if(it == m_OutputsMap.end())
+  if (it == m_OutputsMap.end())
     {
-      itkExceptionMacro(<<"Module has no output with key "<<oldKey);
+    itkExceptionMacro(<< "Module has no output with key " << oldKey);
     }
 
   OutputDataDescriptor desc = it->second;
   desc.SetDataKey(newKey);
-  
-  desc.SetDataKey( newKey );
+
+  desc.SetDataKey(newKey);
   m_OutputsMap[newKey] = desc;
-  m_OutputsMap.erase( oldKey );
+  m_OutputsMap.erase(oldKey);
 }
 
 /** Get the Data object descriptor corresponding to the given key */
-const InputDataDescriptor & Module::GetInputDataDescriptorByKey(const std::string & key) const
+const InputDataDescriptor& Module::GetInputDataDescriptorByKey(const std::string& key) const
 {
   // Search for the key in the output map
   InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if (it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no input with key "<<key);
+    itkExceptionMacro(<< "Module has no input with key " << key);
     }
   return it->second;
 }
 
 /** Get the input data descriptors map */
-const Module::InputDataDescriptorMapType & Module::GetInputsMap() const
+const Module::InputDataDescriptorMapType& Module::GetInputsMap() const
 {
   return m_InputsMap;
 }
 
 /** Get the output data descriptors map */
-const Module::OutputDataDescriptorMapType & Module::GetOutputsMap() const
+const Module::OutputDataDescriptorMapType& Module::GetOutputsMap() const
 {
   return m_OutputsMap;
 }
 /** Get number of input data by key */
-unsigned int Module::GetNumberOfInputDataByKey(const std::string & key) const
+unsigned int Module::GetNumberOfInputDataByKey(const std::string& key) const
 {
   // Search for the key in the input map
   InputDataDescriptorMapType::const_iterator it = m_InputsMap.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_InputsMap.end())
+  if (it == m_InputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no input with key "<<key);
+    itkExceptionMacro(<< "Module has no input with key " << key);
     }
   return it->second.GetNumberOfData();
 }
 
 /** Load cached data */
-void Module::LoadCachedData(const DataObjectWrapper & data, const std::string & key, unsigned int idx)
+void Module::LoadCachedData(const DataObjectWrapper& data, const std::string& key, unsigned int idx)
 {
   // Search for the key in the output map
   OutputDataDescriptorMapType::iterator it = m_OutputsMap.find(key);
-  
+
   // If the key can not be found, throw an exception
-  if(it == m_OutputsMap.end())
+  if (it == m_OutputsMap.end())
     {
-    itkExceptionMacro(<<"Module has no output with key "<<key);
+    itkExceptionMacro(<< "Module has no output with key " << key);
     }
 
   // Change the
-  it->second.CacheNthData(idx,data);
+  it->second.CacheNthData(idx, data);
 }
 
 /** Check that every mandatory input has been filled and call the
@@ -181,15 +185,15 @@ void Module::LoadCachedData(const DataObjectWrapper & data, const std::string & 
 void Module::Start()
 {
   // Check input parameters
-  for(InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it!=m_InputsMap.end();++it)
+  for (InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it != m_InputsMap.end(); ++it)
     {
-    if(!it->second.IsConsistent())
+    if (!it->second.IsConsistent())
       {
-      itkExceptionMacro(<<"Input "<<it->second.GetDataKey()<<" is inconsistent.");
+      itkExceptionMacro(<< "Input " << it->second.GetDataKey() << " is inconsistent.");
       }
     }
-    // Once parameters have been checked, the run method can be triggered.
-    this->Run();
+  // Once parameters have been checked, the run method can be triggered.
+  this->Run();
 }
 
 /** The custom run command */
@@ -205,7 +209,7 @@ void Module::Run()
 /** Notify outputs change */
 void Module::NotifyOutputsChange()
 {
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 }
 
 /** Clear output descriptors */
@@ -216,36 +220,36 @@ void Module::ClearOutputDescriptors()
 }
 
 /** Erase an output with its key */
-void Module::EraseOutputByKey(const std::string & key)
+void Module::EraseOutputByKey(const std::string& key)
 {
   // erase all the map element which key starts by "key" ("OutputImage" erases "OutputImage (ban1)", ...)
   OutputDataDescriptorMapType::iterator it;
   it = m_OutputsMap.begin();
   std::vector<std::string> keyVector;
-  while( it != m_OutputsMap.end() )
+  while (it != m_OutputsMap.end())
     {
-      if( (*it).first.find(key) == 0 )
-       {
-         keyVector.push_back((*it).first);
-       }
-      ++it;
+    if ((*it).first.find(key) == 0)
+      {
+      keyVector.push_back((*it).first);
+      }
+    ++it;
     }
-  for(unsigned int i=0; i<keyVector.size(); i++)
-       {
-         m_OutputsMap.erase(keyVector[i]);
-       }
+  for (unsigned int i = 0; i < keyVector.size(); i++)
+    {
+    m_OutputsMap.erase(keyVector[i]);
+    }
 }
 
 /** The custom run command */
 void Module::ThreadedRun()
 {
-  itkExceptionMacro(<<"Subclasses should override this method");
+  itkExceptionMacro(<< "Subclasses should override this method");
 }
 
 /** The custom run command */
 void Module::ThreadedWatch()
 {
-  itkExceptionMacro(<<"Subclasses should override this method");
+  itkExceptionMacro(<< "Subclasses should override this method");
 }
 
 /** The custom run command */

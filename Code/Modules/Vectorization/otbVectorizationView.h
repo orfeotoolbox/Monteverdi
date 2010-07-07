@@ -34,42 +34,42 @@ namespace otb
  *
  */
 class ITK_EXPORT VectorizationView
-      : public ListenerBase,
-        public VectorizationViewGroup,
-        public itk::Object
+  : public ListenerBase,
+  public VectorizationViewGroup,
+  public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef VectorizationView  Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef VectorizationView             Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(VectorizationView,Object);
+  itkTypeMacro(VectorizationView, Object);
 
   typedef VectorizationModel
-    ::VisualizationModelType                   VisualizationModelType;
-  typedef ImageView<VisualizationModelType>    ImageViewType;
-  typedef VectorizationModel::VectorDataType   VectorDataType;
+  ::VisualizationModelType VisualizationModelType;
+  typedef ImageView<VisualizationModelType>  ImageViewType;
+  typedef VectorizationModel::VectorDataType VectorDataType;
   typedef VectorDataGlComponent
-    <VectorDataType>                           VectorDataGlComponentType;
+  <VectorDataType>                           VectorDataGlComponentType;
   typedef VectorDataTreeBrowser
-    <VectorDataType>                           VectorDataTreeBrowserType;
+  <VectorDataType>                           VectorDataTreeBrowserType;
 
   /** Event from the model */
   virtual void Notify();
 
   /** Set the controller */
   void SetController(VectorizationControllerInterface * controller);
-  itkGetObjectMacro(Controller,VectorizationControllerInterface);
+  itkGetObjectMacro(Controller, VectorizationControllerInterface);
 
   /** Set the widgets controller */
-  itkSetObjectMacro(WidgetController,ImageWidgetController);
+  itkSetObjectMacro(WidgetController, ImageWidgetController);
 
   /** Get The image view */
-  itkGetObjectMacro(ImageView,ImageViewType);
+  itkGetObjectMacro(ImageView, ImageViewType);
 
   /** Build the interface */
   virtual void BuildInterface();
@@ -77,7 +77,7 @@ public:
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
-  
+
 protected:
   /** Constructor */
   VectorizationView();
@@ -87,21 +87,21 @@ protected:
 
 private:
   VectorizationView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
+  void operator =(const Self&); //purposely not implemented
+
   /** Pointer to the controller */
   VectorizationControllerInterface::Pointer m_Controller;
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer            m_WidgetController;
+  ImageWidgetController::Pointer m_WidgetController;
   /** Pointer to the model */
-  VectorizationModel::Pointer               m_Model;
+  VectorizationModel::Pointer m_Model;
   /** Image view */
-  ImageViewType::Pointer                    m_ImageView;
+  ImageViewType::Pointer m_ImageView;
   /** VectorData Gl component */
-  VectorDataGlComponentType::Pointer        m_VectorDataGlComponent;
+  VectorDataGlComponentType::Pointer m_VectorDataGlComponent;
   /** VectorDataTreeBrowser */
-  VectorDataTreeBrowserType::Pointer        m_VectorDataTreeBrowser;
+  VectorDataTreeBrowserType::Pointer m_VectorDataTreeBrowser;
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

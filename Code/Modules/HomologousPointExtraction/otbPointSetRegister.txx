@@ -19,7 +19,6 @@
 
 #include "otbPointSetRegister.h"
 
-
 namespace otb
 {
 template <class TTransform>
@@ -31,22 +30,21 @@ PointSetRegister<TTransform>
   m_Transform = TransformationType::New();
 }
 
-
 template <class TTransform>
 void
 PointSetRegister<TTransform>
 ::ComputeTransform()
 {
-  if(m_FixPointSet->GetNumberOfPoints() == 0 || m_MovingPointSet->GetNumberOfPoints() == 0)
+  if (m_FixPointSet->GetNumberOfPoints() == 0 || m_MovingPointSet->GetNumberOfPoints() == 0)
     {
-      itkExceptionMacro(<<"Input set is empty");
+    itkExceptionMacro(<< "Input set is empty");
     }
-  if(m_FixPointSet->GetNumberOfPoints() != m_MovingPointSet->GetNumberOfPoints())
+  if (m_FixPointSet->GetNumberOfPoints() != m_MovingPointSet->GetNumberOfPoints())
     {
-      itkExceptionMacro(<<"Input point sets set size differs.");
+    itkExceptionMacro(<< "Input point sets set size differs.");
     }
-  
-  MetricType::Pointer metric = MetricType::New();
+
+  MetricType::Pointer       metric = MetricType::New();
   TransformationPointerType invTransform = TransformationType::New();
   // Optimizer Type
   OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -54,36 +52,35 @@ PointSetRegister<TTransform>
   invTransform->SetIdentity();
   RegistrationType::Pointer registration = RegistrationType::New();
   // Scale the translation components of the Transform in the Optimizer
-  
-  unsigned long numberOfIterations = 2000;
-  double gradientTolerance = 1e-5; // convergence criterion
-  double valueTolerance = 1e-5; // convergence criterion
-  double epsilonFunction = 1e-6; // convergence criterion
-  optimizer->SetScales( m_Scales );
-  optimizer->SetNumberOfIterations( numberOfIterations );
-  optimizer->SetValueTolerance( valueTolerance );
-  optimizer->SetGradientTolerance( gradientTolerance );
-  optimizer->SetEpsilonFunction( epsilonFunction );
 
-  registration->SetInitialTransformParameters( invTransform->GetParameters() );
+  unsigned long numberOfIterations = 2000;
+  double        gradientTolerance = 1e-5; // convergence criterion
+  double        valueTolerance = 1e-5; // convergence criterion
+  double        epsilonFunction = 1e-6; // convergence criterion
+  optimizer->SetScales(m_Scales);
+  optimizer->SetNumberOfIterations(numberOfIterations);
+  optimizer->SetValueTolerance(valueTolerance);
+  optimizer->SetGradientTolerance(gradientTolerance);
+  optimizer->SetEpsilonFunction(epsilonFunction);
+
+  registration->SetInitialTransformParameters(invTransform->GetParameters());
 
   //------------------------------------------------------
   // Connect all the components required for Registration
   //------------------------------------------------------
-  registration->SetMetric( metric );
-  registration->SetOptimizer( optimizer );
-  registration->SetTransform( invTransform );
-  registration->SetFixedPointSet( m_FixPointSet );
-  registration->SetMovingPointSet( m_MovingPointSet );
+  registration->SetMetric(metric);
+  registration->SetOptimizer(optimizer);
+  registration->SetTransform(invTransform);
+  registration->SetFixedPointSet(m_FixPointSet);
+  registration->SetMovingPointSet(m_MovingPointSet);
 
   registration->StartRegistration();
 
- invTransform->GetInverse( m_Transform );
+  invTransform->GetInverse(m_Transform);
 
- m_TransformParameters = m_Transform->GetParameters();
+  m_TransformParameters = m_Transform->GetParameters();
 }
 
-
-}// namespace otb
+} // namespace otb
 
 #endif

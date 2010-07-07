@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbPanSharpeningModule.h"
 
 #include "otbVectorImage.h"
@@ -26,9 +25,9 @@
 int otbPanSharpeningModuleTest(int argc, char* argv[])
 {
   otb::PanSharpeningModule::Pointer specificModule = otb::PanSharpeningModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
+  otb::Module::Pointer              module = specificModule.GetPointer();
 
-  std::cout<<"Module: "<<module<<std::endl;
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * panfname = argv[1];
@@ -36,9 +35,9 @@ int otbPanSharpeningModuleTest(int argc, char* argv[])
 
   typedef otb::PanSharpeningModule::FloatingImageType       PanImageType;
   typedef otb::PanSharpeningModule::FloatingVectorImageType XsImageType;
-  typedef otb::ImageFileReader<PanImageType>  ReaderPanType;
-  typedef otb::ImageFileReader<XsImageType>   ReaderXsType;
-  typedef otb::ImageFileWriter<XsImageType>   WriterType;
+  typedef otb::ImageFileReader<PanImageType>                ReaderPanType;
+  typedef otb::ImageFileReader<XsImageType>                 ReaderXsType;
+  typedef otb::ImageFileWriter<XsImageType>                 WriterType;
 
   //reader pan
   ReaderPanType::Pointer readerPan = ReaderPanType::New();
@@ -51,26 +50,25 @@ int otbPanSharpeningModuleTest(int argc, char* argv[])
   readerXs->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperPan = otb::DataObjectWrapper::Create(readerPan->GetOutput());
-  std::cout<<"Pan wrapper: "<< wrapperPan << std::endl;
+  std::cout << "Pan wrapper: " << wrapperPan << std::endl;
 
-  module->AddInputByKey("PanImage",wrapperPan);
+  module->AddInputByKey("PanImage", wrapperPan);
 
   otb::DataObjectWrapper wrapperXs = otb::DataObjectWrapper::Create(readerXs->GetOutput());
-  std::cout<<"Xs wrapper: "<< wrapperXs << std::endl;
+  std::cout << "Xs wrapper: " << wrapperXs << std::endl;
 
-  module->AddInputByKey("XsImage",wrapperXs);
-
+  module->AddInputByKey("XsImage", wrapperXs);
 
   module->Start();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("PanSharpenedImageOutput");
 
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
 
   XsImageType::Pointer outImage = dynamic_cast<XsImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(outImage);
   writer->Update();
@@ -78,4 +76,3 @@ int otbPanSharpeningModuleTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 
 }
-

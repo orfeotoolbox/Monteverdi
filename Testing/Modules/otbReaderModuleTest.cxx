@@ -24,14 +24,14 @@
 int otbReaderModuleTest(int argc, char* argv[])
 {
   otb::ReaderModule::Pointer specificModule = otb::ReaderModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer       module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   typedef otb::ReaderModule::FloatingVectorImageType ImageType;
   typedef otb::ImageFileWriter<ImageType>            WriterType;
-  
+
   module->Start();
   Fl::check();
 
@@ -45,28 +45,27 @@ int otbReaderModuleTest(int argc, char* argv[])
   specificModule->vName->value("test");
   Fl::check();
 
-  specificModule->bOk->do_callback(); 
+  specificModule->bOk->do_callback();
   Fl::check();
-  
-  std::cout<<specificModule<<std::endl;
+
+  std::cout << specificModule << std::endl;
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("test");
 
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
 
-  if(wrapperOut.GetDataType()=="Floating_Point_VectorImage")
+  if (wrapperOut.GetDataType() == "Floating_Point_VectorImage")
     {
 
     ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
     //Write the image
-    WriterType::Pointer  writer = WriterType::New();
+    WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(argv[2]);
     writer->SetInput(outImage);
     writer->Update();
     }
-  
+
   return EXIT_SUCCESS;
 
 }
-

@@ -25,16 +25,15 @@
 int otbSpeckleFilteringModuleTest(int argc, char* argv[])
 {
   otb::SpeckleFilteringModule::Pointer specificModule = otb::SpeckleFilteringModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer                 module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::SpeckleFilteringModule::InputImageType  ImageType;
-  typedef otb::ImageFileReader<ImageType>              ReaderType;
-  typedef otb::ImageFileWriter<ImageType>              WriterType;
-
+  typedef otb::SpeckleFilteringModule::InputImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef otb::ImageFileWriter<ImageType>             WriterType;
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -42,9 +41,9 @@ int otbSpeckleFilteringModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
-  
-  module->AddInputByKey("InputImage",wrapperIn);
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
+
+  module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
   Fl::check();
 
@@ -54,12 +53,12 @@ int otbSpeckleFilteringModuleTest(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
 
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(outImage);
   writer->Update();
@@ -67,4 +66,3 @@ int otbSpeckleFilteringModuleTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 
 }
-

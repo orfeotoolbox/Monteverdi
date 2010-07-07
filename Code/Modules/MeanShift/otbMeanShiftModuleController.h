@@ -34,29 +34,28 @@
 namespace otb
 {
 class ITK_EXPORT MeanShiftModuleController
-      : public MeanShiftModuleControllerInterface
+  : public MeanShiftModuleControllerInterface
 {
 public:
   /** Standard class typedefs */
   typedef MeanShiftModuleController          Self;
   typedef MeanShiftModuleControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(MeanShiftModuleController,Superclass);
+  itkTypeMacro(MeanShiftModuleController, Superclass);
   itkNewMacro(Self);
 
-
   /** Widgets controller and action handlers */
-  typedef MeanShiftModuleView::ImageViewType              ImageViewType;
-  typedef MeanShiftModuleModel::VisualizationModelType    VisualizationModelType;
+  typedef MeanShiftModuleView::ImageViewType           ImageViewType;
+  typedef MeanShiftModuleModel::VisualizationModelType VisualizationModelType;
 
-  typedef ImageWidgetController                                                        WidgetsControllerType;
-  typedef WidgetResizingActionHandler<VisualizationModelType,ImageViewType>            ResizingHandlerType;
-  typedef ChangeExtractRegionActionHandler<VisualizationModelType,ImageViewType>       ChangeRegionHandlerType;
-  typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
-  typedef ChangeScaleActionHandler<VisualizationModelType,ImageViewType>               ChangeScaleHandlerType;
+  typedef ImageWidgetController                                                         WidgetsControllerType;
+  typedef WidgetResizingActionHandler<VisualizationModelType, ImageViewType>            ResizingHandlerType;
+  typedef ChangeExtractRegionActionHandler<VisualizationModelType, ImageViewType>       ChangeRegionHandlerType;
+  typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
+  typedef ChangeScaleActionHandler<VisualizationModelType, ImageViewType>               ChangeScaleHandlerType;
 
   void SetModel(ModelType* model);
 
@@ -64,8 +63,7 @@ public:
   void SetView(MeanShiftModuleView * view);
 
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetsController,WidgetsControllerType);
-
+  itkGetObjectMacro(WidgetsController, WidgetsControllerType);
 
   /** User action */
   virtual void RunSegmentation();
@@ -74,7 +72,7 @@ public:
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(unsigned int sr);
   virtual void SetMinRegionSize(unsigned int mr);
-  virtual void SetOpacity( double op );
+  virtual void SetOpacity(double op);
   virtual void UpdateViewerDisplay();
 
   virtual void SetInputImage(MeanShiftModuleModel::VectorImageType* image)
@@ -82,12 +80,11 @@ public:
     m_Model->SetInputImage(image);
   }
 
-
   bool IsModelUpdating()
   {
     return m_Model->IsUpdating();
   }
-  
+
   virtual void Quit();
 protected:
   /** Constructor */
@@ -95,10 +92,9 @@ protected:
   /** Destructor */
   virtual ~MeanShiftModuleController();
 
-
 private:
   MeanShiftModuleController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
   MeanShiftModuleView * m_View;
@@ -106,15 +102,14 @@ private:
   /** The instance of the model */
   ModelType * m_Model;
 
-
   /** Widgets controller */
-  WidgetsControllerType::Pointer             m_WidgetsController;
+  WidgetsControllerType::Pointer m_WidgetsController;
 
   /** Action handlers */
-  ResizingHandlerType::Pointer               m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
-  ChangeScaledRegionHandlerType::Pointer     m_ChangeScaledRegionHandler;
-  ChangeScaleHandlerType::Pointer            m_ChangeScaleHandler;
+  ResizingHandlerType::Pointer           m_ResizingHandler;
+  ChangeRegionHandlerType::Pointer       m_ChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer        m_ChangeScaleHandler;
 
   itk::MultiThreader::Pointer m_Threader;
 

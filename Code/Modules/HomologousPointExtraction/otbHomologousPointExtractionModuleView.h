@@ -19,7 +19,6 @@
 #ifndef __otbHomologousPointExtractionView_h
 #define __otbHomologousPointExtractionView_h
 
-
 #include "otbHomologousPointExtractionViewGroup.h"
 
 #include "otbListenerBase.h"
@@ -36,19 +35,18 @@ namespace otb
  *
  */
 class ITK_EXPORT HomologousPointExtractionModuleView
-      : public ListenerBase, public HomologousPointExtractionViewGroup, public itk::Object
+  : public ListenerBase, public HomologousPointExtractionViewGroup, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef HomologousPointExtractionModuleView  Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef HomologousPointExtractionModuleView Self;
+  typedef itk::Object                         Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(HomologousPointExtractionModuleView,Object);
-
+  itkTypeMacro(HomologousPointExtractionModuleView, Object);
 
   typedef HomologousPointExtractionModuleModel::VisualizationModelType VisualizationModelType;
   typedef HomologousPointExtractionModuleModel::RGBPixelType           PixelType;
@@ -68,8 +66,8 @@ public:
   HomologousPointExtractionModuleControllerInterface* GetController();
 
   /** Set the widgets controller */
-  itkSetObjectMacro(FirstWidgetsController,ImageWidgetController);
-  itkSetObjectMacro(SecondWidgetsController,ImageWidgetController);
+  itkSetObjectMacro(FirstWidgetsController, ImageWidgetController);
+  itkSetObjectMacro(SecondWidgetsController, ImageWidgetController);
 
   /** Build the interface */
   virtual void BuildInterface();
@@ -83,15 +81,15 @@ public:
   virtual void HideAll();
 
   void UpdateListSelectionColor(bool whichOne);
-  void ChangePointValue(IndexType index, unsigned int viewId );
-  void AddPointsToList( IndexType id1, IndexType id2);
+  void ChangePointValue(IndexType index, unsigned int viewId);
+  void AddPointsToList(IndexType id1, IndexType id2);
   void RedrawWidgets();
   void Show();
 
   /** Get a pointer to the view parts for the controller */
-  itkGetObjectMacro(FirstImageView,ImageViewType);
-  itkGetObjectMacro(SecondImageView,ImageViewType);
-  
+  itkGetObjectMacro(FirstImageView, ImageViewType);
+  itkGetObjectMacro(SecondImageView, ImageViewType);
+
 protected:
   /** Constructor */
   HomologousPointExtractionModuleView();
@@ -99,34 +97,33 @@ protected:
   /** Destructor */
   virtual ~HomologousPointExtractionModuleView();
 
-
 private:
   HomologousPointExtractionModuleView(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   HomologousPointExtractionModuleModel* GetModel();
 
   /** Pointer to the controller */
   HomologousPointExtractionModuleControllerInterface::Pointer m_Controller;
   /** Pointer to the widgets controller */
-  ImageWidgetController::Pointer                m_FirstWidgetsController;
-  ImageWidgetController::Pointer                m_SecondWidgetsController;
+  ImageWidgetController::Pointer m_FirstWidgetsController;
+  ImageWidgetController::Pointer m_SecondWidgetsController;
   /** Pointer to the model */
   //HomologousPointExtractionModuleModel::Pointer m_Model;
   /** Image view */
-  ImageViewType::Pointer                        m_FirstImageView;
-  ImageViewType::Pointer                        m_SecondImageView;
+  ImageViewType::Pointer m_FirstImageView;
+  ImageViewType::Pointer m_SecondImageView;
   /** Cross Gl Component */
-  CrossGlComponent::Pointer                     m_FirstCrossGlComponent;
-  CrossGlComponent::Pointer                     m_SecondCrossGlComponent;
+  CrossGlComponent::Pointer m_FirstCrossGlComponent;
+  CrossGlComponent::Pointer m_SecondCrossGlComponent;
   /** Circle Gl Component */
-  CircleGlComponent::Pointer                    m_FirstCircleGlComponent;
-  CircleGlComponent::Pointer                    m_SecondCircleGlComponent;
+  CircleGlComponent::Pointer m_FirstCircleGlComponent;
+  CircleGlComponent::Pointer m_SecondCircleGlComponent;
   /** Point color */
-  ColorListType                                 m_ColorList;
+  ColorListType m_ColorList;
   /** Green color */
-  ColorType                                     m_Green;
+  ColorType m_Green;
 };
-}//end namespace otb
+} //end namespace otb
 
 #endif

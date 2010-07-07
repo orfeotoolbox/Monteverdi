@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbSpeckleFilteringView.h"
 
 namespace otb
@@ -30,7 +29,6 @@ SpeckleFilteringView
   // Create the component of the GUI
   this->CreateGUI();
 }
-
 
 /**
  * Handle the notification of the model
@@ -70,11 +68,10 @@ SpeckleFilteringView
 ::Process()
 {
 
-  if( guiFilterType->value() == 0)
-    m_Controller->ProcessFrostFilter(static_cast<unsigned int>(guiFrostRadius->value()),guiLeeDeRamp->value());
+  if (guiFilterType->value() == 0) m_Controller->ProcessFrostFilter(
+      static_cast<unsigned int>(guiFrostRadius->value()), guiLeeDeRamp->value());
   else
-    if(guiFilterType->value() == 1)
-      m_Controller->ProcessLeeFilter(static_cast<unsigned int>(guiLeeRadius->value()));
+  if (guiFilterType->value() == 1) m_Controller->ProcessLeeFilter(static_cast<unsigned int>(guiLeeRadius->value()));
   guiMainWindow->hide();
 }
 

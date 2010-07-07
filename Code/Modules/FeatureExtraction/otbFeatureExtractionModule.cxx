@@ -41,7 +41,6 @@ FeatureExtractionModule::FeatureExtractionModule()
   m_View->SetFeatureExtractionController(m_Controller);
   m_View->InitVisu();
 
-
   // Describe inputs
   this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply feature extraction"));
 
@@ -57,7 +56,7 @@ FeatureExtractionModule::~FeatureExtractionModule()
 void FeatureExtractionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -68,44 +67,44 @@ void FeatureExtractionModule::Run()
 
   InputImageType::Pointer input = this->GetInputData<InputImageType>("InputImage");
   input->UpdateOutputInformation();
-  if(input.IsNotNull())
+  if (input.IsNotNull())
     {
-    m_Model->SetInputImage(input); 
+    m_Model->SetInputImage(input);
     m_View->SetFeatureExtractPreviewParentBrowser(-1);
     m_View->Show();
     m_Model->GenerateLayers();
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 }
 
 /** The Notify */
-void FeatureExtractionModule::Notify(const std::string & event)
+void FeatureExtractionModule::Notify(const std::string& event)
 {
   if (event == "OutputsUpdated")
     {
-      this->ClearOutputDescriptors();
-      this->AddOutputDescriptor(m_Model->GetOutputImage(),"OutputImage", otbGetTextMacro("Feature image extraction"));
-      // Send an event to Monteverdi application
-      this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-      // Once module is closed, it is no longer busy
-      //this->BusyOff();
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_Model->GetOutputImage(), "OutputImage", otbGetTextMacro("Feature image extraction"));
+    // Send an event to Monteverdi application
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+    // Once module is closed, it is no longer busy
+    //this->BusyOff();
     }
   else if (event == "BusyOff")
-  {
+    {
     this->BusyOff();
-  }
+    }
   else if (event == "Cancel")
-  {
+    {
     this->BusyOff();
-    this->NotifyAll(MonteverdiEvent("Cancel",m_InstanceId));
-  }
+    this->NotifyAll(MonteverdiEvent("Cancel", m_InstanceId));
+    }
   else
-  {
+    {
 
-  }
+    }
 
 }
 

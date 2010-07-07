@@ -48,7 +48,6 @@
 #include "itkSimilarity2DTransform.h"
 #include "itkTranslationTransform.h"
 
-
 namespace otb {
 
 /** \class HomologousPointExtractionModuleModel
@@ -57,15 +56,15 @@ namespace otb {
  *
  */
 class ITK_EXPORT HomologousPointExtractionModuleModel
-      : public MVCModel<ListenerBase>, public itk::Object
+  : public MVCModel<ListenerBase>, public itk::Object
 {
 
 public:
   /** Standard class typedefs */
-  typedef HomologousPointExtractionModuleModel           Self;
-  typedef MVCModel<ListenerBase>                         Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef HomologousPointExtractionModuleModel Self;
+  typedef MVCModel<ListenerBase>               Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(HomologousPointExtractionModuleModel, Object);
@@ -74,12 +73,12 @@ public:
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
   typedef TypeManager::Floating_Point_Image       ImageType;
 
-  typedef VectorImageType::Pointer                VectorImagePointerType;
-  typedef VectorImageType::IndexType              IndexType;
-  typedef VectorImageType::SizeType               SizeType;
-  typedef VectorImageType::PointType              ImagePointType;
-  typedef std::vector<VectorImagePointerType>     ImageListType;
-  typedef itk::ContinuousIndex<>                  ContinuousIndexType;
+  typedef VectorImageType::Pointer            VectorImagePointerType;
+  typedef VectorImageType::IndexType          IndexType;
+  typedef VectorImageType::SizeType           SizeType;
+  typedef VectorImageType::PointType          ImagePointType;
+  typedef std::vector<VectorImagePointerType> ImageListType;
+  typedef itk::ContinuousIndex<>              ContinuousIndexType;
 
   typedef std::pair<IndexType, IndexType>  IndexCoupleType;
   typedef std::vector<IndexCoupleType>     IndexesListType;
@@ -87,27 +86,36 @@ public:
   typedef std::vector<ContinuousIndexType> ContinuousIndexListType;
 
   /** Visualization model */
-  typedef itk::RGBPixel<unsigned char>                              RGBPixelType;
-  typedef Image<RGBPixelType,2>                                     RGBImageType;
-  typedef ImageLayer<VectorImageType,RGBImageType>                  LayerType;
-  typedef ImageLayerGenerator<LayerType>                            LayerGeneratorType;
-  typedef LayerGeneratorType::Pointer                               LayerGeneratorPointerType;
-  typedef std::vector<LayerGeneratorPointerType>                    LayerGeneratorListType;
-  typedef ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
-  typedef VisualizationModelType::Pointer                           VisualizationModelPointerType;
-  typedef std::vector<VisualizationModelPointerType>                VisualizationModelListType;
-  typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer                                                               BlendingFunctionPointerType;
-  typedef std::vector<BlendingFunctionPointerType>                                                    BlendingFunctionListType;
+  typedef itk::RGBPixel<unsigned char>              RGBPixelType;
+  typedef Image<RGBPixelType, 2>                    RGBImageType;
+  typedef ImageLayer<VectorImageType, RGBImageType> LayerType;
+  typedef ImageLayerGenerator<LayerType>
+  LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer
+  LayerGeneratorPointerType;
+  typedef std::vector<LayerGeneratorPointerType>
+  LayerGeneratorListType;
+  typedef ImageLayerRenderingModel<RGBImageType>
+  VisualizationModelType;
+  typedef VisualizationModelType::Pointer
+  VisualizationModelPointerType;
+  typedef std::vector<VisualizationModelPointerType>
+  VisualizationModelListType;
+  typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType>
+  BlendingFunctionType;
+  typedef BlendingFunctionType::Pointer
+  BlendingFunctionPointerType;
+  typedef std::vector<BlendingFunctionPointerType>
+  BlendingFunctionListType;
 
   /** New macro */
   itkNewMacro(Self);
-  
+
   /** Point Set */
-  typedef itk::PointSet< float, 2 > PointSetType;
+  typedef itk::PointSet<float, 2>   PointSetType;
   typedef PointSetType::Pointer     PointSetPointerType;
   typedef PointSetType::PointType   PointType;
-  typedef itk::Point<double,2>      OutPointType;
+  typedef itk::Point<double, 2>     OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
 
   /** Transformation type */
@@ -129,44 +137,44 @@ public:
   /** Get the visualization models */
   VisualizationModelPointerType GetVisualizationModel(unsigned int id)
   {
-    if( id != 0 && id != 1 )
+    if (id != 0 && id != 1)
       {
-       itkExceptionMacro(<<"invalid id "<<id<<".");
+      itkExceptionMacro(<< "invalid id " << id << ".");
       }
     return m_VisualizationModel[id];
   }
 
   /** input images Pointer */
-  void SetFirstInputImage( VectorImagePointerType img );
+  void SetFirstInputImage(VectorImagePointerType img);
   itkGetConstObjectMacro(FirstInputImage, VectorImageType);
-  void SetSecondInputImage( VectorImagePointerType img );
+  void SetSecondInputImage(VectorImagePointerType img);
   itkGetConstObjectMacro(SecondInputImage, VectorImageType);
-  void SetImage( unsigned int id, VectorImagePointerType image );
+  void SetImage(unsigned int id, VectorImagePointerType image);
 
   /** Indexes list manipulation. */
   IndexesListType GetIndexesList() const { return m_IndexesList; }
-  void AddIndexesToList( IndexType id1, IndexType id2 );
+  void AddIndexesToList(IndexType id1, IndexType id2);
   void ClearIndexesList() { m_IndexesList.clear(); }
-  void RemovePointFromList( unsigned int id );
+  void RemovePointFromList(unsigned int id);
 
   /** Transform performing */
-  void ComputeTransform( TransformEnumType transformType );
+  void ComputeTransform(TransformEnumType transformType);
 
   /** Convert index list to point sets*/
-  void ConvertList( PointSetPointerType fix, PointSetPointerType mov );
-  
+  void ConvertList(PointSetPointerType fix, PointSetPointerType mov);
+
   /** Perform the transform */
-  template <typename T> void GenericRegistration(const ScalesType & scales);
+  template <typename T> void GenericRegistration(const ScalesType& scales);
 
   void AffineLeastSquareRegistration();
 
   /** Compute the transform on one point */
-  ContinuousIndexType TransformPoint( TransformEnumType transformType, IndexType id );
+  ContinuousIndexType TransformPoint(TransformEnumType transformType, IndexType id);
   /** Compute the transform of a list of index */
   template <typename T> ContinuousIndexType GenericTransformPoint(IndexType index);
 
   /** Compute the transform the points of m_IndexList */
-  ContinuousIndexListType TransformPoints( TransformEnumType transformType );
+  ContinuousIndexListType TransformPoints(TransformEnumType transformType);
   /** Compute the transform of a list of index */
   template <typename T> ContinuousIndexListType GenericTransformPoints(IndexListType inList);
 
@@ -174,7 +182,7 @@ public:
   void OK();
 
   /** Get the output changed flag */
-  itkGetMacro(OutputChanged,bool);
+  itkGetMacro(OutputChanged, bool);
   /** Get Output image */
   itkGetObjectMacro(Output, VectorImageType);
 
@@ -188,23 +196,22 @@ protected:
   /** Destructor */
   ~HomologousPointExtractionModuleModel();
 
-  
 private:
   HomologousPointExtractionModuleModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
   /** Singleton instance */
-  static Pointer                     Instance;
+  static Pointer Instance;
 
   /** Visualization */
   VisualizationModelListType m_VisualizationModel;
   LayerGeneratorListType     m_ImageGenerator;
   BlendingFunctionListType   m_BlendingFunction;
   /** input images */
-  ImageListType              m_Images;
+  ImageListType          m_Images;
   VectorImagePointerType m_FirstInputImage;
   VectorImagePointerType m_SecondInputImage;
 
@@ -227,5 +234,5 @@ private:
 
 };
 
-}//end namespace otb
+} //end namespace otb
 #endif

@@ -34,8 +34,8 @@ namespace otb
 
 class ITK_EXPORT ChangeDetectionModule
   : public Module, public ListenerBase
-  {
-  public:
+{
+public:
   /** Standard class typedefs */
   typedef ChangeDetectionModule         Self;
   typedef Module                        Superclass;
@@ -46,19 +46,19 @@ class ITK_EXPORT ChangeDetectionModule
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ChangeDetectionModule,Module);
-  
+  itkTypeMacro(ChangeDetectionModule, Module);
+
   /** Input typedef */
-  typedef TypeManager::Floating_Point_Precision      FloatingType;
-  typedef InteractiveChangeDetection<FloatingType>   ChangeDetectionType;
-  typedef ChangeDetectionType::ImageType             ImageType;
-  typedef ChangeDetectionType::SingleImageType       SingleImageType;
+  typedef TypeManager::Floating_Point_Precision    FloatingType;
+  typedef InteractiveChangeDetection<FloatingType> ChangeDetectionType;
+  typedef ChangeDetectionType::ImageType           ImageType;
+  typedef ChangeDetectionType::SingleImageType     SingleImageType;
 
   /** Cast SingleImage to ImageType (VectorImage) */
-  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
+  typedef ImageToVectorImageCastFilter<SingleImageType, ImageType> CastSingleImageFilter;
 
- /*  /\** Accessor to the ChangeDetection Instance *\/ */
-  itkGetObjectMacro(ChangeDetection,ChangeDetectionType);
+  /*  /\** Accessor to the ChangeDetection Instance *\/ */
+  itkGetObjectMacro(ChangeDetection, ChangeDetectionType);
 
 protected:
   /** Constructor */
@@ -80,15 +80,14 @@ protected:
 
 private:
   ChangeDetectionModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // The view
-  ChangeDetectionType::Pointer        m_ChangeDetection;
+  ChangeDetectionType::Pointer m_ChangeDetection;
 
   // Cast Filter
-  CastSingleImageFilter::Pointer     m_CastFilter;
+  CastSingleImageFilter::Pointer m_CastFilter;
 };
-
 
 } // End namespace otb
 

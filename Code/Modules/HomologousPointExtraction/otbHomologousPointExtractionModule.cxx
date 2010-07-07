@@ -43,8 +43,8 @@ HomologousPointExtractionModule::HomologousPointExtractionModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage",otbGetTextMacro("Fix image"));
-  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage",otbGetTextMacro("Moving Image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage", otbGetTextMacro("Fix image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage", otbGetTextMacro("Moving Image"));
 }
 
 /** Destructor */
@@ -55,9 +55,8 @@ HomologousPointExtractionModule::~HomologousPointExtractionModule()
 void HomologousPointExtractionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void HomologousPointExtractionModule::Run()
@@ -76,17 +75,17 @@ void HomologousPointExtractionModule::Run()
   FloatingVectorImageType::Pointer fpvImage2 = this->GetInputData<FloatingVectorImageType>("MovingInputImage");
 
   // One of this pointer will be NULL:
-  if(fpvImage1.IsNotNull() && fpvImage2.IsNotNull() )
+  if (fpvImage1.IsNotNull() && fpvImage2.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_Model->SetFirstInputImage( fpvImage1 );
-      m_Model->SetSecondInputImage( fpvImage2 );
+    m_Model->SetFirstInputImage(fpvImage1);
+    m_Model->SetSecondInputImage(fpvImage2);
 
-      m_View->BuildInterface();
+    m_View->BuildInterface();
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -100,16 +99,15 @@ void HomologousPointExtractionModule::Notify()
 
   if (m_Model->GetOutputChanged())
     {
-      this->ClearOutputDescriptors();
-      // Add outputs
-      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"Transformed Image", otbGetTextMacro("Transformed moving image"));
+    this->ClearOutputDescriptors();
+    // Add outputs
+    FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
+    this->AddOutputDescriptor(filteredOutput, "Transformed Image", otbGetTextMacro("Transformed moving image"));
     }
 
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }
 } // End namespace otb
-

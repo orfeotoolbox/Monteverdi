@@ -18,22 +18,20 @@ See OTBCopyright.txt for details.
 #ifndef __otbOpticalCalibrationEnum_h
 #define __otbOpticalCalibrationEnum_h
 
-
 namespace otb
 {
 /**
  * this enum defines the different images available.
  */
 typedef enum
-{
+  {
   INPUT_IMAGE,
   LUMINANCE,
   REFLECTANCE_TOA,
   REFLECTANCE_TOC,
   DIFF_REFL
-}
+  }
 EnumImageType;
 
-
-}// namespace otb
+} // namespace otb
 #endif

@@ -28,14 +28,14 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
 {
   //Internationalization
   otbI18nMacro();
-  
+
   otb::HomologousPointExtractionModule::Pointer pointModule = otb::HomologousPointExtractionModule::New();
-  otb::Module::Pointer module = pointModule.GetPointer();
-  
+  otb::Module::Pointer                          module = pointModule.GetPointer();
+
   // Put in the tests
   typedef otb::HomologousPointExtractionModule::FloatingVectorImageType ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileReader<ImageType>                               ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                               WriterType;
 
   //reader
   ReaderType::Pointer reader1 = ReaderType::New();
@@ -47,12 +47,12 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
- 
-  module->AddInputByKey("FixInputImage",wrapperIn1);
-  module->AddInputByKey("MovingInputImage",wrapperIn2);
+
+  module->AddInputByKey("FixInputImage", wrapperIn1);
+  module->AddInputByKey("MovingInputImage", wrapperIn2);
 
   module->Start();
-  
+
   Fl::check();
 
   // First point
@@ -93,7 +93,7 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
   */
   pointModule->GetView()->guiComputeTransform->do_callback();
   Fl::check();
- 
+
   pointModule->GetView()->guiQuit->do_callback();
   /*
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("Transformed Image");
@@ -105,5 +105,5 @@ int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
   writer->SetFileName(argv[3]);
   writer->Update();
   */
- return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

@@ -44,13 +44,13 @@ Notify(ListenerBase * listener)
 
 SupervisedClassificationModel::
 SupervisedClassificationModel() : m_MaxTrainingSize(100),
-          m_MaxValidationSize(100),
-          m_ValidationTrainingProportion(0.5),
-          m_ClassKey("Class"),
-          m_NumberOfClasses(0),
-          m_Description(""),
-          m_OverallAccuracy(0.0),
-          m_KappaIndex(0.0)
+  m_MaxValidationSize(100),
+  m_ValidationTrainingProportion(0.5),
+  m_ClassKey("Class"),
+  m_NumberOfClasses(0),
+  m_Description(""),
+  m_OverallAccuracy(0.0),
+  m_KappaIndex(0.0)
 {
   m_InputImage = ImageType::New();
   m_LabeledImage = LabeledImageType::New();
@@ -66,7 +66,6 @@ SupervisedClassificationModel
 {
 }
 
-
 void
 SupervisedClassificationModel
 ::SetImage(ImagePointerType image)
@@ -75,7 +74,6 @@ SupervisedClassificationModel
 
   image->UpdateOutputInformation();
   m_InputImage = image;
-  
 
   this->UpdateDescription();
 }
@@ -100,11 +98,10 @@ SupervisedClassificationModel
 
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
-  
+
   this->UpdateVectorDataInformation();
   this->UpdateDescription();
 }
-
 
 void
 SupervisedClassificationModel
@@ -113,7 +110,7 @@ SupervisedClassificationModel
 
   m_ClassificationFilter->SetInput(m_InputImage);
   m_ClassificationFilter->SetModel(m_ModelEstimator->GetModel());
-  m_Caster->SetInput( m_ClassificationFilter->GetOutput() );
+  m_Caster->SetInput(m_ClassificationFilter->GetOutput());
   m_OutputChanged = true;
   this->NotifyAll();
 
@@ -136,9 +133,9 @@ SupervisedClassificationModel
   m_SampleGenerator->SetValidationTrainingProportion(m_ValidationTrainingProportion);
   m_SampleGenerator->SetClassKey(m_ClassKey);
 
-  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
-  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
-  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
+  otbGenericMsgDebugMacro(<< "Vector data " << m_VectorROIs);
+  otbGenericMsgDebugMacro(<< "Vector data size " << m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<< "Image " << m_InputImage);
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
@@ -146,11 +143,9 @@ SupervisedClassificationModel
 
   m_NumberOfClasses = m_SampleGenerator->GetNumberOfClasses();
 
-
-  otbGenericMsgDebugMacro(<<"Samples generated. "<< m_NumberOfClasses
-       << " classes found ");
+  otbGenericMsgDebugMacro(<< "Samples generated. " << m_NumberOfClasses
+                          << " classes found ");
 }
-
 
 void
 SupervisedClassificationModel
@@ -161,8 +156,7 @@ SupervisedClassificationModel
   m_ModelEstimator->SetInputSampleList(m_SampleGenerator->GetTrainingListSample());
   m_ModelEstimator->SetTrainingSampleList(m_SampleGenerator->GetTrainingListLabel());
   m_ModelEstimator->SetNumberOfClasses(m_NumberOfClasses);
-  if(m_NumberOfClasses == 1)
-    m_ModelEstimator->SetSVMType(ONE_CLASS);
+  if (m_NumberOfClasses == 1) m_ModelEstimator->SetSVMType(ONE_CLASS);
   m_ModelEstimator->Update();
 }
 
@@ -182,18 +176,18 @@ SupervisedClassificationModel
   ValidationListSampleType::ConstIterator itEnd = validationClassifier->GetOutput()->End();
 
   TrainingListSampleType::Pointer validationList = TrainingListSampleType::New();
- 
-  while(it != itEnd)
+
+  while (it != itEnd)
     {
     validationList->PushBack(it.GetClassLabel());
     ++it;
     }
 
   ConfusionMatrixCalculatorType::Pointer confMatCalc =
-                                          ConfusionMatrixCalculatorType::New();
+    ConfusionMatrixCalculatorType::New();
 
-  confMatCalc->SetReferenceLabels( m_SampleGenerator->GetValidationListLabel() );
-  confMatCalc->SetProducedLabels( validationList );
+  confMatCalc->SetReferenceLabels(m_SampleGenerator->GetValidationListLabel());
+  confMatCalc->SetProducedLabels(validationList);
 
   confMatCalc->Update();
 
@@ -202,8 +196,8 @@ SupervisedClassificationModel
   m_KappaIndex = confMatCalc->GetKappaIndex();
   m_MapOfClasses = confMatCalc->GetMapOfClasses();
 
-  otbGenericMsgDebugMacro(<<"Confusion matrix \n" << m_ConfusionMatrix);
-  
+  otbGenericMsgDebugMacro(<< "Confusion matrix \n" << m_ConfusionMatrix);
+
   this->UpdateMatrixString();
 
 }
@@ -225,15 +219,15 @@ SupervisedClassificationModel
     }
   m_ClassKeyList = node->Get()->GetFieldList();
   if ((!node->Get()->HasField(m_ClassKey)) && (m_ClassKeyList.size() > 0))
-  {
+    {
     m_ClassKey = m_ClassKeyList[0];
-  }
+    }
 
   m_SampleGenerator->SetClassKey(m_ClassKey);
 
-  otbGenericMsgDebugMacro(<<"Vector data "<< m_VectorROIs);
-  otbGenericMsgDebugMacro(<<"Vector data size "<< m_VectorROIs->Size());
-  otbGenericMsgDebugMacro(<<"Image "<< m_InputImage);
+  otbGenericMsgDebugMacro(<< "Vector data " << m_VectorROIs);
+  otbGenericMsgDebugMacro(<< "Vector data size " << m_VectorROIs->Size());
+  otbGenericMsgDebugMacro(<< "Image " << m_InputImage);
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
@@ -260,7 +254,7 @@ SupervisedClassificationModel
     {
     oss << "Training samples:\n";
     for (std::map<int, int>::const_iterator itmap = classesSamplesNumberTraining.begin();
-        itmap != classesSamplesNumberTraining.end(); ++itmap)
+         itmap != classesSamplesNumberTraining.end(); ++itmap)
       {
       oss << itmap->first << ":\t" << itmap->second << "\n";
       }
@@ -270,7 +264,7 @@ SupervisedClassificationModel
     {
     oss << "Validation samples:\n";
     for (std::map<int, int>::const_iterator itmap = classesSamplesNumberValidation.begin();
-        itmap != classesSamplesNumberValidation.end(); ++itmap)
+         itmap != classesSamplesNumberValidation.end(); ++itmap)
       {
       oss << itmap->first << ":\t" << itmap->second << "\n";
       }
@@ -302,7 +296,7 @@ SupervisedClassificationModel
     for (std::map<ClassLabelType, int>::const_iterator itmap2 = m_MapOfClasses.begin();
          itmap2 != m_MapOfClasses.end(); ++itmap2)
       {
-      oss << m_ConfusionMatrix(itmap->second,itmap2->second) << "\t";
+      oss << m_ConfusionMatrix(itmap->second, itmap2->second) << "\t";
       }
     oss << "\n";
     }
@@ -315,4 +309,4 @@ SupervisedClassificationModel
   this->NotifyAll();
 }
 
-}// namespace otb
+} // namespace otb

@@ -12,11 +12,12 @@ class ViewerModuleGroup {open
 } {
   Function {ViewerModuleGroup()} {return_type void
   } {}
-  Function {Build()} {} {
+  Function {Build()} {open
+  } {
     Fl_Window bSetupWindow {
-      label {Vector data propreties}
+      label {Viewer setup}
       callback {this->Quit();} open
-      xywh {570 159 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
+      xywh {653 142 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
         callback {this->TabSetupPosition();} open
@@ -25,7 +26,7 @@ class ViewerModuleGroup {open
         Fl_Group {} {
           label {Vector data}
           callback {this->TabSetupPosition();} open
-          tooltip {Vector data propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Vector data propreties} xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {160 260 25 25} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -67,8 +68,8 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiViewerSetupWindow {
           label Setup
-          callback {this->TabSetupPosition();} open
-          xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
+          callback {this->TabSetupPosition();} open selected
+          xywh {0 29 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Round_Button guiViewerSetupGrayscaleMode {
             label {Grayscale mode}
@@ -81,20 +82,20 @@ class ViewerModuleGroup {open
             tooltip {Switch the image viewer mode to RGB composition} xywh {265 47 184 24} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
           }
           Fl_Spinner guiGrayscaleChannelChoice {
-            label {Channel index} open
-            tooltip {Select the band to view in grayscale mode} xywh {130 91 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
+            label {Channel index}
+            tooltip {Select the band to view in grayscale mode} xywh {130 91 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1
           }
           Fl_Spinner guiRedChannelChoice {
-            label {Red channel} open
-            tooltip {Select band for red channel in RGB composition} xywh {360 91 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            label {Red channel}
+            tooltip {Select band for red channel in RGB composition} xywh {360 91 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
           }
           Fl_Spinner guiGreenChannelChoice {
-            label {Green channel} open
-            tooltip {Select band for green channel in RGB composition} xywh {360 126 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            label {Green channel}
+            tooltip {Select band for green channel in RGB composition} xywh {360 126 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
           }
           Fl_Spinner guiBlueChannelChoice {
-            label {Blue channel} open
-            tooltip {Select band for blue channel in RGB composition} xywh {360 161 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
+            label {Blue channel}
+            tooltip {Select band for blue channel in RGB composition} xywh {360 161 90 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
           }
           Fl_Return_Button guiViewerSetupOk {
             label Ok
@@ -130,6 +131,11 @@ class ViewerModuleGroup {open
                 label Apply
                 callback {this->UpdateLowerQuantile();}
                 xywh {574 262 90 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Check_Button bEnableScaling {
+                label {Enable scaling}
+                callback {this->UpdateEnableScaling();}
+                xywh {400 195 120 15} down_box DOWN_BOX value 1
               }
             }
           }
@@ -168,11 +174,11 @@ class ViewerModuleGroup {open
       }
     }
   }
-  Function {BuildDEM()} {return_type {virtual void}
+  Function {BuildDEM()} {open return_type {virtual void}
   } {
     Fl_Window wDEM {
       label {DEM Selection} open
-      xywh {655 540 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {655 540 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Button gLoadDEM {
         label Load
@@ -220,11 +226,13 @@ bDEM->value(0);
   } {}
   Function {ViewerSetupOk()} {open return_type {virtual void}
   } {}
-  Function {UseDEM()} {selected return_type {virtual void}
+  Function {UseDEM()} {return_type {virtual void}
   } {}
   Function {UpdateDEMSettings()} {return_type {virtual void}
   } {}
   Function {TabSetupPosition()} {return_type {virtual void}
+  } {}
+  Function {UpdateEnableScaling()} {return_type {virtual void}
   } {}
   Function {UpdateUpperQuantile()} {return_type {virtual void}
   } {}

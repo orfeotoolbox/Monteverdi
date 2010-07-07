@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbSpeckleFilteringModel.h"
 
 namespace otb
@@ -45,7 +44,7 @@ void
 SpeckleFilteringModel
 ::LeeFiltering(unsigned int radius)
 {
-  LeeFilterType::SizeType     lradius;
+  LeeFilterType::SizeType lradius;
   lradius.Fill(radius);
   m_LeeFilter->SetInput(m_InputImage);
   m_LeeFilter->SetRadius(lradius);
@@ -61,7 +60,7 @@ void
 SpeckleFilteringModel
 ::FrostFiltering(unsigned int radius, double deRamp)
 {
-  FrostFilterType::SizeType     fradius;
+  FrostFilterType::SizeType fradius;
   fradius.Fill(radius);
 
   m_FrostFilter->SetInput(m_InputImage);
@@ -79,5 +78,4 @@ SpeckleFilteringModel
   listener->Notify();
 }
 
-
-}// End namespace
+} // End namespace

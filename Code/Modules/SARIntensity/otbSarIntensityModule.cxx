@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbSarIntensityModule.h"
 
-
 namespace otb
 {
 /** Constructor */
@@ -28,7 +27,7 @@ SarIntensityModule::SarIntensityModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<ComplexImageType>("InputImage",otbGetTextMacro("Complex image to extract intensity from"));
+  this->AddInputDescriptor<ComplexImageType>("InputImage", otbGetTextMacro("Complex image to extract intensity from"));
 
   m_ModulusFilter = ModulusFilterType::New();
   m_SquareFilter  = SquareFilterType::New();
@@ -43,9 +42,8 @@ SarIntensityModule::~SarIntensityModule()
 void SarIntensityModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void SarIntensityModule::Run()
@@ -55,7 +53,7 @@ void SarIntensityModule::Run()
   ComplexImageType::Pointer image = this->GetInputData<ComplexImageType>("InputImage");
 
   // Check if dataset is not null
-  if(image.IsNotNull())
+  if (image.IsNotNull())
     {
     // Wire filters
     m_ModulusFilter->SetInput(image);
@@ -69,16 +67,17 @@ void SarIntensityModule::Run()
     this->ClearOutputDescriptors();
 
     // Add an output (single version)
-    this->AddOutputDescriptor(m_SquareFilter->GetOutput(), "Intensity", otbGetTextMacro("Intensity of the complex image"));
-    this->AddOutputDescriptor(m_LogFilter->GetOutput(),"LogIntensity", otbGetTextMacro("Log10-intensity of the complex image"));
+    this->AddOutputDescriptor(m_SquareFilter->GetOutput(), "Intensity",
+                              otbGetTextMacro("Intensity of the complex image"));
+    this->AddOutputDescriptor(m_LogFilter->GetOutput(), "LogIntensity",
+                              otbGetTextMacro("Log10-intensity of the complex image"));
 
     // Last, when all outputs where declared, notify listeners
     this->NotifyOutputsChange();
     }
   else
     {
-    itkExceptionMacro(<<"Dataset is Null");
+    itkExceptionMacro(<< "Dataset is Null");
     }
 }
 } // End namespace otb
-

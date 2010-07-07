@@ -18,7 +18,6 @@
 #ifndef __otbCheckButtonWidgetScroll_h
 #define __otbCheckButtonWidgetScroll_h
 
-
 #include "otbWidgetScroll.h"
 #include "FL/Fl_Check_Button.h"
 
@@ -28,34 +27,29 @@ class AdaptedCheckButton : public Fl_Check_Button
 {
 public:
   typedef Fl_Check_Button Superclass;
-  AdaptedCheckButton(int X, int Y, int W, int H, const char*L=0) : Fl_Check_Button(X,Y,W,H,L) {};
-  virtual ~AdaptedCheckButton() {};
+  AdaptedCheckButton(int X, int Y, int W, int H, const char*L = 0) : Fl_Check_Button(X, Y, W, H, L) {}
+  virtual ~AdaptedCheckButton() {}
   virtual int handle(int event)
   {
     switch (event)
-    {
-    case FL_ENTER:
-    {
-      return 1;
-    }
-    case FL_LEAVE:
-    {
-      return 1;
-    }
-    case FL_RELEASE:
-    {
-      if (value()==1)
-        value(0);
-      else
-        value(1);
-      return 1;
-    }
-    }
+      {
+      case FL_ENTER:
+        {
+        return 1;
+        }
+      case FL_LEAVE:
+        {
+        return 1;
+        }
+      case FL_RELEASE:
+        {
+        if (value() == 1) value(0);
+        else value(1);
+        return 1;
+        }
+      }
   }
 };
-
-
-
 
 class CheckButtonWidgetScroll : public WidgetScroll<Fl_Check_Button>
 {
@@ -67,28 +61,29 @@ public:
   typedef Superclass::StringVectorType   StringVectorType;
   typedef std::vector<int>               CheckedBoxListType;
 
-  CheckButtonWidgetScroll(int X, int Y, int W, int H, const char*L=0) : WidgetScroll<Fl_Check_Button>(X,Y,W,H,L)
+  CheckButtonWidgetScroll(int X, int Y, int W, int H, const char*L = 0) : WidgetScroll<Fl_Check_Button>(X, Y, W, H, L)
   {
-  };
-  virtual ~CheckButtonWidgetScroll() {};
+  }
+  virtual ~CheckButtonWidgetScroll() {}
 
   CheckedBoxListType GetCheckedBoxList()
   {
     this->ComputeCheckedBoxList();
     return m_CheckedBoxList;
-  };
+  }
 
   void ComputeCheckedBoxList()
   {
     // number of tile childre
 
-    for (unsigned int i = 0; i<static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->children(); i++)
-    {
-      if (static_cast<Fl_Check_Button *>(static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->child(i))->value()==1)
+    for (unsigned int i = 0; i < static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->children(); i++)
       {
+      if (static_cast<Fl_Check_Button *>(static_cast<Fl_Tile *>(static_cast<Fl_Scroll *>(child(0))->child(0))->child(i))
+          ->value() == 1)
+        {
         m_CheckedBoxList.push_back(i);
+        }
       }
-    }
 
   }
 
@@ -98,6 +93,6 @@ protected:
 private:
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #endif

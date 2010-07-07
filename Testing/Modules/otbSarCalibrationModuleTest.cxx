@@ -27,52 +27,50 @@
 int otbSarCalibrationModuleTest(int argc, char* argv[])
 {
   bool withComplex = false;
-  if(atoi(argv[2]) == 1)
-    withComplex = true;
+  if (atoi(argv[2]) == 1) withComplex = true;
 
-  
   //Internationalization
   otbI18nMacro();
-  
+
   otb::SarCalibrationModule::Pointer pointModule = otb::SarCalibrationModule::New();
-  otb::Module::Pointer module = pointModule.GetPointer();
-  
+  otb::Module::Pointer               module = pointModule.GetPointer();
+
   // Put in the tests
-  typedef otb::SarCalibrationModule::ImageType          ImageType;
-  typedef otb::SarCalibrationModule::ComplexImageType   ComplexImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileReader<ComplexImageType> ComplexReaderType;
- 
+  typedef otb::SarCalibrationModule::ImageType        ImageType;
+  typedef otb::SarCalibrationModule::ComplexImageType ComplexImageType;
+  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef otb::ImageFileReader<ComplexImageType>      ComplexReaderType;
+
   //reader
   ReaderType::Pointer        reader    = ReaderType::New();
   ComplexReaderType::Pointer cplxReader = ComplexReaderType::New();
 
-  otb::DataObjectWrapper     wrapperIn;
-  if(!withComplex)
+  otb::DataObjectWrapper wrapperIn;
+  if (!withComplex)
     {
-      reader->SetFileName(argv[1]);
-      reader->GenerateOutputInformation();
-      wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
+    reader->SetFileName(argv[1]);
+    reader->GenerateOutputInformation();
+    wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
     }
   else
     {
-      cplxReader->SetFileName(argv[1]);
-      cplxReader->GenerateOutputInformation();
-      wrapperIn = otb::DataObjectWrapper::Create(cplxReader->GetOutput());
+    cplxReader->SetFileName(argv[1]);
+    cplxReader->GenerateOutputInformation();
+    wrapperIn = otb::DataObjectWrapper::Create(cplxReader->GetOutput());
     }
 
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage", wrapperIn);
 
   module->Start();
-  
+
   Fl::check();
 
-  if( pointModule->CheckMetadata() )
+  if (pointModule->CheckMetadata())
     {
-      pointModule->bBrightness->value();
-      Fl::check();
-      pointModule->bOK->do_callback();
-      Fl::check();
+    pointModule->bBrightness->value();
+    Fl::check();
+    pointModule->bOK->do_callback();
+    Fl::check();
     }
 
   Fl::check();

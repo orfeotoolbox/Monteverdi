@@ -26,7 +26,6 @@
 #include "itkExceptionObject.h"
 #include "otbFeature.h"
 
-
 namespace otb
 {
 
@@ -73,7 +72,7 @@ FeatureExtractionViewGUI
 FeatureExtractionViewGUI
 ::~FeatureExtractionViewGUI()
 {
-  
+
 }
 
 void
@@ -160,27 +159,27 @@ FeatureExtractionViewGUI
   guiAdvList->add("Information. Correlation 1", 8);
   guiAdvList->add("Information Correlation 2", 9);
   guiAdvList->redraw();
-  
+
 }
 
 void
 FeatureExtractionViewGUI
-::UpdateParameterArea( unsigned int groupId )
+::UpdateParameterArea(unsigned int groupId)
 {
-  for(unsigned int i=0; i<m_ParameterGroupList.size(); i++)
+  for (unsigned int i = 0; i < m_ParameterGroupList.size(); i++)
     m_ParameterGroupList[i]->hide();
 
   m_ParameterGroupList[groupId]->show();
-  if(m_ParameterGroupList[groupId]==guiSpectAngle)
+  if (m_ParameterGroupList[groupId] == guiSpectAngle)
     {
-      if( GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() < 2 )
-        {
-          m_ParameterGroupList[groupId]->deactivate();
-        }
-      else
-        {
-          m_ParameterGroupList[groupId]->activate();
-        }
+    if (GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() < 2)
+      {
+      m_ParameterGroupList[groupId]->deactivate();
+      }
+    else
+      {
+      m_ParameterGroupList[groupId]->activate();
+      }
     }
 }
 
@@ -188,11 +187,11 @@ void
 FeatureExtractionViewGUI
 ::UpdateFeaturePreview()
 {
-  if (guiFeatureListAction->value()>0)
-  {
+  if (guiFeatureListAction->value() > 0)
+    {
     //GetModel()->GetSingleOutput(guiFeatureListAction->value()-1);
-    m_FeatureExtractionController->UpdateFeaturePreview(guiFeatureListAction->value()-1);
-  }
+    m_FeatureExtractionController->UpdateFeaturePreview(guiFeatureListAction->value() - 1);
+    }
 }
 
 void
@@ -200,16 +199,15 @@ FeatureExtractionViewGUI
 ::UpdateFeaturePreviewFromOutputList()
 {
   unsigned int OutputListNb = guiOutputFeatureList->value();
-  if (OutputListNb>0)
+  if (OutputListNb > 0)
     {
-    if(static_cast<unsigned int>(OutputListNb-1) <GetModel()->GetOutputListOrder().size() )
+    if (static_cast<unsigned int>(OutputListNb - 1) < GetModel()->GetOutputListOrder().size())
       {
-	//GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
-	m_FeatureExtractionController->UpdateFeaturePreview(GetModel()->GetOutputListOrder()[OutputListNb-1]);
+      //GetModel()->GetSingleOutput( GetModel()->GetOutputListOrder()[OutputListNb-1]);
+      m_FeatureExtractionController->UpdateFeaturePreview(GetModel()->GetOutputListOrder()[OutputListNb - 1]);
       }
-  }
+    }
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -221,21 +219,21 @@ FeatureExtractionViewGUI
 
 void
 FeatureExtractionViewGUI
-::Notify(const std::string & event)
+::Notify(const std::string& event)
 {
   if (GetModel()->GetHasInput())
-  {
-    if(event != "Cancel")
+    {
+    if (event != "Cancel")
       {
-        this->InitWidgets();
-        this->UpdateChannelSelection();
-	 if(event != "SetInputImage")
-	   {
-	     this->UpdateChannels();
-	   }
-        this->UpdateInformation();
+      this->InitWidgets();
+      this->UpdateChannelSelection();
+      if (event != "SetInputImage")
+        {
+        this->UpdateChannels();
+        }
+      this->UpdateInformation();
       }
-  }
+    }
 }
 
 void
@@ -244,40 +242,37 @@ FeatureExtractionViewGUI
 {
   guiChannelSelection->clear();
   itk::OStringStream oss;
-  int count = 1;
-  for (unsigned int i = 0; i<GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
-  {
+  int                count = 1;
+  for (unsigned int i = 0; i < GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
+    {
     oss.str("");
-    oss<<"Channel "<<i+1;
+    oss << "Channel " << i + 1;
     guiChannelSelection->add(oss.str().c_str(), count);
     count++;
-  }
-  if(GetModel()->GetNumberOfChannels() > 1 )
-  {
+    }
+  if (GetModel()->GetNumberOfChannels() > 1)
+    {
     guiChannelSelection->add("Intensity", count);
-  }
+    }
   // Set all check box checked
   guiChannelSelection->check_all();
   guiChannelSelection->redraw();
 }
 
-
 void
 FeatureExtractionViewGUI
 ::UpdateInformation()
 {
-  std::string imName = GetModel()->GetInputFileName();
+  std::string        imName = GetModel()->GetInputFileName();
   itk::OStringStream oss;
   oss.str("");
-  oss<<"Feature Extraction Application";
-  oss<<" : "<<imName.substr(imName.find_last_of("/")+1, imName.size());
-  oss<<" ("<<GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel();
-  if(GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() != 1)
-    oss<<" bands , ";
-  else
-    oss<<" band , ";
+  oss << "Feature Extraction Application";
+  oss << " : " << imName.substr(imName.find_last_of("/") + 1, imName.size());
+  oss << " (" << GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel();
+  if (GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
+  else oss << " band , ";
 
-  oss<<GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()<<")";
+  oss << GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize() << ")";
   guiMainWindow->label(oss.str().c_str());
 }
 
@@ -285,50 +280,50 @@ void
 FeatureExtractionViewGUI
 ::AddOutputChannel()
 {
-  if (guiFeatureList->size()!=0 && guiFeatureList->value()!=0)
-  {
-    m_InputOutputFeatureLink.push_back(guiFeatureList->value()-1);
-    m_FeatureExtractionController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+  if (guiFeatureList->size() != 0 && guiFeatureList->value() != 0)
+    {
+    m_InputOutputFeatureLink.push_back(guiFeatureList->value() - 1);
+    m_FeatureExtractionController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size() - 1]);
     guiOutputFeatureList->add(guiFeatureList->text(guiFeatureList->value()));
-    m_FeatureExtractionController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+    m_FeatureExtractionController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size() - 1]);
     guiOutputFeatureList->redraw();
-  }
+    }
 }
 
 void
 FeatureExtractionViewGUI
 ::RemoveOutputChannel()
 {
-  if (guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
-  {
-    m_FeatureExtractionController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+  if (guiOutputFeatureList->size() != 0 && guiOutputFeatureList->value() != 0)
+    {
+    m_FeatureExtractionController->ChangeFilterStatus(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size() - 1]);
     m_FeatureExtractionController->RemoveFromOutputListOrder(guiOutputFeatureList->value());
-    m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin()+guiOutputFeatureList->value()-1);
+    m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin() + guiOutputFeatureList->value() - 1);
     guiOutputFeatureList->remove(guiOutputFeatureList->value());
     guiOutputFeatureList->redraw();
-  }
+    }
 }
 
 void
 FeatureExtractionViewGUI
 ::UpOutputChannel()
 {
-  if ( guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0 )
+  if (guiOutputFeatureList->size() != 0 && guiOutputFeatureList->value() != 0)
     {
-      int id = guiOutputFeatureList->value();
-      // exchnage the output list manager
-      m_FeatureExtractionController->ExchangeOutputListOrder(1);
-      // exchnage the list display order
-      if(id!=1)
-       {
-         guiOutputFeatureList->swap( id, id-1 );
-         guiOutputFeatureList->value(id-1);
-       }
-      else
-       {
-         guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
-         guiOutputFeatureList->value(guiOutputFeatureList->size());
-       }
+    int id = guiOutputFeatureList->value();
+    // exchnage the output list manager
+    m_FeatureExtractionController->ExchangeOutputListOrder(1);
+    // exchnage the list display order
+    if (id != 1)
+      {
+      guiOutputFeatureList->swap(id, id - 1);
+      guiOutputFeatureList->value(id - 1);
+      }
+    else
+      {
+      guiOutputFeatureList->swap(id, guiOutputFeatureList->size());
+      guiOutputFeatureList->value(guiOutputFeatureList->size());
+      }
     }
 }
 
@@ -336,63 +331,61 @@ void
 FeatureExtractionViewGUI
 ::DownOutputChannel()
 {
-  if ( guiOutputFeatureList->size()!=0 && guiOutputFeatureList->value()!=0)
+  if (guiOutputFeatureList->size() != 0 && guiOutputFeatureList->value() != 0)
     {
-      int id = guiOutputFeatureList->value();
-      // exchnage the output list manager
-      m_FeatureExtractionController->ExchangeOutputListOrder(-1);
-      // exchnage the list display order
-      if(id!=guiOutputFeatureList->size())
-       {
-         guiOutputFeatureList->swap( id, id+1 );
-         guiOutputFeatureList->value(id+1);
-       }
-      else
-       {
-         guiOutputFeatureList->swap(id, 1 );
-         guiOutputFeatureList->value(1);
-       }
-      guiOutputFeatureList->redraw();
+    int id = guiOutputFeatureList->value();
+    // exchnage the output list manager
+    m_FeatureExtractionController->ExchangeOutputListOrder(-1);
+    // exchnage the list display order
+    if (id != guiOutputFeatureList->size())
+      {
+      guiOutputFeatureList->swap(id, id + 1);
+      guiOutputFeatureList->value(id + 1);
+      }
+    else
+      {
+      guiOutputFeatureList->swap(id, 1);
+      guiOutputFeatureList->value(1);
+      }
+    guiOutputFeatureList->redraw();
     }
 }
 
 void
 FeatureExtractionViewGUI
-::UpdateSelectedPixel(const IndexType & id)
+::UpdateSelectedPixel(const IndexType& id)
 {
   itk::OStringStream oss;
-  oss<<"("<<id[0]<<" , "<<id[1]<<")";
+  oss << "(" << id[0] << " , " << id[1] << ")";
   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
   guiSpectAnglePixelCoordinates->redraw();
   m_SelectedPixel = GetModel()->GetInputImage()->GetPixel(id);
   oss.str("");
-  oss<<"[";
+  oss << "[";
 
   unsigned int i = 0;
-  for (i=0; i<m_SelectedPixel.Size()-1; i++)
+  for (i = 0; i < m_SelectedPixel.Size() - 1; i++)
     {
-      oss<<m_SelectedPixel[i]<<", ";
+    oss << m_SelectedPixel[i] << ", ";
     }
 
-  oss<<m_SelectedPixel[i]<<"]";
+  oss << m_SelectedPixel[i] << "]";
   guiSpectAnglePixelValue->value(oss.str().c_str());
   guiSpectAnglePixelValue->redraw();
 
 }
 
-
 void
 FeatureExtractionViewGUI
 ::UpdateFeatureInfo(FeatureType feat)
 {
-  FeatureInfo inf;
+  FeatureInfo        inf;
   itk::OStringStream oss;
-  oss<<inf.GetMapInfo().find(feat)->second;
-  guiFeatInfo->buffer()->remove(0,guiFeatInfo->buffer()->length());
+  oss << inf.GetMapInfo().find(feat)->second;
+  guiFeatInfo->buffer()->remove(0, guiFeatInfo->buffer()->length());
   guiFeatInfo->insert(oss.str().c_str());
   guiFeatInfo->redraw();
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -405,41 +398,39 @@ FeatureExtractionViewGUI
   gScroll->resizable(m_VisuView->GetScrollWidget());
   gScroll->box(FL_NO_BOX);
   m_VisuView->GetScrollWidget()->show();
-  m_VisuView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h() );
+  m_VisuView->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h());
 
 // Full
   gFull->add(m_VisuView->GetFullWidget());
   gFull->resizable(m_VisuView->GetFullWidget());
   gFull->box(FL_NO_BOX);
   m_VisuView->GetFullWidget()->show();
-  m_VisuView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h() );
+  m_VisuView->GetFullWidget()->resize(gFull->x(), gFull->y(), gFull->w(), gFull->h());
 
 // Feature
   gFeature->add(m_ResultVisuView->GetFullWidget());
   gFeature->resizable(m_ResultVisuView->GetFullWidget());
   gFeature->box(FL_NO_BOX);
   m_ResultVisuView->GetFullWidget()->show();
-  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
+  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(), gFeature->y(), gFeature->w(), gFeature->h());
 
   m_VisuView->GetScrollWidget()->redraw();
   m_VisuView->GetFullWidget()->redraw();
   m_ResultVisuView->GetFullWidget()->redraw();
- 
+
   gScroll->show();
   gFull->show();
   gFeature->show();
 }
-
 
 void
 FeatureExtractionViewGUI
 ::OK()
 {
   m_FeatureExtractionController->SaveOutput();
-    
+
   this->Quit();
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -447,21 +438,20 @@ FeatureExtractionViewGUI
 {
   // Gets the used channels
   std::vector<unsigned int> ckeckedList(guiChannelSelection->nchecked(), 0);
-  int j = 1;
-  int count = 0;
-  while ( j<=guiChannelSelection->nitems() && count<guiChannelSelection->nchecked() )
-  {
-    if (guiChannelSelection->checked(j) != 0)
+  int                       j = 1;
+  int                       count = 0;
+  while (j <= guiChannelSelection->nitems() && count < guiChannelSelection->nchecked())
     {
+    if (guiChannelSelection->checked(j) != 0)
+      {
       ckeckedList[count] = j;
       count++;
-    }
+      }
     j++;
-  }
+    }
 
   m_FeatureExtractionController->AddInputChannels(ckeckedList);
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -469,7 +459,6 @@ FeatureExtractionViewGUI
 {
   m_FeatureExtractionController->CreateFeature(m_FeatureType);
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -486,12 +475,11 @@ FeatureExtractionViewGUI
 
   if (m_ResultVisuView.IsNotNull())
     {
-      m_ResultVisuView->GetFullWidget()->ClearBuffer();
-      m_ResultVisuView->GetFullWidget()->redraw();
-      GetModel()->GetResultVisuModel()->ClearLayers();
+    m_ResultVisuView->GetFullWidget()->ClearBuffer();
+    m_ResultVisuView->GetFullWidget()->redraw();
+    GetModel()->GetResultVisuModel()->ClearLayers();
     }
 }
-
 
 void
 FeatureExtractionViewGUI
@@ -504,28 +492,28 @@ FeatureExtractionViewGUI
   guiFeatureChoice->value(0);
   this->UpdateParameterArea(0);
   this->SetFeatureType(FeatureInfo::UNKNOWN);
-  
+
   // NewVisu
   if (m_VisuView.IsNotNull())
-  {
+    {
     m_VisuView->GetScrollWidget()->ClearBuffer();
     m_VisuView->GetScrollWidget()->redraw();
     m_VisuView->GetFullWidget()->ClearBuffer();
     m_VisuView->GetFullWidget()->redraw();
     GetModel()->GetVisuModel()->ClearLayers();
 
-  }
+    }
 
   if (m_ResultVisuView.IsNotNull())
-  {
+    {
     m_ResultVisuView->GetFullWidget()->ClearBuffer();
     m_ResultVisuView->GetFullWidget()->redraw();
     GetModel()->GetResultVisuModel()->ClearLayers();
-  }
+    }
 
   m_FeatureExtractionController->InitInput();
- // Reset the title
- guiMainWindow->label("Feature Extraction Application");
+  // Reset the title
+  guiMainWindow->label("Feature Extraction Application");
 
 }
 
@@ -537,7 +525,6 @@ FeatureExtractionViewGUI
   m_FeatureExtractionController->Quit();
   guiMainWindow->hide();
 }
-
 
 void
 FeatureExtractionViewGUI

@@ -25,58 +25,54 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int main(int argc, char* argv[])
 {
   //Internationalization
   otbI18nMacro();
 
   // Parse command line parameters
-  typedef otb::CommandLineArgumentParser           ParserType;
-  typedef otb::CommandLineArgumentParseResult      ParserResultType;
+  typedef otb::CommandLineArgumentParser      ParserType;
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
 
-  ParserType::Pointer        parser      = ParserType::New();
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  ParserType::Pointer       parser      = ParserType::New();
+  ParserResultType::Pointer parseResult = ParserResultType::New();
   //parser->AddInputImage();
-  parser->AddOption("--FirstInputImage", "First input image.","-in1",true);
-  parser->AddOption("--SecondInputImage", "Second input image.","-in2",true);
+  parser->AddOption("--FirstInputImage", "First input image.", "-in1", true);
+  parser->AddOption("--SecondInputImage", "Second input image.", "-in2", true);
   //parser->AddOption("--Output", "Image Name where Output Image will be written.","-out",true);
-    
+
   try
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-       {
-         return EXIT_SUCCESS;
-       }
-      if(descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-       {
-         return EXIT_SUCCESS;
-       }
-      return EXIT_FAILURE;
+    std::string descriptionException = err.GetDescription();
+    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+      {
+      return EXIT_SUCCESS;
+      }
+    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      {
+      return EXIT_SUCCESS;
+      }
+    return EXIT_FAILURE;
     }
 
-
-    
   // Convenient typedefs
-  typedef otb::VectorImage<double,2>             InputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>   WriterType;
+  typedef otb::VectorImage<double, 2>          InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
   otb::HomologousPointExtractionModule::Pointer pointModule = otb::HomologousPointExtractionModule::New();
-  otb::Module::Pointer module = pointModule.GetPointer();
-  
-  otbGenericMsgDebugMacro( <<"Module: "<<pointModule );
+  otb::Module::Pointer                          module = pointModule.GetPointer();
+
+  otbGenericMsgDebugMacro(<< "Module: " << pointModule);
 
   // Put in the tests
-  typedef otb::VectorImage<double,2>  ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::ImageFileWriter<ImageType>     WriterType;
-
+  typedef otb::VectorImage<double, 2>     ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   //reader
   ReaderType::Pointer reader1 = ReaderType::New();
@@ -88,13 +84,13 @@ int main(int argc, char* argv[])
 
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
-  otbGenericMsgDebugMacro( <<"Input wrapper 1: "<<wrapperIn1 );
-  otbGenericMsgDebugMacro( <<"Input wrapper 3: "<<wrapperIn2 );
+  otbGenericMsgDebugMacro(<< "Input wrapper 1: " << wrapperIn1);
+  otbGenericMsgDebugMacro(<< "Input wrapper 3: " << wrapperIn2);
 
-  module->AddInputByKey("FirstInputImage",wrapperIn1);
-  module->AddInputByKey("SecondInputImage",wrapperIn2);
+  module->AddInputByKey("FirstInputImage", wrapperIn1);
+  module->AddInputByKey("SecondInputImage", wrapperIn2);
 
   module->Start();
- 
+
   Fl::run();
 }

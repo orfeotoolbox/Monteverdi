@@ -49,45 +49,40 @@ See OTBCopyright.txt for details.
 #include "otbSVMKernels.h"
 #include "itkListSample.h"
 
-
 namespace otb
 {
 typedef enum
-{
+  {
   NO_IMAGE,
   HAS_IMAGE,
   EXAMPLES_SELECTED,
   POLYGONS_DETECTED,
   HAS_REFERENCEPIXEL
-}
+  }
 ObjectCountingApplicationStatesType;
 
 typedef enum
-{
+  {
   EXTRACT,
   FULL_IMAGE
-}
+  }
 ImageToWorkType;
-
 
 template <class TInput1, class TInput2, class TOutput>
 class ClassifBoundaryFunctor
 {
 public:
-  ClassifBoundaryFunctor() {};
-  ~ClassifBoundaryFunctor() {};
-  inline TOutput operator()(const TInput1 &classif, const TInput2 &bound)
+  ClassifBoundaryFunctor() {}
+  ~ClassifBoundaryFunctor() {}
+  inline TOutput operator ()(const TInput1& classif, const TInput2& bound)
   {
     TOutput val;
-    if ( classif==1 && bound==1 )
-      val = 0;
-    else
-      val = static_cast<TOutput>(classif);
+    if (classif == 1 && bound == 1) val = 0;
+    else val = static_cast<TOutput>(classif);
 
     return val;
   }
 };
-
 
 /** \class ObjectCountingModel
  *
@@ -95,18 +90,16 @@ public:
  *
  */
 
-
-
 class ITK_EXPORT ObjectCountingModel
-      : public EventsSender<std::string>, public itk::Object
+  : public EventsSender<std::string>, public itk::Object
 {
 
 public:
   /** Standard class typedefs */
-  typedef ObjectCountingModel                            Self;
-  typedef MVCModel<ListenerBase>                         Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef ObjectCountingModel           Self;
+  typedef MVCModel<ListenerBase>        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(ObjectCountingModel, MVCModel);
@@ -119,79 +112,78 @@ public:
   typedef ImageToWorkType                     WhichImageType;
 
   /** Input image typedefs*/
-  typedef TypeManager::Floating_Point_Precision       PixelType;
-  typedef TypeManager::Label_Short_Precision          LabelPixelType;
-  typedef int                                         IntLabelPixelType;
-  typedef TypeManager::Labeled_Short_Image            LabeledImageType;
-  typedef Image<IntLabelPixelType,2>                  IntLabeledImageType;
-  typedef TypeManager::Floating_Point_Image           SingleImageType;
-  typedef TypeManager::Floating_Point_VectorImage     ImageType;
+  typedef TypeManager::Floating_Point_Precision   PixelType;
+  typedef TypeManager::Label_Short_Precision      LabelPixelType;
+  typedef int                                     IntLabelPixelType;
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
+  typedef Image<IntLabelPixelType, 2>             IntLabeledImageType;
+  typedef TypeManager::Floating_Point_Image       SingleImageType;
+  typedef TypeManager::Floating_Point_VectorImage ImageType;
 
-  typedef ImageType::Pointer                          ImagePointerType;  
-  typedef ImageType::SizeType                         SizeType;
-  typedef ImageType::PixelType                        InputPixelType;
-  typedef ImageType::IndexType                        IndexType;
-  typedef ImageType::RegionType                       RegionType;
-  typedef ImageFileReader<ImageType>                  ReaderType;
-  typedef ReaderType::Pointer                         ReaderPointerType;
-  
+  typedef ImageType::Pointer         ImagePointerType;
+  typedef ImageType::SizeType        SizeType;
+  typedef ImageType::PixelType       InputPixelType;
+  typedef ImageType::IndexType       IndexType;
+  typedef ImageType::RegionType      RegionType;
+  typedef ImageFileReader<ImageType> ReaderType;
+  typedef ReaderType::Pointer        ReaderPointerType;
+
   //typedef ImageView<VisualizationModelType>            ImageViewType;
 
-  typedef InverseCosSAMKernelFunctor KernelType;
-  typedef StreamingShrinkImageFilter<ImageType,ImageType>         ShrinkFilterType;
+  typedef InverseCosSAMKernelFunctor                              KernelType;
+  typedef StreamingShrinkImageFilter<ImageType, ImageType>        ShrinkFilterType;
   typedef ShrinkFilterType::Pointer                               ShrinkFilterPointerType;
-  typedef itk::ImageRegionConstIterator< ImageType >              IteratorType;
-  typedef itk::Vector<itk::NumericTraits<PixelType>::RealType,1>  MeasurementVectorType;
+  typedef itk::ImageRegionConstIterator<ImageType>                IteratorType;
+  typedef itk::Vector<itk::NumericTraits<PixelType>::RealType, 1> MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType>      ListSampleType;
   typedef float                                                   HistogramMeasurementType;
   typedef itk::Statistics::ListSampleToHistogramGenerator<
-  ListSampleType,
-  HistogramMeasurementType,
-  itk::Statistics::DenseFrequencyContainer,1>                   HistogramGeneratorType;
-  typedef HistogramGeneratorType::HistogramType                   HistogramType;
-  typedef HistogramType::Pointer                                  HistogramPointerType;
-  typedef MultiChannelExtractROI<PixelType,PixelType>             ExtractROIFilterType;
-  typedef otb::Polygon<double>                                    PolygonType;
-  typedef PolygonType::Pointer                                    PolygonPointerType;
-  typedef PolygonType::ContinuousIndexType                        PolygonIndexType;
-  typedef ObjectList<PolygonType>                                 PolygonListType;
-  typedef PolygonListType::Pointer                                PolygonListPointerType;
+      ListSampleType,
+      HistogramMeasurementType,
+      itk::Statistics::DenseFrequencyContainer, 1>                   HistogramGeneratorType;
+  typedef HistogramGeneratorType::HistogramType        HistogramType;
+  typedef HistogramType::Pointer                       HistogramPointerType;
+  typedef MultiChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
+  typedef otb::Polygon<double>                         PolygonType;
+  typedef PolygonType::Pointer                         PolygonPointerType;
+  typedef PolygonType::ContinuousIndexType             PolygonIndexType;
+  typedef ObjectList<PolygonType>                      PolygonListType;
+  typedef PolygonListType::Pointer                     PolygonListPointerType;
 
-
-  typedef SVMImageClassificationFilter<ImageType,IntLabeledImageType>           ClassifierType;
-  typedef ClassifierType::Pointer                                               ClassifierPointerType;
-  typedef ClassifierType::ModelType                                             ModelType;
-  typedef ImageType::PixelType                                                  SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                               SampleListType;
-  typedef itk::FixedArray<IntLabelPixelType,1>                                  TrainingSampleType;
-  typedef itk::Statistics::ListSample<TrainingSampleType>                       TrainingListSampleType;
-  typedef SVMSampleListModelEstimator<SampleListType,TrainingListSampleType>    EstimatorType;
-  typedef EstimatorType::Pointer                                                EstimatorPointerType;
-  typedef SpectralAngleDistanceImageFilter<ImageType, SingleImageType>          SpectralAngleType;
-  typedef SpectralAngleType::Pointer                                            SpectralAnglePointerType;
-  typedef itk::BinaryThresholdImageFilter<SingleImageType,LabeledImageType>     ThresholdFilterType;
-  typedef ThresholdFilterType::Pointer                                          ThresholdFilterPointerType;
-  typedef itk::IntensityWindowingImageFilter<SingleImageType,SingleImageType>   RescaleFilterType;
-  typedef RescaleFilterType::Pointer                                            RescaleFilterPointerType;
-  typedef MeanShiftVectorImageFilter<ImageType,ImageType>                       MeanShiftFilterType;
-  typedef MeanShiftFilterType::LabeledOutputType                                MSLabeledImageType;
-  typedef MSLabeledImageType::PixelType                                         MSLabeledPixelType;
-  typedef MeanShiftFilterType::Pointer                                          MeanShiftFilterPointerType;
-  typedef itk::ChangeLabelImageFilter< IntLabeledImageType, LabeledImageType>        ChangeLabelImageFilterType;
-  typedef ChangeLabelImageFilterType::Pointer                                   ChangeLabelImageFilterPointerType;
-  typedef ClassifBoundaryFunctor<LabelPixelType,LabelPixelType, LabelPixelType> ClassifBoundaryFunctorType;
+  typedef SVMImageClassificationFilter<ImageType, IntLabeledImageType>           ClassifierType;
+  typedef ClassifierType::Pointer                                                ClassifierPointerType;
+  typedef ClassifierType::ModelType                                              ModelType;
+  typedef ImageType::PixelType                                                   SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                                SampleListType;
+  typedef itk::FixedArray<IntLabelPixelType, 1>                                  TrainingSampleType;
+  typedef itk::Statistics::ListSample<TrainingSampleType>                        TrainingListSampleType;
+  typedef SVMSampleListModelEstimator<SampleListType, TrainingListSampleType>    EstimatorType;
+  typedef EstimatorType::Pointer                                                 EstimatorPointerType;
+  typedef SpectralAngleDistanceImageFilter<ImageType, SingleImageType>           SpectralAngleType;
+  typedef SpectralAngleType::Pointer                                             SpectralAnglePointerType;
+  typedef itk::BinaryThresholdImageFilter<SingleImageType, LabeledImageType>     ThresholdFilterType;
+  typedef ThresholdFilterType::Pointer                                           ThresholdFilterPointerType;
+  typedef itk::IntensityWindowingImageFilter<SingleImageType, SingleImageType>   RescaleFilterType;
+  typedef RescaleFilterType::Pointer                                             RescaleFilterPointerType;
+  typedef MeanShiftVectorImageFilter<ImageType, ImageType>                       MeanShiftFilterType;
+  typedef MeanShiftFilterType::LabeledOutputType                                 MSLabeledImageType;
+  typedef MSLabeledImageType::PixelType                                          MSLabeledPixelType;
+  typedef MeanShiftFilterType::Pointer                                           MeanShiftFilterPointerType;
+  typedef itk::ChangeLabelImageFilter<IntLabeledImageType, LabeledImageType>     ChangeLabelImageFilterType;
+  typedef ChangeLabelImageFilterType::Pointer                                    ChangeLabelImageFilterPointerType;
+  typedef ClassifBoundaryFunctor<LabelPixelType, LabelPixelType, LabelPixelType> ClassifBoundaryFunctorType;
   typedef itk::BinaryFunctorImageFilter<LabeledImageType,
-  MSLabeledImageType,
-  LabeledImageType,
-  ClassifBoundaryFunctorType>             ClassifBoundaryFilterType;
-  typedef ClassifBoundaryFilterType::Pointer                                    ClassifBoundaryFilterPointerType;
-  typedef itk::ConnectedComponentImageFilter<LabeledImageType,LabeledImageType> ConnectedFilterType;
-  typedef ConnectedFilterType::Pointer                                          ConnectedFilterPointerType;
-  typedef itk::RelabelComponentImageFilter<LabeledImageType,LabeledImageType>   RelabelFilterType;
-  typedef RelabelFilterType::Pointer                                            RelabelFilterPointerType;
-  typedef PersistentVectorizationImageFilter<LabeledImageType,PolygonType>      PersistentVectorizationFilterType;
-  typedef PersistentVectorizationFilterType::Pointer                            PersistentVectorizationFilterPointerType;
-
+      MSLabeledImageType,
+      LabeledImageType,
+      ClassifBoundaryFunctorType>             ClassifBoundaryFilterType;
+  typedef ClassifBoundaryFilterType::Pointer                                     ClassifBoundaryFilterPointerType;
+  typedef itk::ConnectedComponentImageFilter<LabeledImageType, LabeledImageType> ConnectedFilterType;
+  typedef ConnectedFilterType::Pointer                                           ConnectedFilterPointerType;
+  typedef itk::RelabelComponentImageFilter<LabeledImageType, LabeledImageType>   RelabelFilterType;
+  typedef RelabelFilterType::Pointer                                             RelabelFilterPointerType;
+  typedef PersistentVectorizationImageFilter<LabeledImageType, PolygonType>      PersistentVectorizationFilterType;
+  typedef PersistentVectorizationFilterType::Pointer
+  PersistentVectorizationFilterPointerType;
 
   /** Filters initialization */
   void InitFilters();
@@ -206,13 +198,13 @@ public:
   /** Run image extraction on current region */
   void RunImageExtraction();
   /** Run the algorithm*/
-  void RunChain( const char * cfname );
+  void RunChain(const char * cfname);
   /** Run over the full image */
-  void SavePolygon( const char * cfname );
+  void SavePolygon(const char * cfname);
   /** Polygon manipulation */
-  void NewPolygon(const IndexType & index);
-  void AddPointToCurrentPolygon(const IndexType & index);
-  void ErasePolygon(const IndexType & index);
+  void NewPolygon(const IndexType& index);
+  void AddPointToCurrentPolygon(const IndexType& index);
+  void ErasePolygon(const IndexType& index);
   void GenerateInputExampleSampleList();
   /** Extract Input Classification*/
   void Classification();
@@ -237,21 +229,21 @@ public:
 
   itkSetMacro(ShrinkFactor, unsigned int);
   itkGetMacro(ShrinkFactor, unsigned int);
-  itkGetObjectMacro(InputImage,ImageType);
-  itkGetObjectMacro(ExtractedImage,ImageType);
-  itkGetObjectMacro(Quicklook,ImageType);
-  itkGetObjectMacro(Shrinker,ShrinkFilterType);
-  itkGetMacro(State,StatesType);
-  itkSetMacro(CurrentRegion,RegionType);
-  itkGetMacro(CurrentRegion,RegionType);
-  itkSetMacro(QuicklookSize,SizeType);
-  itkGetMacro(QuicklookSize,SizeType);
+  itkGetObjectMacro(InputImage, ImageType);
+  itkGetObjectMacro(ExtractedImage, ImageType);
+  itkGetObjectMacro(Quicklook, ImageType);
+  itkGetObjectMacro(Shrinker, ShrinkFilterType);
+  itkGetMacro(State, StatesType);
+  itkSetMacro(CurrentRegion, RegionType);
+  itkGetMacro(CurrentRegion, RegionType);
+  itkSetMacro(QuicklookSize, SizeType);
+  itkGetMacro(QuicklookSize, SizeType);
   itkSetMacro(WhichImage, WhichImageType);
   itkGetMacro(WhichImage, WhichImageType);
 
-  itkGetObjectMacro(InputPolyList,PolygonListType);
-  itkGetObjectMacro(OutputPolyList,PolygonListType);
-  itkGetObjectMacro(ExtractPolyList,PolygonListType);
+  itkGetObjectMacro(InputPolyList, PolygonListType);
+  itkGetObjectMacro(OutputPolyList, PolygonListType);
+  itkGetObjectMacro(ExtractPolyList, PolygonListType);
   //itkGetObjectMacro(MeanShiftFilter, MeanShiftFilterType);
   itkGetObjectMacro(RelabelFilter, RelabelFilterType);
 
@@ -263,11 +255,10 @@ public:
   itkSetMacro(UseSVM, bool);
   itkSetMacro(ThresholdValue, PixelType);
   itkGetMacro(ThresholdValue, PixelType);
-  itkGetObjectMacro(ExtractOutputImage,LabeledImageType);
+  itkGetObjectMacro(ExtractOutputImage, LabeledImageType);
   itkSetMacro(OutputImageName, std::string);
   itkSetMacro(OutputVectorFileName, std::string);
   itkSetMacro(UseSmoothing, bool);
-
 
   // Mean Shift filter parameters
   itkSetMacro(SpatialRadius, unsigned int);
@@ -275,27 +266,26 @@ public:
   itkSetMacro(Scale, unsigned int);
   itkSetMacro(MinRegionSize, unsigned int);
 
-  itkSetMacro(NuParameter,double);
-  itkGetMacro(NuParameter,double);
+  itkSetMacro(NuParameter, double);
+  itkGetMacro(NuParameter, double);
 
   LabeledImageType::Pointer GetOutputLabeledImage()
   {
     return m_PersistentVectorizationFilter->GetOutput();
-  };
+  }
 
   ImagePointerType GetInputImage() const
   {
     return m_InputImage;
   }
-  
+
   void SetInputImage(ImagePointerType image);
-  
+
   /** This is protected for the singleton. Use GetInstance() instead. */
   itkNewMacro(Self);
-  
+
   void Quit();
 protected:
-  
 
   /** Constructor */
   ObjectCountingModel();
@@ -303,21 +293,20 @@ protected:
   virtual ~ObjectCountingModel();
 
   void GenerateQuicklook();
-  void GenerateHistogram() ;
+  void GenerateHistogram();
 
 private:
   ObjectCountingModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
   /** Singleton instance */
-  static Pointer                     Instance;
+  static Pointer Instance;
 
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
-
 
   /** Application state */
   StatesType m_State;
@@ -349,7 +338,7 @@ private:
   PolygonListPointerType m_OutputPolyList;
   /** current polygon index*/
   unsigned int m_InputPolygonListIndex;
-  int m_ErasedPolygonIndex;
+  int          m_ErasedPolygonIndex;
 
   /** Reference Pixel for spectral angle */
   InputPixelType m_ReferencePixel;

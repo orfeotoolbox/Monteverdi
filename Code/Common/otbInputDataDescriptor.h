@@ -45,7 +45,7 @@ class InputDataDescriptor
 public:
   /** Constructors */
   InputDataDescriptor();
-  InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description);
+  InputDataDescriptor(const std::string& type, const std::string& key, const std::string& description);
 
   /** Destructor */
   virtual ~InputDataDescriptor();
@@ -63,14 +63,14 @@ public:
   void SetMultiple(bool flag);
 
   /** Add a supported type for the input */
-  void AddSupportedType(const std::string & type);
+  void AddSupportedType(const std::string& type);
 
   /** Check if the given type is compatible with the input */
-  virtual bool IsTypeCompatible(const std::string & type) const;
+  virtual bool IsTypeCompatible(const std::string& type) const;
 
   /** Add data (virtual because behaviour depends
    *  on subclasses) */
-  virtual void AddData(const DataObjectWrapper & wrapper);
+  virtual void AddData(const DataObjectWrapper& wrapper);
 
   /** Check consistency */
   bool IsConsistent() const;
@@ -80,7 +80,7 @@ protected:
   typedef std::vector<std::string> StringVectorType;
 
   /** Split type string according to a separator */
-  static StringVectorType SplitTypeName(const std::string & types, char separator = ',');
+  static StringVectorType SplitTypeName(const std::string& types, char separator = ',');
 
 private:
   /** The optional flag */
@@ -91,7 +91,7 @@ private:
 };
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descriptor);
+std::ostream& operator <<(std::ostream& ostr, const InputDataDescriptor& descriptor);
 
 } // End namespace otb
 

@@ -16,25 +16,23 @@
 
 =========================================================================*/
 
-
 #include "otbWriterModule.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-
 int otbWriterModuleTest(int argc, char* argv[])
 {
   otb::WriterModule::Pointer specificModule = otb::WriterModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
+  otb::Module::Pointer       module = specificModule.GetPointer();
 
-  std::cout<<"Module: "<<module<<std::endl;
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
 
-  typedef otb::WriterModule::FloatImageType    ImageType;
-  typedef otb::ImageFileReader<ImageType>      ReaderType;
+  typedef otb::WriterModule::FloatImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>   ReaderType;
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -42,25 +40,24 @@ int otbWriterModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
-  
-  module->AddInputByKey("InputDataSet",wrapperIn);
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
+
+  module->AddInputByKey("InputDataSet", wrapperIn);
 
   Fl::lock();
-  
+
   module->Start();
   Fl::check();
-  
+
   // Simulate file chooser and ok callback
   specificModule->vFilePath->value(argv[2]);
   Fl::check();
   specificModule->bOk->do_callback();
   Fl::check();
 
-  // Wait for the writer to complete 
+  // Wait for the writer to complete
   Fl::run();
 
   return EXIT_SUCCESS;
 
 }
-

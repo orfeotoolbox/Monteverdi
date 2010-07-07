@@ -34,18 +34,20 @@ typedef enum {
   OTB_FLU_RIGHT_LEFT_PUSHED,
   OTB_FLU_RIGHT_MOUSE_RELEASED,
   OTB_FLU_RIGHT_MOUSE_PUSHED
-} TreeCallBackEnumType;
+  } TreeCallBackEnumType;
 
-typedef enum{
-    NO_MODULE_OUTPUT,
-    SHOW_MODULE,
-    RENAME_MODULE } ModuleMenuOutputEnumType;
+typedef enum {
+  NO_MODULE_OUTPUT,
+  SHOW_MODULE,
+  RENAME_MODULE
+  } ModuleMenuOutputEnumType;
 
-typedef enum{
+typedef enum {
   NO_OUTPUT,
   RENAME_OUTPUT,
   DISPLAY_OUTPUT,
   CACHE_OUTPUT,
-  WRITE_OUTPUT} OutputMenuOutputEnumType;
+  WRITE_OUTPUT
+  } OutputMenuOutputEnumType;
 
 #endif

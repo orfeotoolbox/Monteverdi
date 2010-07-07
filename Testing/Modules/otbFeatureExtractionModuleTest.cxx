@@ -24,16 +24,16 @@
 
 int otbFeatureExtractionModuleTest(int argc, char* argv[])
 {
-  if (argc != 3 )
-  {
+  if (argc != 3)
+    {
     std::cout << argv[0] << "\t" << "input image" << "\t" << "output image" << std::endl;
     return EXIT_FAILURE;
-  }
-  
+    }
+
   otb::FeatureExtractionModule::Pointer specificModule = otb::FeatureExtractionModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
-  
-  std::cout<<"Module: "<<module<<std::endl;
+  otb::Module::Pointer                  module = specificModule.GetPointer();
+
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
@@ -41,16 +41,15 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType>              ReaderType;
   typedef otb::ImageFileWriter<ImageType>              WriterType;
 
-
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<<wrapperIn<<std::endl;
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
 //   std::cout<<"ad key.."<<std::endl;
-  module->AddInputByKey("InputImage",wrapperIn);
+  module->AddInputByKey("InputImage", wrapperIn);
 //   std::cout<<"start..."<<std::endl;
   module->Start();
 //   std::cout<<"start over"<<std::endl;
@@ -77,21 +76,20 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
   specificModule->GetView()->guiAdd->do_callback();
   specificModule->GetView()->guiFeatureListAction->redraw();
   Fl::check();
-  
-  
+
   // Simulate Ok (save) button callback
-  std::cout<<"save image"<<std::endl;
+  std::cout << "save image" << std::endl;
   specificModule->GetView()->guiOK->do_callback();
   Fl::check();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 
-  std::cout<<"Output wrapper: "<<wrapperOut<<std::endl;
+  std::cout << "Output wrapper: " << wrapperOut << std::endl;
   //std::cout<<"..."<<std::endl;
   ImageType::Pointer outImage = dynamic_cast<ImageType *>(wrapperOut.GetDataObject());
 
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(outImage);
   writer->Update();
@@ -99,4 +97,3 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
   return 0;
 
 }
-

@@ -57,7 +57,7 @@ public:
     resp.Set(data);
     return resp;
   }
-  
+
   /** Constructors */
   DataObjectWrapper();
 
@@ -68,8 +68,8 @@ public:
   template <typename T> void Set(T * data)
   {
     // Fill the data type and object
-  m_DataType = TypeManager::GetInstance()->GetTypeName<T>();
-  m_DataObject = data;
+    m_DataType = TypeManager::GetInstance()->GetTypeName<T>();
+    m_DataObject = data;
   }
 
   /** Set the data object mandatory types (SmartPointer version) */
@@ -82,23 +82,22 @@ public:
   itk::DataObject * GetDataObject() const;
 
   /** Get the DataType */
-  const std::string & GetDataType() const;
+  const std::string& GetDataType() const;
 
   /** Set the source instance id */
-  void SetSourceInstanceId(const std::string & id);
+  void SetSourceInstanceId(const std::string& id);
 
   /** Get the source instance id */
   const std::string& GetSourceInstanceId() const;
 
-   /** Set the source output Key */
-  void SetSourceOutputKey(const std::string & key);
+  /** Set the source output Key */
+  void SetSourceOutputKey(const std::string& key);
 
   /** Get the source output Key */
   const std::string& GetSourceOutputKey() const;
 
-
-   /** Set the description */
-  void SetDescription(const std::string & desc);
+  /** Set the description */
+  void SetDescription(const std::string& desc);
 
   /** Get the description */
   const std::string& GetDescription() const;
@@ -115,13 +114,13 @@ private:
 
   /** The source module output key */
   std::string m_SourceOutputKey;
-  
+
   /** The description of the object (file name) */
   std::string m_Description;
 };
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const DataObjectWrapper & wrapper);
+std::ostream& operator <<(std::ostream& ostr, const DataObjectWrapper& wrapper);
 
 } // End namespace otb
 

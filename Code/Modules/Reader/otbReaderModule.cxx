@@ -43,7 +43,7 @@ ReaderModule::ReaderModule()
   vType->add(otbGetTextMacro("SAR image"));
   vType->add(otbGetTextMacro("Vector"));
   vType->value(0);
-  
+
   // Deactivate ok for now
   bOk->deactivate();
 
@@ -59,9 +59,8 @@ ReaderModule::~ReaderModule()
 void ReaderModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void ReaderModule::Run()
@@ -87,29 +86,29 @@ void ReaderModule::Analyse()
     m_FPVReader->SetFileName(filepath);
     m_FPVReader->GenerateOutputInformation();
 
-    switch(m_FPVReader->GetImageIO()->GetPixelType())
+    switch (m_FPVReader->GetImageIO()->GetPixelType())
       {
       // handle the radar case
       case itk::ImageIOBase::COMPLEX:
-       vType->value(2);
-       // If we are still here, this is a readable image
-       typeFound = true;
-       break;
+        vType->value(2);
+        // If we are still here, this is a readable image
+        typeFound = true;
+        break;
 
-       // handle the optical case
+      // handle the optical case
       default:
-       vType->value(1);
-       // If we are still here, this is a readable image
-       typeFound = true;
-       break;
+        vType->value(1);
+        // If we are still here, this is a readable image
+        typeFound = true;
+        break;
       }
     }
-  catch(itk::ExceptionObject)
+  catch (itk::ExceptionObject)
     {
     // Silent catch
     }
 
-  if(!typeFound)
+  if (!typeFound)
     {
     try
       {
@@ -119,15 +118,15 @@ void ReaderModule::Analyse()
       vType->value(3);
       typeFound = true;
       }
-    catch(itk::ExceptionObject)
+    catch (itk::ExceptionObject)
       {
       // Silent catch
       vType->value(0);
       }
     }
-  
+
   // Activate/ deactivate ok
-  if(!typeFound)
+  if (!typeFound)
     {
     vType->value(0);
     bOk->deactivate();
@@ -139,49 +138,48 @@ void ReaderModule::Analyse()
 
   std::string name = vName->value();
 
-  if(name.empty())
+  if (name.empty())
     {
     ossimFilename fname (vFilePath->value());
     vName->value(fname.fileNoExtension());
     }
 }
 
-
 void ReaderModule::OpenDataSet()
 {
   try
     {
-    switch(vType->value())
+    switch (vType->value())
       {
       case 1:
-       this->OpenOpticalImage();
-       break;
+        this->OpenOpticalImage();
+        break;
       case 2:
-       this->OpenSarImage();
-       break;
+        this->OpenSarImage();
+        break;
       case 3:
-       this->OpenVector();
-       break;
+        this->OpenVector();
+        break;
       default:
-       itkExceptionMacro(<<"Unknow dataset type.");
-       break;
+        itkExceptionMacro(<< "Unknow dataset type.");
+        break;
       }
- 
+
     wFileChooserWindow->hide();
-  
+
     // Notify all listener
     // TODO: this should not be done by the user
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
-      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
 
 void ReaderModule::TypeChanged()
 {
-  if(vType->value() >0)
+  if (vType->value() > 0)
     {
     bOk->activate();
     }
@@ -195,8 +193,8 @@ void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId;
-  std::string filepath = vFilePath->value();
+  ostringstream oss, ossId;
+  std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
   m_FPVReader->SetFileName(filepath);
@@ -204,54 +202,52 @@ void ReaderModule::OpenOpticalImage()
 
   // Add the full data set as a descriptor
   oss << "Image read from file: " << lFile.file();
-  ossId<<vName->value();
-  this->AddOutputDescriptor(m_FPVReader->GetOutput(),ossId.str(),oss.str(),true);
+  ossId << vName->value();
+  this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
 }
-
 
 void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId;
-  std::string filepath = vFilePath->value();
+  ostringstream oss, ossId;
+  std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
   m_ComplexReader->SetFileName(filepath);
   m_ComplexReader->GenerateOutputInformation();
 
-  oss <<"Complex image read from file: "<<lFile.file();
-  ossId<<vName->value();
-  this->AddOutputDescriptor(m_ComplexReader->GetOutput(),ossId.str(),oss.str(),true);
+  oss << "Complex image read from file: " << lFile.file();
+  ossId << vName->value();
+  this->AddOutputDescriptor(m_ComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
 void ReaderModule::OpenVector()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss,ossId;
-  std::string filepath = vFilePath->value();
+  ostringstream oss, ossId;
+  std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
   m_VectorReader->SetFileName(filepath);
   m_VectorReader->GenerateOutputInformation();
 
   oss << "Vector read from file : " << lFile.file();
-  ossId<<vName->value()<<" (whole dataset)";
-  this->AddOutputDescriptor(m_VectorReader->GetOutput(),ossId.str(),oss.str());
+  ossId << vName->value() << " (whole dataset)";
+  this->AddOutputDescriptor(m_VectorReader->GetOutput(), ossId.str(), oss.str());
 }
-
 
 void ReaderModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.*","");
-  
+  filename = flu_file_chooser("Choose the dataset file...", "*.*", "");
+
   if (filename == NULL)
     {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    otbMsgDebugMacro(<< "Empty file name!");
+    return;
     }
   vFilePath->value(filename);
   this->Analyse();

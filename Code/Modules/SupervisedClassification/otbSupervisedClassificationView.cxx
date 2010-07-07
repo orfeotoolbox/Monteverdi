@@ -47,14 +47,13 @@ SupervisedClassificationView
   wMainWindow->show();
 }
 
-
 void
 SupervisedClassificationView
 ::BuildInterface()
 {
-  if(!m_Controller)
+  if (!m_Controller)
     {
-      itkExceptionMacro(<<"Controller is not set, can not build view.");
+    itkExceptionMacro(<< "Controller is not set, can not build view.");
     }
 
   // Build the fltk code
@@ -161,9 +160,9 @@ SupervisedClassificationView
 
   std::vector<std::string> classKeyList =  m_Controller->GetModel()->GetClassKeyList();
   for (unsigned int i = 0; i < classKeyList.size(); ++i)
-  {
+    {
     icClassKey->add(classKeyList[i].c_str());
-  }
+    }
   icClassKey->value(m_Controller->GetModel()->GetClassKey());
 }
 

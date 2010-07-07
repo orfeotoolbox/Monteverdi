@@ -32,7 +32,7 @@
 namespace otb
 {
 class ITK_EXPORT VectorizationController
-      : public VectorizationControllerInterface
+  : public VectorizationControllerInterface
 {
 public:
   /** Standard class typedefs */
@@ -42,33 +42,32 @@ public:
   typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(VectorizationController,Superclass);
+  itkTypeMacro(VectorizationController, Superclass);
   itkNewMacro(Self);
-
 
   /** Widgets controller and action handlers */
   typedef VectorizationView
-    ::ImageViewType                        ImageViewType;
+  ::ImageViewType ImageViewType;
   typedef VectorizationModel
-    ::VisualizationModelType               VisualizationModelType;
+  ::VisualizationModelType VisualizationModelType;
   typedef VectorizationModel
-    ::VectorDataModelType                  VectorDataModelType;
+  ::VectorDataModelType VectorDataModelType;
   typedef VectorizationModel
-    ::VectorImageType                      VectorImageType;
- 
+  ::VectorImageType VectorImageType;
+
   /** Handlers */
-  typedef ImageWidgetController            WidgetControllerType;
+  typedef ImageWidgetController WidgetControllerType;
   typedef WidgetResizingActionHandler
-    <VisualizationModelType,ImageViewType> ResizingHandlerType;
+  <VisualizationModelType, ImageViewType> ResizingHandlerType;
   typedef ChangeExtractRegionActionHandler
-    <VisualizationModelType,ImageViewType> ChangeRegionHandlerType;
+  <VisualizationModelType, ImageViewType> ChangeRegionHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-    <VisualizationModelType,ImageViewType> ChangeScaledRegionHandlerType;
+  <VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler
-    <VisualizationModelType,ImageViewType> ChangeScaleHandlerType;
+  <VisualizationModelType, ImageViewType> ChangeScaleHandlerType;
   typedef VectorDataActionHandler
-    <VectorDataModelType,
-     ImageViewType>                        VectorDataActionHandlerType;
+  <VectorDataModelType,
+      ImageViewType>                        VectorDataActionHandlerType;
 
   void SetModel(ModelType* model);
 
@@ -76,7 +75,7 @@ public:
   void SetView(VectorizationView * view);
 
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetController,WidgetControllerType);
+  itkGetObjectMacro(WidgetController, WidgetControllerType);
 
   virtual void SetInputImage(VectorizationModel::VectorImageType* image)
   {
@@ -84,39 +83,45 @@ public:
   }
 
   virtual void RemoveDataNode(DataNodeType * node);
-  virtual void SetDataNodeFieldAsInt(DataNodeType * node, const std::string & name, int value);
-  virtual void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string & name, float value);
-  virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string & name, const std::string & value);
-  virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string & name);
-  virtual void RemovePointFromDataNode(DataNodeType * node, const long & index,bool interiorRing, const unsigned int & interiorRingIndex = 0);
-  virtual void UpdatePointFromDataNode(DataNodeType * node, const long & index, const PointType & point,bool interiorRing, const unsigned int & interiorRingIndex = 0);
+  virtual void SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value);
+  virtual void SetDataNodeFieldAsFloat(DataNodeType * node, const std::string& name, float value);
+  virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value);
+  virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name);
+  virtual void RemovePointFromDataNode(DataNodeType * node,
+                                       const long& index,
+                                       bool interiorRing,
+                                       const unsigned int& interiorRingIndex = 0);
+  virtual void UpdatePointFromDataNode(DataNodeType * node,
+                                       const long& index,
+                                       const PointType& point,
+                                       bool interiorRing,
+                                       const unsigned int& interiorRingIndex = 0);
 
- protected:
+protected:
   /** Constructor */
   VectorizationController();
   /** Destructor */
   virtual ~VectorizationController();
 
-
 private:
   VectorizationController(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  VectorizationView *                      m_View;
+  VectorizationView * m_View;
 
   /** The instance of the model */
-  ModelType *                              m_Model;
+  ModelType * m_Model;
 
   /** Widgets controller */
-  WidgetControllerType::Pointer            m_WidgetController;
+  WidgetControllerType::Pointer m_WidgetController;
 
   /** Action handlers */
-  ResizingHandlerType::Pointer             m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer         m_ChangeRegionHandler;
-  ChangeScaledRegionHandlerType::Pointer   m_ChangeScaledRegionHandler;
-  ChangeScaleHandlerType::Pointer          m_ChangeScaleHandler;
-  VectorDataActionHandlerType::Pointer     m_VectorDataActionHandler;
+  ResizingHandlerType::Pointer           m_ResizingHandler;
+  ChangeRegionHandlerType::Pointer       m_ChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer        m_ChangeScaleHandler;
+  VectorDataActionHandlerType::Pointer   m_VectorDataActionHandler;
 };
 } //end namespace otb
 

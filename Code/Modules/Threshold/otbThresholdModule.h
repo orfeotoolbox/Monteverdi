@@ -67,61 +67,61 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ThresholdModule,Module);
+  itkTypeMacro(ThresholdModule, Module);
 
-  typedef TypeManager::Floating_Point_Precision          PrecisionType;
-  typedef TypeManager::Floating_Point_Image              ImageType;
-  
+  typedef TypeManager::Floating_Point_Precision PrecisionType;
+  typedef TypeManager::Floating_Point_Image     ImageType;
+
   /** Output image type */
-  typedef itk::RGBAPixel<unsigned char>                  RGBPixelType;
-  typedef Image<RGBPixelType,2>                          OutputImageType;
+  typedef itk::RGBAPixel<unsigned char> RGBPixelType;
+  typedef Image<RGBPixelType, 2>        OutputImageType;
 
   /** Image layer type */
-  typedef ImageLayer<ImageType, OutputImageType>         ImageLayerType;
-  typedef ImageLayerType::Pointer                        ImageLayerPointerType;
-  typedef ImageLayerType::HistogramType                  HistogramType;
-  
+  typedef ImageLayer<ImageType, OutputImageType> ImageLayerType;
+  typedef ImageLayerType::Pointer                ImageLayerPointerType;
+  typedef ImageLayerType::HistogramType          HistogramType;
+
   /** Image layer generator type */
-  typedef ImageLayerGenerator<ImageLayerType>            ImageLayerGeneratorType;
-  typedef ImageLayerGeneratorType::Pointer               ImageLayerGeneratorPointerType;
-  
+  typedef ImageLayerGenerator<ImageLayerType> ImageLayerGeneratorType;
+  typedef ImageLayerGeneratorType::Pointer    ImageLayerGeneratorPointerType;
+
   /** Rendering model type */
-  typedef ImageLayerRenderingModel<OutputImageType>      RenderingModelType;
-  typedef RenderingModelType::Pointer                    RenderingModelPointerType;
-  
+  typedef ImageLayerRenderingModel<OutputImageType> RenderingModelType;
+  typedef RenderingModelType::Pointer               RenderingModelPointerType;
+
   /** View type */
-  typedef ImageView<RenderingModelType>                  ViewType;
-  typedef ViewType::Pointer                              ViewPointerType;
-  
+  typedef ImageView<RenderingModelType> ViewType;
+  typedef ViewType::Pointer             ViewPointerType;
+
   /** Widget controller */
-  typedef ImageWidgetController                          WidgetControllerType;
-  typedef WidgetControllerType::Pointer                  WidgetControllerPointerType;
-  
+  typedef ImageWidgetController         WidgetControllerType;
+  typedef WidgetControllerType::Pointer WidgetControllerPointerType;
+
   /** Standard action handlers */
   typedef otb::WidgetResizingActionHandler
-    <RenderingModelType,ViewType>                        ResizingHandlerType;
+  <RenderingModelType, ViewType>                        ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-    <RenderingModelType,ViewType>                        ChangeScaledRegionHandlerType;
+  <RenderingModelType, ViewType>                        ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-    <RenderingModelType,ViewType>                        ChangeRegionHandlerType;
+  <RenderingModelType, ViewType>                        ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-    <RenderingModelType,ViewType>                        ChangeScaleHandlerType;
+  <RenderingModelType, ViewType>                        ChangeScaleHandlerType;
   typedef otb::ArrowKeyMoveActionHandler
-    <RenderingModelType,ViewType>                        ArrowKeyMoveActionHandlerType;
-  
+  <RenderingModelType, ViewType>                        ArrowKeyMoveActionHandlerType;
+
   /** Filter for thresholding*/
-  typedef itk::ThresholdImageFilter<ImageType>           ThresholdFilterType;
-  typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>
-                                                         BinaryThresholdFilterType;
+  typedef itk::ThresholdImageFilter<ImageType> ThresholdFilterType;
+  typedef itk::BinaryThresholdImageFilter<ImageType, ImageType>
+  BinaryThresholdFilterType;
   /** Filter to display a binary image at binarythreshold filter output (1 rendering function for 2 layers)*/
-  typedef itk::RescaleIntensityImageFilter<ImageType,ImageType> RescaleFilterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescaleFilterType;
 
   /** Set the input Image*/
-  itkSetObjectMacro(InputImage,ImageType);
-  
+  itkSetObjectMacro(InputImage, ImageType);
+
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Hide window */
   virtual void Hide();
 
@@ -135,68 +135,66 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-  
+
   /** Callbacks */
   virtual void OK();
 
   /** UpdateThresholdLayer */
   virtual void UpdateThresholdLayer();
-  
+
   /** Callback on the sliders*/
   virtual void UpdateDetails();
 
   /** Update the sliders*/
   virtual void UpdateSlidersExtremum();
-  
+
   /** Show*/
   virtual void Show();
 
   /** */
   virtual void AlphaBlending();
-  
+
   /**  Update layer generation flag*/
   virtual void UpdateLayerGenerationFlag();
-  
+
 private:
   ThresholdModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Threshold filter */
-  ThresholdFilterType::Pointer             m_ThresholdFilter;
-  ThresholdFilterType::Pointer             m_ThresholdQuicklook;
+  ThresholdFilterType::Pointer m_ThresholdFilter;
+  ThresholdFilterType::Pointer m_ThresholdQuicklook;
 
-  BinaryThresholdFilterType::Pointer       m_BinaryThresholdFilter;
-  BinaryThresholdFilterType::Pointer       m_BinaryThresholdQuicklook;
-  
+  BinaryThresholdFilterType::Pointer m_BinaryThresholdFilter;
+  BinaryThresholdFilterType::Pointer m_BinaryThresholdQuicklook;
+
   /** Pointer to the image */
-  ImageType::Pointer                       m_InputImage;
-  
+  ImageType::Pointer m_InputImage;
+
   /** The image layer */
-  ImageLayerPointerType                    m_InputImageLayer;
-  ImageLayerPointerType                    m_ThresholdImageLayer;
-  
-  
+  ImageLayerPointerType m_InputImageLayer;
+  ImageLayerPointerType m_ThresholdImageLayer;
+
   /** The rendering model */
-  RenderingModelPointerType                m_RenderingModel;
+  RenderingModelPointerType m_RenderingModel;
 
   /** The view */
-  ViewPointerType                          m_View;
-  
+  ViewPointerType m_View;
+
   /** The widget controller */
-  WidgetControllerPointerType              m_Controller;
+  WidgetControllerPointerType m_Controller;
 
   /** Layer Generator*/
-  ImageLayerGeneratorType::Pointer         m_ThresholdGenerator;
-  ImageLayerGeneratorType::Pointer         m_Generator;
-  
-  /** Recsaler for binary threshold display */
-  RescaleFilterType::Pointer               m_Rescaler;
-  RescaleFilterType::Pointer               m_RescalerQuicklook;
-  
-  /** Flag to allow layer regeneration*/
-  bool                                     m_HasToGenerateLayer;
-};
+  ImageLayerGeneratorType::Pointer m_ThresholdGenerator;
+  ImageLayerGeneratorType::Pointer m_Generator;
 
+  /** Recsaler for binary threshold display */
+  RescaleFilterType::Pointer m_Rescaler;
+  RescaleFilterType::Pointer m_RescalerQuicklook;
+
+  /** Flag to allow layer regeneration*/
+  bool m_HasToGenerateLayer;
+};
 
 } // End namespace otb
 

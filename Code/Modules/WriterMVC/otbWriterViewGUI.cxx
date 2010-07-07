@@ -78,21 +78,21 @@ WriterViewGUI
   gScroll->resizable(m_VisuView->GetScrollWidget());
   gScroll->box(FL_NO_BOX);
   m_VisuView->GetScrollWidget()->show();
-  m_VisuView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h() );
+  m_VisuView->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h());
 
 // Full
   gFull->add(m_VisuView->GetFullWidget());
   gFull->resizable(m_VisuView->GetFullWidget());
   gFull->box(FL_NO_BOX);
   m_VisuView->GetFullWidget()->show();
-  m_VisuView->GetFullWidget()->resize(gFull->x(),gFull->y(),gFull->w(),gFull->h() );
+  m_VisuView->GetFullWidget()->resize(gFull->x(), gFull->y(), gFull->w(), gFull->h());
 
 // Feature
   gFeature->add(m_ResultVisuView->GetFullWidget());
   gFeature->resizable(m_ResultVisuView->GetFullWidget());
   gFeature->box(FL_NO_BOX);
   m_ResultVisuView->GetFullWidget()->show();
-  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(),gFeature->y(),gFeature->w(),gFeature->h() );
+  m_ResultVisuView->GetFullWidget()->resize(gFeature->x(), gFeature->y(), gFeature->w(), gFeature->h());
 
   gScroll->show();
   gFull->show();
@@ -104,9 +104,9 @@ WriterViewGUI
 
 void
 WriterViewGUI
-::UpdateParameterArea( unsigned int groupId )
+::UpdateParameterArea(unsigned int groupId)
 {
-  for(unsigned int i=0; i<m_ParameterGroupList.size(); i++)
+  for (unsigned int i = 0; i < m_ParameterGroupList.size(); i++)
     m_ParameterGroupList[i]->hide();
   m_ParameterGroupList[groupId]->show();
 }
@@ -115,10 +115,10 @@ void
 WriterViewGUI
 ::UpdateFeaturePreview()
 {
-  if (guiOutputFeatureList->value()>0)
-  {
-  m_WriterModel->GetSingleOutput(guiOutputFeatureList->value()-1);
-  }
+  if (guiOutputFeatureList->value() > 0)
+    {
+    m_WriterModel->GetSingleOutput(guiOutputFeatureList->value() - 1);
+    }
 }
 
 void
@@ -126,26 +126,26 @@ WriterViewGUI
 ::UpdateFeaturePreviewFromOutputList()
 {
 
-  if (guiOutputFeatureList->value()>0)
-  {
-    if( static_cast<unsigned int>(guiOutputFeatureList->value()-1) <m_WriterModel->GetOutputListOrder().size() )
+  if (guiOutputFeatureList->value() > 0)
     {
-     m_WriterModel->GetSingleOutput( m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value()-1]);
+    if (static_cast<unsigned int>(guiOutputFeatureList->value() - 1) < m_WriterModel->GetOutputListOrder().size())
+      {
+      m_WriterModel->GetSingleOutput(m_WriterModel->GetOutputListOrder()[guiOutputFeatureList->value() - 1]);
 
+      }
     }
-  }
 }
 
 void
 WriterViewGUI
-::Notify(const std::string & event)
+::Notify(const std::string& event)
 {
   if (m_WriterModel->GetHasInput())
-  {
+    {
     InitWidgets();
 //     this->UpdateChannelSelection();
     this->UpdateInformation();
-  }
+    }
 }
 /*
 void
@@ -172,18 +172,16 @@ void
 WriterViewGUI
 ::UpdateInformation()
 {
-  std::string imName = m_WriterModel->GetInputFileName();
+  std::string        imName = m_WriterModel->GetInputFileName();
   itk::OStringStream oss;
   oss.str("");
-  oss<<"Writer Application";
-  oss<<" : "<<imName.substr(imName.find_last_of("/")+1, imName.size());
-  oss<<" ("<<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
-  if(m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel() != 1)
-    oss<<" bands , ";
-  else
-    oss<<" band , ";
+  oss << "Writer Application";
+  oss << " : " << imName.substr(imName.find_last_of("/") + 1, imName.size());
+  oss << " (" << m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
+  if (m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
+  else oss << " band , ";
 
-  oss<<m_WriterModel->GetInputImage()->GetLargestPossibleRegion().GetSize()<<")";
+  oss << m_WriterModel->GetInputImage()->GetLargestPossibleRegion().GetSize() << ")";
   guiMainWindow->label(oss.str().c_str());
 }
 
@@ -192,13 +190,13 @@ WriterViewGUI
 ::AddOutputChannel()
 {
   unsigned int listValue = guiFeatureList->value();
-  if ( ( guiFeatureList->size() != 0 ) && ( listValue != 0 ) )
-  {
-    m_InputOutputFeatureLink.push_back(listValue-1);
+  if ((guiFeatureList->size() != 0) && (listValue != 0))
+    {
+    m_InputOutputFeatureLink.push_back(listValue - 1);
     guiOutputFeatureList->add(guiFeatureList->text(listValue));
-    m_WriterController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size()-1]);
+    m_WriterController->AddToOutputListOrder(m_InputOutputFeatureLink[m_InputOutputFeatureLink.size() - 1]);
     guiOutputFeatureList->redraw();
-  }
+    }
 }
 
 void
@@ -206,13 +204,13 @@ WriterViewGUI
 ::RemoveOutputChannel()
 {
   unsigned int listValue = guiOutputFeatureList->value();
-  if ( ( guiOutputFeatureList->size() != 0 ) && ( listValue != 0 ) )
-  {
+  if ((guiOutputFeatureList->size() != 0) && (listValue != 0))
+    {
     m_WriterController->RemoveFromOutputListOrder(listValue);
-    m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin()+listValue-1);
+    m_InputOutputFeatureLink.erase(m_InputOutputFeatureLink.begin() + listValue - 1);
     guiOutputFeatureList->remove(listValue);
     guiOutputFeatureList->redraw();
-  }
+    }
 }
 
 void
@@ -220,22 +218,22 @@ WriterViewGUI
 ::UpOutputChannel()
 {
   int id = guiOutputFeatureList->value();
-  if ( ( guiOutputFeatureList->size() != 0 ) && ( id != 0 ) )
+  if ((guiOutputFeatureList->size() != 0) && (id != 0))
     {
-      
-      // exchnage the output list manager
-      m_WriterController->ExchangeOutputListOrder(1);
-      // exchnage the list display order
-      if(id!=1)
-       {
-         guiOutputFeatureList->swap( id, id-1 );
-         guiOutputFeatureList->value(id-1);
-       }
-      else
-       {
-         guiOutputFeatureList->swap(id, guiOutputFeatureList->size() );
-         guiOutputFeatureList->value(guiOutputFeatureList->size());
-       }
+
+    // exchnage the output list manager
+    m_WriterController->ExchangeOutputListOrder(1);
+    // exchnage the list display order
+    if (id != 1)
+      {
+      guiOutputFeatureList->swap(id, id - 1);
+      guiOutputFeatureList->value(id - 1);
+      }
+    else
+      {
+      guiOutputFeatureList->swap(id, guiOutputFeatureList->size());
+      guiOutputFeatureList->value(guiOutputFeatureList->size());
+      }
     }
 }
 
@@ -244,23 +242,23 @@ WriterViewGUI
 ::DownOutputChannel()
 {
   int id = guiOutputFeatureList->value();
-  if ( ( guiOutputFeatureList->size() != 0 ) && ( id !=0 ) )
-  {
+  if ((guiOutputFeatureList->size() != 0) && (id != 0))
+    {
     // exchnage the output list manager
     m_WriterController->ExchangeOutputListOrder(-1);
     // exchnage the list display order
-    if(id!=guiOutputFeatureList->size())
-    {
-      guiOutputFeatureList->swap( id, id+1 );
-      guiOutputFeatureList->value(id+1);
-    }
+    if (id != guiOutputFeatureList->size())
+      {
+      guiOutputFeatureList->swap(id, id + 1);
+      guiOutputFeatureList->value(id + 1);
+      }
     else
-    {
-      guiOutputFeatureList->swap(id, 1 );
+      {
+      guiOutputFeatureList->swap(id, 1);
       guiOutputFeatureList->value(1);
-    }
+      }
     guiOutputFeatureList->redraw();
-  }
+    }
 }
 
 void
@@ -269,7 +267,7 @@ WriterViewGUI
 {
   m_WriterController->CreateFeature();
   guiMainWindow->show();
-  
+
   //Initialize progress bar
   pBar->minimum(0);
   pBar->maximum(1);
@@ -280,16 +278,16 @@ WriterViewGUI
 ::InitFeatureOutputList()
 {
   std::ostringstream oss;
-  std::string strBase = "channel number: ";
+  std::string        strBase = "channel number: ";
 
-  for (unsigned int i=0;i<m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();++i)
-  {
+  for (unsigned int i = 0; i < m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel(); ++i)
+    {
     std::ostringstream oss;
-    oss << i+1;
-    this->guiFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
-    this->guiOutputFeatureList->add( m_WriterModel->GetOutputChannelsInformation()[i].c_str() );
+    oss << i + 1;
+    this->guiFeatureList->add(m_WriterModel->GetOutputChannelsInformation()[i].c_str());
+    this->guiOutputFeatureList->add(m_WriterModel->GetOutputChannelsInformation()[i].c_str());
     this->AddToInputOutputFeatureLink(i);
-  }
+    }
   this->guiFeatureList->redraw();
   this->guiOutputFeatureList->redraw();
 }
@@ -299,12 +297,11 @@ WriterViewGUI
 ::OK()
 {
   std::string filepath = vFilePath->value();
-  const bool useScale = static_cast <bool> ( guiScale->value() );
-  const int pixelType = guiOutputPixelTypeChoice->value();
+  const bool  useScale = static_cast <bool> (guiScale->value());
+  const int   pixelType = guiOutputPixelTypeChoice->value();
 
   m_WriterController->SaveOutput(filepath, pixelType, useScale);
 }
-
 
 void
 WriterViewGUI
@@ -314,13 +311,12 @@ WriterViewGUI
   unsigned int nbBand = m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
 
   std::vector<unsigned int> ckeckedList(nbBand, 0);
-  for (unsigned int i=0;i<nbBand;++i)
-  {
-    ckeckedList[i] = i+1;
-  }
+  for (unsigned int i = 0; i < nbBand; ++i)
+    {
+    ckeckedList[i] = i + 1;
+    }
   m_WriterController->AddInputChannels(ckeckedList);
 }
-
 
 void
 WriterViewGUI
@@ -335,12 +331,11 @@ WriterViewGUI
 
   if (m_ResultVisuView.IsNotNull())
     {
-      m_ResultVisuView->GetFullWidget()->ClearBuffer();
-      m_ResultVisuView->GetFullWidget()->redraw();
-      m_WriterModel->GetResultVisuModel()->ClearLayers();
+    m_ResultVisuView->GetFullWidget()->ClearBuffer();
+    m_ResultVisuView->GetFullWidget()->redraw();
+    m_WriterModel->GetResultVisuModel()->ClearLayers();
     }
 }
-
 
 void
 WriterViewGUI
@@ -351,19 +346,19 @@ WriterViewGUI
 
   // NewVisu
   if (m_VisuView.IsNotNull())
-  {
+    {
     m_VisuView->GetScrollWidget()->ClearBuffer();
     m_VisuView->GetScrollWidget()->redraw();
     m_VisuView->GetFullWidget()->ClearBuffer();
     m_VisuView->GetFullWidget()->redraw();
     m_WriterModel->GetVisuModel()->ClearLayers();
-  }
+    }
   if (m_ResultVisuView.IsNotNull())
-  {
+    {
     m_ResultVisuView->GetFullWidget()->ClearBuffer();
     m_ResultVisuView->GetFullWidget()->redraw();
     m_WriterModel->GetResultVisuModel()->ClearLayers();
-  }
+    }
 
   m_WriterController->InitInput();
   // Reset the title
@@ -383,13 +378,13 @@ void WriterViewGUI::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.*","");
-  
+  filename = flu_file_chooser("Choose the dataset file...", "*.*", "");
+
   if (filename == NULL)
-  {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-  }
+    {
+    otbMsgDebugMacro(<< "Empty file name!");
+    return;
+    }
   vFilePath->value(filename);
 }
 
@@ -399,42 +394,41 @@ void WriterViewGUI::UpdateProgress()
 
   itk::OStringStream oss1, oss2;
   oss1.str("");
-  oss1<<"Writing dataset  ("<<std::floor(100*progress)<<"%)";
+  oss1 << "Writing dataset  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
-  oss2<<std::floor(100*progress);
-  oss2<<"%";
-  pBar->value( progress );
+  oss2 << std::floor(100 * progress);
+  oss2 << "%";
+  pBar->value(progress);
   vFilePath->copy_label(oss1.str().c_str());
-  pBar->copy_label( oss2.str().c_str() );
+  pBar->copy_label(oss2.str().c_str());
 }
 
 void WriterViewGUI::UpdateProgressCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
 
-  if(writer.IsNotNull())
-  {
+  if (writer.IsNotNull())
+    {
     writer->UpdateProgress();
-  }
+    }
 }
 
 void WriterViewGUI::QuitCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
 
-  if(writer.IsNotNull())
-  {
+  if (writer.IsNotNull())
+    {
     writer->Quit();
-  }
+    }
 }
-
 
 void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
 {
   Fl::lock();
   if (withAwake)
-  {
-     // Reactivate window buttons
+    {
+    // Reactivate window buttons
     guiQuit->activate();
     guiOK->activate();
     vFilePath->activate();
@@ -446,10 +440,10 @@ void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
     guiRemoveChannel->activate();
     guiUpChannel->activate();
     guiDownChannel->activate();
-    Fl::awake(&QuitCallback,this);
-  }
+    Fl::awake(&QuitCallback, this);
+    }
   else
-  {
+    {
     // Deactivate window buttons
     guiQuit->deactivate();
     guiOK->deactivate();
@@ -462,14 +456,13 @@ void WriterViewGUI::ManageActivationWindowButtons(bool withAwake)
     guiRemoveChannel->deactivate();
     guiUpChannel->deactivate();
     guiDownChannel->deactivate();
-  }
+    }
   Fl::unlock();
 }
- 
 
-void WriterViewGUI::AwakeProgressFields (double progress)
+void WriterViewGUI::AwakeProgressFields(double progress)
 {
   this->SetProgress(progress);
-  Fl::awake(&UpdateProgressCallback,this);
+  Fl::awake(&UpdateProgressCallback, this);
 }
 } //end namespace

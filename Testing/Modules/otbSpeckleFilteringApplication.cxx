@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "otbSpeckleFilteringView.h"
 #include "otbSpeckleFilteringModel.h"
 #include "otbSpeckleFilteringController.h"
@@ -30,7 +29,6 @@ int otbSpeckleFilteringApplication(int argc, char* argv[])
   typedef otb::SpeckleFilteringView       ViewType;
   typedef otb::SpeckleFilteringController ControllerType;
   typedef otb::SpeckleFilteringModel      ModelType;
-
 
   // Instanciation of pointer
   ViewType::Pointer       view       = ViewType::New();
@@ -54,7 +52,6 @@ int otbSpeckleFilteringApplication(int argc, char* argv[])
 
   model->SetInputImage(reader->GetOutput());
 
-
   // Open the GUI
   view->Show();
   Fl::check();
@@ -62,7 +59,7 @@ int otbSpeckleFilteringApplication(int argc, char* argv[])
   Fl::check();
 
   //Write the image
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(model->GetOutput());
   writer->Update();
@@ -70,4 +67,3 @@ int otbSpeckleFilteringApplication(int argc, char* argv[])
   return EXIT_SUCCESS;
 
 }
-

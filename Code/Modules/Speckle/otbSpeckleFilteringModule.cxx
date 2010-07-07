@@ -36,7 +36,7 @@ SpeckleFilteringModule::SpeckleFilteringModule()
   m_Model->RegisterListener(this);
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage",otbGetTextMacro("Image to apply speckle filtering on"));
+  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply speckle filtering on"));
 }
 
 /** Destructor */
@@ -47,7 +47,7 @@ SpeckleFilteringModule::~SpeckleFilteringModule()
 void SpeckleFilteringModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -55,14 +55,14 @@ void SpeckleFilteringModule::Run()
 {
   InputImageType::Pointer inputImage = this->GetInputData<InputImageType>("InputImage");
 
-  if(inputImage.IsNotNull())
+  if (inputImage.IsNotNull())
     {
     m_Model->SetInputImage(inputImage);
     m_View->Show();
     }
   else
     {
-    itkExceptionMacro(<<"Input image is NULL");
+    itkExceptionMacro(<< "Input image is NULL");
     }
 }
 
@@ -72,10 +72,10 @@ void SpeckleFilteringModule::Notify()
   if (m_Model->GetOutputChanged())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutput(),"OutputImage",otbGetTextMacro("Speckle filtered image"));
+    this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", otbGetTextMacro("Speckle filtered image"));
     // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
-  }
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+    }
 }
 
 } // End namespace otb

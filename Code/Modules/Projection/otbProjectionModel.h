@@ -35,61 +35,61 @@ class ITK_EXPORT ProjectionModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 
- public:
+public:
   /** Standard class typedefs */
-  typedef ProjectionModel                           Self;
-  typedef MVCModel<ListenerBase>                    Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ProjectionModel               Self;
+  typedef MVCModel<ListenerBase>        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(ProjectionModel, MVCModel);
   itkNewMacro(Self);
 
   /** typedefs */
-  typedef TypeManager::Floating_Point_VectorImage  InputImageType;
-  typedef InputImageType::IndexType                IndexType;
-  typedef InputImageType::SizeType                 SizeType;
-  typedef InputImageType::PointType                PointType;
-  typedef InputImageType::SpacingType              SpacingType;
- 
+  typedef TypeManager::Floating_Point_VectorImage InputImageType;
+  typedef InputImageType::IndexType               IndexType;
+  typedef InputImageType::SizeType                SizeType;
+  typedef InputImageType::PointType               PointType;
+  typedef InputImageType::SpacingType             SpacingType;
+
   /** typedef the Remote Sensing transform*/
-  typedef GenericRSTransform<>                        TransformType;
+  typedef GenericRSTransform<> TransformType;
   //typedef RSTransformType::TransformType            TransformType;
-  typedef TransformType::OutputPointType              OutputPointType;
+  typedef TransformType::OutputPointType OutputPointType;
 
   /** Output */
-  typedef TypeManager::Floating_Point_Image           SingleImageType;
+  typedef TypeManager::Floating_Point_Image                                            SingleImageType;
   typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>       ResampleFilterType;
   typedef PerBandVectorImageFilter<InputImageType, InputImageType, ResampleFilterType> PerBandFilterType;
-  
+
   /** SetInputImage */
-  itkSetObjectMacro(InputImage,InputImageType);
-  itkGetObjectMacro(InputImage,InputImageType);
+  itkSetObjectMacro(InputImage, InputImageType);
+  itkGetObjectMacro(InputImage, InputImageType);
 
   /** Get Output Image */
-  itkGetObjectMacro(Output,InputImageType);
+  itkGetObjectMacro(Output, InputImageType);
 
   /** Get the output changed flag */
-  itkGetMacro(OutputChanged,bool);
+  itkGetMacro(OutputChanged, bool);
 
   /** Get the transform changed flag */
-  itkGetMacro(TransformChanged,bool);
+  itkGetMacro(TransformChanged, bool);
 
   /** Get the transform changed flag */
-  itkGetMacro(TempTransformChanged,bool);
+  itkGetMacro(TempTransformChanged, bool);
 
   /** Get a  reference on the Transform */
-  itkGetObjectMacro(Transform,TransformType);
+  itkGetObjectMacro(Transform, TransformType);
 
   /** Get the instance of the resampler*/
-  itkGetObjectMacro(Resampler,ResampleFilterType);
+  itkGetObjectMacro(Resampler, ResampleFilterType);
 
   /** Get Spacing / Size & Origin*/
-  itkGetMacro(OutputSize,SizeType);
-  itkGetMacro(OutputOrigin,PointType);
-  itkGetMacro(OutputSpacing,SpacingType);
-  
+  itkGetMacro(OutputSize, SizeType);
+  itkGetMacro(OutputOrigin, PointType);
+  itkGetMacro(OutputSpacing, SpacingType);
+
   /** Compute the output region*/
   virtual void UpdateOutputParameters();
 
@@ -97,65 +97,69 @@ class ITK_EXPORT ProjectionModel
   virtual void ReprojectImage();
 
   /** Tell the resampler to region to project*/
-  virtual void ProjectRegion(unsigned int sizeX, unsigned int sizeY, double spacingX, double spacingY, double originX, double originY , bool isUl);
+  virtual void ProjectRegion(unsigned int sizeX,
+                             unsigned int sizeY,
+                             double spacingX,
+                             double spacingY,
+                             double originX,
+                             double originY,
+                             bool isUl);
 
   /** Update the UTM Projection*/
-  virtual void UpdateUTMTransform(int zone,bool north);
+  virtual void UpdateUTMTransform(int zone, bool north);
 
   /** Initialize the Lambert II Projection*/
   virtual void InitializeLambertIITransform();
-  
-  /** Initialize the transmecator proejction */
-  virtual void UpdateTMTransform(double scale, double falseEasting , double falseNorthing );
 
-    /** Update the Input UTM Projection*/
-  virtual void UpdateInputUTMTransform(int zone,bool north);
+  /** Initialize the transmecator proejction */
+  virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing);
+
+  /** Update the Input UTM Projection*/
+  virtual void UpdateInputUTMTransform(int zone, bool north);
 
   /** Initialize the Input Lambert II Projection*/
   virtual void InitializeInputLambertIITransform();
-  
+
   /** Initialize the Input transmecator proejction */
-  virtual void UpdateInputTMTransform(double scale, double falseEasting , double falseNorthing );
+  virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
 
   /** Initialize the WGS84 transform*/
   void UpdateWGS84Transform();
 
- protected:
+protected:
   /** Constructor */
   ProjectionModel();
 
   /** Destructor */
   virtual ~ProjectionModel();
 
- private:
+private:
   ProjectionModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
-  
-  InputImageType::Pointer       m_InputImage;
-  InputImageType::Pointer       m_Output;
-  bool                          m_OutputChanged;
-  bool                          m_TransformChanged;
-  bool                          m_TempTransformChanged;
+
+  InputImageType::Pointer m_InputImage;
+  InputImageType::Pointer m_Output;
+  bool                    m_OutputChanged;
+  bool                    m_TransformChanged;
+  bool                    m_TempTransformChanged;
 
   // Output Image Information
-  SizeType                      m_OutputSize;
-  PointType                     m_OutputOrigin;
-  SpacingType                   m_OutputSpacing;
-  
+  SizeType    m_OutputSize;
+  PointType   m_OutputOrigin;
+  SpacingType m_OutputSpacing;
+
   // Instance of the composite transform
-  TransformType::Pointer   m_Transform;
-  TransformType::Pointer   m_InverseTransform;
+  TransformType::Pointer m_Transform;
+  TransformType::Pointer m_InverseTransform;
 
   // Outputs
-  ResampleFilterType::Pointer  m_Resampler;
-  PerBandFilterType::Pointer   m_PerBander;
+  ResampleFilterType::Pointer m_Resampler;
+  PerBandFilterType::Pointer  m_PerBander;
 
-  char *                 m_OutputProjectionRef;
+  char * m_OutputProjectionRef;
 };
 }
 #endif
-
-

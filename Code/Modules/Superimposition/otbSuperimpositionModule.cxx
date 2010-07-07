@@ -33,9 +33,9 @@ SuperimpositionModule::SuperimpositionModule()
   m_Transform       = TransformType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<VectorImageType>("ReferenceImage",otbGetTextMacro("Reference image for reprojection"));
+  this->AddInputDescriptor<VectorImageType>("ReferenceImage", otbGetTextMacro("Reference image for reprojection"));
   this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
-  this->AddInputDescriptor<VectorImageType>("InputImage",otbGetTextMacro("Image to reproject"));
+  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Image to reproject"));
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
   this->BuildGUI();
@@ -51,9 +51,8 @@ SuperimpositionModule::~SuperimpositionModule()
 void SuperimpositionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void SuperimpositionModule::Run()
@@ -70,7 +69,7 @@ void SuperimpositionModule::Ok()
   ImageType::Pointer moving = this->GetInputData<ImageType>("InputImage");
 
   // Handle reference image
-  if(fixed.IsNotNull())
+  if (fixed.IsNotNull())
     {
     fixed->UpdateOutputInformation();
     m_Transform->SetInputProjectionRef(fixed->GetProjectionRef());
@@ -81,7 +80,7 @@ void SuperimpositionModule::Ok()
     m_Resampler->SetOutputSpacing(fixed->GetSpacing());
     m_Resampler->SetOutputOrigin(fixed->GetOrigin());
     }
-  else if(vfixed.IsNotNull())
+  else if (vfixed.IsNotNull())
     {
     vfixed->UpdateOutputInformation();
     m_Transform->SetInputProjectionRef(vfixed->GetProjectionRef());
@@ -94,18 +93,18 @@ void SuperimpositionModule::Ok()
     }
   else
     {
-    itkExceptionMacro(<<"Fixed input is null");
+    itkExceptionMacro(<< "Fixed input is null");
     }
 
   // Handle moving inputs
-  if(moving.IsNotNull())
+  if (moving.IsNotNull())
     {
     moving->UpdateOutputInformation();
     m_Transform->SetOutputProjectionRef(moving->GetProjectionRef());
     m_Transform->SetOutputDictionary(moving->GetMetaDataDictionary());
     m_Transform->SetOutputKeywordList(moving->GetImageKeywordlist());
     }
-  else if(vmoving.IsNotNull())
+  else if (vmoving.IsNotNull())
     {
     vmoving->UpdateOutputInformation();
     m_Transform->SetOutputProjectionRef(vmoving->GetProjectionRef());
@@ -114,11 +113,10 @@ void SuperimpositionModule::Ok()
     }
   else
     {
-    itkExceptionMacro(<<"Moving input is null");
+    itkExceptionMacro(<< "Moving input is null");
     }
 
-
-  if(choiceDEM->value() == 1)
+  if (choiceDEM->value() == 1)
     {
     m_Transform->SetDEMDirectory(vDEMPath->value());
     }
@@ -129,12 +127,11 @@ void SuperimpositionModule::Ok()
 
   m_Transform->InstanciateTransform();
 
-
   // Copy parameters from reference image
   m_Resampler->SetTransform(m_Transform);
 
   // Do we have to resample a vector image ?
-  if(vmoving.IsNotNull())
+  if (vmoving.IsNotNull())
     {
     m_PerBanderFilter->SetInput(vmoving);
     m_PerBanderFilter->SetFilter(m_Resampler);
@@ -142,11 +139,11 @@ void SuperimpositionModule::Ok()
     output->UpdateOutputInformation();
 
     // Report projection ref (not done by the resample filter)
-    if(fixed.IsNotNull())
+    if (fixed.IsNotNull())
       {
       output->CopyInformation(fixed);
       }
-    else if(vfixed.IsNotNull())
+    else if (vfixed.IsNotNull())
       {
       output->CopyInformation(vfixed);
       }
@@ -154,22 +151,22 @@ void SuperimpositionModule::Ok()
     output->SetNumberOfComponentsPerPixel(vmoving->GetNumberOfComponentsPerPixel());
 
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output,"Reprojected image",otbGetTextMacro("Image superimposable to reference"));
+    this->AddOutputDescriptor(output, "Reprojected image", otbGetTextMacro("Image superimposable to reference"));
     this->NotifyOutputsChange();
     }
   // Else produce only a single image
-  else if(moving.IsNotNull())
+  else if (moving.IsNotNull())
     {
     m_Resampler->SetInput(moving);
     ImageType::Pointer output = m_Resampler->GetOutput();
     output->UpdateOutputInformation();
 
     // Report projection ref (not done by the resample filter)
-    if(fixed.IsNotNull())
+    if (fixed.IsNotNull())
       {
       output->CopyInformation(fixed);
       }
-    else if(vfixed.IsNotNull())
+    else if (vfixed.IsNotNull())
       {
       output->CopyInformation(vfixed);
       }
@@ -177,23 +174,23 @@ void SuperimpositionModule::Ok()
     output->SetNumberOfComponentsPerPixel(moving->GetNumberOfComponentsPerPixel());
 
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output,"Reprojected image",otbGetTextMacro("Image superimposable to reference"));
+    this->AddOutputDescriptor(output, "Reprojected image", otbGetTextMacro("Image superimposable to reference"));
     this->NotifyOutputsChange();
     }
 
-    wFileChooserWindow->hide();
+  wFileChooserWindow->hide();
 }
 
 void SuperimpositionModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "*.*","");
+  filename = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "*.*", "");
 
   if (filename == NULL)
     {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    otbMsgDebugMacro(<< "Empty file name!");
+    return;
     }
   vDEMPath->value(filename);
 }
@@ -202,7 +199,6 @@ void SuperimpositionModule::Cancel()
 {
   wFileChooserWindow->hide();
 }
-
 
 } // End namespace otb
 

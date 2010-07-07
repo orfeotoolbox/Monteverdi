@@ -26,18 +26,18 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbChangeDetectionModuleTest);
-REGISTER_TEST(otbGCPToSensorModelModuleTest);
-REGISTER_TEST(otbThresholdModuleTestNew);
-REGISTER_TEST(otbThresholdModuleTest);
-REGISTER_TEST(otbOpticalCalibrationModuleTest);
-REGISTER_TEST(otbSarCalibrationModuleTest);
-REGISTER_TEST(otbSupervisedClassificationModelTest);
-REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
-REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
-REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
-REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
-REGISTER_TEST(otbSertitProcessingTest);
-REGISTER_TEST(otbSertitProcessingTestNonGeoProduct);
-REGISTER_TEST(otbSertitProcessingTestNonGeoProductXT);
+  REGISTER_TEST(otbChangeDetectionModuleTest);
+  REGISTER_TEST(otbGCPToSensorModelModuleTest);
+  REGISTER_TEST(otbThresholdModuleTestNew);
+  REGISTER_TEST(otbThresholdModuleTest);
+  REGISTER_TEST(otbOpticalCalibrationModuleTest);
+  REGISTER_TEST(otbSarCalibrationModuleTest);
+  REGISTER_TEST(otbSupervisedClassificationModelTest);
+  REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
+  REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
+  REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
+  REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
+  REGISTER_TEST(otbSertitProcessingTest);
+  REGISTER_TEST(otbSertitProcessingTestNonGeoProduct);
+  REGISTER_TEST(otbSertitProcessingTestNonGeoProductXT);
 }

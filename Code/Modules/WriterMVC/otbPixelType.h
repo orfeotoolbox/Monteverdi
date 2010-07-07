@@ -27,7 +27,7 @@ namespace otb
  * this enum defines the different Pixel type available.
    */
 typedef enum
-{
+  {
   UNSIGNEDCHAR, //0
   SHORTINT,
   INT,
@@ -35,7 +35,7 @@ typedef enum
   DOUBLE,
   UNSIGNEDSHORTINT,
   UNSIGNEDINT
-} PixelType;
+  } PixelType;
 
 }
 #endif

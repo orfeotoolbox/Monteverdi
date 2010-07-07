@@ -40,14 +40,14 @@ GCPToSensorModelModule::GCPToSensorModelModule()
   m_View->SetMapWidgetController(m_Controller->GetMapWidgetController());
 
   m_Model->RegisterListener(this);
-  
+
   // Instanciation of the Image To VectorImage Filter
   m_CastFilter = CastSingleImageFilterType::New();
-  
+
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage",otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
   this->AddTypeToInputDescriptor<FloatingSingleImageType>("InputImage");
 }
 
@@ -59,9 +59,8 @@ GCPToSensorModelModule::~GCPToSensorModelModule()
 void GCPToSensorModelModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void GCPToSensorModelModule::Run()
@@ -82,9 +81,9 @@ void GCPToSensorModelModule::Run()
   // If the input image is an otb::Image instead of VectorImage then cast it
   // in Vector Image and continue the processing
   FloatingSingleImageType::Pointer fSingleImage = this->GetInputData<FloatingSingleImageType>("InputImage");
-  
+
   //Test single floating image
-  if(fSingleImage.IsNotNull() && fpvImage.IsNull())
+  if (fSingleImage.IsNotNull() && fpvImage.IsNull())
     {
     //cast Image in VectorImage
     m_CastFilter->SetInput(fSingleImage);
@@ -92,20 +91,20 @@ void GCPToSensorModelModule::Run()
     }
 
   // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull() )
+  if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_View->BuildInterface();
-      m_Model->SetImage( fpvImage );
+    m_View->BuildInterface();
+    m_Model->SetImage(fpvImage);
 #ifdef OTB_USE_CURL
-      m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
+    m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
 #else
-      m_View->wMapWindow->hide();
+    m_View->wMapWindow->hide();
 #endif
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -118,16 +117,15 @@ void GCPToSensorModelModule::Notify()
 
   if (m_Model->GetOutputChanged())
     {
-      this->ClearOutputDescriptors();
-      // Add outputs
-      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
+    this->ClearOutputDescriptors();
+    // Add outputs
+    FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
+    this->AddOutputDescriptor(filteredOutput, "OutputImage", otbGetTextMacro("Input image with new keyword list"));
     }
 
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 
   // Once module is closed, it is no longer busy
   this->BusyOff();
 }
 } // End namespace otb
-

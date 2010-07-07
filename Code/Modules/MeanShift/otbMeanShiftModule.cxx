@@ -54,9 +54,8 @@ MeanShiftModule::~MeanShiftModule()
 void MeanShiftModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /** The custom run command */
 void MeanShiftModule::Run()
@@ -74,15 +73,15 @@ void MeanShiftModule::Run()
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
   // One of this pointer will be NULL:
-  if(fpvImage.IsNotNull())
+  if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_Model->SetInputImage( fpvImage );
-      m_View->Build();
+    m_Model->SetInputImage(fpvImage);
+    m_View->Build();
     }
   else
     {
-      itkExceptionMacro(<<"Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
 
   // Once all inputs have been properly retrieved, do what the module
@@ -91,40 +90,39 @@ void MeanShiftModule::Run()
 }
 
 /** The Notify */
-void MeanShiftModule::Notify(const std::string & event)
+void MeanShiftModule::Notify(const std::string& event)
 {
 
   if (event == "OutputsUpdated")
-  {
+    {
     this->ClearOutputDescriptors();
 
     // Add outputs
     FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
-    this->AddOutputDescriptor(filteredOutput,"Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
-    
-    FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
-    this->AddOutputDescriptor(clusteredOutput,"Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
-    
-    LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-    this->AddOutputDescriptor(labeledOutput,"Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
-    
-    LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
-    this->AddOutputDescriptor(boundOutput,"Boundaries Image", otbGetTextMacro("Cluster image boundaries"));
-    
-    // Send an event to Monteverdi application
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->AddOutputDescriptor(filteredOutput, "Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
 
-      // Once module is closed, it is no longer busy
+    FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
+    this->AddOutputDescriptor(clusteredOutput, "Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
+
+    LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
+    this->AddOutputDescriptor(labeledOutput, "Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
+
+    LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
+    this->AddOutputDescriptor(boundOutput, "Boundaries Image", otbGetTextMacro("Cluster image boundaries"));
+
+    // Send an event to Monteverdi application
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+
+    // Once module is closed, it is no longer busy
     this->BusyOff();
-  }
+    }
   else if (event == "BusyOff")
-  {
+    {
     this->BusyOff();
-  }
+    }
   else
-  {
-  }
+    {
+    }
 
 }
 } // End namespace otb
-

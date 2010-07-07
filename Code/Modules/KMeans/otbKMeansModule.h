@@ -25,7 +25,6 @@
 
 #include "otbTypeManager.h"
 
-
 // KMeans
 #include "itkEuclideanDistance.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
@@ -44,35 +43,35 @@ template <class TSample, class TLabel> class KMeansFunctor
 {
 public:
   /** operator */
-  TLabel operator()(const TSample & sample) const
+  TLabel operator ()(const TSample& sample) const
   {
     typename CentroidMapType::const_iterator it = m_CentroidsMap.begin();
 
-    if(it == m_CentroidsMap.end())
+    if (it == m_CentroidsMap.end())
       {
       return 0;
       }
 
     TLabel resp = it->first;
-    double minDist = m_Distance->Evaluate(sample,it->second);
+    double minDist = m_Distance->Evaluate(sample, it->second);
     ++it;
 
-    while(it!=m_CentroidsMap.end())
+    while (it != m_CentroidsMap.end())
       {
-      double dist = m_Distance->Evaluate(sample,it->second);
+      double dist = m_Distance->Evaluate(sample, it->second);
 
-      if(dist<minDist)
-       {
-       resp = it->first;
-       minDist = dist;
-       }
+      if (dist < minDist)
+        {
+        resp = it->first;
+        minDist = dist;
+        }
       ++it;
       }
     return resp;
   }
 
   /** Add a new centroid */
-  void AddCentroid(const TLabel & label, const TSample & centroid)
+  void AddCentroid(const TLabel& label, const TSample& centroid)
   {
     m_CentroidsMap[label] = centroid;
   }
@@ -83,16 +82,16 @@ public:
     m_Distance = DistanceType::New();
   }
 
-  bool operator!=(const KMeansFunctor & other) const
+  bool operator !=(const KMeansFunctor& other) const
   {
     return m_CentroidsMap != other.m_CentroidsMap;
   }
 
 private:
-  typedef std::map<TLabel,TSample>        CentroidMapType;
+  typedef std::map<TLabel, TSample>                   CentroidMapType;
   typedef itk::Statistics::EuclideanDistance<TSample> DistanceType;
-  
-  CentroidMapType                          m_CentroidsMap;
+
+  CentroidMapType m_CentroidsMap;
   typename DistanceType::Pointer m_Distance;
 };
 }
@@ -108,7 +107,7 @@ class ITK_EXPORT KMeansModule
 {
 public:
   /** Standard class typedefs */
-  typedef KMeansModule                 Self;
+  typedef KMeansModule                  Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -117,13 +116,13 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(KMeansModule,Module);
+  itkTypeMacro(KMeansModule, Module);
 
   typedef TypeManager::Floating_Point_Precision   PrecisionType;
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
 
-  typedef TypeManager::Label_Short_Precision      LabelType;
-  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
+  typedef TypeManager::Label_Short_Precision LabelType;
+  typedef TypeManager::Labeled_Short_Image   LabeledImageType;
 
   typedef FloatingVectorImageType::PixelType                               SampleType;
   typedef itk::Statistics::ListSample<SampleType>                          ListSampleType;
@@ -131,15 +130,15 @@ public:
   typedef TreeGeneratorType::KdTreeType                                    TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
   typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType,
-                                     FloatingVectorImageType>              SamplingFilterType;
-  typedef Functor::KMeansFunctor<SampleType,LabelType>                     KMeansFunctorType;
+      FloatingVectorImageType>              SamplingFilterType;
+  typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
   typedef itk::UnaryFunctorImageFilter<FloatingVectorImageType,
-                                   LabeledImageType,KMeansFunctorType>     KMeansFilterType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,FloatingVectorImageType> ChangeLabelFilterType;
-  
+      LabeledImageType, KMeansFunctorType>     KMeansFilterType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType, FloatingVectorImageType> ChangeLabelFilterType;
+
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
-  
+  virtual bool CanShow(){return true; }
+
   /** Show the Module GUI */
   virtual void Show()
   {
@@ -149,7 +148,7 @@ public:
     pProgressBar->value(0.);
     pProgressBar->hide();
     this->UpdateNumberOfSamples();
-  };
+  }
 protected:
   /** Constructor */
   KMeansModule();
@@ -183,9 +182,9 @@ private:
 
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);
-  
+
   KMeansModule(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // KMeans estimator
   EstimatorType::Pointer m_Estimator;
@@ -198,11 +197,10 @@ private:
 
   // Pointer to the process object
   itk::ProcessObject::Pointer m_ProcessObject;
-  
+
   //error msg
   std::string m_ErrorMsg;
 };
-
 
 } // End namespace otb
 

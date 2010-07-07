@@ -16,19 +16,17 @@
 
 =========================================================================*/
 
-
 #include "otbWriterMVCModule.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-
 int otbWriterMVCModuleTest2(int argc, char* argv[])
 {
   otb::WriterMVCModule::Pointer specificModule = otb::WriterMVCModule::New();
-  otb::Module::Pointer module = specificModule.GetPointer();
+  otb::Module::Pointer          module = specificModule.GetPointer();
 
-  std::cout<<"Module: "<<module<<std::endl;
+  std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
@@ -41,10 +39,10 @@ int otbWriterMVCModuleTest2(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout<<"Input wrapper: "<< wrapperIn << std::endl;
-  
-  module->AddInputByKey("InputDataSet",wrapperIn);
-  
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
+
+  module->AddInputByKey("InputDataSet", wrapperIn);
+
   module->Start();
 
   Fl::check();
@@ -52,4 +50,3 @@ int otbWriterMVCModuleTest2(int argc, char* argv[])
   return EXIT_SUCCESS;
 
 }
-

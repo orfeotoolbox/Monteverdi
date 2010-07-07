@@ -29,7 +29,11 @@ namespace otb
 InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false)
 {}
 
-InputDataDescriptor::InputDataDescriptor(const std::string & type, const std::string & key, const std::string & description) : DataDescriptor(type,key,description), m_Optional(false), m_Multiple(false)
+InputDataDescriptor::InputDataDescriptor(const std::string& type,
+                                         const std::string& key,
+                                         const std::string& description) : DataDescriptor(type, key,
+                                                                                          description),
+  m_Optional(false), m_Multiple(false)
 {}
 
 /** Destructor */
@@ -61,36 +65,36 @@ void InputDataDescriptor::SetMultiple(bool flag)
 }
 
 /** Add a type to the supported type for this input */
-void InputDataDescriptor::AddSupportedType(const std::string & type)
+void InputDataDescriptor::AddSupportedType(const std::string& type)
 {
   // Check if new type is already supported
-  if(!IsTypeCompatible(type))
+  if (!IsTypeCompatible(type))
     {
     // If not, add the new type
-    m_DataType = m_DataType+'|'+type;
+    m_DataType = m_DataType + '|' + type;
     }
 }
 
 /** Check if the given type is compatible with the input */
-bool InputDataDescriptor::IsTypeCompatible(const std::string & type) const
+bool InputDataDescriptor::IsTypeCompatible(const std::string& type) const
 {
   // Split the string into types substring
-  StringVectorType typesStringVector = SplitTypeName(m_DataType,'|');
+  StringVectorType typesStringVector = SplitTypeName(m_DataType, '|');
 
   // Searh for the type in the vector
-  StringVectorType::const_iterator it = std::find(typesStringVector.begin(),typesStringVector.end(),type);
+  StringVectorType::const_iterator it = std::find(typesStringVector.begin(), typesStringVector.end(), type);
 
   // Return true if the type was found
-  return (it!=typesStringVector.end());
+  return (it != typesStringVector.end());
 }
 
 /** Add data (virtual because behaviour depends
    *  on subclasses) */
-void InputDataDescriptor::AddData(const DataObjectWrapper & wrapper)
+void InputDataDescriptor::AddData(const DataObjectWrapper& wrapper)
 {
-  if(this->IsTypeCompatible(wrapper.GetDataType()))
+  if (this->IsTypeCompatible(wrapper.GetDataType()))
     {
-    if(!m_Multiple && !m_Data.empty())
+    if (!m_Multiple && !m_Data.empty())
       {
       m_Data[0] = wrapper;
       }
@@ -101,44 +105,45 @@ void InputDataDescriptor::AddData(const DataObjectWrapper & wrapper)
     }
   else
     {
-    itkGenericExceptionMacro(<<"Incompatible type. Expected "<<this->GetDataType()<<", received "<<wrapper.GetDataType());
+    itkGenericExceptionMacro(
+      << "Incompatible type. Expected " << this->GetDataType() << ", received " << wrapper.GetDataType());
     }
 }
 
 bool InputDataDescriptor::IsConsistent() const
 {
-  return (m_Optional || (m_Multiple && !m_Data.empty()) || (!m_Multiple && m_Data.size()==1));
+  return (m_Optional || (m_Multiple && !m_Data.empty()) || (!m_Multiple && m_Data.size() == 1));
 }
 
 /** Split type string according to a separator */
-InputDataDescriptor::StringVectorType InputDataDescriptor::SplitTypeName(const std::string & types, char separator)
+InputDataDescriptor::StringVectorType InputDataDescriptor::SplitTypeName(const std::string& types, char separator)
 {
   StringVectorType resp;
 
   size_t currentSep = 0;
   size_t nextSep = 0;
 
-  while(nextSep != std::string::npos)
+  while (nextSep != std::string::npos)
     {
-    nextSep = types.find_first_of(separator,currentSep);
-    std::string newType = types.substr(currentSep,nextSep-currentSep);
-    if(!newType.empty())
+    nextSep = types.find_first_of(separator, currentSep);
+    std::string newType = types.substr(currentSep, nextSep - currentSep);
+    if (!newType.empty())
       {
       resp.push_back(newType);
       }
-    currentSep = nextSep+1;
+    currentSep = nextSep + 1;
     }
   return resp;
 }
 
 /** Overloading the << operator */
-std::ostream & operator<<(std::ostream & ostr, const InputDataDescriptor & descriptor)
+std::ostream& operator <<(std::ostream& ostr, const InputDataDescriptor& descriptor)
 {
-  ostr<< "Input data, "
-      << static_cast<DataDescriptor>(descriptor)
-      << (descriptor.IsOptional() ? ", optional" : ", mandatory")
-      << (descriptor.IsMultiple() ? ", multiple" : ", single")
-      << (descriptor.IsConsistent() ? ", consistent"     : ", inconsistent");
+  ostr << "Input data, "
+  << static_cast<DataDescriptor>(descriptor)
+  << (descriptor.IsOptional() ? ", optional" : ", mandatory")
+  << (descriptor.IsMultiple() ? ", multiple" : ", single")
+  << (descriptor.IsConsistent() ? ", consistent"     : ", inconsistent");
   return ostr;
 }
 
