@@ -91,7 +91,7 @@ public:
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
         itk::OStringStream oss;
-        oss << "Haralick Text : ";
+        //oss << "Haralick Text : ";
 
         switch (pHarList[textId])
           {

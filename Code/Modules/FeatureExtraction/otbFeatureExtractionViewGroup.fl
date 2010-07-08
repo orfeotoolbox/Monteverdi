@@ -17,7 +17,7 @@ class FeatureExtractionViewGroup {open
   } {
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
-      callback {Quit();} open selected
+      callback {Quit();} open
       xywh {37 267 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
@@ -136,13 +136,13 @@ guiSFSRatMaxConsNb->deactivate();}
                 }
               }
               MenuItem {} {
-                label Haralick
+                label Haralick1
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::FeatureInfo::TEXT_HAR);}
+SetFeatureType(otb::FeatureInfo::TEXT_HAR);} selected
                 tooltip {Haralick textures.} xywh {10 10 30 20}
               }
               MenuItem {} {
-                label Advanced
+                label Haralick2
                 callback {UpdateParameterArea(31);
 SetFeatureType(otb::FeatureInfo::TEXT_ADV);}
                 tooltip {Advanced textures.} xywh {20 20 30 20}
