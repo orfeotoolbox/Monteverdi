@@ -511,7 +511,7 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledI
    m_VisualizationModel->Update();
 
  
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 unsigned int ObjectLabelingApplicationModel::GetNumberOfClasses()
