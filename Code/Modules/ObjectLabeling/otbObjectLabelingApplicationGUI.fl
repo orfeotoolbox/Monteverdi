@@ -1,0 +1,446 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ObjectLabelingApplicationGUI {open
+} {
+  Function {Build()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Object Labeling Application}
+      callback {this->Exit();} open
+      xywh {588 249 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+    } {
+      Fl_Group gFullResolution {
+        label {Full Resolution} open
+        xywh {231 50 475 584} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable
+      } {}
+      Fl_Group gScroll {
+        label {Navigation Map} open
+        xywh {5 50 220 220} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Tabs {} {
+        xywh {713 30 233 556} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 178
+      } {
+        Fl_Group gObjectsInterface {
+          label Objects open
+          xywh {713 51 233 535} color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+        } {
+          Fl_Browser lClasses {
+            label Classes
+            callback {this->Classes();}
+            xywh {722 67 216 160} type Hold box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button bAddClass {
+            label Add
+            callback {this->AddClass();}
+            xywh {723 308 69 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bRemoveClass {
+            label Remove
+            callback {this->RemoveClass();}
+            xywh {797 308 68 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bClearClasses {
+            label Clear
+            callback {this->ClearClasses();}
+            xywh {870 308 69 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Browser lObjects {
+            label Objects
+            callback {this->Objects();}
+            xywh {720 356 111 183} type Hold box PLASTIC_DOWN_BOX color 234 selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button bRemoveObject {
+            label Remove
+            callback {this->RemoveObject();}
+            xywh {727 548 53 25} box PLASTIC_DOWN_BOX color 234 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bClearObjects {
+            label Clear
+            callback {this->ClearObjects();}
+            xywh {784 548 40 25} box PLASTIC_DOWN_BOX color 234 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Input vClassLabel {
+            label Label
+            callback {this->ClassLabel();}
+            xywh {775 238 64 24} box PLASTIC_DOWN_BOX selection_color 177 labelfont 1 labelsize 12 labelcolor 177 when 8
+          }
+          Fl_Input vClassName {
+            label Name
+            callback {this->ClassName();}
+            xywh {775 272 159 24} box PLASTIC_DOWN_BOX selection_color 177 labelfont 1 labelsize 12 labelcolor 177 when 8
+          }
+          Fl_Button bClassColor {
+            label {Color }
+            callback {this->ClassColor();}
+            xywh {894 232 37 35} box BORDER_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          }
+          Fl_Browser lMarginSamples {
+            label Margin
+            callback {this->FocusOnMarginSample();}
+            xywh {835 356 105 182} type Hold box PLASTIC_DOWN_BOX color 118 selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3 resizable
+          }
+          Fl_Button bSampleMargin {
+            label Sample
+            callback {this->SampleMargin();}
+            xywh {839 548 50 25} box PLASTIC_DOWN_BOX color 118 labelfont 1 labelsize 12 labelcolor 178
+          }
+          Fl_Button bClearMargin {
+            label Clear
+            callback {this->ClearMarginSamples();}
+            xywh {893 547 40 26} box PLASTIC_DOWN_BOX color 118 labelfont 1 labelsize 12 labelcolor 178
+          }
+        }
+        Fl_Group gFeaturesInterfaces {
+          label Features open
+          xywh {713 51 231 535} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 hide
+        } {
+          Fl_Check_Browser lFeatures {
+            label {Features for classification}
+            callback {Features();}
+            xywh {725 74 206 448} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 178 align 1 when 1
+          }
+          Fl_Button bCheckAll {
+            label {Check all}
+            callback {lFeatures->check_all();
+lFeatures->do_callback();}
+            xywh {736 527 87 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          }
+          Fl_Button bCheckNone {
+            label {Check None}
+            callback {lFeatures->check_none();
+lFeatures->do_callback();}
+            xywh {831 527 87 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          }
+          Fl_Check_Button bUseContext {
+            label {Use context}
+            callback {UseContext();}
+            xywh {780 557 100 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Fl_Group gLearningInterface {
+          label Learning open
+          xywh {713 51 231 535} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+        } {
+          Fl_Group {} {
+            label {SVMs parameters} open
+            xywh {723 75 205 150} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          } {
+            Fl_Choice bSVMKernel {
+              label {Kernel Type }
+              callback {this->ChangeKernelType();} open
+              xywh {853 85 66 20} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+            } {}
+            Fl_Spinner bNbCvFolders {
+              label {Cross-validation folders }
+              callback {this->ChangeNumberOfCrossValidationFolders();}
+              xywh {878 106 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 79
+            }
+            Fl_Spinner bSVMNbCoarseSteps {
+              label {Coarse steps }
+              callback {this->ChangeNumberOfCoarseSteps();}
+              xywh {868 167 40 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+            }
+            Fl_Spinner bSVMNbFineSteps {
+              label {Fine steps}
+              callback {this->ChangeNumberOfFineSteps();}
+              xywh {868 191 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+            }
+            Fl_Check_Button bSVMOptimization {
+              label {Parameters optimization}
+              callback {this->ChangeParametersOptimisation();}
+              xywh {738 137 170 23} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 178
+            }
+          }
+          Fl_Group {} {
+            label {Active Learning} open
+            xywh {720 245 210 100} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          } {
+            Fl_Spinner bALNumberOfSamples {
+              label {Number of samples }
+              callback {this->ChangeNumberOfMarginSamples();}
+              xywh {864 256 45 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+            }
+            Fl_Button bMarginColor {
+              label {Margin color }
+              callback {this->ChangeMarginColor();}
+              xywh {865 286 36 35} box BORDER_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 deactivate
+            }
+          }
+          Fl_Group {} {
+            label Classification open
+            xywh {722 365 211 105} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          } {
+            Fl_Button bALStart {
+              label Classify
+              callback {this->Classify();}
+              xywh {732 436 98 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+            }
+            Fl_Value_Output vAccuracy {
+              label {Accuracy }
+              xywh {833 373 85 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+            }
+            Fl_Button bClearClassification {
+              label Clear
+              callback {this->ClearClassification();}
+              xywh {834 436 85 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+            }
+            Fl_Slider bClassificationOpacity {
+              label Opacity
+              callback {ClassificationOpacity();}
+              xywh {795 404 125 20} type Horizontal box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4 minimum 1 maximum 0 step 0.05 slider_size 0.05
+            }
+          }
+        }
+      }
+      Fl_Menu_Bar {} {open
+        xywh {0 0 945 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
+      } {
+        Submenu {} {
+          label File open
+          xywh {0 0 67 24}
+        } {
+          MenuItem {} {
+            label {Open image}
+            callback {wImagesSelectionWindow->show();}
+            xywh {0 0 34 24}
+          }
+          MenuItem {} {
+            label {Load samples}
+            callback {LoadSamplesFromXMLFile();}
+            xywh {0 0 36 21}
+          }
+          MenuItem {} {
+            label {Save samples}
+            callback {SaveSamplesToXMLFile();}
+            xywh {0 0 36 21}
+          }
+          MenuItem {} {
+            label {Save classification}
+            callback {SaveClassification();} selected
+            xywh {20 20 34 24}
+          }
+          MenuItem {} {
+            label {Save classification to GIS}
+            callback {ExportClassificationToGIS();}
+            xywh {0 0 36 21}
+          }
+          MenuItem {} {
+            label {Save classification graph}
+            callback {SaveClassificationGraph();}
+            xywh {0 0 36 21}
+          }
+          MenuItem {} {
+            label {Save parameters ...}
+            callback {SaveClassificationParametersToXMLFile();} selected
+            xywh {30 30 34 24}
+          }
+          MenuItem {} {
+            label {Save colors  to ascii file}
+            callback {SaveColorsToAsciiFile();}
+            xywh {20 20 34 24}
+          }
+          MenuItem {} {
+            label {Input image view manager}
+            callback {wViewerSetupWindow->show();}
+            xywh {0 0 30 20}
+          }
+          MenuItem {} {
+            label Exit
+            callback {this->Exit();}
+            xywh {10 10 34 24}
+          }
+        }
+      }
+      Fl_Group gZoom {
+        label Zoom open
+        xywh {5 284 220 220} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gPixelDescription {
+        label {Pixel Description} open
+        xywh {5 519 220 115} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group bBusy {
+        label {Thinking, please wait ...} open
+        xywh {720 600 210 25} box PLASTIC_DOWN_FRAME color 1 labelfont 1 labelsize 12 labelcolor 1 align 16 hide
+      } {}
+    }
+    Fl_Window wImagesSelectionWindow {
+      label {Images file chooser} open
+      xywh {586 433 480 150} type Double color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+    } {
+      Fl_File_Input vImagePath {
+        label {Image }
+        xywh {89 13 310 34} labelsize 12
+      }
+      Fl_File_Input vLabelsPath {
+        label {Labels }
+        xywh {91 61 310 34} labelsize 12
+      }
+      Fl_Button bFileChooserOk {
+        label Ok
+        callback {this->FileChooserOk();}
+        xywh {168 110 65 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bFileChooserCancel {
+        label Cancel
+        callback {wImagesSelectionWindow->hide();}
+        xywh {258 110 65 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bImageFileChooser {
+        label {...}
+        callback {this->ImageFileChooser();}
+        xywh {409 16 40 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bLabelsFileChooser {
+        label {...}
+        callback {this->LabelsFileChooser();}
+        xywh {409 62 40 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
+    Fl_Window wViewerSetupWindow {
+      label {Viewer setup} open
+      xywh {706 340 395 180} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
+    } {
+      Fl_Round_Button rViewerSetupGrayscaleMode {
+        label {Grayscale mode}
+        callback {if(rViewerSetupGrayscaleMode->value()==0)
+{
+rViewerSetupGrayscaleMode->value(1);
+}
+else
+{
+rViewerSetupColorMode->value(0);
+iGrayscaleChannelChoice->activate();
+iRChannelChoice->deactivate();
+iGChannelChoice->deactivate();
+iBChannelChoice->deactivate();
+}}
+        tooltip {Swith the image viewer mode to grayscale} xywh {7 8 140 24} down_box PLASTIC_DOWN_BOX color 7 selection_color 22 labelfont 1 labelsize 12 labelcolor 178
+      }
+      Fl_Round_Button rViewerSetupColorMode {
+        label {RGB composition mode}
+        callback {if(rViewerSetupColorMode->value()==0)
+{
+rViewerSetupColorMode->value(1);
+}
+else
+{
+rViewerSetupGrayscaleMode->value(0);
+iGrayscaleChannelChoice->deactivate();
+iRChannelChoice->activate();
+iGChannelChoice->activate();
+iBChannelChoice->activate();
+}}
+        tooltip {Switch the image viewer mode to RGB composition} xywh {200 8 184 24} down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 22 labelfont 1 labelsize 12 labelcolor 178
+      }
+      Fl_Input_Choice iGrayscaleChannelChoice {
+        label {Channel index} open
+        tooltip {Select the band to view in grayscale mode} xywh {103 69 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
+      } {}
+      Fl_Input_Choice iRChannelChoice {
+        label {Red channel} open
+        tooltip {Select band for red channel in RGB composition} xywh {330 42 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 deactivate
+      } {}
+      Fl_Input_Choice iGChannelChoice {
+        label {Green channel} open
+        tooltip {Select band for green channel in RGB composition} xywh {330 69 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 deactivate
+      } {}
+      Fl_Input_Choice iBChannelChoice {
+        label {Blue channel} open
+        tooltip {Select band for blue channel in RGB composition} xywh {330 96 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 deactivate
+      } {}
+      Fl_Return_Button bViewerSetupOk {
+        label Ok
+        callback {wViewerSetupWindow->hide();
+ViewerSetupOkCallback();}
+        tooltip {Save changes and leave viewer set up interface} xywh {90 141 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
+      }
+      Fl_Button bViewerSetupCancel {
+        label Cancel
+        callback {wViewerSetupWindow->hide();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {215 141 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
+      }
+    }
+  }
+  Function {Classes()} {open return_type {virtual void}
+  } {}
+  Function {AddClass()} {open return_type {virtual void}
+  } {}
+  Function {RemoveClass()} {open return_type {virtual void}
+  } {}
+  Function {ClearClasses()} {open return_type {virtual void}
+  } {}
+  Function {ClassColor()} {open return_type {virtual void}
+  } {}
+  Function {ClassLabel()} {open return_type {virtual void}
+  } {}
+  Function {ClassName()} {open return_type {virtual void}
+  } {}
+  Function {Objects()} {open return_type {virtual void}
+  } {}
+  Function {RemoveObject()} {open return_type {virtual void}
+  } {}
+  Function {ClearObjects()} {open return_type {virtual void}
+  } {}
+  Function {ObjectFocus()} {open return_type {virtual void}
+  } {}
+  Function {ImageFileChooser()} {open return_type {virtual void}
+  } {}
+  Function {LabelsFileChooser()} {open return_type {virtual void}
+  } {}
+  Function {FileChooserOk()} {open return_type {virtual void}
+  } {}
+  Function {Exit()} {open return_type {virtual void}
+  } {}
+  Function {SaveColorsToAsciiFile()} {open return_type {virtual void}
+  } {}
+  Function {SaveSamplesToXMLFile()} {open return_type {virtual void}
+  } {}
+  Function {LoadSamplesFromXMLFile()} {open return_type {virtual void}
+  } {}
+  Function {SaveClassification()} {open return_type {virtual void}
+  } {}
+  Function {SaveClassificationGraph()} {open return_type {virtual void}
+  } {}
+  Function {SampleMargin()} {open return_type {virtual void}
+  } {}
+  Function {ChangeKernelType()} {open return_type {virtual void}
+  } {}
+  Function {ChangeNumberOfCrossValidationFolders()} {open return_type {virtual void}
+  } {}
+  Function {ChangeParametersOptimisation()} {open return_type {virtual void}
+  } {}
+  Function {ChangeNumberOfCoarseSteps()} {open return_type {virtual void}
+  } {}
+  Function {ChangeNumberOfFineSteps()} {open return_type {virtual void}
+  } {}
+  Function {ChangeNumberOfMarginSamples()} {open return_type {virtual void}
+  } {}
+  Function {ChangeMarginColor()} {open return_type {virtual void}
+  } {}
+  Function {FocusOnMarginSample()} {open return_type {virtual void}
+  } {}
+  Function {ClearMarginSamples()} {open return_type {virtual void}
+  } {}
+  Function {Classify()} {open return_type {virtual void}
+  } {}
+  Function {ClearClassification()} {open return_type {virtual void}
+  } {}
+  Function {Features()} {open return_type {virtual void}
+  } {}
+  Function {UseContext()} {open return_type {virtual void}
+  } {}
+  Function {ClassificationOpacity()} {open return_type {virtual void}
+  } {}
+  Function {ViewerSetupOkCallback()} {open return_type {virtual void}
+  } {}
+  Function {ExportClassificationToGIS()} {open return_type {virtual void}
+  } {}
+  Function {SaveClassificationParametersToXMLFile()} {open return_type {virtual void}
+  } {}
+} 
