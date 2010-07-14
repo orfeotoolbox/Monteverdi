@@ -495,6 +495,6 @@ bool InputViewComponent::IsReady()
         }
       }
     }
-  return resp;
+  return true;
 }
 } // end namespace otb
