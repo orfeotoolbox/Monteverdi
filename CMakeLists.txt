@@ -57,7 +57,6 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OTB_SOURCE_DIR}/CMake")
 
 FIND_PACKAGE(Mercurial)
 IF(Mercurial_FOUND)
-IF(Mercurial_HG_PROJECT)
   Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} Monteverdi)
   MESSAGE(STATUS "Mercurial version is ${Mercurial_VERSION_HG}")
   MESSAGE(STATUS "Repository revision is ${Monteverdi_WC_REVISION}")
@@ -72,7 +71,6 @@ IF(Mercurial_HG_PROJECT)
   STRING(REGEX REPLACE "\n" ";" Monteverdi_WC_STATUS "${Monteverdi_WC_STATUS}")
   SET(Monteverdi_WC_STATUS ${Monteverdi_WC_STATUS} CACHE STRING "Repository status" FORCE)
   MARK_AS_ADVANCED(Monteverdi_WC_STATUS)
-ENDIF(Mercurial_HG_PROJECT)
 ENDIF(Mercurial_FOUND)
 
 
