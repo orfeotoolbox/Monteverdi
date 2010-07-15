@@ -72,6 +72,8 @@
 #include "otbObjectCountingModule.h"
 #include "otbCommandLineArgumentParser.h"
 #include "otbTileExportModule.h"
+#include "otbObjectLabelingModule.h"
+
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -178,6 +180,10 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
+
+//#ifdef OTB_USE_PQXX
+  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling", otbGetTextMacro("Learning/Object Labeling"));
+//#endif
 
   // Launch Monteverdi
   view->InitWidgets();
