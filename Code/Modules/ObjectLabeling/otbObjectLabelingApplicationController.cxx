@@ -263,11 +263,11 @@ void ObjectLabelingApplicationController::SaveColorsToAsciiFile(const char * fna
     }
 }
 
-void ObjectLabelingApplicationController::SaveClassification(const char * fname)
+void ObjectLabelingApplicationController::SaveClassification()
 {
   try
     {
-    m_Model->SaveClassification(fname);
+    m_Model->SaveClassification();
     }
   catch(itk::ExceptionObject & err)
     {

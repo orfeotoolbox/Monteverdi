@@ -32,11 +32,30 @@ ObjectLabelingApplicationView::ObjectLabelingApplicationView() : m_Controller(),
 {
   // Get the model
   m_Model = ObjectLabelingApplicationModel::GetInstance();
-  m_Model->RegisterListener(this);
+
 
   // Build the visualization part
   m_ImageView = ImageViewType::New();
   m_PixelView = PixelViewType::New();
+
+
+
+}
+
+ObjectLabelingApplicationView::~ObjectLabelingApplicationView()
+{
+  // Remove registered visualization components from the interface
+  gFullResolution->remove(m_ImageView->GetFullWidget());
+  gScroll->remove(m_ImageView->GetScrollWidget());
+  gZoom->remove(m_ImageView->GetZoomWidget());
+  gPixelDescription->remove(m_PixelView->GetPixelDescriptionWidget());
+}
+
+void ObjectLabelingApplicationView::Build()
+{
+  m_Model->RegisterListener(this);
+
+  // Build the visu part
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
   m_PixelView->SetModel(m_Model->GetPixelDescriptionModel());
 
@@ -75,19 +94,7 @@ ObjectLabelingApplicationView::ObjectLabelingApplicationView() : m_Controller(),
   m_ImageView->GetFullWidget()->AddGlComponent(glComp3);
   m_ImageView->GetScrollWidget()->AddGlComponent(glComp3);
   m_ImageView->GetZoomWidget()->AddGlComponent(glComp3);
-}
-
-ObjectLabelingApplicationView::~ObjectLabelingApplicationView()
-{
-  // Remove registered visualization components from the interface
-  gFullResolution->remove(m_ImageView->GetFullWidget());
-  gScroll->remove(m_ImageView->GetScrollWidget());
-  gZoom->remove(m_ImageView->GetZoomWidget());
-  gPixelDescription->remove(m_PixelView->GetPixelDescriptionWidget());
-}
-
-void ObjectLabelingApplicationView::Build()
-{
+  
   if(!m_Controller)
     {
     itkExceptionMacro(<<"Controller is not set, can not build view.");
@@ -580,16 +587,7 @@ void ObjectLabelingApplicationView::SaveColorsToAsciiFile()
 
 void ObjectLabelingApplicationView::SaveClassification()
 {
-    
-  const char * filename = fl_file_chooser("Pick a file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-
-  m_Controller->SaveClassification(filename);
+  m_Controller->SaveClassification();
 }
 
 void ObjectLabelingApplicationView::SaveClassificationGraph()

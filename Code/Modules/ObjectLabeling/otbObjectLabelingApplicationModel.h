@@ -281,7 +281,7 @@ public:
   void SaveColorsToAsciiFile(const char * fname);
 
   /** Save classification (image) to a file */
-  void SaveClassification(const char * fname);
+  void SaveClassification();
   
   /** Save classification graph in Subdue format */
   void SaveClassificationGraph(const char * fname);
@@ -385,9 +385,6 @@ private:
   ObjectLabelingApplicationModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Notify a given listener of changes */
-  virtual void Notify(ObjectLabelingApplicationEventsListener * listener);
-
   /** Compute context description */
   void FillContextDescription(VectorType & vect, const  LabelType& label);
   
@@ -452,6 +449,12 @@ private:
   std::map<std::string,double>       m_FeaturesVariances;
   std::map<std::string,double>       m_FeaturesMinimum;
   std::map<std::string,double>       m_FeaturesMaximum;
+
+  /** Vector Image layer generator */
+  LayerGeneratorType::Pointer        m_ImageGenerator;
+
+  /** Labeled Image layer generator */
+  LayerGeneratorType::Pointer        m_LabeledImageGenerator;
   
   /** Samples */
   ListSampleType::Pointer            m_ListSample;

@@ -12,7 +12,7 @@ class ObjectLabelingApplicationGUI {open
     Fl_Window wMainWindow {
       label {Object Labeling Application}
       callback {this->Exit();} open
-      xywh {588 249 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+      xywh {574 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
         label {Full Resolution} open
@@ -27,7 +27,7 @@ class ObjectLabelingApplicationGUI {open
       } {
         Fl_Group gObjectsInterface {
           label Objects open
-          xywh {713 51 233 535} color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+          xywh {713 51 233 535} color 7 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Browser lClasses {
             label Classes
@@ -124,7 +124,7 @@ lFeatures->do_callback();}
         }
         Fl_Group gLearningInterface {
           label Learning open
-          xywh {713 51 231 535} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+          xywh {713 51 231 535} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 hide
         } {
           Fl_Group {} {
             label {SVMs parameters} open
@@ -205,11 +205,6 @@ lFeatures->do_callback();}
           xywh {0 0 67 24}
         } {
           MenuItem {} {
-            label {Open image}
-            callback {wImagesSelectionWindow->show();}
-            xywh {0 0 34 24}
-          }
-          MenuItem {} {
             label {Load samples}
             callback {LoadSamplesFromXMLFile();}
             xywh {0 0 36 21}
@@ -218,11 +213,6 @@ lFeatures->do_callback();}
             label {Save samples}
             callback {SaveSamplesToXMLFile();}
             xywh {0 0 36 21}
-          }
-          MenuItem {} {
-            label {Save classification}
-            callback {SaveClassification();} selected
-            xywh {20 20 34 24}
           }
           MenuItem {} {
             label {Save classification to GIS}
@@ -236,7 +226,7 @@ lFeatures->do_callback();}
           }
           MenuItem {} {
             label {Save parameters ...}
-            callback {SaveClassificationParametersToXMLFile();} selected
+            callback {SaveClassificationParametersToXMLFile();}
             xywh {30 30 34 24}
           }
           MenuItem {} {
@@ -249,11 +239,6 @@ lFeatures->do_callback();}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}
           }
-          MenuItem {} {
-            label Exit
-            callback {this->Exit();}
-            xywh {10 10 34 24}
-          }
         }
       }
       Fl_Group gZoom {
@@ -265,9 +250,14 @@ lFeatures->do_callback();}
         xywh {5 519 220 115} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {}
       Fl_Group bBusy {
-        label {Thinking, please wait ...} open
-        xywh {720 600 210 25} box PLASTIC_DOWN_FRAME color 1 labelfont 1 labelsize 12 labelcolor 1 align 16 hide
+        label {Thinking, please wait ...} open selected
+        xywh {715 600 150 25} box PLASTIC_DOWN_FRAME color 1 labelfont 1 labelsize 12 labelcolor 1 align 16 hide
       } {}
+      Fl_Button {} {
+        label {Save/Quit}
+        callback {this->Exit()}
+        xywh {870 600 75 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
     }
     Fl_Window wImagesSelectionWindow {
       label {Images file chooser} open

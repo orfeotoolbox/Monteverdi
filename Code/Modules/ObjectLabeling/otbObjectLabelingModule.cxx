@@ -26,11 +26,10 @@ ObjectLabelingModule::ObjectLabelingModule()
   this->NeedsPipelineLockingOff();
 
   // First, do constructor stuffs
-
   m_Controller = ControllerType::New();
   m_View = ViewType::New();
   m_Model = ModelType::New();
-
+  
   m_View->SetController(m_Controller);
   m_View->SetModel(m_Model);
   m_View->SetWidgetsController(m_Controller->GetWidgetsController());
@@ -41,8 +40,6 @@ ObjectLabelingModule::ObjectLabelingModule()
   m_Model->RegisterListener(this);
 
   // Then, describe inputs needed by the module
-
-  // Add a new input
   this->AddInputDescriptor<VectorImageType>("InputImage","The image to classify");
   this->AddInputDescriptor<LabeledImageType>("LabeledImage","The segmentation of the image");
 }

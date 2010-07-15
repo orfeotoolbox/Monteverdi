@@ -280,12 +280,12 @@ ObjectLabelingApplicationModel::GetInstance()
   return Instance;
 }
 
-void ObjectLabelingApplicationModel::Notify(ObjectLabelingApplicationEventsListener * listener)
-{
-  listener->Notify();
-}
-
-ObjectLabelingApplicationModel::ObjectLabelingApplicationModel() : m_VisualizationModel(), m_PixelDescriptionModel(), m_Classes(), m_LabeledImage(), m_VectorImage(), m_LabelMap(), m_SelectedLabel(itk::NumericTraits<LabelType>::max()), m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(), m_SelectedPolygonNode(), m_AvailableFeatures()
+ObjectLabelingApplicationModel::ObjectLabelingApplicationModel() : m_VisualizationModel(), 
+								   m_PixelDescriptionModel(), m_Classes(), 
+								   m_LabeledImage(), m_VectorImage(), m_LabelMap(), 
+								   m_SelectedLabel(itk::NumericTraits<LabelType>::max()), 
+								   m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(), 
+								   m_SelectedPolygonNode(), m_AvailableFeatures()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -359,17 +359,13 @@ ObjectLabelingApplicationModel::~ObjectLabelingApplicationModel()
 void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledImageType* limage)
 {
   // Size checking
-  if(limage->GetLargestPossibleRegion() 
-     != vimage->GetLargestPossibleRegion())
+  if(limage->GetLargestPossibleRegion() != vimage->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Image and label map size are different, can not load data into the application.");
     }
 
   m_LabeledImage = limage;
   m_VectorImage  = vimage;
-
-//   m_LabeledImageFile = labels;
-//   m_VectorImageFile = image;
 
   // Update origin and spacing
   m_Origin[0] = -m_VectorImage->GetOrigin()[0];
@@ -378,14 +374,14 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledI
   m_Spacing[1] = 1/m_VectorImage->GetSpacing()[1];
 
   // Generate the layer
-  LayerGeneratorType::Pointer imageGenerator = LayerGeneratorType::New();
-  imageGenerator->SetImage(m_VectorImage);
-//   imageGenerator->GenerateQuicklookOff();
-//   imageGenerator->SetQuicklook(m_VectorImage);
-//   imageGenerator->SetSubsamplingRate(1);
-  imageGenerator->GenerateLayer();
-
-  m_ImageLayerRenderingFunction = imageGenerator->GetLayer()->GetRenderingFunction();
+  m_ImageGenerator = LayerGeneratorType::New();
+  m_ImageGenerator->SetImage(m_VectorImage);
+  m_ImageGenerator->GenerateQuicklookOff();
+  m_ImageGenerator->SetQuicklook(m_VectorImage);
+  m_ImageGenerator->SetSubsamplingRate(1);
+  m_ImageGenerator->GenerateLayer();
+  
+  m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();
 
   m_Channels.clear();
   if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
@@ -404,15 +400,16 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledI
     }
 
   m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-  imageGenerator->GetLayer()->SetName("Image");
+  m_ImageGenerator->GetLayer()->SetName("Image");
 
   // Clear previous layers
   m_VisualizationModel->ClearLayers();
   m_PixelDescriptionModel->ClearLayers();
 
   // Add the layer to the models
-  m_VisualizationModel->AddLayer(imageGenerator->GetLayer());
-  m_PixelDescriptionModel->AddLayer(imageGenerator->GetLayer());
+  m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
+  m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
+  m_VisualizationModel->Update();
 
   // Convert to label map
   LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
@@ -479,14 +476,14 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledI
      }
 
    // Generate the layer
-   LayerGeneratorType::Pointer labeledImageGenerator = LayerGeneratorType::New();
-   labeledImageGenerator->SetImage(m_ColorMapper->GetOutput());
-//    labeledImageGenerator->GenerateQuicklookOff();
-//    labeledImageGenerator->SetQuicklook(m_ColorMapper->GetOutput());
-//    labeledImageGenerator->SetSubsamplingRate(1);
-   labeledImageGenerator->GenerateLayer();
+   LayerGeneratorType::Pointer m_LabeledImageGenerator = LayerGeneratorType::New();
+   m_LabeledImageGenerator->SetImage(m_ColorMapper->GetOutput());
+   m_LabeledImageGenerator->GenerateQuicklookOff();
+   m_LabeledImageGenerator->SetQuicklook(m_ColorMapper->GetOutput());
+   m_LabeledImageGenerator->SetSubsamplingRate(1);
+   m_LabeledImageGenerator->GenerateLayer();
 
-   labeledImageGenerator->GetLayer()->GetRenderingFunction()->SetAutoMinMax(false);
+   m_LabeledImageGenerator->GetLayer()->GetRenderingFunction()->SetAutoMinMax(false);
 
 
    LayerGeneratorType::ImageLayerType::RenderingFunctionType::ParametersType parameters(6);
@@ -495,23 +492,23 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledI
    parameters[3] = 255;
    parameters[5] = 255;
 
-   labeledImageGenerator->GetLayer()->GetRenderingFunction()->SetParameters(parameters);
+   m_LabeledImageGenerator->GetLayer()->GetRenderingFunction()->SetParameters(parameters);
 
    BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
    blender->SetAlpha(0);
 
-   labeledImageGenerator->GetLayer()->SetBlendingFunction(blender);
-   labeledImageGenerator->GetLayer()->SetName("Classification");
-   labeledImageGenerator->GetLayer()->SetVisible(false);
+   m_LabeledImageGenerator->GetLayer()->SetBlendingFunction(blender);
+   m_LabeledImageGenerator->GetLayer()->SetName("Classification");
+   m_LabeledImageGenerator->GetLayer()->SetVisible(false);
 
    // Add the layer to the models
-   m_VisualizationModel->AddLayer(labeledImageGenerator->GetLayer());
-   m_PixelDescriptionModel->AddLayer(labeledImageGenerator->GetLayer());
+   m_VisualizationModel->AddLayer(m_LabeledImageGenerator->GetLayer());
+   m_PixelDescriptionModel->AddLayer(m_LabeledImageGenerator->GetLayer());
 
    m_VisualizationModel->Update();
 
  
-  this->NotifyAll("Update");
+   //this->NotifyAll("Update");
 }
 
 unsigned int ObjectLabelingApplicationModel::GetNumberOfClasses()
@@ -531,7 +528,7 @@ void ObjectLabelingApplicationModel::AddSampleToClass(const IndexType & sampleIn
   LabelType label = m_LabeledImage->GetPixel(sampleIndex);
 
   this->AddSampleToClass(label,classIndex);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 
@@ -567,7 +564,7 @@ void ObjectLabelingApplicationModel::RemoveSampleFromClass(const LabelType & lab
       m_Classes[classIndex].m_Samples.erase(lit);
       }
 
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
 }
 
@@ -584,7 +581,7 @@ void ObjectLabelingApplicationModel::ClearSamplesFromClass(unsigned int classInd
       node->Remove(node->GetChild(nbChildren-i-1));
       }
     m_Classes[classIndex].m_Samples.clear();
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
 }
 
@@ -660,7 +657,7 @@ void ObjectLabelingApplicationModel::AddClass()
 
   AddClass( label, name, color );
 
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 /** Add a new class (label, color, and name already known)*/
@@ -744,7 +741,7 @@ void ObjectLabelingApplicationModel::RemoveClass(unsigned int classIndex)
       {
       this->ClearSelectedClass();
       }
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
 
 }
@@ -754,7 +751,7 @@ void ObjectLabelingApplicationModel::ClearClasses()
 {
   m_Classes.clear();
   this->ClearSelectedClass();
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 /** Get a const reference on the classes vector */
@@ -775,7 +772,7 @@ void ObjectLabelingApplicationModel::SetClassName(const char * name, unsigned in
   if(classIndex < m_Classes.size())
     {
     m_Classes[classIndex].m_Name = name;
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
 }
 
@@ -799,7 +796,7 @@ void ObjectLabelingApplicationModel::SetClassLabel(const LabelType & label, unsi
     if(!found)
       {
       m_Classes[classIndex].m_Label = label;
-      this->NotifyAll();
+      this->NotifyAll("Update");
       }
     else
       {
@@ -814,7 +811,7 @@ void ObjectLabelingApplicationModel::SetClassColor(const ColorType & color, unsi
   if(classIndex < m_Classes.size())
     {
     m_Classes[classIndex].m_Color = color;
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }  
 }
 
@@ -871,7 +868,7 @@ void ObjectLabelingApplicationModel::SelectSample(const LabelType & label)
     {
     std::cout<<"Neighbors not found for label "<<m_SelectedLabel<<std::endl;
     }
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 /** Is the given sample selected */
@@ -902,7 +899,7 @@ void ObjectLabelingApplicationModel::ClearSelectedSample()
 {
   m_SelectedLabel = itk::NumericTraits<LabelType>::max();
   m_SelectedPolygonNode->SetPolygonExteriorRing(PolygonType::New());
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void ObjectLabelingApplicationModel::IndexClicked(const IndexType & index)
@@ -924,7 +921,7 @@ void ObjectLabelingApplicationModel::IndexClicked(const IndexType & index)
       this->SelectSample(label);
       }
 
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
 }
 
@@ -934,7 +931,7 @@ void ObjectLabelingApplicationModel::SelectClass(unsigned int classIndex)
     {
     m_SelectedClass = classIndex;
     m_HasSelectedClass = true;
-    this->NotifyAll();
+    this->NotifyAll("Update");
     }
   else
     {
@@ -946,7 +943,7 @@ void ObjectLabelingApplicationModel::ClearSelectedClass()
 {
   m_SelectedClass = 0;
   m_HasSelectedClass = false;
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 bool ObjectLabelingApplicationModel::HasSelectedClass()
@@ -981,7 +978,7 @@ void ObjectLabelingApplicationModel::SaveSamplesToXMLFile(const char * fname)
   sources->LinkEndChild(srcImage);
 
   TiXmlElement* labelImage = new TiXmlElement("LabeledImage");
-  labelImage->LinkEndChild(new TiXmlText( m_LabeledImageFile.c_str() ));
+  //labelImage->LinkEndChild(new TiXmlText( m_LabeledImageFile.c_str() ));
   sources->LinkEndChild(labelImage);
 
   TiXmlElement * classes = new TiXmlElement( "Classes" );
@@ -1213,7 +1210,7 @@ void ObjectLabelingApplicationModel::LoadSamplesFromXMLFile(const char * fname)
         }
     }
 
-    this->NotifyAll();
+    this->NotifyAll("Update");
 }
 
 void ObjectLabelingApplicationModel::SaveColorsToAsciiFile(const char * fname)
@@ -1398,15 +1395,19 @@ void ObjectLabelingApplicationModel::ComputeFeaturesStatistics()
   std::cout<<"Done."<<std::endl;
 }
 
-void ObjectLabelingApplicationModel::SaveClassification(const char * fname)
+void ObjectLabelingApplicationModel::SaveClassification()
 {
 
-  Classify();
-  typedef otb::ImageFileWriter<VectorImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(fname);
-  writer->SetInput(m_ColorMapper->GetOutput());
-  writer->Update();
+//   Classify();
+//   typedef otb::ImageFileWriter<VectorImageType> WriterType;
+//   WriterType::Pointer writer = WriterType::New();
+//   writer->SetFileName(fname);
+//   writer->SetInput(m_ColorMapper->GetOutput());
+//   writer->Update();
+
+  m_LabeledOutput = m_ClassLabelFilter->GetOutput();
+  m_ColoredOutput = m_ColorMapper->GetOutput();
+  this->NotifyAll("OutputsUpdated");
   
 }
 
@@ -1593,7 +1594,7 @@ void ObjectLabelingApplicationModel::ClearMarginSamples()
     {
     node->Remove(node->GetChild(nbChildren-i-1));
     }
-  this->NotifyAll();
+  this->NotifyAll("Update");
   std::cout<<"Done."<<std::endl;
 }
 
@@ -1662,7 +1663,7 @@ void ObjectLabelingApplicationModel::SampleMargin()
 
   std::cout<<"Done."<<std::endl;
 
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void ObjectLabelingApplicationModel::Classify()
@@ -1773,6 +1774,8 @@ void ObjectLabelingApplicationModel::Classify()
 
    m_VisualizationModel->Update();
    std::cout<<"Refresh done"<<std::endl;
+
+   this->SaveClassification();
 }
 
 void ObjectLabelingApplicationModel::ClearClassification()

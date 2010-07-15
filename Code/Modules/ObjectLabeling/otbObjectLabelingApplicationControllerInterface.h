@@ -55,7 +55,7 @@ public:
   virtual void SaveClassificationParametersToXMLFile(const char * fname) = 0;
   virtual void LoadSamplesFromXMLFile(const char * fname) = 0;
   virtual void SaveColorsToAsciiFile(const char * fname) = 0;
-  virtual void SaveClassification(const char * fname) = 0;
+  virtual void SaveClassification() = 0;
   virtual void SaveClassificationGraph(const char * fname) = 0;
   virtual void ExportClassificationToGIS(const GISExportInfo& exportInfo) = 0;
   virtual void SampleMargin() = 0;
