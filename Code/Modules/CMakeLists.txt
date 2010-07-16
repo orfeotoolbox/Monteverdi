@@ -89,10 +89,7 @@ FOREACH(moduleDir ${moduleList})
       # OTBGeospatialAnalysis is not generated if OTB_USE_PQXX
       # is set to OFF
       IF(OTB_USE_PQXX)
-	MESSAGE("PQXX is defined ...")
 	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBGeospatialAnalysis) 
-      ELSE(OTB_USE_PQXX)
-	MESSAGE("PQXX is NOT defined ...")
       ENDIF(OTB_USE_PQXX)
 	
       
