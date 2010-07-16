@@ -420,8 +420,8 @@ GCPToSensorModelModel
 
   // Ground point
   Point2DType groundPoint;
-  groundPoint[0] = lat;
-  groundPoint[1] = lon;
+  groundPoint[0] = lon;
+  groundPoint[1] = lat;
 
   // Check if GCPs allready exists
   bool         found = false;
