@@ -30,4 +30,5 @@ void RegisterTests()
   REGISTER_TEST(otbTileMapImportModuleTest);
 #endif
   REGISTER_TEST(otbVectorizationModuleTest);
+  REGISTER_TEST(otbObjectLabelingOpenImage);
 }

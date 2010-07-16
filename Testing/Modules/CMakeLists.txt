@@ -262,8 +262,6 @@ otbSupervisedClassificationModelTrainTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
 
 
-
-
 ADD_TEST(moTvSertitHaitiXTTest ${Modules_TESTS3}
 otbSertitProcessingTest
 ${INPUTDATA}/Haiti1.jpeg
@@ -304,12 +302,16 @@ IF(OTB_USE_CURL)
   )
 ENDIF(OTB_USE_CURL)
 
-
-
 #------------- Vectorization Module Tests ---------------------------
 ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
 ${TEMP}/vecTvVectorizationModuleTestOutput.kml
+)
+
+#-------------  Object Labeling Module 
+ADD_TEST(moTvObjectLabelingOpenImage ${Modules_TESTS4} otbObjectLabelingOpenImage
+  ${INPUTDATA}/calanques.tif
+  ${INPUTDATA}/cala_labelled.tif
 )
 
 SET(Modules_SRCS1
@@ -360,6 +362,7 @@ ENDIF(OTB_USE_CURL)
 
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationModuleTest.cxx
+  otbObjectLabelingOpenImage.cxx
 )
 
 
