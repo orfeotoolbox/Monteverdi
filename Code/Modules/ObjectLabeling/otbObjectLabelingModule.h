@@ -65,6 +65,9 @@ public:
   typedef ModelType::LabeledImageType         LabeledImageType;
   typedef ModelType::VectorImageType          VectorImageType;
 
+  /** Accessor to the view*/
+  itkGetObjectMacro(View, ViewType);
+
 protected:
   /** Constructor */
   ObjectLabelingModule();
@@ -80,7 +83,7 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-
+  
 private:
   ObjectLabelingModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
