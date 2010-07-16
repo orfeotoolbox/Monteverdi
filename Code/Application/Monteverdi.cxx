@@ -174,6 +174,9 @@ int main(int argc, char* argv[])
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               otbGetTextMacro("Geometry/Homologous points extraction"));
+
+  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling", otbGetTextMacro("Learning/Object Labeling"));
+
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
                                                      otbGetTextMacro("Geometry/GCP to sensor model"));
 
@@ -181,9 +184,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
 
-//#ifdef OTB_USE_PQXX
-  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling", otbGetTextMacro("Learning/Object Labeling"));
-//#endif
+
 
   // Launch Monteverdi
   view->InitWidgets();

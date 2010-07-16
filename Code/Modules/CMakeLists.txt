@@ -46,7 +46,7 @@ FOREACH(moduleDir ${moduleList})
        ENDIF(SC_GUI_SRCS_TEMP)
 
        ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-       TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBMonteverdiCommon OTBGeospatialAnalysis flu tinyXML) 
+       TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBMonteverdiCommon flu tinyXML) 
        ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
 
        SET(LIST_MODULE_LIBRARIES "${LIST_MODULE_LIBRARIES};${LIB_NAME}" )
@@ -83,8 +83,18 @@ FOREACH(moduleDir ${moduleList})
       ENDIF(SC_GUI_SRCS_TEMP)
 
       ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-      TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBMonteverdiCommon flu tinyXML) 
+      TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBMonteverdiCommon OTBOBIA flu tinyXML) 
       ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
+      
+      # OTBGeospatialAnalysis is not generated if OTB_USE_PQXX
+      # is set to OFF
+      IF(OTB_USE_PQXX)
+	MESSAGE("PQXX is defined ...")
+	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBGeospatialAnalysis) 
+      ELSE(OTB_USE_PQXX)
+	MESSAGE("PQXX is NOT defined ...")
+      ENDIF(OTB_USE_PQXX)
+	
       
       SET(LIST_MODULE_LIBRARIES "${LIST_MODULE_LIBRARIES};${LIB_NAME}" )
 
