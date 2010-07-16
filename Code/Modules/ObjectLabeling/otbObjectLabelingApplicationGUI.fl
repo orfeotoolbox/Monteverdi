@@ -250,12 +250,12 @@ lFeatures->do_callback();}
         xywh {5 519 220 115} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {}
       Fl_Group bBusy {
-        label {Thinking, please wait ...} open selected
+        label {Thinking, please wait ...} open
         xywh {715 600 150 25} box PLASTIC_DOWN_FRAME color 1 labelfont 1 labelsize 12 labelcolor 1 align 16 hide
       } {}
-      Fl_Button {} {
+      Fl_Button bexit {
         label {Save/Quit}
-        callback {this->Exit()}
+        callback {this->Exit()} selected
         xywh {870 600 75 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
