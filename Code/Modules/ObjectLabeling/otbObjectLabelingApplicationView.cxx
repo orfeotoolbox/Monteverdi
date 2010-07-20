@@ -349,12 +349,12 @@ void ObjectLabelingApplicationView::UpdateClassInformation()
     vClassLabel->value(oss.str().c_str());
     vClassName->activate();
     vClassName->value(m_Model->GetClass(classIndex).m_Name.c_str());
-    fl_color(m_Model->GetClass(classIndex).m_Color[0]*255,
-	     m_Model->GetClass(classIndex).m_Color[1]*255,
-	     m_Model->GetClass(classIndex).m_Color[2]*255);
+    Fl_Color flColor = fl_color_cube(m_Model->GetClass(classIndex).m_Color[0],
+				     m_Model->GetClass(classIndex).m_Color[1],
+				     m_Model->GetClass(classIndex).m_Color[2]);
     bClassColor->activate();
-    lClasses->selection_color(fl_color());
-    bClassColor->color(fl_color());    
+    lClasses->selection_color(flColor);
+    bClassColor->color(flColor);    
 
     // Update the sample list
     ObjectLabelingApplicationModel::ObjectClassType::LabelVectorType::const_iterator sit = m_Model->GetClass(classIndex).m_Samples.begin();
