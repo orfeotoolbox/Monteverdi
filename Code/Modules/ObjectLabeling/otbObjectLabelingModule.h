@@ -67,7 +67,10 @@ public:
 
   /** Accessor to the view*/
   itkGetObjectMacro(View, ViewType);
-
+  
+  /** Accessor to the Controller : needed to test the right clicks */
+  itkGetObjectMacro(Model, ModelType);
+  
 protected:
   /** Constructor */
   ObjectLabelingModule();
