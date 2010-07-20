@@ -314,6 +314,15 @@ ADD_TEST(moTvObjectLabelingOpenImage ${Modules_TESTS4} otbObjectLabelingOpenImag
   ${INPUTDATA}/cala_labelled.tif
 )
 
+# test to classify
+ADD_TEST(moTvObjectLabelingColoredOutput ${Modules_TESTS4} otbObjectLabelingColoredOutput
+  ${INPUTDATA}/calanques.tif
+  ${INPUTDATA}/cala_labelled.tif
+  131 120 226 42 208 231 187 9
+  ${TEMP}/moTvObjectLabelingColoredOutput.tif
+)
+
+
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -363,6 +372,7 @@ ENDIF(OTB_USE_CURL)
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationModuleTest.cxx
   otbObjectLabelingOpenImage.cxx
+  otbObjectLabelingColoredOutput.cxx
 )
 
 

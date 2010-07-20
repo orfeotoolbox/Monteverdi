@@ -31,4 +31,5 @@ void RegisterTests()
 #endif
   REGISTER_TEST(otbVectorizationModuleTest);
   REGISTER_TEST(otbObjectLabelingOpenImage);
+  REGISTER_TEST(otbObjectLabelingColoredOutput);
 }
