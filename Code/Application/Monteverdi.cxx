@@ -73,7 +73,7 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbTileExportModule.h"
 #include "otbObjectLabelingModule.h"
-
+#include "otbFineCorrelationModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -133,6 +133,7 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
+  /***********  File menu *******************/
   model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
   model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image",
@@ -140,15 +141,20 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
-
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
+#ifdef OTB_USE_CURL
+  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
+#endif
 
+  /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
-
+  
+  /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",
                                                        otbGetTextMacro("Calibration/Optical Calibration"));
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
+  /***********  Filtering menu *******************/
   model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
@@ -156,17 +162,23 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
+  model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
+
+  /***********  SAR menu *******************/
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
 
+ /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              otbGetTextMacro("Learning/SVM classification"));
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
                                                               otbGetTextMacro(
                                                                 "Learning/SVM classification (EXPERIMENTAL)"));
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
+  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling", otbGetTextMacro("Learning/Object Labeling"));
 
+ /***********  Geometry menu *******************/
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
                                                        otbGetTextMacro("Geometry/Orthorectification"));
   model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
@@ -174,15 +186,9 @@ int main(int argc, char* argv[])
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               otbGetTextMacro("Geometry/Homologous points extraction"));
-
-  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling", otbGetTextMacro("Learning/Object Labeling"));
-
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
                                                      otbGetTextMacro("Geometry/GCP to sensor model"));
 
-#ifdef OTB_USE_CURL
-  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
-#endif
 
 
 

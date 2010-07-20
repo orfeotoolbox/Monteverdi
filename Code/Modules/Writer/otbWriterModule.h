@@ -74,8 +74,9 @@ public:
   typedef otb::VectorImage<float>          FloatVectorImageType;
   typedef otb::VectorImage<double>         DoubleVectorImageType;
 
-  typedef TypeManager::Vector_Data         VectorType;
-  typedef TypeManager::Labeled_Vector_Data LabeledVectorType;
+  typedef TypeManager::Vector_Data            VectorType;
+  typedef TypeManager::Labeled_Vector_Data    LabeledVectorType;
+  //typedef TypeManager::Deformation_Value_Type DeformationValueType;
 
   typedef VectorDataFileWriter<VectorType>        VectorWriterType;
   typedef VectorDataFileWriter<LabeledVectorType> LabeledVectorWriterType;
