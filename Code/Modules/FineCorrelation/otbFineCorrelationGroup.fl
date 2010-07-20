@@ -1,0 +1,60 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class FineCorrelationGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Fine Correlation}
+      callback {this->Quit()} open
+      xywh {144 341 265 160} type Double box PLASTIC_DOWN_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+    } {
+      Fl_Button bOk {
+        label {Save/Quit}
+        callback {OK();}
+        tooltip {Quit the viewer manager} xywh {84 128 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelfont 1 labelcolor 186
+      }
+      Fl_Group {} {
+        label Radius open
+        xywh {8 22 250 48} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Counter gCorrelationRadius {
+          label {Correlation Radius} selected
+          xywh {25 41 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 7
+        }
+        Fl_Counter gSearchRadius {
+          label {Search Radius}
+          xywh {158 41 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 2
+        }
+      }
+      Fl_Counter gPrecision {
+        label {Sub-pixel precision}
+        xywh {136 94 110 20} box PLASTIC_DOWN_BOX labelsize 12 align 1 minimum 1 maximum 1000 step 1 value 10
+      }
+      Fl_Choice gMode {
+        label Mode
+        callback {if(gMode->value()==2)
+{
+ gPrecision->activate();
+}
+else
+{
+  gPrecision->deactivate();
+}} open
+        tooltip {Possible mode are Coarse (no sub-pixel refinement), LsqrQuadFit (sub-pixel refinement byquadric fitting) and SubPixel (Sub-pixel refinement by interpolation).} xywh {11 91 100 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1
+      } {}
+    }
+  }
+  Function {FineCorrelationGroup()} {} {}
+  Function {~FineCorrelationGroup()} {open return_type virtual
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+} 
