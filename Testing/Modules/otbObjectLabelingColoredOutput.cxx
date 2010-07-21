@@ -44,7 +44,6 @@ int otbObjectLabelingColoredOutput(int argc, char* argv[])
 
   const char * labeledOutputFilename  = argv[11];
     
-  
   // Open Image
   typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
   typedef otb::TypeManager::Floating_Point_Image       LabeledImageType;
@@ -104,7 +103,7 @@ int otbObjectLabelingColoredOutput(int argc, char* argv[])
 
   Fl::check();
   
-  // Select the first class
+  // Select the second class
   objectLabelingModule->GetView()->lClasses->value(2);
   objectLabelingModule->GetView()->lClasses->do_callback();
   
@@ -141,9 +140,6 @@ int otbObjectLabelingColoredOutput(int argc, char* argv[])
   writer->SetFileName(labeledOutputFilename);
   writer->SetInput(outImage);
   writer->Update();
-  
-
-
 
   return EXIT_SUCCESS;
 }

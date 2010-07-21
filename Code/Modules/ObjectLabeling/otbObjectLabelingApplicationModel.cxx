@@ -694,10 +694,10 @@ void ObjectLabelingApplicationModel::AddClass()
   ColorType color;
 
   // srand(newLabel+123456);
-  color[0]=1 /**rand()/(RAND_MAX+1.0)*/;
-  color[1]=0 /**rand()/(RAND_MAX+1.0)*/;
-  color[2]=0 /**rand()/(RAND_MAX+1.0)*/;
-  color[3]=0.75;
+  color[0]= rand()/(RAND_MAX+1.0);
+  color[1]= rand()/(RAND_MAX+1.0);
+  color[2]= rand()/(RAND_MAX+1.0);
+  color[3]=1.0;
 
   itk::OStringStream oss;
   oss << "New Class " << label;
