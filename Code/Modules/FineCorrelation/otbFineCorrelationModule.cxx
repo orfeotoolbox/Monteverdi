@@ -113,7 +113,7 @@ void FineCorrelationModule::OK()
     // First, clear any previous output
     this->ClearOutputDescriptors();
     // Add an output (single version)
-    this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDeformationField(), "DeformationField", otbGetTextMacro("Deformation field"));
+    //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDeformationField(), "DeformationField", otbGetTextMacro("Deformation field"));
     this->AddOutputDescriptor(m_CorrelationFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
     this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDeformationField", otbGetTextMacro("X Deformation field"));
     this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDeformationField", otbGetTextMacro("Y Deformation field"));
