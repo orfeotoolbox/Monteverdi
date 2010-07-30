@@ -96,7 +96,9 @@ SarCalibrationModule
     dict = m_ComplexInputImage->GetMetaDataDictionary();
     }
 
-  if (!lImageMetadata->CanRead(dict))
+  lImageMetadata->SetMetaDataDictionary(dict);
+
+  if (!lImageMetadata->CanRead())
     {
     MsgReporter::GetInstance()->SendError("Invalid Image : No TerraSarX metadata detected");
     return false;
@@ -105,14 +107,14 @@ SarCalibrationModule
   try
     {
     // Test if all used metadatadatas are available...
-    lImageMetadata->GetCalibrationFactor(dict);
-    lImageMetadata->GetNoiseValidityRangeMinList(dict);
-    lImageMetadata->GetNoiseValidityRangeMaxList(dict);
-    lImageMetadata->GetNoiseReferencePointList(dict);
-    lImageMetadata->GetNoisePolynomialCoefficientsList(dict);
-    lImageMetadata->GetRadarFrequency(dict);
-    lImageMetadata->GetNoiseTimeUTCList(dict);
-    lImageMetadata->GetMeanIncidenceAngles(dict);
+    lImageMetadata->GetCalibrationFactor();
+    lImageMetadata->GetNoiseValidityRangeMinList();
+    lImageMetadata->GetNoiseValidityRangeMaxList();
+    lImageMetadata->GetNoiseReferencePointList();
+    lImageMetadata->GetNoisePolynomialCoefficientsList();
+    lImageMetadata->GetRadarFrequency();
+    lImageMetadata->GetNoiseTimeUTCList();
+    lImageMetadata->GetMeanIncidenceAngles();
     }
   catch (itk::ExceptionObject& err)
     {
