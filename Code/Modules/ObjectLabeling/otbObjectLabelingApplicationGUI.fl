@@ -433,4 +433,8 @@ ViewerSetupOkCallback();}
   } {}
   Function {SaveClassificationParametersToXMLFile()} {open return_type {virtual void}
   } {}
+  Function {ObjectLabelingApplicationGUI()} {open
+  } {}
+  Function {~ObjectLabelingApplicationGUI()} {open return_type virtual
+  } {}
 } 
