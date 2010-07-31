@@ -153,7 +153,7 @@ void VectorizationModel
 }
 void VectorizationModel
 ::RemovePointFromDataNode(DataNodeType * node,
-                          const long& index,
+                          const unsigned long& index,
                           bool interiorRing,
                           const unsigned int& interiorRingIndex)
 {
@@ -222,7 +222,7 @@ void VectorizationModel
 
 void VectorizationModel
 ::UpdatePointFromDataNode(DataNodeType * node,
-                          const long& index,
+                          const unsigned long& index,
                           const PointType& point,
                           bool interiorRing,
                           const unsigned int& interiorRingIndex)

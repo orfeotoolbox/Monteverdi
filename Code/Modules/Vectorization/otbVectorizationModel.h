@@ -102,11 +102,11 @@ public:
   void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value);
   void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name);
   void RemovePointFromDataNode(DataNodeType * node,
-                               const long& index,
+                               const unsigned long& index,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
   void UpdatePointFromDataNode(DataNodeType * node,
-                               const long& index,
+                               const unsigned long& index,
                                const PointType& point,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);

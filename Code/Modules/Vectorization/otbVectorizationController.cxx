@@ -143,7 +143,7 @@ void VectorizationController::RemoveFieldFromDataNode(DataNodeType * node, const
 }
 
 void VectorizationController::RemovePointFromDataNode(DataNodeType * node,
-                                                      const long& index,
+                                                      const unsigned long& index,
                                                       bool interiorRing,
                                                       const unsigned int& interiorRingIndex)
 {
@@ -157,7 +157,7 @@ void VectorizationController::RemovePointFromDataNode(DataNodeType * node,
     }
 }
 void VectorizationController::UpdatePointFromDataNode(DataNodeType * node,
-                                                      const long& index,
+                                                      const unsigned long& index,
                                                       const PointType& point,
                                                       bool interiorRing,
                                                       const unsigned int& interiorRingIndex)
