@@ -175,6 +175,15 @@ ${INPUTDATA}/prison_toulouse.tif
 ${INPUTDATA}/prison_toulouse.tif
 ${TEMP}/moTvAlgebraImageModule.tif
 0
+)
+
+
+#------------- Parser Module Test ---------------------------
+ADD_TEST(moTvParserModuleTest ${Modules_TESTS2} otbParserModuleTest
+${INPUTDATA}/prison_toulouse.tif
+${INPUTDATA}/prison_toulouse.tif
+${TEMP}/moTvParserImageModule.tif
+1
 )	      
 
 #----------------------------------------------------------------------------------------------
@@ -347,7 +356,7 @@ otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
-
+otbParserModuleTest.cxx
 )
 
 SET(Modules_SRCS3

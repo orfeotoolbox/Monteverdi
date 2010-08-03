@@ -63,6 +63,7 @@
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
 #include "otbAlgebraModule.h"
+#include "otbParserModule.h"
 #include "otbKMeansModule.h"
 #include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
@@ -150,6 +151,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
 
   model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
+  model->RegisterModule<otb::ParserModule>("Parser", otbGetTextMacro("Filtering/Parser"));
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));

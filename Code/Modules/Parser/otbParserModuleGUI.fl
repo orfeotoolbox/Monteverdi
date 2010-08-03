@@ -1,0 +1,43 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ParserModuleGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Parser module}
+      callback {this->Quit()} open
+      xywh {532 200 600 500} type Single box UP_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
+    } {
+      Fl_Button bOk {
+        label {Save/Quit}
+        callback {OK();}
+        xywh {250 450 100 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 55 selection_color 51 labelfont 1 labelcolor 186
+      }
+      Fl_Input ui_expression {
+        label {Enter Your Formula :} selected
+        xywh {5 40 590 25} align 1
+      }
+      Fl_Output ui_ImageNames {
+        label {Image Names :}
+        xywh {5 110 295 329} type Multiline align 5
+      }
+      Fl_Output ui_VarNames {
+        label {Corresponding Variable Names: }
+        xywh {300 111 290 328} type Multiline align 5
+      }
+    }
+  }
+  Function {ParserModuleGUI()} {} {}
+  Function {~ParserModuleGUI()} {return_type virtual
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+} 
