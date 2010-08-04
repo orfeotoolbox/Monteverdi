@@ -58,16 +58,19 @@ int otbParserModuleTest(int argc, char* argv[])
 
   // Simulate Addition Operation
   specificModule->ui_expression->value("band1+band2");
-  specificModule->bOk->do_callback();
+  Fl::check();
 
   if (run)
-    {
-    Fl::run();
-    }
+     {
+     Fl::run();
+     }
   else
-    {
-    Fl::check();
-    }
+     {
+     Fl::check();
+     }
+  
+  // Exit the GUI and save the result
+  specificModule->bOk->do_callback();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
   std::cout << "Output wrapper: " << wrapperOut << std::endl;

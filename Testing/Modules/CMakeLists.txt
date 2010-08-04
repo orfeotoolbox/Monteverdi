@@ -183,7 +183,7 @@ ADD_TEST(moTvParserModuleTest ${Modules_TESTS2} otbParserModuleTest
 ${INPUTDATA}/prison_toulouse.tif
 ${INPUTDATA}/prison_toulouse.tif
 ${TEMP}/moTvParserImageModule.tif
-1
+0
 )	      
 
 #----------------------------------------------------------------------------------------------
