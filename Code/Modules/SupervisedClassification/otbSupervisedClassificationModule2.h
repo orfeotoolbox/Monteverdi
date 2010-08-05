@@ -57,8 +57,8 @@ public:
 
   /** Data typedefs */
   /// Dataset
-  typedef VectorImage<float, 2> FloatingVectorImageType;
-  typedef VectorData<double, 2> VectorDataType;
+  typedef TypeManager::Floating_Point_VectorImage    FloatingVectorImageType;
+  typedef TypeManager::Vector_Data                   VectorDataType;
 
   /** MVC typedefs */
   typedef otb::SupervisedClassificationController ControllerType;
