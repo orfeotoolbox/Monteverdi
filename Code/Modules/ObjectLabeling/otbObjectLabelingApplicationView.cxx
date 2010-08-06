@@ -349,9 +349,9 @@ void ObjectLabelingApplicationView::UpdateClassInformation()
     vClassLabel->value(oss.str().c_str());
     vClassName->activate();
     vClassName->value(m_Model->GetClass(classIndex).m_Name.c_str());
-    Fl_Color flColor = fl_color_cube(m_Model->GetClass(classIndex).m_Color[0],
-				     m_Model->GetClass(classIndex).m_Color[1],
-				     m_Model->GetClass(classIndex).m_Color[2]);
+    Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED - 1) *m_Model->GetClass(classIndex).m_Color[0]),
+				     static_cast<int>((FL_NUM_GREEN - 1) *m_Model->GetClass(classIndex).m_Color[1]),
+				     static_cast<int>((FL_NUM_BLUE - 1) *m_Model->GetClass(classIndex).m_Color[2]));
     bClassColor->activate();
     lClasses->selection_color(flColor);
     bClassColor->color(flColor);    
