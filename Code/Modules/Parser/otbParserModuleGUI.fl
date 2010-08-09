@@ -12,12 +12,12 @@ class ParserModuleGUI {open
     Fl_Window guiMainWindow {
       label {Parser module}
       callback {this->Quit()} open
-      xywh {532 200 600 500} type Single box UP_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
+      xywh {517 240 600 680} type Single box UP_BOX color 53 selection_color 53 labelcolor 187 align 17 hide resizable
     } {
       Fl_Button bOk {
         label {Save/Quit}
         callback {OK();}
-        xywh {250 450 100 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 55 selection_color 51 labelfont 1 labelcolor 186
+        xywh {250 605 100 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 selection_color 51 labelfont 1 labelcolor 186
       }
       Fl_Input ui_expression {
         label {Enter Your Formula :} selected
@@ -25,11 +25,24 @@ class ParserModuleGUI {open
       }
       Fl_Output ui_ImageNames {
         label {Image Names :}
-        xywh {5 110 295 329} type Multiline align 5
+        xywh {5 110 295 330} type Multiline align 5
       }
       Fl_Output ui_VarNames {
         label {Corresponding Variable Names: }
-        xywh {300 111 290 328} type Multiline align 5
+        xywh {300 110 295 330} type Multiline align 5
+      }
+      Fl_Choice ui_VarNameList {
+        label {Rename Variable : } open
+        xywh {10 480 585 25} down_box BORDER_BOX align 5
+      } {}
+      Fl_Input ui_NewVarName {
+        label {New Name : }
+        xywh {225 510 150 25}
+      }
+      Fl_Button ui_ChangeVarName {
+        label OK
+        callback {ChangeVarName();}
+        xywh {465 510 35 25}
       }
     }
   }
@@ -39,5 +52,7 @@ class ParserModuleGUI {open
   Function {OK()} {open return_type {virtual void}
   } {}
   Function {Quit()} {open return_type {virtual void}
+  } {}
+  Function {ChangeVarName()} {open return_type {virtual void}
   } {}
 } 
