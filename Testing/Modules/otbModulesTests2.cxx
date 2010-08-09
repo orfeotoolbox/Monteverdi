@@ -36,5 +36,7 @@ void RegisterTests()
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
   REGISTER_TEST(otbConcatenateModuleTest);
   REGISTER_TEST(otbAlgebraModuleTest);
+#ifdef OTB_COMPILE_MUPARSER
   REGISTER_TEST(otbParserModuleTest);
+#endif
 }

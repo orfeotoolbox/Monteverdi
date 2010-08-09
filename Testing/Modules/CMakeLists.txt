@@ -179,12 +179,16 @@ ${TEMP}/moTvAlgebraImageModule.tif
 
 
 #------------- Parser Module Test ---------------------------
+
+IF(OTB_COMPILE_MUPARSER)
 ADD_TEST(moTvParserModuleTest ${Modules_TESTS2} otbParserModuleTest
 ${INPUTDATA}/prison_toulouse.tif
 ${INPUTDATA}/prison_toulouse.tif
 ${TEMP}/moTvParserImageModule.tif
 0
 )	      
+ENDIF(OTB_COMPILE_MUPARSER)
+
 
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests3 ----------------------------------------
@@ -344,7 +348,21 @@ otbSupervisedClassificationModuleTest.cxx
 otbReaderWriterModuleTest.cxx
 )
 
-
+IF(OTB_COMPILE_MUPARSER)
+SET(Modules_SRCS2
+otbParserModuleTest.cxx
+otbViewerModuleTest.cxx
+otbWriterMVCModuleTest.cxx
+otbWriterMVCModuleTest2.cxx
+otbPanSharpeningModuleTest.cxx
+otbProjectionModuleTest.cxx
+otbExtractROIModuleTest.cxx
+otbExtractROIVectorImageModuleTest.cxx
+otbHomologousPointExtractionModuleTest.cxx
+otbConcatenateModuleTest.cxx
+otbAlgebraModuleTest.cxx
+)
+ELSE(OTB_COMPILE_MUPARSER)
 SET(Modules_SRCS2
 otbViewerModuleTest.cxx
 otbWriterMVCModuleTest.cxx
@@ -356,8 +374,8 @@ otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
-otbParserModuleTest.cxx
 )
+ENDIF(OTB_COMPILE_MUPARSER)
 
 SET(Modules_SRCS3
 otbChangeDetectionModuleTest.cxx
