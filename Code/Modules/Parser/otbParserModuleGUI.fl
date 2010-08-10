@@ -14,13 +14,13 @@ class ParserModuleGUI {open
       callback {this->Quit()} open
       xywh {517 240 600 680} type Single box UP_BOX color 53 selection_color 53 labelcolor 187 align 17 hide resizable
     } {
-      Fl_Button bOk {
+      Fl_Button ui_Ok {
         label {Save/Quit}
-        callback {OK();}
+        callback {OK();} selected
         xywh {250 605 100 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 selection_color 51 labelfont 1 labelcolor 186
       }
-      Fl_Input ui_expression {
-        label {Enter Your Formula :} selected
+      Fl_Input ui_Expression {
+        label {Enter Your Formula :}
         xywh {5 40 590 25} align 1
       }
       Fl_Output ui_ImageNames {

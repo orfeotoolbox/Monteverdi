@@ -56,8 +56,13 @@ int otbParserModuleTest(int argc, char* argv[])
   module->AddInputByKey("InputImage", wrapperIn2);
   module->Start();
 
+  // Simulate first variable renaming
+  specificModule->ui_NewVarName->value("band1");
+  specificModule->ui_ChangeVarName->do_callback();
+   
   // Simulate Addition Operation
-  specificModule->ui_expression->value("band1+band2");
+  specificModule->ui_Expression->value("band1+b2");
+ 
   Fl::check();
 
   if (run)
@@ -70,7 +75,7 @@ int otbParserModuleTest(int argc, char* argv[])
      }
   
   // Exit the GUI and save the result
-  specificModule->bOk->do_callback();
+  specificModule->ui_Ok->do_callback();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
   std::cout << "Output wrapper: " << wrapperOut << std::endl;

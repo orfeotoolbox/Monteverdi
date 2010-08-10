@@ -59,7 +59,6 @@ void ParserModule::Run()
   // First step is to retrieve the inputs
   // Get the number of input image
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
-  std::ostringstream ImgNameList;
 
   if (numberOfInputImages == 0)
     {
@@ -93,19 +92,19 @@ void ParserModule::Run()
 void ParserModule::PrintVarInf()
 {
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
-  std::ostringstream VarNames, ImageNames, VarNameList;
+  std::ostringstream varNames, imageNames;
   for(unsigned int i = 0; i < numberOfInputImages; i++)
     {
-    VarNames << "(" << i+1 << ") - "; 
-    VarNames << m_ParserFilter->GetNthInputName(i) << std::endl;
-    VarNames << "--------------------" << std::endl;
+    varNames << "(" << i+1 << ") - "; 
+    varNames << m_ParserFilter->GetNthInputName(i) << std::endl;
+    varNames << "--------------------" << std::endl;
     
-    ImageNames << "(" << i+1 << ") - "; 
-    ImageNames << this->GetInputDataDescription<ImageType>("InputImage", i) << std::endl;
-    ImageNames << "--------------------" << std::endl;
+    imageNames << "(" << i+1 << ") - "; 
+    imageNames << this->GetInputDataDescription<ImageType>("InputImage", i) << std::endl;
+    imageNames << "--------------------" << std::endl;
     }
-  ui_ImageNames->value(ImageNames.str().c_str());
-  ui_VarNames->value(VarNames.str().c_str()); 
+  ui_ImageNames->value(imageNames.str().c_str());
+  ui_VarNames->value(varNames.str().c_str()); 
 }
 
 /** 
@@ -114,13 +113,15 @@ void ParserModule::PrintVarInf()
 void ParserModule::ChangeVarName()
 {
   unsigned int idx = ui_VarNameList->value();
-  std::string NewName(ui_NewVarName->value());
+  std::string newName(ui_NewVarName->value());
   size_t found;
 
-  found = NewName.find_first_of(" ");
+  found = newName.find_first_of(" ");
 
-  if((found == std::string::npos) && (NewName.compare("")))
+  if((found == std::string::npos) && (newName.compare("")))
+    {
      m_ParserFilter->SetNthInputName(idx, ui_NewVarName->value());
+    }
 
   this->PrintVarInf();
 }
@@ -131,7 +132,7 @@ void ParserModule::ChangeVarName()
 void ParserModule::OK()
 {
   // Apply the filter
-  m_ParserFilter->SetExpression(ui_expression->value());
+  m_ParserFilter->SetExpression(ui_Expression->value());
   
   try
     {
