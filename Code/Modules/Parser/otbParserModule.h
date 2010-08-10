@@ -89,12 +89,19 @@ protected:
   /** OK callback*/
   virtual void OK();
 
+  /** Print Variables */
+  void PrintVarInf();
+
+  /** Change a Variable Name */
+  void ChangeVarName();
+
 private:
   ParserModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   // Class attributes
   ParserFilterType::Pointer        m_ParserFilter;
+  ImageType::Pointer               m_Output;
 };
 
 } // End namespace otb

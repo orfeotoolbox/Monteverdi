@@ -19,6 +19,7 @@
 #define __otbParserModule_cxx
 
 #include "otbParserModule.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -50,12 +51,16 @@ void ParserModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
 }
 
-/** The custom run command */
+/** 
+ * The custom run command 
+ */
 void ParserModule::Run()
 {
   // First step is to retrieve the inputs
   // Get the number of input image
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
+  std::ostringstream ImgNameList;
+
   if (numberOfInputImages == 0)
     {
     itkExceptionMacro(<< "The number of input images is Null.");
@@ -63,7 +68,6 @@ void ParserModule::Run()
 
   // Setup the filter
   m_ParserFilter = ParserFilterType::New();
-  std::ostringstream VarNames, ImageNames;
   for(unsigned int i = 0; i < numberOfInputImages; i++)
     {
     ImageType::Pointer image = this->GetInputData<ImageType>("InputImage", i);
@@ -72,21 +76,53 @@ void ParserModule::Run()
       itkExceptionMacro(<< "The input image number " << i+1 << " is Null.");
       }
     m_ParserFilter->SetNthInput(i, image);
+    
+    ui_VarNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
+    }
+  ui_VarNameList->value(0);
+  
+  this->PrintVarInf();
+  
+  // Show the GUI
+  this->Show();
+}
+
+/** 
+ * Print Variables
+ */
+void ParserModule::PrintVarInf()
+{
+  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
+  std::ostringstream VarNames, ImageNames, VarNameList;
+  for(unsigned int i = 0; i < numberOfInputImages; i++)
+    {
     VarNames << "(" << i+1 << ") - "; 
     VarNames << m_ParserFilter->GetNthInputName(i) << std::endl;
     VarNames << "--------------------" << std::endl;
+    
     ImageNames << "(" << i+1 << ") - "; 
     ImageNames << this->GetInputDataDescription<ImageType>("InputImage", i) << std::endl;
     ImageNames << "--------------------" << std::endl;
     }
-
   ui_ImageNames->value(ImageNames.str().c_str());
-  ui_VarNames->value(VarNames.str().c_str());
+  ui_VarNames->value(VarNames.str().c_str()); 
+}
 
-  // Show the GUI
-  this->Show();
+/** 
+ * Change a Variable name
+ */
+void ParserModule::ChangeVarName()
+{
+  unsigned int idx = ui_VarNameList->value();
+  std::string NewName(ui_NewVarName->value());
+  size_t found;
 
-  
+  found = NewName.find_first_of(" ");
+
+  if((found == std::string::npos) && (NewName.compare("")))
+     m_ParserFilter->SetNthInputName(idx, ui_NewVarName->value());
+
+  this->PrintVarInf();
 }
 
 /**
@@ -96,8 +132,16 @@ void ParserModule::OK()
 {
   // Apply the filter
   m_ParserFilter->SetExpression(ui_expression->value());
-  m_ParserFilter->Update();
-
+  
+  try
+    {
+    m_Output = m_ParserFilter->GetOutput();
+    }
+  catch(itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+  
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_ParserFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
   this->NotifyOutputsChange();
