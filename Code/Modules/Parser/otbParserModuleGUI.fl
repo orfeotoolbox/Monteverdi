@@ -12,37 +12,39 @@ class ParserModuleGUI {open
     Fl_Window guiMainWindow {
       label {Parser module}
       callback {this->Quit()} open
-      xywh {517 240 600 680} type Single box UP_BOX color 53 selection_color 53 labelcolor 187 align 17 hide resizable
+      xywh {380 168 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
         callback {OK();} selected
-        xywh {250 605 100 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 selection_color 51 labelfont 1 labelcolor 186
+        xywh {275 385 100 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 selection_color 51 labelfont 1 labelcolor 186
       }
       Fl_Input ui_Expression {
         label {Enter Your Formula :}
-        xywh {5 40 590 25} align 1
-      }
-      Fl_Output ui_ImageNames {
-        label {Image Names :}
-        xywh {5 110 295 330} type Multiline align 5
-      }
-      Fl_Output ui_VarNames {
-        label {Corresponding Variable Names: }
-        xywh {300 110 295 330} type Multiline align 5
+        xywh {10 40 630 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186 align 1
       }
       Fl_Choice ui_VarNameList {
         label {Rename Variable : } open
-        xywh {10 480 585 25} down_box BORDER_BOX align 5
+        xywh {10 300 630 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelcolor 186 align 5
       } {}
       Fl_Input ui_NewVarName {
         label {New Name : }
-        xywh {225 510 150 25}
+        xywh {210 335 150 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
       Fl_Button ui_ChangeVarName {
         label OK
         callback {ChangeVarName();}
-        xywh {465 510 35 25}
+        xywh {405 335 35 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+      Fl_Browser ui_VarNames {
+        label {Corresponding Variable Names:}
+        callback {QuickAdd(ui_VarNames->value());}
+        xywh {325 110 320 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+      }
+      Fl_Browser ui_ImageNames {
+        label {Image Names:}
+        callback {QuickAdd(ui_ImageNames->value());}
+        xywh {5 110 320 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
     }
   }
@@ -54,5 +56,7 @@ class ParserModuleGUI {open
   Function {Quit()} {open return_type {virtual void}
   } {}
   Function {ChangeVarName()} {open return_type {virtual void}
+  } {}
+  Function {QuickAdd(unsigned int idx)} {open return_type {virtual void}
   } {}
 } 

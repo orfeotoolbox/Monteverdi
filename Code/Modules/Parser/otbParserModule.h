@@ -89,11 +89,11 @@ protected:
   /** OK callback*/
   virtual void OK();
 
-  /** Print Variables */
-  void PrintVarInf();
-
   /** Change a Variable Name */
   void ChangeVarName();
+
+  /** Quick add a variable name into the expression */
+  void QuickAdd(unsigned int idx);
 
 private:
   ParserModule(const Self&); //purposely not implemented

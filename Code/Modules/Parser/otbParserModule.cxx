@@ -33,7 +33,6 @@ ParserModule::ParserModule()
   
   // Build the GUI
   this->CreateGUI();
-
 }
 
 /**
@@ -77,34 +76,14 @@ void ParserModule::Run()
     m_ParserFilter->SetNthInput(i, image);
     
     ui_VarNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
+    ui_VarNames->add(m_ParserFilter->GetNthInputName(i).c_str());
+    ui_ImageNames->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
     }
+
   ui_VarNameList->value(0);
-  
-  this->PrintVarInf();
   
   // Show the GUI
   this->Show();
-}
-
-/** 
- * Print Variables
- */
-void ParserModule::PrintVarInf()
-{
-  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
-  std::ostringstream varNames, imageNames;
-  for(unsigned int i = 0; i < numberOfInputImages; i++)
-    {
-    varNames << "(" << i+1 << ") - "; 
-    varNames << m_ParserFilter->GetNthInputName(i) << std::endl;
-    varNames << "--------------------" << std::endl;
-    
-    imageNames << "(" << i+1 << ") - "; 
-    imageNames << this->GetInputDataDescription<ImageType>("InputImage", i) << std::endl;
-    imageNames << "--------------------" << std::endl;
-    }
-  ui_ImageNames->value(imageNames.str().c_str());
-  ui_VarNames->value(varNames.str().c_str()); 
 }
 
 /** 
@@ -121,9 +100,28 @@ void ParserModule::ChangeVarName()
   if((found == std::string::npos) && (newName.compare("")))
     {
      m_ParserFilter->SetNthInputName(idx, ui_NewVarName->value());
+     ui_VarNames->remove(idx+1);
+     ui_VarNames->insert(idx+1, m_ParserFilter->GetNthInputName(idx).c_str());
     }
+}
 
-  this->PrintVarInf();
+/**
+ * Quick add a variable name into the expression
+*/
+void ParserModule::QuickAdd(unsigned int idx)
+{
+  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
+  std::ostringstream tmpExpression;
+  
+  ui_VarNames->select(idx);
+  ui_ImageNames->select(idx);
+
+  if((idx-1) < numberOfInputImages)
+    {
+    tmpExpression << ui_Expression->value() << " " << m_ParserFilter->GetNthInputName(idx-1) << " ";
+    ui_Expression->value(tmpExpression.str().c_str());
+    ui_Expression->take_focus();
+    }
 }
 
 /**
