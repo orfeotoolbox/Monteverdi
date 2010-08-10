@@ -29,6 +29,7 @@
 // include the OTB/ITK elements
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -62,8 +63,12 @@ public:
   typedef otb::ObjectLabelingApplicationView       ViewType;
 
   /** Data types */
-  typedef ModelType::LabeledImageType         LabeledImageType;
-  typedef ModelType::VectorImageType          VectorImageType;
+  typedef ModelType::ImageType             ImageType;
+  typedef ModelType::VectorImageType       VectorImageType;
+  typedef TypeManager::Labeled_Short_Image LabeledImageType;
+
+  /** Cast filter type */
+  typedef itk::CastImageFilter<LabeledImageType, ImageType> CasterFilterType;
 
   /** Accessor to the view*/
   itkGetObjectMacro(View, ViewType);
@@ -95,6 +100,8 @@ private:
   ControllerType::Pointer m_Controller;
   ViewType::Pointer m_View;
   ModelType::Pointer m_Model;
+
+  CasterFilterType::Pointer m_Caster;
 };
 
 

@@ -48,6 +48,7 @@ int otbOrthorectificationModuleTest(int argc, char* argv[])
   module->Start();
 
   // Simulate the update of the output parameters :
+  /*
   itk::OStringStream oss;
   oss.str("100");
   specificModule->GetOrthorectification()->guiSizeX->value(oss.str().c_str());
@@ -56,7 +57,7 @@ int otbOrthorectificationModuleTest(int argc, char* argv[])
   specificModule->GetOrthorectification()->guiSizeX->do_callback();
   specificModule->GetOrthorectification()->guiSizeY->do_callback();
   Fl::check();
-
+  */
   // Simulate Ok button callback
   specificModule->GetOrthorectification()->guiOK->do_callback();
 

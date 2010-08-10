@@ -404,7 +404,7 @@ ObjectLabelingApplicationModel::~ObjectLabelingApplicationModel()
 
 
 /** Open an image with its associated label map */
-void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, LabeledImageType* limage)
+void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 {
   // Size checking
   if(limage->GetLargestPossibleRegion() != vimage->GetLargestPossibleRegion())

@@ -29,7 +29,9 @@ ObjectLabelingModule::ObjectLabelingModule()
   m_Controller = ControllerType::New();
   m_View = ViewType::New();
   m_Model = ModelType::New();
-  
+
+  m_Caster = CasterFilterType::New();
+
   m_View->SetController(m_Controller);
   m_View->SetModel(m_Model);
   m_View->SetWidgetsController(m_Controller->GetWidgetsController());
@@ -41,7 +43,10 @@ ObjectLabelingModule::ObjectLabelingModule()
 
   // Then, describe inputs needed by the module
   this->AddInputDescriptor<VectorImageType>("InputImage","The image to classify");
-  this->AddInputDescriptor<LabeledImageType>("LabeledImage","The segmentation of the image");
+  this->AddInputDescriptor<ImageType>("LabeledImage","The segmentation of the image");
+  this->AddTypeToInputDescriptor<LabeledImageType>("LabeledImage");
+
+
 }
 
 /** Destructor */
@@ -63,7 +68,19 @@ void ObjectLabelingModule::Run()
   this->BusyOn();
   
    VectorImageType::Pointer fpvImage = this->GetInputData<VectorImageType>("InputImage");
-   LabeledImageType::Pointer lImage = this->GetInputData<LabeledImageType>("LabeledImage");
+   ImageType::Pointer lImage;
+   LabeledImageType::Pointer lImageLab = this->GetInputData<LabeledImageType>("LabeledImage");
+   
+   if(lImageLab.IsNotNull())
+     {
+       m_Caster->SetInput( lImageLab );
+       lImage = m_Caster->GetOutput();
+     }
+   else
+     {
+       lImage = this->GetInputData<ImageType>("LabeledImage");
+     }
+   
 
    if(fpvImage.IsNotNull() && lImage.IsNotNull())
      {
