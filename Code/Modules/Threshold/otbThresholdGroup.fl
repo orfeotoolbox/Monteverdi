@@ -17,10 +17,10 @@ class ThresholdGroup {open
   } {
     Fl_Window wMainWindow {
       label {Threshold Module} open
-      xywh {3 24 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {723 155 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group {} {
-        label {Inside Value :} open selected
+        label {Inside Value :} open
         xywh {0 0 930 650} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group gScroll {
@@ -116,13 +116,23 @@ guiMaxDetailsValue->value(guiMaxDetails->value());
 this->UpdateDetails();}
           xywh {215 370 225 20} type Horizontal box PLASTIC_DOWN_BOX when 4 maximum 1000 step 1 value 1000 slider_size 0.01
         }
-        Fl_Value_Output guiMinDetailsValue {
+        Fl_Value_Input guiMinDetailsValue {
           label {Lower Treshhold :}
-          xywh {120 340 95 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 maximum 1000 step 1
+          callback {guiMinDetailsValue->value( std::min(guiMinDetailsValue->value(), guiMaxDetails->value()));
+guiMinDetailsValue->value( std::max(guiMinDetailsValue->value(), guiMinDetails->minimum()));
+
+guiMinDetails->value(guiMinDetailsValue->value());
+this->UpdateDetails();} selected
+          xywh {120 340 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1
         }
-        Fl_Value_Output guiMaxDetailsValue {
+        Fl_Value_Input guiMaxDetailsValue {
           label {Upper Threshold :}
-          xywh {120 370 95 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 maximum 1000 step 1 value 1000
+          callback {guiMaxDetailsValue->value( std::min(guiMaxDetailsValue->value(), guiMaxDetails->maximum()));
+guiMaxDetailsValue->value( std::max(guiMaxDetailsValue->value(), guiMinDetails->value()));
+
+guiMaxDetails->value(guiMaxDetailsValue->value());
+this->UpdateDetails();}
+          xywh {120 370 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1 value 1000
         }
       }
     }
