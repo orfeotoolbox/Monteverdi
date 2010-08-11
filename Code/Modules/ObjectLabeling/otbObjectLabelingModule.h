@@ -21,9 +21,9 @@
 // include the base class
 #include "otbModule.h"
 
-#include "otbObjectLabelingApplicationModel.h"
-#include "otbObjectLabelingApplicationView.h"
-#include "otbObjectLabelingApplicationController.h"
+#include "otbObjectLabelingModel.h"
+#include "otbObjectLabelingView.h"
+#include "otbObjectLabelingController.h"
 #include "otbEventsListener.h"
 
 // include the OTB/ITK elements
@@ -58,9 +58,9 @@ public:
   itkTypeMacro(ObjectLabelingModule,Module);
 
   /** MVC typedefs */
-  typedef otb::ObjectLabelingApplicationController ControllerType;
-  typedef otb::ObjectLabelingApplicationModel      ModelType;
-  typedef otb::ObjectLabelingApplicationView       ViewType;
+  typedef otb::ObjectLabelingController ControllerType;
+  typedef otb::ObjectLabelingModel      ModelType;
+  typedef otb::ObjectLabelingView       ViewType;
 
   /** Data types */
   typedef ModelType::ImageType             ImageType;

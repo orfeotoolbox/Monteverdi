@@ -5,14 +5,14 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ObjectLabelingApplicationGUI {open
+class ObjectLabelingGUI {open
 } {
   Function {Build()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {Object Labeling Application}
-      callback {this->Exit();} open
-      xywh {574 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      label {Object Labeling}
+      callback {this->Exit();} open selected
+      xywh {320 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
         label {Full Resolution} open
@@ -255,7 +255,7 @@ lFeatures->do_callback();}
       } {}
       Fl_Button bexit {
         label {Save/Quit}
-        callback {this->Exit()} selected
+        callback {this->Exit()}
         xywh {870 600 75 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
@@ -433,8 +433,8 @@ ViewerSetupOkCallback();}
   } {}
   Function {SaveClassificationParametersToXMLFile()} {open return_type {virtual void}
   } {}
-  Function {ObjectLabelingApplicationGUI()} {open
+  Function {ObjectLabelingGUI()} {open
   } {}
-  Function {~ObjectLabelingApplicationGUI()} {open return_type virtual
+  Function {~ObjectLabelingGUI()} {open return_type virtual
   } {}
 } 

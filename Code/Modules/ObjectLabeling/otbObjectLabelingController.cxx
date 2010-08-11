@@ -15,17 +15,17 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationController_cxx
-#define __otbObjectLabelingApplicationController_cxx
+#ifndef __otbObjectLabelingController_cxx
+#define __otbObjectLabelingController_cxx
 
-#include "otbObjectLabelingApplicationController.h"
+#include "otbObjectLabelingController.h"
 #include "otbMsgReporter.h"
 #include <FL/fl_ask.H>
 
 namespace otb
 {
 
-ObjectLabelingApplicationController::ObjectLabelingApplicationController() : m_View(), m_WidgetsController(), 
+ObjectLabelingController::ObjectLabelingController() : m_View(), m_WidgetsController(), 
 									     m_ResizingHandler(),m_ChangeScaleHandler(), m_ChangeRegionHandler(), 
 									     m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler(), m_MouseClickHandler()
 {
@@ -61,10 +61,11 @@ ObjectLabelingApplicationController::ObjectLabelingApplicationController() : m_V
   m_WidgetsController->AddActionHandler(m_MouseClickHandler);
 }
 
-ObjectLabelingApplicationController::~ObjectLabelingApplicationController()
+ObjectLabelingController::~ObjectLabelingController()
 {}
 
-void ObjectLabelingApplicationController::SetView(ObjectLabelingApplicationView * view)
+
+void ObjectLabelingController::SetView(ObjectLabelingView * view)
 {
   m_View = view;
   m_ResizingHandler->SetView(m_View->GetImageView());
@@ -75,7 +76,25 @@ void ObjectLabelingApplicationController::SetView(ObjectLabelingApplicationView 
   m_MouseClickHandler->SetView(m_View->GetImageView());
 }
 
-void ObjectLabelingApplicationController::ClassSelected(unsigned int classIndex)
+
+void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* limage)
+{
+  try
+    {
+      m_Model->OpenImage(vimage, limage);
+    }
+  catch(itk::ExceptionObject & err)
+    {
+      itk::OStringStream oss;
+      oss<<"Invalid input imge(s).";
+      oss<<"The following exception was caught: ";
+      oss<<err.GetDescription();
+      MsgReporter::GetInstance()->SendError(oss.str());
+    }
+}
+
+
+void ObjectLabelingController::ClassSelected(unsigned int classIndex)
 {
   try
     {
@@ -87,7 +106,7 @@ void ObjectLabelingApplicationController::ClassSelected(unsigned int classIndex)
     }
 }
 
-void ObjectLabelingApplicationController::ClearSelectedClass()
+void ObjectLabelingController::ClearSelectedClass()
 { 
   try
     {
@@ -99,7 +118,7 @@ void ObjectLabelingApplicationController::ClearSelectedClass()
     }
 }
 
-void ObjectLabelingApplicationController::AddClass()
+void ObjectLabelingController::AddClass()
 {  
   try
     {
@@ -110,7 +129,7 @@ void ObjectLabelingApplicationController::AddClass()
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::RemoveClass(unsigned int classIndex)
+void ObjectLabelingController::RemoveClass(unsigned int classIndex)
 {
   try
     {
@@ -121,7 +140,7 @@ void ObjectLabelingApplicationController::RemoveClass(unsigned int classIndex)
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::ClearClasses()
+void ObjectLabelingController::ClearClasses()
 {  
   try
     {
@@ -132,7 +151,7 @@ void ObjectLabelingApplicationController::ClearClasses()
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::ChangeClassColor(unsigned int classIndex,const ColorType & color)
+void ObjectLabelingController::ChangeClassColor(unsigned int classIndex,const ColorType & color)
 {
   try
     {
@@ -143,7 +162,7 @@ void ObjectLabelingApplicationController::ChangeClassColor(unsigned int classInd
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::ChangeClassName(unsigned int classIndex,const char * name)
+void ObjectLabelingController::ChangeClassName(unsigned int classIndex,const char * name)
 {
   try
     {
@@ -154,7 +173,7 @@ void ObjectLabelingApplicationController::ChangeClassName(unsigned int classInde
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::ChangeClassLabel(unsigned int classIndex,const LabelType & label)
+void ObjectLabelingController::ChangeClassLabel(unsigned int classIndex,const LabelType & label)
 {
   try
     {
@@ -165,7 +184,7 @@ void ObjectLabelingApplicationController::ChangeClassLabel(unsigned int classInd
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingApplicationController::RemoveObject(unsigned int objectIndex)
+void ObjectLabelingController::RemoveObject(unsigned int objectIndex)
 {
   if(m_Model->HasSelectedClass())
     {
@@ -180,7 +199,7 @@ void ObjectLabelingApplicationController::RemoveObject(unsigned int objectIndex)
     }
 }
 
-void ObjectLabelingApplicationController::SelectObject(unsigned int objectIndex)
+void ObjectLabelingController::SelectObject(unsigned int objectIndex)
 {
   if(m_Model->HasSelectedClass())
     {
@@ -198,7 +217,7 @@ void ObjectLabelingApplicationController::SelectObject(unsigned int objectIndex)
     }				    
 }
 
-void ObjectLabelingApplicationController::ClearObjects()
+void ObjectLabelingController::ClearObjects()
 {
   if(m_Model->HasSelectedClass())
     {
@@ -214,7 +233,7 @@ void ObjectLabelingApplicationController::ClearObjects()
 
 }
 
-void ObjectLabelingApplicationController::SaveSamplesToXMLFile(const char * fname)
+void ObjectLabelingController::SaveSamplesToXMLFile(const char * fname)
 {
   try
     {
@@ -226,7 +245,7 @@ void ObjectLabelingApplicationController::SaveSamplesToXMLFile(const char * fnam
     }
 }
 
-void ObjectLabelingApplicationController::LoadSamplesFromXMLFile(const char * fname)
+void ObjectLabelingController::LoadSamplesFromXMLFile(const char * fname)
 {
   try
     {
@@ -238,7 +257,7 @@ void ObjectLabelingApplicationController::LoadSamplesFromXMLFile(const char * fn
     }
 }
 
-void ObjectLabelingApplicationController::SaveClassificationParametersToXMLFile(const char * fname)
+void ObjectLabelingController::SaveClassificationParametersToXMLFile(const char * fname)
 {
   try
     {
@@ -251,7 +270,7 @@ void ObjectLabelingApplicationController::SaveClassificationParametersToXMLFile(
 }
 
 
-void ObjectLabelingApplicationController::SaveColorsToAsciiFile(const char * fname)
+void ObjectLabelingController::SaveColorsToAsciiFile(const char * fname)
 {
   try
     {
@@ -263,7 +282,7 @@ void ObjectLabelingApplicationController::SaveColorsToAsciiFile(const char * fna
     }
 }
 
-void ObjectLabelingApplicationController::SaveClassification()
+void ObjectLabelingController::SaveClassification()
 {
   try
     {
@@ -275,7 +294,7 @@ void ObjectLabelingApplicationController::SaveClassification()
     }
 }
 
-void ObjectLabelingApplicationController::SaveClassificationGraph(const char * fname)
+void ObjectLabelingController::SaveClassificationGraph(const char * fname)
 {
   try
     {
@@ -287,7 +306,7 @@ void ObjectLabelingApplicationController::SaveClassificationGraph(const char * f
     }
 }
 
-void ObjectLabelingApplicationController::ExportClassificationToGIS(const GISExportInfo& exportInfo)
+void ObjectLabelingController::ExportClassificationToGIS(const GISExportInfo& exportInfo)
 {
   try
     {
@@ -302,7 +321,7 @@ void ObjectLabelingApplicationController::ExportClassificationToGIS(const GISExp
     MsgReporter::GetInstance()->SendError(e.what());
     }
 }
-// void ObjectLabelingApplicationController::LoadImages(const char * image, const char * label)
+// void ObjectLabelingController::LoadImages(const char * image, const char * label)
 // {
 // //   try
 // //     {
@@ -315,7 +334,7 @@ void ObjectLabelingApplicationController::ExportClassificationToGIS(const GISExp
 // //     }
 // }
 
-void ObjectLabelingApplicationController::SampleMargin()
+void ObjectLabelingController::SampleMargin()
 {
   try
     {
@@ -328,7 +347,7 @@ void ObjectLabelingApplicationController::SampleMargin()
 }
 
 
-void ObjectLabelingApplicationController::ChangeKernelType(int kernel)
+void ObjectLabelingController::ChangeKernelType(int kernel)
 {
   try
     {
@@ -340,7 +359,7 @@ void ObjectLabelingApplicationController::ChangeKernelType(int kernel)
     }
 }
 
-void ObjectLabelingApplicationController::ChangeNumberOfCrossValidationFolders(unsigned int nb)
+void ObjectLabelingController::ChangeNumberOfCrossValidationFolders(unsigned int nb)
 { 
   try
     {
@@ -352,7 +371,7 @@ void ObjectLabelingApplicationController::ChangeNumberOfCrossValidationFolders(u
     }
 }
 
-void ObjectLabelingApplicationController::ChangeParametersOptimisation(bool value)
+void ObjectLabelingController::ChangeParametersOptimisation(bool value)
 {
   try
     {
@@ -364,7 +383,7 @@ void ObjectLabelingApplicationController::ChangeParametersOptimisation(bool valu
     }
 }
 
-void ObjectLabelingApplicationController::ChangeNumberOfCoarseSteps(unsigned int nb)
+void ObjectLabelingController::ChangeNumberOfCoarseSteps(unsigned int nb)
 {
   try
     {
@@ -376,7 +395,7 @@ void ObjectLabelingApplicationController::ChangeNumberOfCoarseSteps(unsigned int
     }
 }
 
-void ObjectLabelingApplicationController::ChangeNumberOfFineSteps(unsigned int nb)
+void ObjectLabelingController::ChangeNumberOfFineSteps(unsigned int nb)
 {
   try
     {
@@ -388,7 +407,7 @@ void ObjectLabelingApplicationController::ChangeNumberOfFineSteps(unsigned int n
     }
 }
 
-void ObjectLabelingApplicationController::ChangeNumberOfMarginSamples(unsigned int nb)
+void ObjectLabelingController::ChangeNumberOfMarginSamples(unsigned int nb)
 {
   try
     {
@@ -400,9 +419,9 @@ void ObjectLabelingApplicationController::ChangeNumberOfMarginSamples(unsigned i
     }
 }
 
-void ObjectLabelingApplicationController::ChangeMarginColor(const ColorType & color){}
+void ObjectLabelingController::ChangeMarginColor(const ColorType & color){}
 
-void ObjectLabelingApplicationController::FocusOnMarginSample(unsigned int sample)
+void ObjectLabelingController::FocusOnMarginSample(unsigned int sample)
 {
   if(sample>0 && sample <= m_Model->GetMarginSamples().size())
     {
@@ -418,7 +437,7 @@ void ObjectLabelingApplicationController::FocusOnMarginSample(unsigned int sampl
     }
 }
 
-void ObjectLabelingApplicationController::ClearMarginSamples()
+void ObjectLabelingController::ClearMarginSamples()
 {
   try
     {
@@ -430,16 +449,16 @@ void ObjectLabelingApplicationController::ClearMarginSamples()
     }
 }
 
-void ObjectLabelingApplicationController::Classify()
+void ObjectLabelingController::Classify()
 {
   m_Model->Classify();
 }
-void ObjectLabelingApplicationController::ClearClassification()
+void ObjectLabelingController::ClearClassification()
 {
   m_Model->ClearClassification();
 }
 
-void ObjectLabelingApplicationController::ChangeFeatureState(const std::string & fname,bool state)
+void ObjectLabelingController::ChangeFeatureState(const std::string & fname,bool state)
 {
   try
     {
@@ -451,7 +470,7 @@ void ObjectLabelingApplicationController::ChangeFeatureState(const std::string &
     }
 }
 
-void ObjectLabelingApplicationController::SetUseContext(bool context)
+void ObjectLabelingController::SetUseContext(bool context)
 {
   try
     {
@@ -464,7 +483,7 @@ void ObjectLabelingApplicationController::SetUseContext(bool context)
 }
 
 
-void ObjectLabelingApplicationController::ChangeClassificationOpacity(double value)
+void ObjectLabelingController::ChangeClassificationOpacity(double value)
 {
   try
     {
@@ -476,7 +495,7 @@ void ObjectLabelingApplicationController::ChangeClassificationOpacity(double val
     }
 }
 
-void ObjectLabelingApplicationController::UpdateViewerDisplay()
+void ObjectLabelingController::UpdateViewerDisplay()
 {
   if(!m_Model->GetVectorImage())
     {

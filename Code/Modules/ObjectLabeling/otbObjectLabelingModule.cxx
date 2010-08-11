@@ -42,8 +42,8 @@ ObjectLabelingModule::ObjectLabelingModule()
   m_Model->RegisterListener(this);
 
   // Then, describe inputs needed by the module
-  this->AddInputDescriptor<VectorImageType>("InputImage","The image to classify");
-  this->AddInputDescriptor<ImageType>("LabeledImage","The segmentation of the image");
+  this->AddInputDescriptor<VectorImageType>("InputImage","The image to classify (huge image not supported yet)");
+  this->AddInputDescriptor<ImageType>("LabeledImage","The segmentation of the image (huge image not supported yet)");
   this->AddTypeToInputDescriptor<LabeledImageType>("LabeledImage");
 
 
@@ -73,11 +73,13 @@ void ObjectLabelingModule::Run()
    
    if(lImageLab.IsNotNull())
      {
+       std::cout<<"go caster go"<<std::endl;
        m_Caster->SetInput( lImageLab );
        lImage = m_Caster->GetOutput();
      }
    else
      {
+  std::cout<<"go simple go"<<std::endl;
        lImage = this->GetInputData<ImageType>("LabeledImage");
      }
    
@@ -88,7 +90,7 @@ void ObjectLabelingModule::Run()
      m_View->Build();
      fpvImage->UpdateOutputInformation();
      lImage->UpdateOutputInformation();
-     m_Model->OpenImage(fpvImage,lImage);
+     m_Controller->OpenImage(fpvImage,lImage);
      m_View->UpdateViewerSetup();
      }
    else

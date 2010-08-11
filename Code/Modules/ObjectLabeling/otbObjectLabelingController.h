@@ -15,11 +15,11 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationController_h
-#define __otbObjectLabelingApplicationController_h
+#ifndef __otbObjectLabelingController_h
+#define __otbObjectLabelingController_h
 
-#include "otbObjectLabelingApplicationControllerInterface.h"
-#include "otbObjectLabelingApplicationView.h"
+#include "otbObjectLabelingControllerInterface.h"
+#include "otbObjectLabelingView.h"
 
 #include "otbImageWidgetController.h"
 #include "otbWidgetResizingActionHandler.h"
@@ -31,24 +31,24 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-class ObjectLabelingApplicationController
-      : public ObjectLabelingApplicationControllerInterface
+class ObjectLabelingController
+      : public ObjectLabelingControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectLabelingApplicationController Self;
+  typedef ObjectLabelingController Self;
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(ObjectLabelingApplicationController,Superclass);
+  itkTypeMacro(ObjectLabelingController,Superclass);
   itkNewMacro(Self);
 
   /** Widgets controller and action handlers */
-  typedef ObjectLabelingApplicationView::ImageViewType              ImageViewType;
-  typedef ObjectLabelingApplicationModel::VisualizationModelType    VisualizationModelType;
-  typedef ObjectLabelingApplicationModel::PixelDescriptionModelType PixelDescriptionModelType;
+  typedef ObjectLabelingView::ImageViewType              ImageViewType;
+  typedef ObjectLabelingModel::VisualizationModelType    VisualizationModelType;
+  typedef ObjectLabelingModel::PixelDescriptionModelType PixelDescriptionModelType;
   typedef ImageWidgetController                                     WidgetsControllerType;
   typedef WidgetResizingActionHandler 
     <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
@@ -61,8 +61,12 @@ public:
  typedef otb::PixelDescriptionActionHandler
     < PixelDescriptionModelType, ImageViewType>                     PixelDescriptionActionHandlerType;
   typedef otb::MouseClickActionHandler
-  <ObjectLabelingApplicationModel,ImageViewType>                    MouseClickActionHandlerType;
+  <ObjectLabelingModel,ImageViewType>                    MouseClickActionHandlerType;
   
+  /** Image typedefs*/
+  typedef ObjectLabelingControllerInterface::VectorImageType VectorImageType;
+  typedef ObjectLabelingControllerInterface::ImageType       ImageType; 
+
   /** User action */
   virtual void ClassSelected(unsigned int classIndex);
   virtual void ClearSelectedClass();
@@ -99,14 +103,15 @@ public:
   virtual void SetUseContext(bool context);
   virtual void ChangeClassificationOpacity(double value);
   virtual void UpdateViewerDisplay();
+  virtual void OpenImage(VectorImageType* vimage, ImageType* limage);
 
   /** Set the pointer to the view */
-  void SetView(ObjectLabelingApplicationView * view);
+  void SetView(ObjectLabelingView * view);
 
 
-  virtual void SetModel(ObjectLabelingApplicationModel * model)
+  virtual void SetModel(ObjectLabelingModel * model)
   {
-    ObjectLabelingApplicationControllerInterface::SetModel(model);
+    ObjectLabelingControllerInterface::SetModel(model);
     
     // Register the model to the action handlers
     m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
@@ -124,16 +129,16 @@ public:
 
 protected:
   /** Constructor */
-  ObjectLabelingApplicationController();
+  ObjectLabelingController();
   /** Destructor */
-  ~ObjectLabelingApplicationController();
+  ~ObjectLabelingController();
 
 private:
-  ObjectLabelingApplicationController(const Self&); //purposely not implemented
+  ObjectLabelingController(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  ObjectLabelingApplicationView *            m_View;
+  ObjectLabelingView *            m_View;
 
   /** Widgets controller */
   WidgetsControllerType::Pointer             m_WidgetsController;

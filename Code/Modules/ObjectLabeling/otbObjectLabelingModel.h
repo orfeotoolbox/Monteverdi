@@ -15,11 +15,11 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationModel_h
-#define __otbObjectLabelingApplicationModel_h
+#ifndef __otbObjectLabelingModel_h
+#define __otbObjectLabelingModel_h
 
 #include "otbEventsSender.h"
-#include "otbObjectLabelingApplicationEventsListener.h"
+#include "otbObjectLabelingEventsListener.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkFixedArray.h"
@@ -101,18 +101,18 @@ public:
   std::string table_name;
 };
 
-class ObjectLabelingApplicationModel
+class ObjectLabelingModel
   : public  EventsSender<std::string>, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectLabelingApplicationModel                             Self;
+  typedef ObjectLabelingModel                             Self;
   typedef itk::Object                                                Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(ObjectLabelingApplicationModel,Object);
+  itkTypeMacro(ObjectLabelingModel,Object);
 
   /** New macro*/
   itkNewMacro(Self);
@@ -194,6 +194,9 @@ public:
 
   /** Open an image with its associated label map */
   void OpenImage(VectorImageType* vimage, ImageType* limage);
+
+  /** Initialize the filters */
+  void Init(VectorImageType* vimage, ImageType* limage);
 
   /** Add sample */
   void AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex);
@@ -374,15 +377,15 @@ public:
 
 protected:
   /** Constructor */
-  ObjectLabelingApplicationModel();
+  ObjectLabelingModel();
   /** Destructor */
-  ~ObjectLabelingApplicationModel();
+  ~ObjectLabelingModel();
 
   /** Extract the relevant features and normalize to range [0,1] */
   VectorType BuildSample(const LabelObjectType * lo) const;
 
 private:
-  ObjectLabelingApplicationModel(const Self&); //purposely not implemented
+  ObjectLabelingModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Compute context description */

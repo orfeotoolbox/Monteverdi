@@ -15,22 +15,22 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationView_h
-#define __otbObjectLabelingApplicationView_h
+#ifndef __otbObjectLabelingView_h
+#define __otbObjectLabelingView_h
 
 // Disabling deprecation warning
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-#include "otbObjectLabelingApplicationGUI.h"
+#include "otbObjectLabelingGUI.h"
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
 #include "otbEventsListener.h"
-#include "otbObjectLabelingApplicationModel.h"
-#include "otbObjectLabelingApplicationControllerInterface.h"
+#include "otbObjectLabelingModel.h"
+#include "otbObjectLabelingControllerInterface.h"
 
 #include "otbImageView.h"
 #include "otbPixelDescriptionView.h"
@@ -40,32 +40,32 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class ObjectLabelingApplicationView
+/** \class ObjectLabelingView
  *
  */
-class ObjectLabelingApplicationView
+class ObjectLabelingView
       : public EventsListener<std::string>, 
-	public ObjectLabelingApplicationGUI, 
+	public ObjectLabelingGUI, 
 	public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectLabelingApplicationView  Self;
+  typedef ObjectLabelingView  Self;
   typedef itk::Object                    Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(ObjectLabelingApplicationView,Object);
+  itkTypeMacro(ObjectLabelingView,Object);
 
   /** Visualization typedefs */
-  typedef ObjectLabelingApplicationModel::RGBPixelType              RGBPixelType;
-  typedef ObjectLabelingApplicationModel::VisualizationModelType    VisualizationModelType;
-  typedef ObjectLabelingApplicationModel::PixelDescriptionModelType PixelDescriptionModelType;
+  typedef ObjectLabelingModel::RGBPixelType              RGBPixelType;
+  typedef ObjectLabelingModel::VisualizationModelType    VisualizationModelType;
+  typedef ObjectLabelingModel::PixelDescriptionModelType PixelDescriptionModelType;
   typedef ImageView<VisualizationModelType>                         ImageViewType;
   typedef PixelDescriptionView<PixelDescriptionModelType>           PixelViewType;
-  typedef ObjectLabelingApplicationModel::VectorDataType            VectorDataType;
+  typedef ObjectLabelingModel::VectorDataType            VectorDataType;
   typedef VectorDataGlComponent<VectorDataType>                     VectorDataGlComponentType;
   typedef std::vector<VectorDataGlComponentType * >                 VectorDataGlComponentVectorType;
 
@@ -113,13 +113,13 @@ public:
   virtual void ViewerSetupOkCallback();
 
   /** Set the application controller */
-  void SetController(ObjectLabelingApplicationControllerInterface * controller);
+  void SetController(ObjectLabelingControllerInterface * controller);
 
   /** Set the widgets controller */
   void SetWidgetsController(ImageWidgetController * controller);
 
   /** Set the model */
-  void SetModel(ObjectLabelingApplicationModel * model)
+  void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;
     m_Model->RegisterListener(this);
@@ -137,9 +137,9 @@ public:
 
 protected:
   /** Constructor */
-  ObjectLabelingApplicationView();
+  ObjectLabelingView();
   /** Destructor */
-  ~ObjectLabelingApplicationView();
+  ~ObjectLabelingView();
   
   /** Refresh functions */
   void RefreshInterface();
@@ -147,17 +147,17 @@ protected:
   void UpdateClassInformation();
 
 private:
-  ObjectLabelingApplicationView(const Self&); //purposely not implemented
+  ObjectLabelingView(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the controller */
-  ObjectLabelingApplicationControllerInterface * m_Controller;
+  ObjectLabelingControllerInterface * m_Controller;
   
   /** Pointer to the widgets controller */
   ImageWidgetController *                        m_WidgetsController;
 
   /** Pointer to the model */
-  ObjectLabelingApplicationModel *               m_Model;
+  ObjectLabelingModel *               m_Model;
 
   /** Image view */
   ImageViewType::Pointer                         m_ImageView;

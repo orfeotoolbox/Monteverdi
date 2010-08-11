@@ -15,28 +15,31 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationControllerInterface_h
-#define __otbObjectLabelingApplicationControllerInterface_h
+#ifndef __otbObjectLabelingControllerInterface_h
+#define __otbObjectLabelingControllerInterface_h
 
 #include "itkObject.h"
-#include "otbObjectLabelingApplicationModel.h"
+#include "otbObjectLabelingModel.h"
 
 namespace otb
 {
-class ObjectLabelingApplicationControllerInterface
+class ObjectLabelingControllerInterface
       : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectLabelingApplicationControllerInterface Self;
+  typedef ObjectLabelingControllerInterface Self;
   typedef itk::Object                                  Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
-  typedef ObjectLabelingApplicationModel::ColorType    ColorType;
-  typedef ObjectLabelingApplicationModel::LabelType    LabelType;
+  typedef ObjectLabelingModel::ColorType    ColorType;
+  typedef ObjectLabelingModel::LabelType    LabelType;
+  typedef ObjectLabelingModel::VectorImageType VectorImageType;
+  typedef ObjectLabelingModel::ImageType       ImageType;
+
 
   /** Standard type macros */
-  itkTypeMacro(ObjectLabelingApplicationControllerInterface,Superclass);
+  itkTypeMacro(ObjectLabelingControllerInterface,Superclass);
 
   /** Users actions */
   virtual void AddClass() = 0;
@@ -74,25 +77,26 @@ public:
   virtual void SetUseContext(bool context) = 0;
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
-  virtual void SetModel(ObjectLabelingApplicationModel * model)
+  virtual void OpenImage(VectorImageType*, ImageType*) =0;
+  virtual void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;
   }
 
 protected:
   /** Constructor */
-  ObjectLabelingApplicationControllerInterface()
+  ObjectLabelingControllerInterface()
   {
-    m_Model = ObjectLabelingApplicationModel::GetInstance();
+    m_Model = ObjectLabelingModel::GetInstance();
   }
   /** Destructor */
-  ~ObjectLabelingApplicationControllerInterface() {}
+  ~ObjectLabelingControllerInterface() {}
 
   /** The instance of the model (for commodity) */
-  ObjectLabelingApplicationModel * m_Model;
+  ObjectLabelingModel * m_Model;
 
 private:
-  ObjectLabelingApplicationControllerInterface(const Self&); //purposely not implemented
+  ObjectLabelingControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 } // end namespace otb

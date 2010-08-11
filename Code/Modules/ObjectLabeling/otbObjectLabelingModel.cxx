@@ -15,12 +15,13 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationModel_cxx
-#define __otbObjectLabelingApplicationModel_cxx
+#ifndef __otbObjectLabelingModel_cxx
+#define __otbObjectLabelingModel_cxx
 
-#include "otbObjectLabelingApplicationModel.h"
+#include "otbObjectLabelingModel.h"
 #include "otbImageFileWriter.h"
 #include "base/ossimFilename.h"
+#include "otbFltkFilterWatcher.h"
 
 #ifdef OTB_USE_PQXX
 #include "otbPostGISConnectionImplementation.h"
@@ -130,8 +131,8 @@ public:
   typedef Superclass::PolygonListPointerType PolygonListPointerType;
   typedef Superclass::PolygonListPointerType PolygonListConstPointerType;
 
-  typedef ObjectLabelingApplicationModel::LabelObjectType LabelObjectType;
-  typedef ObjectLabelingApplicationModel::LabelMapType LabelMapType;
+  typedef ObjectLabelingModel::LabelObjectType LabelObjectType;
+  typedef ObjectLabelingModel::LabelMapType LabelMapType;
 
 public:
 
@@ -266,7 +267,7 @@ private:
 };
 
 
-void ObjectLabelingApplicationModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
+void ObjectLabelingModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
 {
   typedef otb::PostGISConnectionImplementation BdConnection;
   typedef otb::PostGISConnectionImplementation::Pointer BdConnectionPointer;
@@ -306,7 +307,7 @@ void ObjectLabelingApplicationModel::ExportClassificationToGIS(const GISExportIn
 
 #else
 
-void ObjectLabelingApplicationModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
+void ObjectLabelingModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
 {
   itkExceptionMacro(<< "OTB_USE_PQXX is undefined, please set OTB_USE_PQXX to ON to use this");
 }
@@ -315,20 +316,20 @@ void ObjectLabelingApplicationModel::ExportClassificationToGIS(const GISExportIn
 
 
 /** Initialize the singleton */
-ObjectLabelingApplicationModel::Pointer ObjectLabelingApplicationModel::Instance = NULL;
+ObjectLabelingModel::Pointer ObjectLabelingModel::Instance = NULL;
 
 /** Manage the singleton */
-ObjectLabelingApplicationModel::Pointer
-ObjectLabelingApplicationModel::GetInstance()
+ObjectLabelingModel::Pointer
+ObjectLabelingModel::GetInstance()
 {
   if (!Instance)
   {
-    Instance = ObjectLabelingApplicationModel::New();
+    Instance = ObjectLabelingModel::New();
   }
   return Instance;
 }
 
-ObjectLabelingApplicationModel::ObjectLabelingApplicationModel() : m_VisualizationModel(), 
+ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(), 
 								   m_PixelDescriptionModel(), m_Classes(), 
 								   m_LabeledImage(), m_VectorImage(), m_LabelMap(), 
 								   m_SelectedLabel(itk::NumericTraits<LabelType>::max()), 
@@ -399,12 +400,12 @@ ObjectLabelingApplicationModel::ObjectLabelingApplicationModel() : m_Visualizati
   m_UseContext = true;
 }
 
-ObjectLabelingApplicationModel::~ObjectLabelingApplicationModel()
+ObjectLabelingModel::~ObjectLabelingModel()
 {}
 
 
 /** Open an image with its associated label map */
-void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageType* limage)
+void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 {
   // Size checking
   if(limage->GetLargestPossibleRegion() != vimage->GetLargestPossibleRegion())
@@ -415,23 +416,28 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
   m_LabeledImage = limage;
   m_VectorImage  = vimage;
 
+  /*
   // Update origin and spacing
   m_Origin[0] = -m_VectorImage->GetOrigin()[0];
   m_Origin[1] = -m_VectorImage->GetOrigin()[1];
   m_Spacing[0] = 1/m_VectorImage->GetSpacing()[0];
   m_Spacing[1] = 1/m_VectorImage->GetSpacing()[1];
+*/
 
   // Generate the layer
   m_ImageGenerator = LayerGeneratorType::New();
   m_ImageGenerator->SetImage(m_VectorImage);
-  m_ImageGenerator->GenerateQuicklookOff();
-  m_ImageGenerator->SetQuicklook(m_VectorImage);
-  m_ImageGenerator->SetSubsamplingRate(1);
+  //m_ImageGenerator->GenerateQuicklookOff();
+  //m_ImageGenerator->SetQuicklook(m_VectorImage);
+  //m_ImageGenerator->SetSubsamplingRate(1);
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_ImageGenerator->GenerateLayer();
   
   m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();
 
-  m_Channels.clear();
+ 
+  /*
+ m_Channels.clear();
   if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
     {
       m_Channels.push_back(0);
@@ -446,8 +452,11 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
       m_Channels.push_back(0);
       std::cout<< "4 bands" << std::endl;
     }
-
+    
+  /// Update the StandardRenderingFunction
   m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+  */
+
   m_ImageGenerator->GetLayer()->SetName("Image");
 
   // Clear previous layers
@@ -457,13 +466,27 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
+  std::cout<<"ici?"<<std::endl;
   m_VisualizationModel->Update();
-
+  
+  m_Channels.clear();
+  m_Channels = m_ImageLayerRenderingFunction->GetChannelList();
+  std::cout<<"m_Channels :"<<std::endl;
+  std::cout<<"m_Channels.size(): "<<m_Channels.size()<<std::endl;
+  for(unsigned int p=0; p<m_Channels.size(); p++)
+    {
+      std::cout<<m_Channels.at(p)<<std::endl;
+    }
+  m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+  m_VisualizationModel->Update();
+  
+  std::cout<<"ici?"<<std::endl;
+  
   // Convert to label map
   LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
   lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   lfilter->SetInput(m_LabeledImage);
-
+  
   // Compute shape attributes
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(lfilter->GetOutput());
@@ -472,15 +495,43 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
   radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(m_VectorImage);
-  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
-    {
-    radiometricLabelMapFilter->SetRedChannelIndex(2);
-    radiometricLabelMapFilter->SetGreenChannelIndex(1);
-    radiometricLabelMapFilter->SetBlueChannelIndex(0);
-    radiometricLabelMapFilter->SetNIRChannelIndex(2);
-    }
-  radiometricLabelMapFilter->Update();
+  
 
+  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==3 )
+    {
+      radiometricLabelMapFilter->SetRedChannelIndex(2);
+      radiometricLabelMapFilter->SetGreenChannelIndex(1);
+      radiometricLabelMapFilter->SetBlueChannelIndex(0);
+      radiometricLabelMapFilter->SetNIRChannelIndex(2);
+    }
+  
+  /*
+  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==3 )
+    {
+      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[2]);//2);
+      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);//1);
+      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);//0);
+      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[2]);//2);
+    }
+  else if(m_VectorImage->GetNumberOfComponentsPerPixel()==1)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==1)
+  {
+      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
+      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[0]);
+      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
+      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[0]);
+  }
+  else if(m_VectorImage->GetNumberOfComponentsPerPixel()==2)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==1)
+  {
+      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
+      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);
+      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
+      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[1]);
+  }
+  */
+  
+ std::cout<<"pete?"<<std::endl;
+  radiometricLabelMapFilter->Update();
+ std::cout<<"non?"<<std::endl;
   // Get the label map
   m_LabelMap = radiometricLabelMapFilter->GetOutput();
   m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
@@ -507,7 +558,7 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
    m_ClassLabelFilter->Update();
    std::cout<<"Done."<<std::endl;
 
-   // Coloring classes */
+   // Coloring classes 
    m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
    m_ColorMapper->SetNumberOfComponentsPerPixel(3);
    m_ColorMapper->ClearChangeMap();
@@ -522,6 +573,9 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
      std::cout<<"New value: "<<newValue<<std::endl;
      m_ColorMapper->SetChange(oit->m_Label,newValue);
      }
+
+
+   //this->Init(m_VectorImage, m_LabeledImage);
 
    // Generate the layer
    LayerGeneratorType::Pointer m_LabeledImageGenerator = LayerGeneratorType::New();
@@ -556,16 +610,117 @@ void ObjectLabelingApplicationModel::OpenImage(VectorImageType* vimage, ImageTyp
    m_VisualizationModel->Update();
 
  
-   //this->NotifyAll("Update");
 }
 
-unsigned int ObjectLabelingApplicationModel::GetNumberOfClasses()
+
+/** Open an image with its associated label map */
+void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
+{
+  // Update origin and spacing
+  m_Origin[0] = -vimage->GetOrigin()[0];
+  m_Origin[1] = -vimage->GetOrigin()[1];
+  m_Spacing[0] = 1/vimage->GetSpacing()[0];
+  m_Spacing[1] = 1/vimage->GetSpacing()[1];
+  
+  // Convert to label map
+  LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
+  lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  lfilter->SetInput(m_LabeledImage);
+  
+  // Compute shape attributes
+  ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
+  shapeLabelMapFilter->SetInput(lfilter->GetOutput());
+  
+  // Compute radiometric attributes
+  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
+  radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
+  radiometricLabelMapFilter->SetInput2(vimage);
+  
+  if(vimage->GetNumberOfComponentsPerPixel()==3)// && limage->GetNumberOfComponentsPerPixel()==3 )
+    {
+      radiometricLabelMapFilter->SetRedChannelIndex(2);
+      radiometricLabelMapFilter->SetGreenChannelIndex(1);
+      radiometricLabelMapFilter->SetBlueChannelIndex(0);
+      radiometricLabelMapFilter->SetNIRChannelIndex(2);
+    }
+  /*
+    if(vimage->GetNumberOfComponentsPerPixel()==3)// && limage->GetNumberOfComponentsPerPixel()==3 )
+    {
+    radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[2]);//2);
+    radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);//1);
+    radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);//0);
+    radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[2]);//2);
+    }
+    else if(vimage->GetNumberOfComponentsPerPixel()==1)// && limage->GetNumberOfComponentsPerPixel()==1)
+    {
+    radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
+    radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[0]);
+    radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
+    radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[0]);
+  }
+  else if(vimage->GetNumberOfComponentsPerPixel()==2)// && limage->GetNumberOfComponentsPerPixel()==1)
+  {
+  radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
+  radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);
+  radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
+  radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[1]);
+  }
+  */
+  radiometricLabelMapFilter->Update();
+  
+  std::cout<<"pete?"<<std::endl;
+  radiometricLabelMapFilter->Update();
+  std::cout<<"non?"<<std::endl;
+  // Get the label map
+  m_LabelMap = radiometricLabelMapFilter->GetOutput();
+  m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
+  
+  // Populates the features list
+  m_AvailableFeatures.clear();
+  
+  std::vector<std::string> features = m_LabelMap->GetNthLabelObject(0)->GetAvailableAttributes();
+  
+  for(std::vector<std::string>::const_iterator fit = features.begin();fit!=features.end();++fit)
+    {
+      m_AvailableFeatures[*fit]=true;
+    }
+  
+  // Computes the features statistics
+  this->ComputeFeaturesStatistics();
+  
+  m_SelectedPolygon->SetProjectionRef(vimage->GetProjectionRef());
+  m_MarginSampledPolygon->SetProjectionRef(vimage->GetProjectionRef());
+  
+  // Export to class label image
+  std::cout<<"Exporting to class label image ..."<<std::endl;
+  m_ClassLabelFilter->SetInput(m_LabelMap);
+  m_ClassLabelFilter->Update();
+  std::cout<<"Done."<<std::endl;
+  
+  // Coloring classes */
+  m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
+  m_ColorMapper->SetNumberOfComponentsPerPixel(3);
+  m_ColorMapper->ClearChangeMap();
+  
+  // For each classes
+  for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
+    {
+      VectorPixelType newValue(3);
+      newValue[0]=oit->m_Color[0];
+      newValue[1]=oit->m_Color[1];
+      newValue[2]=oit->m_Color[2];
+      std::cout<<"New value: "<<newValue<<std::endl;
+      m_ColorMapper->SetChange(oit->m_Label,newValue);
+    }
+}
+
+unsigned int ObjectLabelingModel::GetNumberOfClasses()
 {
   return m_Classes.size();
 }
 
 /** Add sample */
-void ObjectLabelingApplicationModel::AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex)
+void ObjectLabelingModel::AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex)
 {
   // Check for a valid label image
   if(!m_LabeledImage)
@@ -580,7 +735,7 @@ void ObjectLabelingApplicationModel::AddSampleToClass(const IndexType & sampleIn
 }
 
 
-void ObjectLabelingApplicationModel::AddSampleToClass(const LabelType & label, unsigned int classIndex)
+void ObjectLabelingModel::AddSampleToClass(const LabelType & label, unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -596,7 +751,7 @@ void ObjectLabelingApplicationModel::AddSampleToClass(const LabelType & label, u
 }
 
 /** Remove label */
-void ObjectLabelingApplicationModel::RemoveSampleFromClass(const LabelType & label, unsigned int classIndex)
+void ObjectLabelingModel::RemoveSampleFromClass(const LabelType & label, unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())  
     {
@@ -617,7 +772,7 @@ void ObjectLabelingApplicationModel::RemoveSampleFromClass(const LabelType & lab
 }
 
 /** Clear samples from class */
-void ObjectLabelingApplicationModel::ClearSamplesFromClass(unsigned int classIndex)
+void ObjectLabelingModel::ClearSamplesFromClass(unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())  
     {
@@ -634,7 +789,7 @@ void ObjectLabelingApplicationModel::ClearSamplesFromClass(unsigned int classInd
 }
 
 /** Focus on sample */
-void ObjectLabelingApplicationModel::FocusOnSample(const LabelType & label)
+void ObjectLabelingModel::FocusOnSample(const LabelType & label)
 {
   // Convert sample to polygon
   SimplifyPolygonFunctorType sfunctor;
@@ -653,7 +808,7 @@ void ObjectLabelingApplicationModel::FocusOnSample(const LabelType & label)
 }
 
 /** Get a class by its index */
-const ObjectLabelingApplicationModel::ObjectClassType & ObjectLabelingApplicationModel::GetClass(unsigned int classIndex) const 
+const ObjectLabelingModel::ObjectClassType & ObjectLabelingModel::GetClass(unsigned int classIndex) const 
 {
   if(classIndex < m_Classes.size())  
     {
@@ -666,7 +821,7 @@ const ObjectLabelingApplicationModel::ObjectClassType & ObjectLabelingApplicatio
 }
 
 /** Get a class by its label */
-unsigned int ObjectLabelingApplicationModel::GetClassIndex(LabelType label) const 
+unsigned int ObjectLabelingModel::GetClassIndex(LabelType label) const 
 {
   ObjectClassVectorType::const_iterator beg = m_Classes.begin();
   ObjectClassVectorType::const_iterator it  = beg;
@@ -686,7 +841,7 @@ unsigned int ObjectLabelingApplicationModel::GetClassIndex(LabelType label) cons
 }
 
 /** Add a new class (label, color, and name auto-generated)*/
-void ObjectLabelingApplicationModel::AddClass()
+void ObjectLabelingModel::AddClass()
 {
   LabelType label = GetNextAvailableClassLabel();
 
@@ -709,7 +864,7 @@ void ObjectLabelingApplicationModel::AddClass()
 }
 
 /** Add a new class (label, color, and name already known)*/
-void ObjectLabelingApplicationModel::AddClass(const LabelType& label, const std::string& name, const ColorType& color)
+void ObjectLabelingModel::AddClass(const LabelType& label, const std::string& name, const ColorType& color)
 {
   ObjectClassType newClass;
   newClass.m_Label = label;
@@ -742,7 +897,7 @@ void ObjectLabelingApplicationModel::AddClass(const LabelType& label, const std:
 }
 
 
-ObjectLabelingApplicationModel::LabelType ObjectLabelingApplicationModel::GetNextAvailableClassLabel()
+ObjectLabelingModel::LabelType ObjectLabelingModel::GetNextAvailableClassLabel()
 {
   // Check for an available label
   ObjectClassVectorType::const_iterator it = m_Classes.begin();
@@ -779,7 +934,7 @@ ObjectLabelingApplicationModel::LabelType ObjectLabelingApplicationModel::GetNex
 }
 
 /** Remove the given class */
-void ObjectLabelingApplicationModel::RemoveClass(unsigned int classIndex)
+void ObjectLabelingModel::RemoveClass(unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -795,7 +950,7 @@ void ObjectLabelingApplicationModel::RemoveClass(unsigned int classIndex)
 }
 
 /** Clear all classes */
-void ObjectLabelingApplicationModel::ClearClasses()
+void ObjectLabelingModel::ClearClasses()
 {
   m_Classes.clear();
   this->ClearSelectedClass();
@@ -803,19 +958,19 @@ void ObjectLabelingApplicationModel::ClearClasses()
 }
 
 /** Get a const reference on the classes vector */
-const ObjectLabelingApplicationModel::ObjectClassVectorType & ObjectLabelingApplicationModel::GetClasses() const
+const ObjectLabelingModel::ObjectClassVectorType & ObjectLabelingModel::GetClasses() const
 {
   return m_Classes;
 }
 
 /** Is there any classes available ? */
-bool ObjectLabelingApplicationModel::HasClasses() const
+bool ObjectLabelingModel::HasClasses() const
 {
   return !m_Classes.empty();
 }
 
 /** Set class name */
-void ObjectLabelingApplicationModel::SetClassName(const char * name, unsigned int classIndex)
+void ObjectLabelingModel::SetClassName(const char * name, unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -825,7 +980,7 @@ void ObjectLabelingApplicationModel::SetClassName(const char * name, unsigned in
 }
 
 /** Set class label */
-void ObjectLabelingApplicationModel::SetClassLabel(const LabelType & label, unsigned int classIndex)
+void ObjectLabelingModel::SetClassLabel(const LabelType & label, unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -854,7 +1009,7 @@ void ObjectLabelingApplicationModel::SetClassLabel(const LabelType & label, unsi
 }
 
 /** Set class color */
-void ObjectLabelingApplicationModel::SetClassColor(const ColorType & color, unsigned int classIndex)
+void ObjectLabelingModel::SetClassColor(const ColorType & color, unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -864,7 +1019,7 @@ void ObjectLabelingApplicationModel::SetClassColor(const ColorType & color, unsi
 }
 
 /** Select sample */
-void ObjectLabelingApplicationModel::SelectSample(const IndexType & index)
+void ObjectLabelingModel::SelectSample(const IndexType & index)
 {
   // Check for a valid label image
   if(!m_LabeledImage)
@@ -876,7 +1031,7 @@ void ObjectLabelingApplicationModel::SelectSample(const IndexType & index)
 
   this->SelectSample(label);
 }
-void ObjectLabelingApplicationModel::SelectSample(const LabelType & label)
+void ObjectLabelingModel::SelectSample(const LabelType & label)
 {
   m_SelectedLabel = label;
 
@@ -920,7 +1075,7 @@ void ObjectLabelingApplicationModel::SelectSample(const LabelType & label)
 }
 
 /** Is the given sample selected */
-bool ObjectLabelingApplicationModel::IsSampleSelected(const IndexType & index)
+bool ObjectLabelingModel::IsSampleSelected(const IndexType & index)
 {
 // Check for a valid label image
   if(!m_LabeledImage)
@@ -933,24 +1088,24 @@ bool ObjectLabelingApplicationModel::IsSampleSelected(const IndexType & index)
   return this->IsSampleSelected(label);
 
 }
-bool ObjectLabelingApplicationModel::IsSampleSelected(const LabelType & label)
+bool ObjectLabelingModel::IsSampleSelected(const LabelType & label)
 {
   return (m_SelectedLabel == label);
 }
 
-bool ObjectLabelingApplicationModel::IsSampleSelected()
+bool ObjectLabelingModel::IsSampleSelected()
 {
   return (m_SelectedLabel != itk::NumericTraits<LabelType>::max());
 }
 
-void ObjectLabelingApplicationModel::ClearSelectedSample()
+void ObjectLabelingModel::ClearSelectedSample()
 {
   m_SelectedLabel = itk::NumericTraits<LabelType>::max();
   m_SelectedPolygonNode->SetPolygonExteriorRing(PolygonType::New());
   this->NotifyAll("Update");
 }
 
-void ObjectLabelingApplicationModel::IndexClicked(const IndexType & index)
+void ObjectLabelingModel::IndexClicked(const IndexType & index)
 {
   // If there is a class selected
   if(this->HasSelectedClass())
@@ -973,7 +1128,7 @@ void ObjectLabelingApplicationModel::IndexClicked(const IndexType & index)
     }
 }
 
-void ObjectLabelingApplicationModel::SelectClass(unsigned int classIndex)
+void ObjectLabelingModel::SelectClass(unsigned int classIndex)
 {
   if(classIndex < m_Classes.size())
     {
@@ -987,19 +1142,19 @@ void ObjectLabelingApplicationModel::SelectClass(unsigned int classIndex)
     }
 }
 
-void ObjectLabelingApplicationModel::ClearSelectedClass()
+void ObjectLabelingModel::ClearSelectedClass()
 {
   m_SelectedClass = 0;
   m_HasSelectedClass = false;
   this->NotifyAll("Update");
 }
 
-bool ObjectLabelingApplicationModel::HasSelectedClass()
+bool ObjectLabelingModel::HasSelectedClass()
 {
   return m_HasSelectedClass;
 }
 
-unsigned int ObjectLabelingApplicationModel::GetSelectedClass()
+unsigned int ObjectLabelingModel::GetSelectedClass()
 {
   if(!m_HasSelectedClass)
     {
@@ -1008,14 +1163,14 @@ unsigned int ObjectLabelingApplicationModel::GetSelectedClass()
   return m_SelectedClass;
 }
 
-void ObjectLabelingApplicationModel::SaveSamplesToXMLFile(const char * fname)
+void ObjectLabelingModel::SaveSamplesToXMLFile(const char * fname)
 {
   TiXmlDocument doc;
 
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = new TiXmlElement( "ObjectLabelingApplicationClasses" );
+  TiXmlElement * root = new TiXmlElement( "ObjectLabelingClasses" );
   doc.LinkEndChild( root );
 
   TiXmlElement * sources = new TiXmlElement( "Sources" );
@@ -1064,7 +1219,7 @@ void ObjectLabelingApplicationModel::SaveSamplesToXMLFile(const char * fname)
 }
 
 
-void ObjectLabelingApplicationModel::SaveClassificationParametersToXMLFile(const char * fname)
+void ObjectLabelingModel::SaveClassificationParametersToXMLFile(const char * fname)
 {
   itk::OStringStream oss;
 
@@ -1080,7 +1235,7 @@ void ObjectLabelingApplicationModel::SaveClassificationParametersToXMLFile(const
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );  
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = new TiXmlElement( "ObjectLabelingApplicationClassificationParameters" );
+  TiXmlElement * root = new TiXmlElement( "ObjectLabelingClassificationParameters" );
   doc.LinkEndChild( root );
 
   // The svm model file
@@ -1185,7 +1340,7 @@ void ObjectLabelingApplicationModel::SaveClassificationParametersToXMLFile(const
   doc.SaveFile( fname );
 }
 
-void ObjectLabelingApplicationModel::LoadSamplesFromXMLFile(const char * fname)
+void ObjectLabelingModel::LoadSamplesFromXMLFile(const char * fname)
 {
   // Currently tested only from a fresh new class list (just after importing the images)
   if (m_Classes.size() > 0)
@@ -1200,7 +1355,7 @@ void ObjectLabelingApplicationModel::LoadSamplesFromXMLFile(const char * fname)
     }
 
   TiXmlHandle hDoc(&doc);
-  TiXmlHandle classes = hDoc.FirstChildElement("ObjectLabelingApplicationClasses").FirstChildElement("Classes");
+  TiXmlHandle classes = hDoc.FirstChildElement("ObjectLabelingClasses").FirstChildElement("Classes");
 
   for( TiXmlElement* currentClass = classes.FirstChildElement("Class").ToElement();
        currentClass != NULL;
@@ -1261,7 +1416,7 @@ void ObjectLabelingApplicationModel::LoadSamplesFromXMLFile(const char * fname)
     this->NotifyAll("Update");
 }
 
-void ObjectLabelingApplicationModel::SaveColorsToAsciiFile(const char * fname)
+void ObjectLabelingModel::SaveColorsToAsciiFile(const char * fname)
 {
   std::ofstream ofs;
   ofs.open(fname);
@@ -1284,7 +1439,7 @@ void ObjectLabelingApplicationModel::SaveColorsToAsciiFile(const char * fname)
   ofs.close();
 }
 
-void ObjectLabelingApplicationModel::SaveClassificationGraph(const char * fname)
+void ObjectLabelingModel::SaveClassificationGraph(const char * fname)
 {
   std::ofstream ofs;
   ofs.open(fname);
@@ -1347,7 +1502,7 @@ void ObjectLabelingApplicationModel::SaveClassificationGraph(const char * fname)
 
 
 
-void ObjectLabelingApplicationModel::ComputeFeaturesStatistics()
+void ObjectLabelingModel::ComputeFeaturesStatistics()
 {
   std::cout<<"Computing statistics ..."<<std::endl;
   m_FeaturesMeans.clear();
@@ -1405,7 +1560,7 @@ void ObjectLabelingApplicationModel::ComputeFeaturesStatistics()
   std::cout<<"Done."<<std::endl;
 }
 
-void ObjectLabelingApplicationModel::SaveClassification()
+void ObjectLabelingModel::SaveClassification()
 {
 
 //   Classify();
@@ -1421,7 +1576,7 @@ void ObjectLabelingApplicationModel::SaveClassification()
   
 }
 
-void ObjectLabelingApplicationModel::EstimateCentroids()
+void ObjectLabelingModel::EstimateCentroids()
 {
   std::cout<<"Computing Kmeans centroids ..." <<std::endl;
   std::cout<<"Number of classes: "<<m_Classes.size()<<std::endl;
@@ -1525,7 +1680,7 @@ void ObjectLabelingApplicationModel::EstimateCentroids()
   std::cout<<"Done."<<std::endl;
 }
 
-void ObjectLabelingApplicationModel::BuildSampleList()
+void ObjectLabelingModel::BuildSampleList()
 {
   std::cout<<"Building samples list ..."<<std::endl;
 
@@ -1551,7 +1706,7 @@ void ObjectLabelingApplicationModel::BuildSampleList()
   std::cout<<"Done."<<std::endl;
 }
 
-void ObjectLabelingApplicationModel::BuildTrainingSampleList()
+void ObjectLabelingModel::BuildTrainingSampleList()
 {
   std::cout<<"Building training samples list ..."<<std::endl;
   // Clear previous samples
@@ -1590,7 +1745,7 @@ void ObjectLabelingApplicationModel::BuildTrainingSampleList()
   std::cout<<"Done."<<std::endl;
 }
 
-void ObjectLabelingApplicationModel::ClearMarginSamples()
+void ObjectLabelingModel::ClearMarginSamples()
 {
   std::cout<<"Erase any previous margin sampled polygons ..."<<std::endl;
 
@@ -1609,7 +1764,7 @@ void ObjectLabelingApplicationModel::ClearMarginSamples()
 }
 
 
-void ObjectLabelingApplicationModel::SampleMargin()
+void ObjectLabelingModel::SampleMargin()
 {
  
   this->ClearMarginSamples();
@@ -1676,7 +1831,7 @@ void ObjectLabelingApplicationModel::SampleMargin()
   this->NotifyAll("Update");
 }
 
-void ObjectLabelingApplicationModel::Classify()
+void ObjectLabelingModel::Classify()
 {
   // Build the sample lists
   if(m_UseContext)
@@ -1788,13 +1943,13 @@ void ObjectLabelingApplicationModel::Classify()
    this->SaveClassification();
 }
 
-void ObjectLabelingApplicationModel::ClearClassification()
+void ObjectLabelingModel::ClearClassification()
 {
    m_VisualizationModel->GetLayerByName("Classification")->SetVisible(false);
    m_VisualizationModel->Update();
 }
 
-void ObjectLabelingApplicationModel::ChangeFeatureState(const std::string& fname, bool state)
+void ObjectLabelingModel::ChangeFeatureState(const std::string& fname, bool state)
 {
 //   std::cout<<"Trying "<<fname<<std::endl;
   if(m_AvailableFeatures.count(fname)>0)
@@ -1808,7 +1963,7 @@ void ObjectLabelingApplicationModel::ChangeFeatureState(const std::string& fname
     }
 }
 
-void ObjectLabelingApplicationModel::FillContextDescription(VectorType & vect, const LabelType & label)
+void ObjectLabelingModel::FillContextDescription(VectorType & vect, const LabelType & label)
 {
   DistanceType::Pointer distCalculator = DistanceType::New();
   unsigned int sampleSize = vect.Size() + m_CentroidsVector.size();
@@ -1853,7 +2008,7 @@ void ObjectLabelingApplicationModel::FillContextDescription(VectorType & vect, c
     }
 }
 
-void ObjectLabelingApplicationModel::ChangeClassificationOpacity(double opacity)
+void ObjectLabelingModel::ChangeClassificationOpacity(double opacity)
 {
   BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
   blender->SetAlpha(opacity);
@@ -1861,7 +2016,7 @@ void ObjectLabelingApplicationModel::ChangeClassificationOpacity(double opacity)
   m_VisualizationModel->Update();
 }
 
-void ObjectLabelingApplicationModel::UpdateViewerDisplay(std::vector<unsigned int> ch)
+void ObjectLabelingModel::UpdateViewerDisplay(std::vector<unsigned int> ch)
 {
   if(m_VisualizationModel->GetNumberOfLayers() != 2 )
     {
@@ -1874,7 +2029,7 @@ void ObjectLabelingApplicationModel::UpdateViewerDisplay(std::vector<unsigned in
 }
 
 
-ObjectLabelingApplicationModel::VectorType ObjectLabelingApplicationModel::BuildSample(const LabelObjectType * lo) const
+ObjectLabelingModel::VectorType ObjectLabelingModel::BuildSample(const LabelObjectType * lo) const
 {
 
   // Compute the sample size

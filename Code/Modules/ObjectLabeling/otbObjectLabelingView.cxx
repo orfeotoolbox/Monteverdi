@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbObjectLabelingApplicationView_cxx
-#define __otbObjectLabelingApplicationView_cxx
+#ifndef __otbObjectLabelingView_cxx
+#define __otbObjectLabelingView_cxx
 
-#include "otbObjectLabelingApplicationView.h"
+#include "otbObjectLabelingView.h"
 
 #include "otbMsgReporter.h"
 
@@ -28,10 +28,10 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-ObjectLabelingApplicationView::ObjectLabelingApplicationView() : m_Controller(), m_Model(), m_ImageView(), m_PixelView(), m_VectorDataGlComponents()
+ObjectLabelingView::ObjectLabelingView() : m_Controller(), m_Model(), m_ImageView(), m_PixelView(), m_VectorDataGlComponents()
 {
   // Get the model
-  m_Model = ObjectLabelingApplicationModel::GetInstance();
+  m_Model = ObjectLabelingModel::GetInstance();
 
 
   // Build the visualization part
@@ -42,7 +42,7 @@ ObjectLabelingApplicationView::ObjectLabelingApplicationView() : m_Controller(),
 
 }
 
-ObjectLabelingApplicationView::~ObjectLabelingApplicationView()
+ObjectLabelingView::~ObjectLabelingView()
 {
   // Remove registered visualization components from the interface
   gFullResolution->remove(m_ImageView->GetFullWidget());
@@ -51,7 +51,7 @@ ObjectLabelingApplicationView::~ObjectLabelingApplicationView()
   gPixelDescription->remove(m_PixelView->GetPixelDescriptionWidget());
 }
 
-void ObjectLabelingApplicationView::Build()
+void ObjectLabelingView::Build()
 {
   m_Model->RegisterListener(this);
 
@@ -106,7 +106,7 @@ void ObjectLabelingApplicationView::Build()
     }
 
   // Build the fltk code
-  ObjectLabelingApplicationGUI::Build();
+  ObjectLabelingGUI::Build();
 
   // Register controllers
   m_ImageView->SetController(m_WidgetsController);
@@ -144,7 +144,7 @@ void ObjectLabelingApplicationView::Build()
   this->RefreshInterface();
 }
 
-void ObjectLabelingApplicationView::UpdateViewerSetup()
+void ObjectLabelingView::UpdateViewerSetup()
 {
   if(!m_Model->GetVectorImage())
     {
@@ -189,17 +189,17 @@ void ObjectLabelingApplicationView::UpdateViewerSetup()
   wViewerSetupWindow->redraw();
 }
 
-void ObjectLabelingApplicationView::SetController(ObjectLabelingApplicationControllerInterface * controller)
+void ObjectLabelingView::SetController(ObjectLabelingControllerInterface * controller)
 {
   m_Controller = controller;
 }
 
-void ObjectLabelingApplicationView::SetWidgetsController(ImageWidgetController * controller)
+void ObjectLabelingView::SetWidgetsController(ImageWidgetController * controller)
 {
   m_WidgetsController = controller; 
 }
 
-void ObjectLabelingApplicationView::Notify(const std::string & event)
+void ObjectLabelingView::Notify(const std::string & event)
 {
   if(event == "Update")
     {
@@ -210,7 +210,7 @@ void ObjectLabelingApplicationView::Notify(const std::string & event)
 
 }
 
-void ObjectLabelingApplicationView::RefreshVisualization()
+void ObjectLabelingView::RefreshVisualization()
 {
   // Apply spacing to all components
   dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(1))->SetOrigin(m_Model->GetOrigin());
@@ -254,9 +254,9 @@ void ObjectLabelingApplicationView::RefreshVisualization()
 }
 
 
-void ObjectLabelingApplicationView::RefreshInterface()
+void ObjectLabelingView::RefreshInterface()
 {
-  typedef ObjectLabelingApplicationModel::ObjectClassVectorType::const_iterator ClassesIteratorType;
+  typedef ObjectLabelingModel::ObjectClassVectorType::const_iterator ClassesIteratorType;
 
   ClassesIteratorType it = m_Model->GetClasses().begin();
 
@@ -298,8 +298,8 @@ void ObjectLabelingApplicationView::RefreshInterface()
 
   // Features update 
   lFeatures->clear();
-  ObjectLabelingApplicationModel::AvailableFeaturesMapType myvector = m_Model->GetAvailableFeatures();
-  ObjectLabelingApplicationModel::AvailableFeaturesMapType::const_iterator fit = myvector.begin();
+  ObjectLabelingModel::AvailableFeaturesMapType myvector = m_Model->GetAvailableFeatures();
+  ObjectLabelingModel::AvailableFeaturesMapType::const_iterator fit = myvector.begin();
 
   while(fit != myvector.end())
     {
@@ -311,7 +311,7 @@ void ObjectLabelingApplicationView::RefreshInterface()
   int lvalue = lMarginSamples->value();
   lMarginSamples->clear();
 
-  ObjectLabelingApplicationModel::LabelVectorType::const_iterator lit = m_Model->GetMarginSamples().begin();
+  ObjectLabelingModel::LabelVectorType::const_iterator lit = m_Model->GetMarginSamples().begin();
   
 
   while(lit != m_Model->GetMarginSamples().end())
@@ -338,7 +338,7 @@ void ObjectLabelingApplicationView::RefreshInterface()
   bUseContext->value(m_Model->GetUseContext());
 }
 
-void ObjectLabelingApplicationView::UpdateClassInformation()
+void ObjectLabelingView::UpdateClassInformation()
 {
   if(m_Model->HasSelectedClass())
     {
@@ -357,7 +357,7 @@ void ObjectLabelingApplicationView::UpdateClassInformation()
     bClassColor->color(flColor);    
 
     // Update the sample list
-    ObjectLabelingApplicationModel::ObjectClassType::LabelVectorType::const_iterator sit = m_Model->GetClass(classIndex).m_Samples.begin();
+    ObjectLabelingModel::ObjectClassType::LabelVectorType::const_iterator sit = m_Model->GetClass(classIndex).m_Samples.begin();
     
     int objectIndex = lObjects->value();
 
@@ -391,7 +391,7 @@ void ObjectLabelingApplicationView::UpdateClassInformation()
   lClasses->redraw();  
 }
 
-void ObjectLabelingApplicationView::Classes()
+void ObjectLabelingView::Classes()
 {
   if(lClasses->value() == 0)
     {
@@ -403,7 +403,7 @@ void ObjectLabelingApplicationView::Classes()
     }
 }
 
-void ObjectLabelingApplicationView::AddClass()
+void ObjectLabelingView::AddClass()
 {
 //  VectorDataGlComponentType::Pointer glComp = VectorDataGlComponentType::New();
 //  m_ImageView->GetFullWidget()->AddGlComponent(glComp);
@@ -414,7 +414,7 @@ void ObjectLabelingApplicationView::AddClass()
 
 }
 
-void ObjectLabelingApplicationView::RemoveClass()
+void ObjectLabelingView::RemoveClass()
 {
   if(m_Model->HasSelectedClass())
     {
@@ -426,7 +426,7 @@ void ObjectLabelingApplicationView::RemoveClass()
     }
 }
 
-void ObjectLabelingApplicationView::ClearClasses()
+void ObjectLabelingView::ClearClasses()
 {
 //  for(unsigned int i = 0; i<m_Model->GetNumberOfClasses();++i)
 //    {
@@ -438,7 +438,7 @@ void ObjectLabelingApplicationView::ClearClasses()
   m_Controller->ClearClasses();
 }
 
-void ObjectLabelingApplicationView::ClassColor()
+void ObjectLabelingView::ClassColor()
 {
    if(m_Model->HasSelectedClass())
     {
@@ -451,7 +451,7 @@ void ObjectLabelingApplicationView::ClassColor()
      
      if (ok)
        {
-       ObjectLabelingApplicationModel::ColorType color;
+       ObjectLabelingModel::ColorType color;
        color[0]=r;
        color[1]=g;
        color[2]=b;
@@ -461,25 +461,25 @@ void ObjectLabelingApplicationView::ClassColor()
     }
   
 }
-void ObjectLabelingApplicationView::ClassLabel()
+void ObjectLabelingView::ClassLabel()
 {
   if(m_Model->HasSelectedClass())
     {
     m_Controller->ChangeClassLabel(m_Model->GetSelectedClass(),atoi(vClassLabel->value()));
     }
 }
-void ObjectLabelingApplicationView::ClassName()
+void ObjectLabelingView::ClassName()
 {
   if(m_Model->HasSelectedClass())
     {
     m_Controller->ChangeClassName(m_Model->GetSelectedClass(),vClassName->value());
     } 
 }
-void ObjectLabelingApplicationView::Objects()
+void ObjectLabelingView::Objects()
 {
   m_Controller->SelectObject(lObjects->value()-1);
 }
-void ObjectLabelingApplicationView::RemoveObject()
+void ObjectLabelingView::RemoveObject()
 {
   if(lObjects->value()>0)
     {
@@ -488,13 +488,13 @@ void ObjectLabelingApplicationView::RemoveObject()
     }
 }
 
-void ObjectLabelingApplicationView::ClearObjects()
+void ObjectLabelingView::ClearObjects()
 {
   m_Controller->ClearObjects();
 }
 
-void ObjectLabelingApplicationView::ObjectFocus(){}
-void ObjectLabelingApplicationView::ImageFileChooser()
+void ObjectLabelingView::ObjectFocus(){}
+void ObjectLabelingView::ImageFileChooser()
 {
   const char * filename = NULL;
 
@@ -508,7 +508,7 @@ void ObjectLabelingApplicationView::ImageFileChooser()
   vImagePath->value(filename);
 }
 
-void ObjectLabelingApplicationView::LabelsFileChooser()
+void ObjectLabelingView::LabelsFileChooser()
 {
   const char * filename = NULL;
   
@@ -523,7 +523,7 @@ void ObjectLabelingApplicationView::LabelsFileChooser()
 
 }
 
-void ObjectLabelingApplicationView::SaveSamplesToXMLFile()
+void ObjectLabelingView::SaveSamplesToXMLFile()
 {
   
   const char * filename = NULL;
@@ -539,7 +539,7 @@ void ObjectLabelingApplicationView::SaveSamplesToXMLFile()
   m_Controller->SaveSamplesToXMLFile(filename);
 }
 
-void ObjectLabelingApplicationView::SaveClassificationParametersToXMLFile()
+void ObjectLabelingView::SaveClassificationParametersToXMLFile()
 {
   
   const char * filename = NULL;
@@ -555,7 +555,7 @@ void ObjectLabelingApplicationView::SaveClassificationParametersToXMLFile()
   m_Controller->SaveClassificationParametersToXMLFile(filename);
 }
 
-void ObjectLabelingApplicationView::LoadSamplesFromXMLFile()
+void ObjectLabelingView::LoadSamplesFromXMLFile()
 {
   
   const char * filename = NULL;
@@ -571,7 +571,7 @@ void ObjectLabelingApplicationView::LoadSamplesFromXMLFile()
   m_Controller->LoadSamplesFromXMLFile(filename);
 }
 
-void ObjectLabelingApplicationView::SaveColorsToAsciiFile()
+void ObjectLabelingView::SaveColorsToAsciiFile()
 {
     
   const char * filename = fl_file_chooser("Pick a file", "*.*",".");
@@ -585,12 +585,12 @@ void ObjectLabelingApplicationView::SaveColorsToAsciiFile()
   m_Controller->SaveColorsToAsciiFile(filename);
 }
 
-void ObjectLabelingApplicationView::SaveClassification()
+void ObjectLabelingView::SaveClassification()
 {
   m_Controller->SaveClassification();
 }
 
-void ObjectLabelingApplicationView::SaveClassificationGraph()
+void ObjectLabelingView::SaveClassificationGraph()
 {
     
   const char * filename = fl_file_chooser("Pick a file", "*.*",".");
@@ -604,7 +604,7 @@ void ObjectLabelingApplicationView::SaveClassificationGraph()
   m_Controller->SaveClassificationGraph(filename);
 }
 
-void ObjectLabelingApplicationView::ExportClassificationToGIS()
+void ObjectLabelingView::ExportClassificationToGIS()
 {
   GISExportInfo gisExportInfo;
   gisExportInfo.host = "localhost";
@@ -616,7 +616,7 @@ void ObjectLabelingApplicationView::ExportClassificationToGIS()
   m_Controller->ExportClassificationToGIS(gisExportInfo);
 }
 
-// void ObjectLabelingApplicationView::FileChooserOk()
+// void ObjectLabelingView::FileChooserOk()
 // { 
 //   wImagesSelectionWindow->hide();
 //   bBusy->show();
@@ -625,14 +625,14 @@ void ObjectLabelingApplicationView::ExportClassificationToGIS()
 //   bBusy->hide();
 // }
 
-void ObjectLabelingApplicationView::Exit()
+void ObjectLabelingView::Exit()
 {
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
   wImagesSelectionWindow->hide();
 }
 
-void ObjectLabelingApplicationView::SampleMargin()
+void ObjectLabelingView::SampleMargin()
 {
   bBusy->show();
   Fl::flush();
@@ -640,52 +640,52 @@ void ObjectLabelingApplicationView::SampleMargin()
   bBusy->hide();
 }
 
-void ObjectLabelingApplicationView::ChangeKernelType()
+void ObjectLabelingView::ChangeKernelType()
 {
   m_Controller->ChangeKernelType(bSVMKernel->value());
 }
 
-void ObjectLabelingApplicationView::ChangeNumberOfCrossValidationFolders()
+void ObjectLabelingView::ChangeNumberOfCrossValidationFolders()
 {
   m_Controller->ChangeNumberOfCrossValidationFolders(bNbCvFolders->value());
 }
 
-void ObjectLabelingApplicationView::ChangeParametersOptimisation()
+void ObjectLabelingView::ChangeParametersOptimisation()
 {
   m_Controller->ChangeParametersOptimisation(bSVMOptimization->value());
 }
 
-void ObjectLabelingApplicationView::ChangeNumberOfCoarseSteps()
+void ObjectLabelingView::ChangeNumberOfCoarseSteps()
 {
   m_Controller->ChangeNumberOfCoarseSteps(bSVMNbCoarseSteps->value());
 }
 
-void ObjectLabelingApplicationView::ChangeNumberOfFineSteps()
+void ObjectLabelingView::ChangeNumberOfFineSteps()
 {
   m_Controller->ChangeNumberOfFineSteps(bSVMNbFineSteps->value());
 }
 
-void ObjectLabelingApplicationView::ChangeNumberOfMarginSamples()
+void ObjectLabelingView::ChangeNumberOfMarginSamples()
 {
   m_Controller->ChangeNumberOfMarginSamples(bALNumberOfSamples->value());
 }
 
-void ObjectLabelingApplicationView::ChangeMarginColor()
+void ObjectLabelingView::ChangeMarginColor()
 {
 // TODO: Implement this
 }
 
-void ObjectLabelingApplicationView::FocusOnMarginSample()
+void ObjectLabelingView::FocusOnMarginSample()
 {
   m_Controller->FocusOnMarginSample(lMarginSamples->value());
 }
 
-void ObjectLabelingApplicationView::ClearMarginSamples()
+void ObjectLabelingView::ClearMarginSamples()
 {
   m_Controller->ClearMarginSamples();
 }
 
-void ObjectLabelingApplicationView::Classify()
+void ObjectLabelingView::Classify()
 {
   bBusy->show();
   Fl::flush();
@@ -698,7 +698,7 @@ void ObjectLabelingApplicationView::Classify()
   bBusy->hide();
 }
 
-void ObjectLabelingApplicationView::ClearClassification()
+void ObjectLabelingView::ClearClassification()
 {
   for(VectorDataGlComponentVectorType::iterator  git = m_VectorDataGlComponents.begin();
       git!=m_VectorDataGlComponents.end();++git)
@@ -708,7 +708,7 @@ void ObjectLabelingApplicationView::ClearClassification()
   m_Controller->ClearClassification();
 }
 
-void ObjectLabelingApplicationView::Features()
+void ObjectLabelingView::Features()
 {
   // Walk the feature list
   for(int i = 1; i<=lFeatures->nitems();++i)
@@ -725,17 +725,17 @@ void ObjectLabelingApplicationView::Features()
     }
 }
 
-void ObjectLabelingApplicationView::ViewerSetupOkCallback()
+void ObjectLabelingView::ViewerSetupOkCallback()
 {
   m_Controller->UpdateViewerDisplay();
 }
 
-void ObjectLabelingApplicationView::UseContext()
+void ObjectLabelingView::UseContext()
 {
   m_Controller->SetUseContext(bUseContext->value());
 }
 
-void ObjectLabelingApplicationView::ClassificationOpacity()
+void ObjectLabelingView::ClassificationOpacity()
 {
   m_Controller->ChangeClassificationOpacity(bClassificationOpacity->value());
 }
