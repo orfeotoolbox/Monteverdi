@@ -22,6 +22,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "base/ossimFilename.h"
 #include "otbFltkFilterWatcher.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 #ifdef OTB_USE_PQXX
 #include "otbPostGISConnectionImplementation.h"
@@ -334,7 +336,7 @@ ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(),
 								   m_LabeledImage(), m_VectorImage(), m_LabelMap(), 
 								   m_SelectedLabel(itk::NumericTraits<LabelType>::max()), 
 								   m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(), 
-								   m_SelectedPolygonNode(), m_AvailableFeatures()
+					                           m_SelectedPolygonNode(), m_AvailableFeatures(), m_BandId()
 {
   m_VisualizationModel    = VisualizationModelType::New();
   m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -398,6 +400,10 @@ ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(),
 
   // Do we use context ?
   m_UseContext = true;
+  
+  // Init band id list : B=0, G=1, R=2, NIR=3
+  m_BandId[0] = 0;  m_BandId[1] = 1;
+  m_BandId[2] = 2;  m_BandId[3] = 3;
 }
 
 ObjectLabelingModel::~ObjectLabelingModel()
@@ -410,31 +416,31 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   // Size checking
   if(limage->GetLargestPossibleRegion() != vimage->GetLargestPossibleRegion())
     {
-    itkExceptionMacro(<<"Image and label map size are different, can not load data into the application.");
+      itkExceptionMacro(<<"Image and label map size are different, can not load data into the application.");
     }
 
   m_LabeledImage = limage;
   m_VectorImage  = vimage;
 
-  /*
   // Update origin and spacing
   m_Origin[0] = -m_VectorImage->GetOrigin()[0];
   m_Origin[1] = -m_VectorImage->GetOrigin()[1];
   m_Spacing[0] = 1/m_VectorImage->GetSpacing()[0];
   m_Spacing[1] = 1/m_VectorImage->GetSpacing()[1];
-*/
+
 
   // Generate the layer
   m_ImageGenerator = LayerGeneratorType::New();
   m_ImageGenerator->SetImage(m_VectorImage);
-  //m_ImageGenerator->GenerateQuicklookOff();
-  //m_ImageGenerator->SetQuicklook(m_VectorImage);
-  //m_ImageGenerator->SetSubsamplingRate(1);
+  m_ImageGenerator->GenerateQuicklookOff();
+  m_ImageGenerator->SetQuicklook(m_VectorImage);
+  m_ImageGenerator->SetSubsamplingRate(1);
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_ImageGenerator->GenerateLayer();
   
   m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();
 
+  this->InitBandIdList( vimage );
  
   /*
  m_Channels.clear();
@@ -459,6 +465,11 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 
   m_ImageGenerator->GetLayer()->SetName("Image");
 
+  m_Channels.clear();
+  m_Channels.push_back(m_BandId[2]); // R
+  m_Channels.push_back(m_BandId[1]); // G
+  m_Channels.push_back(m_BandId[0]); // B
+
   // Clear previous layers
   m_VisualizationModel->ClearLayers();
   m_PixelDescriptionModel->ClearLayers();
@@ -469,16 +480,16 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   std::cout<<"ici?"<<std::endl;
   m_VisualizationModel->Update();
   
-  m_Channels.clear();
-  m_Channels = m_ImageLayerRenderingFunction->GetChannelList();
-  std::cout<<"m_Channels :"<<std::endl;
-  std::cout<<"m_Channels.size(): "<<m_Channels.size()<<std::endl;
-  for(unsigned int p=0; p<m_Channels.size(); p++)
-    {
-      std::cout<<m_Channels.at(p)<<std::endl;
-    }
-  m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-  m_VisualizationModel->Update();
+//   m_Channels.clear();
+//   m_Channels = m_ImageLayerRenderingFunction->GetChannelList();
+//   std::cout<<"m_Channels :"<<std::endl;
+//   std::cout<<"m_Channels.size(): "<<m_Channels.size()<<std::endl;
+//   for(unsigned int p=0; p<m_Channels.size(); p++)
+//     {
+//       std::cout<<m_Channels.at(p)<<std::endl;
+//     }
+//   m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+//   m_VisualizationModel->Update();
   
   std::cout<<"ici?"<<std::endl;
   
@@ -497,37 +508,14 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   radiometricLabelMapFilter->SetInput2(m_VectorImage);
   
 
-  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==3 )
+  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
     {
-      radiometricLabelMapFilter->SetRedChannelIndex(2);
-      radiometricLabelMapFilter->SetGreenChannelIndex(1);
-      radiometricLabelMapFilter->SetBlueChannelIndex(0);
-      radiometricLabelMapFilter->SetNIRChannelIndex(2);
+      radiometricLabelMapFilter->SetRedChannelIndex(m_BandId[2]);
+      radiometricLabelMapFilter->SetGreenChannelIndex(m_BandId[1]);
+      radiometricLabelMapFilter->SetBlueChannelIndex(m_BandId[0]);
+      radiometricLabelMapFilter->SetNIRChannelIndex(m_BandId[3]);
     }
   
-  /*
-  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==3 )
-    {
-      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[2]);//2);
-      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);//1);
-      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);//0);
-      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[2]);//2);
-    }
-  else if(m_VectorImage->GetNumberOfComponentsPerPixel()==1)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==1)
-  {
-      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
-      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[0]);
-      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
-      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[0]);
-  }
-  else if(m_VectorImage->GetNumberOfComponentsPerPixel()==2)// && m_LabeledImage->GetNumberOfComponentsPerPixel()==1)
-  {
-      radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
-      radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);
-      radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
-      radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[1]);
-  }
-  */
   
  std::cout<<"pete?"<<std::endl;
   radiometricLabelMapFilter->Update();
@@ -611,6 +599,47 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 
  
 }
+
+
+
+void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
+{
+  if(vimage->GetNumberOfComponentsPerPixel() > 3)
+    {
+      std::vector<unsigned int> tempList;
+      // this list is used to set the NIR channel
+      // it is set as the fgirst remainded index (when R, G, B one are supressed of the list)
+      for(unsigned int i=0; i<vimage->GetNumberOfComponentsPerPixel(); i++)
+	{
+	  tempList.push_back(i);
+	}
+      // Look for bands id in metadata
+      ImageMetadataInterfaceBase::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(vimage->GetMetaDataDictionary());
+      // B band Id
+      m_BandId[0] = metadataInterface->GetDefaultBBand();
+      tempList.erase( tempList.begin()+ m_BandId[0]);
+      // G band Id
+      m_BandId[1] = metadataInterface->GetDefaultGBand();
+      tempList.erase( tempList.begin()+ m_BandId[1]);
+      // R band Id
+      m_BandId[2] = metadataInterface->GetDefaultRBand();
+      tempList.erase( tempList.begin()+ m_BandId[2]);
+      // NIR band Id
+      m_BandId[2] = tempList[0];
+    }
+  else if(vimage->GetNumberOfComponentsPerPixel() == 3)
+    {
+      m_BandId[0] = 0;
+      m_BandId[1] = 1;
+      m_BandId[2] = 2;
+      m_BandId[3] = 0;
+    }
+  else if(vimage->GetNumberOfComponentsPerPixel() == 2)
+    {
+      itkExceptionMacro("invalid input image. It must have more than 2 channels."<<std::endl<<"The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" one.");
+    }
+}
+
 
 
 /** Open an image with its associated label map */

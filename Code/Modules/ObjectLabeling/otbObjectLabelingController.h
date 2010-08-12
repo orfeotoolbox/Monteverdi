@@ -126,7 +126,6 @@ public:
   /** Get the widgets controller */
   itkGetObjectMacro(WidgetsController,WidgetsControllerType);
   
-
 protected:
   /** Constructor */
   ObjectLabelingController();

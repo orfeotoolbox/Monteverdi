@@ -11,7 +11,7 @@ class ObjectLabelingGUI {open
   } {
     Fl_Window wMainWindow {
       label {Object Labeling}
-      callback {this->Exit();} open selected
+      callback {this->Exit();}
       xywh {320 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
@@ -239,6 +239,11 @@ lFeatures->do_callback();}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}
           }
+          MenuItem {} {
+            label {Band setup}
+            callback {wBandSetup->show();} selected
+            xywh {10 10 30 20}
+          }
         }
       }
       Fl_Group gZoom {
@@ -260,7 +265,7 @@ lFeatures->do_callback();}
       }
     }
     Fl_Window wImagesSelectionWindow {
-      label {Images file chooser} open
+      label {Images file chooser}
       xywh {586 433 480 150} type Double color 7 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_File_Input vImagePath {
@@ -293,7 +298,7 @@ lFeatures->do_callback();}
       }
     }
     Fl_Window wViewerSetupWindow {
-      label {Viewer setup} open
+      label {Viewer setup}
       xywh {706 340 395 180} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
     } {
       Fl_Round_Button rViewerSetupGrayscaleMode {
@@ -354,6 +359,38 @@ ViewerSetupOkCallback();}
         label Cancel
         callback {wViewerSetupWindow->hide();}
         tooltip {Leave viewer set up interface without saving changes} xywh {215 141 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
+      }
+    }
+    Fl_Window wBandSetup {
+      label {Band Selection} open
+      xywh {280 426 370 145} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
+    } {
+      Fl_Input_Choice iBChannelId {
+        label {Blue channel} open
+        tooltip {Select band for blue channel in RGB composition} xywh {112 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
+      } {}
+      Fl_Input_Choice iGChannelId {
+        label {Green channel} open
+        tooltip {Select band for green channel in RGB composition} xywh {111 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
+      } {}
+      Fl_Input_Choice iRChannelId {
+        label {Red channel} open
+        tooltip {Select band for red channel in RGB composition} xywh {215 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
+      } {}
+      Fl_Input_Choice iNIRChannelId {
+        label {NIR channel} open
+        tooltip {Select band for blue channel in RGB composition} xywh {215 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
+      } {}
+      Fl_Return_Button bBadnSetupOk {
+        label Ok
+        callback {wBandSetup->hide();
+BandSetupOkCallback();}
+        tooltip {Save changes and leave viewer set up interface} xywh {90 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
+      }
+      Fl_Button bBandSetupCancel {
+        label Cancel
+        callback {wBandSetup->hide();}
+        tooltip {Leave viewer set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
       }
     }
   }
@@ -436,5 +473,7 @@ ViewerSetupOkCallback();}
   Function {ObjectLabelingGUI()} {open
   } {}
   Function {~ObjectLabelingGUI()} {open return_type virtual
+  } {}
+  Function {BandSetupOkCallback()} {open return_type {virtual void}
   } {}
 } 

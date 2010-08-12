@@ -118,68 +118,70 @@ public:
   itkNewMacro(Self);
 
   /** Algorithms typedef */
-  typedef      TypeManager::Floating_Point_Precision                             LabelType;
-  typedef      TypeManager::Floating_Point_Precision                             PixelType;
-  typedef      TypeManager::Floating_Point_Image                                 ImageType;
-  typedef      TypeManager::Floating_Point_VectorImage                           VectorImageType;
+  typedef TypeManager::Floating_Point_Precision   LabelType;
+  typedef TypeManager::Floating_Point_Precision   PixelType;
+  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
   
-  typedef      ImageType::IndexType                                              IndexType;
-  typedef      VectorImageType::PixelType                                        VectorPixelType;
+  typedef ImageType::IndexType                    IndexType;
+  typedef VectorImageType::PixelType              VectorPixelType;
   
-  typedef      AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType> LabelObjectType;
-  typedef otb::LabelMapWithAdjacency<LabelObjectType>                            LabelMapType;
-  typedef      LabelMapType::AdjacentLabelsContainerType                         AdjacentLabelsContainerType;
-  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<ImageType,LabelMapType>   LabelMapFilterType;
-  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                       ShapeLabelMapFilterType;
-  typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType> RadiometricLabelMapFilterType;
+  typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType> LabelObjectType;
+  typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
+  typedef LabelMapType::AdjacentLabelsContainerType                            AdjacentLabelsContainerType;
+  typedef LabelImageToLabelMapWithAdjacencyFilter<ImageType,LabelMapType>      LabelMapFilterType;
+  typedef ShapeAttributesLabelMapFilter<LabelMapType>                          ShapeLabelMapFilterType;
+  typedef RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType>    RadiometricLabelMapFilterType;
   
-  typedef      ObjectClass<LabelType>                                            ObjectClassType;
-  typedef      ObjectClassType::ColorType                                        ColorType;
-  typedef std::vector<ObjectClassType>                                           ObjectClassVectorType;
-  typedef      ObjectClassType::VectorDataType                                   VectorDataType;
-  typedef      VectorDataType::DataNodeType                                      DataNodeType;
-  typedef    VectorDataType::DataTreeType::TreeNodeType                          TreeNodeType;
-  typedef    ObjectClassType::LabelVectorType                                    LabelVectorType;
+  typedef ObjectClass<LabelType>                     ObjectClassType;
+  typedef ObjectClassType::ColorType                 ColorType;
+  typedef std::vector<ObjectClassType>               ObjectClassVectorType;
+  typedef ObjectClassType::VectorDataType            VectorDataType;
+  typedef VectorDataType::DataNodeType               DataNodeType;
+  typedef VectorDataType::DataTreeType::TreeNodeType TreeNodeType;
+  typedef ObjectClassType::LabelVectorType           LabelVectorType;
 
-  typedef otb::LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,ImageType> ClassLabelFilterType;
-  typedef otb::ChangeLabelImageFilter<ImageType,VectorImageType>                     ChangeLabelFilterType;
+  typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,ImageType> ClassLabelFilterType;
+  typedef ChangeLabelImageFilter<ImageType,VectorImageType>                     ChangeLabelFilterType;
 
   // Learning typedefs 
   typedef itk::VariableLengthVector<float>                                         VectorType;
   typedef itk::FixedArray<LabelType,1>                                             TrainingVectorType;
   typedef itk::Statistics::ListSample<VectorType>                                  ListSampleType;
   typedef itk::Statistics::ListSample<TrainingVectorType>                          TrainingListSampleType;
-  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,
+  typedef LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,
     ListSampleType,TrainingListSampleType>                                         ClassLabelMap2ListSampleFilterType;
-  typedef otb::LabelMapToSampleListFilter<LabelMapType,ListSampleType>             LabelMap2ListSampleFilterType;
+  typedef LabelMapToSampleListFilter<LabelMapType,ListSampleType>                  LabelMap2ListSampleFilterType;
   typedef std::map<std::string,bool>                                               AvailableFeaturesMapType;
 
   // SVMs
-  typedef otb::Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
-  typedef otb::SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
-    MeasurementVectorFunctorType>                                                  SVMEstimatorType;
-  typedef otb::SVMClassifier<ListSampleType,LabelType>                             SVMClassifierType;
-  typedef otb::SVMMarginSampler<ListSampleType,SVMClassifierType::SVMModelType>    MarginSamplerType;
+  typedef Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
+  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
+    MeasurementVectorFunctorType>                                             SVMEstimatorType;
+  typedef SVMClassifier<ListSampleType,LabelType>                             SVMClassifierType;
+  typedef SVMMarginSampler<ListSampleType,SVMClassifierType::SVMModelType>    MarginSamplerType;
 
   // KMeans
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
-  typedef  TreeGeneratorType::KdTreeType                                           TreeType;
+  typedef TreeGeneratorType::KdTreeType                                            TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
   typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
 
+  /** Badn id list typedef */
+  typedef itk::FixedArray<unsigned int, 4>                               BandIdListType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef      Image<RGBPixelType,2>                                     RGBImageType;
-  typedef      ImageLayer<VectorImageType,RGBImageType>                  LayerType;
-  typedef      ImageLayer<ImageType,RGBImageType>                        LabeledLayerType;
-  typedef      ImageLayerGenerator<LayerType>                            LayerGeneratorType;
-  typedef      ImageLayerGenerator<LabeledLayerType>                     LabeledLayerGeneratorType;
-  typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
-  typedef      PixelDescriptionModel<RGBImageType>                       PixelDescriptionModelType;
-  typedef      DataNodeType::PolygonType                                 PolygonType;
-  typedef otb::SimplifyPathFunctor<PolygonType,PolygonType>              SimplifyPolygonFunctorType;
+  typedef Image<RGBPixelType,2>                                          RGBImageType;
+  typedef ImageLayer<VectorImageType,RGBImageType>                       LayerType;
+  typedef ImageLayer<ImageType,RGBImageType>                             LabeledLayerType;
+  typedef ImageLayerGenerator<LayerType>                                 LayerGeneratorType;
+  typedef ImageLayerGenerator<LabeledLayerType>                          LabeledLayerGeneratorType;
+  typedef ImageLayerRenderingModel<RGBImageType>                         VisualizationModelType;
+  typedef PixelDescriptionModel<RGBImageType>                            PixelDescriptionModelType;
+  typedef DataNodeType::PolygonType                                      PolygonType;
+  typedef SimplifyPathFunctor<PolygonType,PolygonType>                   SimplifyPolygonFunctorType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef LayerGeneratorType::ImageLayerType::RenderingFunctionType      RenderingFunctionType;
 
@@ -372,8 +374,12 @@ public:
   /** Change displayed channel order */
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
 
-  
+  /** Update band list. */
+  void InitBandIdList(VectorImageType* vimage);
 
+  /** Band id list accessors. */
+  itkSetMacro(BandId, BandIdListType);
+  itkGetMacro(BandId, BandIdListType);
 
 protected:
   /** Constructor */
@@ -494,6 +500,10 @@ private:
 
   ImageType::Pointer           m_LabeledOutput;
   VectorImageType::Pointer     m_ColoredOutput;
+  
+  /** Band Id list (0:B, 1:G, 2:R, 3:NIR)*/
+  BandIdListType m_BandId;
+
 };
 }
 #endif

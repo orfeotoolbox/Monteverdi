@@ -82,12 +82,12 @@ void ObjectLabelingModule::Run()
   std::cout<<"go simple go"<<std::endl;
        lImage = this->GetInputData<ImageType>("LabeledImage");
      }
-   
 
+ 
    if(fpvImage.IsNotNull() && lImage.IsNotNull())
      {
      // Process the input as an FloatingVectorImageType
-     m_View->Build();
+    m_View->Build();
      fpvImage->UpdateOutputInformation();
      lImage->UpdateOutputInformation();
      m_Controller->OpenImage(fpvImage,lImage);

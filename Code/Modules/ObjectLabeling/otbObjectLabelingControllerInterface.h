@@ -83,9 +83,13 @@ public:
     m_Model = model;
   }
 
+  /** Get/Set boolean used to know if the GUI is locked or not. */
+  itkSetMacro(IsLockedGUI, bool);
+  itkGetMacro(IsLockedGUI, bool);
+
 protected:
   /** Constructor */
-  ObjectLabelingControllerInterface()
+  ObjectLabelingControllerInterface() : m_IsLockedGUI(false)
   {
     m_Model = ObjectLabelingModel::GetInstance();
   }
@@ -98,6 +102,10 @@ protected:
 private:
   ObjectLabelingControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+ /** Boolean used to know if the GUI is locked or not. */
+  bool m_IsLockedGUI;
+
 };
 } // end namespace otb
 

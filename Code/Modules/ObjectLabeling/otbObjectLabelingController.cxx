@@ -27,7 +27,7 @@ namespace otb
 
 ObjectLabelingController::ObjectLabelingController() : m_View(), m_WidgetsController(), 
 									     m_ResizingHandler(),m_ChangeScaleHandler(), m_ChangeRegionHandler(), 
-									     m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler(), m_MouseClickHandler()
+						       m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler(), m_MouseClickHandler()
 {
   // Build the widgets controller
   m_WidgetsController         = WidgetsControllerType::New();
@@ -91,6 +91,20 @@ void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* lim
       oss<<err.GetDescription();
       MsgReporter::GetInstance()->SendError(oss.str());
     }
+  
+  for(unsigned int i=0;i<vimage->GetNumberOfComponentsPerPixel(); i++)
+    {
+      itk::OStringStream oss;
+      oss<<i;
+      m_View->iBChannelId->add(oss.str().c_str());
+      m_View->iGChannelId->add(oss.str().c_str());
+      m_View->iRChannelId->add(oss.str().c_str());
+      m_View->iNIRChannelId->add(oss.str().c_str());
+    }
+  m_View->iBChannelId->value( m_Model->GetBandId()[0] );
+  m_View->iGChannelId->value( m_Model->GetBandId()[1] );  
+  m_View->iRChannelId->value( m_Model->GetBandId()[2] );
+  m_View->iNIRChannelId->value( m_Model->GetBandId()[3] );
 }
 
 

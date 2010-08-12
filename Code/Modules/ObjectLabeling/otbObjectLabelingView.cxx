@@ -129,6 +129,7 @@ void ObjectLabelingView::Build()
 
  // Show and refresh the interface
   this->wMainWindow->show();
+  //this->wBandSetupMainWindow->show();
 
   m_ImageView->GetZoomWidget()->show();
   m_ImageView->GetFullWidget()->show();
@@ -728,6 +729,21 @@ void ObjectLabelingView::Features()
 void ObjectLabelingView::ViewerSetupOkCallback()
 {
   m_Controller->UpdateViewerDisplay();
+}
+
+void ObjectLabelingView::BandSetupOkCallback()
+{
+  //m_Controller->
+  std::cout<<"B: "<<this->iBChannelId->value()<<std::endl;
+  std::cout<<"G: "<<this->iGChannelId->value()<<std::endl;
+  std::cout<<"R: "<<this->iRChannelId->value()<<std::endl;
+  std::cout<<"NIR: "<<this->iNIRChannelId->value()<<std::endl;
+  // Release the interface
+  m_Controller->SetIsLockedGUI(false);
+  // hide the window
+  this->wBandSetup->hide();
+  // show the main window
+  this->wMainWindow->show();
 }
 
 void ObjectLabelingView::UseContext()
