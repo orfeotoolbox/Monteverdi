@@ -241,7 +241,7 @@ lFeatures->do_callback();}
           }
           MenuItem {} {
             label {Band setup}
-            callback {wBandSetup->show();} selected
+            callback {wBandSetup->show();}
             xywh {10 10 30 20}
           }
         }
@@ -389,8 +389,8 @@ BandSetupOkCallback();}
       }
       Fl_Button bBandSetupCancel {
         label Cancel
-        callback {wBandSetup->hide();}
-        tooltip {Leave viewer set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
+        callback {wBandSetup->hide();} selected
+        tooltip {Leave band set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
       }
     }
   }

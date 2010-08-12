@@ -67,6 +67,10 @@ public:
   typedef ObjectLabelingControllerInterface::VectorImageType VectorImageType;
   typedef ObjectLabelingControllerInterface::ImageType       ImageType; 
 
+  /** Model typedefs */
+  typedef ObjectLabelingModel::BandIdListType BandIdListType;
+
+
   /** User action */
   virtual void ClassSelected(unsigned int classIndex);
   virtual void ClearSelectedClass();
@@ -104,6 +108,7 @@ public:
   virtual void ChangeClassificationOpacity(double value);
   virtual void UpdateViewerDisplay();
   virtual void OpenImage(VectorImageType* vimage, ImageType* limage);
+  virtual void UpdateBandId();
 
   /** Set the pointer to the view */
   void SetView(ObjectLabelingView * view);

@@ -381,6 +381,8 @@ public:
   itkSetMacro(BandId, BandIdListType);
   itkGetMacro(BandId, BandIdListType);
 
+  void Link();
+
 protected:
   /** Constructor */
   ObjectLabelingModel();

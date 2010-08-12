@@ -442,33 +442,19 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 
   this->InitBandIdList( vimage );
  
-  /*
- m_Channels.clear();
-  if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
-    {
-      m_Channels.push_back(0);
-      m_Channels.push_back(1);
-      m_Channels.push_back(2);
-      std::cout<< "3 bands" << std::endl;
-    }
-  else
-    {
-      m_Channels.push_back(2);
-      m_Channels.push_back(1);
-      m_Channels.push_back(0);
-      std::cout<< "4 bands" << std::endl;
-    }
-    
-  /// Update the StandardRenderingFunction
-  m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-  */
-
   m_ImageGenerator->GetLayer()->SetName("Image");
 
+  this->Link();
+}
+
+void ObjectLabelingModel::Link()
+{
   m_Channels.clear();
   m_Channels.push_back(m_BandId[2]); // R
   m_Channels.push_back(m_BandId[1]); // G
   m_Channels.push_back(m_BandId[0]); // B
+
+  m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
 
   // Clear previous layers
   m_VisualizationModel->ClearLayers();
@@ -477,21 +463,9 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   // Add the layer to the models
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
   m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
-  std::cout<<"ici?"<<std::endl;
+
   m_VisualizationModel->Update();
-  
-//   m_Channels.clear();
-//   m_Channels = m_ImageLayerRenderingFunction->GetChannelList();
-//   std::cout<<"m_Channels :"<<std::endl;
-//   std::cout<<"m_Channels.size(): "<<m_Channels.size()<<std::endl;
-//   for(unsigned int p=0; p<m_Channels.size(); p++)
-//     {
-//       std::cout<<m_Channels.at(p)<<std::endl;
-//     }
-//   m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-//   m_VisualizationModel->Update();
-  
-  std::cout<<"ici?"<<std::endl;
+
   
   // Convert to label map
   LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
@@ -507,7 +481,6 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(m_VectorImage);
   
-
   if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
     {
       radiometricLabelMapFilter->SetRedChannelIndex(m_BandId[2]);
@@ -517,9 +490,8 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
     }
   
   
- std::cout<<"pete?"<<std::endl;
   radiometricLabelMapFilter->Update();
- std::cout<<"non?"<<std::endl;
+
   // Get the label map
   m_LabelMap = radiometricLabelMapFilter->GetOutput();
   m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
@@ -542,11 +514,13 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
 
   // Export to class label image
    std::cout<<"Exporting to class label image ..."<<std::endl;
+   m_ClassLabelFilter = ClassLabelFilterType::New();
    m_ClassLabelFilter->SetInput(m_LabelMap);
    m_ClassLabelFilter->Update();
    std::cout<<"Done."<<std::endl;
 
-   // Coloring classes 
+   // Coloring classes
+   m_ColorMapper = ChangeLabelFilterType::New();
    m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
    m_ColorMapper->SetNumberOfComponentsPerPixel(3);
    m_ColorMapper->ClearChangeMap();
@@ -563,10 +537,9 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
      }
 
 
-   //this->Init(m_VectorImage, m_LabeledImage);
-
    // Generate the layer
    LayerGeneratorType::Pointer m_LabeledImageGenerator = LayerGeneratorType::New();
+   m_LabeledImageGenerator = LayerGeneratorType::New();
    m_LabeledImageGenerator->SetImage(m_ColorMapper->GetOutput());
    m_LabeledImageGenerator->GenerateQuicklookOff();
    m_LabeledImageGenerator->SetQuicklook(m_ColorMapper->GetOutput());
@@ -596,8 +569,6 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
    m_PixelDescriptionModel->AddLayer(m_LabeledImageGenerator->GetLayer());
 
    m_VisualizationModel->Update();
-
- 
 }
 
 
@@ -607,6 +578,8 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
   if(vimage->GetNumberOfComponentsPerPixel() > 3)
     {
       std::vector<unsigned int> tempList;
+      std::vector<unsigned int>::iterator it;
+      bool found = false;
       // this list is used to set the NIR channel
       // it is set as the fgirst remainded index (when R, G, B one are supressed of the list)
       for(unsigned int i=0; i<vimage->GetNumberOfComponentsPerPixel(); i++)
@@ -617,15 +590,52 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
       ImageMetadataInterfaceBase::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(vimage->GetMetaDataDictionary());
       // B band Id
       m_BandId[0] = metadataInterface->GetDefaultBBand();
-      tempList.erase( tempList.begin()+ m_BandId[0]);
+      it = tempList.begin();
+      while( it != tempList.end() && found == false )
+	{
+	  if( (*it) == m_BandId[0] )
+	    {
+	      tempList.erase( it );
+	      found = true;
+	    }
+	  it++;
+	}
+     
       // G band Id
       m_BandId[1] = metadataInterface->GetDefaultGBand();
-      tempList.erase( tempList.begin()+ m_BandId[1]);
+      it = tempList.begin();
+      found = false;
+      while( it != tempList.end() && found == false )
+	{
+	  if( (*it) == m_BandId[1] )
+	    {
+	      tempList.erase( it );
+	      found = true;
+	    }
+	  it++;
+	}
+
       // R band Id
       m_BandId[2] = metadataInterface->GetDefaultRBand();
-      tempList.erase( tempList.begin()+ m_BandId[2]);
-      // NIR band Id
-      m_BandId[2] = tempList[0];
+      it = tempList.begin();
+      found = false;
+      while( it != tempList.end() && found == false )
+	{
+	  if( (*it) == m_BandId[2] )
+	    {
+	      tempList.erase( it );
+	      found = true;
+	    }
+	  it++;
+	}
+ 
+     // NIR band Id
+      m_BandId[3] = tempList[0];
+      std::cout<<"m_BandId:"<<std::endl;
+      std::cout<<m_BandId[0]<<std::endl;
+      std::cout<<m_BandId[1]<<std::endl;
+      std::cout<<m_BandId[2]<<std::endl;
+      std::cout<<m_BandId[3]<<std::endl;
     }
   else if(vimage->GetNumberOfComponentsPerPixel() == 3)
     {

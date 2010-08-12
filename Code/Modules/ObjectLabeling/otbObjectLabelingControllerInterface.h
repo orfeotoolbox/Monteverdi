@@ -78,18 +78,16 @@ public:
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
   virtual void OpenImage(VectorImageType*, ImageType*) =0;
+  virtual void UpdateBandId() =0;
   virtual void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;
   }
 
-  /** Get/Set boolean used to know if the GUI is locked or not. */
-  itkSetMacro(IsLockedGUI, bool);
-  itkGetMacro(IsLockedGUI, bool);
 
 protected:
   /** Constructor */
-  ObjectLabelingControllerInterface() : m_IsLockedGUI(false)
+  ObjectLabelingControllerInterface()
   {
     m_Model = ObjectLabelingModel::GetInstance();
   }
@@ -102,9 +100,6 @@ protected:
 private:
   ObjectLabelingControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
- /** Boolean used to know if the GUI is locked or not. */
-  bool m_IsLockedGUI;
 
 };
 } // end namespace otb

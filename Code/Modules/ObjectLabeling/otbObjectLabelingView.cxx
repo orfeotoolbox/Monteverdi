@@ -738,8 +738,7 @@ void ObjectLabelingView::BandSetupOkCallback()
   std::cout<<"G: "<<this->iGChannelId->value()<<std::endl;
   std::cout<<"R: "<<this->iRChannelId->value()<<std::endl;
   std::cout<<"NIR: "<<this->iNIRChannelId->value()<<std::endl;
-  // Release the interface
-  m_Controller->SetIsLockedGUI(false);
+  m_Controller->UpdateBandId();
   // hide the window
   this->wBandSetup->hide();
   // show the main window
