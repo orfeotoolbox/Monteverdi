@@ -95,6 +95,7 @@ int main(int argc, char* argv[])
 
   parser->AddInputImage(false); //Optional parameter
   parser->AddOption("--InputVectorData", "input vector data file name ", "-ivd", 1, false);
+  parser->AddOptionNParams("--ImageList", "image list", "-iml", false);
   parser->SetProgramDescription("Monteverdi launcher");
   //   parser->AddOption("--NoSplashScreen", "Deactivate the splash screen","-NoSplash", 0, false);
 
@@ -275,6 +276,29 @@ int main(int argc, char* argv[])
     readerModule->Analyse();
     readerModule->bOk->do_callback();
     Fl::check();
+    }
+
+  if (parseResult->IsOptionPresent("--ImageList"))
+    {  
+      int numberOfImage = parseResult->GetNumberOfParameters("--ImageList");
+      for (int i = 0; i < numberOfImage; i++)
+	{
+	  Fl::check();
+	  std::vector<std::string> moduleVector;
+	  
+	  // Get the ModuleInstanceId
+	  std::string readerId = model->CreateModuleByKey("Reader");
+	  
+	  // Get the module itself
+	  otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+	  
+	  // Simulate file chooser and ok callback
+	  otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+	  readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+	  readerModule->Analyse();
+	  readerModule->bOk->do_callback();
+	  Fl::check();
+	}
     }
 
   return Fl::run();
