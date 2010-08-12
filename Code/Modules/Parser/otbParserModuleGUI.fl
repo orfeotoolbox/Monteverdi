@@ -11,17 +11,17 @@ class ParserModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {Parser module}
-      callback {this->Quit()} open
-      xywh {380 168 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
+      callback {this->Quit()} open selected
+      xywh {626 158 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
-        callback {OK();} selected
-        xywh {275 385 100 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 selection_color 51 labelfont 1 labelcolor 186
+        callback {OK();}
+        xywh {275 385 100 25} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
       }
       Fl_Input ui_Expression {
         label {Enter Your Formula :}
-        xywh {10 40 630 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186 align 1
+        xywh {10 40 630 25} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelcolor 186 align 1
       }
       Fl_Choice ui_VarNameList {
         label {Rename Variable : } open
@@ -39,24 +39,24 @@ class ParserModuleGUI {open
       Fl_Browser ui_VarNames {
         label {Corresponding Variable Names:}
         callback {QuickAdd(ui_VarNames->value());}
-        xywh {325 110 320 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+        xywh {415 110 230 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
       Fl_Browser ui_ImageNames {
         label {Image Names:}
         callback {QuickAdd(ui_ImageNames->value());}
-        xywh {5 110 320 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+        xywh {5 110 410 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
     }
   }
   Function {ParserModuleGUI()} {} {}
   Function {~ParserModuleGUI()} {return_type virtual
   } {}
-  Function {OK()} {open return_type {virtual void}
+  Function {OK()} {return_type {virtual void}
   } {}
-  Function {Quit()} {open return_type {virtual void}
+  Function {Quit()} {return_type {virtual void}
   } {}
-  Function {ChangeVarName()} {open return_type {virtual void}
+  Function {ChangeVarName()} {return_type {virtual void}
   } {}
-  Function {QuickAdd(unsigned int idx)} {open return_type {virtual void}
+  Function {QuickAdd(unsigned int idx)} {return_type {virtual void}
   } {}
 } 

@@ -50,6 +50,14 @@ void ParserModule::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
 }
 
+/**
+ * Hide the Module GUI
+ */
+void ParserModule::Hide()
+{
+  guiMainWindow->hide();
+}
+
 /** 
  * The custom run command 
  */
@@ -63,7 +71,7 @@ void ParserModule::Run()
     {
     itkExceptionMacro(<< "The number of input images is Null.");
     }
-
+  
   // Setup the filter
   m_ParserFilter = ParserFilterType::New();
   for(unsigned int i = 0; i < numberOfInputImages; i++)
@@ -75,7 +83,7 @@ void ParserModule::Run()
       }
     m_ParserFilter->SetNthInput(i, image);
     
-    ui_VarNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
+    ui_VarNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());        
     ui_VarNames->add(m_ParserFilter->GetNthInputName(i).c_str());
     ui_ImageNames->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
     }
@@ -113,11 +121,11 @@ void ParserModule::QuickAdd(unsigned int idx)
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
   std::ostringstream tmpExpression;
   
-  ui_VarNames->select(idx);
-  ui_ImageNames->select(idx);
-
   if((idx-1) < numberOfInputImages)
     {
+    ui_VarNames->select(idx);
+    ui_ImageNames->select(idx);
+
     tmpExpression << ui_Expression->value() << " " << m_ParserFilter->GetNthInputName(idx-1) << " ";
     ui_Expression->value(tmpExpression.str().c_str());
     ui_Expression->take_focus();
@@ -129,24 +137,52 @@ void ParserModule::QuickAdd(unsigned int idx)
  */
 void ParserModule::OK()
 {
-  // Apply the filter
-  m_ParserFilter->SetExpression(ui_Expression->value());
-  
+  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
+  unsigned int exceptFlag = 0;
+  ParserType::Pointer dummyParser = ParserType::New();
+  std::vector<double> dummyVars;
+  double value;
+
+  // Setup the dummy parser
+  for(unsigned int i = 0; i < numberOfInputImages; i++)
+    {
+    dummyVars.push_back(1);
+    dummyParser->DefineVar(m_ParserFilter->GetNthInputName(i), &(dummyVars.at(i)));
+    }
+  dummyParser->SetExpr(ui_Expression->value());
+    
   try
     {
-    m_Output = m_ParserFilter->GetOutput();
+    value = dummyParser->Eval();
     }
   catch(itk::ExceptionObject& err)
     {
+    exceptFlag = 1;
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
   
-  this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_ParserFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
-  this->NotifyOutputsChange();
+  if(!exceptFlag)
+    {
+    ui_Expression->color((Fl_Color)7);
+    ui_Expression->redraw();
+    // Apply the filter
+    m_ParserFilter->SetExpression(ui_Expression->value());
+    m_Output = m_ParserFilter->GetOutput();
+    this->ClearOutputDescriptors();
+    this->AddOutputDescriptor(m_ParserFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
+    this->NotifyOutputsChange();
 
-  // close the GUI
-  this->Hide();
+    // close the GUI
+    this->Hide();
+    ui_Expression->label("Enter Your Formula :");
+    }
+  else
+    {
+    exceptFlag=0;
+    ui_Expression->label("[WRONG FORMULA] - Please Check Your Formula :");
+    ui_Expression->color(1);
+    ui_Expression->redraw();
+    }
 }
 
 } // End namespace otb
