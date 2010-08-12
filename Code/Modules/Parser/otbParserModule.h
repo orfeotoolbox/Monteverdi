@@ -1,4 +1,3 @@
- 
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -57,6 +56,7 @@ public:
 
   // Parser Class typedefs
   typedef NaryParserImageFilter<ImageType>             ParserFilterType;
+  typedef Parser                                       ParserType;
 
 protected:
   /** Constructor */
@@ -81,10 +81,7 @@ protected:
   }
 
   /** Hide the Module GUI */
-  virtual void Hide()
-  {
-    guiMainWindow->hide();
-  }
+  virtual void Hide();
   
   /** OK callback*/
   virtual void OK();
@@ -102,6 +99,7 @@ private:
   // Class attributes
   ParserFilterType::Pointer        m_ParserFilter;
   ImageType::Pointer               m_Output;
+
 };
 
 } // End namespace otb
