@@ -79,6 +79,7 @@ void ObjectLabelingController::SetView(ObjectLabelingView * view)
 
 void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* limage)
 {
+  // Check image channels
   if(vimage->GetNumberOfComponentsPerPixel() < 3)
     {
       itk::OStringStream oss;
@@ -87,35 +88,47 @@ void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* lim
       MsgReporter::GetInstance()->SendError(oss.str());
       m_View->wMainWindow->hide();
     }
-  else
-    {
-      try
-	{
-	  m_Model->OpenImage(vimage, limage);
-	}
-      catch(itk::ExceptionObject & err)
-	{
-	  itk::OStringStream oss;
-	  oss<<"Invalid input imge(s).";
-	  oss<<"The following exception was caught: ";
-	  oss<<err.GetDescription();
-	  MsgReporter::GetInstance()->SendError(oss.str());
-	}
-      
-      for(unsigned int i=0;i<vimage->GetNumberOfComponentsPerPixel(); i++)
-	{
-	  itk::OStringStream oss;
-	  oss<<i;
-	  m_View->iBChannelId->add(oss.str().c_str());
-	  m_View->iGChannelId->add(oss.str().c_str());
-	  m_View->iRChannelId->add(oss.str().c_str());
-	  m_View->iNIRChannelId->add(oss.str().c_str());
-	}
-      
-      m_View->iBChannelId->value( m_Model->GetBandId()[0] );
-      m_View->iGChannelId->value( m_Model->GetBandId()[1] );  
-      m_View->iRChannelId->value( m_Model->GetBandId()[2] );
-      m_View->iNIRChannelId->value( m_Model->GetBandId()[3] );
+    else
+      {
+	try
+	  {
+	    m_Model->OpenImage(vimage, limage);
+
+	    for(unsigned int i=0;i<vimage->GetNumberOfComponentsPerPixel(); i++)
+	      {
+		itk::OStringStream oss;
+		oss<<i;
+		m_View->iBChannelId->add(oss.str().c_str());
+		m_View->iGChannelId->add(oss.str().c_str());
+		m_View->iRChannelId->add(oss.str().c_str());
+		m_View->iNIRChannelId->add(oss.str().c_str());
+	      }
+	    
+	    m_View->iBChannelId->value( m_Model->GetBandId()[0] );
+	    m_View->iGChannelId->value( m_Model->GetBandId()[1] );  
+	    m_View->iRChannelId->value( m_Model->GetBandId()[2] );
+	    m_View->iNIRChannelId->value( m_Model->GetBandId()[3] );
+	  }
+	catch(itk::ExceptionObject & err)
+	  {
+	    ossimString ossStr(err.GetDescription());
+	    std::cout<<"messaaaaaaaaaaaaaaaaaaage: "<<ossStr<<std::endl;
+	    if( ossStr.contains("End point not with +/-1 line from line") == true )
+	      {
+		itk::OStringStream oss;
+		oss<<"Invalid label image, too many labels.";
+		MsgReporter::GetInstance()->SendError(oss.str());
+	      }
+	    else
+	      {
+		itk::OStringStream oss;
+		oss<<"Invalid input imge(s).";
+		oss<<"The following exception was caught: ";
+		oss<<err.GetDescription();
+		MsgReporter::GetInstance()->SendError(oss.str());	
+	      }
+	    m_View->wMainWindow->hide();
+	  }    
     }
 }
 

@@ -73,13 +73,11 @@ void ObjectLabelingModule::Run()
    
    if(lImageLab.IsNotNull())
      {
-       std::cout<<"go caster go"<<std::endl;
        m_Caster->SetInput( lImageLab );
        lImage = m_Caster->GetOutput();
      }
    else
      {
-  std::cout<<"go simple go"<<std::endl;
        lImage = this->GetInputData<ImageType>("LabeledImage");
      }
 

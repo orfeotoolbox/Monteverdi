@@ -447,6 +447,25 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   this->Link();
 }
 
+bool ObjectLabelingModel::CheckLabelImage(ImageType* limage)
+{
+   // Convert to label map
+  LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
+  lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  lfilter->SetInput(limage);
+  
+  lfilter->Update();
+  unsigned int nbPix = limage->GetLargestPossibleRegion().GetSize()[0]*limage->GetLargestPossibleRegion().GetSize()[1];
+  bool res = true;
+  std::cout<<"map label size: "<<lfilter->GetOutput()->GetLabelObjectContainer().size()<<std::endl;
+  if(lfilter->GetOutput()->GetLabelObjectContainer().size() > nbPix*0.1)
+    {
+      res = false;
+    }
+
+  return res;
+}
+
 void ObjectLabelingModel::Link()
 {
   m_Channels.clear();
@@ -466,12 +485,12 @@ void ObjectLabelingModel::Link()
 
   m_VisualizationModel->Update();
 
-  
   // Convert to label map
   LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
   lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   lfilter->SetInput(m_LabeledImage);
   
+
   // Compute shape attributes
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(lfilter->GetOutput());
@@ -489,7 +508,6 @@ void ObjectLabelingModel::Link()
       radiometricLabelMapFilter->SetNIRChannelIndex(m_BandId[3]);
     }
   
-  
   radiometricLabelMapFilter->Update();
 
   // Get the label map
@@ -505,7 +523,7 @@ void ObjectLabelingModel::Link()
     {
     m_AvailableFeatures[*fit]=true;
     }
-  
+
   // Computes the features statistics
   this->ComputeFeaturesStatistics();
   
@@ -631,11 +649,6 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
  
      // NIR band Id
       m_BandId[3] = tempList[0];
-      std::cout<<"m_BandId:"<<std::endl;
-      std::cout<<m_BandId[0]<<std::endl;
-      std::cout<<m_BandId[1]<<std::endl;
-      std::cout<<m_BandId[2]<<std::endl;
-      std::cout<<m_BandId[3]<<std::endl;
     }
   else if(vimage->GetNumberOfComponentsPerPixel() == 3)
     {
@@ -644,7 +657,7 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
       m_BandId[2] = 2;
       m_BandId[3] = 0;
     }
-  else if(vimage->GetNumberOfComponentsPerPixel() == 2)
+  else
     {
       itkExceptionMacro("invalid input image. It must have more than 2 channels."<<std::endl<<"The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" one.");
     }
@@ -682,34 +695,9 @@ void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
       radiometricLabelMapFilter->SetBlueChannelIndex(0);
       radiometricLabelMapFilter->SetNIRChannelIndex(2);
     }
-  /*
-    if(vimage->GetNumberOfComponentsPerPixel()==3)// && limage->GetNumberOfComponentsPerPixel()==3 )
-    {
-    radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[2]);//2);
-    radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);//1);
-    radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);//0);
-    radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[2]);//2);
-    }
-    else if(vimage->GetNumberOfComponentsPerPixel()==1)// && limage->GetNumberOfComponentsPerPixel()==1)
-    {
-    radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
-    radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[0]);
-    radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
-    radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[0]);
-  }
-  else if(vimage->GetNumberOfComponentsPerPixel()==2)// && limage->GetNumberOfComponentsPerPixel()==1)
-  {
-  radiometricLabelMapFilter->SetRedChannelIndex(m_Channels[0]);;
-  radiometricLabelMapFilter->SetGreenChannelIndex(m_Channels[1]);
-  radiometricLabelMapFilter->SetBlueChannelIndex(m_Channels[0]);
-  radiometricLabelMapFilter->SetNIRChannelIndex(m_Channels[1]);
-  }
-  */
+
   radiometricLabelMapFilter->Update();
   
-  std::cout<<"pete?"<<std::endl;
-  radiometricLabelMapFilter->Update();
-  std::cout<<"non?"<<std::endl;
   // Get the label map
   m_LabelMap = radiometricLabelMapFilter->GetOutput();
   m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());

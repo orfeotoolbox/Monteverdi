@@ -380,7 +380,11 @@ public:
   /** Band id list accessors. */
   itkSetMacro(BandId, BandIdListType);
   itkGetMacro(BandId, BandIdListType);
-
+  
+  /** Check image label relability. */
+  bool CheckLabelImage(ImageType* limage);
+  
+  /** Link the pipeline and the visu. */
   void Link();
 
 protected:
