@@ -74,6 +74,7 @@
 #include "otbTileExportModule.h"
 #include "otbObjectLabelingModule.h"
 #include "otbFineCorrelationModule.h"
+#include "otbVectorizationModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -168,7 +169,8 @@ int main(int argc, char* argv[])
                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
-  
+  model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));
+
   /***********  SAR menu *******************/
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
