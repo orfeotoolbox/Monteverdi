@@ -11,7 +11,7 @@ class ExtractROIModuleGUI {open
   } {
     Fl_Window wExtractROIWindow {
       label {Select the ROI} open
-      xywh {530 255 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
+      xywh {470 255 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
     } {
       Fl_Group {} {open
         xywh {400 0 400 400}
@@ -59,7 +59,7 @@ class ExtractROIModuleGUI {open
                 xywh {580 255 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
               }
               Fl_Value_Input vLatitude2 {
-                label {Lower Right Latitude} selected
+                label {Lower Right Latitude}
                 xywh {580 285 100 25} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+07 maximum 1e+07 step 1e-05
               }
               Fl_Button bUpdate {
@@ -92,8 +92,8 @@ class ExtractROIModuleGUI {open
         } {
           Fl_Return_Button bOk {
             label Ok
-            callback {this->Ok();}
-            xywh {695 368 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            callback {this->Ok();} selected
+            xywh {695 368 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button bCancel {
             label Cancel
