@@ -74,6 +74,12 @@ public:
   /** Build the interface */
   virtual void BuildInterface();
   virtual void HideAll();
+  virtual void NextGeometryIsPointCallback();
+  virtual void NextGeometryIsLineCallback();
+  virtual void NextGeometryIsPolygonExtCallback();
+  virtual void NextGeometryIsPolygonIntCallback();
+  virtual void ChangeNavigationModeCallback();
+
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);

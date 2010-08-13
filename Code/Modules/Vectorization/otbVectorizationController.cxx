@@ -84,6 +84,24 @@ VectorizationController
   m_VectorDataActionHandler->SetView(m_View->GetImageView());
 }
 
+
+void VectorizationController::ChangeNavigationMode()
+{
+  if(m_ChangeRegionHandler->GetMouseButton() == 1)
+    {
+      m_ChangeRegionHandler->SetMouseButton(2);
+      m_ChangeScaledRegionHandler->SetMouseButton(2);
+      m_VectorDataActionHandler->SetAddMouseButton(1);
+    }
+  else
+    {
+      m_ChangeRegionHandler->SetMouseButton(1);
+      m_ChangeScaledRegionHandler->SetMouseButton(1);
+      m_VectorDataActionHandler->SetAddMouseButton(2);
+    }
+
+}
+
 void VectorizationController::RemoveDataNode(DataNodeType * node)
 {
   try

@@ -55,6 +55,8 @@ public:
                                        const PointType& point,
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0) = 0;
+  virtual void ChangeNavigationMode() =0;
+
 
 protected:
   /** Constructor */

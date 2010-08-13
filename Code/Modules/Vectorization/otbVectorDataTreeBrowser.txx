@@ -135,7 +135,6 @@ VectorDataTreeBrowser<TVectorData>
       {
       // Get the data node
       DataNodePointerType node = it.GetNode()->Get();
-
       switch (node->GetNodeType())
         {
         case ROOT:

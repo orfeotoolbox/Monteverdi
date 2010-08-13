@@ -164,4 +164,36 @@ void VectorizationView
   // Nothing done for now
   this->RedrawWidgets();
 }
+
+void VectorizationView
+::NextGeometryIsPointCallback()
+{
+  m_Model->GetVectorDataModel()->SetCurrentNodeType(FEATURE_POINT);
+}
+
+void VectorizationView
+::NextGeometryIsLineCallback()
+{
+  m_Model->GetVectorDataModel()->SetCurrentNodeType(FEATURE_LINE);
+}
+
+void VectorizationView
+::NextGeometryIsPolygonExtCallback()
+{
+  m_Model->GetVectorDataModel()->SetCurrentNodeType(FEATURE_POLYGON);
+}
+
+void VectorizationView
+::NextGeometryIsPolygonIntCallback()
+{
+  m_Model->GetVectorDataModel()->SetCurrentNodeType(FEATURE_POLYGON);
+}
+
+void VectorizationView
+::ChangeNavigationModeCallback()
+{
+  m_Controller->ChangeNavigationMode();
+}
+
+
 } // end namespace
