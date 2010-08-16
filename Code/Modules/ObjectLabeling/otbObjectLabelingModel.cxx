@@ -833,10 +833,6 @@ void ObjectLabelingModel::FocusOnSample(const LabelType & label)
   VectorImageType::IndexType pindex;
 
   m_VectorImage->TransformPhysicalPointToIndex(center,pindex);
-
-  std::cout<<"Focus index: "<<pindex<<std::endl;
-  std::cout<<"Pysical center: "<<center<<std::endl;
-
   m_VisualizationModel->SetExtractRegionCenter(pindex);
   m_VisualizationModel->SetScaledExtractRegionCenter(pindex);
 
