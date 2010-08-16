@@ -423,10 +423,10 @@ void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
   m_VectorImage  = vimage;
 
   // Update origin and spacing
-  m_Origin[0] = -m_VectorImage->GetOrigin()[0];
-  m_Origin[1] = -m_VectorImage->GetOrigin()[1];
-  m_Spacing[0] = 1/m_VectorImage->GetSpacing()[0];
-  m_Spacing[1] = 1/m_VectorImage->GetSpacing()[1];
+  m_Origin[0] = m_VectorImage->GetOrigin()[0];
+  m_Origin[1] = m_VectorImage->GetOrigin()[1];
+  m_Spacing[0] =m_VectorImage->GetSpacing()[0];
+  m_Spacing[1] =m_VectorImage->GetSpacing()[1];
 
 
   // Generate the layer
@@ -669,10 +669,10 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
 void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
 {
   // Update origin and spacing
-  m_Origin[0] = -vimage->GetOrigin()[0];
-  m_Origin[1] = -vimage->GetOrigin()[1];
-  m_Spacing[0] = 1/vimage->GetSpacing()[0];
-  m_Spacing[1] = 1/vimage->GetSpacing()[1];
+  m_Origin[0] = vimage->GetOrigin()[0];
+  m_Origin[1] = vimage->GetOrigin()[1];
+  m_Spacing[0] =vimage->GetSpacing()[0];
+  m_Spacing[1] =vimage->GetSpacing()[1];
   
   // Convert to label map
   LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
@@ -821,12 +821,21 @@ void ObjectLabelingModel::FocusOnSample(const LabelType & label)
   // Convert sample to polygon
   SimplifyPolygonFunctorType sfunctor;
   PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(label)->GetPolygon()/**)*/;
-  VectorImageType::RegionType pregion = polygon->GetBoundingRegion().GetImageRegion();
+  PolygonType::RegionType rsRegion = polygon->GetBoundingRegion();
+  PolygonType::PointType center;
 
-  VectorImageType::IndexType pindex = pregion.GetIndex();
+  for(unsigned int dim = 0; dim<VectorImageType::ImageDimension;++dim)
+    {
+    center[dim]= polygon->GetBoundingRegion().GetOrigin()[dim]
+      +polygon->GetBoundingRegion().GetSize()[dim]/2;
+    }
 
-  pindex[0]+=pregion.GetSize()[0]/2;
-  pindex[1]+=pregion.GetSize()[1]/2;
+  VectorImageType::IndexType pindex;
+
+  m_VectorImage->TransformPhysicalPointToIndex(center,pindex);
+
+  std::cout<<"Focus index: "<<pindex<<std::endl;
+  std::cout<<"Pysical center: "<<center<<std::endl;
 
   m_VisualizationModel->SetExtractRegionCenter(pindex);
   m_VisualizationModel->SetScaledExtractRegionCenter(pindex);
