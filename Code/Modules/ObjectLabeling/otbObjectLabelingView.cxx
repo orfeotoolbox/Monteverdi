@@ -38,7 +38,9 @@ ObjectLabelingView::ObjectLabelingView() : m_Controller(), m_Model(), m_ImageVie
   m_ImageView = ImageViewType::New();
   m_PixelView = PixelViewType::New();
 
-
+#ifndef OTB_USE_PQXX
+  mExportToPostGIS->hide();
+#endif
 
 }
 
@@ -572,37 +574,9 @@ void ObjectLabelingView::LoadSamplesFromXMLFile()
   m_Controller->LoadSamplesFromXMLFile(filename);
 }
 
-void ObjectLabelingView::SaveColorsToAsciiFile()
-{
-    
-  const char * filename = fl_file_chooser("Pick a file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-
-  m_Controller->SaveColorsToAsciiFile(filename);
-}
-
 void ObjectLabelingView::SaveClassification()
 {
   m_Controller->SaveClassification();
-}
-
-void ObjectLabelingView::SaveClassificationGraph()
-{
-    
-  const char * filename = fl_file_chooser("Pick a file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-
-  m_Controller->SaveClassificationGraph(filename);
 }
 
 void ObjectLabelingView::ExportClassificationToGIS()

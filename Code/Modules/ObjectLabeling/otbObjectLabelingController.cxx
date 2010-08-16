@@ -328,35 +328,11 @@ void ObjectLabelingController::SaveClassificationParametersToXMLFile(const char 
 }
 
 
-void ObjectLabelingController::SaveColorsToAsciiFile(const char * fname)
-{
-  try
-    {
-    m_Model->SaveColorsToAsciiFile(fname);
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
 void ObjectLabelingController::SaveClassification()
 {
   try
     {
     m_Model->SaveClassification();
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
-void ObjectLabelingController::SaveClassificationGraph(const char * fname)
-{
-  try
-    {
-    m_Model->SaveClassificationGraph(fname);
     }
   catch(itk::ExceptionObject & err)
     {
@@ -379,18 +355,6 @@ void ObjectLabelingController::ExportClassificationToGIS(const GISExportInfo& ex
     MsgReporter::GetInstance()->SendError(e.what());
     }
 }
-// void ObjectLabelingController::LoadImages(const char * image, const char * label)
-// {
-// //   try
-// //     {
-// //     m_Model->OpenImage(image,label);
-// //     m_View->UpdateViewerSetup();
-// //     }
-// //   catch(itk::ExceptionObject & err)
-// //     {
-// //     MsgReporter::GetInstance()->SendError(err.GetDescription());
-// //     }
-// }
 
 void ObjectLabelingController::SampleMargin()
 {

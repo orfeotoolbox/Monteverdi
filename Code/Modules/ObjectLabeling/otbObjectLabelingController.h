@@ -87,9 +87,7 @@ public:
   virtual void SaveSamplesToXMLFile(const char * fname);
   virtual void LoadSamplesFromXMLFile(const char * fname);
   virtual void SaveClassificationParametersToXMLFile(const char * fname);
-  virtual void SaveColorsToAsciiFile(const char * fname);
   virtual void SaveClassification();
-  virtual void SaveClassificationGraph(const char * fname);
   virtual void ExportClassificationToGIS(const GISExportInfo& exportInfo);
   virtual void SampleMargin();
   virtual void ChangeKernelType(int kernel);

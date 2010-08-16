@@ -90,9 +90,7 @@ public:
   virtual void SaveSamplesToXMLFile();
   virtual void SaveClassificationParametersToXMLFile();
   virtual void LoadSamplesFromXMLFile();
-  virtual void SaveColorsToAsciiFile();
   virtual void SaveClassification();
-  virtual void SaveClassificationGraph();
   virtual void ExportClassificationToGIS();
   virtual void SampleMargin();
   virtual void ChangeKernelType();

@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -11,7 +11,7 @@ class ObjectLabelingGUI {open
   } {
     Fl_Window wMainWindow {
       label {Object Labeling}
-      callback {this->Exit();}
+      callback {this->Exit();} open
       xywh {320 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
@@ -143,12 +143,12 @@ lFeatures->do_callback();}
             Fl_Spinner bSVMNbCoarseSteps {
               label {Coarse steps }
               callback {this->ChangeNumberOfCoarseSteps();}
-              xywh {868 167 40 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+              xywh {868 167 40 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
             }
             Fl_Spinner bSVMNbFineSteps {
               label {Fine steps}
               callback {this->ChangeNumberOfFineSteps();}
-              xywh {868 191 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+              xywh {868 191 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
             }
             Fl_Check_Button bSVMOptimization {
               label {Parameters optimization}
@@ -163,7 +163,7 @@ lFeatures->do_callback();}
             Fl_Spinner bALNumberOfSamples {
               label {Number of samples }
               callback {this->ChangeNumberOfMarginSamples();}
-              xywh {864 256 45 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
+              xywh {864 256 45 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
             }
             Fl_Button bMarginColor {
               label {Margin color }
@@ -214,33 +214,23 @@ lFeatures->do_callback();}
             callback {SaveSamplesToXMLFile();}
             xywh {0 0 36 21}
           }
-          MenuItem {} {
-            label {Save classification to GIS}
+          MenuItem mExportToPostGIS {
+            label {Export results to PostGIS}
             callback {ExportClassificationToGIS();}
             xywh {0 0 36 21}
           }
           MenuItem {} {
-            label {Save classification graph}
-            callback {SaveClassificationGraph();}
-            xywh {0 0 36 21}
-          }
-          MenuItem {} {
-            label {Save parameters ...}
-            callback {SaveClassificationParametersToXMLFile();}
+            label {Save classification parameters ...}
+            callback {SaveClassificationParametersToXMLFile();} selected
             xywh {30 30 34 24}
           }
           MenuItem {} {
-            label {Save colors  to ascii file}
-            callback {SaveColorsToAsciiFile();}
-            xywh {20 20 34 24}
-          }
-          MenuItem {} {
-            label {Input image view manager}
+            label {Visualisation setup}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}
           }
           MenuItem {} {
-            label {Band setup}
+            label {Spectral bands setup}
             callback {wBandSetup->show();}
             xywh {10 10 30 20}
           }
@@ -389,7 +379,7 @@ BandSetupOkCallback();}
       }
       Fl_Button bBandSetupCancel {
         label Cancel
-        callback {wBandSetup->hide();} selected
+        callback {wBandSetup->hide();}
         tooltip {Leave band set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
       }
     }
@@ -424,15 +414,11 @@ BandSetupOkCallback();}
   } {}
   Function {Exit()} {open return_type {virtual void}
   } {}
-  Function {SaveColorsToAsciiFile()} {open return_type {virtual void}
-  } {}
   Function {SaveSamplesToXMLFile()} {open return_type {virtual void}
   } {}
   Function {LoadSamplesFromXMLFile()} {open return_type {virtual void}
   } {}
   Function {SaveClassification()} {open return_type {virtual void}
-  } {}
-  Function {SaveClassificationGraph()} {open return_type {virtual void}
   } {}
   Function {SampleMargin()} {open return_type {virtual void}
   } {}

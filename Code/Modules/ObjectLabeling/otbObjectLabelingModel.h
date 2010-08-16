@@ -282,15 +282,9 @@ public:
   /** Save classification parameters to XML file */
   void SaveClassificationParametersToXMLFile(const char * fname);
 
-  /** Save colors to ascii file */
-  void SaveColorsToAsciiFile(const char * fname);
-
   /** Save classification (image) to a file */
   void SaveClassification();
   
-  /** Save classification graph in Subdue format */
-  void SaveClassificationGraph(const char * fname);
-
   /** Save classification to a PostGIS table */
   void ExportClassificationToGIS(const GISExportInfo& exportInfo);
 
