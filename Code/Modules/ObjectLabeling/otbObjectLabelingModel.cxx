@@ -457,7 +457,7 @@ bool ObjectLabelingModel::CheckLabelImage(ImageType* limage)
   lfilter->Update();
   unsigned int nbPix = limage->GetLargestPossibleRegion().GetSize()[0]*limage->GetLargestPossibleRegion().GetSize()[1];
   bool res = true;
-  std::cout<<"map label size: "<<lfilter->GetOutput()->GetLabelObjectContainer().size()<<std::endl;
+  otbMsgDevMacro(<<"map label size: "<<lfilter->GetOutput()->GetLabelObjectContainer().size());
   if(lfilter->GetOutput()->GetLabelObjectContainer().size() > nbPix*0.1)
     {
       res = false;
@@ -531,11 +531,11 @@ void ObjectLabelingModel::Link()
   m_MarginSampledPolygon->SetProjectionRef(m_VectorImage->GetProjectionRef());
 
   // Export to class label image
-   std::cout<<"Exporting to class label image ..."<<std::endl;
+   otbMsgDevMacro(<<"Exporting to class label image ...");
    m_ClassLabelFilter = ClassLabelFilterType::New();
    m_ClassLabelFilter->SetInput(m_LabelMap);
    m_ClassLabelFilter->Update();
-   std::cout<<"Done."<<std::endl;
+   otbMsgDevMacro(<<"Done.");
 
    // Coloring classes
    m_ColorMapper = ChangeLabelFilterType::New();
@@ -550,7 +550,7 @@ void ObjectLabelingModel::Link()
      newValue[0]=oit->m_Color[0];
      newValue[1]=oit->m_Color[1];
      newValue[2]=oit->m_Color[2];
-     std::cout<<"New value: "<<newValue<<std::endl;
+     otbMsgDevMacro(<<"New value: "<<newValue);
      m_ColorMapper->SetChange(oit->m_Label,newValue);
      }
 
@@ -659,7 +659,7 @@ void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
     }
   else
     {
-      itkExceptionMacro("invalid input image. It must have more than 2 channels."<<std::endl<<"The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" one.");
+      itkExceptionMacro("invalid input image. It must have more than 2 channels. The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" one.");
     }
 }
 
@@ -719,10 +719,10 @@ void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
   m_MarginSampledPolygon->SetProjectionRef(vimage->GetProjectionRef());
   
   // Export to class label image
-  std::cout<<"Exporting to class label image ..."<<std::endl;
+  otbMsgDevMacro(<<"Exporting to class label image ...");
   m_ClassLabelFilter->SetInput(m_LabelMap);
   m_ClassLabelFilter->Update();
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
   
   // Coloring classes */
   m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
@@ -736,7 +736,7 @@ void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
       newValue[0]=oit->m_Color[0];
       newValue[1]=oit->m_Color[1];
       newValue[2]=oit->m_Color[2];
-      std::cout<<"New value: "<<newValue<<std::endl;
+      otbMsgDevMacro(<<"New value: "<<newValue);
       m_ColorMapper->SetChange(oit->m_Label,newValue);
     }
 }
@@ -1081,7 +1081,7 @@ void ObjectLabelingModel::SelectSample(const LabelType & label)
     
     LabelMapType::AdjacentLabelsContainerType::const_iterator nit;
   
-    std::cout<<"Add the "<<neighbors.size() <<" neighboring polygons ..."<<std::endl;
+    otbMsgDevMacro(<<"Add the "<<neighbors.size() <<" neighboring polygons ...");
     
     // For each neighbor
     for(nit = neighbors.begin();nit!= neighbors.end();++nit)
@@ -1092,11 +1092,11 @@ void ObjectLabelingModel::SelectSample(const LabelType & label)
       polygonNode->SetPolygonExteriorRing(polygon);
       m_NeighborsPolygon->GetDataTree()->Add(polygonNode,m_NeighborsFolder);
       }
-    std::cout<<"Done."<<std::endl;
+    otbMsgDevMacro(<<"Done.");
     }
   catch(itk::ExceptionObject & err)
     {
-    std::cout<<"Neighbors not found for label "<<m_SelectedLabel<<std::endl;
+    otbMsgDevMacro(<<"Neighbors not found for label "<<m_SelectedLabel);
     }
   this->NotifyAll("Update");
 }
@@ -1521,7 +1521,7 @@ void ObjectLabelingModel::SaveClassificationGraph(const char * fname)
       }
     catch(itk::ExceptionObject & err)
       {
-      std::cout << "Neighbors not found for label " << label << std::endl;
+      otbMsgDevMacro( << "Neighbors not found for label " << label);
       }
     }
   ofs.close();
@@ -1531,7 +1531,7 @@ void ObjectLabelingModel::SaveClassificationGraph(const char * fname)
 
 void ObjectLabelingModel::ComputeFeaturesStatistics()
 {
-  std::cout<<"Computing statistics ..."<<std::endl;
+  otbMsgDevMacro(<<"Computing statistics ...");
   m_FeaturesMeans.clear();
   m_FeaturesVariances.clear();
 
@@ -1584,7 +1584,7 @@ void ObjectLabelingModel::ComputeFeaturesStatistics()
     m_FeaturesMeans[fit->first]=sum[fit->first]/static_cast<double>(nbSamples);
     m_FeaturesVariances[fit->first]=vcl_sqrt(sumOfSquares[fit->first]/static_cast<double>(nbSamples)-vcl_pow(m_FeaturesMeans[fit->first],2));
     }   
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 }
 
 void ObjectLabelingModel::SaveClassification()
@@ -1605,16 +1605,16 @@ void ObjectLabelingModel::SaveClassification()
 
 void ObjectLabelingModel::EstimateCentroids()
 {
-  std::cout<<"Computing Kmeans centroids ..." <<std::endl;
-  std::cout<<"Number of classes: "<<m_Classes.size()<<std::endl;
+  otbMsgDevMacro(<<"Computing Kmeans centroids ..." );
+  otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
   unsigned int numberOfCentroids = m_Classes.size();
 
   if(numberOfCentroids <= 1)
     {
-    std::cout<<"ONE CLASS svm mode, forcing number of centroids to 10"<<std::endl;
+    otbMsgDevMacro(<<"ONE CLASS svm mode, forcing number of centroids to 10");
     numberOfCentroids = 10;
     }
-  std::cout<<"Number of centroids: "<<numberOfCentroids<<std::endl;
+  otbMsgDevMacro(<<"Number of centroids: "<<numberOfCentroids);
 
 
   ListSampleType::Pointer ls = ListSampleType::New();
@@ -1700,16 +1700,16 @@ void ObjectLabelingModel::EstimateCentroids()
       {
       newCenter[i]=estimator->GetParameters()[cId * sampleSize + i];
       }
-    std::cout<<"New centroid: "<<newCenter<<std::endl;
+    otbMsgDevMacro(<<"New centroid: "<<newCenter);
     m_CentroidsVector.push_back(newCenter);
     }
   
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 }
 
 void ObjectLabelingModel::BuildSampleList()
 {
-  std::cout<<"Building samples list ..."<<std::endl;
+  otbMsgDevMacro(<<"Building samples list ...");
 
   // Clear previous samples
   m_ListSample->Clear();
@@ -1730,12 +1730,12 @@ void ObjectLabelingModel::BuildSampleList()
 
     ++it;
     }
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 }
 
 void ObjectLabelingModel::BuildTrainingSampleList()
 {
-  std::cout<<"Building training samples list ..."<<std::endl;
+  otbMsgDevMacro(<<"Building training samples list ...");
   // Clear previous samples
   m_TrainingListSample->Clear();
   m_LabelsListSample->Clear();
@@ -1769,12 +1769,12 @@ void ObjectLabelingModel::BuildTrainingSampleList()
 	}  
       }
     }
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 }
 
 void ObjectLabelingModel::ClearMarginSamples()
 {
-  std::cout<<"Erase any previous margin sampled polygons ..."<<std::endl;
+  otbMsgDevMacro(<<"Erase any previous margin sampled polygons ...");
 
   // Clear margin samples
   m_MarginSamples.clear();
@@ -1787,7 +1787,7 @@ void ObjectLabelingModel::ClearMarginSamples()
     node->Remove(node->GetChild(nbChildren-i-1));
     }
   this->NotifyAll("Update");
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 }
 
 
@@ -1805,17 +1805,17 @@ void ObjectLabelingModel::SampleMargin()
   this->BuildSampleList();
   this->BuildTrainingSampleList();
 
-  std::cout<<"Estimating model ..."<<std::endl;
+  otbMsgDevMacro(<<"Estimating model ...");
   // Model estimation
   m_SVMEstimator->SetInputSampleList(m_TrainingListSample);
   m_SVMEstimator->SetTrainingSampleList(m_LabelsListSample);
   m_SVMEstimator->Modified();
-  std::cout<<"Number of classes: "<<m_Classes.size()<<std::endl;
+  otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
   m_SVMEstimator->SetNumberOfClasses(m_Classes.size());
 
   if(m_Classes.size() == 1)
     {
-    std::cout<<"ONE_CLASS svm mode."<<std::endl;
+    otbMsgDevMacro(<<"ONE_CLASS svm mode.");
     m_SVMEstimator->SetSVMType(ONE_CLASS);
     }
 
@@ -1824,9 +1824,9 @@ void ObjectLabelingModel::SampleMargin()
   
   m_Accuracy = m_SVMEstimator->GetFinalCrossValidationAccuracy();
 
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 
-  std::cout<<"Sampling margin ..."<<std::endl;
+  otbMsgDevMacro(<<"Sampling margin ...");
 
   // Margin sampling
   // m_MarginSampler = MarginSamplerType::New();
@@ -1834,9 +1834,9 @@ void ObjectLabelingModel::SampleMargin()
   m_MarginSampler->SetModel(m_SVMEstimator->GetModel());
   m_MarginSampler->Update();
   
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 
-  std::cout<<"Add the margin sampled polygons to the displayed vector layers ..."<<std::endl;
+  otbMsgDevMacro(<<"Add the margin sampled polygons to the displayed vector layers ...");
 
   // For each margin sample 
   for(MarginSamplerType::IndexVectorType::const_iterator sit = m_MarginSampler->GetMarginSamples().begin();
@@ -1853,7 +1853,7 @@ void ObjectLabelingModel::SampleMargin()
     m_MarginSampledPolygon->GetDataTree()->Add(polygonNode,m_MarginSampledFolder);
     }
 
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 
   this->NotifyAll("Update");
 }
@@ -1870,16 +1870,16 @@ void ObjectLabelingModel::Classify()
   this->BuildTrainingSampleList();
 
   // Model estimation
-  std::cout<<"Estimating model ..."<<std::endl;
+  otbMsgDevMacro(<<"Estimating model ...");
   m_SVMEstimator->SetInputSampleList(m_TrainingListSample);
   m_SVMEstimator->SetTrainingSampleList(m_LabelsListSample);
   m_SVMEstimator->Modified();
-  std::cout<<"Number of classes: "<<m_Classes.size()<<std::endl;
+  otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
   m_SVMEstimator->SetNumberOfClasses(m_Classes.size());
 
    if(m_Classes.size() == 1)
      {
-     std::cout<<"ONE_CLASS svm mode."<<std::endl;
+     otbMsgDevMacro(<<"ONE_CLASS svm mode.");
      m_SVMEstimator->SetSVMType(ONE_CLASS);
      }
 
@@ -1891,7 +1891,7 @@ void ObjectLabelingModel::Classify()
   m_SVMEstimator->GetModel()->SaveModel("model.svm");
 
   // SVM Classification
-  std::cout<<"Classifying ..."<<std::endl;
+  otbMsgDevMacro(<<"Classifying ...");
   SVMClassifierType::Pointer svmClassifier = SVMClassifierType::New();
   svmClassifier->SetSample(m_ListSample);
   svmClassifier->SetModel(m_SVMEstimator->GetModel());
@@ -1905,10 +1905,10 @@ void ObjectLabelingModel::Classify()
      }
 
   svmClassifier->Update();
-  std::cout<<"Done."<<std::endl;
+  otbMsgDevMacro(<<"Done.");
 
    // Class labeling the label object
-   std::cout<<"Class labeling the objects ..."<<std::endl;
+   otbMsgDevMacro(<<"Class labeling the objects ...");
    LabelMapType::LabelObjectContainerType::const_iterator lit 
      = m_LabelMap->GetLabelObjectContainer().begin();
    SVMClassifierType::OutputType::ConstIterator sit = svmClassifier->GetOutput()->Begin();
@@ -1921,7 +1921,7 @@ void ObjectLabelingModel::Classify()
      ++lit;
      ++sit;
      }
-   std::cout<<"Done."<<std::endl;
+   otbMsgDevMacro(<<"Done.");
    
    m_ClassLabelFilter = ClassLabelFilterType::New();
    m_ClassLabelFilter->SetInput(m_LabelMap);
@@ -1942,7 +1942,7 @@ void ObjectLabelingModel::Classify()
       newValue[0]=255*m_Classes[0].m_Color[0];
       newValue[1]=255*m_Classes[0].m_Color[1];
       newValue[2]=255*m_Classes[0].m_Color[2];
-      std::cout<<"New value: "<<newValue<<std::endl;
+      otbMsgDevMacro(<<"New value: "<<newValue);
       m_ColorMapper->SetChange(1,newValue);
       m_ColorMapper->SetChange(2,defaultValue);
 
@@ -1955,17 +1955,17 @@ void ObjectLabelingModel::Classify()
      newValue[0]=255*oit->m_Color[0];
      newValue[1]=255*oit->m_Color[1];
      newValue[2]=255*oit->m_Color[2];
-     std::cout<<"New value: "<<oit->m_Label<<" "<<newValue<<std::endl;
+     otbMsgDevMacro(<<"New value: "<<oit->m_Label<<" "<<newValue);
      m_ColorMapper->SetChange(oit->m_Label,newValue);
      }
 
    m_ColorMapper->Update();
-   std::cout<<"Color Mapper update."<<std::endl;
+   otbMsgDevMacro(<<"Color Mapper update.");
    m_VisualizationModel->GetLayerByName("Classification")->SetVisible(true);
-   std::cout<<"Get layer by name."<<std::endl;
+   otbMsgDevMacro(<<"Get layer by name.");
 
    m_VisualizationModel->Update();
-   std::cout<<"Refresh done"<<std::endl;
+   otbMsgDevMacro(<<"Refresh done");
 
    this->SaveClassification();
 }
@@ -1978,10 +1978,10 @@ void ObjectLabelingModel::ClearClassification()
 
 void ObjectLabelingModel::ChangeFeatureState(const std::string& fname, bool state)
 {
-//   std::cout<<"Trying "<<fname<<std::endl;
+//   otbMsgDevMacro(<<"Trying "<<fname);
   if(m_AvailableFeatures.count(fname)>0)
     {
-//     std::cout<<"Changing state of feature "<<fname<<" to "<<state<<std::endl;
+//     otbMsgDevMacro(<<"Changing state of feature "<<fname<<" to "<<state);
     m_AvailableFeatures[fname]=state;
     }
   else
@@ -2095,7 +2095,7 @@ ObjectLabelingModel::VectorType ObjectLabelingModel::BuildSample(const LabelObje
       }
     }
 
-  //std::cout<<"NewSample: "<<newSample<<std::endl;
+  //otbMsgDevMacro(<<"NewSample: "<<newSample);
 
   // Return the sample
   return newSample;
