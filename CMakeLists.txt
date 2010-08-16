@@ -81,6 +81,12 @@ CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/ConfigureMonteverdi.h.in
 
 
 #-----------------------------------------------------------------------------
+#Build shared libraries for monteverdi
+#By default, import the option from the OTB configuration
+SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
+
+
+#-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
