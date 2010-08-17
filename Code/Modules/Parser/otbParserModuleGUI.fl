@@ -11,8 +11,8 @@ class ParserModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {Parser module}
-      callback {this->Quit()} open selected
-      xywh {626 158 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
+      callback {this->Quit()} open
+      xywh {182 189 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
@@ -46,6 +46,26 @@ class ParserModuleGUI {open
         callback {QuickAdd(ui_ImageNames->value());}
         xywh {5 110 410 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
+      Fl_Light_Button ui_Help {
+        label Help
+        callback {if(ui_Help->value())
+{
+ui_HelpWindow->show();
+}
+else
+{
+ui_HelpWindow->hide();
+}}
+        xywh {565 360 65 50} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+    }
+    Fl_Window ui_HelpWindow {
+      label Help open
+      xywh {838 189 335 425} type Double noborder visible
+    } {
+      Fl_Output ui_HelpText {selected
+        xywh {0 0 335 425} type Multiline
+      }
     }
   }
   Function {ParserModuleGUI()} {} {}
@@ -58,5 +78,7 @@ class ParserModuleGUI {open
   Function {ChangeVarName()} {return_type {virtual void}
   } {}
   Function {QuickAdd(unsigned int idx)} {return_type {virtual void}
+  } {}
+  Function {InitHelp()} {return_type {virtual void}
   } {}
 } 

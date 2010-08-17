@@ -86,11 +86,14 @@ protected:
   /** OK callback*/
   virtual void OK();
 
+  /** Help Initialization */
+  virtual void InitHelp();
+
   /** Change a Variable Name */
-  void ChangeVarName();
+  virtual void ChangeVarName();
 
   /** Quick add a variable name into the expression */
-  void QuickAdd(unsigned int idx);
+  virtual void QuickAdd(unsigned int idx);
 
 private:
   ParserModule(const Self&); //purposely not implemented
