@@ -54,7 +54,7 @@ guiMinDetailsValue->deactivate();
 guiMaxDetails->activate();
 guiMaxDetailsValue->activate();
 
-this->UpdateDetails();} selected
+this->UpdateDetails();}
           tooltip {Set pixels with an input intensity superior to upper threshold value to outside intensity} xywh {490 375 140 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Round_Button guiBelow {
@@ -99,14 +99,14 @@ this->UpdateDetails();}
 guiBelow->activate();
 guiOutside->activate();
 
-guiAbove->value(1);
+guiAbove->value(0);
 guiBelow->value(0);
-guiOutside->value(0);
+guiOutside->value(1);
 guiGenericThreshold->value(1);
 guiBinaryThreshold->value(0);
 guiInsideValue->deactivate();
 this->UpdateLayerGenerationFlag();
-this->UpdateDetails();}
+this->UpdateDetails();} selected
           xywh {270 410 140 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Round_Button guiBinaryThreshold {
