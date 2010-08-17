@@ -84,18 +84,18 @@ void ObjectLabelingView::Build()
   m_ImageView->GetZoomWidget()->AddGlComponent(glComp2);
 
   // Add the GlComponent for neighboring polygons
-  VectorDataGlComponentType::Pointer glComp3 = VectorDataGlComponentType::New();
-  VectorDataGlComponentType::ColorType color3;
-  color3[0]=0.;
-  color3[1]=1.;
-  color3[2]=0.;
-  color3[3]=0.5;
-  glComp3->SetVectorData(m_Model->GetNeighborsPolygon());
-  glComp3->RenderPolygonBoundariesOnlyOn();
-  glComp3->SetColor(color3);
-  m_ImageView->GetFullWidget()->AddGlComponent(glComp3);
-  m_ImageView->GetScrollWidget()->AddGlComponent(glComp3);
-  m_ImageView->GetZoomWidget()->AddGlComponent(glComp3);
+//  VectorDataGlComponentType::Pointer glComp3 = VectorDataGlComponentType::New();
+//  VectorDataGlComponentType::ColorType color3;
+//  color3[0]=0.;
+//  color3[1]=1.;
+//  color3[2]=0.;
+//  color3[3]=0.5;
+//  glComp3->SetVectorData(m_Model->GetNeighborsPolygon());
+//  glComp3->RenderPolygonBoundariesOnlyOn();
+//  glComp3->SetColor(color3);
+//  m_ImageView->GetFullWidget()->AddGlComponent(glComp3);
+//  m_ImageView->GetScrollWidget()->AddGlComponent(glComp3);
+//  m_ImageView->GetZoomWidget()->AddGlComponent(glComp3);
   
   if(!m_Controller)
     {
@@ -220,8 +220,8 @@ void ObjectLabelingView::RefreshVisualization()
   dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(1))->SetSpacing(m_Model->GetSpacing());
   dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(2))->SetOrigin(m_Model->GetOrigin());
   dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(2))->SetSpacing(m_Model->GetSpacing());
-  dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(3))->SetOrigin(m_Model->GetOrigin());
-  dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(3))->SetSpacing(m_Model->GetSpacing());
+//  dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(3))->SetOrigin(m_Model->GetOrigin());
+//  dynamic_cast<VectorDataGlComponentType *>(m_ImageView->GetFullWidget()->GetNthGlComponent(3))->SetSpacing(m_Model->GetSpacing());
 
   // Remove all GL components from views except for the 4 first ones which are always here
   unsigned int nbComponents = m_ImageView->GetFullWidget()->GetNumberOfGlComponents();
@@ -602,6 +602,7 @@ void ObjectLabelingView::ExportClassificationToGIS()
 
 void ObjectLabelingView::Exit()
 {
+  this->SaveClassification();
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
   wImagesSelectionWindow->hide();

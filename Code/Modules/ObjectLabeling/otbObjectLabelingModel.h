@@ -325,6 +325,9 @@ public:
   /** Clear margin samples */
   void ClearMarginSamples();
 
+  /** Train SVM */
+  void Train();
+
   /** Classify */
   void Classify();
 
