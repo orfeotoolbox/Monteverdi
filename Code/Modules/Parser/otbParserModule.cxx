@@ -56,6 +56,8 @@ void ParserModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void ParserModule::Hide()
 {
   guiMainWindow->hide();
+  ui_HelpWindow->hide();
+  ui_Help->value(0);
 }
 
 /** 
@@ -90,8 +92,34 @@ void ParserModule::Run()
 
   ui_VarNameList->value(0);
   
+  // Initialize the help window
+  this->InitHelp();
+
   // Show the GUI
   this->Show();
+}
+
+/** 
+ * Help Initialization
+ */
+void ParserModule::InitHelp()
+{
+  std::ostringstream helpContent;
+  
+  helpContent << "- Functions : "<< std::endl;
+  helpContent << "-- Trigonometric Functions" << std::endl << "sin() - cos() - tan()" << std::endl;
+  helpContent << "-- Arcus Functions" << std::endl << "asin() - acos() - atan()" << std::endl;
+  helpContent << "-- Hyperbholic Functions" << std::endl << "sinh() - cosh() - tanh()" << std::endl;
+  helpContent << "-- Arcus Hyperbolic Functions" << std::endl << "asinh() - acosh() - atanh()" << std::endl;
+  helpContent << "-- Logarithm Functions" << std::endl << "log2() - log10() - log() - ln()" << std::endl;
+  helpContent << "-- Misc" << std::endl << "exp() - sqrt() - sign() - rint() - abs() - if()" << std::endl;
+  helpContent << "-- Functions With Variable Number of Arguments" << std::endl;
+  helpContent << "sum() - avg() - min() - max()" << std::endl;
+  helpContent << "-- OTB Functions" << std::endl << "ndvi()" << std::endl << std::endl;
+  helpContent << "- Constants : " << std::endl << "e - log2e - log10e - ln2 - ln10 - ";
+  helpContent << "pi - euler" << std::endl;
+
+  ui_HelpText->value(helpContent.str().c_str());
 }
 
 /** 
