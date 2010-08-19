@@ -314,15 +314,18 @@ namespace otb
       std::vector<unsigned int>::iterator it;
       bool found = false;
       // this list is used to set the NIR channel
-      // it is set as the fgirst remainded index (when R, G, B one are supressed of the list)
+      // it is set as the first remaining index (when R, G, B one are suppressed of the list)
       for(unsigned int i=0; i<vimage->GetNumberOfComponentsPerPixel(); i++)
         {
         tempList.push_back(i);
         }
+
       // Look for bands id in metadata
       ImageMetadataInterfaceBase::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(vimage->GetMetaDataDictionary());
+      std::vector<unsigned int> defaultDisplayChannels = metadataInterface->GetDefaultDisplay();
+
       // B band Id
-      m_BandId[0] = metadataInterface->GetDefaultBBand();
+      m_BandId[0] = defaultDisplayChannels[2];
       it = tempList.begin();
       while( it != tempList.end() && found == false )
         {
@@ -335,7 +338,7 @@ namespace otb
         }
 
       // G band Id
-      m_BandId[1] = metadataInterface->GetDefaultGBand();
+      m_BandId[1] = defaultDisplayChannels[1];
       it = tempList.begin();
       found = false;
       while( it != tempList.end() && found == false )
@@ -349,7 +352,7 @@ namespace otb
         }
 
       // R band Id
-      m_BandId[2] = metadataInterface->GetDefaultRBand();
+      m_BandId[2] = defaultDisplayChannels[0];
       it = tempList.begin();
       found = false;
       while( it != tempList.end() && found == false )
@@ -374,7 +377,7 @@ namespace otb
       }
     else
       {
-      itkExceptionMacro("invalid input image. It must have more than 2 channels. The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" one.");
+      itkExceptionMacro("invalid input image. It must have more than 2 channels. The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" channels.");
       }
   }
 
