@@ -12,7 +12,7 @@ class ParserModuleGUI {open
     Fl_Window guiMainWindow {
       label {Parser module}
       callback {this->Quit()} open
-      xywh {182 189 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
+      xywh {134 201 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
@@ -21,9 +21,10 @@ class ParserModuleGUI {open
       }
       Fl_Input ui_Expression {
         label {Enter Your Formula :}
-        xywh {10 40 630 25} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelcolor 186 align 1
+        callback {LiveCheck();}
+        xywh {10 40 630 25} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelcolor 186 align 1 when 1
       }
-      Fl_Choice ui_VarNameList {
+      Fl_Choice ui_ImageNameList {
         label {Rename Variable : } open
         xywh {10 300 630 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelcolor 186 align 5
       } {}
@@ -37,33 +38,34 @@ class ParserModuleGUI {open
         xywh {405 335 35 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
       Fl_Browser ui_VarNames {
-        label {Corresponding Variable Names:}
+        label {Variable Names:}
         callback {QuickAdd(ui_VarNames->value());}
-        xywh {415 110 230 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+        xywh {465 110 180 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
       Fl_Browser ui_ImageNames {
         label {Image Names:}
         callback {QuickAdd(ui_ImageNames->value());}
-        xywh {5 110 410 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+        xywh {5 110 460 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
       }
-      Fl_Light_Button ui_Help {
+      Fl_Button ui_Help {
         label Help
         callback {if(ui_Help->value())
 {
+ui_HelpWindow->position(guiMainWindow->x() + guiMainWindow->w(),guiMainWindow->y());
 ui_HelpWindow->show();
 }
 else
 {
 ui_HelpWindow->hide();
-}}
-        xywh {565 360 65 50} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+}} selected
+        xywh {570 360 65 50} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
     }
     Fl_Window ui_HelpWindow {
       label Help open
-      xywh {838 189 335 425} type Double noborder visible
+      xywh {790 202 335 425} type Double visible
     } {
-      Fl_Output ui_HelpText {selected
+      Fl_Output ui_HelpText {
         xywh {0 0 335 425} type Multiline
       }
     }
@@ -80,5 +82,7 @@ ui_HelpWindow->hide();
   Function {QuickAdd(unsigned int idx)} {return_type {virtual void}
   } {}
   Function {InitHelp()} {return_type {virtual void}
+  } {}
+  Function {LiveCheck()} {open return_type {virtual void}
   } {}
 } 

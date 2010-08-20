@@ -22,7 +22,7 @@
 #include "otbParserModuleGUI.h"
 
 // include the OTB elements
-#include "otbImage.h"
+#include "otbVectorImageToImageListFilter.h"
 
 // Parser opertor Filter
 #include "otbNaryParserImageFilter.h"
@@ -30,7 +30,7 @@
 namespace otb
 {
 /** \class ParserModule
- *  \brief This it the Parser module
+ *  \brief This is the Parser module
  *
  *
  */
@@ -53,6 +53,9 @@ public:
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image            ImageType;
+  typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
+  typedef otb::ImageList<ImageType>                    ImageListType;
+  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
 
   // Parser Class typedefs
   typedef NaryParserImageFilter<ImageType>             ParserFilterType;
@@ -95,6 +98,9 @@ protected:
   /** Quick add a variable name into the expression */
   virtual void QuickAdd(unsigned int idx);
 
+  /** Expression live checking */
+  virtual void LiveCheck();
+
 private:
   ParserModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -102,6 +108,8 @@ private:
   // Class attributes
   ParserFilterType::Pointer        m_ParserFilter;
   ImageType::Pointer               m_Output;
+  unsigned int                     m_NumberOfInputBands;
+  unsigned int                     m_InputSize[2];
 
 };
 

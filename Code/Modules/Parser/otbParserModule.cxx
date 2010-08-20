@@ -21,6 +21,8 @@
 #include "otbParserModule.h"
 #include "otbMsgReporter.h"
 
+#include "otbVectorImageToImageListFilter.h"
+
 namespace otb
 {
 /**
@@ -30,6 +32,8 @@ ParserModule::ParserModule()
 {
    // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to process"), false, true);
+  // The module does not support vector images as input yet
+  //this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
   
   // Build the GUI
   this->CreateGUI();
@@ -68,6 +72,7 @@ void ParserModule::Run()
   // First step is to retrieve the inputs
   // Get the number of input image
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
+  unsigned int bandId = 0;
 
   if (numberOfInputImages == 0)
     {
@@ -78,19 +83,94 @@ void ParserModule::Run()
   m_ParserFilter = ParserFilterType::New();
   for(unsigned int i = 0; i < numberOfInputImages; i++)
     {
+    // Test if the input is an Image or a VectorImage
     ImageType::Pointer image = this->GetInputData<ImageType>("InputImage", i);
-    if (image.IsNull())
-      {
-      itkExceptionMacro(<< "The input image number " << i+1 << " is Null.");
-      }
-    m_ParserFilter->SetNthInput(i, image);
+    // The module does not support vector images as input yet
+    //VectorImageType::Pointer vectorImage = this->GetInputData<VectorImageType>("InputImage", i);
+    VectorImageType::Pointer vectorImage = NULL;
     
-    ui_VarNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());        
-    ui_VarNames->add(m_ParserFilter->GetNthInputName(i).c_str());
-    ui_ImageNames->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
-    }
+    // If the input is neither an Image nor a vectorImage
+    if (image.IsNull() && vectorImage.IsNull())
+      {
+      itkExceptionMacro(<< "The input image number " << bandId + 1 << " is Null.");
+      }
+    
+    // From here on, the input is either an Image or a vectorImage
+    // The input is an image
+    if (image.IsNotNull()) 
+      {
+      image->UpdateOutputInformation();
+      if(bandId == 0)
+	{
+	m_InputSize[0] =  image->GetLargestPossibleRegion().GetSize(0);
+	m_InputSize[1] =  image->GetLargestPossibleRegion().GetSize(1);
+	}
+      else
+	{
+	if((m_InputSize[0] != image->GetLargestPossibleRegion().GetSize(0))
+	   || (m_InputSize[1] != image->GetLargestPossibleRegion().GetSize(1)))
+	  {
+	  itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+			    << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
+			    << "band #" << bandId+1 << " is [" << image->GetLargestPossibleRegion().GetSize(0)
+			    << ";" << image->GetLargestPossibleRegion().GetSize(1) << "]");
+	  }
+	}
+      
+      m_ParserFilter->SetNthInput(bandId, image);
+      
+      ui_ImageNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());        
+      ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
+      ui_ImageNames->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
+      bandId ++;
+      }
+    // The input is an vectorImage
+    else
+      {
+      vectorImage->UpdateOutputInformation();
+      if(bandId == 0)
+	{
+	m_InputSize[0] =  vectorImage->GetLargestPossibleRegion().GetSize(0);
+	m_InputSize[1] =  vectorImage->GetLargestPossibleRegion().GetSize(1);
+	}
+      else
+	{
+	if((m_InputSize[0] != vectorImage->GetLargestPossibleRegion().GetSize(0))
+	   || (m_InputSize[1] != vectorImage->GetLargestPossibleRegion().GetSize(1)))
+	  {
+	  itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+			    << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
+			    << "band #" << bandId+1 << " is [" << vectorImage->GetLargestPossibleRegion().GetSize(0)
+			    << ";" << vectorImage->GetLargestPossibleRegion().GetSize(1) << "]");
+	  }
+	}
+      
+      // vectorImage to Images adaptator
+      VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
+      filter->SetInput(vectorImage);
+      filter->Update();
+      //filter->GetOutput()->UpdateOutputInformation();
+      
 
-  ui_VarNameList->value(0);
+      for(unsigned int j = 0; j < vectorImage->GetNumberOfComponentsPerPixel(); j++)
+	{
+	std::ostringstream tmpVarName, tmpParserVarName;
+	tmpParserVarName << "im" << i+1 << "b" << j+1;
+
+	//filter->GetOutput()->GetNthElement(j)->UpdateOutputInformation();
+
+	m_ParserFilter->SetNthInput(bandId, filter->GetOutput()->GetNthElement(j), tmpParserVarName.str());
+	
+	tmpVarName << this->GetInputDataDescription<ImageType>("InputImage", i) << "(band" << j+1 << ")";
+	ui_ImageNameList->add(tmpVarName.str().c_str());        
+	ui_ImageNames->add(tmpVarName.str().c_str());
+	ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
+	bandId ++;
+	}
+      }
+    }
+  m_NumberOfInputBands = bandId;
+  ui_ImageNameList->value(0);
   
   // Initialize the help window
   this->InitHelp();
@@ -127,18 +207,21 @@ void ParserModule::InitHelp()
  */
 void ParserModule::ChangeVarName()
 {
-  unsigned int idx = ui_VarNameList->value();
+  unsigned int idx = ui_ImageNameList->value();
   std::string newName(ui_NewVarName->value());
-  size_t found;
+  size_t found1, found2;
 
-  found = newName.find_first_of(" ");
+  found1 = newName.find_first_of(" ");
+  found2 = newName.find_first_of(".");
 
-  if((found == std::string::npos) && (newName.compare("")))
+  if((found1 == std::string::npos) && (found2 == std::string::npos) && (newName.compare("")))
     {
      m_ParserFilter->SetNthInputName(idx, ui_NewVarName->value());
      ui_VarNames->remove(idx+1);
      ui_VarNames->insert(idx+1, m_ParserFilter->GetNthInputName(idx).c_str());
     }
+  
+  LiveCheck();
 }
 
 /**
@@ -146,10 +229,9 @@ void ParserModule::ChangeVarName()
 */
 void ParserModule::QuickAdd(unsigned int idx)
 {
-  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
   std::ostringstream tmpExpression;
   
-  if((idx-1) < numberOfInputImages)
+  if((idx-1) < m_NumberOfInputBands)
     {
     ui_VarNames->select(idx);
     ui_ImageNames->select(idx);
@@ -158,41 +240,49 @@ void ParserModule::QuickAdd(unsigned int idx)
     ui_Expression->value(tmpExpression.str().c_str());
     ui_Expression->take_focus();
     }
+  LiveCheck();
 }
 
 /**
- * OK CallBack
+ * Live Checking
  */
-void ParserModule::OK()
+void ParserModule::LiveCheck()
 {
-  unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
-  unsigned int exceptFlag = 0;
   ParserType::Pointer dummyParser = ParserType::New();
   std::vector<double> dummyVars;
   double value;
+  
+  ui_Expression->color(FL_GREEN);
+  ui_Expression->tooltip("The Expression is Valid");
+  ui_Ok->activate();
 
   // Setup the dummy parser
-  for(unsigned int i = 0; i < numberOfInputImages; i++)
+  for(unsigned int i = 0; i < m_NumberOfInputBands; i++)
     {
     dummyVars.push_back(1);
     dummyParser->DefineVar(m_ParserFilter->GetNthInputName(i), &(dummyVars.at(i)));
     }
   dummyParser->SetExpr(ui_Expression->value());
-    
+  // Check the expression
   try
     {
     value = dummyParser->Eval();
     }
   catch(itk::ExceptionObject& err)
     {
-    exceptFlag = 1;
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    ui_Expression->color(FL_RED);
+    ui_Expression->tooltip(err.GetDescription());
+    ui_Ok->deactivate();
     }
-  
-  if(!exceptFlag)
-    {
-    ui_Expression->color((Fl_Color)7);
     ui_Expression->redraw();
+}
+
+
+/**
+ * OK CallBack
+ */
+void ParserModule::OK()
+{
     // Apply the filter
     m_ParserFilter->SetExpression(ui_Expression->value());
     m_Output = m_ParserFilter->GetOutput();
@@ -202,15 +292,6 @@ void ParserModule::OK()
 
     // close the GUI
     this->Hide();
-    ui_Expression->label("Enter Your Formula :");
-    }
-  else
-    {
-    exceptFlag=0;
-    ui_Expression->label("[WRONG FORMULA] - Please Check Your Formula :");
-    ui_Expression->color(1);
-    ui_Expression->redraw();
-    }
 }
 
 } // End namespace otb
