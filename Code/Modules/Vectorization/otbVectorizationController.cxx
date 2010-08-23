@@ -203,5 +203,17 @@ void VectorizationController::AddVectorData(VectorDataPointer vData)
    }
 }
 
+void VectorizationController::OK()
+{
+ try
+    {
+      m_Model->OK();
+    }
+ catch (itk::ExceptionObject& err)
+   {
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
+   }
+}
+
 
 } // end namespace otb

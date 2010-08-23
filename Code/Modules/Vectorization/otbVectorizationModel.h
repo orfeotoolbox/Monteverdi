@@ -20,6 +20,7 @@
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbEventsSender.h"
 #include "otbTypeManager.h"
 
 //Visu
@@ -36,7 +37,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT VectorizationModel
-  : public MVCModel<ListenerBase>, public itk::Object, public ListenerBase
+  : public  MVCModel<ListenerBase>, public itk::Object, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -46,7 +47,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(VectorizationModel, Object);
+  itkTypeMacro(VectorizationModel, MVCModel);
 
   /** New macro */
   itkNewMacro(Self);
@@ -110,7 +111,14 @@ public:
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
   void UpdateAlpha(double alpha);
+  void OK();
+
+  /** Output accessor. */
+  itkGetObjectMacro(Output, VectorDataType );
   
+  /** Output changed accessor. */
+  itkGetMacro( OutputChanged, bool );
+
 protected:
   /** Constructor */
   VectorizationModel();
@@ -139,6 +147,11 @@ private:
 
   /** VectorData model */
   VectorDataModelPointerType m_VectorDataModel;
+
+  /**Output vector data. */
+  VectorDataPointerType  m_Output;
+  
+  bool m_OutputChanged;
 };
 
 } //end namespace otb

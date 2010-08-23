@@ -99,18 +99,19 @@ void VectorizationModule::Run()
 /** The Notify */
 void VectorizationModule::Notify()
 {
+  if (m_Model->GetOutputChanged())
+    {
+      std::cout<<"ferfgehkprh"<<std::endl;
+      this->ClearOutputDescriptors();
+      // Add outputs
+      VectorDataType::Pointer vData = m_Model->GetOutput();
+      this->AddOutputDescriptor(vData,"VectorData", otbGetTextMacro("New vector data"));
 
-//  if (m_Model->GetOutputChanged())
-//    {
-//      this->ClearOutputDescriptors();
-//      // Add outputs
-//      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-//      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
-//    }
-
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->BusyOff();
+    }
 
   // Once module is closed, it is no longer busy
-  this->BusyOff();
+ 
 }
 } // End namespace otb

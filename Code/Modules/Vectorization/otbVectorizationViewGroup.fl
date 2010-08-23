@@ -12,7 +12,7 @@ class VectorizationViewGroup {open
     Fl_Window wMainWindow {
       label {Vectorization Tool}
       callback {this->HideAll();} open
-      xywh {179 108 1005 795} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
+      xywh {179 108 915 795} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
       Fl_Group guiImageGroup {open
         xywh {8 3 477 754} resizable
@@ -35,11 +35,11 @@ class VectorizationViewGroup {open
         }
       }
       Fl_Group guiParametersGroup {open
-        xywh {492 1 553 756}
+        xywh {492 1 423 756}
       } {
         Fl_Group guiVectorDataTreeGroup {
           label {Vector Data Browser} open
-          xywh {499 23 500 584} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
+          xywh {499 23 406 584} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
         } {}
         Fl_Group {} {
           label {Next geometry} open
@@ -80,26 +80,32 @@ this->NextGeometryIsPolygonIntCallback();}
         }
         Fl_Group {} {
           label {Color table} open
-          xywh {725 633 272 118} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+          xywh {711 633 194 85} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
         } {
           Fl_Button bColor {
+            label Color
             callback {this->UpdateColorCallback();}
-            xywh {769 649 190 20} box PLASTIC_DOWN_BOX color 7
+            xywh {725 649 163 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Slider sAlpha {
             callback {vAlpha->value(sAlpha->value());
 this->UpdateAlphaCallback();}
-            xywh {792 713 182 20} type Horizontal box PLASTIC_DOWN_BOX color 7 when 4 step 0.05 value 0.75 slider_size 0.01
+            xywh {765 690 123 18} type Horizontal box PLASTIC_DOWN_BOX color 7 when 4 step 0.05 value 0.75 slider_size 0.01
           }
           Fl_Value_Input vAlpha {
-            label Alpha selected
-            tooltip {Vactor data transparency value.} xywh {752 713 40 20} box PLASTIC_DOWN_BOX selection_color 42 labelfont 1 labelsize 12 labelcolor 186 align 5 when 4 step 0.05 value 0.75
+            label Alpha
+            tooltip {Vactor data transparency value.} xywh {725 690 40 18} box PLASTIC_DOWN_BOX selection_color 42 labelfont 1 labelsize 12 labelcolor 186 align 5 when 4 step 0.05 value 0.75
           }
+        }
+        Fl_Return_Button {} {
+          label OK
+          callback {this->OKCallback();} selected
+          xywh {775 725 66 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
         }
       }
       Fl_Choice vNavigationMode {
         callback {ChangeNavigationModeCallback();} open
-        xywh {10 760 988 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+        xywh {10 760 900 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
       } {}
     }
   }
@@ -122,5 +128,7 @@ this->UpdateAlphaCallback();}
   Function {UpdateAlphaCallback()} {open return_type virtual
   } {}
   Function {UpdateColorCallback()} {open return_type virtual
+  } {}
+  Function {OKCallback()} {open return_type virtual
   } {}
 } 

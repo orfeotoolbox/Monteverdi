@@ -82,6 +82,7 @@ public:
   virtual void ChangeNavigationModeCallback();
   virtual void UpdateColorCallback();
   virtual void UpdateAlphaCallback();  
+  virtual void OKCallback();  
 
   void Show();
   void RedrawWidgets();

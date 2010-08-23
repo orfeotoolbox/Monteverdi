@@ -56,6 +56,8 @@ public:
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0) = 0;
   virtual void ChangeNavigationMode() =0;
+  virtual void OK() =0;
+
 
 protected:
   /** Constructor */

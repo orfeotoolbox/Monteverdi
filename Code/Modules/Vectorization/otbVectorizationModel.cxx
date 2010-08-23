@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbVectorizationModel.h"
 #include "itkPreOrderTreeIterator.h"
+#include "otbVectorDataProjectionFilter.h"
+
 
 namespace otb
 {
@@ -45,7 +47,8 @@ VectorizationModel::
 VectorizationModel() : m_VisualizationModel(),
   m_ImageGenerator(),
   m_InputImage(),
-  m_VectorDataModel()
+  m_VectorDataModel(),
+  m_Output()
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -57,6 +60,7 @@ VectorizationModel() : m_VisualizationModel(),
   // VectorData model
   m_VectorDataModel = VectorDataModelType::New();
   m_VectorDataModel->RegisterListener(this);
+  m_OutputChanged = false;
 }
 
 VectorizationModel
@@ -136,7 +140,7 @@ void VectorizationModel
   if (!it.IsAtEnd())
     {
     it.Remove();
-    this->NotifyAll();
+     this->NotifyAll();
     }
 }
 
@@ -302,6 +306,35 @@ void VectorizationModel
 }
 
 
+void
+VectorizationModel
+::OK()
+{
+  //VectorDataPointerType vData = m_VectorDataModel->GetVectorData();
+  typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+  ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
+  vectorDataProjection->SetInput(m_VectorDataModel->GetVectorData());
+
+  PointType lNewOrigin;
+  // polygons are recorded with a 0.5 shift...
+  lNewOrigin[0] = m_InputImage->GetOrigin()[0]+0.5;
+  lNewOrigin[1] = m_InputImage->GetOrigin()[1]+0.5;
+
+  vectorDataProjection->SetInputOrigin(lNewOrigin);
+  vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
+
+  std::string projectionRef;
+  itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
+                                   MetaDataKey::ProjectionRefKey, projectionRef );
+  vectorDataProjection->SetInputProjectionRef(projectionRef);
+  vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
+  vectorDataProjection->Update();
+
+  m_Output = vectorDataProjection->GetOutput();
+  m_OutputChanged = true;
+  this->NotifyAll();
+  m_OutputChanged = false;
+}
 
 void
 VectorizationModel

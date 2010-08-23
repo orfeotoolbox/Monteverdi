@@ -146,8 +146,6 @@ void
 VectorizationView
 ::RedrawWidgets()
 {
-//  m_VectorDataGlComponent->SetOrigin(m_Model->GetInputImage()->GetOrigin());
-//  m_VectorDataGlComponent->SetSpacing(m_Model->GetInputImage()->GetSpacing());
   m_ImageView->GetFullWidget()->redraw();
   m_ImageView->GetScrollWidget()->redraw();
   m_ImageView->GetZoomWidget()->redraw();
@@ -266,6 +264,14 @@ void VectorizationView
   m_Color[3] = static_cast<double>(vAlpha->value());
   m_VectorDataGlComponent->SetColor(m_Color);
   m_ImageView->Update();
+}
+
+
+ void VectorizationView
+::OKCallback()
+{
+  m_Controller->OK();
+  wMainWindow->hide();
 }
 
 } // end namespace

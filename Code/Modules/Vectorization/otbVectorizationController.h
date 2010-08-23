@@ -100,7 +100,9 @@ public:
                                        const unsigned int& interiorRingIndex = 0);
   virtual void ChangeNavigationMode();
   virtual void AddVectorData(VectorDataPointer vData);
+  virtual void OK();
 
+ 
 protected:
   /** Constructor */
   VectorizationController();

@@ -99,6 +99,7 @@ protected:
     m_View->HideAll();
   }
 
+
 private:
   VectorizationModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
