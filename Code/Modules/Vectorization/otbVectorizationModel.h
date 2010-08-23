@@ -75,8 +75,8 @@ public:
   typedef BlendingFunctionType::Pointer      BlendingFunctionPointerType;
   typedef VisualizationModelType::RegionType RegionType;
 
-  typedef TypeManager
-  ::Vector_Data VectorDataType;
+  typedef TypeManager::Vector_Data     VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointerType;
   typedef VectorDataModel              VectorDataModelType;
   typedef VectorDataModelType::Pointer VectorDataModelPointerType;
   typedef VectorDataType::DataNodeType DataNodeType;
@@ -95,6 +95,8 @@ public:
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
+  /** Load a vector data */
+  void AddVectorData(VectorDataPointerType vData);
 
   void RemoveDataNode(DataNodeType * node);
   void SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value);

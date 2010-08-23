@@ -107,6 +107,25 @@ VectorizationModel
 //  m_VectorDataModel->SetSpacing(m_InputImage->GetSpacing());
 }
 
+
+
+void VectorizationModel
+::AddVectorData(VectorDataPointerType vData)
+{
+std::cout<<"VectorizationModel::AddVectorDat go"<<std::endl;
+  if(m_InputImage.IsNull())
+    {
+      itkExceptionMacro("Invalid input image.");
+    }
+  std::cout<<"VectorizationModel::AddVectorDat"<<std::endl;
+  m_VectorDataModel->AddVectorData<VectorImageType>(vData, m_InputImage);
+  std::cout<<"VectorizationModel::AddVectorDat end"<<std::endl;
+ m_VisualizationModel->Update();
+
+  //this->NotifyAll();
+}
+
+
 void VectorizationModel
 ::RemoveDataNode(DataNodeType * node)
 {

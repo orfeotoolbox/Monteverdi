@@ -189,4 +189,19 @@ void VectorizationController::UpdatePointFromDataNode(DataNodeType * node,
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
+
+
+void VectorizationController::AddVectorData(VectorDataPointer vData)
+{
+ try
+    {
+      m_Model->AddVectorData(vData);
+    }
+ catch (itk::ExceptionObject& err)
+   {
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
+   }
+ 
+}
+
 } // end namespace otb

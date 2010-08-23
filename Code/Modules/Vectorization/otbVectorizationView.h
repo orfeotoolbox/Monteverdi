@@ -83,6 +83,7 @@ public:
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
+  void UpdateModel();
 
 protected:
   /** Constructor */

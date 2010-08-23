@@ -58,6 +58,7 @@ public:
   ::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager
   ::Vector_Data VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointerType;
 
   /** MVC typedefs */
   typedef otb::VectorizationController ControllerType;

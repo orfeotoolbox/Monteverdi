@@ -62,7 +62,7 @@ protected:
   /** Constructor */
   VectorizationControllerInterface() {}
   /** Destructor */
-  ~VectorizationControllerInterface() {}
+  virtual ~VectorizationControllerInterface() {}
 
 private:
   VectorizationControllerInterface(const Self&); //purposely not implemented
