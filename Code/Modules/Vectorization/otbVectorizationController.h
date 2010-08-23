@@ -101,7 +101,6 @@ public:
   virtual void ChangeNavigationMode();
   virtual void AddVectorData(VectorDataPointer vData);
 
-
 protected:
   /** Constructor */
   VectorizationController();

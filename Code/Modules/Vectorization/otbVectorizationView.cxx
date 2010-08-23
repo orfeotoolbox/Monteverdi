@@ -22,6 +22,7 @@
 #include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Color_Chooser.H>
 
 namespace otb
 {
@@ -40,8 +41,14 @@ VectorizationView
   m_ImageView->GetFullWidget()->AddGlComponent(m_VectorDataGlComponent);
   m_ImageView->GetScrollWidget()->AddGlComponent(m_VectorDataGlComponent);
   m_ImageView->GetZoomWidget()->AddGlComponent(m_VectorDataGlComponent);
-}
 
+  // Init with red
+  m_Color.Fill(0);
+  m_Color[0]=1.;
+  m_Color[3]=1;
+  
+}
+  
 VectorizationView
 ::~VectorizationView()
 {
@@ -110,12 +117,29 @@ VectorizationView
     "Mouse left: add point, mouse middle: navigate, mouse right: end geometry, del: remove last geometry");
   vNavigationMode->add(
     "Mouse left: navigate, mouse middle: add point, mouse right: end geometry, del: remove last geometry");
-  vNavigationMode->value(2);
+  vNavigationMode->value(0);
+  vNavigationMode->redraw();
 
   // Register controllers
   m_ImageView->SetController(m_WidgetController);
   // Show
   this->Show();
+
+
+  m_Color =  m_VectorDataGlComponent->GetColor();
+  fl_color(static_cast<unsigned char>(255 * m_Color[0]),
+	   static_cast<unsigned char>(255 * m_Color[1]),
+	   static_cast<unsigned char>(255 * m_Color[2]));
+  
+  // Change the color of the text
+  bColor->color(fl_color());
+  bColor->redraw();
+
+  vAlpha->value(m_Color[3]);
+  vAlpha->redraw();
+  sAlpha->value(m_Color[3]);
+  sAlpha->redraw();
+  
 }
 
 void
@@ -206,5 +230,42 @@ void VectorizationView
   m_Controller->ChangeNavigationMode();
 }
 
+void VectorizationView
+::UpdateColorCallback()
+{
+
+  double r = (double) m_Color[0];
+  double g = (double) m_Color[1];
+  double b = (double) m_Color[2];
+  
+  int ok = fl_color_chooser(otbGetTextMacro("Changed class color"), r, g, b);
+  
+  if (ok)
+    {
+      m_Color[0] = (float) r;
+      m_Color[1] = (float) g;
+      m_Color[2] = (float) b;
+      
+      fl_color(static_cast<unsigned char>(255 * m_Color[0]),
+               static_cast<unsigned char>(255 * m_Color[1]),
+               static_cast<unsigned char>(255 * m_Color[2]));
+
+      // Change the color of the text
+      bColor->color(fl_color());
+      bColor->redraw();
+
+      m_VectorDataGlComponent->SetColor(m_Color);
+      m_ImageView->Update();
+    }
+}
+  
+
+ void VectorizationView
+::UpdateAlphaCallback()
+{
+  m_Color[3] = static_cast<double>(vAlpha->value());
+  m_VectorDataGlComponent->SetColor(m_Color);
+  m_ImageView->Update();
+}
 
 } // end namespace

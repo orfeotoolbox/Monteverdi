@@ -44,16 +44,12 @@ Notify(ListenerBase * listener)
 VectorizationModel::
 VectorizationModel() : m_VisualizationModel(),
   m_ImageGenerator(),
-  m_BlendingFunction(),
   m_InputImage(),
   m_VectorDataModel()
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
-  m_BlendingFunction    = BlendingFunctionType::New();
   m_ImageGenerator      = LayerGeneratorType::New();
-
-  m_BlendingFunction->SetAlpha(0.6);
 
   // Input & Output
   m_InputImage = VectorImageType::New();
@@ -112,15 +108,13 @@ VectorizationModel
 void VectorizationModel
 ::AddVectorData(VectorDataPointerType vData)
 {
-std::cout<<"VectorizationModel::AddVectorDat go"<<std::endl;
   if(m_InputImage.IsNull())
     {
       itkExceptionMacro("Invalid input image.");
     }
-  std::cout<<"VectorizationModel::AddVectorDat"<<std::endl;
+
   m_VectorDataModel->AddVectorData<VectorImageType>(vData, m_InputImage);
-  std::cout<<"VectorizationModel::AddVectorDat end"<<std::endl;
- m_VisualizationModel->Update();
+  //m_VisualizationModel->Update();
 
   //this->NotifyAll();
 }
@@ -306,6 +300,8 @@ void VectorizationModel
     }
   this->NotifyAll();
 }
+
+
 
 void
 VectorizationModel

@@ -70,9 +70,6 @@ public:
   typedef VisualizationModelType::Pointer VisualizationModelPointerType;
   typedef LayerGeneratorType::ImageLayerType
   ::OutputPixelType OutputPixelType;
-  typedef Function::UniformAlphaBlendingFunction
-  <OutputPixelType>                         BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer      BlendingFunctionPointerType;
   typedef VisualizationModelType::RegionType RegionType;
 
   typedef TypeManager::Vector_Data     VectorDataType;
@@ -112,7 +109,8 @@ public:
                                const PointType& point,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
-
+  void UpdateAlpha(double alpha);
+  
 protected:
   /** Constructor */
   VectorizationModel();
@@ -135,7 +133,6 @@ private:
   /** Visualization */
   VisualizationModelPointerType m_VisualizationModel;
   LayerGeneratorPointerType     m_ImageGenerator;
-  BlendingFunctionPointerType   m_BlendingFunction;
 
   /** Input Images */
   VectorImagePointerType m_InputImage;

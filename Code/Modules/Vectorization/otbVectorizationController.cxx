@@ -201,7 +201,7 @@ void VectorizationController::AddVectorData(VectorDataPointer vData)
    {
      MsgReporter::GetInstance()->SendError(err.GetDescription());
    }
- 
 }
+
 
 } // end namespace otb

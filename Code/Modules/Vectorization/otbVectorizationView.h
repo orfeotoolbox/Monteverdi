@@ -57,6 +57,7 @@ public:
   <VectorDataType>                           VectorDataGlComponentType;
   typedef VectorDataTreeBrowser
   <VectorDataType>                           VectorDataTreeBrowserType;
+  typedef VectorDataGlComponentType::ColorType ColorType;
 
   /** Event from the model */
   virtual void Notify();
@@ -79,6 +80,8 @@ public:
   virtual void NextGeometryIsPolygonExtCallback();
   virtual void NextGeometryIsPolygonIntCallback();
   virtual void ChangeNavigationModeCallback();
+  virtual void UpdateColorCallback();
+  virtual void UpdateAlphaCallback();  
 
   void Show();
   void RedrawWidgets();
@@ -108,6 +111,9 @@ private:
   VectorDataGlComponentType::Pointer m_VectorDataGlComponent;
   /** VectorDataTreeBrowser */
   VectorDataTreeBrowserType::Pointer m_VectorDataTreeBrowser;
+  /** Store the vector data representation color. */
+  ColorType m_Color;
+
 };
 } //end namespace otb
 
