@@ -101,21 +101,21 @@ void ParserModule::Run()
       {
       image->UpdateOutputInformation();
       if(bandId == 0)
-	{
-	m_InputSize[0] =  image->GetLargestPossibleRegion().GetSize(0);
-	m_InputSize[1] =  image->GetLargestPossibleRegion().GetSize(1);
-	}
+        {
+        m_InputSize[0] =  image->GetLargestPossibleRegion().GetSize(0);
+        m_InputSize[1] =  image->GetLargestPossibleRegion().GetSize(1);
+        }
       else
-	{
-	if((m_InputSize[0] != image->GetLargestPossibleRegion().GetSize(0))
-	   || (m_InputSize[1] != image->GetLargestPossibleRegion().GetSize(1)))
-	  {
-	  itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
-			    << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
-			    << "band #" << bandId+1 << " is [" << image->GetLargestPossibleRegion().GetSize(0)
-			    << ";" << image->GetLargestPossibleRegion().GetSize(1) << "]");
-	  }
-	}
+        {
+        if((m_InputSize[0] != image->GetLargestPossibleRegion().GetSize(0))
+           || (m_InputSize[1] != image->GetLargestPossibleRegion().GetSize(1)))
+          {
+          itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+                            << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
+                            << "band #" << bandId+1 << " is [" << image->GetLargestPossibleRegion().GetSize(0)
+                            << ";" << image->GetLargestPossibleRegion().GetSize(1) << "]");
+          }
+        }
       
       m_ParserFilter->SetNthInput(bandId, image);
       
@@ -129,41 +129,41 @@ void ParserModule::Run()
       {
       vectorImage->UpdateOutputInformation();
       if(bandId == 0)
-	{
-	m_InputSize[0] =  vectorImage->GetLargestPossibleRegion().GetSize(0);
-	m_InputSize[1] =  vectorImage->GetLargestPossibleRegion().GetSize(1);
-	}
+        {
+        m_InputSize[0] =  vectorImage->GetLargestPossibleRegion().GetSize(0);
+        m_InputSize[1] =  vectorImage->GetLargestPossibleRegion().GetSize(1);
+        }
       else
-	{
-	if((m_InputSize[0] != vectorImage->GetLargestPossibleRegion().GetSize(0))
-	   || (m_InputSize[1] != vectorImage->GetLargestPossibleRegion().GetSize(1)))
-	  {
-	  itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
-			    << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
-			    << "band #" << bandId+1 << " is [" << vectorImage->GetLargestPossibleRegion().GetSize(0)
-			    << ";" << vectorImage->GetLargestPossibleRegion().GetSize(1) << "]");
-	  }
-	}
+        {
+        if((m_InputSize[0] != vectorImage->GetLargestPossibleRegion().GetSize(0))
+           || (m_InputSize[1] != vectorImage->GetLargestPossibleRegion().GetSize(1)))
+          {
+          itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
+                            << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
+                            << "band #" << bandId+1 << " is [" << vectorImage->GetLargestPossibleRegion().GetSize(0)
+                            << ";" << vectorImage->GetLargestPossibleRegion().GetSize(1) << "]");
+          }
+        }
       
       // Extract bands from the vectorImage
       for(unsigned int j = 0; j < vectorImage->GetNumberOfComponentsPerPixel(); j++)
-	{
-	std::ostringstream tmpVarName, tmpParserVarName;
-	tmpParserVarName << "im" << imageId+1 << "b" << j+1;
-	
-        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();      
+        {
+        std::ostringstream tmpVarName, tmpParserVarName;
+        tmpParserVarName << "im" << imageId+1 << "b" << j+1;
+        
+        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
         extractROIFilter->SetInput(vectorImage);
-	extractROIFilter->SetChannel(j+1);
+        extractROIFilter->SetChannel(j+1);
         extractROIFilter->GetOutput()->UpdateOutputInformation();
         m_ChannelExtractorList->PushBack(extractROIFilter);
         m_ParserFilter->SetNthInput(bandId, m_ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
         
         tmpVarName << this->GetInputDataDescription<ImageType>("InputImage", i) << "(band" << j+1 << ")";
-	ui_ImageNameList->add(tmpVarName.str().c_str());
-	ui_ImageNames->add(tmpVarName.str().c_str());
-	ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
-	bandId ++;
-	}
+        ui_ImageNameList->add(tmpVarName.str().c_str());
+        ui_ImageNames->add(tmpVarName.str().c_str());
+        ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
+        bandId ++;
+        }
       imageId ++;
       }
     }
