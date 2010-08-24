@@ -182,9 +182,10 @@ ${TEMP}/moTvAlgebraImageModule.tif
 
 IF(OTB_COMPILE_MUPARSER)
 ADD_TEST(moTvParserModuleTest ${Modules_TESTS2} otbParserModuleTest
-${INPUTDATA}/prison_toulouse.tif
-${INPUTDATA}/prison_toulouse.tif
-${TEMP}/moTvParserImageModule.tif
+${INPUTDATA}/poupees_sub_c1.png
+${INPUTDATA}/poupees_sub_c2.png
+${INPUTDATA}/poupees_sub.png
+${TEMP}/moTvParserModule.tif
 0
 )	      
 ENDIF(OTB_COMPILE_MUPARSER)

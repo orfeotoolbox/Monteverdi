@@ -32,36 +32,49 @@ int otbParserModuleTest(int argc, char* argv[])
   // Put in the tests
   const char * infname1 = argv[1];
   const char * infname2 = argv[2];
-  bool         run = atoi(argv[4]);
+  const char * infname3 = argv[3];
+  bool run = atoi(argv[5]);
 
-  typedef otb::ParserModule::ImageType    ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ParserModule::ImageType          ImageType;
+  typedef otb::ParserModule::VectorImageType    VectorImageType;
+  typedef otb::ImageFileReader<ImageType>       ImageReaderType;
+  typedef otb::ImageFileReader<VectorImageType> VectorImageReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
   // Reader
-  ReaderType::Pointer reader1 = ReaderType::New();
-  ReaderType::Pointer reader2 = ReaderType::New();
+  ImageReaderType::Pointer reader1 = ImageReaderType::New();
+  ImageReaderType::Pointer reader2 = ImageReaderType::New();
+  VectorImageReaderType::Pointer reader3 = VectorImageReaderType::New();
 
   reader1->SetFileName(infname1);
   reader1->GenerateOutputInformation();
   reader2->SetFileName(infname2);
   reader2->GenerateOutputInformation();
+  reader3->SetFileName(infname3);
+  reader3->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn1 = otb::DataObjectWrapper::Create(reader1->GetOutput());
   std::cout << "Input wrapper: " << wrapperIn1 << std::endl;
   otb::DataObjectWrapper wrapperIn2 = otb::DataObjectWrapper::Create(reader2->GetOutput());
   std::cout << "Input wrapper: " << wrapperIn2 << std::endl;
+  otb::DataObjectWrapper wrapperIn3 = otb::DataObjectWrapper::Create(reader3->GetOutput());
+  std::cout << "Input wrapper: " << wrapperIn3 << std::endl;
 
   module->AddInputByKey("InputImage", wrapperIn1);
   module->AddInputByKey("InputImage", wrapperIn2);
+  module->AddInputByKey("InputImage", wrapperIn3);
   module->Start();
 
   // Simulate first variable renaming
   specificModule->ui_NewVarName->value("band1");
   specificModule->ui_ChangeVarName->do_callback();
+
+  // Simulate use of the help window
+  specificModule->ui_Help->value(1);
+  specificModule->ui_Help->do_callback();
    
-  // Simulate Addition Operation
-  specificModule->ui_Expression->value("band1+b2");
+  // Simulate Operation
+  specificModule->ui_Expression->value("band1+b2 / (im1b1+im1b2+im1b3) * im1b4");
  
   Fl::check();
 
@@ -73,7 +86,7 @@ int otbParserModuleTest(int argc, char* argv[])
      {
      Fl::check();
      }
-  
+
   // Exit the GUI and save the result
   specificModule->ui_Ok->do_callback();
 
@@ -83,10 +96,9 @@ int otbParserModuleTest(int argc, char* argv[])
 
   //Write the image
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(argv[3]);
+  writer->SetFileName(argv[4]);
   writer->SetInput(outImage);
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }
