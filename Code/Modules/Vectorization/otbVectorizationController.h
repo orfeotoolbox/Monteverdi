@@ -52,6 +52,8 @@ public:
   ::VisualizationModelType VisualizationModelType;
   typedef VectorizationModel
   ::VectorDataModelType VectorDataModelType;
+  typedef VectorDataModelType::VectorDataType VectorDataType;
+  typedef VectorDataType::Pointer VectorDataPointer; 
   typedef VectorizationModel
   ::VectorImageType VectorImageType;
 
@@ -97,7 +99,10 @@ public:
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0);
   virtual void ChangeNavigationMode();
+  virtual void AddVectorData(VectorDataPointer vData);
+  virtual void OK();
 
+ 
 protected:
   /** Constructor */
   VectorizationController();

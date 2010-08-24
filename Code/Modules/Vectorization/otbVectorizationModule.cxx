@@ -41,6 +41,7 @@ VectorizationModule::VectorizationModule()
   // Then, describe inputs needed by the module
   // Add a new input
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data"), true, true);
 }
 
 /** Destructor */
@@ -63,9 +64,9 @@ void VectorizationModule::Run()
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
+  
 
-  // First step is to retrieve the inputs
-
+  // Second step is to retrieve the input image
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
 
@@ -78,8 +79,18 @@ void VectorizationModule::Run()
     }
   else
     {
-    itkExceptionMacro(<< "Input image is NULL.");
+      itkExceptionMacro(<< "Input image is NULL.");
     }
+
+
+  for( unsigned int i=0; i<this->GetNumberOfInputDataByKey("VectorData"); i++ )
+    {
+      VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
+      // Load the vector data (still empty otherwise !!!)
+      vdata->Update();
+      m_Controller->AddVectorData(vdata);
+    }
+
 
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
@@ -88,18 +99,19 @@ void VectorizationModule::Run()
 /** The Notify */
 void VectorizationModule::Notify()
 {
+  if (m_Model->GetOutputChanged())
+    {
+      std::cout<<"ferfgehkprh"<<std::endl;
+      this->ClearOutputDescriptors();
+      // Add outputs
+      VectorDataType::Pointer vData = m_Model->GetOutput();
+      this->AddOutputDescriptor(vData,"VectorData", otbGetTextMacro("New vector data"));
 
-//  if (m_Model->GetOutputChanged())
-//    {
-//      this->ClearOutputDescriptors();
-//      // Add outputs
-//      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-//      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
-//    }
-
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->BusyOff();
+    }
 
   // Once module is closed, it is no longer busy
-  this->BusyOff();
+ 
 }
 } // End namespace otb

@@ -20,7 +20,11 @@
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbEventsSender.h"
 #include "otbTypeManager.h"
+
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataExtractROI.h"
 
 //Visu
 #include "otbImageLayerRenderingModel.h"
@@ -36,7 +40,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT VectorizationModel
-  : public MVCModel<ListenerBase>, public itk::Object, public ListenerBase
+  : public  MVCModel<ListenerBase>, public itk::Object, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -46,7 +50,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(VectorizationModel, Object);
+  itkTypeMacro(VectorizationModel, MVCModel);
 
   /** New macro */
   itkNewMacro(Self);
@@ -70,19 +74,23 @@ public:
   typedef VisualizationModelType::Pointer VisualizationModelPointerType;
   typedef LayerGeneratorType::ImageLayerType
   ::OutputPixelType OutputPixelType;
-  typedef Function::UniformAlphaBlendingFunction
-  <OutputPixelType>                         BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer      BlendingFunctionPointerType;
   typedef VisualizationModelType::RegionType RegionType;
 
-  typedef TypeManager
-  ::Vector_Data VectorDataType;
+  typedef TypeManager::Vector_Data     VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointerType;
   typedef VectorDataModel              VectorDataModelType;
   typedef VectorDataModelType::Pointer VectorDataModelPointerType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef DataNodeType::PointType      PointType;
   typedef DataNodeType::PolygonType::VertexType
   VertexType;
+  
+  // Reprojection filter
+  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
+    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -95,6 +103,8 @@ public:
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
+  /** Load a vector data */
+  void AddVectorData(VectorDataPointerType vData);
 
   void RemoveDataNode(DataNodeType * node);
   void SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value);
@@ -110,6 +120,14 @@ public:
                                const PointType& point,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
+  void UpdateAlpha(double alpha);
+  void OK();
+
+  /** Output accessor. */
+  itkGetObjectMacro(Output, VectorDataType );
+  
+  /** Output changed accessor. */
+  itkGetMacro( OutputChanged, bool );
 
 protected:
   /** Constructor */
@@ -133,13 +151,17 @@ private:
   /** Visualization */
   VisualizationModelPointerType m_VisualizationModel;
   LayerGeneratorPointerType     m_ImageGenerator;
-  BlendingFunctionPointerType   m_BlendingFunction;
 
   /** Input Images */
   VectorImagePointerType m_InputImage;
 
   /** VectorData model */
   VectorDataModelPointerType m_VectorDataModel;
+
+  /**Output vector data. */
+  VectorDataPointerType  m_Output;
+  
+  bool m_OutputChanged;
 };
 
 } //end namespace otb
