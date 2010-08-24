@@ -88,6 +88,9 @@ void FineCorrelationModule::OK()
       itkExceptionMacro(<<"The input reference image is Null.");
       }
 
+    // Update reference image output information
+    referenceImage->UpdateOutputInformation();
+
     ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage",0);
     if( secondaryImage.IsNull())
       {
@@ -138,6 +141,7 @@ void FineCorrelationModule::OK()
 
     m_WarpFilter->SetInput(secondaryImage);
     m_WarpFilter->SetDeformationField(m_CorrelationFilter->GetOutputDeformationField());
+    m_WarpFilter->SetOutputParametersFromImage(referenceImage);
 
     // First, clear any previous output
     this->ClearOutputDescriptors();
