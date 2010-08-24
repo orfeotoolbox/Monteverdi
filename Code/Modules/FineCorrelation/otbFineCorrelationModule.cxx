@@ -29,20 +29,18 @@ FineCorrelationModule::FineCorrelationModule()
   // Add a new input
   this->AddInputDescriptor<ImageType>("ReferenceInputImage", otbGetTextMacro("Reference input image"));
   this->AddInputDescriptor<ImageType>("SecondaryInputImage", otbGetTextMacro("Secondary input image"));
-  m_CorrelationFilter = CorrelationFilterType::New();
-  m_ExtractXField = ExtractFilterType::New();
+  m_CorrelationFilter    = CorrelationFilterType::New();
+  m_FixedGaussianFilter  = GaussianFilterType::New();
+  m_MovingGaussianFilter = GaussianFilterType::New();
+  m_WarpFilter           = WarpFilterType::New();
+  m_ExtractXField        = ExtractFilterType::New();
+  m_ExtractYField        = ExtractFilterType::New();
+
   m_ExtractXField->GetFunctor().SetIndex(0);
-  m_ExtractYField = ExtractFilterType::New();
   m_ExtractYField->GetFunctor().SetIndex(1);
 
   // Build the GUI
   this->CreateGUI();
-
-  gMode->add("Coarse");
-  gMode->add("LsqrQuadFit");
-  gMode->add("SubPixel");
-  gMode->value(0);
-  gPrecision->deactivate();
 }
 
 /** Destructor */
@@ -76,12 +74,6 @@ void FineCorrelationModule::Run()
 
     // Show the GUI
     this->Show();
-    
-    m_CorrelationFilter->SetFixedInput(referenceImage);
-    m_CorrelationFilter->SetMovingInput(secondaryImage);
-     
-    m_ExtractXField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
-    m_ExtractYField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
 }
 
 
@@ -90,25 +82,62 @@ void FineCorrelationModule::OK()
   {
     this->Hide();
     
-    m_CorrelationFilter->SetRadius(gCorrelationRadius->value());
-    m_CorrelationFilter->SetSearchRadius(gSearchRadius->value());
-
-    if(gMode->value()==0)
+    ImageType::Pointer referenceImage = this->GetInputData<ImageType>("ReferenceInputImage",0);
+    if( referenceImage.IsNull())
       {
-	// Coarse
-      m_CorrelationFilter->SetRefinementModeToCoarse();
+      itkExceptionMacro(<<"The input reference image is Null.");
       }
-    else if(gMode->value()==1)
+
+    ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage",0);
+    if( secondaryImage.IsNull())
       {
-	// LSQR
-      m_CorrelationFilter->SetRefinementModeToLSQRQuadFit();
+      itkExceptionMacro(<<"The input secondary image is Null.");
+      }
+
+    // Smooth fixed image if needed
+    if(vSmoothFixedImage)
+      {
+      m_FixedGaussianFilter->SetInput(referenceImage);
+      m_FixedGaussianFilter->SetVariance(vFixedSigma->value());
+      m_CorrelationFilter->SetFixedInput(m_FixedGaussianFilter->GetOutput());
       }
     else
       {
-	// SUBPixel
-      m_CorrelationFilter->SetRefinementModeToSubPixel();
-      m_CorrelationFilter->SetSubPixelPrecision(gPrecision->value());
+      m_CorrelationFilter->SetFixedInput(referenceImage);
       }
+
+    // Smooth moving image if needed
+    if(vSmoothMovingImage)
+      {
+      m_MovingGaussianFilter->SetInput(referenceImage);
+      m_MovingGaussianFilter->SetVariance(vMovingSigma->value());
+      m_CorrelationFilter->SetMovingInput(m_MovingGaussianFilter->GetOutput());
+      }
+    else
+      {
+      m_CorrelationFilter->SetMovingInput(referenceImage);
+      }
+
+    // Set correlation parameters
+    m_CorrelationFilter->SetRadius(vCorrelationRadius->value());
+    m_CorrelationFilter->SetSearchRadius(vSearchRadius->value());
+    m_CorrelationFilter->SetSubPixelAccuracy(vPrecision->value());
+
+    CorrelationFilterType::OffsetType gridStep;
+    gridStep.Fill(vGridStep->value());
+    m_CorrelationFilter->SetGridStep(gridStep);
+
+    CorrelationFilterType::SpacingType initialOffset;
+    initialOffset[0] = vInitialOffsetX->value();
+    initialOffset[1] = vInitialOffsetY->value();
+    m_CorrelationFilter->SetInitialOffset(initialOffset);
+
+
+    m_ExtractXField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
+    m_ExtractYField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
+
+    m_WarpFilter->SetInput(secondaryImage);
+    m_WarpFilter->SetDeformationField(m_CorrelationFilter->GetOutputDeformationField());
 
     // First, clear any previous output
     this->ClearOutputDescriptors();
@@ -117,6 +146,13 @@ void FineCorrelationModule::OK()
     this->AddOutputDescriptor(m_CorrelationFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
     this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDeformationField", otbGetTextMacro("X Deformation field"));
     this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDeformationField", otbGetTextMacro("Y Deformation field"));
+
+    // If needed, expose the warped moving image
+    if(vWarpMovingImage)
+      {
+      this->AddOutputDescriptor(m_WarpFilter->GetOutput(), "RegisteredImage", otbGetTextMacro("Registered image"));
+      }
+
     // Last, when all outputs where declared, notify listeners
     this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
 

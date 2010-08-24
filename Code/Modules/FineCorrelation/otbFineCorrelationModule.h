@@ -26,7 +26,11 @@
 #include "otbVectorImage.h"
 #include "itkFixedArray.h"
 #include "itkUnaryFunctorImageFilter.h"
-#include "otbFineCorrelationImageFilter.h"
+
+#include "otbFineRegistrationImageFilter.h"
+#include "itkDiscreteGaussianImageFilter.h"
+#include "otbStreamingWarpImageFilter.h"
+
 #include "otbFineCorrelationGroup.h"
 
 namespace otb
@@ -89,7 +93,10 @@ public:
   typedef TypeManager::Deformation_Field_Type                           DeformationFieldType;
   typedef TypeManager::Deformation_Value_Type                           DeformationValueType;
   
-  typedef FineCorrelationImageFilter<ImageType,ImageType,DeformationFieldType> CorrelationFilterType;
+  typedef FineRegistrationImageFilter<ImageType,ImageType,DeformationFieldType> CorrelationFilterType;
+  typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType>                 GaussianFilterType;
+  typedef StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType>    WarpFilterType;
+
   typedef FieldComponentExtractor<DeformationValueType, PixelType> ExtractFunctorType;
   typedef itk::UnaryFunctorImageFilter<DeformationFieldType, ImageType, ExtractFunctorType> ExtractFilterType; 
   
@@ -130,8 +137,11 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   CorrelationFilterType::Pointer m_CorrelationFilter;
-  ExtractFilterType::Pointer m_ExtractXField;
-  ExtractFilterType::Pointer m_ExtractYField;
+  GaussianFilterType::Pointer    m_FixedGaussianFilter;
+  GaussianFilterType::Pointer    m_MovingGaussianFilter;
+  WarpFilterType::Pointer        m_WarpFilter;
+  ExtractFilterType::Pointer     m_ExtractXField;
+  ExtractFilterType::Pointer     m_ExtractYField;
 };
 
 
