@@ -83,11 +83,13 @@ public:
   virtual void UpdateColorCallback();
   virtual void UpdateAlphaCallback();  
   virtual void OKCallback();  
+  virtual void SetDEMOptionCallback();
 
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
   void UpdateModel();
+  itkGetMacro(IsHide, bool);
 
 protected:
   /** Constructor */
@@ -114,7 +116,7 @@ private:
   VectorDataTreeBrowserType::Pointer m_VectorDataTreeBrowser;
   /** Store the vector data representation color. */
   ColorType m_Color;
-
+  bool m_IsHide;
 };
 } //end namespace otb
 

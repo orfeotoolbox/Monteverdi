@@ -47,7 +47,9 @@ VectorizationModel() : m_VisualizationModel(),
   m_ImageGenerator(),
   m_InputImage(),
   m_VectorDataModel(),
-  m_Output()
+  m_Output(),
+  m_DEMPath(""),
+  m_UseDEM(false)
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -115,7 +117,7 @@ void VectorizationModel
     {
       itkExceptionMacro("Invalid input image.");
     }
-
+  
   // Vector data reprojection
   VectorDataProjectionFilterType::Pointer vproj;
   VectorDataExtractROIType::Pointer       vdextract;
@@ -161,8 +163,17 @@ void VectorizationModel
 
   // Set the cartographic region to the extract roi filter
   vdextract->SetRegion(rsRegion);
-  //if (!m_DEMDirectory.empty()) vdextract->SetDEMDirectory(m_DEMDirectory);
-
+  if(m_UseDEM==true)
+    {    
+      if (!m_DEMPath.empty()) 
+	{
+	  vdextract->SetDEMDirectory(m_DEMPath);
+	}
+      else
+	{
+	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+	}
+    }
   // Reproject VectorData in image projection
   vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vdextract->GetOutput());
@@ -171,30 +182,22 @@ void VectorizationModel
   vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
   vproj->SetOutputOrigin(m_InputImage->GetOrigin());
   vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  //if (!m_DEMDirectory.empty()) vproj->SetDEMDirectory(m_DEMDirectory);
+  if(m_UseDEM==true)
+    {    
+      if (!m_DEMPath.empty()) 
+	{
+	  vproj->SetDEMDirectory(m_DEMPath);
+	}
+      else
+	{
+	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+	}
+    }
+
   vproj->Update();
 
-  std::cout<<"projected"<<std::endl;
 
-  /*
-  ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
-  vectorDataProjection->SetInput(vData);
-
-  PointType lNewOrigin;
-  // polygons are recorded with a 0.5 shift...
-  lNewOrigin[0] = m_InputImage->GetOrigin()[0]+0.5;
-  lNewOrigin[1] = m_InputImage->GetOrigin()[1]+0.5;
-
-  vectorDataProjection->SetOutputOrigin(lNewOrigin);
-  vectorDataProjection->SetOutputSpacing(m_InputImage->GetSpacing());
-
-  std::string projectionRef;
-  itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
-                                   otb::MetaDataKey::ProjectionRefKey, projectionRef );
-  vectorDataProjection->SetOutputProjectionRef(projectionRef);
-  vectorDataProjection->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  vectorDataProjection->Update();
-  */
+  //m_VectorDataModel->AddVectorData(tihs->ReprojectedVectorData(vData, false));
   m_VectorDataModel->AddVectorData(vproj->GetOutput());
 }
 
@@ -404,19 +407,26 @@ VectorizationModel
                                    MetaDataKey::ProjectionRefKey, projectionRef );
   vectorDataProjection->SetInputProjectionRef(projectionRef);
   vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
+//   if(m_UseDEM==true)
+//     {    
+//       if (!m_DEMPath.empty()) 
+// 	{
+// 	  vectorDataProjection->SetDEMDirectory(m_DEMDirectory);
+// 	}
+//       else
+// 	{
+// 	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+// 	}
+//     }
+
   vectorDataProjection->Update();
   m_Output = vectorDataProjection->GetOutput();
   
-  
-  /*
-  m_Output =  m_VectorDataModel->GetVectorData();
-  m_Output->SetProjectionRef(m_InputImage->GetProjectionRef());
-  m_Output->SetMetaDataDictionary(m_InputImage->GetMetaDataDictionary());
-  */
   m_OutputChanged = true;
   this->NotifyAll();
   m_OutputChanged = false;
 }
+
 
 void
 VectorizationModel

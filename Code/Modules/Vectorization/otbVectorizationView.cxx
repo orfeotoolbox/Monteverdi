@@ -19,7 +19,6 @@
 #include "otbVectorizationView.h"
 #include "otbMsgReporter.h"
 
-#include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Color_Chooser.H>
@@ -33,7 +32,8 @@ VectorizationView
   m_Model(),
   m_ImageView(),
   m_VectorDataGlComponent(),
-  m_VectorDataTreeBrowser()
+  m_VectorDataTreeBrowser(),
+  m_IsHide(false)
 {
   m_ImageView = ImageViewType::New();
   m_VectorDataGlComponent = VectorDataGlComponentType::New();
@@ -121,7 +121,8 @@ VectorizationView
   vNavigationMode->redraw();
 
   // Register controllers
-  m_ImageView->SetController(m_WidgetController);
+  m_ImageView->SetController(m_WidgetController); 
+  
   // Show
   this->Show();
 
@@ -189,6 +190,9 @@ VectorizationView
 ::HideAll()
 {
   wMainWindow->hide();
+  m_IsHide = true;
+  m_Model->Notify();
+  m_IsHide = false;
 }
 
 void VectorizationView
@@ -266,6 +270,22 @@ void VectorizationView
   m_ImageView->Update();
 }
 
+void VectorizationView
+:: SetDEMOptionCallback()
+{
+//   if(bDEM->value() == 1)
+//     {
+//       //m_Controller->UpateVectorDataWithDEM( true);
+//       m_Model->SetUseDEM(true);
+//       m_Model->SetDEMPath( gDEMPath->value() );
+//     }
+//   else
+//     {
+//       m_Model->SetUseDEM(false);
+//     }
+
+}
+ 
 
  void VectorizationView
 ::OKCallback()

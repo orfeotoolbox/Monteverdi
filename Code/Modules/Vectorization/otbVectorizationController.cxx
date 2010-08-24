@@ -203,6 +203,7 @@ void VectorizationController::AddVectorData(VectorDataPointer vData)
    }
 }
 
+
 void VectorizationController::OK()
 {
  try

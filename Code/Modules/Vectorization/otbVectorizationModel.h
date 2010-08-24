@@ -122,18 +122,31 @@ public:
                                const unsigned int& interiorRingIndex = 0);
   void UpdateAlpha(double alpha);
   void OK();
-
+ 
   /** Output accessor. */
   itkGetObjectMacro(Output, VectorDataType );
   
   /** Output changed accessor. */
   itkGetMacro( OutputChanged, bool );
+  
+  /** DEM directory accessors. */
+  itkGetConstMacro(DEMPath, std::string);
+  itkSetMacro(DEMPath, std::string);
+
+  /** Use DEM or not accessor. */
+  itkGetMacro(UseDEM, bool);
+  itkSetMacro(UseDEM, bool);
+
+  /** Receive notifications */
+  virtual void Notify();
+ 
 
 protected:
   /** Constructor */
   VectorizationModel();
   /** Destructor */
-  ~VectorizationModel();
+  virtual ~VectorizationModel();
+
 
 private:
   VectorizationModel(const Self&); //purposely not implemented
@@ -142,8 +155,7 @@ private:
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
-  /** Receive notifications */
-  virtual void Notify();
+
 
   /** Singleton instance */
   static Pointer Instance;
@@ -161,7 +173,14 @@ private:
   /**Output vector data. */
   VectorDataPointerType  m_Output;
   
+  /** Has a new output or not. */
   bool m_OutputChanged;
+
+  /** DEM directoryu path. */
+  std::string m_DEMPath;
+
+  /** Use DEM or not. */
+  bool m_UseDEM;
 };
 
 } //end namespace otb

@@ -16,6 +16,10 @@
 
 =========================================================================*/
 #include "otbVectorizationModule.h"
+#include <FLU/Flu_File_Chooser.h>
+#include "base/ossimFilename.h"
+#include "otbMsgReporter.h"
+
 
 namespace otb
 {
@@ -65,6 +69,26 @@ void VectorizationModule::Run()
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
   
+   if(this->GetNumberOfInputDataByKey("VectorData") > 0)
+     {
+       const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+       Fl::check();
+       if(cfname != "")
+	 {
+	   ossimFilename dir(cfname);
+	   if( dir.isDir() )
+	     {
+	       m_Model->SetUseDEM(true);
+	       m_Model->SetDEMPath(dir);
+	     }
+	   else
+	     {
+	       itk::OStringStream oss;
+	       oss<<"Invalid DEm directory "<<cfname<<".";
+	       MsgReporter::GetInstance()->SendError(oss.str());
+	     }
+	 }
+     }
 
   // Second step is to retrieve the input image
   // To handle an input with multiple supported type :
@@ -108,6 +132,10 @@ void VectorizationModule::Notify()
       this->AddOutputDescriptor(vData,"VectorData", otbGetTextMacro("New vector data"));
 
       this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->BusyOff();
+    }
+  else if  (m_View->GetIsHide())
+    {
       this->BusyOff();
     }
 
