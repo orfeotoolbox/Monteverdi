@@ -117,7 +117,7 @@ void VectorizationModel
       itkExceptionMacro("Invalid input image.");
     }
 
-  m_VectorDataModel->AddVectorData<VectorImageType>(vData, m_InputImage);
+  m_VectorDataModel->AddVectorData(vData, m_InputImage);
   //m_VisualizationModel->Update();
 
   //this->NotifyAll();
