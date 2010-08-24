@@ -109,13 +109,13 @@ void FineCorrelationModule::OK()
     // Smooth moving image if needed
     if(vSmoothMovingImage)
       {
-      m_MovingGaussianFilter->SetInput(referenceImage);
+      m_MovingGaussianFilter->SetInput(secondaryImage);
       m_MovingGaussianFilter->SetVariance(vMovingSigma->value());
       m_CorrelationFilter->SetMovingInput(m_MovingGaussianFilter->GetOutput());
       }
     else
       {
-      m_CorrelationFilter->SetMovingInput(referenceImage);
+      m_CorrelationFilter->SetMovingInput(secondaryImage);
       }
 
     // Set correlation parameters
