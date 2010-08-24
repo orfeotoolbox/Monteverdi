@@ -23,6 +23,9 @@
 #include "otbEventsSender.h"
 #include "otbTypeManager.h"
 
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataExtractROI.h"
+
 //Visu
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
@@ -81,6 +84,13 @@ public:
   typedef DataNodeType::PointType      PointType;
   typedef DataNodeType::PolygonType::VertexType
   VertexType;
+  
+  // Reprojection filter
+  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
+    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
