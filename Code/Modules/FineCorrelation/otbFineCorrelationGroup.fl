@@ -32,7 +32,7 @@ vFixedSigma->deactivate();
         }
         Fl_Value_Input vFixedSigma {
           label Sigma
-          tooltip {Sigma for gaussian smoothing of the fixed image} xywh {173 40 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
+          tooltip {Sigma for gaussian smoothing of the fixed image (expressed in pixels)} xywh {173 40 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
         }
         Fl_Check_Button vSmoothMovingImage {
           label {Moving image}
@@ -48,7 +48,7 @@ vMovingSigma->deactivate();
         }
         Fl_Value_Input vMovingSigma {
           label Sigma
-          tooltip {Sigma for gaussian smoothing of the moving image} xywh {173 75 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
+          tooltip {Sigma for gaussian smoothing of the moving image (expressed in pixels)} xywh {173 75 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
         }
       }
       Fl_Group {} {
@@ -57,11 +57,11 @@ vMovingSigma->deactivate();
       } {
         Fl_Value_Input vInitialOffsetX {
           label {First direction}
-          tooltip {Initial offset between fixed and moving image in first direction} xywh {40 146 50 20} labelsize 12 align 1 minimum -99999 maximum 1e+07 step 1
+          tooltip {Initial offset between fixed and moving image in first direction (taking account of image spacing)} xywh {40 146 50 20} labelsize 12 align 1 minimum -99999 maximum 1e+07 step 1
         }
         Fl_Value_Input vInitialOffsetY {
           label {Second direction}
-          tooltip {Initial offset between fixed and moving image in second direction} xywh {173 146 50 20} labelsize 12 align 1 minimum -999999 maximum 1e+10 step 1
+          tooltip {Initial offset between fixed and moving image in second direction (taking account of image spacing)} xywh {173 146 50 20} labelsize 12 align 1 minimum -999999 maximum 1e+10 step 1
         }
       }
       Fl_Group {} {
@@ -70,11 +70,11 @@ vMovingSigma->deactivate();
       } {
         Fl_Counter vCorrelationRadius {
           label {Correlation Radius}
-          tooltip {Radius of the correlation window} xywh {25 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 3
+          tooltip {Radius of the correlation window (in pixels)} xywh {25 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 3
         }
         Fl_Counter vSearchRadius {
           label {Search Radius}
-          tooltip {Radius of the search window} xywh {158 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 2
+          tooltip {Radius of the search window (in pixels)} xywh {158 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 2
         }
       }
       Fl_Group {} {
@@ -83,11 +83,11 @@ vMovingSigma->deactivate();
       } {
         Fl_Counter vGridStep {
           label Step
-          tooltip {Step of the correlation grid} xywh {25 274 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 1e+07 step 1 value 1
+          tooltip {Step of the correlation grid (in pixels)} xywh {25 274 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 1e+07 step 1 value 1
         }
         Fl_Value_Input vPrecision {
-          label Precision
-          tooltip {Precision of the deformation field in fraction of fixed image pixels (takes spacing into account)} xywh {175 276 50 20} labelsize 12 align 1 minimum 1e-09 step 0.05 value 0.1
+          label Precision selected
+          tooltip {Precision of the deformation field in fraction of fixed image pixels (taking spacing into account)} xywh {175 276 50 20} labelsize 12 align 1 minimum 1e-09 step 0.05 value 0.1
         }
       }
       Fl_Check_Button vWarpMovingImage {
@@ -96,7 +96,7 @@ vMovingSigma->deactivate();
       }
       Fl_Button bOk {
         label {Save/Quit}
-        callback {OK();} selected
+        callback {OK();}
         tooltip {Quit the viewer manager} xywh {90 339 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelfont 1 labelcolor 186
       }
     }

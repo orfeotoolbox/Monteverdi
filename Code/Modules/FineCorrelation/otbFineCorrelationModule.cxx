@@ -39,6 +39,9 @@ FineCorrelationModule::FineCorrelationModule()
   m_ExtractXField->GetFunctor().SetIndex(0);
   m_ExtractYField->GetFunctor().SetIndex(1);
 
+  m_FixedGaussianFilter->SetUseImageSpacingOff();
+  m_MovingGaussianFilter->SetUseImageSpacingOff();
+
   // Build the GUI
   this->CreateGUI();
 }
