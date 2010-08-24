@@ -22,7 +22,7 @@
 #include "otbParserModuleGUI.h"
 
 // include the OTB elements
-#include "otbVectorImageToImageListFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
 
 // Parser opertor Filter
 #include "otbNaryParserImageFilter.h"
@@ -54,9 +54,9 @@ public:
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image            ImageType;
   typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
-  typedef otb::ImageList<ImageType>                    ImageListType;
-  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
-
+  typedef otb::MultiToMonoChannelExtractROI<ImageType::PixelType, ImageType::PixelType> ExtractROIFilterType;
+  typedef otb::ObjectList<ExtractROIFilterType>        ExtractROIFilterListType;
+ 
   // Parser Class typedefs
   typedef NaryParserImageFilter<ImageType>             ParserFilterType;
   typedef Parser                                       ParserType;
@@ -106,10 +106,11 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   // Class attributes
-  ParserFilterType::Pointer        m_ParserFilter;
-  ImageType::Pointer               m_Output;
-  unsigned int                     m_NumberOfInputBands;
-  unsigned int                     m_InputSize[2];
+  ParserFilterType::Pointer         m_ParserFilter;
+  ExtractROIFilterListType::Pointer m_ChannelExtractorList;
+  ImageType::Pointer                m_Output;
+  unsigned int                      m_NumberOfInputBands;
+  unsigned int                      m_InputSize[2];
 
 };
 
