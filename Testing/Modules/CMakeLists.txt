@@ -339,6 +339,16 @@ ADD_TEST(moTvObjectLabelingColoredOutput ${Modules_TESTS4} otbObjectLabelingColo
 )
 
 
+#------------- FineCorrelation Module Tests ---------------------------
+ADD_TEST(ficTvFineCorrelationModuleTest ${Modules_TESTS4} otbFineCorrelationModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput1.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput2.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput3.tif
+)
+
+
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -403,6 +413,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationModuleTest.cxx
   otbObjectLabelingOpenImage.cxx
   otbObjectLabelingColoredOutput.cxx
+  otbFineCorrelationModuleTest.cxx
 )
 
 
