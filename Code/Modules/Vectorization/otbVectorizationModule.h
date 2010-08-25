@@ -67,6 +67,7 @@ public:
 
   itkGetObjectMacro(View, ViewType);
   itkGetObjectMacro(Controller, ControllerType);
+  itkGetObjectMacro(Model, ModelType);
 
 protected:
   /** Constructor */

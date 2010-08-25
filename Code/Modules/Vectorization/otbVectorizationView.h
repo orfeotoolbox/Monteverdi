@@ -83,12 +83,12 @@ public:
   virtual void UpdateColorCallback();
   virtual void UpdateAlphaCallback();  
   virtual void OKCallback();  
-  virtual void SetDEMOptionCallback();
 
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
   void UpdateModel();
+  void InitColor();
   itkGetMacro(IsHide, bool);
 
 protected:

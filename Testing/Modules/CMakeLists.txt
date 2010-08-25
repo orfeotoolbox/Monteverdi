@@ -318,8 +318,10 @@ ENDIF(OTB_USE_CURL)
 
 #------------- Vectorization Module Tests ---------------------------
 ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
-${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${INPUTDATA}/Capitole-Shadows.shp
 ${TEMP}/vecTvVectorizationModuleTestOutput.kml
+${INPUTDATA}/DEM/srtm_directory
 )
 
 #-------------  Object Labeling Module 

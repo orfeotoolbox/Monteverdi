@@ -98,8 +98,9 @@ void VectorizationModule::Run()
   if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-    m_View->BuildInterface();
-    m_Model->SetImage(fpvImage);
+      m_View->BuildInterface();
+      m_Model->SetImage(fpvImage);
+      //m_View->InitColor();
     }
   else
     {
@@ -110,9 +111,16 @@ void VectorizationModule::Run()
   for( unsigned int i=0; i<this->GetNumberOfInputDataByKey("VectorData"); i++ )
     {
       VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
-      // Load the vector data (still empty otherwise !!!)
-      vdata->Update();
-      m_Controller->AddVectorData(vdata);
+      if(vdata.IsNotNull())
+	{
+	  // Load the vector data (still empty otherwise !!!)
+	  vdata->Update();
+	  m_Controller->AddVectorData(vdata);
+	}
+      else
+	{
+	  itkExceptionMacro(<< "Input vector data is NULL.");
+	}
     }
 
 
@@ -125,7 +133,6 @@ void VectorizationModule::Notify()
 {
   if (m_Model->GetOutputChanged())
     {
-      std::cout<<"ferfgehkprh"<<std::endl;
       this->ClearOutputDescriptors();
       // Add outputs
       VectorDataType::Pointer vData = m_Model->GetOutput();

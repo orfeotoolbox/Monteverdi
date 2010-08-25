@@ -125,22 +125,32 @@ VectorizationView
   
   // Show
   this->Show();
+  this->InitColor();
+}
 
+
+void
+VectorizationView
+::InitColor()
+{
+  Fl::check();
 
   m_Color =  m_VectorDataGlComponent->GetColor();
-  fl_color(static_cast<unsigned char>(255 * m_Color[0]),
-	   static_cast<unsigned char>(255 * m_Color[1]),
-	   static_cast<unsigned char>(255 * m_Color[2]));
+  
+  fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
+	   static_cast<unsigned char>((double)(255) * m_Color[1]),
+	   static_cast<unsigned char>((double)(255) * m_Color[2]));
+  
+  Fl::check();
   
   // Change the color of the text
   bColor->color(fl_color());
   bColor->redraw();
-
+  
   vAlpha->value(m_Color[3]);
   vAlpha->redraw();
   sAlpha->value(m_Color[3]);
-  sAlpha->redraw();
-  
+  sAlpha->redraw(); 
 }
 
 void
@@ -269,23 +279,6 @@ void VectorizationView
   m_VectorDataGlComponent->SetColor(m_Color);
   m_ImageView->Update();
 }
-
-void VectorizationView
-:: SetDEMOptionCallback()
-{
-//   if(bDEM->value() == 1)
-//     {
-//       //m_Controller->UpateVectorDataWithDEM( true);
-//       m_Model->SetUseDEM(true);
-//       m_Model->SetDEMPath( gDEMPath->value() );
-//     }
-//   else
-//     {
-//       m_Model->SetUseDEM(false);
-//     }
-
-}
- 
 
  void VectorizationView
 ::OKCallback()
