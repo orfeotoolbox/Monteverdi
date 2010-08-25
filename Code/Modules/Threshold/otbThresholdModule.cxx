@@ -19,7 +19,7 @@
 #include "otbMsgReporter.h"
 #include "otbFltkFilterWatcher.h"
 
-#include "itkMinimumMaximumImageCalculator.h"
+#include "otbStreamingStatisticsImageFilter.h"
 #include "otbUniformAlphaBlendingFunction.h"
 #include "otbBlendingFunction.h"
 
@@ -196,11 +196,10 @@ void ThresholdModule::UpdateThresholdLayer()
 void ThresholdModule::UpdateSlidersExtremum()
 {
   // Get the extremum of the image
-  typedef itk::MinimumMaximumImageCalculator<ImageType> ExtremumCalculatorType;
+  typedef otb::StreamingStatisticsImageFilter<ImageType>  ExtremumCalculatorType;
   ExtremumCalculatorType::Pointer extremumCalculator = ExtremumCalculatorType::New();
-  extremumCalculator->SetImage(m_InputImage);
-  extremumCalculator->ComputeMinimum();
-  extremumCalculator->ComputeMaximum();
+  extremumCalculator->SetInput(m_InputImage);
+  extremumCalculator->Update();
 
   // Edit the sliders with the min and the max.
   double min = extremumCalculator->GetMinimum();
