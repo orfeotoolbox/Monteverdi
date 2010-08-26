@@ -110,7 +110,6 @@ private:
   ExtractROIFilterListType::Pointer m_ChannelExtractorList;
   ImageType::Pointer                m_Output;
   unsigned int                      m_NumberOfInputBands;
-  unsigned int                      m_InputSize[2];
 
 };
 

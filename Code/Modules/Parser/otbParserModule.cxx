@@ -99,24 +99,6 @@ void ParserModule::Run()
     // The input is an image
     if (image.IsNotNull()) 
       {
-      image->UpdateOutputInformation();
-      if(bandId == 0)
-        {
-        m_InputSize[0] =  image->GetLargestPossibleRegion().GetSize(0);
-        m_InputSize[1] =  image->GetLargestPossibleRegion().GetSize(1);
-        }
-      else
-        {
-        if((m_InputSize[0] != image->GetLargestPossibleRegion().GetSize(0))
-           || (m_InputSize[1] != image->GetLargestPossibleRegion().GetSize(1)))
-          {
-          itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
-                            << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
-                            << "band #" << bandId+1 << " is [" << image->GetLargestPossibleRegion().GetSize(0)
-                            << ";" << image->GetLargestPossibleRegion().GetSize(1) << "]");
-          }
-        }
-      
       m_ParserFilter->SetNthInput(bandId, image);
       
       ui_ImageNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
@@ -127,24 +109,6 @@ void ParserModule::Run()
     // The input is an vectorImage
     else
       {
-      vectorImage->UpdateOutputInformation();
-      if(bandId == 0)
-        {
-        m_InputSize[0] =  vectorImage->GetLargestPossibleRegion().GetSize(0);
-        m_InputSize[1] =  vectorImage->GetLargestPossibleRegion().GetSize(1);
-        }
-      else
-        {
-        if((m_InputSize[0] != vectorImage->GetLargestPossibleRegion().GetSize(0))
-           || (m_InputSize[1] != vectorImage->GetLargestPossibleRegion().GetSize(1)))
-          {
-          itkExceptionMacro(<< "Input images must have the same dimensions." << std::endl
-                            << "band #1 is [" << m_InputSize[0] << ";" << m_InputSize[1] << "]" << std::endl
-                            << "band #" << bandId+1 << " is [" << vectorImage->GetLargestPossibleRegion().GetSize(0)
-                            << ";" << vectorImage->GetLargestPossibleRegion().GetSize(1) << "]");
-          }
-        }
-      
       // Extract bands from the vectorImage
       for(unsigned int j = 0; j < vectorImage->GetNumberOfComponentsPerPixel(); j++)
         {
