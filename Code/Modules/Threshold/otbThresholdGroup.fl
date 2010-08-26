@@ -11,91 +11,78 @@ decl {\#include <FL/Fl_Gl_Window.H>} {public
 decl {\#include <iostream>} {public
 } 
 
-class ThresholdGroup {open
+class ThresholdGroup {open selected
 } {
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window wMainWindow {
       label {Threshold Module} open
-      xywh {387 270 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {3 476 790 490} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Group {} {
-        label {Inside Value :} open
-        xywh {0 0 930 650} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+      Fl_Group {} {open
+        xywh {-2 0 794 490} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group gScroll {
           label Scroll open
-          xywh {0 15 385 290} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {-2 14 385 290} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gFull {
           label Full open
-          xywh {400 15 395 290} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {398 14 394 290} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Button bOK {
           label {Save Quit}
           callback {OK();}
-          xywh {685 445 70 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          xywh {698 454 70 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Value_Input guiOutsideValue {
           label {Outside value :}
           callback {this->UpdateDetails();}
-          xywh {120 405 95 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1
-        }
-        Fl_Round_Button guiAbove {
-          label {Threshold Above}
-          callback {guiAbove->value(1);
-guiBelow->value(0);
-guiOutside->value(0);
-
-guiMinDetails->value(guiMinDetails->minimum());
-guiMinDetailsValue->value(guiMinDetailsValue->minimum());
-guiMinDetails->deactivate();
-guiMinDetailsValue->deactivate();
-guiMaxDetails->activate();
-guiMaxDetailsValue->activate();
-
-this->UpdateDetails();}
-          tooltip {Set pixels with an input intensity superior to upper threshold value to outside intensity} xywh {490 375 140 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Round_Button guiBelow {
-          label {Threshold Below}
-          callback {guiAbove->value(0);
-guiBelow->value(1);
-guiOutside->value(0);
-guiMaxDetails->value(guiMaxDetails->maximum());
-guiMaxDetailsValue->value(guiMaxDetailsValue->maximum());
-guiMaxDetails->deactivate();
-guiMaxDetailsValue->deactivate();
-guiMinDetails->activate();
-guiMinDetailsValue->activate();
-this->UpdateDetails();}
-          tooltip {Set pixels with an input intensity inferior to lower threshold value to outside value} xywh {491 425 135 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Round_Button guiOutside {
-          label {Threshold Outside}
-          callback {guiAbove->value(0);
-guiBelow->value(0);
-guiOutside->value(1);
-guiMinDetails->activate();
-guiMinDetailsValue->activate();
-guiMaxDetails->activate();
-guiMaxDetailsValue->activate();
-this->UpdateDetails();}
-          tooltip {Set pixels with an input intensity out of the range [lower threshold;upper threshold] to outside value} xywh {491 400 138 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          xywh {113 435 95 20} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 value 1
         }
         Fl_Value_Slider guiAlpha {
           label {alpha :}
           callback {this->AlphaBlending();}
-          xywh {535 340 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 14
+          xywh {513 319 225 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 step 0.05 value 0.5 slider_size 0.01 textsize 14
         }
         Fl_Value_Input guiInsideValue {
           label {Inside value :}
           callback {this->UpdateDetails();}
-          xywh {120 440 95 25} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 maximum 100000 step 1 deactivate
+          xywh {113 460 95 20} box PLASTIC_DOWN_BOX color 41 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 maximum 100000 step 1 deactivate
         }
-        Fl_Round_Button guiGenericThreshold {
-          label {Generic Threshold}
-          callback {guiAbove->activate();
+        Fl_Value_Input guiMinDetails {
+          label {Lower Treshhold :}
+          callback {guiMinDetails->value( std::min(guiMinDetails->value(), guiMaxDetails->value()));
+guiMinDetails->value( std::max(guiMinDetails->value(), guiMinDetails->minimum()));
+this->UpdateDetails();}
+          tooltip {Edit or drag-and-slide to adjust the value} xywh {113 370 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1
+        }
+        Fl_Value_Input guiMaxDetails {
+          label {Upper Threshold :}
+          callback {guiMaxDetails->value( std::min(guiMaxDetails->value(), guiMaxDetails->maximum()));
+guiMaxDetails->value( std::max(guiMaxDetails->value(), guiMinDetails->value()));
+this->UpdateDetails();}
+          tooltip {Edit or drag-and-slide to adjust the value} xywh {113 395 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1 value 1000
+        }
+        Fl_Group {} {
+          label {Image Extremum} open
+          tooltip {Input image extremum} xywh {528 365 210 69} box PLASTIC_DOWN_FRAME color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          Fl_Value_Output guiMin {
+            label {Min : }
+            xywh {593 375 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Value_Output guiMax {
+            label {Max : }
+            xywh {593 404 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Fl_Group {} {open
+          tooltip {Threshold type} xywh {30 310 280 30} box PLASTIC_DOWN_FRAME
+        } {
+          Fl_Round_Button guiGenericThreshold {
+            label {Generic Threshold}
+            callback {guiAbove->activate();
 guiBelow->activate();
 guiOutside->activate();
 
@@ -106,12 +93,12 @@ guiGenericThreshold->value(1);
 guiBinaryThreshold->value(0);
 guiInsideValue->deactivate();
 this->UpdateLayerGenerationFlag();
-this->UpdateDetails();} selected
-          xywh {270 410 140 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Round_Button guiBinaryThreshold {
-          label {Binary Threshold}
-          callback {guiAbove->deactivate();
+this->UpdateDetails();}
+            xywh {36 319 140 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Round_Button guiBinaryThreshold {
+            label {Binary Threshold}
+            callback {guiAbove->deactivate();
 guiBelow->deactivate();
 guiOutside->deactivate();
 guiInsideValue->activate();
@@ -120,43 +107,48 @@ guiBinaryThreshold->value(1);
 guiGenericThreshold->value(0);
 
 guiMinDetails->activate();
-guiMinDetailsValue->activate();
 guiMaxDetails->activate();
-guiMaxDetailsValue->activate();
 
 this->UpdateLayerGenerationFlag();
 this->UpdateDetails();}
-          xywh {270 440 140 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+            xywh {181 319 129 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
         }
-        Fl_Slider guiMinDetails {
-          callback {guiMinDetails->value( std::min(guiMinDetails->value(), guiMaxDetails->value()) );
-guiMinDetailsValue->value(guiMinDetails->value());
+        Fl_Group {} {open
+          xywh {251 382 155 90} box PLASTIC_DOWN_FRAME
+        } {
+          Fl_Round_Button guiAbove {
+            label {Threshold Above}
+            callback {guiAbove->value(1);
+guiBelow->value(0);
+guiOutside->value(0);
+guiMinDetails->value(guiMinDetails->minimum());
+guiMinDetails->deactivate();
+guiMaxDetails->activate();
 this->UpdateDetails();}
-          xywh {215 340 225 20} type Horizontal box PLASTIC_DOWN_BOX when 4 maximum 1000 step 1 slider_size 0.01
-        }
-        Fl_Slider guiMaxDetails {
-          callback {guiMaxDetails->value( std::max(guiMaxDetails->value(), guiMinDetails->value()) );
-guiMaxDetailsValue->value(guiMaxDetails->value());
+            tooltip {Set pixels with an input intensity superior to upper threshold value to outside intensity} xywh {267 393 139 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Round_Button guiBelow {
+            label {Threshold Below}
+            callback {guiAbove->value(0);
+guiBelow->value(1);
+guiOutside->value(0);
+guiMaxDetails->value(guiMaxDetails->maximum());
+guiMaxDetails->deactivate();
+guiMinDetails->activate();
 this->UpdateDetails();}
-          xywh {215 370 225 20} type Horizontal box PLASTIC_DOWN_BOX when 4 maximum 1000 step 1 value 1000 slider_size 0.01
-        }
-        Fl_Value_Input guiMinDetailsValue {
-          label {Lower Treshhold :}
-          callback {guiMinDetailsValue->value( std::min(guiMinDetailsValue->value(), guiMaxDetails->value()));
-guiMinDetailsValue->value( std::max(guiMinDetailsValue->value(), guiMinDetails->minimum()));
-
-guiMinDetails->value(guiMinDetailsValue->value());
+            tooltip {Set pixels with an input intensity inferior to lower threshold value to outside value} xywh {268 446 135 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Round_Button guiOutside {
+            label {Threshold Outside}
+            callback {guiAbove->value(0);
+guiBelow->value(0);
+guiOutside->value(1);
+guiMinDetails->activate();
+guiMaxDetails->activate();
 this->UpdateDetails();}
-          xywh {120 340 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1
-        }
-        Fl_Value_Input guiMaxDetailsValue {
-          label {Upper Threshold :}
-          callback {guiMaxDetailsValue->value( std::min(guiMaxDetailsValue->value(), guiMaxDetails->maximum()));
-guiMaxDetailsValue->value( std::max(guiMaxDetailsValue->value(), guiMinDetails->value()));
-
-guiMaxDetails->value(guiMaxDetailsValue->value());
-this->UpdateDetails();}
-          xywh {120 370 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 maximum 1000 step 1 value 1000
+            tooltip {Set pixels with an input intensity out of the range [lower threshold;upper threshold] to outside value} xywh {268 419 138 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          }
         }
       }
     }
