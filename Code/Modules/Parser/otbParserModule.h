@@ -25,7 +25,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 
 // Parser opertor Filter
-#include "otbNaryParserImageFilter.h"
+#include "otbBandMathImageFilter.h"
 
 namespace otb
 {
@@ -58,7 +58,7 @@ public:
   typedef otb::ObjectList<ExtractROIFilterType>        ExtractROIFilterListType;
  
   // Parser Class typedefs
-  typedef NaryParserImageFilter<ImageType>             ParserFilterType;
+  typedef BandMathImageFilter<ImageType>             ParserFilterType;
   typedef Parser                                       ParserType;
 
 protected:
