@@ -59,10 +59,6 @@ FOREACH(moduleDir ${moduleList})
 	ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
       ENDIF(OTB_USE_CURL)
     ELSE(${LIB_NAME} MATCHES "otbTileMapImportModule")
-      IF(${LIB_NAME} MATCHES "otbParserModule" AND NOT OTB_COMPILE_MUPARSER)
-	# Ignore the parser module
-      ELSE(${LIB_NAME} MATCHES "otbParserModule" AND NOT OTB_COMPILE_MUPARSER)
-	
 	FILE(GLOB SC_SRCS  ${moduleDir}/*.cxx )
 	FILE(GLOB SC_GUI_SRCS_TEMP  ${moduleDir}/*.fl )
 	SET(SC_GUI_SRCS "")
@@ -105,7 +101,6 @@ FOREACH(moduleDir ${moduleList})
             ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
 	ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 	
-	ENDIF(${LIB_NAME} MATCHES "otbParserModule" AND NOT OTB_COMPILE_MUPARSER)
     ENDIF(${LIB_NAME} MATCHES "otbTileMapImportModule")
     
     # Create Executable

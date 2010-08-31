@@ -75,13 +75,10 @@
 #include "otbFineCorrelationModule.h"
 #include "otbVectorizationModule.h"
 #include "otbSpectrumModule.h"
+#include "otbParserModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
-#endif
-
-#ifdef OTB_COMPILE_MUPARSER
-#include "otbParserModule.h"
 #endif
 
 
@@ -164,9 +161,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
   
   /***********  Filtering menu *******************/
-#ifdef OTB_COMPILE_MUPARSER
   model->RegisterModule<otb::ParserModule>("Parser", otbGetTextMacro("Filtering/BandMath"));
-#endif
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
