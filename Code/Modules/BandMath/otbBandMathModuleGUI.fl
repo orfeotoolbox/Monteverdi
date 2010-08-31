@@ -5,12 +5,12 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ParserModuleGUI {open
+class BandMathModuleGUI {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label {Parser module}
+      label {BandMath module}
       callback {this->Quit()} open
       xywh {134 201 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
     } {
@@ -70,8 +70,8 @@ ui_HelpWindow->hide();
       }
     }
   }
-  Function {ParserModuleGUI()} {} {}
-  Function {~ParserModuleGUI()} {return_type virtual
+  Function {BandMathModuleGUI()} {} {}
+  Function {~BandMathModuleGUI()} {return_type virtual
   } {}
   Function {OK()} {return_type {virtual void}
   } {}

@@ -15,32 +15,32 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserModule_h
-#define __otbParserModule_h
+#ifndef __otbBandMathModule_h
+#define __otbBandMathModule_h
 
 #include "otbModule.h"
-#include "otbParserModuleGUI.h"
+#include "otbBandMathModuleGUI.h"
 
 // include the OTB elements
 #include "otbMultiToMonoChannelExtractROI.h"
 
-// Parser opertor Filter
+// BandMath Filter
 #include "otbBandMathImageFilter.h"
 
 namespace otb
 {
-/** \class ParserModule
- *  \brief This is the Parser module
+/** \class BandMathModule
+ *  \brief This is the band math module
  *
  *
  */
 
-class ITK_EXPORT ParserModule
-  : public Module, public ParserModuleGUI
+class ITK_EXPORT BandMathModule
+  : public Module, public BandMathModuleGUI
 {
 public:
   /** Standard class typedefs */
-  typedef ParserModule                  Self;
+  typedef BandMathModule                Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -49,24 +49,22 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ParserModule, Module);
+  itkTypeMacro(BandMathModule, Module);
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image            ImageType;
   typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
   typedef otb::MultiToMonoChannelExtractROI<ImageType::PixelType, ImageType::PixelType> ExtractROIFilterType;
   typedef otb::ObjectList<ExtractROIFilterType>        ExtractROIFilterListType;
- 
-  // Parser Class typedefs
-  typedef BandMathImageFilter<ImageType>             ParserFilterType;
+  typedef BandMathImageFilter<ImageType>               BandMathFilterType;
   typedef Parser                                       ParserType;
 
 protected:
   /** Constructor */
-  ParserModule();
+  BandMathModule();
 
   /** Destructor */
-  virtual ~ParserModule();
+  virtual ~BandMathModule();
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -102,11 +100,11 @@ protected:
   virtual void LiveCheck();
 
 private:
-  ParserModule(const Self&); //purposely not implemented
+  BandMathModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   // Class attributes
-  ParserFilterType::Pointer         m_ParserFilter;
+  BandMathFilterType::Pointer       m_BandMathFilter;
   ExtractROIFilterListType::Pointer m_ChannelExtractorList;
   ImageType::Pointer                m_Output;
   unsigned int                      m_NumberOfInputBands;

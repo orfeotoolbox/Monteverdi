@@ -16,15 +16,15 @@
 
 =========================================================================*/
 
-#include "otbParserModule.h"
+#include "otbBandMathModule.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbParserModuleTest(int argc, char* argv[])
+int otbBandMathModuleTest(int argc, char* argv[])
 {
-  otb::ParserModule::Pointer specificModule = otb::ParserModule::New();
+  otb::BandMathModule::Pointer specificModule = otb::BandMathModule::New();
   otb::Module::Pointer        module = specificModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
@@ -35,11 +35,11 @@ int otbParserModuleTest(int argc, char* argv[])
   const char * infname3 = argv[3];
   bool run = atoi(argv[5]);
 
-  typedef otb::ParserModule::ImageType          ImageType;
-  typedef otb::ParserModule::VectorImageType    VectorImageType;
-  typedef otb::ImageFileReader<ImageType>       ImageReaderType;
-  typedef otb::ImageFileReader<VectorImageType> VectorImageReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
+  typedef otb::BandMathModule::ImageType          ImageType;
+  typedef otb::BandMathModule::VectorImageType    VectorImageType;
+  typedef otb::ImageFileReader<ImageType>         ImageReaderType;
+  typedef otb::ImageFileReader<VectorImageType>   VectorImageReaderType;
+  typedef otb::ImageFileWriter<ImageType>         WriterType;
 
   // Reader
   ImageReaderType::Pointer reader1 = ImageReaderType::New();

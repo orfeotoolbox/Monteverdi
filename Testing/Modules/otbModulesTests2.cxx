@@ -36,5 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbHomologousPointExtractionModuleTest);
   REGISTER_TEST(otbConcatenateModuleTest);
   REGISTER_TEST(otbSpectrumViewerModuleTest);
-  REGISTER_TEST(otbParserModuleTest);
+  REGISTER_TEST(otbBandMathModuleTest);
 }

@@ -173,13 +173,13 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
-#------------- Parser Module Test ---------------------------
+#------------- BandMath Module Test ---------------------------
 
-ADD_TEST(moTvParserModuleTest ${Modules_TESTS2} otbParserModuleTest
+ADD_TEST(moTvBandMathModuleTest ${Modules_TESTS2} otbBandMathModuleTest
 ${INPUTDATA}/poupees_sub_c1.png
 ${INPUTDATA}/poupees_sub_c2.png
 ${INPUTDATA}/poupees_sub.png
-${TEMP}/moTvParserModule.tif
+${TEMP}/moTvBandMathModule.tif
 0
 )
 
@@ -367,7 +367,7 @@ otbReaderWriterModuleTest.cxx
 )
 
 SET(Modules_SRCS2
-otbParserModuleTest.cxx
+otbBandMathModuleTest.cxx
 otbViewerModuleTest.cxx
 otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx

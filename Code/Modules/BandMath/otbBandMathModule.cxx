@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbParserModule_cxx
-#define __otbParserModule_cxx
+#ifndef __otbBandMathModule_cxx
+#define __otbBandMathModule_cxx
 
-#include "otbParserModule.h"
+#include "otbBandMathModule.h"
 #include "otbMsgReporter.h"
 
 #include "otbVectorImageToImageListFilter.h"
@@ -28,7 +28,7 @@ namespace otb
 /**
  * Constructor
  */
-ParserModule::ParserModule()
+BandMathModule::BandMathModule()
 {
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to process"), false, true);
@@ -41,13 +41,13 @@ ParserModule::ParserModule()
 /**
  * Destructor
  */
-ParserModule::~ParserModule()
+BandMathModule::~BandMathModule()
 {}
 
 /**
  * PrintSelf method
  */
-void ParserModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void BandMathModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);
@@ -56,7 +56,7 @@ void ParserModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /**
  * Hide the Module GUI
  */
-void ParserModule::Hide()
+void BandMathModule::Hide()
 {
   guiMainWindow->hide();
   ui_HelpWindow->hide();
@@ -66,7 +66,7 @@ void ParserModule::Hide()
 /** 
  * The custom run command 
  */
-void ParserModule::Run()
+void BandMathModule::Run()
 {
   // First step is to retrieve the inputs
   // Get the number of input image
@@ -82,7 +82,7 @@ void ParserModule::Run()
     }
   
   // Setup the filter
-  m_ParserFilter = ParserFilterType::New();
+  m_BandMathFilter = BandMathFilterType::New();
   for(unsigned int i = 0; i < numberOfInputImages; i++)
     {
     // Test if the input is an Image or a VectorImage
@@ -99,10 +99,10 @@ void ParserModule::Run()
     // The input is an image
     if (image.IsNotNull()) 
       {
-      m_ParserFilter->SetNthInput(bandId, image);
+      m_BandMathFilter->SetNthInput(bandId, image);
       
       ui_ImageNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
-      ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
+      ui_VarNames->add(m_BandMathFilter->GetNthInputName(bandId).c_str());
       ui_ImageNames->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
       bandId ++;
       }
@@ -120,12 +120,12 @@ void ParserModule::Run()
         extractROIFilter->SetChannel(j+1);
         extractROIFilter->GetOutput()->UpdateOutputInformation();
         m_ChannelExtractorList->PushBack(extractROIFilter);
-        m_ParserFilter->SetNthInput(bandId, m_ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
+        m_BandMathFilter->SetNthInput(bandId, m_ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
         
         tmpVarName << this->GetInputDataDescription<ImageType>("InputImage", i) << "(band" << j+1 << ")";
         ui_ImageNameList->add(tmpVarName.str().c_str());
         ui_ImageNames->add(tmpVarName.str().c_str());
-        ui_VarNames->add(m_ParserFilter->GetNthInputName(bandId).c_str());
+        ui_VarNames->add(m_BandMathFilter->GetNthInputName(bandId).c_str());
         bandId ++;
         }
       imageId ++;
@@ -144,7 +144,7 @@ void ParserModule::Run()
 /** 
  * Help Initialization
  */
-void ParserModule::InitHelp()
+void BandMathModule::InitHelp()
 {
   std::ostringstream helpContent;
   
@@ -167,7 +167,7 @@ void ParserModule::InitHelp()
 /** 
  * Change a Variable name
  */
-void ParserModule::ChangeVarName()
+void BandMathModule::ChangeVarName()
 {
   unsigned int idx = ui_ImageNameList->value();
   std::string newName(ui_NewVarName->value());
@@ -178,9 +178,9 @@ void ParserModule::ChangeVarName()
   
   if((found1 == std::string::npos) && (found2 == std::string::npos) && (newName.compare("")))
     {
-    m_ParserFilter->SetNthInputName(idx, ui_NewVarName->value());
+    m_BandMathFilter->SetNthInputName(idx, ui_NewVarName->value());
     ui_VarNames->remove(idx+1);
-    ui_VarNames->insert(idx+1, m_ParserFilter->GetNthInputName(idx).c_str());
+    ui_VarNames->insert(idx+1, m_BandMathFilter->GetNthInputName(idx).c_str());
     }
   
   LiveCheck();
@@ -189,7 +189,7 @@ void ParserModule::ChangeVarName()
 /**
  * Quick add a variable name into the expression
 */
-void ParserModule::QuickAdd(unsigned int idx)
+void BandMathModule::QuickAdd(unsigned int idx)
 {
   std::ostringstream tmpExpression;
   
@@ -198,7 +198,7 @@ void ParserModule::QuickAdd(unsigned int idx)
     ui_VarNames->select(idx);
     ui_ImageNames->select(idx);
     
-    tmpExpression << ui_Expression->value() << " " << m_ParserFilter->GetNthInputName(idx-1) << " ";
+    tmpExpression << ui_Expression->value() << " " << m_BandMathFilter->GetNthInputName(idx-1) << " ";
     ui_Expression->value(tmpExpression.str().c_str());
     ui_Expression->take_focus();
     }
@@ -208,7 +208,7 @@ void ParserModule::QuickAdd(unsigned int idx)
 /**
  * Live Checking
  */
-void ParserModule::LiveCheck()
+void BandMathModule::LiveCheck()
 {
   ParserType::Pointer dummyParser = ParserType::New();
   std::vector<double> dummyVars;
@@ -222,7 +222,7 @@ void ParserModule::LiveCheck()
   for(unsigned int i = 0; i < m_NumberOfInputBands; i++)
     {
     dummyVars.push_back(1);
-    dummyParser->DefineVar(m_ParserFilter->GetNthInputName(i), &(dummyVars.at(i)));
+    dummyParser->DefineVar(m_BandMathFilter->GetNthInputName(i), &(dummyVars.at(i)));
     }
   dummyParser->SetExpr(ui_Expression->value());
   // Check the expression
@@ -243,13 +243,13 @@ void ParserModule::LiveCheck()
 /**
  * OK CallBack
  */
-void ParserModule::OK()
+void BandMathModule::OK()
 {
   // Apply the filter
-  m_ParserFilter->SetExpression(ui_Expression->value());
-  m_Output = m_ParserFilter->GetOutput();
+  m_BandMathFilter->SetExpression(ui_Expression->value());
+  m_Output = m_BandMathFilter->GetOutput();
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_ParserFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
+  this->AddOutputDescriptor(m_BandMathFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
   this->NotifyOutputsChange();
   
   // close the GUI
