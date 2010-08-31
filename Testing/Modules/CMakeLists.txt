@@ -173,15 +173,6 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
-#------------- Algebra Module test
-ADD_TEST(moTvAlgebraModuleTest ${Modules_TESTS2} otbAlgebraModuleTest
-${INPUTDATA}/prison_toulouse.tif
-${INPUTDATA}/prison_toulouse.tif
-${TEMP}/moTvAlgebraImageModule.tif
-0
-)
-
-
 #------------- Parser Module Test ---------------------------
 
 IF(OTB_COMPILE_MUPARSER)
@@ -389,7 +380,6 @@ otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
-otbAlgebraModuleTest.cxx
 otbSpectrumViewerModuleTest.cxx
 )
 ELSE(OTB_COMPILE_MUPARSER)
@@ -403,7 +393,6 @@ otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
-otbAlgebraModuleTest.cxx
 )
 ENDIF(OTB_COMPILE_MUPARSER)
 

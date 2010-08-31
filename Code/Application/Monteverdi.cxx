@@ -62,7 +62,6 @@
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
-#include "otbAlgebraModule.h"
 #include "otbKMeansModule.h"
 #include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
@@ -165,7 +164,9 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
   
   /***********  Filtering menu *******************/
-  model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
+#ifdef OTB_COMPILE_MUPARSER
+  model->RegisterModule<otb::ParserModule>("Parser", otbGetTextMacro("Filtering/BandMath"));
+#endif
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
@@ -201,12 +202,6 @@ int main(int argc, char* argv[])
   
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
                                                      otbGetTextMacro("Geometry/GCP to sensor model"));
-  
-
-
-#ifdef OTB_COMPILE_MUPARSER
-  model->RegisterModule<otb::ParserModule>("Parser", otbGetTextMacro("Filtering/Parser"));
-#endif
 
 
   // Launch Monteverdi
