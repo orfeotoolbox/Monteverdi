@@ -97,10 +97,10 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  MeanShiftModuleView * m_View;
+  MeanShiftModuleView::Pointer m_View;
 
   /** The instance of the model */
-  ModelType * m_Model;
+  ModelType::Pointer m_Model;
 
   /** Widgets controller */
   WidgetsControllerType::Pointer m_WidgetsController;
