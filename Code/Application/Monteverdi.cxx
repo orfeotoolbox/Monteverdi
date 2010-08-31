@@ -75,6 +75,7 @@
 #include "otbObjectLabelingModule.h"
 #include "otbFineCorrelationModule.h"
 #include "otbVectorizationModule.h"
+#include "otbSpectrumModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -152,8 +153,11 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
+
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
+  model->RegisterModule<otb::SpectrumModule>("SpectrumViewer", otbGetTextMacro("Visualization/Spectrum Viewer"));
+
   
   /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",
@@ -281,26 +285,26 @@ int main(int argc, char* argv[])
     }
 
   if (parseResult->IsOptionPresent("--ImageList"))
-    {  
+    {
       int numberOfImage = parseResult->GetNumberOfParameters("--ImageList");
       for (int i = 0; i < numberOfImage; i++)
-	{
-	  Fl::check();
-	  std::vector<std::string> moduleVector;
-	  
-	  // Get the ModuleInstanceId
-	  std::string readerId = model->CreateModuleByKey("Reader");
-	  
-	  // Get the module itself
-	  otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
-	  
-	  // Simulate file chooser and ok callback
-	  otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-	  readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
-	  readerModule->Analyse();
-	  readerModule->bOk->do_callback();
-	  Fl::check();
-	}
+        {
+        Fl::check();
+        std::vector<std::string> moduleVector;
+
+        // Get the ModuleInstanceId
+        std::string readerId = model->CreateModuleByKey("Reader");
+
+        // Get the module itself
+        otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+        // Simulate file chooser and ok callback
+        otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+        readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+        readerModule->Analyse();
+        readerModule->bOk->do_callback();
+        Fl::check();
+        }
     }
 
   return Fl::run();

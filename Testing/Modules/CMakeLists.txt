@@ -101,7 +101,11 @@ ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+#------------------  Spectrum Viewer Tests ---------------------------
+ADD_TEST(moTvSpectrumViewerModuleTest ${Modules_TESTS2} otbSpectrumViewerModuleTest
+${INPUTDATA}/poupees.tif
+0
+)
 
 #------------- Writer MVC Module Tests ---------------------------
 ADD_TEST(moTvWriterMVCModuleTest  ${Modules_TESTS2} otbWriterMVCModuleTest
@@ -374,6 +378,7 @@ otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
 otbAlgebraModuleTest.cxx
+otbSpectrumViewerModuleTest.cxx
 )
 ELSE(OTB_COMPILE_MUPARSER)
 SET(Modules_SRCS2

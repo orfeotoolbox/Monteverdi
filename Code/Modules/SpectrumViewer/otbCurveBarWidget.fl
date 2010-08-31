@@ -1,0 +1,39 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+widget_class CurveBarWidget {open
+  xywh {48 486 225 55} type Double box PLASTIC_DOWN_BOX resizable
+  class Fl_Group visible position_relative
+} {
+  Fl_Box m_Label {
+    label label
+    xywh {33 10 0 20} box UP_BOX align 8
+  }
+  Fl_Box m_Index {
+    label label
+    xywh {33 31 0 16} labelsize 10 align 8
+  }
+  Fl_Check_Button m_CheckVisible {
+    callback {CheckVisibleCallBack()}
+    xywh {181 19 20 20} down_box DOWN_BOX
+  }
+  Fl_Button m_DeleteButton {
+    label x
+    callback {DeleteButtonCallBack()}
+    tooltip {Remove the curve} xywh {6 21 13 13} box PLASTIC_DOWN_BOX color 1 labeltype NO_LABEL labelfont 1 labelsize 10
+  }
+  Fl_Button m_ColorButton {
+    callback {ColorButtonCallBack()} selected
+    xywh {147 22 13 13} box PLASTIC_DOWN_BOX
+  }
+  Function {DeleteButtonCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ColorButtonCallBack()} {open return_type {virtual void}
+  } {}
+  Function {CheckVisibleCallBack()} {open return_type {virtual void}
+  } {}
+} 
