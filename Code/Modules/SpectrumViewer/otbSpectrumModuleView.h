@@ -31,7 +31,7 @@
 #include "otbSpectrumModuleControllerInterface.h"
 #include "otbSpectrumModuleViewGroup.h"
 
-#include "FL/Fl_File_Chooser.h"
+#include "FL/Fl_File_Chooser.H"
 
 namespace otb {
 
