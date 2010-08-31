@@ -348,6 +348,18 @@ ${TEMP}/vecTvFineCorrelationModuleTestOutput2.tif
 ${TEMP}/vecTvFineCorrelationModuleTestOutput3.tif
 )
 
+#------------- Mean Shift Clustering Module Tests ---------------------------
+ADD_TEST(moTvMeanShiftModuleTest ${Modules_TESTS4} otbMeanShiftModuleTest
+${INPUTDATA}/ExtrZoneNuageuse.tif
+${TEMP}/moTvMeanShiftModuleOutput1.tif
+${TEMP}/moTvMeanShiftModuleOutput2.tif
+${TEMP}/moTvMeanShiftModuleOutput3.tif
+${TEMP}/moTvMeanShiftModuleOutput4.tif
+10
+30
+290
+)
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -414,6 +426,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbObjectLabelingOpenImage.cxx
   otbObjectLabelingColoredOutput.cxx
   otbFineCorrelationModuleTest.cxx
+  otbMeanShiftModuleTest.cxx
 )
 
 
