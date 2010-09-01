@@ -86,12 +86,10 @@ public:
   virtual void ObjectFocus();
   virtual void ImageFileChooser();
   virtual void LabelsFileChooser();
-  //virtual void FileChooserOk();
   virtual void SaveSamplesToXMLFile();
   virtual void SaveClassificationParametersToXMLFile();
   virtual void LoadSamplesFromXMLFile();
   virtual void SaveClassification();
-  virtual void ExportClassificationToGIS();
   virtual void SampleMargin();
   virtual void ChangeKernelType();
   virtual void ChangeNumberOfCrossValidationFolders();

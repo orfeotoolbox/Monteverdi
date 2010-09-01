@@ -83,12 +83,10 @@ public:
   virtual void RemoveObject(unsigned int objectIndex);
   virtual void SelectObject(unsigned int objectIndex);
   virtual void ClearObjects();
-  //virtual void LoadImages(const char * image, const char * label);
   virtual void SaveSamplesToXMLFile(const char * fname);
   virtual void LoadSamplesFromXMLFile(const char * fname);
   virtual void SaveClassificationParametersToXMLFile(const char * fname);
   virtual void SaveClassification();
-  virtual void ExportClassificationToGIS(const GISExportInfo& exportInfo);
   virtual void SampleMargin();
   virtual void ChangeKernelType(int kernel);
   virtual void ChangeNumberOfCrossValidationFolders(unsigned int nb);

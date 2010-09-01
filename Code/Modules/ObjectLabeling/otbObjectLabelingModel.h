@@ -89,18 +89,6 @@ public:
   DataNodeType::Pointer   m_Folder;
 };
 
-
-class GISExportInfo
-{
-public:
-  std::string host;
-  std::string port;
-  std::string db;
-  std::string user;
-  std::string passwd;
-  std::string table_name;
-};
-
 class ObjectLabelingModel
   : public  EventsSender<std::string>, public itk::Object
 {
@@ -284,9 +272,6 @@ public:
 
   /** Save classification (image) to a file */
   void SaveClassification();
-  
-  /** Save classification to a PostGIS table */
-  void ExportClassificationToGIS(const GISExportInfo& exportInfo);
 
   /** Get the visualization models */
   itkGetObjectMacro(VisualizationModel,VisualizationModelType);

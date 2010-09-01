@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -12,7 +12,7 @@ class ObjectLabelingGUI {open
     Fl_Window wMainWindow {
       label {Object Labeling}
       callback {this->Exit();} open
-      xywh {320 233 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {610 147 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
         label {Full Resolution} open
@@ -211,17 +211,12 @@ lFeatures->do_callback();}
           }
           MenuItem {} {
             label {Save samples}
-            callback {SaveSamplesToXMLFile();}
-            xywh {0 0 36 21}
-          }
-          MenuItem mExportToPostGIS {
-            label {Export results to PostGIS}
-            callback {ExportClassificationToGIS();}
+            callback {SaveSamplesToXMLFile();} selected
             xywh {0 0 36 21}
           }
           MenuItem {} {
             label {Save classification parameters ...}
-            callback {SaveClassificationParametersToXMLFile();} selected
+            callback {SaveClassificationParametersToXMLFile();}
             xywh {30 30 34 24}
           }
           MenuItem {} {

@@ -112,7 +112,7 @@ void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* lim
 	catch(itk::ExceptionObject & err)
 	  {
 	    ossimString ossStr(err.GetDescription());
-	    std::cout<<"messaaaaaaaaaaaaaaaaaaage: "<<ossStr<<std::endl;
+	    std::cout<<"message: "<<ossStr<<std::endl;
 	    if( ossStr.contains("End point not with +/-1 line from line") == true )
 	      {
 		itk::OStringStream oss;
@@ -337,22 +337,6 @@ void ObjectLabelingController::SaveClassification()
   catch(itk::ExceptionObject & err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
-void ObjectLabelingController::ExportClassificationToGIS(const GISExportInfo& exportInfo)
-{
-  try
-    {
-    m_Model->ExportClassificationToGIS(exportInfo);
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-  catch(std::exception & e)
-    {
-    MsgReporter::GetInstance()->SendError(e.what());
     }
 }
 

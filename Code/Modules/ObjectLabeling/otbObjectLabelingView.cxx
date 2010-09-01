@@ -33,15 +33,9 @@ ObjectLabelingView::ObjectLabelingView() : m_Controller(), m_Model(), m_ImageVie
   // Get the model
   m_Model = ObjectLabelingModel::GetInstance();
 
-
   // Build the visualization part
   m_ImageView = ImageViewType::New();
   m_PixelView = PixelViewType::New();
-
-#ifndef OTB_USE_PQXX
-  mExportToPostGIS->hide();
-#endif
-
 }
 
 ObjectLabelingView::~ObjectLabelingView()
@@ -578,27 +572,6 @@ void ObjectLabelingView::SaveClassification()
 {
   m_Controller->SaveClassification();
 }
-
-void ObjectLabelingView::ExportClassificationToGIS()
-{
-  GISExportInfo gisExportInfo;
-  gisExportInfo.host = "localhost";
-  gisExportInfo.port = "5432";
-  gisExportInfo.db = "gisdb";
-  gisExportInfo.user = "jmalik";
-  gisExportInfo.passwd = "01061981";
-  gisExportInfo.table_name = "classif";
-  m_Controller->ExportClassificationToGIS(gisExportInfo);
-}
-
-// void ObjectLabelingView::FileChooserOk()
-// { 
-//   wImagesSelectionWindow->hide();
-//   bBusy->show();
-//   Fl::flush();
-//   m_Controller->LoadImages(vImagePath->value(),vLabelsPath->value());
-//   bBusy->hide();
-// }
 
 void ObjectLabelingView::Exit()
 {

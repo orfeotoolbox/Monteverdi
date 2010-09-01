@@ -1740,53 +1740,5 @@ namespace otb
     return newSample;
   }
 
-#ifdef OTB_USE_PQXX
-  void ObjectLabelingModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
-  {
-    typedef otb::PostGISConnectionImplementation BdConnection;
-    typedef otb::PostGISConnectionImplementation::Pointer BdConnectionPointer;
-
-    BdConnectionPointer connection = BdConnection::New();
-    PostGISTableWithAttributesAndClass::Pointer gisTable = PostGISTableWithAttributesAndClass::New();
-
-    // Create the DB connection
-    connection->SetHost     (exportInfo.host);
-    connection->SetPort     (exportInfo.port);
-    connection->SetDBName   (exportInfo.db);
-    connection->SetUser     (exportInfo.user);
-    connection->SetPassword (exportInfo.passwd);
-
-    connection->ConnectToDB();
-    gisTable->SetConnection(connection);
-    gisTable->SetTableName(exportInfo.table_name);
-
-
-    AvailableFeaturesMapType::const_iterator fit;
-    std::vector<std::string> attributes;
-    for(fit = m_AvailableFeatures.begin(); fit != m_AvailableFeatures.end(); ++fit)
-      {
-      if(fit->second)
-        {
-        attributes.push_back(fit->first);
-        }
-      }
-    gisTable->SetAttributes(attributes);
-
-    // Create the table in db
-    gisTable->CreateTable( true );
-
-    gisTable->InsertLabelMap( *m_LabelMap );
-
-  }
-
-#else
-
-  void ObjectLabelingModel::ExportClassificationToGIS(const GISExportInfo& exportInfo)
-  {
-    itkExceptionMacro(<< "OTB_USE_PQXX is undefined, please set OTB_USE_PQXX to ON to use this");
-  }
-
-#endif
-
 }
 #endif

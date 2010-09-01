@@ -53,12 +53,10 @@ public:
   virtual void RemoveObject(unsigned int objectIndex)=0;
   virtual void SelectObject(unsigned int objectIndex)=0;
   virtual void ClearObjects() = 0;
-  //virtual void LoadImages(const char * image, const char * label)=0;
   virtual void SaveSamplesToXMLFile(const char * fname) = 0;
   virtual void SaveClassificationParametersToXMLFile(const char * fname) = 0;
   virtual void LoadSamplesFromXMLFile(const char * fname) = 0;
   virtual void SaveClassification() = 0;
-  virtual void ExportClassificationToGIS(const GISExportInfo& exportInfo) = 0;
   virtual void SampleMargin() = 0;
   virtual void ChangeKernelType(int kernel) = 0;
   virtual void ChangeNumberOfCrossValidationFolders(unsigned int nb) = 0;
