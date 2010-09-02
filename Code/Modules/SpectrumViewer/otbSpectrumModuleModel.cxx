@@ -20,7 +20,7 @@
 #include "otbSpectrumModuleModel.h"
 
 #include "otbStreamingImageFileWriter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 #include "otbMath.h"
 
@@ -117,23 +117,20 @@ SpectrumModuleModel
   // checking for any quicklook
   if (hasQuickLook)
     {
-    std::cout << "hasQuicklook = true" << std::endl;
     tempImage = m_LayerGenerator->GetLayer()->GetQuicklook();
     }
   else
     {
-    std::cout << "hasQuicklook = false" << std::endl;
     tempImage = m_InputImage;
     }
 
-  typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StatFilterType;
+  typedef otb::StreamingMinMaxVectorImageFilter<ImageType> StatFilterType;
   StatFilterType::Pointer statFilter = StatFilterType::New();
   statFilter->SetInput(tempImage);
   statFilter->Update();
 
   m_LayerGenerator->GetLayer()->SetMinValues(statFilter->GetMinimum());
   m_LayerGenerator->GetLayer()->SetMaxValues(statFilter->GetMaximum());
-
 }
 
 void
