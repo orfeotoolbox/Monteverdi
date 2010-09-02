@@ -20,6 +20,8 @@
 #include "otbSpectrumModuleModel.h"
 
 #include "otbStreamingImageFileWriter.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbFltkFilterWatcher.h"
 #include "otbMath.h"
 
 namespace otb {
@@ -106,65 +108,31 @@ SpectrumModuleModel
 
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);
+  FltkFilterWatcher* qlwatcher = new FltkFilterWatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_LayerGenerator->GenerateLayer();
+  delete qlwatcher;
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();
 
   // checking for any quicklook
   if (hasQuickLook)
     {
+    std::cout << "hasQuicklook = true" << std::endl;
     tempImage = m_LayerGenerator->GetLayer()->GetQuicklook();
     }
   else
     {
+    std::cout << "hasQuicklook = false" << std::endl;
     tempImage = m_InputImage;
     }
 
-  IndexType index;
-  int       sizeX, sizeY;
+  typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StatFilterType;
+  StatFilterType::Pointer statFilter = StatFilterType::New();
+  statFilter->SetInput(tempImage);
+  statFilter->Update();
 
-  numberOfComponentsPerPixel = tempImage->GetNumberOfComponentsPerPixel();
-  itk::ImageRegionConstIterator<ImageType> it(tempImage, tempImage->GetLargestPossibleRegion());
-
-  minValues.SetSize(numberOfComponentsPerPixel);
-  maxValues.SetSize(numberOfComponentsPerPixel);
-
-  maxValues.SetElement(0, it.Get().GetElement(0));
-  minValues.SetElement(0, it.Get().GetElement(0));
-
-  sizeX = tempImage->GetLargestPossibleRegion().GetSize()[0];
-  sizeY = tempImage->GetLargestPossibleRegion().GetSize()[1];
-
-  // for each chanel
-  for (int j = 0; j < numberOfComponentsPerPixel; j++)
-    {
-    maxValues.SetElement(j, 0);
-    minValues.SetElement(j, 0);
-
-    // for each pixel
-    for (int x = 0; x < sizeX; x++)
-      {
-      for (int y = 0; y < sizeY; y++)
-        {
-        index[0] = x;
-        index[1] = y;
-
-        if (tempImage->GetPixel(index)[j] > maxValues.GetElement(j))
-          {
-          maxValues.SetElement(j, tempImage->GetPixel(index)[j]);
-          }
-
-        if (tempImage->GetPixel(index)[j] < minValues.GetElement(j))
-          {
-          minValues.SetElement(j, tempImage->GetPixel(index)[j]);
-          }
-        }
-      }
-
-    }
-
-  m_LayerGenerator->GetLayer()->SetMinValues(minValues);
-  m_LayerGenerator->GetLayer()->SetMaxValues(maxValues);
+  m_LayerGenerator->GetLayer()->SetMinValues(statFilter->GetMinimum());
+  m_LayerGenerator->GetLayer()->SetMaxValues(statFilter->GetMaximum());
 
 }
 
