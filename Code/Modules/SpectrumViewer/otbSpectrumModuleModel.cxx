@@ -100,7 +100,6 @@ void
 SpectrumModuleModel
 ::DetermineMinMaxValues()
 {
-
   bool             hasQuickLook;
   PixelVectorType  minValues, maxValues;
   ImagePointerType tempImage;
@@ -108,9 +107,9 @@ SpectrumModuleModel
 
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);
-  FltkFilterWatcher* qlwatcher = new FltkFilterWatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+  // TODO: the test fails when decommenting the following line (although the module is usable in Monteverdi)
+  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_LayerGenerator->GenerateLayer();
-  delete qlwatcher;
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();
 
