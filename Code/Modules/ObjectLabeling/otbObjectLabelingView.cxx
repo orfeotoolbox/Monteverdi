@@ -30,9 +30,6 @@ namespace otb
 
 ObjectLabelingView::ObjectLabelingView() : m_Controller(), m_Model(), m_ImageView(), m_PixelView(), m_VectorDataGlComponents()
 {
-  // Get the model
-  m_Model = ObjectLabelingModel::GetInstance();
-
   // Build the visualization part
   m_ImageView = ImageViewType::New();
   m_PixelView = PixelViewType::New();

@@ -83,10 +83,8 @@ public:
 
 protected:
   /** Constructor */
-  ObjectLabelingControllerInterface()
-  {
-    m_Model = ObjectLabelingModel::GetInstance();
-  }
+  ObjectLabelingControllerInterface() {}
+
   /** Destructor */
   ~ObjectLabelingControllerInterface() {}
 

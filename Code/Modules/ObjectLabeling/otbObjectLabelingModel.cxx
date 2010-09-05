@@ -32,20 +32,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include <cstdlib>
 namespace otb
 {
-  /** Initialize the singleton */
-  ObjectLabelingModel::Pointer ObjectLabelingModel::Instance = NULL;
-
-  /** Manage the singleton */
-  ObjectLabelingModel::Pointer
-  ObjectLabelingModel::GetInstance()
-  {
-    if (!Instance)
-      {
-      Instance = ObjectLabelingModel::New();
-      }
-    return Instance;
-  }
-
   ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(),
       m_PixelDescriptionModel(), m_Classes(),
       m_LabeledImage(), m_VectorImage(), m_LabelMap(),
@@ -1311,7 +1297,7 @@ namespace otb
       for(unsigned int cId = 0; cId<numberOfCentroids;++cId)
         {
         unsigned int centroidId = static_cast<unsigned int>(static_cast<double>(m_LabelMap->GetNumberOfLabelObjects())*rand()/RAND_MAX);
-        assert(centroidId<m_Classes[cId].m_Samples.size());
+        assert(centroidId<m_LabelMap->GetNumberOfLabelObjects());
         LabelType centroidLabel = m_LabelMap->GetNthLabelObject(centroidId)->GetLabel();
         VectorType centroidSample = this->BuildSample(m_LabelMap->GetLabelObject(centroidLabel));
         // Fill the initial means

@@ -40,14 +40,6 @@ ObjectLabelingController::ObjectLabelingController() : m_View(), m_WidgetsContro
   m_PixelDescriptionHandler   = PixelDescriptionActionHandlerType::New();
   m_MouseClickHandler         = MouseClickActionHandlerType::New();
 
-  // Register the model to the action handlers
-  m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
-  m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
-  m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
-  m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
-  m_PixelDescriptionHandler->SetModel(m_Model->GetPixelDescriptionModel());
-  m_MouseClickHandler->SetModel(m_Model);
-
   // Set up mouse click handler
   m_MouseClickHandler->SetMouseButton(3);
   m_MouseClickHandler->ActiveOnScrollWidgetOff();

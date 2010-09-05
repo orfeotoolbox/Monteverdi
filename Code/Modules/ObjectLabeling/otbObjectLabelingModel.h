@@ -173,9 +173,6 @@ public:
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef LayerGeneratorType::ImageLayerType::RenderingFunctionType      RenderingFunctionType;
 
-  /** Get the unique instance of the model */
-  static Pointer GetInstance();
-
   /** Get the origin */
   itkGetConstReferenceMacro(Origin,VectorImageType::PointType);
   
