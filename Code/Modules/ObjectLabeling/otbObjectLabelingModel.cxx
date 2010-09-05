@@ -1227,7 +1227,7 @@ namespace otb
   void ObjectLabelingModel::SaveClassification()
   {
 
-    this->Classify();
+    //this->Classify();
 
     //   typedef otb::ImageFileWriter<VectorImageType> WriterType;
     //   WriterType::Pointer writer = WriterType::New();
