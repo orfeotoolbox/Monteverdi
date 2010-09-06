@@ -28,6 +28,7 @@ int otbObjectLabelingOpenImage(int argc, char* argv[])
   // Input
   const char * inputFilename  = argv[1];
   const char * segmentedInputFilename  = argv[2];
+  bool         run = atoi(argv[3]);
   
   // Open Image
   typedef otb::TypeManager::Floating_Point_VectorImage ImageType;
@@ -58,14 +59,24 @@ int otbObjectLabelingOpenImage(int argc, char* argv[])
   otb::Module::Pointer      olabelingModule    = objectLabelingModule.GetPointer();
   std::cout << "Module : " << olabelingModule << std::endl << std::endl;
 
-  // Configure GCP To Sensor Model module
+  // Configure module
   olabelingModule->AddInputByKey("InputImage", wrapperIn);
   olabelingModule->AddInputByKey("LabeledImage",wrapperSegmentedIn );
   olabelingModule->Start();
 
-  // Exit the module
-  objectLabelingModule->GetView()->bexit->do_callback();
-  Fl::check();
+
+  if (run)
+    {
+    Fl::run();
+    }
+  else
+    {
+    Fl::check();
+
+    // Exit the module
+    objectLabelingModule->GetView()->bexit->do_callback();
+    Fl::check();
+    }
 
 
   return EXIT_SUCCESS;
