@@ -318,17 +318,31 @@ ${INPUTDATA}/DEM/srtm_directory
 )
 
 #-------------  Object Labeling Module 
-ADD_TEST(moTvObjectLabelingOpenImage ${Modules_TESTS4} otbObjectLabelingOpenImage
+ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
   ${INPUTDATA}/calanques.tif
   ${INPUTDATA}/cala_labelled.tif
+  0
+)
+
+ADD_TEST(moTvObjectLabelingOpenImage3Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
+  ${INPUTDATA}/calanques3bands.tif
+  ${INPUTDATA}/cala_labelled.tif
+  0
 )
 
 # test to classify
-ADD_TEST(moTvObjectLabelingColoredOutput ${Modules_TESTS4} otbObjectLabelingColoredOutput
+ADD_TEST(moTvObjectLabelingColoredOutput4Bands ${Modules_TESTS4} otbObjectLabelingColoredOutput
   ${INPUTDATA}/calanques.tif
   ${INPUTDATA}/cala_labelled.tif
   131 120 226 42 208 231 187 9
-  ${TEMP}/moTvObjectLabelingColoredOutput.tif
+  ${TEMP}/moTvObjectLabelingColoredOutput4Bands.tif
+)
+
+ADD_TEST(moTvObjectLabelingColoredOutput3Bands ${Modules_TESTS4} otbObjectLabelingColoredOutput
+  ${INPUTDATA}/calanques3bands.tif
+  ${INPUTDATA}/cala_labelled.tif
+  131 120 226 42 208 231 187 9
+  ${TEMP}/moTvObjectLabelingColoredOutput3Bands.tif
 )
 
 
