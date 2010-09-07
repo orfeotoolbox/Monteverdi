@@ -101,7 +101,7 @@ public:
   virtual void ChangeNavigationMode();
   virtual void AddVectorData(VectorDataPointer vData);
   virtual void OK();
-
+  virtual void FocusOnDataNode(const IndexType& index);
  
 protected:
   /** Constructor */

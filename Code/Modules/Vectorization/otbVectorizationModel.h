@@ -83,7 +83,7 @@ public:
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef DataNodeType::PointType      PointType;
   typedef DataNodeType::PolygonType::VertexType
-  VertexType;
+  VertexType; 
   
   // Reprojection filter
   typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
@@ -122,6 +122,7 @@ public:
                                const unsigned int& interiorRingIndex = 0);
   void UpdateAlpha(double alpha);
   void OK();
+  void FocusOnDataNode(const PointType& index);
  
   /** Output accessor. */
   itkGetObjectMacro(Output, VectorDataType );

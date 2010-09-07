@@ -651,6 +651,75 @@ VectorDataTreeBrowser<TVectorData>
 template <class TVectorData>
 void
 VectorDataTreeBrowser<TVectorData>
+::FocusCallback(Fl_Widget* w, void* data)
+{
+  Self * pthis = static_cast<Self *>(data);
+  if (pthis) pthis->FocusOnSelectedGeometry();
+}
+
+template <class TVectorData>
+void
+VectorDataTreeBrowser<TVectorData>
+::FocusOnSelectedGeometry()
+{
+  // Retrieve selected flu node
+  FluNodeType * selectedFluNode = this->get_hilighted();
+
+  // Find the corresponding node from VectorData
+  typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
+
+  while (it != m_NodeMap.end() && it->second != selectedFluNode)
+    {
+    ++it;
+    }
+
+  if ((it != m_NodeMap.end()) && (it != m_NodeMap.begin()))
+    {
+    // Set the Focus to the bounding box
+    NodeType nT;
+    PointType p;
+    RegionType r;
+    SizeType s;
+    IndexType i, indexFocus;
+
+    nT = it->first->GetNodeType();
+    
+    switch (nT)
+      {
+      case FEATURE_POINT:
+        p = it->first->GetPoint();
+        indexFocus[0] = p[0];
+        indexFocus[1] = p[1];
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      case FEATURE_LINE:
+        r = it->first->GetLine()->GetBoundingRegion();
+        s = r.GetSize();
+        i = r.GetIndex();
+        indexFocus[0] = static_cast<int>(s[0] / 2 + i[0]);
+        indexFocus[1] = static_cast<int>(s[1] / 2 + i[1]);
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      case FEATURE_POLYGON:
+        r = it->first->GetPolygonExteriorRing()->GetBoundingRegion();
+        s = r.GetSize();
+        i = r.GetIndex();
+        indexFocus[0] = static_cast<int>(s[0] / 2 + i[0]);
+        indexFocus[1] = static_cast<int>(s[1] / 2 + i[1]);
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      default:
+        break;
+      }
+    }
+}
+
+template <class TVectorData>
+void
+VectorDataTreeBrowser<TVectorData>
 ::DeleteFieldCallback(Fl_Widget*w, void *data)
 {
   Self * pthis = static_cast<Self *>(data);
@@ -693,11 +762,12 @@ VectorDataTreeBrowser<TVectorData>
   // If we are on a data node
   if (found)
     {
-    Fl_Menu_Item popup_menu[3] = {
-            {"Delete geometry",  0, DeleteGeometryCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-                { "Add field",  0, AddFieldCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK }, {NULL}
-      };
-
+    Fl_Menu_Item popup_menu[4] = {
+        {"Delete geometry",  0, DeleteGeometryCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+        { "Add field",  0, AddFieldCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+        {"Focus", 0, FocusCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK }, 
+        {NULL}};
+    
     int x, y;
     x = Fl::event_x();
     y = Fl::event_y();

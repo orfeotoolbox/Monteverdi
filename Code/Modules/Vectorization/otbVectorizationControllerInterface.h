@@ -36,6 +36,7 @@ public:
   typedef VectorizationModel      ModelType;
   typedef ModelType::DataNodeType DataNodeType;
   typedef ModelType::PointType    PointType;
+  typedef DataNodeType::PolygonType::IndexType IndexType;
 
   /** Standard type macros */
   itkTypeMacro(VectorizationControllerInterface, Superclass);
@@ -57,7 +58,7 @@ public:
                                        const unsigned int& interiorRingIndex = 0) = 0;
   virtual void ChangeNavigationMode() =0;
   virtual void OK() =0;
-
+  virtual void FocusOnDataNode(const IndexType& index) =0;
 
 protected:
   /** Constructor */

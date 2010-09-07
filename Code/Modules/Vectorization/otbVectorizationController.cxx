@@ -216,5 +216,10 @@ void VectorizationController::OK()
    }
 }
 
+void VectorizationController::FocusOnDataNode(const IndexType& index)
+{
+  m_Model->FocusOnDataNode(index);
+}
+
 
 } // end namespace otb

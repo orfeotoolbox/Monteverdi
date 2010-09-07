@@ -435,4 +435,18 @@ VectorizationModel
   this->NotifyAll();
 }
 
+void
+VectorizationModel
+::FocusOnDataNode(const PointType& point)
+{
+  IndexType index;
+  index[0] = static_cast<IndexType::IndexValueType>(point[0]);
+  index[1] = static_cast<IndexType::IndexValueType>(point[1]);
+
+  // Center the view around the defined index 
+  m_VisualizationModel->SetScaledExtractRegionCenter(index);
+  m_VisualizationModel->SetExtractRegionCenter(index);
+  m_VisualizationModel->Update();
+}
+
 } // namespace otb
