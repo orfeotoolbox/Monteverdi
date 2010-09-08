@@ -23,6 +23,7 @@
 #include "otbVectorDataTreeBrowser.h"
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Value_Input.H>
+#include <FL/Fl_Value_Output.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Menu_Item.H>
 
@@ -404,8 +405,8 @@ VectorDataTreeBrowser<TVectorData>
     Fl_Group::current(NULL);
     Fl_Group *g = new Fl_Group(0, 0, 150, 20);
     g->resizable(NULL);
-    Fl_Value_Input * ix = new Fl_Value_Input(0, 0, 75, 20);
-    Fl_Value_Input * iy = new Fl_Value_Input(75, 0, 75, 20);
+    Fl_Value_Output * ix = new Fl_Value_Output(0, 0, 75, 20);
+    Fl_Value_Output * iy = new Fl_Value_Output(75, 0, 75, 20);
     ix->value(point[0]);
     iy->value(point[1]);
     g->add(ix);
@@ -415,8 +416,8 @@ VectorDataTreeBrowser<TVectorData>
   else
     {
     Fl_Group *       g = dynamic_cast<Fl_Group *>(node->widget());
-    Fl_Value_Input * ix = dynamic_cast<Fl_Value_Input *>(g->child(0));
-    Fl_Value_Input * iy = dynamic_cast<Fl_Value_Input *>(g->child(1));
+    Fl_Value_Output * ix = dynamic_cast<Fl_Value_Output *>(g->child(0));
+    Fl_Value_Output * iy = dynamic_cast<Fl_Value_Output *>(g->child(1));
     ix->value(point[0]);
     iy->value(point[1]);
     }
@@ -673,7 +674,7 @@ VectorDataTreeBrowser<TVectorData>
     ++it;
     }
 
-  if ((it != m_NodeMap.end()) && (it != m_NodeMap.begin()))
+  if (it != m_NodeMap.end())
     {
     // Set the Focus to the bounding box
     NodeType nT;

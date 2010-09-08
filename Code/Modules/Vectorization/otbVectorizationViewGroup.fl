@@ -74,8 +74,8 @@ this->NextGeometryIsPolygonExtCallback();}
             callback {bPoint->clear();
 bLine->clear();
 bPolygonExt->clear();
-this->NextGeometryIsPolygonIntCallback();}
-            xywh {514 710 170 23} down_box ROUND_DOWN_BOX deactivate
+this->NextGeometryIsPolygonIntCallback();} selected
+            xywh {514 710 170 23} down_box ROUND_DOWN_BOX hide deactivate
           }
         }
         Fl_Group {} {
@@ -101,7 +101,7 @@ this->UpdateAlphaCallback();}
         }
         Fl_Return_Button bOK {
           label OK
-          callback {this->OKCallback();} selected
+          callback {this->OKCallback();}
           xywh {785 716 55 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
         }
       }
