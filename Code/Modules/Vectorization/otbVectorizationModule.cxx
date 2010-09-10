@@ -64,66 +64,73 @@ void VectorizationModule::Run()
 {
   // Untill window closing, module will be busy
   this->BusyOn();
-
+  
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
   
-   if(this->GetNumberOfInputDataByKey("VectorData") > 0)
-     {
-       const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
-       Fl::check();
-       if(cfname != "")
-	 {
-	   ossimFilename dir(cfname);
-	   if( dir.isDir() )
-	     {
-	       m_Model->SetUseDEM(true);
-	       m_Model->SetDEMPath(dir);
-	     }
-	   else
-	     {
-	       itk::OStringStream oss;
-	       oss<<"Invalid DEm directory "<<cfname<<".";
-	       MsgReporter::GetInstance()->SendError(oss.str());
-	     }
-	 }
-     }
-
+  if(this->GetNumberOfInputDataByKey("VectorData") > 0)
+    {
+    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+    Fl::check();
+    if(cfname != "")
+      {
+      ossimFilename dir(cfname);
+      if( dir.isDir() )
+        {
+        m_Model->SetUseDEM(true);
+        m_Model->SetDEMPath(dir);
+        }
+      else
+        {
+        itk::OStringStream oss;
+        oss<<"Invalid DEm directory "<<cfname<<".";
+        MsgReporter::GetInstance()->SendError(oss.str());
+        }
+      }
+    }
+  
   // Second step is to retrieve the input image
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-
+  
   // One of this pointer will be NULL:
   if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
-      m_View->BuildInterface();
-      m_Model->SetImage(fpvImage);
-      //m_View->InitColor();
+    m_View->BuildInterface();
+    m_Model->SetImage(fpvImage);
+    //m_View->InitColor();
     }
   else
     {
-      itkExceptionMacro(<< "Input image is NULL.");
+    itkExceptionMacro(<< "Input image is NULL.");
     }
-
-
+  
+  
   for( unsigned int i=0; i<this->GetNumberOfInputDataByKey("VectorData"); i++ )
     {
-      VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
-      if(vdata.IsNotNull())
-	{
-	  // Load the vector data (still empty otherwise !!!)
-	  vdata->Update();
-	  m_Controller->AddVectorData(vdata);
-	}
-      else
-	{
-	  itkExceptionMacro(<< "Input vector data is NULL.");
-	}
+    VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
+    if(vdata.IsNotNull())
+      {
+      // Load the vector data (still empty otherwise !!!)
+      vdata->Update();
+      if (vdata->Size() <= 100)
+        {
+        m_Controller->AddVectorData(vdata);
+        }
+      else 
+        {
+        itkExceptionMacro("The Input Shapefile Contains to Many Features to be Loaded");
+        }
+      }
+    else
+      {
+      itkExceptionMacro(<< "Input vector data is NULL.");
+      }
     }
-
-
+  
+  
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 }
