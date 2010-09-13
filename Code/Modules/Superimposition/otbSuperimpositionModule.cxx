@@ -75,7 +75,7 @@ void SuperimpositionModule::Ok()
     m_Transform->SetInputProjectionRef(fixed->GetProjectionRef());
     m_Transform->SetInputDictionary(fixed->GetMetaDataDictionary());
     m_Transform->SetInputKeywordList(fixed->GetImageKeywordlist());
-    m_Resampler->SetSize(fixed->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputSize(fixed->GetLargestPossibleRegion().GetSize());
     m_Resampler->SetOutputStartIndex(fixed->GetLargestPossibleRegion().GetIndex());
     m_Resampler->SetOutputSpacing(fixed->GetSpacing());
     m_Resampler->SetOutputOrigin(fixed->GetOrigin());
@@ -86,7 +86,7 @@ void SuperimpositionModule::Ok()
     m_Transform->SetInputProjectionRef(vfixed->GetProjectionRef());
     m_Transform->SetInputDictionary(vfixed->GetMetaDataDictionary());
     m_Transform->SetInputKeywordList(vfixed->GetImageKeywordlist());
-    m_Resampler->SetSize(vfixed->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputSize(vfixed->GetLargestPossibleRegion().GetSize());
     m_Resampler->SetOutputStartIndex(vfixed->GetLargestPossibleRegion().GetIndex());
     m_Resampler->SetOutputSpacing(vfixed->GetSpacing());
     m_Resampler->SetOutputOrigin(vfixed->GetOrigin());

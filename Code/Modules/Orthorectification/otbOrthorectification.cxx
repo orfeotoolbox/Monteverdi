@@ -889,12 +889,12 @@ Orthorectification::GenericCreateOutput(TMapProjection *mapProj)
   IndexType start;
   start[0] = 0;
   start[1] = 0;
-  typename OrthorectificationFilterType::OriginPointType origin;
-  typedef typename OrthorectificationFilterType::OriginPointType OriginPointType;
+  typename OrthorectificationFilterType::PointType origin;
+  typedef typename OrthorectificationFilterType::PointType OriginPointType;
   origin = static_cast<OriginPointType>(m_OutputOrigin);
 
   orthoRectifFilter->SetOutputStartIndex(start);
-  orthoRectifFilter->SetSize(m_OutputSize);
+  orthoRectifFilter->SetOutputSize(m_OutputSize);
   orthoRectifFilter->SetOutputSpacing(m_OutputSpacing);
   orthoRectifFilter->SetOutputOrigin(origin);
   orthoRectifFilter->SetMapProjection(mapProj);
