@@ -475,7 +475,7 @@ ProjectionModel
 ::ReprojectImage()
 {
   m_Resampler->SetTransform(m_InverseTransform);
-  m_Resampler->SetSize(m_OutputSize);
+  m_Resampler->SetOutputSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
   m_PerBander->SetInput(m_InputImage);
