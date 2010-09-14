@@ -328,8 +328,6 @@ void ObjectLabelingView::RefreshInterface()
   bSVMNbFineSteps->value(m_Model->GetSVMEstimator()->GetFineOptimizationNumberOfSteps());
   bSVMOptimization->value(m_Model->GetSVMEstimator()->GetParametersOptimization());
   bALNumberOfSamples->value(m_Model->GetMarginSampler()->GetNumberOfCandidates());
-
-  bUseContext->value(m_Model->GetUseContext());
 }
 
 void ObjectLabelingView::UpdateClassInformation()
@@ -473,12 +471,12 @@ void ObjectLabelingView::Objects()
 {
   m_Controller->SelectObject(lObjects->value()-1);
 }
+
 void ObjectLabelingView::RemoveObject()
 {
   if(lObjects->value()>0)
     {
     m_Controller->RemoveObject(lObjects->value()-1);
-
     }
 }
 
@@ -487,34 +485,8 @@ void ObjectLabelingView::ClearObjects()
   m_Controller->ClearObjects();
 }
 
-void ObjectLabelingView::ObjectFocus(){}
-void ObjectLabelingView::ImageFileChooser()
+void ObjectLabelingView::ObjectFocus()
 {
-  const char * filename = NULL;
-
-  filename = fl_file_chooser("Pick an image file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-  vImagePath->value(filename);
-}
-
-void ObjectLabelingView::LabelsFileChooser()
-{
-  const char * filename = NULL;
-  
-  filename = fl_file_chooser("Pick a labeled image file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-  vLabelsPath->value(filename);
-
 }
 
 void ObjectLabelingView::SaveSamplesToXMLFile()
@@ -575,7 +547,6 @@ void ObjectLabelingView::Exit()
   this->SaveClassification();
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
-  wImagesSelectionWindow->hide();
 }
 
 void ObjectLabelingView::SampleMargin()
@@ -690,10 +661,6 @@ void ObjectLabelingView::BandSetupOkCallback()
   this->wMainWindow->show();
 }
 
-void ObjectLabelingView::UseContext()
-{
-  m_Controller->SetUseContext(bUseContext->value());
-}
 
 void ObjectLabelingView::ClassificationOpacity()
 {

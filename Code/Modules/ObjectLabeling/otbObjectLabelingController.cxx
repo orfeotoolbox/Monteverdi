@@ -468,19 +468,6 @@ void ObjectLabelingController::ChangeFeatureState(const std::string & fname,bool
     }
 }
 
-void ObjectLabelingController::SetUseContext(bool context)
-{
-  try
-    {
-    m_Model->SetUseContext(context);
-    }
-  catch(itk::ExceptionObject & err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-}
-
-
 void ObjectLabelingController::ChangeClassificationOpacity(double value)
 {
   try

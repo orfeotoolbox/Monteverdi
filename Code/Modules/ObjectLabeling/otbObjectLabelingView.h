@@ -84,8 +84,6 @@ public:
   virtual void RemoveObject();
   virtual void ClearObjects();
   virtual void ObjectFocus();
-  virtual void ImageFileChooser();
-  virtual void LabelsFileChooser();
   virtual void SaveSamplesToXMLFile();
   virtual void SaveClassificationParametersToXMLFile();
   virtual void LoadSamplesFromXMLFile();
@@ -105,7 +103,6 @@ public:
   virtual void Exit();
   virtual void Features();
   virtual void ClassificationOpacity();
-  virtual void UseContext();
   virtual void ViewerSetupOkCallback();
   virtual void BandSetupOkCallback();
 

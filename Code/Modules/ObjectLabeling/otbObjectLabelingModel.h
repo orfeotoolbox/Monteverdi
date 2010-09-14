@@ -332,10 +332,6 @@ public:
   /** Change a feature state */
   void ChangeFeatureState(const std::string &, bool state);
 
-  /** Set Use context */
-  itkSetMacro(UseContext,bool);
-  itkGetMacro(UseContext,bool);
-
   /** Change classification opacity */
   void ChangeClassificationOpacity(double opacity);
 
@@ -379,9 +375,6 @@ private:
   ObjectLabelingModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Compute context description */
-  void FillContextDescription(VectorType & vect, const  LabelType& label);
-  
   /** Create a new class */
   void AddClass(const LabelType& label, const std::string& name, const ColorType& color);
   
@@ -473,9 +466,6 @@ private:
   CentroidsVectorType                m_CentroidsVector;
 
   RenderingFunctionType::Pointer     m_ImageLayerRenderingFunction;
-
-  /** Do we use context ? */
-  bool m_UseContext;
 
   /** Displayed channels list */
   std::vector<unsigned int> m_Channels;

@@ -99,9 +99,6 @@ namespace otb
     m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ColorMapper = ChangeLabelFilterType::New();
 
-    // Do we use context ?
-    m_UseContext = true;
-
     // Init band id list : B=0, G=1, R=2, NIR=3
     m_BandId[0] = 0;  m_BandId[1] = 1;
     m_BandId[2] = 2;  m_BandId[3] = 3;
@@ -1031,47 +1028,6 @@ namespace otb
         }
       }
 
-    // If context description
-    if(m_UseContext)
-      {
-      // Export centroids as well
-      TiXmlElement * centroids = new TiXmlElement( "ContextCentroids" );
-      root->LinkEndChild( centroids );
-
-      // For each centroid
-      for(unsigned int cindex = 0; cindex<m_CentroidsVector.size();++cindex)
-        {
-        TiXmlElement * centroid = new TiXmlElement( "Centroid" );
-        centroids->LinkEndChild( centroid );
-
-        // For each value in centroid
-        unsigned int findex = 0;
-
-        for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
-          {
-          // If it is selected
-          if(fit->second)
-            {
-            TiXmlElement * position = new TiXmlElement( "CentroidFeature" );
-            centroid->LinkEndChild( position );
-
-            // Name of the feature
-            TiXmlElement * name = new TiXmlElement( "Name" );
-            name->LinkEndChild(new TiXmlText(fit->first.c_str()));
-            position->LinkEndChild(name);
-
-            // Value of the feature
-            TiXmlElement * value = new TiXmlElement( "Value" );
-            oss.str("");
-            oss<<m_CentroidsVector[cindex][findex];
-            value->LinkEndChild(new TiXmlText(oss.str().c_str()));
-            position->LinkEndChild(value);
-            ++findex;
-            }
-          }
-        }
-      }
-
     // Finally, write the file
     doc.SaveFile( fname );
   }
@@ -1352,12 +1308,7 @@ namespace otb
       {
       VectorType newSample = this->BuildSample(it->second);
 
-      if(m_UseContext)
-        {
-        this->FillContextDescription(newSample,it->first);
-        }
       // Add the new sample
-      //std::cout<<"Sample: "<<newSample<<std::endl;
       m_ListSample->PushBack(newSample);
 
       ++it;
@@ -1387,13 +1338,6 @@ namespace otb
 
           TrainingVectorType label;
           label[0]=oit->m_Label;
-
-
-          // Eventually add context description
-          if(m_UseContext)
-            {
-            this->FillContextDescription(newSample,*lit);
-            }
 
           // Add the new samples
           m_TrainingListSample->PushBack(newSample);
@@ -1428,12 +1372,6 @@ namespace otb
   void ObjectLabelingModel::Train()
   {
     // Build the sample lists
-
-    if(m_UseContext)
-      {
-      this->EstimateCentroids();
-      }
-
     this->BuildSampleList();
     this->BuildTrainingSampleList();
 
@@ -1603,56 +1541,6 @@ namespace otb
     else
       {
       itkExceptionMacro(<<"Feature "<<fname<<" could not be found in the available features.");
-      }
-  }
-
-  void ObjectLabelingModel::FillContextDescription(VectorType & vect, const LabelType & label)
-  {
-    DistanceType::Pointer distCalculator = DistanceType::New();
-    unsigned int sampleSize = vect.Size() + m_CentroidsVector.size();
-    unsigned int contextStartIndex = vect.Size();
-
-
-    // Resize the vector to handle context
-    vect.SetSize(sampleSize,false);
-
-    // Initialise
-    for(unsigned int i = 0; i<m_CentroidsVector.size();++i)
-      {
-
-      assert(contextStartIndex+i<sampleSize);
-
-      vect[contextStartIndex+i] = 0.;
-      }
-
-    // Get the adjacent labels map
-    AdjacentLabelsContainerType adjMap = m_LabelMap->GetAdjacentLabels(label);
-
-    // Neighborhood frequency
-    assert(adjMap.size()>0);
-    double frequency = 1/static_cast<double>(adjMap.size());
-
-    // Iterate on adjacent labels
-    for(AdjacentLabelsContainerType::const_iterator lit = adjMap.begin();lit!=adjMap.end();++lit)
-      {
-      // Build the sample
-      VectorType newSample = this->BuildSample(m_LabelMap->GetLabelObject(*lit));
-
-      double minDist = itk::NumericTraits<double>::max();
-      int minCId = -1;
-
-      for(unsigned int cId = 0; cId < m_CentroidsVector.size();++cId)
-        {
-        double dist = distCalculator->Evaluate(newSample,m_CentroidsVector[cId]);
-        if(dist < minDist)
-          {
-          minDist = dist;
-          minCId = cId;
-          }
-        }
-      // TODO: Check for sigma here
-      assert(contextStartIndex+minCId<sampleSize);
-      vect[contextStartIndex+minCId]+=frequency;
       }
   }
 

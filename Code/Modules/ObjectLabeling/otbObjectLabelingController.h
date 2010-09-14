@@ -100,7 +100,6 @@ public:
   virtual void Classify();
   virtual void ClearClassification();
   virtual void ChangeFeatureState(const std::string & fname, bool state);
-  virtual void SetUseContext(bool context);
   virtual void ChangeClassificationOpacity(double value);
   virtual void UpdateViewerDisplay();
   virtual void OpenImage(VectorImageType* vimage, ImageType* limage);
