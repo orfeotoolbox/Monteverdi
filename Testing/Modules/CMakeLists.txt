@@ -367,6 +367,15 @@ ${TEMP}/moTvMeanShiftModuleOutput4.tif
 290
 )
 
+#------------- Vectorization & Classification MiniPipeline ---------------------------
+ADD_TEST(moTvVectorizationClassification ${Modules_TESTS4} otbVectorizationClassification
+${INPUTDATA}/ExtrZoneNuageuse.tif
+${INPUTDATA}/toitsVeg.shp
+${TEMP}/moTvVectorizationClassificationMiniPipeline.shp
+${TEMP}/moTvVectorizationClassificationMiniPipeline.tif
+${INPUTDATA}/DEM/srtm_directory
+)
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -419,6 +428,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbObjectLabelingColoredOutput.cxx
   otbFineCorrelationModuleTest.cxx
   otbMeanShiftModuleTest.cxx
+  otbVectorizationClassificationTest.cxx
 )
 
 

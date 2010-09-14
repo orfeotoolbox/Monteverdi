@@ -34,4 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbObjectLabelingColoredOutput);
   REGISTER_TEST(otbFineCorrelationModuleTest);
   REGISTER_TEST(otbMeanShiftModuleTest);
+  REGISTER_TEST(otbVectorizationClassification);
 }
