@@ -160,9 +160,6 @@ public:
   typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
 
-  /** Badn id list typedef */
-  typedef itk::FixedArray<unsigned int, 4>                               BandIdListType;
-
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
   typedef Image<RGBPixelType,2>                                          RGBImageType;

@@ -67,10 +67,6 @@ public:
   typedef ObjectLabelingControllerInterface::VectorImageType VectorImageType;
   typedef ObjectLabelingControllerInterface::ImageType       ImageType; 
 
-  /** Model typedefs */
-  typedef ObjectLabelingModel::BandIdListType BandIdListType;
-
-
   /** User action */
   virtual void ClassSelected(unsigned int classIndex);
   virtual void ClearSelectedClass();
