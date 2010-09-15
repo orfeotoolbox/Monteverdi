@@ -164,13 +164,6 @@ namespace otb
 
   void ObjectLabelingModel::Link()
   {
-    m_Channels.clear();
-    //m_Channels.push_back(m_BandId[2]); // R
-    //m_Channels.push_back(m_BandId[1]); // G
-    //m_Channels.push_back(m_BandId[0]); // B
-
-    //m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-
     // Clear previous layers
     m_VisualizationModel->ClearLayers();
     m_PixelDescriptionModel->ClearLayers();
@@ -1460,7 +1453,6 @@ namespace otb
       itkExceptionMacro("Invalid number of layers");
       }
 
-    m_Channels = ch;
     m_ImageLayerRenderingFunction->SetChannelList(ch);
     m_VisualizationModel->Update();
   }

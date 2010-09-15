@@ -457,9 +457,6 @@ private:
 
   RenderingFunctionType::Pointer     m_ImageLayerRenderingFunction;
 
-  /** Displayed channels list */
-  std::vector<unsigned int> m_Channels;
-
   VectorImageType::PointType   m_Origin;
   VectorImageType::SpacingType m_Spacing;
 
