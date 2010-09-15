@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbotbVectorDataTreeBrowser_txx
-#define __otbotbVectorDataTreeBrowser_txx
+#ifndef __otbVectorDataTreeBrowser_txx
+#define __otbVectorDataTreeBrowser_txx
 
 #include "otbMonteverdiEnum.h"
 
