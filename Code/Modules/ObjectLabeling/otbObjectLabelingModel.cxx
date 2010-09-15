@@ -32,12 +32,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include <cstdlib>
 namespace otb
 {
-  ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(),
-      m_PixelDescriptionModel(), m_Classes(),
-      m_LabeledImage(), m_VectorImage(), m_LabelMap(),
+  ObjectLabelingModel::ObjectLabelingModel() :
       m_SelectedLabel(itk::NumericTraits<LabelType>::max()),
-      m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(),
-      m_SelectedPolygonNode(), m_AvailableFeatures()
+      m_SelectedClass(0),
+      m_HasSelectedClass(false)
   {
     m_VisualizationModel    = VisualizationModelType::New();
     m_PixelDescriptionModel = PixelDescriptionModelType::New();
