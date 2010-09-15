@@ -21,10 +21,12 @@
 #include "otbMonteverdiEnum.h"
 
 #include "otbVectorDataTreeBrowser.h"
-#include <FL/Fl_Int_Input.H>
-#include <FL/Fl_Value_Input.H>
+//#include <FL/Fl_Int_Output.H>
 #include <FL/Fl_Value_Output.H>
-#include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>
+//#include <FL/Fl_Int_Input.H>
+//#include <FL/Fl_Value_Input.H>
+//#include <FL/Fl_Input.H>
 #include <FL/Fl_Menu_Item.H>
 
 #include <map>
@@ -445,7 +447,7 @@ VectorDataTreeBrowser<TVectorData>
       {
       case OFTString:
         {
-        Fl_Input * value = new Fl_Input(0, 0, 75, 20);
+        Fl_Output * value = new Fl_Output(0, 0, 75, 20);
         value->value(field.second.String);
         parent->add(label.c_str(), value);
         break;
@@ -454,14 +456,14 @@ VectorDataTreeBrowser<TVectorData>
         {
         oss.str("");
         oss << field.second.Integer;
-        Fl_Int_Input * value = new Fl_Int_Input(0, 0, 75, 20);
+        Fl_Output * value = new Fl_Output(0, 0, 75, 20);
         value->value(oss.str().c_str());
         parent->add(label.c_str(), value);
         break;
         }
       case OFTReal:
         {
-        Fl_Value_Input * value = new Fl_Value_Input(0, 0, 75, 20);
+        Fl_Value_Output * value = new Fl_Value_Output(0, 0, 75, 20);
         value->value(field.second.Real);
         parent->add(label.c_str(), value);
         break;
