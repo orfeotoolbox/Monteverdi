@@ -414,12 +414,8 @@ private:
   VectorDataType::Pointer            m_MarginSampledPolygon;
   DataNodeType::Pointer              m_MarginSampledFolder;
 
-  VectorDataType::Pointer            m_NeighborsPolygon;
-  DataNodeType::Pointer              m_NeighborsFolder;
-
   /** List of available features */
   AvailableFeaturesMapType           m_AvailableFeatures;
-
 
   /** Stats */
   std::map<std::string,double>       m_FeaturesMeans;

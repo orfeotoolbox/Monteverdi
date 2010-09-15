@@ -60,20 +60,6 @@ namespace otb
     m_SelectedPolygon->GetDataTree()->Add(m_SelectedPolygonNode,folder);
 
     // Building the margin sampling vector data
-    m_NeighborsPolygon = VectorDataType::New();
-    document = DataNodeType::New();
-    m_NeighborsFolder= DataNodeType::New();
-
-    document->SetNodeType(otb::DOCUMENT);
-    m_NeighborsFolder->SetNodeType(otb::FOLDER);
-
-    root = m_NeighborsPolygon->GetDataTree()->GetRoot()->Get();
-
-    m_NeighborsPolygon->GetDataTree()->Add(document,root);
-    m_NeighborsPolygon->GetDataTree()->Add(m_NeighborsFolder,document);
-
-
-    // Building the margin sampling vector data
     m_MarginSampledPolygon = VectorDataType::New();
     document = DataNodeType::New();
     m_MarginSampledFolder= DataNodeType::New();
@@ -663,41 +649,9 @@ namespace otb
     m_SelectedLabel = label;
 
     // Add the polygon to the VectorData
-    SimplifyPolygonFunctorType sfunctor;
-    PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(label)->GetPolygon()/**)*/;
+    PolygonType::Pointer polygon = m_LabelMap->GetLabelObject(label)->GetPolygon();
     m_SelectedPolygonNode->SetPolygonExteriorRing(polygon);
 
-//    // Erase the previous neighboring polygons
-//    TreeNodeType * node = const_cast<TreeNodeType *> (m_NeighborsPolygon->GetDataTree()->GetNode(m_NeighborsFolder));
-//    unsigned int nbChildren = node->CountChildren();
-//    for(unsigned int i = 0; i<nbChildren;++i)
-//      {
-//      node->Remove(node->GetChild(nbChildren-i-1));
-//      }
-//
-//    try
-//    {
-//      LabelMapType::AdjacentLabelsContainerType neighbors = m_LabelMap->GetAdjacentLabels(m_SelectedLabel);
-//
-//      LabelMapType::AdjacentLabelsContainerType::const_iterator nit;
-//
-//      otbMsgDevMacro(<<"Add the "<<neighbors.size() <<" neighboring polygons ...");
-//
-//      // For each neighbor
-//      for(nit = neighbors.begin();nit!= neighbors.end();++nit)
-//        {
-//        // Add the polygon to the VectorData
-//        DataNodeType::Pointer polygonNode = DataNodeType::New();
-//        PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(*nit)->GetPolygon()/**)*/;
-//        polygonNode->SetPolygonExteriorRing(polygon);
-//        m_NeighborsPolygon->GetDataTree()->Add(polygonNode,m_NeighborsFolder);
-//        }
-//      otbMsgDevMacro(<<"Done.");
-//    }
-//    catch(itk::ExceptionObject & err)
-//    {
-//      otbMsgDevMacro(<<"Neighbors not found for label "<<m_SelectedLabel);
-//    }
     this->NotifyAll("Update");
   }
 
