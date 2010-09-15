@@ -181,8 +181,12 @@ namespace otb
       m_AvailableFeatures[*fit]=true;
       }
 
-    // Computes the features statistics
-    this->ComputeFeaturesStatistics();
+    // Computes the features min/max once and for all
+    MinMaxLabelMapFilterType::Pointer minMaxAttributes = MinMaxLabelMapFilterType::New();
+    minMaxAttributes->SetInput(m_LabelMap);
+    minMaxAttributes->Update();
+    m_FeaturesMinimum = minMaxAttributes->GetMinimum();
+    m_FeaturesMaximum = minMaxAttributes->GetMaximum();
 
     m_SelectedPolygon->SetProjectionRef(m_VectorImage->GetProjectionRef());
     m_MarginSampledPolygon->SetProjectionRef(m_VectorImage->GetProjectionRef());
@@ -877,64 +881,6 @@ namespace otb
     this->NotifyAll("Update");
   }
 
-  void ObjectLabelingModel::ComputeFeaturesStatistics()
-  {
-    otbMsgDevMacro(<<"Computing statistics ...");
-    m_FeaturesMeans.clear();
-    m_FeaturesVariances.clear();
-
-    std::map<std::string,double> sum;
-    std::map<std::string,double> sumOfSquares;
-
-    LabelMapType::LabelObjectContainerType::const_iterator it
-    = m_LabelMap->GetLabelObjectContainer().begin();
-
-    for(AvailableFeaturesMapType::const_iterator fit = m_AvailableFeatures.begin();
-        fit != m_AvailableFeatures.end();++fit)
-      {
-      sum[fit->first] = 0.;
-      sumOfSquares[fit->first] = 0.;
-      m_FeaturesMinimum[fit->first] = it->second->GetAttribute((fit->first).c_str());
-      m_FeaturesMaximum[fit->first] = it->second->GetAttribute((fit->first).c_str());
-      }
-
-    unsigned int nbSamples = 0;
-
-    // iterate on label objects
-    while(it != m_LabelMap->GetLabelObjectContainer().end())
-      {
-      for(AvailableFeaturesMapType::const_iterator fit = m_AvailableFeatures.begin();
-          fit != m_AvailableFeatures.end();++fit)
-        {
-        // Update sums and sums of squares
-        double value = it->second->GetAttribute((fit->first).c_str());
-        sum[fit->first]+= value;
-        sumOfSquares[fit->first]+= vcl_pow(value,2);
-
-        if(m_FeaturesMinimum[fit->first] > value)
-          {
-          m_FeaturesMinimum[fit->first] = value;
-          }
-        if(m_FeaturesMaximum[fit->first] < value)
-          {
-          m_FeaturesMaximum[fit->first] = value;
-          }
-
-        }
-      ++nbSamples;
-      ++it;
-      }
-
-    // Compute mean and variance from sums and sums of squares
-    for(AvailableFeaturesMapType::const_iterator fit = m_AvailableFeatures.begin();
-        fit != m_AvailableFeatures.end();++fit)
-      {
-      m_FeaturesMeans[fit->first]=sum[fit->first]/static_cast<double>(nbSamples);
-      m_FeaturesVariances[fit->first]=vcl_sqrt(sumOfSquares[fit->first]/static_cast<double>(nbSamples)-vcl_pow(m_FeaturesMeans[fit->first],2));
-      }
-    otbMsgDevMacro(<<"Done.");
-  }
-
   void ObjectLabelingModel::SaveClassification()
   {
 
@@ -949,174 +895,6 @@ namespace otb
     m_LabeledOutput = m_ClassLabelFilter->GetOutput();
     m_ColoredOutput = m_ColorMapper->GetOutput();
     this->NotifyAll("OutputsUpdated");
-  }
-
-  void ObjectLabelingModel::EstimateCentroids()
-  {
-    otbMsgDevMacro(<<"Computing Kmeans centroids ..." );
-    otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
-    unsigned int numberOfCentroids = m_Classes.size();
-
-    if(numberOfCentroids <= 1)
-      {
-      otbMsgDevMacro(<<"ONE CLASS svm mode, forcing number of centroids to 10");
-      numberOfCentroids = 10;
-      }
-    otbMsgDevMacro(<<"Number of centroids: "<<numberOfCentroids);
-
-
-    ListSampleType::Pointer ls = ListSampleType::New();
-
-    LabelMapType::LabelObjectContainerType::const_iterator it = m_LabelMap->GetLabelObjectContainer().begin();
-
-    VectorType newSample = this->BuildSample(it->second);
-    unsigned int sampleSize = newSample.GetSize();
-
-    // Add the new sample
-    ls->PushBack(newSample);
-    ++it;
-
-    // Iterate on label objects
-    while(it!=m_LabelMap->GetLabelObjectContainer().end())
-      {
-      VectorType newSample = this->BuildSample(it->second);
-
-      // Add the new sample
-      ls->PushBack(newSample);
-      ++it;
-      }
-
-    // Build the Kd Tree
-    TreeGeneratorType::Pointer kdTreeGenerator = TreeGeneratorType::New();
-    kdTreeGenerator->SetSample(ls);
-    kdTreeGenerator->SetBucketSize(100);
-    kdTreeGenerator->Update();
-
-    // Randomly pick the initial means among the classes
-    EstimatorType::ParametersType initialMeans(sampleSize*numberOfCentroids);
-    initialMeans.Fill(0.);
-
-    // TODO: Do we need random intialization here ?
-    srand(0);
-    if(m_Classes.size() > 1)
-      {
-      for(unsigned int cId = 0; cId<m_Classes.size();++cId)
-        {
-        // Identify one centroid and get the sample
-        unsigned int centroidId = static_cast<unsigned int>(static_cast<double>(m_Classes[cId].m_Samples.size())*rand()/RAND_MAX);
-        assert(centroidId<m_Classes[cId].m_Samples.size());
-        LabelType centroidLabel = m_Classes[cId].m_Samples[centroidId];
-        VectorType centroidSample = this->BuildSample(m_LabelMap->GetLabelObject(centroidLabel));
-        // Fill the initial means
-        for(unsigned int idx = 0; idx < sampleSize; ++idx)
-          {
-          assert(idx<centroidSample.Size());
-          assert(cId*sampleSize+idx<initialMeans.Size());
-          initialMeans[cId*sampleSize+idx]=centroidSample[idx];
-          }
-        }
-      }
-    else
-      {
-      // ONE CLASS case
-      for(unsigned int cId = 0; cId<numberOfCentroids;++cId)
-        {
-        unsigned int centroidId = static_cast<unsigned int>(static_cast<double>(m_LabelMap->GetNumberOfLabelObjects())*rand()/RAND_MAX);
-        assert(centroidId<m_LabelMap->GetNumberOfLabelObjects());
-        LabelType centroidLabel = m_LabelMap->GetNthLabelObject(centroidId)->GetLabel();
-        VectorType centroidSample = this->BuildSample(m_LabelMap->GetLabelObject(centroidLabel));
-        // Fill the initial means
-        for(unsigned int idx = 0; idx < sampleSize; ++idx)
-          {
-          assert(idx<centroidSample.Size());
-          assert(cId*sampleSize+idx<initialMeans.Size());
-          initialMeans[cId*sampleSize+idx]=centroidSample[idx];
-          }
-
-        }
-      }
-
-    // Do KMeans estimation
-    EstimatorType::Pointer estimator = EstimatorType::New();
-    estimator->SetParameters(initialMeans);
-    estimator->SetKdTree(kdTreeGenerator->GetOutput());
-    estimator->SetMaximumIteration(10000);
-    estimator->SetCentroidPositionChangesThreshold(0.00001);
-    estimator->StartOptimization();
-
-    // Retrieve final centroids
-    m_CentroidsVector.clear();
-
-    for(unsigned int cId = 0; cId<numberOfCentroids;++cId)
-      {
-      VectorType newCenter(sampleSize);
-
-      for(unsigned int i = 0; i < sampleSize; ++i)
-        {
-        assert(cId * sampleSize + i<estimator->GetParameters().Size());
-        newCenter[i]=estimator->GetParameters()[cId * sampleSize + i];
-        }
-      otbMsgDevMacro(<<"New centroid: "<<newCenter);
-      m_CentroidsVector.push_back(newCenter);
-      }
-
-    otbMsgDevMacro(<<"Done.");
-  }
-
-  void ObjectLabelingModel::BuildSampleList()
-  {
-    otbMsgDevMacro(<<"Building samples list ...");
-
-    // Clear previous samples
-    m_ListSample->Clear();
-
-    LabelMapType::LabelObjectContainerType::const_iterator it = m_LabelMap->GetLabelObjectContainer().begin();
-
-    // Iterate on label objects
-    while(it!=m_LabelMap->GetLabelObjectContainer().end())
-      {
-      VectorType newSample = this->BuildSample(it->second);
-
-      // Add the new sample
-      m_ListSample->PushBack(newSample);
-
-      ++it;
-      }
-    otbMsgDevMacro(<<"Done.");
-  }
-
-  void ObjectLabelingModel::BuildTrainingSampleList()
-  {
-    otbMsgDevMacro(<<"Building training samples list ...");
-    // Clear previous samples
-    m_TrainingListSample->Clear();
-    m_LabelsListSample->Clear();
-
-    // For each classes
-    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
-      {
-      // For each sample in class
-      for(ObjectClassType::LabelVectorType::const_iterator lit = oit->m_Samples.begin(); lit != oit->m_Samples.end();++lit)
-        {
-
-        if(m_LabelMap->HasLabel(*lit))
-          {
-
-          // Create new sample
-          VectorType newSample = this->BuildSample(m_LabelMap->GetLabelObject(*lit));
-
-          TrainingVectorType label;
-          label[0]=oit->m_Label;
-
-          // Add the new samples
-          m_TrainingListSample->PushBack(newSample);
-          m_LabelsListSample->PushBack(label);
-
-          //std::cout<<"Training: "<<label<<" "<<newSample<<std::endl;
-          }
-        }
-      }
-    otbMsgDevMacro(<<"Done.");
   }
 
   void ObjectLabelingModel::ClearMarginSamples()
@@ -1137,12 +915,33 @@ namespace otb
     otbMsgDevMacro(<<"Done.");
   }
 
-
   void ObjectLabelingModel::Train()
   {
-    // Build the sample lists
-    this->BuildSampleList();
-    this->BuildTrainingSampleList();
+    // Build training LabelMap
+    LabelMapType::Pointer trainingLabelMap = LabelMapType::New();
+
+    // For each classes
+    for (ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end(); ++oit)
+      {
+      // For each sample in class
+      for (ObjectClassType::LabelVectorType::const_iterator lit = oit->m_Samples.begin(); lit != oit->m_Samples.end(); ++lit)
+        {
+        if (m_LabelMap->HasLabel(*lit))
+          {
+          LabelObjectType::Pointer lo = LabelObjectType::New();
+          lo->CopyAllFrom(m_LabelMap->GetLabelObject(*lit));
+          lo->SetClassLabel(oit->m_Label);
+          trainingLabelMap->PushLabelObject(lo);
+          }
+        }
+      }
+
+    ClassLabelMap2ListSampleFilterType::Pointer trainingSampleGenerator = ClassLabelMap2ListSampleFilterType::New();
+    trainingSampleGenerator->SetInputLabelMap(trainingLabelMap);
+    trainingSampleGenerator->Update();
+
+    m_TrainingListSample = trainingSampleGenerator->GetOutputSampleList();
+    m_LabelsListSample = trainingSampleGenerator->GetOutputTrainingSampleList();
 
     otbMsgDevMacro(<<"Estimating model ...");
     // Model estimation
@@ -1330,55 +1129,6 @@ namespace otb
 
     m_ImageLayerRenderingFunction->SetChannelList(ch);
     m_VisualizationModel->Update();
-  }
-
-  ObjectLabelingModel::VectorType ObjectLabelingModel::BuildSample(const LabelObjectType * lo) const
-  {
-
-    // Compute the sample size
-    unsigned int sampleSize = 0;
-    AvailableFeaturesMapType::const_iterator fit;
-
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
-      {
-      if(fit->second)
-        {
-        sampleSize++;
-        }
-      }
-
-    // Create new sample
-    VectorType newSample(sampleSize);
-    newSample.Fill(0);
-
-    unsigned int index = 0;
-
-    // Iterate on available features
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
-      {
-      if(fit->second)
-        {
-        // Centered and reduced
-        //double mean = m_FeaturesMeans.find(fit->first)->second;
-        //double var = m_FeaturesVariances.find(fit->first)->second;
-        //newSample[index] = (lo->GetAttribute(fit->first.c_str())-mean)/var;
-
-        // Linear
-        double min = m_FeaturesMinimum.find(fit->first)->second;
-        double max = m_FeaturesMaximum.find(fit->first)->second;
-
-        // TODO: Check assertion
-        assert(index<sampleSize);
-
-        newSample[index] =(lo->GetAttribute(fit->first.c_str())-min)/(max-min);
-        ++index;
-        }
-      }
-
-    //otbMsgDevMacro(<<"NewSample: "<<newSample);
-
-    // Return the sample
-    return newSample;
   }
 
 }

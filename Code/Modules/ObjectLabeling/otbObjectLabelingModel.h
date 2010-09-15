@@ -29,6 +29,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
+#include "otbMinMaxAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbSimplifyPathFunctor.h"
@@ -94,7 +95,7 @@ class ObjectLabelingModel
 {
 public:
   /** Standard class typedefs */
-  typedef ObjectLabelingModel                             Self;
+  typedef ObjectLabelingModel                                        Self;
   typedef itk::Object                                                Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
@@ -106,7 +107,7 @@ public:
   itkNewMacro(Self);
 
   /** Algorithms typedef */
-  typedef TypeManager::Floating_Point_Precision   LabelType;
+  typedef TypeManager::Label_Short_Precision      LabelType;
   typedef TypeManager::Floating_Point_Precision   PixelType;
   typedef TypeManager::Floating_Point_Image       ImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
@@ -115,10 +116,12 @@ public:
   typedef VectorImageType::PixelType              VectorPixelType;
   
   typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType>  LabelObjectType;
+  typedef LabelObjectType::AttributesMapType                                    AttributesMapType;
   typedef itk::LabelMap<LabelObjectType>                                        LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<ImageType,LabelMapType>               LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                           ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
+  typedef MinMaxAttributesLabelMapFilter<LabelMapType>                          MinMaxLabelMapFilterType;
   
   typedef ObjectClass<LabelType>                     ObjectClassType;
   typedef ObjectClassType::ColorType                 ColorType;
@@ -282,18 +285,6 @@ public:
     return m_AvailableFeatures;
   }
 
-  /** Compute features statistics */
-  void ComputeFeaturesStatistics();
-
-  /** Estimate the centroids */
-  void EstimateCentroids();
-
-  /** Convert to sample list */
-  void BuildSampleList();
-
-  /** Convert to training sample list */
-  void BuildTrainingSampleList();
-
   /** Margin sampler */
   void SampleMargin();
 
@@ -350,9 +341,6 @@ protected:
   ObjectLabelingModel();
   /** Destructor */
   ~ObjectLabelingModel();
-
-  /** Extract the relevant features and normalize to range [0,1] */
-  VectorType BuildSample(const LabelObjectType * lo) const;
 
 private:
   ObjectLabelingModel(const Self&); //purposely not implemented
@@ -411,10 +399,8 @@ private:
   AvailableFeaturesMapType           m_AvailableFeatures;
 
   /** Stats */
-  std::map<std::string,double>       m_FeaturesMeans;
-  std::map<std::string,double>       m_FeaturesVariances;
-  std::map<std::string,double>       m_FeaturesMinimum;
-  std::map<std::string,double>       m_FeaturesMaximum;
+  AttributesMapType m_FeaturesMinimum;
+  AttributesMapType m_FeaturesMaximum;
 
   /** Vector Image layer generator */
   LayerGeneratorType::Pointer        m_ImageGenerator;
