@@ -280,9 +280,6 @@ public:
   /** Get the margin sampled polygons */
   itkGetObjectMacro(MarginSampledPolygon,VectorDataType);
 
-  /** Get the margin sampled polygons */
-  itkGetObjectMacro(NeighborsPolygon,VectorDataType);
-
  /** Get the list of available features */
   AvailableFeaturesMapType GetAvailableFeatures() const
   {
