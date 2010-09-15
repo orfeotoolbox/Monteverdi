@@ -30,6 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbMinMaxAttributesLabelMapFilter.h"
+#include "otbNormalizeAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbSimplifyPathFunctor.h"
@@ -122,6 +123,7 @@ public:
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                           ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
   typedef MinMaxAttributesLabelMapFilter<LabelMapType>                          MinMaxLabelMapFilterType;
+  typedef NormalizeAttributesLabelMapFilter<LabelMapType>                       NormalizeLabelMapFilterType;
   
   typedef ObjectClass<LabelType>                     ObjectClassType;
   typedef ObjectClassType::ColorType                 ColorType;
@@ -399,8 +401,8 @@ private:
   AvailableFeaturesMapType           m_AvailableFeatures;
 
   /** Stats */
-  AttributesMapType m_FeaturesMinimum;
-  AttributesMapType m_FeaturesMaximum;
+  AttributesMapType                  m_FeaturesMinimum;
+  AttributesMapType                  m_FeaturesMaximum;
 
   /** Vector Image layer generator */
   LayerGeneratorType::Pointer        m_ImageGenerator;

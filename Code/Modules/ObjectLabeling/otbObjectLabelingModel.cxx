@@ -181,12 +181,18 @@ namespace otb
       m_AvailableFeatures[*fit]=true;
       }
 
-    // Computes the features min/max once and for all
+    // Computes the features min/max and normalize once and for all
     MinMaxLabelMapFilterType::Pointer minMaxAttributes = MinMaxLabelMapFilterType::New();
     minMaxAttributes->SetInput(m_LabelMap);
     minMaxAttributes->Update();
     m_FeaturesMinimum = minMaxAttributes->GetMinimum();
     m_FeaturesMaximum = minMaxAttributes->GetMaximum();
+
+    NormalizeLabelMapFilterType::Pointer normalizeAttributes = NormalizeLabelMapFilterType::New();
+    normalizeAttributes->SetInput(m_LabelMap);
+    normalizeAttributes->SetMinAttributesValues(minMaxAttributes->GetMinimum());
+    normalizeAttributes->SetMaxAttributesValues(minMaxAttributes->GetMaximum());
+    normalizeAttributes->Update();
 
     m_SelectedPolygon->SetProjectionRef(m_VectorImage->GetProjectionRef());
     m_MarginSampledPolygon->SetProjectionRef(m_VectorImage->GetProjectionRef());
@@ -905,6 +911,12 @@ namespace otb
 
   void ObjectLabelingModel::Train()
   {
+    // Build Sample List for classification (whole LabelMap)
+    LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
+    labelMap2SampleList->SetInputLabelMap(m_LabelMap);
+    labelMap2SampleList->Update();
+    m_ListSample = labelMap2SampleList->GetOutputSampleList();
+
     // Build training LabelMap
     LabelMapType::Pointer trainingLabelMap = LabelMapType::New();
 
@@ -955,14 +967,11 @@ namespace otb
   void ObjectLabelingModel::SampleMargin()
   {
     this->ClearMarginSamples();
-
-    // Triggers training
     this->Train();
 
     otbMsgDevMacro(<<"Sampling margin ...");
 
     // Margin sampling
-    // m_MarginSampler = MarginSamplerType::New();
     m_MarginSampler->SetSample(m_ListSample);
     m_MarginSampler->SetModel(m_SVMEstimator->GetModel());
     m_MarginSampler->Modified();
@@ -994,7 +1003,6 @@ namespace otb
 
   void ObjectLabelingModel::Classify()
   {
-    // Triggers training
     this->Train();
 
     // SVM Classification
@@ -1019,7 +1027,6 @@ namespace otb
     LabelMapType::LabelObjectContainerType::const_iterator lit
     = m_LabelMap->GetLabelObjectContainer().begin();
     SVMClassifierType::OutputType::ConstIterator sit = svmClassifier->GetOutput()->Begin();
-
 
     while(lit != m_LabelMap->GetLabelObjectContainer().end()
         && sit!=svmClassifier->GetOutput()->End())
