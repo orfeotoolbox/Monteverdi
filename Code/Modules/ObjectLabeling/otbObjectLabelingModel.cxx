@@ -164,19 +164,18 @@ namespace otb
     shapeLabelMapFilter->SetInput(lfilter->GetOutput());
 
     // Compute radiometric attributes
-    RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
-    radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
-    radiometricLabelMapFilter->SetInput2(m_VectorImage);
-    radiometricLabelMapFilter->Update();
+    BandsStatsLabelMapFilterType::Pointer bandsStatsLabelMapFilter = BandsStatsLabelMapFilterType::New();
+    bandsStatsLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
+    bandsStatsLabelMapFilter->SetFeatureImage(m_VectorImage);
+    bandsStatsLabelMapFilter->Update();
 
     // Get the label map
-    m_LabelMap = radiometricLabelMapFilter->GetOutput();
+    m_LabelMap = bandsStatsLabelMapFilter->GetOutput();
 
     // Populates the features list
     m_AvailableFeatures.clear();
 
     std::vector<std::string> features = m_LabelMap->GetNthLabelObject(0)->GetAvailableAttributes();
-
     for(std::vector<std::string>::const_iterator fit = features.begin();fit!=features.end();++fit)
       {
       m_AvailableFeatures[*fit]=true;

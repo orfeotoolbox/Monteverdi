@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbShapeAttributesLabelMapFilter.h"
-#include "otbRadiometricAttributesLabelMapFilter.h"
+#include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbSimplifyPathFunctor.h"
@@ -114,11 +114,11 @@ public:
   typedef ImageType::IndexType                    IndexType;
   typedef VectorImageType::PixelType              VectorPixelType;
   
-  typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                       LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<ImageType,LabelMapType>              LabelMapFilterType;
-  typedef ShapeAttributesLabelMapFilter<LabelMapType>                          ShapeLabelMapFilterType;
-  typedef RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType>    RadiometricLabelMapFilterType;
+  typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType>  LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                        LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<ImageType,LabelMapType>               LabelMapFilterType;
+  typedef ShapeAttributesLabelMapFilter<LabelMapType>                           ShapeLabelMapFilterType;
+  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
   
   typedef ObjectClass<LabelType>                     ObjectClassType;
   typedef ObjectClassType::ColorType                 ColorType;
