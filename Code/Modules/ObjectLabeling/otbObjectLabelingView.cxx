@@ -122,7 +122,6 @@ void ObjectLabelingView::Build()
 
  // Show and refresh the interface
   this->wMainWindow->show();
-  //this->wBandSetupMainWindow->show();
 
   m_ImageView->GetZoomWidget()->show();
   m_ImageView->GetFullWidget()->show();
@@ -328,8 +327,6 @@ void ObjectLabelingView::RefreshInterface()
   bSVMNbFineSteps->value(m_Model->GetSVMEstimator()->GetFineOptimizationNumberOfSteps());
   bSVMOptimization->value(m_Model->GetSVMEstimator()->GetParametersOptimization());
   bALNumberOfSamples->value(m_Model->GetMarginSampler()->GetNumberOfCandidates());
-
-  bUseContext->value(m_Model->GetUseContext());
 }
 
 void ObjectLabelingView::UpdateClassInformation()
@@ -473,12 +470,12 @@ void ObjectLabelingView::Objects()
 {
   m_Controller->SelectObject(lObjects->value()-1);
 }
+
 void ObjectLabelingView::RemoveObject()
 {
   if(lObjects->value()>0)
     {
     m_Controller->RemoveObject(lObjects->value()-1);
-
     }
 }
 
@@ -487,34 +484,8 @@ void ObjectLabelingView::ClearObjects()
   m_Controller->ClearObjects();
 }
 
-void ObjectLabelingView::ObjectFocus(){}
-void ObjectLabelingView::ImageFileChooser()
+void ObjectLabelingView::ObjectFocus()
 {
-  const char * filename = NULL;
-
-  filename = fl_file_chooser("Pick an image file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-  vImagePath->value(filename);
-}
-
-void ObjectLabelingView::LabelsFileChooser()
-{
-  const char * filename = NULL;
-  
-  filename = fl_file_chooser("Pick a labeled image file", "*.*",".");
-  
-  if (filename == NULL)
-    {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-    }
-  vLabelsPath->value(filename);
-
 }
 
 void ObjectLabelingView::SaveSamplesToXMLFile()
@@ -575,7 +546,6 @@ void ObjectLabelingView::Exit()
   this->SaveClassification();
   MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
-  wImagesSelectionWindow->hide();
 }
 
 void ObjectLabelingView::SampleMargin()
@@ -674,25 +644,6 @@ void ObjectLabelingView::Features()
 void ObjectLabelingView::ViewerSetupOkCallback()
 {
   m_Controller->UpdateViewerDisplay();
-}
-
-void ObjectLabelingView::BandSetupOkCallback()
-{
-  //m_Controller->
-  std::cout<<"B: "<<this->iBChannelId->value()<<std::endl;
-  std::cout<<"G: "<<this->iGChannelId->value()<<std::endl;
-  std::cout<<"R: "<<this->iRChannelId->value()<<std::endl;
-  std::cout<<"NIR: "<<this->iNIRChannelId->value()<<std::endl;
-  m_Controller->UpdateBandId();
-  // hide the window
-  this->wBandSetup->hide();
-  // show the main window
-  this->wMainWindow->show();
-}
-
-void ObjectLabelingView::UseContext()
-{
-  m_Controller->SetUseContext(bUseContext->value());
 }
 
 void ObjectLabelingView::ClassificationOpacity()

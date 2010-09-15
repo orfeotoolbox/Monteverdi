@@ -280,9 +280,6 @@ public:
   /** Get the margin sampled polygons */
   itkGetObjectMacro(MarginSampledPolygon,VectorDataType);
 
-  /** Get the margin sampled polygons */
-  itkGetObjectMacro(NeighborsPolygon,VectorDataType);
-
  /** Get the list of available features */
   AvailableFeaturesMapType GetAvailableFeatures() const
   {
@@ -332,10 +329,6 @@ public:
   /** Change a feature state */
   void ChangeFeatureState(const std::string &, bool state);
 
-  /** Set Use context */
-  itkSetMacro(UseContext,bool);
-  itkGetMacro(UseContext,bool);
-
   /** Change classification opacity */
   void ChangeClassificationOpacity(double opacity);
 
@@ -345,20 +338,10 @@ public:
   itkGetObjectMacro(ColoredOutput,VectorImageType);
 
   /** Get displayed channels list */
-  std::vector<unsigned int> GetChannels()
-    {
-      return m_Channels;
-    }
+  std::vector<unsigned int> GetChannels();
 
   /** Change displayed channel order */
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
-
-  /** Update band list. */
-  void InitBandIdList(VectorImageType* vimage);
-
-  /** Band id list accessors. */
-  itkSetMacro(BandId, BandIdListType);
-  itkGetMacro(BandId, BandIdListType);
   
   /** Check image label relability. */
   bool CheckLabelImage(ImageType* limage);
@@ -379,9 +362,6 @@ private:
   ObjectLabelingModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Compute context description */
-  void FillContextDescription(VectorType & vect, const  LabelType& label);
-  
   /** Create a new class */
   void AddClass(const LabelType& label, const std::string& name, const ColorType& color);
   
@@ -431,12 +411,8 @@ private:
   VectorDataType::Pointer            m_MarginSampledPolygon;
   DataNodeType::Pointer              m_MarginSampledFolder;
 
-  VectorDataType::Pointer            m_NeighborsPolygon;
-  DataNodeType::Pointer              m_NeighborsFolder;
-
   /** List of available features */
   AvailableFeaturesMapType           m_AvailableFeatures;
-
 
   /** Stats */
   std::map<std::string,double>       m_FeaturesMeans;
@@ -474,21 +450,11 @@ private:
 
   RenderingFunctionType::Pointer     m_ImageLayerRenderingFunction;
 
-  /** Do we use context ? */
-  bool m_UseContext;
-
-  /** Displayed channels list */
-  std::vector<unsigned int> m_Channels;
-
   VectorImageType::PointType   m_Origin;
   VectorImageType::SpacingType m_Spacing;
 
   ImageType::Pointer           m_LabeledOutput;
   VectorImageType::Pointer     m_ColoredOutput;
-  
-  /** Band Id list (0:B, 1:G, 2:R, 3:NIR)*/
-  BandIdListType m_BandId;
-
 };
 }
 #endif

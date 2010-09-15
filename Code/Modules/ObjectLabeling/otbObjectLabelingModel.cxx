@@ -32,12 +32,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include <cstdlib>
 namespace otb
 {
-  ObjectLabelingModel::ObjectLabelingModel() : m_VisualizationModel(),
-      m_PixelDescriptionModel(), m_Classes(),
-      m_LabeledImage(), m_VectorImage(), m_LabelMap(),
+  ObjectLabelingModel::ObjectLabelingModel() :
       m_SelectedLabel(itk::NumericTraits<LabelType>::max()),
-      m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(),
-      m_SelectedPolygonNode(), m_AvailableFeatures(), m_BandId()
+      m_SelectedClass(0),
+      m_HasSelectedClass(false)
   {
     m_VisualizationModel    = VisualizationModelType::New();
     m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -58,20 +56,6 @@ namespace otb
     m_SelectedPolygon->GetDataTree()->Add(document,root);
     m_SelectedPolygon->GetDataTree()->Add(folder,document);
     m_SelectedPolygon->GetDataTree()->Add(m_SelectedPolygonNode,folder);
-
-    // Building the margin sampling vector data
-    m_NeighborsPolygon = VectorDataType::New();
-    document = DataNodeType::New();
-    m_NeighborsFolder= DataNodeType::New();
-
-    document->SetNodeType(otb::DOCUMENT);
-    m_NeighborsFolder->SetNodeType(otb::FOLDER);
-
-    root = m_NeighborsPolygon->GetDataTree()->GetRoot()->Get();
-
-    m_NeighborsPolygon->GetDataTree()->Add(document,root);
-    m_NeighborsPolygon->GetDataTree()->Add(m_NeighborsFolder,document);
-
 
     // Building the margin sampling vector data
     m_MarginSampledPolygon = VectorDataType::New();
@@ -98,18 +82,16 @@ namespace otb
     // Classification
     m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ColorMapper = ChangeLabelFilterType::New();
-
-    // Do we use context ?
-    m_UseContext = true;
-
-    // Init band id list : B=0, G=1, R=2, NIR=3
-    m_BandId[0] = 0;  m_BandId[1] = 1;
-    m_BandId[2] = 2;  m_BandId[3] = 3;
   }
 
   ObjectLabelingModel::~ObjectLabelingModel()
   {}
 
+  std::vector<unsigned int>
+  ObjectLabelingModel::GetChannels()
+  {
+    return m_ImageLayerRenderingFunction->GetChannelList();
+  }
 
   /** Open an image with its associated label map */
   void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
@@ -140,9 +122,6 @@ namespace otb
     m_ImageGenerator->GenerateLayer();
 
     m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();
-
-    this->InitBandIdList( vimage );
-
     m_ImageGenerator->GetLayer()->SetName("Image");
 
     this->Link();
@@ -169,13 +148,6 @@ namespace otb
 
   void ObjectLabelingModel::Link()
   {
-    m_Channels.clear();
-    m_Channels.push_back(m_BandId[2]); // R
-    m_Channels.push_back(m_BandId[1]); // G
-    m_Channels.push_back(m_BandId[0]); // B
-
-    m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
-
     // Clear previous layers
     m_VisualizationModel->ClearLayers();
     m_PixelDescriptionModel->ClearLayers();
@@ -200,15 +172,6 @@ namespace otb
     RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
     radiometricLabelMapFilter->SetInput2(m_VectorImage);
-
-    if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
-      {
-      radiometricLabelMapFilter->SetRedChannelIndex(m_BandId[2]);
-      radiometricLabelMapFilter->SetGreenChannelIndex(m_BandId[1]);
-      radiometricLabelMapFilter->SetBlueChannelIndex(m_BandId[0]);
-      radiometricLabelMapFilter->SetNIRChannelIndex(m_BandId[3]);
-      }
-
     radiometricLabelMapFilter->Update();
 
     // Get the label map
@@ -290,85 +253,6 @@ namespace otb
     m_VisualizationModel->Update();
   }
 
-
-
-  void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
-  {
-    if(vimage->GetNumberOfComponentsPerPixel() > 3)
-      {
-      std::vector<unsigned int> tempList;
-      std::vector<unsigned int>::iterator it;
-      bool found = false;
-      // this list is used to set the NIR channel
-      // it is set as the first remaining index (when R, G, B one are suppressed of the list)
-      for(unsigned int i=0; i<vimage->GetNumberOfComponentsPerPixel(); i++)
-        {
-        tempList.push_back(i);
-        }
-
-      // Look for bands id in metadata
-      ImageMetadataInterfaceBase::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(vimage->GetMetaDataDictionary());
-      std::vector<unsigned int> defaultDisplayChannels = metadataInterface->GetDefaultDisplay();
-
-      // B band Id
-      m_BandId[0] = defaultDisplayChannels[2];
-      it = tempList.begin();
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[0] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // G band Id
-      m_BandId[1] = defaultDisplayChannels[1];
-      it = tempList.begin();
-      found = false;
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[1] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // R band Id
-      m_BandId[2] = defaultDisplayChannels[0];
-      it = tempList.begin();
-      found = false;
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[2] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // NIR band Id
-      m_BandId[3] = tempList[0];
-      }
-    else if(vimage->GetNumberOfComponentsPerPixel() == 3)
-      {
-      m_BandId[0] = 0;
-      m_BandId[1] = 1;
-      m_BandId[2] = 2;
-      m_BandId[3] = 0;
-      }
-    else
-      {
-      itkExceptionMacro("invalid input image. It must have more than 2 channels. The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" channels.");
-      }
-  }
-
-
-
   /** Open an image with its associated label map */
   void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
   {
@@ -391,15 +275,6 @@ namespace otb
     RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
     radiometricLabelMapFilter->SetInput2(vimage);
-
-    if(vimage->GetNumberOfComponentsPerPixel()==3)// && limage->GetNumberOfComponentsPerPixel()==3 )
-      {
-      radiometricLabelMapFilter->SetRedChannelIndex(2);
-      radiometricLabelMapFilter->SetGreenChannelIndex(1);
-      radiometricLabelMapFilter->SetBlueChannelIndex(0);
-      radiometricLabelMapFilter->SetNIRChannelIndex(2);
-      }
-
     radiometricLabelMapFilter->Update();
 
     // Get the label map
@@ -772,41 +647,9 @@ namespace otb
     m_SelectedLabel = label;
 
     // Add the polygon to the VectorData
-    SimplifyPolygonFunctorType sfunctor;
-    PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(label)->GetPolygon()/**)*/;
+    PolygonType::Pointer polygon = m_LabelMap->GetLabelObject(label)->GetPolygon();
     m_SelectedPolygonNode->SetPolygonExteriorRing(polygon);
 
-//    // Erase the previous neighboring polygons
-//    TreeNodeType * node = const_cast<TreeNodeType *> (m_NeighborsPolygon->GetDataTree()->GetNode(m_NeighborsFolder));
-//    unsigned int nbChildren = node->CountChildren();
-//    for(unsigned int i = 0; i<nbChildren;++i)
-//      {
-//      node->Remove(node->GetChild(nbChildren-i-1));
-//      }
-//
-//    try
-//    {
-//      LabelMapType::AdjacentLabelsContainerType neighbors = m_LabelMap->GetAdjacentLabels(m_SelectedLabel);
-//
-//      LabelMapType::AdjacentLabelsContainerType::const_iterator nit;
-//
-//      otbMsgDevMacro(<<"Add the "<<neighbors.size() <<" neighboring polygons ...");
-//
-//      // For each neighbor
-//      for(nit = neighbors.begin();nit!= neighbors.end();++nit)
-//        {
-//        // Add the polygon to the VectorData
-//        DataNodeType::Pointer polygonNode = DataNodeType::New();
-//        PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(*nit)->GetPolygon()/**)*/;
-//        polygonNode->SetPolygonExteriorRing(polygon);
-//        m_NeighborsPolygon->GetDataTree()->Add(polygonNode,m_NeighborsFolder);
-//        }
-//      otbMsgDevMacro(<<"Done.");
-//    }
-//    catch(itk::ExceptionObject & err)
-//    {
-//      otbMsgDevMacro(<<"Neighbors not found for label "<<m_SelectedLabel);
-//    }
     this->NotifyAll("Update");
   }
 
@@ -1028,47 +871,6 @@ namespace otb
         oss<<m_FeaturesMaximum[fit->first];
         max->LinkEndChild(new TiXmlText(oss.str().c_str()));
         feature->LinkEndChild(max);
-        }
-      }
-
-    // If context description
-    if(m_UseContext)
-      {
-      // Export centroids as well
-      TiXmlElement * centroids = new TiXmlElement( "ContextCentroids" );
-      root->LinkEndChild( centroids );
-
-      // For each centroid
-      for(unsigned int cindex = 0; cindex<m_CentroidsVector.size();++cindex)
-        {
-        TiXmlElement * centroid = new TiXmlElement( "Centroid" );
-        centroids->LinkEndChild( centroid );
-
-        // For each value in centroid
-        unsigned int findex = 0;
-
-        for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
-          {
-          // If it is selected
-          if(fit->second)
-            {
-            TiXmlElement * position = new TiXmlElement( "CentroidFeature" );
-            centroid->LinkEndChild( position );
-
-            // Name of the feature
-            TiXmlElement * name = new TiXmlElement( "Name" );
-            name->LinkEndChild(new TiXmlText(fit->first.c_str()));
-            position->LinkEndChild(name);
-
-            // Value of the feature
-            TiXmlElement * value = new TiXmlElement( "Value" );
-            oss.str("");
-            oss<<m_CentroidsVector[cindex][findex];
-            value->LinkEndChild(new TiXmlText(oss.str().c_str()));
-            position->LinkEndChild(value);
-            ++findex;
-            }
-          }
         }
       }
 
@@ -1352,12 +1154,7 @@ namespace otb
       {
       VectorType newSample = this->BuildSample(it->second);
 
-      if(m_UseContext)
-        {
-        this->FillContextDescription(newSample,it->first);
-        }
       // Add the new sample
-      //std::cout<<"Sample: "<<newSample<<std::endl;
       m_ListSample->PushBack(newSample);
 
       ++it;
@@ -1387,13 +1184,6 @@ namespace otb
 
           TrainingVectorType label;
           label[0]=oit->m_Label;
-
-
-          // Eventually add context description
-          if(m_UseContext)
-            {
-            this->FillContextDescription(newSample,*lit);
-            }
 
           // Add the new samples
           m_TrainingListSample->PushBack(newSample);
@@ -1428,12 +1218,6 @@ namespace otb
   void ObjectLabelingModel::Train()
   {
     // Build the sample lists
-
-    if(m_UseContext)
-      {
-      this->EstimateCentroids();
-      }
-
     this->BuildSampleList();
     this->BuildTrainingSampleList();
 
@@ -1606,56 +1390,6 @@ namespace otb
       }
   }
 
-  void ObjectLabelingModel::FillContextDescription(VectorType & vect, const LabelType & label)
-  {
-    DistanceType::Pointer distCalculator = DistanceType::New();
-    unsigned int sampleSize = vect.Size() + m_CentroidsVector.size();
-    unsigned int contextStartIndex = vect.Size();
-
-
-    // Resize the vector to handle context
-    vect.SetSize(sampleSize,false);
-
-    // Initialise
-    for(unsigned int i = 0; i<m_CentroidsVector.size();++i)
-      {
-
-      assert(contextStartIndex+i<sampleSize);
-
-      vect[contextStartIndex+i] = 0.;
-      }
-
-    // Get the adjacent labels map
-    AdjacentLabelsContainerType adjMap = m_LabelMap->GetAdjacentLabels(label);
-
-    // Neighborhood frequency
-    assert(adjMap.size()>0);
-    double frequency = 1/static_cast<double>(adjMap.size());
-
-    // Iterate on adjacent labels
-    for(AdjacentLabelsContainerType::const_iterator lit = adjMap.begin();lit!=adjMap.end();++lit)
-      {
-      // Build the sample
-      VectorType newSample = this->BuildSample(m_LabelMap->GetLabelObject(*lit));
-
-      double minDist = itk::NumericTraits<double>::max();
-      int minCId = -1;
-
-      for(unsigned int cId = 0; cId < m_CentroidsVector.size();++cId)
-        {
-        double dist = distCalculator->Evaluate(newSample,m_CentroidsVector[cId]);
-        if(dist < minDist)
-          {
-          minDist = dist;
-          minCId = cId;
-          }
-        }
-      // TODO: Check for sigma here
-      assert(contextStartIndex+minCId<sampleSize);
-      vect[contextStartIndex+minCId]+=frequency;
-      }
-  }
-
   void ObjectLabelingModel::ChangeClassificationOpacity(double opacity)
   {
     BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
@@ -1671,11 +1405,9 @@ namespace otb
       itkExceptionMacro("Invalid number of layers");
       }
 
-    m_Channels = ch;
-    m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+    m_ImageLayerRenderingFunction->SetChannelList(ch);
     m_VisualizationModel->Update();
   }
-
 
   ObjectLabelingModel::VectorType ObjectLabelingModel::BuildSample(const LabelObjectType * lo) const
   {

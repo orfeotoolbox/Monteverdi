@@ -70,11 +70,9 @@ public:
   virtual void Classify() = 0;
   virtual void ClearClassification() = 0;
   virtual void ChangeFeatureState(const std::string& fname,bool state) = 0;
-  virtual void SetUseContext(bool context) = 0;
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
   virtual void OpenImage(VectorImageType*, ImageType*) =0;
-  virtual void UpdateBandId() =0;
   virtual void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;

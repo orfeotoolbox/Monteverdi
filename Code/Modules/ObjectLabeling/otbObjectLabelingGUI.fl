@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -12,7 +12,7 @@ class ObjectLabelingGUI {open
     Fl_Window wMainWindow {
       label {Object Labeling}
       callback {this->Exit();} open
-      xywh {610 147 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {756 157 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
         label {Full Resolution} open
@@ -116,11 +116,6 @@ lFeatures->do_callback();}
 lFeatures->do_callback();}
             xywh {831 527 87 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
           }
-          Fl_Check_Button bUseContext {
-            label {Use context}
-            callback {UseContext();}
-            xywh {780 557 100 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-          }
         }
         Fl_Group gLearningInterface {
           label Learning open
@@ -201,7 +196,7 @@ lFeatures->do_callback();}
         xywh {0 0 945 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
       } {
         Submenu {} {
-          label File open
+          label File open selected
           xywh {0 0 67 24}
         } {
           MenuItem {} {
@@ -211,7 +206,7 @@ lFeatures->do_callback();}
           }
           MenuItem {} {
             label {Save samples}
-            callback {SaveSamplesToXMLFile();} selected
+            callback {SaveSamplesToXMLFile();}
             xywh {0 0 36 21}
           }
           MenuItem {} {
@@ -223,11 +218,6 @@ lFeatures->do_callback();}
             label {Visualisation setup}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}
-          }
-          MenuItem {} {
-            label {Spectral bands setup}
-            callback {wBandSetup->show();}
-            xywh {10 10 30 20}
           }
         }
       }
@@ -249,41 +239,8 @@ lFeatures->do_callback();}
         xywh {870 600 75 25} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
-    Fl_Window wImagesSelectionWindow {
-      label {Images file chooser}
-      xywh {586 433 480 150} type Double color 7 labelfont 1 labelsize 12 labelcolor 186 hide
-    } {
-      Fl_File_Input vImagePath {
-        label {Image }
-        xywh {89 13 310 34} labelsize 12
-      }
-      Fl_File_Input vLabelsPath {
-        label {Labels }
-        xywh {91 61 310 34} labelsize 12
-      }
-      Fl_Button bFileChooserOk {
-        label Ok
-        callback {this->FileChooserOk();}
-        xywh {168 110 65 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button bFileChooserCancel {
-        label Cancel
-        callback {wImagesSelectionWindow->hide();}
-        xywh {258 110 65 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button bImageFileChooser {
-        label {...}
-        callback {this->ImageFileChooser();}
-        xywh {409 16 40 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Button bLabelsFileChooser {
-        label {...}
-        callback {this->LabelsFileChooser();}
-        xywh {409 62 40 30} box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186
-      }
-    }
     Fl_Window wViewerSetupWindow {
-      label {Viewer setup}
+      label {Viewer setup} open
       xywh {706 340 395 180} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
     } {
       Fl_Round_Button rViewerSetupGrayscaleMode {
@@ -346,38 +303,6 @@ ViewerSetupOkCallback();}
         tooltip {Leave viewer set up interface without saving changes} xywh {215 141 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
       }
     }
-    Fl_Window wBandSetup {
-      label {Band Selection} open
-      xywh {280 426 370 145} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
-    } {
-      Fl_Input_Choice iBChannelId {
-        label {Blue channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {112 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
-      } {}
-      Fl_Input_Choice iGChannelId {
-        label {Green channel} open
-        tooltip {Select band for green channel in RGB composition} xywh {111 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
-      } {}
-      Fl_Input_Choice iRChannelId {
-        label {Red channel} open
-        tooltip {Select band for red channel in RGB composition} xywh {215 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
-      } {}
-      Fl_Input_Choice iNIRChannelId {
-        label {NIR channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {215 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
-      } {}
-      Fl_Return_Button bBadnSetupOk {
-        label Ok
-        callback {wBandSetup->hide();
-BandSetupOkCallback();}
-        tooltip {Save changes and leave viewer set up interface} xywh {90 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
-      }
-      Fl_Button bBandSetupCancel {
-        label Cancel
-        callback {wBandSetup->hide();}
-        tooltip {Leave band set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
-      }
-    }
   }
   Function {Classes()} {open return_type {virtual void}
   } {}
@@ -400,10 +325,6 @@ BandSetupOkCallback();}
   Function {ClearObjects()} {open return_type {virtual void}
   } {}
   Function {ObjectFocus()} {open return_type {virtual void}
-  } {}
-  Function {ImageFileChooser()} {open return_type {virtual void}
-  } {}
-  Function {LabelsFileChooser()} {open return_type {virtual void}
   } {}
   Function {FileChooserOk()} {open return_type {virtual void}
   } {}
@@ -440,8 +361,6 @@ BandSetupOkCallback();}
   Function {ClearClassification()} {open return_type {virtual void}
   } {}
   Function {Features()} {open return_type {virtual void}
-  } {}
-  Function {UseContext()} {open return_type {virtual void}
   } {}
   Function {ClassificationOpacity()} {open return_type {virtual void}
   } {}
