@@ -43,8 +43,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 // SVMs
 #include "otbSVMSampleListModelEstimator.h"
-#include "otbSVMClassifier.h"
 #include "otbSVMMarginSampler.h"
+#include "otbLabelMapSVMClassifier.h"
 
 // Visu
 #include "otbImageLayerRenderingModel.h"
@@ -150,8 +150,8 @@ public:
   typedef Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
   typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
     MeasurementVectorFunctorType>                                             SVMEstimatorType;
-  typedef SVMClassifier<ListSampleType,LabelType>                             SVMClassifierType;
-  typedef SVMMarginSampler<ListSampleType,SVMClassifierType::SVMModelType>    MarginSamplerType;
+  typedef LabelMapSVMClassifier<LabelMapType>                                 LabelMapSVMClassifierType;
+  typedef SVMMarginSampler<ListSampleType,SVMEstimatorType::SVMModelType>     MarginSamplerType;
 
   // KMeans
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;

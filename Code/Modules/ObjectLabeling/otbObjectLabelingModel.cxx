@@ -1005,43 +1005,19 @@ namespace otb
   {
     this->Train();
 
-    // SVM Classification
-    otbMsgDevMacro(<<"Classifying ...");
-    SVMClassifierType::Pointer svmClassifier = SVMClassifierType::New();
-    svmClassifier->SetSample(m_ListSample);
-    svmClassifier->SetModel(m_SVMEstimator->GetModel());
-    if(m_Classes.size() == 1)
-      {
-      svmClassifier->SetNumberOfClasses(2);
-      }
-    else
-      {
-      svmClassifier->SetNumberOfClasses(m_Classes.size());
-      }
+    // Do classification
+    LabelMapSVMClassifierType::Pointer classifier = LabelMapSVMClassifierType::New();
+    classifier->SetInput(m_LabelMap);
+    classifier->SetModel(m_SVMEstimator->GetModel());
+    classifier->SetInPlace(true);
+    classifier->Update();
 
-    svmClassifier->Update();
-    otbMsgDevMacro(<<"Done.");
-
-    // Class labeling the label object
-    otbMsgDevMacro(<<"Class labeling the objects ...");
-    LabelMapType::LabelObjectContainerType::const_iterator lit
-    = m_LabelMap->GetLabelObjectContainer().begin();
-    SVMClassifierType::OutputType::ConstIterator sit = svmClassifier->GetOutput()->Begin();
-
-    while(lit != m_LabelMap->GetLabelObjectContainer().end()
-        && sit!=svmClassifier->GetOutput()->End())
-      {
-      lit->second->SetClassLabel(sit.GetClassLabel());
-      ++lit;
-      ++sit;
-      }
-    otbMsgDevMacro(<<"Done.");
-
+    // Make an image of classes labels
     m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ClassLabelFilter->SetInput(m_LabelMap);
     m_ClassLabelFilter->Update();
 
-    // Coloring classes */
+    // Coloring classes
     m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
     m_ColorMapper->SetNumberOfComponentsPerPixel(3);
     m_ColorMapper->ClearChangeMap();
@@ -1059,7 +1035,6 @@ namespace otb
       otbMsgDevMacro(<<"New value: "<<newValue);
       m_ColorMapper->SetChange(1,newValue);
       m_ColorMapper->SetChange(2,defaultValue);
-
       }
 
     // For each classes
