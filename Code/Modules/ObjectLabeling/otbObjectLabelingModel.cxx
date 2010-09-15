@@ -163,7 +163,7 @@ namespace otb
     ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
     shapeLabelMapFilter->SetInput(lfilter->GetOutput());
 
-    // Compute radiometric attributes
+    // Compute bands statistics attributes
     BandsStatsLabelMapFilterType::Pointer bandsStatsLabelMapFilter = BandsStatsLabelMapFilterType::New();
     bandsStatsLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
     bandsStatsLabelMapFilter->SetFeatureImage(m_VectorImage);
@@ -214,7 +214,6 @@ namespace otb
       otbMsgDevMacro(<<"New value: "<<newValue);
       m_ColorMapper->SetChange(oit->m_Label,newValue);
       }
-
 
     // Generate the layer
     m_LabeledImageGenerator = LayerGeneratorType::New();
@@ -277,7 +276,7 @@ namespace otb
       // Add the polygon to the VectorData
       SimplifyPolygonFunctorType sfunctor;
       DataNodeType::Pointer polygonNode = DataNodeType::New();
-      PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(label)->GetPolygon()/**)*/;
+      PolygonType::Pointer polygon = m_LabelMap->GetLabelObject(label)->GetPolygon();
       polygonNode->SetPolygonExteriorRing(polygon);
       m_Classes[classIndex].m_VectorData->GetDataTree()->Add(polygonNode,m_Classes[classIndex].m_Folder);
       }
@@ -326,7 +325,7 @@ namespace otb
   {
     // Convert sample to polygon
     SimplifyPolygonFunctorType sfunctor;
-    PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetLabelObject(label)->GetPolygon()/**)*/;
+    PolygonType::Pointer polygon = m_LabelMap->GetLabelObject(label)->GetPolygon();
     PolygonType::RegionType rsRegion = polygon->GetBoundingRegion();
     PolygonType::PointType center;
 
@@ -434,7 +433,6 @@ namespace otb
     m_Classes.push_back(newClass);
   }
 
-
   ObjectLabelingModel::LabelType ObjectLabelingModel::GetNextAvailableClassLabel()
   {
     // Check for an available label
@@ -484,7 +482,6 @@ namespace otb
         }
       this->NotifyAll("Update");
       }
-
   }
 
   /** Clear all classes */
@@ -592,8 +589,8 @@ namespace otb
     LabelType label = m_LabeledImage->GetPixel(index);
 
     return this->IsSampleSelected(label);
-
   }
+
   bool ObjectLabelingModel::IsSampleSelected(const LabelType & label)
   {
     return (m_SelectedLabel == label);
@@ -883,15 +880,6 @@ namespace otb
 
   void ObjectLabelingModel::SaveClassification()
   {
-
-    //this->Classify();
-
-    //   typedef otb::ImageFileWriter<VectorImageType> WriterType;
-    //   WriterType::Pointer writer = WriterType::New();
-    //   writer->SetFileName(fname);
-    //   writer->SetInput(m_ColorMapper->GetOutput());
-    //   writer->Update();
-
     m_LabeledOutput = m_ClassLabelFilter->GetOutput();
     m_ColoredOutput = m_ColorMapper->GetOutput();
     this->NotifyAll("OutputsUpdated");
@@ -945,7 +933,6 @@ namespace otb
 
     otbMsgDevMacro(<<"Estimating model ...");
     // Model estimation
-    //m_SVMEstimator = SVMEstimatorType::New();
     m_SVMEstimator->SetInputSampleList(m_TrainingListSample);
     m_SVMEstimator->SetTrainingSampleList(m_LabelsListSample);
     m_SVMEstimator->Modified();
@@ -1088,8 +1075,6 @@ namespace otb
     otbMsgDevMacro(<<"Refresh done");
 
     this->NotifyAll("Update");
-
-    //   this->SaveClassification();
   }
 
   void ObjectLabelingModel::ClearClassification()
@@ -1100,10 +1085,8 @@ namespace otb
 
   void ObjectLabelingModel::ChangeFeatureState(const std::string& fname, bool state)
   {
-    //   otbMsgDevMacro(<<"Trying "<<fname);
     if(m_AvailableFeatures.count(fname)>0)
       {
-      //     otbMsgDevMacro(<<"Changing state of feature "<<fname<<" to "<<state);
       m_AvailableFeatures[fname]=state;
       }
     else
