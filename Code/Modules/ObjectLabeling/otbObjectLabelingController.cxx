@@ -69,7 +69,7 @@ void ObjectLabelingController::SetView(ObjectLabelingView * view)
 }
 
 
-void ObjectLabelingController::OpenImage(VectorImageType* vimage, ImageType* limage)
+void ObjectLabelingController::OpenImage(VectorImageType* vimage, LabeledImageType* limage)
 {
   try
     {

@@ -63,12 +63,12 @@ public:
   typedef otb::ObjectLabelingView       ViewType;
 
   /** Data types */
-  typedef ModelType::ImageType             ImageType;
-  typedef ModelType::VectorImageType       VectorImageType;
-  typedef TypeManager::Labeled_Short_Image LabeledImageType;
+  typedef TypeManager::Floating_Point_Image LabeledFloatingImageType;
+  typedef ModelType::LabeledImageType       LabeledImageType;
+  typedef ModelType::VectorImageType        VectorImageType;
 
   /** Cast filter type */
-  typedef itk::CastImageFilter<LabeledImageType, ImageType> CasterFilterType;
+  typedef itk::CastImageFilter<LabeledFloatingImageType, LabeledImageType> CasterFilterType;
 
   /** Accessor to the view*/
   itkGetObjectMacro(View, ViewType);

@@ -43,7 +43,7 @@ ObjectLabelingModule::ObjectLabelingModule()
 
   // Then, describe inputs needed by the module
   this->AddInputDescriptor<VectorImageType>("InputImage","The image to classify (huge image not supported yet)");
-  this->AddInputDescriptor<ImageType>("LabeledImage","The segmentation of the image (huge image not supported yet)");
+  this->AddInputDescriptor<LabeledFloatingImageType>("LabeledImage","The segmentation of the image (huge image not supported yet)");
   this->AddTypeToInputDescriptor<LabeledImageType>("LabeledImage");
 
 
@@ -66,35 +66,34 @@ void ObjectLabelingModule::Run()
 {
   // Untill window closing, module will be busy
   this->BusyOn();
-  
-   VectorImageType::Pointer fpvImage = this->GetInputData<VectorImageType>("InputImage");
-   ImageType::Pointer lImage;
-   LabeledImageType::Pointer lImageLab = this->GetInputData<LabeledImageType>("LabeledImage");
-   
-   if(lImageLab.IsNotNull())
-     {
-       m_Caster->SetInput( lImageLab );
-       lImage = m_Caster->GetOutput();
-     }
-   else
-     {
-       lImage = this->GetInputData<ImageType>("LabeledImage");
-     }
 
- 
-   if(fpvImage.IsNotNull() && lImage.IsNotNull())
-     {
-     // Process the input as an FloatingVectorImageType
+  VectorImageType::Pointer fpvImage = this->GetInputData<VectorImageType> ("InputImage");
+  LabeledFloatingImageType::Pointer lImage = this->GetInputData<LabeledFloatingImageType> ("LabeledImage");
+  LabeledImageType::Pointer lImageLab;
+
+  if (lImage.IsNotNull())
+    {
+    m_Caster->SetInput(lImage);
+    lImageLab = m_Caster->GetOutput();
+    }
+  else
+    {
+    lImageLab = this->GetInputData<LabeledImageType> ("LabeledImage");
+    }
+
+  if (fpvImage.IsNotNull() && lImage.IsNotNull())
+    {
+    // Process the input as an FloatingVectorImageType
     m_View->Build();
-     fpvImage->UpdateOutputInformation();
-     lImage->UpdateOutputInformation();
-     m_Controller->OpenImage(fpvImage,lImage);
-     m_View->UpdateViewerSetup();
-     }
-   else
-     {
-       itkExceptionMacro(<<"One of the input image is null");
-     }
+    fpvImage->UpdateOutputInformation();
+    lImageLab->UpdateOutputInformation();
+    m_Controller->OpenImage(fpvImage, lImageLab);
+    m_View->UpdateViewerSetup();
+    }
+  else
+    {
+    itkExceptionMacro(<<"One of the input image is null");
+    }
 }
 
 /** The Notify */

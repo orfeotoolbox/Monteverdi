@@ -32,10 +32,11 @@ public:
   typedef itk::Object                                  Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
-  typedef ObjectLabelingModel::ColorType    ColorType;
-  typedef ObjectLabelingModel::LabelType    LabelType;
-  typedef ObjectLabelingModel::VectorImageType VectorImageType;
-  typedef ObjectLabelingModel::ImageType       ImageType;
+
+  typedef ObjectLabelingModel::ColorType         ColorType;
+  typedef ObjectLabelingModel::LabelType         LabelType;
+  typedef ObjectLabelingModel::VectorImageType   VectorImageType;
+  typedef ObjectLabelingModel::LabeledImageType  LabeledImageType;
 
 
   /** Standard type macros */
@@ -72,7 +73,7 @@ public:
   virtual void ChangeFeatureState(const std::string& fname,bool state) = 0;
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
-  virtual void OpenImage(VectorImageType*, ImageType*) =0;
+  virtual void OpenImage(VectorImageType*, LabeledImageType*) =0;
   virtual void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;

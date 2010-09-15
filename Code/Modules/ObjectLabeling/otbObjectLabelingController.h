@@ -64,8 +64,8 @@ public:
   <ObjectLabelingModel,ImageViewType>                    MouseClickActionHandlerType;
   
   /** Image typedefs*/
-  typedef ObjectLabelingControllerInterface::VectorImageType VectorImageType;
-  typedef ObjectLabelingControllerInterface::ImageType       ImageType; 
+  typedef ObjectLabelingControllerInterface::VectorImageType        VectorImageType;
+  typedef ObjectLabelingControllerInterface::LabeledImageType       LabeledImageType;
 
   /** User action */
   virtual void ClassSelected(unsigned int classIndex);
@@ -98,7 +98,7 @@ public:
   virtual void ChangeFeatureState(const std::string & fname, bool state);
   virtual void ChangeClassificationOpacity(double value);
   virtual void UpdateViewerDisplay();
-  virtual void OpenImage(VectorImageType* vimage, ImageType* limage);
+  virtual void OpenImage(VectorImageType* vimage, LabeledImageType* limage);
 
   /** Set the pointer to the view */
   void SetView(ObjectLabelingView * view);
