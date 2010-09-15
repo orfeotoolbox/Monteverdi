@@ -181,9 +181,6 @@ public:
   /** Open an image with its associated label map */
   void OpenImage(VectorImageType* vimage, ImageType* limage);
 
-  /** Initialize the filters */
-  void Init(VectorImageType* vimage, ImageType* limage);
-
   /** Add sample */
   void AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex);
   void AddSampleToClass(const LabelType & label,       unsigned int classIndex);
