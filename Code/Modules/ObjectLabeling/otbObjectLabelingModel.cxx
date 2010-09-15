@@ -25,10 +25,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 
-#ifdef OTB_USE_PQXX
-#include "otbObjectLabelingPostGisHelperClasses.h"
-#endif
-
 #include <cstdlib>
 namespace otb
 {
