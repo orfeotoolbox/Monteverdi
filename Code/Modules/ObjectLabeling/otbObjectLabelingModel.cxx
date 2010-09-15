@@ -159,7 +159,6 @@ namespace otb
     lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
     lfilter->SetInput(m_LabeledImage);
 
-
     // Compute shape attributes
     ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
     shapeLabelMapFilter->SetInput(lfilter->GetOutput());
@@ -172,7 +171,6 @@ namespace otb
 
     // Get the label map
     m_LabelMap = radiometricLabelMapFilter->GetOutput();
-    m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
 
     // Populates the features list
     m_AvailableFeatures.clear();
@@ -272,7 +270,6 @@ namespace otb
 
     // Get the label map
     m_LabelMap = radiometricLabelMapFilter->GetOutput();
-    m_LabelMap->SetAdjacencyMap(lfilter->GetOutput()->GetAdjacencyMap());
 
     // Populates the features list
     m_AvailableFeatures.clear();

@@ -24,9 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkObjectFactory.h"
 #include "itkFixedArray.h"
 #include "otbTypeManager.h"
-#include "otbLabelMapWithAdjacency.h"
+#include "itkLabelMap.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
-#include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
+#include "itkLabelImageToLabelMapFilter.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbRadiometricAttributesLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
@@ -115,9 +115,8 @@ public:
   typedef VectorImageType::PixelType              VectorPixelType;
   
   typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType> LabelObjectType;
-  typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
-  typedef LabelMapType::AdjacentLabelsContainerType                            AdjacentLabelsContainerType;
-  typedef LabelImageToLabelMapWithAdjacencyFilter<ImageType,LabelMapType>      LabelMapFilterType;
+  typedef itk::LabelMap<LabelObjectType>                                       LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<ImageType,LabelMapType>              LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                          ShapeLabelMapFilterType;
   typedef RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType>    RadiometricLabelMapFilterType;
   
