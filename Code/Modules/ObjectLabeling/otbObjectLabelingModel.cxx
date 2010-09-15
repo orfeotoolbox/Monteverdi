@@ -220,16 +220,13 @@ namespace otb
 
 
     // Generate the layer
-    LayerGeneratorType::Pointer m_LabeledImageGenerator = LayerGeneratorType::New();
     m_LabeledImageGenerator = LayerGeneratorType::New();
     m_LabeledImageGenerator->SetImage(m_ColorMapper->GetOutput());
     m_LabeledImageGenerator->GenerateQuicklookOff();
     m_LabeledImageGenerator->SetQuicklook(m_ColorMapper->GetOutput());
     m_LabeledImageGenerator->SetSubsamplingRate(1);
     m_LabeledImageGenerator->GenerateLayer();
-
     m_LabeledImageGenerator->GetLayer()->GetRenderingFunction()->SetAutoMinMax(false);
-
 
     LayerGeneratorType::ImageLayerType::RenderingFunctionType::ParametersType parameters(6);
     parameters.Fill(0);
