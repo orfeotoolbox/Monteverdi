@@ -103,7 +103,6 @@ public:
   virtual void ChangeClassificationOpacity(double value);
   virtual void UpdateViewerDisplay();
   virtual void OpenImage(VectorImageType* vimage, ImageType* limage);
-  virtual void UpdateBandId();
 
   /** Set the pointer to the view */
   void SetView(ObjectLabelingView * view);

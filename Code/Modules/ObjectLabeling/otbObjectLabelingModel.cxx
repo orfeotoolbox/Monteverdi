@@ -37,7 +37,7 @@ namespace otb
       m_LabeledImage(), m_VectorImage(), m_LabelMap(),
       m_SelectedLabel(itk::NumericTraits<LabelType>::max()),
       m_SelectedClass(0),m_HasSelectedClass(false), m_SelectedPolygon(),
-      m_SelectedPolygonNode(), m_AvailableFeatures(), m_BandId()
+      m_SelectedPolygonNode(), m_AvailableFeatures()
   {
     m_VisualizationModel    = VisualizationModelType::New();
     m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -98,15 +98,16 @@ namespace otb
     // Classification
     m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ColorMapper = ChangeLabelFilterType::New();
-
-    // Init band id list : B=0, G=1, R=2, NIR=3
-    m_BandId[0] = 0;  m_BandId[1] = 1;
-    m_BandId[2] = 2;  m_BandId[3] = 3;
   }
 
   ObjectLabelingModel::~ObjectLabelingModel()
   {}
 
+  std::vector<unsigned int>
+  ObjectLabelingModel::GetChannels()
+  {
+    return m_ImageLayerRenderingFunction->GetChannelList();
+  }
 
   /** Open an image with its associated label map */
   void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
@@ -137,9 +138,6 @@ namespace otb
     m_ImageGenerator->GenerateLayer();
 
     m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();
-
-    this->InitBandIdList( vimage );
-
     m_ImageGenerator->GetLayer()->SetName("Image");
 
     this->Link();
@@ -167,11 +165,11 @@ namespace otb
   void ObjectLabelingModel::Link()
   {
     m_Channels.clear();
-    m_Channels.push_back(m_BandId[2]); // R
-    m_Channels.push_back(m_BandId[1]); // G
-    m_Channels.push_back(m_BandId[0]); // B
+    //m_Channels.push_back(m_BandId[2]); // R
+    //m_Channels.push_back(m_BandId[1]); // G
+    //m_Channels.push_back(m_BandId[0]); // B
 
-    m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+    //m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
 
     // Clear previous layers
     m_VisualizationModel->ClearLayers();
@@ -197,15 +195,6 @@ namespace otb
     RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
     radiometricLabelMapFilter->SetInput2(m_VectorImage);
-
-    if(m_VectorImage->GetNumberOfComponentsPerPixel()==3)
-      {
-      radiometricLabelMapFilter->SetRedChannelIndex(m_BandId[2]);
-      radiometricLabelMapFilter->SetGreenChannelIndex(m_BandId[1]);
-      radiometricLabelMapFilter->SetBlueChannelIndex(m_BandId[0]);
-      radiometricLabelMapFilter->SetNIRChannelIndex(m_BandId[3]);
-      }
-
     radiometricLabelMapFilter->Update();
 
     // Get the label map
@@ -287,85 +276,6 @@ namespace otb
     m_VisualizationModel->Update();
   }
 
-
-
-  void ObjectLabelingModel::InitBandIdList(VectorImageType* vimage)
-  {
-    if(vimage->GetNumberOfComponentsPerPixel() > 3)
-      {
-      std::vector<unsigned int> tempList;
-      std::vector<unsigned int>::iterator it;
-      bool found = false;
-      // this list is used to set the NIR channel
-      // it is set as the first remaining index (when R, G, B one are suppressed of the list)
-      for(unsigned int i=0; i<vimage->GetNumberOfComponentsPerPixel(); i++)
-        {
-        tempList.push_back(i);
-        }
-
-      // Look for bands id in metadata
-      ImageMetadataInterfaceBase::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(vimage->GetMetaDataDictionary());
-      std::vector<unsigned int> defaultDisplayChannels = metadataInterface->GetDefaultDisplay();
-
-      // B band Id
-      m_BandId[0] = defaultDisplayChannels[2];
-      it = tempList.begin();
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[0] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // G band Id
-      m_BandId[1] = defaultDisplayChannels[1];
-      it = tempList.begin();
-      found = false;
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[1] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // R band Id
-      m_BandId[2] = defaultDisplayChannels[0];
-      it = tempList.begin();
-      found = false;
-      while( it != tempList.end() && found == false )
-        {
-        if( (*it) == m_BandId[2] )
-          {
-          tempList.erase( it );
-          found = true;
-          }
-        it++;
-        }
-
-      // NIR band Id
-      m_BandId[3] = tempList[0];
-      }
-    else if(vimage->GetNumberOfComponentsPerPixel() == 3)
-      {
-      m_BandId[0] = 0;
-      m_BandId[1] = 1;
-      m_BandId[2] = 2;
-      m_BandId[3] = 0;
-      }
-    else
-      {
-      itkExceptionMacro("invalid input image. It must have more than 2 channels. The given image has "<<vimage->GetNumberOfComponentsPerPixel()<<" channels.");
-      }
-  }
-
-
-
   /** Open an image with its associated label map */
   void ObjectLabelingModel::Init(VectorImageType* vimage, ImageType* limage)
   {
@@ -388,15 +298,6 @@ namespace otb
     RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
     radiometricLabelMapFilter->SetInput2(vimage);
-
-    if(vimage->GetNumberOfComponentsPerPixel()==3)// && limage->GetNumberOfComponentsPerPixel()==3 )
-      {
-      radiometricLabelMapFilter->SetRedChannelIndex(2);
-      radiometricLabelMapFilter->SetGreenChannelIndex(1);
-      radiometricLabelMapFilter->SetBlueChannelIndex(0);
-      radiometricLabelMapFilter->SetNIRChannelIndex(2);
-      }
-
     radiometricLabelMapFilter->Update();
 
     // Get the label map
@@ -1560,10 +1461,9 @@ namespace otb
       }
 
     m_Channels = ch;
-    m_ImageLayerRenderingFunction->SetChannelList(m_Channels);
+    m_ImageLayerRenderingFunction->SetChannelList(ch);
     m_VisualizationModel->Update();
   }
-
 
   ObjectLabelingModel::VectorType ObjectLabelingModel::BuildSample(const LabelObjectType * lo) const
   {

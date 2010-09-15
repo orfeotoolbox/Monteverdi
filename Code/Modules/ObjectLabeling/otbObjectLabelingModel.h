@@ -341,20 +341,10 @@ public:
   itkGetObjectMacro(ColoredOutput,VectorImageType);
 
   /** Get displayed channels list */
-  std::vector<unsigned int> GetChannels()
-    {
-      return m_Channels;
-    }
+  std::vector<unsigned int> GetChannels();
 
   /** Change displayed channel order */
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
-
-  /** Update band list. */
-  void InitBandIdList(VectorImageType* vimage);
-
-  /** Band id list accessors. */
-  itkSetMacro(BandId, BandIdListType);
-  itkGetMacro(BandId, BandIdListType);
   
   /** Check image label relability. */
   bool CheckLabelImage(ImageType* limage);
@@ -475,10 +465,6 @@ private:
 
   ImageType::Pointer           m_LabeledOutput;
   VectorImageType::Pointer     m_ColoredOutput;
-  
-  /** Band Id list (0:B, 1:G, 2:R, 3:NIR)*/
-  BandIdListType m_BandId;
-
 };
 }
 #endif

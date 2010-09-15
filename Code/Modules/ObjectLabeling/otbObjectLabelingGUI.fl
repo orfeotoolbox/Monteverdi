@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ObjectLabelingGUI {open selected
+class ObjectLabelingGUI {open
 } {
   Function {Build()} {open return_type {virtual void}
   } {
@@ -196,7 +196,7 @@ lFeatures->do_callback();}
         xywh {0 0 945 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
       } {
         Submenu {} {
-          label File open
+          label File open selected
           xywh {0 0 67 24}
         } {
           MenuItem {} {
@@ -218,11 +218,6 @@ lFeatures->do_callback();}
             label {Visualisation setup}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}
-          }
-          MenuItem {} {
-            label {Spectral bands setup}
-            callback {wBandSetup->show();}
-            xywh {10 10 30 20}
           }
         }
       }
@@ -306,38 +301,6 @@ ViewerSetupOkCallback();}
         label Cancel
         callback {wViewerSetupWindow->hide();}
         tooltip {Leave viewer set up interface without saving changes} xywh {215 141 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
-      }
-    }
-    Fl_Window wBandSetup {
-      label {Band Selection} open
-      xywh {280 426 370 145} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 hide
-    } {
-      Fl_Input_Choice iBChannelId {
-        label {Blue channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {112 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
-      } {}
-      Fl_Input_Choice iGChannelId {
-        label {Green channel} open
-        tooltip {Select band for green channel in RGB composition} xywh {111 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178
-      } {}
-      Fl_Input_Choice iRChannelId {
-        label {Red channel} open
-        tooltip {Select band for red channel in RGB composition} xywh {215 18 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
-      } {}
-      Fl_Input_Choice iNIRChannelId {
-        label {NIR channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {215 54 57 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelfont 1 labelsize 12 labelcolor 178 align 8
-      } {}
-      Fl_Return_Button bBadnSetupOk {
-        label Ok
-        callback {wBandSetup->hide();
-BandSetupOkCallback();}
-        tooltip {Save changes and leave viewer set up interface} xywh {90 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
-      }
-      Fl_Button bBandSetupCancel {
-        label Cancel
-        callback {wBandSetup->hide();}
-        tooltip {Leave band set up interface without saving changes} xywh {215 101 80 30} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 178
       }
     }
   }

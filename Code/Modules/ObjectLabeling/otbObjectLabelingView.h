@@ -104,7 +104,6 @@ public:
   virtual void Features();
   virtual void ClassificationOpacity();
   virtual void ViewerSetupOkCallback();
-  virtual void BandSetupOkCallback();
 
   /** Set the application controller */
   void SetController(ObjectLabelingControllerInterface * controller);

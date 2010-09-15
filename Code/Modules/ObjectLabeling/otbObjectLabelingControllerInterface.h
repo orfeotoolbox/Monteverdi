@@ -73,7 +73,6 @@ public:
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
   virtual void OpenImage(VectorImageType*, ImageType*) =0;
-  virtual void UpdateBandId() =0;
   virtual void SetModel(ObjectLabelingModel * model)
   {
     m_Model = model;
