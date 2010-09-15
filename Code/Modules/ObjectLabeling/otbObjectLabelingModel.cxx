@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageMetadataInterfaceFactory.h"
 
 #include <cstdlib>
+
 namespace otb
 {
   ObjectLabelingModel::ObjectLabelingModel() :
@@ -90,7 +91,7 @@ namespace otb
   }
 
   /** Open an image with its associated label map */
-  void ObjectLabelingModel::OpenImage(VectorImageType* vimage, ImageType* limage)
+  void ObjectLabelingModel::OpenImage(VectorImageType* vimage, LabeledImageType* limage)
   {
     // Size checking
     if(limage->GetLargestPossibleRegion() != vimage->GetLargestPossibleRegion())
@@ -123,7 +124,7 @@ namespace otb
     this->Link();
   }
 
-  bool ObjectLabelingModel::CheckLabelImage(ImageType* limage)
+  bool ObjectLabelingModel::CheckLabelImage(LabeledImageType* limage)
   {
     // Convert to label map
     LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
@@ -911,9 +912,18 @@ namespace otb
 
   void ObjectLabelingModel::Train()
   {
-    // Build Sample List for classification (whole LabelMap)
+    // Build Sample List for classification and margin sampling (whole LabelMap)
     LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
     labelMap2SampleList->SetInputLabelMap(m_LabelMap);
+    // Enable features chosen by user
+    AvailableFeaturesMapType::const_iterator fit;
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+      {
+      if (fit->second)
+        {
+        labelMap2SampleList->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
+        }
+      }
     labelMap2SampleList->Update();
     m_ListSample = labelMap2SampleList->GetOutputSampleList();
 
@@ -938,16 +948,26 @@ namespace otb
 
     ClassLabelMap2ListSampleFilterType::Pointer trainingSampleGenerator = ClassLabelMap2ListSampleFilterType::New();
     trainingSampleGenerator->SetInputLabelMap(trainingLabelMap);
+    // Enable features chosen by user
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+      {
+      if (fit->second)
+        {
+        trainingSampleGenerator->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
+        }
+      }
     trainingSampleGenerator->Update();
 
     m_TrainingListSample = trainingSampleGenerator->GetOutputSampleList();
     m_LabelsListSample = trainingSampleGenerator->GetOutputTrainingSampleList();
 
+    std::cout << "m_TrainingListSample" << m_TrainingListSample << std::endl;
+    std::cout << "m_LabelsListSample" << m_LabelsListSample << std::endl;
+
     otbMsgDevMacro(<<"Estimating model ...");
     // Model estimation
     m_SVMEstimator->SetInputSampleList(m_TrainingListSample);
     m_SVMEstimator->SetTrainingSampleList(m_LabelsListSample);
-    m_SVMEstimator->Modified();
     otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
     m_SVMEstimator->SetNumberOfClasses(m_Classes.size());
 
@@ -957,6 +977,7 @@ namespace otb
       m_SVMEstimator->SetSVMType(ONE_CLASS);
       }
 
+    m_SVMEstimator->Modified();
     m_SVMEstimator->Update();
 
     m_Accuracy = m_SVMEstimator->GetFinalCrossValidationAccuracy();
@@ -1010,6 +1031,15 @@ namespace otb
     classifier->SetInput(m_LabelMap);
     classifier->SetModel(m_SVMEstimator->GetModel());
     classifier->SetInPlace(true);
+    // Enable features chosen by user
+    AvailableFeaturesMapType::const_iterator fit;
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+      {
+      if (fit->second)
+        {
+        classifier->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
+        }
+      }
     classifier->Update();
 
     // Make an image of classes labels

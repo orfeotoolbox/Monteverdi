@@ -110,16 +110,17 @@ public:
   /** Algorithms typedef */
   typedef TypeManager::Label_Short_Precision      LabelType;
   typedef TypeManager::Floating_Point_Precision   PixelType;
-  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
   
-  typedef ImageType::IndexType                    IndexType;
+  typedef LabeledImageType::IndexType             IndexType;
   typedef VectorImageType::PixelType              VectorPixelType;
   
   typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType>  LabelObjectType;
+  typedef LabelObjectType::AttributesValueType                                  AttributesValueType;
   typedef LabelObjectType::AttributesMapType                                    AttributesMapType;
   typedef itk::LabelMap<LabelObjectType>                                        LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<ImageType,LabelMapType>               LabelMapFilterType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>        LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                           ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
   typedef MinMaxAttributesLabelMapFilter<LabelMapType>                          MinMaxLabelMapFilterType;
@@ -133,11 +134,11 @@ public:
   typedef VectorDataType::DataTreeType::TreeNodeType TreeNodeType;
   typedef ObjectClassType::LabelVectorType           LabelVectorType;
 
-  typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,ImageType> ClassLabelFilterType;
-  typedef ChangeLabelImageFilter<ImageType,VectorImageType>                     ChangeLabelFilterType;
+  typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,LabeledImageType> ClassLabelFilterType;
+  typedef ChangeLabelImageFilter<LabeledImageType,VectorImageType>                     ChangeLabelFilterType;
 
   // Learning typedefs 
-  typedef itk::VariableLengthVector<float>                                         VectorType;
+  typedef itk::VariableLengthVector<AttributesValueType>                           VectorType;
   typedef itk::FixedArray<LabelType,1>                                             TrainingVectorType;
   typedef itk::Statistics::ListSample<VectorType>                                  ListSampleType;
   typedef itk::Statistics::ListSample<TrainingVectorType>                          TrainingListSampleType;
@@ -164,7 +165,7 @@ public:
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
   typedef Image<RGBPixelType,2>                                          RGBImageType;
   typedef ImageLayer<VectorImageType,RGBImageType>                       LayerType;
-  typedef ImageLayer<ImageType,RGBImageType>                             LabeledLayerType;
+  typedef ImageLayer<LabeledImageType,RGBImageType>                      LabeledLayerType;
   typedef ImageLayerGenerator<LayerType>                                 LayerGeneratorType;
   typedef ImageLayerGenerator<LabeledLayerType>                          LabeledLayerGeneratorType;
   typedef ImageLayerRenderingModel<RGBImageType>                         VisualizationModelType;
@@ -181,7 +182,7 @@ public:
   itkGetConstReferenceMacro(Spacing,VectorImageType::SpacingType);
 
   /** Open an image with its associated label map */
-  void OpenImage(VectorImageType* vimage, ImageType* limage);
+  void OpenImage(VectorImageType* vimage, LabeledImageType* limage);
 
   /** Add sample */
   void AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex);
@@ -320,7 +321,7 @@ public:
 
   /** Get vector image */
   itkGetConstObjectMacro(VectorImage,VectorImageType);
-  itkGetObjectMacro(LabeledOutput,ImageType);
+  itkGetObjectMacro(LabeledOutput,LabeledImageType);
   itkGetObjectMacro(ColoredOutput,VectorImageType);
 
   /** Get displayed channels list */
@@ -330,7 +331,7 @@ public:
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
   
   /** Check image label relability. */
-  bool CheckLabelImage(ImageType* limage);
+  bool CheckLabelImage(LabeledImageType* limage);
   
   /** Link the pipeline and the visu. */
   void Link();
@@ -364,7 +365,7 @@ private:
   ObjectClassVectorType              m_Classes;
 
   /** Labeled reader */
-  ImageType::Pointer                 m_LabeledImage;
+  LabeledImageType::Pointer          m_LabeledImage;
 
   /** Labeled Image source file */
   std::string                        m_LabeledImageFile;
@@ -434,7 +435,7 @@ private:
   VectorImageType::PointType   m_Origin;
   VectorImageType::SpacingType m_Spacing;
 
-  ImageType::Pointer           m_LabeledOutput;
+  LabeledImageType::Pointer    m_LabeledOutput;
   VectorImageType::Pointer     m_ColoredOutput;
 };
 }
