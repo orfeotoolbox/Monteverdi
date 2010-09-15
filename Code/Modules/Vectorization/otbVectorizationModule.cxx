@@ -73,7 +73,7 @@ void VectorizationModule::Run()
     {
     const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
     Fl::check();
-    if(cfname != "")
+    if(cfname != NULL)
       {
       ossimFilename dir(cfname);
       if( dir.isDir() )
