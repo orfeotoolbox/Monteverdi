@@ -412,7 +412,7 @@ guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_NEAREST);}
-              xywh {35 35 100 25} labelsize 11
+              xywh {35 35 100 25} labelsize 11 deactivate
             }
             MenuItem {} {
               label SinC
@@ -422,7 +422,7 @@ guiSinC->show();
 guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_SINC);}
-              xywh {35 35 100 25} labelsize 11
+              xywh {35 35 100 25} labelsize 11 deactivate
             }
             MenuItem {} {
               label Splines
@@ -432,7 +432,7 @@ guiSinC->hide();
 guiSplines->show();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_SPLINES);}
-              xywh {45 45 100 25} labelsize 11
+              xywh {45 45 100 25} labelsize 11 deactivate
             }
           }
         }
