@@ -358,24 +358,6 @@ void ProjectionModel
       up = i;
       }
     }
-//   // size image in carto coordinate :
-//   double sizeXcarto =  maxX-minX;
-//   // - because of the difference of origin for Y (image vs. carto)
-//   double sizeYcarto =  -(maxY-minY);
-
-//   // X
-//   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
-//   double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
-
-//   m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
-//   m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
-
-//   // Y
-//   double alphaY1 = vcl_atan2( vcl_abs(voutput[up][1]-voutput[left][1]), vcl_abs(voutput[up][0]-voutput[left][0]) );
-//   double alphaY2 = vcl_atan2( vcl_abs(voutput[down][1]-voutput[left][1]), vcl_abs(voutput[down][0]-voutput[left][0]) );
-
-//   m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
-//   m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
 
   // Compute the output size
   double sizeCartoX = vcl_abs(maxX - minX);
@@ -468,6 +450,7 @@ void
 ProjectionModel
 ::ReprojectImage()
 {
+  // Fill the resampler parameters
   m_Resampler->SetInput(m_InputImage);
   m_Resampler->SetOutputSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
@@ -488,10 +471,10 @@ ProjectionModel
   if(m_OutputSpacing[1] < 1e-10)   spacing[1] *= -1.;
   m_Resampler->SetDeformationFieldSpacing(spacing);
   
-  // Default value 
+  // Default padding value 
   InputImageType::PixelType defaultValue;
   itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
-                                                m_InputImage->GetNumberOfComponentsPerPixel());
+                                                     m_InputImage->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
 
   m_Output        = m_Resampler->GetOutput();
