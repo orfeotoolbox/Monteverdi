@@ -327,6 +327,12 @@ void ObjectLabelingView::RefreshInterface()
   bSVMNbFineSteps->value(m_Model->GetSVMEstimator()->GetFineOptimizationNumberOfSteps());
   bSVMOptimization->value(m_Model->GetSVMEstimator()->GetParametersOptimization());
   bALNumberOfSamples->value(m_Model->GetMarginSampler()->GetNumberOfCandidates());
+
+  // Hide buttons for non available actions
+  if (!m_Model->GetHasSVMModel())
+    {
+    mSaveClassif->deactivate();
+    }
 }
 
 void ObjectLabelingView::UpdateClassInformation()
@@ -493,7 +499,7 @@ void ObjectLabelingView::SaveSamplesToXMLFile()
   
   const char * filename = NULL;
   
-  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.*", ".");
+  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.xml", "");
   
   if (filename == NULL)
     {
@@ -506,10 +512,10 @@ void ObjectLabelingView::SaveSamplesToXMLFile()
 
 void ObjectLabelingView::SaveClassificationParametersToXMLFile()
 {
-  
+
   const char * filename = NULL;
   
-  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.*", ".");
+  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.xml", "");
   
   if (filename == NULL)
     {
@@ -525,7 +531,7 @@ void ObjectLabelingView::LoadSamplesFromXMLFile()
   
   const char * filename = NULL;
   
-  filename = flu_file_chooser(otbGetTextMacro("Pick a file"), "*.*", ".");
+  filename = flu_file_chooser(otbGetTextMacro("Pick a file"), "*.xml", "");
   
   if (filename == NULL)
     {

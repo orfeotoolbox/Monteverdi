@@ -138,12 +138,12 @@ lFeatures->do_callback();}
             Fl_Spinner bSVMNbCoarseSteps {
               label {Coarse steps }
               callback {this->ChangeNumberOfCoarseSteps();}
-              xywh {868 167 40 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+              xywh {868 167 40 23} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
             }
             Fl_Spinner bSVMNbFineSteps {
               label {Fine steps}
               callback {this->ChangeNumberOfFineSteps();}
-              xywh {868 191 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+              xywh {868 191 40 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
             }
             Fl_Check_Button bSVMOptimization {
               label {Parameters optimization}
@@ -158,7 +158,7 @@ lFeatures->do_callback();}
             Fl_Spinner bALNumberOfSamples {
               label {Number of samples }
               callback {this->ChangeNumberOfMarginSamples();}
-              xywh {864 256 45 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+              xywh {864 256 45 24} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178 value 1
             }
             Fl_Button bMarginColor {
               label {Margin color }
@@ -196,25 +196,25 @@ lFeatures->do_callback();}
         xywh {0 0 945 25} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textfont 1 textsize 12 textcolor 186
       } {
         Submenu {} {
-          label File open selected
+          label File open
           xywh {0 0 67 24}
         } {
-          MenuItem {} {
+          MenuItem mLoadSamples {
             label {Load samples}
             callback {LoadSamplesFromXMLFile();}
             xywh {0 0 36 21}
           }
-          MenuItem {} {
+          MenuItem mSaveSamples {
             label {Save samples}
-            callback {SaveSamplesToXMLFile();}
+            callback {SaveSamplesToXMLFile();} selected
             xywh {0 0 36 21}
           }
-          MenuItem {} {
+          MenuItem mSaveClassif {
             label {Save classification parameters ...}
             callback {SaveClassificationParametersToXMLFile();}
             xywh {30 30 34 24}
           }
-          MenuItem {} {
+          MenuItem mVisuSetup {
             label {Visualisation setup}
             callback {wViewerSetupWindow->show();}
             xywh {0 0 30 20}

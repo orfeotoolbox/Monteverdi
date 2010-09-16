@@ -336,6 +336,9 @@ public:
   /** Link the pipeline and the visu. */
   void Link();
 
+  itkGetMacro(HasSVMModel, bool);
+  itkGetMacro(HasOutputs,  bool);
+
 protected:
   /** Constructor */
   ObjectLabelingModel();
