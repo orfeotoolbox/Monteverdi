@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0110 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -62,7 +62,7 @@ class SpectrumModuleViewGroup {open
           xywh {0 0 265 655} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 10 labelcolor 186
         } {
           Fl_Group sCurveOptionPan {
-            label {Curve option} open selected
+            label {Curve option} open
             xywh {10 39 245 584} color 55 labelfont 1 labelsize 12 labelcolor 186
           } {
             Fl_Group sCurveOptionPanSub1 {
@@ -207,7 +207,7 @@ if((int)cBWSpectralAngle->value() == 1){
         callback {this->wInfo->hide();}
         xywh {225 205 62 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Text_Display wHelpText {
+      Fl_Text_Display wHelpText {selected
         xywh {5 10 280 175}
       }
     }
