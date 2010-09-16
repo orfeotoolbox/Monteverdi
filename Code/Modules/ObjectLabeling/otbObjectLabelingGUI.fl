@@ -12,7 +12,7 @@ class ObjectLabelingGUI {open
     Fl_Window wMainWindow {
       label {Object Labeling}
       callback {this->Exit();} open
-      xywh {636 208 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {267 127 950 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
         label {Full Resolution} open
@@ -42,7 +42,7 @@ class ObjectLabelingGUI {open
           Fl_Button bRemoveClass {
             label Remove
             callback {this->RemoveClass();}
-            xywh {797 345 68 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {797 345 69 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Button bClearClasses {
             label Clear
