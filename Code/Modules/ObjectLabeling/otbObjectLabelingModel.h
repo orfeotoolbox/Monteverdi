@@ -349,11 +349,11 @@ private:
   /** Create a new class */
   void AddClass(const LabelType& label, const std::string& name, const ColorType& color);
   
-  /**  */
+  /** return an available label for a new added class */
   LabelType GetNextAvailableClassLabel();
 
-  /** Singleton instance */
-  static Pointer                     Instance;
+  /** throws if training is not possible */
+  void CheckTrainingValidity();
 
   /** Visualization model */
   VisualizationModelType::Pointer    m_VisualizationModel;

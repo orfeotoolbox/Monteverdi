@@ -134,7 +134,7 @@ public:
   void SetSpectralLayerOpacity(float f);
   void WriteSpreadsheetFile(int id, const char *path);
   void ForceSpectralContrast(float c);
-
+  void ClearSpectralAngle();
   void SaveAndQuit();
   void Quit();
 
@@ -169,6 +169,7 @@ private:
   RGBtoVectorImageCastFilterType::Pointer m_RgbToVectorFilter;
   RGBtoVectorImageCastFilterType::Pointer m_RgbToVectorFilterQL;
 
+  bool                          m_SpectralAngleLayerAvailable;
   bool                          m_SecondLayerToAdd;
   bool                          m_UseColorMap;
   BlendingFunctionType::Pointer m_BlendingFunction;

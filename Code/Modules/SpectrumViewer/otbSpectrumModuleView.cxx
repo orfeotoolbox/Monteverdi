@@ -369,6 +369,13 @@ SpectrumModuleView
 
 void
 SpectrumModuleView
+::ClearSpectralAngleCallBack()
+{
+  m_SpectrumModuleController->ClearSpectralAngle();
+}
+
+void
+SpectrumModuleView
 ::ViewerSetupOkCallback()
 {
   m_SpectrumModuleController->UpdateViewerDisplay();

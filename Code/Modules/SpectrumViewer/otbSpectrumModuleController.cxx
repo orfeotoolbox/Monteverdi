@@ -24,7 +24,6 @@ namespace otb {
 SpectrumModuleController
 ::SpectrumModuleController()
 {
-
   m_ImageWidgetController = ImageWidgetControllerType::New();
   m_PixelSpectrumController = PixelSpectrumControllerType::New();
 
@@ -73,7 +72,6 @@ SpectrumModuleController
   m_ChangeScaleHandler->SetModel(m_SpectrumModuleModel->GetImageModel());
   m_ChangeScaledRegionHandler->SetModel(m_SpectrumModuleModel->GetImageModel());
   m_PixelActionHandler->SetController(m_PixelSpectrumController);
-
 }
 
 void
@@ -89,7 +87,6 @@ SpectrumModuleController
   m_ChangeScaleHandler->SetView(m_SpectrumModuleView->GetImageView());
   m_ChangeScaledRegionHandler->SetView(m_SpectrumModuleView->GetImageView());
   m_PixelActionHandler->SetView(m_SpectrumModuleView->GetImageView());
-
 }
 
 void
@@ -115,6 +112,13 @@ SpectrumModuleController
 ::GenerateSpectralAngle(int Id)
 {
   m_SpectrumModuleModel->GenerateSpectralAngle(Id);
+}
+
+void
+SpectrumModuleController
+::ClearSpectralAngle()
+{
+  m_SpectrumModuleModel->ClearSpectralAngle();
 }
 
 void
