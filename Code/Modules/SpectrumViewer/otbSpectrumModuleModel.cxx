@@ -29,6 +29,7 @@ namespace otb {
 SpectrumModuleModel
 ::SpectrumModuleModel()
 {
+  m_SpectralAngleLayerAvailable = false;
   m_UseColorMap = false;
 
   // Member initialization
@@ -176,10 +177,9 @@ void
 SpectrumModuleModel
 ::SaveAndQuit()
 {
-
-  this->NotifyAll("OutputsUpdated");
+  if (m_SpectralAngleLayerAvailable)
+    this->NotifyAll("OutputsUpdated");
   this->Quit();
-
 }
 
 void
@@ -221,7 +221,6 @@ SpectrumModuleModel
     {
     ForceSpectralContrast(m_OriginalDynamic);
     val = m_OriginalDynamic;
-
     // set a color-mapper
     m_Colormapper->UseInputImageExtremaForScalingOff();
     m_ColormapperQL->UseInputImageExtremaForScalingOff();
@@ -277,6 +276,20 @@ SpectrumModuleModel
   m_SecondLayerToAdd = 0;
 
   m_ImageModel->Update();
+
+  m_SpectralAngleLayerAvailable = true;
+}
+
+void
+SpectrumModuleModel
+::ClearSpectralAngle()
+{
+  m_SpectralAngleLayerAvailable = false;
+  if (m_ImageModel->GetLayerByName("Spectral") != NULL)
+    {
+    m_ImageModel->GetLayerByName("Spectral")->SetVisible(false);
+    m_ImageModel->Update();
+    }
 }
 
 void

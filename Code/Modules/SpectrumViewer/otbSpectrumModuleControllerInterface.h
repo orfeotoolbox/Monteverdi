@@ -73,6 +73,7 @@ public:
   virtual void Quit() = 0;
   virtual void UpdateViewerDisplay() = 0;
   virtual void GenerateSpectralAngle(int Id) = 0;
+  virtual void ClearSpectralAngle() = 0;
   virtual void SetSpectralLayerOpacity(float f) = 0;
   virtual void WriteSpreadsheetFile(int id, const char *path) = 0;
   virtual void ForceSpectralContrast(float c) = 0;

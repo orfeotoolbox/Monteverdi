@@ -101,6 +101,7 @@ public:
   void ZoomRouletteCallBack();
   void StepRouletteCallBack();
   void DisplaySpectralAngleCallBack();
+  void ClearSpectralAngleCallBack();
   void OpacityCallBack();
   void ExportSpectralImageCallBack();
   void ExportSpecralSpreadsheet();

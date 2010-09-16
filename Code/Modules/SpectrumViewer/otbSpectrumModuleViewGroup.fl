@@ -15,7 +15,7 @@ class SpectrumModuleViewGroup {open
     Fl_Window wMainWindow {
       label {Spectrum analysis module}
       callback {this->Exit();} open
-      xywh {849 205 980 655} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 align 80 hide resizable
+      xywh {100 197 980 655} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 align 80 hide resizable
     } {
       Fl_Group gImageViewer {open
         tooltip {Right click to add a curve to the list.} xywh {265 0 501 540} box PLASTIC_DOWN_BOX color 48
@@ -51,11 +51,11 @@ class SpectrumModuleViewGroup {open
         }
         Fl_Button {} {
           label Help
-          callback {this->wInfo->show();}
+          callback {this->ShowInfo();}
           xywh {890 585 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
-      Fl_Group gLeftGroup {open
+      Fl_Group gLeftGroup {
         xywh {0 0 265 655} box PLASTIC_DOWN_BOX
       } {
         Fl_Tabs tCurveUses {open
@@ -63,7 +63,7 @@ class SpectrumModuleViewGroup {open
         } {
           Fl_Group sCurveOptionPan {
             label {Curve option} open
-            xywh {10 39 245 584} color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+            xywh {10 39 245 584} color 55 labelfont 1 labelsize 12 labelcolor 186
           } {
             Fl_Group sCurveOptionPanSub1 {
               xywh {10 39 245 96}
@@ -92,20 +92,20 @@ class SpectrumModuleViewGroup {open
           }
           Fl_Group sCurveSpectralAnglePan {
             label {Spectral angle} open
-            xywh {10 30 255 625} color 55 labelfont 1 labelsize 12 labelcolor 186
+            xywh {10 30 255 625} color 55 labelfont 1 labelsize 12 labelcolor 186 hide
           } {
             Fl_Group sCurveSpectralAnglePanSub1 {open
               xywh {10 40 245 440} color 55
             } {}
             Fl_Button bDisplaySpectralAngle {
-              label {Display spectral angle}
+              label Compute
               callback {DisplaySpectralAngleCallBack();}
-              xywh {65 595 150 31} box PLASTIC_DOWN_BOX color 55 labelsize 12 labelcolor 186
+              xywh {40 595 95 31} box PLASTIC_DOWN_BOX color 55 labelsize 12 labelcolor 186
             }
             Fl_Value_Slider OpacitySlider {
               label Opacity
               callback {OpacityCallBack();}
-              xywh {42 510 175 20} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 4 value 1 textsize 14
+              xywh {42 510 175 20} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 4 step 0.01 value 1 textsize 14
             }
             Fl_Value_Slider IntensitySlider {
               label {Force contrast}
@@ -116,7 +116,7 @@ class SpectrumModuleViewGroup {open
               label {Spectral angle display}
               xywh {117 487 29 14} labelsize 12 labelcolor 186
             }
-            Fl_Check_Button cColorSpectralAngle {
+            Fl_Round_Button cColorSpectralAngle {
               label Color
               callback {ColorOrBWSpectralAngleCallBack();
 if((int)cColorSpectralAngle->value() == 1){
@@ -125,17 +125,23 @@ if((int)cColorSpectralAngle->value() == 1){
 }else{
 	cColorSpectralAngle->value(1);
 }}
-              xywh {63 625 60 30} type Radio down_box DOWN_BOX labelsize 12 labelcolor 186
+              xywh {145 630 64 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
             }
-            Fl_Check_Button cBWSpectralAngle {
-              label {B&&W (faster)}
+            Fl_Round_Button cBWSpectralAngle {
+              label {B&&W}
               callback {ColorOrBWSpectralAngleCallBack();
 if((int)cBWSpectralAngle->value() == 1){
 	cColorSpectralAngle->value(0);
+	IntensitySlider->show();
 }else{
 	cBWSpectralAngle->value(1);
 }}
-              xywh {130 625 60 30} type Radio down_box DOWN_BOX value 1 labelsize 12 labelcolor 186
+              xywh {80 630 64 15} down_box ROUND_DOWN_BOX value 1 labelsize 12 labelcolor 186
+            }
+            Fl_Button bClearSpectralAngle {
+              label Clear
+              callback {ClearSpectralAngleCallBack();}
+              xywh {145 594 90 31} box PLASTIC_DOWN_BOX color 55 labelsize 12 labelcolor 186
             }
           }
         }
@@ -184,29 +190,24 @@ if((int)cBWSpectralAngle->value() == 1){
       Fl_Roller bZoomRoulette {
         label Zoom
         callback {ZoomRouletteCallBack()}
-        xywh {556 60 25 120} labelsize 11 labelcolor 186
+        xywh {556 60 25 120} labelsize 11 labelcolor 186 step 0.001
       }
       Fl_Roller bStepRoulette {
         label Step
         callback {StepRouletteCallBack()}
-        xywh {471 60 25 120} labelsize 11 labelcolor 186
+        xywh {471 60 25 120} labelsize 11 labelcolor 186 step 0.001
       }
     }
     Fl_Window wInfo {
       label Info open
-      xywh {518 116 290 235} type Double box PLASTIC_DOWN_BOX color 55 visible
+      xywh {1242 206 290 235} type Double box PLASTIC_DOWN_BOX color 55 visible
     } {
-      Fl_Button {} {
-        label OK
-        callback {this->wInfo->hide();} selected
-        xywh {225 205 62 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Text_Display wHelpText {
-        xywh {5 10 280 175}
+      Fl_Output wHelpText {selected
+        xywh {5 11 280 218} type Multiline labeltype NO_LABEL align 0
       }
     }
     Fl_Window wNotMultispectral {
-      label Info
+      label Info open
       xywh {3 142 480 120} type Double box PLASTIC_DOWN_BOX color 55 hide
     } {
       Fl_Box {} {
@@ -269,5 +270,9 @@ if((int)cBWSpectralAngle->value() == 1){
   Function {ColorOrBWSpectralAngleCallBack()} {open return_type {virtual void}
   } {}
   Function {SaveAndQuit()} {open return_type {virtual void}
+  } {}
+  Function {ClearSpectralAngleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ShowInfo()} {open return_type {virtual void}
   } {}
 } 

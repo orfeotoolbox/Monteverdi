@@ -100,9 +100,6 @@ SpectrumModuleView
   m_PixelSpectrumView->GetCurveWidget()->resize(gCurves->x(), gCurves->y(), gCurves->w(), gCurves->h());
   m_PixelSpectrumView->GetIndexBox()->resize(gIndex->x(), gIndex->y(), gIndex->w(), gIndex->h());
 
-  Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-  this->wHelpText->buffer(buffer);
-
   if (!m_MonoChannelException)
     {
     // set layer opacity to the value set in fluid
@@ -180,17 +177,26 @@ void
 SpectrumModuleView
 ::ShowInfo()
 {
-  this->wHelpText->insert("test");
-  this->wHelpText->show_insert_position();
-  this->wHelpText->show();
-  this->wInfo->show();
+  std::ostringstream helpContent;
+
+  helpContent << "Right Click on a pixel : add a new spectrum to the list "<< std::endl;
+  helpContent << "Middle Click : reset all the list"<< std::endl;
+  helpContent << "H/S : Hide or Show the current curve"<< std::endl;
+  helpContent << "+/- : Change the representation scale"<< std::endl;
+
+  this->wHelpText->value(helpContent.str().c_str());
+  wInfo->position(wMainWindow->x() + wMainWindow->w(),wMainWindow->y());
+  wInfo->show();
 }
 
 void
 SpectrumModuleView
 ::Hide()
 {
-  this->wMainWindow->hide();
+  wMainWindow->hide();
+  wCurveDisplayWindow->hide();
+  wNotMultispectral->hide();
+  wInfo->hide();
 }
 
 void
@@ -199,9 +205,7 @@ SpectrumModuleView
 {
   m_SpectrumModuleController->SaveAndQuit();
   MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
-  wCurveDisplayWindow->hide();
-  wNotMultispectral->hide();
+  this->Hide();
 }
 
 void
@@ -210,9 +214,7 @@ SpectrumModuleView
 {
   m_SpectrumModuleController->Quit();
   MsgReporter::GetInstance()->Hide();
-  wMainWindow->hide();
-  wCurveDisplayWindow->hide();
-  wNotMultispectral->hide();
+  this->Hide();
 }
 
 void
@@ -365,6 +367,13 @@ SpectrumModuleView
 
   if ((int) cColorSpectralAngle->value() == 0) IntensitySlider->show();
 
+}
+
+void
+SpectrumModuleView
+::ClearSpectralAngleCallBack()
+{
+  m_SpectrumModuleController->ClearSpectralAngle();
 }
 
 void

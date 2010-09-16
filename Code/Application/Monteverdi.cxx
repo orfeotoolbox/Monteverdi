@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
 
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
-  model->RegisterModule<otb::SpectrumModule>("SpectrumViewer", otbGetTextMacro("Visualization/Spectrum Viewer"));
+  model->RegisterModule<otb::SpectrumModule>("SpectralViewer", otbGetTextMacro("Visualization/Spectral Viewer"));
 
   
   /***********  Calibration menu *******************/
