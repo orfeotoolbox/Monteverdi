@@ -203,6 +203,12 @@ void ObjectLabelingView::Notify(const std::string & event)
 
 }
 
+void ObjectLabelingView::SamplesOpacity()
+{
+  this->RefreshVisualization();
+  Fl::flush();
+}
+
 void ObjectLabelingView::RefreshVisualization()
 {
   // Apply spacing to all components
@@ -216,7 +222,7 @@ void ObjectLabelingView::RefreshVisualization()
   // Remove all GL components from views except for the 4 first ones which are always here
   unsigned int nbComponents = m_ImageView->GetFullWidget()->GetNumberOfGlComponents();
 
-  for(unsigned int compIndex = nbComponents-1; compIndex > 3; --compIndex)
+  for(unsigned int compIndex = nbComponents-1; compIndex > 2; --compIndex)
     {
       m_ImageView->GetFullWidget()->RemoveGlComponent(compIndex);
       m_ImageView->GetScrollWidget()->RemoveGlComponent(compIndex);
@@ -233,7 +239,10 @@ void ObjectLabelingView::RefreshVisualization()
     {
       VectorDataGlComponentType::Pointer glComp = VectorDataGlComponentType::New();
       glComp->SetVectorData(m_Model->GetClass(classIndex).m_VectorData);
-      glComp->SetColor(m_Model->GetClass(classIndex).m_Color);
+      // Apply opacity
+      ObjectClass<ObjectLabelingModel::LabelType>::ColorType color = m_Model->GetClass(classIndex).m_Color;
+      color[3] = bSamplesOpacity->value();
+      glComp->SetColor(color);
       glComp->SetOrigin(m_Model->GetOrigin());
       glComp->SetSpacing(m_Model->GetSpacing());
 
