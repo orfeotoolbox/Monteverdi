@@ -432,11 +432,14 @@ private:
 
   RenderingFunctionType::Pointer     m_ImageLayerRenderingFunction;
 
-  VectorImageType::PointType   m_Origin;
-  VectorImageType::SpacingType m_Spacing;
+  VectorImageType::PointType         m_Origin;
+  VectorImageType::SpacingType       m_Spacing;
 
-  LabeledImageType::Pointer    m_LabeledOutput;
-  VectorImageType::Pointer     m_ColoredOutput;
+  LabeledImageType::Pointer          m_LabeledOutput;
+  VectorImageType::Pointer           m_ColoredOutput;
+
+  bool                               m_HasSVMModel;
+  bool                               m_HasOutputs;
 };
 }
 #endif

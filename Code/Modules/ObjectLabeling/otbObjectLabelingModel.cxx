@@ -32,7 +32,10 @@ namespace otb
   ObjectLabelingModel::ObjectLabelingModel() :
       m_SelectedLabel(itk::NumericTraits<LabelType>::max()),
       m_SelectedClass(0),
-      m_HasSelectedClass(false)
+      m_HasSelectedClass(false),
+      m_Accuracy(0.0),
+      m_HasSVMModel(false),
+      m_HasOutputs(false)
   {
     m_VisualizationModel    = VisualizationModelType::New();
     m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -73,8 +76,6 @@ namespace otb
     m_TrainingListSample = ListSampleType::New();
     m_LabelsListSample = TrainingListSampleType::New();
     m_MarginSampler = MarginSamplerType::New();
-
-    m_Accuracy = 0.;
 
     // Classification
     m_ClassLabelFilter = ClassLabelFilterType::New();
@@ -889,7 +890,8 @@ namespace otb
 
   void ObjectLabelingModel::SaveClassification()
   {
-    this->NotifyAll("OutputsUpdated");
+    if (m_HasOutputs)
+      this->NotifyAll("OutputsUpdated");
   }
 
   void ObjectLabelingModel::ClearMarginSamples()
@@ -914,6 +916,9 @@ namespace otb
   {
     // First check if classification is possible
     this->CheckTrainingValidity();
+
+    m_HasSVMModel = false;
+    m_HasOutputs = false;
 
     // Build Sample List for classification and margin sampling (whole LabelMap)
     LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
@@ -981,6 +986,7 @@ namespace otb
     m_SVMEstimator->Update();
 
     m_Accuracy = m_SVMEstimator->GetFinalCrossValidationAccuracy();
+    m_HasSVMModel = true;
 
     otbMsgDevMacro(<<"Done.");
   }
@@ -989,6 +995,9 @@ namespace otb
   {
     this->ClearMarginSamples();
     this->Train();
+
+    if (!m_HasSVMModel)
+      itkExceptionMacro(<<"Invalid SVM model. Unable to run Margin Sampling procedure");
 
     otbMsgDevMacro(<<"Sampling margin ...");
 
@@ -1088,6 +1097,7 @@ namespace otb
 
     m_LabeledOutput = m_ClassLabelFilter->GetOutput();
     m_ColoredOutput = m_ColorMapper->GetOutput();
+    m_HasOutputs = true;
 
     this->NotifyAll("Update");
   }
