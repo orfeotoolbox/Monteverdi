@@ -436,6 +436,9 @@ namespace otb
 
     // Push back the new class
     m_Classes.push_back(newClass);
+
+    // Automatically select the added class
+    this->SelectClass(m_Classes.size() - 1);
   }
 
   ObjectLabelingModel::LabelType ObjectLabelingModel::GetNextAvailableClassLabel()
@@ -908,6 +911,9 @@ namespace otb
 
   void ObjectLabelingModel::Train()
   {
+    // First check if classification is possible
+    this->CheckTrainingValidity();
+
     // Build Sample List for classification and margin sampling (whole LabelMap)
     LabelMap2ListSampleFilterType::Pointer labelMap2SampleList = LabelMap2ListSampleFilterType::New();
     labelMap2SampleList->SetInputLabelMap(m_LabelMap);
@@ -1120,6 +1126,31 @@ namespace otb
 
     m_ImageLayerRenderingFunction->SetChannelList(ch);
     m_VisualizationModel->Update();
+  }
+
+  void ObjectLabelingModel::CheckTrainingValidity()
+  {
+    // There must be at least one class
+    if (m_Classes.empty())
+      itkExceptionMacro(<< "No classes available for training");
+
+    // Each class must contain at least one sample
+    ObjectClassVectorType::const_iterator cit;
+    for (cit = m_Classes.begin(); cit != m_Classes.end(); ++cit)
+      {
+      if (cit->m_Samples.empty())
+        itkExceptionMacro(<< "The class " << cit->m_Name << " does not contain any sample");
+      }
+
+    // At least one feature must be selected
+    bool atLeastOneFeature = false;
+    AvailableFeaturesMapType::const_iterator fit;
+    for (fit = m_AvailableFeatures.begin(); fit != m_AvailableFeatures.end(); ++fit)
+      {
+      atLeastOneFeature = atLeastOneFeature || (fit->second);
+      }
+    if (!atLeastOneFeature)
+      itkExceptionMacro(<< "At least one feature must be selected");
   }
 
 }
