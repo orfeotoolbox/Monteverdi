@@ -35,6 +35,7 @@ FineCorrelationModule::FineCorrelationModule()
   m_WarpFilter           = WarpFilterType::New();
   m_ExtractXField        = ExtractFilterType::New();
   m_ExtractYField        = ExtractFilterType::New();
+  m_AbsImageFilter       = AbsImageFilterType::New();
 
   m_ExtractXField->GetFunctor().SetIndex(0);
   m_ExtractYField->GetFunctor().SetIndex(1);
@@ -146,11 +147,13 @@ void FineCorrelationModule::OK()
     m_WarpFilter->SetDeformationField(m_CorrelationFilter->GetOutputDeformationField());
     m_WarpFilter->SetOutputParametersFromImage(referenceImage);
 
+    m_AbsImageFilter->SetInput(m_CorrelationFilter->GetOutput());
+
     // First, clear any previous output
     this->ClearOutputDescriptors();
     // Add an output (single version)
     //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDeformationField(), "DeformationField", otbGetTextMacro("Deformation field"));
-    this->AddOutputDescriptor(m_CorrelationFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
+    this->AddOutputDescriptor(m_AbsImageFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
     this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDeformationField", otbGetTextMacro("X Deformation field"));
     this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDeformationField", otbGetTextMacro("Y Deformation field"));
 

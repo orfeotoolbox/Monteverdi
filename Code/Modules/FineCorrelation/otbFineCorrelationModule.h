@@ -30,6 +30,7 @@
 #include "otbFineRegistrationImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "otbStreamingWarpImageFilter.h"
+#include "itkAbsImageFilter.h"
 
 #include "otbFineCorrelationGroup.h"
 
@@ -100,6 +101,7 @@ public:
   typedef FieldComponentExtractor<DeformationValueType, PixelType> ExtractFunctorType;
   typedef itk::UnaryFunctorImageFilter<DeformationFieldType, ImageType, ExtractFunctorType> ExtractFilterType; 
   
+  typedef itk::AbsImageFilter<ImageType, ImageType> AbsImageFilterType;
 protected:
   /** Constructor */
   FineCorrelationModule();
@@ -142,6 +144,7 @@ private:
   WarpFilterType::Pointer        m_WarpFilter;
   ExtractFilterType::Pointer     m_ExtractXField;
   ExtractFilterType::Pointer     m_ExtractYField;
+  AbsImageFilterType::Pointer    m_AbsImageFilter;
 };
 
 
