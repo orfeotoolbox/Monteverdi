@@ -285,8 +285,11 @@ SpectrumModuleModel
 ::ClearSpectralAngle()
 {
   m_SpectralAngleLayerAvailable = false;
-  m_ImageModel->GetLayerByName("Spectral")->SetVisible(false);
-  m_ImageModel->Update();
+  if (m_ImageModel->GetLayerByName("Spectral") != NULL)
+    {
+    m_ImageModel->GetLayerByName("Spectral")->SetVisible(false);
+    m_ImageModel->Update();
+    }
 }
 
 void

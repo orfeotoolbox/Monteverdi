@@ -51,11 +51,11 @@ class SpectrumModuleViewGroup {open
         }
         Fl_Button {} {
           label Help
-          callback {this->wInfo->show();}
+          callback {this->ShowInfo();}
           xywh {890 585 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
-      Fl_Group gLeftGroup {open
+      Fl_Group gLeftGroup {
         xywh {0 0 265 655} box PLASTIC_DOWN_BOX
       } {
         Fl_Tabs tCurveUses {open
@@ -200,15 +200,10 @@ if((int)cBWSpectralAngle->value() == 1){
     }
     Fl_Window wInfo {
       label Info open
-      xywh {518 116 290 235} type Double box PLASTIC_DOWN_BOX color 55 hide
+      xywh {1242 206 290 235} type Double box PLASTIC_DOWN_BOX color 55 visible
     } {
-      Fl_Button {} {
-        label OK
-        callback {this->wInfo->hide();}
-        xywh {225 205 62 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Text_Display wHelpText {selected
-        xywh {5 10 280 175}
+      Fl_Output wHelpText {selected
+        xywh {5 11 280 218} type Multiline labeltype NO_LABEL align 0
       }
     }
     Fl_Window wNotMultispectral {
@@ -277,5 +272,7 @@ if((int)cBWSpectralAngle->value() == 1){
   Function {SaveAndQuit()} {open return_type {virtual void}
   } {}
   Function {ClearSpectralAngleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ShowInfo()} {open return_type {virtual void}
   } {}
 } 
