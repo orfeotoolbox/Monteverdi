@@ -20,9 +20,10 @@
 
 #include "otbSarCalibrationModule.h"
 
-#include "otbTerraSarImageMetadataInterface.h"
-#include "itkMetaDataDictionary.h"
 #include "otbMsgReporter.h"
+#include "otbSarImageMetadataInterface.h"
+#include "otbSarImageMetadataInterfaceFactory.h"
+
 
 namespace otb
 {
@@ -32,6 +33,15 @@ namespace otb
 SarCalibrationModule
 ::SarCalibrationModule()
 {
+  m_ComplexCalibFilter = CalibrationComplexFilterType::New();
+  m_CalibFilter = CalibrationFilterType::New();
+  m_Log10ImageFilter = LogImageFilterType::New();
+  m_MultiplyByConstantImageFilter = MultiplyByConstantImageFilterType::New();
+  m_MultiplyByConstantImageFilter->SetConstant(10.0);
+
+  m_AddConstantToImageFilter = AddConstantToImageFilterType::New();
+  m_AddConstantToImageFilter->SetConstant(CONST_EPSILON);
+
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Input image"));
   this->AddTypeToInputDescriptor<ComplexImageType>("InputImage");
@@ -82,60 +92,110 @@ bool
 SarCalibrationModule
 ::CheckMetadata()
 {
-  TerraSarImageMetadataInterface::Pointer lImageMetadata = TerraSarImageMetadataInterface::New();
-  itk::MetaDataDictionary                 dict;
+  SarImageMetadataInterface::Pointer lImageMetadata;
 
   if (!m_WorkWithCplx)
     {
     m_InputImage->UpdateOutputInformation();
-    dict = m_InputImage->GetMetaDataDictionary();
+    lImageMetadata = otb::SarImageMetadataInterfaceFactory::CreateIMI(m_InputImage->GetMetaDataDictionary());
     }
   else
     {
     m_ComplexInputImage->UpdateOutputInformation();
-    dict = m_ComplexInputImage->GetMetaDataDictionary();
+    lImageMetadata = otb::SarImageMetadataInterfaceFactory::CreateIMI(m_ComplexInputImage->GetMetaDataDictionary());
     }
-
-  lImageMetadata->SetMetaDataDictionary(dict);
 
   if (!lImageMetadata->CanRead())
     {
-    MsgReporter::GetInstance()->SendError("Invalid Image : No TerraSarX metadata detected");
-    return false;
-    }
-
-  try
-    {
-    // Test if all used metadatadatas are available...
-    lImageMetadata->GetCalibrationFactor();
-    lImageMetadata->GetNoiseValidityRangeMinList();
-    lImageMetadata->GetNoiseValidityRangeMaxList();
-    lImageMetadata->GetNoiseReferencePointList();
-    lImageMetadata->GetNoisePolynomialCoefficientsList();
-    lImageMetadata->GetRadarFrequency();
-    lImageMetadata->GetNoiseTimeUTCList();
-    lImageMetadata->GetMeanIncidenceAngles();
-    }
-  catch (itk::ExceptionObject& err)
-    {
-    itk::OStringStream oss;
-    oss.str("");
-    oss << "Invalid input image medadata. The parsing returns the following error:\n";
-    oss << err.GetDescription();
-    MsgReporter::GetInstance()->SendError(oss.str().c_str());
+    MsgReporter::GetInstance()->SendError("Invalid Image : No Sar metadata Interface detected");
     return false;
     }
 
   return true;
-
 }
+
+void
+SarCalibrationModule
+::ComplexCalibrationProcess()
+{
+  m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
+
+  // Output selection (linear or dB scale)
+  if (bLin->value() == 1 && bdB->value() == 0)
+    {
+    this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),
+                              "CalibOutputImage",
+                              otbGetTextMacro("Calibrated image"));
+
+    }
+  else if (bLin->value() == 0 && bdB->value() == 1)
+    {
+    m_AddConstantToImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
+    m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+
+    m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
+
+    this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                              "CalibOutputImage dB",
+                              otbGetTextMacro("Calibrated image dB"));
+    }
+  else
+    {
+    MsgReporter::GetInstance()->SendError("Invalid scale value ");
+    return;
+    }
+}
+
+void
+SarCalibrationModule
+::CalibrationProcess()
+{
+  m_CalibFilter->SetInput(m_InputImage);
+
+  // Output selection (linear or dB scale)
+  if (bLin->value() == 1 && bdB->value() == 0)
+    {
+    this->AddOutputDescriptor(m_CalibFilter->GetOutput(),
+                              "CalibOutputImage",
+                              otbGetTextMacro("Calibrated image"));
+
+    }
+  else if (bLin->value() == 0 && bdB->value() == 1)
+    {
+
+
+    m_AddConstantToImageFilter->SetInput(m_CalibFilter->GetOutput());
+    m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+
+    m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
+
+    this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                              "CalibOutputImage dB",
+                              otbGetTextMacro("Calibrated image dB"));
+    }
+  else
+    {
+    MsgReporter::GetInstance()->SendError("Invalid scale value ");
+    return;
+    }
+}
+
 
 void
 SarCalibrationModule
 ::OK()
 {
   this->ClearOutputDescriptors();
+  if (!m_WorkWithCplx)
+    {
+      this->CalibrationProcess();
+    }
+  else
+    {
+    this->ComplexCalibrationProcess();
+    }
 
+  #if 0
   if (!m_WorkWithCplx)
     {
     if (bCalib->value() == 1)
@@ -263,6 +323,8 @@ SarCalibrationModule
         }
       }
     }
+
+#endif
 
   this->NotifyOutputsChange();
 
