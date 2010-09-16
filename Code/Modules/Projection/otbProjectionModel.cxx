@@ -29,9 +29,9 @@ ProjectionModel::ProjectionModel()
   m_OutputChanged    = false;
   m_TransformChanged = false;
   m_TempTransformChanged = false;
+  m_UseDEM               = false;
 
   m_Resampler = ResampleFilterType::New();
-  m_PerBander = PerBandFilterType::New();
 
   m_Transform        = TransformType::New();
   m_InverseTransform = TransformType::New();
@@ -71,10 +71,8 @@ ProjectionModel
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
 
 /**
@@ -110,10 +108,8 @@ void ProjectionModel
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
 
 /**
@@ -145,10 +141,8 @@ void ProjectionModel
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //  m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
 
 /**
@@ -173,7 +167,7 @@ ProjectionModel
 
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
-
+  
   // Get the transform
   m_Transform->GetInverse(m_InverseTransform);
 
@@ -474,28 +468,61 @@ void
 ProjectionModel
 ::ReprojectImage()
 {
-  m_Resampler->SetTransform(m_InverseTransform);
+  m_Resampler->SetInput(m_InputImage);
   m_Resampler->SetOutputSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
-  m_PerBander->SetInput(m_InputImage);
-  m_PerBander->SetFilter(m_Resampler);
-  m_Output = m_PerBander->GetOutput();
+  m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
 
-  m_Output->UpdateOutputInformation();
-  // Report projection ref (not done by the resample filter)
-  itk::MetaDataDictionary& dict = m_Output->GetMetaDataDictionary();
-  std::string              projectionRef = m_Transform->GetOutputProjectionRef();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-  m_Output->SetMetaDataDictionary(dict);
-  m_Output->UpdateOutputInformation();
+  // Use the DEM
+  if(m_UseDEM)
+    {
+    std::cout <<"DEM Directory "<< m_Transform->GetDEMDirectory()  << std::endl;
+    m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
+    }
+  
+  // Deformation grid spacing : 4 by default
+  // TODO : intialize in the StreamingResampleImageFilter
+  InputImageType::SpacingType spacing;
+  spacing.Fill(4.);
+  if(m_OutputSpacing[1] < 1e-10)   spacing[1] *= -1.;
+  m_Resampler->SetDeformationFieldSpacing(spacing);
+  
+  // Default value 
+  InputImageType::PixelType defaultValue;
+  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
+                                                m_InputImage->GetNumberOfComponentsPerPixel());
+  m_Resampler->SetEdgePaddingValue(defaultValue);
 
+  m_Output        = m_Resampler->GetOutput();
   m_OutputChanged = true;
   this->NotifyAll();
-
-  // The SetSizeMacro doesn't recall the update on the resampler when size is changed
-  m_Resampler = ResampleFilterType::New();
+  m_OutputChanged = false;
 }
+
+/**
+ *
+ */
+void
+ProjectionModel
+::SetDEMPath(std::string dem)
+{
+  if(m_UseDEM)
+    {
+    // Update the transform and the inverse one
+    m_Transform->SetDEMDirectory(dem);
+    m_Transform->InstanciateTransform();
+    m_Transform->GetInverse(m_InverseTransform);
+    }
+  else
+    {
+    // Update the transform and the inverse one
+    m_Transform->SetDEMDirectory("");
+    m_Transform->InstanciateTransform();
+    m_Transform->GetInverse(m_InverseTransform);
+    }
+}
+
 
 /**
  *
