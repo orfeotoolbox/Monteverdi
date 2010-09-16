@@ -107,7 +107,7 @@ protected:
   /** Complex Calibration Process */
   void ComplexCalibrationProcess();
 
-  static const double CONST_EPSILON =        0.000001;   /* 10^-6 */
+  static const double Epsilon;
 
 private:
   SarCalibrationModule(const Self&); //purposely not implemented

@@ -27,6 +27,9 @@
 
 namespace otb
 {
+
+const double SarCalibrationModule::Epsilon = 1.0E-6;
+
 /**
  * Constructor
  */
@@ -40,7 +43,7 @@ SarCalibrationModule
   m_MultiplyByConstantImageFilter->SetConstant(10.0);
 
   m_AddConstantToImageFilter = AddConstantToImageFilterType::New();
-  m_AddConstantToImageFilter->SetConstant(CONST_EPSILON);
+  m_AddConstantToImageFilter->SetConstant(itkGetStaticConstMacro(Epsilon));
 
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Input image"));
