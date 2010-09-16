@@ -401,11 +401,25 @@ void ObjectLabelingController::ClearMarginSamples()
 
 void ObjectLabelingController::Classify()
 {
-  m_Model->Classify();
+  try
+    {
+    m_Model->Classify();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
 }
 void ObjectLabelingController::ClearClassification()
 {
-  m_Model->ClearClassification();
+  try
+    {
+    m_Model->ClearClassification();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
 }
 
 void ObjectLabelingController::ChangeFeatureState(const std::string & fname,bool state)
