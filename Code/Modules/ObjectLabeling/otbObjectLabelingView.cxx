@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMsgReporter.h"
 
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/fl_draw.H>
 
 namespace otb
@@ -493,7 +493,7 @@ void ObjectLabelingView::SaveSamplesToXMLFile()
   
   const char * filename = NULL;
   
-  filename = fl_file_chooser("Pick a file", "*.*",".");
+  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.*", ".");
   
   if (filename == NULL)
     {
@@ -509,7 +509,7 @@ void ObjectLabelingView::SaveClassificationParametersToXMLFile()
   
   const char * filename = NULL;
   
-  filename = fl_file_chooser("Pick a file", "*.*",".");
+  filename = flu_file_chooser(otbGetTextMacro("Choose file"), "*.*", ".");
   
   if (filename == NULL)
     {
@@ -525,7 +525,7 @@ void ObjectLabelingView::LoadSamplesFromXMLFile()
   
   const char * filename = NULL;
   
-  filename = fl_file_chooser("Pick a file", "*.*",".");
+  filename = flu_file_chooser(otbGetTextMacro("Pick a file"), "*.*", ".");
   
   if (filename == NULL)
     {
