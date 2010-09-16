@@ -221,6 +221,9 @@ public:
   /** Is there any classes available ? */
   bool HasClasses() const;
 
+  /** Do all classes have at least one sample ? */
+  bool HasValidClasses() const;
+
   /** Set class name */
   void SetClassName(const char * name, unsigned int classIndex);
 

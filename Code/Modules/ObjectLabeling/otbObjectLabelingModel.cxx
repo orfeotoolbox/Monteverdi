@@ -514,6 +514,22 @@ namespace otb
     return !m_Classes.empty();
   }
 
+  /** Do all classes have at least one sample ? */
+  bool ObjectLabelingModel::HasValidClasses() const
+  {
+    if (m_Classes.empty())
+      return false;
+
+    ObjectClassVectorType::const_iterator it;
+    for(it = m_Classes.begin(); it!=m_Classes.end(); ++it)
+      {
+      if (it->m_Samples.empty())
+        return false;
+      }
+
+    return true;
+  }
+
   /** Set class name */
   void ObjectLabelingModel::SetClassName(const char * name, unsigned int classIndex)
   {

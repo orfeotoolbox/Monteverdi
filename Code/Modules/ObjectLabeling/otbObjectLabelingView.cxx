@@ -329,9 +329,15 @@ void ObjectLabelingView::RefreshInterface()
   bALNumberOfSamples->value(m_Model->GetMarginSampler()->GetNumberOfCandidates());
 
   // Hide buttons for non available actions
+  mSaveClassif->activate();
+  mSaveSamples->activate();
   if (!m_Model->GetHasSVMModel())
     {
     mSaveClassif->deactivate();
+    }
+  if (!m_Model->HasValidClasses())
+    {
+    mSaveSamples->deactivate();
     }
 }
 
