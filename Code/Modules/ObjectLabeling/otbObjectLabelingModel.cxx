@@ -249,6 +249,7 @@ namespace otb
     m_PixelDescriptionModel->AddLayer(m_LabeledImageGenerator->GetLayer());
 
     m_VisualizationModel->Update();
+    this->NotifyAll("Update");
   }
 
   unsigned int ObjectLabelingModel::GetNumberOfClasses()
