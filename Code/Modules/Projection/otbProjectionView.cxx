@@ -19,6 +19,7 @@
 
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/fl_ask.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/Enumerations.H>
 
 #include "otbMacro.h"
@@ -495,16 +496,16 @@ ProjectionView
     {
     case MAP_LINEAR_:
       {
-      typedef itk::LinearInterpolateImageFunction<SingleImageType, double> LinearType;
-      LinearType::Pointer interp = LinearType::New();
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+      typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearType;
+       LinearType::Pointer interp = LinearType::New();
+       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
     case MAP_NEAREST:
       {
-      typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
-      NearestType::Pointer interp = NearestType::New();
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//       typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
+//       NearestType::Pointer interp = NearestType::New();
+//       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
     case MAP_SINC:
@@ -524,7 +525,7 @@ ProjectionView
             BlackmanType::Pointer interp = BlackmanType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           case 1:
@@ -534,7 +535,7 @@ ProjectionView
             CosineType::Pointer interp = CosineType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           case 2:
@@ -543,7 +544,7 @@ ProjectionView
             GaussianType::Pointer interp = GaussianType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           case 3:
@@ -552,7 +553,7 @@ ProjectionView
             HammingType::Pointer interp = HammingType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           case 4:
@@ -561,7 +562,7 @@ ProjectionView
             LanczosType::Pointer interp = LanczosType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           case 5:
@@ -570,7 +571,7 @@ ProjectionView
             WelchType::Pointer interp = WelchType::New();
             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
             //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+            //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
             break;
             }
           default:
@@ -589,7 +590,7 @@ ProjectionView
       typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
       SplineType::Pointer interp = SplineType::New();
       interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()));
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+      //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
     default:
@@ -805,5 +806,48 @@ ProjectionView::UpToDateTransform()
       break;
     }
 }
+
+/**
+ * Browse DEM
+ */
+void
+ProjectionView::Browse()
+{
+  const char * demName = NULL;
+
+  // Choose file
+  demName = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), "");
+  
+  if (demName == NULL)
+    {
+    otbMsgDebugMacro(<< "Empty directory!");
+    return;
+    }
+  
+  vDEMPath->value(demName);
+  std::string DEMfile = demName;
+  
+  m_Controller->SetDEMPath(DEMfile);
+}
+
+void
+ProjectionView::UpdateDEMUse()
+{
+  // Update following the choiceDEM radio button
+  // value
+  if(choiceDEM->value())
+    {
+    vDEMPath->activate();
+    bBrowse->activate();
+    m_Controller->GetModel()->SetUseDEM(true);
+    } 
+  else
+    {
+    m_Controller->GetModel()->SetUseDEM(false);
+    vDEMPath->deactivate();
+    bBrowse->deactivate();
+    }
+}
+
 
 } // End namespace otb

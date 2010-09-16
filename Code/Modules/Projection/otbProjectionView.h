@@ -84,7 +84,7 @@ public:
 
   // Called before building the GUI
   virtual void InitializeAction();
-  // Initialize transform and show the GUI
+  // Init2ialize transform and show the GUI
   virtual void Show();
   //  Shpw the GUI
   virtual void ShowGUI();
@@ -104,7 +104,13 @@ public:
 
 protected:
 
-  //
+  // Browser DEM
+  virtual void Browse();
+
+  // Update the use dem statuts
+  void UpdateDEMUse();
+
+  // 
   virtual void RetrieveInputProjection();
 
   // Launch the orthorectification & Quit the application
