@@ -200,13 +200,11 @@ namespace otb
 
     // Export to class label image
     otbMsgDevMacro(<<"Exporting to class label image ...");
-    m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ClassLabelFilter->SetInput(m_LabelMap);
     m_ClassLabelFilter->Update();
     otbMsgDevMacro(<<"Done.");
 
     // Coloring classes
-    m_ColorMapper = ChangeLabelFilterType::New();
     m_ColorMapper->SetInput(m_ClassLabelFilter->GetOutput());
     m_ColorMapper->SetNumberOfComponentsPerPixel(3);
     m_ColorMapper->ClearChangeMap();
@@ -887,8 +885,6 @@ namespace otb
 
   void ObjectLabelingModel::SaveClassification()
   {
-    m_LabeledOutput = m_ClassLabelFilter->GetOutput();
-    m_ColoredOutput = m_ColorMapper->GetOutput();
     this->NotifyAll("OutputsUpdated");
   }
 
@@ -960,9 +956,6 @@ namespace otb
 
     m_TrainingListSample = trainingSampleGenerator->GetOutputSampleList();
     m_LabelsListSample = trainingSampleGenerator->GetOutputTrainingSampleList();
-
-    std::cout << "m_TrainingListSample" << m_TrainingListSample << std::endl;
-    std::cout << "m_LabelsListSample" << m_LabelsListSample << std::endl;
 
     otbMsgDevMacro(<<"Estimating model ...");
     // Model estimation
@@ -1043,8 +1036,7 @@ namespace otb
     classifier->Update();
 
     // Make an image of classes labels
-    m_ClassLabelFilter = ClassLabelFilterType::New();
-    m_ClassLabelFilter->SetInput(m_LabelMap);
+    m_ClassLabelFilter->SetInput(classifier->GetOutput());
     m_ClassLabelFilter->Update();
 
     // Coloring classes
@@ -1079,12 +1071,16 @@ namespace otb
       }
 
     m_ColorMapper->Update();
+
     otbMsgDevMacro(<<"Color Mapper update.");
     m_VisualizationModel->GetLayerByName("Classification")->SetVisible(true);
     otbMsgDevMacro(<<"Get layer by name.");
 
     m_VisualizationModel->Update();
     otbMsgDevMacro(<<"Refresh done");
+
+    m_LabeledOutput = m_ClassLabelFilter->GetOutput();
+    m_ColoredOutput = m_ColorMapper->GetOutput();
 
     this->NotifyAll("Update");
   }
