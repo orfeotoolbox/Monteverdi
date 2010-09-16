@@ -91,6 +91,7 @@ public:
   virtual void SetSpectrumModuleModel(SpectrumModuleModelType * m);
   virtual void UpdateViewerDisplay();
   virtual void GenerateSpectralAngle(int Id);
+  virtual void ClearSpectralAngle();
   virtual void SetSpectralLayerOpacity(float f);
   virtual void WriteSpreadsheetFile(int id, const char *path);
   virtual void ForceSpectralContrast(float c);
