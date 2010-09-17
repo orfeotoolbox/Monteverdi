@@ -74,6 +74,7 @@ public:
 
   /** Callbacks */
   virtual void Classes();
+  virtual void SamplesOpacity();
   virtual void AddClass();
   virtual void RemoveClass();
   virtual void ClearClasses();

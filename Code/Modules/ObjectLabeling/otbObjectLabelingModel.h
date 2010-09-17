@@ -221,6 +221,9 @@ public:
   /** Is there any classes available ? */
   bool HasClasses() const;
 
+  /** Do all classes have at least one sample ? */
+  bool HasValidClasses() const;
+
   /** Set class name */
   void SetClassName(const char * name, unsigned int classIndex);
 
@@ -336,6 +339,9 @@ public:
   /** Link the pipeline and the visu. */
   void Link();
 
+  itkGetMacro(HasSVMModel, bool);
+  itkGetMacro(HasOutputs,  bool);
+
 protected:
   /** Constructor */
   ObjectLabelingModel();
@@ -432,11 +438,14 @@ private:
 
   RenderingFunctionType::Pointer     m_ImageLayerRenderingFunction;
 
-  VectorImageType::PointType   m_Origin;
-  VectorImageType::SpacingType m_Spacing;
+  VectorImageType::PointType         m_Origin;
+  VectorImageType::SpacingType       m_Spacing;
 
-  LabeledImageType::Pointer    m_LabeledOutput;
-  VectorImageType::Pointer     m_ColoredOutput;
+  LabeledImageType::Pointer          m_LabeledOutput;
+  VectorImageType::Pointer           m_ColoredOutput;
+
+  bool                               m_HasSVMModel;
+  bool                               m_HasOutputs;
 };
 }
 #endif
