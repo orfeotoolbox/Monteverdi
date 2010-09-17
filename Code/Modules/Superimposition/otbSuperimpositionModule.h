@@ -23,13 +23,8 @@
 
 // include the GUI
 #include "otbSuperimpositionModuleGUI.h"
-
-// include the OTB elements
-#include "otbVectorImage.h"
-#include "otbImage.h"
-#include "otbGenericRSTransform.h"
-#include "otbStreamingResampleImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
+#include "otbGenericRSResampleImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 namespace otb
 {
@@ -59,11 +54,14 @@ public:
   /// Dataset
   typedef TypeManager::Floating_Point_Image       ImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
-
-  typedef GenericRSTransform<>                                                           TransformType;
-  typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
-  typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
-
+  
+  /** Resampler */
+  typedef GenericRSResampleImageFilter<VectorImageType,
+                                       VectorImageType>    ResampleFilterType;
+  /** Cast otb::Image types*/
+  typedef ImageToVectorImageCastFilter<ImageType, 
+                                       VectorImageType>    CastImageFilterType;
+  
 protected:
   /** Constructor */
   SuperimpositionModule();
@@ -86,9 +84,9 @@ private:
   SuperimpositionModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  ResampleFilterType::Pointer m_Resampler;
-  PerBandFilterType::Pointer  m_PerBanderFilter;
-  TransformType::Pointer      m_Transform;
+  ResampleFilterType::Pointer  m_Resampler;
+  CastImageFilterType::Pointer m_CastFixedFilter;
+  CastImageFilterType::Pointer m_CastMovingFilter;
 };
 
 } // End namespace otb

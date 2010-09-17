@@ -28,14 +28,16 @@ namespace otb
 /** Constructor */
 SuperimpositionModule::SuperimpositionModule()
 {
-  m_Resampler       = ResampleFilterType::New();
-  m_PerBanderFilter = PerBandFilterType::New();
-  m_Transform       = TransformType::New();
-
+  m_Resampler        = ResampleFilterType::New();
+  m_CastFixedFilter  = CastImageFilterType::New();
+  m_CastMovingFilter = CastImageFilterType::New();
+    
   // Describe inputs
-  this->AddInputDescriptor<VectorImageType>("ReferenceImage", otbGetTextMacro("Reference image for reprojection"));
+  this->AddInputDescriptor<VectorImageType>("ReferenceImage",
+                                            otbGetTextMacro("Reference image for reprojection"));
   this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
-  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Image to reproject"));
+  this->AddInputDescriptor<VectorImageType>("InputImage", 
+                                            otbGetTextMacro("Image to reproject"));
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
   this->BuildGUI();
@@ -68,116 +70,50 @@ void SuperimpositionModule::Ok()
   ImageType::Pointer fixed = this->GetInputData<ImageType>("ReferenceImage");
   ImageType::Pointer moving = this->GetInputData<ImageType>("InputImage");
 
-  // Handle reference image
-  if (fixed.IsNotNull())
+  // Get the inputs and cast if otb::Image
+  if (fixed.IsNotNull() && vfixed.IsNull())
     {
-    fixed->UpdateOutputInformation();
-    m_Transform->SetInputProjectionRef(fixed->GetProjectionRef());
-    m_Transform->SetInputDictionary(fixed->GetMetaDataDictionary());
-    m_Transform->SetInputKeywordList(fixed->GetImageKeywordlist());
-    m_Resampler->SetOutputSize(fixed->GetLargestPossibleRegion().GetSize());
-    m_Resampler->SetOutputStartIndex(fixed->GetLargestPossibleRegion().GetIndex());
-    m_Resampler->SetOutputSpacing(fixed->GetSpacing());
-    m_Resampler->SetOutputOrigin(fixed->GetOrigin());
+    // Cast Image into VectorImage
+    m_CastFixedFilter->SetInput(fixed);
+    vfixed = m_CastFixedFilter->GetOutput();
     }
-  else if (vfixed.IsNotNull())
+  
+  if (moving.IsNotNull() && vmoving.IsNull())
     {
-    vfixed->UpdateOutputInformation();
-    m_Transform->SetInputProjectionRef(vfixed->GetProjectionRef());
-    m_Transform->SetInputDictionary(vfixed->GetMetaDataDictionary());
-    m_Transform->SetInputKeywordList(vfixed->GetImageKeywordlist());
-    m_Resampler->SetOutputSize(vfixed->GetLargestPossibleRegion().GetSize());
-    m_Resampler->SetOutputStartIndex(vfixed->GetLargestPossibleRegion().GetIndex());
-    m_Resampler->SetOutputSpacing(vfixed->GetSpacing());
-    m_Resampler->SetOutputOrigin(vfixed->GetOrigin());
-    }
-  else
-    {
-    itkExceptionMacro(<< "Fixed input is null");
+    // Cast Image into VectorImage
+    m_CastMovingFilter->SetInput(moving);
+    vmoving = m_CastMovingFilter->GetOutput();
     }
 
-  // Handle moving inputs
-  if (moving.IsNotNull())
+  if (vfixed.IsNull() || vmoving.IsNull() )
     {
-    moving->UpdateOutputInformation();
-    m_Transform->SetOutputProjectionRef(moving->GetProjectionRef());
-    m_Transform->SetOutputDictionary(moving->GetMetaDataDictionary());
-    m_Transform->SetOutputKeywordList(moving->GetImageKeywordlist());
-    }
-  else if (vmoving.IsNotNull())
-    {
-    vmoving->UpdateOutputInformation();
-    m_Transform->SetOutputProjectionRef(vmoving->GetProjectionRef());
-    m_Transform->SetOutputDictionary(vmoving->GetMetaDataDictionary());
-    m_Transform->SetOutputKeywordList(vmoving->GetImageKeywordlist());
-    }
-  else
-    {
-    itkExceptionMacro(<< "Moving input is null");
+    itkExceptionMacro(<< "Input is null");
     }
 
+  // Update input output informations
+  vfixed->UpdateOutputInformation();
+  vmoving->UpdateOutputInformation();
+  
+  // Resampler 
+  m_Resampler->SetInput(vmoving);
+  m_Resampler->SetDeformationFieldSpacing(vfixed->GetSpacing() * 4.);
+  m_Resampler->SetOutputParametersFromImage(vfixed);
+  
   if (choiceDEM->value() == 1)
     {
-    m_Transform->SetDEMDirectory(vDEMPath->value());
+    m_Resampler->SetDEMDirectory(vDEMPath->value());
     }
   else
     {
-    m_Transform->SetAverageElevation(vAverageElevation->value());
+    m_Resampler->SetAverageElevation(vAverageElevation->value());
     }
+  
+  this->ClearOutputDescriptors();
+  this->AddOutputDescriptor(m_Resampler->GetOutput(), "Reprojected image", 
+                            otbGetTextMacro("Image superimposable to reference"));
+  this->NotifyOutputsChange();
 
-  m_Transform->InstanciateTransform();
-
-  // Copy parameters from reference image
-  m_Resampler->SetTransform(m_Transform);
-
-  // Do we have to resample a vector image ?
-  if (vmoving.IsNotNull())
-    {
-    m_PerBanderFilter->SetInput(vmoving);
-    m_PerBanderFilter->SetFilter(m_Resampler);
-    VectorImageType::Pointer output = m_PerBanderFilter->GetOutput();
-    output->UpdateOutputInformation();
-
-    // Report projection ref (not done by the resample filter)
-    if (fixed.IsNotNull())
-      {
-      output->CopyInformation(fixed);
-      }
-    else if (vfixed.IsNotNull())
-      {
-      output->CopyInformation(vfixed);
-      }
-
-    output->SetNumberOfComponentsPerPixel(vmoving->GetNumberOfComponentsPerPixel());
-
-    this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output, "Reprojected image", otbGetTextMacro("Image superimposable to reference"));
-    this->NotifyOutputsChange();
-    }
-  // Else produce only a single image
-  else if (moving.IsNotNull())
-    {
-    m_Resampler->SetInput(moving);
-    ImageType::Pointer output = m_Resampler->GetOutput();
-    output->UpdateOutputInformation();
-
-    // Report projection ref (not done by the resample filter)
-    if (fixed.IsNotNull())
-      {
-      output->CopyInformation(fixed);
-      }
-    else if (vfixed.IsNotNull())
-      {
-      output->CopyInformation(vfixed);
-      }
-
-    output->SetNumberOfComponentsPerPixel(moving->GetNumberOfComponentsPerPixel());
-
-    this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(output, "Reprojected image", otbGetTextMacro("Image superimposable to reference"));
-    this->NotifyOutputsChange();
-    }
-
+  // Close the GUI
   wFileChooserWindow->hide();
 }
 
