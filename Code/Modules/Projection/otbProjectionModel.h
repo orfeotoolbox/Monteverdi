@@ -167,7 +167,7 @@ private:
   // Outputs
   ResampleFilterType::Pointer m_Resampler;
 
-  char * m_OutputProjectionRef;
+  std::string  m_OutputProjectionRef;
 };
 }
 #endif

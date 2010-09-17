@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbProjectionModel.h"
 #include <ogr_spatialref.h>
+#include "otbMapProjections.h"
+#include <string>
 
 namespace otb
 {
@@ -44,6 +46,10 @@ ProjectionModel::
 ~ProjectionModel()
 {}
 
+///////////////////////////////////////////////////////////////
+/**     CASE : input transform is not allowed */
+/////////////// /////////////// /////////////// /////////////// 
+
 /**
  * Update the input Projection Ref
  */
@@ -51,16 +57,13 @@ void
 ProjectionModel
 ::UpdateInputUTMTransform(int zone, bool north)
 {
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetUTM(zone, north);
-
-  char * utmRef = NULL;
-  oSRS.exportToWkt(&utmRef);
-
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+  
+  utmProjection->SetZone(zone);
+  utmProjection->SetHemisphere(north);
+  std::string utmRef = utmProjection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, utmRef);
@@ -81,23 +84,10 @@ ProjectionModel
 void ProjectionModel
 ::InitializeInputLambertIITransform()
 {
-  // Projection Parameters
-  double stdParallel1  = 45.89891944;
-  double stdParallel2  = 47.69601389;
-  double originLat     = 46.8;
-  double originLong    = 2.33722778;
-  double falseEasting  = 600000;
-  double falseNorthing = 2200000;
-
-  // Build the Output Projection Ref
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Lambert II ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetLCC(stdParallel1, stdParallel2, originLat, originLong, falseEasting, falseNorthing);
-
-  char * lambertRef = NULL;
-  oSRS.exportToWkt(&lambertRef);
-
+  typedef Lambert2EtenduForwardProjection Lambert2Type;
+  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
+  std::string  lambertRef = lambert2Projection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, lambertRef);
@@ -118,25 +108,17 @@ void ProjectionModel
 void ProjectionModel
 ::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
-  //Get the parameters
-  double originLat   = 49.83;
-  double originLong  = 6.16;
-
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Transmercator ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetTM(originLat, originLong, scale, falseEasting, falseNorthing);
-
-  char * tmRef = NULL;
-  oSRS.exportToWkt(&tmRef);
-
+  typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
+  TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
+  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  std::string tmRef =   transMercatorProjection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, tmRef);
 
   // Up To date the transform
+  m_Transform->SetInputProjectionRef(tmRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
 
@@ -145,6 +127,10 @@ void ProjectionModel
   m_TempTransformChanged = false;
 }
 
+//////////////////////////////////////////////////////////////////
+/**     END CASE : input transform is not accessible */
+//////////////////////////////////////////////////////////////////
+
 /**
  *
  */
@@ -152,15 +138,13 @@ void
 ProjectionModel
 ::UpdateUTMTransform(int zone, bool north)
 {
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetUTM(zone, north);
-
-  oSRS.exportToWkt(&m_OutputProjectionRef /*utmRef*/);
-
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+  
+  utmProjection->SetZone(zone);
+  utmProjection->SetHemisphere(north);
+  m_OutputProjectionRef = utmProjection->GetWkt();
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -186,20 +170,9 @@ ProjectionModel
 void ProjectionModel
 ::InitializeLambertIITransform()
 {
-  // Projection Parameters
-  double stdParallel1  = 45.89891944;
-  double stdParallel2  = 47.69601389;
-  double originLat     = 46.8;
-  double originLong    = 2.33722778;
-  double falseEasting  = 600000;
-  double falseNorthing = 2200000;
-
-  // Build the Output Projection Ref
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Lambert II ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetLCC(stdParallel1, stdParallel2, originLat, originLong, falseEasting, falseNorthing);
-  oSRS.exportToWkt(&m_OutputProjectionRef);
+  typedef Lambert2EtenduForwardProjection Lambert2Type;
+  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
+  m_OutputProjectionRef = lambert2Projection->GetWkt();
 
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
@@ -224,18 +197,11 @@ void ProjectionModel
 void ProjectionModel
 ::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
-  //Get the parameters
-  double originLat   = 49.83;
-  double originLong  = 6.16;
-
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Transmercator ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetTM(originLat, originLong, scale, falseEasting, falseNorthing);
-  oSRS.exportToWkt(&m_OutputProjectionRef);
-
+  typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
+  TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
+  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  m_OutputProjectionRef = transMercatorProjection->GetWkt();
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -262,11 +228,12 @@ ProjectionModel
 {
   // Build the Output Projection Ref
   // WGS84
+  char * wgs84Ref;
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.exportToWkt(&m_OutputProjectionRef);
-  std::cout << "m_OutputProjectionRef " << m_OutputProjectionRef << std::endl;
-
+  oSRS.exportToWkt(&wgs84Ref);
+  m_OutputProjectionRef = wgs84Ref;
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -456,20 +423,15 @@ ProjectionModel
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
   m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
-
+  std::cout <<"Resampler PR \n "<<m_Transform->GetOutputProjectionRef() << std::endl;
+  // Deformation grid spacing : 4 times the output spacing
+  m_Resampler->SetDeformationFieldSpacing(4.*m_OutputSpacing);
+  
   // Use the DEM
   if(m_UseDEM)
     {
-    std::cout <<"DEM Directory "<< m_Transform->GetDEMDirectory()  << std::endl;
     m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
     }
-  
-  // Deformation grid spacing : 4 by default
-  // TODO : intialize in the StreamingResampleImageFilter
-  InputImageType::SpacingType spacing;
-  spacing.Fill(4.);
-  if(m_OutputSpacing[1] < 1e-10)   spacing[1] *= -1.;
-  m_Resampler->SetDeformationFieldSpacing(spacing);
   
   // Default padding value 
   InputImageType::PixelType defaultValue;
