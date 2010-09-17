@@ -96,10 +96,12 @@ protected:
     wMainWindow->hide();
   }
 
-  /** SarCalibration Methods*/
 
-  /** OK callback*/
+  /** Callbacks */
   virtual void OK();
+  virtual void Cancel();
+
+  /** SarCalibration Methods*/
 
   /** Calibration Process */
   void CalibrationProcess();

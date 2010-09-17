@@ -28,12 +28,12 @@ class SarCalibrationModuleGUI {open
         xywh {10 20 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Check_Button bBrightness {
-          label Brightness
-          xywh {275 27 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 deactivate
+          label Brightness selected
+          tooltip {Beta Naught} xywh {275 27 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 deactivate
         }
         Fl_Check_Button bCalib {
-          label Calibration selected
-          xywh {120 27 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          label Calibration
+          tooltip {Sigma Naught} xywh {120 27 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
       }
       Fl_Group {} {
