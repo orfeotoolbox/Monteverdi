@@ -948,7 +948,7 @@ namespace otb
         labelMap2SampleList->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
         }
       }
-    labelMap2SampleList->Update();
+    labelMap2SampleList->Compute();
     m_ListSample = labelMap2SampleList->GetOutputSampleList();
 
     // Build training LabelMap
@@ -980,7 +980,7 @@ namespace otb
         trainingSampleGenerator->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
         }
       }
-    trainingSampleGenerator->Update();
+    trainingSampleGenerator->Compute();
 
     m_TrainingListSample = trainingSampleGenerator->GetOutputSampleList();
     m_LabelsListSample = trainingSampleGenerator->GetOutputTrainingSampleList();
