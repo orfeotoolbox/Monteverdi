@@ -24,6 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbFltkFilterWatcher.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
+#include "otbVectorDataProjectionFilter.h"
 
 #include <cstdlib>
 
@@ -80,6 +81,7 @@ namespace otb
     // Classification
     m_ClassLabelFilter = ClassLabelFilterType::New();
     m_ColorMapper = ChangeLabelFilterType::New();
+    m_VectorDataExporter = LabelMapToVectorDataFilterType::New();
   }
 
   ObjectLabelingModel::~ObjectLabelingModel()
@@ -1067,6 +1069,29 @@ namespace otb
       }
     classifier->Update();
 
+    m_VectorDataExporter->SetInput(m_LabelMap);
+    m_VectorDataExporter->Update();
+
+    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+    ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
+    vectorDataProjection->SetInput(m_VectorDataExporter->GetOutput());
+
+    VectorImageType::PointType lNewOrigin;
+    // polygons are recorded with a 0.5 shift...
+    lNewOrigin[0] = m_VectorImage->GetOrigin()[0]+0.5;
+    lNewOrigin[1] = m_VectorImage->GetOrigin()[1]+0.5;
+
+    vectorDataProjection->SetInputOrigin(lNewOrigin);
+    vectorDataProjection->SetInputSpacing(m_VectorImage->GetSpacing());
+
+    std::string projectionRef;
+    itk::ExposeMetaData<std::string>(m_VectorImage->GetMetaDataDictionary(),
+                                     MetaDataKey::ProjectionRefKey, projectionRef );
+    vectorDataProjection->SetInputProjectionRef(projectionRef);
+    vectorDataProjection->SetInputKeywordList(m_VectorImage->GetImageKeywordlist());
+    vectorDataProjection->Update();
+    m_VectorDataOutput = vectorDataProjection->GetOutput();
+
     // Make an image of classes labels
     m_ClassLabelFilter->SetInput(classifier->GetOutput());
     m_ClassLabelFilter->Update();
@@ -1113,6 +1138,7 @@ namespace otb
 
     m_LabeledOutput = m_ClassLabelFilter->GetOutput();
     m_ColoredOutput = m_ColorMapper->GetOutput();
+
     m_HasOutputs = true;
 
     this->NotifyAll("Update");

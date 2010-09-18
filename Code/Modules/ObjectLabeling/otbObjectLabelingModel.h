@@ -24,6 +24,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkObjectFactory.h"
 #include "itkFixedArray.h"
 #include "otbTypeManager.h"
+
+// LabelObject & LabelMap
 #include "itkLabelMap.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "itkLabelImageToLabelMapFilter.h"
@@ -34,6 +36,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbSimplifyPathFunctor.h"
+
+// VectorData export
+#include "otbLabelObjectWithClassLabelFieldsFunctor.h"
+#include "otbLabelMapToVectorDataFilter.h"
 
 // Sample list
 #include "otbLabelMapToSampleListFilter.h"
@@ -125,7 +131,7 @@ public:
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
   typedef MinMaxAttributesLabelMapFilter<LabelMapType>                          MinMaxLabelMapFilterType;
   typedef NormalizeAttributesLabelMapFilter<LabelMapType>                       NormalizeLabelMapFilterType;
-  
+
   typedef ObjectClass<LabelType>                     ObjectClassType;
   typedef ObjectClassType::ColorType                 ColorType;
   typedef std::vector<ObjectClassType>               ObjectClassVectorType;
@@ -133,6 +139,10 @@ public:
   typedef VectorDataType::DataNodeType               DataNodeType;
   typedef VectorDataType::DataTreeType::TreeNodeType TreeNodeType;
   typedef ObjectClassType::LabelVectorType           LabelVectorType;
+
+  typedef Functor::LabelObjectWithClassLabelFieldsFunctor<LabelObjectType>  LabelObjectWithClassLabelFieldsFunctorType;
+  typedef LabelMapToVectorDataFilter<LabelMapType, VectorDataType, LabelObjectWithClassLabelFieldsFunctorType>
+                                                                   LabelMapToVectorDataFilterType;
 
   typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,LabeledImageType> ClassLabelFilterType;
   typedef ChangeLabelImageFilter<LabeledImageType,VectorImageType>                     ChangeLabelFilterType;
@@ -326,6 +336,7 @@ public:
   itkGetConstObjectMacro(VectorImage,VectorImageType);
   itkGetObjectMacro(LabeledOutput,LabeledImageType);
   itkGetObjectMacro(ColoredOutput,VectorImageType);
+  itkGetObjectMacro(VectorDataOutput,VectorDataType);
 
   /** Get displayed channels list */
   std::vector<unsigned int> GetChannels();
@@ -443,6 +454,9 @@ private:
 
   LabeledImageType::Pointer          m_LabeledOutput;
   VectorImageType::Pointer           m_ColoredOutput;
+
+  LabelMapToVectorDataFilterType::Pointer m_VectorDataExporter;
+  VectorDataType::Pointer            m_VectorDataOutput;
 
   bool                               m_HasSVMModel;
   bool                               m_HasOutputs;
