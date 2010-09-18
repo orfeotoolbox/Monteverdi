@@ -992,7 +992,6 @@ namespace otb
     m_SVMEstimator->SetInputSampleList(m_TrainingListSample);
     m_SVMEstimator->SetTrainingSampleList(m_LabelsListSample);
     otbMsgDevMacro(<<"Number of classes: "<<m_Classes.size());
-    m_SVMEstimator->SetNumberOfClasses(m_Classes.size());
 
     if(m_Classes.size() == 1)
       {
