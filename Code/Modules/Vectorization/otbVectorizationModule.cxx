@@ -115,7 +115,7 @@ void VectorizationModule::Run()
       {
       // Load the vector data (still empty otherwise !!!)
       vdata->Update();
-      if (vdata->Size() <= 100)
+      if (vdata->Size() <= 1000)
         {
         m_Controller->AddVectorData(vdata);
         }
