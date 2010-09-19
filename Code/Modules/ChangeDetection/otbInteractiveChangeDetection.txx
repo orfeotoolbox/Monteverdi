@@ -27,7 +27,6 @@
 #include <iostream>
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbFileName.h"
 #include "otbMsgReporter.h"
 
 // Overlay result display
