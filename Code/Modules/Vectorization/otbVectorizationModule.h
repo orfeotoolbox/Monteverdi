@@ -58,6 +58,7 @@ public:
   ::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager
   ::Vector_Data VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointerType;
 
   /** MVC typedefs */
   typedef otb::VectorizationController ControllerType;
@@ -66,6 +67,7 @@ public:
 
   itkGetObjectMacro(View, ViewType);
   itkGetObjectMacro(Controller, ControllerType);
+  itkGetObjectMacro(Model, ModelType);
 
 protected:
   /** Constructor */
@@ -97,6 +99,7 @@ protected:
   {
     m_View->HideAll();
   }
+
 
 private:
   VectorizationModule(const Self&); //purposely not implemented

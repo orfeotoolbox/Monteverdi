@@ -63,6 +63,7 @@ public:
                              double originY,
                              bool isUl);
   virtual void InitializeWGS84Transform();
+  virtual void SetDEMPath(std::string dem);
 
 protected:
   /** Constructor */

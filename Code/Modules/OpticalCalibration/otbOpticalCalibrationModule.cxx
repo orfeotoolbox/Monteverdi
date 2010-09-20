@@ -18,8 +18,8 @@
 #include "otbOpticalCalibrationModule.h"
 
 #include "itkMetaDataDictionary.h"
-#include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageMetadataInterfaceBase.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
 #include "ossim/base/ossimFilename.h"
 #include <FL/Fl_File_Chooser.H>
 #include "otbMsgReporter.h"
@@ -110,9 +110,9 @@ OpticalCalibrationModule
     }
 
   itk::MetaDataDictionary             dict = m_InputImage->GetMetaDataDictionary();
-  ImageMetadataInterfaceBase::Pointer lImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+  OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-  std::string sensorID = lImageMetadataInterface->GetSensorID(dict);
+  std::string sensorID = lImageMetadataInterface->GetSensorID();
 
   // Test the sensor : only QB, IKONOS and Spot are supported
   if (sensorID.find("QB02") == std::string::npos &&
@@ -127,15 +127,15 @@ OpticalCalibrationModule
   try
     {
     // ImageToLuminance
-    lImageMetadataInterface->GetPhysicalGain(dict);
-    lImageMetadataInterface->GetPhysicalBias(dict);
+    lImageMetadataInterface->GetPhysicalGain();
+    lImageMetadataInterface->GetPhysicalBias();
 
     // LuminanceToReflectance
-    lImageMetadataInterface->GetDay(dict);
-    lImageMetadataInterface->GetMonth(dict);
+    lImageMetadataInterface->GetDay();
+    lImageMetadataInterface->GetMonth();
 
-    lImageMetadataInterface->GetSolarIrradiance(dict);
-    lImageMetadataInterface->GetSunElevation(dict);
+    lImageMetadataInterface->GetSolarIrradiance();
+    lImageMetadataInterface->GetSunElevation();
 
     }
   catch (itk::ExceptionObject& err)

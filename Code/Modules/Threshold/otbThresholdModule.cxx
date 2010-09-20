@@ -19,7 +19,7 @@
 #include "otbMsgReporter.h"
 #include "otbFltkFilterWatcher.h"
 
-#include "itkMinimumMaximumImageCalculator.h"
+#include "otbStreamingStatisticsImageFilter.h"
 #include "otbUniformAlphaBlendingFunction.h"
 #include "otbBlendingFunction.h"
 
@@ -196,33 +196,24 @@ void ThresholdModule::UpdateThresholdLayer()
 void ThresholdModule::UpdateSlidersExtremum()
 {
   // Get the extremum of the image
-  typedef itk::MinimumMaximumImageCalculator<ImageType> ExtremumCalculatorType;
+  typedef otb::StreamingStatisticsImageFilter<ImageType>  ExtremumCalculatorType;
   ExtremumCalculatorType::Pointer extremumCalculator = ExtremumCalculatorType::New();
-  extremumCalculator->SetImage(m_InputImage);
-  extremumCalculator->ComputeMinimum();
-  extremumCalculator->ComputeMaximum();
+  extremumCalculator->SetInput(m_InputImage);
+  extremumCalculator->Update();
 
   // Edit the sliders with the min and the max.
   double min = extremumCalculator->GetMinimum();
   double max = extremumCalculator->GetMaximum();
-
-  guiMinDetails->range(min, max);
-  guiMinDetailsValue->range(min, max);
-  guiMaxDetails->range(min, max);
-  guiMaxDetailsValue->range(min, max);
-  guiMinDetails->value(min);
-  guiMinDetailsValue->value(min);
-  guiMaxDetails->value(max);
-  guiMaxDetailsValue->value(max);
+  
+  guiMin->value(min);
+  guiMax->value(max);
 
   guiMinDetails->step(vcl_floor(((max - min) / 100.) * 100) / 100.);
-  guiMinDetailsValue->step(vcl_floor(((max - min) / 100.) * 100) / 100.);
   guiMaxDetails->step(vcl_floor(((max - min) / 100.) * 100) / 100.);
-  guiMaxDetailsValue->step(vcl_floor(((max - min) / 100.) * 100) / 100.);
-
-  // Redraw the sliders
-  guiMinDetails->redraw();
-  guiMaxDetails->redraw();
+  guiMinDetails->range(min, max);
+  guiMaxDetails->range(min, max);
+  guiMinDetails->value(min);
+  guiMaxDetails->value(max);
 
   guiInsideValue->value(min);
   guiOutsideValue->value(max);

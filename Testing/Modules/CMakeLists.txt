@@ -101,7 +101,11 @@ ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-
+#------------------  Spectrum Viewer Tests ---------------------------
+ADD_TEST(moTvSpectrumViewerModuleTest ${Modules_TESTS2} otbSpectrumViewerModuleTest
+${INPUTDATA}/poupees.tif
+0
+)
 
 #------------- Writer MVC Module Tests ---------------------------
 ADD_TEST(moTvWriterMVCModuleTest  ${Modules_TESTS2} otbWriterMVCModuleTest
@@ -169,13 +173,16 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
-#------------- Algebra Module test
-ADD_TEST(moTvAlgebraModuleTest ${Modules_TESTS2} otbAlgebraModuleTest
-${INPUTDATA}/prison_toulouse.tif
-${INPUTDATA}/prison_toulouse.tif
-${TEMP}/moTvAlgebraImageModule.tif
+#------------- BandMath Module Test ---------------------------
+
+ADD_TEST(moTvBandMathModuleTest ${Modules_TESTS2} otbBandMathModuleTest
+${INPUTDATA}/poupees_sub_c1.png
+${INPUTDATA}/poupees_sub_c2.png
+${INPUTDATA}/poupees_sub.png
+${TEMP}/moTvBandMathModule.tif
 0
-)	      
+)
+
 
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests3 ----------------------------------------
@@ -262,8 +269,6 @@ otbSupervisedClassificationModelTrainTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
 
 
-
-
 ADD_TEST(moTvSertitHaitiXTTest ${Modules_TESTS3}
 otbSertitProcessingTest
 ${INPUTDATA}/Haiti1.jpeg
@@ -304,13 +309,73 @@ IF(OTB_USE_CURL)
   )
 ENDIF(OTB_USE_CURL)
 
-
-
 #------------- Vectorization Module Tests ---------------------------
 ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
-${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif
+${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+${INPUTDATA}/Capitole-Shadows.shp
 ${TEMP}/vecTvVectorizationModuleTestOutput.kml
+${INPUTDATA}/DEM/srtm_directory
 )
+
+#-------------  Object Labeling Module 
+ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
+  ${INPUTDATA}/maur.tif
+  ${INPUTDATA}/maur_labelled.tif
+  0
+)
+
+ADD_TEST(moTvObjectLabelingOpenImage3Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
+  ${INPUTDATA}/maur_rgb.tif
+  ${INPUTDATA}/maur_labelled.tif
+  0
+)
+
+# test to classify
+ADD_TEST(moTvObjectLabelingColoredOutput4Bands ${Modules_TESTS4} otbObjectLabelingColoredOutput
+  ${INPUTDATA}/maur.tif
+  ${INPUTDATA}/maur_labelled.tif
+  131 120 226 42 208 231 187 9
+  ${TEMP}/moTvObjectLabelingColoredOutput4Bands.tif
+)
+
+ADD_TEST(moTvObjectLabelingColoredOutput3Bands ${Modules_TESTS4} otbObjectLabelingColoredOutput
+  ${INPUTDATA}/maur_rgb.tif
+  ${INPUTDATA}/maur_labelled.tif
+  131 120 226 42 208 231 187 9
+  ${TEMP}/moTvObjectLabelingColoredOutput3Bands.tif
+)
+
+
+#------------- FineCorrelation Module Tests ---------------------------
+ADD_TEST(ficTvFineCorrelationModuleTest ${Modules_TESTS4} otbFineCorrelationModuleTest
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput1.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput2.tif
+${TEMP}/vecTvFineCorrelationModuleTestOutput3.tif
+)
+
+#------------- Mean Shift Clustering Module Tests ---------------------------
+ADD_TEST(moTvMeanShiftModuleTest ${Modules_TESTS4} otbMeanShiftModuleTest
+${INPUTDATA}/ExtrZoneNuageuse.tif
+${TEMP}/moTvMeanShiftModuleOutput1.tif
+${TEMP}/moTvMeanShiftModuleOutput2.tif
+${TEMP}/moTvMeanShiftModuleOutput3.tif
+${TEMP}/moTvMeanShiftModuleOutput4.tif
+10
+30
+290
+)
+
+#------------- Vectorization & Classification MiniPipeline ---------------------------
+ADD_TEST(moTvVectorizationClassification ${Modules_TESTS4} otbVectorizationClassification
+${INPUTDATA}/ExtrZoneNuageuse.tif
+${INPUTDATA}/toitsVeg.shp
+${TEMP}/moTvVectorizationClassificationMiniPipeline.shp
+${TEMP}/moTvVectorizationClassificationMiniPipeline.tif
+${INPUTDATA}/DEM/srtm_directory
+)
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -324,8 +389,8 @@ otbSupervisedClassificationModuleTest.cxx
 otbReaderWriterModuleTest.cxx
 )
 
-
 SET(Modules_SRCS2
+otbBandMathModuleTest.cxx
 otbViewerModuleTest.cxx
 otbWriterMVCModuleTest.cxx
 otbWriterMVCModuleTest2.cxx
@@ -335,8 +400,7 @@ otbExtractROIModuleTest.cxx
 otbExtractROIVectorImageModuleTest.cxx
 otbHomologousPointExtractionModuleTest.cxx
 otbConcatenateModuleTest.cxx
-otbAlgebraModuleTest.cxx
-
+otbSpectrumViewerModuleTest.cxx
 )
 
 SET(Modules_SRCS3
@@ -360,6 +424,11 @@ ENDIF(OTB_USE_CURL)
 
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationModuleTest.cxx
+  otbObjectLabelingOpenImage.cxx
+  otbObjectLabelingColoredOutput.cxx
+  otbFineCorrelationModuleTest.cxx
+  otbMeanShiftModuleTest.cxx
+  otbVectorizationClassificationTest.cxx
 )
 
 

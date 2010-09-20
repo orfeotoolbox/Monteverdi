@@ -15,15 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbotbVectorDataTreeBrowser_txx
-#define __otbotbVectorDataTreeBrowser_txx
+#ifndef __otbVectorDataTreeBrowser_txx
+#define __otbVectorDataTreeBrowser_txx
 
 #include "otbMonteverdiEnum.h"
 
 #include "otbVectorDataTreeBrowser.h"
-#include <FL/Fl_Int_Input.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Input.H>
+//#include <FL/Fl_Int_Output.H>
+#include <FL/Fl_Value_Output.H>
+#include <FL/Fl_Output.H>
+//#include <FL/Fl_Int_Input.H>
+//#include <FL/Fl_Value_Input.H>
+//#include <FL/Fl_Input.H>
 #include <FL/Fl_Menu_Item.H>
 
 #include <map>
@@ -135,7 +138,6 @@ VectorDataTreeBrowser<TVectorData>
       {
       // Get the data node
       DataNodePointerType node = it.GetNode()->Get();
-
       switch (node->GetNodeType())
         {
         case ROOT:
@@ -405,8 +407,8 @@ VectorDataTreeBrowser<TVectorData>
     Fl_Group::current(NULL);
     Fl_Group *g = new Fl_Group(0, 0, 150, 20);
     g->resizable(NULL);
-    Fl_Value_Input * ix = new Fl_Value_Input(0, 0, 75, 20);
-    Fl_Value_Input * iy = new Fl_Value_Input(75, 0, 75, 20);
+    Fl_Value_Output * ix = new Fl_Value_Output(0, 0, 75, 20);
+    Fl_Value_Output * iy = new Fl_Value_Output(75, 0, 75, 20);
     ix->value(point[0]);
     iy->value(point[1]);
     g->add(ix);
@@ -416,8 +418,8 @@ VectorDataTreeBrowser<TVectorData>
   else
     {
     Fl_Group *       g = dynamic_cast<Fl_Group *>(node->widget());
-    Fl_Value_Input * ix = dynamic_cast<Fl_Value_Input *>(g->child(0));
-    Fl_Value_Input * iy = dynamic_cast<Fl_Value_Input *>(g->child(1));
+    Fl_Value_Output * ix = dynamic_cast<Fl_Value_Output *>(g->child(0));
+    Fl_Value_Output * iy = dynamic_cast<Fl_Value_Output *>(g->child(1));
     ix->value(point[0]);
     iy->value(point[1]);
     }
@@ -445,7 +447,7 @@ VectorDataTreeBrowser<TVectorData>
       {
       case OFTString:
         {
-        Fl_Input * value = new Fl_Input(0, 0, 75, 20);
+        Fl_Output * value = new Fl_Output(0, 0, 75, 20);
         value->value(field.second.String);
         parent->add(label.c_str(), value);
         break;
@@ -454,14 +456,14 @@ VectorDataTreeBrowser<TVectorData>
         {
         oss.str("");
         oss << field.second.Integer;
-        Fl_Int_Input * value = new Fl_Int_Input(0, 0, 75, 20);
+        Fl_Output * value = new Fl_Output(0, 0, 75, 20);
         value->value(oss.str().c_str());
         parent->add(label.c_str(), value);
         break;
         }
       case OFTReal:
         {
-        Fl_Value_Input * value = new Fl_Value_Input(0, 0, 75, 20);
+        Fl_Value_Output * value = new Fl_Value_Output(0, 0, 75, 20);
         value->value(field.second.Real);
         parent->add(label.c_str(), value);
         break;
@@ -652,6 +654,75 @@ VectorDataTreeBrowser<TVectorData>
 template <class TVectorData>
 void
 VectorDataTreeBrowser<TVectorData>
+::FocusCallback(Fl_Widget* w, void* data)
+{
+  Self * pthis = static_cast<Self *>(data);
+  if (pthis) pthis->FocusOnSelectedGeometry();
+}
+
+template <class TVectorData>
+void
+VectorDataTreeBrowser<TVectorData>
+::FocusOnSelectedGeometry()
+{
+  // Retrieve selected flu node
+  FluNodeType * selectedFluNode = this->get_hilighted();
+
+  // Find the corresponding node from VectorData
+  typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
+
+  while (it != m_NodeMap.end() && it->second != selectedFluNode)
+    {
+    ++it;
+    }
+
+  if (it != m_NodeMap.end())
+    {
+    // Set the Focus to the bounding box
+    NodeType nT;
+    PointType p;
+    RegionType r;
+    SizeType s;
+    IndexType i, indexFocus;
+
+    nT = it->first->GetNodeType();
+    
+    switch (nT)
+      {
+      case FEATURE_POINT:
+        p = it->first->GetPoint();
+        indexFocus[0] = p[0];
+        indexFocus[1] = p[1];
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      case FEATURE_LINE:
+        r = it->first->GetLine()->GetBoundingRegion();
+        s = r.GetSize();
+        i = r.GetIndex();
+        indexFocus[0] = static_cast<int>(s[0] / 2 + i[0]);
+        indexFocus[1] = static_cast<int>(s[1] / 2 + i[1]);
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      case FEATURE_POLYGON:
+        r = it->first->GetPolygonExteriorRing()->GetBoundingRegion();
+        s = r.GetSize();
+        i = r.GetIndex();
+        indexFocus[0] = static_cast<int>(s[0] / 2 + i[0]);
+        indexFocus[1] = static_cast<int>(s[1] / 2 + i[1]);
+        m_Controller->FocusOnDataNode(indexFocus);
+        break;
+        
+      default:
+        break;
+      }
+    }
+}
+
+template <class TVectorData>
+void
+VectorDataTreeBrowser<TVectorData>
 ::DeleteFieldCallback(Fl_Widget*w, void *data)
 {
   Self * pthis = static_cast<Self *>(data);
@@ -694,11 +765,12 @@ VectorDataTreeBrowser<TVectorData>
   // If we are on a data node
   if (found)
     {
-    Fl_Menu_Item popup_menu[3] = {
-            {"Delete geometry",  0, DeleteGeometryCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-                { "Add field",  0, AddFieldCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK }, {NULL}
-      };
-
+    Fl_Menu_Item popup_menu[4] = {
+        {"Delete geometry",  0, DeleteGeometryCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+        { "Add field",  0, AddFieldCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
+        {"Focus", 0, FocusCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK }, 
+        {NULL}};
+    
     int x, y;
     x = Fl::event_x();
     y = Fl::event_y();

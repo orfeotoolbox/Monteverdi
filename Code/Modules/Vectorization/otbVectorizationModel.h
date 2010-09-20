@@ -20,7 +20,11 @@
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
+#include "otbEventsSender.h"
 #include "otbTypeManager.h"
+
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataExtractROI.h"
 
 //Visu
 #include "otbImageLayerRenderingModel.h"
@@ -36,7 +40,7 @@ namespace otb {
  *
  */
 class ITK_EXPORT VectorizationModel
-  : public MVCModel<ListenerBase>, public itk::Object, public ListenerBase
+  : public  MVCModel<ListenerBase>, public itk::Object, public ListenerBase
 {
 public:
   /** Standard class typedefs */
@@ -46,7 +50,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(VectorizationModel, Object);
+  itkTypeMacro(VectorizationModel, MVCModel);
 
   /** New macro */
   itkNewMacro(Self);
@@ -70,19 +74,23 @@ public:
   typedef VisualizationModelType::Pointer VisualizationModelPointerType;
   typedef LayerGeneratorType::ImageLayerType
   ::OutputPixelType OutputPixelType;
-  typedef Function::UniformAlphaBlendingFunction
-  <OutputPixelType>                         BlendingFunctionType;
-  typedef BlendingFunctionType::Pointer      BlendingFunctionPointerType;
   typedef VisualizationModelType::RegionType RegionType;
 
-  typedef TypeManager
-  ::Vector_Data VectorDataType;
+  typedef TypeManager::Vector_Data     VectorDataType;
+  typedef VectorDataType::Pointer      VectorDataPointerType;
   typedef VectorDataModel              VectorDataModelType;
   typedef VectorDataModelType::Pointer VectorDataModelPointerType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef DataNodeType::PointType      PointType;
   typedef DataNodeType::PolygonType::VertexType
-  VertexType;
+  VertexType; 
+  
+  // Reprojection filter
+  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
+    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
+
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
@@ -95,6 +103,8 @@ public:
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, VectorImageType);
   void SetImage(VectorImagePointerType image);
+  /** Load a vector data */
+  void AddVectorData(VectorDataPointerType vData);
 
   void RemoveDataNode(DataNodeType * node);
   void SetDataNodeFieldAsInt(DataNodeType * node, const std::string& name, int value);
@@ -102,20 +112,42 @@ public:
   void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value);
   void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name);
   void RemovePointFromDataNode(DataNodeType * node,
-                               const long& index,
+                               const unsigned long& index,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
   void UpdatePointFromDataNode(DataNodeType * node,
-                               const long& index,
+                               const unsigned long& index,
                                const PointType& point,
                                bool interiorRing,
                                const unsigned int& interiorRingIndex = 0);
+  void UpdateAlpha(double alpha);
+  void OK();
+  void FocusOnDataNode(const PointType& index);
+ 
+  /** Output accessor. */
+  itkGetObjectMacro(Output, VectorDataType );
+  
+  /** Output changed accessor. */
+  itkGetMacro( OutputChanged, bool );
+  
+  /** DEM directory accessors. */
+  itkGetConstMacro(DEMPath, std::string);
+  itkSetMacro(DEMPath, std::string);
+
+  /** Use DEM or not accessor. */
+  itkGetMacro(UseDEM, bool);
+  itkSetMacro(UseDEM, bool);
+
+  /** Receive notifications */
+  virtual void Notify();
+ 
 
 protected:
   /** Constructor */
   VectorizationModel();
   /** Destructor */
-  ~VectorizationModel();
+  virtual ~VectorizationModel();
+
 
 private:
   VectorizationModel(const Self&); //purposely not implemented
@@ -124,8 +156,7 @@ private:
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
 
-  /** Receive notifications */
-  virtual void Notify();
+
 
   /** Singleton instance */
   static Pointer Instance;
@@ -133,13 +164,24 @@ private:
   /** Visualization */
   VisualizationModelPointerType m_VisualizationModel;
   LayerGeneratorPointerType     m_ImageGenerator;
-  BlendingFunctionPointerType   m_BlendingFunction;
 
   /** Input Images */
   VectorImagePointerType m_InputImage;
 
   /** VectorData model */
   VectorDataModelPointerType m_VectorDataModel;
+
+  /**Output vector data. */
+  VectorDataPointerType  m_Output;
+  
+  /** Has a new output or not. */
+  bool m_OutputChanged;
+
+  /** DEM directoryu path. */
+  std::string m_DEMPath;
+
+  /** Use DEM or not. */
+  bool m_UseDEM;
 };
 
 } //end namespace otb

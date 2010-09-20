@@ -23,8 +23,12 @@
 
 // include the OTB elements
 #include "otbImage.h"
-#include "otbTerraSarBrightnessImageFilter.h"
-#include "otbTerraSarCalibrationImageFilter.h"
+//#include "otbTerraSarBrightnessImageFilter.h"
+//#include "otbTerraSarCalibrationImageFilter.h"
+#include "otbSarRadiometricCalibrationToImageFilter.h"
+#include "itkLog10ImageFilter.h"
+#include "itkMultiplyByConstantImageFilter.h"
+#include "itkAddConstantToImageFilter.h"
 
 namespace otb
 {
@@ -51,18 +55,22 @@ public:
   itkTypeMacro(SarCalibrationModule, Module);
 
   // Convenient typedefs
+  typedef TypeManager::Floating_Point_Precision     Floating_Point_PrecisionType;
   typedef TypeManager::Floating_Point_Image         ImageType;
   typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
 
-  // SarCalibration Class typedefs
-  typedef TerraSarBrightnessImageFilter<ImageType, ImageType>               BrightnessFilterType;
-  typedef TerraSarBrightnessImageFilter<ComplexImageType, ComplexImageType> BrightnessComplexFilterType;
 
-  typedef TerraSarCalibrationImageFilter<ImageType, ImageType>               CalibrationFilterType;
-  typedef TerraSarCalibrationImageFilter<ComplexImageType, ComplexImageType> CalibrationComplexFilterType;
+  // SarCalibration Class typedefs
+  typedef SarRadiometricCalibrationToImageFilter<ImageType, ImageType>               CalibrationFilterType;
+  typedef SarRadiometricCalibrationToImageFilter<ComplexImageType,ImageType>         CalibrationComplexFilterType;
+
+  typedef itk::Log10ImageFilter<ImageType, ImageType>                        LogImageFilterType;
+  typedef itk::MultiplyByConstantImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  MultiplyByConstantImageFilterType;
+  typedef itk::AddConstantToImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  AddConstantToImageFilterType;
 
   /** Check metadat validity */
   bool CheckMetadata();
+
 
 protected:
   /** Constructor */
@@ -88,10 +96,20 @@ protected:
     wMainWindow->hide();
   }
 
+
+  /** Callbacks */
+  virtual void OK();
+  virtual void Cancel();
+
   /** SarCalibration Methods*/
 
-  /** OK callback*/
-  virtual void OK();
+  /** Calibration Process */
+  void CalibrationProcess();
+
+  /** Complex Calibration Process */
+  void ComplexCalibrationProcess();
+
+  static const double Epsilon;
 
 private:
   SarCalibrationModule(const Self&); //purposely not implemented
@@ -100,11 +118,14 @@ private:
   // Class attributes
   ImageType::Pointer        m_InputImage;
   ComplexImageType::Pointer m_ComplexInputImage;
+  ImageType::Pointer        m_OutputImage;
 
-  BrightnessFilterType::Pointer         m_BrighFilter;
-  BrightnessComplexFilterType::Pointer  m_BrighComplexFilter;
   CalibrationFilterType::Pointer        m_CalibFilter;
   CalibrationComplexFilterType::Pointer m_ComplexCalibFilter;
+
+  LogImageFilterType::Pointer m_Log10ImageFilter;
+  MultiplyByConstantImageFilterType::Pointer m_MultiplyByConstantImageFilter;
+  AddConstantToImageFilterType::Pointer m_AddConstantToImageFilter;
 
   /** Modulus input image or complex one */
   bool m_WorkWithCplx;

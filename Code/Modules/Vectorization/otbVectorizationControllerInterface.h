@@ -36,6 +36,7 @@ public:
   typedef VectorizationModel      ModelType;
   typedef ModelType::DataNodeType DataNodeType;
   typedef ModelType::PointType    PointType;
+  typedef DataNodeType::PolygonType::IndexType IndexType;
 
   /** Standard type macros */
   itkTypeMacro(VectorizationControllerInterface, Superclass);
@@ -47,20 +48,23 @@ public:
   virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value) = 0;
   virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name) = 0;
   virtual void RemovePointFromDataNode(DataNodeType * node,
-                                       const long& index,
+                                       const unsigned long& index,
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0) = 0;
   virtual void UpdatePointFromDataNode(DataNodeType * node,
-                                       const long& index,
+                                       const unsigned long& index,
                                        const PointType& point,
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0) = 0;
+  virtual void ChangeNavigationMode() =0;
+  virtual void OK() =0;
+  virtual void FocusOnDataNode(const IndexType& index) =0;
 
 protected:
   /** Constructor */
   VectorizationControllerInterface() {}
   /** Destructor */
-  ~VectorizationControllerInterface() {}
+  virtual ~VectorizationControllerInterface() {}
 
 private:
   VectorizationControllerInterface(const Self&); //purposely not implemented

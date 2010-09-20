@@ -19,6 +19,7 @@
 
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/fl_ask.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/Enumerations.H>
 
 #include "otbMacro.h"
@@ -495,103 +496,103 @@ ProjectionView
     {
     case MAP_LINEAR_:
       {
-      typedef itk::LinearInterpolateImageFunction<SingleImageType, double> LinearType;
-      LinearType::Pointer interp = LinearType::New();
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+      typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearType;
+       LinearType::Pointer interp = LinearType::New();
+       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
-    case MAP_NEAREST:
-      {
-      typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
-      NearestType::Pointer interp = NearestType::New();
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-      break;
-      }
-    case MAP_SINC:
-      {
-      itk::OStringStream oss;
-      oss.str("");
-      oss << guiSincRadius->value();
-      if (strcmp("", oss.str().c_str()) != 0)
-        {
-        oss.str("");
-        oss << guiSincWindow->value();
-        switch (guiSincWindow->value())
-          {
-          case 0:
-            {
-            typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
-            BlackmanType::Pointer interp = BlackmanType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          case 1:
-            {
+//     case MAP_NEAREST:
+//       {
+// //       typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
+// //       NearestType::Pointer interp = NearestType::New();
+// //       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//       break;
+//       }
+//     case MAP_SINC:
+//       {
+//       itk::OStringStream oss;
+//       oss.str("");
+//       oss << guiSincRadius->value();
+//       if (strcmp("", oss.str().c_str()) != 0)
+//         {
+//         oss.str("");
+//         oss << guiSincWindow->value();
+//         switch (guiSincWindow->value())
+//           {
+//           case 0:
+//             {
+//             typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
+//             BlackmanType::Pointer interp = BlackmanType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           case 1:
+//             {
 
-            typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
-            CosineType::Pointer interp = CosineType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          case 2:
-            {
-            typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
-            GaussianType::Pointer interp = GaussianType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          case 3:
-            {
-            typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
-            HammingType::Pointer interp = HammingType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          case 4:
-            {
-            typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
-            LanczosType::Pointer interp = LanczosType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          case 5:
-            {
-            typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
-            WelchType::Pointer interp = WelchType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            //interp->Initialize();
-            m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-            break;
-            }
-          default:
-            fl_alert("Problem with interpolator type, please contact developpers");
-            break;
-          }
-        }
-      else
-        {
-        fl_alert("Invalid ionterpolator Radius...");
-        }
-      break;
-      }
-    case MAP_SPLINES:
-      {
-      typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
-      SplineType::Pointer interp = SplineType::New();
-      interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()));
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-      break;
-      }
+//             typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
+//             CosineType::Pointer interp = CosineType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           case 2:
+//             {
+//             typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
+//             GaussianType::Pointer interp = GaussianType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           case 3:
+//             {
+//             typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
+//             HammingType::Pointer interp = HammingType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           case 4:
+//             {
+//             typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
+//             LanczosType::Pointer interp = LanczosType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           case 5:
+//             {
+//             typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
+//             WelchType::Pointer interp = WelchType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             //interp->Initialize();
+//             //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//             break;
+//             }
+//           default:
+//             fl_alert("Problem with interpolator type, please contact developpers");
+//             break;
+//           }
+//         }
+//       else
+//         {
+//         fl_alert("Invalid ionterpolator Radius...");
+//         }
+//       break;
+//       }
+//     case MAP_SPLINES:
+//       {
+//       typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
+//       SplineType::Pointer interp = SplineType::New();
+//       interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()));
+//       //m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+//       break;
+//       }
     default:
       fl_alert("Problem with map projection type, please contact developpers");
       res = 1;
@@ -805,5 +806,48 @@ ProjectionView::UpToDateTransform()
       break;
     }
 }
+
+/**
+ * Browse DEM
+ */
+void
+ProjectionView::Browse()
+{
+  const char * demName = NULL;
+
+  // Choose file
+  demName = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), "");
+  
+  if (demName == NULL)
+    {
+    otbMsgDebugMacro(<< "Empty directory!");
+    return;
+    }
+  
+  vDEMPath->value(demName);
+  std::string DEMfile = demName;
+  
+  m_Controller->SetDEMPath(DEMfile);
+}
+
+void
+ProjectionView::UpdateDEMUse()
+{
+  // Update following the choiceDEM radio button
+  // value
+  if(choiceDEM->value())
+    {
+    vDEMPath->activate();
+    bBrowse->activate();
+    m_Controller->GetModel()->SetUseDEM(true);
+    } 
+  else
+    {
+    m_Controller->GetModel()->SetUseDEM(false);
+    vDEMPath->deactivate();
+    bBrowse->deactivate();
+    }
+}
+
 
 } // End namespace otb

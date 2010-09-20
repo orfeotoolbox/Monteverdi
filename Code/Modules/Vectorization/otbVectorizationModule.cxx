@@ -16,6 +16,10 @@
 
 =========================================================================*/
 #include "otbVectorizationModule.h"
+#include <FLU/Flu_File_Chooser.h>
+#include "base/ossimFilename.h"
+#include "otbMsgReporter.h"
+
 
 namespace otb
 {
@@ -41,6 +45,7 @@ VectorizationModule::VectorizationModule()
   // Then, describe inputs needed by the module
   // Add a new input
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data"), true, true);
 }
 
 /** Destructor */
@@ -59,28 +64,73 @@ void VectorizationModule::Run()
 {
   // Untill window closing, module will be busy
   this->BusyOn();
-
+  
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
-
-  // First step is to retrieve the inputs
-
+  
+  if(this->GetNumberOfInputDataByKey("VectorData") > 0)
+    {
+    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+    Fl::check();
+    if(cfname != NULL)
+      {
+      ossimFilename dir(cfname);
+      if( dir.isDir() )
+        {
+        m_Model->SetUseDEM(true);
+        m_Model->SetDEMPath(dir);
+        }
+      else
+        {
+        itk::OStringStream oss;
+        oss<<"Invalid DEm directory "<<cfname<<".";
+        MsgReporter::GetInstance()->SendError(oss.str());
+        }
+      }
+    }
+  
+  // Second step is to retrieve the input image
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-
+  
   // One of this pointer will be NULL:
   if (fpvImage.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
     m_View->BuildInterface();
     m_Model->SetImage(fpvImage);
+    //m_View->InitColor();
     }
   else
     {
     itkExceptionMacro(<< "Input image is NULL.");
     }
-
+  
+  
+  for( unsigned int i=0; i<this->GetNumberOfInputDataByKey("VectorData"); i++ )
+    {
+    VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
+    if(vdata.IsNotNull())
+      {
+      // Load the vector data (still empty otherwise !!!)
+      vdata->Update();
+      if (vdata->Size() <= 1000)
+        {
+        m_Controller->AddVectorData(vdata);
+        }
+      else 
+        {
+        itkExceptionMacro("The Input Shapefile Contains to Many Features to be Loaded");
+        }
+      }
+    else
+      {
+      itkExceptionMacro(<< "Input vector data is NULL.");
+      }
+    }
+  
+  
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 }
@@ -88,18 +138,22 @@ void VectorizationModule::Run()
 /** The Notify */
 void VectorizationModule::Notify()
 {
+  if (m_Model->GetOutputChanged())
+    {
+      this->ClearOutputDescriptors();
+      // Add outputs
+      VectorDataType::Pointer vData = m_Model->GetOutput();
+      this->AddOutputDescriptor(vData,"VectorData", otbGetTextMacro("New vector data"));
 
-//  if (m_Model->GetOutputChanged())
-//    {
-//      this->ClearOutputDescriptors();
-//      // Add outputs
-//      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-//      this->AddOutputDescriptor(filteredOutput,"OutputImage", otbGetTextMacro("Input image with new keyword list"));
-//    }
-
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      this->BusyOff();
+    }
+  else if  (m_View->GetIsHide())
+    {
+      this->BusyOff();
+    }
 
   // Once module is closed, it is no longer busy
-  this->BusyOff();
+ 
 }
 } // End namespace otb

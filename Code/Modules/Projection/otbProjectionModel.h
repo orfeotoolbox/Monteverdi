@@ -26,8 +26,7 @@
 #include "otbVectorImage.h"
 #include "otbGenericRSTransform.h"
 
-#include "otbStreamingResampleImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
+#include "otbGenericRSResampleImageFilter.h"
 
 namespace otb
 {
@@ -53,16 +52,16 @@ public:
   typedef InputImageType::PointType               PointType;
   typedef InputImageType::SpacingType             SpacingType;
 
+  typedef TypeManager::Floating_Point_Image       SingleImageType;
+
   /** typedef the Remote Sensing transform*/
-  typedef GenericRSTransform<> TransformType;
-  //typedef RSTransformType::TransformType            TransformType;
+  typedef GenericRSTransform<>           TransformType;
   typedef TransformType::OutputPointType OutputPointType;
 
   /** Output */
-  typedef TypeManager::Floating_Point_Image                                            SingleImageType;
-  typedef StreamingResampleImageFilter<SingleImageType, SingleImageType, double>       ResampleFilterType;
-  typedef PerBandVectorImageFilter<InputImageType, InputImageType, ResampleFilterType> PerBandFilterType;
-
+  typedef GenericRSResampleImageFilter<InputImageType, 
+                                       InputImageType>       ResampleFilterType;
+  
   /** SetInputImage */
   itkSetObjectMacro(InputImage, InputImageType);
   itkGetObjectMacro(InputImage, InputImageType);
@@ -125,6 +124,15 @@ public:
 
   /** Initialize the WGS84 transform*/
   void UpdateWGS84Transform();
+  
+  /** Set the DEM Path */
+  void SetDEMPath(std::string dem);
+
+  /** Method to modify the flag*/
+  void SetUseDEM(bool value)
+  {
+    m_UseDEM = value;
+  }
 
 protected:
   /** Constructor */
@@ -145,6 +153,7 @@ private:
   bool                    m_OutputChanged;
   bool                    m_TransformChanged;
   bool                    m_TempTransformChanged;
+  bool                    m_UseDEM;
 
   // Output Image Information
   SizeType    m_OutputSize;
@@ -157,9 +166,8 @@ private:
 
   // Outputs
   ResampleFilterType::Pointer m_Resampler;
-  PerBandFilterType::Pointer  m_PerBander;
 
-  char * m_OutputProjectionRef;
+  std::string  m_OutputProjectionRef;
 };
 }
 #endif

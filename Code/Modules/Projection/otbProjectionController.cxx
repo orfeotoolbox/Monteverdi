@@ -191,4 +191,22 @@ ProjectionController
     }
 }
 
+/**
+ *
+ */
+void
+ProjectionController
+::SetDEMPath(std::string dem)
+{
+  try
+    {
+    m_Model->SetDEMPath(dem);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
+
 } // end namespace otb

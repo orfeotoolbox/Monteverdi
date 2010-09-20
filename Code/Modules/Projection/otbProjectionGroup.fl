@@ -22,10 +22,10 @@ class ProjectionGroup {open
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Tabs m_TabsMode {open
-        xywh {5 9 420 410} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
+        xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label {Input image} open selected
+          label {Input image} selected
           xywh {5 30 420 389} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -167,7 +167,7 @@ this->UpdateInputTMTransform();}
           }
         }
         Fl_Group {} {
-          label {Output image} open
+          label {Output image}
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
@@ -391,7 +391,7 @@ this->UpdateTMTransform();}
             }
           }
           Fl_Choice guiInterpSelection {
-            label Interpolator open
+            label Interpolator
             tooltip {Select the Orthorectif Interpolator} xywh {155 50 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
@@ -412,7 +412,7 @@ guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_NEAREST);}
-              xywh {35 35 100 25} labelsize 11
+              xywh {35 35 100 25} labelsize 11 deactivate
             }
             MenuItem {} {
               label SinC
@@ -422,7 +422,7 @@ guiSinC->show();
 guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_SINC);}
-              xywh {35 35 100 25} labelsize 11
+              xywh {35 35 100 25} labelsize 11 deactivate
             }
             MenuItem {} {
               label Splines
@@ -432,7 +432,49 @@ guiSinC->hide();
 guiSplines->show();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_SPLINES);}
-              xywh {45 45 100 25} labelsize 11
+              xywh {45 45 100 25} labelsize 11 deactivate
+            }
+          }
+        }
+        Fl_Group {} {
+          label DEM open
+          xywh {5 31 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+        } {
+          Fl_Group {} {open
+            xywh {20 69 395 174}
+          } {
+            Fl_Round_Button choiceDEM {
+              label {Use DEM}
+              callback {choiceElevation->clear();
+vAverageElevation->deactivate();
+this->UpdateDEMUse();}
+              xywh {36 85 90 15} down_box ROUND_DOWN_BOX
+            }
+            Fl_Round_Button choiceElevation {
+              label {Use average elevation}
+              callback {if(choiceElevation->value()){
+choiceDEM->clear();
+vDEMPath->deactivate();
+bBrowse->deactivate();
+vAverageElevation->activate();
+}
+else
+{
+vAverageElevation->deactivate();
+}}
+              xywh {36 177 170 20} down_box ROUND_DOWN_BOX value 1
+            }
+            Fl_File_Input vDEMPath {
+              xywh {45 117 291 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 1
+            }
+            Fl_Button bBrowse {
+              label {...}
+              callback {this->Browse();}
+              xywh {360 126 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+            }
+            Fl_Value_Input vAverageElevation {
+              label {Elevation value    }
+              xywh {182 209 153 24}
             }
           }
         }
@@ -469,5 +511,9 @@ SetInterpolatorType(MAP_SPLINES);}
   Function {UpdateInputLambertIITransform()} {open return_type {virtual void}
   } {}
   Function {UpdateWGS84Transform()} {open return_type {virtual void}
+  } {}
+  Function {Browse()} {open return_type {virtual void}
+  } {}
+  Function {UpdateDEMUse()} {open return_type {virtual void}
   } {}
 } 

@@ -280,7 +280,6 @@ void MonteverdiViewGUI::TreeCallback(Fl_Widget* w, void* v)
   switch (reason)
     {
     case OTB_FLU_RIGHT_MOUSE_PUSHED:
-      printf("%s rightclickpushed\n", n->label());
       pthis->LaunchPopupMenu(n);
       break;
     }

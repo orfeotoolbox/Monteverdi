@@ -68,6 +68,8 @@ public:
   typedef ModelType::VectorImageType  FloatingVectorImageType;
   typedef ModelType::LabeledImageType LabelImageType;
 
+  itkGetObjectMacro(View, MeanShiftModuleView);
+
 protected:
   /** Constructor */
   MeanShiftModule();

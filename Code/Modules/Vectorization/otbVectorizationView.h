@@ -57,6 +57,7 @@ public:
   <VectorDataType>                           VectorDataGlComponentType;
   typedef VectorDataTreeBrowser
   <VectorDataType>                           VectorDataTreeBrowserType;
+  typedef VectorDataGlComponentType::ColorType ColorType;
 
   /** Event from the model */
   virtual void Notify();
@@ -74,9 +75,21 @@ public:
   /** Build the interface */
   virtual void BuildInterface();
   virtual void HideAll();
+  virtual void NextGeometryIsPointCallback();
+  virtual void NextGeometryIsLineCallback();
+  virtual void NextGeometryIsPolygonExtCallback();
+  virtual void NextGeometryIsPolygonIntCallback();
+  virtual void ChangeNavigationModeCallback();
+  virtual void UpdateColorCallback();
+  virtual void UpdateAlphaCallback();  
+  virtual void OKCallback();  
+
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
+  void UpdateModel();
+  void InitColor();
+  itkGetMacro(IsHide, bool);
 
 protected:
   /** Constructor */
@@ -101,6 +114,9 @@ private:
   VectorDataGlComponentType::Pointer m_VectorDataGlComponent;
   /** VectorDataTreeBrowser */
   VectorDataTreeBrowserType::Pointer m_VectorDataTreeBrowser;
+  /** Store the vector data representation color. */
+  ColorType m_Color;
+  bool m_IsHide;
 };
 } //end namespace otb
 

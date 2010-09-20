@@ -84,6 +84,24 @@ VectorizationController
   m_VectorDataActionHandler->SetView(m_View->GetImageView());
 }
 
+
+void VectorizationController::ChangeNavigationMode()
+{
+  if(m_ChangeRegionHandler->GetMouseButton() == 1)
+    {
+      m_ChangeRegionHandler->SetMouseButton(2);
+      m_ChangeScaledRegionHandler->SetMouseButton(2);
+      m_VectorDataActionHandler->SetAddMouseButton(1);
+    }
+  else
+    {
+      m_ChangeRegionHandler->SetMouseButton(1);
+      m_ChangeScaledRegionHandler->SetMouseButton(1);
+      m_VectorDataActionHandler->SetAddMouseButton(2);
+    }
+
+}
+
 void VectorizationController::RemoveDataNode(DataNodeType * node)
 {
   try
@@ -143,7 +161,7 @@ void VectorizationController::RemoveFieldFromDataNode(DataNodeType * node, const
 }
 
 void VectorizationController::RemovePointFromDataNode(DataNodeType * node,
-                                                      const long& index,
+                                                      const unsigned long& index,
                                                       bool interiorRing,
                                                       const unsigned int& interiorRingIndex)
 {
@@ -157,7 +175,7 @@ void VectorizationController::RemovePointFromDataNode(DataNodeType * node,
     }
 }
 void VectorizationController::UpdatePointFromDataNode(DataNodeType * node,
-                                                      const long& index,
+                                                      const unsigned long& index,
                                                       const PointType& point,
                                                       bool interiorRing,
                                                       const unsigned int& interiorRingIndex)
@@ -171,4 +189,37 @@ void VectorizationController::UpdatePointFromDataNode(DataNodeType * node,
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
+
+
+void VectorizationController::AddVectorData(VectorDataPointer vData)
+{
+ try
+    {
+      m_Model->AddVectorData(vData);
+    }
+ catch (itk::ExceptionObject& err)
+   {
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
+   }
+}
+
+
+void VectorizationController::OK()
+{
+ try
+    {
+      m_Model->OK();
+    }
+ catch (itk::ExceptionObject& err)
+   {
+     MsgReporter::GetInstance()->SendError(err.GetDescription());
+   }
+}
+
+void VectorizationController::FocusOnDataNode(const IndexType& index)
+{
+  m_Model->FocusOnDataNode(index);
+}
+
+
 } // end namespace otb

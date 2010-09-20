@@ -1,0 +1,111 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class FineCorrelationGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Fine Correlation}
+      callback {this->Quit()} open
+      xywh {684 440 270 370} type Double box PLASTIC_DOWN_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+    } {
+      Fl_Group {} {
+        label {Gaussian smoothing} open
+        xywh {10 21 250 84} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Check_Button vSmoothFixedImage {
+          label {Fixed image}
+          callback {if(vSmoothFixedImage->value())
+{
+vFixedSigma->activate();
+}
+else
+{
+vFixedSigma->deactivate();
+}}
+          tooltip {Apply gaussian smoothing to the fixed image} xywh {33 38 105 20} down_box DOWN_BOX value 1 labelsize 12
+        }
+        Fl_Value_Input vFixedSigma {
+          label Sigma
+          tooltip {Sigma for gaussian smoothing of the fixed image (expressed in pixels)} xywh {173 40 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
+        }
+        Fl_Check_Button vSmoothMovingImage {
+          label {Moving image}
+          callback {if(vSmoothMovingImage->value())
+{
+vMovingSigma->activate();
+}
+else
+{
+vMovingSigma->deactivate();
+}}
+          tooltip {Apply gaussian smoothing to the moving image} xywh {33 74 115 20} down_box DOWN_BOX value 1 labelsize 12
+        }
+        Fl_Value_Input vMovingSigma {
+          label Sigma
+          tooltip {Sigma for gaussian smoothing of the moving image (expressed in pixels)} xywh {173 75 50 20} labelsize 12 align 1 minimum 1e-06 maximum 1e+07 step 0.05 value 1
+        }
+      }
+      Fl_Group {} {
+        label {Initial offset} open
+        xywh {9 124 250 48} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Value_Input vInitialOffsetX {
+          label {First direction}
+          tooltip {Initial offset between fixed and moving image in first direction (taking account of image spacing)} xywh {40 146 50 20} labelsize 12 align 1 minimum -99999 maximum 1e+07 step 1
+        }
+        Fl_Value_Input vInitialOffsetY {
+          label {Second direction}
+          tooltip {Initial offset between fixed and moving image in second direction (taking account of image spacing)} xywh {173 146 50 20} labelsize 12 align 1 minimum -999999 maximum 1e+10 step 1
+        }
+      }
+      Fl_Group {} {
+        label Radius open
+        xywh {8 189 250 48} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Counter vCorrelationRadius {
+          label {Correlation Radius}
+          tooltip {Radius of the correlation window (in pixels)} xywh {25 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 3
+        }
+        Fl_Counter vSearchRadius {
+          label {Search Radius}
+          tooltip {Radius of the search window (in pixels)} xywh {158 208 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 50 step 1 value 2
+        }
+      }
+      Fl_Group {} {
+        label {Output grid} open
+        xywh {8 255 250 48} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Counter vGridStep {
+          label Step
+          tooltip {Step of the correlation grid (in pixels)} xywh {25 274 86 20} box PLASTIC_DOWN_BOX color 7 labelsize 12 align 1 minimum 1 maximum 1e+07 step 1 value 1
+        }
+        Fl_Value_Input vPrecision {
+          label Precision selected
+          tooltip {Precision of the deformation field in fraction of fixed image pixels (taking spacing into account)} xywh {175 276 50 20} labelsize 12 align 1 minimum 1e-09 step 0.05 value 0.1
+        }
+      }
+      Fl_Check_Button vWarpMovingImage {
+        label {Generate warped moving image}
+        tooltip {Generate the warped moving image according to the estimated deformation field} xywh {19 312 225 20} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Button bOk {
+        label {Save/Quit}
+        callback {OK();}
+        tooltip {Quit the viewer manager} xywh {90 339 95 25} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelfont 1 labelcolor 186
+      }
+    }
+  }
+  Function {FineCorrelationGroup()} {} {}
+  Function {~FineCorrelationGroup()} {open return_type virtual
+  } {}
+  Function {OK()} {open return_type {virtual void}
+  } {}
+  Function {Quit()} {open return_type {virtual void}
+  } {}
+} 

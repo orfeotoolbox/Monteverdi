@@ -67,7 +67,7 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
 
   if (pointModule->CheckMetadata())
     {
-    pointModule->bBrightness->value();
+    pointModule->bCalib->value();
     Fl::check();
     pointModule->bOK->do_callback();
     Fl::check();

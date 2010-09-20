@@ -19,18 +19,17 @@
 #ifndef __otbSpeckleFilteringControllerInterface_h
 #define __otbSpeckleFilteringControllerInterface_h
 
-#include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbSpeckleFilteringModel.h"
 
 namespace otb
 {
 class ITK_EXPORT SpeckleFilteringControllerInterface
-  : public ImageViewerFullResolutionEventsInterface
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef SpeckleFilteringControllerInterface      Self;
-  typedef ImageViewerFullResolutionEventsInterface Superclass;
+  typedef itk::Object                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 

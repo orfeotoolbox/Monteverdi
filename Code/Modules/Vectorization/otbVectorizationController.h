@@ -52,6 +52,8 @@ public:
   ::VisualizationModelType VisualizationModelType;
   typedef VectorizationModel
   ::VectorDataModelType VectorDataModelType;
+  typedef VectorDataModelType::VectorDataType VectorDataType;
+  typedef VectorDataType::Pointer VectorDataPointer; 
   typedef VectorizationModel
   ::VectorImageType VectorImageType;
 
@@ -88,15 +90,19 @@ public:
   virtual void SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value);
   virtual void RemoveFieldFromDataNode(DataNodeType * node, const std::string& name);
   virtual void RemovePointFromDataNode(DataNodeType * node,
-                                       const long& index,
+                                       const unsigned long& index,
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0);
   virtual void UpdatePointFromDataNode(DataNodeType * node,
-                                       const long& index,
+                                       const unsigned long& index,
                                        const PointType& point,
                                        bool interiorRing,
                                        const unsigned int& interiorRingIndex = 0);
-
+  virtual void ChangeNavigationMode();
+  virtual void AddVectorData(VectorDataPointer vData);
+  virtual void OK();
+  virtual void FocusOnDataNode(const IndexType& index);
+ 
 protected:
   /** Constructor */
   VectorizationController();

@@ -19,7 +19,6 @@
 #include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl.H>
 #include <algorithm>
-#include "otbFileName.h"
 #include "otbMsgReporter.h"
 
 #include "otbCachingModule.h"

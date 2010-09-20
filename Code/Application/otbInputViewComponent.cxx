@@ -282,7 +282,7 @@ void InputViewComponent::RemoveInput(Fl_Widget * w, void * v)
 
   int choiceVal = pthis->m_FlBrowser->value();
 
-  if (choiceVal <= pthis->m_FlBrowser->size())
+  if (choiceVal <= pthis->m_FlBrowser->size() && choiceVal != 0)
     {
     pthis->m_FlBrowser->value(choiceVal);
     pthis->m_FlBrowser->remove(choiceVal);

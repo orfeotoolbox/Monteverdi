@@ -1,0 +1,278 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class SpectrumModuleViewGroup {open
+} {
+  Function {Build()} {open return_type void
+  } {
+    Fl_Window wMainWindow {
+      label {Spectrum analysis module}
+      callback {this->Exit();} open
+      xywh {100 197 980 655} type Double box PLASTIC_DOWN_BOX color 255 selection_color 255 labelsize 12 labelcolor 186 align 80 hide resizable
+    } {
+      Fl_Group gImageViewer {open
+        tooltip {Right click to add a curve to the list.} xywh {265 0 501 540} box PLASTIC_DOWN_BOX color 48
+      } {}
+      Fl_Group gRightGroup {open
+        xywh {765 0 275 655} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+      } {
+        Fl_Button {} {
+          label Cancel
+          callback {this->Exit();}
+          xywh {890 620 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Group gIndex {open
+          xywh {785 415 185 25} box THIN_DOWN_FRAME
+        } {}
+        Fl_Group gScroll {
+          label {Navigation view} open
+          xywh {785 25 185 180} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Group gZoom {
+          label {Zoom view} open
+          xywh {785 225 185 180} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Button {} {
+          label {Export to CSV}
+          callback {this->ExportSpecralSpreadsheet();}
+          xywh {785 585 95 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button {} {
+          label {Save and Quit}
+          callback {this->SaveAndQuit();}
+          xywh {785 620 95 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button {} {
+          label Help
+          callback {this->ShowInfo();}
+          xywh {890 585 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+      }
+      Fl_Group gLeftGroup {
+        xywh {0 0 265 655} box PLASTIC_DOWN_BOX
+      } {
+        Fl_Tabs tCurveUses {open
+          xywh {0 0 265 655} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 10 labelcolor 186
+        } {
+          Fl_Group sCurveOptionPan {
+            label {Curve option} open
+            xywh {10 39 245 584} color 55 labelfont 1 labelsize 12 labelcolor 186
+          } {
+            Fl_Group sCurveOptionPanSub1 {
+              xywh {10 39 245 96}
+            } {
+              Fl_Box boxLabelColor {
+                label Color
+                xywh {156 39 34 16} labelsize 9 labelcolor 35
+              }
+              Fl_Box boxLabelVisible {
+                label Visible
+                xywh {191 39 35 16} labelsize 9 labelcolor 35
+              }
+              Fl_Box boxLabelDelete {
+                label {Del.}
+                xywh {18 39 23 16} labelsize 9 labelcolor 35
+              }
+            }
+            Fl_Group sCurveOptionPanSub2 {open
+              xywh {15 55 235 530} color 55
+            } {}
+            Fl_Button bResetList {
+              label {Reset list}
+              callback {ResetListCallBack();}
+              xywh {90 595 80 28} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186
+            }
+          }
+          Fl_Group sCurveSpectralAnglePan {
+            label {Spectral angle} open
+            xywh {10 30 255 625} color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+          } {
+            Fl_Group sCurveSpectralAnglePanSub1 {open
+              xywh {10 40 245 440} color 55
+            } {}
+            Fl_Button bDisplaySpectralAngle {
+              label Compute
+              callback {DisplaySpectralAngleCallBack();}
+              xywh {40 595 95 31} box PLASTIC_DOWN_BOX color 55 labelsize 12 labelcolor 186
+            }
+            Fl_Value_Slider OpacitySlider {
+              label Opacity
+              callback {OpacityCallBack();}
+              xywh {42 510 175 20} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 4 step 0.01 value 1 textsize 14
+            }
+            Fl_Value_Slider IntensitySlider {
+              label {Force contrast}
+              callback {IntensityCallBack();}
+              xywh {42 555 175 20} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 4 minimum 160 maximum 250 step 2 value 160 textsize 14
+            }
+            Fl_Box {} {
+              label {Spectral angle display}
+              xywh {117 487 29 14} labelsize 12 labelcolor 186
+            }
+            Fl_Round_Button cColorSpectralAngle {
+              label Color
+              callback {ColorOrBWSpectralAngleCallBack();
+if((int)cColorSpectralAngle->value() == 1){
+	IntensitySlider->hide();
+	cBWSpectralAngle->value(0);
+}else{
+	cColorSpectralAngle->value(1);
+}}
+              xywh {145 630 64 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
+            }
+            Fl_Round_Button cBWSpectralAngle {
+              label {B&&W}
+              callback {ColorOrBWSpectralAngleCallBack();
+if((int)cBWSpectralAngle->value() == 1){
+	cColorSpectralAngle->value(0);
+	IntensitySlider->show();
+}else{
+	cBWSpectralAngle->value(1);
+}}
+              xywh {80 630 64 15} down_box ROUND_DOWN_BOX value 1 labelsize 12 labelcolor 186
+            }
+            Fl_Button bClearSpectralAngle {
+              label Clear
+              callback {ClearSpectralAngleCallBack();}
+              xywh {145 594 90 31} box PLASTIC_DOWN_BOX color 55 labelsize 12 labelcolor 186
+            }
+          }
+        }
+      }
+      Fl_Group gBottomGroup {open
+        xywh {265 560 500 95} box PLASTIC_DOWN_BOX color 55 align 16
+      } {
+        Fl_Value_Slider RedSlider {
+          label Red
+          callback {ColorChannelCallBack();}
+          xywh {315 585 440 15} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 1 align 4 when 4 maximum 2 step 1 textsize 14
+        }
+        Fl_Value_Slider GreenSlider {
+          label Green
+          callback {ColorChannelCallBack();}
+          xywh {315 610 440 15} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 2 align 4 when 4 maximum 2 step 1 value 1 textsize 14
+        }
+        Fl_Value_Slider BlueSlider {
+          label Blue
+          callback {ColorChannelCallBack();}
+          xywh {315 635 440 15} type Horizontal box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 4 align 4 when 4 maximum 2 step 1 value 2 textsize 14
+        }
+        Fl_Box {} {
+          label {RGB display: channel selection}
+          xywh {534 565 29 16} labelsize 12 labelcolor 186
+        }
+      }
+    }
+    Fl_Window wCurveDisplayWindow {
+      label {Curve Display}
+      xywh {1258 843 620 295} type Double box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 80 hide resizable
+    } {
+      Fl_Group gCurves {open
+        xywh {10 10 435 275} box PLASTIC_DOWN_BOX
+      } {}
+      Fl_Check_Button mHideRollOverCurveButton {
+        label {Hide roll-overed curve}
+        callback {HideRollOverCurveCallBack();}
+        xywh {460 264 150 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 148
+      }
+      Fl_Check_Button bAutoGridStep {
+        label {Auto grid step}
+        callback {AutoGridCallBack()}
+        xywh {460 237 150 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 148
+      }
+      Fl_Roller bZoomRoulette {
+        label Zoom
+        callback {ZoomRouletteCallBack()}
+        xywh {556 60 25 120} labelsize 11 labelcolor 186 step 0.001
+      }
+      Fl_Roller bStepRoulette {
+        label Step
+        callback {StepRouletteCallBack()}
+        xywh {471 60 25 120} labelsize 11 labelcolor 186 step 0.001
+      }
+    }
+    Fl_Window wInfo {
+      label Info open
+      xywh {1242 206 290 235} type Double box PLASTIC_DOWN_BOX color 55 visible
+    } {
+      Fl_Output wHelpText {selected
+        xywh {5 11 280 218} type Multiline labeltype NO_LABEL align 0
+      }
+    }
+    Fl_Window wNotMultispectral {
+      label Info open
+      xywh {3 142 480 120} type Double box PLASTIC_DOWN_BOX color 55 hide
+    } {
+      Fl_Box {} {
+        label {This module cannot be used with mono channel images.}
+        xywh {240 25 29 16} labelfont 1 labelcolor 186
+      }
+      Fl_Button btNotMultispectral {
+        label Ok
+        callback {NotMultispectralCallBack();}
+        xywh {210 70 62 20} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+    }
+  }
+  Function {Exit()} {open return_type {virtual void}
+  } {}
+  Function {~SpectrumModuleViewGroup()} {open return_type virtual
+  } {}
+  Function {ViewerSetupOkCallback()} {open return_type {virtual void}
+  } {}
+  Function {HideRollOverCurveCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ZoomPlusCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ZoomLessCallBack()} {open return_type {virtual void}
+  } {}
+  Function {GridStep1CallBack()} {open return_type {virtual void}
+  } {}
+  Function {GridStep2CallBack()} {open return_type {virtual void}
+  } {}
+  Function {GridStep3CallBack()} {open return_type {virtual void}
+  } {}
+  Function {GridStep4CallBack()} {open return_type {virtual void}
+  } {}
+  Function {GridStep5CallBack()} {open return_type {virtual void}
+  } {}
+  Function {AutoScaleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {AutoGridCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ResetListCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ZoomRouletteCallBack()} {open return_type {virtual void}
+  } {}
+  Function {StepRouletteCallBack()} {open return_type {virtual void}
+  } {}
+  Function {DisplaySpectralAngleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {OpacityCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ExportSpectralImageCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ExportSpecralSpreadsheet()} {open return_type {virtual void}
+  } {}
+  Function {IntensityCallBack()} {open return_type {virtual void}
+  } {}
+  Function {NotMultispectralCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ColorChannelCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ColorOrBWSpectralAngleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {SaveAndQuit()} {open return_type {virtual void}
+  } {}
+  Function {ClearSpectralAngleCallBack()} {open return_type {virtual void}
+  } {}
+  Function {ShowInfo()} {open return_type {virtual void}
+  } {}
+} 

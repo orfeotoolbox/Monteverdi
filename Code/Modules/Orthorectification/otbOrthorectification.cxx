@@ -26,7 +26,6 @@
 #include <FL/Enumerations.H>
 
 #include "otbMacro.h"
-#include "otbPerBandVectorImageFilter.h"
 #include "itkExceptionObject.h"
 
 #include "elevation/ossimElevManager.h"
@@ -73,11 +72,9 @@ Orthorectification::Orthorectification()
   m_MaxTileSize = 256.;
   guiShowDEM->hide();
 
+  m_OrthoFilter = OrthorectificationFilterType::New();
+  
   m_HasOutput = false;
-
-  //Instanciate Filter
-  //m_OrthorectificationFilter = OrthorectificationFilterType::New();
-  //m_PerBandFilter     = PerBandFilterType::New();
 }
 void
 Orthorectification
@@ -676,6 +673,7 @@ Orthorectification
 ::CheckMapParameters()
 {
   int res = 0;
+  std::cout << "this->GetMapType() "<< this->GetMapType()<< std::endl;
   switch (this->GetMapType())
     {
     case UTM:
@@ -688,7 +686,7 @@ Orthorectification
         UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
         utmProjection->SetZone(atoi(guiUTMZone->value()));
         utmProjection->SetHemisphere(hem);
-        res = this->CreateOutput<UtmProjectionType>(utmProjection);
+        m_CartographicProjectionRef = utmProjection->GetWkt();
         }
       else
         {
@@ -703,16 +701,14 @@ Orthorectification
       {
       typedef Lambert2EtenduInverseProjection Lambert2Type;
       Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
-      res = this->CreateOutput<Lambert2Type>(lambert2Projection);
-
+      m_CartographicProjectionRef = lambert2Projection->GetWkt();
       break;
       }
     case LAMBERT3CARTOSUD:
       {
       typedef Lambert3CartoSudInverseProjection Lambert3CartoSudType;
       Lambert3CartoSudType::Pointer lambert3CartoSudProjection = Lambert3CartoSudType::New();
-      res = this->CreateOutput<Lambert3CartoSudType>(lambert3CartoSudProjection);
-
+      m_CartographicProjectionRef = lambert3CartoSudProjection->GetWkt();
       break;
       }
     case TRANSMERCATOR:
@@ -727,7 +723,7 @@ Orthorectification
           transMercatorProjection->SetParameters(strtod(guiTRANSMERCATOREast->value(), NULL),
                                                  strtod(guiTRANSMERCATORNorth->value(), NULL),
                                                  strtod(guiTRANSMERCATORScale->value(), NULL));
-          res = this->CreateOutput<TransMercatorProjectionType>(transMercatorProjection);
+          m_CartographicProjectionRef = transMercatorProjection->GetWkt();
           }
         else
           {
@@ -744,7 +740,11 @@ Orthorectification
       MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
       res = 1;
       break;
-    }
+    } 
+  
+  // lauch the process
+  this->CreateOutput();
+  
   return res;
 }
 
@@ -758,98 +758,98 @@ Orthorectification
     {
     case LINEAR_:
       {
-      typedef itk::LinearInterpolateImageFunction<SingleImageType, double> LinearType;
+      typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearType;
       LinearType::Pointer interp = LinearType::New();
       m_Interp = interp;
       break;
       }
-    case NEAREST:
-      {
-      typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
-      NearestType::Pointer interp = NearestType::New();
-      m_Interp = interp;
-      break;
-      }
-    case SINC:
-      {
-      itk::OStringStream oss;
-      oss.str("");
-      oss << guiSincRadius->value();
-      if (strcmp("", oss.str().c_str()) != 0)
-        {
-        oss.str("");
-        oss << guiSincWindow->value();
-        switch (guiSincWindow->value())
-          {
-          case 0:
-            {
-            typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
-            BlackmanType::Pointer interp = BlackmanType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          case 1:
-            {
+//     case NEAREST:
+//       {
+//       typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
+//       NearestType::Pointer interp = NearestType::New();
+//       m_Interp = interp;
+//       break;
+//       }
+//     case SINC:
+//       {
+//       itk::OStringStream oss;
+//       oss.str("");
+//       oss << guiSincRadius->value();
+//       if (strcmp("", oss.str().c_str()) != 0)
+//         {
+//         oss.str("");
+//         oss << guiSincWindow->value();
+//         switch (guiSincWindow->value())
+//           {
+//           case 0:
+//             {
+//             typedef WindowedSincInterpolateImageBlackmanFunction<SingleImageType> BlackmanType;
+//             BlackmanType::Pointer interp = BlackmanType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           case 1:
+//             {
 
-            typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
-            CosineType::Pointer interp = CosineType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          case 2:
-            {
-            typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
-            GaussianType::Pointer interp = GaussianType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          case 3:
-            {
-            typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
-            HammingType::Pointer interp = HammingType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          case 4:
-            {
-            typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
-            LanczosType::Pointer interp = LanczosType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          case 5:
-            {
-            typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
-            WelchType::Pointer interp = WelchType::New();
-            interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
-            m_Interp = interp;
-            break;
-            }
-          default:
-            MsgReporter::GetInstance()->SendError("Problem with interpolator type, please contact developpers");
-            break;
-          }
-        }
-      else
-        {
-        MsgReporter::GetInstance()->SendError("Invalid ionterpolator Radius...");
-        }
-      break;
-      }
-    case SPLINES:
-      {
-      typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
-      SplineType::Pointer interp = SplineType::New();
-      interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()));
-      m_Interp = interp;
+//             typedef WindowedSincInterpolateImageCosineFunction<SingleImageType> CosineType;
+//             CosineType::Pointer interp = CosineType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           case 2:
+//             {
+//             typedef WindowedSincInterpolateImageGaussianFunction<SingleImageType> GaussianType;
+//             GaussianType::Pointer interp = GaussianType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           case 3:
+//             {
+//             typedef WindowedSincInterpolateImageHammingFunction<SingleImageType> HammingType;
+//             HammingType::Pointer interp = HammingType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           case 4:
+//             {
+//             typedef WindowedSincInterpolateImageLanczosFunction<SingleImageType> LanczosType;
+//             LanczosType::Pointer interp = LanczosType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           case 5:
+//             {
+//             typedef WindowedSincInterpolateImageWelchFunction<SingleImageType> WelchType;
+//             WelchType::Pointer interp = WelchType::New();
+//             interp->SetRadius(static_cast<unsigned int>(guiSincRadius->value()));
+//             m_Interp = interp;
+//             break;
+//             }
+//           default:
+//             MsgReporter::GetInstance()->SendError("Problem with interpolator type, please contact developpers");
+//             break;
+//           }
+//         }
+//       else
+//         {
+//         MsgReporter::GetInstance()->SendError("Invalid ionterpolator Radius...");
+//         }
+//       break;
+//       }
+//     case SPLINES:
+//       {
+//       typedef otb::BSplineInterpolateImageFunction<SingleImageType, double, double> SplineType;
+//       SplineType::Pointer interp = SplineType::New();
+//       interp->SetSplineOrder(static_cast<unsigned int>(guiSplineOrder->value()));
+//       m_Interp = interp;
 
-      break;
-      }
+//       break;
+//       }
     default:
       MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
       res = 1;
@@ -858,52 +858,29 @@ Orthorectification
   return res;
 }
 
-template <class TMapProjection>
-int
-Orthorectification
-::CreateOutput(TMapProjection* mapProj)
+void
+Orthorectification::
+CreateOutput()
 {
-  int res = 0;
-
-  //TODO : for the moment Handle Only 16 bits image
-  //if (gui16bits->value()==1)
-  res = this->GenericCreateOutput<SingleImageType, SingleImageType, ImageType, ImageType, TMapProjection>(mapProj);
-
-  if (res != 0)
-    {
-    return res;
-    }
-
-  return res;
-
-}
-
-template<class TInputImage, class TOutputImage, class TInputVectorImage, class TOutputVectorImage, class TMapProjection>
-int
-Orthorectification::GenericCreateOutput(TMapProjection *mapProj)
-{
-  ImagePointerType image = m_InputImage;
-
-  typedef OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection> OrthorectificationFilterType;
-  typename OrthorectificationFilterType::Pointer orthoRectifFilter = OrthorectificationFilterType::New();
   IndexType start;
   start[0] = 0;
   start[1] = 0;
-  typename OrthorectificationFilterType::OriginPointType origin;
-  typedef typename OrthorectificationFilterType::OriginPointType OriginPointType;
-  origin = static_cast<OriginPointType>(m_OutputOrigin);
 
-  orthoRectifFilter->SetOutputStartIndex(start);
-  orthoRectifFilter->SetSize(m_OutputSize);
-  orthoRectifFilter->SetOutputSpacing(m_OutputSpacing);
-  orthoRectifFilter->SetOutputOrigin(origin);
-  orthoRectifFilter->SetMapProjection(mapProj);
-  orthoRectifFilter->SetInterpolator(m_Interp);
+  OriginPointType origin = static_cast<OriginPointType>(m_OutputOrigin); 
 
+  m_OrthoFilter->SetInput(m_InputImage);
+  m_OrthoFilter->SetOutputStartIndex(start);
+  m_OrthoFilter->SetOutputSize(m_OutputSize);
+  m_OrthoFilter->SetOutputSpacing(m_OutputSpacing);
+  m_OrthoFilter->SetOutputOrigin(origin);
+  m_OrthoFilter->SetOutputProjectionRef(m_CartographicProjectionRef);
+  m_OrthoFilter->SetInterpolator(m_Interp);
+  m_OrthoFilter->SetDeformationFieldSpacing(4.*m_OutputSpacing);
+  
   // Set DEM or elvation average value.
   if (guiUseAverageElevation->value() == 1 && guiUseDEM->value() == 0)
     {
-    orthoRectifFilter->SetAverageElevation(strtod(guiAvElev->value(), NULL));
+    m_OrthoFilter->SetAverageElevation(strtod(guiAvElev->value(), NULL));
     }
   if (guiUseDEM->value() == 1 && guiUseAverageElevation->value() == 0)
     {
@@ -913,21 +890,12 @@ Orthorectification::GenericCreateOutput(TMapProjection *mapProj)
       }
     else
       {
-      orthoRectifFilter->SetDEMDirectory(guiDEMPath->value());
+      m_OrthoFilter->SetDEMDirectory(guiDEMPath->value());
       }
     }
 
-  typedef PerBandVectorImageFilter<TInputVectorImage, TOutputVectorImage,
-      OrthorectificationFilterType> PerBandFilterType;
-  typename PerBandFilterType::Pointer perBandFilter = PerBandFilterType::New();
-  perBandFilter->SetFilter(orthoRectifFilter);
-  perBandFilter->SetInput(image);
-
-  m_Output = perBandFilter->GetOutput();
-  m_PerBandFilter = perBandFilter.GetPointer();
+  m_Output = m_OrthoFilter->GetOutput();
   m_HasOutput = true;
-
-  return 0;
 }
 
 void
@@ -1156,7 +1124,7 @@ Orthorectification::LongLatPointToCarto(ForwardSensorInputPointType latLongPoint
 
       Lambert2Type::OutputPointType cartoPoint;
       cartoPoint = lambert2Projection->TransformPoint(latLongPoint);
-
+      
       outVectPoint[0] = static_cast<double>(cartoPoint[0]);
       outVectPoint[1] = static_cast<double>(cartoPoint[1]);
 

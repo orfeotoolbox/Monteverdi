@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbProjectionModel.h"
 #include <ogr_spatialref.h>
+#include "otbMapProjections.h"
+#include <string>
 
 namespace otb
 {
@@ -29,9 +31,9 @@ ProjectionModel::ProjectionModel()
   m_OutputChanged    = false;
   m_TransformChanged = false;
   m_TempTransformChanged = false;
+  m_UseDEM               = false;
 
   m_Resampler = ResampleFilterType::New();
-  m_PerBander = PerBandFilterType::New();
 
   m_Transform        = TransformType::New();
   m_InverseTransform = TransformType::New();
@@ -44,6 +46,10 @@ ProjectionModel::
 ~ProjectionModel()
 {}
 
+///////////////////////////////////////////////////////////////
+/**     CASE : input transform is not allowed */
+/////////////// /////////////// /////////////// /////////////// 
+
 /**
  * Update the input Projection Ref
  */
@@ -51,16 +57,13 @@ void
 ProjectionModel
 ::UpdateInputUTMTransform(int zone, bool north)
 {
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetUTM(zone, north);
-
-  char * utmRef = NULL;
-  oSRS.exportToWkt(&utmRef);
-
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+  
+  utmProjection->SetZone(zone);
+  utmProjection->SetHemisphere(north);
+  std::string utmRef = utmProjection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, utmRef);
@@ -71,10 +74,8 @@ ProjectionModel
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
 
 /**
@@ -83,23 +84,10 @@ ProjectionModel
 void ProjectionModel
 ::InitializeInputLambertIITransform()
 {
-  // Projection Parameters
-  double stdParallel1  = 45.89891944;
-  double stdParallel2  = 47.69601389;
-  double originLat     = 46.8;
-  double originLong    = 2.33722778;
-  double falseEasting  = 600000;
-  double falseNorthing = 2200000;
-
-  // Build the Output Projection Ref
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Lambert II ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetLCC(stdParallel1, stdParallel2, originLat, originLong, falseEasting, falseNorthing);
-
-  char * lambertRef = NULL;
-  oSRS.exportToWkt(&lambertRef);
-
+  typedef Lambert2EtenduForwardProjection Lambert2Type;
+  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
+  std::string  lambertRef = lambert2Projection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, lambertRef);
@@ -110,10 +98,8 @@ void ProjectionModel
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
 
 /**
@@ -122,34 +108,28 @@ void ProjectionModel
 void ProjectionModel
 ::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
-  //Get the parameters
-  double originLat   = 49.83;
-  double originLong  = 6.16;
-
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Transmercator ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetTM(originLat, originLong, scale, falseEasting, falseNorthing);
-
-  char * tmRef = NULL;
-  oSRS.exportToWkt(&tmRef);
-
+  typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
+  TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
+  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  std::string tmRef =   transMercatorProjection->GetWkt();
+  
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, tmRef);
 
   // Up To date the transform
+  m_Transform->SetInputProjectionRef(tmRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
 
   m_TempTransformChanged = true;
-  //  m_TransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-  //m_TransformChanged = false;
 }
+
+//////////////////////////////////////////////////////////////////
+/**     END CASE : input transform is not accessible */
+//////////////////////////////////////////////////////////////////
 
 /**
  *
@@ -158,22 +138,20 @@ void
 ProjectionModel
 ::UpdateUTMTransform(int zone, bool north)
 {
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetUTM(zone, north);
-
-  oSRS.exportToWkt(&m_OutputProjectionRef /*utmRef*/);
-
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+  
+  utmProjection->SetZone(zone);
+  utmProjection->SetHemisphere(north);
+  m_OutputProjectionRef = utmProjection->GetWkt();
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
 
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
-
+  
   // Get the transform
   m_Transform->GetInverse(m_InverseTransform);
 
@@ -192,20 +170,9 @@ ProjectionModel
 void ProjectionModel
 ::InitializeLambertIITransform()
 {
-  // Projection Parameters
-  double stdParallel1  = 45.89891944;
-  double stdParallel2  = 47.69601389;
-  double originLat     = 46.8;
-  double originLong    = 2.33722778;
-  double falseEasting  = 600000;
-  double falseNorthing = 2200000;
-
-  // Build the Output Projection Ref
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Lambert II ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetLCC(stdParallel1, stdParallel2, originLat, originLong, falseEasting, falseNorthing);
-  oSRS.exportToWkt(&m_OutputProjectionRef);
+  typedef Lambert2EtenduForwardProjection Lambert2Type;
+  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
+  m_OutputProjectionRef = lambert2Projection->GetWkt();
 
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
@@ -230,18 +197,11 @@ void ProjectionModel
 void ProjectionModel
 ::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
-  //Get the parameters
-  double originLat   = 49.83;
-  double originLong  = 6.16;
-
-  // Build the Output Projection Ref
-  // Suppose that the transformation choosen is UTM : 31 , North:
-  OGRSpatialReference oSRS;
-  oSRS.SetProjCS("Transmercator ");
-  oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.SetTM(originLat, originLong, scale, falseEasting, falseNorthing);
-  oSRS.exportToWkt(&m_OutputProjectionRef);
-
+  typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
+  TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
+  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  m_OutputProjectionRef = transMercatorProjection->GetWkt();
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -268,11 +228,12 @@ ProjectionModel
 {
   // Build the Output Projection Ref
   // WGS84
+  char * wgs84Ref;
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  oSRS.exportToWkt(&m_OutputProjectionRef);
-  std::cout << "m_OutputProjectionRef " << m_OutputProjectionRef << std::endl;
-
+  oSRS.exportToWkt(&wgs84Ref);
+  m_OutputProjectionRef = wgs84Ref;
+  
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -364,24 +325,6 @@ void ProjectionModel
       up = i;
       }
     }
-//   // size image in carto coordinate :
-//   double sizeXcarto =  maxX-minX;
-//   // - because of the difference of origin for Y (image vs. carto)
-//   double sizeYcarto =  -(maxY-minY);
-
-//   // X
-//   double alphaX1 = vcl_atan2( vcl_abs(voutput[right][1]-voutput[up][1]), vcl_abs(voutput[right][0]-voutput[up][0]) );
-//   double alphaX2 = vcl_atan2( vcl_abs(voutput[left][1]-voutput[up][1]), vcl_abs(voutput[left][0]-voutput[up][0]) );
-
-//   m_OutputSpacing[0] = sizeXcarto/((static_cast<double>(size[0])* vcl_cos( alphaX1 )) + (static_cast<double>(size[1])* vcl_cos( alphaX2 )));
-//   m_OutputSize[0]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeXcarto/m_OutputSpacing[0])) );
-
-//   // Y
-//   double alphaY1 = vcl_atan2( vcl_abs(voutput[up][1]-voutput[left][1]), vcl_abs(voutput[up][0]-voutput[left][0]) );
-//   double alphaY2 = vcl_atan2( vcl_abs(voutput[down][1]-voutput[left][1]), vcl_abs(voutput[down][0]-voutput[left][0]) );
-
-//   m_OutputSpacing[1] = sizeYcarto/((static_cast<double>(size[1])* vcl_cos( alphaY1 )) + (static_cast<double>(size[0])* vcl_cos( alphaY2 )));
-//   m_OutputSize[1]    = static_cast<unsigned int>(vcl_floor(std::abs(sizeYcarto/m_OutputSpacing[1])) );
 
   // Compute the output size
   double sizeCartoX = vcl_abs(maxX - minX);
@@ -474,28 +417,57 @@ void
 ProjectionModel
 ::ReprojectImage()
 {
-  m_Resampler->SetTransform(m_InverseTransform);
-  m_Resampler->SetSize(m_OutputSize);
+  // Fill the resampler parameters
+  m_Resampler->SetInput(m_InputImage);
+  m_Resampler->SetOutputSize(m_OutputSize);
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
-  m_PerBander->SetInput(m_InputImage);
-  m_PerBander->SetFilter(m_Resampler);
-  m_Output = m_PerBander->GetOutput();
+  m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
+  std::cout <<"Resampler PR \n "<<m_Transform->GetOutputProjectionRef() << std::endl;
+  // Deformation grid spacing : 4 times the output spacing
+  m_Resampler->SetDeformationFieldSpacing(4.*m_OutputSpacing);
+  
+  // Use the DEM
+  if(m_UseDEM)
+    {
+    m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
+    }
+  
+  // Default padding value 
+  InputImageType::PixelType defaultValue;
+  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
+                                                     m_InputImage->GetNumberOfComponentsPerPixel());
+  m_Resampler->SetEdgePaddingValue(defaultValue);
 
-  m_Output->UpdateOutputInformation();
-  // Report projection ref (not done by the resample filter)
-  itk::MetaDataDictionary& dict = m_Output->GetMetaDataDictionary();
-  std::string              projectionRef = m_Transform->GetOutputProjectionRef();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-  m_Output->SetMetaDataDictionary(dict);
-  m_Output->UpdateOutputInformation();
-
+  m_Output        = m_Resampler->GetOutput();
   m_OutputChanged = true;
   this->NotifyAll();
-
-  // The SetSizeMacro doesn't recall the update on the resampler when size is changed
-  m_Resampler = ResampleFilterType::New();
+  m_OutputChanged = false;
 }
+
+/**
+ *
+ */
+void
+ProjectionModel
+::SetDEMPath(std::string dem)
+{
+  if(m_UseDEM)
+    {
+    // Update the transform and the inverse one
+    m_Transform->SetDEMDirectory(dem);
+    m_Transform->InstanciateTransform();
+    m_Transform->GetInverse(m_InverseTransform);
+    }
+  else
+    {
+    // Update the transform and the inverse one
+    m_Transform->SetDEMDirectory("");
+    m_Transform->InstanciateTransform();
+    m_Transform->GetInverse(m_InverseTransform);
+    }
+}
+
 
 /**
  *

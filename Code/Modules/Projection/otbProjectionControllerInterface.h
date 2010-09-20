@@ -58,6 +58,8 @@ public:
   virtual void InitializeInputLambertIITransform() = 0;
   virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing) = 0;
   virtual void InitializeWGS84Transform() = 0;
+  virtual void SetDEMPath(std::string dem) = 0;
+  
 
 protected:
   /** Constructor */

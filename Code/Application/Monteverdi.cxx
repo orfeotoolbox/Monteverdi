@@ -62,7 +62,6 @@
 #include "otbConcatenateModule.h"
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
-#include "otbAlgebraModule.h"
 #include "otbKMeansModule.h"
 #include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
@@ -72,10 +71,16 @@
 #include "otbObjectCountingModule.h"
 #include "otbCommandLineArgumentParser.h"
 #include "otbTileExportModule.h"
+#include "otbObjectLabelingModule.h"
+#include "otbFineCorrelationModule.h"
+#include "otbVectorizationModule.h"
+#include "otbSpectrumModule.h"
+#include "otbBandMathModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
 #endif
+
 
 int main(int argc, char* argv[])
 {
@@ -88,6 +93,7 @@ int main(int argc, char* argv[])
 
   parser->AddInputImage(false); //Optional parameter
   parser->AddOption("--InputVectorData", "input vector data file name ", "-ivd", 1, false);
+  parser->AddOptionNParams("--ImageList", "image list", "-iml", false);
   parser->SetProgramDescription("Monteverdi launcher");
   //   parser->AddOption("--NoSplashScreen", "Deactivate the splash screen","-NoSplash", 0, false);
 
@@ -131,6 +137,7 @@ int main(int argc, char* argv[])
   view->SetMonteverdiController(controller);
 
   // Register modules
+  /***********  File menu *******************/
   model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
   model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image",
@@ -138,33 +145,46 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
-
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
+#ifdef OTB_USE_CURL
+  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
+#endif
 
+  /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
+  model->RegisterModule<otb::SpectrumModule>("SpectralViewer", otbGetTextMacro("Visualization/Spectral Viewer"));
 
+  
+  /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",
                                                        otbGetTextMacro("Calibration/Optical Calibration"));
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
-
-  model->RegisterModule<otb::AlgebraModule>("Algebra", otbGetTextMacro("Filtering/Band math"));
+  
+  /***********  Filtering menu *******************/
+  model->RegisterModule<otb::BandMathModule>("BandMath", otbGetTextMacro("Filtering/BandMath"));
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
+  model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
+  model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));
+
+  /***********  SAR menu *******************/
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
-
+  
+  /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              otbGetTextMacro("Learning/SVM classification"));
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
                                                               otbGetTextMacro(
-                                                                "Learning/SVM classification (EXPERIMENTAL)"));
+									      "Learning/SVM classification (EXPERIMENTAL)"));
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
-
+  
+  /***********  Geometry menu *******************/
   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
                                                        otbGetTextMacro("Geometry/Orthorectification"));
   model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
@@ -172,12 +192,12 @@ int main(int argc, char* argv[])
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               otbGetTextMacro("Geometry/Homologous points extraction"));
+  
+  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", otbGetTextMacro("Learning/Object Labeling"));
+  
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
                                                      otbGetTextMacro("Geometry/GCP to sensor model"));
 
-#ifdef OTB_USE_CURL
-  model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
-#endif
 
   // Launch Monteverdi
   view->InitWidgets();
@@ -252,6 +272,29 @@ int main(int argc, char* argv[])
     readerModule->Analyse();
     readerModule->bOk->do_callback();
     Fl::check();
+    }
+
+  if (parseResult->IsOptionPresent("--ImageList"))
+    {
+      int numberOfImage = parseResult->GetNumberOfParameters("--ImageList");
+      for (int i = 0; i < numberOfImage; i++)
+        {
+        Fl::check();
+        std::vector<std::string> moduleVector;
+
+        // Get the ModuleInstanceId
+        std::string readerId = model->CreateModuleByKey("Reader");
+
+        // Get the module itself
+        otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+        // Simulate file chooser and ok callback
+        otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+        readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+        readerModule->Analyse();
+        readerModule->bOk->do_callback();
+        Fl::check();
+        }
     }
 
   return Fl::run();

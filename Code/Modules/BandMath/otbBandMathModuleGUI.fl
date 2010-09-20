@@ -1,0 +1,88 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class BandMathModuleGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {BandMath module}
+      callback {this->Quit()} open
+      xywh {134 201 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
+    } {
+      Fl_Button ui_Ok {
+        label {Save/Quit}
+        callback {OK();}
+        xywh {275 385 100 25} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
+      }
+      Fl_Input ui_Expression {
+        label {Enter Your Formula :}
+        callback {LiveCheck();}
+        xywh {10 40 630 25} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelcolor 186 align 1 when 1
+      }
+      Fl_Choice ui_ImageNameList {
+        label {Rename Variable : } open
+        xywh {10 300 630 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelcolor 186 align 5
+      } {}
+      Fl_Input ui_NewVarName {
+        label {New Name : }
+        xywh {210 335 150 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+      Fl_Button ui_ChangeVarName {
+        label OK
+        callback {ChangeVarName();}
+        xywh {405 335 35 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+      Fl_Browser ui_VarNames {
+        label {Variable Names:}
+        callback {QuickAdd(ui_VarNames->value());}
+        xywh {465 110 180 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+      }
+      Fl_Browser ui_ImageNames {
+        label {Image Names:}
+        callback {QuickAdd(ui_ImageNames->value());}
+        xywh {5 110 460 165} type Hold box PLASTIC_DOWN_BOX selection_color 137 labelfont 1 labelcolor 186 align 1
+      }
+      Fl_Button ui_Help {
+        label Help
+        callback {if(ui_Help->value())
+{
+ui_HelpWindow->position(guiMainWindow->x() + guiMainWindow->w(),guiMainWindow->y());
+ui_HelpWindow->show();
+}
+else
+{
+ui_HelpWindow->hide();
+}} selected
+        xywh {570 360 65 50} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+    }
+    Fl_Window ui_HelpWindow {
+      label Help open
+      xywh {790 202 335 425} type Double visible
+    } {
+      Fl_Output ui_HelpText {
+        xywh {0 0 335 425} type Multiline
+      }
+    }
+  }
+  Function {BandMathModuleGUI()} {} {}
+  Function {~BandMathModuleGUI()} {return_type virtual
+  } {}
+  Function {OK()} {return_type {virtual void}
+  } {}
+  Function {Quit()} {return_type {virtual void}
+  } {}
+  Function {ChangeVarName()} {return_type {virtual void}
+  } {}
+  Function {QuickAdd(unsigned int idx)} {return_type {virtual void}
+  } {}
+  Function {InitHelp()} {return_type {virtual void}
+  } {}
+  Function {LiveCheck()} {open return_type {virtual void}
+  } {}
+} 

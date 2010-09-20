@@ -35,6 +35,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbForwardSensorModel.h"
 #include "itkInterpolateImageFunction.h"
+#include "otbMapProjections.h"
 
 #include "otbMVCModel.h"
 #include "otbTypeManager.h"
@@ -96,8 +97,15 @@ public:
   typedef InverseSensorType::InputPointType  InverseSensorInputPointType;
   typedef InverseSensorType::OutputPointType InverseSensorOutputPointType;
 
+  /** Orthoirectification filter */
+  typedef otb::UtmInverseProjection                DefaultMapType;
+  typedef OrthoRectificationFilter<ImageType,
+                                   ImageType, 
+                                   DefaultMapType> OrthorectificationFilterType;
+  typedef OrthorectificationFilterType::PointType  OriginPointType;
+  
   /** Interpolator definition*/
-  typedef itk::InterpolateImageFunction<SingleImageType, double> InterpType;
+  typedef itk::InterpolateImageFunction<ImageType, double> InterpType;
   typedef InterpType::Pointer                                    InterpPointerType;
 
   // input image Accessor
@@ -148,13 +156,8 @@ protected:
   // Check the map parameters.
   int CheckMapParameters();
 
-  // Create the output
-  template<class TMapProjection> int CreateOutput(TMapProjection* mapProj);
-
   // Create output with template image type (for multiple possible working pixel type)
-  template<class TSingleInputImage, class TSingleOutputImage, class TInputVectorImage, class TOutputVectorImage,
-      class TMapProjection>
-  int GenericCreateOutput(TMapProjection* mapProj);
+  void CreateOutput();
 
   // Change from image to carto point
   DoubleVectorType ImageToCarto(ForwardSensorInputPointType point);
@@ -224,20 +227,19 @@ private:
   SpacingType       m_DEMSpacing;
 
   // Store ref Zone and Hemisphere
-  int    m_UTMZoneRef;
-  char   m_UTMHemRef;
-  int    m_TileNumber;
-  double m_MaxTileSize;
+  int               m_UTMZoneRef;
+  char              m_UTMHemRef;
+  int               m_TileNumber;
+  double            m_MaxTileSize;
 
-  //Filter Instanciation
-  //OrthorectificationFilterType::Pointer m_OrthorectificationFilter;
-
-  // This pointer is used to store the main filter of the application
-  itk::ProcessObject::Pointer m_PerBandFilter;
-
+  // 
+  std::string       m_CartographicProjectionRef;
+  
   //Input & Outputs Images
-  ImagePointerType m_InputImage;
-  ImagePointerType m_Output;
+  ImagePointerType  m_InputImage;
+  ImagePointerType  m_Output;
+
+  OrthorectificationFilterType::Pointer m_OrthoFilter;
 
   // Flag to determine if there is an output
   bool m_HasOutput;

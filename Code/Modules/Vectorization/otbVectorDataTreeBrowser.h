@@ -76,6 +76,10 @@ public:
   typedef typename FieldEditorType
   ::Pointer FieldEditorPointerType;
 
+  typedef typename PolygonType::RegionType                 RegionType;
+  typedef typename RegionType::SizeType                    SizeType;
+  typedef typename RegionType::IndexType                    IndexType;
+
 /** RTT type info */
   itkTypeMacro(VectorDataTreeBrowser, itk::Object);
 
@@ -149,6 +153,10 @@ private:
   static void DeleteFieldCallback(Fl_Widget*w, void *data);
 
   void DeleteSelectedField();
+
+  static void FocusCallback(Fl_Widget* w, void* data);
+
+  void FocusOnSelectedGeometry();
 
   void PopupMenu(FluNodeType * node);
 
