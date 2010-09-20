@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -14,7 +14,7 @@ class MonteverdiViewGroup {open
     Fl_Window wMainWindow {
       label Monteverdi
       callback {this->OpenEraseCaching();} open
-      xywh {436 172 480 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {436 172 480 600} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Menu_Bar mMenuBar {open
         xywh {0 0 480 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 textsize 12 textcolor 186
@@ -25,7 +25,7 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wHelpWindow {
       label {Help me...} open
-      xywh {34 192 850 720} type Double box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {34 192 850 720} type Double box PLASTIC_DOWN_BOX color 47 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Text_Display gHelpText {
         xywh {0 0 830 720} box PLASTIC_DOWN_BOX color 55 selection_color 186 labelfont 5 labelsize 12 labelcolor 186 textfont 4 textcolor 186
@@ -73,7 +73,7 @@ class MonteverdiViewGroup {open
     Fl_Window wOutputRenameWindow {
       label {Output  renamer}
       callback {wOutputRenameWindow->hide();}
-      xywh {595 524 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+      xywh {595 524 385 180} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Output gOutputRenameRoot {
         label {Root  instance label}
@@ -101,17 +101,22 @@ class MonteverdiViewGroup {open
     Fl_Window wEraseCaching2Window {
       label {Erase the caching directory?}
       callback {this->Quit();} open
-      xywh {521 304 330 60} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+      xywh {531 309 410 55} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
     } {
       Fl_Return_Button bYes {
         label Yes
         callback {this->EraseCaching(true);}
-        xywh {30 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {165 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bNo {
         label No
         callback {this->EraseCaching(false);}
-        xywh {190 20 115 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {290 20 115 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Return_Button bCancel {
+        label Cancel
+        callback {this->CancelEraseCaching();}
+        xywh {15 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
@@ -127,6 +132,8 @@ class MonteverdiViewGroup {open
   } {}
   Function {EraseCaching(bool erase)} {return_type {virtual void}
   } {}
-  Function {OpenEraseCaching()} {selected return_type {virtual void}
+  Function {OpenEraseCaching()} {return_type {virtual void}
+  } {}
+  Function {CancelEraseCaching()} {selected return_type {virtual void}
   } {}
 } 

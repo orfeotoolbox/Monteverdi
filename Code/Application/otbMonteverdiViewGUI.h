@@ -118,6 +118,9 @@ protected:
   /** Open the pop up image to choose if we erase the caching directory */
   void EraseCaching(bool erase);
 
+  /** Close the pop up image and return to the main window */
+  void CancelEraseCaching();
+  
   /** Create a module instance according to its name */
   void CreateModuleByKey(const char * modulekey);
 
