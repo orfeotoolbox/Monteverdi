@@ -101,7 +101,7 @@ class MonteverdiViewGroup {open
     Fl_Window wEraseCaching2Window {
       label {Erase the caching directory?}
       callback {this->Quit();} open
-      xywh {531 309 410 55} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable modal
+      xywh {531 309 410 55} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
     } {
       Fl_Return_Button bYes {
         label Yes
@@ -113,9 +113,9 @@ class MonteverdiViewGroup {open
         callback {this->EraseCaching(false);}
         xywh {290 20 115 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Return_Button bCancel {
+      Fl_Return_Button bCancelCaching {
         label Cancel
-        callback {this->CancelEraseCaching();}
+        callback {this->CancelEraseCaching();} selected
         xywh {15 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
     }
@@ -134,6 +134,6 @@ class MonteverdiViewGroup {open
   } {}
   Function {OpenEraseCaching()} {return_type {virtual void}
   } {}
-  Function {CancelEraseCaching()} {selected return_type {virtual void}
+  Function {CancelEraseCaching()} {return_type {virtual void}
   } {}
 } 
