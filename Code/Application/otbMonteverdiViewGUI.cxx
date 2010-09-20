@@ -349,7 +349,6 @@ MonteverdiViewGUI
       }
     else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == CACHE_OUTPUT)
       {
-	std::cout << "instanceId " << "outputId " <<instanceId << outputId<< std::endl;
       m_MonteverdiController->StartCaching(instanceId, outputId, true);
       }
     else if (m_Tree->GetModuleMenu()->GetOutputMenuOutput() == WRITE_OUTPUT)
