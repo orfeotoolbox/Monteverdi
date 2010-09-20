@@ -673,7 +673,6 @@ Orthorectification
 ::CheckMapParameters()
 {
   int res = 0;
-  std::cout << "this->GetMapType() "<< this->GetMapType()<< std::endl;
   switch (this->GetMapType())
     {
     case UTM:

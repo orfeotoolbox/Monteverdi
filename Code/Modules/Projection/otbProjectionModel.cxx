@@ -423,7 +423,6 @@ ProjectionModel
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
   m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
-  std::cout <<"Resampler PR \n "<<m_Transform->GetOutputProjectionRef() << std::endl;
   // Deformation grid spacing : 4 times the output spacing
   m_Resampler->SetDeformationFieldSpacing(4.*m_OutputSpacing);
   
