@@ -429,7 +429,7 @@ ProjectionModel
   if (m_EstimateInputRPCModel)
     {
     m_Resampler->EstimateInputRpcModelOn();
-    m_Resampler->SetInputRpcGridSize(10);
+    m_Resampler->SetInputRpcGridSize(20);
     }
   
   // Use the DEM
