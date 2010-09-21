@@ -874,6 +874,13 @@ CreateOutput()
   m_OrthoFilter->SetOutputOrigin(origin);
   m_OrthoFilter->SetOutputProjectionRef(m_CartographicProjectionRef);
   m_OrthoFilter->SetInterpolator(m_Interp);
+
+  // Estimate the input rpc model
+  if(guiRPCEstimator->value())
+    {
+    m_OrthoFilter->EstimateInputRpcModelOn();
+    m_OrthoFilter->SetInputRpcGridSize(20);
+    }
   
   // Set DEM or elvation average value.
   if (guiUseAverageElevation->value() == 1 && guiUseDEM->value() == 0)

@@ -190,7 +190,7 @@ protected:
   int UpdateInterpolator();
   // Compute long/long of a carto point IN the original REF
   DoubleVectorType LongLatPointToCartoInOriginRef(ForwardSensorInputPointType latLongPoint);
-  // Compûte DEM spacing from the carto spacing
+  // Compute DEM spacing from the carto spacing
   void  UpdateDEMSpacing();
 
   itkSetMacro(OutputSize, SizeType);

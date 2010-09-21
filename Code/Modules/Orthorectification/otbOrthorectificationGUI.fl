@@ -30,11 +30,11 @@ class OrthorectificationGUI {open
         tooltip {Quit the viewer manager} xywh {18 420 85 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Tabs m_TabsMode {open
-        xywh {18 14 398 393} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
+        xywh {18 14 398 398} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open selected
-          xywh {18 35 398 372} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+          label Coordinates open
+          xywh {18 35 398 377} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
             label {Geographical Coordinates} open
@@ -95,7 +95,7 @@ InsightExtent();}
 		  	SetMapType(LAMBERT2);}
               xywh {20 20 100 25} labelsize 11
             }
-	    MenuItem {} {
+            MenuItem {} {
               label LAMBERT3CARTOSUD
               callback {m_UTM->hide();
 	          	m_Lambert2->hide();
@@ -118,102 +118,106 @@ InsightExtent();}
           }
           Fl_Wizard m_MapType {
             label {Cartographic Coordinates} open
-            xywh {31 227 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
+            xywh {31 219 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group m_UTM {open
-              xywh {31 227 360 160}
+              xywh {31 219 360 160}
             } {
               Fl_Input guiUTMZone {
                 label Zone
                 callback {UpdateLongLat();}
-                tooltip {Enter the zone number} xywh {172 323 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the zone number} xywh {172 315 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiUTMEastSelection {
                 label Easting
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the easting of the output image center} xywh {172 243 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the easting of the output image center} xywh {172 235 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiUTMNorthSelection {
                 label Northing
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the northing of the output image center} xywh {172 283 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the northing of the output image center} xywh {172 275 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Round_Button guiUTMNorth {
                 label {Northern Hemisphere}
                 callback {guiUTMNorth->value(1);guiUTMSouth->value(0);UpdateLongLat();}
-                xywh {187 362 18 25} down_box ROUND_DOWN_BOX value 1 align 132
+                xywh {187 354 18 25} down_box ROUND_DOWN_BOX value 1 align 132
               }
               Fl_Round_Button guiUTMSouth {
                 label {Southern Hemisphere}
                 callback {guiUTMSouth->value(1);guiUTMNorth->value(0);UpdateLongLat();}
-                xywh {231 362 18 25} down_box ROUND_DOWN_BOX
+                xywh {231 354 18 25} down_box ROUND_DOWN_BOX
               }
             }
             Fl_Group m_Lambert2 {open
-              xywh {37 227 360 160} hide
+              xywh {37 219 360 160} hide
             } {
               Fl_Input guiLambertEastSelection {
                 label Easting
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the easting of the output image center} xywh {172 278 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the easting of the output image center} xywh {172 270 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiLambertNorthSelection {
                 label Northing
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the northing of the output image center} xywh {172 318 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the northing of the output image center} xywh {172 310 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
-	    Fl_Group m_Lambert3CartoSud {open
-              xywh {37 227 360 160} hide
+            Fl_Group m_Lambert3CartoSud {open
+              xywh {37 219 360 160} hide
             } {
               Fl_Input guiLambert3EastSelection {
                 label Easting
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the easting of the output image center} xywh {172 278 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the easting of the output image center} xywh {172 270 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiLambert3NorthSelection {
                 label Northing
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter the northing of the output image center} xywh {172 318 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the northing of the output image center} xywh {172 310 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
             Fl_Group m_TRANSMERCATOR {open
-              xywh {37 227 360 160} hide
+              xywh {37 219 360 160} hide
             } {
               Fl_Input guiTRANSMERCATOREast {
                 label {False Easting}
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter false easting} xywh {172 298 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter false easting} xywh {172 290 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiTRANSMERCATORNorth {
                 label {False Northing}
                 callback {UpdateEastNorth();
 UpdateLongLat();}
-                tooltip {Enter false northing} xywh {172 329 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter false northing} xywh {172 321 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiTRANSMERCATORScale {
                 label {Scale Factor}
                 callback {UpdateLongLat();}
-                tooltip {Enter Scale Factor} xywh {172 360 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter Scale Factor} xywh {172 352 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiTransmercatorEastSelection {
                 label Easting
                 callback {UpdateLongLat();}
-                tooltip {Enter the easting of the output image center} xywh {172 236 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the easting of the output image center} xywh {172 228 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiTransmercatorNorthSelection {
                 label Northing
                 callback {UpdateLongLat();}
-                tooltip {Enter the northing of the output image center} xywh {172 267 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the northing of the output image center} xywh {172 259 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
+          }
+          Fl_Round_Button guiRPCEstimator {
+            label {Estimate Input RPC Model} selected
+            tooltip {If checked, use the upper left output image pixel coordinates} xywh {45 394 18 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {
