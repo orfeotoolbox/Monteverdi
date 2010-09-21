@@ -874,7 +874,6 @@ CreateOutput()
   m_OrthoFilter->SetOutputOrigin(origin);
   m_OrthoFilter->SetOutputProjectionRef(m_CartographicProjectionRef);
   m_OrthoFilter->SetInterpolator(m_Interp);
-  m_OrthoFilter->SetDeformationFieldSpacing(4.*m_OutputSpacing);
   
   // Set DEM or elvation average value.
   if (guiUseAverageElevation->value() == 1 && guiUseDEM->value() == 0)
