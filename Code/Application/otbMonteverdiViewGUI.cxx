@@ -87,7 +87,7 @@ MonteverdiViewGUI
 
   gHelpText->buffer(m_HelpTextBuffer);
 
-  gHelpText->insert("This is Monteverdi 1.0\n");
+  gHelpText->insert("This is the application Monteverdi\n");
   gHelpText->insert("======================\n\n");
   gHelpText->insert("Monteverdi is an application for capacity building to provide simple\n");
   gHelpText->insert("remote sensing data analysis tools for non-experienced users.\n\n");
