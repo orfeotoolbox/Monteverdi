@@ -95,6 +95,7 @@ protected:
   virtual void SaveDataSet();
   virtual void Browse();
   virtual void Cancel();
+  virtual void CheckButtonSaveMetadata();
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
 
@@ -129,6 +130,7 @@ private:
     caster->SetInPlace(true);
     writer->SetInput(caster->GetOutput());
     writer->SetFileName(m_Filename);
+    writer->SetWriteGeomFile(m_WriteGeomFile);
     m_ProcessObject =  writer;
     writer->Update();
   }
@@ -204,6 +206,9 @@ private:
   std::string m_Filename;
 
   std::map<otb::PixelType, std::string> m_OutputTypesChoices;
+
+  //WriteGeomFile
+  bool m_WriteGeomFile;
 };
 
 } // End namespace otb

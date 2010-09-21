@@ -38,14 +38,21 @@ class WriterModuleGUI {open
         label {Output Data Type} open
         xywh {152 65 120 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       } {}
+      Fl_Check_Button bSaveMetadata {
+        label {Save metadata}
+        callback {this->CheckButtonSaveMetadata();}
+        xywh {152 87 25 25} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4
+      }
     }
   }
-  Function {SaveDataSet()} {open selected return_type {virtual void}
+  Function {SaveDataSet()} {open return_type {virtual void}
   } {}
   Function {Browse()} {open return_type {virtual void}
   } {}
-  Function {Cancel()} {open return_type {virtual void}
+  Function {Cancel()} {open selected return_type {virtual void}
   } {}
   Function {~WriterModuleGUI()} {open return_type virtual
+  } {}
+  Function {CheckButtonSaveMetadata()} {open return_type {virtual void}
   } {}
 } 

@@ -62,6 +62,8 @@ WriterModule::WriterModule()
   m_OutputTypesChoices[otb::DOUBLE]           = "double (64 bits)";
   m_OutputTypesChoices[otb::UNSIGNEDSHORTINT] = "unsigned short (16 bits)";
   m_OutputTypesChoices[otb::UNSIGNEDINT]      = "unsigned int (32 bits)";
+
+  m_WriteGeomFile = false;
 }
 
 /** Destructor */
@@ -130,6 +132,8 @@ void WriterModule::Run()
     cOutDataType->hide();
     }
 
+  bSaveMetadata->value(m_WriteGeomFile);
+
   pBar->minimum(0);
   pBar->maximum(1);
   wFileChooserWindow->show();
@@ -161,6 +165,12 @@ void WriterModule::Cancel()
 {
   wFileChooserWindow->hide();
 }
+
+void WriterModule::CheckButtonSaveMetadata()
+{
+  m_WriteGeomFile = bSaveMetadata->value();
+}
+
 
 void WriterModule::UpdateProgress()
 {
@@ -196,6 +206,7 @@ void WriterModule::ThreadedWatch()
   bOk->deactivate();
   vFilePath->deactivate();
   cOutDataType->deactivate();
+  bSaveMetadata->deactivate();
   Fl::unlock();
 
   double last = 0;
@@ -228,6 +239,7 @@ void WriterModule::ThreadedWatch()
   bOk->activate();
   vFilePath->activate();
   cOutDataType->activate();
+  bSaveMetadata->activate();
   Fl::unlock();
 
   Fl::awake(&HideWindowCallback, this);
