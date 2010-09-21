@@ -32,6 +32,7 @@ ProjectionModel::ProjectionModel()
   m_TransformChanged = false;
   m_TempTransformChanged = false;
   m_UseDEM               = false;
+  m_EstimateInputRPCModel = false;
 
   m_Resampler = ResampleFilterType::New();
 
@@ -423,6 +424,13 @@ ProjectionModel
   m_Resampler->SetOutputSpacing(m_OutputSpacing);
   m_Resampler->SetOutputOrigin(m_OutputOrigin);
   m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
+
+  // Estimate Input RPC Model
+  if (m_EstimateInputRPCModel)
+    {
+    m_Resampler->EstimateInputRpcModelOn();
+    m_Resampler->SetInputRpcGridSize(10);
+    }
   
   // Use the DEM
   if(m_UseDEM)

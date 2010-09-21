@@ -127,12 +127,15 @@ public:
   
   /** Set the DEM Path */
   void SetDEMPath(std::string dem);
-
+  
   /** Method to modify the flag*/
   void SetUseDEM(bool value)
   {
     m_UseDEM = value;
   }
+  /** Update the Estimate Input rpc Model flag value*/
+  itkSetMacro(EstimateInputRPCModel,bool);
+  
 
 protected:
   /** Constructor */
@@ -154,6 +157,7 @@ private:
   bool                    m_TransformChanged;
   bool                    m_TempTransformChanged;
   bool                    m_UseDEM;
+  bool                    m_EstimateInputRPCModel;
 
   // Output Image Information
   SizeType    m_OutputSize;

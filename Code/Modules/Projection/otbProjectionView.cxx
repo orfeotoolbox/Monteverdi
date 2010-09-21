@@ -849,5 +849,16 @@ ProjectionView::UpdateDEMUse()
     }
 }
 
+void
+ProjectionView::UpdateRpcEstimation()
+{
+  // Update following the choiceDEM radio button
+  // value
+  if(guiRPCEstimator->value())
+    m_Controller->GetModel()->SetEstimateInputRPCModel(true);
+  else
+    m_Controller->GetModel()->SetEstimateInputRPCModel(false);
+}
+
 
 } // End namespace otb

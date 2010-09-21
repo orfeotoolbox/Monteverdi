@@ -25,7 +25,7 @@ class ProjectionGroup {open
         xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label {Input image} selected
+          label {Input image} open
           xywh {5 30 420 389} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -164,6 +164,11 @@ this->UpdateInputTMTransform();}
             Fl_Group iSensorModel {open
               xywh {46 230 360 160} hide
             } {}
+          }
+          Fl_Round_Button guiRPCEstimator {
+            label {Estimate Input RPC Model}
+            callback {this->UpdateRpcEstimation();} selected
+            tooltip {If checked, use the upper left output image pixel coordinates} xywh {40 400 18 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {
@@ -515,5 +520,7 @@ vAverageElevation->deactivate();
   Function {Browse()} {open return_type {virtual void}
   } {}
   Function {UpdateDEMUse()} {open return_type {virtual void}
+  } {}
+  Function {UpdateRpcEstimation()} {open return_type {virtual void}
   } {}
 } 

@@ -153,6 +153,9 @@ protected:
   virtual void UpdateInputTMTransform();
   //
   virtual void UpToDateTransform();
+  
+  // Set the estimation rpc model possible
+  virtual void UpdateRpcEstimation();
 
   /** Model Notificatin catcher*/
   virtual void Notify();
