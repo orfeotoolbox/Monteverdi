@@ -20,8 +20,6 @@ SET(Monteverdi_VERSION_MINOR "2")
 SET(Monteverdi_VERSION_PATCH "1")
 
 
-OPTION(BUILD_SHARED_LIBS "Build Monteverdi with shared libraries." ON)
-
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 SET(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
