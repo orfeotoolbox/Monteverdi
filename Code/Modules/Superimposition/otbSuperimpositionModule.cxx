@@ -96,7 +96,6 @@ void SuperimpositionModule::Ok()
   
   // Resampler 
   m_Resampler->SetInput(vmoving);
-  m_Resampler->SetDeformationFieldSpacing(vfixed->GetSpacing() * 4.);
   m_Resampler->SetOutputParametersFromImage(vfixed);
   
   if (choiceDEM->value() == 1)
