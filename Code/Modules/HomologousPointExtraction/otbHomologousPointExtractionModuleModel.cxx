@@ -29,23 +29,6 @@
 
 namespace otb
 {
-/** Initialize the singleton */
-HomologousPointExtractionModuleModel::Pointer HomologousPointExtractionModuleModel::Instance = NULL;
-/** Manage the singleton */
-HomologousPointExtractionModuleModel::Pointer
-HomologousPointExtractionModuleModel::GetInstance()
-{
-  if (!Instance)
-    {
-    Instance = HomologousPointExtractionModuleModel::New();
-    }
-  return Instance;
-}
-
-void HomologousPointExtractionModuleModel::Notify(ListenerBase * listener)
-{
-  listener->Notify();
-}
 
 HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(),
   m_BlendingFunction(), m_Output(), m_Resampler(), m_PerBander()
@@ -83,6 +66,11 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
 
 HomologousPointExtractionModuleModel
 ::~HomologousPointExtractionModuleModel() {}
+
+void HomologousPointExtractionModuleModel::Notify(ListenerBase * listener)
+{
+  listener->Notify();
+}
 
 void
 HomologousPointExtractionModuleModel

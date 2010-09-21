@@ -21,26 +21,6 @@
 
 namespace otb
 {
-/** Initialize the singleton */
-SupervisedClassificationModel::Pointer SupervisedClassificationModel::Instance = NULL;
-
-/** Manage the singleton */
-SupervisedClassificationModel::Pointer
-SupervisedClassificationModel::
-GetInstance()
-{
-  if (!Instance)
-    {
-    Instance = SupervisedClassificationModel::New();
-    }
-  return Instance;
-}
-
-void SupervisedClassificationModel::
-Notify(ListenerBase * listener)
-{
-  listener->Notify();
-}
 
 SupervisedClassificationModel::
 SupervisedClassificationModel() : m_MaxTrainingSize(100),
@@ -64,6 +44,12 @@ SupervisedClassificationModel() : m_MaxTrainingSize(100),
 SupervisedClassificationModel
 ::~SupervisedClassificationModel()
 {
+}
+
+void SupervisedClassificationModel::
+Notify(ListenerBase * listener)
+{
+  listener->Notify();
 }
 
 void

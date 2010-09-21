@@ -28,26 +28,6 @@
 
 namespace otb
 {
-/** Initialize the singleton */
-GCPToSensorModelModel::Pointer GCPToSensorModelModel::Instance = NULL;
-
-/** Manage the singleton */
-GCPToSensorModelModel::Pointer
-GCPToSensorModelModel::
-GetInstance()
-{
-  if (!Instance)
-    {
-    Instance = GCPToSensorModelModel::New();
-    }
-  return Instance;
-}
-
-void GCPToSensorModelModel::
-Notify(ListenerBase * listener)
-{
-  listener->Notify();
-}
 
 GCPToSensorModelModel::
 GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer(), m_ErrorsContainer(),
@@ -104,6 +84,12 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
 GCPToSensorModelModel
 ::~GCPToSensorModelModel()
 {
+}
+
+void GCPToSensorModelModel::
+Notify(ListenerBase * listener)
+{
+  listener->Notify();
 }
 
 void

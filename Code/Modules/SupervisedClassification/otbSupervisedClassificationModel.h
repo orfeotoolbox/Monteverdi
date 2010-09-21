@@ -97,9 +97,6 @@ public:
 
   typedef otb::ImageToVectorImageCastFilter<LabeledImageType, ImageType> CasterType;
 
-  /** Get the unique instance of the model */
-  static Pointer GetInstance();
-
   /** Input Image Pointer */
   itkGetConstObjectMacro(InputImage, ImageType);
   void SetImage(ImagePointerType image);
@@ -191,9 +188,6 @@ private:
 
   /** Output changed */
   bool m_OutputChanged;
-
-  /** Singleton instance */
-  static Pointer Instance;
 
   /** Input Images */
   ImagePointerType        m_InputImage;

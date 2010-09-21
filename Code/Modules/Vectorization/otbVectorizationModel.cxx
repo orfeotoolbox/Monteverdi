@@ -21,26 +21,6 @@
 
 namespace otb
 {
-/** Initialize the singleton */
-VectorizationModel::Pointer VectorizationModel::Instance = NULL;
-
-/** Manage the singleton */
-VectorizationModel::Pointer
-VectorizationModel::
-GetInstance()
-{
-  if (!Instance)
-    {
-    Instance = VectorizationModel::New();
-    }
-  return Instance;
-}
-
-void VectorizationModel::
-Notify(ListenerBase * listener)
-{
-  listener->Notify();
-}
 
 VectorizationModel::
 VectorizationModel() : m_VisualizationModel(),
@@ -67,6 +47,12 @@ VectorizationModel() : m_VisualizationModel(),
 VectorizationModel
 ::~VectorizationModel()
 {}
+
+void VectorizationModel::
+Notify(ListenerBase * listener)
+{
+  listener->Notify();
+}
 
 void
 VectorizationModel

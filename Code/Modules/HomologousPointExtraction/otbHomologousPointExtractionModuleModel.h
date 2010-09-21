@@ -131,9 +131,6 @@ public:
   typedef ResampleFilterType::TransformType                                              ResampleTransformType;
   typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
-
   /** Get the visualization models */
   VisualizationModelPointerType GetVisualizationModel(unsigned int id)
   {
@@ -202,9 +199,6 @@ private:
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
-
-  /** Singleton instance */
-  static Pointer Instance;
 
   /** Visualization */
   VisualizationModelListType m_VisualizationModel;

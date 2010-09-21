@@ -322,8 +322,6 @@ private:
 
   /** Output Filter Information */
   OutputFilterInformationType m_OutputChannelsInformation;
-  /** The instance singleton */
-  static Pointer Instance;
   /** Number of input images*/
   int m_NumberOfInputImages;
   /** Output filename*/

@@ -78,7 +78,6 @@ protected:
   /** Constructor */
   FeatureExtractionControllerInterface()
   {
-    // m_Model = ModelType::GetInstance();
   }
   /** Destructor */
   virtual ~FeatureExtractionControllerInterface() {}

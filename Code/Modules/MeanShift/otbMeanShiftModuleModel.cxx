@@ -3,23 +3,6 @@
 
 namespace otb
 {
-/** Initialize the singleton */
-MeanShiftModuleModel::Pointer MeanShiftModuleModel::Instance = NULL;
-/** Manage the singleton */
-MeanShiftModuleModel::Pointer
-MeanShiftModuleModel::GetInstance()
-{
-  if (!Instance)
-    {
-    Instance = MeanShiftModuleModel::New();
-    }
-  return Instance;
-}
-
-void MeanShiftModuleModel::Notify(ListenerBase * listener)
-{
-  listener->Notify();
-}
 
 MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_MeanShift(), m_BlendingFunction()
 {
@@ -43,6 +26,11 @@ MeanShiftModuleModel::MeanShiftModuleModel() : m_VisualizationModel(), m_MeanShi
 MeanShiftModuleModel
 ::~MeanShiftModuleModel()
 {
+}
+
+void MeanShiftModuleModel::Notify(ListenerBase * listener)
+{
+  listener->Notify();
 }
 
 void

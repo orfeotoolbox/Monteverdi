@@ -67,10 +67,8 @@ public:
 
 protected:
   /** Constructor */
-  WriterControllerInterface()
-  {
-//     m_Model = ModelType::GetInstance();
-  }
+  WriterControllerInterface() {}
+
   /** Destructor */
   virtual ~WriterControllerInterface() {}
 

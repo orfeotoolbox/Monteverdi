@@ -61,9 +61,6 @@ public:
   /** New macro */
   itkNewMacro(Self);
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
-
   /** Get the visualization models */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
@@ -120,9 +117,6 @@ private:
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
-
-  /** Singleton instance */
-  static Pointer Instance;
 
   /** Visualization model */
   VisualizationModelType::Pointer m_VisualizationModel;

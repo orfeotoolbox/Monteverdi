@@ -91,9 +91,6 @@ public:
   typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
-
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
@@ -140,7 +137,6 @@ public:
 
   /** Receive notifications */
   virtual void Notify();
- 
 
 protected:
   /** Constructor */
@@ -148,18 +144,12 @@ protected:
   /** Destructor */
   virtual ~VectorizationModel();
 
-
 private:
   VectorizationModel(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */
   virtual void Notify(ListenerBase * listener);
-
-
-
-  /** Singleton instance */
-  static Pointer Instance;
 
   /** Visualization */
   VisualizationModelPointerType m_VisualizationModel;

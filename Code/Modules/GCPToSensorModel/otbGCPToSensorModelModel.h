@@ -131,9 +131,6 @@ public:
   typedef itk::Point<double, 2>     OutPointType;
   typedef std::vector<OutPointType> OutPointListType;
 
-  /** Get the unique instanc1e of the model */
-  static Pointer GetInstance();
-
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
@@ -257,9 +254,6 @@ private:
 
   /** Update the local GCPs Container, refresh the sensor model, notify it */
   void UpdateContainer();
-
-  /** Singleton instance */
-  static Pointer Instance;
 
   /** GCPs To RCP Sensor Model Image Filter */
   GCPsToRPCSensorModelImageFilterPointerType m_GCPsToRPCSensorModelImageFilter;
