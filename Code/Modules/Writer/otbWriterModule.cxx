@@ -18,11 +18,6 @@
 #include "otbWriterModule.h"
 #include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl.H>
-#include <FL/fl_ask.H>
-
-#include <itksys/SystemTools.hxx>
-#include <fstream>
-
 
 #include "otbMsgReporter.h"
 
@@ -147,21 +142,8 @@ void WriterModule::Run()
 
 void WriterModule::SaveDataSet()
 {
-  m_Filename = vFilePath->value();
-
-  if( itksys::SystemTools::FileExists( m_Filename.c_str() ) )
-    {
-      if( fl_choice("Would you like to overwrite this file ?","No", "Yes", NULL) > 0 )
-        {
-          this->StartProcess2();
-          this->StartProcess1();
-        }
-    }
-  else{
-    this->StartProcess2();
-    this->StartProcess1();
-
-  }
+  this->StartProcess2();
+  this->StartProcess1();
 }
 
 void WriterModule::Browse()
@@ -267,6 +249,7 @@ void WriterModule::ThreadedRun()
 {
   this->BusyOn();
 
+  m_Filename = vFilePath->value();
   PixelType outFormat = static_cast<PixelType> (cOutDataType->value());
 
   try
