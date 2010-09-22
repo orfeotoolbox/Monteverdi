@@ -26,6 +26,10 @@
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
+#include <itksys/SystemTools.hxx>
+#include <fstream>
+
+
 namespace otb
 {
 
@@ -300,7 +304,13 @@ WriterViewGUI
   const bool  useScale = static_cast <bool> (guiScale->value());
   const int   pixelType = guiOutputPixelTypeChoice->value();
 
-  m_WriterController->SaveOutput(filepath, pixelType, useScale);
+  if( itksys::SystemTools::FileExists( filepath.c_str() ) )
+    {
+      if( fl_choice("Would you like to overwrite this file ?","No", "Yes", NULL) > 0 )
+        {
+        m_WriterController->SaveOutput(filepath, pixelType, useScale);
+        }
+    }
 }
 
 void
