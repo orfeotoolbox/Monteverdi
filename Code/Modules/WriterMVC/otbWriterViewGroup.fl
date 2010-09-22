@@ -18,7 +18,7 @@ class WriterViewGroup {open
     Fl_Window guiMainWindow {
       label {Writer application}
       callback {Quit();} open
-      xywh {523 47 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 hide resizable
+      xywh {523 47 665 640} type Double box PLASTIC_DOWN_BOX color 45 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 7 selection_color 48 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -82,6 +82,10 @@ guiScale->hide();}
             label {Use scaling}
             xywh {165 460 110 20} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
           }
+          Fl_Check_Button guiWriteMetadata {
+            label {Save metadata} selected
+            xywh {165 483 110 20} down_box DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          }
         }
         Fl_Group guiOutput {
           label Output open
@@ -89,7 +93,7 @@ guiScale->hide();}
         } {
           Fl_Browser guiFeatureList {
             label {Feature image list}
-            callback {UpdateExtractView();} selected
+            callback {UpdateExtractView();}
             tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Button guiAddChannel {

@@ -81,7 +81,7 @@ void ObjectLabelingModule::Run()
     lImageLab = this->GetInputData<LabeledImageType> ("LabeledImage");
     }
 
-  if (fpvImage.IsNotNull() && lImage.IsNotNull())
+  if (fpvImage.IsNotNull() && lImageLab.IsNotNull())
     {
     // Process the input as an FloatingVectorImageType
     m_View->Build();
