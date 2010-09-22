@@ -68,7 +68,7 @@ WriterModule::WriterModule()
   m_OutputTypesChoices[otb::UNSIGNEDSHORTINT] = "unsigned short (16 bits)";
   m_OutputTypesChoices[otb::UNSIGNEDINT]      = "unsigned int (32 bits)";
 
-  m_WriteGeomFile = false;
+  m_WriteGeomFile = true;
 }
 
 /** Destructor */
