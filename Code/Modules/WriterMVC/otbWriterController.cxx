@@ -69,13 +69,15 @@ WriterController
 
 void
 WriterController
-::SaveOutput(const std::string& fname, int pixelType, const bool useScale)
+::SaveOutput(const std::string& fname, int pixelType,
+             const bool useScale, const bool isWriteGeomFile)
 {
   try
     {
 //     m_Model->GenerateOutputImage(fname, pType, useScale);
     //Try to multi thread
-    m_Model->ThreadedGenerateOutputImage(fname, pixelType, useScale);
+    m_Model->ThreadedGenerateOutputImage(fname, pixelType,
+                                         useScale, isWriteGeomFile);
     }
   catch (itk::ExceptionObject& err)
     {

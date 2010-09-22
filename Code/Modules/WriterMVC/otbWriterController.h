@@ -103,7 +103,8 @@ public:
   }
 
   virtual void OpenInputImage(const char * filename);
-  virtual void SaveOutput(const std::string& fname, int pixelType, const bool useScale);
+  virtual void SaveOutput(const std::string& fname, int pixelType,
+                          const bool useScale, const bool isWriteGeomFile);
   virtual void InitInput();
   virtual void ClearFeatures();
   virtual void CreateFeature();

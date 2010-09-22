@@ -260,6 +260,11 @@ public:
   /** usescale */
   itkSetMacro(UseScale, bool);
   itkGetMacro(UseScale, bool);
+
+  /** IsWriteGeomFile */
+  itkSetMacro(IsWriteGeomFile, bool);
+  itkGetMacro(IsWriteGeomFile, bool);
+
   /** Number of channels */
   itkSetMacro(NumberOfChannels, unsigned int);
   itkGetMacro(NumberOfChannels, unsigned int);
@@ -286,7 +291,8 @@ public:
 
   /** Generate output image */
   void GenerateOutputImage(/*const std::string & fname, const unsigned int pType, const bool useScale*/);
-  void ThreadedGenerateOutputImage(const std::string& fname, int pType, bool useScale);
+  void ThreadedGenerateOutputImage(const std::string& fname, int pType,
+                                   bool useScale, bool isWriteGeomFile);
   void GetSingleOutput(int id);
   void AddChannels(std::vector<unsigned int> chListx);
   void AddChannel(int id);
@@ -335,6 +341,9 @@ private:
   unsigned int m_PType;
   /** use scale*/
   bool m_UseScale;
+  /** is writting geom file */
+  bool m_IsWriteGeomFile;
+
   /** Flags to activate/deactivate the preprocessings */
   bool m_HasInput;
 

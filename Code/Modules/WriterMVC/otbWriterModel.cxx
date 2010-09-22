@@ -203,12 +203,14 @@ WriterModel
 
 void
 WriterModel
-::ThreadedGenerateOutputImage(const std::string& fname, int pType, bool useScale)
+::ThreadedGenerateOutputImage(const std::string& fname, int pType,
+                              bool useScale, bool isWriteGeomFile)
 {
   /** Set writer parameter*/
   this->SetOutputFileName(fname);
   this->SetPType(pType);
   this->SetUseScale(useScale);
+  this->SetIsWriteGeomFile(isWriteGeomFile);
 
   this->NotifyAll("SaveDataSet");
 }
@@ -300,6 +302,7 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 //     this->NotifyAll("SetWriter");
   this->SetProcessObjectModel (writer);
   writer->SetFileName(this->GetOutputFileName().c_str());
+  writer->SetWriteGeomFile(this->GetIsWriteGeomFile());
 
   if (this->GetUseScale())
     {
