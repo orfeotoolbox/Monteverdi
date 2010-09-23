@@ -33,7 +33,7 @@ class OrthorectificationGUI {open
         xywh {18 14 398 398} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open
+          label Coordinates open selected
           xywh {18 35 398 377} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -216,7 +216,7 @@ UpdateLongLat();}
             }
           }
           Fl_Round_Button guiRPCEstimator {
-            label {Estimate Input RPC Model} selected
+            label {Estimate Input RPC Model}
             tooltip {If checked, use the upper left output image pixel coordinates} xywh {45 394 18 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
           }
         }
@@ -276,7 +276,7 @@ guiSinC->show();
 guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(SINC);}
-              xywh {30 30 100 25} labelsize 11
+              xywh {30 30 100 25} labelsize 11 hide deactivate
             }
           }
           Fl_Wizard m_InterpType {

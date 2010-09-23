@@ -501,13 +501,13 @@ ProjectionView
        m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
-//     case MAP_NEAREST:
-//       {
-// //       typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
-// //       NearestType::Pointer interp = NearestType::New();
-// //       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-//       break;
-//       }
+    case MAP_NEAREST:
+      {
+      typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestType;
+      NearestType::Pointer interp = NearestType::New();
+      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+      break;
+      }
 //     case MAP_SINC:
 //       {
 //       itk::OStringStream oss;

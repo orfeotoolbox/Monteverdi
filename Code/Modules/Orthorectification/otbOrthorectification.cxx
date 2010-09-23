@@ -762,13 +762,13 @@ Orthorectification
       m_Interp = interp;
       break;
       }
-//     case NEAREST:
-//       {
-//       typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> NearestType;
-//       NearestType::Pointer interp = NearestType::New();
-//       m_Interp = interp;
-//       break;
-//       }
+    case NEAREST:
+      {
+      typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestType;
+      NearestType::Pointer interp = NearestType::New();
+      m_Interp = interp;
+      break;
+      }
 //     case SINC:
 //       {
 //       itk::OStringStream oss;
