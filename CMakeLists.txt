@@ -329,7 +329,8 @@ MESSAGE(CPACK_OTB_DLL_PATH)
 # This part is "OSGeo specific" because it makes assumption about the naming of the DLLs,
 # and the fact that they can all be found in the GDAL bin directory
 # It supposes that GDAL version is 1.6
-INSTALL(FILES ${CPACK_OTB_DLL_PATH}/adrg.dll
+INSTALL(FILES 
+${CPACK_OTB_DLL_PATH}/adrg.dll
 ${CPACK_OTB_DLL_PATH}/dted.dll
 ${CPACK_OTB_DLL_PATH}/gdal16.dll
 ${CPACK_OTB_DLL_PATH}/geos_c.dll
@@ -367,9 +368,26 @@ ${CPACK_OTB_DLL_PATH}/vrf.dll
 ${CPACK_OTB_DLL_PATH}/xerces-c_2_7.dll
 ${CPACK_OTB_DLL_PATH}/xerces-depdom_2_7.dll
 ${CPACK_OTB_DLL_PATH}/zlib1.dll
-${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll
-${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll			  
-        DESTINATION bin )
+${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll		  
+DESTINATION bin
+COMPONENT Runtime)
+
+#
+# Need to include csv files provided with OSGeo that contains some needed EPSG definitions
+# For GDAL 1.6, those files are located in OSGEO_ROOT/apps/gdal-16/share/gdal
+# This path is available from the GDAL_DATA env var (from an OSGeo shell with gdal16.bat executed)
+#
+INSTALL(DIRECTORY $ENV{GDAL_DATA}
+        DESTINATION share/gdal
+        COMPONENT Resources)
+
+INSTALL(FILES ${Monteverdi_SOURCE_DIR}/monteverdi.bat
+        DESTINATION bin
+        COMPONENT Runtime)
+
+# override CPACK_PACKAGE_EXECUTABLES to use the .bat file instead
+SET(CPACK_PACKAGE_EXECUTABLES
+    "monteverdi.bat" "Monteverdi application")
 
 
 ENDIF(WIN32 AND NOT UNIX)
