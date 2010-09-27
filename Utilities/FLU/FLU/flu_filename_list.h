@@ -12,6 +12,8 @@
  * - using the renamed flu_filename_list function in Flu_File_Chooser.cpp
  *
  */
+#ifndef flu_filename_list_h
+#  define flu_filename_list_h
 
 #include <FL/filename.H>
 #include "flustring.h"
@@ -82,3 +84,6 @@ typedef int (Flu_File_Sort_F)(struct dirent **, struct dirent **);
 FL_EXPORT int flu_filename_list(const char *d, struct dirent ***l,
                                 Flu_File_Sort_F *s = flu_numericsort);
 #  endif /* __cplusplus */
+
+#endif /* flu_filename_list_h */
+
