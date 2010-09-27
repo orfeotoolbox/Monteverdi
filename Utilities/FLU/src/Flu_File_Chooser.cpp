@@ -55,6 +55,8 @@
 #include "FLU/flu_file_chooser_pixmaps.h"
 #include "FLU/flu_pixmaps.h"
 
+#include "flu_filename_list.h"
+
 // set default language strings
 FluSimpleString Flu_File_Chooser::favoritesTxt = "Favorites";
 #ifdef WIN32
@@ -1039,7 +1041,7 @@ void Flu_File_Chooser :: recursiveScan( const char *dir, FluStringVector *files 
   dirent **e;
   char *name;
   FluSimpleString fullpath;
-  int num = fl_filename_list( dir, &e );
+  int num = flu_filename_list( dir, &e );
   for( int i = 0; i < num; i++ )
     {
       name = e[i]->d_name;
@@ -3325,7 +3327,7 @@ void Flu_File_Chooser :: buildLocationCombo()
   // get all volume mount points and add to the location combobox
   dirent **e;
   char *name;
-  int num = fl_filename_list( "/Volumes/", &e );
+  int num = flu_filename_list( "/Volumes/", &e );
   if( num > 0 )
     {
       int i;
@@ -3849,7 +3851,7 @@ void Flu_File_Chooser :: cd( const char *path )
   // read the directory
   dirent **e;
   char *name;
-  int num = fl_filename_list( pathbase.c_str(), &e );
+  int num = flu_filename_list( pathbase.c_str(), &e );
   if( num > 0 )
     {
       int i;
