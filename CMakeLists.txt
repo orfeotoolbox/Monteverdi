@@ -311,9 +311,14 @@ SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi_SOURCE_DIR}/Copyright/OTBCopyright
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
 
-#SET(CPACK_PACKAGE_EXECUTABLES
-#"monteverdi" "Monteverdi application"
-#)
+
+# http://www.vtk.org/Bug/view.php?id=7828
+# Need to use the CPACK_PACKAGE_EXECUTABLES 
+# otherwise the shortcut in the menu will not 
+# appear. 
+SET(CPACK_PACKAGE_EXECUTABLES
+"monteverdi" "Monteverdi application"
+)
 
 
 IF(WIN32 AND NOT UNIX)
@@ -385,6 +390,8 @@ INSTALL(FILES ${Monteverdi_SOURCE_DIR}/monteverdi.bat
         DESTINATION bin
         COMPONENT Runtime)
 
+# Override the monteverdi.exe 
+# with the monteverdi.bat shortcut
 SET(CPACK_NSIS_MENU_LINKS
     "bin/monteverdi.bat" "Monteverdi application")
 
