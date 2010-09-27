@@ -22,6 +22,6 @@
 typedef enum { MAP_UTM, MAP_LAMBERT, MAP_LAMBERT2, MAP_SINUS, MAP_ECKERT4, MAP_TRANSMERCATOR, MAP_MOLLWEID,
                MAP_WGS84 }  ProjectionMapType;
 typedef enum { MAP_LINEAR_, MAP_NEAREST, MAP_SINC,
-               MAP_SPLINES} ProjectionInterpolatorType;
+               MAP_SPLINES,MAP_BCO} ProjectionInterpolatorType;
 
 #endif

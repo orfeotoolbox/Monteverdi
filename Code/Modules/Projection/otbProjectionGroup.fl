@@ -332,17 +332,17 @@ this->UpdateTMTransform();}
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
-            label {Interpolator parameters}
-            xywh {43 160 360 125} box PLASTIC_DOWN_BOX color 48 selection_color 210 labelsize 12 align 5
+            label {Interpolator parameters} open
+            xywh {44 162 356 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
           } {
-            Fl_Group guiLinear {
-              xywh {44 162 356 121}
+            Fl_Group guiLinear {open
+              xywh {44 162 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Group guiNearest {open
-              xywh {49 164 349 119} hide
+              xywh {44 162 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
             } {}
             Fl_Group guiSinC {
-              xywh {47 163 352 118} hide
+              xywh {44 162 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
             } {
               Fl_Choice guiSincWindow {
                 label Interpolator
@@ -385,13 +385,22 @@ this->UpdateTMTransform();}
                 xywh {174 234 160 25}
               }
             }
-            Fl_Group guiSplines {open
-              xywh {50 166 347 116} hide
+            Fl_Group guiSplines {
+              xywh {44 162 356 121} labelsize 12 hide
             } {
               Fl_Counter guiSplineOrder {
                 label Radius
                 callback {SetInterpolatorType(MAP_SPLINES);}
                 xywh {174 212 160 25} align 4 minimum 0 maximum 5 step 1
+              }
+            }
+            Fl_Group guiBCO {open
+              xywh {44 162 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
+            } {
+              Fl_Counter guiBCORadius {
+                label {BCO Radius}
+                callback {SetInterpolatorType(MAP_BCO);}
+                xywh {174 235 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 1 maximum 15000 step 1 value 1
               }
             }
           }
@@ -403,8 +412,8 @@ this->UpdateTMTransform();}
               label Linear
               callback {guiLinear->show();
 guiNearest->hide();
+guiBCO->hide();
 guiSinC->hide();
-guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_LINEAR_);}
               xywh {25 25 100 25} labelsize 11
@@ -414,30 +423,29 @@ SetInterpolatorType(MAP_LINEAR_);}
               callback {guiLinear->hide();
 guiNearest->show();
 guiSinC->hide();
-guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_NEAREST);}
               xywh {35 35 100 25} labelsize 11
             }
             MenuItem {} {
+              label BCO
+              callback {guiLinear->hide();
+guiNearest->hide();
+guiBCO->show();
+guiSinC->hide();
+this->m_InterpType->redraw();
+SetInterpolatorType(MAP_BCO);}
+              xywh {45 45 100 25} labelsize 11
+            }
+            MenuItem {} {
               label SinC
               callback {guiLinear->hide();
 guiNearest->hide();
+guiBCO->hide();
 guiSinC->show();
-guiSplines->hide();
 this->m_InterpType->redraw();
 SetInterpolatorType(MAP_SINC);}
               xywh {35 35 100 25} labelsize 11 hide deactivate
-            }
-            MenuItem {} {
-              label Splines
-              callback {guiLinear->hide();
-guiNearest->hide();
-guiSinC->hide();
-guiSplines->show();
-this->m_InterpType->redraw();
-SetInterpolatorType(MAP_SPLINES);}
-              xywh {45 45 100 25} labelsize 11 hide deactivate
             }
           }
         }

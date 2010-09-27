@@ -40,6 +40,7 @@
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbBSplineInterpolateImageFunction.h"
+#include "otbBCOInterpolateImageFunction.h"
 #include "otbMsgReporter.h"
 #include "otbUtmMapProjection.h"
 
@@ -505,6 +506,14 @@ ProjectionView
       {
       typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestType;
       NearestType::Pointer interp = NearestType::New();
+      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+      break;
+      }
+    case MAP_BCO:
+      {
+      typedef BCOInterpolateImageFunction<ImageType, double> BCOType;
+      BCOType::Pointer interp = BCOType::New();
+      interp->SetRadius(static_cast<unsigned int>(guiBCORadius->value()));
       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
       break;
       }
