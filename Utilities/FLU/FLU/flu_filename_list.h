@@ -20,7 +20,12 @@
 
 #  if defined(WIN32) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
 
-struct dirent {char d_name[1];};
+//
+// [OTB modification]
+// On windows, dirent is defined in <FL/filename.H>
+// Don't define it twice, otherwise we get a compile error
+//
+// struct dirent {char d_name[1];};
 
 #  elif defined(__APPLE__) && defined(__PROJECTBUILDER__)
 
