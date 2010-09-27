@@ -10,4 +10,4 @@
 
 
 :: Start Monteverdi
-@%CURRENT_SCRIPT_DIR%monteverdi.exe
+@"%CURRENT_SCRIPT_DIR%monteverdi.exe"

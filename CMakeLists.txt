@@ -311,9 +311,9 @@ SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi_SOURCE_DIR}/Copyright/OTBCopyright
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
 FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
 
-SET(CPACK_PACKAGE_EXECUTABLES
-"monteverdi" "Monteverdi application"
-)
+#SET(CPACK_PACKAGE_EXECUTABLES
+#"monteverdi" "Monteverdi application"
+#)
 
 
 IF(WIN32 AND NOT UNIX)
@@ -378,16 +378,15 @@ COMPONENT Runtime)
 # This path is available from the GDAL_DATA env var (from an OSGeo shell with gdal16.bat executed)
 #
 INSTALL(DIRECTORY $ENV{GDAL_DATA}
-        DESTINATION share/gdal
+        DESTINATION share
         COMPONENT Resources)
 
 INSTALL(FILES ${Monteverdi_SOURCE_DIR}/monteverdi.bat
         DESTINATION bin
         COMPONENT Runtime)
 
-# override CPACK_PACKAGE_EXECUTABLES to use the .bat file instead
-SET(CPACK_PACKAGE_EXECUTABLES
-    "monteverdi.bat" "Monteverdi application")
+SET(CPACK_NSIS_MENU_LINKS
+    "bin/monteverdi.bat" "Monteverdi application")
 
 
 ENDIF(WIN32 AND NOT UNIX)
