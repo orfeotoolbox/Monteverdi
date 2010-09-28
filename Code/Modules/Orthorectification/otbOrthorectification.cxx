@@ -42,6 +42,7 @@
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbBSplineInterpolateImageFunction.h"
+#include "otbBCOInterpolateImageFunction.h"
 #include "otbMsgReporter.h"
 
 namespace otb
@@ -769,6 +770,14 @@ Orthorectification
       m_Interp = interp;
       break;
       }
+    case BCO:
+    {
+    typedef BCOInterpolateImageFunction<ImageType, double> BCOType;
+    BCOType::Pointer interp = BCOType::New();
+    interp->SetRadius(static_cast<unsigned int>(guiBCORadius->value()));
+    m_Interp = interp;
+    break;
+    }
 //     case SINC:
 //       {
 //       itk::OStringStream oss;

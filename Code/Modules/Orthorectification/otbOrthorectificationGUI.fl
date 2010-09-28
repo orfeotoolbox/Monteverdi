@@ -37,7 +37,7 @@ class OrthorectificationGUI {open
           xywh {18 35 398 377} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
-            label {Geographical Coordinates} open
+            label {Geographical Coordinates}
             xywh {31 60 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group {} {
@@ -72,7 +72,7 @@ InsightExtent();}
             }
           }
           Fl_Choice guiMapSelection {
-            label {Map Projection} open
+            label {Map Projection}
             tooltip {Select the map projection type} xywh {169 174 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
@@ -117,7 +117,7 @@ InsightExtent();}
             }
           }
           Fl_Wizard m_MapType {
-            label {Cartographic Coordinates} open
+            label {Cartographic Coordinates}
             xywh {31 219 370 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group m_UTM {open
@@ -252,6 +252,7 @@ UpdateLongLat();}
               label Linear
               callback {guiLinear->show();
 guiNearest->hide();
+guiBCO->hide();
 guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
@@ -262,6 +263,7 @@ SetInterpolatorType(LINEAR_);}
               label Nearest
               callback {guiLinear->hide();
 guiNearest->show();
+guiBCO->hide();
 guiSinC->hide();
 guiSplines->hide();
 this->m_InterpType->redraw();
@@ -269,9 +271,21 @@ SetInterpolatorType(NEAREST);}
               xywh {30 30 100 25} labelsize 11
             }
             MenuItem {} {
+              label BCO
+              callback {guiLinear->hide();
+guiNearest->hide();
+guiBCO->show();
+guiSinC->hide();
+guiSplines->hide();
+this->m_InterpType->redraw();
+SetInterpolatorType(BCO);}
+              xywh {40 40 100 25} labelsize 11
+            }
+            MenuItem {} {
               label SinC
               callback {guiLinear->hide();
 guiNearest->hide();
+guiBCO->hide();
 guiSinC->show();
 guiSplines->hide();
 this->m_InterpType->redraw();
@@ -287,10 +301,19 @@ SetInterpolatorType(SINC);}
               xywh {39 270 356 121}
             } {}
             Fl_Group guiNearest {open
-              xywh {44 272 349 119} hide
+              xywh {39 270 356 121} hide
             } {}
+            Fl_Group guiBCO {open
+              xywh {39 270 356 121} hide
+            } {
+              Fl_Counter guiBCORadius {
+                label {BCO Radius}
+                callback {SetInterpolatorType(BCO);}
+                xywh {169 296 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 1 maximum 15000 step 1 value 1
+              }
+            }
             Fl_Group guiSinC {open
-              xywh {42 271 352 118} hide
+              xywh {39 270 356 121} hide
             } {
               Fl_Choice guiSincWindow {
                 label Interpolator open
@@ -333,8 +356,8 @@ SetInterpolatorType(SINC);}
                 xywh {169 342 160 25}
               }
             }
-            Fl_Group guiSplines {open
-              xywh {45 274 347 116} hide
+            Fl_Group guiSplines {
+              xywh {39 270 356 121} hide
             } {
               Fl_Counter guiSplineOrder {
                 label Radius
@@ -345,7 +368,7 @@ SetInterpolatorType(SINC);}
           }
         }
         Fl_Group {} {
-          label DEM open
+          label DEM
           xywh {18 35 398 372} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard guiUseDEMWiz {open

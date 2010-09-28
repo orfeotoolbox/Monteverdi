@@ -20,6 +20,6 @@
 #define __OTBORTHOENUM_H__
 
 typedef enum { UTM, LAMBERT, LAMBERT2, LAMBERT3CARTOSUD, SINUS, ECKERT4, TRANSMERCATOR, MOLLWEID} MapType;
-typedef enum { LINEAR_, NEAREST, SINC, SPLINES}                                                   InterpolatorType;
+typedef enum { LINEAR_, NEAREST, SINC, SPLINES, BCO}                                                   InterpolatorType;
 
 #endif
