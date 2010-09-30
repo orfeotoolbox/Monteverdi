@@ -110,7 +110,7 @@ SarCalibrationModule
 
   if (!lImageMetadata->CanRead())
     {
-    MsgReporter::GetInstance()->SendError("Invalid Image : No Sar metadata Interface detected");
+    MsgReporter::GetInstance()->SendError("Invalid Image: No Sar metadata Interface detected");
     return false;
     }
 

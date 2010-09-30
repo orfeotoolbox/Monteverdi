@@ -23,7 +23,7 @@ namespace otb
 {
 
 VectorizationModel::
-VectorizationModel() : m_VisualizationModel(),
+VectorizationModel(): m_VisualizationModel(),
   m_ImageGenerator(),
   m_InputImage(),
   m_VectorDataModel(),
@@ -157,7 +157,7 @@ void VectorizationModel
 	}
       else
 	{
-	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
 	}
     }
   // Reproject VectorData in image projection
@@ -176,7 +176,7 @@ void VectorizationModel
 	}
       else
 	{
-	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
 	}
     }
 
@@ -401,7 +401,7 @@ VectorizationModel
 // 	}
 //       else
 // 	{
-// 	  itkExceptionMacro("Invalid DEM directory : "<<m_DEMPath<<".");
+// 	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
 // 	}
 //     }
 

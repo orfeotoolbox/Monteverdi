@@ -368,12 +368,12 @@ ObjectCountingModel
 {
   std::string outName = cfname;
   int         length = outName.size() - (outName.find_last_of('.') + 1);
-  //std::cout << "lenght of the file " <<   outName.size() << " Name : " << outName << " et length " << length << std::endl;
+  //std::cout << "lenght of the file " <<   outName.size() << " Name: " << outName << " et length " << length << std::endl;
   std::string ext = outName.substr(outName.find_last_of('.') + 1, length);
 
   if (ext.compare("shp") == 0 && ext.compare("kml") == 0)
     {
-    itkExceptionMacro(<< ext << " : Not recognized file vector format. Must be shp or kml");
+    itkExceptionMacro(<< ext << ": Not recognized file vector format. Must be shp or kml");
     }
 
   typedef otb::VectorData<double, 2>                VectorDataType;
@@ -566,7 +566,7 @@ void
 ObjectCountingModel
 ::Learning()
 {
-// Extract image to sample list :
+// Extract image to sample list:
   EstimatorType::Pointer          estimator = EstimatorType::New();
   SampleListType::Pointer         extractSampleList = SampleListType::New();
   TrainingListSampleType::Pointer trainingSampleList = TrainingListSampleType::New();

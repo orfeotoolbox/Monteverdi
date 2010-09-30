@@ -235,7 +235,7 @@ Orthorectification::ComputeTileNumber()
   double outputSize = strtod(guiSizeX->value(), NULL) * strtod(guiSizeY->value(), NULL);
   double bandNb = m_InputImage->GetNumberOfComponentsPerPixel();
   double internalPixelSize = 2 * 1e-6;   // 16 bits = 2 octet = 0.0000002 MO
-  // note : Only 16 bits image are proposed in Monteverdi
+  // note: Only 16 bits image are proposed in Monteverdi
 
   m_TileNumber =
     static_cast<int>(std::floor(2 * bandNb * internalPixelSize * (outputInImageSize + outputSize) / m_MaxTileSize + 0.5));
@@ -546,7 +546,7 @@ Orthorectification
       up = i;
       }
     }
-  // size image in carto coordinate :
+  // size image in carto coordinate:
   double sizeXcarto =  maxX - minX;
   // - because of the difference of origin for Y (image vs. carto)
   double sizeYcarto =  -(maxY - minY);
@@ -1062,7 +1062,7 @@ Orthorectification
     }
   catch (itk::ExceptionObject&)
     {
-    MsgReporter::GetInstance()->SendError("Invalid image : No ImageKeywordlist found");
+    MsgReporter::GetInstance()->SendError("Invalid image: No ImageKeywordlist found");
     return;
     }
   ForwardSensorInputPointType point;

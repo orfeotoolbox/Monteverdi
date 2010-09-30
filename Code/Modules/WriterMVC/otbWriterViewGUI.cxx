@@ -176,7 +176,7 @@ WriterViewGUI
   itk::OStringStream oss;
   oss.str("");
   oss << "Writer Application";
-  oss << " : " << imName.substr(imName.find_last_of("/") + 1, imName.size());
+  oss << ": " << imName.substr(imName.find_last_of("/") + 1, imName.size());
   oss << " (" << m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel();
   if (m_WriterModel->GetInputImage()->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
   else oss << " band , ";

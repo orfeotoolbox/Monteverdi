@@ -267,7 +267,7 @@ FeatureExtractionViewGUI
   itk::OStringStream oss;
   oss.str("");
   oss << "Feature Extraction Application";
-  oss << " : " << imName.substr(imName.find_last_of("/") + 1, imName.size());
+  oss << ": " << imName.substr(imName.find_last_of("/") + 1, imName.size());
   oss << " (" << GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel();
   if (GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
   else oss << " band , ";

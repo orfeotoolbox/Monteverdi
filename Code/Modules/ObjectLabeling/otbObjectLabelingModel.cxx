@@ -30,7 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  ObjectLabelingModel::ObjectLabelingModel() :
+  ObjectLabelingModel::ObjectLabelingModel():
       m_SelectedLabel(itk::NumericTraits<LabelType>::max()),
       m_SelectedClass(0),
       m_HasSelectedClass(false),
@@ -860,14 +860,14 @@ namespace otb
       TiXmlElement* nameElement = currentClass->FirstChildElement("Name");
       if (!nameElement)
         {
-        itkExceptionMacro(<<"Bad XML file : "<<fname);
+        itkExceptionMacro(<<"Bad XML file: "<<fname);
         }
       std::string name = nameElement->GetText();
 
       TiXmlElement* colorElement = currentClass->FirstChildElement("Color");
       if (!colorElement)
         {
-        itkExceptionMacro(<<"Bad XML file : "<<fname);
+        itkExceptionMacro(<<"Bad XML file: "<<fname);
         }
       int readColor[4];
       colorElement->Attribute("r", &readColor[0]);
@@ -899,7 +899,7 @@ namespace otb
         }
       else
         {
-        itkExceptionMacro(<<"Bad XML file : "<<fname);
+        itkExceptionMacro(<<"Bad XML file: "<<fname);
         }
       }
 

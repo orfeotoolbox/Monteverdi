@@ -40,7 +40,7 @@
 
 namespace otb
 {
-class GUIRectangle : public Fl_Group
+class GUIRectangle: public Fl_Group
 {
 public:
   /** Standard typedefs */
@@ -436,13 +436,13 @@ public:
   void CreateInsightTooltip()
   {
     m_Oss.str("");
-    m_Oss << "UL : (" << m_ExtentList[0][0] << " , " << m_ExtentList[0][1] << ")" << std::endl;
+    m_Oss << "UL: (" << m_ExtentList[0][0] << " , " << m_ExtentList[0][1] << ")" << std::endl;
     m_Oss << "       (" << m_LongLatExtentList[0][0] << " , " << m_LongLatExtentList[0][1] << ")" << std::endl;
-    m_Oss << "UR : (" << m_ExtentList[1][0] << " , " << m_ExtentList[1][1] << ")" << std::endl;
+    m_Oss << "UR: (" << m_ExtentList[1][0] << " , " << m_ExtentList[1][1] << ")" << std::endl;
     m_Oss << "       (" << m_LongLatExtentList[1][0] << " , " << m_LongLatExtentList[1][1] << ")" << std::endl;
-    m_Oss << "LR : (" << m_ExtentList[2][0] << " , " << m_ExtentList[2][1] << ")" << std::endl;
+    m_Oss << "LR: (" << m_ExtentList[2][0] << " , " << m_ExtentList[2][1] << ")" << std::endl;
     m_Oss << "       (" << m_LongLatExtentList[2][0] << " , " << m_LongLatExtentList[2][1] << ")" << std::endl;
-    m_Oss << "LL : (" << m_ExtentList[3][0] << " , " << m_ExtentList[3][1] << ")" << std::endl;
+    m_Oss << "LL: (" << m_ExtentList[3][0] << " , " << m_ExtentList[3][1] << ")" << std::endl;
     m_Oss << "       (" << m_LongLatExtentList[3][0] << " , " << m_LongLatExtentList[3][1] << ")" << std::endl;
   }
 
@@ -590,7 +590,7 @@ public:
   }
 
   /** Constructor */
-  GUIRectangle(int x, int y, int w, int h, const char* toto) : Fl_Group(x, y, w, h, toto)
+  GUIRectangle(int x, int y, int w, int h, const char* toto): Fl_Group(x, y, w, h, toto)
   {
     m_Tooltip = new Fl_Tooltip();
     m_Oss << std::setiosflags(std::ios_base::fixed);

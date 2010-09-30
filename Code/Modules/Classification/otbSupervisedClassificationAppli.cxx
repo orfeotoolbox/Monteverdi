@@ -306,7 +306,7 @@ void
 SupervisedClassificationAppli
 ::ImportVectorData()
 {
-  const char * cfname = fl_file_chooser("Vector data file :", "*.shp\t*.kml", m_LastPath.c_str());
+  const char * cfname = fl_file_chooser("Vector data file:", "*.shp\t*.kml", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;
@@ -556,7 +556,7 @@ void
 SupervisedClassificationAppli
 ::OpenSVMModel()
 {
-  const char * cfname = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  const char * cfname = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;
@@ -600,7 +600,7 @@ void
 SupervisedClassificationAppli
 ::SaveSVMModel()
 {
-  const char * cfname = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  const char * cfname = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;

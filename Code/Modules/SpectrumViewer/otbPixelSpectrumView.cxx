@@ -24,7 +24,7 @@ namespace otb
 {
 
 PixelSpectrumView
-::PixelSpectrumView() : m_Model()
+::PixelSpectrumView(): m_Model()
 {
   m_Initiated = false;
 
@@ -186,7 +186,7 @@ PixelSpectrumView
   gridSpace.Fill(0);
 
   // about the grid
-  gridSpace[0] = m_Curve->GetSpectralCurve().GetSize() > 15 ? m_CurveWidget->GetAxisLength()[0] / 10 : 1;
+  gridSpace[0] = m_Curve->GetSpectralCurve().GetSize() > 15 ? m_CurveWidget->GetAxisLength()[0] / 10: 1;
 
   if (!automatic)
     {
@@ -255,7 +255,7 @@ PixelSpectrumView
     // relative to the HCI
     tempDesc.id = m_Model->GetSeveralSpectrumData().at(cur).id;
     std::ostringstream oss;
-    oss << "Curve : [ID " << tempDesc.id << "] - coord: (" << m_Model->GetSeveralSpectrumData().at(cur).coord[0] <<
+    oss << "Curve: [ID " << tempDesc.id << "] - coord: (" << m_Model->GetSeveralSpectrumData().at(cur).coord[0] <<
     ", " << m_Model->GetSeveralSpectrumData().at(cur).coord[1] << " )";
 
     tempDesc.name = oss.str();

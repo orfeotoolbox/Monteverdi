@@ -179,10 +179,10 @@ SpectrumModuleView
 {
   std::ostringstream helpContent;
 
-  helpContent << "Right Click on a pixel : add a new spectrum to the list "<< std::endl;
-  helpContent << "Middle Click : reset all the list"<< std::endl;
-  helpContent << "H/S : Hide or Show the current curve"<< std::endl;
-  helpContent << "+/- : Change the representation scale"<< std::endl;
+  helpContent << "Right Click on a pixel: add a new spectrum to the list "<< std::endl;
+  helpContent << "Middle Click: reset all the list"<< std::endl;
+  helpContent << "H/S: Hide or Show the current curve"<< std::endl;
+  helpContent << "+/-: Change the representation scale"<< std::endl;
 
   this->wHelpText->value(helpContent.str().c_str());
   wInfo->position(wMainWindow->x() + wMainWindow->w(),wMainWindow->y());

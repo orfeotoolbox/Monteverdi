@@ -82,37 +82,37 @@ public:
         {
         case FeatureInfo::SFS_LEN:
           {
-          oss << "SFS Length : ";
+          oss << "SFS Length: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::LENGTH, true); //LENGTH, SFSTexturesFilterType::WIDTH, PSI, WMEAN, RATIO, SD
           break;
           }
         case FeatureInfo::SFS_WID:
           {
-          oss << "SFS Width : ";
+          oss << "SFS Width: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WIDTH, true);
           break;
           }
         case FeatureInfo::SFS_PSI:
           {
-          oss << "SFS PSI : ";
+          oss << "SFS PSI: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::PSI, true);
           break;
           }
         case FeatureInfo::SFS_WME:
           {
-          oss << "SFS W-mean : ";
+          oss << "SFS W-mean: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WMEAN, true);
           break;
           }
         case FeatureInfo::SFS_RAT:
           {
-          oss << "SFS Ratio : ";
+          oss << "SFS Ratio: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::RATIO, true);
           break;
           }
         case FeatureInfo::SFS_SD:
           {
-          oss << "SFS SD : ";
+          oss << "SFS SD: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::SD, true);
           break;
           }

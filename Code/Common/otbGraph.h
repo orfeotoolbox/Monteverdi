@@ -49,7 +49,7 @@ namespace otb
  */
 template <class TVertex, class TEdge, class TDirected = boost::undirectedS>
 class ITK_EXPORT Graph
-  : public itk::DataObject
+ : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
@@ -134,7 +134,7 @@ protected:
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Number of vertices: " << this->GetNumberOfVertices() << std::endl;
-    os << indent << "Number of edges   : " << this->GetNumberOfEdges() << std::endl;
+    os << indent << "Number of edges  : " << this->GetNumberOfEdges() << std::endl;
   }
 
 private:

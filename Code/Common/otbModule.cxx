@@ -23,7 +23,7 @@
 namespace otb
 {
 /** Constructor */
-Module::Module() :  m_InstanceId("Unknown"), m_InputsMap(), m_OutputsMap(), m_NeedsPipelineLocking(false), m_Busy(false)
+Module::Module():  m_InstanceId("Unknown"), m_InputsMap(), m_OutputsMap(), m_NeedsPipelineLocking(false), m_Busy(false)
 {}
 
 /** Destructor */
@@ -54,7 +54,7 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** Add an input data by its key */
 void Module::AddInputByKey(const std::string& key, const DataObjectWrapper& data)
 {
-  otbGenericMsgDebugMacro(<< "AddInputByKey:key : " << key << " data : " << data);
+  otbGenericMsgDebugMacro(<< "AddInputByKey:key: " << key << " data: " << data);
 
   // Search for the key in the input map
   InputDataDescriptorMapType::iterator it = m_InputsMap.find(key);

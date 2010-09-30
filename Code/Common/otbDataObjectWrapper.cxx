@@ -25,7 +25,7 @@ namespace otb
 {
 
 /** Constructors */
-DataObjectWrapper::DataObjectWrapper() : m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"),
+DataObjectWrapper::DataObjectWrapper(): m_DataType("Unknown"), m_DataObject(), m_SourceInstanceId("Unknwon"),
   m_SourceOutputKey("Unknown"), m_Description("Unknown")
 {}
 

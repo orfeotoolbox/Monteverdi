@@ -202,20 +202,20 @@ public:
       {
       case FeatureInfo::NDVI:
         {
-        mess = "Full Image : NDVI : ";
+        mess = "Full Image: NDVI: ";
         this->GenericAddRAndNIRFilter<NDVIFilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::RVI:
         {
-        mess = "Full Image : RVI : ";
+        mess = "Full Image: RVI: ";
         this->GenericAddRAndNIRFilter<RVIFilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::PVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : PVI : " << params[0] << "," << params[1] << " ";
+        oss << "Full Image: PVI: " << params[0] << "," << params[1] << " ";
         std::string            mess = oss.str();
         PVIFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<PVIFilterType>(model, type, redId, nirId, mess);
@@ -226,7 +226,7 @@ public:
       case FeatureInfo::SAVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : SAVI : " << params[0] << " ";
+        oss << "Full Image: SAVI: " << params[0] << " ";
         std::string             mess = oss.str();
         SAVIFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<SAVIFilterType>(model, type, redId, nirId, mess);
@@ -236,7 +236,7 @@ public:
       case FeatureInfo::MSAVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : MSAVI : " << params[0] << " ";
+        oss << "Full Image: MSAVI: " << params[0] << " ";
         std::string              mess = oss.str();
         MSAVIFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<MSAVIFilterType>(model, type, redId, nirId, mess);
@@ -245,14 +245,14 @@ public:
         }
       case FeatureInfo::MSAVI2:
         {
-        mess = "Full Image : MSAVI2 : ";
+        mess = "Full Image: MSAVI2: ";
         this->GenericAddRAndNIRFilter<MSAVI2FilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::TSAVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : TSAVI : " << params[0] << "," << params[1] << "," << params[2] << " ";
+        oss << "Full Image: TSAVI: " << params[0] << "," << params[1] << "," << params[2] << " ";
         std::string              mess = oss.str();
         TSAVIFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<TSAVIFilterType>(model, type, redId, nirId, mess);
@@ -263,14 +263,14 @@ public:
         }
       case FeatureInfo::GEMI:
         {
-        mess = "Full Image : GEMI : ";
+        mess = "Full Image: GEMI: ";
         this->GenericAddRAndNIRFilter<GEMIFilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::WDVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : WDVI : " << params[0] << " ";
+        oss << "Full Image: WDVI: " << params[0] << " ";
         std::string             mess = oss.str();
         WDVIFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<WDVIFilterType>(model, type, redId, nirId, mess);
@@ -279,20 +279,20 @@ public:
         }
       case FeatureInfo::IPVI:
         {
-        mess = "Full Image : IPVI : ";
+        mess = "Full Image: IPVI: ";
         this->GenericAddRAndNIRFilter<IPVIFilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::TNDVI:
         {
-        mess = "Full Image : TNDVI : ";
+        mess = "Full Image: TNDVI: ";
         this->GenericAddRAndNIRFilter<TNDVIFilterType>(model, type, redId, nirId, mess);
         break;
         }
       case FeatureInfo::ISU:
         {
         itk::OStringStream oss;
-        oss << "Full Image : ISU : " << params[0] << "," << params[1] << " ";
+        oss << "Full Image: ISU: " << params[0] << "," << params[1] << " ";
         std::string            mess = oss.str();
         ISUFilterType::Pointer filter;
         filter = this->GenericAddRAndNIRFilter<ISUFilterType>(model, type, redId, nirId, mess);
@@ -319,7 +319,7 @@ public:
       {
       case FeatureInfo::ARVI:
         {
-        mess = "Full Image : ARVI : ";
+        mess = "Full Image: ARVI: ";
         ARVIFilterType::Pointer filter;
         filter = this->GenericAddRAndBAndNIRFilter<ARVIFilterType>(model, type, redId, blueId, nirId, mess);
         filter->GetFunctor().SetGamma(params[0]);
@@ -328,7 +328,7 @@ public:
       case FeatureInfo::EVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : EVI : " << params[0] << "," << params[1] << "," << params[2] << "," << params[3] << " ";
+        oss << "Full Image: EVI: " << params[0] << "," << params[1] << "," << params[2] << "," << params[3] << " ";
         std::string            mess = oss.str();
         EVIFilterType::Pointer filter;
         filter = this->GenericAddRAndBAndNIRFilter<EVIFilterType>(model, type, redId, blueId, nirId, mess);
@@ -341,7 +341,7 @@ public:
       case FeatureInfo::TSARVI:
         {
         itk::OStringStream oss;
-        oss << "Full Image : TSARVI : " << params[0] << "," << params[1] << "," << params[2] << " ";
+        oss << "Full Image: TSARVI: " << params[0] << "," << params[1] << "," << params[2] << " ";
         std::string               mess = oss.str();
         TSARVIFilterType::Pointer filter;
         filter = this->GenericAddRAndBAndNIRFilter<TSARVIFilterType>(model, type, redId, blueId, nirId, mess);
@@ -379,7 +379,7 @@ public:
         avi->GetFunctor().SetLambdaNir(params[2]);
 
         itk::OStringStream oss;
-        oss << "Full Image : AVI : " << params[0] << "," << params[1] << "," << params[2] << " " << greenId << "," <<
+        oss << "Full Image: AVI: " << params[0] << "," << params[1] << "," << params[2] << " " << greenId << "," <<
         redId << "," << nirId;
         std::string mess = oss.str();
         model->AddFeatureFilter(avi, FeatureInfo::AVI, itk::NumericTraits<unsigned int>::max(), 0, mess);
@@ -394,7 +394,7 @@ public:
         ib2->SetNIRIndex(nirId);
 
         itk::OStringStream oss;
-        oss << "Full Image : IB2 : " << redId << ", " << greenId << ", " << nirId;
+        oss << "Full Image: IB2: " << redId << ", " << greenId << ", " << nirId;
         std::string mess = oss.str();
         model->AddFeatureFilter(ib2, FeatureInfo::IB2, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
@@ -419,7 +419,7 @@ public:
         ir->SetRedIndex(chan2Id);
 
         itk::OStringStream oss;
-        oss << "Full Image : IR : " << chan1Id << ", " << chan2Id;
+        oss << "Full Image: IR: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ir, FeatureInfo::IR, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
@@ -432,7 +432,7 @@ public:
         ic->SetRedIndex(chan2Id);
 
         itk::OStringStream oss;
-        oss << "Full Image : IC : " << chan1Id << ", " << chan2Id;
+        oss << "Full Image: IC: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ic, FeatureInfo::IC, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
@@ -445,50 +445,50 @@ public:
         ib->SetRedIndex(chan2Id);
 
         itk::OStringStream oss;
-        oss << "Full Image : IB : " << chan1Id << ", " << chan2Id;
+        oss << "Full Image: IB: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ib, FeatureInfo::IB, itk::NumericTraits<unsigned int>::max(), 0, mess);
         break;
         }
       case FeatureInfo::NDBI:
         {
-        mess = "Full Image : NDBI : ";
+        mess = "Full Image: NDBI: ";
         this->GenericAdd2ChannelsFilter<NDBIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::SRWI:
         {
-        mess = "Full Image : SRWI : ";
+        mess = "Full Image: SRWI: ";
         this->GenericAdd2ChannelsFilter<SRWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::NDWI:
         {
-        mess = "Full Image : NDWI : ";
+        mess = "Full Image: NDWI: ";
         this->GenericAdd2ChannelsFilter<NDWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::NDWI2:
         {
-        mess = "Full Image : NDWI2 : ";
+        mess = "Full Image: NDWI2: ";
         this->GenericAdd2ChannelsFilter<NDWI2FilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::MNDWI:
         {
-        mess = "Full Image : MNDWI : ";
+        mess = "Full Image: MNDWI: ";
         this->GenericAdd2ChannelsFilter<MNDWIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::NDPI:
         {
-        mess = "Full Image : NDPI : ";
+        mess = "Full Image: NDPI: ";
         this->GenericAdd2ChannelsFilter<NDPIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }
       case FeatureInfo::NDTI:
         {
-        mess = "Full Image : NDTI : ";
+        mess = "Full Image: NDTI: ";
         this->GenericAdd2ChannelsFilter<NDTIFilterType>(model, type, chan1Id, chan2Id, mess);
         break;
         }

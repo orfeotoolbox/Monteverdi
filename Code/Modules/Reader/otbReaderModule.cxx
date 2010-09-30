@@ -233,7 +233,7 @@ void ReaderModule::OpenVector()
   m_VectorReader->SetFileName(filepath);
   m_VectorReader->GenerateOutputInformation();
 
-  oss << "Vector read from file : " << lFile.file();
+  oss << "Vector read from file: " << lFile.file();
   ossId << vName->value() << " (whole dataset)";
   this->AddOutputDescriptor(m_VectorReader->GetOutput(), ossId.str(), oss.str());
 }

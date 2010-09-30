@@ -91,48 +91,48 @@ public:
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
         itk::OStringStream oss;
-        //oss << "Haralick Text : ";
+        //oss << "Haralick Text: ";
 
         switch (pHarList[textId])
           {
           case HaralickTexture::ENERGY:
             {
-            oss << "Energy : ";
+            oss << "Energy: ";
             break;
             }
           case HaralickTexture::ENTROPY:
             {
-            oss << "Entropy : ";
+            oss << "Entropy: ";
             break;
             }
           case HaralickTexture::CORRELATION:
             {
-            oss << "Correlation : ";
+            oss << "Correlation: ";
             break;
             }
           case HaralickTexture::INERTIA:
             {
-            oss << "Inertia : ";
+            oss << "Inertia: ";
             break;
             }
           case HaralickTexture::INVDIFMO:
             {
-            oss << "Inv. Diff. Moment : ";
+            oss << "Inv. Diff. Moment: ";
             break;
             }
           case HaralickTexture::CLUSPRO:
             {
-            oss << "Cluster Pro. : ";
+            oss << "Cluster Pro.: ";
             break;
             }
           case HaralickTexture::CLUSHA:
             {
-            oss << "Cluster Shade : ";
+            oss << "Cluster Shade: ";
             break;
             }
           case HaralickTexture::HARCORR:
             {
-            oss << "Har. Corr : ";
+            oss << "Har. Corr: ";
             break;
             }
           default:

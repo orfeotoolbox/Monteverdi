@@ -24,7 +24,7 @@
 namespace otb
 {
 /** Constructors */
-DataDescriptor::DataDescriptor() : m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown"), m_Data()
+DataDescriptor::DataDescriptor(): m_DataType("Unknown"), m_DataKey("Unknown"), m_DataDescription("Unknown"), m_Data()
 {}
 
 DataDescriptor::DataDescriptor(const std::string& type, const std::string& key, const std::string& description)

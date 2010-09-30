@@ -223,8 +223,8 @@ WriterModel
   int  outputNb = 0;
   int  i = 0;
 
-  if (!m_HasInput) itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if (m_OutputListOrder.size() == 0) itkExceptionMacro("Impossible to create output image : no feature selected.");
+  if (!m_HasInput) itkExceptionMacro("Impossible to create output image: no image image selected.");
+  if (m_OutputListOrder.size() == 0) itkExceptionMacro("Impossible to create output image: no feature selected.");
 
   //m_VisuModel->GetLayer(0)->
 

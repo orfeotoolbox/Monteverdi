@@ -104,22 +104,22 @@ ProjectionView
   // Get the projection Ref from the input Image
   std::string inputProjRef = m_Controller->GetModel()->GetInputImage()->GetProjectionRef();
 
-  // If the Projection is not empty : Map Projection
+  // If the Projection is not empty: Map Projection
   OGRSpatialReference oSRS;
 
   // Else perhaps a model sensor
   if (!inputProjRef.empty())
     {
-    // From std::string to char* : Needed for the importFromWkt(char** projRef)
+    // From std::string to char*: Needed for the importFromWkt(char** projRef)
     char * inputProjchar = new char[inputProjRef.length() + 1];
     strcpy(inputProjchar, inputProjRef.c_str());
 
     // Import OGRSpatial Reference object from projectionRef
-    // Warning : importFromWkt modifies the passed pointer !
+    // Warning: importFromWkt modifies the passed pointer !
     char* inputProjcharForImport = inputProjchar;
     oSRS.importFromWkt(&inputProjcharForImport);
 
-    // First test if the node Projection exists : Avoid Segfaults when
+    // First test if the node Projection exists: Avoid Segfaults when
     // uses strcmp with null values.
     if (oSRS.GetAttrValue("PROJECTION") != NULL)
       {
@@ -182,7 +182,7 @@ ProjectionView
       }
     }
 
-  // Sensor Model :: Test if KeyWorldList is not empty
+  // Sensor Model:: Test if KeyWorldList is not empty
   if (m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() > 0 && inputProjRef.empty())
     {
     // Select the Sensor Model in the InputMapType
@@ -192,7 +192,7 @@ ProjectionView
     iTRANSMERCATOR->hide();
     }
 
-  // Default Case : Kwl & ProjRef  empty : Give the user the possibility to fill the proj he needs
+  // Default Case: Kwl & ProjRef  empty: Give the user the possibility to fill the proj he needs
   if (m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize() == 0 && inputProjRef.empty())
     {
     iMapType->activate();
@@ -202,7 +202,7 @@ ProjectionView
 }
 
 /**
- * In the OGR_SRSNode : Find the value of the parameter inParam if exists
+ * In the OGR_SRSNode: Find the value of the parameter inParam if exists
  *
  */
 bool
@@ -210,7 +210,7 @@ ProjectionView
 ::FindParameter(OGRSpatialReference oSRS, const char * inParam, double * paramValue)
 {
   // Get all the nodes of the Projection Ref Tree
-  // and search for a child named : "scale_factor"
+  // and search for a child named: "scale_factor"
   OGR_SRSNode* node = oSRS.GetAttrNode("PROJCS");
 
   int nbChild  = node->GetChildCount();
@@ -241,7 +241,7 @@ ProjectionView
     // Note that call is useful for transform initialization and paramters initiaization
     // Get the projection initial parameters
     this->RetrieveInputProjection();
-    // Default : utm is the output projection proposed
+    // Default: utm is the output projection proposed
     this->UpdateUTMTransform();
     // Edit the GUI following the projection computed when UpdateUTMTransform Called
     this->InitializeAction();
@@ -424,7 +424,7 @@ ProjectionView
 }
 
 /**
- * In case of unknown input map :
+ * In case of unknown input map:
  */
 void
 ProjectionView
@@ -663,7 +663,7 @@ ProjectionView::InitializeAction()
     // End of filling the utm parameters
     }
 
-  // Transform middle point to carto projection : it is done here cause we wait for the
+  // Transform middle point to carto projection: it is done here cause we wait for the
   // update of the transform following the utm zone found
   outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 

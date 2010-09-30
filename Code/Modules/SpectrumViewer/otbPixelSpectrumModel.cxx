@@ -29,7 +29,7 @@ unsigned int PixelSpectrumModel::NoneID = itk::NumericTraits<unsigned int>::max(
 
 PixelSpectrumModel
 ::PixelSpectrumModel()
-  : m_PixelSpectrum(""),
+ : m_PixelSpectrum(""),
   m_AxisLengthX(0),
   m_AxisLengthY(0),
   m_CurentCurveAlpha(0),

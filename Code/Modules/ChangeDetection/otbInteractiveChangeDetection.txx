@@ -310,7 +310,7 @@ void
 InteractiveChangeDetection<TPixel>
 ::SaveSVMModel()
 {
-  const char* filename = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  const char* filename = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (filename == NULL || strlen(filename) < 1)
     {
     return;
@@ -327,7 +327,7 @@ void
 InteractiveChangeDetection<TPixel>
 ::OpenSVMModel()
 {
-  const char* filename = fl_file_chooser("SVM model file :", "*.svm", m_LastPath.c_str());
+  const char* filename = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (filename == NULL || strlen(filename) < 1)
     {
     return;
@@ -391,7 +391,7 @@ void
 InteractiveChangeDetection<TPixel>
 ::ImportVectorData()
 {
-  const char* filename = fl_file_chooser("Vector data file :", "*.shp\t*.kml", m_LastPath.c_str());
+  const char* filename = fl_file_chooser("Vector data file:", "*.shp\t*.kml", m_LastPath.c_str());
   if (filename == NULL || strlen(filename) < 1)
     {
     return;
@@ -438,7 +438,7 @@ void
 InteractiveChangeDetection<TPixel>
 ::ExportVectorData()
 {
-  const char* filename = fl_file_chooser("Vector data file :", "*.shp", m_LastPath.c_str());
+  const char* filename = fl_file_chooser("Vector data file:", "*.shp", m_LastPath.c_str());
   if (filename == NULL || strlen(filename) < 1)
     {
     return;

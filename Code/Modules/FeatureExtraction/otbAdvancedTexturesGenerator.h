@@ -91,43 +91,43 @@ public:
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
         itk::OStringStream oss;
-        //oss<<"Advanced Text : ";
+        //oss<<"Advanced Text: ";
 
         switch (pHarList[textId])
           {
           case AdvancedTexture::VARIANCE:
             {
-            oss << "Variance : ";
+            oss << "Variance: ";
             break;
             }
           case AdvancedTexture::MEAN:
             {
-            oss << "Mean : ";
+            oss << "Mean: ";
             break;
             }
           case AdvancedTexture::SUMAV:
             {
-            oss << "Sum average : ";
+            oss << "Sum average: ";
             break;
             }
           case AdvancedTexture::SUMVAR:
             {
-            oss << "Sum variance : ";
+            oss << "Sum variance: ";
             break;
             }
           case AdvancedTexture::SUMENT:
             {
-            oss << "Sum entropy : ";
+            oss << "Sum entropy: ";
             break;
             }
           case AdvancedTexture::DIFFENT:
             {
-            oss << "Diff. entropy : ";
+            oss << "Diff. entropy: ";
             break;
             }
           case AdvancedTexture::DIFFVAR:
             {
-            oss << "Diff. variance : ";
+            oss << "Diff. variance: ";
             break;
             }
           case AdvancedTexture::IC1:

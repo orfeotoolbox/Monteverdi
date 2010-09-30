@@ -26,12 +26,12 @@
 namespace otb
 {
 /** Constructors */
-InputDataDescriptor::InputDataDescriptor() : DataDescriptor(), m_Optional(false), m_Multiple(false)
+InputDataDescriptor::InputDataDescriptor(): DataDescriptor(), m_Optional(false), m_Multiple(false)
 {}
 
 InputDataDescriptor::InputDataDescriptor(const std::string& type,
                                          const std::string& key,
-                                         const std::string& description) : DataDescriptor(type, key,
+                                         const std::string& description): DataDescriptor(type, key,
                                                                                           description),
   m_Optional(false), m_Multiple(false)
 {}
@@ -141,9 +141,9 @@ std::ostream& operator <<(std::ostream& ostr, const InputDataDescriptor& descrip
 {
   ostr << "Input data, "
   << static_cast<DataDescriptor>(descriptor)
-  << (descriptor.IsOptional() ? ", optional" : ", mandatory")
-  << (descriptor.IsMultiple() ? ", multiple" : ", single")
-  << (descriptor.IsConsistent() ? ", consistent"     : ", inconsistent");
+  << (descriptor.IsOptional() ? ", optional": ", mandatory")
+  << (descriptor.IsMultiple() ? ", multiple": ", single")
+  << (descriptor.IsConsistent() ? ", consistent"    : ", inconsistent");
   return ostr;
 }
 

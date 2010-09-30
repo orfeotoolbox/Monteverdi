@@ -24,13 +24,13 @@
 namespace otb
 {
 /** Constructors */
-OutputDataDescriptor::OutputDataDescriptor() : DataDescriptor(), m_Cached(false)
+OutputDataDescriptor::OutputDataDescriptor(): DataDescriptor(), m_Cached(false)
 {}
 
 OutputDataDescriptor::OutputDataDescriptor(const DataObjectWrapper& data,
                                            const std::string& key,
                                            const std::string& description,
-                                           bool cached) : DataDescriptor(data.GetDataType(), key,
+                                           bool cached): DataDescriptor(data.GetDataType(), key,
                                                                          description), m_Cached(cached)
 {
   m_Data.push_back(data);
@@ -61,7 +61,7 @@ std::ostream& operator <<(std::ostream& ostr, const OutputDataDescriptor& descri
   ostr << "Output data, "
   << static_cast<DataDescriptor>(descriptor)
   << ", number of data = " << descriptor.GetNumberOfData()
-  << ", " << (descriptor.IsCached() ? "Cached" : "Streamed");
+  << ", " << (descriptor.IsCached() ? "Cached": "Streamed");
   return ostr;
 }
 

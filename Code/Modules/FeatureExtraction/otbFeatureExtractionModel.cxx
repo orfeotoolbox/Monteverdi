@@ -275,7 +275,7 @@ FeatureExtractionModel
     filterTouzi->SetInput(m_InputImageList->GetNthElement(i));
 
     itk::OStringStream oss;
-    oss << "TOUZI : " << radiusX;
+    oss << "TOUZI: " << radiusX;
     std::string mess = oss.str();
     this->AddFeatureFilter(filterTouzi, FeatureInfo::TOUZI, i, 0, mess);
     }
@@ -295,7 +295,7 @@ FeatureExtractionModel
     harris->SetInput(m_InputImageList->GetNthElement(i));
 
     itk::OStringStream oss;
-    oss << "HARRIS : " << sigmaD << " , " << sigmaI << " , " << alpha;
+    oss << "HARRIS: " << sigmaD << " , " << sigmaI << " , " << alpha;
     std::string mess = oss.str();
     this->AddFeatureFilter(harris, FeatureInfo::HARRIS, i, 0, mess);
     }
@@ -318,7 +318,7 @@ FeatureExtractionModel
   angle->SetReferencePixel(pix);
 
   itk::OStringStream oss;
-  oss << "Full Image : Spect Angle : ";
+  oss << "Full Image: Spect Angle: ";
   for (unsigned int i = 0; i < pix.Size(); ++i)
     {
     oss << pix[i] << " ";
@@ -394,7 +394,7 @@ FeatureExtractionModel
     var->SetInput(m_InputImageList->GetNthElement(i));
 
     itk::OStringStream oss;
-    oss << "Variance : " << radiusX << ", " << radiusY;
+    oss << "Variance: " << radiusX << ", " << radiusY;
     std::string mess = oss.str();
     this->AddFeatureFilter(var, FeatureInfo::VARIANCE, i, 0, mess);
     }
@@ -414,7 +414,7 @@ FeatureExtractionModel
     mean->SetInput(m_InputImageList->GetNthElement(i));
 
     itk::OStringStream oss;
-    oss << "Mean : " << radiusX << ", " << radiusY;
+    oss << "Mean: " << radiusX << ", " << radiusY;
     std::string mess = oss.str();
     this->AddFeatureFilter(mean, FeatureInfo::MEAN, i, 0, mess);
     }
@@ -431,7 +431,7 @@ FeatureExtractionModel
     grad->SetInput(m_InputImageList->GetNthElement(i));
 
     itk::OStringStream oss;
-    oss << "Rec. Gradient : " << sigma;
+    oss << "Rec. Gradient: " << sigma;
     std::string mess = oss.str();
     this->AddFeatureFilter(grad, FeatureInfo::GRADIENT, i, 0, mess);
     }
@@ -692,8 +692,8 @@ FeatureExtractionModel
   int  outputNb = 0;
   int  i = 0;
 
-  if (!m_HasInput) itkExceptionMacro("Impossible to create output image : no image image selected.");
-  if (m_OutputListOrder.size() == 0) itkExceptionMacro("Impossible to create output image : no feature selected.");
+  if (!m_HasInput) itkExceptionMacro("Impossible to create output image: no image image selected.");
+  if (m_OutputListOrder.size() == 0) itkExceptionMacro("Impossible to create output image: no feature selected.");
 
   m_imageList->Clear();
 

@@ -72,10 +72,10 @@ public:
       itk::OStringStream oss;
       switch (pType)
         {
-        /** CASE NOT USED : ITK PROBLEM WITH CANNY FILTER*/
+        /** CASE NOT USED: ITK PROBLEM WITH CANNY FILTER*/
         case FeatureInfo::EDGE_CANNY:
           {
-          oss << "Edge Canny : ";
+          oss << "Edge Canny: ";
 
           CannyEdgeDensityFilterType::Pointer edgeDetectorFilter = CannyEdgeDensityFilterType::New();
           CannyDetectorType::Pointer          cannyFilter = CannyDetectorType::New();
@@ -96,7 +96,7 @@ public:
           }
         case FeatureInfo::EDGE_SOBEL:
           {
-          oss << "Edge Sobel : ";
+          oss << "Edge Sobel: ";
 
           SobelEdgeDensityFilterType::Pointer edgeDetectorFilter = SobelEdgeDensityFilterType::New();
           SobelDetectorType::Pointer          sobelFilter = SobelDetectorType::New();

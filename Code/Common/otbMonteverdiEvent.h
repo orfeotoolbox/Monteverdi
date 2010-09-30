@@ -25,8 +25,8 @@ class ITK_EXPORT MonteverdiEvent
 {
 public:
   /** Constructor */
-  MonteverdiEvent() : m_Type("Unknown"), m_InstanceId("Unknown") {}
-  MonteverdiEvent(const std::string& type, const std::string& id) : m_Type(type), m_InstanceId(id) {}
+  MonteverdiEvent(): m_Type("Unknown"), m_InstanceId("Unknown") {}
+  MonteverdiEvent(const std::string& type, const std::string& id): m_Type(type), m_InstanceId(id) {}
   virtual ~MonteverdiEvent(){}
 
   void SetType(const std::string& type)

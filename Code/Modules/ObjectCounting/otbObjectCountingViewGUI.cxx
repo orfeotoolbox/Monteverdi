@@ -191,7 +191,7 @@ void ObjectCountingViewGUI
     case POLYGONS_DETECTED:
       {
       itk::OStringStream oss;
-      oss << "Number of Object(s) found : ";
+      oss << "Number of Object(s) found: ";
       oss << m_Model->GetNumberOfObjects();
       tStat->value(oss.str().c_str());
       tStat->redraw();
@@ -275,7 +275,7 @@ void
 ObjectCountingViewGUI
 ::SavePolygon()
 {
-  const char * cfname = fl_file_chooser("Vector data file :", "*.shp\t*.kml", ".");
+  const char * cfname = fl_file_chooser("Vector data file:", "*.shp\t*.kml", ".");
   Fl::check();
   guiMainWindow->redraw();
   if (cfname == NULL || strlen(cfname) < 1)
