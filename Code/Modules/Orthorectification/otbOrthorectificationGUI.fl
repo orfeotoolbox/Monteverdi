@@ -33,7 +33,7 @@ class OrthorectificationGUI {open
         xywh {18 14 398 398} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label Coordinates open selected
+          label Coordinates open
           xywh {18 35 398 377} box EMBOSSED_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -308,8 +308,8 @@ SetInterpolatorType(SINC);}
             } {
               Fl_Counter guiBCORadius {
                 label {BCO Radius}
-                callback {SetInterpolatorType(BCO);}
-                xywh {169 296 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 1 maximum 15000 step 1 value 1
+                callback {SetInterpolatorType(BCO);} selected
+                xywh {169 296 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 2 maximum 15000 step 1 value 2
               }
             }
             Fl_Group guiSinC {open

@@ -25,7 +25,7 @@ class ProjectionGroup {open
         xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group AllGrp {
-          label {Input image} open selected
+          label {Input image} open
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
@@ -399,8 +399,8 @@ this->UpdateTMTransform();}
             } {
               Fl_Counter guiBCORadius {
                 label {BCO Radius}
-                callback {SetInterpolatorType(MAP_BCO);}
-                xywh {174 235 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 1 maximum 15000 step 1 value 1
+                callback {SetInterpolatorType(MAP_BCO);} selected
+                xywh {174 235 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 2 maximum 15000 step 1 value 2
               }
             }
           }
