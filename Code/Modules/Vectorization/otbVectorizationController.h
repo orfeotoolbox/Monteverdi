@@ -29,6 +29,9 @@
 #include "otbChangeScaleActionHandler.h"
 #include "otbVectorDataActionHandler.h"
 
+// Automatic Segmentation case widget handler
+#include "otbAutomaticSegmentationMouseClickHandler.h"
+
 namespace otb
 {
 class ITK_EXPORT VectorizationController
@@ -60,16 +63,19 @@ public:
   /** Handlers */
   typedef ImageWidgetController WidgetControllerType;
   typedef WidgetResizingActionHandler
-  <VisualizationModelType, ImageViewType> ResizingHandlerType;
+  <VisualizationModelType, ImageViewType>   ResizingHandlerType;
   typedef ChangeExtractRegionActionHandler
-  <VisualizationModelType, ImageViewType> ChangeRegionHandlerType;
+  <VisualizationModelType, ImageViewType>   ChangeRegionHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-  <VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
+  <VisualizationModelType, ImageViewType>   ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler
-  <VisualizationModelType, ImageViewType> ChangeScaleHandlerType;
+  <VisualizationModelType, ImageViewType>   ChangeScaleHandlerType;
   typedef VectorDataActionHandler
   <VectorDataModelType,
       ImageViewType>                        VectorDataActionHandlerType;
+  typedef AutomaticSegmentationMouseClickHandler
+  <VectorizationModel, 
+   ImageViewType>		            AutomaticMouseClickActionHandlerType;
 
   void SetModel(ModelType* model);
 
@@ -102,12 +108,20 @@ public:
   virtual void AddVectorData(VectorDataPointer vData);
   virtual void OK();
   virtual void FocusOnDataNode(const IndexType& index);
- 
+  
+  /** From the GUI */
+  virtual void ButtonAutomaticCallbackOn();
+  virtual void ButtonAutomaticCallbackOff();
+  
 protected:
   /** Constructor */
   VectorizationController();
   /** Destructor */
   virtual ~VectorizationController();
+
+  // Intialize the handlers common to the manual and the automatic
+  // selection mode
+  virtual void InitializeCommonActionHandler();
 
 private:
   VectorizationController(const Self&); //purposely not implemented
@@ -128,6 +142,7 @@ private:
   ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
   ChangeScaleHandlerType::Pointer        m_ChangeScaleHandler;
   VectorDataActionHandlerType::Pointer   m_VectorDataActionHandler;
+  AutomaticMouseClickActionHandlerType::Pointer   m_AutomaticActionHandler;
 };
 } //end namespace otb
 

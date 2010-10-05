@@ -60,6 +60,10 @@ public:
   virtual void OK() =0;
   virtual void FocusOnDataNode(const IndexType& index) =0;
 
+  /** From the GUI */
+  virtual void ButtonAutomaticCallbackOn()=0;
+  virtual void ButtonAutomaticCallbackOff()=0;
+
 protected:
   /** Constructor */
   VectorizationControllerInterface() {}

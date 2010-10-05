@@ -29,7 +29,8 @@ VectorizationController
   m_ChangeRegionHandler(),
   m_ChangeScaledRegionHandler(),
   m_ChangeScaleHandler(),
-  m_VectorDataActionHandler()
+  m_VectorDataActionHandler(),
+  m_AutomaticActionHandler()
 {
   // Build the widgets controller
   m_WidgetController          = WidgetControllerType::New();
@@ -40,12 +41,9 @@ VectorizationController
   m_ChangeScaledRegionHandler = ChangeScaledRegionHandlerType::New();
   m_ChangeScaleHandler        = ChangeScaleHandlerType::New();
   m_VectorDataActionHandler   = VectorDataActionHandlerType::New();
+  m_AutomaticActionHandler    = AutomaticMouseClickActionHandlerType::New();
 
-  // Add the action handlers to the widgets controller
-  m_WidgetController->AddActionHandler(m_ResizingHandler);
-  m_WidgetController->AddActionHandler(m_ChangeRegionHandler);
-  m_WidgetController->AddActionHandler(m_ChangeScaledRegionHandler);
-  m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
+  // First handle the action with the manual vector data action handler
   m_WidgetController->AddActionHandler(m_VectorDataActionHandler);
 
   // Specific buttons mapping
@@ -70,6 +68,7 @@ VectorizationController
   m_ChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeScaleHandler->SetModel(m_Model->GetVisualizationModel());
   m_VectorDataActionHandler->SetModel(m_Model->GetVectorDataModel());
+  m_AutomaticActionHandler->SetModel(m_Model);
 }
 
 void
@@ -82,6 +81,7 @@ VectorizationController
   m_ChangeScaledRegionHandler->SetView(m_View->GetImageView());
   m_ChangeScaleHandler->SetView(m_View->GetImageView());
   m_VectorDataActionHandler->SetView(m_View->GetImageView());
+  m_AutomaticActionHandler->SetView(m_View->GetImageView());
 }
 
 
@@ -221,5 +221,36 @@ void VectorizationController::FocusOnDataNode(const IndexType& index)
   m_Model->FocusOnDataNode(index);
 }
 
+/**
+ * Used to set the automatic vectordata action handler
+ */
+void 
+VectorizationController::ButtonAutomaticCallbackOn()
+{
+  std::cout <<"VectorizationController::ButtonAutomaticCallbackOn " << std::endl;
+  this->InitializeCommonActionHandler();
+  m_WidgetController->AddActionHandler(m_AutomaticActionHandler);
+}
+
+/**
+ * Used to set the manual vectordata action handler
+ */
+void 
+VectorizationController::ButtonAutomaticCallbackOff()
+{
+  std::cout <<"VectorizationController::ButtonAutomaticCallbackOff " << std::endl;
+  this->InitializeCommonActionHandler();
+  m_WidgetController->AddActionHandler(m_VectorDataActionHandler);
+}
+
+void 
+VectorizationController::InitializeCommonActionHandler()
+{
+  m_WidgetController->ClearAllActionHandlers();
+  m_WidgetController->AddActionHandler(m_ResizingHandler);
+  m_WidgetController->AddActionHandler(m_ChangeRegionHandler);
+  m_WidgetController->AddActionHandler(m_ChangeScaledRegionHandler);
+  m_WidgetController->AddActionHandler(m_ChangeScaleHandler);
+}
 
 } // end namespace otb
