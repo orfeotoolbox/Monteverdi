@@ -84,6 +84,10 @@ public:
   virtual void UpdateAlphaCallback();  
   virtual void OKCallback();  
 
+  /** GUI callbacks*/
+  virtual void ButtonAutomaticCallbackOn();
+  virtual void ButtonAutomaticCallbackOff();
+  
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);

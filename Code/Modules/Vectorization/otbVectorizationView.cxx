@@ -287,4 +287,35 @@ void VectorizationView
   wMainWindow->hide();
 }
 
+
+/**
+ * The automatic and manual vectorization mode is defined by the
+ * action used in the handler. The  method switches from manuel
+ * vectordata handler to automatic
+ */
+void
+VectorizationView::ButtonAutomaticCallbackOn()
+{
+  m_Controller->ButtonAutomaticCallbackOn();
+  //Initialisation of Algo List
+  //m_AlgoListBuffer = new Fl_Text_Buffer();
+  //TAlgolist->buffer(m_AlgoListBuffer);
+  
+//   for (unsigned int i=0; i<20; i++)
+//     {
+//     TAlgolist->insert(m_Model->m_AlgoListText[i].c_str());
+//     }
+  //m_SelectedPolygonGLComponent->SetVisible(true);
+  std::cout<<"View: OkCallbackOn -------> OK"<<std::endl;
+}
+
+void
+VectorizationView::ButtonAutomaticCallbackOff()
+{
+  m_Controller->ButtonAutomaticCallbackOff();
+  std::cout<<"View: OkCallbackOff -------> OK"<<std::endl;
+}
+
+
+
 } // end namespace

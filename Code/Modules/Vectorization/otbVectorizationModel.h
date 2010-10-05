@@ -120,7 +120,25 @@ public:
   void UpdateAlpha(double alpha);
   void OK();
   void FocusOnDataNode(const PointType& index);
- 
+
+  /** Methods necessary for the automatic mode*/
+
+  void RightIndexClicked(const IndexType & index, RegionType ExtRegion)
+  {
+    std::cout<< "RightIndexClicked:: Not Implemented Yet"<< std::endl;
+    std::cout<< "LeftIndexClicked:: index" << index<< std::endl;
+    std::cout<< "LeftIndexClicked:: ExtRegion" << ExtRegion<< std::endl;
+  }
+  void LeftIndexClicked(const IndexType & index, RegionType ExtRegion)
+  {
+    std::cout<< "LeftIndexClicked:: Not Implemented Yet"<< std::endl;
+    std::cout<< "LeftIndexClicked:: index" << index<< std::endl;
+    std::cout<< "LeftIndexClicked:: ExtRegion" << ExtRegion<< std::endl;
+  }
+  
+  void DeleteGeometry(void){}
+
+  
   /** Output accessor. */
   itkGetObjectMacro(Output, VectorDataType );
   

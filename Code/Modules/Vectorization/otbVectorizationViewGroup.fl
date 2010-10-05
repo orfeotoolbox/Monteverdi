@@ -12,9 +12,9 @@ class VectorizationViewGroup {open
     Fl_Window wMainWindow {
       label {Vectorization Tool}
       callback {this->HideAll();} open
-      xywh {236 107 915 795} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
+      xywh {673 90 915 795} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable size_range {962 700 0 0} visible
     } {
-      Fl_Group guiImageGroup {open
+      Fl_Group guiImageGroup {
         xywh {8 3 477 754} resizable
       } {
         Fl_Group gScroll {
@@ -35,15 +35,49 @@ class VectorizationViewGroup {open
         }
       }
       Fl_Group guiParametersGroup {open
-        xywh {492 1 423 756}
+        xywh {495 1 420 610}
       } {
         Fl_Group guiVectorDataTreeGroup {
-          label {Vector Data Browser} open
+          label {Vector Data Browser}
           xywh {499 23 406 584} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
         } {}
+      }
+      Fl_Choice vNavigationMode {
+        callback {ChangeNavigationModeCallback();} open
+        xywh {10 760 900 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+      } {}
+      Fl_Tabs gTabsAutomatic {open
+        xywh {500 24 406 581} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
+      } {
+        Fl_Group gClusterAlgo {
+          label {Cluster Algorithms} open
+          xywh {500 45 406 559} box PLASTIC_DOWN_FRAME color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 resizable
+        } {
+          Fl_Text_Display TCurrentAlgo {
+            label {Current algorithm}
+            xywh {501 82 404 38} box BORDER_BOX labelfont 1 labelsize 12 labelcolor 177 textsize 13
+          }
+          Fl_Text_Display TAlgolist {
+            label {Algorithm list}
+            xywh {501 140 404 464} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 textsize 13
+          }
+        }
         Fl_Group {} {
-          label {Next geometry} open
-          xywh {498 627 205 124} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+          label {Polygons Selected} open
+          xywh {500 64 406 536} color 7 labelfont 1 labelsize 12 labelcolor 186 hide
+        } {
+          Fl_Group guiFinalVectorDataTreeGroup {
+            label {Vector Data Browser}
+            xywh {500 64 406 534} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177 resizable
+          } {}
+        }
+      }
+      Fl_Group {} {open
+        xywh {500 615 405 141}
+      } {
+        Fl_Group gNextGeometry {
+          label {Next geometry}
+          xywh {503 627 207 87} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
         } {
           Fl_Round_Button bPoint {
             label Point
@@ -51,7 +85,7 @@ class VectorizationViewGroup {open
 bPolygonExt->clear();
 bPolygonInt->clear();
 this->NextGeometryIsPointCallback();}
-            xywh {514 639 170 23} down_box ROUND_DOWN_BOX
+            xywh {519 639 170 23} down_box ROUND_DOWN_BOX
           }
           Fl_Round_Button bLine {
             label Line
@@ -59,7 +93,7 @@ this->NextGeometryIsPointCallback();}
 bPolygonExt->clear();
 bPolygonInt->clear();
 this->NextGeometryIsLineCallback();}
-            xywh {514 662 170 23} down_box ROUND_DOWN_BOX
+            xywh {519 662 170 23} down_box ROUND_DOWN_BOX
           }
           Fl_Round_Button bPolygonExt {
             label {Polygon (Exterior ring)}
@@ -67,48 +101,62 @@ this->NextGeometryIsLineCallback();}
 bLine->clear();
 bPolygonInt->clear();
 this->NextGeometryIsPolygonExtCallback();}
-            xywh {514 686 170 23} down_box ROUND_DOWN_BOX value 1
+            xywh {519 686 170 23} down_box ROUND_DOWN_BOX value 1
           }
           Fl_Round_Button bPolygonInt {
             label {Polygon (Interior rings)}
             callback {bPoint->clear();
 bLine->clear();
 bPolygonExt->clear();
-this->NextGeometryIsPolygonIntCallback();} selected
-            xywh {514 710 170 23} down_box ROUND_DOWN_BOX hide deactivate
+this->NextGeometryIsPolygonIntCallback();}
+            xywh {519 710 170 4} down_box ROUND_DOWN_BOX hide deactivate
           }
         }
         Fl_Group {} {
-          label {Color table} open
-          xywh {711 627 194 78} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
+          label {Color table}
+          xywh {716 627 189 78} box PLASTIC_DOWN_FRAME labelfont 1 labelsize 12 labelcolor 177
         } {
           Fl_Button bColor {
             label Color
             callback {this->UpdateColorCallback();}
-            xywh {738 640 140 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {743 640 140 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Slider sAlpha {
             callback {vAlpha->value(sAlpha->value());
 this->UpdateAlphaCallback();}
-            tooltip {Vactor data transparency value.} xywh {806 675 89 20} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5 when 4 step 0.05 value 0.75 slider_size 0.01
+            tooltip {Vactor data transparency value.} xywh {811 675 89 20} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5 when 4 step 0.05 value 0.75 slider_size 0.01
           }
           Fl_Value_Input vAlpha {
             label Opacity
             callback {sAlpha->value(vAlpha->value());
 this->UpdateAlphaCallback();}
-            tooltip {Vector data transparency value.} xywh {766 675 40 20} box PLASTIC_DOWN_BOX selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 step 0.05 value 0.75
+            tooltip {Vector data transparency value.} xywh {771 675 40 20} box PLASTIC_DOWN_BOX selection_color 42 labelfont 1 labelsize 12 labelcolor 186 when 4 step 0.05 value 0.75
           }
         }
         Fl_Return_Button bOK {
           label OK
           callback {this->OKCallback();}
-          xywh {785 716 55 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
+          xywh {790 716 55 30} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelcolor 186
+        }
+        Fl_Light_Button bAutomaticMode {
+          label {    Automatic Mode}
+          callback {if(static_cast<unsigned int>(bAutomaticMode->value()) == 1)
+{
+guiParametersGroup->hide();
+gTabsAutomatic->set_visible();
+gNextGeometry->deactivate();
+this->ButtonAutomaticCallbackOn();
+}
+else
+{
+guiParametersGroup->set_visible();
+gTabsAutomatic->hide();
+gNextGeometry->activate();
+this->ButtonAutomaticCallbackOff();
+}}
+          xywh {510 725 200 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 177 resizable
         }
       }
-      Fl_Choice vNavigationMode {
-        callback {ChangeNavigationModeCallback();} open
-        xywh {10 760 900 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
-      } {}
     }
   }
   Function {VectorizationViewGroup()} {open
@@ -132,5 +180,9 @@ this->UpdateAlphaCallback();}
   Function {UpdateColorCallback()} {open return_type virtual
   } {}
   Function {OKCallback()} {open return_type virtual
+  } {}
+  Function {ButtonAutomaticCallbackOn()} {open return_type virtual
+  } {}
+  Function {ButtonAutomaticCallbackOff()} {open selected return_type virtual
   } {}
 } 
