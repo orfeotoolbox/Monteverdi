@@ -165,10 +165,10 @@ this->UpdateInputTMTransform();}
               xywh {46 230 360 160} hide
             } {}
           }
-          Fl_Round_Button guiRPCEstimator {
+          Fl_Check_Button guiRPCEstimator {
             label {Estimate Input RPC Model}
-            callback {this->UpdateRpcEstimation();}
-            tooltip {If checked, use the upper left output image pixel coordinates} xywh {40 400 18 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
+            callback {this->UpdateRpcEstimation();} selected
+            xywh {35 400 170 15} down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {
@@ -399,7 +399,7 @@ this->UpdateTMTransform();}
             } {
               Fl_Counter guiBCORadius {
                 label {BCO Radius}
-                callback {SetInterpolatorType(MAP_BCO);} selected
+                callback {SetInterpolatorType(MAP_BCO);}
                 xywh {174 235 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 2 maximum 15000 step 1 value 2
               }
             }
