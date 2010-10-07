@@ -17,7 +17,7 @@ class OrthorectificationGUI {open
   } {
     Fl_Window guiMainWindow {
       label otbOrthorectification open
-      xywh {155 303 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {555 366 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Button guiOK {
         label Ok
@@ -215,9 +215,9 @@ UpdateLongLat();}
               }
             }
           }
-          Fl_Round_Button guiRPCEstimator {
-            label {Estimate Input RPC Model}
-            tooltip {If checked, use the upper left output image pixel coordinates} xywh {45 394 18 15} down_box ROUND_DOWN_BOX labelsize 12 labelcolor 186
+          Fl_Check_Button guiRPCEstimator {
+            label {Estimate Input RPC Model} selected
+            xywh {30 392 165 15} down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {
@@ -308,7 +308,7 @@ SetInterpolatorType(SINC);}
             } {
               Fl_Counter guiBCORadius {
                 label {BCO Radius}
-                callback {SetInterpolatorType(BCO);} selected
+                callback {SetInterpolatorType(BCO);}
                 xywh {169 296 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 2 maximum 15000 step 1 value 2
               }
             }
