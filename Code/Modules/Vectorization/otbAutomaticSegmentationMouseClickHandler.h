@@ -22,7 +22,7 @@
 
 namespace otb
 {
-/** \class MouseClickActionHandler
+/** \class AutomaticSegmentationMouseClickHandler
 *   \brief Implements clicking on widgets
 *   Triggers the IndexClicked(); methods on the destination.
 *
@@ -117,20 +117,20 @@ public:
 		 m_Model->RightIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
 		 return true;
 	   }
-	   if ((event == FL_KEYBOARD) || (event == FL_SHORTCUT))
-	   {
-		 switch (Fl::event_key())
-		  {
-			 case FL_Delete:
-			   {
-			   m_Model->DeleteGeometry();
-			   return true;
-			   break;
-			   }
-			 default:
-			 break;
-		  }
-	   }
+// 	   if ((event == FL_KEYBOARD) || (event == FL_SHORTCUT))
+// 	   {
+// 		 switch (Fl::event_key())
+// 		  {
+// 			 case FL_Delete:
+// 			   {
+// 			   m_Model->DeleteGeometry();
+// 			   return true;
+// 			   break;
+// 			   }
+// 			 default:
+// 			 break;
+// 		  }
+// 	   }
       }
     return false;
   }
