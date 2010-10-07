@@ -114,9 +114,9 @@ VectorizationView
 
   // Display navigation modes
   vNavigationMode->add(
-    "Mouse left: add point, mouse middle: navigate, mouse right: end geometry, del: remove last geometry");
+    "Mouse left: add point, mouse middle: navigate, mouse right: end geometry");
   vNavigationMode->add(
-    "Mouse left: navigate, mouse middle: add point, mouse right: end geometry, del: remove last geometry");
+    "Mouse left: navigate, mouse middle: add point, mouse right: end geometry");
   vNavigationMode->value(0);
   vNavigationMode->redraw();
 
