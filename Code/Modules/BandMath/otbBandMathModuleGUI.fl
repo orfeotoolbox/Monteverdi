@@ -11,8 +11,8 @@ class BandMathModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {BandMath module}
-      callback {this->Quit()} open
-      xywh {134 201 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
+      callback {this->Hide()} open selected
+      xywh {361 202 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
@@ -57,13 +57,14 @@ ui_HelpWindow->show();
 else
 {
 ui_HelpWindow->hide();
-}} selected
+}}
         xywh {570 360 65 50} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
     }
     Fl_Window ui_HelpWindow {
-      label Help open
-      xywh {790 202 335 425} type Double visible
+      label Help
+      callback {this->Hide()}
+      xywh {1017 202 335 425} type Double visible
     } {
       Fl_Output ui_HelpText {
         xywh {0 0 335 425} type Multiline
@@ -75,7 +76,7 @@ ui_HelpWindow->hide();
   } {}
   Function {OK()} {return_type {virtual void}
   } {}
-  Function {Quit()} {return_type {virtual void}
+  Function {Hide()} {return_type {virtual void}
   } {}
   Function {ChangeVarName()} {return_type {virtual void}
   } {}
