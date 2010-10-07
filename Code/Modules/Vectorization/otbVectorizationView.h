@@ -121,6 +121,8 @@ private:
   /** Store the vector data representation color. */
   ColorType m_Color;
   bool m_IsHide;
+
+  VectorDataGlComponentType::Pointer m_SelectedPolygonGLComponent;
 };
 } //end namespace otb
 

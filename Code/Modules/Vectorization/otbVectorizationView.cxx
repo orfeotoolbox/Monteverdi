@@ -47,6 +47,9 @@ VectorizationView
   m_Color[0]=1.;
   m_Color[3]=1;
   
+
+  // 
+  m_SelectedPolygonGLComponent = VectorDataGlComponentType::New();
 }
   
 VectorizationView
@@ -56,7 +59,7 @@ VectorizationView
   m_ImageView->GetFullWidget()->ClearGlComponents();
   m_ImageView->GetScrollWidget()->ClearGlComponents();
   m_ImageView->GetZoomWidget()->ClearGlComponents();
-
+  
   gFull->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
   gZoom->remove(m_ImageView->GetZoomWidget());
@@ -192,6 +195,22 @@ VectorizationView
                                   guiVectorDataTreeGroup->y(),
                                   guiVectorDataTreeGroup->w(),
                                   guiVectorDataTreeGroup->h());
+
+
+  m_SelectedPolygonGLComponent->SetVectorData(m_Model->GetSelectedVectorDataType());
+  m_SelectedPolygonGLComponent->RenderPolygonBoundariesOnlyOn();
+  m_ImageView->GetFullWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+  m_ImageView->GetScrollWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+  m_ImageView->GetZoomWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+
+//   // Add the vectorDataTreeBrowser to the automatic tree
+//   guiFinalVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+//   guiFinalVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+//   m_VectorDataTreeBrowser->resize(guiFinalVectorDataTreeGroup->x(),
+//                                   guiFinalVectorDataTreeGroup->y(),
+//                                   guiFinalVectorDataTreeGroup->w(),
+//                                   guiFinalVectorDataTreeGroup->h());
+  
   m_VectorDataTreeBrowser->show();
 }
 
@@ -297,14 +316,26 @@ void
 VectorizationView::ButtonAutomaticCallbackOn()
 {
   m_Controller->ButtonAutomaticCallbackOn();
+  
+  //guiVectorDataTreeGroup->remove(m_VectorDataTreeBrowser);
+  // Add the vectorDataTreeBrowser to the automatic tree
+  guiFinalVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+  guiFinalVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+  m_VectorDataTreeBrowser->resize(guiFinalVectorDataTreeGroup->x(),
+                                  guiFinalVectorDataTreeGroup->y(),
+                                  guiFinalVectorDataTreeGroup->w(),
+                                  guiFinalVectorDataTreeGroup->h());
+
+  // Show the automatic computed polygons
+  m_SelectedPolygonGLComponent->SetVisible(true);
+  
   //Initialisation of Algo List
   //m_AlgoListBuffer = new Fl_Text_Buffer();
   //TAlgolist->buffer(m_AlgoListBuffer);
-  
-//   for (unsigned int i=0; i<20; i++)
-//     {
-//     TAlgolist->insert(m_Model->m_AlgoListText[i].c_str());
-//     }
+  //   for (unsigned int i=0; i<20; i++)
+  //     {
+  //     TAlgolist->insert(m_Model->m_AlgoListText[i].c_str());
+  //     }
   //m_SelectedPolygonGLComponent->SetVisible(true);
   std::cout<<"View: OkCallbackOn -------> OK"<<std::endl;
 }
@@ -313,6 +344,16 @@ void
 VectorizationView::ButtonAutomaticCallbackOff()
 {
   m_Controller->ButtonAutomaticCallbackOff();
+
+  guiVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+  guiVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+  m_VectorDataTreeBrowser->resize(guiVectorDataTreeGroup->x(),
+                                  guiVectorDataTreeGroup->y(),
+                                  guiVectorDataTreeGroup->w(),
+                                  guiVectorDataTreeGroup->h());
+
+  // Hide the automatic computed polygons
+  m_SelectedPolygonGLComponent->SetVisible(false);
   std::cout<<"View: OkCallbackOff -------> OK"<<std::endl;
 }
 
