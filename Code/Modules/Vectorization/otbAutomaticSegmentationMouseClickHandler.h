@@ -80,7 +80,7 @@ public:
         }
 
       //Left Click
-      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == 1)
+      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_AddMouseButton)
         {
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
@@ -95,11 +95,13 @@ public:
         index[1] = static_cast<int>(imagePoint[1]);
 
         // Change scaled extract region center
+        std::cout <<"AUTOMATIC HANDLER :E / LEFT CLICK" << std::endl;
         m_Model->LeftIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
+        
         return true;
         }
       //Right Click
-	   if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == 3)
+	   if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_EndMouseButton)
 	   {
 		 // Get the clicked index
 		 typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
@@ -115,6 +117,7 @@ public:
 
 		 // Change scaled extract region center
 		 m_Model->RightIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
+                 std::cout <<"AUTOMATIC HANDLER :ADD / RIGHT CLICK" << std::endl;
 		 return true;
 	   }
 // 	   if ((event == FL_KEYBOARD) || (event == FL_SHORTCUT))
@@ -142,10 +145,14 @@ public:
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View, ViewType);
   itkGetObjectMacro(View, ViewType);
+  
+  /** Set/Get End polygon Mouse butto */
+  itkSetMacro(EndMouseButton, int);
+  itkGetMacro(EndMouseButton, int);
 
-  /** Set the mouse button used (1 = left, 2 = center, 3 = right) */
-/*  itkSetClampMacro(MouseButton, int, 1, 3);
-  itkGetMacro(MouseButton, int);*/
+  /** Set/Get Add polygon Mouse butto */
+  itkSetMacro(AddMouseButton, int);
+  itkGetMacro(AddMouseButton, int);
 
   itkSetMacro(ActiveOnScrollWidget, bool);
   itkGetMacro(ActiveOnScrollWidget, bool);
@@ -161,10 +168,13 @@ public:
 
 protected:
   /** Constructor */
-  AutomaticSegmentationMouseClickHandler() : m_View(), m_Model(), m_ActiveOnScrollWidget(true), m_ActiveOnFullWidget(true),
-    m_ActiveOnZoomWidget(true)
-  {
-  }
+  AutomaticSegmentationMouseClickHandler() : m_View(), m_Model(), 
+                                             m_ActiveOnScrollWidget(true), 
+                                             m_ActiveOnFullWidget(true),
+                                             m_ActiveOnZoomWidget(true),
+                                             m_AddMouseButton(1),
+                                             m_EndMouseButton(3)
+  {}
 
   /** Destructor */
   virtual ~AutomaticSegmentationMouseClickHandler(){}
@@ -189,6 +199,9 @@ private:
   bool m_ActiveOnFullWidget;
   bool m_ActiveOnZoomWidget;
 
+  // Button selection 
+  int m_EndMouseButton;
+  int m_AddMouseButton;
 
 }; // end class
 } // end namespace otb
