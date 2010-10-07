@@ -50,15 +50,15 @@ public:
 
   /** Widgets controller and action handlers */
   typedef VectorizationView
-  ::ImageViewType ImageViewType;
+  ::ImageViewType                             ImageViewType;
   typedef VectorizationModel
-  ::VisualizationModelType VisualizationModelType;
+  ::VisualizationModelType                    VisualizationModelType;
   typedef VectorizationModel
-  ::VectorDataModelType VectorDataModelType;
+  ::VectorDataModelType                       VectorDataModelType;
   typedef VectorDataModelType::VectorDataType VectorDataType;
-  typedef VectorDataType::Pointer VectorDataPointer; 
+  typedef VectorDataType::Pointer             VectorDataPointer; 
   typedef VectorizationModel
-  ::VectorImageType VectorImageType;
+  ::VectorImageType                           VectorImageType;
 
   /** Handlers */
   typedef ImageWidgetController WidgetControllerType;

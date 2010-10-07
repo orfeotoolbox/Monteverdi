@@ -229,6 +229,10 @@ VectorizationController::ButtonAutomaticCallbackOn()
 {
   std::cout <<"VectorizationController::ButtonAutomaticCallbackOn " << std::endl;
   this->InitializeCommonActionHandler();
+  // Get the extracted region
+  VectorizationModel::RegionType  extractedRegion = m_View->GetImageView()->GetExtractRegionGlComponent()->GetRegion();
+  m_Model->ExtractRegionOfImage(extractedRegion);
+  m_Model->GenerateLayers();
   m_WidgetController->AddActionHandler(m_AutomaticActionHandler);
 }
 
