@@ -199,11 +199,25 @@ public:
   
   LabelMapPointerType ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage);
 
+  // Delete the generated label map relative to the previous extracted
+  // image 
+  void DeleteLayers();
+  
   /** Macro to get the selected polygon to visualize */
-  itkGetObjectMacro(SelectedVectorDataType,VectorDataType);
+  itkGetObjectMacro(SelectedVectorData,VectorDataType);
 
   /** Get the list of the selected algorithms */
-  itkGetStringMacro(AlgorithmNameList);
+  //itkGetStringMacro(AlgorithmsNameList);
+  std::vector<std::string> GetAlgorithmsNameList()
+    { 
+      return m_AlgorithmsNameList;
+    }
+  
+  /** Get the actual layer number */
+  itkGetMacro(ActualLayerNumber,int);
+  
+  /** Get the flag for the extract region update */
+  itkGetMacro(ExtractRegionUpdated,bool);
   
   ////////////////////////////////////////
   // END AUTOMATIC MODE METHODS 
@@ -257,10 +271,10 @@ private:
   bool                          m_OutputChanged;
 
   /** DEM directoryu path. */
-  std::string m_DEMPath;
+  std::string        m_DEMPath;
 
   /** Use DEM or not. */
-  bool m_UseDEM;
+  bool               m_UseDEM;
 
   /** Extract Full Widget region */
   RegionType                    m_LastRegionSelected;
@@ -277,12 +291,11 @@ private:
   PolygonType::Pointer		  m_SelectedPolygon;
   DataNodeType::Pointer           m_SelectedPolygonNode;
 
-  unsigned int                    m_ActualLayerNumber;
+  int                             m_ActualLayerNumber;
 
-  VectorDataType::Pointer         m_SelectedVectorDataType;
+  VectorDataType::Pointer         m_SelectedVectorData;
 
-  std::vector<std::string>        m_AlgorithmNameList;
-  
+  std::vector<std::string>        m_AlgorithmsNameList;
 };
 
 } //end namespace otb

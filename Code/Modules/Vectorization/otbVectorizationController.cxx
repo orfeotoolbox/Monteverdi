@@ -92,12 +92,14 @@ void VectorizationController::ChangeNavigationMode()
       m_ChangeRegionHandler->SetMouseButton(2);
       m_ChangeScaledRegionHandler->SetMouseButton(2);
       m_VectorDataActionHandler->SetAddMouseButton(1);
+      m_AutomaticActionHandler->SetAddMouseButton(1);
     }
   else
     {
       m_ChangeRegionHandler->SetMouseButton(1);
       m_ChangeScaledRegionHandler->SetMouseButton(1);
       m_VectorDataActionHandler->SetAddMouseButton(2);
+      m_AutomaticActionHandler->SetAddMouseButton(2);
     }
 
 }
@@ -227,13 +229,26 @@ void VectorizationController::FocusOnDataNode(const IndexType& index)
 void 
 VectorizationController::ButtonAutomaticCallbackOn()
 {
-  std::cout <<"VectorizationController::ButtonAutomaticCallbackOn " << std::endl;
   this->InitializeCommonActionHandler();
-  // Get the extracted region
-  VectorizationModel::RegionType  extractedRegion = m_View->GetImageView()->GetExtractRegionGlComponent()->GetRegion();
-  m_Model->ExtractRegionOfImage(extractedRegion);
-  m_Model->GenerateLayers();
+  // Extract the region to process on
+  this->ExtractRegion();
+  // Add the correct action handler
   m_WidgetController->AddActionHandler(m_AutomaticActionHandler);
+}
+
+/**
+ * Used to set the automatic vectordata action handler
+ */
+void 
+VectorizationController::ExtractRegion()
+{
+  // Get the extracted region
+  VectorizationModel::RegionType  extractedRegion 
+    = m_View->GetImageView()->GetExtractRegionGlComponent()->GetRegion();
+  // Set the right extract region to the model
+  m_Model->ExtractRegionOfImage(extractedRegion);
+  // Launch the process
+  m_Model->GenerateLayers();
 }
 
 /**
@@ -242,11 +257,15 @@ VectorizationController::ButtonAutomaticCallbackOn()
 void 
 VectorizationController::ButtonAutomaticCallbackOff()
 {
-  std::cout <<"VectorizationController::ButtonAutomaticCallbackOff " << std::endl;
   this->InitializeCommonActionHandler();
+  // Add the right handler fot the automatic mode
   m_WidgetController->AddActionHandler(m_VectorDataActionHandler);
 }
 
+/**
+  * Add the common handlers for the manual and automatic geometric
+  * features selection mode
+  */
 void 
 VectorizationController::InitializeCommonActionHandler()
 {

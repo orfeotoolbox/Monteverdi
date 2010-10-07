@@ -63,6 +63,7 @@ public:
   /** From the GUI */
   virtual void ButtonAutomaticCallbackOn()=0;
   virtual void ButtonAutomaticCallbackOff()=0;
+  virtual void ExtractRegion()=0;
 
 protected:
   /** Constructor */

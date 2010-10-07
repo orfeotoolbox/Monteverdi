@@ -112,6 +112,7 @@ public:
   /** From the GUI */
   virtual void ButtonAutomaticCallbackOn();
   virtual void ButtonAutomaticCallbackOff();
+  virtual void ExtractRegion();
   
 protected:
   /** Constructor */

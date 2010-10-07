@@ -44,25 +44,22 @@ VectorizationModel(): m_DEMPath(""),m_UseDEM(false),
   // Extract Filter 
   m_ExtractImageFilter = ExtractImageFilterType::New();
   
-  // Extract region flag
-  m_ExtractRegionUpdated = false;
-
   // Selected Polygon on right click in automatic mode 
   m_SelectedPolygon     = PolygonType::New();
   m_SelectedPolygonNode = DataNodeType::New();
 
   // Build the automatic vectordata vector for each polygon selected
-  m_SelectedVectorDataType       = VectorDataType::New();
-  DataNodeType::Pointer root     = m_SelectedVectorDataType->GetDataTree()->GetRoot()->Get();
+  m_SelectedVectorData           = VectorDataType::New();
+  DataNodeType::Pointer root     = m_SelectedVectorData->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder   = DataNodeType::New();
   
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
 
-  m_SelectedVectorDataType->GetDataTree()->Add(document,root);
-  m_SelectedVectorDataType->GetDataTree()->Add(folder,document);
-  m_SelectedVectorDataType->GetDataTree()->Add(m_SelectedPolygonNode,folder);
+  m_SelectedVectorData->GetDataTree()->Add(document,root);
+  m_SelectedVectorData->GetDataTree()->Add(folder,document);
+  m_SelectedVectorData->GetDataTree()->Add(m_SelectedPolygonNode,folder);
 }
 
 VectorizationModel
@@ -458,7 +455,6 @@ void VectorizationModel
   if (m_LastRegionSelected == ExtRegion)
     {
     m_ExtractRegionUpdated = false;
-    std::cout<<"Same Region"<<std::endl;
     }
   else
     {
@@ -466,9 +462,7 @@ void VectorizationModel
     m_ExtractImageFilter->SetExtractionRegion(ExtRegion);
     m_LastRegionSelected = ExtRegion;
     m_ExtractRegionUpdated = true;
-    std::cout<<"Different Region"<<std::endl;
     }
-  std::cout<<"Model:ExtractRegionOfImage  -----> ok"<<std::endl;
 }
 
 /** 
@@ -501,15 +495,17 @@ void VectorizationModel
     LabelType label = m_LabelImageVector[m_ActualLayerNumber]->GetPixel(index);
     m_SelectedPolygon = Functor(m_LabelMapVector[m_ActualLayerNumber]->GetLabelObject(label));
     m_SelectedPolygonNode->SetPolygonExteriorRing(m_SelectedPolygon);
-
-    std::cout <<"The layer selected is "<<m_ActualLayerNumber   << std::endl;
     
     if(m_ActualLayerNumber == m_LabelImageVector.size()-1)
       m_ActualLayerNumber = 0;
     else
       m_ActualLayerNumber++;
     }
-
+  else
+    {
+    m_ExtractRegionUpdated = false;
+    }
+  
   this->NotifyAll();
 }
 
@@ -518,13 +514,26 @@ VectorizationModel::GenerateLayers()
 {
   if (m_ExtractRegionUpdated)
     {
-    //this->DeleteLayers();
+    // First delete the previsous layers
+    this->DeleteLayers();
+    
+    // Generate new layer (labeled image) for each algorithm
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(10,30,100));
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(3,50,150));
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(2,5,10));
+    
     for(unsigned int i=0; i<m_LabelImageVector.size(); i++)
       m_LabelMapVector.push_back(ConvertLabelImageToLabelMap(m_LabelImageVector[i]));
     }
+}
+
+void
+VectorizationModel
+::DeleteLayers()
+{
+  m_LabelImageVector.clear();
+  m_LabelMapVector.clear();
+  m_SelectedPolygonNode->SetPolygonExteriorRing(PolygonType::New());
 }
 
 
@@ -543,10 +552,21 @@ VectorizationModel
   MSImageFilter->SetRangeRadius(RangeRadius);
   MSImageFilter->SetMinimumRegionSize(MinRegionSize);
   MSImageFilter->Update();
+  
+  // Add the specific text for the segmentation method currently used
+  // in order to show it in the GUI
   std::ostringstream os;
-  os <<"MeanShift. Spatial Radius : "<<SpatialRadius<<"; Range Radius : "<<RangeRadius<<"; MinRegionSize : "<<MinRegionSize<<std::endl;
-  m_AlgorithmNameList.push_back(os.str());
-  std::cout<<"Model: Meanshift clustering: spatial radius = "<<SpatialRadius<<", rangeradius = "<<RangeRadius<<", minimum region size = "<<MinRegionSize<<std::endl;
+  os <<"MeanShift. Spatial Radius : "
+     <<SpatialRadius<<"; Range Radius : "
+     <<RangeRadius<<"; MinRegionSize : "
+     <<MinRegionSize<<std::endl;
+  m_AlgorithmsNameList.push_back(os.str());
+  
+  std::cout<<"Model: Meanshift clustering: spatial radius = "
+           <<SpatialRadius<<", rangeradius = "
+           <<RangeRadius<<", minimum region size = "
+           <<MinRegionSize<<std::endl;
+  
   return MSImageFilter->GetLabeledClusteredOutput();
 }
 
@@ -560,7 +580,6 @@ VectorizationModel
   LI2LM->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   LI2LM->SetInput(inputImage);
   LI2LM->Update();
-  std::cout<<"Model: Labelimage to label map ------> OK"<<std::endl;
   return LI2LM->GetOutput();
 }
 
