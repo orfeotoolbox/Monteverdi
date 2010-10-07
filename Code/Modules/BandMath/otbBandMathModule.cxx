@@ -99,7 +99,10 @@ void BandMathModule::Run()
     // The input is an image
     if (image.IsNotNull()) 
       {
-      m_BandMathFilter->SetNthInput(bandId, image);
+      std::ostringstream tmpParserVarName;
+      tmpParserVarName << "im" << imageId+1 << "b1";
+
+      m_BandMathFilter->SetNthInput(bandId, image, tmpParserVarName.str());
       
       ui_ImageNameList->add(this->GetInputDataDescription<ImageType>("InputImage", i).c_str());
       ui_VarNames->add(m_BandMathFilter->GetNthInputName(bandId).c_str());
@@ -128,8 +131,8 @@ void BandMathModule::Run()
         ui_VarNames->add(m_BandMathFilter->GetNthInputName(bandId).c_str());
         bandId ++;
         }
-      imageId ++;
       }
+    imageId ++;
     }
   m_NumberOfInputBands = bandId;
   ui_ImageNameList->value(0);
