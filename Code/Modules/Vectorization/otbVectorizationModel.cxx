@@ -23,13 +23,9 @@ namespace otb
 {
 
 VectorizationModel::
-VectorizationModel(): m_VisualizationModel(),
-  m_ImageGenerator(),
-  m_InputImage(),
-  m_VectorDataModel(),
-  m_Output(),
-  m_DEMPath(""),
-  m_UseDEM(false)
+VectorizationModel(): m_DEMPath(""),m_UseDEM(false),
+                      m_ExtractRegionUpdated(false),
+                      m_ActualLayerNumber(0)
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -41,7 +37,32 @@ VectorizationModel(): m_VisualizationModel(),
   // VectorData model
   m_VectorDataModel = VectorDataModelType::New();
   m_VectorDataModel->RegisterListener(this);
+  
+  // Output changed flag
   m_OutputChanged = false;
+  
+  // Extract Filter 
+  m_ExtractImageFilter = ExtractImageFilterType::New();
+  
+  // Extract region flag
+  m_ExtractRegionUpdated = false;
+
+  // Selected Polygon on right click in automatic mode 
+  m_SelectedPolygon     = PolygonType::New();
+  m_SelectedPolygonNode = DataNodeType::New();
+
+  // Build the automatic vectordata vector for each polygon selected
+  m_SelectedVectorDataType       = VectorDataType::New();
+  DataNodeType::Pointer root     = m_SelectedVectorDataType->GetDataTree()->GetRoot()->Get();
+  DataNodeType::Pointer document = DataNodeType::New();
+  DataNodeType::Pointer folder   = DataNodeType::New();
+  
+  document->SetNodeType(otb::DOCUMENT);
+  folder->SetNodeType(otb::FOLDER);
+
+  m_SelectedVectorDataType->GetDataTree()->Add(document,root);
+  m_SelectedVectorDataType->GetDataTree()->Add(folder,document);
+  m_SelectedVectorDataType->GetDataTree()->Add(m_SelectedPolygonNode,folder);
 }
 
 VectorizationModel
@@ -93,8 +114,6 @@ VectorizationModel
 //  m_VectorDataModel->SetOrigin(m_InputImage->GetOrigin());
 //  m_VectorDataModel->SetSpacing(m_InputImage->GetSpacing());
 }
-
-
 
 void VectorizationModel
 ::AddVectorData(VectorDataPointerType vData)
@@ -374,8 +393,6 @@ void
 VectorizationModel
 ::OK()
 {
-  //VectorDataPointerType vData = m_VectorDataModel->GetVectorData();
-  
   typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(m_VectorDataModel->GetVectorData());
@@ -435,4 +452,117 @@ VectorizationModel
   m_VisualizationModel->Update();
 }
 
+void VectorizationModel
+::ExtractRegionOfImage(RegionType ExtRegion)
+{
+  if (m_LastRegionSelected == ExtRegion)
+    {
+    m_ExtractRegionUpdated = false;
+    std::cout<<"Same Region"<<std::endl;
+    }
+  else
+    {
+    m_ExtractImageFilter->SetInput(m_InputImage);
+    m_ExtractImageFilter->SetExtractionRegion(ExtRegion);
+    m_LastRegionSelected = ExtRegion;
+    m_ExtractRegionUpdated = true;
+    std::cout<<"Different Region"<<std::endl;
+    }
+  std::cout<<"Model:ExtractRegionOfImage  -----> ok"<<std::endl;
+}
+
+/** 
+ * Add the polygon to the tree browser.
+ * 
+ */
+void VectorizationModel
+::RightIndexClicked(const IndexType & index, RegionType ExtRegion)
+{
+  DataNodeType::Pointer PolygonNode = DataNodeType::New();
+  PolygonNode->SetNodeType(otb::FEATURE_POLYGON);
+  PolygonNode->SetNodeId("FEATURE_POLYGON");
+  PolygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
+  m_VectorDataModel->GetVectorData()->GetDataTree()->Add(PolygonNode,
+                                                         m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
+  this->NotifyAll();
+  m_ActualLayerNumber = 0;
+}
+
+/**
+ * show the different polygon that the point belongs to.
+ */
+void VectorizationModel
+::LeftIndexClicked(const IndexType & index, 
+                   RegionType ExtRegion)
+{
+  if(m_LastRegionSelected == ExtRegion)
+    {
+    LabelObject2PolygonFunctorType Functor;
+    LabelType label = m_LabelImageVector[m_ActualLayerNumber]->GetPixel(index);
+    m_SelectedPolygon = Functor(m_LabelMapVector[m_ActualLayerNumber]->GetLabelObject(label));
+    m_SelectedPolygonNode->SetPolygonExteriorRing(m_SelectedPolygon);
+
+    std::cout <<"The layer selected is "<<m_ActualLayerNumber   << std::endl;
+    
+    if(m_ActualLayerNumber == m_LabelImageVector.size()-1)
+      m_ActualLayerNumber = 0;
+    else
+      m_ActualLayerNumber++;
+    }
+
+  this->NotifyAll();
+}
+
+void
+VectorizationModel::GenerateLayers()
+{
+  if (m_ExtractRegionUpdated)
+    {
+    //this->DeleteLayers();
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(10,30,100));
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(3,50,150));
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(2,5,10));
+    for(unsigned int i=0; i<m_LabelImageVector.size(); i++)
+      m_LabelMapVector.push_back(ConvertLabelImageToLabelMap(m_LabelImageVector[i]));
+    }
+}
+
+
+VectorizationModel
+::LabeledImagePointerType
+VectorizationModel
+::GenerateMeanshiftClustering(int SpatialRadius, 
+                              double RangeRadius, 
+                              int MinRegionSize)
+{
+  MeanShiftVectorImageFilterType::Pointer 
+    MSImageFilter = MeanShiftVectorImageFilterType::New();
+  
+  MSImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
+  MSImageFilter->SetSpatialRadius(SpatialRadius);
+  MSImageFilter->SetRangeRadius(RangeRadius);
+  MSImageFilter->SetMinimumRegionSize(MinRegionSize);
+  MSImageFilter->Update();
+  std::ostringstream os;
+  os <<"MeanShift. Spatial Radius : "<<SpatialRadius<<"; Range Radius : "<<RangeRadius<<"; MinRegionSize : "<<MinRegionSize<<std::endl;
+  m_AlgorithmNameList.push_back(os.str());
+  std::cout<<"Model: Meanshift clustering: spatial radius = "<<SpatialRadius<<", rangeradius = "<<RangeRadius<<", minimum region size = "<<MinRegionSize<<std::endl;
+  return MSImageFilter->GetLabeledClusteredOutput();
+}
+
+VectorizationModel::LabelMapPointerType
+VectorizationModel
+::ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage)
+{
+  LabelImageToLabelMapFilterType::Pointer  
+    LI2LM = LabelImageToLabelMapFilterType::New();
+  
+  LI2LM->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  LI2LM->SetInput(inputImage);
+  LI2LM->Update();
+  std::cout<<"Model: Labelimage to label map ------> OK"<<std::endl;
+  return LI2LM->GetOutput();
+}
+
 } // namespace otb
+

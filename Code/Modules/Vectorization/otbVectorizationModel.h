@@ -26,13 +26,38 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataExtractROI.h"
 
-//Visu
+// Visu
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 
 // Vectorization
 #include "otbVectorDataModel.h"
+
+////////////////////////////////////////////
+// AUTOMATIC MODE INCLUDES
+////////////////////////////////////////////
+
+//Transform clustering result to polygon
+#include "itkLabelObject.h"
+#include "otbLabelObjectToPolygonFunctor.h"
+
+//Polygons selected
+#include "otbObjectList.h"
+
+#include "itkLabelMap.h"
+#include "itkLabelImageToLabelMapFilter.h"
+
+#include "otbMeanShiftVectorImageFilter.h"
+
+// Extract ROI
+#include "itkExtractImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+
+///////////////////////////////////////////
+// END AUTOMATIC MODE INCLUDES
+////////////////////////////////////////////
+
 
 namespace otb {
 
@@ -55,41 +80,40 @@ public:
   /** New macro */
   itkNewMacro(Self);
 
-  typedef TypeManager
-  ::Floating_Point_VectorImage VectorImageType;
-  typedef VectorImageType::Pointer   VectorImagePointerType;
-  typedef VectorImageType::IndexType IndexType;
-  typedef VectorImageType::SizeType  SizeType;
-  typedef VectorImageType::PointType ImagePointType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+  typedef VectorImageType::Pointer                VectorImagePointerType;
+  typedef VectorImageType::IndexType              IndexType;
+  typedef VectorImageType::SizeType               SizeType;
+  typedef VectorImageType::PointType              ImagePointType;
 
   /** Visualization model */
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef Image<RGBPixelType, 2>       RGBImageType;
+  typedef itk::RGBPixel<unsigned char>            RGBPixelType;
+  typedef Image<RGBPixelType, 2>                  RGBImageType;
   typedef ImageLayer<VectorImageType,
-      RGBImageType>            LayerType;
-  typedef ImageLayerGenerator<LayerType> LayerGeneratorType;
-  typedef LayerGeneratorType::Pointer    LayerGeneratorPointerType;
+      RGBImageType>                               LayerType;
+  typedef ImageLayerGenerator<LayerType>          LayerGeneratorType;
+  typedef LayerGeneratorType::Pointer             LayerGeneratorPointerType;
   typedef ImageLayerRenderingModel
-  <RGBImageType>                            VisualizationModelType;
-  typedef VisualizationModelType::Pointer VisualizationModelPointerType;
+  <RGBImageType>                                  VisualizationModelType;
+  typedef VisualizationModelType::Pointer         VisualizationModelPointerType;
   typedef LayerGeneratorType::ImageLayerType
-  ::OutputPixelType OutputPixelType;
-  typedef VisualizationModelType::RegionType RegionType;
+  ::OutputPixelType                               OutputPixelType;
+  typedef VisualizationModelType::RegionType      RegionType;
 
-  typedef TypeManager::Vector_Data     VectorDataType;
-  typedef VectorDataType::Pointer      VectorDataPointerType;
-  typedef VectorDataModel              VectorDataModelType;
-  typedef VectorDataModelType::Pointer VectorDataModelPointerType;
-  typedef VectorDataType::DataNodeType DataNodeType;
-  typedef DataNodeType::PointType      PointType;
-  typedef DataNodeType::PolygonType::VertexType
-  VertexType; 
+  typedef TypeManager::Vector_Data                VectorDataType;
+  typedef VectorDataType::Pointer                 VectorDataPointerType;
+  typedef VectorDataModel                         VectorDataModelType;
+  typedef VectorDataModelType::Pointer            VectorDataModelPointerType;
+  typedef VectorDataType::DataNodeType            DataNodeType;
+  typedef DataNodeType::PointType                 PointType;
+  typedef DataNodeType::PolygonType::VertexType   VertexType; 
+  typedef DataNodeType::PolygonType 		  PolygonType;
   
   // Reprojection filter
-  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
-    VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
-  typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
+  typedef VectorDataProjectionFilter<
+    VectorDataType,VectorDataType>                VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>    VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
 
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
@@ -120,27 +144,73 @@ public:
   void UpdateAlpha(double alpha);
   void OK();
   void FocusOnDataNode(const PointType& index);
-
-  /** Methods necessary for the automatic mode*/
-
-  void RightIndexClicked(const IndexType & index, RegionType ExtRegion)
-  {
-    std::cout<< "RightIndexClicked:: Not Implemented Yet"<< std::endl;
-    std::cout<< "LeftIndexClicked:: index" << index<< std::endl;
-    std::cout<< "LeftIndexClicked:: ExtRegion" << ExtRegion<< std::endl;
-  }
-  void LeftIndexClicked(const IndexType & index, RegionType ExtRegion)
-  {
-    std::cout<< "LeftIndexClicked:: Not Implemented Yet"<< std::endl;
-    std::cout<< "LeftIndexClicked:: index" << index<< std::endl;
-    std::cout<< "LeftIndexClicked:: ExtRegion" << ExtRegion<< std::endl;
-  }
   
   void DeleteGeometry(void){}
 
+  ////////////////////////////////////////////
+  // AUTOMATIC MODE METHODS AND TYPEDEFS
+  ////////////////////////////////////////////
+
+  // Label Type
+  typedef TypeManager::Label_Short_Precision        LabelType;
+  typedef TypeManager::Labeled_Short_Image          LabeledImageType; 
+  typedef LabeledImageType::Pointer                 LabeledImagePointerType;
+
+  typedef ObjectList<LabeledImageType>              LabeledImageListType;
+  
+  // Extract ROI
+  typedef itk::ExtractImageFilter< VectorImageType, 
+                                   VectorImageType > ExtractImageFilterType;
+  typedef ExtractImageFilterType::Pointer            ExtractImageFilterPointerType;
+  
+  /** Transform label image to label map */
+  typedef itk::LabelObject<LabelType, 2>	     LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>	     LabelMapType;
+  typedef LabelMapType::Pointer 		     LabelMapPointerType;
+  typedef itk::LabelImageToLabelMapFilter<
+    LabeledImageType, LabelMapType>	             LabelImageToLabelMapFilterType;
+  
+  typedef Functor::LabelObjectToPolygonFunctor<
+    LabelObjectType, PolygonType>                    LabelObject2PolygonFunctorType;
+
+  //MeanShift
+  typedef MeanShiftVectorImageFilter<
+    VectorImageType, 
+    VectorImageType, 
+    LabeledImageType>                                MeanShiftVectorImageFilterType;
+
+  // Method the extract the region seen on the full widget
+  void ExtractRegionOfImage(RegionType ExtRegion);
+
+  // Generate the segmented image of the full region seen on the full
+  // image 
+  void GenerateLayers();
+
+  // Methods necessary for the automatic mode : called from the
+  // automatic vectordata handler
+  void RightIndexClicked(const IndexType & index, RegionType ExtRegion);
+  
+  void LeftIndexClicked(const IndexType & index, RegionType ExtRegion);
+
+  // Put the next methods protected 
+  LabeledImagePointerType GenerateMeanshiftClustering(int SpatialRadius, 
+                                                      double RangeRadius, 
+                                                      int MinRegionSize);
+  
+  LabelMapPointerType ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage);
+
+  /** Macro to get the selected polygon to visualize */
+  itkGetObjectMacro(SelectedVectorDataType,VectorDataType);
+
+  /** Get the list of the selected algorithms */
+  itkGetStringMacro(AlgorithmNameList);
+  
+  ////////////////////////////////////////
+  // END AUTOMATIC MODE METHODS 
+  ////////////////////////////////////////
   
   /** Output accessor. */
-  itkGetObjectMacro(Output, VectorDataType );
+  itkGetObjectMacro(Output, VectorDataType);
   
   /** Output changed accessor. */
   itkGetMacro( OutputChanged, bool );
@@ -162,6 +232,7 @@ protected:
   /** Destructor */
   virtual ~VectorizationModel();
 
+
 private:
   VectorizationModel(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -174,22 +245,44 @@ private:
   LayerGeneratorPointerType     m_ImageGenerator;
 
   /** Input Images */
-  VectorImagePointerType m_InputImage;
+  VectorImagePointerType        m_InputImage;
 
   /** VectorData model */
-  VectorDataModelPointerType m_VectorDataModel;
+  VectorDataModelPointerType    m_VectorDataModel;
 
   /**Output vector data. */
-  VectorDataPointerType  m_Output;
+  VectorDataPointerType         m_Output;
   
   /** Has a new output or not. */
-  bool m_OutputChanged;
+  bool                          m_OutputChanged;
 
   /** DEM directoryu path. */
   std::string m_DEMPath;
 
   /** Use DEM or not. */
   bool m_UseDEM;
+
+  /** Extract Full Widget region */
+  RegionType                    m_LastRegionSelected;
+  ExtractImageFilterPointerType m_ExtractImageFilter;
+  bool                          m_ExtractRegionUpdated;
+
+  // ObjectList to store the LabeledImage as result of the several
+  // segmentation algorithms used in the automatic mode
+  //  --> LabeledImageListType::Pointer 
+  std::vector<LabeledImagePointerType>   m_LabelImageVector;
+  std::vector<LabelMapPointerType>       m_LabelMapVector;
+
+  // Selected Polygon on full image right click
+  PolygonType::Pointer		  m_SelectedPolygon;
+  DataNodeType::Pointer           m_SelectedPolygonNode;
+
+  unsigned int                    m_ActualLayerNumber;
+
+  VectorDataType::Pointer         m_SelectedVectorDataType;
+
+  std::vector<std::string>        m_AlgorithmNameList;
+  
 };
 
 } //end namespace otb
