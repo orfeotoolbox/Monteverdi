@@ -73,8 +73,11 @@ int otbBandMathModuleTest(int argc, char* argv[])
   specificModule->ui_Help->value(1);
   specificModule->ui_Help->do_callback();
    
+  // Simulate the indexes use
+  specificModule->ui_AddIndexes->do_callback();
+
   // Simulate Operation
-  specificModule->ui_Expression->value("band1+im2b1 / (im3b1+im3b2+im3b3) * im3b4");
+  specificModule->ui_Expression->value("band1+im2b1 / (im3b1+im3b2+im3b3) * im3b4 * idxX");
  
   Fl::check();
 

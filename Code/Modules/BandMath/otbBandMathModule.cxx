@@ -242,6 +242,29 @@ void BandMathModule::LiveCheck()
   ui_Expression->redraw();
 }
 
+/**
+ * Add Indexes
+ */
+void BandMathModule::AddIndexes()
+{  
+  std::vector<std::string> tmpVarNames;
+  
+  tmpVarNames.resize(4);
+  tmpVarNames.at(0) =  "index X";
+  tmpVarNames.at(1) =  "index Y";
+  tmpVarNames.at(2) =  "physical index X";
+  tmpVarNames.at(3) =  "physical index Y";
+
+  for(unsigned int j=0; j < 4; j++)
+    { 
+    ui_ImageNameList->add(tmpVarNames.at(j).c_str());
+    ui_ImageNames->add(tmpVarNames.at(j).c_str());  
+    ui_VarNames->add(m_BandMathFilter->GetNthInputName(m_NumberOfInputBands+j).c_str());
+    }
+  
+  m_NumberOfInputBands += 4;
+  ui_ImageNameList->value(0);
+}
 
 /**
  * OK CallBack

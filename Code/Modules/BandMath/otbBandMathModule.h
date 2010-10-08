@@ -99,6 +99,9 @@ protected:
   /** Expression live checking */
   virtual void LiveCheck();
 
+  /** Add image and physical indexes in the variables */
+  virtual void AddIndexes();
+
 private:
   BandMathModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

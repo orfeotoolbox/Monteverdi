@@ -11,8 +11,8 @@ class BandMathModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {BandMath module}
-      callback {this->Hide()} open selected
-      xywh {361 202 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 visible
+      callback {this->Hide()} open
+      xywh {309 136 650 425} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
@@ -60,11 +60,17 @@ ui_HelpWindow->hide();
 }}
         xywh {570 360 65 50} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
+      Fl_Check_Button ui_AddIndexes {
+        label {Add Indexes}
+        callback {this->AddIndexes();
+ui_AddIndexes->deactivate();} selected
+        xywh {35 380 110 25} type Radio box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX
+      }
     }
     Fl_Window ui_HelpWindow {
       label Help
       callback {this->Hide()}
-      xywh {1017 202 335 425} type Double visible
+      xywh {965 136 335 425} type Double visible
     } {
       Fl_Output ui_HelpText {
         xywh {0 0 335 425} type Multiline
@@ -84,6 +90,8 @@ ui_HelpWindow->hide();
   } {}
   Function {InitHelp()} {return_type {virtual void}
   } {}
-  Function {LiveCheck()} {open return_type {virtual void}
+  Function {LiveCheck()} {return_type {virtual void}
+  } {}
+  Function {AddIndexes()} {return_type {virtual void}
   } {}
 } 
