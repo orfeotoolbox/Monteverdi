@@ -36,16 +36,16 @@ class AutomaticSegmentationMouseClickHandler
 {
 public:
   /** Standard class typedefs */
-  typedef AutomaticSegmentationMouseClickHandler       Self;
-  typedef ImageWidgetActionHandler      Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef AutomaticSegmentationMouseClickHandler   Self;
+  typedef ImageWidgetActionHandler                 Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(AutomaticSegmentationMouseClickHandler, ImageWidgetActionHandler);
+  itkTypeMacro(AutomaticSegmentationMouseClickHandler,ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                      ModelType;
@@ -85,41 +85,39 @@ public:
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
         screenPoint = source->GetMousePosition();
-
+        
         // Transform to image point
         imagePoint = source->GetScreenToImageTransform()->TransformPoint(screenPoint);
-
+        
         // Transform to index
         typename ViewType::IndexType index;
         index[0] = static_cast<int>(imagePoint[0]);
         index[1] = static_cast<int>(imagePoint[1]);
-
+        
         // Change scaled extract region center
-        std::cout <<"AUTOMATIC HANDLER :E / LEFT CLICK" << std::endl;
         m_Model->LeftIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
         
         return true;
         }
       //Right Click
-	   if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_EndMouseButton)
-	   {
-		 // Get the clicked index
-		 typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-		 screenPoint = source->GetMousePosition();
-
-		 // Transform to image point
-		 imagePoint = source->GetScreenToImageTransform()->TransformPoint(screenPoint);
-
-		 // Transform to index
-		 typename ViewType::IndexType index;
-		 index[0] = static_cast<int>(imagePoint[0]);
-		 index[1] = static_cast<int>(imagePoint[1]);
-
-		 // Change scaled extract region center
-		 m_Model->RightIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
-                 std::cout <<"AUTOMATIC HANDLER :ADD / RIGHT CLICK" << std::endl;
-		 return true;
-	   }
+      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_EndMouseButton)
+        {
+        // Get the clicked index
+        typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
+        screenPoint = source->GetMousePosition();
+        
+        // Transform to image point
+        imagePoint = source->GetScreenToImageTransform()->TransformPoint(screenPoint);
+        
+        // Transform to index
+        typename ViewType::IndexType index;
+        index[0] = static_cast<int>(imagePoint[0]);
+        index[1] = static_cast<int>(imagePoint[1]);
+        
+        // Change scaled extract region center
+        m_Model->RightIndexClicked(index, m_View->GetExtractRegionGlComponent()->GetRegion());
+        return true;
+        }
 // 	   if ((event == FL_KEYBOARD) || (event == FL_SHORTCUT))
 // 	   {
 // 		 switch (Fl::event_key())
@@ -189,19 +187,19 @@ private:
   void operator =(const Self&); // purposely not implemented
 
   // Pointer to the view
-  ViewPointerType m_View;
+  ViewPointerType  m_View;
 
   // Pointer to the model
   ModelPointerType m_Model;
 
   // ClickOnScroll
-  bool m_ActiveOnScrollWidget;
-  bool m_ActiveOnFullWidget;
-  bool m_ActiveOnZoomWidget;
+  bool             m_ActiveOnScrollWidget;
+  bool             m_ActiveOnFullWidget;
+  bool             m_ActiveOnZoomWidget;
 
   // Button selection 
-  int m_EndMouseButton;
-  int m_AddMouseButton;
+  int              m_EndMouseButton;
+  int              m_AddMouseButton;
 
 }; // end class
 } // end namespace otb

@@ -288,10 +288,13 @@ void VectorizationModel
           }
         else
           {
-          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
-          // a method to remove a given vertex, we must use a const_cast here.
+          // Since PolylineParametricPath does not provide read-write
+          // access to the vertex list, nor a method to remove a given
+          // vertex, we must use a const_cast here. 
           DataNodeType::PolygonType::VertexListType * pointContainer
-            = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonExteriorRing()->GetVertexList());
+            = const_cast<DataNodeType::PolygonType::VertexListType *>(
+              node->GetPolygonExteriorRing()->GetVertexList());
+          
           pointContainer->DeleteIndex(index);
           }
         }
@@ -299,11 +302,13 @@ void VectorizationModel
         {
         if (interiorRingIndex < node->GetPolygonInteriorRings()->Size())
           {
-          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
-          // a method to remove a given vertex, we must use a const_cast here.
+          // Since PolylineParametricPath does not provide read-write
+          // access to the vertex list, nor a method to remove a given
+          // vertex, we must use a const_cast here. 
           DataNodeType::PolygonType::VertexListType * pointContainer
-            = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonInteriorRings()
-                                                                      ->GetNthElement(interiorRingIndex)->GetVertexList());
+            = const_cast<DataNodeType::PolygonType::VertexListType *>(
+              node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
+          
           pointContainer->DeleteIndex(index);
           }
         }
@@ -341,10 +346,13 @@ void VectorizationModel
       {
       if (index < node->GetLine()->GetVertexList()->Size())
         {
-        // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
-        // a method to set a given vertex, we must use a const_cast here.
+        // Since PolylineParametricPath does not provide read-write
+        // access to the vertex list, nor a method to set a given
+        // vertex, we must use a const_cast here. 
         DataNodeType::LineType::VertexListType * pointContainer
-          = const_cast<DataNodeType::LineType::VertexListType *>(node->GetLine()->GetVertexList());
+          = const_cast<DataNodeType::LineType::VertexListType *>(
+            node->GetLine()->GetVertexList());
+        
         pointContainer->SetElement(index, vertex);
         }
       break;
@@ -355,10 +363,13 @@ void VectorizationModel
         {
         if (index < node->GetPolygonExteriorRing()->GetVertexList()->Size())
           {
-          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
-          // a method to set a given vertex, we must use a const_cast here.
+          // Since PolylineParametricPath does not provide read-write
+          // access to the vertex list, nor a method to set a given
+          // vertex, we must use a const_cast here. 
           DataNodeType::PolygonType::VertexListType * pointContainer
-            = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonExteriorRing()->GetVertexList());
+            = const_cast<DataNodeType::PolygonType::VertexListType *>(
+              node->GetPolygonExteriorRing()->GetVertexList());
+          
           pointContainer->SetElement(index, vertex);
           }
         }
@@ -367,11 +378,13 @@ void VectorizationModel
         if (interiorRingIndex < node->GetPolygonInteriorRings()->Size()
             && index < node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList()->Size())
           {
-          // Since PolylineParametricPath does not provide read-write access to the vertex list, nor
-          // a method to set a given vertex, we must use a const_cast here.
+          // Since PolylineParametricPath does not provide read-write
+          // access to the vertex list, nor a method to set a given
+          // vertex, we must use a const_cast here. 
           DataNodeType::PolygonType::VertexListType * pointContainer
-            = const_cast<DataNodeType::PolygonType::VertexListType *>(node->GetPolygonInteriorRings()
-                                                                      ->GetNthElement(interiorRingIndex)->GetVertexList());
+            = const_cast<DataNodeType::PolygonType::VertexListType *>(
+              node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
+          
           pointContainer->SetElement(index, vertex);
           }
         }
@@ -390,7 +403,8 @@ void
 VectorizationModel
 ::OK()
 {
-  typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+  typedef otb::VectorDataProjectionFilter
+    <VectorDataType,VectorDataType>                    ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(m_VectorDataModel->GetVectorData());
 

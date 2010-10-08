@@ -34,9 +34,6 @@
 // Vectorization
 #include "otbVectorDataModel.h"
 
-////////////////////////////////////////////
-// AUTOMATIC MODE INCLUDES
-////////////////////////////////////////////
 
 //Transform clustering result to polygon
 #include "itkLabelObject.h"
@@ -52,12 +49,6 @@
 
 // Extract ROI
 #include "itkExtractImageFilter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
-
-///////////////////////////////////////////
-// END AUTOMATIC MODE INCLUDES
-////////////////////////////////////////////
-
 
 namespace otb {
 
@@ -114,6 +105,35 @@ public:
     VectorDataType,VectorDataType>                VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>    VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
+  
+  // Label Type
+  typedef TypeManager::Label_Short_Precision      LabelType;
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType; 
+  typedef LabeledImageType::Pointer               LabeledImagePointerType;
+
+  typedef ObjectList<LabeledImageType>            LabeledImageListType;
+  
+  // Extract ROI
+  typedef itk::ExtractImageFilter<
+    VectorImageType, VectorImageType>             ExtractImageFilterType;
+  typedef ExtractImageFilterType::Pointer         ExtractImageFilterPointerType;
+  
+  /** Transform label image to label map */
+  typedef itk::LabelObject<LabelType, 2>	  LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>	  LabelMapType;
+  typedef LabelMapType::Pointer 		  LabelMapPointerType;
+  typedef itk::LabelImageToLabelMapFilter<
+    LabeledImageType, LabelMapType>	          LabelImageToLabelMapFilterType;
+  
+  typedef Functor::LabelObjectToPolygonFunctor<
+    LabelObjectType, PolygonType>                 LabelObject2PolygonFunctorType;
+
+  //MeanShift
+  typedef MeanShiftVectorImageFilter<
+    VectorImageType, 
+    VectorImageType, 
+    LabeledImageType>                             MeanShiftVectorImageFilterType;
+
 
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
@@ -147,38 +167,6 @@ public:
   
   void DeleteGeometry(void){}
 
-  ////////////////////////////////////////////
-  // AUTOMATIC MODE METHODS AND TYPEDEFS
-  ////////////////////////////////////////////
-
-  // Label Type
-  typedef TypeManager::Label_Short_Precision        LabelType;
-  typedef TypeManager::Labeled_Short_Image          LabeledImageType; 
-  typedef LabeledImageType::Pointer                 LabeledImagePointerType;
-
-  typedef ObjectList<LabeledImageType>              LabeledImageListType;
-  
-  // Extract ROI
-  typedef itk::ExtractImageFilter< VectorImageType, 
-                                   VectorImageType > ExtractImageFilterType;
-  typedef ExtractImageFilterType::Pointer            ExtractImageFilterPointerType;
-  
-  /** Transform label image to label map */
-  typedef itk::LabelObject<LabelType, 2>	     LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>	     LabelMapType;
-  typedef LabelMapType::Pointer 		     LabelMapPointerType;
-  typedef itk::LabelImageToLabelMapFilter<
-    LabeledImageType, LabelMapType>	             LabelImageToLabelMapFilterType;
-  
-  typedef Functor::LabelObjectToPolygonFunctor<
-    LabelObjectType, PolygonType>                    LabelObject2PolygonFunctorType;
-
-  //MeanShift
-  typedef MeanShiftVectorImageFilter<
-    VectorImageType, 
-    VectorImageType, 
-    LabeledImageType>                                MeanShiftVectorImageFilterType;
-
   // Method the extract the region seen on the full widget
   void ExtractRegionOfImage(RegionType ExtRegion);
 
@@ -207,7 +195,6 @@ public:
   itkGetObjectMacro(SelectedVectorData,VectorDataType);
 
   /** Get the list of the selected algorithms */
-  //itkGetStringMacro(AlgorithmsNameList);
   std::vector<std::string> GetAlgorithmsNameList()
     { 
       return m_AlgorithmsNameList;
@@ -218,10 +205,6 @@ public:
   
   /** Get the flag for the extract region update */
   itkGetMacro(ExtractRegionUpdated,bool);
-  
-  ////////////////////////////////////////
-  // END AUTOMATIC MODE METHODS 
-  ////////////////////////////////////////
   
   /** Output accessor. */
   itkGetObjectMacro(Output, VectorDataType);
@@ -245,7 +228,6 @@ protected:
   VectorizationModel();
   /** Destructor */
   virtual ~VectorizationModel();
-
 
 private:
   VectorizationModel(const Self&); //purposely not implemented
@@ -271,10 +253,10 @@ private:
   bool                          m_OutputChanged;
 
   /** DEM directoryu path. */
-  std::string        m_DEMPath;
+  std::string                   m_DEMPath;
 
   /** Use DEM or not. */
-  bool               m_UseDEM;
+  bool                          m_UseDEM;
 
   /** Extract Full Widget region */
   RegionType                    m_LastRegionSelected;
@@ -283,9 +265,8 @@ private:
 
   // ObjectList to store the LabeledImage as result of the several
   // segmentation algorithms used in the automatic mode
-  //  --> LabeledImageListType::Pointer 
-  std::vector<LabeledImagePointerType>   m_LabelImageVector;
-  std::vector<LabelMapPointerType>       m_LabelMapVector;
+  std::vector<LabeledImagePointerType>  m_LabelImageVector;
+  std::vector<LabelMapPointerType>      m_LabelMapVector;
 
   // Selected Polygon on full image right click
   PolygonType::Pointer		  m_SelectedPolygon;

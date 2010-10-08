@@ -136,8 +136,7 @@ void
 VectorizationView
 ::InitColor()
 {
-  Fl::check();
-
+  Fl::check(); 
   m_Color =  m_VectorDataGlComponent->GetColor();
   
   fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
@@ -301,7 +300,6 @@ void VectorizationView
       m_ImageView->Update();
     }
 }
-  
 
  void VectorizationView
 ::UpdateAlphaCallback()
@@ -317,7 +315,6 @@ void VectorizationView
   m_Controller->OK();
   wMainWindow->hide();
 }
-
 
 /**
  * The automatic and manual vectorization mode is defined by the
@@ -365,7 +362,4 @@ VectorizationView::ButtonAutomaticCallbackOff()
   // Hide the automatic computed polygons
   m_SelectedPolygonGLComponent->SetVisible(false);
 }
-
-
-
 } // end namespace
