@@ -341,7 +341,7 @@ VectorizationView::ButtonAutomaticCallbackOn()
   // Set the used segmentation method list
   Fl_Text_Buffer* algoListBuffer = new Fl_Text_Buffer();
   TAlgolist->buffer(algoListBuffer);
-  for (unsigned int i=0; i<m_Model->GetAlgorithmsNameList().size() ; i++)
+  for (unsigned int i=0; i<m_Model->GetAlgorithmsNameList().size(); i++)
     {
     TAlgolist->insert(m_Model->GetAlgorithmsNameList()[i].c_str());
     }

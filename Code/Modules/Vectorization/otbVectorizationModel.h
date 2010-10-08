@@ -98,7 +98,7 @@ public:
   typedef VectorDataType::DataNodeType            DataNodeType;
   typedef DataNodeType::PointType                 PointType;
   typedef DataNodeType::PolygonType::VertexType   VertexType;
-  typedef DataNodeType::PolygonType 		  PolygonType;
+  typedef DataNodeType::PolygonType               PolygonType;
   
   // Reprojection filter
   typedef VectorDataProjectionFilter<
@@ -118,12 +118,12 @@ public:
     VectorImageType, VectorImageType>             ExtractImageFilterType;
   typedef ExtractImageFilterType::Pointer         ExtractImageFilterPointerType;
   
-  /** Transform label image to label map */
-  typedef itk::LabelObject<LabelType, 2>	  LabelObjectType;
+  // Transform label image to label map
+  typedef itk::LabelObject<LabelType, 2>	  LabelObjectType; 
   typedef itk::LabelMap<LabelObjectType>	  LabelMapType;
   typedef LabelMapType::Pointer 		  LabelMapPointerType;
   typedef itk::LabelImageToLabelMapFilter
-  <LabeledImageType, LabelMapType>	          LabelImageToLabelMapFilterType;
+  <LabeledImageType, LabelMapType>                LabelImageToLabelMapFilterType;
   
   typedef Functor::LabelObjectToPolygonFunctor<
     LabelObjectType, PolygonType>                 LabelObject2PolygonFunctorType;

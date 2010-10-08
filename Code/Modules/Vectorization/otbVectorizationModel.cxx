@@ -164,9 +164,9 @@ void VectorizationModel
   rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
 
   // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
+  vdextract->SetRegion(rsRegion); 
   if (m_UseDEM==true)
-    {    
+    {
     if (!m_DEMPath.empty()) 
       {
       vdextract->SetDEMDirectory(m_DEMPath);
@@ -175,7 +175,7 @@ void VectorizationModel
       {
       itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
       }
-    }
+    }  
   // Reproject VectorData in image projection
   vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vdextract->GetOutput());
@@ -186,8 +186,8 @@ void VectorizationModel
   vproj->SetOutputSpacing(m_InputImage->GetSpacing());
   
   if (m_UseDEM==true)
-    {    
-    if (!m_DEMPath.empty()) 
+    {
+    if (!m_DEMPath.empty())
       {
       vproj->SetDEMDirectory(m_DEMPath);
       }
@@ -198,7 +198,6 @@ void VectorizationModel
     }
   
   vproj->Update();
-
   m_VectorDataModel->AddVectorData(vproj->GetOutput());
 }
 
@@ -598,4 +597,3 @@ VectorizationModel
 }
 
 } // namespace otb
-
