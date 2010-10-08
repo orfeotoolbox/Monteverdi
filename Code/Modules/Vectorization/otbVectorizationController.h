@@ -74,7 +74,7 @@ public:
   <VectorDataModelType,
       ImageViewType>                          VectorDataActionHandlerType;
   typedef AutomaticSegmentationMouseClickHandler
-  <VectorizationModel, ImageViewType>	      AutomaticMouseClickActionHandlerType;
+  <VectorizationModel, ImageViewType>         AutomaticMouseClickActionHandlerType;
   
   void SetModel(ModelType* model);
 

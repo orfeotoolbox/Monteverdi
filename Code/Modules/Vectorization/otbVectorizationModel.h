@@ -97,7 +97,7 @@ public:
   typedef VectorDataModelType::Pointer            VectorDataModelPointerType;
   typedef VectorDataType::DataNodeType            DataNodeType;
   typedef DataNodeType::PointType                 PointType;
-  typedef DataNodeType::PolygonType::VertexType   VertexType; 
+  typedef DataNodeType::PolygonType::VertexType   VertexType;
   typedef DataNodeType::PolygonType 		  PolygonType;
   
   // Reprojection filter
@@ -122,8 +122,8 @@ public:
   typedef itk::LabelObject<LabelType, 2>	  LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>	  LabelMapType;
   typedef LabelMapType::Pointer 		  LabelMapPointerType;
-  typedef itk::LabelImageToLabelMapFilter<
-    LabeledImageType, LabelMapType>	          LabelImageToLabelMapFilterType;
+  typedef itk::LabelImageToLabelMapFilter
+  <LabeledImageType, LabelMapType>	          LabelImageToLabelMapFilterType;
   
   typedef Functor::LabelObjectToPolygonFunctor<
     LabelObjectType, PolygonType>                 LabelObject2PolygonFunctorType;
@@ -133,7 +133,6 @@ public:
     VectorImageType, 
     VectorImageType, 
     LabeledImageType>                             MeanShiftVectorImageFilterType;
-
 
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
@@ -269,14 +268,14 @@ private:
   std::vector<LabelMapPointerType>      m_LabelMapVector;
 
   // Selected Polygon on full image right click
-  PolygonType::Pointer		  m_SelectedPolygon;
-  DataNodeType::Pointer           m_SelectedPolygonNode;
+  PolygonType::Pointer		        m_SelectedPolygon;
+  DataNodeType::Pointer                 m_SelectedPolygonNode;
 
-  int                             m_ActualLayerNumber;
+  int                                   m_ActualLayerNumber;
 
-  VectorDataType::Pointer         m_SelectedVectorData;
+  VectorDataType::Pointer               m_SelectedVectorData;
 
-  std::vector<std::string>        m_AlgorithmsNameList;
+  std::vector<std::string>              m_AlgorithmsNameList;
 };
 
 } //end namespace otb

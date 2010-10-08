@@ -165,16 +165,16 @@ void VectorizationModel
 
   // Set the cartographic region to the extract roi filter
   vdextract->SetRegion(rsRegion);
-  if(m_UseDEM==true)
+  if (m_UseDEM==true)
     {    
-      if (!m_DEMPath.empty()) 
-	{
-	  vdextract->SetDEMDirectory(m_DEMPath);
-	}
-      else
-	{
-	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
-	}
+    if (!m_DEMPath.empty()) 
+      {
+      vdextract->SetDEMDirectory(m_DEMPath);
+      }
+    else
+      {
+      itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
+      }
     }
   // Reproject VectorData in image projection
   vproj = VectorDataProjectionFilterType::New();
@@ -184,25 +184,23 @@ void VectorizationModel
   vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
   vproj->SetOutputOrigin(m_InputImage->GetOrigin());
   vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  if(m_UseDEM==true)
+  
+  if (m_UseDEM==true)
     {    
-      if (!m_DEMPath.empty()) 
-	{
-	  vproj->SetDEMDirectory(m_DEMPath);
-	}
-      else
-	{
-	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
-	}
+    if (!m_DEMPath.empty()) 
+      {
+      vproj->SetDEMDirectory(m_DEMPath);
+      }
+    else
+      {
+      itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
+      }
     }
-
+  
   vproj->Update();
 
-
-  //m_VectorDataModel->AddVectorData(tihs->ReprojectedVectorData(vData, false));
   m_VectorDataModel->AddVectorData(vproj->GetOutput());
 }
-
 
 void VectorizationModel
 ::RemoveDataNode(DataNodeType * node)
@@ -421,17 +419,17 @@ VectorizationModel
                                    MetaDataKey::ProjectionRefKey, projectionRef );
   vectorDataProjection->SetInputProjectionRef(projectionRef);
   vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
-//   if(m_UseDEM==true)
-//     {    
-//       if (!m_DEMPath.empty()) 
-// 	{
-// 	  vectorDataProjection->SetDEMDirectory(m_DEMDirectory);
-// 	}
-//       else
-// 	{
-// 	  itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
-// 	}
-//     }
+  /*if(m_UseDEM==true)
+    {    
+    if (!m_DEMPath.empty()) 
+      {
+      vectorDataProjection->SetDEMDirectory(m_DEMDirectory);
+      }
+    else
+      {
+      itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
+      }
+    }*/
 
   vectorDataProjection->Update();
   m_Output = vectorDataProjection->GetOutput();
@@ -490,8 +488,10 @@ void VectorizationModel
   PolygonNode->SetNodeType(otb::FEATURE_POLYGON);
   PolygonNode->SetNodeId("FEATURE_POLYGON");
   PolygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
-  m_VectorDataModel->GetVectorData()->GetDataTree()->Add(PolygonNode,
-                                                         m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
+  m_VectorDataModel->GetVectorData()->GetDataTree()->Add(
+    PolygonNode,
+    m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
+  
   this->NotifyAll();
   m_ActualLayerNumber = 0;
 }
