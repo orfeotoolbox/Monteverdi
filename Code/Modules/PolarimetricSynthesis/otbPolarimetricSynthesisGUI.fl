@@ -1,0 +1,471 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class PolarimetricSynthesisGUI {open
+} {
+  Function {VectorBrowserCallback()} {open return_type {virtual void}
+  } {}
+  Function {HHBrowserCallback()} {open return_type {virtual void}
+  } {}
+  Function {HVBrowserCallback()} {open return_type {virtual void}
+  } {}
+  Function {VHBrowserCallback()} {open return_type {virtual void}
+  } {}
+  Function {VVBrowserCallback()} {open return_type {virtual void}
+  } {}
+  Function {HEmissionCallback()} {open return_type {virtual void}
+  } {}
+  Function {VEmissionCallback()} {open return_type {virtual void}
+  } {}
+  Function {OpenVectorImageCallback()} {open return_type {virtual void}
+  } {}
+  Function {OpenImagesCallback()} {open return_type {virtual void}
+  } {}
+  Function {OpenImageOkCallback()} {open return_type {virtual void}
+  } {}
+  Function {OpenImageCancelCallback()} {open return_type {virtual void}
+  } {}
+  Function {OpenCallback()} {open return_type {virtual void}
+  } {}
+  Function {QuitCallback()} {open return_type {virtual void}
+  } {}
+  Function {SaveResultCallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayGroupCallback()} {open return_type {virtual void}
+  } {}
+  Function {RGBGroupCallback()} {open return_type {virtual void}
+  } {}
+  Function {RGBButtonCallback()} {open return_type {virtual void}
+  } {}
+  Function {RedPsiICallback()} {open return_type {virtual void}
+  } {}
+  Function {RedPsiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {RedKhiICallback()} {open return_type {virtual void}
+  } {}
+  Function {RedKhiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {RedCoPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {RedCrossPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {RedAnyPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {BluePsiICallback()} {open return_type {virtual void}
+  } {}
+  Function {BluePsiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {BlueKhiICallback()} {open return_type {virtual void}
+  } {}
+  Function {BlueKhiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {BlueCoPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {BlueCrossPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {BlueAnyPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenPsiICallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenPsiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenKhiICallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenKhiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenCoPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenCrossPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {GreenAnyPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {Build()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Polarimetric synthesis application} open selected
+      xywh {386 55 955 785} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gFullResolution {
+        label {Full resolution} open
+        tooltip {This area display a piece of the image at full resolution. You can change the displayed region by clicking on the scroll area} xywh {7 16 700 715} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable
+      } {}
+      Fl_Group gScroll {
+        label Scroll open
+        tooltip {This area display a minimap of the full image, allowing you to change the region displayed by the full resolution area by clicking} xywh {722 17 215 190} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gInterface {
+        label {Polarization parameters} open
+        xywh {722 223 220 275} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Tabs gRGBTabs {
+          callback {this->RGBGroupCallback();} open
+          xywh {722 223 220 242} box PLASTIC_DOWN_BOX labelsize 12
+        } {
+          Fl_Group gRedGroup {
+            label Red open
+            xywh {722 248 220 216} box PLASTIC_DOWN_BOX labelsize 12
+          } {
+            Fl_Group {} {
+              label Emission open
+              xywh {722 277 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 132
+            } {
+              Fl_Value_Slider vRedPsiI {
+                label Psi
+                callback {this->RedPsiICallback();}
+                tooltip {Change the incident Psi value (in degree)} xywh {753 280 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.01 textsize 14
+              }
+              Fl_Value_Slider vRedKhiI {
+                label Khi
+                callback {this->RedKhiICallback();}
+                tooltip {Change the incident Khi value (in degree)} xywh {753 304 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              label Reception open
+              xywh {722 344 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 193
+            } {
+              Fl_Value_Slider vRedPsiR {
+                label Psi
+                callback {this->RedPsiRCallback();}
+                tooltip {Change the reflected Psi value (in degree)} xywh {753 348 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.001 textsize 14
+              }
+              Fl_Value_Slider vRedKhiR {
+                label Khi
+                callback {this->RedKhiRCallback();}
+                tooltip {Change the emitted Khi value (in degree)} xywh {753 372 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              xywh {743 400 177 64}
+            } {
+              Fl_Round_Button bRedCrossPolarization {
+                label {Cross-polarization}
+                callback {this->RedCrossPolarizationCallback();}
+                tooltip {Force cross polarization} xywh {750 420 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bRedCoPolarization {
+                label {Co-polarization}
+                callback {this->RedCoPolarizationCallback();}
+                tooltip {Force co-polarization} xywh {750 440 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bRedAnyPolarization {
+                label {Indifferent  polarization}
+                callback {this->RedAnyPolarizationCallback();}
+                tooltip {Allows any polarization} xywh {750 400 170 20} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+            }
+          }
+          Fl_Group gGreenGroup {
+            label Green open
+            xywh {722 248 220 216} box PLASTIC_DOWN_BOX labelsize 12 hide
+          } {
+            Fl_Group {} {
+              label Emission open
+              xywh {722 277 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 132
+            } {
+              Fl_Value_Slider vGreenPsiI {
+                label Psi
+                callback {this->GreenPsiICallback();}
+                tooltip {Change the incident Psi value (in degree)} xywh {753 280 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.01 textsize 14
+              }
+              Fl_Value_Slider vGreenKhiI {
+                label Khi
+                callback {this->GreenKhiICallback();}
+                tooltip {Change the incident Khi value (in degree)} xywh {753 304 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              label Reception open
+              xywh {722 344 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 193
+            } {
+              Fl_Value_Slider vGreenPsiR {
+                label Psi
+                callback {this->GreenPsiRCallback();}
+                tooltip {Change the reflected Psi value (in degree)} xywh {753 348 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.001 textsize 14
+              }
+              Fl_Value_Slider vGreenKhiR {
+                label Khi
+                callback {this->GreenKhiRCallback();}
+                tooltip {Change the emitted Khi value (in degree)} xywh {753 372 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              xywh {743 400 177 64}
+            } {
+              Fl_Round_Button bGreenCrossPolarization {
+                label {Cross-polarization}
+                callback {this->GreenCrossPolarizationCallback();}
+                tooltip {Force cross polarization} xywh {750 420 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bGreenCoPolarization {
+                label {Co-polarization}
+                callback {this->GreenCoPolarizationCallback();}
+                tooltip {Force co-polarization} xywh {750 440 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bGreenAnyPolarization {
+                label {Indifferent  polarization}
+                callback {this->GreenAnyPolarizationCallback();}
+                tooltip {Allows any polarization} xywh {750 400 170 20} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+            }
+          }
+          Fl_Group gBlueGroup {
+            label Blue open
+            xywh {722 248 220 216} box PLASTIC_DOWN_BOX labelsize 12 hide
+          } {
+            Fl_Group {} {
+              label Emission open
+              xywh {722 277 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 132
+            } {
+              Fl_Value_Slider vBluePsiI {
+                label Psi
+                callback {this->BluePsiICallback();}
+                tooltip {Change the incident Psi value (in degree)} xywh {753 280 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.01 textsize 14
+              }
+              Fl_Value_Slider vBlueKhiI {
+                label Khi
+                callback {this->BlueKhiICallback();}
+                tooltip {Change the incident Khi value (in degree)} xywh {753 304 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              label Reception open
+              xywh {722 344 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 193
+            } {
+              Fl_Value_Slider vBluePsiR {
+                label Psi
+                callback {this->BluePsiRCallback();}
+                tooltip {Change the reflected Psi value (in degree)} xywh {753 348 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.001 textsize 14
+              }
+              Fl_Value_Slider vBlueKhiR {
+                label Khi
+                callback {this->BlueKhiRCallback();}
+                tooltip {Change the emitted Khi value (in degree)} xywh {753 372 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              xywh {743 400 177 64}
+            } {
+              Fl_Round_Button bBlueCrossPolarization {
+                label {Cross-polarization}
+                callback {this->BlueCrossPolarizationCallback();}
+                tooltip {Force cross polarization} xywh {750 420 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bBlueCoPolarization {
+                label {Co-polarization}
+                callback {this->BlueCoPolarizationCallback();}
+                tooltip {Force co-polarization} xywh {750 440 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bBlueAnyPolarization {
+                label {Indifferent  polarization}
+                callback {this->BlueAnyPolarizationCallback();}
+                tooltip {Allows any polarization} xywh {750 400 170 20} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+            }
+          }
+        }
+        Fl_Tabs gGrayTabs {
+          callback {this->GrayGroupCallback();} open
+          xywh {722 223 220 242} box PLASTIC_DOWN_BOX labelsize 12 hide
+        } {
+          Fl_Group gGrayGroup {
+            label Grayscale open
+            xywh {722 248 220 216} box PLASTIC_DOWN_BOX labelsize 12
+          } {
+            Fl_Group {} {
+              label Emission open
+              xywh {722 277 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 132
+            } {
+              Fl_Value_Slider vGrayPsiI {
+                label Psi
+                callback {this->GrayPsiICallback();}
+                tooltip {Change the incident Psi value (in degree)} xywh {753 280 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.01 textsize 14
+              }
+              Fl_Value_Slider vGrayKhiI {
+                label Khi
+                callback {this->GrayKhiICallback();}
+                tooltip {Change the incident Khi value (in degree)} xywh {753 304 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              label Reception open
+              xywh {722 344 220 50} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 193
+            } {
+              Fl_Value_Slider vGrayPsiR {
+                label Psi
+                callback {this->GrayPsiRCallback();}
+                tooltip {Change the reflected Psi value (in degree)} xywh {753 348 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -180 maximum 180 step 1 slider_size 0.001 textsize 14
+              }
+              Fl_Value_Slider vGrayKhiR {
+                label Khi
+                callback {this->GrayKhiRCallback();}
+                tooltip {Change the emitted Khi value (in degree)} xywh {753 372 175 20} type Horizontal box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 minimum -45 maximum 45 step 1 slider_size 0.001 textsize 14
+              }
+            }
+            Fl_Group {} {
+              xywh {744 400 177 64}
+            } {
+              Fl_Round_Button bGrayCrossPolarization {
+                label {Cross-polarization}
+                callback {this->GrayCrossPolarizationCallback();}
+                tooltip {Force cross polarization} xywh {750 420 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bGrayCoPolarization {
+                label {Co-polarization}
+                callback {this->GrayCoPolarizationCallback();}
+                tooltip {Force co-polarization} xywh {750 440 170 20} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+              Fl_Round_Button bGrayAnyPolarization {
+                label {Indifferent  polarization}
+                callback {this->GrayAnyPolarizationCallback();}
+                tooltip {Allows any polarization} xywh {750 400 170 20} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+              }
+            }
+          }
+        }
+        Fl_Dial vGain {
+          label Gain
+          callback {this->DialGainCallback()}
+          xywh {789 466 30 30} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177 align 4 maximum 50 step 0.05 value 1
+        }
+        Fl_Value_Input iGain {
+          callback {this->InputGainCallback()}
+          xywh {830 469 54 24} labelsize 12 labelcolor 177 maximum 1000 step 0.05 value 1
+        }
+      }
+      Fl_Group gSphere {
+        label {Poincare Sphere}
+        tooltip {Drag the sphere to rotate it} xywh {722 516 215 215} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Output vPixelValue {
+        label {Pixel value}
+        tooltip {Pixel value} xywh {73 739 635 21} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button bRGB {
+        label RGB
+        callback {this->RGBButtonCallback();}
+        xywh {878 226 60 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 labelsize 12
+      }
+      Fl_Button {} {
+        label Exit
+        xywh {725 735 210 30} box EMBOSSED_BOX down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+      }
+    }
+    Fl_Window wOpenImageWindow {
+      label {Image file chooser} open
+      xywh {726 222 420 315} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide
+    } {
+      Fl_Group {} {open
+        xywh {0 0 835 315}
+      } {
+        Fl_Group gGroupImages {open
+          xywh {11 10 395 225} color 8
+        } {
+          Fl_File_Input fHHInputImage {
+            label {HH image}
+            tooltip {HH input image path} xywh {106 16 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
+          }
+          Fl_File_Input fHVInputImage {
+            label {HV image}
+            tooltip {HV input image path} xywh {106 66 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
+          }
+          Fl_File_Input fVHInputImage {
+            label {VH image}
+            tooltip {VH input image path} xywh {106 116 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
+          }
+          Fl_File_Input fVVInputImage {
+            label {VV image}
+            tooltip {VV input image path} xywh {106 166 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
+          }
+          Fl_Button bHHBrowser {
+            label {...}
+            callback {this->HHBrowserCallback()}
+            tooltip {Choose the HH image file name} xywh {314 16 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bHVBrowser {
+            label {...}
+            callback {this->HVBrowserCallback()}
+            tooltip {Choose the HV image file name} xywh {314 66 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bVHBrowser {
+            label {...}
+            callback {this->VHBrowserCallback()}
+            tooltip {Choose the VH image file name} xywh {314 116 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Button bVVBrowser {
+            label {...}
+            callback {this->VVBrowserCallback()}
+            tooltip {Choose the VV image file name} xywh {314 166 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Fl_Group gGroupVectorImage {
+          xywh {0 30 395 120} color 8
+        } {
+          Fl_File_Input fVectorInputImage {
+            label {Vector image}
+            tooltip {Vector input image path} xywh {102 81 190 34} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12 hide deactivate
+          }
+          Fl_Button bVectorBrowser {
+            label {...}
+            callback {this->VectorBrowserCallback()}
+            tooltip {Choose the vector image  file name} xywh {310 81 48 34} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
+          }
+        }
+        Fl_Return_Button bOpenImageOk {
+          label Ok
+          callback {this->OpenImageOkCallback();}
+          tooltip {Load images into the application} xywh {65 266 120 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Return_Button bOpenImageCancel {
+          label Cancel
+          callback {this->OpenImageCancelCallback();}
+          tooltip {Hide the open images window} xywh {235 266 120 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Round_Button bOpenVectorImage {
+          label {Open Vector image}
+          callback {this->OpenVectorImageCallback();}
+          tooltip {Import a polarimetric vector image} xywh {120 8 165 18} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide
+        }
+        Fl_Round_Button bOpenImages {
+          label {Open image}
+          callback {this->OpenImagesCallback();}
+          tooltip {Import images corresponding to the HH, HV, VH, VV channels} xywh {567 5 130 25} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186 hide
+        }
+        Fl_Check_Button bVEmission {
+          label {V Emission}
+          callback {this->VEmissionCallback();}
+          tooltip {Enable or disable the vertical emssion for the polarimetric data} xywh {160 241 100 15} down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Check_Button bHEmission {
+          label {H Emission}
+          callback {this->HEmissionCallback();}
+          tooltip {Enable or disable the horizontcal emssion for the polarimetric data} xywh {160 216 100 15} down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
+        }
+      }
+    }
+  }
+  Function {GrayPsiICallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayPsiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayKhiICallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayKhiRCallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayCoPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayCrossPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {GrayAnyPolarizationCallback()} {open return_type {virtual void}
+  } {}
+  Function {DialGainCallback()} {open return_type {virtual void}
+  } {}
+  Function {InputGainCallback()} {open return_type {virtual void}
+  } {}
+  Function {~PolarimetricSynthesisGUI()} {open return_type virtual
+  } {}
+} 

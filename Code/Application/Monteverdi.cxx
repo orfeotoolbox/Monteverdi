@@ -76,6 +76,7 @@
 #include "otbVectorizationModule.h"
 #include "otbSpectrumModule.h"
 #include "otbBandMathModule.h"
+#include "otbPolarimetricSynthesisModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -175,6 +176,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
+  model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
+                                                 otbGetTextMacro("SAR/Polarimetric Synthesis"));
   
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
