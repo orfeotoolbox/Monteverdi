@@ -27,7 +27,7 @@ void PolarimetricSynthesisModel::NotifyListener(ListenerBase * listener)
 }
 
 PolarimetricSynthesisModel::PolarimetricSynthesisModel():
-        m_UseVectorImage(false), m_HEmissionMode(true), m_VEmissionMode(true), m_RGB(true),
+        m_UseVectorImage(false), m_HEmissionMode(false), m_VEmissionMode(false), m_RGB(true),
         m_GrayPolarizationMode(ANY_POLAR),
         m_RedPolarizationMode(ANY_POLAR),
         m_GreenPolarizationMode(ANY_POLAR),
@@ -104,33 +104,35 @@ void PolarimetricSynthesisModel::LoadImages()
   SetupEmission(GREEN);
   SetupEmission(BLUE);
 
+  m_Valid = true;
+
   if (m_UseVectorImage)
   {
-    m_VectorReader->SetFileName(m_VectorImageFilename);
-    m_VectorReader->GenerateOutputInformation();
-    m_Valid=true;
+//    m_VectorReader->SetFileName(m_VectorImageFilename);
+//    m_VectorReader->GenerateOutputInformation();
   }
   else
   {
-
     if (m_HEmissionMode && m_VEmissionMode)
     {
-      m_HHReader->SetFileName(m_HHImageFilename);
-      m_HHReader->GenerateOutputInformation();
-      m_HVReader->SetFileName(m_HVImageFilename);
-      m_HVReader->GenerateOutputInformation();
-      m_VHReader->SetFileName(m_VHImageFilename);
-      m_VHReader->GenerateOutputInformation();
-      m_VVReader->SetFileName(m_VVImageFilename);
-      m_VVReader->GenerateOutputInformation();
-      m_Valid = true;
+//      m_HHReader->SetFileName(m_HHImageFilename);
+//     m_HHReader->GenerateOutputInformation();
+//      m_HVReader->SetFileName(m_HVImageFilename);
+//      m_HVReader->GenerateOutputInformation();
+//      m_VHReader->SetFileName(m_VHImageFilename);
+//      m_VHReader->GenerateOutputInformation();
+//      m_VVReader->SetFileName(m_VVImageFilename);
+//      m_VVReader->GenerateOutputInformation();
+ //     m_Valid = true;
     }
     else if (!m_HEmissionMode && m_VEmissionMode)
     {
+/*
       m_VHReader->SetFileName(m_VHImageFilename);
       m_VHReader->GenerateOutputInformation();
       m_VVReader->SetFileName(m_VVImageFilename);
       m_VVReader->GenerateOutputInformation();
+*/
       m_GrayPsiI = 90;
       m_GrayKhiI = 0;
       m_RedPsiI = 90;
@@ -143,10 +145,12 @@ void PolarimetricSynthesisModel::LoadImages()
     }
     else if (m_HEmissionMode && !m_VEmissionMode)
     {
+/*
       m_HHReader->SetFileName(m_HHImageFilename);
       m_HHReader->GenerateOutputInformation();
       m_HVReader->SetFileName(m_HVImageFilename);
       m_HVReader->GenerateOutputInformation();
+*/
       m_GrayPsiI = 0;
       m_GrayKhiI = 0;
       m_RedPsiI = 0;
@@ -155,7 +159,6 @@ void PolarimetricSynthesisModel::LoadImages()
       m_GreenKhiI = 0;
       m_BluePsiI = 0;
       m_BlueKhiI = 0;
-      m_Valid = true;
     }
     else
     {
@@ -169,12 +172,37 @@ void PolarimetricSynthesisModel::LoadImages()
   this->GenerateOutputHistogram(RED);
   this->GenerateOutputHistogram(GREEN);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::WirePipeline()
 {
-  std::cout<<"WirePipeline"<<std::endl;
+  m_ImageList->Clear();
+  if (m_HEmissionMode)
+  {
+    m_ImageHH->UpdateOutputInformation();
+    m_ImageHV->UpdateOutputInformation();
+    m_ImageList->PushBack(m_ImageHH);
+    m_ImageList->PushBack(m_ImageHV);
+  }
+  if (m_VEmissionMode)
+  {
+    m_ImageVH->UpdateOutputInformation();
+    m_ImageVV->UpdateOutputInformation();
+    m_ImageList->PushBack(m_ImageVH);
+    m_ImageList->PushBack(m_ImageVV);
+  }
+
+  m_ImageListToVectorImageFilter->SetInput(m_ImageList);
+  m_GrayPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
+  m_GrayPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
+  m_RedPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
+  m_RedPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
+  m_GreenPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
+  m_GreenPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
+  m_BluePolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
+  m_BluePolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
+  /*
   if (!m_UseVectorImage)
   {
     m_ImageList->Clear();
@@ -208,6 +236,7 @@ void PolarimetricSynthesisModel::WirePipeline()
     m_BluePolarimetricSynthesisFilter->SetInput(m_VectorReader->GetOutput());
     m_VectorReader->GenerateOutputInformation();
   }
+*/
 
   // Connexions for the Full Image
   m_FullImageList->Clear();
@@ -237,7 +266,6 @@ void PolarimetricSynthesisModel::WirePipeline()
   this->SetupPolarization(BLUE);
 
   m_GrayPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-
 }
 
 void PolarimetricSynthesisModel::ComputeNormalizationFactors()
@@ -496,7 +524,7 @@ void PolarimetricSynthesisModel::SetGain(double value)
   this->GenerateOutputHistogram(BLUE);
   m_ImageListToVectorImageFilterForFull->Modified();
   m_ImageListToVectorImageFilterForScroll->Modified();
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 //---------------------- GRAYSCALE PART ----------------------//
@@ -518,7 +546,7 @@ void PolarimetricSynthesisModel::SetGrayPolarizationMode(PolarizationMode mode)
   }
   this->SetupPolarization(GRAYSCALE);
   this->GenerateOutputHistogram(GRAYSCALE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGrayPsiI(double value)
@@ -548,7 +576,7 @@ void PolarimetricSynthesisModel::SetGrayPsiI(double value)
   }
   this->SetupPolarization(GRAYSCALE);
   this->GenerateOutputHistogram(GRAYSCALE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGrayPsiR(double value)
@@ -581,7 +609,7 @@ void PolarimetricSynthesisModel::SetGrayPsiR(double value)
   }
   this->SetupPolarization(GRAYSCALE);
   this->GenerateOutputHistogram(GRAYSCALE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 void PolarimetricSynthesisModel::SetGrayKhiI(double value)
 {
@@ -606,7 +634,7 @@ void PolarimetricSynthesisModel::SetGrayKhiI(double value)
   }
   this->SetupPolarization(GRAYSCALE);
   this->GenerateOutputHistogram(GRAYSCALE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGrayKhiR(double value)
@@ -639,7 +667,7 @@ void PolarimetricSynthesisModel::SetGrayKhiR(double value)
   }
   this->SetupPolarization(GRAYSCALE);
   this->GenerateOutputHistogram(GRAYSCALE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 
@@ -662,7 +690,7 @@ void PolarimetricSynthesisModel::SetRedPolarizationMode(PolarizationMode mode)
   }
   this->SetupPolarization(RED);
   this->GenerateOutputHistogram(RED);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetRedPsiI(double value)
@@ -692,7 +720,7 @@ void PolarimetricSynthesisModel::SetRedPsiI(double value)
   }
   this->SetupPolarization(RED);
   this->GenerateOutputHistogram(RED);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetRedPsiR(double value)
@@ -725,7 +753,7 @@ void PolarimetricSynthesisModel::SetRedPsiR(double value)
   }
   this->SetupPolarization(RED);
   this->GenerateOutputHistogram(RED);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 void PolarimetricSynthesisModel::SetRedKhiI(double value)
 {
@@ -750,7 +778,7 @@ void PolarimetricSynthesisModel::SetRedKhiI(double value)
   }
   this->SetupPolarization(RED);
   this->GenerateOutputHistogram(RED);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetRedKhiR(double value)
@@ -783,7 +811,7 @@ void PolarimetricSynthesisModel::SetRedKhiR(double value)
   }
   this->SetupPolarization(RED);
   this->GenerateOutputHistogram(RED);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 //---------------------- GREEN PART ----------------------//
@@ -805,7 +833,7 @@ void PolarimetricSynthesisModel::SetGreenPolarizationMode(PolarizationMode mode)
   }
   this->SetupPolarization(GREEN);
   this->GenerateOutputHistogram(GREEN);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGreenPsiI(double value)
@@ -835,7 +863,7 @@ void PolarimetricSynthesisModel::SetGreenPsiI(double value)
   }
   this->SetupPolarization(GREEN);
   this->GenerateOutputHistogram(GREEN);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGreenPsiR(double value)
@@ -868,7 +896,7 @@ void PolarimetricSynthesisModel::SetGreenPsiR(double value)
   }
   this->SetupPolarization(GREEN);
   this->GenerateOutputHistogram(GREEN);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGreenKhiI(double value)
@@ -894,7 +922,7 @@ void PolarimetricSynthesisModel::SetGreenKhiI(double value)
   }
   this->SetupPolarization(GREEN);
   this->GenerateOutputHistogram(GREEN);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetGreenKhiR(double value)
@@ -927,7 +955,7 @@ void PolarimetricSynthesisModel::SetGreenKhiR(double value)
   }
   this->SetupPolarization(GREEN);
   this->GenerateOutputHistogram(GREEN);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 //---------------------- BLUE PART ----------------------//
@@ -949,7 +977,7 @@ void PolarimetricSynthesisModel::SetBluePolarizationMode(PolarizationMode mode)
   }
   this->SetupPolarization(BLUE);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetBluePsiI(double value)
@@ -979,7 +1007,7 @@ void PolarimetricSynthesisModel::SetBluePsiI(double value)
   }
   this->SetupPolarization(BLUE);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetBluePsiR(double value)
@@ -1012,7 +1040,7 @@ void PolarimetricSynthesisModel::SetBluePsiR(double value)
   }
   this->SetupPolarization(BLUE);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetBlueKhiI(double value)
@@ -1038,7 +1066,7 @@ void PolarimetricSynthesisModel::SetBlueKhiI(double value)
   }
   this->SetupPolarization(BLUE);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 void PolarimetricSynthesisModel::SetBlueKhiR(double value)
@@ -1071,7 +1099,7 @@ void PolarimetricSynthesisModel::SetBlueKhiR(double value)
   }
   this->SetupPolarization(BLUE);
   this->GenerateOutputHistogram(BLUE);
-  this->NotifyAll();
+  this->NotifyAll("Update");
 }
 
 }

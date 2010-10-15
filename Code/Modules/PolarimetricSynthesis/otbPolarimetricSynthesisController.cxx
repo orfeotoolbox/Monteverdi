@@ -38,6 +38,7 @@ void PolarimetricSynthesisController::SetView(ViewPointerType view)
 
 void PolarimetricSynthesisController::LoadImages()
 {
+#if 0
   m_Model->SetUseVectorImage(m_View->bOpenVectorImage->value());
   m_Model->SetHEmissionMode(m_View->bHEmission->value());
   m_Model->SetVEmissionMode(m_View->bVEmission->value());
@@ -66,6 +67,8 @@ void PolarimetricSynthesisController::LoadImages()
       m_Model->SetVHImageFilename(m_View->fVHInputImage->value());
     }
   }
+#endif
+
   try
   {
     m_Model->LoadImages();

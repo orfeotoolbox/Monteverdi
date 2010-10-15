@@ -117,11 +117,6 @@ public:
 
 
   /** Buttons callback */
-  virtual void VectorBrowserCallback();
-  virtual void HHBrowserCallback();
-  virtual void HVBrowserCallback();
-  virtual void VHBrowserCallback();
-  virtual void VVBrowserCallback();
   virtual void HEmissionCallback();
   virtual void VEmissionCallback();
   virtual void OpenVectorImageCallback();

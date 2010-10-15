@@ -98,13 +98,23 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /**Combine real and imaginary image to create a complex image */
-  ComplexImageType::Pointer CombineData(ImageType::Pointer & realImage,
+  ComplexImageType::Pointer CombineData(unsigned int i,
+                                        ImageType::Pointer & realImage,
                                         ImageType::Pointer & imagImage);
 
 
   ControllerType::Pointer m_Controller;
   ViewType::Pointer m_View;
   ModelType::Pointer m_Model;
+
+  ComplexImageType::Pointer hhImage;
+  ComplexImageType::Pointer hvImage;
+  ComplexImageType::Pointer vhImage;
+  ComplexImageType::Pointer vvImage;
+
+  std::vector<RealImageToComplexImageFilterType::Pointer> realToComplexFilter;
+  std::vector<ImaginaryImageToComplexImageFilterType::Pointer> imaginaryToComplexFilter;
+  std::vector<RealAndImaginaryImageToComplexImageFilterType::Pointer> realAndImaginaryToComplexFilter;
 };
 
 } // End namespace otb

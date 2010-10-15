@@ -26,6 +26,16 @@ PolarimetricSynthesisModule::PolarimetricSynthesisModule()
   // This module needs pipeline locking
   this->NeedsPipelineLockingOff();
 
+  realToComplexFilter.resize(4);
+  imaginaryToComplexFilter.resize(4);
+  realAndImaginaryToComplexFilter.resize(4);
+  for(unsigned int i = 0 ; i < 4 ; ++i)
+    {
+      realToComplexFilter[i] = RealImageToComplexImageFilterType::New();
+      imaginaryToComplexFilter[i] = ImaginaryImageToComplexImageFilterType::New();
+      realAndImaginaryToComplexFilter[i] = RealAndImaginaryImageToComplexImageFilterType::New();
+    }
+
   // First, do constructor stuffs
   m_Controller = ControllerType::New();
   m_View = ViewType::New();
@@ -63,31 +73,29 @@ void PolarimetricSynthesisModule::PrintSelf(std::ostream& os, itk::Indent indent
 }
  /** Combine real and imaginary image to create a complex image*/
 PolarimetricSynthesisModule::ComplexImageType::Pointer
-PolarimetricSynthesisModule::CombineData(ImageType::Pointer & realImage,
+PolarimetricSynthesisModule::CombineData(unsigned int i,
+                                         ImageType::Pointer & realImage,
                                          ImageType::Pointer & imagImage)
 {
   if(realImage.IsNotNull() && imagImage.IsNotNull())
    {
-     RealAndImaginaryImageToComplexImageFilterType::Pointer filter = RealAndImaginaryImageToComplexImageFilterType::New();
-     filter->SetInputRealPart(realImage);
-     filter->SetInputRealPart(imagImage);
-     return filter->GetOutput();
+      realAndImaginaryToComplexFilter[i]->SetInputRealPart(realImage);
+      realAndImaginaryToComplexFilter[i]->SetInputRealPart(imagImage);
+      return realAndImaginaryToComplexFilter[i]->GetOutput();
    }
  else
    {
      if(realImage.IsNotNull())
        {
-         RealImageToComplexImageFilterType::Pointer filter = RealImageToComplexImageFilterType::New();
-         filter->SetInput(realImage);
-         return filter->GetOutput();
+         realToComplexFilter[i]->SetInput(realImage);
+         return realToComplexFilter[i]->GetOutput();
        }
      else
        {
        if(imagImage.IsNotNull())
          {
-           ImaginaryImageToComplexImageFilterType::Pointer filter = ImaginaryImageToComplexImageFilterType::New();
-           filter->SetInput(imagImage);
-           return filter->GetOutput();
+           imaginaryToComplexFilter[i]->SetInput(imagImage);
+           return imaginaryToComplexFilter[i]->GetOutput();
          }
        else
          {
@@ -104,8 +112,6 @@ void PolarimetricSynthesisModule::Run()
   // Untill window closing, module will be busy
   this->BusyOn();
 
-//  m_View->Build();
-#if 1
   ImageType::Pointer hhRealImage = this->GetInputData<ImageType> ("InputImageHHReal");
   ImageType::Pointer hhImagImage = this->GetInputData<ImageType> ("InputImageHHImag");
   ImageType::Pointer hvRealImage = this->GetInputData<ImageType> ("InputImageHVReal");
@@ -115,15 +121,11 @@ void PolarimetricSynthesisModule::Run()
   ImageType::Pointer vvRealImage = this->GetInputData<ImageType> ("InputImageVVReal");
   ImageType::Pointer vvImagImage = this->GetInputData<ImageType> ("InputImageVVImag");
 
-  ComplexImageType::Pointer hhImage = ComplexImageType::New();
-  ComplexImageType::Pointer hvImage = ComplexImageType::New();
-  ComplexImageType::Pointer vhImage = ComplexImageType::New();
-  ComplexImageType::Pointer vvImage = ComplexImageType::New();
 
-  hhImage = CombineData(hhRealImage,hhImagImage);
-  hvImage = CombineData(hvRealImage,hvImagImage);
-  vhImage = CombineData(vhRealImage,vhImagImage);
-  vvImage = CombineData(vvRealImage,vvImagImage);
+  hhImage = CombineData(0,hhRealImage,hhImagImage);
+  hvImage = CombineData(1,hvRealImage,hvImagImage);
+  vhImage = CombineData(2,vhRealImage,vhImagImage);
+  vvImage = CombineData(3,vvRealImage,vvImagImage);
 
   if( hhImage.IsNull() && hvImage.IsNull() &&
       vhImage.IsNull() && vvImage.IsNull() )
@@ -131,57 +133,23 @@ void PolarimetricSynthesisModule::Run()
       itkExceptionMacro(<<"Need at least one input image ");
     }
 
-  if(hhImage.IsNull() || hvImage.IsNull())
+  if(hhImage.IsNotNull() || hvImage.IsNotNull())
     {
       m_Model->SetHEmissionMode(true);
     }
-  if(vhImage.IsNull() || vvImage.IsNull())
+  if(vhImage.IsNotNull() || vvImage.IsNotNull())
     {
       m_Model->SetVEmissionMode(true);
     }
 
+  m_Model->SetUseVectorImage(false);
   m_Model->SetImageHH(hhImage);
   m_Model->SetImageHV(hvImage);
   m_Model->SetImageVH(vhImage);
   m_Model->SetImageVV(vvImage);
 
   m_View->Build();
-
-  //m_Controller->OpenImages(hhImage, hvImage, vhImage, vvImage);
-  //m_View->UpdateViewerSetup();
-
-
-#endif
-
-
-  #if 0
-  VectorImageType::Pointer fpvImage = this->GetInputData<VectorImageType> ("InputImage");
-  LabeledFloatingImageType::Pointer lImage = this->GetInputData<LabeledFloatingImageType> ("LabeledImage");
-  LabeledImageType::Pointer lImageLab;
-
-  if (lImage.IsNotNull())
-    {
-    m_Caster->SetInput(lImage);
-    lImageLab = m_Caster->GetOutput();
-    }
-  else
-    {
-    lImageLab = this->GetInputData<LabeledImageType> ("LabeledImage");
-    }
-
-  if (fpvImage.IsNotNull() && lImageLab.IsNotNull())
-    {
-    // Process the input as an FloatingVectorImageType
-    m_View->Build();
-    fpvImage->UpdateOutputInformation();
-    lImageLab->UpdateOutputInformation();
-    }
-  else
-    {
-    itkExceptionMacro(<<"One of the input image is null");
-    }
-#endif
-
+  m_Controller->LoadImages();
 }
 
 /** The Notify */
