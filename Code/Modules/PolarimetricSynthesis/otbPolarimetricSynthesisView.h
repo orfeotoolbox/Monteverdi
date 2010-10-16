@@ -124,7 +124,6 @@ public:
   virtual void OpenImageOkCallback();
   virtual void OpenImageCancelCallback();
   virtual void OpenCallback();
-  virtual void SaveResultCallback();
   virtual void QuitCallback();
   virtual void DialGainCallback();
   virtual void InputGainCallback();
