@@ -142,7 +142,6 @@ void PolarimetricSynthesisModule::Run()
       m_Model->SetVEmissionMode(true);
     }
 
-  m_Model->SetUseVectorImage(false);
   m_Model->SetImageHH(hhImage);
   m_Model->SetImageHV(hvImage);
   m_Model->SetImageVH(vhImage);

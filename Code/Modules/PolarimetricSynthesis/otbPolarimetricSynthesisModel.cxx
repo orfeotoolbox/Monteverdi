@@ -27,7 +27,7 @@ void PolarimetricSynthesisModel::NotifyListener(ListenerBase * listener)
 }
 
 PolarimetricSynthesisModel::PolarimetricSynthesisModel():
-        m_UseVectorImage(false), m_HEmissionMode(false), m_VEmissionMode(false), m_RGB(true),
+        m_HEmissionMode(false), m_VEmissionMode(false), m_RGB(true),
         m_GrayPolarizationMode(ANY_POLAR),
         m_RedPolarizationMode(ANY_POLAR),
         m_GreenPolarizationMode(ANY_POLAR),
@@ -106,14 +106,7 @@ void PolarimetricSynthesisModel::LoadImages()
 
   m_Valid = true;
 
-  if (m_UseVectorImage)
-  {
-//    m_VectorReader->SetFileName(m_VectorImageFilename);
-//    m_VectorReader->GenerateOutputInformation();
-  }
-  else
-  {
-    if (m_HEmissionMode && m_VEmissionMode)
+  if (m_HEmissionMode && m_VEmissionMode)
     {
 //      m_HHReader->SetFileName(m_HHImageFilename);
 //     m_HHReader->GenerateOutputInformation();
@@ -165,7 +158,6 @@ void PolarimetricSynthesisModel::LoadImages()
       m_Valid = false;
       itkExceptionMacro(<<"At least vertical or horizontal emission is required!");
     }
-  }
   this->WirePipeline();
   this->ComputeNormalizationFactors();
   this->GenerateOutputHistogram(GRAYSCALE);
@@ -391,16 +383,8 @@ void PolarimetricSynthesisModel::GenerateQuicklook()
 {
   SizeType largestRegionSize;
 
-  if (!m_UseVectorImage)
-  {
-    m_ShrinkFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
-    largestRegionSize = m_ImageListToVectorImageFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
-  }
-  else
-  {
-    m_ShrinkFilter->SetInput(m_VectorReader->GetOutput());
-    largestRegionSize = m_VectorReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  }
+  m_ShrinkFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
+  largestRegionSize = m_ImageListToVectorImageFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
 
   unsigned int maxQuicklook = std::max(m_QuicklookSize[0],m_QuicklookSize[1]);
   unsigned int maxLargest   = std::max(largestRegionSize[0],largestRegionSize[1]);

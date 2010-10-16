@@ -147,7 +147,6 @@ public:
   itkSetMacro(RGB,bool);
   itkSetMacro(HEmissionMode,bool);
   itkSetMacro(VEmissionMode,bool);
-  itkSetMacro(UseVectorImage,bool);
   itkSetMacro(QuicklookSize,SizeType);
   itkSetStringMacro(HHImageFilename);
   itkSetStringMacro(HVImageFilename);
@@ -176,7 +175,6 @@ public:
   itkGetMacro(RGB,bool);
   itkGetMacro(HEmissionMode,bool);
   itkGetMacro(VEmissionMode,bool);
-  itkGetMacro(UseVectorImage,bool);
   itkGetMacro(GrayPolarizationMode,PolarizationMode);
   itkGetMacro(RedPolarizationMode,PolarizationMode);
   itkGetMacro(GreenPolarizationMode,PolarizationMode);
@@ -288,7 +286,6 @@ private:
   double                 m_AbsoluteMax;
 
   // Configuration
-  bool m_UseVectorImage;
   bool m_HEmissionMode;
   bool m_VEmissionMode;
   PolarizationMode m_GrayPolarizationMode;
