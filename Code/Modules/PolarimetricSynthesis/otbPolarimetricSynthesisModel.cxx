@@ -61,11 +61,6 @@ void PolarimetricSynthesisModel::InitPointers()
 {
 
   // Filters initialization
-  m_HHReader = ImageReaderType::New();
-  m_HVReader = ImageReaderType::New();
-  m_VHReader = ImageReaderType::New();
-  m_VVReader = ImageReaderType::New();
-  m_VectorReader = VectorImageReaderType::New();
   m_ImageList = ComplexImageListType::New();
   m_ScrollImageList = DoubleImageListType::New();
   m_FullImageList = DoubleImageListType::New();

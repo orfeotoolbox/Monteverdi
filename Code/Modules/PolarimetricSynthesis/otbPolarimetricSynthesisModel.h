@@ -148,11 +148,6 @@ public:
   itkSetMacro(HEmissionMode,bool);
   itkSetMacro(VEmissionMode,bool);
   itkSetMacro(QuicklookSize,SizeType);
-  itkSetStringMacro(HHImageFilename);
-  itkSetStringMacro(HVImageFilename);
-  itkSetStringMacro(VHImageFilename);
-  itkSetStringMacro(VVImageFilename);
-  itkSetStringMacro(VectorImageFilename);
 
   /** Getters */
   itkGetMacro(GrayPsiI,double);
@@ -231,13 +226,6 @@ private:
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
 
-  /** Filters */
-  ImageReaderType::Pointer m_HHReader;
-  ImageReaderType::Pointer m_HVReader;
-  ImageReaderType::Pointer m_VHReader;
-  ImageReaderType::Pointer m_VVReader;
-  VectorImageReaderType::Pointer m_VectorReader;
-
   ComplexImageListType::Pointer  m_ImageList;
   // For RGB scroll
   DoubleImageListType::Pointer   m_ScrollImageList;
@@ -267,13 +255,6 @@ private:
   static Pointer Instance;
 
   /** Parameters */
-  // Filenames
-  std::string m_VectorImageFilename;
-  std::string m_HHImageFilename;
-  std::string m_HVImageFilename;
-  std::string m_VHImageFilename;
-  std::string m_VVImageFilename;
-
   ComplexImageType::Pointer m_ImageHH;
   ComplexImageType::Pointer m_ImageHV;
   ComplexImageType::Pointer m_ImageVH;
