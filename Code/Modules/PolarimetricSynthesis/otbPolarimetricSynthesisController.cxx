@@ -211,17 +211,6 @@ void PolarimetricSynthesisController::IndexClicked(const IndexType& index)
   }
 }
 
-void PolarimetricSynthesisController::SaveResult(const char * fname)
-{
-  try
-  {
-    m_Model->SaveResult(fname);
-  }
-  catch (itk::ExceptionObject & err)
-  {
-    fl_alert(err.GetDescription());
-  }
-}
 
 void PolarimetricSynthesisController::MouseIn()
 {}

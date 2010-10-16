@@ -83,8 +83,6 @@ void PolarimetricSynthesisModel::InitPointers()
 
   m_HistogramGenerator = HistogramGeneratorType::New();
 
-  m_WriterGray = WriterGrayType::New();
-  m_WriterRGB = WriterRGBType::New();
   m_Quicklook = ComplexVectorImageType::New();
 }
 
@@ -470,23 +468,6 @@ const PolarimetricSynthesisModel::HistogramType * PolarimetricSynthesisModel::Ge
   return m_HistogramGenerator->GetOutput();
 }
 
-void PolarimetricSynthesisModel::SaveResult(const char * fname)
-{
-  if (m_RGB)
-  {
-    m_WriterRGB->SetFileName(fname);
-    m_WriterRGB->SetInput(this->GetOutputVectorImage());
-    m_WriterRGB->Update();
-    m_WriterRGB = WriterRGBType::New();
-  }
-  else
-  {
-    m_WriterGray->SetFileName(fname);
-    m_WriterGray->SetInput(this->GetOutputImage());
-    m_WriterGray->Update();
-    m_WriterGray = WriterGrayType::New();
-  }
-}
 void PolarimetricSynthesisModel::SetGain(double value)
 {
   m_GrayPolarimetricSynthesisFilter->SetGain(value);

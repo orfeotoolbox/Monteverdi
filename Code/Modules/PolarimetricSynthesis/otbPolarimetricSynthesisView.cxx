@@ -244,32 +244,6 @@ void PolarimetricSynthesisView::Notify(const std::string & event)
 }
 
 
-void PolarimetricSynthesisView::SaveResultCallback()
-{
-  const char * filename = NULL;
-
-  filename = fl_file_chooser("Pick an image file", "*.*",".");
-
-  if (filename == NULL)
-  {
-    otbMsgDebugMacro(<<"Empty file name!");
-    return ;
-  }
-
-  otb::FltkFilterWatcher  * watcher;
-
-  if (m_Model->GetRGB())
-  {
-    watcher = new FltkFilterWatcher(m_Model->GetWriterRGB(),wMainWindow->x(),wMainWindow->y(),200,20, "Saving result ...");
-  }
-  else
-  {
-    watcher = new FltkFilterWatcher(m_Model->GetWriterGray(),wMainWindow->x(),wMainWindow->y(),200,20, "Saving result ...");
-  }
-  m_Controller->SaveResult(filename);
-  delete watcher;
-}
-
 void PolarimetricSynthesisView::HEmissionCallback()
 {
   if (bHEmission->value())

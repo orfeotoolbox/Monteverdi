@@ -64,7 +64,6 @@ public:
   virtual void ChangeBlueKhiR(double value) = 0;
   virtual void ChangeBluePolarizationMode(PolarizationMode mode) = 0;
   virtual void IndexClicked(const IndexType& index) = 0;
-  virtual void SaveResult(const char * fname) = 0;
   virtual void MouseIn() = 0;
   virtual void MouseOut() = 0;
   virtual void PixelHovered(const IndexType & index) = 0;

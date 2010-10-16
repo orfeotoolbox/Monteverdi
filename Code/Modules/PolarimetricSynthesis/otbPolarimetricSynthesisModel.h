@@ -180,8 +180,6 @@ public:
   itkGetMacro(Min,double);
   itkGetMacro(Max,double);
   itkGetMacro(ShrinkFactor,unsigned int);
-  itkGetObjectMacro(WriterRGB,WriterRGBType);
-  itkGetObjectMacro(WriterGray,WriterGrayType);
 
   /** Get the output images */
   DoubleVectorImageType * GetOutputVectorImage();
@@ -199,7 +197,6 @@ public:
   void ComputeNormalizationFactors();
   void GenerateOutputHistogram(Color value);
   void GenerateQuicklook();
-  void SaveResult(const char * fname);
 
   /** Setter / getter polarimetric Image*/
   itkSetObjectMacro(ImageHH,ComplexImageType);
@@ -297,8 +294,6 @@ private:
   double m_BlueKhiR;
 
   ComplexVectorImageType::Pointer m_Quicklook;
-  WriterRGBType::Pointer          m_WriterRGB;
-  WriterGrayType::Pointer         m_WriterGray;
 };
 } // end namespace otb
 
