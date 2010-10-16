@@ -101,24 +101,9 @@ void PolarimetricSynthesisModel::LoadImages()
 
   if (m_HEmissionMode && m_VEmissionMode)
     {
-//      m_HHReader->SetFileName(m_HHImageFilename);
-//     m_HHReader->GenerateOutputInformation();
-//      m_HVReader->SetFileName(m_HVImageFilename);
-//      m_HVReader->GenerateOutputInformation();
-//      m_VHReader->SetFileName(m_VHImageFilename);
-//      m_VHReader->GenerateOutputInformation();
-//      m_VVReader->SetFileName(m_VVImageFilename);
-//      m_VVReader->GenerateOutputInformation();
- //     m_Valid = true;
     }
     else if (!m_HEmissionMode && m_VEmissionMode)
     {
-/*
-      m_VHReader->SetFileName(m_VHImageFilename);
-      m_VHReader->GenerateOutputInformation();
-      m_VVReader->SetFileName(m_VVImageFilename);
-      m_VVReader->GenerateOutputInformation();
-*/
       m_GrayPsiI = 90;
       m_GrayKhiI = 0;
       m_RedPsiI = 90;
@@ -131,12 +116,6 @@ void PolarimetricSynthesisModel::LoadImages()
     }
     else if (m_HEmissionMode && !m_VEmissionMode)
     {
-/*
-      m_HHReader->SetFileName(m_HHImageFilename);
-      m_HHReader->GenerateOutputInformation();
-      m_HVReader->SetFileName(m_HVImageFilename);
-      m_HVReader->GenerateOutputInformation();
-*/
       m_GrayPsiI = 0;
       m_GrayKhiI = 0;
       m_RedPsiI = 0;
@@ -187,41 +166,6 @@ void PolarimetricSynthesisModel::WirePipeline()
   m_GreenPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
   m_BluePolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
   m_BluePolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-  /*
-  if (!m_UseVectorImage)
-  {
-    m_ImageList->Clear();
-    if (m_HEmissionMode)
-    {
-      m_ImageList->PushBack(m_ImageHH.GetPointer());
-      m_ImageList->PushBack(m_ImageHV.GetPointer());
-    }
-    if (m_VEmissionMode)
-    {
-      m_ImageList->PushBack(m_ImageVH.GetPointer());
-      m_ImageList->PushBack(m_ImageVV.GetPointer());
-    }
-    m_ImageListToVectorImageFilter->SetInput(m_ImageList);
-
-    m_GrayPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
-    m_GrayPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-    m_RedPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
-    m_RedPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-    m_GreenPolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
-    m_GreenPolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-    m_BluePolarimetricSynthesisFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
-    m_BluePolarimetricSynthesisFilter->GetOutput()->UpdateOutputInformation();
-
-  }
-  else
-  {
-    m_GrayPolarimetricSynthesisFilter->SetInput(m_VectorReader->GetOutput());
-    m_RedPolarimetricSynthesisFilter->SetInput(m_VectorReader->GetOutput());
-    m_GreenPolarimetricSynthesisFilter->SetInput(m_VectorReader->GetOutput());
-    m_BluePolarimetricSynthesisFilter->SetInput(m_VectorReader->GetOutput());
-    m_VectorReader->GenerateOutputInformation();
-  }
-*/
 
   // Connexions for the Full Image
   m_FullImageList->Clear();

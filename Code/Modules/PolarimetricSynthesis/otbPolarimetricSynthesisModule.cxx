@@ -121,6 +121,10 @@ void PolarimetricSynthesisModule::Run()
   ImageType::Pointer vvRealImage = this->GetInputData<ImageType> ("InputImageVVReal");
   ImageType::Pointer vvImagImage = this->GetInputData<ImageType> ("InputImageVVImag");
 
+  ComplexImageType::Pointer hhImage;
+  ComplexImageType::Pointer hvImage;
+  ComplexImageType::Pointer vhImage;
+  ComplexImageType::Pointer vvImage;
 
   hhImage = CombineData(0,hhRealImage,hhImagImage);
   hvImage = CombineData(1,hvRealImage,hvImagImage);

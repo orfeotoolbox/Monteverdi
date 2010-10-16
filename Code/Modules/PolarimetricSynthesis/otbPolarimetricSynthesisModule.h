@@ -107,11 +107,6 @@ private:
   ViewType::Pointer m_View;
   ModelType::Pointer m_Model;
 
-  ComplexImageType::Pointer hhImage;
-  ComplexImageType::Pointer hvImage;
-  ComplexImageType::Pointer vhImage;
-  ComplexImageType::Pointer vvImage;
-
   std::vector<RealImageToComplexImageFilterType::Pointer> realToComplexFilter;
   std::vector<ImaginaryImageToComplexImageFilterType::Pointer> imaginaryToComplexFilter;
   std::vector<RealAndImaginaryImageToComplexImageFilterType::Pointer> realAndImaginaryToComplexFilter;
