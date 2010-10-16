@@ -104,7 +104,6 @@ SpectrumModuleModel
   bool             hasQuickLook;
   PixelVectorType  minValues, maxValues;
   ImagePointerType tempImage;
-  int              numberOfComponentsPerPixel;
 
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);

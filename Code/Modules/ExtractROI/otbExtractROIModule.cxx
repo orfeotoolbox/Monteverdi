@@ -144,6 +144,7 @@ void ExtractROIModule::Run()
       vLatitude2->deactivate();
       bUpdate->deactivate();
       bUpdate->deactivate();
+	  MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else if (image.IsNull() && !vectorImage.IsNull())
@@ -183,6 +184,7 @@ void ExtractROIModule::Run()
       vLong2->deactivate();
       vLatitude2->deactivate();
       bUpdate->deactivate();
+	  MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else

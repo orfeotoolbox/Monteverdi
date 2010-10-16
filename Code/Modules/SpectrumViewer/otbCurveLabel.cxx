@@ -59,7 +59,7 @@ CurveLabel::CheckVisibleCallBack()
 void
 CurveLabel::ColorButtonCallBack()
 {
-  unsigned char r2, g2, b2, a2;
+  unsigned char r2, g2, b2;
   double        r = 1;
   double        g = 1;
   double        b = 1;
