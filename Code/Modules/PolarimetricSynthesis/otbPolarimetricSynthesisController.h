@@ -27,7 +27,7 @@ See OTBCopyright.txt for details.
 #include "otbChangeExtractRegionActionHandler.h"
 #include "otbChangeScaleActionHandler.h"
 #include "otbPixelDescriptionActionHandler.h"
-#include "otbMouseClickActionHandler.h"
+//#include "otbMouseClickActionHandler.h"
 
 
 
@@ -62,9 +62,10 @@ public:
    <VisualizationModelType,ImageViewType>                            ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler
      < PixelDescriptionModelType, ImageViewType>                     PixelDescriptionActionHandlerType;
-   typedef otb::MouseClickActionHandler
+/*
+  typedef otb::MouseClickActionHandler
    <PolarimetricSynthesisModel,ImageViewType>                        MouseClickActionHandlerType;
-
+*/
 
   /** Standard type macros */
   itkTypeMacro(PolarimetricSynthesisController,Superclass);
@@ -146,7 +147,7 @@ private:
   ChangeRegionHandlerType::Pointer           m_ChangeRegionHandler;
   ChangeScaledRegionHandlerType::Pointer     m_ChangeScaledRegionHandler;
   PixelDescriptionActionHandlerType::Pointer m_PixelDescriptionHandler;
-  MouseClickActionHandlerType::Pointer       m_MouseClickHandler;
+//  MouseClickActionHandlerType::Pointer       m_MouseClickHandler;
 
 };
 } //end namespace otb
