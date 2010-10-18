@@ -140,10 +140,18 @@ void PolarimetricSynthesisModule::Run()
   if(hhImage.IsNotNull() || hvImage.IsNotNull())
     {
       m_Model->SetHEmissionMode(true);
+      if(hhImage.IsNull() || hvImage.IsNull())
+        {
+        itkExceptionMacro(<<"Need at least two inputs images: hh and hv");
+        }
     }
   if(vhImage.IsNotNull() || vvImage.IsNotNull())
     {
       m_Model->SetVEmissionMode(true);
+      if(vhImage.IsNull() || vvImage.IsNull())
+        {
+        itkExceptionMacro(<<"Need at least two inputs images: vh and vv");
+        }
     }
 
   m_Model->SetImageHH(hhImage);
@@ -158,17 +166,16 @@ void PolarimetricSynthesisModule::Run()
 /** The Notify */
 void PolarimetricSynthesisModule::Notify(const std::string & event)
 {
-
   if (event == "OutputsUpdated")
     {
     this->ClearOutputDescriptors();
     if( m_Model->GetRGB() )
       {
-      this->AddOutputDescriptor(m_Model->GetOutputVectorImage(),"VectorImageOutput","The synthetized images");
+      this->AddOutputDescriptor(m_Model->GetOutputVectorImage(),"PolarimetricSynthesisVectorImage","The synthetized images");
       }
     else
       {
-      this->AddOutputDescriptor(m_Model->GetOutputImage(),"ImageOutput","The synthetized images");
+      this->AddOutputDescriptor(m_Model->GetOutputImage(),"PolarimetricSynthesisImage","The synthetized images");
       }
     this->NotifyOutputsChange();
     }
@@ -177,11 +184,6 @@ void PolarimetricSynthesisModule::Notify(const std::string & event)
     // Once module is closed, it is no longer busy
     this->BusyOff();
     }
-
-#if 0
-     this->AddOutputDescriptor(m_Model->GetColoredOutput(),"ColoredOutput","The classes colors image");
-     this->AddOutputDescriptor(m_Model->GetVectorDataOutput(),"VectorDataOutput","The classes polygons");
-#endif
 }
 } // End namespace otb
 
