@@ -5,36 +5,8 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class PolarimetricSynthesisGUI {open
+class PolarimetricSynthesisGUI {open selected
 } {
-  Function {VectorBrowserCallback()} {open return_type {virtual void}
-  } {}
-  Function {HHBrowserCallback()} {open return_type {virtual void}
-  } {}
-  Function {HVBrowserCallback()} {open return_type {virtual void}
-  } {}
-  Function {VHBrowserCallback()} {open return_type {virtual void}
-  } {}
-  Function {VVBrowserCallback()} {open return_type {virtual void}
-  } {}
-  Function {HEmissionCallback()} {open return_type {virtual void}
-  } {}
-  Function {VEmissionCallback()} {open return_type {virtual void}
-  } {}
-  Function {OpenVectorImageCallback()} {open return_type {virtual void}
-  } {}
-  Function {OpenImagesCallback()} {open return_type {virtual void}
-  } {}
-  Function {OpenImageOkCallback()} {open return_type {virtual void}
-  } {}
-  Function {OpenImageCancelCallback()} {open return_type {virtual void}
-  } {}
-  Function {OpenCallback()} {open return_type {virtual void}
-  } {}
-  Function {QuitCallback()} {open return_type {virtual void}
-  } {}
-  Function {SaveResultCallback()} {open return_type {virtual void}
-  } {}
   Function {GrayGroupCallback()} {open return_type {virtual void}
   } {}
   Function {RGBGroupCallback()} {open return_type {virtual void}
@@ -83,10 +55,10 @@ class PolarimetricSynthesisGUI {open
   } {}
   Function {GreenAnyPolarizationCallback()} {open return_type {virtual void}
   } {}
-  Function {Build()} {open return_type {virtual void}
+  Function {Build()} {return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {Polarimetric synthesis application} open selected
+      label {Polarimetric synthesis application} open
       xywh {386 55 955 785} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gFullResolution {
@@ -351,100 +323,14 @@ class PolarimetricSynthesisGUI {open
         xywh {878 226 60 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX value 1 labelsize 12
       }
       Fl_Button {} {
-        label Exit
-        xywh {725 735 210 30} box EMBOSSED_BOX down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 177
+        label {Save / Quit}
+        callback {this->SaveAndQuitCallback();}
+        xywh {724 736 105 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
-    }
-    Fl_Window wOpenImageWindow {
-      label {Image file chooser} open
-      xywh {726 222 420 315} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide
-    } {
-      Fl_Group {} {open
-        xywh {0 0 835 315}
-      } {
-        Fl_Group gGroupImages {open
-          xywh {11 10 395 225} color 8
-        } {
-          Fl_File_Input fHHInputImage {
-            label {HH image}
-            tooltip {HH input image path} xywh {106 16 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
-          }
-          Fl_File_Input fHVInputImage {
-            label {HV image}
-            tooltip {HV input image path} xywh {106 66 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
-          }
-          Fl_File_Input fVHInputImage {
-            label {VH image}
-            tooltip {VH input image path} xywh {106 116 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
-          }
-          Fl_File_Input fVVInputImage {
-            label {VV image}
-            tooltip {VV input image path} xywh {106 166 190 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12
-          }
-          Fl_Button bHHBrowser {
-            label {...}
-            callback {this->HHBrowserCallback()}
-            tooltip {Choose the HH image file name} xywh {314 16 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-          }
-          Fl_Button bHVBrowser {
-            label {...}
-            callback {this->HVBrowserCallback()}
-            tooltip {Choose the HV image file name} xywh {314 66 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-          }
-          Fl_Button bVHBrowser {
-            label {...}
-            callback {this->VHBrowserCallback()}
-            tooltip {Choose the VH image file name} xywh {314 116 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-          }
-          Fl_Button bVVBrowser {
-            label {...}
-            callback {this->VVBrowserCallback()}
-            tooltip {Choose the VV image file name} xywh {314 166 48 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-          }
-        }
-        Fl_Group gGroupVectorImage {
-          xywh {0 30 395 120} color 8
-        } {
-          Fl_File_Input fVectorInputImage {
-            label {Vector image}
-            tooltip {Vector input image path} xywh {102 81 190 34} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 textsize 12 hide deactivate
-          }
-          Fl_Button bVectorBrowser {
-            label {...}
-            callback {this->VectorBrowserCallback()}
-            tooltip {Choose the vector image  file name} xywh {310 81 48 34} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide deactivate
-          }
-        }
-        Fl_Return_Button bOpenImageOk {
-          label Ok
-          callback {this->OpenImageOkCallback();}
-          tooltip {Load images into the application} xywh {65 266 120 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Return_Button bOpenImageCancel {
-          label Cancel
-          callback {this->OpenImageCancelCallback();}
-          tooltip {Hide the open images window} xywh {235 266 120 35} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Round_Button bOpenVectorImage {
-          label {Open Vector image}
-          callback {this->OpenVectorImageCallback();}
-          tooltip {Import a polarimetric vector image} xywh {120 8 165 18} down_box ROUND_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide
-        }
-        Fl_Round_Button bOpenImages {
-          label {Open image}
-          callback {this->OpenImagesCallback();}
-          tooltip {Import images corresponding to the HH, HV, VH, VV channels} xywh {567 5 130 25} down_box ROUND_DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186 hide
-        }
-        Fl_Check_Button bVEmission {
-          label {V Emission}
-          callback {this->VEmissionCallback();}
-          tooltip {Enable or disable the vertical emssion for the polarimetric data} xywh {160 241 100 15} down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Check_Button bHEmission {
-          label {H Emission}
-          callback {this->HEmissionCallback();}
-          tooltip {Enable or disable the horizontcal emssion for the polarimetric data} xywh {160 216 100 15} down_box DOWN_BOX value 1 color 23 labelfont 1 labelsize 12 labelcolor 186
-        }
+      Fl_Button {} {
+        label Cancel
+        callback {this->CancelCallback();}
+        xywh {830 736 105 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
@@ -467,5 +353,9 @@ class PolarimetricSynthesisGUI {open
   Function {InputGainCallback()} {open return_type {virtual void}
   } {}
   Function {~PolarimetricSynthesisGUI()} {open return_type virtual
+  } {}
+  Function {SaveAndQuitCallback()} {open return_type {virtual void}
+  } {}
+  Function {CancelCallback()} {open return_type {virtual void}
   } {}
 } 

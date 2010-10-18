@@ -118,7 +118,8 @@ public:
   virtual void MouseIn();
   virtual void MouseOut();
   virtual void PixelHovered(const IndexType & index);
-
+  virtual bool IsHEmissionMode();
+  virtual bool IsVEmissionMode();
 
   /** Get the widgets controller */
   itkGetObjectMacro(WidgetsController,WidgetsControllerType);

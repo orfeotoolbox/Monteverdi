@@ -244,127 +244,19 @@ void PolarimetricSynthesisView::Notify(const std::string & event)
 }
 
 
-void PolarimetricSynthesisView::HEmissionCallback()
-{
-  if (bHEmission->value())
-  {
-    m_Model->SetHEmissionMode(true);
-    bOpenImageOk->activate();
-    fHVInputImage->activate();
-    bHVBrowser->activate();
-    fHHInputImage->activate();
-    bHHBrowser->activate();
-    if (bVEmission->value())
-    {
-      vGrayPsiI->activate();
-      vGrayKhiI->activate();
-      vRedPsiI->activate();
-      vRedKhiI->activate();
-      vGreenPsiI->activate();
-      vGreenKhiI->activate();
-      vBluePsiI->activate();
-      vBlueKhiI->activate();
-    }
-  }
-  else
-  {
-    m_Model->SetHEmissionMode(false);
-    if (!bVEmission->value())
-    {
-      bOpenImageOk->deactivate();
-    }
-    vGrayPsiI->deactivate();
-    vGrayKhiI->deactivate();
-    vRedPsiI->deactivate();
-    vRedKhiI->deactivate();
-    vGreenPsiI->deactivate();
-    vGreenKhiI->deactivate();
-    vBluePsiI->deactivate();
-    vBlueKhiI->deactivate();
-    fHVInputImage->deactivate();
-    bHVBrowser->deactivate();
-    fHHInputImage->deactivate();
-    bHHBrowser->deactivate();
-  }
-}
 
-void PolarimetricSynthesisView::VEmissionCallback()
-{
-  if (bVEmission->value())
-  {
-    bOpenImageOk->activate();
-    fVVInputImage->activate();
-    bVVBrowser->activate();
-    fVHInputImage->activate();
-    bVHBrowser->activate();
-    if (bHEmission->value())
-    {
-      vGrayPsiI->activate();
-      vGrayKhiI->activate();
-      vRedPsiI->activate();
-      vRedKhiI->activate();
-      vGreenPsiI->activate();
-      vGreenKhiI->activate();
-      vBluePsiI->activate();
-      vBlueKhiI->activate();
-    }
-  }
-  else
-  {
-    if (!bHEmission->value())
-    {
-      bOpenImageOk->deactivate();
-    }
-    vGrayPsiI->deactivate();
-    vGrayKhiI->deactivate();
-    vRedPsiI->deactivate();
-    vRedKhiI->deactivate();
-    vGreenPsiI->deactivate();
-    vGreenKhiI->deactivate();
-    vBluePsiI->deactivate();
-    vBlueKhiI->deactivate();
-    fVVInputImage->deactivate();
-    bVVBrowser->deactivate();
-    fVHInputImage->deactivate();
-    bVHBrowser->deactivate();
-  }
-}
-void PolarimetricSynthesisView::OpenVectorImageCallback()
-{
-  gGroupImages->deactivate();
-  gGroupVectorImage->activate();
-  bOpenVectorImage->set();
-  bOpenImages->clear();
-}
-void PolarimetricSynthesisView::OpenImagesCallback()
-{
-  gGroupImages->activate();
-  gGroupVectorImage->deactivate();
-  bOpenImages->set();
-  bOpenVectorImage->clear();
 
-}
-void PolarimetricSynthesisView::OpenImageOkCallback()
-{
-  otb::FltkFilterWatcher  watcher(m_Model->GetShrinkFilter(),wOpenImageWindow->x(),wOpenImageWindow->y()-20,200,20, "Generating Quicklook ...");
-  bOpenImageOk->deactivate();
-  m_Controller->LoadImages();
-  bOpenImageOk->activate();
-  wOpenImageWindow->hide();
-}
-void PolarimetricSynthesisView::OpenImageCancelCallback()
-{
-  wOpenImageWindow->hide();
-}
-void PolarimetricSynthesisView::OpenCallback()
-{
-  wOpenImageWindow->show();
-}
-void PolarimetricSynthesisView::QuitCallback()
+void PolarimetricSynthesisView::SaveAndQuitCallback()
 {
   wMainWindow->hide();
-  wOpenImageWindow->hide();
 }
+
+
+void PolarimetricSynthesisView::CancelCallback()
+{
+  wMainWindow->hide();
+}
+
 
 void PolarimetricSynthesisView::UpdateInterface()
 {
@@ -538,7 +430,7 @@ void PolarimetricSynthesisView::RedCoPolarizationCallback()
   bRedCoPolarization->set();
   bRedCrossPolarization->clear();
   bRedAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsHEmissionMode() | !m_Controller->IsVEmissionMode())
   {
     vRedPsiR->deactivate();
     vRedKhiR->deactivate();
@@ -555,7 +447,7 @@ void PolarimetricSynthesisView::RedCrossPolarizationCallback()
   bRedCrossPolarization->set();
   bRedCoPolarization->clear();
   bRedAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vRedPsiR->deactivate();
     vRedKhiR->deactivate();
@@ -599,7 +491,7 @@ void PolarimetricSynthesisView::GreenCoPolarizationCallback()
   bGreenCoPolarization->set();
   bGreenCrossPolarization->clear();
   bGreenAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vGreenPsiR->deactivate();
     vGreenKhiR->deactivate();
@@ -616,7 +508,7 @@ void PolarimetricSynthesisView::GreenCrossPolarizationCallback()
   bGreenCrossPolarization->set();
   bGreenCoPolarization->clear();
   bGreenAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vGreenPsiR->deactivate();
     vGreenKhiR->deactivate();
@@ -660,7 +552,7 @@ void PolarimetricSynthesisView::BlueCoPolarizationCallback()
   bBlueCoPolarization->set();
   bBlueCrossPolarization->clear();
   bBlueAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vBluePsiR->deactivate();
     vBlueKhiR->deactivate();
@@ -677,7 +569,7 @@ void PolarimetricSynthesisView::BlueCrossPolarizationCallback()
   bBlueCrossPolarization->set();
   bBlueCoPolarization->clear();
   bBlueAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vBluePsiR->deactivate();
     vBlueKhiR->deactivate();
@@ -721,7 +613,7 @@ void PolarimetricSynthesisView::GrayCoPolarizationCallback()
   bGrayCoPolarization->set();
   bGrayCrossPolarization->clear();
   bGrayAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vGrayPsiR->deactivate();
     vGrayKhiR->deactivate();
@@ -738,7 +630,7 @@ void PolarimetricSynthesisView::GrayCrossPolarizationCallback()
   bGrayCrossPolarization->set();
   bGrayCoPolarization->clear();
   bGrayAnyPolarization->clear();
-  if (!bVEmission->value() | !bHEmission->value())
+  if (!m_Controller->IsVEmissionMode() | !m_Controller->IsHEmissionMode())
   {
     vGrayPsiR->deactivate();
     vGrayKhiR->deactivate();

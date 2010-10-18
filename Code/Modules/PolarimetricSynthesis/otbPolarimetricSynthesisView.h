@@ -117,16 +117,10 @@ public:
 
 
   /** Buttons callback */
-  virtual void HEmissionCallback();
-  virtual void VEmissionCallback();
-  virtual void OpenVectorImageCallback();
-  virtual void OpenImagesCallback();
-  virtual void OpenImageOkCallback();
-  virtual void OpenImageCancelCallback();
-  virtual void OpenCallback();
-  virtual void QuitCallback();
   virtual void DialGainCallback();
   virtual void InputGainCallback();
+  virtual void SaveAndQuitCallback();
+  virtual void CancelCallback();
 
   virtual void RGBButtonCallback();
   virtual void RGBGroupCallback();

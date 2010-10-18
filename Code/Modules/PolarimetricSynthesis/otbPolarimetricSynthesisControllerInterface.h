@@ -72,6 +72,9 @@ public:
     m_Model = model;
   }
 
+  virtual bool IsHEmissionMode() = 0;
+  virtual bool IsVEmissionMode() = 0;
+
 
 protected:
   /** Constructor */

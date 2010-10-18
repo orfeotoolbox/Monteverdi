@@ -36,6 +36,17 @@ void PolarimetricSynthesisController::SetView(ViewPointerType view)
   m_View = view;
 }
 
+bool PolarimetricSynthesisController::IsHEmissionMode()
+{
+  return m_Model->GetHEmissionMode();
+}
+
+bool PolarimetricSynthesisController::IsVEmissionMode()
+{
+  return m_Model->GetVEmissionMode();
+}
+
+
 void PolarimetricSynthesisController::LoadImages()
 {
 #if 0
