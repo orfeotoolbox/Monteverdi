@@ -112,7 +112,7 @@ ProjectionView
     {
     // From std::string to char*: Needed for the importFromWkt(char** projRef)
     char * inputProjchar = new char[inputProjRef.length() + 1];
-    strcpy_s(inputProjchar, sizeof(inputProjRef.c_str()),inputProjRef.c_str());
+    strcpy(inputProjchar, inputProjRef.c_str());
 
     // Import OGRSpatial Reference object from projectionRef
     // Warning: importFromWkt modifies the passed pointer !
