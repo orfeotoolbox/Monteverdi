@@ -41,6 +41,7 @@ public:
 
   /** Users actions */
   virtual void LoadImages() = 0;
+  virtual void Save() = 0;
   virtual void ChangeRGB(bool value) = 0;
   virtual void ChangeGain(double value) = 0;
   virtual void ChangeGrayPsiI(double value) = 0;

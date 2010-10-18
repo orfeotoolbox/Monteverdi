@@ -19,6 +19,7 @@ See OTBCopyright.txt for details.
 #include <FL/Fl_File_Chooser.H>
 #include "otbFltkFilterWatcher.h"
 #include "otbMacro.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -248,6 +249,8 @@ void PolarimetricSynthesisView::Notify(const std::string & event)
 
 void PolarimetricSynthesisView::SaveAndQuitCallback()
 {
+  m_Controller->Save();
+  MsgReporter::GetInstance()->Hide();
   wMainWindow->hide();
 }
 

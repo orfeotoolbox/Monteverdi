@@ -86,6 +86,11 @@ void PolarimetricSynthesisModel::InitPointers()
   m_Quicklook = ComplexVectorImageType::New();
 }
 
+void PolarimetricSynthesisModel::Save()
+{
+    this->NotifyAll("OutputsUpdated");
+}
+
 void PolarimetricSynthesisModel::LoadImages()
 {
 

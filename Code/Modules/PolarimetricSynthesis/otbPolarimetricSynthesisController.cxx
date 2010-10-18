@@ -16,6 +16,7 @@ See OTBCopyright.txt for details.
 
 ====================================================================*/
 #include "otbPolarimetricSynthesisController.h"
+#include "otbMsgReporter.h"
 #include <FL/fl_ask.H>
 
 namespace otb
@@ -46,6 +47,17 @@ bool PolarimetricSynthesisController::IsVEmissionMode()
   return m_Model->GetVEmissionMode();
 }
 
+void PolarimetricSynthesisController::Save()
+{
+  try
+    {
+    m_Model->Save();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
 
 void PolarimetricSynthesisController::LoadImages()
 {

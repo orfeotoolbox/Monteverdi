@@ -92,6 +92,8 @@ public:
 
   /** User action */
   virtual void LoadImages();
+  virtual void Save();
+
   virtual void ChangeRGB(bool value);
   virtual void ChangeGain(double value);
   virtual void ChangeGrayPsiI(double value);

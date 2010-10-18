@@ -158,20 +158,29 @@ void PolarimetricSynthesisModule::Run()
 /** The Notify */
 void PolarimetricSynthesisModule::Notify(const std::string & event)
 {
+
+  if (event == "OutputsUpdated")
+    {
+    this->ClearOutputDescriptors();
+    if( m_Model->GetRGB() )
+      {
+      this->AddOutputDescriptor(m_Model->GetOutputVectorImage(),"VectorImageOutput","The synthetized images");
+      }
+    else
+      {
+      this->AddOutputDescriptor(m_Model->GetOutputImage(),"ImageOutput","The synthetized images");
+      }
+    this->NotifyOutputsChange();
+    }
+  else if(event == "Quit")
+    {
+    // Once module is closed, it is no longer busy
+    this->BusyOff();
+    }
+
 #if 0
-   if (event == "OutputsUpdated")
-     {
-     this->ClearOutputDescriptors();
-     this->AddOutputDescriptor(m_Model->GetLabeledOutput(),"LabeledOutput","The classes labels image");
      this->AddOutputDescriptor(m_Model->GetColoredOutput(),"ColoredOutput","The classes colors image");
      this->AddOutputDescriptor(m_Model->GetVectorDataOutput(),"VectorDataOutput","The classes polygons");
-     this->NotifyOutputsChange();
-     }
-   else if(event == "Quit")
-     {
-     // Once module is closed, it is no longer busy
-     this->BusyOff();
-     }
 #endif
 }
 } // End namespace otb

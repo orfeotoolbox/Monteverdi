@@ -191,6 +191,7 @@ public:
   /** Load a single image */
   void InitPointers();
   void LoadImages();
+  void Save();
   void WirePipeline();
   void SetupPolarization(Color value);
   void SetupEmission(Color value);
