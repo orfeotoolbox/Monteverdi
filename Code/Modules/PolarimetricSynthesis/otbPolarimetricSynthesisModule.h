@@ -77,6 +77,8 @@ public:
   typedef otb::ImaginaryImageToComplexImageFilter<ImageType,
               ComplexImageType>  ImaginaryImageToComplexImageFilterType;
 
+  itkGetObjectMacro(View,ViewType);
+
 protected:
   /** Constructor */
   PolarimetricSynthesisModule();
