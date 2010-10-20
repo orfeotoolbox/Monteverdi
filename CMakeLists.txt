@@ -133,7 +133,7 @@ IF(NOT Monteverdi_INSTALL_BIN_DIR)
 ENDIF(NOT Monteverdi_INSTALL_BIN_DIR)
 
 IF(NOT Monteverdi_INSTALL_LIB_DIR)
-  SET(Monteverdi_INSTALL_LIB_DIR "/bin")
+  SET(Monteverdi_INSTALL_LIB_DIR "/lib/otb")
 ENDIF(NOT Monteverdi_INSTALL_LIB_DIR)
 
 IF(NOT Monteverdi_INSTALL_DATA_DIR)
