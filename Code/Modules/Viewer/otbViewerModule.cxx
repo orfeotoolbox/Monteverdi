@@ -10,1180 +10,1763 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+  =========================================================================*/
 #ifndef __otbViewerModule_cxx
 #define __otbViewerModule_cxx
 
+#include <string>
+#include <sstream>
 #include "otbViewerModule.h"
 #include <FLU/Flu_File_Chooser.h>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Text_Buffer.H>
 #include "otbFltkFilterWatcher.h"
-
-
 #include "otbMsgReporter.h"
+#include "otbViewerConst.h"
+
 
 namespace otb
 {
-/** Constructor */
-ViewerModule::ViewerModule() :  m_InputImageLayer(), m_RenderingModel(), m_PixelDescriptionModel(),
-  m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-  m_Controller(), m_RenderingFunction(), m_DisplayedLabel("+ "), m_UndisplayedLabel("- "),
-  m_GenerateRandomColor(true)
-{
-  // This module needs pipeline locking
-  this->NeedsPipelineLockingOn();
 
-  // Color Definition
-  m_Red.Fill(0);
-  m_Green.Fill(0);
-  m_Blue.Fill(0);
-  m_Grey.Fill(0.5);
-  m_Red[0]  = 1.;   m_Red[3]   = 0.5;
-  m_Green[1] = 1.;   m_Green[3] = 0.5;
-  m_Blue[2] = 1.;   m_Blue[3]  = 0.5;
+  /**
+   * Constructor
+   */
+  ViewerModule::ViewerModule()
+    :  m_CurrentOpaqueImage(0), m_CurrentTransparentImage(0), m_RenderingModel(),
+       m_PixelDescriptionModel(), m_View(), m_PixelDescriptionView(), m_CurveWidget(), m_Controller(),
+       m_WindowsLayout(PACKED_WINDOWS_LAYOUT), m_DisplayMode(SLIDESHOW_DISPLAY_MODE),
+       m_DisplayedLabel("+ "), m_UndisplayedLabel("- "), m_GenerateRandomColor(true)
+  {
+    // This module needs pipeline locking
+    this->NeedsPipelineLockingOn();
 
-  // Build a new rendering model
-  m_RenderingModel = RenderingModelType::New();
-  m_PixelDescriptionModel = PixelDescriptionModelType::New();
-  m_PixelDescriptionModel->SetLayers(m_RenderingModel->GetLayers());
+    // Color Definition
+    m_Red.Fill(0.0);
+    m_Green.Fill(0.0);
+    m_Blue.Fill(0.0);
+    m_Grey.Fill(0.5);
+    m_Red[0]  = 1.0;   m_Red[3]   = 0.5;
+    m_Green[1]= 1.0;   m_Green[3] = 0.5;
+    m_Blue[2] = 1.0;   m_Blue[3]  = 0.5;
 
-  // Build a view
-  m_View                 = ViewType::New();
-  m_PixelDescriptionView = PixelDescriptionViewType::New();
+    // Build a new rendering model
+    m_RenderingModel = RenderingModelType::New();
+    m_PixelDescriptionModel = PixelDescriptionModelType::New();
+    m_PixelDescriptionModel->SetLayers(m_RenderingModel->GetLayers());
 
-  // Build a controller
-  m_Controller     = WidgetControllerType::New();
+    // Build a view
+    m_View                 = ViewType::New();
+    m_PixelDescriptionView = PixelDescriptionViewType::New();
 
-  // StandardRendering Function : Needed for the histogram handler
-  m_StandardRenderingFunction = StandardRenderingFunctionType::New();
+    // Build a controller
+    m_Controller = WidgetControllerType::New();
 
-  // Vertical asymptotes for each channel
-  m_BlueVaCurveR = VerticalAsymptoteCurveType::New();
-  m_BlueVaCurveL = VerticalAsymptoteCurveType::New();
+    // Standard rendering function : Needed for the histogram handler
+    m_RenderingFunctionList = RenderingFunctionListType::New();
 
-  m_GreenVaCurveR = VerticalAsymptoteCurveType::New();
-  m_GreenVaCurveL = VerticalAsymptoteCurveType::New();
+    // Vertical asymptotes for each channel
+    m_BlueVaCurveR = VerticalAsymptoteCurveType::New();
+    m_BlueVaCurveL = VerticalAsymptoteCurveType::New();
 
-  m_RedVaCurveR = VerticalAsymptoteCurveType::New();
-  m_RedVaCurveL = VerticalAsymptoteCurveType::New();
+    m_GreenVaCurveR = VerticalAsymptoteCurveType::New();
+    m_GreenVaCurveL = VerticalAsymptoteCurveType::New();
 
-  // Build the curve widget
-  m_CurveWidget    = CurvesWidgetType::New();
-  m_CurveWidget->SetXAxisLabel(otbGetTextMacro("Pixels"));
-  m_CurveWidget->SetYAxisLabel(otbGetTextMacro("Frequency"));
+    m_RedVaCurveR = VerticalAsymptoteCurveType::New();
+    m_RedVaCurveL = VerticalAsymptoteCurveType::New();
 
-  // Curvet Widget Instanciation
-  m_BlueCurveWidgetGroup  = CurvesWidgetType::New();
-  m_GreenCurveWidgetGroup = CurvesWidgetType::New();
-  m_RedCurveWidgetGroup   = CurvesWidgetType::New();
+    // Build the curve widget
+    m_CurveWidget = CurvesWidgetType::New();
+    m_CurveWidget->SetXAxisLabel(otbGetTextMacro("Pixels"));
+    m_CurveWidget->SetYAxisLabel(otbGetTextMacro("Frequency"));
 
-  m_BlueCurveWidgetGroup->SetIdentifier("BlueCurve");
-  m_GreenCurveWidgetGroup->SetIdentifier("GreenCurve");
-  m_RedCurveWidgetGroup->SetIdentifier("RedCurve");
+    // Curvet Widget Instanciation
+    m_BlueCurveWidgetGroup  = CurvesWidgetType::New();
+    m_GreenCurveWidgetGroup = CurvesWidgetType::New();
+    m_RedCurveWidgetGroup   = CurvesWidgetType::New();
 
-  m_BlueCurveWidgetGroup->SetController(m_Controller);
-  m_GreenCurveWidgetGroup->SetController(m_Controller);
-  m_RedCurveWidgetGroup->SetController(m_Controller);
+    m_BlueCurveWidgetGroup->SetIdentifier("BlueCurve");
+    m_GreenCurveWidgetGroup->SetIdentifier("GreenCurve");
+    m_RedCurveWidgetGroup->SetIdentifier("RedCurve");
 
-  // Wire the MVC
-  m_View->SetModel(m_RenderingModel);
-  m_View->SetController(m_Controller);
-  m_PixelDescriptionView->SetModel(m_PixelDescriptionModel);
+    m_BlueCurveWidgetGroup->SetController(m_Controller);
+    m_GreenCurveWidgetGroup->SetController(m_Controller);
+    m_RedCurveWidgetGroup->SetController(m_Controller);
 
-  // Add the resizing handler
-  ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
-  resizingHandler->SetModel(m_RenderingModel);
-  resizingHandler->SetView(m_View);
-  m_Controller->AddActionHandler(resizingHandler);
+    // Wire the MVC
+    m_View->SetModel(m_RenderingModel);
+    m_View->SetController(m_Controller);
+    m_PixelDescriptionView->SetModel(m_PixelDescriptionModel);
 
-  // Add the change extract region handler
-  ChangeRegionHandlerType::Pointer changeHandler = ChangeRegionHandlerType::New();
-  changeHandler->SetModel(m_RenderingModel);
-  changeHandler->SetView(m_View);
-  m_Controller->AddActionHandler(changeHandler);
+    // Add the resizing handler
+    ResizingHandlerType::Pointer resizingHandler = ResizingHandlerType::New();
+    resizingHandler->SetModel(m_RenderingModel);
+    resizingHandler->SetView(m_View);
+    m_Controller->AddActionHandler(resizingHandler);
 
-  // Add the change scaled region handler
-  ChangeScaledRegionHandlerType::Pointer changeScaledHandler = ChangeScaledRegionHandlerType::New();
-  changeScaledHandler->SetModel(m_RenderingModel);
-  changeScaledHandler->SetView(m_View);
-  m_Controller->AddActionHandler(changeScaledHandler);
+    // Add the change extract region handler
+    ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
+    changeHandler->SetModel(m_RenderingModel);
+    changeHandler->SetView(m_View);
+    m_Controller->AddActionHandler(changeHandler);
 
-  // Add the change scaled handler
-  ChangeScaleHandlerType::Pointer changeScaleHandler = ChangeScaleHandlerType::New();
-  changeScaleHandler->SetModel(m_RenderingModel);
-  changeScaleHandler->SetView(m_View);
-  m_Controller->AddActionHandler(changeScaleHandler);
+    // Add the change scaled region handler
+    ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
+    changeScaledHandler->SetModel(m_RenderingModel);
+    changeScaledHandler->SetView(m_View);
+    m_Controller->AddActionHandler(changeScaledHandler);
 
-  // Add the pixel description action handler
-  PixelDescriptionActionHandlerType::Pointer pixelActionHandler = PixelDescriptionActionHandlerType::New();
-  pixelActionHandler->SetView(m_View);
-  pixelActionHandler->SetModel(m_PixelDescriptionModel);
-  m_Controller->AddActionHandler(pixelActionHandler);
+    // Add the change scaled handler
+    ChangeScaleHandlerType::Pointer changeScaleHandler =ChangeScaleHandlerType::New();
+    changeScaleHandler->SetModel(m_RenderingModel);
+    changeScaleHandler->SetView(m_View);
+    m_Controller->AddActionHandler(changeScaleHandler);
 
-  // Add the action handler for the arrow key
-  ArrowKeyMoveActionHandlerType::Pointer arrowKeyMoveHandler = ArrowKeyMoveActionHandlerType::New();
-  arrowKeyMoveHandler->SetModel(m_RenderingModel);
-  arrowKeyMoveHandler->SetView(m_View);
-  m_Controller->AddActionHandler(arrowKeyMoveHandler);
+    // Add the pixel description action handler
+    PixelDescriptionActionHandlerType::Pointer pixelActionHandler = PixelDescriptionActionHandlerType::New();
+    pixelActionHandler->SetView(m_View);
+    pixelActionHandler->SetModel(m_PixelDescriptionModel);
+    m_Controller->AddActionHandler(pixelActionHandler);
 
-  // Add the blue histogram handler
-  m_BlueHistogramHandler = HistogramActionHandlerType::New();
-  m_BlueHistogramHandler->SetModel(m_RenderingModel);
-  m_BlueHistogramHandler->SetView(m_View);
-  m_BlueHistogramHandler->SetCurve(m_BlueCurveWidgetGroup);
-  m_BlueHistogramHandler->SetLeftAsymptote(m_BlueVaCurveL);
-  m_BlueHistogramHandler->SetRightAsymptote(m_BlueVaCurveR);
-  m_Controller->AddActionHandler(m_BlueHistogramHandler);
+    // Add the action handler for the arrow key
+    ArrowKeyMoveActionHandlerType::Pointer arrowKeyMoveHandler = ArrowKeyMoveActionHandlerType::New();
+    arrowKeyMoveHandler->SetModel(m_RenderingModel);
+    arrowKeyMoveHandler->SetView(m_View);
+    m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
-  // Add the green histogram handler
-  m_GreenHistogramHandler = HistogramActionHandlerType::New();
-  m_GreenHistogramHandler->SetModel(m_RenderingModel);
-  m_GreenHistogramHandler->SetView(m_View);
-  m_GreenHistogramHandler->SetCurve(m_GreenCurveWidgetGroup);
-  m_GreenHistogramHandler->SetLeftAsymptote(m_GreenVaCurveL);
-  m_GreenHistogramHandler->SetRightAsymptote(m_GreenVaCurveR);
-  m_Controller->AddActionHandler(m_GreenHistogramHandler);
+    // Add the blue histogram handler
+    m_BlueHistogramHandler = HistogramActionHandlerType::New();
+    m_BlueHistogramHandler->SetModel(m_RenderingModel);
+    m_BlueHistogramHandler->SetView(m_View);
+    m_BlueHistogramHandler->SetCurve(m_BlueCurveWidgetGroup);
+    m_BlueHistogramHandler->SetLeftAsymptote(m_BlueVaCurveL);
+    m_BlueHistogramHandler->SetRightAsymptote(m_BlueVaCurveR);
+    m_Controller->AddActionHandler(m_BlueHistogramHandler);
 
-  // Add the red histogram handler
-  m_RedHistogramHandler = HistogramActionHandlerType::New();
-  m_RedHistogramHandler->SetModel(m_RenderingModel);
-  m_RedHistogramHandler->SetView(m_View);
-  m_RedHistogramHandler->SetCurve(m_RedCurveWidgetGroup);
-  m_RedHistogramHandler->SetLeftAsymptote(m_RedVaCurveL);
-  m_RedHistogramHandler->SetRightAsymptote(m_RedVaCurveR);
-  m_Controller->AddActionHandler(m_RedHistogramHandler);
+    // Add the green histogram handler
+    m_GreenHistogramHandler = HistogramActionHandlerType::New();
+    m_GreenHistogramHandler->SetModel(m_RenderingModel);
+    m_GreenHistogramHandler->SetView(m_View);
+    m_GreenHistogramHandler->SetCurve(m_GreenCurveWidgetGroup);
+    m_GreenHistogramHandler->SetLeftAsymptote(m_GreenVaCurveL);
+    m_GreenHistogramHandler->SetRightAsymptote(m_GreenVaCurveR);
+    m_Controller->AddActionHandler(m_GreenHistogramHandler);
 
-  // Display Window
-  m_DisplayWindow   = WidgetManagerType::New();
-  m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
-  m_DisplayWindow->RegisterScrollWidget(m_View->GetScrollWidget());
-  m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
-  m_DisplayWindow->RegisterPixelDescriptionWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
-  m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
+    // Add the red histogram handler
+    m_RedHistogramHandler = HistogramActionHandlerType::New();
+    m_RedHistogramHandler->SetModel(m_RenderingModel);
+    m_RedHistogramHandler->SetView(m_View);
+    m_RedHistogramHandler->SetCurve(m_RedCurveWidgetGroup);
+    m_RedHistogramHandler->SetLeftAsymptote(m_RedVaCurveL);
+    m_RedHistogramHandler->SetRightAsymptote(m_RedVaCurveR);
+    m_Controller->AddActionHandler(m_RedHistogramHandler);
 
-  // Instanciation of the Image To VectorImage Filter
-  m_CastFilter = CastSingleImageFilter::New();
+    // Managed windows layout
+    m_SplittedWindows = SplittedWidgetManagerType::New();
+    m_PackedWindows   = PackedWidgetManagerType::New();
 
-  // VectorData List Instance
-  m_VectorDataList = VectorDataListType::New();
-
-  // Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to display"));
-  this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
-  this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data to display"), true, true);
-
-  // Build GUI
-  this->Build();
-
-  // build the DEM GUI
-  this->BuildDEM();
-}
-
-/** Destructor */
-ViewerModule::~ViewerModule()
-{}
-
-/** PrintSelf method */
-void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  // Call superclass implementation
-  Superclass::PrintSelf(os, indent);
-}
-
-/** The custom run command */
-void ViewerModule::Run()
-{
-  // While the viewer is shown, it is busy
-  this->BusyOn();
-
-  // Get input image
-  m_InputImage = this->GetInputData<ImageType>("InputImage");
-  // Get the description
-  m_Label = this->GetInputDataDescription<ImageType>("InputImage");
-
-  // Try to get a single image
-  // If the input image is an otb::Image instead of VectorImage then cast it
-  // in Vector Image and continue the processing
-  SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
-
-  // Test single image
-  if (singleImage.IsNotNull() && m_InputImage.IsNull())
+    if (m_WindowsLayout == SPLITTED_WINDOWS_LAYOUT)
     {
-    m_CastFilter->SetInput(singleImage);
-    m_InputImage = m_CastFilter->GetOutput();
-    // Get the description
-    m_Label = this->GetInputDataDescription<SingleImageType>("InputImage");
+      m_DisplayWindow = m_SplittedWindows;
+    }
+    else
+    {
+      m_DisplayWindow = m_PackedWindows;
+    }
+    m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
+    m_DisplayWindow->RegisterScrollWidget(m_View->GetScrollWidget());
+    m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
+    m_DisplayWindow->RegisterPixelDescriptionWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
+    m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
+
+    // Instanciation of the Image To VectorImage filter list
+    m_CastFilterList = CastFilterListType::New();
+
+    // Data List Instance
+    m_VectorDataList      = VectorDataListType::New();
+    m_InputImageList      = ImageListType::New();
+    m_InputImageLayerList = ImageLayerListType::New();
+
+    // Describe inputs
+    this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to display"), false, true);
+    this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
+    this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data to display"), true, true);
+
+    // Build GUI
+    this->Build();
+
+    // build the DEM GUI
+    this->BuildDEM();
+  }
+
+
+  /**
+   * Destructor
+   */
+  ViewerModule::~ViewerModule()
+  {}
+
+
+  /**
+   * PrintSelf method
+   */
+  void ViewerModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    // Call superclass implementation
+    Superclass::PrintSelf(os, indent);
+  }
+
+
+  /**
+   * The custom run command
+   */
+  void ViewerModule::Run()
+  {
+    // While the viewer is shown, it is busy
+    this->BusyOn();
+
+    ImageType::SizeType firstImageSize;
+
+    // Load and process all selected images
+    for (unsigned int i = 0 ; i < GetNumberOfInputDataByKey("InputImage") ; i++)
+    {
+      std::string desc;
+
+      // Get the input image
+      ImageType::Pointer image = this->GetInputData<ImageType>("InputImage", i);
+
+      // If the image pointer is null, the data is probably a single band
+      // (single image)
+      if (image.IsNull())
+      {
+        // Try to get a single image
+        // If the input image is an otb::Image instead of VectorImage then
+        // cast it in Vector Image and continue the processing
+        SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage", i);
+
+        if (singleImage.IsNotNull())
+        {
+          CastSingleImageFilter::Pointer castFilter = CastSingleImageFilter::New();
+          m_CastFilterList->PushBack(castFilter);
+
+          castFilter->SetInput(singleImage);
+          image = castFilter->GetOutput();
+
+          // Get the description
+          desc = this->GetInputDataDescription<SingleImageType>("InputImage", i);
+        }
+
+        // First check if there is actually an input image
+        if (image.IsNull())
+        {
+          MsgReporter::GetInstance()->SendError("The image pointer is null, there is nothing to display. "
+                                                "You probably forgot to set the image.");
+          this->Quit();
+          return;
+        }
+      }
+      else
+      {
+        // Get the description
+        desc = this->GetInputDataDescription<ImageType>("InputImage", i);
+      }
+
+      // Update image info for further use
+      image->UpdateOutputInformation();
+
+      // Drop the images which have a different size than the first one.
+      if (i == 0)
+      {
+        firstImageSize = image->GetLargestPossibleRegion().GetSize();
+      }
+      else
+      {
+        ImageType::SizeType currentImageSize = image->GetLargestPossibleRegion().GetSize();
+        if (currentImageSize != firstImageSize)
+        {
+          itk::OStringStream oss;
+          oss << "Image '" << this->GetInputDataDescription<ImageType>("InputImage", i)
+              << "' dropped because its size is different that of the first image ("
+              << currentImageSize << " vs " << firstImageSize << ")";
+          MsgReporter::GetInstance()->SendError(oss.str());
+          continue;
+        }
+      }
+
+      // Generate the layer
+      ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
+      generator->SetImage(image);
+      FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20,
+                                  otbGetTextMacro("Generating QuickLook ..."));
+      generator->GenerateLayer();
+      ImageLayerType::Pointer imageLayer = generator->GetLayer();
+
+      // Work with standard rendering function
+      ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
+      StandardRenderingFunctionType::Pointer renderer = StandardRenderingFunctionType::New();
+      renderer->SetChannelList(channels);
+      imageLayer->SetRenderingFunction(renderer);
+
+      BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
+      blender->SetAlpha(ALPHA_BLENDING_DEFAULT);
+      imageLayer->SetBlendingFunction(blender);
+      imageLayer->SetVisible(true);
+
+      // Add this image to the stack of layers
+      m_InputImageList->PushBack(image);
+      m_InputImageLayerList->PushBack(imageLayer);
+      m_RenderingFunctionList->PushBack(renderer);
+      m_ContrastStretchList.push_back(LINEAR_CONTRAST_STRETCH);
+
+      guiOpaqueImageSelection->add(desc.c_str());
+      guiTransparentImageSelection->add(desc.c_str());
+      m_AlphaBlendingList.push_back(ALPHA_BLENDING_DEFAULT);
     }
 
-  // First check if there is actually an input image
-  if (m_InputImage.IsNull())
+    // Select first image as current opaque image
+    m_CurrentOpaqueImage = 0;
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+    m_RenderingModel->AddLayer(imageLayer);
+    guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
+    BlendingFunctionType::Pointer blender =
+      dynamic_cast<BlendingFunctionType *>(imageLayer->GetBlendingFunction());
+    blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
+    m_AlphaBlendingList[m_CurrentOpaqueImage] = ALPHA_BLENDING_OPAQUE;
+
+    // Select next image (or the current opaque image if there is only one) as
+    // current transparent image
+    if (m_InputImageLayerList->Size() > 1)
     {
-    MsgReporter::GetInstance()->SendError(
-      "The image pointer is null, there is nothing to display. You probably forgot to set the image.");
-    this->Quit();
-    return;
+      m_CurrentTransparentImage = 1;
+    }
+    else
+    {
+      m_CurrentTransparentImage = 0;
+    }
+    guiTransparentImageSelection->value(m_CurrentTransparentImage);
+
+    // Load and process vector data sources
+    for (unsigned int i = 0 ; i < GetNumberOfInputDataByKey("VectorData") ; i++)
+    {
+      VectorDataType::Pointer vdata = GetInputData<VectorDataType>("VectorData", i);
+      m_VectorDataList->PushBack(vdata);
+      m_DisplayedVectorData.push_back(true);
+      UpdateVectorData(i);
+      std::string desc = GetInputDataDescription<VectorDataType>("VectorData", i);
+      AddNameToVectorDataBrowser(desc);
     }
 
-  // Update image info for further use
-  m_InputImage->UpdateOutputInformation();
-
-  this->UpdateInformation();
-
-  // If there is a VectorData
-  for (unsigned int i = 0; i < this->GetNumberOfInputDataByKey("VectorData"); i++)
+    if (m_WindowsLayout == SPLITTED_WINDOWS_LAYOUT)
     {
-    VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
-    m_VectorDataList->PushBack(vdata);
-    m_DisplayedVectorData.push_back(true);
-    this->UpdateVectorData(i);
-    std::string desc = this->GetInputDataDescription<VectorDataType>("VectorData", i);
-    this->AddName(desc);
+      guiViewerSetupSplittedLayout->set();
+      guiViewerSetupPackedLayout->clear();
+    }
+    else
+    {
+      guiViewerSetupSplittedLayout->clear();
+      guiViewerSetupPackedLayout->set();
+      m_WindowsLayout = PACKED_WINDOWS_LAYOUT;
     }
 
-  // Generate the layer
-  ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
-  generator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
-  generator->GenerateLayer();
-  m_InputImageLayer = generator->GetLayer();
-  m_RenderingFunction = generator->GetRenderingFunction();
+    // No constrast stretch (NO_CONTRAST_STRETCH)
+    guiContrastStretchSelection->add("Linear 0-255");
 
-  // Work with standardrenderingFunction
-  ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
+    // Linear contrast stretch (LINEAR_CONTRAST_STRETCH)
+    guiContrastStretchSelection->add("Linear X %");
 
-  m_StandardRenderingFunction->SetChannelList(channels);
-  m_StandardRenderingFunction->SetAutoMinMax(true);
+    // Gaussian contrast stretch (GAUSSIAN_CONTRAST_STRETCH)
+    guiContrastStretchSelection->add("Gaussian");
+    guiSetStandardDeviation->value(otb::Function::GAUSSIAN_STANDARD_DEVIATION);
 
-  double autoMinMaxQuantile = m_StandardRenderingFunction->GetAutoMinMaxQuantile();
-  bLowerQuantile->value(100 * autoMinMaxQuantile);
-  bUpperQuantile->value(100 * autoMinMaxQuantile);
+    // Square root contrast stretch (SQUARE_ROOT_CONTRAST_STRETCH)
+    guiContrastStretchSelection->add("Square root");
 
-  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
+    // Default value : linear stretch applied
+    guiContrastStretchSelection->value(LINEAR_CONTRAST_STRETCH);
+    // Quantiles are only displayed when the linear stretch is selected
+    guiGroupQuantiles->show();
 
-  // Add the generated layer to the rendering model
-  m_RenderingModel->AddLayer(generator->GetLayer());
+    guiGroupStandardDeviation->resize(guiGroupQuantiles->x(), guiGroupQuantiles->y(),
+                                      guiGroupQuantiles->w(), guiGroupQuantiles->h());
+    guiGroupStandardDeviation->hide();
 
-  // Show everything
-  m_DisplayWindow->Show();
+    // Show everything
+    m_DisplayWindow->Show();
 
-  try
+    try
     {
-    // Update the rendering model
-    m_RenderingModel->Update();
+      // Update the rendering model
+      m_RenderingModel->Update();
 
-    // Handle Histogram
-    this->UpdateHistogramCurve();
+      // Handle Histogram
+      this->UpdateHistogramCurve();
 
-    // Update The Histogram Tab
-    this->UpdateTabHistogram();
+      // Update The Histogram Tab
+      this->UpdateTabHistogram();
 
-    // Update the color composition window
-    this->UpdateViewerSetupWindow();
+      // Show the interface setup
+      gVectorData->value(guiTabData);
+      bSetupWindow->show();
+
+      // Update the color composition window
+      this->UpdateViewerSetupWindow();
     }
-  catch (itk::ExceptionObject& err)
+    catch(itk::ExceptionObject & err)
     {
+      itk::OStringStream oss;
+      oss << "Problem occured while loading input image. The following error was returned:\n";
+      oss << err.GetDescription();
+      MsgReporter::GetInstance()->SendError(oss.str());
+      this->Quit();
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateHistogramCurve()
+  {
+    // Clear the widget
+    m_CurveWidget->ClearAllCurves();
+
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    unsigned int pixelRepresentationSize =
+      imageLayer->GetRenderingFunction()->GetPixelRepresentationSize();
+
+    if (pixelRepresentationSize >= 3)
+    {
+      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+      bhistogram->SetHistogramColor(m_Blue);
+      bhistogram->SetLabelColor(m_Blue);
+      bhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(2));
+      m_CurveWidget->AddCurve(bhistogram);
+    }
+
+    if (pixelRepresentationSize >= 2)
+    {
+      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+      ghistogram->SetHistogramColor(m_Green);
+      ghistogram->SetLabelColor(m_Green);
+      ghistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(1));
+      m_CurveWidget->AddCurve(ghistogram);
+    }
+
+    HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+    if (pixelRepresentationSize == 1)
+    {
+      rhistogram->SetHistogramColor(m_Grey);
+      rhistogram->SetLabelColor(m_Grey);
+    }
+    else
+    {
+      rhistogram->SetHistogramColor(m_Red);
+      rhistogram->SetLabelColor(m_Red);
+    }
+
+    rhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(0));
+    m_CurveWidget->AddCurve(rhistogram);
+  }
+
+
+  /**
+   * Project the vector Data in the image projection.
+   * Extract the Remotesensing region corresponding to the image.
+   */
+  void ViewerModule::UpdateVectorData(unsigned int index)
+  {
+    VectorDataProjectionFilterType::Pointer vproj;
+    VectorDataExtractROIType::Pointer vdextract;
+
+    // Extract The part of the VectorData that actually overlaps with
+    // the image extent
+    vdextract = VectorDataExtractROIType::New();
+    vdextract->SetInput(m_VectorDataList->GetNthElement(index));
+
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Find the geographic region of interest
+
+    // Ge the index of the corner of the image
+    ImageType::IndexType ul, ur, ll, lr;
+    ImageType::PointType pul,pur,pll,plr;
+    ul = image->GetLargestPossibleRegion().GetIndex();
+    ur = ul;
+    ll = ul;
+    lr = ul;
+    ur[0] += image->GetLargestPossibleRegion().GetSize()[0];
+    lr[0] += image->GetLargestPossibleRegion().GetSize()[0];
+    lr[1] += image->GetLargestPossibleRegion().GetSize()[1];
+    ll[1] += image->GetLargestPossibleRegion().GetSize()[1];
+
+    // Transform to physical point
+    image->TransformIndexToPhysicalPoint(ul,pul);
+    image->TransformIndexToPhysicalPoint(ur,pur);
+    image->TransformIndexToPhysicalPoint(ll,pll);
+    image->TransformIndexToPhysicalPoint(lr,plr);
+
+    // Build the cartographic region
+    RemoteSensingRegionType rsRegion;
+    RemoteSensingRegionType::IndexType rsOrigin;
+    RemoteSensingRegionType::SizeType  rsSize;
+    rsOrigin[0]= min(pul[0],plr[0]);
+    rsOrigin[1]= min(pul[1],plr[1]);
+    rsSize[0]=vcl_abs(pul[0]-plr[0]);
+    rsSize[1]=vcl_abs(pul[1]-plr[1]);
+
+    rsRegion.SetOrigin(rsOrigin);
+    rsRegion.SetSize(rsSize);
+    rsRegion.SetRegionProjection(image->GetProjectionRef());
+    rsRegion.SetKeywordList(image->GetImageKeywordlist());
+
+    // Set the cartographic region to the extract roi filter
+    vdextract->SetRegion(rsRegion);
+    if (!m_DEMDirectory.empty())
+    {
+      vdextract->SetDEMDirectory(m_DEMDirectory);
+    }
+
+    // Reproject VectorData in image projection
+    vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vdextract->GetOutput());
+    vproj->SetInputProjectionRef(m_VectorDataList->GetNthElement(index)->GetProjectionRef());
+    vproj->SetOutputKeywordList(image->GetImageKeywordlist());
+    vproj->SetOutputProjectionRef(image->GetProjectionRef());
+    vproj->SetOutputOrigin(image->GetOrigin());
+    vproj->SetOutputSpacing(image->GetSpacing());
+    if (!m_DEMDirectory.empty())
+    {
+      vproj->SetDEMDirectory(m_DEMDirectory);
+    }
+    vproj->Update();
+
+    // Create a VectorData gl component
+    VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
+    vgl->SetVectorData(vproj->GetOutput());
+
+    // Flag to Generate Random Color or to use saved colors (used only when DEM use is requested)
+    if (m_GenerateRandomColor)
+    {
+      vgl->SetColor(this->SetRandomColor());
+      // Add the color to the list
+      m_ColorList.push_back(vgl->GetColor());
+    }
+    else
+    {
+      vgl->SetColor(m_ColorList[index]);
+    }
+
+    // Add it to the image view
+    m_View->GetScrollWidget()->AddGlComponent(vgl);
+    m_View->GetFullWidget()->AddGlComponent(vgl);
+    m_View->GetZoomWidget()->AddGlComponent(vgl);
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::AddNameToVectorDataBrowser(const std::string & name)
+  {
     itk::OStringStream oss;
     oss.str("");
-    oss << "Problem occured while loading input image. The following error was returned:\n";
-    oss << err.GetDescription();
-    MsgReporter::GetInstance()->SendError(oss.str().c_str());
-    this->Quit();
-    }
+    oss << m_DisplayedLabel << name;
 
-  // Show the interface setup
-  bSetupWindow->show();
-}
-
-/**
- *
- */
-void ViewerModule::UpdateHistogramCurve()
-{
-  // Clear the widget
-  m_CurveWidget->ClearAllCurves();
-
-  // Get the current rendering function
-  RenderingFunctionType::Pointer renderingFunction = m_InputImageLayer->GetRenderingFunction();
-
-  //
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >= 3)
-    {
-    HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-    bhistogram->SetHistogramColor(m_Blue);
-    bhistogram->SetLabelColor(m_Blue);
-    bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
-    m_CurveWidget->AddCurve(bhistogram);
-    }
-
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() >= 2)
-    {
-    HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-    ghistogram->SetHistogramColor(m_Green);
-    ghistogram->SetLabelColor(m_Green);
-    ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
-    m_CurveWidget->AddCurve(ghistogram);
-    }
-
-  HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  if (m_InputImageLayer->GetRenderingFunction()->GetPixelRepresentationSize() == 1)
-    {
-    rhistogram->SetHistogramColor(m_Grey);
-    rhistogram->SetLabelColor(m_Grey);
-    }
-  else
-    {
-    rhistogram->SetHistogramColor(m_Red);
-    rhistogram->SetLabelColor(m_Red);
-    }
-  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0));
-  m_CurveWidget->AddCurve(rhistogram);
-}
-
-/**
- * Project the vector Data in the image projection.
- * Extract the Remotesensing region corresponding to the image.
- */
-void ViewerModule::UpdateVectorData(unsigned int index)
-{
-  VectorDataProjectionFilterType::Pointer vproj;
-  VectorDataExtractROIType::Pointer       vdextract;
-
-  // Extract The part of the VectorData that actually overlaps with
-  // the image extent
-  vdextract = VectorDataExtractROIType::New();
-  vdextract->SetInput(m_VectorDataList->GetNthElement(index));
-
-  // Find the geographic region of interest
-
-  // Ge the index of the corner of the image
-  ImageType::IndexType ul, ur, ll, lr;
-  ImageType::PointType pul, pur, pll, plr;
-  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-
-  // Transform to physical point
-  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
-  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
-  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
-  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
-
-  // Build the cartographic region
-  RemoteSensingRegionType            rsRegion;
-  RemoteSensingRegionType::IndexType rsOrigin;
-  RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = min(pul[0], plr[0]);
-  rsOrigin[1] = min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
-
-  rsRegion.SetOrigin(rsOrigin);
-  rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
-
-  // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
-  if (!m_DEMDirectory.empty()) vdextract->SetDEMDirectory(m_DEMDirectory);
-
-  // Reproject VectorData in image projection
-  vproj = VectorDataProjectionFilterType::New();
-  vproj->SetInput(vdextract->GetOutput());
-  vproj->SetInputProjectionRef(m_VectorDataList->GetNthElement(index)->GetProjectionRef());
-  vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  vproj->SetOutputOrigin(m_InputImage->GetOrigin());
-  vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  if (!m_DEMDirectory.empty()) vproj->SetDEMDirectory(m_DEMDirectory);
-  vproj->Update();
-
-  // Create a VectorData gl component
-  VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
-  vgl->SetVectorData(vproj->GetOutput());
-
-  // Flag to Generate Random Color or to use saved colors (used only when DEM use is requested)
-  if (m_GenerateRandomColor)
-    {
-    vgl->SetColor(this->SetRandomColor());
-    // Add the color to the list
-    m_ColorList.push_back(vgl->GetColor());
-    }
-  else vgl->SetColor(m_ColorList[index]);
-
-  // Add it to the image view
-  m_View->GetScrollWidget()->AddGlComponent(vgl);
-  m_View->GetFullWidget()->AddGlComponent(vgl);
-  m_View->GetZoomWidget()->AddGlComponent(vgl);
-}
-
-/**
- *
- */
-void ViewerModule::AddName(std::string name)
-{
-  itk::OStringStream oss;
-  oss.str("");
-  oss << m_DisplayedLabel << name;
-
-  dVDList->add(oss.str().c_str());
-  dVDList->redraw();
-}
-
-/**
- *
- */
-
-void ViewerModule::
-UpdateVectorDataListShowed(unsigned int selectedItem, std::string status)
-{
-  /* Update the ImageList using the status label "+" or "-" */
-  std::string filename = this->GetInputDataDescription<VectorDataType>("VectorData", selectedItem - 1);
-
-  itk::OStringStream oss;
-  oss << status << filename;
-  dVDList->text(selectedItem, oss.str().c_str());
-  oss.str("");
-}
-
-/**
- *
- */
-void ViewerModule::UpdateListSelectionColor()
-{
-  //selectedIndex
-  unsigned int selectedIndex = dVDList->value();
-
-  if (selectedIndex /*&& m_DisplayedVectorData[selectedIndex-1]*/)
-    {
-    //VectorDataGlComponentType*  selecedVectorDataGlComponent = dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
-    //ColorType                   curColor                     = selecedVectorDataGlComponent->GetColor();
-
-    ColorType curColor = m_ColorList[selectedIndex - 1];
-
-    // color To fl_color
-    fl_color(static_cast<unsigned char>(255 * curColor[0]),
-             static_cast<unsigned char>(255 * curColor[1]),
-             static_cast<unsigned char>(255 * curColor[2]));
-
-    //Update the text color
-    dVDList->selection_color(fl_color());
+    dVDList->add(oss.str().c_str());
     dVDList->redraw();
+  }
 
-    //Update the ROIColorItem
-    dROIColor->color(fl_color());
-    dROIColor->redraw();
-    }
-}
 
-/**
- *
- */
-void ViewerModule::DeleteVectorData()
-{
-  unsigned int selectedIndex = dVDList->value();
+  /**
+   *
+   */
+  void ViewerModule::SynchronizeAll()
+  {
+    // Handle the histogram
+    UpdateHistogramCurve();
 
-  if (selectedIndex)
+    // Update the histogram tab
+    UpdateTabHistogram();
+
+    // Refresh the displayed informations
+    RedrawWidget();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::SetAlphaBlending()
+  {
+    if (m_AlphaBlendingList[m_CurrentTransparentImage] == guiAlphaBlending->value())
     {
-    // Remove the VectorDataGl Compenent
-    m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
-    m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
-    m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex - 1)->SetVisible(false);  //-1 because in the Zoom Widget there is no red square which is a GlComponent
-
-    // Update the status of the selectedItem vector data
-    m_DisplayedVectorData[selectedIndex - 1] = false;
-    this->UpdateVectorDataListShowed(selectedIndex, m_UndisplayedLabel);
-
-    //Redraw all the widgets
-    this->RedrawWidget();
+      return;
     }
-}
+    m_AlphaBlendingList[m_CurrentTransparentImage] = guiAlphaBlending->value();
 
-/**
- * Hide all the vector datas
- **/
-void ViewerModule::ClearAll()
-{
-  for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
+    ShowSelectedImages();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ActivateTransparencyMode()
+  {
+    if (m_DisplayMode == TRANSPARENCY_DISPLAY_MODE)
     {
-    // Hide the Gl Componenent int the view
-    m_View->GetScrollWidget()->GetNthGlComponent(i + 1)->SetVisible(false);
-    m_View->GetFullWidget()->GetNthGlComponent(i + 1)->SetVisible(false);
-    m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(false);
-
-    // Update the dispaly status of each vector
-    m_DisplayedVectorData[i] = false;
-    this->UpdateVectorDataListShowed(i + 1, m_UndisplayedLabel);
-    }
-  //Redraw all the widgets
-  this->RedrawWidget();
-}
-
-/**
- *  Dispaly if Hidden VectorData
- */
-void
-ViewerModule::DisplaySelectedVectorData()
-{
-  // Get the selected vectordata
-  unsigned int selectedIndex = dVDList->value();
-  if (selectedIndex > 0)
-    {
-    // Dispaly the selected VD if not already dispalyed
-    if (!m_DisplayedVectorData[selectedIndex - 1])
-      {
-      // Hide all displayed vector datas
-      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
-      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
-      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex - 1)->SetVisible(true);
-      // Set visible status to selected VectorDataGl Compenents
-      m_DisplayedVectorData[selectedIndex - 1] = true;
-      this->UpdateVectorDataListShowed(selectedIndex, m_DisplayedLabel);
-      }
-    //Redraw all the widgets
-    this->RedrawWidget();
+      return;
     }
 
-}
+    m_DisplayMode = TRANSPARENCY_DISPLAY_MODE;
 
-/**
- *  Dispaly if Hidden VectorData
- */
-void
-ViewerModule::DisplayVectorData()
-{
-  // loop over all the vector datas
-  for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
+    // Activate overlay related widgets
+    guiTransparentImageSelection->activate();
+    guiAlphaBlending->activate();
+
+    // Deactivate slide show related widgets
+    bPreviousImage->deactivate();
+    bNextImage->deactivate();
+
+    guiAlphaBlending->value(m_AlphaBlendingList[m_CurrentTransparentImage]);
+
+    ShowSelectedImages();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ActivateSlideShowMode()
+  {
+    if (m_DisplayMode == SLIDESHOW_DISPLAY_MODE)
     {
-    // Dispaly the selected VD if not already displayed
-    if (!m_DisplayedVectorData[i])
-      {
-      m_View->GetScrollWidget()->GetNthGlComponent(i + 1)->SetVisible(true);
-      m_View->GetFullWidget()->GetNthGlComponent(i + 1)->SetVisible(true);
-      m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
-      m_DisplayedVectorData[i] = true;
-      this->UpdateVectorDataListShowed(i + 1, m_DisplayedLabel);
-      }
+      return;
     }
-  //Redraw all the widgets
-  this->RedrawWidget();
-}
 
-/**
- *
- */
-ViewerModule::ColorType ViewerModule::SetRandomColor()
-{
-  ColorType color;
-  // Update Vector Data color
-  color[0] = rand() / (RAND_MAX + 1.0);
-  color[1] = rand() / (RAND_MAX + 1.0);
-  color[2] = rand() / (RAND_MAX + 1.0);
-  color[3] = 1.0;
+    m_DisplayMode = SLIDESHOW_DISPLAY_MODE;
 
-  return color;
-}
+    // Activate slide show related widgets
+    bPreviousImage->activate();
+    bNextImage->activate();
 
-/**
- *
- */
-void ViewerModule::ChangeROIColor()
-{
-  unsigned int selectedIndex = dVDList->value();
+    // Deactivate overlay related widgets
+    guiTransparentImageSelection->deactivate();
+    guiAlphaBlending->deactivate();
 
-  if (selectedIndex && m_DisplayedVectorData[selectedIndex - 1])
+    ShowSelectedImages();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::SetOpaqueImage()
+  {
+    if (m_CurrentOpaqueImage == guiOpaqueImageSelection->value())
     {
-    VectorDataGlComponentType* selecedVectorDataGlComponent =
-      dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex - 1));
-    ColorType curColor  = selecedVectorDataGlComponent->GetColor();
+      return;
+    }
 
-    double r = (double) curColor[0];
-    double g = (double) curColor[1];
-    double b = (double) curColor[2];
+    m_CurrentOpaqueImage = guiOpaqueImageSelection->value();
+    
+    ShowSelectedImages();
+  }
 
-    int ok = fl_color_chooser(otbGetTextMacro("Changed class color"), r, g, b);
 
-    if (ok)
-      {
-      curColor[0] = (float) r;
-      curColor[1] = (float) g;
-      curColor[2] = (float) b;
+  /**
+   *
+   */
+  void ViewerModule::SetTransparentImage()
+  {
+    if (m_CurrentTransparentImage == guiTransparentImageSelection->value())
+    {
+      return;
+    }
 
-      fl_color(static_cast<unsigned char>(255 * curColor[0]),
-               static_cast<unsigned char>(255 * curColor[1]),
-               static_cast<unsigned char>(255 * curColor[2]));
+    m_CurrentTransparentImage = guiTransparentImageSelection->value();
+    guiAlphaBlending->value(m_AlphaBlendingList[m_CurrentTransparentImage]);
+    ShowSelectedImages();
+  }
 
-      // Change the color of the text
+
+  /**
+   *
+   */
+  void ViewerModule::ShowPreviousImage()
+  {
+    m_CurrentOpaqueImage = ( m_CurrentOpaqueImage - 1 + m_InputImageLayerList->Size() )
+                           % m_InputImageLayerList->Size();
+    guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
+
+    ShowSelectedImages();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ShowNextImage()
+  {
+    m_CurrentOpaqueImage = ( m_CurrentOpaqueImage + 1 ) % m_InputImageLayerList->Size();
+    guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
+
+    ShowSelectedImages();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ShowSelectedImages()
+  {
+    ImageLayerType::Pointer imageLayer;
+    BlendingFunctionType::Pointer blender;
+
+    m_RenderingModel->ClearLayers();
+
+    imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+    blender = dynamic_cast<BlendingFunctionType *>(imageLayer->GetBlendingFunction());
+    blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
+    m_RenderingModel->AddLayer(imageLayer);
+
+    if ((m_DisplayMode == TRANSPARENCY_DISPLAY_MODE) &&
+        (m_CurrentOpaqueImage != m_CurrentTransparentImage))
+    {
+      imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentTransparentImage);
+      blender = dynamic_cast<BlendingFunctionType *>(imageLayer->GetBlendingFunction());
+      blender->SetAlpha(m_AlphaBlendingList[m_CurrentTransparentImage]);
+      m_RenderingModel->AddLayer(imageLayer);
+    }
+    
+    m_RenderingModel->Update();
+
+    SynchronizeAll();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateVectorDataListShowed(unsigned int selectedItem, std::string status)
+  {
+    /* Update the ImageList using the status label "+" or "-" */
+    std::string filename = this->GetInputDataDescription<VectorDataType>("VectorData",selectedItem-1);
+
+    itk::OStringStream oss;
+    oss<<status<<filename;
+    dVDList->text(selectedItem,oss.str().c_str());
+    oss.str("");
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateListSelectionColor()
+  {
+    //selectedIndex
+    unsigned int selectedIndex = dVDList->value();
+
+    if (selectedIndex)
+    {
+      ColorType curColor = m_ColorList[selectedIndex-1];
+
+      // color To fl_color
+      fl_color(static_cast<unsigned char>(255*curColor[0]),
+               static_cast<unsigned char>(255*curColor[1]),
+               static_cast<unsigned char>(255*curColor[2]));
+
+      //Update the text color
       dVDList->selection_color(fl_color());
       dVDList->redraw();
-      // Change the color of the RoiButton
+
+      //Update the ROIColorItem
       dROIColor->color(fl_color());
-      // Change the color of the VectorData
-      selecedVectorDataGlComponent->SetColor(curColor);
-      m_ColorList[selectedIndex - 1] = curColor;
+      dROIColor->redraw();
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::DeleteVectorData()
+  {
+    unsigned int selectedIndex = dVDList->value();
+
+    if (selectedIndex)
+    {
+      // Remove the VectorDataGl Compenent
+      m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(false);
+      // Below, "selectedIndex - 1" because in the Zoom Widget there is no red
+      // square which is a GlComponent
+      m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex - 1)->SetVisible(false);
+
+      // Update the status of the selectedItem vector data
+      m_DisplayedVectorData[selectedIndex-1] = false;
+      this->UpdateVectorDataListShowed(selectedIndex,m_UndisplayedLabel);
+
+      //Redraw all the widgets
       this->RedrawWidget();
-      }
     }
-}
+  }
 
-/**
- *
- */
-void ViewerModule::RedrawWidget()
-{
-  m_DisplayWindow->Refresh();
 
-}
-
-void ViewerModule::UseDEM()
-{
-
-  // show the DEM GUI
-  if (bDEM->value()) wDEM->show();
-}
-
-/**
- *
- */
-void ViewerModule::UpdateDEMSettings()
-{
-  if (gDEMPath->value())
+  /**
+   * Hide all the vector datas
+   */
+  void ViewerModule::ClearAll()
+  {
+    for (unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
     {
-    // Copy the DEM pathname
-    m_DEMDirectory = gDEMPath->value();
+      // Hide the Gl Componenent int the view
+      m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(false);
+      m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(false);
 
-    // Delete the vector data
-    for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
-      {
-      m_View->GetScrollWidget()->RemoveGlComponent(1);
-      m_View->GetFullWidget()->RemoveGlComponent(1);
-      m_View->GetZoomWidget()->RemoveGlComponent(0);
-      }
-
-    // Deactivate the Random Generation of the color when render vector
-    m_GenerateRandomColor = false;
-
-    // Reproject using the DEM this time
-    for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
-      {
-      this->UpdateVectorData(i);
-      }
-
-    // Refresh widgets
+      // Update the display status of each vector
+      m_DisplayedVectorData[i] = false;
+      this->UpdateVectorDataListShowed(i+1,m_UndisplayedLabel);
+    }
+    //Redraw all the widgets
     this->RedrawWidget();
-    }
-}
+  }
 
-/**
- * Edit the viewer setup ---------------------
- */
 
-/**
- *
- */
-void ViewerModule::UpdateViewerSetupWindow()
-{
-  //Get the number of components per pixel
-  unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
-
-  guiGrayscaleChannelChoice->range(1, nbComponent);
-  guiRedChannelChoice->range(1, nbComponent);
-  guiGreenChannelChoice->range(1, nbComponent);
-  guiBlueChannelChoice->range(1, nbComponent);
-
-  guiViewerSetupWindow->redraw();
-
-  if (nbComponent == 1)
+  /**
+   *  Display if Hidden VectorData
+   */
+  void ViewerModule::DisplaySelectedVectorData()
+  {
+    // Get the selected vectordata
+    unsigned int selectedIndex = dVDList->value();
+    if ( selectedIndex > 0 )
     {
-    this->GrayScaleSet();
+      // Display the selected VD if not already displayed
+      if (!m_DisplayedVectorData[selectedIndex-1])
+      {
+        // Hide all displayed vector datas
+        m_View->GetScrollWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+        m_View->GetFullWidget()->GetNthGlComponent(selectedIndex)->SetVisible(true);
+        m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(true);
+        // Set visible status to selected VectorDataGl Compenents
+        m_DisplayedVectorData[selectedIndex-1] = true;
+        this->UpdateVectorDataListShowed(selectedIndex,m_DisplayedLabel);
+      }
+      //Redraw all the widgets
+      this->RedrawWidget();
     }
-  else
+  }
+
+
+  /**
+   *  Display if Hidden VectorData
+   */
+  void ViewerModule::DisplayVectorData()
+  {
+    // loop over all the vector datas
+    for (unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
     {
-    this->RGBSet();
+      // Display the selected VD if not already displayed
+      if (!m_DisplayedVectorData[i])
+      {
+        m_View->GetScrollWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+        m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
+        m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
+        m_DisplayedVectorData[i] = true;
+        this->UpdateVectorDataListShowed(i+1,m_DisplayedLabel);
+      }
+    }
+    //Redraw all the widgets
+    this->RedrawWidget();
+  }
+
+
+  /**
+   *
+   */
+  ViewerModule::ColorType ViewerModule::SetRandomColor()
+  {
+    ColorType   color;
+    // Update Vector Data color
+    color[0]=rand()/(RAND_MAX+1.0);
+    color[1]=rand()/(RAND_MAX+1.0);
+    color[2]=rand()/(RAND_MAX+1.0);
+    color[3]=1.0;
+
+    return color;
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ChangeROIColor()
+  {
+    unsigned int selectedIndex = dVDList->value();
+
+    if (selectedIndex && m_DisplayedVectorData[selectedIndex-1])
+    {
+      VectorDataGlComponentType*  selecedVectorDataGlComponent =
+        dynamic_cast<VectorDataGlComponentType*>(m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1));
+      ColorType curColor  = selecedVectorDataGlComponent->GetColor();
+
+      double r = (double)curColor[0];
+      double g = (double)curColor[1];
+      double b = (double)curColor[2];
+
+      int ok = fl_color_chooser(otbGetTextMacro("Changed class color"),r,g,b);
+
+      if (ok)
+      {
+        curColor[0]=(float)r;
+        curColor[1]=(float)g;
+        curColor[2]=(float)b;
+
+        fl_color(static_cast<unsigned char>(255*curColor[0]),
+                 static_cast<unsigned char>(255*curColor[1]),
+                 static_cast<unsigned char>(255*curColor[2]));
+
+        // Change the color of the text
+        dVDList->selection_color(fl_color());
+        dVDList->redraw();
+        // Change the color of the RoiButton
+        dROIColor->color(fl_color());
+        // Change the color of the VectorData
+        selecedVectorDataGlComponent->SetColor(curColor);
+        m_ColorList[selectedIndex-1] = curColor;
+        this->RedrawWidget();
+      }
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::RedrawWidget()
+  {
+    m_DisplayWindow->Refresh();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UseDEM()
+  {
+    // show the DEM GUI
+    if (bDEM->value())
+    {
+      wDEM->show();
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateDEMSettings()
+  {
+    if (gDEMPath->value())
+    {
+      // Copy the DEM pathname
+      m_DEMDirectory = gDEMPath->value();
+
+      // Delete the vector data
+      for (unsigned int i = 0; i< m_VectorDataList->Size(); i++ )
+      {
+        m_View->GetScrollWidget()->RemoveGlComponent(1);
+        m_View->GetFullWidget()->RemoveGlComponent(1);
+        m_View->GetZoomWidget()->RemoveGlComponent(0);
+      }
+
+      // Deactivate the Random Generation of the color when render vector
+      m_GenerateRandomColor = false;
+
+      // Reproject using the DEM this time
+      for (unsigned int i = 0; i < m_VectorDataList->Size();i++)
+      {
+        this->UpdateVectorData(i);
+      }
+
+      // Refresh widgets
+      this->RedrawWidget();
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateViewerSetupWindow()
+  {
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    //Get the number of components per pixel
+    unsigned int nbComponent = image->GetNumberOfComponentsPerPixel();
+
+    itk::OStringStream oss;
+    oss.str("");
+
+    //Clear all the choices
+    guiGrayscaleChannelChoice->range(1, nbComponent);
+    guiRedChannelChoice->range(1, nbComponent);
+    guiGreenChannelChoice->range(1, nbComponent);
+    guiBlueChannelChoice->range(1, nbComponent);
+
+    guiTabSetup->redraw();
+
+    if (nbComponent == 1)
+    {
+      this->GrayScaleSet();
+    }
+    else
+    {
+      this->RGBSet();
     }
 
-}
+  }
 
-/**
- * RGBSet();
- */
-void ViewerModule::RGBSet()
-{
-  unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
 
-  guiViewerSetupColorMode->set();
-  guiViewerSetupGrayscaleMode->clear();
-  guiGrayscaleChannelChoice->deactivate();
+  /**
+   * RGBSet();
+   */
+  void ViewerModule::RGBSet()
+  {
+    // Select the current image layer
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
 
-  guiRedChannelChoice->activate();
-  guiGreenChannelChoice->activate();
-  guiBlueChannelChoice->activate();
+    unsigned int nbComponent = image->GetNumberOfComponentsPerPixel();
 
-  ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
-  unsigned int    i = 0;
-  while (channels.size() < 3)
+    guiViewerSetupColorMode->set();
+    guiViewerSetupGrayscaleMode->clear();
+    guiGrayscaleChannelChoice->deactivate();
+
+    guiRedChannelChoice->activate();
+    guiGreenChannelChoice->activate();
+    guiBlueChannelChoice->activate();
+
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+
+    ChannelListType channels = renderer->GetChannelList();
+    unsigned int i = 0;
+    while (channels.size() < 3)
     {
-    channels.push_back(i);
-    ++i;
+      channels.push_back(i);
+      ++i;
     }
 
-  guiRedChannelChoice->value(std::min(channels[0] + 1, nbComponent));
-  guiGreenChannelChoice->value(std::min(channels[1] + 1, nbComponent));
-  guiBlueChannelChoice->value(std::min(channels[2] + 1, nbComponent));
-}
+    guiRedChannelChoice->value(std::min(channels[0] + 1, nbComponent));
+    guiGreenChannelChoice->value(std::min(channels[1] + 1, nbComponent));
+    guiBlueChannelChoice->value(std::min(channels[2] + 1, nbComponent));
+  }
 
-/**
- * Change the render function to gray scale one
- */
-void ViewerModule::GrayScaleSet()
-{
-  unsigned int nbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
 
-  guiViewerSetupGrayscaleMode->set();
-  guiViewerSetupColorMode->clear();
+  /**
+   * Change the render function to gray scale one
+   */
+  void ViewerModule::GrayScaleSet()
+  {
+    // Select the current image layer
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
 
-  guiRedChannelChoice->deactivate();
-  guiGreenChannelChoice->deactivate();
-  guiBlueChannelChoice->deactivate();
+    unsigned int nbComponent = image->GetNumberOfComponentsPerPixel();
 
-  guiGrayscaleChannelChoice->activate();
+    guiViewerSetupGrayscaleMode->set();
+    guiViewerSetupColorMode->clear();
 
-  ChannelListType channels = m_StandardRenderingFunction->GetChannelList();
-  if (channels.size() < 1)
+    guiRedChannelChoice->deactivate();
+    guiGreenChannelChoice->deactivate();
+    guiBlueChannelChoice->deactivate();
+
+    guiGrayscaleChannelChoice->activate();
+
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+
+    ChannelListType channels = renderer->GetChannelList();
+    if (channels.size() < 1)
     {
-    channels.push_back(0);
+      channels.push_back(0);
     }
-  guiGrayscaleChannelChoice->value(std::min(channels[0] + 1, nbComponent));
-}
+    guiGrayscaleChannelChoice->value(std::min(channels[0] + 1, nbComponent));
+  }
 
-/**
- *
- */
-void ViewerModule::ViewerSetupOk()
-{
-  if (guiViewerSetupColorMode->value())
+
+  /**
+   * Display the viewed elements in splitted windows
+   */
+  void ViewerModule::SplittedLayout()
+  {
+    if (m_WindowsLayout == SPLITTED_WINDOWS_LAYOUT)
     {
-    int redChoice = static_cast<int>(guiRedChannelChoice->value() - 1);
-    int greenChoice = static_cast<int>(guiGreenChannelChoice->value() - 1);
-    int blueChoice = static_cast<int>(guiBlueChannelChoice->value() - 1);
-    this->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice);
-    }
-  else if (guiViewerSetupGrayscaleMode->value())
-    {
-    int grayChoice = static_cast<int>(guiGrayscaleChannelChoice->value() - 1);
-    this->UpdateGrayScaleChannelOrder(grayChoice);
+      return;
     }
 
-  // Refresh widgets
-  this->RedrawWidget();
+    guiViewerSetupSplittedLayout->set();
+    guiViewerSetupPackedLayout->clear();
+    UpdateWindowsLayout(SPLITTED_WINDOWS_LAYOUT);
+  }
 
-  // Update Histogram
-  this->UpdateHistogramCurve();
 
-  //
-  this->UpdateTabHistogram();
-}
-
-/**
- * Gray Scale channel order
- */
-void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
-{
-  // Build the appropriate rendring function
-  ChannelListType channels;
-
-  channels.resize(3);
-  channels[0] = choice;
-  channels[1] = choice;
-  channels[2] = choice;
-  m_StandardRenderingFunction->SetChannelList(channels);
-
-  // Apply the new rendering function to the Image layer
-  m_StandardRenderingFunction->SetAutoMinMax(true);
-  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
-  m_RenderingModel->Update();
-}
-
-/**
- * RGB Channel Order
- */
-
-void ViewerModule::UpdateRGBChannelOrder(int red, int green, int blue)
-{
-  // Build the appropriate rendring function
-  ChannelListType channels;
-  channels.resize(3);
-  channels[0] = red;
-  channels[1] = green;
-  channels[2] = blue;
-  m_StandardRenderingFunction->SetChannelList(channels);
-
-  // Apply the new rendering function to the Image layer
-  m_StandardRenderingFunction->SetAutoMinMax(true);
-  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
-  m_RenderingModel->Update();
-}
-
-/**
- *
- */
-void ViewerModule::UpdateTabHistogram()
-{
-  //Get the number of subdivisons in the GUI
-  int width  = (int) (gHistogram->w() / 2.);
-  int height = (int) (gHistogram->h() / 2.);
-  int blank  = 2;
-
-  // Clear the widget
-  m_BlueCurveWidgetGroup->ClearAllCurves();
-  m_GreenCurveWidgetGroup->ClearAllCurves();
-  m_RedCurveWidgetGroup->ClearAllCurves();
-
-  /// Update the StandardRenderingFunction
-  ChannelListType channels = m_InputImageLayer->GetRenderingFunction()->GetChannelList();
-  m_StandardRenderingFunction->SetChannelList(channels);
-  m_StandardRenderingFunction->Initialize(m_InputImage->GetMetaDataDictionary());
-  m_InputImageLayer->SetRenderingFunction(m_StandardRenderingFunction);
-
-  //Set the rendering to the histogram handlers
-  m_BlueHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
-  m_GreenHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
-  m_RedHistogramHandler->SetRenderingFunction(m_StandardRenderingFunction);
-
-  /// BLUE band : draw the BLUE band histogram and the asymptote
-  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() >= 3)
+  /**
+   * Display the viewed elements in packed windows
+   */
+  void ViewerModule::PackedLayout()
+  {
+    if (m_WindowsLayout == PACKED_WINDOWS_LAYOUT)
     {
-    HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-    bhistogram->SetHistogramColor(m_Blue);
-    bhistogram->SetLabelColor(m_Blue);
-    bhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(2));
-    m_BlueCurveWidgetGroup->AddCurve(bhistogram);
+      return;
+    }
 
-    //Add to the gHistogram group
-    gHistogram->add(m_BlueCurveWidgetGroup);
-    gHistogram->resizable(m_BlueCurveWidgetGroup);
-    m_BlueCurveWidgetGroup->resize(gHistogram->x() + blank, gHistogram->y() + height + blank,
-                                   width - blank, height - blank);
+    guiViewerSetupSplittedLayout->clear();
+    guiViewerSetupPackedLayout->set();
+    UpdateWindowsLayout(PACKED_WINDOWS_LAYOUT);
+  }
+
+
+  /**
+   * Set the display mode to "windowsLayout" value
+   */
+  void ViewerModule::UpdateWindowsLayout(const WindowsLayoutEnumType windowsLayout)
+  {
+    WidgetManagerPointerType tmpHandler = m_DisplayWindow;
+
+    m_DisplayWindow->Hide();
+    m_DisplayWindow->UnRegisterAll();
+
+    if (windowsLayout == SPLITTED_WINDOWS_LAYOUT)
+    {
+      m_DisplayWindow = m_SplittedWindows;
+    }
+    else
+    {
+      m_DisplayWindow = m_PackedWindows;
+    }
+
+    m_DisplayWindow->RegisterFullWidget(m_View->GetFullWidget());
+    m_DisplayWindow->RegisterScrollWidget(m_View->GetScrollWidget());
+    m_DisplayWindow->RegisterZoomWidget(m_View->GetZoomWidget());
+    m_DisplayWindow->RegisterPixelDescriptionWidget(m_PixelDescriptionView->GetPixelDescriptionWidget());
+    m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
+
+    tmpHandler->Hide();
+    tmpHandler->UnRegisterAll();
+
+    m_DisplayWindow->Refresh();
+    m_DisplayWindow->Show();
+
+    m_WindowsLayout = windowsLayout;
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ViewerSetupOk()
+  {
+    if (guiViewerSetupColorMode->value())
+    {
+      int redChoice   = static_cast<int>(guiRedChannelChoice->value() - 1);
+      int greenChoice = static_cast<int>(guiGreenChannelChoice->value() - 1);
+      int blueChoice  = static_cast<int>(guiBlueChannelChoice->value() - 1);
+      this->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice);
+    }
+    else if (guiViewerSetupGrayscaleMode->value())
+    {
+      int grayChoice = static_cast<int>(guiGrayscaleChannelChoice->value() - 1);
+      this->UpdateGrayScaleChannelOrder(grayChoice);
+    }
+
+    SynchronizeAll();
+  }
+
+
+  /**
+   * Gray Scale channel order
+   */
+  void ViewerModule::UpdateGrayScaleChannelOrder(int choice)
+  {
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+    
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Build the appropriate rendering function
+    ChannelListType channels;
+
+    channels.resize(3);
+    channels[0]=choice;
+    channels[1]=choice;
+    channels[2]=choice;
+    renderer->SetChannelList(channels);
+
+    // Apply the new rendering function to the Image layer
+    renderer->SetAutoMinMax(true);
+
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    imageLayer->SetRenderingFunction(renderer);
+    renderer->Initialize( image->GetMetaDataDictionary() );
+    m_RenderingModel->Update();
+  }
+
+
+  /**
+   * RGB Channel Order
+   */
+  void ViewerModule::UpdateRGBChannelOrder(int red, int green, int blue)
+  {
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Build the appropriate rendering function
+    ChannelListType channels;
+
+    channels.resize(3);
+    channels[0]=red;
+    channels[1]=green;
+    channels[2]=blue;
+    renderer->SetChannelList(channels);
+
+    // Apply the new rendering function to the Image layer
+    renderer->SetAutoMinMax(true);
+
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    imageLayer->SetRenderingFunction(renderer);
+    renderer->Initialize( image->GetMetaDataDictionary() );
+    m_RenderingModel->Update();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateTabHistogram()
+  {
+    // Get the number of subdivisons in the GUI
+    int blank  = 4;
+    int width  = (int)((gHistogram->w() - blank) / 2.0);
+    int height = (int)((gHistogram->h() - blank) / 2.0);
+
+    // Clear the widget
+    m_BlueCurveWidgetGroup->ClearAllCurves();
+    m_GreenCurveWidgetGroup->ClearAllCurves();
+    m_RedCurveWidgetGroup->ClearAllCurves();
+
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    /// Update the rendering function
+    ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
+    renderer->SetChannelList(channels);
+    renderer->Initialize( image->GetMetaDataDictionary() );
+    imageLayer->SetRenderingFunction(renderer);
+
+    // Set the rendering to the histogram handlers
+    m_BlueHistogramHandler->SetRenderingFunction(renderer);
+    m_GreenHistogramHandler->SetRenderingFunction(renderer);
+    m_RedHistogramHandler->SetRenderingFunction(renderer);
+
+    /// BLUE band : draw the BLUE band histogram and the asymptote
+    if (imageLayer->GetRenderingFunction()->GetHistogramList()->Size() >= 3)
+    {
+      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+      bhistogram->SetHistogramColor(m_Blue);
+      bhistogram->SetLabelColor(m_Blue);
+      bhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(2));
+      m_BlueCurveWidgetGroup->AddCurve(bhistogram);
+
+      // Add to the gHistogram group
+      gHistogram->add(m_BlueCurveWidgetGroup);
+      gHistogram->resizable(m_BlueCurveWidgetGroup);
+      m_BlueCurveWidgetGroup->resize(gHistogram->x(), gHistogram->y() + height + blank,
+                                     width, height);
+
+      // Left Asymptote
+      m_BlueVaCurveL->SetAbcisse(renderer->GetParameters().GetElement(4));
+      m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
+
+      // Right Asymptote
+      m_BlueVaCurveR->SetAbcisse(renderer->GetParameters().GetElement(5));
+      m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
+
+      // Add the asymptote to the curve
+      m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveR);
+      m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveL);
+
+      // Edit the channel we're changing
+      m_BlueHistogramHandler->SetChannel(2);
+    }
+    /// GREEN band : draw the GREEN band histogram and the asymptote
+    if (imageLayer->GetRenderingFunction()->GetHistogramList()->Size() >= 2)
+    {
+      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+      ghistogram->SetHistogramColor(m_Green);
+      ghistogram->SetLabelColor(m_Green);
+      ghistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(1));
+      m_GreenCurveWidgetGroup->AddCurve(ghistogram);
+
+      //Add to the gHistogram group
+      gHistogram->add(m_GreenCurveWidgetGroup);
+      gHistogram->resizable(m_GreenCurveWidgetGroup);
+      m_GreenCurveWidgetGroup->resize(gHistogram->x() + width + blank, gHistogram->y(),
+                                      width, height);
+
+      // Left Asymptote
+      m_GreenVaCurveL->SetAbcisse(renderer->GetParameters().GetElement(2));
+      m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
+
+      // Right Asymptote
+      m_GreenVaCurveR->SetAbcisse(renderer->GetParameters().GetElement(3));
+      m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green);
+
+      // Add the asymptote to the curve
+      m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
+      m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
+
+      // Edit the channel we're changing
+      m_GreenHistogramHandler->SetChannel(1);
+    }
+    /// RED band : draw the RED band histogram and the asymptote
+    HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+    if (imageLayer->GetRenderingFunction()->GetHistogramList()->Size() == 1)
+    {
+      rhistogram->SetHistogramColor(m_Grey);
+      rhistogram->SetLabelColor(m_Grey);
+
+      //Add to the gHistogram group
+      gHistogram->add(m_RedCurveWidgetGroup);
+      gHistogram->resizable(m_RedCurveWidgetGroup);
+      m_RedCurveWidgetGroup->resize(gHistogram->x(), gHistogram->y(),
+                                    width, height);
+    }
+    else
+    {
+      rhistogram->SetHistogramColor(m_Red);
+      rhistogram->SetLabelColor(m_Red);
+
+      //Add to the gHistogram group
+      gHistogram->add(m_RedCurveWidgetGroup);
+      gHistogram->resizable(m_RedCurveWidgetGroup);
+      m_RedCurveWidgetGroup->resize(gHistogram->x(), gHistogram->y(),
+                                    width, height);
+    }
+
+    rhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(0));
+    m_RedCurveWidgetGroup->AddCurve(rhistogram);
+    // Left Asymptote
+    m_RedVaCurveL->SetAbcisse(renderer->GetParameters().GetElement(0));
+    m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
 
     // Right Asymptote
-    m_BlueVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(4));
-    m_BlueVaCurveL->SetVerticalAsymptoteColor(m_Blue);
-
-    // Left Asymptote
-    m_BlueVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(5));
-    m_BlueVaCurveR->SetVerticalAsymptoteColor(m_Blue);
+    m_RedVaCurveR->SetAbcisse(renderer->GetParameters().GetElement(1));
+    m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
 
     // Add the asymptote to the curve
-    m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveR);
-    m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveL);
+    m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveR);
+    m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveL);
 
     // Edit the channel we're changing
-    m_BlueHistogramHandler->SetChannel(2);
-    }
-  /// GREEN band : draw the GREEN band histogram and the asymptote
-  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() >= 2)
+    m_RedHistogramHandler->SetChannel(0);
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::TabSetupPosition()
+  {
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    if (gVectorData->value() == guiTabHistogram)
     {
-    HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-    ghistogram->SetHistogramColor(m_Green);
-    ghistogram->SetLabelColor(m_Green);
-    ghistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(1));
-    m_GreenCurveWidgetGroup->AddCurve(ghistogram);
+      unsigned int nbBands =
+        imageLayer->GetRenderingFunction()->GetHistogramList()->Size();
+      // Avoid Little Window Opened when nbBands less than 3 or 2
+      if (nbBands >= 3)
+      {
+        m_BlueCurveWidgetGroup->show();
+      }
+      if (nbBands >= 2)
+      {
+        m_GreenCurveWidgetGroup->show();
+      }
+      if (nbBands >= 1)
+      {
+        m_RedCurveWidgetGroup->show();
+      }
 
-    //Add to the gHistogram group
-    gHistogram->add(m_GreenCurveWidgetGroup);
-    gHistogram->resizable(m_GreenCurveWidgetGroup);
-    m_GreenCurveWidgetGroup->resize(gHistogram->x() + width + blank, gHistogram->y() + blank,
-                                    width - blank, height - blank);
-
-    // Right Asymptote
-    m_GreenVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(2));
-    m_GreenVaCurveL->SetVerticalAsymptoteColor(m_Green);
-
-    // Left Asymptote
-    m_GreenVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(3));
-    m_GreenVaCurveR->SetVerticalAsymptoteColor(m_Green);
-
-    // Add the asymptote to the curve
-    m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
-    m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
-
-    // Edit the channel we're changing
-    m_GreenHistogramHandler->SetChannel(1);
+      guiContrastStretchSelection->value(m_ContrastStretchList[m_CurrentOpaqueImage]);
     }
-  /// RED band : draw the RED band histogram and the asymptote
-  HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-  if (m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size() == 1)
+    else if(gVectorData->value() == guiTabSetup)
     {
-    rhistogram->SetHistogramColor(m_Grey);
-    rhistogram->SetLabelColor(m_Grey);
-
-    //Add to the gHistogram group
-    gHistogram->add(m_RedCurveWidgetGroup);
-    gHistogram->resizable(m_RedCurveWidgetGroup);
-    m_RedCurveWidgetGroup->resize(gHistogram->x() + blank, gHistogram->y() + blank,
-                                  width - blank, height - blank);
+      m_BlueCurveWidgetGroup->hide();
+      m_GreenCurveWidgetGroup->hide();
+      m_RedCurveWidgetGroup->hide();
+      // Update the color composition window
+      this->UpdateViewerSetupWindow();
+      
     }
-  else
+    else
     {
-    rhistogram->SetHistogramColor(m_Red);
-    rhistogram->SetLabelColor(m_Red);
 
-    //Add to the gHistogram group
-    gHistogram->add(m_RedCurveWidgetGroup);
-    gHistogram->resizable(m_RedCurveWidgetGroup);
-    m_RedCurveWidgetGroup->resize(gHistogram->x() + blank, gHistogram->y() + blank,
-                                  width - blank, height - blank);
+      m_BlueCurveWidgetGroup->hide();
+      m_GreenCurveWidgetGroup->hide();
+      m_RedCurveWidgetGroup->hide();
+    }
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::SetContrastStretch()
+  {
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    ContrastStretchEnumType contrastStretch;
+
+    ChannelListType channels =
+      imageLayer->GetRenderingFunction()->GetChannelList();
+
+    RenderingFunctionType::Pointer renderer;
+
+    if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
+    {
+      renderer = StandardRenderingFunctionType::New();
+      contrastStretch = LINEAR_CONTRAST_STRETCH;
+    }
+    else if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+      renderer = GaussianRenderingFunctionType::New();
+      contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
+    }
+    else if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
+    {
+      renderer = SquareRootRenderingFunctionType::New();
+      contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
+    }
+    else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
+    {
+      renderer = NoStretchRenderingFunctionType::New();
+      contrastStretch = NO_CONTRAST_STRETCH;
     }
 
-  rhistogram->SetHistogram(m_InputImageLayer->GetHistogramList()->GetNthElement(0));
-  m_RedCurveWidgetGroup->AddCurve(rhistogram);
-  // Right Asymptote
-  m_RedVaCurveL->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(0));
-  m_RedVaCurveL->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
+    renderer->SetChannelList(channels);
+    imageLayer->SetRenderingFunction(renderer);
+    m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
+    m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
+    m_RenderingModel->Update();
 
-  // Left Asymptote
-  m_RedVaCurveR->SetAbcisse(m_StandardRenderingFunction->GetParameters().GetElement(1));
-  m_RedVaCurveR->SetVerticalAsymptoteColor(rhistogram->GetLabelColor());
+    UpdateQuantiles();
+  }
 
-  // Add the asymptote to the curve
-  m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveR);
-  m_RedCurveWidgetGroup->AddCurve(m_RedVaCurveL);
 
-  // Edit the channel we're changing
-  m_RedHistogramHandler->SetChannel(0);
-}
+  /**
+   *
+   */
+  void ViewerModule::UpdateQuantiles()
+  {
+    double lowerQuantile, upperQuantile;
+    bool isVisible;
 
-void ViewerModule::TabSetupPosition()
-{
-  unsigned int nbBands = m_InputImageLayer->GetRenderingFunction()->GetHistogramList()->Size();
-
-  if (strcmp(gVectorData->value()->label(), otbGetTextMacro("Histogram")))
+    if ((guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH) ||
+        (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH))
     {
+      guiGroupQuantiles->show();
+      isVisible = true;
+      lowerQuantile = bLowerQuantile->value() / 100.0;
+      upperQuantile = bUpperQuantile->value() / 100.0;
+    }
+    else
+    {
+      guiGroupQuantiles->hide();
+      isVisible = false;
+      lowerQuantile = 0.0;
+      upperQuantile = 0.0;
+    }
+
+    m_BlueVaCurveR->SetVisible(isVisible);
+    m_BlueVaCurveL->SetVisible(isVisible);
+    m_GreenVaCurveR->SetVisible(isVisible);
+    m_GreenVaCurveL->SetVisible(isVisible);
+    m_RedVaCurveR->SetVisible(isVisible);
+    m_RedVaCurveL->SetVisible(isVisible);
+
+    if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+      guiGroupStandardDeviation->show();
+    }
+    else
+    {
+      guiGroupStandardDeviation->hide();
+    }
+
+    UpdateQuantiles(lowerQuantile, upperQuantile);
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
+  {
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Cancel the automatic computation of the quantile
+    renderer->SetAutoMinMax(false);
+
+    // Get the rendering function extrema parameters
+    ParametersType params;
+    ParametersType paramsMinMax;
+    params = renderer->GetParameters();
+    if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+      paramsMinMax.SetSize(params.GetSize() - 2);
+      for (unsigned int i = 0 ; i < paramsMinMax.GetSize() ; i++)
+      {
+        paramsMinMax[i] = params[i + 2];
+      }
+    }
+    else
+    {
+      paramsMinMax = params;
+    }
+
+    // Update the parameters
+    for (unsigned int i = 0 ; i < paramsMinMax.Size() ; i = i + 2)
+    {
+      unsigned int n = i / 2;
+
+      double min =
+        renderer->GetHistogramList()->GetNthElement(n)->Quantile(0, lowerQuantile);
+      double max =
+        renderer->GetHistogramList()->GetNthElement(n)->Quantile(0, 1 - upperQuantile);
+      paramsMinMax.SetElement(i, min);
+      paramsMinMax.SetElement(i + 1, max);
+    }
+
+    // Update the layer
+    if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+      params[1] = guiSetStandardDeviation->value();
+      for (unsigned int i = 0 ; i < paramsMinMax.GetSize() ; i++)
+      {
+        params[i + 2] = paramsMinMax[i];
+      }
+    }
+    else
+    {
+      params = paramsMinMax;
+    }
+    renderer->SetParameters(params);
+    m_RenderingModel->Update();
+
+    // Redraw the histogram curves
+    UpdateTabHistogram();
+
+    // Added cause the asymptote doesn't update their position
     m_BlueCurveWidgetGroup->hide();
     m_GreenCurveWidgetGroup->hide();
     m_RedCurveWidgetGroup->hide();
-    }
-  else
-    {
-    // Avoid Little Window Opened when nbBands less than 3 or 2
-    if (nbBands >= 3) m_BlueCurveWidgetGroup->show();
-    if (nbBands >= 2) m_GreenCurveWidgetGroup->show();
-    if (nbBands >= 1) m_RedCurveWidgetGroup->show();
-    }
-}
 
-void ViewerModule::UpdateEnableScaling()
-{
-  bool enableScaling = bEnableScaling->value();
+    // Needed to show the curves
+    TabSetupPosition();
+  }
 
-  if (enableScaling)
-    {
-    // Use the Histogram & quantile settings  to scale intensity values
 
-    bLowerQuantile->activate();
-    bUpperQuantile->activate();
-    bLowerApply->activate();
-    bUpperApply->activate();
+  /**
+   *
+   */
+  void ViewerModule::UpdateStandardDeviation()
+  {
+    // Select the current rendering function
+    RenderingFunctionType::Pointer renderer =
+      m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
 
-    // Update both lower and upper quantile
-    double upperQuantile = bUpperQuantile->value() / 100.;
-    double lowerQuantile = bLowerQuantile->value() / 100.;
-    m_StandardRenderingFunction->SetAutoMinMax(false);
-
+    // Get the rendering function parameters and modify the standard deviation
     ParametersType params;
-    params = m_StandardRenderingFunction->GetParameters();
 
-    for (unsigned int i = 0; i < params.Size(); i = i + 2)
-      {
-      double min = m_StandardRenderingFunction->GetHistogramList()
-                   ->GetNthElement((unsigned int) (i / 2))->Quantile(0, lowerQuantile);
-      double max = m_StandardRenderingFunction->GetHistogramList()
-                   ->GetNthElement((unsigned int) (i / 2))->Quantile(0, 1 - upperQuantile);
+    params = renderer->GetParameters();
+    params[1] = guiSetStandardDeviation->value();
+    renderer->SetParameters(params);
+    m_RenderingModel->Update();
+  }
 
-      params.SetElement(i, min);
-      params.SetElement(i + 1, max);
-      }
 
-    this->UpdateIntensityScaling(params);
+  /**
+   *
+   */
+  void ViewerModule::UpdatePixelInformationWindow()
+  {
+    //Create buffer for the guiViewerInformation
+    Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
+    bPixelInfo->buffer(buffer);
 
-    }
-  else
+    // Set the index
+    ImageType::IndexType     index;
+    index[0] = static_cast<ImageType::IndexType::IndexValueType>(bX->value());
+    index[1] = static_cast<ImageType::IndexType::IndexValueType>(bY->value());
+
+    // Select the current image layer
+    ImageLayerType::Pointer imageLayer =
+      m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+
+    // Get the description
+    itk::OStringStream oss;
+    oss.str("");
+    bPixelInfo->buffer()->remove(0, bPixelInfo->buffer()->length());
+    oss << imageLayer->GetPixelDescription(index);
+    bPixelInfo->insert(oss.str().c_str());
+
+    // Center the view around the index selected
+    m_RenderingModel->SetScaledExtractRegionCenter(index);
+    m_RenderingModel->SetExtractRegionCenter(index);
+    m_RenderingModel->Update();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::ShowHide()
+  {
+    m_DisplayWindow->Show();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::Quit()
+  {
+    this->Hide();
+    // Once module is closed, it is no longer busy
+    this->BusyOff();
+  }
+
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateInformation()
+  {
+    // Select the current image
+    ImageType::Pointer image =
+      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
+
+    std::string imName = m_Label.c_str();
+    itk::OStringStream oss;
+    oss.str("");
+    oss << imName.substr(imName.find_last_of("/") + 1, imName.size()) << " ("
+        << image->GetNumberOfComponentsPerPixel();
+    if (image->GetNumberOfComponentsPerPixel() != 1)
     {
-    // Display raw intensity values. Dynamic is limited to [0..255]
-
-    bLowerQuantile->deactivate();
-    bUpperQuantile->deactivate();
-    bLowerApply->deactivate();
-    bUpperApply->deactivate();
-
-    m_StandardRenderingFunction->SetAutoMinMax(false);
-
-    ParametersType params = m_StandardRenderingFunction->GetParameters();
-    for (unsigned int i = 0; i < params.Size(); i = i + 2)
-      {
-      params.SetElement(i, 0);
-      params.SetElement(i + 1, 255);
-      }
-
-    this->UpdateIntensityScaling(params);
-
+      oss << " bands, ";
     }
-}
-
-/**
- *
- */
-void ViewerModule::UpdateUpperQuantile()
-{
-  double upperQuantile = bUpperQuantile->value() / 100.;
-
-  // Cancel the automatic computation of the quantile
-  m_StandardRenderingFunction->SetAutoMinMax(false);
-
-  ParametersType params;
-  params = m_StandardRenderingFunction->GetParameters();
-
-  for (unsigned int i = 1; i < params.Size(); i = i + 2)
+    else
     {
-    double max = m_StandardRenderingFunction->GetHistogramList()
-                 ->GetNthElement((unsigned int) (i / 2))->Quantile(0, 1 - upperQuantile);
-    params.SetElement(i, max);
+      oss << " band, ";
     }
 
-  this->UpdateIntensityScaling(params);
-}
+    oss << image->GetLargestPossibleRegion().GetSize() << ")";
 
-/**
- *
- */
-void ViewerModule::UpdateLowerQuantile()
-{
-  double lowerQuantile = bLowerQuantile->value() / 100.;
+    m_DisplayWindow->SetLabel(oss.str().c_str());
+    bSetupWindow->copy_label(oss.str().c_str());
+  }
 
-  // Cancel the automatic computation of the quantile
-  m_StandardRenderingFunction->SetAutoMinMax(false);
 
-  // Get the standardRenderingFunction extrema parameters
-  ParametersType params;
-  params = m_StandardRenderingFunction->GetParameters();
+  /**
+   *
+   */
+  void ViewerModule::Hide()
+  {
+    // Hide the main window
+    m_DisplayWindow->Hide();
+    // Hide the DEM Window
+    wDEM->hide();
+    // Hide the Setup Propreties Window
+    bSetupWindow->hide();
+  }
 
-  // Update the parameters
-  for (unsigned int i = 0; i < params.Size(); i = i + 2)
-    {
-    double min = m_StandardRenderingFunction->GetHistogramList()
-                 ->GetNthElement((unsigned int) (i / 2))->Quantile(0, lowerQuantile);
-    params.SetElement(i, min);
-    }
 
-  this->UpdateIntensityScaling(params);
-}
+  /**
+   * FIXME: code refactoring in progress...
+   */
+  void ViewerModule::RefreshTabData()
+  {
+  }
 
-void ViewerModule::UpdateIntensityScaling(ParametersType& renderingFunctionParams)
-{
-  // Update the layer
-  m_StandardRenderingFunction->SetParameters(renderingFunctionParams);
-  m_RenderingModel->Update();
 
-  // Redraw the histogram curves
-  this->UpdateTabHistogram();
+  /**
+   * FIXME: code refactoring in progress...
+   */
+  void ViewerModule::RefreshTabSetup()
+  {
+  }
 
-  // Added cause the asymptote doesn't update their position
-  m_BlueCurveWidgetGroup->hide();
-  m_GreenCurveWidgetGroup->hide();
-  m_RedCurveWidgetGroup->hide();
 
-  // Needed to show the curves
-  this->TabSetupPosition();
-}
+  /**
+   * FIXME: code refactoring in progress...
+   */
+  void ViewerModule::RefreshTabHistogram()
+  {
+  }
 
-/**
- *
- */
-void ViewerModule::UpdatePixelInformationWindow()
-{
-  //Create buffer for the guiViewerInformation
-  Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-  bPixelInfo->buffer(buffer);
 
-  // Set the index
-  ImageType::IndexType index;
-  index[0] = static_cast<ImageType::IndexType::IndexValueType>(bX->value());
-  index[1] = static_cast<ImageType::IndexType::IndexValueType>(bY->value());
-
-  // Get the description
-  itk::OStringStream oss;
-  oss.str("");
-  bPixelInfo->buffer()->remove(0, bPixelInfo->buffer()->length());
-  oss << m_InputImageLayer->GetPixelDescription(index);
-  bPixelInfo->insert(oss.str().c_str());
-
-  // Center the view around the index selected
-  m_RenderingModel->SetScaledExtractRegionCenter(index);
-  m_RenderingModel->SetExtractRegionCenter(index);
-  m_RenderingModel->Update();
-}
-
-/**
- *
- */
-void ViewerModule::ShowHide()
-{
-  m_DisplayWindow->Show();
-}
-
-/**
- *
- */
-void ViewerModule::Quit()
-{
-  this->Hide();
-  // Once module is closed, it is no longer busy
-  this->BusyOff();
-}
-
-/**
- *
- */
-void
-ViewerModule
-::UpdateInformation()
-{
-  std::string        imName = m_Label.c_str();
-  itk::OStringStream oss;
-  oss.str("");
-  oss << imName.substr(imName.find_last_of("/") + 1, imName.size());
-  oss << " (" << m_InputImage->GetNumberOfComponentsPerPixel();
-  if (m_InputImage->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
-  else oss << " band , ";
-
-  oss << m_InputImage->GetLargestPossibleRegion().GetSize() << ")";
-
-  m_DisplayWindow->SetLabel(oss.str().c_str());
-  bSetupWindow->copy_label(oss.str().c_str());
-}
-
-void
-ViewerModule
-::Hide()
-{
-  // Hide the main window
-  m_DisplayWindow->Hide();
-  // Hide the DEM Window
-  wDEM->hide();
-  // Hide the Setup Propreties Window
-  bSetupWindow->hide();
-}
+  /**
+   * FIXME: code refactoring in progress...
+   */
+  void ViewerModule::RefreshTabPixelDescription()
+  {
+  }
 
 } // End namespace otb
 
