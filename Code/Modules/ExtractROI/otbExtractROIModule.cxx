@@ -120,8 +120,9 @@ void ExtractROIModule::Run()
       {
       const itk::MetaDataDictionary& inputDict = image->GetMetaDataDictionary();
       m_Transform->SetInputDictionary(inputDict);
-      m_Transform->SetInputOrigin(image->GetOrigin());
-      m_Transform->SetInputSpacing(image->GetSpacing());
+      m_Transform->SetInputProjectionRef(image->GetProjectionRef());
+//      m_Transform->SetInputOrigin(image->GetOrigin());
+//      m_Transform->SetInputSpacing(image->GetSpacing());
       m_Transform->InstanciateTransform();
 
       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
@@ -162,8 +163,9 @@ void ExtractROIModule::Run()
       {
       const itk::MetaDataDictionary& inputDict = vectorImage->GetMetaDataDictionary();
       m_Transform->SetInputDictionary(inputDict);
-      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
-      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
+      m_Transform->SetInputProjectionRef(vectorImage->GetProjectionRef());
+//      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
+//      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
       m_Transform->InstanciateTransform();
 
       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
