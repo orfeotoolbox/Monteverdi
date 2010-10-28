@@ -110,6 +110,10 @@ public:
   void SelectNthChoice(unsigned int idx)
   {
     m_FlChoice->value(idx);
+    if (m_InputDataDescriptor.IsMultiple())
+      {
+      Self::AddInput(0, (void*) this);
+      }
   }
 
 protected:
