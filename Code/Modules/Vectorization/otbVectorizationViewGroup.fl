@@ -153,8 +153,8 @@ guiParametersGroup->set_visible();
 gTabsAutomatic->hide();
 gNextGeometry->activate();
 this->ButtonAutomaticCallbackOff();
-}}
-          xywh {510 725 200 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 177 resizable
+}} selected
+          xywh {510 725 200 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 177
         }
       }
     }
@@ -183,6 +183,6 @@ this->ButtonAutomaticCallbackOff();
   } {}
   Function {ButtonAutomaticCallbackOn()} {open return_type virtual
   } {}
-  Function {ButtonAutomaticCallbackOff()} {open selected return_type virtual
+  Function {ButtonAutomaticCallbackOff()} {open return_type virtual
   } {}
 } 

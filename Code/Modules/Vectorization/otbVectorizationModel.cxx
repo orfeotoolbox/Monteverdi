@@ -19,6 +19,7 @@
 #include "itkPreOrderTreeIterator.h"
 
 
+
 namespace otb
 {
 
@@ -419,8 +420,8 @@ VectorizationModel
   vectorDataProjection->SetInputProjectionRef(projectionRef);
   vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
   /*if(m_UseDEM==true)
-    {    
-    if (!m_DEMPath.empty()) 
+    {
+    if (!m_DEMPath.empty())
       {
       vectorDataProjection->SetDEMDirectory(m_DEMDirectory);
       }
@@ -529,11 +530,27 @@ VectorizationModel::GenerateLayers()
     {
     // First delete the previsous layers
     this->DeleteLayers();
+
+    //
+
     
     // Generate new layer (labeled image) for each algorithm
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(10,30,100));
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(3,50,150));
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(2,5,10));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(1, 0.05,0.0, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(2, 0.1,0.0, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(3, 0.05,0.005, 2, 12));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(4, 0.1,0.01, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(5, 0.15,0.001, 2, 15));
+    m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 40, 100));
+    m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 30, 5, 8, 7, 40, 100));
+    m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 25, 150));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(1,256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(2,256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(3,256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(4,256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(5,256));
     
     for(unsigned int i=0; i<m_LabelImageVector.size(); i++)
       m_LabelMapVector.push_back(ConvertLabelImageToLabelMap(m_LabelImageVector[i]));
@@ -549,39 +566,183 @@ VectorizationModel
   m_SelectedPolygonNode->SetPolygonExteriorRing(PolygonType::New());
 }
 
+/** 
+  * Standard Deviation of a gabor convoluted image 
+  */
+VectorizationModel::LabeledImagePointerType
+VectorizationModel
+::GenerateGaborClustering(unsigned int gaborRad, double phi, 
+                          double a, double b, double firstDir, int nbDir, 
+                          unsigned int varRad, int spatialRadius, double rangeRadius, 
+                          int minRegionSize)
+{
+  // Instanciate the objects
+  StdGaborFilterType::Pointer stdFilter = StdGaborFilterType::New();
+  MeanShiftVectorImageFilterType::Pointer msImageFilter = MeanShiftVectorImageFilterType::New();
+  
+  // 
+  stdFilter->SetInput(m_ExtractImageFilter->GetOutput());
+  stdFilter->SetA(a);
+  stdFilter->SetB(b);
+  stdFilter->SetVarianceRadius(varRad);
+  stdFilter->SetRadius(gaborRad);
+  stdFilter->SetNumberOfDirection(nbDir);
+  stdFilter->SetInitialDirection(firstDir);
+  stdFilter->SetPhi(phi/180.0*M_PI);
 
+  msImageFilter->SetInput(stdFilter->GetOutput());
+  msImageFilter->SetSpatialRadius(spatialRadius);
+  msImageFilter->SetRangeRadius(rangeRadius);
+  msImageFilter->SetMinimumRegionSize(minRegionSize);
+  msImageFilter->Update();
+
+  // Add the specific text for the segmentation method currently used
+  // in order to show it in the GUI
+  std::ostringstream os;
+  os <<"Gabor Clustering. GR : "<<gaborRad<<"; Phi : "<<phi<<"; A : "<<a<<"; B : "
+     <<b<<"; FirstDir : "<<firstDir<<"; NbDir : "<<nbDir
+     <<"; SR : "<<spatialRadius<<"; RR: "
+     <<rangeRadius<<"; MRS : "<<minRegionSize
+     <<std::endl;
+  m_AlgorithmsNameList.push_back(os.str());
+
+  return msImageFilter->GetLabeledClusteredOutput();
+}
+
+/**
+ * Mean shift labeled image
+ */
+VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::LabeledImagePointerType
-VectorizationModel
-::GenerateMeanshiftClustering(int SpatialRadius, 
-                              double RangeRadius, 
-                              int MinRegionSize)
+::GenerateMeanshiftClustering(int spatialRadius, 
+                              double rangeRadius, 
+                              int minRegionSize)
 {
   MeanShiftVectorImageFilterType::Pointer 
-    MSImageFilter = MeanShiftVectorImageFilterType::New();
+    msImageFilter = MeanShiftVectorImageFilterType::New();
   
-  MSImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
-  MSImageFilter->SetSpatialRadius(SpatialRadius);
-  MSImageFilter->SetRangeRadius(RangeRadius);
-  MSImageFilter->SetMinimumRegionSize(MinRegionSize);
-  MSImageFilter->Update();
-  
+  msImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
+  msImageFilter->SetSpatialRadius(spatialRadius);
+  msImageFilter->SetRangeRadius(rangeRadius);
+  msImageFilter->SetMinimumRegionSize(minRegionSize);
+  msImageFilter->Update();
+
   // Add the specific text for the segmentation method currently used
   // in order to show it in the GUI
   std::ostringstream os;
   os <<"MeanShift. Spatial Radius : "
-     <<SpatialRadius<<"; Range Radius : "
-     <<RangeRadius<<"; MinRegionSize : "
-     <<MinRegionSize<<std::endl;
+     <<spatialRadius<<"; Range Radius : "
+     <<rangeRadius<<"; MinRegionSize : "
+     <<minRegionSize<<std::endl;
   m_AlgorithmsNameList.push_back(os.str());
   
   std::cout<<"Model: Meanshift clustering: spatial radius = "
-           <<SpatialRadius<<", rangeradius = "
-           <<RangeRadius<<", minimum region size = "
-           <<MinRegionSize<<std::endl;
+           <<spatialRadius<<", rangeradius = "
+           <<rangeRadius<<", minimum region size = "
+           <<minRegionSize<<std::endl;
   
-  return MSImageFilter->GetLabeledClusteredOutput();
+  return msImageFilter->GetLabeledClusteredOutput();
 }
+
+
+VectorizationModel::LabeledImagePointerType
+VectorizationModel
+::GenerateGrowingRegionLayer(int channel, int numberofhistogramsbins)
+{
+  VectorImageToImageListFilterType::Pointer	image2List      = VectorImageToImageListFilterType::New();
+  OtsuThresholdImageFilterType::Pointer	        otsuFilter      = OtsuThresholdImageFilterType::New();
+  BinaryImageToLabelMapFilterType::Pointer      binary2LabelMap = BinaryImageToLabelMapFilterType::New();
+  IntensityChannelFilterType::Pointer           intensityFilter = IntensityChannelFilterType::New();
+  LabelMapToLabelImageType::Pointer             lm2li           = LabelMapToLabelImageType::New();
+  
+
+  if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel > 0 )
+    {
+    image2List->SetInput(m_ExtractImageFilter->GetOutput());
+    image2List->UpdateOutputInformation();
+    otsuFilter->SetInput(image2List->GetOutput()->GetNthElement(channel-1));
+    }
+  else
+    {
+    intensityFilter->SetInput(m_ExtractImageFilter->GetOutput());
+    otsuFilter->SetInput(intensityFilter->GetOutput());
+    }
+  
+  otsuFilter->SetNumberOfHistogramBins(numberofhistogramsbins);
+  otsuFilter->SetOutsideValue(0);
+  otsuFilter->SetInsideValue(255);
+  
+  binary2LabelMap->SetInput(otsuFilter->GetOutput());
+  binary2LabelMap->SetInputForegroundValue(255);
+
+  lm2li->SetInput(binary2LabelMap->GetOutput());
+  lm2li->Update();
+
+  std::ostringstream os;
+  os <<"Region Growing Otsu Filter channel "<<channel
+     <<" histogram number of Bins "<< numberofhistogramsbins <<std::endl;
+  m_AlgorithmsNameList.push_back(os.str());
+  std::cout<<"Region Growing Otsu Filter"<<std::endl;
+  return lm2li->GetOutput();
+}
+
+VectorizationModel::LabeledImagePointerType
+VectorizationModel
+::GenerateWatershedClustering(int channel, double level, 
+                              double threshold, double conductanceParameter, 
+                              int numberOfIterations )
+{
+  GradientAnisotropicDiffusionFilterType::Pointer diffusionFilter    = GradientAnisotropicDiffusionFilterType::New();
+  GradientMagnitudeFilterType::Pointer            gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
+  WatershedFilterType::Pointer                    watershedFilter    = WatershedFilterType::New();
+  VectorImageToImageListFilterType::Pointer	  image2List         = VectorImageToImageListFilterType::New();
+  IntensityChannelFilterType::Pointer             intensityFilter    = IntensityChannelFilterType::New();
+  
+  if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel>0)
+    {
+    image2List->SetInput(m_ExtractImageFilter->GetOutput());
+    image2List->UpdateOutputInformation();
+    diffusionFilter->SetInput(image2List->GetOutput()->GetNthElement(channel-1));
+    }
+  else
+    {
+    intensityFilter->SetInput(m_ExtractImageFilter->GetOutput());
+    diffusionFilter->SetInput(intensityFilter->GetOutput());
+    }
+  
+  diffusionFilter->SetNumberOfIterations(numberOfIterations);
+  diffusionFilter->SetConductanceParameter(conductanceParameter);
+  diffusionFilter->SetTimeStep(0.125);
+
+  gradientMagnitudeFilter->SetInput(diffusionFilter->GetOutput());
+  watershedFilter->SetInput(gradientMagnitudeFilter->GetOutput());
+  watershedFilter->SetLevel(level);
+  watershedFilter->SetThreshold(threshold);
+  
+  // the watershedFilter filter does not give the choice to choose the output image
+  // type, cast it into the labeled image type
+  typedef itk::CastImageFilter
+    <WatershedFilterType::OutputImageType,LabeledImageType>    CastFilterType;
+  
+  CastFilterType::Pointer castFilter = CastFilterType::New();
+  castFilter->SetInput(watershedFilter->GetOutput());
+  castFilter->Update();
+
+  std::ostringstream os;
+  os <<"Watershed. Intensity. level : "<<level<<"; Threshold : "<<threshold
+     <<"; Conductance Parameter : "<<conductanceParameter
+     <<"; Nb Iterations : "<<numberOfIterations<<std::endl;
+  
+  m_AlgorithmsNameList.push_back(os.str());
+  
+  std::cout<<"Model : Watershed segmentation. level : "<<level<< " Threshold : "<<threshold<<std::endl;
+  
+  return   castFilter->GetOutput();
+}
+
+
+
+
 
 VectorizationModel::LabelMapPointerType
 VectorizationModel

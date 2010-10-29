@@ -34,7 +34,6 @@
 // Vectorization
 #include "otbVectorDataModel.h"
 
-
 //Transform clustering result to polygon
 #include "itkLabelObject.h"
 #include "otbLabelObjectToPolygonFunctor.h"
@@ -45,7 +44,23 @@
 #include "itkLabelMap.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
+// Segmentation Mean shift
 #include "otbMeanShiftVectorImageFilter.h"
+
+// Gabor convolution 
+#include "otbImageToStdGaborConvolutionFilter.h"
+
+// Growing Region 
+#include "itkOtsuThresholdImageFilter.h"
+#include "itkBinaryImageToLabelMapFilter.h"
+#include "itkLabelMapToLabelImageFilter.h"
+#include "otbVectorImageToImageListFilter.h"
+
+// Watershed
+#include "itkGradientMagnitudeImageFilter.h"
+#include "itkGradientAnisotropicDiffusionImageFilter.h"
+#include "itkWatershedImageFilter.h"
+#include "itkCastImageFilter.h"
 
 // Extract ROI
 #include "itkExtractImageFilter.h"
@@ -119,21 +134,48 @@ public:
   typedef ExtractImageFilterType::Pointer         ExtractImageFilterPointerType;
   
   // Transform label image to label map
-  typedef itk::LabelObject<LabelType, 2>	  LabelObjectType; 
+  typedef itk::LabelObject<LabelType, 2>          LabelObjectType; 
   typedef itk::LabelMap<LabelObjectType>	  LabelMapType;
-  typedef LabelMapType::Pointer 		  LabelMapPointerType;
+  typedef      LabelMapType::Pointer 		  LabelMapPointerType;
   typedef itk::LabelImageToLabelMapFilter
   <LabeledImageType, LabelMapType>                LabelImageToLabelMapFilterType;
   
   typedef Functor::LabelObjectToPolygonFunctor<
     LabelObjectType, PolygonType>                 LabelObject2PolygonFunctorType;
 
-  //MeanShift
+  // MeanShift
   typedef MeanShiftVectorImageFilter<
     VectorImageType, 
     VectorImageType, 
     LabeledImageType>                             MeanShiftVectorImageFilterType;
 
+  // Image To Gabor convoluted image
+  typedef ImageToStdGaborConvolutionFilter
+  <VectorImageType,VectorImageType>               StdGaborFilterType;
+
+  // Growing region
+  typedef TypeManager::Floating_Point_Image       SingleImageType;
+  typedef otb::ImageList<SingleImageType>         ImageListType;
+  typedef otb::VectorImageToImageListFilter
+  <VectorImageType, ImageListType>    VectorImageToImageListFilterType;
+  typedef itk::OtsuThresholdImageFilter
+  <SingleImageType, SingleImageType>              OtsuThresholdImageFilterType;
+  typedef itk::BinaryImageToLabelMapFilter
+  <SingleImageType, LabelMapType>                 BinaryImageToLabelMapFilterType;
+  typedef VectorImageToIntensityImageFilter
+  <VectorImageType, SingleImageType>              IntensityChannelFilterType;
+  typedef itk::LabelMapToLabelImageFilter
+  <LabelMapType, LabeledImageType>                LabelMapToLabelImageType;
+
+
+  // Watershed 
+  typedef itk::GradientAnisotropicDiffusionImageFilter
+  <SingleImageType, SingleImageType>              GradientAnisotropicDiffusionFilterType;
+  typedef itk::GradientMagnitudeImageFilter
+  <SingleImageType, SingleImageType>              GradientMagnitudeFilterType;
+  typedef itk::WatershedImageFilter
+  <SingleImageType>                               WatershedFilterType;
+  
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
 
@@ -180,9 +222,25 @@ public:
   void LeftIndexClicked(const IndexType & index, RegionType ExtRegion);
 
   // Put the next methods protected 
-  LabeledImagePointerType GenerateMeanshiftClustering(int SpatialRadius, 
-                                                      double RangeRadius, 
-                                                      int MinRegionSize);
+  LabeledImagePointerType GenerateMeanshiftClustering(int spatialRadius, 
+                                                      double rangeRadius, 
+                                                      int minRegionSize);
+
+  LabeledImagePointerType GenerateGaborClustering(unsigned int gaborRad, double phi, 
+                                                  double a, double b, double firstDir, 
+                                                  int nbDir, unsigned int varRad, 
+                                                  int spatialRadius, double rangeRadius, 
+                                                  int minRegionSize);
+
+  LabeledImagePointerType GenerateGrowingRegionLayer(int channel, 
+                                                     int numberofhistogramsbins);
+  
+  LabeledImagePointerType GenerateWatershedClustering(int channel, 
+                                                      double level, 
+                                                      double threshold, 
+                                                      double conductanceParameter, 
+                                                      int numberOfIterations );
+    
   
   LabelMapPointerType ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage);
 
@@ -221,7 +279,6 @@ public:
 
   /** Receive notifications */
   virtual void Notify();
-
 protected:
   /** Constructor */
   VectorizationModel();
@@ -268,13 +325,10 @@ private:
   std::vector<LabelMapPointerType>      m_LabelMapVector;
 
   // Selected Polygon on full image right click
-  PolygonType::Pointer		        m_SelectedPolygon;
+  PolygonType::Pointer                  m_SelectedPolygon;
   DataNodeType::Pointer                 m_SelectedPolygonNode;
-
   int                                   m_ActualLayerNumber;
-
   VectorDataType::Pointer               m_SelectedVectorData;
-
   std::vector<std::string>              m_AlgorithmsNameList;
 };
 
