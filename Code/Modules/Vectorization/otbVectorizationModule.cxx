@@ -36,6 +36,7 @@ VectorizationModule::VectorizationModule()
 
   m_Controller->SetModel(m_Model);
   m_Controller->SetView(m_View);
+  m_Controller->ButtonAutomaticCallbackOff();
   m_View->SetController(m_Controller);
   m_View->SetModel(m_Model);
   m_View->SetWidgetController(m_Controller->GetWidgetController());

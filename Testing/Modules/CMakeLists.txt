@@ -377,6 +377,16 @@ ${INPUTDATA}/DEM/srtm_directory
 )
 
 
+
+#------------- Mean Shift Clustering Module Tests ---------------------------
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvPolarimetricSynthesisModuleTest ${Modules_TESTS4} otbPolarimetricSynthesisTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	0
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -429,6 +439,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbFineCorrelationModuleTest.cxx
   otbMeanShiftModuleTest.cxx
   otbVectorizationClassificationTest.cxx
+  otbPolarimetricSynthesisTest.cxx
 )
 
 

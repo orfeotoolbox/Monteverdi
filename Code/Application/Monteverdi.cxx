@@ -76,6 +76,8 @@
 #include "otbVectorizationModule.h"
 #include "otbSpectrumModule.h"
 #include "otbBandMathModule.h"
+#include "otbPolarimetricSynthesisModule.h"
+#include "otbDEMToImageGeneratorModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -175,6 +177,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
+  model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
+                                                 otbGetTextMacro("SAR/Polarimetric Synthesis"));
   
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
@@ -195,9 +199,8 @@ int main(int argc, char* argv[])
   
   model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", otbGetTextMacro("Learning/Object Labeling"));
   
-  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
-                                                     otbGetTextMacro("Geometry/GCP to sensor model"));
-
+  model->RegisterModule<otb::DEMToImageGeneratorModule>("DEM To Image Generator",
+                                                     otbGetTextMacro("Geometry/DEM To Image Generator"));
 
   // Launch Monteverdi
   view->InitWidgets();

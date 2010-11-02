@@ -59,8 +59,6 @@ SpectralSignatureCurve<TSpectralSignature>
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glColor4d(m_SpectralCurveColor[0], m_SpectralCurveColor[1], m_SpectralCurveColor[2], m_SpectralCurveColor[3]);
 
-  float posX, posY, posXNext, posYNext;
-
   glLineWidth(1.5);
   glEnable(GL_LINE_SMOOTH);
   glBegin(GL_LINE_STRIP);

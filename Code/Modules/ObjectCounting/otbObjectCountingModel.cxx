@@ -70,7 +70,6 @@ ObjectCountingModel::ObjectCountingModel()
   m_NuParameter           = 0.01;
 
   m_Kernel = new KernelType();
-  m_Kernel->Update();
 
   this->InitFilters();
 }

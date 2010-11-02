@@ -408,9 +408,14 @@ template <typename T> T * Module::GetInputData(const std::string& key, unsigned 
     }
 
   // If type is compatible, try to convert
-  T * resp = dynamic_cast<T*>(it->second.GetNthData(idx).GetDataObject());
-
-  return resp;
+  if(it->second.GetNumberOfData() > 0)
+    {
+      return dynamic_cast<T*>(it->second.GetNthData(idx).GetDataObject());
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 /** Retrieve the actual data description from the map */

@@ -84,6 +84,10 @@ public:
   virtual void UpdateAlphaCallback();  
   virtual void OKCallback();  
 
+  /** GUI callbacks*/
+  virtual void ButtonAutomaticCallbackOn();
+  virtual void ButtonAutomaticCallbackOff();
+  
   void Show();
   void RedrawWidgets();
   void SetModel(VectorizationModel* model);
@@ -117,6 +121,8 @@ private:
   /** Store the vector data representation color. */
   ColorType m_Color;
   bool m_IsHide;
+
+  VectorDataGlComponentType::Pointer m_SelectedPolygonGLComponent;
 };
 } //end namespace otb
 

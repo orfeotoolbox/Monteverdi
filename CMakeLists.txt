@@ -16,7 +16,7 @@ ADD_DEFINITIONS(
 #-----------------------------------------------------------------------------
 # Montevrdi version number.  An even minor number corresponds to releases.
 SET(Monteverdi_VERSION_MAJOR "1")
-SET(Monteverdi_VERSION_MINOR "4")
+SET(Monteverdi_VERSION_MINOR "5")
 SET(Monteverdi_VERSION_PATCH "0")
 
 
@@ -133,7 +133,7 @@ IF(NOT Monteverdi_INSTALL_BIN_DIR)
 ENDIF(NOT Monteverdi_INSTALL_BIN_DIR)
 
 IF(NOT Monteverdi_INSTALL_LIB_DIR)
-  SET(Monteverdi_INSTALL_LIB_DIR "/bin")
+  SET(Monteverdi_INSTALL_LIB_DIR "/lib/otb")
 ENDIF(NOT Monteverdi_INSTALL_LIB_DIR)
 
 IF(NOT Monteverdi_INSTALL_DATA_DIR)

@@ -467,7 +467,8 @@ OpticalCalibrationModule
   catch (itk::ExceptionObject& err)
     {
     MsgReporter::GetInstance()->SendError(
-      "The Input Image of the ReflectanceToSurfaceReflectanceFilter is not initialized.");
+      std::string("The Input Image of the ReflectanceToSurfaceReflectanceFilter is not initialized: ")
+	  + err.GetDescription() );
     }
 
   this->UpdateParamDisplay();
