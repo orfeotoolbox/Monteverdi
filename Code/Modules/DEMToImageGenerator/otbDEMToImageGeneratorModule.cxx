@@ -36,7 +36,7 @@ DEMToImageGeneratorModule::DEMToImageGeneratorModule()
   m_Model->RegisterListener(m_View);
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage","DEM image ",true,false);
+  this->AddInputDescriptor<InputImageType>("InputImage","reference image ",true,false);
 }
 
 /** Destructor */
@@ -58,36 +58,19 @@ void DEMToImageGeneratorModule::Run()
   if (inputImage.IsNotNull())
     {
     inputImage->UpdateOutputInformation();
-    std::cout << "DEMToImageGeneratorModule::Run()"
-        << inputImage->GetProjectionRef()
-        << std::endl;
-
-    m_Model->SetInputImage(inputImage);
-    m_Model->UpdateOutputParameters();
-    m_Model->SetUseInputImage(true);
-    m_View->Show();
-    /* hide a part of a menu */
+    m_Model->UpdateOutputParametersFromImage(inputImage);
     }
-  else
-    {
-    //itkExceptionMacro(<< "Input image is NULL");
-    /*show InputMenu()*/
-    m_Model->SetUseInputImage(false);
-    m_View->Show();
-    }
+  m_View->Show();
 }
 
 /** The Notify */
 void DEMToImageGeneratorModule::Notify()
 {
-  if (m_Model->GetOutputChanged())
-    {
     this->ClearOutputDescriptors();
     this->AddOutputDescriptor(m_Model->GetOutput(), "DEMImage", otbGetTextMacro("DEM image"));
     // Send an event to Monteverdi application
     //this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
     this->NotifyOutputsChange();
-    }
 }
 
 } // End namespace otb

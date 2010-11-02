@@ -29,19 +29,7 @@ namespace otb
  */
 DEMToImageGeneratorModel::DEMToImageGeneratorModel()
 {
-  m_OutputChanged         = false;
-  m_TransformChanged      = false;
-  m_TempTransformChanged  = false;
-  m_UseImageFileName      = false;
-  m_EstimateInputRPCModel = false;
-  m_SRTMDEM               = false;
-  m_UseInputImage         = false;
-
-  m_InputImage = InputImageType::New();
-
-  m_Transform        = TransformType::New();
-  m_InverseTransform = TransformType::New();
-
+  m_UseInputImage = false;
   m_DEMToImageGenerator = DEMToImageGeneratorType::New();
 }
 
@@ -57,9 +45,29 @@ DEMToImageGeneratorModel::
  * Compute the new Origin, Spacing & Size of the output
  */
 void DEMToImageGeneratorModel
-::UpdateOutputParameters()
+::UpdateOutputParametersFromImage(InputImageType::Pointer inputImage)
 {
-  m_DEMToImageGenerator->SetOutputParametersFromImage(m_InputImage.GetPointer());
+  m_DEMToImageGenerator->SetOutputParametersFromImage(inputImage.GetPointer());
+  m_DEMToImageGenerator->GetTransform()->InstanciateTransform();
+  this->SetUseInputImage(true);
+
+  InputImageType::IndexType index;
+  InputImageType::PointType point, geoPoint;
+  index.Fill(0);
+  inputImage->TransformIndexToPhysicalPoint(index, point);
+  // Transform to geo and to Choosen projection
+  m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
+
+  index[0]= inputImage->GetLargestPossibleRegion().GetSize()[0];
+  index[1]= inputImage->GetLargestPossibleRegion().GetSize()[1];
+
+  m_OutputSize[0] = index[0];
+  m_OutputSize[1] = index[1];
+
+  inputImage->TransformIndexToPhysicalPoint(index, point);
+  // Transform to geo and to Choosen projection
+  geoPoint = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
+  m_OutputSpacing = inputImage->GetSpacing();
 }
 
 /**
@@ -72,8 +80,7 @@ DEMToImageGeneratorModel
                 double spacingX,
                 double spacingY,
                 double originX,
-                double originY,
-                bool isUl)
+                double originY)
 {
   // Edit the size
   m_OutputSize[0] = sizeX;
@@ -84,21 +91,11 @@ DEMToImageGeneratorModel
   m_OutputSpacing[1] = spacingY;
 
   // Edit the origin in the cartographic projection
-  OutputPointType geoPoint, newCartoPoint;
+  OutputPointType geoPoint;
   geoPoint[0] = originX;
   geoPoint[1] = originY;
-  newCartoPoint = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+  m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 
-  if (isUl)
-    {
-    m_OutputOrigin[0] = newCartoPoint[0] - m_OutputSpacing[0] * m_OutputSize[0] / 2;
-    m_OutputOrigin[1] = newCartoPoint[1] - m_OutputSpacing[1] * m_OutputSize[1] / 2;
-    }
-  else
-    {
-    m_OutputOrigin[0] = newCartoPoint[0];
-    m_OutputOrigin[1] = newCartoPoint[1];
-    }
 }
 
 /**
@@ -108,29 +105,7 @@ void
 DEMToImageGeneratorModel
 ::ReprojectImage()
 {
-  m_Transform->InstanciateTransform();
-#if 0
-  if(this->GetUseInputImage() == true )
-    {
-      m_Resampler->SetInput(m_InputImage);
-      //resampler->SetDeformationFieldSpacing(gridSpacing);
-      m_Resampler->SetOutputOrigin(m_OutputOrigin);
-      m_Resampler->SetOutputSize(m_OutputSize);
-      m_Resampler->SetOutputSpacing(m_OutputSpacing);
-      m_Resampler->SetOutputProjectionRef(m_Transform->GetOutputProjectionRef());
-
-      // Default padding value
-      InputImageType::PixelType defaultValue;
-      itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
-                                                     m_InputImage->GetNumberOfComponentsPerPixel());
-      m_Resampler->SetEdgePaddingValue(defaultValue);
-
-      m_Output        = m_Resampler->GetOutput();
-    }
-  else
-    {
-    }
-#endif
+//  m_Transform->InstanciateTransform();
 //  m_DEMToImageGenerator->SetTransform(m_Transform);
   m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
   m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
@@ -138,15 +113,12 @@ DEMToImageGeneratorModel
   // Default padding value
   InputImageType::PixelType defaultValue;
   itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
-                                                 m_InputImage->GetNumberOfComponentsPerPixel());
+                          m_DEMToImageGenerator->GetOutput()->GetNumberOfComponentsPerPixel());
   m_DEMToImageGenerator->SetDefaultUnknownValue(defaultValue);
 
   m_Output        = m_DEMToImageGenerator->GetOutput();
 
-  m_OutputChanged = true;
   this->NotifyAll();
-  m_OutputChanged = false;
-
 }
 
 
