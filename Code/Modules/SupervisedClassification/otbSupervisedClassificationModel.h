@@ -36,6 +36,9 @@
 #include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataExtractROI.h"
+
 namespace otb {
 
 /** \class SupervisedClassificationModel
@@ -67,10 +70,18 @@ public:
   typedef VectorImage<PixelType, 2>  ImageType;
   typedef ImageType::Pointer         ImagePointerType;
   typedef Image<LabeledPixelType, 2> LabeledImageType;
+  typedef ImageType::IndexType       IndexType;
+  typedef ImageType::PointType       PointType;
   typedef LabeledImageType::Pointer  LabeledImagePointerType;
 
   typedef otb::VectorData<double, 2> VectorDataType;
   typedef VectorDataType::Pointer    VectorDataPointerType;
+
+   // Reprojection filter
+  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
+    VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;
 
   typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
   typedef ListSampleGeneratorType::Pointer                    ListSampleGeneratorPointerType;
@@ -185,6 +196,8 @@ private:
   virtual void Notify(ListenerBase * listener);
 
   void GenerateSamples();
+
+  void ReprojectVectorData();
 
   /** Output changed */
   bool m_OutputChanged;

@@ -85,8 +85,79 @@ SupervisedClassificationModel
   m_VectorROIs = vectorData;
   m_VectorROIs->Update();
 
+  this->ReprojectVectorData();
+
   this->UpdateVectorDataInformation();
   this->UpdateDescription();
+}
+
+void
+SupervisedClassificationModel
+::ReprojectVectorData()
+{
+ if(m_InputImage.IsNull())
+    {
+      itkExceptionMacro("Invalid input image.");
+    }
+  
+  // Vector data reprojection
+  VectorDataProjectionFilterType::Pointer vproj;
+  VectorDataExtractROIType::Pointer       vdextract;
+
+  // Extract The part of the VectorData that actually overlaps with
+  // the image extent
+  vdextract = VectorDataExtractROIType::New();
+  vdextract->SetInput(m_VectorROIs);
+
+  // Find the geographic region of interest
+
+  // Ge the index of the corner of the image
+  IndexType ul, ur, ll, lr;
+  PointType pul, pur, pll, plr;
+  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
+  ur = ul;
+  ll = ul;
+  lr = ul;
+  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
+  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
+  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
+  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
+
+  // Transform to physical point
+  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
+  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
+  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
+  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
+
+  // Build the cartographic region
+  RemoteSensingRegionType            rsRegion;
+  RemoteSensingRegionType::IndexType rsOrigin;
+  RemoteSensingRegionType::SizeType  rsSize;
+  rsOrigin[0] = min(pul[0], plr[0]);
+  rsOrigin[1] = min(pul[1], plr[1]);
+  rsSize[0] = vcl_abs(pul[0] - plr[0]);
+  rsSize[1] = vcl_abs(pul[1] - plr[1]);
+
+  rsRegion.SetOrigin(rsOrigin);
+  rsRegion.SetSize(rsSize);
+  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
+  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
+
+  // Set the cartographic region to the extract roi filter
+  vdextract->SetRegion(rsRegion);
+  
+  // Reproject VectorData in image projection
+  vproj = VectorDataProjectionFilterType::New();
+  vproj->SetInput(vdextract->GetOutput());
+  vproj->SetInputProjectionRef(m_VectorROIs->GetProjectionRef());
+  vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
+  vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
+  vproj->SetOutputOrigin(m_InputImage->GetOrigin());
+  vproj->SetOutputSpacing(m_InputImage->GetSpacing());
+  
+  vproj->Update();
+
+  m_VectorROIs = vproj->GetOutput();
 }
 
 void
