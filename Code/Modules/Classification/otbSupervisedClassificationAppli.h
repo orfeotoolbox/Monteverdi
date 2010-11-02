@@ -210,6 +210,7 @@ protected:
   //virtual void ExportVectorData();
   virtual void ExportAllVectorData();
   virtual void ImportROIsImage();
+  virtual void LoadSVMParams();
 
   /** Setup Callbacks */
 

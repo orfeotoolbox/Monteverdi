@@ -116,6 +116,27 @@ SupervisedClassificationAppli
 
   bTrainingSet->set();
   bValidationSet->clear();
+
+  this->LoadSVMParams();
+}
+
+void
+SupervisedClassificationAppli
+::LoadSVMParams()
+{
+   // SVM Setup
+  this->svmSVMType->value(m_Estimator->GetSVMType());
+  this->svmKernelType->value(m_Estimator->GetKernelType());
+  this->svmKernelDegree->value(m_Estimator->GetPolynomialKernelDegree());
+  this->svmGamma->value(m_Estimator->GetKernelGamma());
+  this->svmNu->value(m_Estimator->GetNu());
+  this->svmCoef0->value(m_Estimator->GetKernelCoef0());
+  this->svmC->value(m_Estimator->GetC());
+  this->svmEpsilon->value(m_Estimator->GetEpsilon());
+  this->svmP->value(m_Estimator->GetP());
+  this->svmCacheSize->value(m_Estimator->GetCacheSize());
+  this->svmPE->value(m_Estimator->GetDoProbabilityEstimates());
+  this->svmShrinking->value(m_Estimator->GetDoShrinking());
 }
 
 /**
@@ -621,18 +642,7 @@ void
 SupervisedClassificationAppli
 ::SVMSetup()
 {
-  this->svmSVMType->value(m_Estimator->GetSVMType());
-  this->svmKernelType->value(m_Estimator->GetKernelType());
-  this->svmKernelDegree->value(m_Estimator->GetPolynomialKernelDegree());
-  this->svmGamma->value(m_Estimator->GetKernelGamma());
-  this->svmNu->value(m_Estimator->GetNu());
-  this->svmCoef0->value(m_Estimator->GetKernelCoef0());
-  this->svmC->value(m_Estimator->GetC());
-  this->svmEpsilon->value(m_Estimator->GetEpsilon());
-  this->svmP->value(m_Estimator->GetP());
-  this->svmCacheSize->value(m_Estimator->GetCacheSize());
-  this->svmPE->value(m_Estimator->GetDoProbabilityEstimates());
-  this->svmShrinking->value(m_Estimator->GetDoShrinking());
+  this->LoadSVMParams();
   guiSVMSetup->show();
 }
 
