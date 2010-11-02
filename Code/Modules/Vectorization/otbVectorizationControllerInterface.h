@@ -28,14 +28,14 @@ class ITK_EXPORT VectorizationControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef VectorizationControllerInterface Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef VectorizationControllerInterface    Self;
+  typedef itk::Object                         Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
-  typedef VectorizationModel      ModelType;
-  typedef ModelType::DataNodeType DataNodeType;
-  typedef ModelType::PointType    PointType;
+  typedef VectorizationModel                   ModelType;
+  typedef ModelType::DataNodeType              DataNodeType;
+  typedef ModelType::PointType                 PointType;
   typedef DataNodeType::PolygonType::IndexType IndexType;
 
   /** Standard type macros */
@@ -59,6 +59,11 @@ public:
   virtual void ChangeNavigationMode() =0;
   virtual void OK() =0;
   virtual void FocusOnDataNode(const IndexType& index) =0;
+
+  /** From the GUI */
+  virtual void ButtonAutomaticCallbackOn()=0;
+  virtual void ButtonAutomaticCallbackOff()=0;
+  virtual void ExtractRegion()=0;
 
 protected:
   /** Constructor */

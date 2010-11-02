@@ -11,7 +11,7 @@ class SarCalibrationModuleGUI {open
   } {
     Fl_Window wMainWindow {
       label {Open dataset} open
-      xywh {581 250 360 130} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {354 230 360 130} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_Button bOK {
         label {Save/Quit}
@@ -28,7 +28,7 @@ class SarCalibrationModuleGUI {open
         xywh {10 20 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Check_Button bBrightness {
-          label Brightness selected
+          label Brightness
           tooltip {Beta Naught} xywh {275 27 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 deactivate
         }
         Fl_Check_Button bCalib {
@@ -42,27 +42,19 @@ class SarCalibrationModuleGUI {open
       } {
         Fl_Round_Button bLin {
           label Linear
-          callback {if(bLin->value()==0)
-{
-bdB->value(1);
-}
-else
+          callback {if(bLin->value()==1)
 {
 bdB->value(0);
 }}
-          xywh {149 73 20 15} down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          xywh {149 73 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
         Fl_Round_Button bdB {
           label {Log(dB)}
-          callback {if(bdB->value()==0)
-{
-bLin->value(1);
-}
-else
+          callback {if(bdB->value()==1)
 {
 bLin->value(0);
-}}
-          xywh {199 73 20 15} down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+}} selected
+          xywh {199 73 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
     }

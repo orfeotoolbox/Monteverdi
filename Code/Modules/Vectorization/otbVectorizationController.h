@@ -29,6 +29,9 @@
 #include "otbChangeScaleActionHandler.h"
 #include "otbVectorDataActionHandler.h"
 
+// Automatic Segmentation case widget handler
+#include "otbAutomaticSegmentationMouseClickHandler.h"
+
 namespace otb
 {
 class ITK_EXPORT VectorizationController
@@ -36,10 +39,10 @@ class ITK_EXPORT VectorizationController
 {
 public:
   /** Standard class typedefs */
-  typedef VectorizationController          Self;
-  typedef VectorizationControllerInterface Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef VectorizationController             Self;
+  typedef VectorizationControllerInterface    Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Standard type macros */
   itkTypeMacro(VectorizationController, Superclass);
@@ -47,30 +50,32 @@ public:
 
   /** Widgets controller and action handlers */
   typedef VectorizationView
-  ::ImageViewType ImageViewType;
+  ::ImageViewType                             ImageViewType;
   typedef VectorizationModel
-  ::VisualizationModelType VisualizationModelType;
+  ::VisualizationModelType                    VisualizationModelType;
   typedef VectorizationModel
-  ::VectorDataModelType VectorDataModelType;
+  ::VectorDataModelType                       VectorDataModelType;
   typedef VectorDataModelType::VectorDataType VectorDataType;
-  typedef VectorDataType::Pointer VectorDataPointer; 
+  typedef VectorDataType::Pointer             VectorDataPointer; 
   typedef VectorizationModel
-  ::VectorImageType VectorImageType;
+  ::VectorImageType                           VectorImageType;
 
   /** Handlers */
-  typedef ImageWidgetController WidgetControllerType;
+  typedef ImageWidgetController               WidgetControllerType;
   typedef WidgetResizingActionHandler
-  <VisualizationModelType, ImageViewType> ResizingHandlerType;
+  <VisualizationModelType, ImageViewType>     ResizingHandlerType;
   typedef ChangeExtractRegionActionHandler
-  <VisualizationModelType, ImageViewType> ChangeRegionHandlerType;
+  <VisualizationModelType, ImageViewType>     ChangeRegionHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-  <VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
+  <VisualizationModelType, ImageViewType>     ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler
-  <VisualizationModelType, ImageViewType> ChangeScaleHandlerType;
+  <VisualizationModelType, ImageViewType>     ChangeScaleHandlerType;
   typedef VectorDataActionHandler
   <VectorDataModelType,
-      ImageViewType>                        VectorDataActionHandlerType;
-
+      ImageViewType>                          VectorDataActionHandlerType;
+  typedef AutomaticSegmentationMouseClickHandler
+  <VectorizationModel, ImageViewType>         AutomaticMouseClickActionHandlerType;
+  
   void SetModel(ModelType* model);
 
   /** Set the pointer to the view */
@@ -102,12 +107,21 @@ public:
   virtual void AddVectorData(VectorDataPointer vData);
   virtual void OK();
   virtual void FocusOnDataNode(const IndexType& index);
- 
+  
+  /** From the GUI */
+  virtual void ButtonAutomaticCallbackOn();
+  virtual void ButtonAutomaticCallbackOff();
+  virtual void ExtractRegion();
+  
 protected:
   /** Constructor */
   VectorizationController();
   /** Destructor */
   virtual ~VectorizationController();
+
+  // Intialize the handlers common to the manual and the automatic
+  // selection mode
+  virtual void InitializeCommonActionHandler();
 
 private:
   VectorizationController(const Self&); //purposely not implemented
@@ -120,14 +134,15 @@ private:
   ModelType * m_Model;
 
   /** Widgets controller */
-  WidgetControllerType::Pointer m_WidgetController;
+  WidgetControllerType::Pointer                 m_WidgetController;
 
   /** Action handlers */
-  ResizingHandlerType::Pointer           m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer       m_ChangeRegionHandler;
-  ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
-  ChangeScaleHandlerType::Pointer        m_ChangeScaleHandler;
-  VectorDataActionHandlerType::Pointer   m_VectorDataActionHandler;
+  ResizingHandlerType::Pointer                  m_ResizingHandler;
+  ChangeRegionHandlerType::Pointer              m_ChangeRegionHandler;
+  ChangeScaledRegionHandlerType::Pointer        m_ChangeScaledRegionHandler;
+  ChangeScaleHandlerType::Pointer               m_ChangeScaleHandler;
+  VectorDataActionHandlerType::Pointer          m_VectorDataActionHandler;
+  AutomaticMouseClickActionHandlerType::Pointer m_AutomaticActionHandler;
 };
 } //end namespace otb
 

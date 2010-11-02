@@ -47,6 +47,9 @@ VectorizationView
   m_Color[0]=1.;
   m_Color[3]=1;
   
+
+  // 
+  m_SelectedPolygonGLComponent = VectorDataGlComponentType::New();
 }
   
 VectorizationView
@@ -56,7 +59,7 @@ VectorizationView
   m_ImageView->GetFullWidget()->ClearGlComponents();
   m_ImageView->GetScrollWidget()->ClearGlComponents();
   m_ImageView->GetZoomWidget()->ClearGlComponents();
-
+  
   gFull->remove(m_ImageView->GetFullWidget());
   gScroll->remove(m_ImageView->GetScrollWidget());
   gZoom->remove(m_ImageView->GetZoomWidget());
@@ -133,13 +136,12 @@ void
 VectorizationView
 ::InitColor()
 {
-  Fl::check();
-
+  Fl::check(); 
   m_Color =  m_VectorDataGlComponent->GetColor();
   
   fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
-	   static_cast<unsigned char>((double)(255) * m_Color[1]),
-	   static_cast<unsigned char>((double)(255) * m_Color[2]));
+           static_cast<unsigned char>((double)(255) * m_Color[1]), 
+           static_cast<unsigned char>((double)(255) * m_Color[2]));
   
   Fl::check();
   
@@ -161,6 +163,15 @@ VectorizationView
   m_ImageView->GetScrollWidget()->redraw();
   m_ImageView->GetZoomWidget()->redraw();
   m_VectorDataTreeBrowser->Update();
+ 
+  // Change the current used method for segmentation
+  if(bAutomaticMode->value())
+    {
+    Fl_Text_Buffer * currentAlgoBuffer = new Fl_Text_Buffer();
+    int currentAlgorithm = m_Model->GetActualLayerNumber();
+    TCurrentAlgo->buffer(currentAlgoBuffer);
+    TCurrentAlgo->insert(m_Model->GetAlgorithmsNameList()[currentAlgorithm].c_str());
+    }
 }
 
 void
@@ -186,12 +197,24 @@ VectorizationView
   m_ImageView->GetScrollWidget()->show();
   m_ImageView->GetZoomWidget()->show();
 
+  // Add the vector data tree browser to his group
   guiVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
   guiVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
   m_VectorDataTreeBrowser->resize(guiVectorDataTreeGroup->x(),
                                   guiVectorDataTreeGroup->y(),
                                   guiVectorDataTreeGroup->w(),
                                   guiVectorDataTreeGroup->h());
+
+  
+  // Add a gl component for the polygon candidate to be added to the
+  // final vector data
+  m_SelectedPolygonGLComponent->SetVectorData(m_Model->GetSelectedVectorData());
+  m_SelectedPolygonGLComponent->RenderPolygonBoundariesOnlyOn();
+  m_ImageView->GetFullWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+  m_ImageView->GetScrollWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+  m_ImageView->GetZoomWidget()->AddGlComponent(m_SelectedPolygonGLComponent);
+  
+  // Update the tree
   m_VectorDataTreeBrowser->show();
 }
 
@@ -208,6 +231,13 @@ VectorizationView
 void VectorizationView
 ::Notify()
 {
+  // If the extracted region has changed compute the new one and
+  // reprocess the segmentation
+  if(!m_Model->GetExtractRegionUpdated() && bAutomaticMode->value())
+    {
+    m_Controller->ExtractRegion();
+    }
+  
   // Nothing done for now
   this->RedrawWidgets();
 }
@@ -270,7 +300,6 @@ void VectorizationView
       m_ImageView->Update();
     }
 }
-  
 
  void VectorizationView
 ::UpdateAlphaCallback()
@@ -287,4 +316,50 @@ void VectorizationView
   wMainWindow->hide();
 }
 
+/**
+ * The automatic and manual vectorization mode is defined by the
+ * action used in the handler. The  method switches from manuel
+ * vectordata handler to automatic
+ */
+void
+VectorizationView::ButtonAutomaticCallbackOn()
+{
+  m_Controller->ButtonAutomaticCallbackOn();
+  
+  //guiVectorDataTreeGroup->remove(m_VectorDataTreeBrowser);
+  // Add the vectorDataTreeBrowser to the automatic tree
+  guiFinalVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+  guiFinalVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+  m_VectorDataTreeBrowser->resize(guiFinalVectorDataTreeGroup->x(),
+                                  guiFinalVectorDataTreeGroup->y(),
+                                  guiFinalVectorDataTreeGroup->w(),
+                                  guiFinalVectorDataTreeGroup->h());
+
+  // Show the automatic computed polygons
+  m_SelectedPolygonGLComponent->SetVisible(true);
+  
+  // Set the used segmentation method list
+  Fl_Text_Buffer* algoListBuffer = new Fl_Text_Buffer();
+  TAlgolist->buffer(algoListBuffer);
+  for (unsigned int i=0; i<m_Model->GetAlgorithmsNameList().size(); i++)
+    {
+    TAlgolist->insert(m_Model->GetAlgorithmsNameList()[i].c_str());
+    }
+}
+
+void
+VectorizationView::ButtonAutomaticCallbackOff()
+{
+  m_Controller->ButtonAutomaticCallbackOff();
+
+  guiVectorDataTreeGroup->add(m_VectorDataTreeBrowser);
+  guiVectorDataTreeGroup->resizable(m_VectorDataTreeBrowser);
+  m_VectorDataTreeBrowser->resize(guiVectorDataTreeGroup->x(),
+                                  guiVectorDataTreeGroup->y(),
+                                  guiVectorDataTreeGroup->w(),
+                                  guiVectorDataTreeGroup->h());
+
+  // Hide the automatic computed polygons
+  m_SelectedPolygonGLComponent->SetVisible(false);
+}
 } // end namespace

@@ -50,4 +50,21 @@ typedef enum {
   WRITE_OUTPUT
   } OutputMenuOutputEnumType;
 
+typedef enum {
+  PACKED_WINDOWS_LAYOUT,
+  SPLITTED_WINDOWS_LAYOUT
+} WindowsLayoutEnumType;
+
+typedef enum {
+  TRANSPARENCY_DISPLAY_MODE,
+  SLIDESHOW_DISPLAY_MODE
+} DisplayModeEnumType;
+
+typedef enum {
+  NO_CONTRAST_STRETCH,
+  LINEAR_CONTRAST_STRETCH,
+  GAUSSIAN_CONTRAST_STRETCH,
+  SQUARE_ROOT_CONTRAST_STRETCH
+} ContrastStretchEnumType;
+
 #endif

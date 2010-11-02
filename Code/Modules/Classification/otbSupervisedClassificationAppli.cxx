@@ -1718,7 +1718,16 @@ SupervisedClassificationAppli
   m_Estimator->SetInputSampleList(m_TrainingListSample);
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
   m_Estimator->SetNumberOfClasses(m_ClassesMap.size());
-  m_Estimator->Update();
+
+  try
+  {
+    m_Estimator->Update();
+  }
+  catch( itk::ExceptionObject& exc )
+  {
+    fl_alert(exc.what());
+    return;
+  }
 
   m_Model = m_Estimator->GetModel();
 

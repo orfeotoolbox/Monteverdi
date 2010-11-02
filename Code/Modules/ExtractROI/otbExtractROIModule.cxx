@@ -120,8 +120,9 @@ void ExtractROIModule::Run()
       {
       const itk::MetaDataDictionary& inputDict = image->GetMetaDataDictionary();
       m_Transform->SetInputDictionary(inputDict);
-      m_Transform->SetInputOrigin(image->GetOrigin());
-      m_Transform->SetInputSpacing(image->GetSpacing());
+      m_Transform->SetInputProjectionRef(image->GetProjectionRef());
+//      m_Transform->SetInputOrigin(image->GetOrigin());
+//      m_Transform->SetInputSpacing(image->GetSpacing());
       m_Transform->InstanciateTransform();
 
       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
@@ -144,6 +145,7 @@ void ExtractROIModule::Run()
       vLatitude2->deactivate();
       bUpdate->deactivate();
       bUpdate->deactivate();
+	  MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else if (image.IsNull() && !vectorImage.IsNull())
@@ -161,8 +163,9 @@ void ExtractROIModule::Run()
       {
       const itk::MetaDataDictionary& inputDict = vectorImage->GetMetaDataDictionary();
       m_Transform->SetInputDictionary(inputDict);
-      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
-      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
+      m_Transform->SetInputProjectionRef(vectorImage->GetProjectionRef());
+//      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
+//      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
       m_Transform->InstanciateTransform();
 
       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
@@ -183,6 +186,7 @@ void ExtractROIModule::Run()
       vLong2->deactivate();
       vLatitude2->deactivate();
       bUpdate->deactivate();
+	  MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else
