@@ -46,13 +46,6 @@ DEMToImageGeneratorView::DEMToImageGeneratorView()
   this->CreateGUI();
   m_InputImageUnknown = false;
   m_projectionRefBuffer = new Fl_Text_Buffer();
-
-#if 0
-  guiTRANSMERCATOREast->value("0");
-  guiTRANSMERCATORNorth->value("0");
-  guiTRANSMERCATORScale->value("1");
-  m_InputDEMToImageGeneratorUnknown = false;
-#endif
 }
 
 /**
@@ -61,6 +54,7 @@ DEMToImageGeneratorView::DEMToImageGeneratorView()
 void
 DEMToImageGeneratorView::Notify()
 {
+#if 0
   if (m_Controller->GetModel()->GetTransformChanged())
     {
     // Update the cartographic parameters
@@ -74,6 +68,7 @@ DEMToImageGeneratorView::Notify()
     m_InputImageUnknown = false;
     //this->UpdateUnavailableLongLat();
     }
+#endif
 }
 
 
@@ -140,9 +135,12 @@ DEMToImageGeneratorView
   unsigned int sizeY    = atoi(oSizeY->value());
   double       spacingX = atof(oSpacingX->value());
   double       spacingY = atof(oSpacingY->value());
-  bool         isUl    =  false;
 
-  m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY, isUl);
+  std::string srtmDirectory = std::string(iDEMPath->value());
+  m_Controller->SetDEMDirectoryPath(srtmDirectory.c_str());
+  m_Controller->GetModel()->GetDEMToImageGenerator()->GetTransform()->InstanciateTransform();
+
+  m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY);
 
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
@@ -184,27 +182,37 @@ DEMToImageGeneratorView
 ::UpdateOutputParameters()
 {
   itk::OStringStream oss;
+
+  IndexType index;
+  PointType point, geoPoint;
+
+  /** Origin value */
+  index.Fill(0);
+
   oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputSpacing()[0];
+  oss << m_Controller->GetModel()->GetOutputOrigin()[0];
+  oOriginX->value(oss.str().c_str());
+
+  oss.str("");
+  oss << m_Controller->GetModel()->GetOutputOrigin()[1];
+  oOriginY->value(oss.str().c_str());
+
+  oss.str("");
+  oss << m_Controller->GetModel()->GetOutputSpacing()[0];
   oSpacingX->value(oss.str().c_str());
+
   oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputSpacing()[1];
+  oss << m_Controller->GetModel()->GetOutputSpacing()[1];
   oSpacingY->value(oss.str().c_str());
 
   oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputSize()[0];
+  oss << m_Controller->GetModel()->GetOutputSize()[0];
   oSizeX->value(oss.str().c_str());
+
   oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputSize()[1];
+  oss << m_Controller->GetModel()->GetOutputSize()[1];
   oSizeY->value(oss.str().c_str());
 
-  oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputOrigin()[0];
-
-  oOriginX->value(oss.str().c_str());
-  oss.str("");
-  oss << m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputOrigin()[1];
-  oOriginY->value(oss.str().c_str());
 
   this->UpdateProjectionRef();
 }
@@ -214,7 +222,8 @@ void
 DEMToImageGeneratorView::UpdateProjectionRef()
 {
   std::string projectionRef;
-  projectionRef = std::string(m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputProjectionRef());
+  projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetInputProjectionRef();
+  std::cout << "DEMToImageGeneratorView::UpdateProjectionRef() : " << projectionRef << std::endl;
   m_projectionRefBuffer->text(projectionRef.c_str());
 
   oOutputProjectionRef->buffer(m_projectionRefBuffer);
@@ -243,26 +252,6 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
   iDEMPath->value(srtmDirectory);
   m_Controller->SetDEMDirectoryPath(srtmDirectory);
 }
-
-
-void
-DEMToImageGeneratorView::UpdateSRTMDEMUse()
-{
-  // Update following the choiceDEM radio button
-  if(iUseSRTMDEM->value())
-    {
-    iDEMPath->activate();
-    iBrowse->activate();
-    m_Controller->GetModel()->SetSRTMDEM(true);
-    }
-  else
-    {
-    m_Controller->GetModel()->SetSRTMDEM(false);
-    iDEMPath->deactivate();
-    iBrowse->deactivate();
-    }
-}
-
 
 
 } // End namespace otb

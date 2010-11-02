@@ -19,18 +19,18 @@
 #ifndef __otbDEMToImageGeneratorControllerInterface_h
 #define __otbDEMToImageGeneratorControllerInterface_h
 
-#include "otbImageViewerFullResolutionEventsInterface.h"
+#include "itkObject.h"
 #include "otbDEMToImageGeneratorModel.h"
 
 namespace otb
 {
 class ITK_EXPORT DEMToImageGeneratorControllerInterface
-  : public ImageViewerFullResolutionEventsInterface
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef DEMToImageGeneratorControllerInterface            Self;
-  typedef ImageViewerFullResolutionEventsInterface Superclass;
+  typedef DEMToImageGeneratorControllerInterface   Self;
+  typedef itk::Object                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
@@ -49,8 +49,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl)  = 0;
+                             double originY)  = 0;
   virtual void SetDEMDirectoryPath(const char* DEMDirectory) = 0;
 
 protected:

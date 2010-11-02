@@ -54,8 +54,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl);
+                             double originY);
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
 protected:
   /** Constructor */

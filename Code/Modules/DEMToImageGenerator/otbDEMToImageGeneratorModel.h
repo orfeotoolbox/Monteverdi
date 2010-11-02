@@ -63,29 +63,12 @@ public:
   typedef GenericRSResampleImageFilter<InputImageType, 
                                        InputImageType>       ResampleFilterType;
   
-  /** SetInputImage */
-  itkSetObjectMacro(InputImage, InputImageType);
-  itkGetObjectMacro(InputImage, InputImageType);
-
   /** Get Output Image */
   itkGetObjectMacro(Output, InputImageType);
 
-  /** Get the output changed flag */
-  itkGetMacro(OutputChanged, bool);
-
-  /** Get the transform changed flag */
-  itkGetMacro(TransformChanged, bool);
-
-  /** Get the transform changed flag */
-  itkGetMacro(TempTransformChanged, bool);
-
-  /** Set/Get SRTM DEM is available or not */
-  itkSetMacro(SRTMDEM,bool)
-  itkGetMacro(SRTMDEM,bool)
-
-  /** Set/Get Use Input Image or not */
-  itkSetMacro(UseInputImage,bool)
-  itkGetMacro(UseInputImage,bool)
+  /** SET/Get UseInputImage*/
+  itkSetMacro(UseInputImage, bool);
+  itkGetMacro(UseInputImage, bool);
 
   /** Get Spacing / Size & Origin*/
   itkGetMacro(OutputSize, SizeType);
@@ -95,9 +78,8 @@ public:
   /** Get DEMToImage generator object */
   itkGetObjectMacro(DEMToImageGenerator,DEMToImageGeneratorType);
 
-
   /** Compute the output region*/
-  virtual void UpdateOutputParameters();
+  virtual void UpdateOutputParametersFromImage(InputImageType::Pointer inputImage);
 
   /** Reproject the input image*/
   virtual void ReprojectImage();
@@ -108,8 +90,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl);
+                             double originY);
 
   
   /** Set the DEM Path to the DEMToImageGenerator */
@@ -129,28 +110,16 @@ private:
   /** Notify a given listener of changes */
   virtual void NotifyListener(ListenerBase * listener);
 
-  InputImageType::Pointer m_InputImage;
+  bool       m_UseInputImage;
 
   InputImageType::Pointer m_Output;
-  bool                    m_OutputChanged;
-  bool                    m_TransformChanged;
-  bool                    m_TempTransformChanged;
-  bool                    m_UseImageFileName;
-  bool                    m_EstimateInputRPCModel;
-  bool                    m_SRTMDEM;
-  bool                    m_UseInputImage;
 
   // Output Image Information
   SizeType    m_OutputSize;
   PointType   m_OutputOrigin;
   SpacingType m_OutputSpacing;
 
-  // Instance of the composite transform
-  TransformType::Pointer m_Transform;
-  TransformType::Pointer m_InverseTransform;
-
   // Outputs
-
   DEMToImageGeneratorType::Pointer m_DEMToImageGenerator;
 
 };

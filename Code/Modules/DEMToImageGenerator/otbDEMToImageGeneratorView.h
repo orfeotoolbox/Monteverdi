@@ -101,10 +101,6 @@ public:
 
 protected:
 
-  /** Activate and Desactivate the STRM DEM Input Group*/
-  virtual void UpdateSRTMDEMUse();
-
-
   /** Browser SRTM DEM */
   virtual void BrowseSRTMDEM();
 
