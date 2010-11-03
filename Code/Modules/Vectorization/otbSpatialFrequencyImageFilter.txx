@@ -95,8 +95,6 @@ template< class TInputImage, class TOutputImage>
 void
 SpatialFrequencyImageFilter< TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData() {
-  cout << "Entering BeforeThreadedGenerateData()" << endl;
-  cout << "Number of threads : " << this->GetNumberOfThreads() << endl;
 
   // Memory allocation
   int nbOfPixels = m_WindowSize * m_WindowSize;
@@ -114,10 +112,9 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
   }
 
   fftwf_print_plan(plan[0]);
-  cout << endl;
   double add, mul, fma;
   fftwf_flops(plan[0], &add, &mul, &fma);
-  cout << (add + mul + 2 * fma) << " flops : " << add << " adds, " << mul << " muls, " << fma << " fmas" << endl;
+  //cout << (add + mul + 2 * fma) << " flops : " << add << " adds, " << mul << " muls, " << fma << " fmas" << endl;
 }
 
 template< class TInputImage, class TOutputImage>
