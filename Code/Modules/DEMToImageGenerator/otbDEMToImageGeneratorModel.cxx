@@ -110,12 +110,6 @@ DEMToImageGeneratorModel
   m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
   m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
   m_DEMToImageGenerator->SetOutputSpacing(m_OutputSpacing);
-  // Default padding value
-  InputImageType::PixelType defaultValue;
-  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
-                          m_DEMToImageGenerator->GetOutput()->GetNumberOfComponentsPerPixel());
-  m_DEMToImageGenerator->SetDefaultUnknownValue(defaultValue);
-
   m_Output        = m_DEMToImageGenerator->GetOutput();
 
   this->NotifyAll();

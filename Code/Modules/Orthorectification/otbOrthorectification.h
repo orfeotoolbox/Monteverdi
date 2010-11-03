@@ -82,8 +82,7 @@ public:
 
   /** DEM computation typedefs */
   typedef DEMToImageGenerator<ImageType>          DEMToImageGeneratorType;
-  typedef DEMToImageGeneratorType::DEMHandlerType DEMHandlerType;
-  typedef DEMHandlerType::PointType               DEMPointType;
+  typedef DEMToImageGeneratorType::PointType      DEMPointType;
   typedef DEMToImageGeneratorType::SizeType       DEMSizeType;
   typedef DEMToImageGeneratorType::SpacingType    DEMSpacingType;
 
