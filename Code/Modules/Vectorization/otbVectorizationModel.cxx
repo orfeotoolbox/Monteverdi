@@ -546,6 +546,13 @@ VectorizationModel::GenerateLayers()
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 40, 100));
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 30, 5, 8, 7, 40, 100));
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 25, 150));
+#ifdef USE_FFTWF
+    m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(1, 32, 3));
+    m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(2, 32, 3));
+    m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(3, 32, 3));
+    m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(4, 32, 3));
+    m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(5, 32, 3));
+#endif
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(1,256));
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(2,256));
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(3,256));
@@ -740,6 +747,48 @@ VectorizationModel
   return   castFilter->GetOutput();
 }
 
+
+#ifdef USE_FFTWF
+VectorizationModel::LabeledImagePointerType
+VectorizationModel
+::GenerateFastFourierTransformLayer(int channel, 
+                                    int windowSize, 
+                                    unsigned short threshold)
+{
+  VectorImageToImageListFilterType::Pointer  image2List  = VectorImageToImageListFilterType::New();
+  SpatialFrequencyImageFilterType::Pointer   sfFilter    = SpatialFrequencyImageFilterType::New();
+  ScalarConnectedComponentFilterType::Pointer azimuthToLabelImage = ScalarConnectedComponentFilterType::New();
+  IntensityChannelFilterType::Pointer intensityFilter = IntensityChannelFilterType::New();
+  
+
+  // Choose the input following the channel selected
+  if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel>0)
+    {
+    image2List->SetInput(m_ExtractImageFilter->GetOutput());
+    image2List->UpdateOutputInformation();
+    sfFilter->SetInput(image2List->GetOutput()->GetNthElement(channel-1));
+    }
+  else
+    {
+    intensityFilter->SetInput(m_ExtractImageFilter->GetOutput());
+    sfFilter->SetInput(intensityFilter->GetOutput());
+    }
+
+  // Do the processing
+  sfFilter->SetWindowSize(windowSize);
+  
+  azimuthToLabelImage->SetInput(sfFilter->GetOutput());
+  azimuthToLabelImage->SetDistanceThreshold(threshold);
+  azimuthToLabelImage->Update();
+
+  // Add the stream related to this segmentation algorithm
+  std::ostringstream os;
+  os <<"FFT. Channel = "<<channel<<"; Window Size : "<<windowSize<<"; Threshold : "<<threshold<<std::endl;
+  m_AlgorithmsNameList.push_back(os.str());
+  
+  return azimuthToLabelImage->GetOutput();
+}
+#endif
 
 
 
