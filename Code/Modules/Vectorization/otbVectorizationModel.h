@@ -62,6 +62,10 @@
 #include "itkWatershedImageFilter.h"
 #include "itkCastImageFilter.h"
 
+// 
+#include "itkScalarConnectedComponentImageFilter.h"
+#include "otbSpatialFrequencyImageFilter.h"
+
 // Extract ROI
 #include "itkExtractImageFilter.h"
 
@@ -175,6 +179,13 @@ public:
   <SingleImageType, SingleImageType>              GradientMagnitudeFilterType;
   typedef itk::WatershedImageFilter
   <SingleImageType>                               WatershedFilterType;
+
+  //Fast Fourier Transform
+  typedef itk::ScalarConnectedComponentImageFilter
+  <LabeledImageType,LabeledImageType>	          ScalarConnectedComponentFilterType;
+  typedef SpatialFrequencyImageFilter
+  <SingleImageType,LabeledImageType>              SpatialFrequencyImageFilterType;
+  
   
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
@@ -240,7 +251,11 @@ public:
                                                       double threshold, 
                                                       double conductanceParameter, 
                                                       int numberOfIterations );
-    
+#ifdef USE_FFTWF
+  LabeledImagePointerType GenerateFastFourierTransformLayer(int channel, 
+                                                            int windowSize, 
+                                                            unsigned short threshold);
+#endif    
   
   LabelMapPointerType ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage);
 
