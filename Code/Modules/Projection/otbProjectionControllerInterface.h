@@ -19,18 +19,19 @@
 #ifndef __otbProjectionControllerInterface_h
 #define __otbProjectionControllerInterface_h
 
-#include "otbImageViewerFullResolutionEventsInterface.h"
+//#include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbProjectionModel.h"
+#include "itkObject.h"
 
 namespace otb
 {
 class ITK_EXPORT ProjectionControllerInterface
-  : public ImageViewerFullResolutionEventsInterface
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef ProjectionControllerInterface            Self;
-  typedef ImageViewerFullResolutionEventsInterface Superclass;
+  typedef itk::Object                              Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
