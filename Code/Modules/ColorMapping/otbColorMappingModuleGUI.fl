@@ -1,0 +1,99 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ColorMappingModuleGUI {open selected
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Color Map to Apply: } open
+      xywh {603 276 380 100} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Button bOK {
+        label {Save/Quit}
+        callback {this->OK();}
+        xywh {274 58 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button bCancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {174 58 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Group {} {open
+        xywh {10 20 343 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Choice iColorMap {
+          label {Color Map to Apply} open
+          xywh {160 23 151 20} down_box BORDER_BOX labelcolor 186
+        } {
+          MenuItem {} {
+            label Red
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Green
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Blue
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Grey
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Hot
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Cool
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Spring
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Summer
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Autumn
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Winter
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Copper
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label Jet
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label HSV
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label OverUnder
+            xywh {0 0 100 20}
+          }
+        }
+      }
+    }
+  }
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {}
+  Function {OK()} {open protected return_type {virtual void}
+  } {}
+  Function {~ColorMappingModuleGUI()} {open return_type virtual
+  } {}
+} 

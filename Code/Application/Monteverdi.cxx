@@ -78,6 +78,7 @@
 #include "otbBandMathModule.h"
 #include "otbPolarimetricSynthesisModule.h"
 #include "otbDEMToImageGeneratorModule.h"
+#include "otbColorMappingModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -155,7 +156,7 @@ int main(int argc, char* argv[])
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
   model->RegisterModule<otb::SpectrumModule>("SpectralViewer", otbGetTextMacro("Visualization/Spectral Viewer"));
-
+  model->RegisterModule<otb::ColorMappingModule>("ColorMapping", otbGetTextMacro("Visualization/Color Mapping"));
   
   /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",

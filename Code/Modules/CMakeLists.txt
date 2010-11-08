@@ -83,7 +83,10 @@ FOREACH(moduleDir ${moduleList})
 	ENDIF(SC_GUI_SRCS_TEMP)
 	
 	ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon OTBOBIA flu tinyXML) 
+	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters 
+	                      OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry 
+	                      OTBProjections OTBSARPolarimetry OTBMonteverdiCommon 
+	                      OTBOBIA flu tinyXML) 
 	ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
 	
 	# OTBGeospatialAnalysis is not generated if OTB_USE_PQXX
