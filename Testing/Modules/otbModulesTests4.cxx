@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbMeanShiftModuleTest);
   REGISTER_TEST(otbVectorizationClassification);
   REGISTER_TEST(otbPolarimetricSynthesisTest);
+  REGISTER_TEST(otbColorMappingModuleTest);
 }

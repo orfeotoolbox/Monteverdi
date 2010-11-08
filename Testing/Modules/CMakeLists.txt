@@ -409,6 +409,15 @@ ADD_TEST(moTvPolarimetricSynthesisModuleTest ${Modules_TESTS4} otbPolarimetricSy
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#------------- Color Mapping Module Tests ---------------------------
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvColorMappingModuleTest ${Modules_TESTS4} otbColorMappingModuleTest
+	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	1
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -463,6 +472,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbMeanShiftModuleTest.cxx
   otbVectorizationClassificationTest.cxx
   otbPolarimetricSynthesisTest.cxx
+  otbColorMappingModuleTest.cxx
 )
 
 
