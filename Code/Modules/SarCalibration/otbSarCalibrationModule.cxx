@@ -38,6 +38,10 @@ SarCalibrationModule
 {
   m_ComplexCalibFilter = CalibrationComplexFilterType::New();
   m_CalibFilter = CalibrationFilterType::New();
+
+  m_ComplexBrightnessFilter = BrightnessComplexFilterType::New();
+  m_BrightnessCalibFilter = BrightnessFilterType::New();
+
   m_Log10ImageFilter = LogImageFilterType::New();
   m_MultiplyByConstantImageFilter = MultiplyByConstantImageFilterType::New();
   m_MultiplyByConstantImageFilter->SetConstant(10.0);
@@ -121,31 +125,62 @@ void
 SarCalibrationModule
 ::ComplexCalibrationProcess()
 {
-  m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
-
-  // Output selection (linear or dB scale)
-  if (bLin->value() == 1 && bdB->value() == 0)
+  if (bCalib->value() == 1 && bBrightness->value() == 0)
     {
-    this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),
-                              "CalibOutputImage",
-                              otbGetTextMacro("Calibrated image"));
+    m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
+    // Output selection (linear or dB scale)
+    if (bLin->value() == 1 && bdB->value() == 0)
+      {
+      this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),
+                                "Radiometric Calibration Image",
+                                otbGetTextMacro("Calibrated image"));
+      }
+    else
+      if (bLin->value() == 0 && bdB->value() == 1)
+        {
+        m_AddConstantToImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
+        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
 
-    }
-  else if (bLin->value() == 0 && bdB->value() == 1)
-    {
-    m_AddConstantToImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
-    m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
 
-    m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-    this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                              "CalibOutputImage dB",
-                              otbGetTextMacro("Calibrated image dB"));
+        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                                  "Radiometric Calibration in dB",
+                                  otbGetTextMacro("Calibrated image dB"));
+        }
+      else
+        {
+        MsgReporter::GetInstance()->SendError("Invalid scale value ");
+        return;
+        }
     }
   else
     {
-    MsgReporter::GetInstance()->SendError("Invalid scale value ");
-    return;
+    m_ComplexBrightnessFilter->SetInput(m_ComplexInputImage);
+    // Output selection (linear or dB scale)
+    if (bLin->value() == 1 && bdB->value() == 0)
+      {
+      this->AddOutputDescriptor(m_ComplexBrightnessFilter->GetOutput(),
+                                "Brightness Image",
+                                otbGetTextMacro("Calibrated image"));
+
+      }
+    else
+      if (bLin->value() == 0 && bdB->value() == 1)
+        {
+        m_AddConstantToImageFilter->SetInput(m_ComplexBrightnessFilter->GetOutput());
+        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+
+        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
+
+        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                                  "Brightness Image in dB",
+                                  otbGetTextMacro("Calibrated image dB"));
+        }
+      else
+        {
+        MsgReporter::GetInstance()->SendError("Invalid scale value ");
+        return;
+        }
     }
 }
 
@@ -153,33 +188,65 @@ void
 SarCalibrationModule
 ::CalibrationProcess()
 {
-  m_CalibFilter->SetInput(m_InputImage);
 
-  // Output selection (linear or dB scale)
-  if (bLin->value() == 1 && bdB->value() == 0)
+  if (bCalib->value() == 1 && bBrightness->value() == 0)
     {
-    this->AddOutputDescriptor(m_CalibFilter->GetOutput(),
-                              "CalibOutputImage",
-                              otbGetTextMacro("Calibrated image"));
+    m_CalibFilter->SetInput(m_InputImage);
 
-    }
-  else if (bLin->value() == 0 && bdB->value() == 1)
-    {
+    // Output selection (linear or dB scale)
+    if (bLin->value() == 1 && bdB->value() == 0)
+      {
+      this->AddOutputDescriptor(m_CalibFilter->GetOutput(),
+                                "Radiometric Calibration Image",
+                                otbGetTextMacro("Calibrated image"));
 
+      }
+    else
+      if (bLin->value() == 0 && bdB->value() == 1)
+        {
+        m_AddConstantToImageFilter->SetInput(m_CalibFilter->GetOutput());
+        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
 
-    m_AddConstantToImageFilter->SetInput(m_CalibFilter->GetOutput());
-    m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
 
-    m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-    this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                              "CalibOutputImage dB",
-                              otbGetTextMacro("Calibrated image dB"));
+        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                                  "Radiometric Calibration in dB",
+                                  otbGetTextMacro("Calibrated image dB"));
+        }
+      else
+        {
+        MsgReporter::GetInstance()->SendError("Invalid scale value ");
+        return;
+        }
     }
   else
     {
-    MsgReporter::GetInstance()->SendError("Invalid scale value ");
-    return;
+    m_BrightnessCalibFilter->SetInput(m_InputImage);
+    // Output selection (linear or dB scale)
+    if (bLin->value() == 1 && bdB->value() == 0)
+      {
+      this->AddOutputDescriptor(m_BrightnessCalibFilter->GetOutput(),
+                                "Brightness Image",
+                                otbGetTextMacro("Calibrated image"));
+      }
+    else
+      if (bLin->value() == 0 && bdB->value() == 1)
+        {
+        m_AddConstantToImageFilter->SetInput(m_BrightnessCalibFilter->GetOutput());
+        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
+
+        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
+
+        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
+                                  "Brightness Image in dB",
+                                  otbGetTextMacro("Calibrated image dB"));
+        }
+      else
+        {
+        MsgReporter::GetInstance()->SendError("Invalid scale value ");
+        return;
+        }
+
     }
 }
 

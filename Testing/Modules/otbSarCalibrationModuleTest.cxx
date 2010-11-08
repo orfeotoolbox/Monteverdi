@@ -26,6 +26,7 @@
 
 int otbSarCalibrationModuleTest(int argc, char* argv[])
 {
+
   bool withComplex = false;
   if (atoi(argv[2]) == 1) withComplex = true;
 
@@ -59,6 +60,9 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
     wrapperIn = otb::DataObjectWrapper::Create(cplxReader->GetOutput());
     }
 
+  bool isCalib = atoi(argv[3]);
+  bool isLinear = atoi(argv[4]);
+
   module->AddInputByKey("InputImage", wrapperIn);
 
   module->Start();
@@ -67,13 +71,17 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
 
   if (pointModule->CheckMetadata())
     {
-    pointModule->bCalib->value();
+    pointModule->bCalib->value(isCalib);
+    pointModule->bBrightness->value(!isCalib);
+    pointModule->bLin->value(isLinear);
+    pointModule->bdB->value(!isLinear);
+
     Fl::check();
     pointModule->bOK->do_callback();
     Fl::check();
     }
 
   Fl::check();
-  //Fl::run();
+
   return EXIT_SUCCESS;
 }

@@ -11,7 +11,7 @@ class SarCalibrationModuleGUI {open
   } {
     Fl_Window wMainWindow {
       label {Open dataset} open
-      xywh {354 230 360 130} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+      xywh {503 250 360 130} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_Button bOK {
         label {Save/Quit}
@@ -25,15 +25,23 @@ class SarCalibrationModuleGUI {open
       }
       Fl_Group {} {
         label {Output file} open
-        xywh {10 20 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        xywh {10 20 343 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
-        Fl_Check_Button bBrightness {
-          label Brightness
-          tooltip {Beta Naught} xywh {275 27 20 15} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 deactivate
+        Fl_Round_Button bCalib {
+          label {Radiometric Calibration}
+          callback {if(bCalib->value()==1)
+{
+bBrightness->value(0);
+}}
+          xywh {168 25 15 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
-        Fl_Check_Button bCalib {
-          label Calibration
-          tooltip {Sigma Naught} xywh {120 27 20 15} down_box DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+        Fl_Round_Button bBrightness {
+          label Brightness
+          callback {if(bBrightness->value()==1)
+{
+bCalib->value(0);
+}} selected
+          xywh {275 25 15 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4
         }
       }
       Fl_Group {} {
@@ -53,7 +61,7 @@ bdB->value(0);
           callback {if(bdB->value()==1)
 {
 bLin->value(0);
-}} selected
+}}
           xywh {199 73 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }

@@ -238,15 +238,38 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- SarCalibration Module -------------
 ADD_TEST(moTvSarCalibrationModuleNoMDTest ${Modules_TESTS3} otbSarCalibrationModuleTest
-${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-0 # scalar image
+	${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+	0 # scalar image
+	0 # Radiometric Calib
+	0 # Linear
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvSarCalibrationModuleCplxTest ${Modules_TESTS3} otbSarCalibrationModuleTest
-${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-1 #complex
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear ${Modules_TESTS3} otbSarCalibrationModuleTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	1 # is complex
+	0 # Radiometric Calib
+	0 # Linear
 )
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB ${Modules_TESTS3} otbSarCalibrationModuleTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	1 # is complex
+	0 # Radiometric Calib
+	1 # Linear
+)
+ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessLinear ${Modules_TESTS3} otbSarCalibrationModuleTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	1 # is complex
+	1 # Radiometric Calib
+	0 # Linear
+)
+ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessDB ${Modules_TESTS3} otbSarCalibrationModuleTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	1 # is complex
+	1 # Radiometric Calib
+	1 # Linear
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(moTuSupervisedClassificationModelTest ${Modules_TESTS3}

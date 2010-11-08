@@ -23,9 +23,8 @@
 
 // include the OTB elements
 #include "otbImage.h"
-//#include "otbTerraSarBrightnessImageFilter.h"
-//#include "otbTerraSarCalibrationImageFilter.h"
 #include "otbSarRadiometricCalibrationToImageFilter.h"
+#include "otbSarBrightnessToImageFilter.h"
 #include "itkLog10ImageFilter.h"
 #include "itkMultiplyByConstantImageFilter.h"
 #include "itkAddConstantToImageFilter.h"
@@ -63,6 +62,10 @@ public:
   // SarCalibration Class typedefs
   typedef SarRadiometricCalibrationToImageFilter<ImageType, ImageType>               CalibrationFilterType;
   typedef SarRadiometricCalibrationToImageFilter<ComplexImageType,ImageType>         CalibrationComplexFilterType;
+
+  // SarBrightness Class typedefs
+  typedef SarBrightnessToImageFilter<ImageType, ImageType>               BrightnessFilterType;
+  typedef SarBrightnessToImageFilter<ComplexImageType,ImageType>         BrightnessComplexFilterType;
 
   typedef itk::Log10ImageFilter<ImageType, ImageType>                        LogImageFilterType;
   typedef itk::MultiplyByConstantImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  MultiplyByConstantImageFilterType;
@@ -122,6 +125,10 @@ private:
 
   CalibrationFilterType::Pointer        m_CalibFilter;
   CalibrationComplexFilterType::Pointer m_ComplexCalibFilter;
+
+  BrightnessFilterType::Pointer        m_BrightnessCalibFilter;
+  BrightnessComplexFilterType::Pointer m_ComplexBrightnessFilter;
+
 
   LogImageFilterType::Pointer m_Log10ImageFilter;
   MultiplyByConstantImageFilterType::Pointer m_MultiplyByConstantImageFilter;
