@@ -64,7 +64,9 @@
 
 // 
 #include "itkScalarConnectedComponentImageFilter.h"
+#ifdef USE_FFTWF
 #include "otbSpatialFrequencyImageFilter.h"
+#endif
 
 // Extract ROI
 #include "itkExtractImageFilter.h"
@@ -183,9 +185,10 @@ public:
   //Fast Fourier Transform
   typedef itk::ScalarConnectedComponentImageFilter
   <LabeledImageType,LabeledImageType>	          ScalarConnectedComponentFilterType;
+#ifdef USE_FFTWF
   typedef SpatialFrequencyImageFilter
   <SingleImageType,LabeledImageType>              SpatialFrequencyImageFilterType;
-  
+#endif
   
   /** Get the visualization model */
   itkGetObjectMacro(VisualizationModel, VisualizationModelType);
