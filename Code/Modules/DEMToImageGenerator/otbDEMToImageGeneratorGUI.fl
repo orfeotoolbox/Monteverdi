@@ -14,7 +14,7 @@ class DEMToImageGeneratorGUI {open
   } {
     Fl_Window guiMainWindow {
       label {DEM To Image Generator} open
-      xywh {727 232 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {858 47 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Tabs m_TabsMode {open
         xywh {5 14 420 442} box PLASTIC_DOWN_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
@@ -88,7 +88,7 @@ class DEMToImageGeneratorGUI {open
           xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Group oHillShading {open
-            xywh {26 88 370 96} box PLASTIC_DOWN_BOX
+            xywh {26 88 369 125} box PLASTIC_DOWN_BOX
           } {
             Fl_Value_Input oAzimutLight {
               label {Azimut Light angle (deg)}
@@ -98,6 +98,10 @@ class DEMToImageGeneratorGUI {open
               label {Elevation Light angle (deg) }
               tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1
             }
+            Fl_Value_Input oRadiusHillShading {
+              label {Hill shading radius (pixel)} selected
+              xywh {269 173 40 25} maximum 200 step 1 value 1
+            }
           }
           Fl_Check_Button oHillShadingAsOutput {
             label {Export Hill Shading}
@@ -105,8 +109,20 @@ class DEMToImageGeneratorGUI {open
             xywh {30 55 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
           }
           Fl_Check_Button oColorRelief {
-            label {Display Color Relief} selected
-            xywh {30 198 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+            label {Display Color Relief}
+            xywh {30 228 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+          }
+          Fl_Group oColorReliefGroup {open
+            xywh {27 254 369 86} box PLASTIC_DOWN_BOX
+          } {
+            Fl_Value_Input oMinValue {
+              label {Lower value }
+              xywh {271 269 40 25} maximum 100000 step 1
+            }
+            Fl_Value_Input oMaxValue {
+              label {Upper value }
+              xywh {271 302 40 25} maximum 10000 step 1 value 4000
+            }
           }
         }
       }

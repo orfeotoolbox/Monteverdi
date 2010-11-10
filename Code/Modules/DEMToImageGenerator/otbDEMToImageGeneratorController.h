@@ -57,7 +57,9 @@ public:
                              double originY);
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
 
-  virtual void ProcessHillShading(double azimutAngle,double elevationAngle);
+  virtual void ProcessHillShading(double azimutAngle,
+                                  double elevationAngle,
+                                  unsigned int radius);
 
   virtual void ProcessColorRelief();
 

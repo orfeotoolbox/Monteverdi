@@ -148,10 +148,11 @@ DEMToImageGeneratorView
   // Evaluate Hill shading in necessary
   if(oHillShadingAsOutput->value() == 1)
     {
-    double       azimutAngle = oAzimutLight->value();
+    double       azimutAngle    = oAzimutLight->value();
     double       elevationAngle = oElevationLight->value();
+    unsigned int radius         = oRadiusHillShading->value();
 
-    m_Controller->ProcessHillShading(azimutAngle,elevationAngle);
+    m_Controller->ProcessHillShading( azimutAngle, elevationAngle,radius);
 
     // Display the color relief
     if(oColorRelief->value() == 1)
@@ -270,22 +271,26 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
   m_Controller->SetDEMDirectoryPath(srtmDirectory);
 }
 
-void
-DEMToImageGeneratorView::UpdateHillShading()
+void DEMToImageGeneratorView::UpdateHillShading()
 {
-   if(oHillShadingAsOutput->value() == 1)
-     {
-       oAzimutLight->activate();
-       oElevationLight->activate();
-       oColorRelief->activate();
-     }
-   else
-     {
-     oAzimutLight->deactivate();
-     oElevationLight->deactivate();
-     oColorRelief->deactivate();
-     }
-
+  if (oHillShadingAsOutput->value() == 1)
+    {
+    oAzimutLight->activate();
+    oElevationLight->activate();
+    oColorRelief->activate();
+    oRadiusHillShading->activate();
+    oMinValue->activate();
+    oMaxValue->activate();
+    }
+  else
+    {
+    oAzimutLight->deactivate();
+    oElevationLight->deactivate();
+    oColorRelief->deactivate();
+    oRadiusHillShading->deactivate();
+    oMinValue->deactivate();
+    oMaxValue->deactivate();
+    }
 }
 
 

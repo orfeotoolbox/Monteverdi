@@ -130,7 +130,7 @@ DEMToImageGeneratorModel
  */
 void
 DEMToImageGeneratorModel
-::ProcessHillShading(double azimutAngle,double elevationAngle)
+::ProcessHillShading(double azimutAngle,double elevationAngle, unsigned int radius)
 {
   //Compute the resolution (Vincenty formula)
   double lon1 = m_OutputOrigin[0];
@@ -142,7 +142,7 @@ DEMToImageGeneratorModel
                       vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
   double res = d / vcl_sqrt(2.0);
 
-  m_HillShading->SetRadius(1);
+  m_HillShading->SetRadius(radius);
   m_HillShading->SetInput(m_DEMToImageGenerator->GetOutput());
   m_HillShading->SetAzimuthLight(azimutAngle);
   m_HillShading->SetElevationLight(azimutAngle);

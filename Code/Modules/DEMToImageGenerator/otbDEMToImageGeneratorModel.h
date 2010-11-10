@@ -136,7 +136,9 @@ public:
   void SetDEMDirectoryPath(const char* DEMDirectory);
   
   /** Evaluate the Hill Shading from the image (Angle are in degrees)*/
-  void ProcessHillShading(double azimutAngle,double elevationAngle);
+  void ProcessHillShading(double azimutAngle,
+                          double elevationAngle,
+                          unsigned int radius);
 
   /** Display Relief in color*/
   void ProcessColorRelief();

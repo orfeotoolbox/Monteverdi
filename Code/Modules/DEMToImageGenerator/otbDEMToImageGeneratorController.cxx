@@ -94,11 +94,11 @@ DEMToImageGeneratorController
  */
 void
 DEMToImageGeneratorController
-::ProcessHillShading(double azimutAngle,double elevationAngle)
+::ProcessHillShading(double azimutAngle,double elevationAngle,unsigned int radius)
 {
   try
     {
-    m_Model->ProcessHillShading( azimutAngle, elevationAngle);
+    m_Model->ProcessHillShading( azimutAngle, elevationAngle, radius);
     }
   catch (itk::ExceptionObject& err)
     {
