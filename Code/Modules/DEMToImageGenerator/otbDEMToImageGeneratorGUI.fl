@@ -21,21 +21,21 @@ class DEMToImageGeneratorGUI {open
       } {
         Fl_Group gDEM {
           label DEM open
-          xywh {20 35 405 421} color 7 selection_color 0 labelfont 2 labelsize 11
+          xywh {5 29 420 427} box PLASTIC_DOWN_BOX color 7 selection_color 0 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard iSRTMDEMPath {
             label {Input SRTM DEM} open
-            xywh {20 62 400 108} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 deactivate
+            xywh {5 62 415 108} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5 deactivate
           } {
             Fl_Group iUseSRTMDEMGroup {open
-              xywh {20 62 395 93}
+              xywh {5 62 410 93}
             } {
-              Fl_File_Input iDEMPath {selected
+              Fl_File_Input iDEMPath {
                 xywh {45 94 291 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 1
               }
               Fl_Button iBrowse {
                 label {...}
-                callback {this->BrowseSRTMDEM();} selected
+                callback {this->BrowseSRTMDEM();}
                 xywh {360 103 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
               }
             }
@@ -83,6 +83,32 @@ class DEMToImageGeneratorGUI {open
             }
           }
         }
+        Fl_Group {} {
+          label {Hill Shading} open
+          xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+        } {
+          Fl_Group oHillShading {open
+            xywh {26 88 370 96} box PLASTIC_DOWN_BOX
+          } {
+            Fl_Value_Input oAzimutLight {
+              label {Azimut Light angle (deg)}
+              tooltip {Azimut angle (in degre) between Earth and Sun} xywh {270 103 40 25} minimum -90 maximum 90 step 1
+            }
+            Fl_Value_Input oElevationLight {
+              label {Elevation Light angle (deg) }
+              tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1
+            }
+          }
+          Fl_Check_Button oHillShadingAsOutput {
+            label {Export Hill Shading}
+            callback {this->UpdateHillShading()}
+            xywh {30 55 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+          }
+          Fl_Check_Button oColorRelief {
+            label {Display Color Relief} selected
+            xywh {30 198 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+          }
+        }
       }
       Fl_Button {} {
         label {Save / Quit}
@@ -108,5 +134,7 @@ class DEMToImageGeneratorGUI {open
   Function {Cancel()} {open return_type {virtual void}
   } {}
   Function {UpdateSRTMDEMUse()} {open return_type {virtual void}
+  } {}
+  Function {UpdateHillShading()} {open return_type {virtual void}
   } {}
 } 

@@ -56,6 +56,12 @@ public:
                              double originX,
                              double originY);
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
+
+  virtual void ProcessHillShading(double azimutAngle,double elevationAngle);
+
+  virtual void ProcessColorRelief();
+
+
 protected:
   /** Constructor */
   DEMToImageGeneratorController();

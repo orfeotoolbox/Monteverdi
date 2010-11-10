@@ -89,6 +89,40 @@ DEMToImageGeneratorController
     }
 }
 
+/**
+ *
+ */
+void
+DEMToImageGeneratorController
+::ProcessHillShading(double azimutAngle,double elevationAngle)
+{
+  try
+    {
+    m_Model->ProcessHillShading( azimutAngle, elevationAngle);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
+/**
+ *
+ */
+void
+DEMToImageGeneratorController
+::ProcessColorRelief()
+{
+  try
+    {
+    m_Model->ProcessColorRelief( );
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
 
 
 } // end namespace otb

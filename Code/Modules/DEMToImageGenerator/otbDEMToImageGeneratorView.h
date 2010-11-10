@@ -115,6 +115,9 @@ protected:
 
   virtual void UpdateOutputParameters();
   
+  /** Callback for showing the Azimut and elevation angle  area*/
+  virtual void UpdateHillShading();
+
   /** Model Notificatin catcher*/
   virtual void Notify();
 

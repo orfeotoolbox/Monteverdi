@@ -20,6 +20,7 @@
 #include "otbMapProjection.h"
 #include <string>
 #include "otbImageFileReader.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -30,7 +31,18 @@ namespace otb
 DEMToImageGeneratorModel::DEMToImageGeneratorModel()
 {
   m_UseInputImage = false;
+  m_HillShadingProcess = false;
+  m_ReliefProcess = false;
+
   m_DEMToImageGenerator = DEMToImageGeneratorType::New();
+  m_HillShading = HillShadingFilterType::New();
+  m_ReliefColored = VectorImageType::New();
+
+  m_Colormapper = ColorMapFilterType::New();
+  m_Colormap = ColorMapFunctorType::New();
+  m_Multiply = MultiplyFilterType::New();
+  m_RGBtoVectorImageCastFilter = RGBtoVectorImageCastFilterType::New();
+
 }
 
 /**
@@ -105,13 +117,67 @@ void
 DEMToImageGeneratorModel
 ::ReprojectImage()
 {
-//  m_Transform->InstanciateTransform();
-//  m_DEMToImageGenerator->SetTransform(m_Transform);
   m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
   m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
   m_DEMToImageGenerator->SetOutputSpacing(m_OutputSpacing);
   m_Output        = m_DEMToImageGenerator->GetOutput();
 
+  this->NotifyAll();
+}
+
+/**
+ *
+ */
+void
+DEMToImageGeneratorModel
+::ProcessHillShading(double azimutAngle,double elevationAngle)
+{
+  //Compute the resolution (Vincenty formula)
+  double lon1 = m_OutputOrigin[0];
+  double lon2 = m_OutputOrigin[0] + m_OutputSize[0] * m_OutputSpacing[0];
+  double lat1 = m_OutputOrigin[1];
+  double lat2 = m_OutputOrigin[1] + m_OutputSize[1] * m_OutputSpacing[1];
+  double R = 6371; // km
+  double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
+                      vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
+  double res = d / vcl_sqrt(2.0);
+
+  m_HillShading->SetRadius(1);
+  m_HillShading->SetInput(m_DEMToImageGenerator->GetOutput());
+  m_HillShading->SetAzimuthLight(azimutAngle);
+  m_HillShading->SetElevationLight(azimutAngle);
+
+  m_HillShading->GetFunctor().SetXRes(res);
+  m_HillShading->GetFunctor().SetYRes(res);
+
+  m_HillShadingProcess = true;
+  this->NotifyAll();
+}
+
+
+
+/**
+ *
+ */
+void
+DEMToImageGeneratorModel
+::ProcessColorRelief()
+{
+
+  m_Colormapper->UseInputImageExtremaForScalingOff();
+
+  m_Colormap->SetMinimumInputValue(0);
+  m_Colormap->SetMaximumInputValue(4000);
+  m_Colormapper->SetColormap(m_Colormap);
+
+  m_Colormapper->SetInput(m_DEMToImageGenerator->GetOutput());
+
+  m_Multiply->SetInput1(m_Colormapper->GetOutput());
+  m_Multiply->SetInput2(m_HillShading->GetOutput());
+
+  m_RGBtoVectorImageCastFilter->SetInput( m_Multiply->GetOutput() );
+  m_ReliefColored = m_RGBtoVectorImageCastFilter->GetOutput();
+  m_ReliefProcess = true;
   this->NotifyAll();
 }
 

@@ -67,9 +67,21 @@ void DEMToImageGeneratorModule::Run()
 void DEMToImageGeneratorModule::Notify()
 {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutput(), "DEMImage", otbGetTextMacro("DEM image"));
-    // Send an event to Monteverdi application
-    //this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->AddOutputDescriptor(m_Model->GetOutput(), "DEM Image", otbGetTextMacro("DEM image"));
+    if(m_Model->GetHillShadingProcess())
+      {
+      this->AddOutputDescriptor(m_Model->GetHillShading()->GetOutput(),
+                                "Hill Shading Image",
+                                otbGetTextMacro("Hill Shading image"));
+      }
+
+    if(m_Model->GetReliefProcess())
+      {
+      this->AddOutputDescriptor(m_Model->GetReliefColored(),
+                                "Relief colored Image",
+                                otbGetTextMacro("Relief Colored Image"));
+      }
+
     this->NotifyOutputsChange();
 }
 

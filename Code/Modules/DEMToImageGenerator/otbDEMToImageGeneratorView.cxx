@@ -145,6 +145,23 @@ DEMToImageGeneratorView
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
 
+  // Evaluate Hill shading in necessary
+  if(oHillShadingAsOutput->value() == 1)
+    {
+    double       azimutAngle = oAzimutLight->value();
+    double       elevationAngle = oElevationLight->value();
+
+    m_Controller->ProcessHillShading(azimutAngle,elevationAngle);
+
+    // Display the color relief
+    if(oColorRelief->value() == 1)
+      {
+      m_Controller->ProcessColorRelief();
+      }
+
+    }
+
+
   // hide the GUI
   this->Hide();
 }
@@ -252,6 +269,26 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
   iDEMPath->value(srtmDirectory);
   m_Controller->SetDEMDirectoryPath(srtmDirectory);
 }
+
+void
+DEMToImageGeneratorView::UpdateHillShading()
+{
+   if(oHillShadingAsOutput->value() == 1)
+     {
+       oAzimutLight->activate();
+       oElevationLight->activate();
+       oColorRelief->activate();
+     }
+   else
+     {
+     oAzimutLight->deactivate();
+     oElevationLight->deactivate();
+     oColorRelief->deactivate();
+     }
+
+}
+
+
 
 
 } // End namespace otb

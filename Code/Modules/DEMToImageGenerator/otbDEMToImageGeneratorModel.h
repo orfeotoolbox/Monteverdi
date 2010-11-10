@@ -25,9 +25,18 @@
 
 #include "otbVectorImage.h"
 #include "otbGenericRSTransform.h"
+#include "itkRGBPixel.h"
 
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbDEMToImageGenerator.h"
+#include "otbHillShadingFilter.h"
+
+#include "itkScalarToRGBColormapImageFilter.h"
+#include "otbReliefColormapFunctor.h"
+#include "itkBinaryFunctorImageFilter.h"
+#include "otbRGBImageToVectorImageCastFilter.h"
+
+
 namespace otb
 {
 class ITK_EXPORT DEMToImageGeneratorModel
@@ -51,8 +60,14 @@ public:
   typedef InputImageType::SizeType                SizeType;
   typedef InputImageType::PointType               PointType;
   typedef InputImageType::SpacingType             SpacingType;
+  typedef InputImageType::PixelType               PixelType;
 
   typedef TypeManager::Floating_Point_Image       SingleImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+
+  typedef unsigned char                            UCharPixelType;
+  typedef itk::RGBPixel<UCharPixelType>            RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>              RGBImageType;
 
   /** typedef the Remote Sensing transform*/
   typedef GenericRSTransform<>           TransformType;
@@ -63,6 +78,16 @@ public:
   typedef GenericRSResampleImageFilter<InputImageType, 
                                        InputImageType>       ResampleFilterType;
   
+  typedef otb::HillShadingFilter<InputImageType, InputImageType> HillShadingFilterType;
+  typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, VectorImageType> RGBtoVectorImageCastFilterType;
+
+  typedef itk::ScalarToRGBColormapImageFilter<InputImageType, RGBImageType> ColorMapFilterType;
+  typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+  typedef itk::BinaryFunctorImageFilter<RGBImageType, SingleImageType, RGBImageType,
+                        otb::Functor::HillShadeModulationFunctor<RGBPixelType,
+                                      PixelType,
+                                      RGBPixelType> >   MultiplyFilterType;
+
   /** Get Output Image */
   itkGetObjectMacro(Output, InputImageType);
 
@@ -76,7 +101,22 @@ public:
   itkGetMacro(OutputSpacing, SpacingType);
 
   /** Get DEMToImage generator object */
-  itkGetObjectMacro(DEMToImageGenerator,DEMToImageGeneratorType);
+  itkGetObjectMacro(DEMToImageGenerator, DEMToImageGeneratorType);
+
+  /** Get HillShading object */
+  itkGetObjectMacro(HillShading, HillShadingFilterType);
+
+  /** Get ReliefColored object */
+  itkGetObjectMacro(ReliefColored, VectorImageType);
+
+  /** SET/Get HillShadingProcess*/
+  itkSetMacro(HillShadingProcess, bool);
+  itkGetMacro(HillShadingProcess, bool);
+
+
+  /** SET/Get HillShadingProcess*/
+  itkSetMacro(ReliefProcess, bool);
+  itkGetMacro(ReliefProcess, bool);
 
   /** Compute the output region*/
   virtual void UpdateOutputParametersFromImage(InputImageType::Pointer inputImage);
@@ -92,10 +132,15 @@ public:
                              double originX,
                              double originY);
 
-  
   /** Set the DEM Path to the DEMToImageGenerator */
   void SetDEMDirectoryPath(const char* DEMDirectory);
   
+  /** Evaluate the Hill Shading from the image (Angle are in degrees)*/
+  void ProcessHillShading(double azimutAngle,double elevationAngle);
+
+  /** Display Relief in color*/
+  void ProcessColorRelief();
+
 protected:
   /** Constructor */
   DEMToImageGeneratorModel();
@@ -111,7 +156,8 @@ private:
   virtual void NotifyListener(ListenerBase * listener);
 
   bool       m_UseInputImage;
-
+  bool       m_HillShadingProcess;
+  bool       m_ReliefProcess;
   InputImageType::Pointer m_Output;
 
   // Output Image Information
@@ -121,6 +167,13 @@ private:
 
   // Outputs
   DEMToImageGeneratorType::Pointer m_DEMToImageGenerator;
+  HillShadingFilterType::Pointer   m_HillShading;
+
+  VectorImageType::Pointer         m_ReliefColored;
+  ColorMapFilterType::Pointer m_Colormapper;
+  ColorMapFunctorType::Pointer m_Colormap;
+  MultiplyFilterType::Pointer m_Multiply;
+  RGBtoVectorImageCastFilterType::Pointer m_RGBtoVectorImageCastFilter;
 
 };
 }
