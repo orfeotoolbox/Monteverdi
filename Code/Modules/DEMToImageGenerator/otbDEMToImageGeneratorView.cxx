@@ -157,7 +157,9 @@ DEMToImageGeneratorView
     // Display the color relief
     if(oColorRelief->value() == 1)
       {
-      m_Controller->ProcessColorRelief();
+      double min = oMinValue->value();
+      double max = oMaxValue->value();
+      m_Controller->ProcessColorRelief(min, max);
       }
 
     }

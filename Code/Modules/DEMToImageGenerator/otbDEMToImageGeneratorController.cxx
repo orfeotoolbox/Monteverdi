@@ -111,11 +111,11 @@ DEMToImageGeneratorController
  */
 void
 DEMToImageGeneratorController
-::ProcessColorRelief()
+::ProcessColorRelief(double min, double max)
 {
   try
     {
-    m_Model->ProcessColorRelief( );
+    m_Model->ProcessColorRelief(min, max);
     }
   catch (itk::ExceptionObject& err)
     {

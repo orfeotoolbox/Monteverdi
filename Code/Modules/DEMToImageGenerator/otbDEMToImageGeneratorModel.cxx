@@ -161,13 +161,13 @@ DEMToImageGeneratorModel
  */
 void
 DEMToImageGeneratorModel
-::ProcessColorRelief()
+::ProcessColorRelief(double min, double max)
 {
 
   m_Colormapper->UseInputImageExtremaForScalingOff();
 
-  m_Colormap->SetMinimumInputValue(0);
-  m_Colormap->SetMaximumInputValue(4000);
+  m_Colormap->SetMinimumInputValue(min);
+  m_Colormap->SetMaximumInputValue(max);
   m_Colormapper->SetColormap(m_Colormap);
 
   m_Colormapper->SetInput(m_DEMToImageGenerator->GetOutput());
