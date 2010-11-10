@@ -141,6 +141,7 @@ ColorMappingModule
 
   m_RGBtoVectorImageCastFilter->SetInput( m_ColorMapFilter->GetOutput() );
 
+  this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_RGBtoVectorImageCastFilter->GetOutput(),
                             ColorMapName +" ColorMap Image",
                             otbGetTextMacro("RGB ColorMap Image") );
