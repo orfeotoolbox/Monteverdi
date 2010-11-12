@@ -5,30 +5,31 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ColorMappingModuleGUI {open selected
+class ColorMappingModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
       label {Color Map to Apply: } open
-      xywh {603 276 380 100} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {198 272 460 95} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Button bOK {
         label {Save/Quit}
-        callback {this->OK();}
-        xywh {274 58 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->OK();} selected
+        xywh {364 58 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
-        callback {this->Cancel();}
-        xywh {174 58 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->Cancel();} selected
+        xywh {264 58 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Group {} {open
-        xywh {10 20 343 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      Fl_Group {} {open selected
+        xywh {5 20 450 35} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Choice iColorMap {
-          label {Color Map to Apply} open
-          xywh {160 23 151 20} down_box BORDER_BOX labelcolor 186
+          label {Color Map to Apply}
+          callback {this->UpdateColorBar();} open selected
+          xywh {144 28 151 20} down_box BORDER_BOX labelcolor 186
         } {
           MenuItem {} {
             label Red
@@ -88,6 +89,9 @@ class ColorMappingModuleGUI {open selected
           }
         }
       }
+      Fl_Group oColorBar {open
+        xywh {310 28 130 20}
+      } {}
     }
   }
   Function {Cancel()} {open protected return_type {virtual void}
@@ -95,5 +99,7 @@ class ColorMappingModuleGUI {open selected
   Function {OK()} {open protected return_type {virtual void}
   } {}
   Function {~ColorMappingModuleGUI()} {open return_type virtual
+  } {}
+  Function {UpdateColorBar()} {open return_type {virtual void}
   } {}
 } 

@@ -27,6 +27,8 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbRGBImageToVectorImageCastFilter.h"
 
+#include "otbColorBarWidget.h"
+
 namespace otb
 {
 /** \class ColorMappingModule
@@ -64,6 +66,7 @@ public:
   typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>  ColorMapFilterType;
   typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType> RGBtoVectorImageCastFilterType;
 
+  typedef otb::ColorBarWidget ColorBarWidgetType;
 
 protected:
   /** Constructor */
@@ -97,6 +100,9 @@ protected:
   /** ColorMapping Methods*/
   virtual void ColorMappingProcess();
 
+  /** Update color bar*/
+  virtual void UpdateColorBar();
+
 private:
   ColorMappingModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -108,7 +114,8 @@ private:
   ColorMapFilterType::Pointer              m_ColorMapFilter;
   RGBtoVectorImageCastFilterType::Pointer  m_RGBtoVectorImageCastFilter;
 
-
+  ColorBarWidgetType::Pointer              m_ColorBarWidget;
+  std::string                              m_ColormapName;
 };
 
 } // End namespace otb

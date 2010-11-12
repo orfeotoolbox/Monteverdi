@@ -19,7 +19,6 @@
 #define __otbColorMappingModule_cxx
 
 #include "otbColorMappingModule.h"
-#include "itkScalarToRGBColormapImageFilter.h"
 #include "otbMsgReporter.h"
 
 namespace otb
@@ -33,12 +32,12 @@ ColorMappingModule
 {
   m_ColorMapFilter = ColorMapFilterType::New();
   m_RGBtoVectorImageCastFilter = RGBtoVectorImageCastFilterType::New();
+  m_ColorBarWidget = ColorBarWidgetType::New();
+  m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
 
   // Describe inputs
   this->AddInputDescriptor<SingleImageType>("InputImage", otbGetTextMacro("Scalar image to process"));
 
-  // Build the GUI
-  this->BuildGUI();
 }
 
 /**
@@ -62,6 +61,17 @@ ColorMappingModule
       itkExceptionMacro(<< "Input image is NULL");
     }
 
+
+  // Build the GUI
+  this->BuildGUI();
+  m_ColorBarWidget->Init(oColorBar->x(),oColorBar->y(),
+                   oColorBar->w(),oColorBar->h(),"Color Bar");
+  oColorBar->add(m_ColorBarWidget);
+  oColorBar->box(FL_NO_BOX);
+  m_ColorBarWidget->show();
+  m_ColorBarWidget->redraw();
+
+  this->UpdateColorBar();
   // open the GUI
   this->Show();
   this->BusyOff();
@@ -76,75 +86,90 @@ ColorMappingModule
 
   m_ColorMapFilter->SetInput( m_InputImage );
 
+  m_RGBtoVectorImageCastFilter->SetInput( m_ColorMapFilter->GetOutput() );
+
+  this->ClearOutputDescriptors();
+  this->AddOutputDescriptor(m_RGBtoVectorImageCastFilter->GetOutput(),
+                            m_ColormapName +" ColorMap Image",
+                            otbGetTextMacro("RGB ColorMap Image") );
+}
+
+
+/** Cancel */
+void
+ColorMappingModule
+::UpdateColorBar()
+{
+  ColorMapFilterType::ColormapEnumType     colormapEnum;
+
   switch (iColorMap->value())
   {
     case 0 :
-      ColorMapName = "Red";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Red );
+      m_ColormapName = "Red";
+      colormapEnum = ColorMapFilterType::Red;
       break;
     case 1 :
-      ColorMapName = "Green";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Green );
+      m_ColormapName = "Green";
+      colormapEnum = ColorMapFilterType::Green;
       break;
     case 2 :
-      ColorMapName = "Blue";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Blue );
+      m_ColormapName = "Blue";
+      colormapEnum = ColorMapFilterType::Blue;
       break;
     case 3 :
-      ColorMapName = "Grey";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Grey );
+      m_ColormapName = "Grey";
+      colormapEnum = ColorMapFilterType::Grey;
       break;
     case 4 :
-      ColorMapName = "Hot";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Hot );
+      m_ColormapName = "Hot";
+      colormapEnum = ColorMapFilterType::Hot;
       break;
     case 5 :
-      ColorMapName = "Cool";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Cool );
+      m_ColormapName = "Cool";
+      colormapEnum = ColorMapFilterType::Cool;
       break;
     case 6 :
-      ColorMapName = "Spring";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Spring );
+      m_ColormapName = "Spring";
+      colormapEnum = ColorMapFilterType::Spring;
       break;
     case 7 :
-      ColorMapName = "Summer";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Summer );
+      m_ColormapName = "Summer";
+      colormapEnum = ColorMapFilterType::Summer;
       break;
     case 8 :
-      ColorMapName = "Autumn";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Autumn );
+      m_ColormapName = "Autumn";
+      colormapEnum = ColorMapFilterType::Autumn;
       break;
     case 9 :
-      ColorMapName = "Winter";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Winter );
+      m_ColormapName = "Winter";
+      colormapEnum = ColorMapFilterType::Winter;
       break;
     case 10 :
-      ColorMapName = "Copper";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Copper );
+      m_ColormapName = "Copper";
+      colormapEnum = ColorMapFilterType::Copper;
       break;
     case 11 :
-      ColorMapName = "Jet";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::Jet );
+      m_ColormapName = "Jet";
+      colormapEnum = ColorMapFilterType::Jet;
       break;
     case 12 :
-      ColorMapName = "HSV";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::HSV );
+      m_ColormapName = "HSV";
+      colormapEnum = ColorMapFilterType::HSV;
       break;
     case 13 :
-      ColorMapName = "OverUnder";
-      m_ColorMapFilter->SetColormap( ColorMapFilterType::OverUnder );
+      m_ColormapName = "OverUnder";
+      colormapEnum = ColorMapFilterType::OverUnder;
       break;
     default:
       itkExceptionMacro(<< "Colormap not implemented");
       break;
   }
 
-  m_RGBtoVectorImageCastFilter->SetInput( m_ColorMapFilter->GetOutput() );
+  m_ColorMapFilter->SetColormap(colormapEnum);
+  m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
+  m_ColorBarWidget->redraw();
 
-  this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_RGBtoVectorImageCastFilter->GetOutput(),
-                            ColorMapName +" ColorMap Image",
-                            otbGetTextMacro("RGB ColorMap Image") );
+
 }
 
 
