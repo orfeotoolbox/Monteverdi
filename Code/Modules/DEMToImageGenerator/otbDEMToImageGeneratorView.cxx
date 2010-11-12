@@ -118,6 +118,15 @@ void
 DEMToImageGeneratorView
 ::ShowGUI()
 {
+  m_ColorBarWidget = ColorBarWidgetType::New();
+  m_ColorBarWidget->Init(oColorBar->x(),oColorBar->y(),
+                   oColorBar->w(),oColorBar->h(),"Color Bar");
+  oColorBar->add(m_ColorBarWidget);
+  oColorBar->box(FL_NO_BOX);
+  m_ColorBarWidget->SetColormap(m_Controller->GetModel()->GetColormap());
+  m_ColorBarWidget->show();
+  m_ColorBarWidget->redraw();
+
   guiMainWindow->show();
 }
 

@@ -18,17 +18,11 @@
 #ifndef __otbColorBarWidget_h
 #define __otbColorBarWidget_h
 
-#include <FL/gl.h>
-#include <FL/Fl.H>
-#include "FL/Fl_Gl_Window.H"
 #include "FL/Fl_Window.H"
-#include <FL/glut.H>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 
-
-// include the OTB elements
 #include "otbModule.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -95,7 +89,7 @@ private:
   void operator=(const Self&); // purposely not implemented
 
   ColormapType::Pointer     m_Colormap;
-  SingleImageType::Pointer m_ScalarImage;
+  SingleImageType::Pointer  m_ScalarImage;
 
 };
 } // end namespace otb

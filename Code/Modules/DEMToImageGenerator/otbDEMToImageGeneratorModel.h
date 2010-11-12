@@ -113,6 +113,8 @@ public:
   itkSetMacro(HillShadingProcess, bool);
   itkGetMacro(HillShadingProcess, bool);
 
+  /** Get ColorMap functor*/
+  itkGetObjectMacro(Colormap, ColorMapFunctorType);
 
   /** SET/Get HillShadingProcess*/
   itkSetMacro(ReliefProcess, bool);

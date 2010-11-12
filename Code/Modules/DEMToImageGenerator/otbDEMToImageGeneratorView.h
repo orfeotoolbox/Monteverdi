@@ -49,6 +49,8 @@
 
 #include "otbProjectionEnum.h"
 
+#include "otbColorBarWidget.h"
+
 namespace otb
 {
 /** \class DEMToImageGeneratorView
@@ -80,6 +82,8 @@ public:
   typedef ModelType::OutputPointType PointType;
   typedef ModelType::IndexType       IndexType;
   typedef ModelType::SingleImageType SingleImageType;
+  typedef otb::ColorBarWidget ColorBarWidgetType;
+
 
   // Initialize transform and show the GUI
   virtual void Show();
@@ -145,6 +149,9 @@ private:
 
   /** Projection reference buffer for the Text Display widget*/
   Fl_Text_Buffer * m_projectionRefBuffer;
+
+  /** Color bar widget */
+  ColorBarWidgetType::Pointer              m_ColorBarWidget;
 };
 
 } // End namespace otb

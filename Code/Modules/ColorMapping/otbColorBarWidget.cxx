@@ -29,7 +29,6 @@ ColorBarWidget::ColorBarWidget()
     : Fl_Window(0,0,0,0,0)
 {
   m_ScalarImage = SingleImageType::New();
-//  m_Colormap = ColormapType::New();
 }
 /**
  * Destructor.
@@ -115,9 +114,6 @@ void ColorBarWidget::draw(void)
       pos +=3 ;
       ++itColorBar;
     }
-
-  Fl_RGB_Image RGBImage(colormap.GetDataPointer(),
-                        width, height,3 , 0);
 
   fl_draw_image(colormap.GetDataPointer(), 0 , 0, width, height, 3 );
 }

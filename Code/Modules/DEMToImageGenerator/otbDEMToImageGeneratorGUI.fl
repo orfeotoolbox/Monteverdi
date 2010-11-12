@@ -99,7 +99,7 @@ class DEMToImageGeneratorGUI {open
               tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1
             }
             Fl_Value_Input oRadiusHillShading {
-              label {Hill shading radius (pixel)} selected
+              label {Hill shading radius (pixel)}
               xywh {269 173 40 25} maximum 200 step 1 value 1
             }
           }
@@ -112,16 +112,23 @@ class DEMToImageGeneratorGUI {open
             label {Display Color Relief}
             xywh {30 228 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
           }
-          Fl_Group oColorReliefGroup {open
-            xywh {27 254 369 86} box PLASTIC_DOWN_BOX
+          Fl_Group {} {open
+            xywh {27 254 369 86}
           } {
-            Fl_Value_Input oMinValue {
-              label {Lower value }
-              xywh {271 269 40 25} maximum 100000 step 1
-            }
-            Fl_Value_Input oMaxValue {
-              label {Upper value }
-              xywh {271 302 40 25} maximum 10000 step 1 value 4000
+            Fl_Group oColorReliefGroup {open
+              xywh {27 254 369 86} box PLASTIC_DOWN_BOX
+            } {
+              Fl_Value_Input oMinValue {
+                label {Lower value }
+                xywh {60 275 40 25} align 2 maximum 100000 step 1
+              }
+              Fl_Value_Input oMaxValue {
+                label {Upper value }
+                xywh {320 275 40 25} align 2 maximum 10000 step 1 value 4000
+              }
+              Fl_Group oColorBar {open selected
+                xywh {105 275 210 25}
+              } {}
             }
           }
         }
