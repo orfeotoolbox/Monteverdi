@@ -137,6 +137,12 @@ namespace otb
     arrowKeyMoveHandler->SetView(m_View);
     m_Controller->AddActionHandler(arrowKeyMoveHandler);
 
+    // Add the full widget handler
+    DragFullActionHandlerType::Pointer dragHandler = DragFullActionHandlerType::New();
+    dragHandler->SetModel(m_RenderingModel);
+    dragHandler->SetView(m_View);
+    m_Controller->AddActionHandler(dragHandler);
+
     // Add the blue histogram handler
     m_BlueHistogramHandler = HistogramActionHandlerType::New();
     m_BlueHistogramHandler->SetModel(m_RenderingModel);

@@ -60,6 +60,7 @@
 #include "otbRemoteSensingRegion.h"
 #include "otbObjectList.h"
 #include "otbImageToVectorImageCastFilter.h"
+#include "otbDragFullWindowActionHandler.h"
 
 #include "otbAmplitudeFunctor.h"
 #include "otbPhaseFunctor.h"
@@ -186,7 +187,8 @@ public:
   typedef otb::HistogramActionHandler
     <RenderingModelType, ViewType,
      RenderingFunctionType>                         HistogramActionHandlerType;
-
+  typedef otb::DragFullWindowActionHandler
+  <RenderingModelType, ViewType>                    DragFullActionHandlerType;
 
   /** Pixel description */
   typedef PixelDescriptionModel<OutputImageType>     PixelDescriptionModelType;
