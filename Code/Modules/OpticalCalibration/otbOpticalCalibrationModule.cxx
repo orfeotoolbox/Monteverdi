@@ -21,7 +21,7 @@
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include "otbOpticalImageMetadataInterface.h"
 #include "ossim/base/ossimFilename.h"
-#include <FL/Fl_File_Chooser.H>
+#include "FLU/Flu_File_Chooser.h"
 #include "otbMsgReporter.h"
 
 namespace otb
@@ -527,12 +527,13 @@ void
 OpticalCalibrationModule
 ::OpenAeronetFileCallback()
 {
-  const char * cfname = fl_file_chooser("Pick an Aeronet file", "*.*", m_LastPath.c_str());
-  Fl::check();
-  if (cfname == NULL || strlen(cfname) < 1)
+  const char * cfname = flu_file_chooser("Pick an Aeronet file...", "*.*", "");
+
+  if (cfname == NULL)
     {
-    return;
-    }
+    otbMsgDebugMacro(<< "Empty file name!");
+	return;
+	}
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teAeronetFile->value(cfname);
@@ -543,12 +544,13 @@ void
 OpticalCalibrationModule
 ::OpenFFVFileCallback()
 {
-  const char * cfname = fl_file_chooser("Pick an Filter Function Values file", "*.*", m_LastPath.c_str());
-  Fl::check();
-  if (cfname == NULL || strlen(cfname) < 1)
+  const char * cfname = flu_file_chooser("Pick an Filter Function Values file...", "*.*", "");
+
+  if (cfname == NULL)
     {
-    return;
-    }
+    otbMsgDebugMacro(<< "Empty file name!");
+	return;
+	}
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teFFVFile->value(cfname);
