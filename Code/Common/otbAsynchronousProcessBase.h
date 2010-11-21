@@ -70,7 +70,7 @@ protected:
   AsynchronousProcessBase();
   virtual ~AsynchronousProcessBase(){}
   /** PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const {}
+  virtual void PrintSelf(std::ostream& , itk::Indent ) const {}
 
   static ITK_THREAD_RETURN_TYPE RunProcess1_static(void * t)
   {
@@ -80,7 +80,7 @@ protected:
     return 0;
   }
 
-  virtual void RunProcess1(void * t)
+  virtual void RunProcess1(void * itkNotUsed(t))
   {
     itkExceptionMacro(<< "The RunProcess1 method has to be overloaded.");
   }
@@ -93,7 +93,7 @@ protected:
     return 0;
   }
 
-  virtual void RunProcess2(void * t)
+  virtual void RunProcess2(void * itkNotUsed(t))
   {
     itkExceptionMacro(<< "The RunProcess2 method has to be overloaded.");
   }
