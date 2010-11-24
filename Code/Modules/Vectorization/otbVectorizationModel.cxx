@@ -407,9 +407,8 @@ VectorizationModel
   vectorDataProjection->SetInput(m_VectorDataModel->GetVectorData());
 
   PointType lNewOrigin;
-  // polygons are recorded with a 0.5 shift...
-  lNewOrigin[0] = m_InputImage->GetOrigin()[0]+0.5;
-  lNewOrigin[1] = m_InputImage->GetOrigin()[1]+0.5;
+  lNewOrigin[0] = m_InputImage->GetOrigin()[0];
+  lNewOrigin[1] = m_InputImage->GetOrigin()[1];
 
   vectorDataProjection->SetInputOrigin(lNewOrigin);
   vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
