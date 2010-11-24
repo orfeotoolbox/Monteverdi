@@ -14,14 +14,14 @@ class DEMToImageGeneratorGUI {open
   } {
     Fl_Window guiMainWindow {
       label {DEM To Image Generator} open
-      xywh {858 47 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {858 47 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 hide resizable
     } {
       Fl_Tabs m_TabsMode {open
         xywh {5 14 420 442} box PLASTIC_DOWN_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group gDEM {
           label DEM open
-          xywh {5 29 420 427} box PLASTIC_DOWN_BOX color 7 selection_color 0 labelfont 2 labelsize 11 hide
+          xywh {5 29 420 427} box PLASTIC_DOWN_BOX color 7 selection_color 0 labelfont 2 labelsize 11
         } {
           Fl_Wizard iSRTMDEMPath {
             label {Input SRTM DEM} open
@@ -85,21 +85,21 @@ class DEMToImageGeneratorGUI {open
         }
         Fl_Group {} {
           label {Hill Shading} open
-          xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+          xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group oHillShading {open
             xywh {26 88 369 125} box PLASTIC_DOWN_BOX
           } {
             Fl_Value_Input oAzimutLight {
               label {Azimut Light angle (deg)}
-              tooltip {Azimut angle (in degre) between Earth and Sun} xywh {270 103 40 25} minimum -90 maximum 90 step 1
+              tooltip {Azimut angle (in degre) between Earth and Sun} xywh {270 103 40 25} minimum -90 maximum 90 step 1 value 30
             }
             Fl_Value_Input oElevationLight {
               label {Elevation Light angle (deg) }
-              tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1
+              tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1 value 30
             }
             Fl_Value_Input oRadiusHillShading {
-              label {Hill shading radius (pixel)}
+              label {Hill shading radius (pixel)} selected
               xywh {269 173 40 25} maximum 200 step 1 value 1
             }
           }
@@ -126,14 +126,14 @@ class DEMToImageGeneratorGUI {open
                 label {Upper value }
                 xywh {320 275 40 25} align 2 maximum 10000 step 1 value 4000
               }
-              Fl_Group oColorBar {open selected
+              Fl_Group oColorBar {open
                 xywh {105 275 210 25}
               } {}
             }
           }
         }
       }
-      Fl_Button {} {
+      Fl_Button guiOK {
         label {Save / Quit}
         callback {this->SaveAndQuit();}
         xywh {262 419 90 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 7

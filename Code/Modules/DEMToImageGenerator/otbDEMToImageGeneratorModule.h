@@ -46,6 +46,7 @@ public:
   /** Type macro */
   itkTypeMacro(DEMToImageGeneratorModule, Module);
 
+
   /** New macro */
   itkNewMacro(Self);
 
