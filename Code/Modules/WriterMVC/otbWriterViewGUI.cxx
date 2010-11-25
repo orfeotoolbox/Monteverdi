@@ -297,11 +297,23 @@ WriterViewGUI
 ::OK()
 {
   std::string filepath = vFilePath->value();
-  const bool  useScale = static_cast <bool> (guiScale->value());
-  const bool  isWriteGeomFile  = static_cast <bool> (guiWriteMetadata->value());
-  const int   pixelType = guiOutputPixelTypeChoice->value();
+  ifstream isFileNameExist( filepath.c_str() );
+  bool isProcessing = true;
 
-  m_WriterController->SaveOutput(filepath, pixelType, useScale, isWriteGeomFile);
+  if(isFileNameExist)
+    {
+      isFileNameExist.close();
+      isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );
+    }
+
+  if(isProcessing)
+    {
+    const bool  useScale = static_cast <bool> (guiScale->value());
+    const bool  isWriteGeomFile  = static_cast <bool> (guiWriteMetadata->value());
+    const int   pixelType = guiOutputPixelTypeChoice->value();
+
+    m_WriterController->SaveOutput(filepath, pixelType, useScale, isWriteGeomFile);
+    }
 }
 
 void
