@@ -16,16 +16,17 @@
 
 =========================================================================*/
 #include "otbWriterModule.h"
-#include <FLU/Flu_File_Chooser.h>
-#include <FL/Fl.H>
 
 #include "otbMsgReporter.h"
 
-namespace otb
-{
+#include <FLU/Flu_File_Chooser.h>
+#include <FL/Fl.H>
+#include <FL/fl_ask.H>
 
 static const char* InputDataSetID = "InputDataSet";
 
+namespace otb
+{
 /** Constructor */
 WriterModule::WriterModule()
 {
@@ -142,8 +143,21 @@ void WriterModule::Run()
 
 void WriterModule::SaveDataSet()
 {
-  this->StartProcess2();
-  this->StartProcess1();
+  std::string fileName = vFilePath->value();
+  ifstream isFileNameExist( fileName.c_str() );
+  bool isProcessing = true;
+
+  if(isFileNameExist)
+    {
+      isFileNameExist.close();
+      isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );
+    }
+
+  if(isProcessing)
+    {
+    this->StartProcess2();
+    this->StartProcess1();
+    }
 }
 
 void WriterModule::Browse()
