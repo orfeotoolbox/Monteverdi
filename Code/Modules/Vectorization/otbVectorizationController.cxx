@@ -49,6 +49,7 @@ VectorizationController
   // Specific buttons mapping
   m_ChangeRegionHandler->SetMouseButton(2);
   m_ChangeScaledRegionHandler->SetMouseButton(2);
+  m_VectorDataActionHandler->SetIsContinuousPoint(false);
 }
 
 VectorizationController
