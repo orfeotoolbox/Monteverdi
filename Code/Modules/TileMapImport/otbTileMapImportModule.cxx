@@ -53,12 +53,13 @@ TileMapImportModule::TileMapImportModule()
   vPlacename->value(empty_str.c_str());
 
   // Initialize Depth choice
-  TileMapImageIOHelper myTileMapImageIOHelper;
+  TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
+  myTileMapImageIOHelper = TileMapImageIOHelper::New();
   for (int i = 1; i <= 18; i++)
     {
     std::ostringstream label;
     label << i;
-    vDepth->add(myTileMapImageIOHelper.ConvertDepthToScale(i).c_str(), "", NULL);
+    vDepth->add(myTileMapImageIOHelper->ConvertDepthToScale(i).c_str(), "", NULL);
     }
 
   // Initialize server choice

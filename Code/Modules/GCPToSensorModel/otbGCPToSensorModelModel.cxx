@@ -519,8 +519,9 @@ GCPToSensorModelModel
 /** get scale rfom depth */
 const std::string GCPToSensorModelModel::ConvertDepthToScale(const unsigned int depth) const
 {
-  TileMapImageIOHelper myTileMapImageIOHelper;
-  return myTileMapImageIOHelper.ConvertDepthToScale(depth);
+  TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
+  myTileMapImageIOHelper = TileMapImageIOHelper::New();
+  return myTileMapImageIOHelper->ConvertDepthToScale(depth);
 }
 
 #ifdef OTB_USE_CURL
