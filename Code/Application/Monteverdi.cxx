@@ -199,7 +199,8 @@ int main(int argc, char* argv[])
                                                               otbGetTextMacro("Geometry/Homologous points extraction"));
   
   model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", otbGetTextMacro("Learning/Object Labeling"));
-  
+  model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
+                                                     otbGetTextMacro("Geometry/GCP to sensor model"));
   model->RegisterModule<otb::DEMToImageGeneratorModule>("DEM To Image Generator",
                                                      otbGetTextMacro("Geometry/DEM To Image Generator"));
 
