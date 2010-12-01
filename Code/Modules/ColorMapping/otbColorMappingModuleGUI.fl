@@ -11,91 +11,117 @@ class ColorMappingModuleGUI {open
   } {
     Fl_Window wMainWindow {
       label {Color Map to Apply: } open
-      xywh {198 272 460 95} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {502 222 365 195} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Button bOK {
         label {Save/Quit}
         callback {this->OK();}
-        xywh {364 58 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {278 164 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {264 58 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {178 164 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group {} {open
-        xywh {5 20 450 35} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        xywh {5 115 355 41}
       } {
-        Fl_Choice iColorMap {
-          label {Color Map to Apply}
-          callback {this->UpdateColorBar();} open
-          xywh {144 28 151 20} down_box BORDER_BOX labelcolor 186
+        Fl_Group {} {
+          label {Select ColorMap} open selected
+          tooltip {Image value must be comprise between 0 and 255} xywh {5 115 355 41} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
         } {
-          MenuItem {} {
-            label Red
-            xywh {0 0 100 20}
+          Fl_Choice iColorMap {
+            callback {this->UpdateColorBar();}
+            xywh {31 126 151 20} down_box BORDER_BOX labelcolor 186
+          } {
+            MenuItem {} {
+              label Red
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Green
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Blue
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Grey
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Hot
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Cool
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Spring
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Summer
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Autumn
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Winter
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Copper
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Jet
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label HSV
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label OverUnder
+              xywh {0 0 100 20}
+            }
+            MenuItem {} {
+              label Relief
+              xywh {0 0 100 20}
+            }
           }
-          MenuItem {} {
-            label Green
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Blue
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Grey
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Hot
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Cool
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Spring
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Summer
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Autumn
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Winter
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Copper
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Jet
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label HSV
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label OverUnder
-            xywh {0 0 100 20}
-          }
-          MenuItem {} {
-            label Relief selected
-            xywh {0 0 100 20}
-          }
+          Fl_Group oColorBar {open
+            xywh {205 127 135 20}
+          } {}
         }
       }
-      Fl_Group oColorBar {open
-        xywh {310 28 130 20}
-      } {}
+      Fl_Group {} {
+        label {Image Scaling before ColorMap manipulation} open
+        xywh {5 23 355 71} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+      } {
+        Fl_Group {} {open
+          xywh {26 49 326 38} box PLASTIC_UP_BOX
+        } {
+          Fl_Value_Input oShift {
+            label {Shift :}
+            xywh {68 58 115 20} minimum -100000 maximum 10000
+          }
+          Fl_Value_Input oScale {
+            label {Scale:}
+            xywh {234 58 115 20} maximum 1e+06 value 1
+          }
+        }
+        Fl_Round_Button oAutoscaling {
+          label {Auto-scaling image}
+          callback {this->UpdateScaling();}
+          xywh {10 30 141 15} down_box ROUND_DOWN_BOX align 24
+        }
+      }
     }
   }
   Function {Cancel()} {open protected return_type {virtual void}
@@ -105,5 +131,7 @@ class ColorMappingModuleGUI {open
   Function {~ColorMappingModuleGUI()} {open return_type virtual
   } {}
   Function {UpdateColorBar()} {open return_type {virtual void}
+  } {}
+  Function {UpdateScaling()} {open return_type {virtual void}
   } {}
 } 

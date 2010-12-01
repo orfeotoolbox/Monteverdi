@@ -30,6 +30,7 @@ namespace otb
 ColorMappingModule
 ::ColorMappingModule()
 {
+  m_ShiftScaleImageFilter = ShiftScaleImageFilterType::New();
   m_ColorMapFilter = ColorMapFilterType::New();
   m_ReliefColorMapFunctor = ReliefColorMapFunctorType::New();
   m_RGBtoVectorImageCastFilter = RGBtoVectorImageCastFilterType::New();
@@ -84,8 +85,23 @@ ColorMappingModule
 ::ColorMappingProcess()
 {
   std::string ColorMapName;
+  double      shift = (oShift->value());
+  double      scale = (oScale->value());
 
-  m_ColorMapFilter->SetInput( m_InputImage );
+  if (oAutoscaling->value() == 1)
+    {
+    m_ColorMapFilter->SetInput( m_InputImage );
+    m_ColorMapFilter->UseInputImageExtremaForScalingOn();
+    }
+  else
+    {
+    m_ShiftScaleImageFilter->SetInput(m_InputImage);
+    m_ShiftScaleImageFilter->SetShift(shift);
+    m_ShiftScaleImageFilter->SetScale(scale);
+
+    m_ColorMapFilter->SetInput( m_ShiftScaleImageFilter->GetOutput() );
+    m_ColorMapFilter->UseInputImageExtremaForScalingOff();
+    }
 
   m_RGBtoVectorImageCastFilter->SetInput( m_ColorMapFilter->GetOutput() );
 
@@ -188,6 +204,22 @@ ColorMappingModule
 
 }
 
+/** Update scaling widget activation */
+void
+ColorMappingModule
+::UpdateScaling()
+{
+  if (oAutoscaling->value() == 1)
+    {
+    oShift->deactivate();
+    oScale->deactivate();
+    }
+  else
+    {
+    oShift->activate();
+    oScale->activate();
+    }
+}
 
 
 /** Cancel */

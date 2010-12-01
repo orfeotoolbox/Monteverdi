@@ -27,6 +27,7 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbRGBImageToVectorImageCastFilter.h"
 #include "otbReliefColormapFunctor.h"
+#include "itkShiftScaleImageFilter.h"
 
 #include "otbColorBarWidget.h"
 
@@ -64,9 +65,10 @@ public:
   typedef otb::Image<RGBPixelType, 2>               RGBImageType;
 
     // ColorMapping Class typedefs
-  typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>  ColorMapFilterType;
+  typedef itk::ShiftScaleImageFilter<SingleImageType,SingleImageType>                     ShiftScaleImageFilterType;
+  typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>              ColorMapFilterType;
   typedef otb::Functor::ReliefColormapFunctor<Floating_Point_PrecisionType, RGBPixelType> ReliefColorMapFunctorType;
-  typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType> RGBtoVectorImageCastFilterType;
+  typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType>             RGBtoVectorImageCastFilterType;
 
 
   typedef otb::ColorBarWidget ColorBarWidgetType;
@@ -106,6 +108,9 @@ protected:
   /** Update color bar*/
   virtual void UpdateColorBar();
 
+  /** Update scaling widget activation*/
+  virtual void UpdateScaling();
+
 private:
   ColorMappingModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -114,6 +119,7 @@ private:
   SingleImageType::Pointer        m_InputImage;
   OutputImageType::Pointer        m_OutputImage;
 
+  ShiftScaleImageFilterType::Pointer       m_ShiftScaleImageFilter;
   ColorMapFilterType::Pointer              m_ColorMapFilter;
   RGBtoVectorImageCastFilterType::Pointer  m_RGBtoVectorImageCastFilter;
   ReliefColorMapFunctorType::Pointer       m_ReliefColorMapFunctor;
