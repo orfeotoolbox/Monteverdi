@@ -26,14 +26,14 @@ PolarimetricSynthesisModule::PolarimetricSynthesisModule()
   // This module needs pipeline locking
   this->NeedsPipelineLockingOff();
 
-  realToComplexFilter.resize(4);
-  imaginaryToComplexFilter.resize(4);
-  realAndImaginaryToComplexFilter.resize(4);
+  m_RealToComplexFilter.resize(4);
+  m_ImaginaryToComplexFilter.resize(4);
+  m_RealAndImaginaryToComplexFilter.resize(4);
   for(unsigned int i = 0 ; i < 4 ; ++i)
     {
-      realToComplexFilter[i] = RealImageToComplexImageFilterType::New();
-      imaginaryToComplexFilter[i] = ImaginaryImageToComplexImageFilterType::New();
-      realAndImaginaryToComplexFilter[i] = RealAndImaginaryImageToComplexImageFilterType::New();
+      m_RealToComplexFilter[i] = RealImageToComplexImageFilterType::New();
+      m_ImaginaryToComplexFilter[i] = ImaginaryImageToComplexImageFilterType::New();
+      m_RealAndImaginaryToComplexFilter[i] = RealAndImaginaryImageToComplexImageFilterType::New();
     }
 
   // First, do constructor stuffs
@@ -79,23 +79,23 @@ PolarimetricSynthesisModule::CombineData(unsigned int i,
 {
   if(realImage.IsNotNull() && imagImage.IsNotNull())
    {
-      realAndImaginaryToComplexFilter[i]->SetInputRealPart(realImage);
-      realAndImaginaryToComplexFilter[i]->SetInputRealPart(imagImage);
-      return realAndImaginaryToComplexFilter[i]->GetOutput();
+      m_RealAndImaginaryToComplexFilter[i]->SetInputRealPart(realImage);
+      m_RealAndImaginaryToComplexFilter[i]->SetInputImaginaryPart(imagImage);
+      return m_RealAndImaginaryToComplexFilter[i]->GetOutput();
    }
  else
    {
      if(realImage.IsNotNull())
        {
-         realToComplexFilter[i]->SetInput(realImage);
-         return realToComplexFilter[i]->GetOutput();
+         m_RealToComplexFilter[i]->SetInput(realImage);
+         return m_RealToComplexFilter[i]->GetOutput();
        }
      else
        {
        if(imagImage.IsNotNull())
          {
-           imaginaryToComplexFilter[i]->SetInput(imagImage);
-           return imaginaryToComplexFilter[i]->GetOutput();
+           m_ImaginaryToComplexFilter[i]->SetInput(imagImage);
+           return m_ImaginaryToComplexFilter[i]->GetOutput();
          }
        else
          {

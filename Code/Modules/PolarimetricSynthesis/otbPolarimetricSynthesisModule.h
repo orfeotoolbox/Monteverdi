@@ -109,9 +109,9 @@ private:
   ViewType::Pointer m_View;
   ModelType::Pointer m_Model;
 
-  std::vector<RealImageToComplexImageFilterType::Pointer> realToComplexFilter;
-  std::vector<ImaginaryImageToComplexImageFilterType::Pointer> imaginaryToComplexFilter;
-  std::vector<RealAndImaginaryImageToComplexImageFilterType::Pointer> realAndImaginaryToComplexFilter;
+  std::vector<RealImageToComplexImageFilterType::Pointer> m_RealToComplexFilter;
+  std::vector<ImaginaryImageToComplexImageFilterType::Pointer> m_ImaginaryToComplexFilter;
+  std::vector<RealAndImaginaryImageToComplexImageFilterType::Pointer> m_RealAndImaginaryToComplexFilter;
 };
 
 } // End namespace otb
