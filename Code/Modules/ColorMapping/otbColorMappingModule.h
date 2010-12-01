@@ -108,9 +108,6 @@ protected:
   /** Update color bar*/
   virtual void UpdateColorBar();
 
-  /** Update scaling widget activation*/
-  virtual void UpdateScaling();
-
 private:
   ColorMappingModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

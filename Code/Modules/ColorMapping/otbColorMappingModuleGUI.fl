@@ -5,34 +5,34 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ColorMappingModuleGUI {open
+class ColorMappingModuleGUI {open selected
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
       label {Color Map to Apply: } open
-      xywh {502 222 365 195} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {502 222 365 170} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_Button bOK {
         label {Save/Quit}
         callback {this->OK();}
-        xywh {278 164 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {278 135 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {178 164 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {178 135 81 25} box PLASTIC_DOWN_BOX value 1 color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group {} {open
-        xywh {5 115 355 41}
+        xywh {5 86 355 70}
       } {
         Fl_Group {} {
-          label {Select ColorMap} open selected
-          tooltip {Image value must be comprise between 0 and 255} xywh {5 115 355 41} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+          label {Select ColorMap} open
+          tooltip {Image value must be comprise between 0 and 255} xywh {5 86 355 41} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
         } {
           Fl_Choice iColorMap {
             callback {this->UpdateColorBar();}
-            xywh {31 126 151 20} down_box BORDER_BOX labelcolor 186
+            xywh {31 97 151 20} down_box BORDER_BOX labelcolor 186
           } {
             MenuItem {} {
               label Red
@@ -96,30 +96,21 @@ class ColorMappingModuleGUI {open
             }
           }
           Fl_Group oColorBar {open
-            xywh {205 127 135 20}
+            xywh {205 98 135 20}
           } {}
         }
       }
       Fl_Group {} {
-        label {Image Scaling before ColorMap manipulation} open
-        xywh {5 23 355 71} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        label {Image Scaling} open
+        xywh {5 23 355 43} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
-        Fl_Group {} {open
-          xywh {26 49 326 38} box PLASTIC_UP_BOX
-        } {
-          Fl_Value_Input oShift {
-            label {Shift :}
-            xywh {68 58 115 20} minimum -100000 maximum 10000
-          }
-          Fl_Value_Input oScale {
-            label {Scale:}
-            xywh {234 58 115 20} maximum 1e+06 value 1
-          }
+        Fl_Value_Input oShift {
+          label {Shift :}
+          xywh {68 34 115 20} minimum -100000 maximum 10000
         }
-        Fl_Round_Button oAutoscaling {
-          label {Auto-scaling image}
-          callback {this->UpdateScaling();}
-          xywh {10 30 141 15} down_box ROUND_DOWN_BOX align 24
+        Fl_Value_Input oScale {
+          label {Scale:}
+          xywh {234 34 115 20} maximum 1e+06 value 1
         }
       }
     }
@@ -131,7 +122,5 @@ class ColorMappingModuleGUI {open
   Function {~ColorMappingModuleGUI()} {open return_type virtual
   } {}
   Function {UpdateColorBar()} {open return_type {virtual void}
-  } {}
-  Function {UpdateScaling()} {open return_type {virtual void}
   } {}
 } 

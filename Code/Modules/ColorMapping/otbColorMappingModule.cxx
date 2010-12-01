@@ -85,25 +85,17 @@ ColorMappingModule
 ::ColorMappingProcess()
 {
   std::string ColorMapName;
-  double      shift = (oShift->value());
-  double      scale = (oScale->value());
+  double shift = (oShift->value());
+  double scale = (oScale->value());
 
-  if (oAutoscaling->value() == 1)
-    {
-    m_ColorMapFilter->SetInput( m_InputImage );
-    m_ColorMapFilter->UseInputImageExtremaForScalingOn();
-    }
-  else
-    {
-    m_ShiftScaleImageFilter->SetInput(m_InputImage);
-    m_ShiftScaleImageFilter->SetShift(shift);
-    m_ShiftScaleImageFilter->SetScale(scale);
+  m_ShiftScaleImageFilter->SetInput(m_InputImage);
+  m_ShiftScaleImageFilter->SetShift(shift);
+  m_ShiftScaleImageFilter->SetScale(scale);
 
-    m_ColorMapFilter->SetInput( m_ShiftScaleImageFilter->GetOutput() );
-    m_ColorMapFilter->UseInputImageExtremaForScalingOff();
-    }
+  m_ColorMapFilter->SetInput(m_ShiftScaleImageFilter->GetOutput());
+  m_ColorMapFilter->UseInputImageExtremaForScalingOff();
 
-  m_RGBtoVectorImageCastFilter->SetInput( m_ColorMapFilter->GetOutput() );
+  m_RGBtoVectorImageCastFilter->SetInput(m_ColorMapFilter->GetOutput());
 
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_RGBtoVectorImageCastFilter->GetOutput(),
@@ -194,33 +186,10 @@ ColorMappingModule
     m_ColorMapFilter->SetColormap( m_ReliefColorMapFunctor);
 
     }
-/*  m_Colormap->SetMinimumInputValue(min);
-  m_Colormap->SetMaximumInputValue(max);
-  m_Colormapper->SetColormap(m_Colormap);
-*/
+
   m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
   m_ColorBarWidget->redraw();
-
-
 }
-
-/** Update scaling widget activation */
-void
-ColorMappingModule
-::UpdateScaling()
-{
-  if (oAutoscaling->value() == 1)
-    {
-    oShift->deactivate();
-    oScale->deactivate();
-    }
-  else
-    {
-    oShift->activate();
-    oScale->activate();
-    }
-}
-
 
 /** Cancel */
 void
