@@ -20,6 +20,11 @@
 
 #include "otbColorMappingModule.h"
 #include "otbMsgReporter.h"
+#include "itkMetaDataDictionary.h"
+#include "otbImageKeywordlist.h"
+#include "itkMetaDataObject.h"
+#include "base/ossimKeywordlist.h"
+
 
 namespace otb
 {
@@ -91,6 +96,32 @@ ColorMappingModule
   m_ShiftScaleImageFilter->SetInput(m_InputImage);
   m_ShiftScaleImageFilter->SetShift(shift);
   m_ShiftScaleImageFilter->SetScale(scale);
+
+
+  m_InputImage->UpdateOutputInformation();
+  //// change SENSOR ID IN KWL TO ESCAPE THE DEFAULT PIXEL DISPLAY
+  // Load MetaDataDictionary
+  itk::MetaDataDictionary dict = m_InputImage->GetMetaDataDictionary();
+  ImageKeywordlist imageKeywordlist;
+  // Extract ossimKWL
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+      itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  // Change sensor to empty string
+  ossimKeywordlist         kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  kwl.add("", "sensor", "");
+
+  // new kwl to save the ossimkwl
+  ImageKeywordlist otb_kwl;
+  otb_kwl.SetKeywordlist(kwl);
+  // Save in the MetaDataDictionary of the image
+  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
+  // Update the output MetaDataDictionary
+  m_ColorMapFilter->GetOutput()->SetMetaDataDictionary(dict);
+
 
   m_ColorMapFilter->SetInput(m_ShiftScaleImageFilter->GetOutput());
   m_ColorMapFilter->UseInputImageExtremaForScalingOff();
