@@ -31,6 +31,7 @@ ColorMappingModule
 ::ColorMappingModule()
 {
   m_ColorMapFilter = ColorMapFilterType::New();
+  m_ReliefColorMapFunctor = ReliefColorMapFunctorType::New();
   m_RGBtoVectorImageCastFilter = RGBtoVectorImageCastFilterType::New();
   m_ColorBarWidget = ColorBarWidgetType::New();
   m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
@@ -160,12 +161,27 @@ ColorMappingModule
       m_ColormapName = "OverUnder";
       colormapEnum = ColorMapFilterType::OverUnder;
       break;
+    case 14 :
+      m_ColormapName = "Relief";
+      break;
     default:
       itkExceptionMacro(<< "Colormap not implemented");
       break;
   }
 
-  m_ColorMapFilter->SetColormap(colormapEnum);
+  if(m_ColormapName != "Relief")
+    {
+    m_ColorMapFilter->SetColormap(colormapEnum);
+    }
+  else
+    {
+    m_ColorMapFilter->SetColormap( m_ReliefColorMapFunctor);
+
+    }
+/*  m_Colormap->SetMinimumInputValue(min);
+  m_Colormap->SetMaximumInputValue(max);
+  m_Colormapper->SetColormap(m_Colormap);
+*/
   m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
   m_ColorBarWidget->redraw();
 

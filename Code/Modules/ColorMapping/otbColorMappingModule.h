@@ -26,6 +26,7 @@
 #include "otbVectorImage.h"
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbRGBImageToVectorImageCastFilter.h"
+#include "otbReliefColormapFunctor.h"
 
 #include "otbColorBarWidget.h"
 
@@ -64,7 +65,9 @@ public:
 
     // ColorMapping Class typedefs
   typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>  ColorMapFilterType;
+  typedef otb::Functor::ReliefColormapFunctor<Floating_Point_PrecisionType, RGBPixelType> ReliefColorMapFunctorType;
   typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType> RGBtoVectorImageCastFilterType;
+
 
   typedef otb::ColorBarWidget ColorBarWidgetType;
 
@@ -113,7 +116,7 @@ private:
 
   ColorMapFilterType::Pointer              m_ColorMapFilter;
   RGBtoVectorImageCastFilterType::Pointer  m_RGBtoVectorImageCastFilter;
-
+  ReliefColorMapFunctorType::Pointer       m_ReliefColorMapFunctor;
   ColorBarWidgetType::Pointer              m_ColorBarWidget;
   std::string                              m_ColormapName;
 };
