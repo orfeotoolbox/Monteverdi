@@ -40,6 +40,9 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "base/ossimFilename.h"
 
+#include "otbImageMetadataInterfaceBase.h"
+#include "otbImageMetadataInterfaceFactory.h"
+
 #include "otbMsgReporter.h"
 
 namespace otb
@@ -197,6 +200,18 @@ SupervisedClassificationAppli
   m_ImageViewer->SetRectangularROISelectionMode(false);
   m_ImageViewer->SetPolygonROIList(m_TrainingSet);
   m_ImageViewer->SetImage(m_InputImage);
+
+  m_InputImage->UpdateOutputInformation();
+  otb::ImageMetadataInterfaceBase::Pointer lImageMetadata = otb::ImageMetadataInterfaceFactory::CreateIMI(
+      m_InputImage->GetMetaDataDictionary());
+
+  std::vector<unsigned int> defaultDisplay(3);
+  defaultDisplay = lImageMetadata->GetDefaultDisplay();
+
+  m_ImageViewer->SetRedChannelIndex(defaultDisplay[0]);
+  m_ImageViewer->SetGreenChannelIndex(defaultDisplay[1]);
+  m_ImageViewer->SetBlueChannelIndex(defaultDisplay[2]);
+
   m_ImageViewer->Build();
 
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
@@ -858,6 +873,7 @@ SupervisedClassificationAppli
   viewerRedChannelChoice->activate();
   viewerGreenChannelChoice->activate();
   viewerBlueChannelChoice->activate();
+
   viewerRedChannelChoice->value(m_ImageViewer->GetRedChannelIndex());
   viewerGreenChannelChoice->value(m_ImageViewer->GetGreenChannelIndex());
   viewerBlueChannelChoice->value(m_ImageViewer->GetBlueChannelIndex());
