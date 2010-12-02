@@ -161,6 +161,8 @@ DEMToImageGeneratorView
     double       elevationAngle = oElevationLight->value();
     unsigned int radius         = oRadiusHillShading->value();
 
+
+
     m_Controller->ProcessHillShading( azimutAngle, elevationAngle,radius);
 
     // Display the color relief
@@ -168,7 +170,7 @@ DEMToImageGeneratorView
       {
       double min = oMinValue->value();
       double max = oMaxValue->value();
-      m_Controller->ProcessColorRelief(min, max);
+      m_Controller->ProcessColorRelief(min, max, oWithHillShading->value());
       }
 
     }

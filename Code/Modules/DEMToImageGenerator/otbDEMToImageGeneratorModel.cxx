@@ -161,7 +161,7 @@ DEMToImageGeneratorModel
  */
 void
 DEMToImageGeneratorModel
-::ProcessColorRelief(double min, double max)
+::ProcessColorRelief(double min, double max, bool withHillShading)
 {
 
   m_Colormapper->UseInputImageExtremaForScalingOff();
@@ -175,7 +175,15 @@ DEMToImageGeneratorModel
   m_Multiply->SetInput1(m_Colormapper->GetOutput());
   m_Multiply->SetInput2(m_HillShading->GetOutput());
 
-  m_RGBtoVectorImageCastFilter->SetInput( m_Multiply->GetOutput() );
+  if(withHillShading)
+    {
+    m_RGBtoVectorImageCastFilter->SetInput( m_Multiply->GetOutput() );
+    }
+  else
+    {
+    m_RGBtoVectorImageCastFilter->SetInput( m_Colormapper->GetOutput() );
+    }
+
   m_ReliefColored = m_RGBtoVectorImageCastFilter->GetOutput();
   m_ReliefProcess = true;
   this->NotifyAll();
