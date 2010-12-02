@@ -22,6 +22,12 @@
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkVariableLengthVector.h"
+#include "itkMetaDataDictionary.h"
+#include "otbImageKeywordlist.h"
+#include "itkMetaDataObject.h"
+#include "base/ossimKeywordlist.h"
+
+
 
 namespace otb
 {
@@ -104,10 +110,32 @@ protected:
 
   /// Additionnal output information for allocation
   virtual void GenerateOutputInformation(void)
-  {
-    Superclass::GenerateOutputInformation();
-    this->GetOutput()->SetNumberOfComponentsPerPixel(3);
-  }
+    {
+      Superclass::GenerateOutputInformation();
+      this->GetOutput()->SetNumberOfComponentsPerPixel(3);
+      
+      //// change SENSOR ID IN KWL TO ESCAPE THE DEFAULT PIXEL DISPLAY
+      // Load MetaDataDictionary
+      itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
+      ImageKeywordlist imageKeywordlist;
+      // Extract ossimKWL
+      if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+        {
+          itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+        }
+      // Change sensor to empty string
+      ossimKeywordlist kwl;
+      imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+      kwl.remove("sensor");
+      kwl.add("sensor", "", true);
+      
+      imageKeywordlist.SetKeywordlist(kwl); 
+      
+      itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+      
+      // Update the output MetaDataDictionary
+      this->GetOutput()->SetMetaDataDictionary(dict);      
+    }
 
   /// Copy output requested region to input requested region
   virtual void GenerateInputRequestedRegion(void)
@@ -121,6 +149,7 @@ protected:
       input->SetRequestedRegion(inputRegion);
       }
   }
+
 
 private:
   RGBImageToVectorImageCastFilter(const Self &); //purposely not implemented
