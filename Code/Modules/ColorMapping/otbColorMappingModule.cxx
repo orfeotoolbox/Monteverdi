@@ -24,7 +24,7 @@
 #include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
 #include "base/ossimKeywordlist.h"
-
+#include "FL/fl_message.H"
 
 namespace otb
 {
@@ -78,6 +78,9 @@ ColorMappingModule
   m_ColorBarWidget->show();
   m_ColorBarWidget->redraw();
 
+  oMin->value("0");
+  oMax->value("255");
+
   this->UpdateColorBar();
   // open the GUI
   this->Show();
@@ -90,9 +93,16 @@ ColorMappingModule
 ::ColorMappingProcess()
 {
   std::string ColorMapName;
-  double shift = (oShift->value());
-  double scale = (oScale->value());
+  double min = atof(oMin->value());
+  double max = atof(oMax->value());
 
+  double shift = -min;
+  double scale = 1.0;
+
+  if(abs(max-min) > 0.000000001)
+    {
+    scale = 255. / (max-min);
+    }
   m_ShiftScaleImageFilter->SetInput(m_InputImage);
   m_ShiftScaleImageFilter->SetShift(shift);
   m_ShiftScaleImageFilter->SetScale(scale);
@@ -234,12 +244,22 @@ void
 ColorMappingModule
 ::OK()
 {
-  this->ColorMappingProcess();
-  this->NotifyOutputsChange();
+  double min = atof(oMin->value());
+  double max = atof(oMax->value());
 
-  // close the GUI
-  this->Hide();
-  this->BusyOff();
+  if(min < max)
+    {
+    this->ColorMappingProcess();
+    this->NotifyOutputsChange();
+
+    // close the GUI
+    this->Hide();
+    this->BusyOff();
+    }
+  else
+    {
+      fl_message("max value must be greater than min value");
+    }
 }
 
 } // End namespace otb
