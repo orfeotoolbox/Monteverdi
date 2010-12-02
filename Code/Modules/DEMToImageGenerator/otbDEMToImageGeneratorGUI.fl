@@ -42,19 +42,19 @@ class DEMToImageGeneratorGUI {open
           }
         }
         Fl_Group {} {
-          label {Output image} open
-          xywh {5 30 420 377} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
+          label {Output image} open selected
+          xywh {5 30 420 377} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1
         } {
           Fl_Group {} {
             label {Output Information} open
             xywh {30 53 365 215} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
           } {
             Fl_Input oOriginX {
-              label {Origin X}
+              label Longitude
               tooltip {Enter the X origin coordinate in the Output Projection Reference} xywh {180 59 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
             }
             Fl_Input oOriginY {
-              label {Origin Y}
+              label Latitude
               tooltip {Enter the Y origin coordinate in the Output Projection Reference} xywh {180 94 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
             }
             Fl_Input oSizeX {
@@ -76,16 +76,16 @@ class DEMToImageGeneratorGUI {open
           }
           Fl_Group {} {
             label {Output Projection Reference} open
-            xywh {30 296 365 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
+            xywh {30 296 365 102} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
           } {
             Fl_Text_Display oOutputProjectionRef {
-              xywh {55 305 320 80} box PLASTIC_DOWN_FRAME color 48
+              xywh {55 305 320 85} box PLASTIC_DOWN_FRAME color 48
             }
           }
         }
         Fl_Group {} {
           label {Hill Shading} open
-          xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
+          xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group oHillShading {
             xywh {26 88 369 125} box PLASTIC_DOWN_BOX
@@ -130,7 +130,7 @@ class DEMToImageGeneratorGUI {open
                 xywh {105 269 210 25}
               } {}
               Fl_Round_Button oWithHillShading {
-                label {With Hill Shading } selected
+                label {With Hill Shading }
                 xywh {58 320 138 21} down_box ROUND_DOWN_BOX
               }
             }
