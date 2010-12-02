@@ -144,11 +144,11 @@ DEMToImageGeneratorModel
 
   m_HillShading->SetRadius(radius);
   m_HillShading->SetInput(m_DEMToImageGenerator->GetOutput());
-  m_HillShading->SetAzimuthLight(azimutAngle);
-  m_HillShading->SetElevationLight(azimutAngle);
+  m_HillShading->SetAzimuthLight(azimutAngle* CONST_PI_180);
+  m_HillShading->SetElevationLight(elevationAngle * CONST_PI_180);
 
-  m_HillShading->GetFunctor().SetXRes(res);
-  m_HillShading->GetFunctor().SetYRes(res);
+//  m_HillShading->GetFunctor().SetXRes(res);
+//  m_HillShading->GetFunctor().SetYRes(res);
 
   m_HillShadingProcess = true;
   this->NotifyAll();
