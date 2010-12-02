@@ -14,14 +14,14 @@ class DEMToImageGeneratorGUI {open
   } {
     Fl_Window guiMainWindow {
       label {DEM To Image Generator} open
-      xywh {858 47 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 hide resizable
+      xywh {858 47 430 460} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Tabs m_TabsMode {open
         xywh {5 14 420 442} box PLASTIC_DOWN_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group gDEM {
           label DEM open
-          xywh {5 29 420 427} box PLASTIC_DOWN_BOX color 7 selection_color 0 labelfont 2 labelsize 11
+          xywh {5 29 420 427} box PLASTIC_DOWN_BOX color 7 selection_color 0 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard iSRTMDEMPath {
             label {Input SRTM DEM} open
@@ -42,19 +42,19 @@ class DEMToImageGeneratorGUI {open
           }
         }
         Fl_Group {} {
-          label {Output image} open
-          xywh {5 30 420 377} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
+          label {Output image} open selected
+          xywh {5 30 420 377} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1
         } {
           Fl_Group {} {
             label {Output Information} open
             xywh {30 53 365 215} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
           } {
             Fl_Input oOriginX {
-              label {Origin X}
+              label Longitude
               tooltip {Enter the X origin coordinate in the Output Projection Reference} xywh {180 59 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
             }
             Fl_Input oOriginY {
-              label {Origin Y}
+              label Latitude
               tooltip {Enter the Y origin coordinate in the Output Projection Reference} xywh {180 94 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
             }
             Fl_Input oSizeX {
@@ -76,10 +76,10 @@ class DEMToImageGeneratorGUI {open
           }
           Fl_Group {} {
             label {Output Projection Reference} open
-            xywh {30 296 365 100} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
+            xywh {30 296 365 102} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
           } {
             Fl_Text_Display oOutputProjectionRef {
-              xywh {55 305 320 80} box PLASTIC_DOWN_FRAME color 48
+              xywh {55 305 320 85} box PLASTIC_DOWN_FRAME color 48
             }
           }
         }
@@ -87,7 +87,7 @@ class DEMToImageGeneratorGUI {open
           label {Hill Shading} open
           xywh {5 30 420 425} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
-          Fl_Group oHillShading {open
+          Fl_Group oHillShading {
             xywh {26 88 369 125} box PLASTIC_DOWN_BOX
           } {
             Fl_Value_Input oAzimutLight {
@@ -99,7 +99,7 @@ class DEMToImageGeneratorGUI {open
               tooltip {Elevation angle (in degre) between Earth and Sun} xywh {270 142 40 25} minimum -180 maximum 180 step 1 value 30
             }
             Fl_Value_Input oRadiusHillShading {
-              label {Hill shading radius (pixel)} selected
+              label {Hill shading radius (pixel)}
               xywh {269 173 40 25} maximum 200 step 1 value 1
             }
           }
@@ -110,25 +110,29 @@ class DEMToImageGeneratorGUI {open
           }
           Fl_Check_Button oColorRelief {
             label {Display Color Relief}
-            xywh {30 228 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+            xywh {30 228 167 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
           }
           Fl_Group {} {open
-            xywh {27 254 369 86}
+            xywh {27 254 369 97}
           } {
             Fl_Group oColorReliefGroup {open
-              xywh {27 254 369 86} box PLASTIC_DOWN_BOX
+              xywh {27 254 369 97} box PLASTIC_DOWN_BOX
             } {
               Fl_Value_Input oMinValue {
-                label {Lower value }
-                xywh {60 275 40 25} align 2 maximum 100000 step 1
+                label {Lower altitude}
+                tooltip {Set the lower DEM altitude value} xywh {60 269 40 25} align 2 maximum 100000 step 1
               }
               Fl_Value_Input oMaxValue {
-                label {Upper value }
-                xywh {320 275 40 25} align 2 maximum 10000 step 1 value 4000
+                label {Upper altitude}
+                tooltip {Set the upper DEM altitude value} xywh {320 269 40 25} align 2 maximum 10000 step 1 value 4000
               }
               Fl_Group oColorBar {open
-                xywh {105 275 210 25}
+                xywh {105 269 210 25}
               } {}
+              Fl_Round_Button oWithHillShading {
+                label {With Hill Shading }
+                xywh {58 320 138 21} down_box ROUND_DOWN_BOX
+              }
             }
           }
         }
@@ -136,12 +140,12 @@ class DEMToImageGeneratorGUI {open
       Fl_Button guiOK {
         label {Save / Quit}
         callback {this->SaveAndQuit();}
-        xywh {262 419 90 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 7
+        xywh {262 417 90 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 7
       }
       Fl_Button {} {
         label Cancel
         callback {this->Cancel();}
-        xywh {357 419 64 30} box PLASTIC_DOWN_BOX down_box PLASTIC_UP_BOX color 7 selection_color 7
+        xywh {357 417 64 30} box PLASTIC_DOWN_BOX down_box PLASTIC_UP_BOX color 7 selection_color 7
       }
     }
   }

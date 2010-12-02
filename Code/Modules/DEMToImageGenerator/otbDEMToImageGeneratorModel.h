@@ -143,7 +143,7 @@ public:
                           unsigned int radius);
 
   /** Display Relief in color*/
-  void ProcessColorRelief(double min, double max);
+  void ProcessColorRelief(double min, double max, bool withHillShading);
 
 protected:
   /** Constructor */

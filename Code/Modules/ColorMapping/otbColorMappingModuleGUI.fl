@@ -5,13 +5,13 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ColorMappingModuleGUI {open selected
+class ColorMappingModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
       label {Color Map to Apply: } open
-      xywh {502 222 365 170} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+      xywh {502 222 365 170} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Button bOK {
         label {Save/Quit}
@@ -104,13 +104,13 @@ class ColorMappingModuleGUI {open selected
         label {Image Scaling} open
         xywh {5 23 355 43} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
-        Fl_Value_Input oShift {
-          label {Shift :}
-          xywh {68 34 115 20} minimum -100000 maximum 10000
+        Fl_Input oMin {
+          label Min
+          xywh {64 33 120 24}
         }
-        Fl_Value_Input oScale {
-          label {Scale:}
-          xywh {234 34 115 20} maximum 1e+06 value 1
+        Fl_Input oMax {
+          label Max selected
+          xywh {230 33 120 24}
         }
       }
     }

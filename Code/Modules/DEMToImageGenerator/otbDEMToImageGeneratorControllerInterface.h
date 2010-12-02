@@ -54,7 +54,7 @@ public:
   virtual void ProcessHillShading(double azimutAngle,
                                   double elevationAngle,
                                   unsigned int radius) = 0;
-  virtual void ProcessColorRelief(double min, double max) = 0;
+  virtual void ProcessColorRelief(double min, double max, bool withHillShading) = 0;
 
 protected:
   /** Constructor */

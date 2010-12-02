@@ -61,7 +61,7 @@ public:
                                   double elevationAngle,
                                   unsigned int radius);
 
-  virtual void ProcessColorRelief(double min, double max);
+  virtual void ProcessColorRelief(double min, double max, bool withHillShading);
 
 
 protected:

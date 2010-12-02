@@ -31,6 +31,7 @@
 #include "base/ossimDirectory.h"
 
 #include "otbMsgReporter.h"
+#include "otbImageKeywordlist.h"
 
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
@@ -161,6 +162,8 @@ DEMToImageGeneratorView
     double       elevationAngle = oElevationLight->value();
     unsigned int radius         = oRadiusHillShading->value();
 
+
+
     m_Controller->ProcessHillShading( azimutAngle, elevationAngle,radius);
 
     // Display the color relief
@@ -168,7 +171,7 @@ DEMToImageGeneratorView
       {
       double min = oMinValue->value();
       double max = oMaxValue->value();
-      m_Controller->ProcessColorRelief(min, max);
+      m_Controller->ProcessColorRelief(min, max, oWithHillShading->value());
       }
 
     }
@@ -251,8 +254,25 @@ void
 DEMToImageGeneratorView::UpdateProjectionRef()
 {
   std::string projectionRef;
-  projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetInputProjectionRef();
-  std::cout << "DEMToImageGeneratorView::UpdateProjectionRef() : " << projectionRef << std::endl;
+//  m_Controller->GetModel()->GetDEMToImageGenerator()->UpdateOutputInformation();
+  projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputProjectionRef();
+  std::cout << "DEMToImageGeneratorView::UpdateProjectionRef()" << projectionRef << std::endl;
+
+  if(projectionRef.empty())
+    {
+    ImageKeywordlist kwl;
+    kwl = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputKeywordList();
+
+    if(kwl.GetSize())
+      {
+        std::cout << "ICI" << std::endl;
+        projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
+      }
+    else
+      {
+      projectionRef ="GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+      }
+    }
   m_projectionRefBuffer->text(projectionRef.c_str());
 
   oOutputProjectionRef->buffer(m_projectionRefBuffer);
