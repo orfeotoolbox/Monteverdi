@@ -99,15 +99,13 @@ ColorMappingModule
   double shift = -min;
   double scale = 1.0;
 
-  if(abs(max-min) > 0.000000001)
+  if(vcl_abs(max-min) > 0.000000001)
     {
     scale = 255. / (max-min);
     }
   m_ShiftScaleImageFilter->SetInput(m_InputImage);
   m_ShiftScaleImageFilter->SetShift(shift);
   m_ShiftScaleImageFilter->SetScale(scale);
-
-  m_ColorMapFilter->GetOutput()->GetMetaDataDictionary().Print(std::cout);
 
   m_ColorMapFilter->SetInput(m_ShiftScaleImageFilter->GetOutput());
   m_ColorMapFilter->UseInputImageExtremaForScalingOff();
