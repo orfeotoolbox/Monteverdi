@@ -791,6 +791,7 @@ VectorDataTreeBrowser<TVectorData>
     if (m) m->do_callback(this, m->user_data());
 
     }
+  /*
   else if (node->parent()->label() == m_GeometricDataKey
            || node->parent()->label() == m_ExteriorRingKey
            || node->parent()->parent()->label() == m_InteriorRingsKey)
@@ -806,6 +807,7 @@ VectorDataTreeBrowser<TVectorData>
     const Fl_Menu_Item *m = popup_menu->popup(x, y, 0, 0, NULL);
     if (m) m->do_callback(this, m->user_data());
     }
+  */
 
   return;
 }
