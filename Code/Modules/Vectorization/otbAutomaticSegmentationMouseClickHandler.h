@@ -80,7 +80,7 @@ public:
         }
 
       //Left Click
-      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_AddMouseButton)
+      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_AddMouseButton && widgetId != m_View->GetScrollWidget()->GetIdentifier())
         {
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
@@ -100,7 +100,7 @@ public:
         return true;
         }
       //Right Click
-      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_EndMouseButton)
+      if (source.IsNotNull() && event == FL_PUSH && Fl::event_button() == m_EndMouseButton && widgetId != m_View->GetScrollWidget()->GetIdentifier())
         {
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
