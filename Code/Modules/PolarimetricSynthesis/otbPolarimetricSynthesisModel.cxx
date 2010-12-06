@@ -39,16 +39,7 @@ void PolarimetricSynthesisModel::NotifyListener(ListenerBase * listener)
   listener->Notify();
 }
 
-PolarimetricSynthesisModel::PolarimetricSynthesisModel():
-        m_HEmissionMode(false), m_VEmissionMode(false), m_RGB(true),
-        m_GrayPolarizationMode(ANY_POLAR),
-        m_RedPolarizationMode(ANY_POLAR),
-        m_GreenPolarizationMode(ANY_POLAR),
-        m_BluePolarizationMode(ANY_POLAR),
-        m_GrayPsiI(0), m_GrayPsiR(0), m_GrayKhiI(0), m_GrayKhiR(0),
-        m_RedPsiI(0), m_RedPsiR(0), m_RedKhiI(0), m_RedKhiR(0),
-        m_GreenPsiI(0), m_GreenPsiR(0), m_GreenKhiI(0), m_GreenKhiR(0),
-        m_BluePsiI(0), m_BluePsiR(0), m_BlueKhiI(0), m_BlueKhiR(0)
+PolarimetricSynthesisModel::PolarimetricSynthesisModel()
 {
   // init the shrink filter pointer (not in the InitPointers() method to support progress bar
   m_ShrinkFilter = ShrinkFilterType::New();
@@ -57,6 +48,30 @@ PolarimetricSynthesisModel::PolarimetricSynthesisModel():
   m_ImageHV = ComplexImageType::New();
   m_ImageVH = ComplexImageType::New();
   m_ImageVV = ComplexImageType::New();
+
+  m_HEmissionMode = false;
+  m_VEmissionMode = false;
+  m_GrayPolarizationMode = ANY_POLAR;
+  m_RedPolarizationMode = ANY_POLAR;
+  m_GreenPolarizationMode = ANY_POLAR;
+  m_BluePolarizationMode = ANY_POLAR;
+  m_RGB = true;
+  m_GrayPsiI = 0;
+  m_GrayPsiR = 0;
+  m_GrayKhiI = 0;
+  m_GrayKhiR = 0;
+  m_RedPsiI = 0;
+  m_RedPsiR = 0;
+  m_RedKhiI = 0;
+  m_RedKhiR = 0;
+  m_GreenPsiI = 0;
+  m_GreenPsiR = 0;
+  m_GreenKhiI = 0;
+  m_GreenKhiR = 0;
+  m_BluePsiI = 0;
+  m_BluePsiR = 0;
+  m_BlueKhiI = 0;
+  m_BlueKhiR = 0;
 
   InitPointers();
 
