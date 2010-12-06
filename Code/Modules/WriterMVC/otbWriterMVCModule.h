@@ -71,6 +71,18 @@ public:
 
   itkGetObjectMacro(View, WriterViewGUI);
 
+  // Check file existance before writing output
+  void SetCheckFileExistance( bool val )
+  {
+    m_View->SetCheckFileExistance(val);
+    this->Modified();
+  }
+  
+  bool GetCheckFileExistance()
+  {
+    return m_View->GetCheckFileExistance();
+  }
+
 protected:
   /** Constructor */
   WriterMVCModule();

@@ -137,6 +137,11 @@ public:
   virtual void ManageActivationWindowButtons(bool withAwake);
 
   virtual void AwakeProgressFields(double progress);
+  
+  // Enable/Disable file existance checking
+  itkSetMacro(CheckFileExistance, bool);
+  itkGetConstMacro(CheckFileExistance, bool);
+
 protected:
 
   /** Destructor */
@@ -197,6 +202,10 @@ private:
 
   /** progress tmp*/
   double m_Progress;
+
+  // For test purpose : if true, enable overwrite checking
+  bool m_CheckFileExistance;
+
 };
 } //end namespace otb
 

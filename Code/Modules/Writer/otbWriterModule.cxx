@@ -64,7 +64,11 @@ WriterModule::WriterModule()
   m_OutputTypesChoices[otb::UNSIGNEDSHORTINT] = "unsigned short (16 bits)";
   m_OutputTypesChoices[otb::UNSIGNEDINT]      = "unsigned int (32 bits)";
 
+  // This module needs pipeline locking
+  this->NeedsPipelineLockingOn();
+
   m_WriteGeomFile = true;
+  m_CheckFileExistance = true;
 }
 
 /** Destructor */
@@ -147,7 +151,7 @@ void WriterModule::SaveDataSet()
   ifstream isFileNameExist( fileName.c_str() );
   bool isProcessing = true;
 
-  if(isFileNameExist)
+  if(isFileNameExist && m_CheckFileExistance==true)
     {
       isFileNameExist.close();
       isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );

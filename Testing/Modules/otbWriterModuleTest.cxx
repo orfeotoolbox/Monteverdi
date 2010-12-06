@@ -39,13 +39,15 @@ int otbWriterModuleTest(int argc, char* argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
+  // Don't ask erase confirmation
+  specificModule->SetCheckFileExistance(false);
+
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
 
   module->AddInputByKey("InputDataSet", wrapperIn);
 
   Fl::lock();
-
   module->Start();
   Fl::check();
 

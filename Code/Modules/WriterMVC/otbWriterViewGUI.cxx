@@ -45,6 +45,8 @@ WriterViewGUI
   m_SelectedPixel.Fill(0);
   m_FeatureExtractPreviewParentBrowser = -1;
 
+ // Check file existance before overwrite and warn user
+  m_CheckFileExistance = true;
 }
 
 void
@@ -300,7 +302,7 @@ WriterViewGUI
   ifstream isFileNameExist( filepath.c_str() );
   bool isProcessing = true;
 
-  if(isFileNameExist)
+  if(isFileNameExist && m_CheckFileExistance==true)
     {
       isFileNameExist.close();
       isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );

@@ -47,6 +47,8 @@ int otbReaderWriterModuleTest(int argc, char* argv[])
   otb::DataObjectWrapper wrapperOut = readerModule->GetOutputByKey("test");
 
   std::cout << "Output wrapper: " << wrapperOut << std::endl;
+  // Don't ask erase confirmation
+  specificWriterModule->SetCheckFileExistance(false);
 
   //Writer module now
   writerModule->AddInputByKey("InputDataSet", wrapperOut);

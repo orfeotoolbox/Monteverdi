@@ -80,6 +80,10 @@ public:
   typedef VectorDataFileWriter<VectorType>        VectorWriterType;
   typedef VectorDataFileWriter<LabeledVectorType> LabeledVectorWriterType;
 
+  // Enable/Disable file existance checking
+  itkSetMacro(CheckFileExistance, bool);
+  itkGetConstMacro(CheckFileExistance, bool);
+
 protected:
   /** Constructor */
   WriterModule();
@@ -207,8 +211,11 @@ private:
 
   std::map<otb::PixelType, std::string> m_OutputTypesChoices;
 
-  //WriteGeomFile
+  // WriteGeomFile
   bool m_WriteGeomFile;
+
+  // For test purpose : if true, enable overwrite checking
+  bool m_CheckFileExistance;
 };
 
 } // End namespace otb

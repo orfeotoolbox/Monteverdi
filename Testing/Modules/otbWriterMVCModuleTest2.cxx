@@ -33,6 +33,9 @@ int otbWriterMVCModuleTest2(int argc, char* argv[])
   typedef otb::WriterMVCModule::FloatingVectorImageType ImageType;
   typedef otb::ImageFileReader<ImageType>               ReaderType;
 
+  // Don't ask erase confirmation
+  specificModule->SetCheckFileExistance(false);
+
   //reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
