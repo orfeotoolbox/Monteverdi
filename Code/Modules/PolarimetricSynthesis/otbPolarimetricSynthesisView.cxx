@@ -25,15 +25,20 @@ namespace otb
 {
 
 
-PolarimetricSynthesisView::PolarimetricSynthesisView() : m_Controller(), m_Model()
+PolarimetricSynthesisView::PolarimetricSynthesisView()
 {
   m_VectorCastFilter = VectorCastFilterType::New();
   m_QuicklookVectorCastFilter = VectorCastFilterType::New();
+
+  m_Model = PolarimetricSynthesisModel::GetInstance();
+  m_Model->RegisterListener(this);
+
+//  m_Controller = PolarimetricSynthesisControllerInterface::New();
+
 }
 
 void PolarimetricSynthesisView::Build()
 {
-  m_Model->RegisterListener(this);
 
   if(!m_Controller)
     {

@@ -20,6 +20,19 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
+/** Initialize the singleton */
+PolarimetricSynthesisModel::Pointer PolarimetricSynthesisModel::Instance = NULL;
+/** Manage the singleton */
+PolarimetricSynthesisModel::Pointer
+PolarimetricSynthesisModel::GetInstance()
+{
+  if (!Instance)
+    {
+    Instance = PolarimetricSynthesisModel::New();
+    }
+  return Instance;
+}
+
 
 void PolarimetricSynthesisModel::NotifyListener(ListenerBase * listener)
 {

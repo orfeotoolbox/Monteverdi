@@ -74,6 +74,9 @@ public:
   /** Standard type macro */
   itkTypeMacro(PolarimetricSynthesisModel,Object);
 
+  /** Get the unique instanc1e of the model */
+  static Pointer GetInstance();
+
   /** New macro*/
   itkNewMacro(Self);
 
