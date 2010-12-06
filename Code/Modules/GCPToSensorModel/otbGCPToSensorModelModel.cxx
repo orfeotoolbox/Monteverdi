@@ -20,6 +20,7 @@
 #include "otbFltkFilterWatcher.h"
 
 #include "tinyxml.h"
+#include "base/ossimFilename.h"
 
 #ifdef OTB_USE_CURL
 #include "otbPlaceNameToLonLat.h"
@@ -67,7 +68,10 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_MapBlendingFunction->SetAlpha(0.6);
 
   m_ServerName      = "http://tile.openstreetmap.org/";
-  m_CacheDirectory  = "./Caching";
+
+  // Use expand because CurlHelper can have pb when the path is relative
+  ossimFilename changeDir = "./Caching";
+  m_CacheDirectory = changeDir.expand();
 
   ossimFilename cachingDir(m_CacheDirectory);
   cachingDir.createDirectory();
