@@ -37,7 +37,10 @@ TileMapImportModule::TileMapImportModule()
   m_SizeY = 500;
 
   m_ServerName = "http://tile.openstreetmap.org/";
-  m_CacheDirectory = "./Caching";
+
+  // Use expand because CurlHelper can have pb when the path is relative
+  ossimFilename changeDir = "./Caching";
+  m_CacheDirectory = changeDir.expand();
 
   // Create the caching dir if not already created
   ossimFilename cachingDir(m_CacheDirectory);
