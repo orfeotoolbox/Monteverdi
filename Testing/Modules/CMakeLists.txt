@@ -71,12 +71,12 @@ ${INPUTDATA}/poupees.svm
 #------------- Writer Module Tests ---------------------------
 ADD_TEST(moTvWriterModuleTest  ${Modules_TESTS1} otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-${TEMP}/readerModuleOuptut.tif
+${TEMP}/writerModuleOuptut.tif
 )
 
 ADD_TEST(moTvReaderWriterModuleTest ${Modules_TESTS1} otbReaderWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-${TEMP}/readerwriterModuleOuptut.tif
+${TEMP}/readerWriterModuleOuptut.tif
 )
 
 
@@ -110,7 +110,7 @@ ${INPUTDATA}/poupees.tif
 #------------- Writer MVC Module Tests ---------------------------
 ADD_TEST(moTvWriterMVCModuleTest  ${Modules_TESTS2} otbWriterMVCModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-${TEMP}/readerModuleOuptut.tif
+${TEMP}/writerMVCModuleOutput.tif
 )
 
 #ADD_TEST(WriterMVCModuleTest2  ${Modules_TESTS} otbWriterMVCModuleTest2
