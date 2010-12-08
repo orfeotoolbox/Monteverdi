@@ -39,7 +39,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 # Link to the Orfeo ToolBox
-FIND_PACKAGE(OTB PATHS /opt/otb/lib/otb)
+FIND_PACKAGE(OTB PATHS /usr/lib/otb)
 IF(OTB_FOUND)
   INCLUDE(${OTB_USE_FILE})
 ELSE(OTB_FOUND)
