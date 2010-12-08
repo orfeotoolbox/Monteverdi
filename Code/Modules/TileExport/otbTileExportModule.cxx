@@ -189,8 +189,14 @@ void TileExportModule::SaveDataSet()
   if (!filepath.empty())
     {
     m_Path = itksys::SystemTools::GetFilenamePath(filepath);    
+    
+    // Problem if the path if empty : it means we are in the current
+    // directory 
+    if(m_Path.empty())
+      m_Path = "./";
+    
     m_FileName = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
-
+    
     // Expand the path and check if the directory is writeable 
     ossimFilename path(m_Path);
     path.createDirectory();
