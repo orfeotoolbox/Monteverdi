@@ -200,7 +200,9 @@ void TileExportModule::SaveDataSet()
     // Expand the path and check if the directory is writeable 
     ossimFilename path(m_Path);
     path.createDirectory();
-    path.expand();
+    
+    // Put the full path in m_Path
+    m_Path = path.expand();
     
     if(path.isWriteable())
       {
@@ -250,7 +252,6 @@ void TileExportModule::SaveDataSet()
         m_LogoFilename << "/logo.jpeg";
 
         ossimFilename cachingDir(m_Path);
-        cachingDir.expand();
         cachingDir.createDirectory();
 
         CastFilterType::Pointer castFiler = CastFilterType::New();
@@ -532,7 +533,6 @@ void TileExportModule::Tiling(unsigned int curIdx)
         path << m_Path;
 
         ossimFilename cachingDir(path.str());
-        cachingDir.expand();
         cachingDir.createDirectory();
 
         // Generate Tile filename
