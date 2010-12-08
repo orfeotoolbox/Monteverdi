@@ -188,162 +188,181 @@ void TileExportModule::SaveDataSet()
   std::string filepath = vFilePath->value();
   if (!filepath.empty())
     {
-    m_Path = itksys::SystemTools::GetFilenamePath(filepath);
+    m_Path = itksys::SystemTools::GetFilenamePath(filepath);    
     m_FileName = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
 
-    // Create the extension following the user choice
-    if (gExtended->value())
+    // Expand the path and check if the directory is writeable 
+    ossimFilename path(m_Path);
+    path.createDirectory();
+    path.expand();
+    
+    if(path.isWriteable())
       {
-      m_KmzExtension = "xt.kmz";
-      m_KmlExtension = "xt.kml";
+      // Create the extension following the user choice
+      if (gExtended->value())
+        {
+        m_KmzExtension = "xt.kmz";
+        m_KmlExtension = "xt.kml";
+        }
+      else
+        {
+        m_KmzExtension = ".kmz";
+        m_KmlExtension = ".kml";
+        }
+
+      // Create a kmz file
+      m_KmzFileName << m_Path << "/" << m_FileName << m_KmzExtension;
+      m_KmzFile = kmlengine::KmzFile::Create(m_KmzFileName.str().c_str());
+
+      // Set tile size
+      switch (this->cTileSize->value())
+        {
+        case 0:
+          m_TileSize = 64;
+          break;
+        case 1:
+          m_TileSize = 128;
+          break;
+        case 2:
+          m_TileSize = 256;
+          break;
+        case 3:
+          m_TileSize = 512;
+          break;
+        case 4:
+          m_TileSize = 1024;
+          break;
+        default:
+          m_TileSize = 256;
+          break;
+        }
+
+      // Generate Logo
+      if (m_HasLogo)
+        {
+        m_LogoFilename << m_Path;
+        m_LogoFilename << "/logo.jpeg";
+
+        ossimFilename cachingDir(m_Path);
+        cachingDir.expand();
+        cachingDir.createDirectory();
+
+        CastFilterType::Pointer castFiler = CastFilterType::New();
+        castFiler->SetInput(m_Logo);
+
+        m_VectorWriter = VectorWriterType::New();
+        m_VectorWriter->SetFileName(m_LogoFilename.str());
+        m_VectorWriter->SetInput(castFiler->GetOutput());
+        m_VectorWriter->Update();
+
+        // Add the logo to the kmz
+        itk::OStringStream logo_root_path_in_kmz;
+        logo_root_path_in_kmz << "logo.jpeg";
+
+        itk::OStringStream logo_absolut_path;
+        logo_absolut_path << m_LogoFilename.str();
+
+        this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
+
+        // Remove the logo file with stdio method :remove
+        if (remove(logo_absolut_path.str().c_str()) != 0)
+          {
+          itk::OStringStream oss;
+          oss << "Error while deleting the file" << logo_absolut_path.str();
+          MsgReporter::GetInstance()->SendError(oss.str());
+          this->Hide();
+          }
+        }
+
+      // Store the legend associations
+      this->StoreAssociations();
+
+      // process all the input images
+      m_NbOfInput = this->GetNumberOfInputDataByKey("InputImage");
+
+      // Progress bar
+      pBarProd->minimum(0.0);
+      pBarProd->maximum(1.0);
+      pBarProd->value(0);
+
+      std::ostringstream labelValueStart;
+      labelValueStart << " 0 / ";
+      labelValueStart << m_NbOfInput;
+
+      pBarProd->copy_label(labelValueStart.str().c_str());
+
+      // Mutliple Inputs
+      for (unsigned int i = 0; i < m_NbOfInput; i++)
+        {
+        if (m_Cancel)
+          {
+          break;
+          }
+        // Get the filename
+        std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
+        m_CurrentImageName = this->GetCuttenFileName(fname, i);
+
+        // Get the current input
+        m_VectorImage  = this->GetInputData<FloatingVectorImageType>("InputImage", i);
+
+        // While there are multiple inputs, it is difficult to tune the
+        // gui with the right values for the channels,
+        // Try to guess them
+        if (m_VectorImage->GetNumberOfComponentsPerPixel() > 3)
+          {
+          this->cRedChannel->value(2);
+          this->cGreenChannel->value(1);
+          this->cBlueChannel->value(0);
+          }
+        else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 3)
+          {
+          this->cRedChannel->value(0);
+          this->cGreenChannel->value(1);
+          this->cBlueChannel->value(2);
+          }
+        else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 1)
+          {
+          this->cRedChannel->value(0);
+          this->cGreenChannel->value(0);
+          this->cBlueChannel->value(0);
+          }
+
+        // Do the tiling for the current image
+        if (this->IsProductHaveMetaData(i)) this->Tiling(i);
+        else this->ExportNonGeoreferencedProduct(i);
+
+        // Progress bar
+        float progressValue = i + 1;
+
+        std::ostringstream labelValue;
+        labelValue << progressValue;
+        labelValue << " / ";
+        labelValue << m_NbOfInput;
+
+        pBarProd->copy_label(labelValue.str().c_str());
+
+        Fl::check();
+
+        m_CurrentProduct++;
+        }
+
+      // Add the covered region kml
+      this->RegionOfInterestProcess();
+
+      // Reset the boost::intrusive_ptr<KmzFile> :
+      // TODO : when upgrading boost > 1.42 use method release().
+      m_KmzFile = NULL;
+
+      // close the GUI
+      this->Hide();
       }
     else
       {
-      m_KmzExtension = ".kmz";
-      m_KmlExtension = ".kml";
+      itk::OStringStream oss;
+      oss<<"The directory where you want to write the Kmz file (" <<m_Path << ") is not writeable, please choose another one.";
+      MsgReporter::GetInstance()->SendError(oss.str());
+      this->Hide();
       }
-
-    // Create a kmz file
-    m_KmzFileName << m_Path << "/" << m_FileName << m_KmzExtension;
-    m_KmzFile = kmlengine::KmzFile::Create(m_KmzFileName.str().c_str());
-
-    // Set tile size
-    switch (this->cTileSize->value())
-      {
-      case 0:
-        m_TileSize = 64;
-        break;
-      case 1:
-        m_TileSize = 128;
-        break;
-      case 2:
-        m_TileSize = 256;
-        break;
-      case 3:
-        m_TileSize = 512;
-        break;
-      case 4:
-        m_TileSize = 1024;
-        break;
-      default:
-        m_TileSize = 256;
-        break;
-      }
-
-    // Generate Logo
-    if (m_HasLogo)
-      {
-      m_LogoFilename << m_Path;
-      m_LogoFilename << "/logo.jpeg";
-
-      ossimFilename cachingDir(m_Path);
-      cachingDir.createDirectory();
-
-      CastFilterType::Pointer castFiler = CastFilterType::New();
-      castFiler->SetInput(m_Logo);
-
-      m_VectorWriter = VectorWriterType::New();
-      m_VectorWriter->SetFileName(m_LogoFilename.str());
-      m_VectorWriter->SetInput(castFiler->GetOutput());
-      m_VectorWriter->Update();
-
-      // Add the logo to the kmz
-      itk::OStringStream logo_root_path_in_kmz;
-      logo_root_path_in_kmz << "logo.jpeg";
-
-      itk::OStringStream logo_absolut_path;
-      logo_absolut_path << m_LogoFilename.str();
-
-      this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
-
-      // Remove the logo file with stdio method :remove
-      if (remove(logo_absolut_path.str().c_str()) != 0)
-        {
-        itkExceptionMacro(<< "Error while deleting the file" << logo_absolut_path.str());
-        }
-      }
-
-    // Store the legend associations
-    this->StoreAssociations();
-
-    // process all the input images
-    m_NbOfInput = this->GetNumberOfInputDataByKey("InputImage");
-
-    // Progress bar
-    pBarProd->minimum(0.0);
-    pBarProd->maximum(1.0);
-    pBarProd->value(0);
-
-    std::ostringstream labelValueStart;
-    labelValueStart << " 0 / ";
-    labelValueStart << m_NbOfInput;
-
-    pBarProd->copy_label(labelValueStart.str().c_str());
-
-    // Mutliple Inputs
-    for (unsigned int i = 0; i < m_NbOfInput; i++)
-      {
-      if (m_Cancel)
-        {
-        break;
-        }
-      // Get the filename
-      std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-      m_CurrentImageName = this->GetCuttenFileName(fname, i);
-
-      // Get the current input
-      m_VectorImage  = this->GetInputData<FloatingVectorImageType>("InputImage", i);
-
-      // While there are multiple inputs, it is difficult to tune the
-      // gui with the right values for the channels,
-      // Try to guess them
-      if (m_VectorImage->GetNumberOfComponentsPerPixel() > 3)
-        {
-        this->cRedChannel->value(2);
-        this->cGreenChannel->value(1);
-        this->cBlueChannel->value(0);
-        }
-      else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 3)
-        {
-        this->cRedChannel->value(0);
-        this->cGreenChannel->value(1);
-        this->cBlueChannel->value(2);
-        }
-      else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 1)
-        {
-        this->cRedChannel->value(0);
-        this->cGreenChannel->value(0);
-        this->cBlueChannel->value(0);
-        }
-
-      // Do the tiling for the current image
-      if (this->IsProductHaveMetaData(i)) this->Tiling(i);
-      else this->ExportNonGeoreferencedProduct(i);
-
-      // Progress bar
-      float progressValue = i + 1;
-
-      std::ostringstream labelValue;
-      labelValue << progressValue;
-      labelValue << " / ";
-      labelValue << m_NbOfInput;
-
-      pBarProd->copy_label(labelValue.str().c_str());
-
-      Fl::check();
-
-      m_CurrentProduct++;
-      }
-
-    // Add the covered region kml
-    this->RegionOfInterestProcess();
-
-    // Reset the boost::intrusive_ptr<KmzFile> :
-    // TODO : when upgrading boost > 1.42 use method release().
-    m_KmzFile = NULL;
-
-    // close the GUI
-    this->Hide();
     }
 }
 
@@ -507,6 +526,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
         path << m_Path;
 
         ossimFilename cachingDir(path.str());
+        cachingDir.expand();
         cachingDir.createDirectory();
 
         // Generate Tile filename
