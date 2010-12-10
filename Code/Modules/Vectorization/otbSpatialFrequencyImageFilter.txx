@@ -172,10 +172,10 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
   int fftSize = m_WindowSize * (m_WindowSize / 2 + 1);
 
   // Copy input window data
-  int i, j; // coordinates within window
-  int I, J; // window coordinates (upper left corner)
-  int k;
-  int idx;
+  unsigned int i, j; // coordinates within window
+  unsigned int I, J; // window coordinates (upper left corner)
+  unsigned int k;
+  unsigned int idx;
   float spacing = image->GetSpacing()[0];
 
   //for (iit.GoToBegin(), azit.GoToBegin(), wlit.GoToBegin(); ! iit.IsAtEnd(); ++iit, ++azit, ++wlit) {
@@ -231,11 +231,11 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
       for (i = 0; i < 3; i++) {
         x[i] = imax[i] % usedWidth;
         y[i] = imax[i] / usedWidth; // from 0 to (height - 1)
-        if (y[i] >= m_WindowSize / 2)
+        if (y[i] >= static_cast<int>(m_WindowSize / 2))
           y[i] = m_WindowSize - y[i]; // shifted to : from -h/2 to h/2
         else
           y[i] = -y[i];
-        theta[i] = 90 - vcl_atan( y[i] / static_cast<float>(x[i]) ) * 180 / M_PI; // azimuth, from 0° (North) to 90° (East) and 180° (South)
+        theta[i] = 90 - vcl_atan( y[i] / static_cast<float>(x[i]) ) * 180 / M_PI; // azimuth, from 0ï¿½ (North) to 90ï¿½ (East) and 180ï¿½ (South)
     
         float wx = x[i] / static_cast<float>(m_WindowSize);
         float wy = y[i] / static_cast<float>(m_WindowSize);
