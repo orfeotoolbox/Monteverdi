@@ -653,9 +653,9 @@ VectorizationModel
 
 VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::GenerateGrowingRegionLayer(int channel, int numberofhistogramsbins)
+::GenerateGrowingRegionLayer(unsigned int channel, unsigned long numberofhistogramsbins)
 {
-  VectorImageToImageListFilterType::Pointer	image2List      = VectorImageToImageListFilterType::New();
+  VectorImageToImageListFilterType::Pointer	    image2List      = VectorImageToImageListFilterType::New();
   OtsuThresholdImageFilterType::Pointer	        otsuFilter      = OtsuThresholdImageFilterType::New();
   BinaryImageToLabelMapFilterType::Pointer      binary2LabelMap = BinaryImageToLabelMapFilterType::New();
   IntensityChannelFilterType::Pointer           intensityFilter = IntensityChannelFilterType::New();

@@ -246,8 +246,8 @@ public:
                                                   int spatialRadius, double rangeRadius, 
                                                   int minRegionSize);
 
-  LabeledImagePointerType GenerateGrowingRegionLayer(int channel, 
-                                                     int numberofhistogramsbins);
+  LabeledImagePointerType GenerateGrowingRegionLayer(unsigned int channel,
+                                                     unsigned long numberofhistogramsbins);
   
   LabeledImagePointerType GenerateWatershedClustering(int channel, 
                                                       double level, 
@@ -345,7 +345,7 @@ private:
   // Selected Polygon on full image right click
   PolygonType::Pointer                  m_SelectedPolygon;
   DataNodeType::Pointer                 m_SelectedPolygonNode;
-  int                                   m_ActualLayerNumber;
+  unsigned int                          m_ActualLayerNumber;
   VectorDataType::Pointer               m_SelectedVectorData;
   std::vector<std::string>              m_AlgorithmsNameList;
 };
