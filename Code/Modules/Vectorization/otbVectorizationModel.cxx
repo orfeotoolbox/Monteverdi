@@ -694,9 +694,11 @@ VectorizationModel
 
 VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::GenerateWatershedClustering(int channel, double level, 
-                              double threshold, double conductanceParameter, 
-                              int numberOfIterations )
+::GenerateWatershedClustering(unsigned int channel,
+                              double level,
+                              double threshold,
+                              double conductanceParameter,
+                              unsigned int numberOfIterations )
 {
   GradientAnisotropicDiffusionFilterType::Pointer diffusionFilter    = GradientAnisotropicDiffusionFilterType::New();
   GradientMagnitudeFilterType::Pointer            gradientMagnitudeFilter = GradientMagnitudeFilterType::New();

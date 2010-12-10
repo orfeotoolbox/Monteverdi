@@ -249,11 +249,11 @@ public:
   LabeledImagePointerType GenerateGrowingRegionLayer(unsigned int channel,
                                                      unsigned long numberofhistogramsbins);
   
-  LabeledImagePointerType GenerateWatershedClustering(int channel, 
+  LabeledImagePointerType GenerateWatershedClustering(unsigned int channel,
                                                       double level, 
                                                       double threshold, 
                                                       double conductanceParameter, 
-                                                      int numberOfIterations );
+                                                      unsigned int numberOfIterations );
 #ifdef USE_FFTWF
   LabeledImagePointerType GenerateFastFourierTransformLayer(int channel, 
                                                             int windowSize, 
