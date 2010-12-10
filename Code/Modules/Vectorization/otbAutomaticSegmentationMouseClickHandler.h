@@ -198,8 +198,8 @@ private:
   bool             m_ActiveOnZoomWidget;
 
   // Button selection 
-  int              m_EndMouseButton;
   int              m_AddMouseButton;
+  int              m_EndMouseButton;
 
 }; // end class
 } // end namespace otb
