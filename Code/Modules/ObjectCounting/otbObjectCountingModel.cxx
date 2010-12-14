@@ -603,7 +603,6 @@ ObjectCountingModel
 
   estimator->SetInputSampleList(extractSampleList);
   estimator->SetTrainingSampleList(trainingSampleList);
-  estimator->SetNumberOfClasses(2);
   estimator->SetSVMType(ONE_CLASS);
   estimator->SetNu(m_NuParameter);
 

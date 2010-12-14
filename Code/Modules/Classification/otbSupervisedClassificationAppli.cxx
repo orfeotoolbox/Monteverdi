@@ -1733,7 +1733,6 @@ SupervisedClassificationAppli
   this->SVMSetupOk();
   m_Estimator->SetInputSampleList(m_TrainingListSample);
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
-  m_Estimator->SetNumberOfClasses(m_ClassesMap.size());
 
   try
   {

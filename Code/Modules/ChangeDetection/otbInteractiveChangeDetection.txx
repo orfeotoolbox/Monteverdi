@@ -638,7 +638,6 @@ InteractiveChangeDetection<TPixel>::ChangeDetectionLearn()
 
     m_Estimator->SetInputSampleList(sampleList);
     m_Estimator->SetTrainingSampleList(trainingSampleList);
-    m_Estimator->SetNumberOfClasses(2);
     m_Estimator->Update();
     m_ClassificationFilter->SetModel(m_Estimator->GetModel());
 
