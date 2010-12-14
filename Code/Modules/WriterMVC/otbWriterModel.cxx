@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbWriterModel.h"
 #include "otbFltkFilterWatcher.h"
-#include <FL/fl_ask.H>
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
