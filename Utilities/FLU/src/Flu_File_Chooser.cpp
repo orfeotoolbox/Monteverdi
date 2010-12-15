@@ -1706,7 +1706,6 @@ int Flu_File_Chooser :: FileColumns :: handle( int event )
 
 void Flu_File_Chooser :: filenameCB()
 {
-  printf( "filenameCB\n" );
   filenameEnterCallback = true;
   //cd( filename.value() );
   okCB();
@@ -4107,7 +4106,6 @@ void Flu_File_Chooser :: cd( const char *path )
   // see if the user pushed <Enter> in the filename input field
   if( filenameEnterCallback )
     {
-      printf( "filenameEnterCallback\n" );
       filenameEnterCallback = false;
 
 #ifdef WIN32
