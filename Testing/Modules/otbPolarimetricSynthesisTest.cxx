@@ -45,11 +45,9 @@ int otbPolarimetricSynthesisTest(int argc, char* argv[])
 
   ComplexToRealImageType::Pointer imageReal = ComplexToRealImageType::New();
   imageReal->SetInput(imageReader->GetOutput());
-  imageReal->Update();
 
   ComplexToImaginaryImageType::Pointer imageImaginary = ComplexToImaginaryImageType::New();
   imageImaginary->SetInput(imageReader->GetOutput());
-  imageImaginary->Update();
 
   // Input Wrapper RealPart
   otb::DataObjectWrapper wrapperRealPart = otb::DataObjectWrapper::Create(imageReal->GetOutput());
