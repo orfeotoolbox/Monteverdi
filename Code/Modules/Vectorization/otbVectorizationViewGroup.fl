@@ -18,7 +18,7 @@ class VectorizationViewGroup {open
         xywh {8 3 442 693} resizable
       } {
         Fl_Group gScroll {
-          label Minimaaap
+          label Minimap
           xywh {8 19 210 210} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {}
         Fl_Group gZoom {
