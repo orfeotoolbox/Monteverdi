@@ -13,7 +13,7 @@ SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${Monteverdi_REQUIRE
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${Monteverdi_REQUIRED_LINK_FLAGS}")
 
 # Add include directories needed to use Monteverdi.
-INCLUDE_DIRECTORIES(BEFORE ${Monteverdi_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${Monteverdi_INCLUDE_DIRS})
 
 # Add link directories needed to use Monteverdi.
 LINK_DIRECTORIES(${Monteverdi_LIBRARY_DIRS})
