@@ -300,8 +300,8 @@ CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
 SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
 
 #-----------------------------------------------------------------------------
-# Set up CPack support, to be able to distribute OTB binary packages. It will
-# be particulary useful to distributed prebuilt OTB.
+# Set up CPack support, to be able to distribute Monteverdi binary packages. It will
+# be particulary useful to distributed prebuilt Monteverdi.
 #
 
 OPTION(OTB_USE_CPACK "Generate installer using CPack" OFF)
