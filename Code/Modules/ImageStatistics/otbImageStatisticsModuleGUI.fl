@@ -1,0 +1,137 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ImageStatisticsModuleGUI {open
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wMainWindow {
+      label {Image Statistics} open
+      xywh {606 146 400 495} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 495 0 0} visible
+    } {
+      Fl_Group {} {
+        label {Input image size information} open selected
+        xywh {0 20 400 75} box PLASTIC_DOWN_BOX align 5
+      } {
+        Fl_Group {} {
+          label Size open
+          xywh {13 27 165 61} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 20
+        } {
+          Fl_Value_Output vSizeX {
+            label X
+            xywh {67 32 100 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+          }
+          Fl_Value_Output vSizeY {
+            label Y
+            xywh {67 62 100 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+          }
+        }
+        Fl_Value_Output vNbChannels {
+          label {Nb of channels}
+          xywh {288 27 100 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+        }
+        Fl_Value_Output vNbPix {
+          label {Nb of pixels}
+          xywh {288 68 100 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+        }
+      }
+      Fl_Group guiSelectArea {
+        label {Image Statistics} open selected
+        xywh {0 115 400 188} box PLASTIC_DOWN_BOX align 5
+      } {
+        Fl_Output vMin {
+          label Min
+          xywh {10 133 380 20} box PLASTIC_DOWN_BOX labelcolor 186 align 5
+        }
+        Fl_Output vMax {
+          label Max
+          xywh {10 172 380 20} box PLASTIC_DOWN_BOX labelcolor 186 align 5
+        }
+        Fl_Output vSum {
+          label Sum
+          xywh {10 211 380 20} box PLASTIC_DOWN_BOX labelcolor 186 align 5 deactivate
+        }
+        Fl_Output vMean {
+          label Mean
+          xywh {10 250 380 20} box PLASTIC_DOWN_BOX labelcolor 186 align 5 deactivate
+        }
+        Fl_Button bCovMatrix {
+          label {Show covariance matrix}
+          callback {wCovarianceWindow->show();}
+          xywh {10 276 380 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186 deactivate
+        }
+      }
+      Fl_Group guiSelectArea2 {
+        label {Channel statistics} open selected
+        xywh {0 323 400 115} box PLASTIC_DOWN_BOX align 5
+      } {
+        Fl_Spinner vChannelId {
+          label {Channel id.}
+          callback {this->UpdateChannelStat();}
+          xywh {189 330 100 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186 value 1
+        }
+        Fl_Value_Output vMinCh {
+          label Min
+          xywh {37 372 150 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5 step 1
+        }
+        Fl_Value_Output vMaxCh {
+          label Max
+          xywh {225 372 150 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5 step 1
+        }
+        Fl_Value_Output vMeanCh {
+          label Mean
+          xywh {37 411 150 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5 step 1 deactivate
+        }
+        Fl_Value_Output vSumCh {
+          label Sum
+          xywh {225 411 150 20} box PLASTIC_DOWN_BOX color 7 labelcolor 186 align 5 step 1 deactivate
+        }
+      }
+      Fl_Group {} {open selected
+        xywh {0 437 400 56}
+      } {
+        Fl_Progress pBusyBar {
+          label Computing
+          xywh {10 442 385 15} box PLASTIC_DOWN_BOX selection_color 1 labelsize 12 labelcolor 186 hide
+        }
+        Fl_Button bFullStat {
+          label {Full Stat}
+          callback {this->ComputeFullStat();}
+          xywh {214 463 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+        }
+        Fl_Return_Button bOk {
+          label Ok
+          callback {this->Quit();}
+          xywh {314 463 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
+        }
+      }
+    }
+    Fl_Window wCovarianceWindow {
+      label Covariance open
+      xywh {228 284 350 350} type Double box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 visible
+    } {
+      Fl_Return_Button bCloseCovWindow {
+        label Close
+        callback {wCovarianceWindow->hide();}
+        xywh {145 310 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelsize 12 labelcolor 186
+      }
+      Fl_Scroll sCov {open
+        xywh {5 5 340 295} box PLASTIC_DOWN_BOX color 7 labelcolor 186
+      } {}
+    }
+  }
+  Function {Quit()} {open protected return_type {virtual void}
+  } {}
+  Function {~ImageStatisticsModuleGUI()} {open return_type virtual
+  } {}
+  Function {Ok()} {open protected return_type {virtual void}
+  } {}
+  Function {UpdateChannelStat()} {open protected return_type {virtual void}
+  } {}
+  Function {ComputeFullStat()} {open protected return_type {virtual void}
+  } {}
+} 

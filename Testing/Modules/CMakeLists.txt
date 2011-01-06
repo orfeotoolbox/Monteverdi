@@ -427,6 +427,18 @@ ADD_TEST(moTvDEMToImageGeneratorModuleTest ${Modules_TESTS4} otbDEMToImageGenera
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
+#------------- Image Statistics Module Tests ---------------------------
+ADD_TEST(moTvImageStatisticsModuleTestImage  ${Modules_TESTS4}
+	otbImageStatisticsModuleTest
+	0 # otbImage
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+)
+
+ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4} 
+	otbImageStatisticsModuleTest
+	1 # otbVectorImage
+	${INPUTDATA}/maur.tif
+)
 
 
 SET(Modules_SRCS1
@@ -484,6 +496,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbPolarimetricSynthesisTest.cxx
   otbColorMappingModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
+  otbImageStatisticsModuleTest.cxx
 )
 
 

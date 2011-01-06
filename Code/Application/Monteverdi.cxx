@@ -79,6 +79,7 @@
 #include "otbPolarimetricSynthesisModule.h"
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
+#include "otbImageStatisticsModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -152,6 +153,7 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
+  model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Image Statistics"));
 
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
