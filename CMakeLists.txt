@@ -66,6 +66,9 @@ IF(WIN32)
     ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
+# Include the patched boost file directory  
+# Make it the first one in the list of includes
+INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Utilities)
 
 # Link to the Orfeo ToolBox
 FIND_PACKAGE(OTB PATHS /usr/lib/otb)
