@@ -20,6 +20,10 @@
 #include "otbMapProjections.h"
 #include <string>
 
+#include "vnl/vnl_random.h"
+
+#include "otbImageToGenericRSOutputParameters.h"
+
 namespace otb
 {
 
@@ -261,117 +265,18 @@ ProjectionModel
 void ProjectionModel
 ::UpdateOutputParameters()
 {
-  // Compute the 4 corners in the cartographic coordinate system
-  unsigned int                 up = 0,  down = 0, left = 0, right = 0;
-  std::vector<IndexType>       vindex;
-  std::vector<OutputPointType> voutput;
+  // Ccompute the output parameters stuff
+  typedef otb::ImageToGenericRSOutputParameters<InputImageType>  OutputParamEstimatorType;  
+  OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
+  
+  estimator->SetInput(m_InputImage);
+  estimator->SetOutputProjectionRef(m_OutputProjectionRef);
+  estimator->Compute();
 
-  IndexType index1, index2, index3, index4;
-  SizeType  size;
-
-  // Image size
-  size = m_InputImage->GetLargestPossibleRegion().GetSize();
-
-  // project the 4 corners
-  index1 = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  index2 = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  index3 = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  index4 = m_InputImage->GetLargestPossibleRegion().GetIndex();
-
-  index2[0] += size[0] - 1;
-  index3[0] += size[0] - 1;
-  index3[1] += size[1] - 1;
-  index4[1] += size[1] - 1;
-
-  vindex.push_back(index1);
-  vindex.push_back(index2);
-  vindex.push_back(index3);
-  vindex.push_back(index4);
-
-  for (unsigned int i = 0; i < vindex.size(); i++)
-    {
-    OutputPointType physicalPoint;
-    m_InputImage->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
-    voutput.push_back(m_Transform->TransformPoint(physicalPoint));
-    }
-
-  // Compute the boundaries
-  double minX = voutput[0][0];
-  double maxX = voutput[0][0];
-  double minY = voutput[0][1];
-  double maxY = voutput[0][1];
-
-  for (unsigned int i = 0; i < voutput.size(); i++)
-    {
-    // Origins
-    if (minX > voutput[i][0])
-      {
-      minX = voutput[i][0];
-      left = i;
-      }
-    if (minY > voutput[i][1])
-      {
-      minY = voutput[i][1];
-      down = i;
-      }
-
-    // Sizes
-    if (maxX < voutput[i][0])
-      {
-      maxX = voutput[i][0];
-      right = i;
-      }
-    if (maxY < voutput[i][1])
-      {
-      maxY = voutput[i][1];
-      up = i;
-      }
-    }
-
-  // Compute the output size
-  double sizeCartoX = vcl_abs(maxX - minX);
-  double sizeCartoY = vcl_abs(minY - maxY);
-
-  OutputPointType o, oX, oY;
-
-  // Initialize
-  o[0] = minX;
-  o[1] = maxY;
-  oX = o;
-  oY = o;
-
-  m_OutputOrigin = o;
-
-  oX[0] += sizeCartoX;
-  oY[1] += sizeCartoY;
-
-  // Transform back into the input image
-  OutputPointType io = m_InverseTransform->TransformPoint(o);
-  OutputPointType ioX = m_InverseTransform->TransformPoint(oX);
-  OutputPointType ioY = m_InverseTransform->TransformPoint(oY);
-
-  // Transform to indices
-  IndexType ioIndex, ioXIndex, ioYIndex;
-  m_InputImage->TransformPhysicalPointToIndex(io, ioIndex);
-  m_InputImage->TransformPhysicalPointToIndex(ioX, ioXIndex);
-  m_InputImage->TransformPhysicalPointToIndex(ioY, ioYIndex);
-
-  // Evaluate Ox and Oy length in number of pixels
-  double OxLength, OyLength;
-
-  OxLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioXIndex[0], 2)
-                      +  vcl_pow((double) ioIndex[1] - (double) ioXIndex[1], 2));
-
-  OyLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioYIndex[0], 2)
-                      +  vcl_pow((double) ioIndex[1] - (double) ioYIndex[1], 2));
-
-  // Evaluate spacing
-  m_OutputSpacing[0] = sizeCartoX / OxLength;
-  m_OutputSpacing[1] = -sizeCartoY / OyLength;
-
-  // Evaluate size
-  m_OutputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / m_OutputSpacing[0])));
-  m_OutputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / m_OutputSpacing[1])));
+  // Edit the output image parmaters
+  m_OutputOrigin  = estimator->GetOutputOrigin();
+  m_OutputSpacing = estimator->GetOutputSpacing();
+  m_OutputSize    = estimator->GetOutputSize();
 }
 
 /**
