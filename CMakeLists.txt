@@ -56,17 +56,17 @@ IF(WIN32)
             -D_SCL_SECURE_NO_DEPRECATE
             )
         ENDIF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
-        
+
         IF (MSVC)
           ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
           ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
         ENDIF(MSVC)
-        
+
       ENDIF(NOT MINGW)
     ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
-# Include the patched boost file directory  
+# Include the patched boost file directory
 # Make it the first one in the list of includes
 INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Utilities)
 
@@ -238,7 +238,7 @@ MESSAGE(STATUS "Automatic includes modules:")
 FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*/)
 FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
-    FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})  
+    FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})
     MESSAGE(STATUS  - ${moduleName})
     SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_SOURCE_DIR}/Code/Modules/${moduleName})
     SET(Monteverdi_INCLUDE_DIRS ${Monteverdi_INCLUDE_DIRS} ${Monteverdi_BINARY_DIR}/Code/Modules/${moduleName})
@@ -260,6 +260,9 @@ ${Monteverdi_INCLUDE_DIRS}
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Utilities)
 ADD_SUBDIRECTORY(StarterKit)
+
+# Resources location
+ADD_SUBDIRECTORY(Data)
 
 #-----------------------------------------------------------------------------
 # Output directories.
@@ -344,9 +347,9 @@ FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
 
 
 # http://www.vtk.org/Bug/view.php?id=7828
-# Need to use the CPACK_PACKAGE_EXECUTABLES 
-# otherwise the shortcut in the menu will not 
-# appear. 
+# Need to use the CPACK_PACKAGE_EXECUTABLES
+# otherwise the shortcut in the menu will not
+# appear.
 SET(CPACK_PACKAGE_EXECUTABLES
 "monteverdi" "Monteverdi application"
 )
@@ -365,7 +368,7 @@ MESSAGE(CPACK_OTB_DLL_PATH)
 # This part is "OSGeo specific" because it makes assumption about the naming of the DLLs,
 # and the fact that they can all be found in the GDAL bin directory
 # It supposes that GDAL version is 1.7
-INSTALL(FILES 
+INSTALL(FILES
 ${CPACK_OTB_DLL_PATH}/adrg.dll
 ${CPACK_OTB_DLL_PATH}/comerr32.dll
 ${CPACK_OTB_DLL_PATH}/dted.dll
@@ -410,7 +413,7 @@ ${CPACK_OTB_DLL_PATH}/vrf.dll
 ${CPACK_OTB_DLL_PATH}/xerces-c_2_7.dll
 ${CPACK_OTB_DLL_PATH}/xerces-depdom_2_7.dll
 ${CPACK_OTB_DLL_PATH}/zlib1.dll
-${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll	
+${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll
 DESTINATION bin
 COMPONENT Runtime)
 
@@ -427,7 +430,7 @@ INSTALL(FILES ${Monteverdi_SOURCE_DIR}/monteverdi.bat
         DESTINATION bin
         COMPONENT Runtime)
 
-# Override the monteverdi.exe 
+# Override the monteverdi.exe
 # with the monteverdi.bat shortcut
 SET(CPACK_NSIS_MENU_LINKS
     "bin/monteverdi.bat" "Monteverdi application")
