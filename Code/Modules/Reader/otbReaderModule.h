@@ -88,6 +88,7 @@ protected:
   virtual void Cancel();
 
   virtual void TypeChanged();
+  virtual void DatasetChanged();
   virtual void Hide();
 
   void OpenOpticalImage();
@@ -105,6 +106,10 @@ private:
   VectorReaderType::Pointer        m_VectorReader;
   ComplexImageReaderType::Pointer  m_ComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
+
+  // vector of string needed to manage hdf file
+  std::vector<std::string>	m_names;
+  std::vector<std::string>  m_desc;
 };
 
 } // End namespace otb

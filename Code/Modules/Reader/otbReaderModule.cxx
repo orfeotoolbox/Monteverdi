@@ -23,6 +23,7 @@
 #include "base/ossimFilename.h"
 #include "otbMsgReporter.h"
 #include "otbI18n.h"
+#include "otbGDALImageIO.h"
 
 namespace otb
 {
@@ -79,70 +80,114 @@ void ReaderModule::Analyse()
   // Get the filename from the filepath
   ossimFilename lFile = ossimFilename(filepath);
 
-  // Try different types
-  try
-    {
-    // Read the image
-    m_FPVReader->SetFileName(filepath);
-    m_FPVReader->GenerateOutputInformation();
+  // Is hdf type
+  bool typeHdf = false;
+  if (lFile.ext() == "hdf")
+    typeHdf = true;
 
-    switch (m_FPVReader->GetImageIO()->GetPixelType())
-      {
-      // handle the radar case
-      case itk::ImageIOBase::COMPLEX:
-        vType->value(2);
-        // If we are still here, this is a readable image
-        typeFound = true;
-        break;
+  if (typeHdf)
+  {
+	  otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
 
-      // handle the optical case
-      default:
-        vType->value(1);
-        // If we are still here, this is a readable image
-        typeFound = true;
-        break;
-      }
-    }
-  catch (itk::ExceptionObject)
-    {
-    // Silent catch
-    }
+	  readerGDAL->SetFileName(filepath);
+	  if (readerGDAL->CanReadFile(filepath.c_str()))
+	  {
+		  bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_names, m_desc);
+		  if (readingSubDatasetInfo == false )
+			  return ;
+	  }
+	  else
+	  {
+	  		return;
+	  }
 
-  if (!typeFound)
-    {
-    try
-      {
-      VectorReaderType::Pointer vectorReader = VectorReaderType::New();
-      vectorReader->SetFileName(filepath);
-      vectorReader->GenerateOutputInformation();
-      vType->value(3);
-      typeFound = true;
-      }
-    catch (itk::ExceptionObject)
-      {
-      // Silent catch
-      vType->value(0);
-      }
-    }
+	  // Fill vDataset with subdataset descriptor info
+		for( int itSubDataset = 0; itSubDataset < m_desc.size() ; itSubDataset++ )
+		{
+			vDataset->add(m_desc[itSubDataset].c_str());
+		}
+	  //vDataset->activate();
+	  vDataset->set_visible();
 
-  // Activate/ deactivate ok
-  if (!typeFound)
-    {
-    vType->value(0);
-    bOk->deactivate();
-    }
+	  vDataset->value(0);
+
+	  vType->value(1); // We assume that hdf file is composed of optical image
+
+	  bOk->activate();
+
+  }
   else
-    {
-    bOk->activate();
-    }
+  {
+	  // Try different types
+	  try
+	  {
+	  // Read the image
+	  m_FPVReader->SetFileName(filepath);
+	  m_FPVReader->GenerateOutputInformation();
+
+	  switch (m_FPVReader->GetImageIO()->GetPixelType())
+		{
+		// handle the radar case
+		case itk::ImageIOBase::COMPLEX:
+		  vType->value(2);
+		  // If we are still here, this is a readable image
+		  typeFound = true;
+		  break;
+
+		// handle the optical case
+		default:
+		  vType->value(1);
+		  // If we are still here, this is a readable image
+		  typeFound = true;
+		  break;
+		}
+	  }
+	  catch (itk::ExceptionObject)
+	  {
+	  // Silent catch
+	  }
+
+	  if (!typeFound)
+	  {
+		  try
+		  {
+			  VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+			  vectorReader->SetFileName(filepath);
+			  vectorReader->GenerateOutputInformation();
+			  vType->value(3);
+			  typeFound = true;
+		  }
+		  catch (itk::ExceptionObject)
+		  {
+			  // Silent catch
+			  vType->value(0);
+		  }
+	  }
+
+	  // Activate/ deactivate ok
+	  if (!typeFound)
+	  {
+		  vType->value(0);
+	      bOk->deactivate();
+	  }
+	  else
+	  {
+		  bOk->activate();
+	  }
+  }
 
   std::string name = vName->value();
 
   if (name.empty())
-    {
-    ossimFilename fname (vFilePath->value());
-    vName->value(fname.fileNoExtension());
-    }
+  {
+    if (typeHdf)
+      vName->value(m_desc[0].c_str());
+    else
+      {
+      ossimFilename fname (vFilePath->value());
+		  vName->value(fname.fileNoExtension());
+      }
+  }
 }
 
 void ReaderModule::OpenDataSet()
@@ -189,20 +234,41 @@ void ReaderModule::TypeChanged()
     }
 }
 
+void ReaderModule::DatasetChanged()
+{
+	vName->value(m_desc[vDataset->value()].c_str());
+}
+
 void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId;
+  ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
+
+  if (lFile.ext() == "hdf")
+  {
+    filepath += ":";
+    ossDatasetId << vDataset->value() + 1 ; // Following the convention observed in the hdf file
+    filepath += ossDatasetId.str();
+  }
 
   m_FPVReader->SetFileName(filepath);
   m_FPVReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
-  oss << "Image read from file: " << lFile.file();
-  ossId << vName->value();
+  if (lFile.ext() == "hdf")
+    {
+    oss << "Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    ossId << vName->value();//m_desc[vDataset->value()];
+    }
+  else
+    {
+    oss << "Image read from file: " << lFile.file();
+    ossId << vName->value();
+    }
+
   this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
