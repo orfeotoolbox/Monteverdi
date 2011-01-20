@@ -107,9 +107,9 @@ private:
   ComplexImageReaderType::Pointer  m_ComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
 
-  // vector of string needed to manage hdf file
-  std::vector<std::string>	m_names;
-  std::vector<std::string>  m_desc;
+  // Vector of string needed to manage hdf file
+  std::vector<std::string>         m_Names;
+  std::vector<std::string>         m_Desc;
 };
 
 } // End namespace otb

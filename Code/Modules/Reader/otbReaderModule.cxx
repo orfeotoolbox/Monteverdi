@@ -92,7 +92,7 @@ void ReaderModule::Analyse()
 	  readerGDAL->SetFileName(filepath);
 	  if (readerGDAL->CanReadFile(filepath.c_str()))
 	  {
-		  bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_names, m_desc);
+		  bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_Names, m_Desc);
 		  if (readingSubDatasetInfo == false )
 			  return ;
 	  }
@@ -102,9 +102,9 @@ void ReaderModule::Analyse()
 	  }
 
 	  // Fill vDataset with subdataset descriptor info
-		for( int itSubDataset = 0; itSubDataset < m_desc.size() ; itSubDataset++ )
+		for( int itSubDataset = 0; itSubDataset < m_Desc.size() ; itSubDataset++ )
 		{
-			vDataset->add(m_desc[itSubDataset].c_str());
+			vDataset->add(m_Desc[itSubDataset].c_str());
 		}
 	  //vDataset->activate();
 	  vDataset->set_visible();
@@ -181,7 +181,7 @@ void ReaderModule::Analyse()
   if (name.empty())
   {
     if (typeHdf)
-      vName->value(m_desc[0].c_str());
+      vName->value(m_Desc[0].c_str());
     else
       {
       ossimFilename fname (vFilePath->value());
@@ -236,7 +236,7 @@ void ReaderModule::TypeChanged()
 
 void ReaderModule::DatasetChanged()
 {
-	vName->value(m_desc[vDataset->value()].c_str());
+	vName->value(m_Desc[vDataset->value()].c_str());
 }
 
 void ReaderModule::OpenOpticalImage()
@@ -261,7 +261,7 @@ void ReaderModule::OpenOpticalImage()
   if (lFile.ext() == "hdf")
     {
     oss << "Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
-    ossId << vName->value();//m_desc[vDataset->value()];
+    ossId << vName->value();//m_Desc[vDataset->value()];
     }
   else
     {
