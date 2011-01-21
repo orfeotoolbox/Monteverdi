@@ -102,7 +102,7 @@ void ReaderModule::Analyse()
 	  }
 
 	  // Fill vDataset with subdataset descriptor info
-		for( int itSubDataset = 0; itSubDataset < m_Desc.size() ; itSubDataset++ )
+		for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size() ; itSubDataset++ )
 		{
 			vDataset->add(m_Desc[itSubDataset].c_str());
 		}
@@ -250,7 +250,7 @@ void ReaderModule::OpenOpticalImage()
   if (lFile.ext() == "hdf")
   {
     filepath += ":";
-    ossDatasetId << vDataset->value() + 1 ; // Following the convention observed in the hdf file
+    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
     filepath += ossDatasetId.str();
   }
 
