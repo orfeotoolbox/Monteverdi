@@ -47,6 +47,10 @@
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
 
+// compute the projected image quicklook
+#include "otbImageToGenericRSOutputParameters.h"
+#include "otbFltkFilterWatcher.h"
+
 namespace otb
 {
 /**
@@ -68,6 +72,15 @@ ProjectionView::ProjectionView()
   m_InterpType = MAP_LINEAR_;
   m_MapType = MAP_UTM;
   m_InputProjectionUnknown = false;
+ 
+  m_PreviewWidget          =  ImageWidgetType::New();
+  //init the previewWindow
+  m_PreviewWidget->label("PreviewWidget");
+  gPreviewWindow->add(m_PreviewWidget);
+  gPreviewWindow->box(FL_NO_BOX);
+  gPreviewWindow->resizable(gPreviewWindow);
+  m_PreviewWidget->resize(gPreviewWindow->x(), gPreviewWindow->y(), gPreviewWindow->w(), gPreviewWindow->h() );
+  m_Transform = ModelType::ResampleFilterType::New(); 
 }
 
 /**
@@ -331,42 +344,42 @@ ProjectionView
   switch (this->GetMapType())
     {
     case MAP_UTM:
-      {
-      newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-      oss.str("");
-      oss << newCartoPoint[1];
-      guiUTMNorthSelection->value(oss.str().c_str());
-      oss.str("");
-      oss << newCartoPoint[0];
-      guiUTMEastSelection->value(oss.str().c_str());
-      break;
-      }
+    {
+    newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+    oss.str("");
+    oss << newCartoPoint[1];
+    guiUTMNorthSelection->value(oss.str().c_str());
+    oss.str("");
+    oss << newCartoPoint[0];
+    guiUTMEastSelection->value(oss.str().c_str());
+    break;
+    }
     case MAP_LAMBERT2:
-      {
-      newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-      oss.str("");
-      oss << newCartoPoint[1];
-      guiLambertNorthSelection->value(oss.str().c_str());
-      oss.str("");
-      oss << newCartoPoint[0];
-      guiLambertEastSelection->value(oss.str().c_str());
-      break;
-      }
+    {
+    newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+    oss.str("");
+    oss << newCartoPoint[1];
+    guiLambertNorthSelection->value(oss.str().c_str());
+    oss.str("");
+    oss << newCartoPoint[0];
+    guiLambertEastSelection->value(oss.str().c_str());
+    break;
+    }
     case MAP_TRANSMERCATOR:
-      {
-      newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-      oss.str("");
-      oss << newCartoPoint[1];
-      guiTransmercatorNorthSelection->value(oss.str().c_str());
-      oss.str("");
-      oss << newCartoPoint[0];
-      guiTransmercatorEastSelection->value(oss.str().c_str());
-      break;
-      }
+    {
+    newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+    oss.str("");
+    oss << newCartoPoint[1];
+    guiTransmercatorNorthSelection->value(oss.str().c_str());
+    oss.str("");
+    oss << newCartoPoint[0];
+    guiTransmercatorEastSelection->value(oss.str().c_str());
+    break;
+    }
     case MAP_WGS84:
-      {
-      break;
-      }
+    {
+    break;
+    }
     default:
       fl_alert("Problem with map projection type, please contact developpers");
       break;
@@ -382,7 +395,6 @@ ProjectionView
 {
   if (!m_InputProjectionUnknown)
     {
-
     IndexType index;
     PointType point, geoPoint;
 
@@ -395,7 +407,6 @@ ProjectionView
       {
       index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] / 2 + 1;
       index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1] / 2 + 1;
-
       }
     else if (guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
       {
@@ -496,27 +507,27 @@ ProjectionView
   switch (this->GetInterpolatorType())
     {
     case MAP_LINEAR_:
-      {
-      typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearType;
-       LinearType::Pointer interp = LinearType::New();
-       m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-      break;
-      }
+    {
+    typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearType;
+    LinearType::Pointer interp = LinearType::New();
+    m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+    break;
+    }
     case MAP_NEAREST:
-      {
-      typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestType;
-      NearestType::Pointer interp = NearestType::New();
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-      break;
-      }
+    {
+    typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestType;
+    NearestType::Pointer interp = NearestType::New();
+    m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+    break;
+    }
     case MAP_BCO:
-      {
-      typedef BCOInterpolateImageFunction<ImageType, double> BCOType;
-      BCOType::Pointer interp = BCOType::New();
-      interp->SetRadius(static_cast<unsigned int>(guiBCORadius->value()));
-      m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
-      break;
-      }
+    {
+    typedef BCOInterpolateImageFunction<ImageType, double> BCOType;
+    BCOType::Pointer interp = BCOType::New();
+    interp->SetRadius(static_cast<unsigned int>(guiBCORadius->value()));
+    m_Controller->GetModel()->GetResampler()->SetInterpolator(interp);
+    break;
+    }
 //     case MAP_SINC:
 //       {
 //       itk::OStringStream oss;
@@ -797,20 +808,20 @@ ProjectionView::UpToDateTransform()
   switch (this->GetMapType())
     {
     case MAP_UTM:
-      {
-      this->UpdateUTMTransform();
-      break;
-      }
+    {
+    this->UpdateUTMTransform();
+    break;
+    }
     case MAP_LAMBERT2:
-      {
-      this->UpdateLambertIITransform();
-      break;
-      }
+    {
+    this->UpdateLambertIITransform();
+    break;
+    }
     case MAP_TRANSMERCATOR:
-      {
-      this->UpdateTMTransform();
-      break;
-      }
+    {
+    this->UpdateTMTransform();
+    break;
+    }
     default:
       break;
     }
@@ -858,6 +869,7 @@ ProjectionView::UpdateDEMUse()
     }
 }
 
+
 void
 ProjectionView::UpdateRpcEstimation()
 {
@@ -869,5 +881,95 @@ ProjectionView::UpdateRpcEstimation()
     m_Controller->GetModel()->SetEstimateInputRPCModel(false);
 }
 
+void
+ProjectionView::DisplayPreviewWidget()
+{
+  // Get the output map computed currently in the model part
+  std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
+   
+  std::cout <<"In DisplayPreviewWidget with output map : " <<  outputMap << std::endl;
 
-} // End namespace otb
+  // Get the previewWidget size 
+  SizeType previewSize;
+  previewSize[0] = gPreviewWindow->w();
+  previewSize[1] = gPreviewWindow->h();
+
+  std::cout <<"Preview Size "<<  previewSize << std::endl;
+
+  // Compute the output image parameters
+  typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;  
+  OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
+   
+  estimator->SetInput(m_Controller->GetModel()->GetInputImage());
+  estimator->SetOutputProjectionRef(outputMap);
+  estimator->ForceSizeTo(previewSize);
+  estimator->Compute();
+
+  std::cout << "-- Output Size "<< estimator->GetOutputSize() << std::endl;
+  std::cout << "-- Output Spacing "<< estimator->GetOutputSpacing() << std::endl;
+  
+  // Reproject the image with a final size equal to 
+  m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
+  m_Transform->SetOutputProjectionRef(outputMap);
+  m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
+  m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
+  m_Transform->SetOutputSize(estimator->GetOutputSize());
+  m_Transform->SetDeformationFieldSpacing (10.*estimator->GetOutputSpacing());
+  m_Transform->Update();
+  
+  // build the rendering model
+  // Generate the layer
+  LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+  layerGenerator->SetImage(m_Transform->GetOutput());
+  FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  layerGenerator->GenerateLayer();
+   
+  /** Rendering image*/
+  VisuModelType::Pointer rendering = VisuModelType::New();
+  rendering->AddLayer(layerGenerator->GetLayer());
+  rendering->Update();
+
+  // Fill the previewWidget with the quicklook of the projected image
+  m_PreviewWidget->ClearBuffer();
+  ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
+  m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+
+  double newIsotropicZoom = this->UpdatePreviewWidgetIsotropicZoom(quickLook->GetLargestPossibleRegion().GetSize());
+  std::cout <<"newIsotropicZoom " << newIsotropicZoom << std::endl;
+  m_PreviewWidget->SetIsotropicZoom(newIsotropicZoom);
+  m_PreviewWidget ->show();
+  m_PreviewWidget->redraw();
+}
+
+// Compute the size of the
+double 
+ProjectionView::UpdatePreviewWidgetIsotropicZoom(SizeType size)
+{
+  int h = gPreviewWindow->h();
+  int w = gPreviewWindow->w();
+  
+  double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
+  double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
+
+  return std::min(zoomW,zoomH);
+}
+
+void ProjectionView::TabPositionHandler()
+{
+  std::cout <<"Current Tab" <<m_TabsMode->label() << " and our tab is "<< gQuickLook << std::endl;
+  if( m_TabsMode->value() == gQuickLook )
+    {
+    std::cout <<"--- Displaying Preview Widget --- " <<std::endl;
+    gPreviewWindow->show();
+    this->DisplayPreviewWidget();
+    }
+  else
+    {
+    std::cout <<"---  Hiding preview widget ---- " << std::endl;
+    m_PreviewWidget->hide();
+    gPreviewWindow->hide();
+    }
+}
+
+}// End namespace otb
+

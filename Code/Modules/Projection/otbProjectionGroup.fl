@@ -14,22 +14,23 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label Projection open
-      xywh {482 183 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {482 183 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 visible
     } {
       Fl_Button guiOK {
         label {Save / Quit}
         callback {OK();}
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
-      Fl_Tabs m_TabsMode {open
-        xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
+      Fl_Tabs m_TabsMode {
+        callback {this->TabPositionHandler();} open
+        xywh {5 9 430 420} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group AllGrp {
-          label {Input image} open
+          label {Input image} selected
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
-            label {Geographical coordinates} open
+            label {Geographical coordinates}
             xywh {31 67 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group {} {open
@@ -63,7 +64,7 @@ this->UpdateLongLat();}
           }
           Fl_Choice iMapSelection {
             label {Input map projection}
-            callback {this->UpdateMapParam();} open
+            callback {this->UpdateMapParam();}
             tooltip {Select the map projection type} xywh {175 175 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186 deactivate
           } {
             MenuItem {} {
@@ -167,7 +168,7 @@ this->UpdateInputTMTransform();}
           }
           Fl_Check_Button guiRPCEstimator {
             label {Estimate Input RPC Model}
-            callback {this->UpdateRpcEstimation();} selected
+            callback {this->UpdateRpcEstimation();}
             xywh {35 400 170 15} down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
@@ -328,7 +329,7 @@ this->UpdateTMTransform();}
           }
         }
         Fl_Group {} {
-          label Settings open
+          label Settings
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
@@ -491,6 +492,14 @@ vAverageElevation->deactivate();
             }
           }
         }
+        Fl_Group gQuickLook {
+          label Quicklook open
+          xywh {20 49 400 352} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+        } {
+          Fl_Group gPreviewWindow {open
+            xywh {20 49 400 352} resizable
+          } {}
+        }
       }
     }
   }
@@ -530,5 +539,9 @@ vAverageElevation->deactivate();
   Function {UpdateDEMUse()} {open return_type {virtual void}
   } {}
   Function {UpdateRpcEstimation()} {open return_type {virtual void}
+  } {}
+  Function {DisplayPreviewWidget()} {open protected return_type {virtual void}
+  } {}
+  Function {TabPositionHandler()} {open return_type {virtual void}
   } {}
 } 

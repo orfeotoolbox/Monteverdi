@@ -135,6 +135,9 @@ public:
   }
   /** Update the Estimate Input rpc Model flag value*/
   itkSetMacro(EstimateInputRPCModel,bool);
+
+  /** Get the output projection ref*/
+  itkGetStringMacro(OutputProjectionRef);
   
 
 protected:
