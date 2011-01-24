@@ -159,12 +159,12 @@ Orthorectification
       }
 
     this->ComputeTileNumber();
-    int resCheckMapParameters = this->CheckMapParameters();
-
-    if (resCheckMapParameters == 1)
-      {
-      itkExceptionMacro(<< "Invalid map parameters");
-      }
+    
+    // check the map parm
+    this->CheckMapParameters();
+    
+    // lauch the process
+    this->CreateOutput();
 
     //m_HasOutput = true done in GenericCreateOutput
     this->NotifyAll();
@@ -480,118 +480,30 @@ void
 Orthorectification
 ::UpdateOutputParameters()
 {
-  ImagePointerType            image = m_InputImage;
-  ForwardSensorInputPointType point;
-  DoubleVectorType            coord;
+  // Ccompute the output parameters stuff
+  typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;  
+  OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
+  
+  estimator->SetInput(m_InputImage);
+  estimator->SetOutputProjectionRef(m_CartographicProjectionRef);
+  estimator->Compute();
+
+  // Edit the output image parmaters
+  m_OutputOrigin  = estimator->GetOutputOrigin();
+
   itk::OStringStream          oss;
-
-  int imageSizeX = image->GetLargestPossibleRegion().GetSize()[0];
-  int imageSizeY = image->GetLargestPossibleRegion().GetSize()[1];
-
-  point[0] = 0;
-  point[1] = 0;
-
-  coord = this->ImageToCarto(point);
-  // Store image corner coordinates
-  std::vector<DoubleVectorType> coordList(4, coord);
-  // Compute Sizes
-  point[0] = imageSizeX - 1;
-  point[1] = 0;
-  coordList[1] = this->ImageToCarto(point);
-  point[0] = imageSizeX - 1;
-  point[1] = imageSizeY - 1;
-  coordList[2] = this->ImageToCarto(point);
-  point[0] = 0;
-  point[1] = imageSizeY - 1;
-  coordList[3] = this->ImageToCarto(point);
-
-  // Compute min/max coordinate values
-  double minX = coordList[0][0];
-  double maxX = coordList[0][0];
-  double minY = coordList[0][1];
-  double maxY = coordList[0][1];
-
-  // Store point position in the output image
-  // calculation will be done from those indexeces to cares all possible rotations
-  unsigned int up = 0;
-  unsigned int down = 0;
-  unsigned int left = 0;
-  unsigned int right = 0;
-
-  for (unsigned int i = 1; i < coordList.size(); i++)
-    {
-    // Origins
-    if (minX > coordList[i][0])
-      {
-      minX = coordList[i][0];
-      left = i;
-      }
-
-    if (minY > coordList[i][1])
-      {
-      minY = coordList[i][1];
-      down = i;
-      }
-
-    // Sizes
-    if (maxX < coordList[i][0])
-      {
-      maxX = coordList[i][0];
-      right = i;
-      }
-
-    if (maxY < coordList[i][1])
-      {
-      maxY = coordList[i][1];
-      up = i;
-      }
-    }
-  // size image in carto coordinate:
-  double sizeXcarto =  maxX - minX;
-  // - because of the difference of origin for Y (image vs. carto)
-  double sizeYcarto =  -(maxY - minY);
-
-  double XfSpacing = 0.;
-  double YfSpacing = 0.;
-  int    sizeX = 0;
-  int    sizeY = 0;
-  //////////////////////////////// for X
-  double alphaX1 =
-    vcl_atan2(vcl_abs(coordList[right][1] - coordList[up][1]), vcl_abs(coordList[right][0] - coordList[up][0]));
-  double alphaX2 =
-    vcl_atan2(vcl_abs(coordList[left][1] - coordList[up][1]), vcl_abs(coordList[left][0] - coordList[up][0]));
-  // spacing X
-  XfSpacing = sizeXcarto /
-              ((static_cast<double>(imageSizeX) *
-                vcl_cos(alphaX1)) + (static_cast<double>(imageSizeY) * vcl_cos(alphaX2)));
-  // sizeX
-  sizeX = static_cast<int>(vcl_floor(std::abs(sizeXcarto / XfSpacing)));
-
-  //////////////////////////////// for Y
-  double alphaY1 =
-    vcl_atan2(vcl_abs(coordList[up][1] - coordList[left][1]), vcl_abs(coordList[up][0] - coordList[left][0]));
-  double alphaY2 =
-    vcl_atan2(vcl_abs(coordList[down][1] - coordList[left][1]), vcl_abs(coordList[down][0] - coordList[left][0]));
-  // spacing X
-  // - because of the difference of origin for Y (image vs. carto)
-  YfSpacing = sizeYcarto /
-              ((static_cast<double>(imageSizeY) *
-                vcl_cos(alphaY1)) + (static_cast<double>(imageSizeX) * vcl_cos(alphaY2)));
-  // sizeY
-  sizeY = static_cast<int>(vcl_floor(std::abs(sizeYcarto / YfSpacing)));
-
   oss.str("");
-  oss << XfSpacing;
+  oss << estimator->GetOutputSpacing()[0];
   guiSpacingX->value(oss.str().c_str());
   oss.str("");
-  oss << YfSpacing;
+  oss << estimator->GetOutputSpacing()[1];
   guiSpacingY->value(oss.str().c_str());
 
   oss.str("");
-  oss << sizeX;
+  oss << estimator->GetOutputSize()[0];
   guiSizeX->value(oss.str().c_str());
   oss.str("");
-  oss << sizeY;
+  oss << estimator->GetOutputSize()[1];
   guiSizeY->value(oss.str().c_str());
 }
 
@@ -669,11 +581,10 @@ Orthorectification::CheckImageParameters()
   return 0;
 }
 
-int
+void
 Orthorectification
 ::CheckMapParameters()
 {
-  int res = 0;
   switch (this->GetMapType())
     {
     case UTM:
@@ -738,14 +649,8 @@ Orthorectification
       }
     default:
       MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
-      res = 1;
       break;
     } 
-  
-  // lauch the process
-  this->CreateOutput();
-  
-  return res;
 }
 
 int
@@ -948,12 +853,15 @@ Orthorectification::SelectAction()
     oss << longLat[1];
     guiLatSelection->value(oss.str().c_str());
 
-    // Upadate map parameters
+    // Update map parameters
     this->UpdateMapParam();
     // Store ref Zone and Hemisphere
     m_UTMZoneRef = atoi(guiUTMZone->value());
     m_UTMHemRef = 'N';
     if (guiUTMSouth->value() == 1) m_UTMHemRef = 'S';
+
+    // Check if the updated map is ok
+    this->CheckMapParameters();
 
     // Update outputinformation
     this->UpdateOutputParameters();
