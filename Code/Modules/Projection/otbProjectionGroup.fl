@@ -23,14 +23,14 @@ class ProjectionGroup {open
       }
       Fl_Tabs m_TabsMode {
         callback {this->TabPositionHandler();} open
-        xywh {5 9 430 420} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
+        xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group AllGrp {
-          label {Input image} selected
+          label {Input image}
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
-            label {Geographical coordinates}
+            label {Geographical coordinates} open
             xywh {31 67 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group {} {open
@@ -107,7 +107,7 @@ iSensorModel->show();}
             }
           }
           Fl_Wizard iMapType {
-            label {Input cartographic coordinates} open
+            label {Input cartographic coordinates}
             xywh {30 220 376 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5 deactivate
           } {
             Fl_Group iUTM {open
@@ -452,7 +452,7 @@ SetInterpolatorType(MAP_SINC);}
         }
         Fl_Group {} {
           label DEM
-          xywh {5 31 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group {} {open
             xywh {20 69 395 174}
@@ -493,11 +493,11 @@ vAverageElevation->deactivate();
           }
         }
         Fl_Group gQuickLook {
-          label Quicklook open
-          xywh {20 49 400 352} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label Quicklook open selected
+          xywh {15 43 405 358} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group gPreviewWindow {open
-            xywh {20 49 400 352} resizable
+            xywh {15 43 405 358} resizable
           } {}
         }
       }

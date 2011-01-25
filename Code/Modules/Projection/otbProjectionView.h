@@ -189,10 +189,7 @@ protected:
 
   // Display preview widget
   virtual void DisplayPreviewWidget();
-
-  // Method to compute the isotropic zoom
-  double UpdatePreviewWidgetIsotropicZoom(SizeType size);
-
+  
   /** Constructor */
   ProjectionView();
   /** Destructor */

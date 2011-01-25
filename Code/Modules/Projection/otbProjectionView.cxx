@@ -884,7 +884,7 @@ ProjectionView::UpdateRpcEstimation()
 void
 ProjectionView::DisplayPreviewWidget()
 {
-  // Get the output map computed currently in the model part
+  // Get the current output projectionRef computed in the model part
   std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
    
   std::cout <<"In DisplayPreviewWidget with output map : " <<  outputMap << std::endl;
@@ -894,8 +894,6 @@ ProjectionView::DisplayPreviewWidget()
   previewSize[0] = gPreviewWindow->w();
   previewSize[1] = gPreviewWindow->h();
 
-  std::cout <<"Preview Size "<<  previewSize << std::endl;
-
   // Compute the output image parameters
   typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;  
   OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
@@ -904,9 +902,6 @@ ProjectionView::DisplayPreviewWidget()
   estimator->SetOutputProjectionRef(outputMap);
   estimator->ForceSizeTo(previewSize);
   estimator->Compute();
-
-  std::cout << "-- Output Size "<< estimator->GetOutputSize() << std::endl;
-  std::cout << "-- Output Spacing "<< estimator->GetOutputSpacing() << std::endl;
   
   // Reproject the image with a final size equal to 
   m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
@@ -915,7 +910,6 @@ ProjectionView::DisplayPreviewWidget()
   m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
   m_Transform->SetOutputSize(estimator->GetOutputSize());
   m_Transform->SetDeformationFieldSpacing (10.*estimator->GetOutputSpacing());
-  m_Transform->Update();
   
   // build the rendering model
   // Generate the layer
@@ -934,24 +928,9 @@ ProjectionView::DisplayPreviewWidget()
   ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
   m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
 
-  double newIsotropicZoom = this->UpdatePreviewWidgetIsotropicZoom(quickLook->GetLargestPossibleRegion().GetSize());
-  std::cout <<"newIsotropicZoom " << newIsotropicZoom << std::endl;
-  m_PreviewWidget->SetIsotropicZoom(newIsotropicZoom);
+  // Show the preview image
   m_PreviewWidget ->show();
   m_PreviewWidget->redraw();
-}
-
-// Compute the size of the
-double 
-ProjectionView::UpdatePreviewWidgetIsotropicZoom(SizeType size)
-{
-  int h = gPreviewWindow->h();
-  int w = gPreviewWindow->w();
-  
-  double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
-  double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
-
-  return std::min(zoomW,zoomH);
 }
 
 void ProjectionView::TabPositionHandler()
@@ -959,13 +938,11 @@ void ProjectionView::TabPositionHandler()
   std::cout <<"Current Tab" <<m_TabsMode->label() << " and our tab is "<< gQuickLook << std::endl;
   if( m_TabsMode->value() == gQuickLook )
     {
-    std::cout <<"--- Displaying Preview Widget --- " <<std::endl;
     gPreviewWindow->show();
     this->DisplayPreviewWidget();
     }
   else
     {
-    std::cout <<"---  Hiding preview widget ---- " << std::endl;
     m_PreviewWidget->hide();
     gPreviewWindow->hide();
     }
