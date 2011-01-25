@@ -244,7 +244,6 @@ ProjectionModel
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
 
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
-  std::cout <<"m_OutputProjectionRef " << m_OutputProjectionRef << std::endl;
   m_Transform->InstanciateTransform();
 
   // Get the transform

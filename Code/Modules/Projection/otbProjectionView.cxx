@@ -95,6 +95,8 @@ ProjectionView::Notify()
     this->UpdateMapParam();
     // Update the output
     this->UpdateOutputParameters();
+    // 
+    this->UpdateOutputRegion();
     }
 
   if (m_Controller->GetModel()->GetTempTransformChanged())
@@ -287,11 +289,11 @@ ProjectionView
 }
 
 /**
- *
+ * Show the main gui
  */
 void
 ProjectionView
-::OK()
+::UpdateOutputRegion()
 {
   // tell the model to project the region edited in the GUI
   unsigned int sizeX    = atoi(guiSizeX->value());
@@ -303,6 +305,18 @@ ProjectionView
   bool         isUl    =  guiCenterPixel->value();
 
   m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY, isUl);
+}
+
+
+/**
+ *
+ */
+void
+ProjectionView
+::OK()
+{
+  // Tell the model to update its region
+  this->UpdateOutputRegion();
 
   // Project the image in the selected map projection
   m_Controller->ReprojectImage();
@@ -431,6 +445,9 @@ ProjectionView
 
     //Update the Map parameters
     this->UpdateMapParam();
+
+    // Update the output origin in the model
+    this->UpdateOutputRegion();
     }
 }
 
@@ -887,29 +904,24 @@ ProjectionView::DisplayPreviewWidget()
   // Get the current output projectionRef computed in the model part
   std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
    
-  std::cout <<"In DisplayPreviewWidget with output map : " <<  outputMap << std::endl;
-
   // Get the previewWidget size 
   SizeType previewSize;
   previewSize[0] = gPreviewWindow->w();
   previewSize[1] = gPreviewWindow->h();
-
-  // Compute the output image parameters
-  typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;  
-  OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
-   
-  estimator->SetInput(m_Controller->GetModel()->GetInputImage());
-  estimator->SetOutputProjectionRef(outputMap);
-  estimator->ForceSizeTo(previewSize);
-  estimator->Compute();
   
-  // Reproject the image with a final size equal to 
+  // Compute the right spacing 
+  ModelType::SpacingType   previewSpacing;
+  previewSpacing[0] = atof(guiSpacingX->value())*atof(guiSizeX->value())/previewSize[0];
+  previewSpacing[1] = atof(guiSpacingY->value())*atof(guiSizeY->value())/previewSize[1];
+  
+  // Reproject the image with a final size equal to the previewWidget
+  // size  and relative spacing
   m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
   m_Transform->SetOutputProjectionRef(outputMap);
-  m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
-  m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
-  m_Transform->SetOutputSize(estimator->GetOutputSize());
-  m_Transform->SetDeformationFieldSpacing (10.*estimator->GetOutputSpacing());
+  m_Transform->SetOutputOrigin(m_Controller->GetModel()->GetOutputOrigin());
+  m_Transform->SetOutputSpacing(previewSpacing);
+  m_Transform->SetOutputSize(previewSize);
+  m_Transform->SetDeformationFieldSpacing(10.*previewSpacing);
   
   // build the rendering model
   // Generate the layer
@@ -918,7 +930,7 @@ ProjectionView::DisplayPreviewWidget()
   FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
   layerGenerator->GenerateLayer();
    
-  /** Rendering image*/
+  // Render
   VisuModelType::Pointer rendering = VisuModelType::New();
   rendering->AddLayer(layerGenerator->GetLayer());
   rendering->Update();
@@ -935,7 +947,6 @@ ProjectionView::DisplayPreviewWidget()
 
 void ProjectionView::TabPositionHandler()
 {
-  std::cout <<"Current Tab" <<m_TabsMode->label() << " and our tab is "<< gQuickLook << std::endl;
   if( m_TabsMode->value() == gQuickLook )
     {
     gPreviewWindow->show();

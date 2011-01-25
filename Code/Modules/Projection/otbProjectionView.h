@@ -189,6 +189,9 @@ protected:
 
   // Display preview widget
   virtual void DisplayPreviewWidget();
+
+  // Method to update the model output attributes
+  void UpdateOutputRegion();
   
   /** Constructor */
   ProjectionView();
