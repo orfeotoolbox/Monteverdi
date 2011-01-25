@@ -901,48 +901,57 @@ ProjectionView::UpdateRpcEstimation()
 void
 ProjectionView::DisplayPreviewWidget()
 {
-  // Get the current output projectionRef computed in the model part
-  std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
-   
-  // Get the previewWidget size 
-  SizeType previewSize;
-  previewSize[0] = gPreviewWindow->w();
-  previewSize[1] = gPreviewWindow->h();
-  
-  // Compute the right spacing 
-  ModelType::SpacingType   previewSpacing;
-  previewSpacing[0] = atof(guiSpacingX->value())*atof(guiSizeX->value())/previewSize[0];
-  previewSpacing[1] = atof(guiSpacingY->value())*atof(guiSizeY->value())/previewSize[1];
-  
-  // Reproject the image with a final size equal to the previewWidget
-  // size  and relative spacing
-  m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
-  m_Transform->SetOutputProjectionRef(outputMap);
-  m_Transform->SetOutputOrigin(m_Controller->GetModel()->GetOutputOrigin());
-  m_Transform->SetOutputSpacing(previewSpacing);
-  m_Transform->SetOutputSize(previewSize);
-  m_Transform->SetDeformationFieldSpacing(10.*previewSpacing);
-  
-  // build the rendering model
-  // Generate the layer
-  LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-  layerGenerator->SetImage(m_Transform->GetOutput());
-  FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
-  layerGenerator->GenerateLayer();
-   
-  // Render
-  VisuModelType::Pointer rendering = VisuModelType::New();
-  rendering->AddLayer(layerGenerator->GetLayer());
-  rendering->Update();
 
-  // Fill the previewWidget with the quicklook of the projected image
-  m_PreviewWidget->ClearBuffer();
-  ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
-  m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+  if(!m_Controller->GetModel()->GetInputImage()->GetProjectionRef().empty()
+    ||m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize()> 0)
+    {
+    // Get the current output projectionRef computed in the model part
+    std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
+   
+    // Get the previewWidget size 
+    SizeType previewSize;
+    previewSize[0] = gPreviewWindow->w();
+    previewSize[1] = gPreviewWindow->h();
+  
+    // Compute the right spacing 
+    ModelType::SpacingType   previewSpacing;
+    previewSpacing[0] = atof(guiSpacingX->value())*atof(guiSizeX->value())/previewSize[0];
+    previewSpacing[1] = atof(guiSpacingY->value())*atof(guiSizeY->value())/previewSize[1];
+  
+    // Reproject the image with a final size equal to the previewWidget
+    // size  and relative spacing
+    m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
+    m_Transform->SetOutputProjectionRef(outputMap);
+    m_Transform->SetOutputOrigin(m_Controller->GetModel()->GetOutputOrigin());
+    m_Transform->SetOutputSpacing(previewSpacing);
+    m_Transform->SetOutputSize(previewSize);
+    m_Transform->SetDeformationFieldSpacing(10.*previewSpacing);
+  
+    // build the rendering model
+    // Generate the layer
+    LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+    layerGenerator->SetImage(m_Transform->GetOutput());
+    FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+    layerGenerator->GenerateLayer();
+   
+    // Render
+    VisuModelType::Pointer rendering = VisuModelType::New();
+    rendering->AddLayer(layerGenerator->GetLayer());
+    rendering->Update();
 
-  // Show the preview image
-  m_PreviewWidget ->show();
-  m_PreviewWidget->redraw();
+    // Fill the previewWidget with the quicklook of the projected image
+    m_PreviewWidget->ClearBuffer();
+    ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
+    m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+
+    // Show the preview image
+    m_PreviewWidget ->show();
+    m_PreviewWidget->redraw();
+    }
+  else
+    {
+    gPreviewWindow->hide();
+    }
 }
 
 void ProjectionView::TabPositionHandler()
