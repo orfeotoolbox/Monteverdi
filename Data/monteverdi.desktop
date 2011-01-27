@@ -7,4 +7,4 @@ TryExec=/usr/bin/monteverdi
 Exec=/usr/bin/monteverdi
 Terminal=false
 Icon=monteverdi
-Categories=Education;Science;Image Processing;
+Categories=Education;Science;ImageProcessing;
