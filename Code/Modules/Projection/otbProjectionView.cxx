@@ -49,7 +49,11 @@
 
 // compute the projected image quicklook
 #include "otbImageToGenericRSOutputParameters.h"
+#include "otbVectorData.h"
+#include "otbVectorDataGlComponent.h"
+#include "otbVectorDataProjectionFilter.h"
 #include "otbFltkFilterWatcher.h"
+#include "otbVectorDataFileWriter.h"
 
 namespace otb
 {
@@ -302,9 +306,8 @@ ProjectionView
   double       spacingY = atof(guiSpacingY->value());
   double       originX =  atof(guiLongSelection->value());
   double       originY =  atof(guiLatSelection->value());
-  bool         isUl    =  guiCenterPixel->value();
 
-  m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY, isUl);
+  m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY);
 }
 
 
@@ -901,10 +904,13 @@ ProjectionView::UpdateRpcEstimation()
 void
 ProjectionView::DisplayPreviewWidget()
 {
-
   if(!m_Controller->GetModel()->GetInputImage()->GetProjectionRef().empty()
     ||m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize()> 0)
     {
+    // Clear the previous widget buffer and the previous GlComponents 
+    m_PreviewWidget->ClearBuffer();
+    m_PreviewWidget->ClearGlComponents();
+
     // Get the current output projectionRef computed in the model part
     std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
    
@@ -912,21 +918,83 @@ ProjectionView::DisplayPreviewWidget()
     SizeType previewSize;
     previewSize[0] = gPreviewWindow->w();
     previewSize[1] = gPreviewWindow->h();
-  
-    // Compute the right spacing 
-    ModelType::SpacingType   previewSpacing;
-    previewSpacing[0] = atof(guiSpacingX->value())*atof(guiSizeX->value())/previewSize[0];
-    previewSpacing[1] = atof(guiSpacingY->value())*atof(guiSizeY->value())/previewSize[1];
-  
+    
+    // Estimate the output parmaters by forcing the output size to the
+    // widget size
+    typedef otb::ImageToGenericRSOutputParameters<ImageType>   OutputParametersEstimatorType;
+    OutputParametersEstimatorType::Pointer  estimator = OutputParametersEstimatorType::New();
+    
+    estimator->SetInput(m_Controller->GetModel()->GetInputImage());
+    estimator->SetOutputProjectionRef(outputMap);
+    estimator->ForceSizeTo(previewSize);
+    estimator->Compute();
+    
     // Reproject the image with a final size equal to the previewWidget
     // size  and relative spacing
     m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
     m_Transform->SetOutputProjectionRef(outputMap);
-    m_Transform->SetOutputOrigin(m_Controller->GetModel()->GetOutputOrigin());
-    m_Transform->SetOutputSpacing(previewSpacing);
-    m_Transform->SetOutputSize(previewSize);
-    m_Transform->SetDeformationFieldSpacing(10.*previewSpacing);
-  
+    m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
+    m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
+    m_Transform->SetOutputSize(estimator->GetOutputSize());
+    m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
+    
+    // Compose the VectorDataGLComponent (Region Selected by the user)
+    // Build the selected polygon vector data
+    typedef otb::VectorData<>              VectorDataType;
+    typedef VectorDataType::DataNodeType   DataNodeType;
+    typedef VectorDataType::PolygonType    PolygonType;
+    
+    VectorDataType::Pointer    userROI   = VectorDataType::New();
+    DataNodeType::Pointer document = DataNodeType::New();
+    DataNodeType::Pointer folder = DataNodeType::New();
+    DataNodeType::Pointer polygonNode = DataNodeType::New();
+    
+    document->SetNodeType(otb::DOCUMENT);
+    folder->SetNodeType(otb::FOLDER);
+    DataNodeType::Pointer root = userROI->GetDataTree()->GetRoot()->Get();
+    userROI->GetDataTree()->Add(document,root);
+    userROI->GetDataTree()->Add(folder,document);
+    userROI->GetDataTree()->Add(polygonNode,folder);
+    userROI->SetProjectionRef(outputMap);
+
+    // build the 4 corners of the selected roi
+    PolygonType::VertexType  p1,p2,p3,p4;
+    p1[0] = m_Controller->GetModel()->GetOutputOrigin()[0];
+    p1[1] = m_Controller->GetModel()->GetOutputOrigin()[1];
+
+    p2[0] = m_Controller->GetModel()->GetOutputOrigin()[0] + atoi(guiSizeX->value())*atof(guiSpacingX->value());
+    p2[1] = m_Controller->GetModel()->GetOutputOrigin()[1];
+
+    p3[0] = m_Controller->GetModel()->GetOutputOrigin()[0] + atoi(guiSizeX->value())*atof(guiSpacingX->value());
+    p3[1] = m_Controller->GetModel()->GetOutputOrigin()[1] + atoi(guiSizeY->value())*atof(guiSpacingY->value());
+
+    p4[0] = m_Controller->GetModel()->GetOutputOrigin()[0];
+    p4[1] = m_Controller->GetModel()->GetOutputOrigin()[1] + atoi(guiSizeY->value())*atof(guiSpacingY->value());
+    
+    //Build the VectorData
+    PolygonType::Pointer polygon = PolygonType::New();
+    polygon->AddVertex(p1);
+    polygon->AddVertex(p2);
+    polygon->AddVertex(p3);
+    polygon->AddVertex(p4);
+    polygonNode->SetPolygonExteriorRing(polygon);
+    
+    // Build the VectorDataGlComponent
+    typedef VectorDataGlComponent<VectorDataType>   VectorDataGlComponentType;
+    VectorDataGlComponentType::Pointer glComp = VectorDataGlComponentType::New();
+    glComp->SetVectorData(userROI);
+    glComp->SetVisible(true);
+    glComp->SetRenderPolygonBoundariesOnly(true);
+    glComp->SetSpacing(estimator->GetOutputSpacing());
+    glComp->SetOrigin(estimator->GetOutputOrigin());
+    
+    // Set the color to green
+    VectorDataGlComponentType::ColorType color = glComp->GetColor();
+    color[0]= 0.;
+    color[1]= 225.;
+    color[2]=0.;
+    glComp->SetColor(color);
+    
     // build the rendering model
     // Generate the layer
     LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
@@ -938,12 +1006,13 @@ ProjectionView::DisplayPreviewWidget()
     VisuModelType::Pointer rendering = VisuModelType::New();
     rendering->AddLayer(layerGenerator->GetLayer());
     rendering->Update();
-
-    // Fill the previewWidget with the quicklook of the projected image
-    m_PreviewWidget->ClearBuffer();
+    
+    // Fill the previewWidget with the quicklook of the projected
+    // image and the GlComponent of the ROI selected by the user
     ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
     m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
-
+    m_PreviewWidget->AddGlComponent(glComp);
+    
     // Show the preview image
     m_PreviewWidget ->show();
     m_PreviewWidget->redraw();
