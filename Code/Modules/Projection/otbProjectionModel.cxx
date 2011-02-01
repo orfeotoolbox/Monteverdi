@@ -288,8 +288,7 @@ ProjectionModel
                 double spacingX,
                 double spacingY,
                 double originX,
-                double originY,
-                bool isUl)
+                double originY)
 {
   // Edit the size
   m_OutputSize[0] = sizeX;
@@ -300,20 +299,10 @@ ProjectionModel
   m_OutputSpacing[1] = spacingY;
 
   // Edit the origin in the cartographic projection
-  OutputPointType geoPoint, newCartoPoint;
+  OutputPointType geoPoint;
   geoPoint[0] = originX;
   geoPoint[1] = originY;
-  newCartoPoint = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-  if (isUl)
-    {
-    m_OutputOrigin[0] = newCartoPoint[0] - m_OutputSpacing[0] * m_OutputSize[0] / 2;
-    m_OutputOrigin[1] = newCartoPoint[1] - m_OutputSpacing[1] * m_OutputSize[1] / 2;
-    }
-  else
-    {
-    m_OutputOrigin[0] = newCartoPoint[0];
-    m_OutputOrigin[1] = newCartoPoint[1];
-    }
+  m_OutputOrigin = m_Transform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
 }
 
 /**

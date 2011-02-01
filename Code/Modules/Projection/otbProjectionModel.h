@@ -101,8 +101,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl);
+                             double originY);
 
   /** Update the UTM Projection*/
   virtual void UpdateUTMTransform(int zone, bool north);
