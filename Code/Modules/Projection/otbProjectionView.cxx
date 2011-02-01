@@ -75,6 +75,7 @@ ProjectionView::ProjectionView()
   iTRANSMERCATORScale->value("1");
   m_InterpType = MAP_LINEAR_;
   m_MapType = MAP_UTM;
+  m_PreviousMapType = MAP_UNKOWN;
   m_InputProjectionUnknown = false;
  
   m_PreviewWidget          =  ImageWidgetType::New();
@@ -905,15 +906,14 @@ void
 ProjectionView::DisplayPreviewWidget()
 {
   if(!m_Controller->GetModel()->GetInputImage()->GetProjectionRef().empty()
-    ||m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize()> 0)
+     ||m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize()> 0)
     {
-    // Clear the previous widget buffer and the previous GlComponents 
-    m_PreviewWidget->ClearBuffer();
+    // Clear the previous GlComponents
     m_PreviewWidget->ClearGlComponents();
-
+    
     // Get the current output projectionRef computed in the model part
     std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
-   
+    
     // Get the previewWidget size 
     SizeType previewSize;
     previewSize[0] = gPreviewWindow->w();
@@ -928,15 +928,41 @@ ProjectionView::DisplayPreviewWidget()
     estimator->SetOutputProjectionRef(outputMap);
     estimator->ForceSizeTo(previewSize);
     estimator->Compute();
+
+    if(m_PreviousMapType != this->GetMapType())
+      {
+      // Clear the previous widget buffer
+      m_PreviewWidget->ClearBuffer();
+         
+      // Reproject the image with a final size equal to the previewWidget
+      // size  and relative spacing
+      m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
+      m_Transform->SetOutputProjectionRef(outputMap);
+      m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
+      m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
+      m_Transform->SetOutputSize(estimator->GetOutputSize());
+      m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
+        
+      // build the rendering model
+      // Generate the layer
+      LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+      layerGenerator->SetImage(m_Transform->GetOutput());
+      FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+      layerGenerator->GenerateLayer();
+   
+      // Render
+      VisuModelType::Pointer rendering = VisuModelType::New();
+      rendering->AddLayer(layerGenerator->GetLayer());
+      rendering->Update();
     
-    // Reproject the image with a final size equal to the previewWidget
-    // size  and relative spacing
-    m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
-    m_Transform->SetOutputProjectionRef(outputMap);
-    m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
-    m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
-    m_Transform->SetOutputSize(estimator->GetOutputSize());
-    m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
+      // Fill the previewWidget with the quicklook of the projected
+      // image and the GlComponent of the ROI selected by the user
+      ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
+      m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+
+      // Update the MapType
+      m_PreviousMapType = this->GetMapType();
+      }
     
     // Compose the VectorDataGLComponent (Region Selected by the user)
     // Build the selected polygon vector data
@@ -995,24 +1021,9 @@ ProjectionView::DisplayPreviewWidget()
     color[2]=0.;
     glComp->SetColor(color);
     
-    // build the rendering model
-    // Generate the layer
-    LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-    layerGenerator->SetImage(m_Transform->GetOutput());
-    FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
-    layerGenerator->GenerateLayer();
-   
-    // Render
-    VisuModelType::Pointer rendering = VisuModelType::New();
-    rendering->AddLayer(layerGenerator->GetLayer());
-    rendering->Update();
-    
-    // Fill the previewWidget with the quicklook of the projected
-    // image and the GlComponent of the ROI selected by the user
-    ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
-    m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+    // Add the GlComponent to the PreviewWidget
     m_PreviewWidget->AddGlComponent(glComp);
-    
+
     // Show the preview image
     m_PreviewWidget ->show();
     m_PreviewWidget->redraw();
@@ -1038,4 +1049,3 @@ void ProjectionView::TabPositionHandler()
 }
 
 }// End namespace otb
-

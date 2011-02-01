@@ -205,6 +205,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   ProjectionMapType          m_MapType;
+  ProjectionMapType          m_PreviousMapType;
   ProjectionInterpolatorType m_InterpType;
 
   // Flag to determine if there is an output
