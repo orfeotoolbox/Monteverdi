@@ -10,8 +10,8 @@ class ReaderModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Open dataset} open
-      xywh {628 357 365 240} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      label {Open dataset} open selected
+      xywh {628 357 365 260} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         callback {this->Analyse();}
@@ -20,12 +20,12 @@ class ReaderModuleGUI {open
       Fl_Return_Button bOk {
         label Open
         callback {this->OpenDataSet();}
-        xywh {265 199 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {265 210 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {165 199 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {165 210 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
@@ -42,9 +42,9 @@ class ReaderModuleGUI {open
         xywh {100 106 195 24} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 185
       }
       Fl_Choice vDataset {
-        label {Sub Dataset}
-        callback {this->DatasetChanged();} open selected
-        xywh {100 145 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 hide
+        label {You try to open a hdf file, please select a sub dataset}
+        callback {this->DatasetChanged();} open
+        xywh {100 161 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 hide
       } {}
     }
   }
