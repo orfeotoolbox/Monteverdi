@@ -28,6 +28,7 @@
 #include "itkLog10ImageFilter.h"
 #include "itkMultiplyByConstantImageFilter.h"
 #include "itkAddConstantToImageFilter.h"
+#include "itkThresholdImageFilter.h"
 
 namespace otb
 {
@@ -70,7 +71,7 @@ public:
   typedef itk::Log10ImageFilter<ImageType, ImageType>                        LogImageFilterType;
   typedef itk::MultiplyByConstantImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  MultiplyByConstantImageFilterType;
   typedef itk::AddConstantToImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  AddConstantToImageFilterType;
-
+  typedef itk::ThresholdImageFilter<ImageType> ThresholdImageFilterType;
   /** Check metadat validity */
   bool CheckMetadata();
 
@@ -133,6 +134,8 @@ private:
   LogImageFilterType::Pointer m_Log10ImageFilter;
   MultiplyByConstantImageFilterType::Pointer m_MultiplyByConstantImageFilter;
   AddConstantToImageFilterType::Pointer m_AddConstantToImageFilter;
+  /** Threshold filter */
+  ThresholdImageFilterType::Pointer m_ThresholdFilter;
 
   /** Modulus input image or complex one */
   bool m_WorkWithCplx;
