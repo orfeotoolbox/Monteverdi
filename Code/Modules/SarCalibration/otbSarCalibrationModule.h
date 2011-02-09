@@ -108,8 +108,6 @@ protected:
   /** Complex Calibration Process */
   void ComplexCalibrationProcess();
 
-  static const double Epsilon;
-
 private:
   SarCalibrationModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
