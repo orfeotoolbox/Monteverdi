@@ -46,7 +46,7 @@
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
-#include "otbOrthorectificationModule.h"
+//#include "otbOrthorectificationModule.h"
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
@@ -192,8 +192,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
   
   /***********  Geometry menu *******************/
-  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
-                                                       otbGetTextMacro("Geometry/Orthorectification"));
+//   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
+//                                                        otbGetTextMacro("Geometry/Orthorectification"));
   model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition",
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
