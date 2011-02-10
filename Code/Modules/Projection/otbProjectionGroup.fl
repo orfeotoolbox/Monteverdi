@@ -26,11 +26,11 @@ class ProjectionGroup {open
         xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group AllGrp {
-          label {Input image} open
+          label {Input image} open selected
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
-            label {Origin Geographical coordinates} open selected
+            label {Origin Geographical coordinates} open
             xywh {31 67 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group {} {open
@@ -494,11 +494,16 @@ vAverageElevation->deactivate();
         }
         Fl_Group gQuickLook {
           label Quicklook open
-          xywh {15 43 405 358} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 32 420 387} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group gPreviewWindow {open
-            xywh {15 43 405 358} resizable
+            xywh {15 36 400 344} resizable
           } {}
+          Fl_Check_Button bDispalyPreview {
+            label {Preview Projected Image}
+            callback {this->DisplayPreviewWidget();}
+            xywh {225 390 175 15} box PLASTIC_DOWN_BOX down_box DOWN_BOX labelsize 12 labelcolor 186
+          }
         }
       }
     }
