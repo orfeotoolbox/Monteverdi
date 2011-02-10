@@ -910,10 +910,10 @@ ProjectionView::DisplayPreviewWidget()
     {
     // Clear the previous GlComponents
     m_PreviewWidget->ClearGlComponents();
-    
+
     // Get the current output projectionRef computed in the model part
     std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
-    
+       
     // Get the previewWidget size 
     SizeType previewSize;
     previewSize[0] = gPreviewWindow->w();
@@ -929,20 +929,31 @@ ProjectionView::DisplayPreviewWidget()
     estimator->ForceSizeTo(previewSize);
     estimator->Compute();
 
-    if(m_PreviousMapType != this->GetMapType())
-      {
-      // Clear the previous widget buffer
-      m_PreviewWidget->ClearBuffer();
-         
-      // Reproject the image with a final size equal to the previewWidget
-      // size  and relative spacing
-      m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
-      m_Transform->SetOutputProjectionRef(outputMap);
-      m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
-      m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
-      m_Transform->SetOutputSize(estimator->GetOutputSize());
-      m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
+    // Clear the previous widget buffer
+    m_PreviewWidget->ClearBuffer();
+      
+    // Display the preview image only if the check box is selected
+    if(bDispalyPreview->value())
+      {      
+      // Two cases when the Display button is set to ON : 
+      // - The mapType changed : reproject
+      // - The mapType does not changed : use the previous projected
+      // image
+      if(m_PreviousMapType != this->GetMapType())
+        {         
+        // Reproject the image with a final size equal to the previewWidget
+        // size  and relative spacing
+        m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
+        m_Transform->SetOutputProjectionRef(outputMap);
+        m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
+        m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
+        m_Transform->SetOutputSize(estimator->GetOutputSize());
+        m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
         
+        // Update the MapType
+        m_PreviousMapType = this->GetMapType();
+        }
+      
       // build the rendering model
       // Generate the layer
       LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
@@ -956,12 +967,27 @@ ProjectionView::DisplayPreviewWidget()
       rendering->Update();
     
       // Fill the previewWidget with the quicklook of the projected
-      // image and the GlComponent of the ROI selected by the user
+      // image 
       ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
       m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+      }
+    else
+      {
+      // Create a temp image : cause no vectordataGlComponent
+      // rendering without an image layer.   
+      ViewerImageType::Pointer  tempImage  = ViewerImageType::New();
+      ImageType::RegionType            tempRegion;
+      ImageType::RegionType::IndexType index;
+      index.Fill(0);
+      tempRegion.SetIndex(index);
+      tempRegion.SetSize(estimator->GetOutputSize());
+      
+      tempImage->SetRegions(tempRegion);
+      tempImage->Allocate();
+      tempImage->FillBuffer(0.);
 
-      // Update the MapType
-      m_PreviousMapType = this->GetMapType();
+      // Fill the previewWidget with the temp black image
+      m_PreviewWidget->ReadBuffer(tempImage, tempRegion);
       }
     
     // Compose the VectorDataGLComponent (Region Selected by the user)
@@ -1039,12 +1065,14 @@ void ProjectionView::TabPositionHandler()
   if( m_TabsMode->value() == gQuickLook )
     {
     gPreviewWindow->show();
+    bDispalyPreview->show();
     this->DisplayPreviewWidget();
     }
   else
     {
     m_PreviewWidget->hide();
     gPreviewWindow->hide();
+    bDispalyPreview->hide();
     }
 }
 
