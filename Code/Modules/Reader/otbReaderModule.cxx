@@ -42,7 +42,7 @@ ReaderModule::ReaderModule()
   vType->add(otbGetTextMacro("Unknown"));
   vType->add(otbGetTextMacro("Optical image"));
   vType->add(otbGetTextMacro("SAR image"));
-  vType->add(otbGetTextMacro("Vector"));
+  vType->add(otbGetTextMacro("Vector Data"));
   vType->value(0);
 
   // Deactivate ok for now
@@ -83,111 +83,126 @@ void ReaderModule::Analyse()
   // Is hdf type
   bool typeHdf = false;
   if (lFile.ext() == "hdf")
+    {
     typeHdf = true;
+    }
 
   if (typeHdf)
-  {
-	  otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+    {
+    otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
 
-	  readerGDAL->SetFileName(filepath);
-	  if (readerGDAL->CanReadFile(filepath.c_str()))
-	  {
-		  bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_Names, m_Desc);
-		  if (readingSubDatasetInfo == false )
-			  return ;
-	  }
-	  else
-	  {
-	  		return;
-	  }
+    readerGDAL->SetFileName(filepath);
+    if (readerGDAL->CanReadFile(filepath.c_str()))
+      {
+      bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_Names, m_Desc);
+      if (readingSubDatasetInfo == false) return;
+      }
+    else
+      {
+      return;
+      }
 
-	  // Fill vDataset with subdataset descriptor info
-		for( unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size() ; itSubDataset++ )
-		{
-			vDataset->add(m_Desc[itSubDataset].c_str());
-		}
-	  //vDataset->activate();
-	  vDataset->set_visible();
+    // Fill vDataset with subdataset descriptor info
+    for (unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size(); itSubDataset++)
+      {
+      vDataset->add(m_Desc[itSubDataset].c_str());
+      }
+    vDataset->set_visible();
+    vDataset->value(0);
 
-	  vDataset->value(0);
-
-	  vType->value(1); // We assume that hdf file is composed of optical image
-
-	  bOk->activate();
-
-  }
+    vType->value(1); // We assume that hdf file is composed of optical image
+    bOk->activate();
+    }
   else
-  {
-	  // Try different types
-	  try
-	  {
-	  // Read the image
-	  m_FPVReader->SetFileName(filepath);
-	  m_FPVReader->GenerateOutputInformation();
+    {
+    // Try different types
+    try
+      {
+      // Read the image
+      m_FPVReader->SetFileName(filepath);
+      m_FPVReader->GenerateOutputInformation();
 
-	  switch (m_FPVReader->GetImageIO()->GetPixelType())
-		{
-		// handle the radar case
-		case itk::ImageIOBase::COMPLEX:
-		  vType->value(2);
-		  // If we are still here, this is a readable image
-		  typeFound = true;
-		  break;
+      // Special action if we use the GDAL image IO
+      if (strcmp(m_FPVReader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+        {
+        if ((dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex())
+          { // Complex Data
+          vType->value(2);
+          typeFound = true;
+          }
+        else
+          { // Real Data
+          vType->value(1);
+          typeFound = true;
+          }
+        }
+      else // if we don't use GDAL Image IO
+        {
+        switch (m_FPVReader->GetImageIO()->GetPixelType())
+          {
+          // handle the radar case
+          case itk::ImageIOBase::COMPLEX:
+            vType->value(2);
+            // If we are still here, this is a readable image
+            typeFound = true;
+            break;
+            // handle the optical case
+          default:
+            vType->value(1);
+            // If we are still here, this is a readable image
+            typeFound = true;
+            break;
+          }
+        }
+      }
+    catch (itk::ExceptionObject&)
+      {
+      // Silent catch
+      }
 
-		// handle the optical case
-		default:
-		  vType->value(1);
-		  // If we are still here, this is a readable image
-		  typeFound = true;
-		  break;
-		}
-	  }
-	  catch (itk::ExceptionObject&)
-	  {
-	  // Silent catch
-	  }
+    if (!typeFound)
+      {
+      try
+        {
+        VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+        vectorReader->SetFileName(filepath);
+        vectorReader->GenerateOutputInformation();
+        vType->value(3);
+        typeFound = true;
+        }
+      catch (itk::ExceptionObject&)
+        {
+        // Silent catch
+        vType->value(0);
+        }
+      }
 
-	  if (!typeFound)
-	  {
-		  try
-		  {
-			  VectorReaderType::Pointer vectorReader = VectorReaderType::New();
-			  vectorReader->SetFileName(filepath);
-			  vectorReader->GenerateOutputInformation();
-			  vType->value(3);
-			  typeFound = true;
-		  }
-		  catch (itk::ExceptionObject&)
-		  {
-			  // Silent catch
-			  vType->value(0);
-		  }
-	  }
-
-	  // Activate/ deactivate ok
-	  if (!typeFound)
-	  {
-		  vType->value(0);
-	      bOk->deactivate();
-	  }
-	  else
-	  {
-		  bOk->activate();
-	  }
-  }
+    // Activate/ deactivate ok
+    if (!typeFound)
+      {
+      vType->value(0);
+      bOk->deactivate();
+      }
+    else
+      {
+      bOk->activate();
+      }
+    }
 
   std::string name = vName->value();
 
   if (name.empty())
-  {
+    {
     if (typeHdf)
+      {
       vName->value(m_Desc[0].c_str());
+      }
     else
       {
-      ossimFilename fname (vFilePath->value());
-		  vName->value(fname.fileNoExtension());
+      ossimFilename fname(vFilePath->value());
+      vName->value(fname.fileNoExtension());
       }
-  }
+    }
 }
 
 void ReaderModule::OpenDataSet()
