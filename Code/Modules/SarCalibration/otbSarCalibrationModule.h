@@ -25,10 +25,8 @@
 #include "otbImage.h"
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbSarBrightnessToImageFilter.h"
-#include "itkLog10ImageFilter.h"
-#include "itkMultiplyByConstantImageFilter.h"
-#include "itkAddConstantToImageFilter.h"
-#include "itkThresholdImageFilter.h"
+#include "otbLog10ThresholdedImageFilter.h"
+
 
 namespace otb
 {
@@ -68,10 +66,7 @@ public:
   typedef SarBrightnessToImageFilter<ImageType, ImageType>               BrightnessFilterType;
   typedef SarBrightnessToImageFilter<ComplexImageType,ImageType>         BrightnessComplexFilterType;
 
-  typedef itk::Log10ImageFilter<ImageType, ImageType>                        LogImageFilterType;
-  typedef itk::MultiplyByConstantImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  MultiplyByConstantImageFilterType;
-  typedef itk::AddConstantToImageFilter<ImageType,Floating_Point_PrecisionType,ImageType>  AddConstantToImageFilterType;
-  typedef itk::ThresholdImageFilter<ImageType> ThresholdImageFilterType;
+  typedef otb::Log10ThresholdedImageFilter<ImageType,ImageType>          Log10TImageFilterType;
   /** Check metadat validity */
   bool CheckMetadata();
 
@@ -113,8 +108,6 @@ protected:
   /** Complex Calibration Process */
   void ComplexCalibrationProcess();
 
-  static const double Epsilon;
-
 private:
   SarCalibrationModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -130,12 +123,7 @@ private:
   BrightnessFilterType::Pointer        m_BrightnessCalibFilter;
   BrightnessComplexFilterType::Pointer m_ComplexBrightnessFilter;
 
-
-  LogImageFilterType::Pointer m_Log10ImageFilter;
-  MultiplyByConstantImageFilterType::Pointer m_MultiplyByConstantImageFilter;
-  AddConstantToImageFilterType::Pointer m_AddConstantToImageFilter;
-  /** Threshold filter */
-  ThresholdImageFilterType::Pointer m_ThresholdFilter;
+  Log10TImageFilterType::Pointer m_Log10TImageFilter;
 
   /** Modulus input image or complex one */
   bool m_WorkWithCplx;

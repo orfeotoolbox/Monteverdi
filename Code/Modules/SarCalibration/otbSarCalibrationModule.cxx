@@ -28,8 +28,6 @@
 namespace otb
 {
 
-const double SarCalibrationModule::Epsilon = 1.0E-6;
-
 /**
  * Constructor
  */
@@ -42,15 +40,7 @@ SarCalibrationModule
   m_ComplexBrightnessFilter = BrightnessComplexFilterType::New();
   m_BrightnessCalibFilter = BrightnessFilterType::New();
 
-  m_Log10ImageFilter = LogImageFilterType::New();
-  m_MultiplyByConstantImageFilter = MultiplyByConstantImageFilterType::New();
-  m_MultiplyByConstantImageFilter->SetConstant(10.0);
-
-  m_AddConstantToImageFilter = AddConstantToImageFilterType::New();
-  m_AddConstantToImageFilter->SetConstant(itkGetStaticConstMacro(Epsilon));
-
-  // Instanciate an instance of thresholder
-  m_ThresholdFilter    = ThresholdImageFilterType::New();
+  m_Log10TImageFilter = Log10TImageFilterType::New();
 
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Input image"));
@@ -59,10 +49,6 @@ SarCalibrationModule
   m_WorkWithCplx = false;
   // Build the GUI
   this->BuildGUI();
-  bEnableNoise->value(1);
-  vThresholdLogDisplay->value(-30);
-  bThresholdOutput->value(1);
-
 }
 
 /**
@@ -136,6 +122,8 @@ SarCalibrationModule
 ::ComplexCalibrationProcess()
 {
   std::string msgAboutNoise(", with noise");
+  double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
+
   if (bCalib->value() == 1 && bBrightness->value() == 0) // Radiometric Calibration
     {
     m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
@@ -153,35 +141,18 @@ SarCalibrationModule
                                 otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image").c_str()));
       }
     else if (bLin->value() == 0 && bdB->value() == 1) // dB
-        {
-        m_AddConstantToImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
-        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
-
-        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-        if (bThresholdOutput->value() == 1) // With Threshold
-          {
-        m_ThresholdFilter->SetInput(m_MultiplyByConstantImageFilter->GetOutput());
-        m_ThresholdFilter->SetOutsideValue(vThresholdLogDisplay->value());
-        m_ThresholdFilter->ThresholdBelow(vThresholdLogDisplay->value());
-
-        this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),
-                                  "Radiometric Calibration in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Thresholded Calibrated image dB").c_str()));
-          }
-        else // Without Threshold
-          {
-          this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                                            "Radiometric Calibration in dB",
-                                            otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-          }
-
-        }
-      else // Invalid case
-        {
-        MsgReporter::GetInstance()->SendError("Invalid scale value ");
-        return;
-        }
+      {
+      m_Log10TImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
+      m_Log10TImageFilter->SetThresholdedValue(valueT);
+      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
+                                "Radiometric Calibration in dB",
+                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
+      }
+    else // Invalid case
+      {
+      MsgReporter::GetInstance()->SendError("Invalid scale value ");
+      return;
+      }
     }
   else // Brightness Calibration
     {
@@ -201,33 +172,18 @@ SarCalibrationModule
 
       }
     else if (bLin->value() == 0 && bdB->value() == 1) // dB
-        {
-        m_AddConstantToImageFilter->SetInput(m_ComplexBrightnessFilter->GetOutput());
-        m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
-
-        m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-        if (bThresholdOutput->value() == 1) // With Threshold
-          {
-          m_ThresholdFilter->SetInput(m_MultiplyByConstantImageFilter->GetOutput());
-          m_ThresholdFilter->SetOutsideValue(vThresholdLogDisplay->value());
-          m_ThresholdFilter->ThresholdBelow(vThresholdLogDisplay->value());
-          this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),
-                                    "Brightness Image in dB",
-                                    otbGetTextMacro(msgAboutNoise.insert(0,"Thresholded Calibrated image dB").c_str()));
-          }
-        else // Without Threshold
-          {
-        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                                  "Brightness Image in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-          }
-        }
+      {
+      m_Log10TImageFilter->SetInput(m_ComplexBrightnessFilter->GetOutput());
+      m_Log10TImageFilter->SetThresholdedValue(valueT);
+      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
+                                "Brightness Image in dB",
+                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
+      }
     else // Invalid case
-        {
+      {
         MsgReporter::GetInstance()->SendError("Invalid scale value ");
         return;
-        }
+      }
     }
 }
 
@@ -236,6 +192,7 @@ SarCalibrationModule
 ::CalibrationProcess()
 {
   std::string msgAboutNoise(", with noise");
+  double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
 
   if (bCalib->value() == 1 && bBrightness->value() == 0) // Radiometric Calibration
     {
@@ -256,25 +213,11 @@ SarCalibrationModule
       }
     else if (bLin->value() == 0 && bdB->value() == 1) // dB
       {
-      m_AddConstantToImageFilter->SetInput(m_CalibFilter->GetOutput());
-      m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
-      m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-      if (bThresholdOutput->value() == 1) // With Threshold
-        {
-        m_ThresholdFilter->SetInput(m_MultiplyByConstantImageFilter->GetOutput());
-        m_ThresholdFilter->SetOutsideValue(vThresholdLogDisplay->value());
-        m_ThresholdFilter->ThresholdBelow(vThresholdLogDisplay->value());
-        this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),
-                                  "Radiometric Calibration in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Thresholded Calibrated image dB").c_str()));
-        }
-      else // Without Threshold
-        {
-        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                                  "Radiometric Calibration in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-        }
+      m_Log10TImageFilter->SetInput(m_CalibFilter->GetOutput());
+      m_Log10TImageFilter->SetThresholdedValue(valueT);
+      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
+                                "Radiometric Calibration in dB",
+                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
       }
     else // Invalid case
       {
@@ -300,25 +243,11 @@ SarCalibrationModule
       }
     else if (bLin->value() == 0 && bdB->value() == 1) // dB
       {
-      m_AddConstantToImageFilter->SetInput(m_BrightnessCalibFilter->GetOutput());
-      m_Log10ImageFilter->SetInput(m_AddConstantToImageFilter->GetOutput());
-      m_MultiplyByConstantImageFilter->SetInput(m_Log10ImageFilter->GetOutput());
-
-      if (bThresholdOutput->value() == 1) // With Threshold
-        {
-        m_ThresholdFilter->SetInput(m_MultiplyByConstantImageFilter->GetOutput());
-        m_ThresholdFilter->SetOutsideValue(vThresholdLogDisplay->value());
-        m_ThresholdFilter->ThresholdBelow(vThresholdLogDisplay->value());
-        this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(),
-                                  "Brightness Image in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Thresholded Calibrated image dB").c_str()));
-        }
-      else // Without Threshold
-        {
-        this->AddOutputDescriptor(m_MultiplyByConstantImageFilter->GetOutput(),
-                                  "Brightness Image in dB",
-                                  otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-        }
+      m_Log10TImageFilter->SetInput(m_BrightnessCalibFilter->GetOutput());
+      m_Log10TImageFilter->SetThresholdedValue(valueT);
+      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
+                                "Brightness Image in dB",
+                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
       }
     else // Invalid case
       {

@@ -54,7 +54,6 @@ bCalib->value(0);
 {
 bdB->value(0);
 vThresholdLogDisplay->hide();
-bThresholdOutput->hide();
 }}
           xywh {165 76 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
@@ -64,22 +63,17 @@ bThresholdOutput->hide();
 {
 bLin->value(0);
 vThresholdLogDisplay->show();
-bThresholdOutput->show();
 }}
           xywh {210 76 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 8
         }
       }
       Fl_Check_Button bEnableNoise {
-        label {Enable Noise}
-        xywh {15 100 115 25} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        label {Enable Noise} selected
+        xywh {15 100 115 25} down_box DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Value_Input vThresholdLogDisplay {
         label {Threshold Value (dB):}
-        xywh {308 124 40 23} labelfont 1 labelsize 12 labelcolor 185 textsize 12 hide
-      }
-      Fl_Check_Button bThresholdOutput {
-        label {Below Thresholding} selected
-        xywh {15 123 140 25} down_box DOWN_BOX labelfont 1 labelsize 12 labelcolor 185 hide
+        xywh {150 124 40 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185 minimum -60 maximum 0 step 1 value -30 hide
       }
     }
   }

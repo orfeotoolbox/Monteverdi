@@ -27,8 +27,16 @@
 int otbSarCalibrationModuleTest(int argc, char* argv[])
 {
 
+  if (argc != 6)
+    {
+    std::cout << "Invalid Parameters" << std::endl;
+    }
+
   bool withComplex = false;
-  if (atoi(argv[2]) == 1) withComplex = true;
+  if (atoi(argv[2]) == 1)
+    {
+    withComplex = true;
+    }
 
   //Internationalization
   otbI18nMacro();
@@ -62,6 +70,7 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
 
   bool isCalib = atoi(argv[3]);
   bool isLinear = atoi(argv[4]);
+  bool withNoise = atoi(argv[5]);
 
   module->AddInputByKey("InputImage", wrapperIn);
 
@@ -75,6 +84,11 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
     pointModule->bBrightness->value(!isCalib);
     pointModule->bLin->value(isLinear);
     pointModule->bdB->value(!isLinear);
+    pointModule->bEnableNoise->value(withNoise);
+    pointModule->bEnableNoise->value(!withNoise);
+    pointModule->vThresholdLogDisplay->value(-25);
+    if ( pointModule->vThresholdLogDisplay->value() != -25 )
+      return EXIT_FAILURE;
 
     Fl::check();
     pointModule->bOK->do_callback();
