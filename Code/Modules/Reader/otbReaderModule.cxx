@@ -23,7 +23,6 @@
 #include "base/ossimFilename.h"
 #include "otbMsgReporter.h"
 #include "otbI18n.h"
-#include "otbGDALImageIO.h"
 
 namespace otb
 {
@@ -77,31 +76,11 @@ void ReaderModule::Analyse()
   // Is type found ?
   bool typeFound = false;
 
-  // Get the filename from the filepath
-  ossimFilename lFile = ossimFilename(filepath);
-
   // Is hdf type
-  bool typeHdf = false;
-  if (lFile.ext() == "hdf")
-    {
-    typeHdf = true;
-    }
+  bool typeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
 
   if (typeHdf)
     {
-    otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
-
-    readerGDAL->SetFileName(filepath);
-    if (readerGDAL->CanReadFile(filepath.c_str()))
-      {
-      bool readingSubDatasetInfo = readerGDAL->GetSubDatasetInfo(m_Names, m_Desc);
-      if (readingSubDatasetInfo == false) return;
-      }
-    else
-      {
-      return;
-      }
-
     // Fill vDataset with subdataset descriptor info
     for (unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size(); itSubDataset++)
       {
@@ -262,7 +241,7 @@ void ReaderModule::OpenOpticalImage()
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
-  if (lFile.ext() == "hdf")
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
     filepath += ":";
     ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
@@ -273,7 +252,7 @@ void ReaderModule::OpenOpticalImage()
   m_FPVReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
-  if (lFile.ext() == "hdf")
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
     oss << "Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
     ossId << vName->value();//m_Desc[vDataset->value()];
@@ -291,15 +270,32 @@ void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId;
+  ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
+
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  {
+    filepath += ":";
+    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
+    filepath += ossDatasetId.str();
+  }
 
   m_ComplexReader->SetFileName(filepath);
   m_ComplexReader->GenerateOutputInformation();
 
-  oss << "Complex image read from file: " << lFile.file();
-  ossId << vName->value();
+  // Add the full data set as a descriptor
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+    {
+    oss << "Complex Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    ossId << vName->value();//m_Desc[vDataset->value()];
+    }
+  else
+    {
+    oss << "Complex image read from file: " << lFile.file();
+    ossId << vName->value();
+    }
+
   this->AddOutputDescriptor(m_ComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
