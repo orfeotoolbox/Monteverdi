@@ -27,7 +27,7 @@
 int otbSarCalibrationModuleTest(int argc, char* argv[])
 {
 
-  if (argc != 6)
+  if (argc != 5)
     {
     std::cout << "Invalid Parameters" << std::endl;
     }
@@ -68,9 +68,8 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
     wrapperIn = otb::DataObjectWrapper::Create(cplxReader->GetOutput());
     }
 
-  bool isCalib = atoi(argv[3]);
-  bool isLinear = atoi(argv[4]);
-  bool withNoise = atoi(argv[5]);
+  bool isLinear = atoi(argv[3]);
+  bool withNoise = atoi(argv[4]);
 
   module->AddInputByKey("InputImage", wrapperIn);
 
@@ -80,8 +79,6 @@ int otbSarCalibrationModuleTest(int argc, char* argv[])
 
   if (pointModule->CheckMetadata())
     {
-    pointModule->bCalib->value(isCalib);
-    pointModule->bBrightness->value(!isCalib);
     pointModule->bLin->value(isLinear);
     pointModule->bdB->value(!isLinear);
     pointModule->bEnableNoise->value(withNoise);

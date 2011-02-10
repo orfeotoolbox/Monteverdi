@@ -240,7 +240,6 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvSarCalibrationModuleNoMDTest ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
 	0 # scalar image
-	0 # Radiometric Calib
 	0 # Linear
 	0 # Without/With Noise
 )
@@ -249,56 +248,24 @@ IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
 	0 # Linear
 	1 # With Noise
 )
 ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
 	0 # Linear
 	0 # Without Noise
 )
 ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
 	1 # Linear
 	1 # With Noise
 )
 ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
-	1 # Linear
-	0 # Without Noise
-)
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessLinear_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
-	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-	1 # is complex
-	1 # Radiometric Calib
-	0 # Linear
-	1 # With Noise
-)
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessLinear_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
-	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-	1 # is complex
-	1 # Radiometric Calib
-	0 # Linear
-	0 # Without Noise
-)
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessDB_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
-	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-	1 # is complex
-	1 # Radiometric Calib
-	1 # Linear
-	1 # With Noise
-)
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessDB_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
-	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-	1 # is complex
-	1 # Radiometric Calib
 	1 # Linear
 	0 # Without Noise
 )

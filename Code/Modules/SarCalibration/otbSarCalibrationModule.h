@@ -123,7 +123,8 @@ private:
   BrightnessFilterType::Pointer        m_BrightnessCalibFilter;
   BrightnessComplexFilterType::Pointer m_ComplexBrightnessFilter;
 
-  Log10TImageFilterType::Pointer m_Log10TImageFilter;
+  Log10TImageFilterType::Pointer m_Log10TImageFilterRC;
+  Log10TImageFilterType::Pointer m_Log10TImageFilterB;
 
   /** Modulus input image or complex one */
   bool m_WorkWithCplx;

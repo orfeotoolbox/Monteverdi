@@ -40,7 +40,8 @@ SarCalibrationModule
   m_ComplexBrightnessFilter = BrightnessComplexFilterType::New();
   m_BrightnessCalibFilter = BrightnessFilterType::New();
 
-  m_Log10TImageFilter = Log10TImageFilterType::New();
+  m_Log10TImageFilterRC = Log10TImageFilterType::New();
+  m_Log10TImageFilterB = Log10TImageFilterType::New();
 
   // Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Input image"));
@@ -122,68 +123,45 @@ SarCalibrationModule
 ::ComplexCalibrationProcess()
 {
   std::string msgAboutNoise(", with noise");
+  std::string msgDescriptor;
   double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
 
-  if (bCalib->value() == 1 && bBrightness->value() == 0) // Radiometric Calibration
+  m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
+  m_ComplexBrightnessFilter->SetInput(m_ComplexInputImage);
+  if (bEnableNoise->value() == 0)
     {
-    m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
-    if (bEnableNoise->value() == 0)
-      {
-      m_ComplexCalibFilter->SetEnableNoise(false);
-      msgAboutNoise.assign(", without noise");
-      }
-
-    // Output selection (linear or dB scale)
-    if (bLin->value() == 1 && bdB->value() == 0) // Linear
-      {
-      this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(),
-                                "Radiometric Calibration Image",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image").c_str()));
-      }
-    else if (bLin->value() == 0 && bdB->value() == 1) // dB
-      {
-      m_Log10TImageFilter->SetInput(m_ComplexCalibFilter->GetOutput());
-      m_Log10TImageFilter->SetThresholdedValue(valueT);
-      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
-                                "Radiometric Calibration in dB",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-      }
-    else // Invalid case
-      {
-      MsgReporter::GetInstance()->SendError("Invalid scale value ");
-      return;
-      }
+    m_ComplexCalibFilter->SetEnableNoise(false);
+    m_ComplexBrightnessFilter->SetEnableNoise(false);
+    msgAboutNoise.assign(", without noise");
     }
-  else // Brightness Calibration
+
+  // Output selection (linear or dB scale)
+  if (bLin->value() == 1 && bdB->value() == 0) // Linear
     {
-    m_ComplexBrightnessFilter->SetInput(m_ComplexInputImage);
-    if (bEnableNoise->value() == 0)
-      {
-      m_ComplexBrightnessFilter->SetEnableNoise(false);
-      msgAboutNoise.assign(", without noise");
-      }
+    msgDescriptor = "Calibrated image" + msgAboutNoise;
+    this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(), "Radiometric Calibration Image",
+                              otbGetTextMacro(msgDescriptor.c_str()));
 
-    // Output selection (linear or dB scale)
-    if (bLin->value() == 1 && bdB->value() == 0) // Linear
-      {
-      this->AddOutputDescriptor(m_ComplexBrightnessFilter->GetOutput(),
-                                "Brightness Image",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image").c_str()));
+    this->AddOutputDescriptor(m_ComplexBrightnessFilter->GetOutput(), "Brightness Image",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+    }
+  else if (bLin->value() == 0 && bdB->value() == 1) // dB
+    {
+    msgDescriptor = "Calibrated image dB" + msgAboutNoise;
+    m_Log10TImageFilterRC->SetInput(m_ComplexCalibFilter->GetOutput());
+    m_Log10TImageFilterRC->SetThresholdedValue(valueT);
+    this->AddOutputDescriptor(m_Log10TImageFilterRC->GetOutput(), "Radiometric Calibration in dB",
+                              otbGetTextMacro(msgDescriptor.c_str()));
 
-      }
-    else if (bLin->value() == 0 && bdB->value() == 1) // dB
-      {
-      m_Log10TImageFilter->SetInput(m_ComplexBrightnessFilter->GetOutput());
-      m_Log10TImageFilter->SetThresholdedValue(valueT);
-      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
-                                "Brightness Image in dB",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-      }
-    else // Invalid case
-      {
-        MsgReporter::GetInstance()->SendError("Invalid scale value ");
-        return;
-      }
+    m_Log10TImageFilterB->SetInput(m_ComplexBrightnessFilter->GetOutput());
+    m_Log10TImageFilterB->SetThresholdedValue(valueT);
+    this->AddOutputDescriptor(m_Log10TImageFilterB->GetOutput(), "Brightness Image in dB",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+    }
+  else // Invalid case
+    {
+    MsgReporter::GetInstance()->SendError("Invalid scale value ");
+    return;
     }
 }
 
@@ -192,68 +170,46 @@ SarCalibrationModule
 ::CalibrationProcess()
 {
   std::string msgAboutNoise(", with noise");
+  std::string msgDescriptor;
   double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
 
-  if (bCalib->value() == 1 && bBrightness->value() == 0) // Radiometric Calibration
+  m_CalibFilter->SetInput(m_InputImage);
+  m_BrightnessCalibFilter->SetInput(m_InputImage);
+  if (bEnableNoise->value() == 0)
     {
-    m_CalibFilter->SetInput(m_InputImage);
-    if (bEnableNoise->value() == 0)
-      {
-      m_CalibFilter->SetEnableNoise(false);
-      msgAboutNoise.assign(", without noise");
-      }
-
-    // Output selection (linear or dB scale)
-    if (bLin->value() == 1 && bdB->value() == 0) // Linear
-      {
-      this->AddOutputDescriptor(m_CalibFilter->GetOutput(),
-                                "Radiometric Calibration Image",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image").c_str()));
-
-      }
-    else if (bLin->value() == 0 && bdB->value() == 1) // dB
-      {
-      m_Log10TImageFilter->SetInput(m_CalibFilter->GetOutput());
-      m_Log10TImageFilter->SetThresholdedValue(valueT);
-      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
-                                "Radiometric Calibration in dB",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-      }
-    else // Invalid case
-      {
-      MsgReporter::GetInstance()->SendError("Invalid scale value ");
-      return;
-      }
+    m_CalibFilter->SetEnableNoise(false);
+    m_BrightnessCalibFilter->SetEnableNoise(false);
+    msgAboutNoise.assign(", without noise");
     }
-  else  // Brightness
-    {
-    m_BrightnessCalibFilter->SetInput(m_InputImage);
-    if (bEnableNoise->value() == 0)
-      {
-      m_BrightnessCalibFilter->SetEnableNoise(false);
-      msgAboutNoise.assign(", without noise");
-      }
 
     // Output selection (linear or dB scale)
-    if (bLin->value() == 1 && bdB->value() == 0) // Linear
-      {
-      this->AddOutputDescriptor(m_BrightnessCalibFilter->GetOutput(),
-                                "Brightness Image",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image").c_str()));
-      }
-    else if (bLin->value() == 0 && bdB->value() == 1) // dB
-      {
-      m_Log10TImageFilter->SetInput(m_BrightnessCalibFilter->GetOutput());
-      m_Log10TImageFilter->SetThresholdedValue(valueT);
-      this->AddOutputDescriptor(m_Log10TImageFilter->GetOutput(),
-                                "Brightness Image in dB",
-                                otbGetTextMacro(msgAboutNoise.insert(0,"Calibrated image dB").c_str()));
-      }
-    else // Invalid case
-      {
-      MsgReporter::GetInstance()->SendError("Invalid scale value ");
-      return;
-      }
+  if (bLin->value() == 1 && bdB->value() == 0) // Linear
+    {
+    msgDescriptor = "Calibrated image" + msgAboutNoise;
+    this->AddOutputDescriptor(m_CalibFilter->GetOutput(), "Radiometric Calibration Image",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+
+    this->AddOutputDescriptor(m_BrightnessCalibFilter->GetOutput(), "Brightness Image",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+
+    }
+  else if (bLin->value() == 0 && bdB->value() == 1) // dB
+    {
+    msgDescriptor = "Calibrated image in dB" + msgAboutNoise;
+    m_Log10TImageFilterRC->SetInput(m_CalibFilter->GetOutput());
+    m_Log10TImageFilterRC->SetThresholdedValue(valueT);
+    this->AddOutputDescriptor(m_Log10TImageFilterRC->GetOutput(), "Radiometric Calibration in dB",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+
+    m_Log10TImageFilterB->SetInput(m_BrightnessCalibFilter->GetOutput());
+    m_Log10TImageFilterB->SetThresholdedValue(valueT);
+    this->AddOutputDescriptor(m_Log10TImageFilterB->GetOutput(), "Brightness Image in dB",
+                              otbGetTextMacro(msgDescriptor.c_str()));
+    }
+  else // Invalid case
+    {
+    MsgReporter::GetInstance()->SendError("Invalid scale value ");
+    return;
     }
 }
 
