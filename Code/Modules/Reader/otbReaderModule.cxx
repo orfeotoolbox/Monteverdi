@@ -81,6 +81,7 @@ void ReaderModule::Analyse()
 
   if (typeHdf)
     {
+    CheckDataSetString();
     // Fill vDataset with subdataset descriptor info
     for (unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size(); itSubDataset++)
       {
@@ -327,6 +328,10 @@ void ReaderModule::Browse()
     return;
     }
   vFilePath->value(filename);
+  // Need to clear these variables
+  m_Desc.clear();
+  m_Names.clear();
+  vDataset->clear();
   this->Analyse();
 }
 
@@ -339,6 +344,50 @@ void ReaderModule::Hide()
 {
   wFileChooserWindow->hide();
 }
-} // End namespace otb
 
+bool ReaderModule::IsHdfFile(std::string filepath)
+{
+  GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  readerGDAL->SetFileName(filepath);
+  if (readerGDAL->CanReadFile(filepath.c_str()))
+    {
+    if (!readerGDAL->GetSubDatasetInfo(m_Names, m_Desc))
+      {
+      return false; // There are no subdataset in this file
+      }
+    }
+  else
+    {
+    return false; // GDAL cannot read this file
+    }
+  return true;
+}
+
+bool ReaderModule::CheckDataSetString()
+{
+  if (!m_Desc.empty())
+    {
+    for (size_t it = 0; it < m_Desc.size(); it++)
+      {
+      string key("/");
+      size_t found;
+      do
+        {
+        found = m_Desc[it].find(key);
+        if (found!=string::npos)
+          {
+          m_Desc[it].replace(found,key.length()," ");
+          }
+        }
+      while(found!=string::npos);
+      }
+    return true;
+    }
+  else
+    {
+    return false;
+    }
+}
+
+} // End namespace otb
 #endif
