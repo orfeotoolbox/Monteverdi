@@ -81,6 +81,9 @@ public:
   /** Get a  reference on the Transform */
   itkGetObjectMacro(Transform, TransformType);
 
+  /** Get a  reference on the Transform */
+  itkGetObjectMacro(InverseTransform, TransformType);
+
   /** Get the instance of the resampler*/
   itkGetObjectMacro(Resampler, ResampleFilterType);
 
@@ -88,6 +91,11 @@ public:
   itkGetMacro(OutputSize, SizeType);
   itkGetMacro(OutputOrigin, PointType);
   itkGetMacro(OutputSpacing, SpacingType);
+
+  /** Get Whole Spacing / Size & Origin*/
+  itkGetMacro(WholeOutputSize, SizeType);
+  itkGetMacro(WholeOutputOrigin, PointType);
+  itkGetMacro(WholeOutputSpacing, SpacingType);
 
   /** Compute the output region*/
   virtual void UpdateOutputParameters();
@@ -165,6 +173,11 @@ private:
   SizeType    m_OutputSize;
   PointType   m_OutputOrigin;
   SpacingType m_OutputSpacing;
+
+  // Whole output projected image information
+  SizeType    m_WholeOutputSize;
+  PointType   m_WholeOutputOrigin;
+  SpacingType m_WholeOutputSpacing;
 
   // Instance of the composite transform
   TransformType::Pointer m_Transform;

@@ -35,8 +35,12 @@ ProjectionModule::ProjectionModule()
   m_Model->RegisterListener(this);
   m_Model->RegisterListener(m_View);
 
+  // Instanciation of the Image To VectorImage Filter
+  m_CastFilter = CastSingleImageFilter::New();
+
   // Describe inputs
   this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to project"));
+  this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
 }
 
 /** Destructor */
@@ -54,6 +58,18 @@ void ProjectionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 void ProjectionModule::Run()
 {
   InputImageType::Pointer inputImage = this->GetInputData<InputImageType>("InputImage");
+  
+  // Try to get a single image
+  // If the input image is an otb::Image instead of VectorImage then cast it
+  // in Vector Image and continue the processing
+  SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
+
+  if (!singleImage.IsNull() && inputImage.IsNull())
+    {
+    m_CastFilter->SetInput(singleImage);
+    m_CastFilter->UpdateOutputInformation();
+    inputImage = m_CastFilter->GetOutput();
+    }
 
   if (inputImage.IsNotNull())
     {
@@ -63,7 +79,7 @@ void ProjectionModule::Run()
     }
   else
     {
-    itkExceptionMacro(<< "Input image is NULL");
+    itkExceptionMacro(<< "InputImage is NULL");
     }
 }
 

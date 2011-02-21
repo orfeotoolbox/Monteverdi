@@ -413,30 +413,36 @@ ProjectionView
 {
   if (!m_InputProjectionUnknown)
     {
-    IndexType index;
     PointType point, geoPoint;
 
-    index.Fill(0);
     // Get the transform from the model
-    TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
+    TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
-    // Apply the transform to the middle point of the image
+    // Set the index to be the center of the ROI selected by the user
     if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
       {
-      index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] / 2 + 1;
-      index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1] / 2 + 1;
+      // Get the cartographic middle point 
+      point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
+        + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+      
+      point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
+        + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+      
+      // Get the cartographic coordinates of the UL point of the
+      // region centered on the output middle point 
+      point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2.;
+      point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2.;
       }
     else if (guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
       {
-      index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
+      // Get the output Cartographic origin
+      point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0];
+      point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1];
       }
-
-    // From index to Physical Point
-    m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index, point);
-
-    // Transform to geo and to Choosen projection
+    
+    // Transform to geo 
     geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
-
+    
     // Fill the datas in the GUI
     itk::OStringStream oss;
     oss << setiosflags(std::ios_base::fixed);
@@ -462,27 +468,35 @@ void
 ProjectionView
 ::UpdateUnavailableLongLat()
 {
-  IndexType index;
   PointType point, geoPoint;
-  index.Fill(0);
 
   // Apply the transform to the middle point of the image
   if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
     {
-    index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] / 2 + 1;
-    index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1] / 2 + 1;
-
+    // Get the cartographic middle point 
+    point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
+      + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+    
+    point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
+      + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+    
+    // Get the cartographic coordinates of the UL point of the
+    // region centered on the output middle point 
+    point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2;
+    point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2;
     }
   else if (guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
     {
-    index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
+    //index = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetIndex();
+    point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0];
+    point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1];
     }
 
   // From index to Physical Point
-  m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index, point);
+  //m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index, point);
 
   // Transform to geo and to Choosen projection
-  geoPoint    = m_Controller->GetModel()->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
+  geoPoint    = m_Controller->GetModel()->GetInverseTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
 
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -649,14 +663,19 @@ ProjectionView::InitializeAction()
   PointType middlePoint, geoPoint, outputPoint, outputPoint1;
 
   // Get the transform from the model
-  TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
+  TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
-  // Apply the transform to the middle point of the image
-  index[0] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[0] / 2 + 1;
-  index[1] = m_Controller->GetModel()->GetInputImage()->GetLargestPossibleRegion().GetSize()[1] / 2 + 1;
+  // Get the cartographic middle middlePoint 
+  middlePoint[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
+    + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+  
+  middlePoint[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
+    + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
 
-  // From index to Physical Point
-  m_Controller->GetModel()->GetInputImage()->TransformIndexToPhysicalPoint(index, middlePoint);
+  // Get the UL corner cartographic coordinates of the
+  // region centered on the whole output middlePoint 
+  middlePoint[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2;
+  middlePoint[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2;
 
   // Transform to geo projection
   geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
