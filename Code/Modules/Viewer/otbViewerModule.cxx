@@ -307,7 +307,20 @@ namespace otb
       generator->SetImage(image);
       FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20,
                                   otbGetTextMacro("Generating QuickLook ..."));
-      generator->GenerateLayer();
+      try
+        {
+        generator->GenerateLayer();
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        itk::OStringStream oss;
+        oss << "Problem occurred while generation of QuickLook. The following error was returned:\n";
+        oss << err.GetDescription();
+        err.SetDescription(oss.str());
+        this->Quit();
+        throw;
+        }
+
       ImageLayerType::Pointer imageLayer = generator->GetLayer();
 
       // Work with standard rendering function
