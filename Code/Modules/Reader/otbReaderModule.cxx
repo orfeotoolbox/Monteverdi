@@ -115,13 +115,11 @@ void ReaderModule::Analyse()
           // Detect if it is a Mono or Multiband Complex Image
           if (m_FPVReader->GetImageIO()->GetNumberOfComponents() / 2 == 1) // cf otb and its management of conversion of Multi/MonobandComplexImage for /2
             {
-              std::cout << "Monoband Complex Image (" << m_FPVReader->GetImageIO()->GetNumberOfComponents() << ")"<< std::endl;
-              m_MultibandComplexImage = false;
+            m_MultibandComplexImage = false;
             }
           else
             {
-              std::cout << "Multiband Complex Image (" << m_FPVReader->GetImageIO()->GetNumberOfComponents()<< ")" << std::endl;
-              m_MultibandComplexImage = true;
+            m_MultibandComplexImage = true;
             }
           }
         else
@@ -215,6 +213,24 @@ void ReaderModule::OpenDataSet()
           }
         else
           {
+          // Check if it is a multiband image of scalar (only monoband complex image can go here)
+          if (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2)
+            {
+            itk::OStringStream oss;
+            oss << "You try to open a two bands image of scalar as a SAR image, \n" << \
+                            "we consider that first band is Real part and second band is Imaginary part.\n"<< \
+                            "This warning message occurred with: " << vFilePath->value();
+            MsgReporter::GetInstance()->SendWarning(oss.str());
+            }
+          else if (m_FPVReader->GetImageIO()->GetNumberOfComponents()  > 2)
+            {
+            itk::OStringStream oss;
+            oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a SAR image, \n" << \
+                "we consider only that first band is Real part and second band is Imaginary part. \n"<< \
+                "Rest of data are not considered.\n" << \
+                "This warning message occurred with: " << vFilePath->value();
+            MsgReporter::GetInstance()->SendWarning(oss.str());
+            }
           this->OpenSarImage();
           }
         break;

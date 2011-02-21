@@ -118,7 +118,7 @@ private:
   std::vector<std::string>         m_Names;
   std::vector<std::string>         m_Desc;
 
-  // Flag needed to select the openSAR method
+  /** Flag needed to select the openSAR method */
   bool m_MultibandComplexImage;
 
   /** Detect if the file is a hdf file read its subdataset info. In our case a hdf file is composed of subdataset and readable with GDAL */

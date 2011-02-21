@@ -77,6 +77,21 @@ MsgReporter
   str = str + "\n";
   this->textArea->insert(str.c_str());
   this->textArea->show_insert_position();
+  //this->Show();
+  Fl::check();
+}
+
+//Send Msg
+void
+MsgReporter
+::SendWarning(const std::string& msg)
+{
+  std::string str(msg);
+  str = str + "\n";
+  this->textArea->insert("WARNING: ");
+  this->textArea->insert(str.c_str());
+  this->textArea->show_insert_position();
+  this->Show();
   Fl::check();
 }
 
