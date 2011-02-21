@@ -63,6 +63,7 @@ public:
   typedef TypeManager::Floating_Point_Image         FloatingImageType;
   typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
   typedef TypeManager::Floating_Point_VectorImage   FloatingVectorImageType;
+  typedef TypeManager::Floating_Point_Complex_VectorImage   VectorComplexImageType;
 
   typedef TypeManager::Vector_Data         VectorType;
   typedef TypeManager::Labeled_Vector_Data LabeledVectorType;
@@ -70,6 +71,7 @@ public:
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
   typedef ImageFileReader<ComplexImageType>        ComplexImageReaderType;
+  typedef ImageFileReader<VectorComplexImageType>  VComplexImageReaderType;
   typedef VectorDataFileReader<VectorType>         VectorReaderType;
   typedef VectorDataFileReader<LabeledVectorType>  LabeledVectorReaderType;
 
@@ -97,6 +99,8 @@ protected:
 
   void OpenSarImage();
 
+  void OpenMultiSarImage();
+
   void OpenVector();
 
 private:
@@ -107,11 +111,15 @@ private:
   FPVReaderType::Pointer           m_FPVReader;
   VectorReaderType::Pointer        m_VectorReader;
   ComplexImageReaderType::Pointer  m_ComplexReader;
+  VComplexImageReaderType::Pointer m_VComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
 
   // Vector of string needed to manage hdf file
   std::vector<std::string>         m_Names;
   std::vector<std::string>         m_Desc;
+
+  // Flag needed to select the openSAR method
+  bool m_MultibandComplexImage;
 
   /** Detect if the file is a hdf file read its subdataset info. In our case a hdf file is composed of subdataset and readable with GDAL */
   bool IsHdfFile(std::string filepath);

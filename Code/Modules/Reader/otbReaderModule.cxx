@@ -34,6 +34,9 @@ ReaderModule::ReaderModule()
   m_VectorReader = VectorReaderType::New();
   m_LabeledVectorReader = LabeledVectorReaderType::New();
   m_ComplexReader = ComplexImageReaderType::New();
+  m_VComplexReader = VComplexImageReaderType::New();
+
+  m_MultibandComplexImage = false;
 
   this->BuildGUI();
 
@@ -109,6 +112,17 @@ void ReaderModule::Analyse()
           { // Complex Data
           vType->value(2);
           typeFound = true;
+          // Detect if it is a Mono or Multiband Complex Image
+          if (m_FPVReader->GetImageIO()->GetNumberOfComponents() / 2 == 1) // cf otb and its management of conversion of Multi/MonobandComplexImage for /2
+            {
+              std::cout << "Monoband Complex Image (" << m_FPVReader->GetImageIO()->GetNumberOfComponents() << ")"<< std::endl;
+              m_MultibandComplexImage = false;
+            }
+          else
+            {
+              std::cout << "Multiband Complex Image (" << m_FPVReader->GetImageIO()->GetNumberOfComponents()<< ")" << std::endl;
+              m_MultibandComplexImage = true;
+            }
           }
         else
           { // Real Data
@@ -195,7 +209,14 @@ void ReaderModule::OpenDataSet()
         this->OpenOpticalImage();
         break;
       case 2:
-        this->OpenSarImage();
+        if (m_MultibandComplexImage)
+          {
+          this->OpenMultiSarImage();
+          }
+        else
+          {
+          this->OpenSarImage();
+          }
         break;
       case 3:
         this->OpenVector();
@@ -265,6 +286,25 @@ void ReaderModule::OpenOpticalImage()
     }
 
   this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
+}
+
+void ReaderModule::OpenMultiSarImage()
+{
+  std::cout << "OpenMultisarImage" <<std::endl;
+  // First, clear any existing output
+  this->ClearOutputDescriptors();
+  ostringstream oss, ossId, ossDatasetId;
+  std::string   filepath = vFilePath->value();
+  ossimFilename lFile = ossimFilename(filepath);
+
+  m_VComplexReader->SetFileName(filepath);
+  m_VComplexReader->GenerateOutputInformation();
+
+  // Add the full data set as a descriptor
+  oss << "Vector Float Complex image read from file: " << lFile.file();
+  ossId << vName->value();
+
+  this->AddOutputDescriptor(m_VComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
 void ReaderModule::OpenSarImage()

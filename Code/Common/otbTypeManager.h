@@ -68,6 +68,7 @@ public:
 
   // Vector Image Types
   typedef otb::VectorImage<Floating_Point_Precision, 2> Floating_Point_VectorImage;
+  typedef otb::VectorImage<Floating_Point_Complex, 2>   Floating_Point_Complex_VectorImage;
   typedef otb::VectorImage<Label_Char_Precision, 2>     Labeled_Char_VectorImage;
   typedef otb::VectorImage<Label_Short_Precision, 2>    Labeled_Short_VectorImage;
 

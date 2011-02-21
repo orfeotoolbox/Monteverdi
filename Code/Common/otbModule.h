@@ -178,6 +178,18 @@ protected:
                                                  const std::string & description,
                                                  bool cached = false);
 
+  /** Partial specialization for the vector complex image case */
+  template <typename T> void AddOutputDescriptor(otb::VectorImage<std::complex<T> > * data,
+                                                 const std::string& key,
+                                                 const std::string& description,
+                                                 bool cached = false);
+
+  /** Partial specialization for the vector complex image case (SmartPointer version) */
+  template <typename T> void AddOutputDescriptor(typename otb::VectorImage<std::complex<T> >::Pointer data,
+                                                 const std::string & key,
+                                                 const std::string & description,
+                                                 bool cached = false);
+
   /** Partial specialization for the complex image case */
   template <typename T> void AddOutputDescriptor(otb::Image<std::complex<T> > * data,
                                                  const std::string& key,
