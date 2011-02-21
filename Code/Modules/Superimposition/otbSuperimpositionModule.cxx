@@ -23,6 +23,11 @@
 #include "base/ossimFilename.h"
 #include "otbMsgReporter.h"
 
+// Interpolators
+#include "itkLinearInterpolateImageFunction.h"
+#include "itkNearestNeighborInterpolateImageFunction.h"
+#include "otbBCOInterpolateImageFunction.h"
+
 namespace otb
 {
 /** Constructor */
@@ -133,6 +138,57 @@ void SuperimpositionModule::Browse()
 void SuperimpositionModule::Cancel()
 {
   wFileChooserWindow->hide();
+}
+
+void
+SuperimpositionModule::SetInterpolatorType(InterpolatorType interp)
+{
+  m_InterpType = interp;
+  this->UpdateInterpolator();
+  this->Modified();
+}
+
+InterpolatorType
+SuperimpositionModule::GetInterpolatorType()
+{
+  return m_InterpType;
+}
+
+void
+SuperimpositionModule::UpdateInterpolator()
+{
+  switch (this->GetInterpolatorType())
+    {
+    case MAP_LINEAR_SUPERIMPOSITION:
+    {
+    typedef itk::LinearInterpolateImageFunction<VectorImageType, double> LinearType;
+    LinearType::Pointer interp = LinearType::New();
+    m_Resampler->SetInterpolator(interp);
+    break;
+    }
+    case MAP_NEAREST_SUPERIMPOSITION:
+    {
+    typedef itk::NearestNeighborInterpolateImageFunction<VectorImageType, double> NearestType;
+    NearestType::Pointer interp = NearestType::New();
+    m_Resampler->SetInterpolator(interp);
+    break;
+    }
+    case MAP_BCO_SUPERIMPOSITION:
+    {
+    typedef BCOInterpolateImageFunction<VectorImageType, double> BCOType;
+    BCOType::Pointer interp = BCOType::New();
+    interp->SetRadius(static_cast<unsigned int>(guiBCORadius->value()));
+    m_Resampler->SetInterpolator(interp);
+    break;
+    }
+    default:
+    {
+    std::ostringstream oss;
+    oss<<"Problem with interpolator, cannot use the selected interpolator";
+    MsgReporter::GetInstance()->SendError(oss.str());
+    break;
+    }
+    }
 }
 
 } // End namespace otb
