@@ -273,9 +273,14 @@ void ProjectionModel
   estimator->Compute();
 
   // Edit the output image parmaters
-  m_OutputOrigin  = estimator->GetOutputOrigin();
+  m_OutputOrigin      = estimator->GetOutputOrigin();
   m_OutputSpacing = estimator->GetOutputSpacing();
   m_OutputSize    = estimator->GetOutputSize();
+
+  // Keep a copy of the origin of the whole projected image
+  m_WholeOutputOrigin  = estimator->GetOutputOrigin();
+  m_WholeOutputSpacing = estimator->GetOutputSpacing();
+  m_WholeOutputSize    = estimator->GetOutputSize();
 }
 
 /**
