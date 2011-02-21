@@ -48,6 +48,10 @@ MonteverdiController
     }
   catch (itk::ExceptionObject& err)
     {
+    itk::OStringStream oss;
+    oss << "Problem occurred with the module: " << id << " \n";
+    oss << err.GetDescription();
+    err.SetDescription(oss.str());
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
