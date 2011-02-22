@@ -14,7 +14,7 @@ class SuperimpositionModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Open dataset} open
-      xywh {443 191 365 385} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {443 191 365 385} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
     } {
       Fl_File_Input vDEMPath {
         xywh {20 35 271 37} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 when 1
@@ -59,7 +59,7 @@ vAverageElevation->activate();}
         }
       }
       Fl_Wizard m_InterpType {
-        label {Interpolator parameters}
+        label {Interpolator parameters} open
         xywh {25 214 325 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Group guiLinear {open
@@ -68,7 +68,7 @@ vAverageElevation->activate();}
         Fl_Group guiNearest {open
           xywh {25 214 325 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
         } {}
-        Fl_Group guiSinC {
+        Fl_Group guiSinC {open
           xywh {25 214 325 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
         } {
           Fl_Choice guiSincWindow {
@@ -77,47 +77,47 @@ vAverageElevation->activate();}
           } {
             MenuItem {} {
               label Blackman
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {40 40 100 25} labelsize 11
             }
             MenuItem {} {
               label Cosine
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {50 50 100 25} labelsize 11
             }
             MenuItem {} {
               label Gaussian
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {60 60 100 25} labelsize 11
             }
             MenuItem {} {
               label Hamming
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {70 70 100 25} labelsize 11
             }
             MenuItem {} {
               label Lanczos
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {80 80 100 25} labelsize 11
             }
             MenuItem {} {
               label Welch
-              callback {SetInterpolatorType(MAP_SINC);}
+              callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
               xywh {90 90 100 25} labelsize 11
             }
           }
           Fl_Value_Input guiSincRadius {
             label Radius
-            callback {SetInterpolatorType(MAP_SINC);}
+            callback {SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);}
             xywh {155 286 160 25}
           }
         }
-        Fl_Group guiSplines {
+        Fl_Group guiSplines {open
           xywh {25 214 325 121} labelsize 12 hide
         } {
           Fl_Counter guiSplineOrder {
             label Radius
-            callback {SetInterpolatorType(MAP_SPLINES);}
+            callback {SetInterpolatorType(MAP_SPLINES_SUPERIMPOSITION);}
             xywh {155 264 160 25} align 4 minimum 0 maximum 5 step 1
           }
         }
@@ -126,13 +126,13 @@ vAverageElevation->activate();}
         } {
           Fl_Counter guiBCORadius {
             label {BCO Radius}
-            callback {SetInterpolatorType(MAP_BCO);}
+            callback {SetInterpolatorType(MAP_BCO_SUPERIMPOSITION);}
             xywh {155 287 160 25} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 4 minimum 2 maximum 15000 step 1 value 2
           }
         }
       }
       Fl_Choice guiInterpSelection {
-        label Interpolator
+        label Interpolator open
         tooltip {Select the Orthorectif Interpolator} xywh {100 160 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
       } {
         MenuItem {} {
@@ -142,7 +142,7 @@ guiNearest->hide();
 guiBCO->hide();
 guiSinC->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(MAP_LINEAR_);}
+SetInterpolatorType(MAP_LINEAR_SUPERIMPOSITION);}
           xywh {30 30 100 25} labelsize 11
         }
         MenuItem {} {
@@ -151,7 +151,7 @@ SetInterpolatorType(MAP_LINEAR_);}
 guiNearest->show();
 guiSinC->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(MAP_NEAREST);}
+SetInterpolatorType(MAP_NEAREST_SUPERIMPOSITION);}
           xywh {40 40 100 25} labelsize 11
         }
         MenuItem {} {
@@ -161,7 +161,7 @@ guiNearest->hide();
 guiBCO->show();
 guiSinC->hide();
 this->m_InterpType->redraw();
-SetInterpolatorType(MAP_BCO);}
+SetInterpolatorType(MAP_BCO_SUPERIMPOSITION);}
           xywh {50 50 100 25} labelsize 11
         }
         MenuItem {} {
@@ -171,7 +171,7 @@ guiNearest->hide();
 guiBCO->hide();
 guiSinC->show();
 this->m_InterpType->redraw();
-SetInterpolatorType(MAP_SINC);}
+SetInterpolatorType(MAP_SINC_SUPERIMPOSITION);} selected
           xywh {40 40 100 25} labelsize 11 hide deactivate
         }
       }
@@ -185,6 +185,6 @@ SetInterpolatorType(MAP_SINC);}
   } {}
   Function {Browse()} {open protected return_type {virtual void}
   } {}
-  Function {SetInterpolatorType(InterpolatorType interp)} {open selected return_type {virtual void}
+  Function {SetInterpolatorType(InterpolatorType interp)} {open return_type {virtual void}
   } {}
 } 
