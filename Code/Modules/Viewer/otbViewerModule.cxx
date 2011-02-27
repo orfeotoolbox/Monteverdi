@@ -391,6 +391,13 @@ namespace otb
       m_WindowsLayout = PACKED_WINDOWS_LAYOUT;
     }
 
+    const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(0);
+    std::ostringstream title;
+    title << "[" << dow.GetSourceInstanceId() << "] " << dow.GetSourceOutputKey();
+    bSetupWindow->copy_label(title.str().c_str());
+    m_SplittedWindows->SetLabel(title.str().c_str());
+    m_PackedWindows->SetLabel(title.str().c_str());
+
     // No constrast stretch (NO_CONTRAST_STRETCH)
     guiContrastStretchSelection->add("Linear 0-255");
 
