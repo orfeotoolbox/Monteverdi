@@ -19,6 +19,7 @@
 #define __otbModule_cxx
 
 #include "otbModule.h"
+#include <boost/algorithm/string.hpp>
 
 namespace otb
 {
@@ -47,7 +48,8 @@ void Module::PrintSelf(std::ostream& os, itk::Indent indent) const
   os << indent << "Number of outputs: " << m_OutputsMap.size() << std::endl;
   for (OutputDataDescriptorMapType::const_iterator outIt = m_OutputsMap.begin(); outIt != m_OutputsMap.end(); ++outIt)
     {
-    os << indent << indent << outIt->second << std::endl;
+//    os << indent << indent << outIt->second << std::endl;
+    os << indent << indent << *outIt << std::endl;
     }
 }
 
@@ -81,22 +83,27 @@ void Module::AddInputByKey(const std::string& key, const DataObjectWrapper& data
 /** Get an output by its key */
 const DataObjectWrapper Module::GetOutputByKey(const std::string& key, unsigned int idx) const
 {
-  // Search for the key in the output map
-  OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(key);
-
   // If the key can not be found, throw an exception
-  if (it == m_OutputsMap.end())
+  if (!IsOutputKeyPresent(key))
     {
     itkExceptionMacro(<< "Module has no output with key " << key);
     }
 
-  // Then if everything is ok, call the assign method
-  DataObjectWrapper wrapper = it->second.GetNthData(idx);
+  // Search for the key in the output map
+  OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.begin();
+  for(; it != m_OutputsMap.end(); ++it)
+    {
+    if (it->GetDataKey() == key)
+      break;
+    }
 
-  if (!it->second.IsTypeCompatible(wrapper.GetDataType()))
+  // Then if everything is ok, call the assign method
+  DataObjectWrapper wrapper = it->GetNthData(idx);
+
+  if (!it->IsTypeCompatible(wrapper.GetDataType()))
     {
     itkExceptionMacro(
-      << "Type mismatch for output with key " << key << ": expected " << it->second.GetDataType() << ", received " <<
+      << "Type mismatch for output with key " << key << ": expected " << it->GetDataType() << ", received " <<
       wrapper.GetDataType());
     }
   return wrapper;
@@ -104,12 +111,17 @@ const DataObjectWrapper Module::GetOutputByKey(const std::string& key, unsigned 
 
 void Module::ChangeOutputKey(const std::string& oldKey, const std::string& newKey)
 {
-  if (m_OutputsMap.count(newKey) > 0)
-    {
-    itkExceptionMacro(<< "Key " << newKey << " alredy exists.");
-    }
   // Search for the key in the output map
-  OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.find(oldKey);
+  OutputDataDescriptorMapType::iterator it = m_OutputsMap.begin();
+  for(; it != m_OutputsMap.end(); ++it )
+    {
+    if (it->GetDataKey() == newKey)
+      {
+      itkExceptionMacro(<< "Key " << newKey << " alredy exists.");
+      }
+    if (it->GetDataKey() == oldKey)
+      break;
+    }
 
   // If the key can not be found, throw an exception
   if (it == m_OutputsMap.end())
@@ -117,12 +129,7 @@ void Module::ChangeOutputKey(const std::string& oldKey, const std::string& newKe
     itkExceptionMacro(<< "Module has no output with key " << oldKey);
     }
 
-  OutputDataDescriptor desc = it->second;
-  desc.SetDataKey(newKey);
-
-  desc.SetDataKey(newKey);
-  m_OutputsMap[newKey] = desc;
-  m_OutputsMap.erase(oldKey);
+  it->SetDataKey(newKey);
 }
 
 /** Get the Data object descriptor corresponding to the given key */
@@ -168,7 +175,12 @@ unsigned int Module::GetNumberOfInputDataByKey(const std::string& key) const
 void Module::LoadCachedData(const DataObjectWrapper& data, const std::string& key, unsigned int idx)
 {
   // Search for the key in the output map
-  OutputDataDescriptorMapType::iterator it = m_OutputsMap.find(key);
+  OutputDataDescriptorMapType::iterator it = m_OutputsMap.begin();
+  for(; it != m_OutputsMap.end(); ++it)
+    {
+    if (it->GetDataKey() == key)
+      break;
+    }
 
   // If the key can not be found, throw an exception
   if (it == m_OutputsMap.end())
@@ -177,7 +189,7 @@ void Module::LoadCachedData(const DataObjectWrapper& data, const std::string& ke
     }
 
   // Change the
-  it->second.CacheNthData(idx, data);
+  it->CacheNthData(idx, data);
 }
 
 /** Check that every mandatory input has been filled and call the
@@ -224,20 +236,16 @@ void Module::EraseOutputByKey(const std::string& key)
 {
   // erase all the map element which key starts by "key" ("OutputImage" erases "OutputImage (ban1)", ...)
   OutputDataDescriptorMapType::iterator it;
-  it = m_OutputsMap.begin();
-  std::vector<std::string> keyVector;
-  while (it != m_OutputsMap.end())
+  OutputDataDescriptorMapType newOutput;
+
+  for (it = m_OutputsMap.begin(); it != m_OutputsMap.end(); ++it)
     {
-    if ((*it).first.find(key) == 0)
+    if ( !boost::starts_with(it->GetDataKey(), key) )
       {
-      keyVector.push_back((*it).first);
+      newOutput.push_back(*it);
       }
-    ++it;
     }
-  for (unsigned int i = 0; i < keyVector.size(); i++)
-    {
-    m_OutputsMap.erase(keyVector[i]);
-    }
+  m_OutputsMap = newOutput;
 }
 
 /** The custom run command */

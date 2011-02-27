@@ -60,6 +60,7 @@ MonteverdiViewGUI
   this->Build();
   // Files Tree
   m_Tree = new FluTreeBrowser(gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree ");
+  m_Tree->insertion_mode(FLU_INSERT_BACK);
 
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
@@ -438,29 +439,32 @@ MonteverdiViewGUI
 
   for (it = lDataMap.begin(); it != lDataMap.end(); it++)
     {
-    FluTreeBrowser::Node* new_node = n->add_branch(it->second.GetDataKey().c_str());
+    otbMsgDevMacro(<< "Add node " << it->GetDataKey() )
+
+    FluTreeBrowser::Node* new_node = n->add_branch(it->GetDataKey().c_str());
 
     // add informations to the targeted module
-    new_node->add(it->second.GetDataDescription().c_str());
-    new_node->add(it->second.GetDataType().c_str());
+    new_node->add(it->GetDataDescription().c_str());
+    new_node->add(it->GetDataType().c_str());
     new_node->parent()->open(true);
+
 
     //new_node->open(close);
     n->branch_icons(&process, &process);
 
-    if (it->second.GetDataType() == "Floating_Point_VectorImage"
-        || it->second.GetDataType() == "Floating_Point_Complex_Image"
-        || it->second.GetDataType() == "Labeled_Char_VectorImage")
+    if (it->GetDataType() == "Floating_Point_VectorImage"
+        || it->GetDataType() == "Floating_Point_Complex_Image"
+        || it->GetDataType() == "Labeled_Char_VectorImage")
       {
       new_node->branch_icons(&vectorImage, &vectorImage);
       }
-    else if (it->second.GetDataType() == "Labeled_Short_Image"
-             || it->second.GetDataType() == "Floating_Point_Image")
+    else if (it->GetDataType() == "Labeled_Short_Image"
+             || it->GetDataType() == "Floating_Point_Image")
       {
       new_node->branch_icons(&scalarImage, &scalarImage);
       }
-    else if (it->second.GetDataType() == "Labeled_Vector_Data"
-             || it->second.GetDataType() == "Vector_Data")
+    else if (it->GetDataType() == "Labeled_Vector_Data"
+             || it->GetDataType() == "Vector_Data")
       {
       new_node->branch_icons(&vectorData, &vectorData);
       }
