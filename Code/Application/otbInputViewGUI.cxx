@@ -104,9 +104,9 @@ InputViewGUI
         for (it_out = lOutputDataMap.begin(); it_out != lOutputDataMap.end(); it_out++)
           {
           // if the type is ok, we can add the label in the Fl_Input_Choice
-          if (it_in->second.IsTypeCompatible(it_out->second.GetDataType()))
+          if (it_in->second.IsTypeCompatible(it_out->GetDataType()))
             {
-            inputChoice->AddChoice(StringPairType(*instIt, it_out->first), locked, lockingModule);
+            inputChoice->AddChoice(StringPairType(*instIt, it_out->GetDataKey()), locked, lockingModule);
             }
           }
         }

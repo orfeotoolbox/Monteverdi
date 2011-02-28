@@ -111,6 +111,12 @@ void SpectrumModule
 
     m_SpectrumModuleView->Build();
 
+    const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(0);
+    std::ostringstream title;
+    title << "[" << dow.GetSourceInstanceId() << "] " << dow.GetSourceOutputKey();
+
+    m_SpectrumModuleView->wMainWindow->label(title.str().c_str());
+    m_SpectrumModuleView->wCurveDisplayWindow->label(title.str().c_str());
     }
   else
     {

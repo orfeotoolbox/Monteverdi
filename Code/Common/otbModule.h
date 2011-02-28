@@ -74,7 +74,7 @@ public:
   typedef std::map<std::string, InputDataDescriptor> InputDataDescriptorMapType;
 
   /** Output data description map */
-  typedef std::map<std::string, OutputDataDescriptor> OutputDataDescriptorMapType;
+  typedef std::vector<OutputDataDescriptor> OutputDataDescriptorMapType;
 
   /** Add an input data by its key. This method performs key and type
    * checking before invoking the protected method
@@ -232,6 +232,19 @@ private:
 
   /** Output descriptor map */
   OutputDataDescriptorMapType m_OutputsMap;
+
+  bool IsOutputKeyPresent(const std::string& key) const
+  {
+    // Search for the key in the output map
+    OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.begin();
+    for( ; it != m_OutputsMap.end(); it++ )
+      {
+      if (it->GetDataKey() == key)
+        break;
+      }
+
+    return it != m_OutputsMap.end();
+  }
 
   /** Does the module need to lock pipeline ? */
   bool m_NeedsPipelineLocking;
