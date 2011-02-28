@@ -27,7 +27,6 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbStreamingResampleImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
 #include "itkContinuousIndex.h"
 
 //Vis
@@ -127,9 +126,8 @@ public:
   typedef itk::LevenbergMarquardtOptimizer::ScalesType ScalesType;
 
   /** Output */
-  typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
+  typedef StreamingResampleImageFilter<VectorImageType, VectorImageType, double>         ResampleFilterType;
   typedef ResampleFilterType::TransformType                                              ResampleTransformType;
-  typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
 
   /** Get the visualization models */
   VisualizationModelPointerType GetVisualizationModel(unsigned int id)
@@ -220,7 +218,6 @@ private:
 
   /** Resampler filter */
   ResampleFilterType::Pointer m_Resampler;
-  PerBandFilterType::Pointer  m_PerBander;
 
   TransformType::Pointer m_Transform;
 
