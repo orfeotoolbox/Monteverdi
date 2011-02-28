@@ -61,6 +61,7 @@
 #include "otbObjectList.h"
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbDragFullWindowActionHandler.h"
+#include "otbScalarBufferToImageFileWriter.h"
 
 #include "otbAmplitudeFunctor.h"
 #include "otbPhaseFunctor.h"
@@ -219,49 +220,13 @@ public:
   typedef ObjectList<RenderingFunctionType>          RenderingFunctionListType;
   typedef ObjectList<CastSingleImageFilter>          CastFilterListType;
 
+  /** Screen shot typedefs */
+  typedef ScalarBufferToImageFileWriter<unsigned char, unsigned char> ScreenShotFilterType;
 
   /**
    * FIXME: code refactoring in progress...
    */
-  /*
-  class ImageLayerInfo
-  {
-    public:
-      itkGetMacro(Image, ImageType::Pointer);
-      itkSetMacro(Image, ImageType::Pointer);
-
-      itkGetMacro(Image, ImageLayerType::Pointer);
-      itkSetMacro(Image, ImageLayerType::Pointer);
-
-      itkGetMacro(Image, RenderingFunctionType::Pointer);
-      itkSetMacro(Image, RenderingFunctionType::Pointer);
-
-      itkGetMacro(Image, ContrastStretchEnumType);
-      itkSetMacro(Image, ContrastStretchEnumType);
-
-      itkGetMacro(Image, double);
-      itkSetMacro(Image, double);
-
-      itkGetMacro(Image, double);
-      itkSetMacro(Image, double);
-
-      itkGetMacro(Image, double);
-      itkSetMacro(Image, double);
-
-      itkGetMacro(Image, double);
-      itkSetMacro(Image, double);
-
-    private:
-      ImageType::Pointer             m_Image;
-      ImageLayerType::Pointer        m_ImageLayer;
-      RenderingFunctionType::Pointer m_Renderer;
-      ContrastStretchEnumType        m_ContrastStretch;
-      double                         m_AlphaBlending;
-      double                         m_LowerQuantile;
-      double                         m_UpperQuantile;
-      double                         m_StandardDeviation;
-  };
-  */
+ 
 
   /** Set/Get the DEM directory */
   itkSetStringMacro(DEMDirectory);
@@ -310,6 +275,7 @@ public:
   virtual void UpdateTabHistogram();
   virtual void UpdatePixelInformationWindow();
   virtual void UpdateVectorDataListShowed(unsigned int selectedItem, std::string status);
+  virtual void ScreenShot(unsigned int id);
 
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();
