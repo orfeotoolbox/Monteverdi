@@ -36,6 +36,9 @@
 #include "otbPixelDescriptionModel.h"
 #include "otbPixelDescriptionView.h"
 #include "otbMouseClickActionHandler.h"
+#include "otbArrowKeyMoveActionHandler.h"
+#include "otbDragFullWindowActionHandler.h"
+
 
 namespace otb
 {
@@ -110,6 +113,8 @@ protected:
   typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler<VisualizationModelType, ImageViewType>               ChangeScaleHandlerType;
   typedef MouseClickActionHandler<MouseClickedController, ImageViewType>                MouseClickedHandlertype;
+  typedef ArrowKeyMoveActionHandler<VisualizationModelType,ImageViewType>               ArrowKeyMoveActionHandlerType;
+  typedef DragFullWindowActionHandler<VisualizationModelType,ImageViewType>             DragActionHandlerType;
 
   typedef PixelDescriptionModel<RGBImageType>                                     PixelDescriptionModelType;
   typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType> PixelDescriptionActionHandlerType;
@@ -193,8 +198,11 @@ private:
   ChangeScaleHandlerType::Pointer            m_FirstChangeScaleHandler;
   MouseClickedHandlertype::Pointer           m_FirstLeftMouseClickedHandler;
   PixelDescriptionActionHandlerType::Pointer m_FirstPixelActionHandler;
+  ArrowKeyMoveActionHandlerType::Pointer     m_FirstArrowKeyMoveActionHandler;
+  DragActionHandlerType::Pointer             m_FirstDragActionHandler;
   PixelDescriptionModelType::Pointer         m_FirstPixelModel;
   PixelDescriptionViewType::Pointer          m_FirstPixelView;
+
 
   ResizingHandlerType::Pointer               m_SecondResizingHandler;
   ChangeRegionHandlerType::Pointer           m_SecondChangeRegionHandler;
@@ -202,8 +210,11 @@ private:
   ChangeScaleHandlerType::Pointer            m_SecondChangeScaleHandler;
   MouseClickedHandlertype::Pointer           m_SecondLeftMouseClickedHandler;
   PixelDescriptionActionHandlerType::Pointer m_SecondPixelActionHandler;
+  ArrowKeyMoveActionHandlerType::Pointer     m_SecondArrowKeyMoveActionHandler;
+  DragActionHandlerType::Pointer             m_SecondDragActionHandler;
   PixelDescriptionModelType::Pointer         m_SecondPixelModel;
   PixelDescriptionViewType::Pointer          m_SecondPixelView;
+
 
   //bool m_TransformationAvailable;
   TransformEnumType m_TransformType;

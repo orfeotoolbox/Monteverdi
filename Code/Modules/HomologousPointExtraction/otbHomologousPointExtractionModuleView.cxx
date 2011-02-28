@@ -115,7 +115,6 @@ HomologousPointExtractionModuleView
 
   // Set the built flag
   m_GUIBuilt = true;
-  std::cout<<"Built flag: "<<m_GUIBuilt<<std::endl;
 }
 
 void
@@ -181,6 +180,9 @@ HomologousPointExtractionModuleView
   m_SecondImageView->GetFullWidget()->show();
   m_SecondImageView->GetScrollWidget()->show();
   m_SecondImageView->GetZoomWidget()->show();
+
+  m_FirstImageView->GetScrollWidget()->set_visible_focus();
+  m_SecondImageView->GetScrollWidget()->set_visible_focus();
 }
 
 void
@@ -405,10 +407,8 @@ void
 HomologousPointExtractionModuleView
 ::Notify()
 {
-  std::cout<<m_GUIBuilt<<" "<<m_Controller.IsNotNull()<<std::endl;
   if(m_GUIBuilt && m_Controller.IsNotNull())
     {
-    std::cout<<m_Controller->GetTransformationAvailable()<<std::endl;
 
     if(m_Controller->GetTransformationAvailable())
       {

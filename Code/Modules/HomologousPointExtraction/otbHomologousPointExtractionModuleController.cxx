@@ -48,6 +48,8 @@ HomologousPointExtractionModuleController
   m_FirstChangeScaleHandler        = ChangeScaleHandlerType::New();
   m_FirstLeftMouseClickedHandler   = MouseClickedHandlertype::New();
   m_FirstPixelActionHandler        = PixelDescriptionActionHandlerType::New();
+  m_FirstArrowKeyMoveActionHandler = ArrowKeyMoveActionHandlerType::New();
+  m_FirstDragActionHandler         = DragActionHandlerType::New();
   m_FirstPixelModel                = PixelDescriptionModelType::New();
   m_FirstPixelView                 = PixelDescriptionViewType::New();
 
@@ -57,6 +59,8 @@ HomologousPointExtractionModuleController
   m_SecondChangeScaleHandler        = ChangeScaleHandlerType::New();
   m_SecondLeftMouseClickedHandler   = MouseClickedHandlertype::New();
   m_SecondPixelActionHandler        = PixelDescriptionActionHandlerType::New();
+  m_SecondArrowKeyMoveActionHandler = ArrowKeyMoveActionHandlerType::New();
+  m_SecondDragActionHandler         = DragActionHandlerType::New();
   m_SecondPixelModel                = PixelDescriptionModelType::New();
   m_SecondPixelView                 = PixelDescriptionViewType::New();
 
@@ -80,12 +84,16 @@ HomologousPointExtractionModuleController
   m_FirstWidgetsController->AddActionHandler(m_FirstChangeScaledRegionHandler);
   m_FirstWidgetsController->AddActionHandler(m_FirstChangeScaleHandler);
   m_FirstWidgetsController->AddActionHandler(m_FirstLeftMouseClickedHandler);
+  m_FirstWidgetsController->AddActionHandler(m_FirstArrowKeyMoveActionHandler);
+  m_FirstWidgetsController->AddActionHandler(m_FirstDragActionHandler);
 
   m_SecondWidgetsController->AddActionHandler(m_SecondResizingHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondChangeRegionHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondChangeScaledRegionHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondChangeScaleHandler);
   m_SecondWidgetsController->AddActionHandler(m_SecondLeftMouseClickedHandler);
+  m_SecondWidgetsController->AddActionHandler(m_SecondArrowKeyMoveActionHandler);
+  m_SecondWidgetsController->AddActionHandler(m_SecondDragActionHandler);
 
   m_TransformType = otb::UNKNOWN;
 }
@@ -112,11 +120,15 @@ HomologousPointExtractionModuleController
   m_FirstChangeRegionHandler->SetModel(m_Model->GetVisualizationModel(0));
   m_FirstChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel(0));
   m_FirstChangeScaleHandler->SetModel(m_Model->GetVisualizationModel(0));
+  m_FirstArrowKeyMoveActionHandler->SetModel(m_Model->GetVisualizationModel(0));
+  m_FirstDragActionHandler->SetModel(m_Model->GetVisualizationModel(0));
 
   m_SecondResizingHandler->SetModel(m_Model->GetVisualizationModel(1));
   m_SecondChangeRegionHandler->SetModel(m_Model->GetVisualizationModel(1));
   m_SecondChangeScaledRegionHandler->SetModel(m_Model->GetVisualizationModel(1));
   m_SecondChangeScaleHandler->SetModel(m_Model->GetVisualizationModel(1));
+  m_SecondArrowKeyMoveActionHandler->SetModel(m_Model->GetVisualizationModel(1));
+  m_SecondDragActionHandler->SetModel(m_Model->GetVisualizationModel(1));
 }
 
 void
@@ -129,12 +141,16 @@ HomologousPointExtractionModuleController
   m_FirstChangeScaledRegionHandler->SetView(m_View->GetFirstImageView());
   m_FirstChangeScaleHandler->SetView(m_View->GetFirstImageView());
   m_FirstLeftMouseClickedHandler->SetView(m_View->GetFirstImageView());
+  m_FirstArrowKeyMoveActionHandler->SetView(m_View->GetFirstImageView());
+  m_FirstDragActionHandler->SetView(m_View->GetFirstImageView());
 
   m_SecondResizingHandler->SetView(m_View->GetSecondImageView());
   m_SecondChangeRegionHandler->SetView(m_View->GetSecondImageView());
   m_SecondChangeScaledRegionHandler->SetView(m_View->GetSecondImageView());
   m_SecondChangeScaleHandler->SetView(m_View->GetSecondImageView());
   m_SecondLeftMouseClickedHandler->SetView(m_View->GetSecondImageView());
+  m_SecondArrowKeyMoveActionHandler->SetView(m_View->GetSecondImageView());
+  m_SecondDragActionHandler->SetView(m_View->GetSecondImageView());
 }
 
 void
