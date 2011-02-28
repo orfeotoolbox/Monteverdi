@@ -31,7 +31,7 @@ namespace otb
 {
 
 HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(),
-  m_BlendingFunction(), m_Output(), m_Resampler(), m_PerBander()
+  m_BlendingFunction(), m_Output(), m_Resampler()
 {
   VisualizationModelType::Pointer visualizationModel1 = VisualizationModelType::New();
   VisualizationModelType::Pointer visualizationModel2 = VisualizationModelType::New();
@@ -57,7 +57,6 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
 
   m_Output = VectorImageType::New();
   m_Resampler = ResampleFilterType::New();
-  m_PerBander = PerBandFilterType::New();
   m_IndexesList.clear();
 
   m_OutputChanged = false;
@@ -466,14 +465,20 @@ HomologousPointExtractionModuleModel
 ::OK()
 {
   // Import parameters from fixed image
+  VectorImageType::PixelType defaultValue;
+  itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
+                                                        m_SecondInputImage->GetNumberOfComponentsPerPixel());
+  BCOInterpolatorType::Pointer  bcoInterpolator = BCOInterpolatorType::New();
+  bcoInterpolator->SetInputImage(m_SecondInputImage);
+
+  m_Resampler->SetInput(m_SecondInputImage);
+  m_Resampler->SetEdgePaddingValue(defaultValue);
+  m_Resampler->SetInterpolator(bcoInterpolator);
   m_Resampler->SetOutputSize(m_SecondInputImage->GetLargestPossibleRegion().GetSize());
   m_Resampler->SetOutputSpacing(m_SecondInputImage->GetSpacing());
   m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
-  m_Resampler->UpdateOutputInformation();
-  m_PerBander->SetInput(m_SecondInputImage);
-  m_PerBander->SetFilter(m_Resampler);
-  m_PerBander->UpdateOutputInformation();
-  m_Output = m_PerBander->GetOutput();
+  m_Resampler->GetOutput()->UpdateOutputInformation();
+  m_Output = m_Resampler->GetOutput();
 
   m_OutputChanged = true;
   this->NotifyAll();

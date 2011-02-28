@@ -47,6 +47,9 @@
 #include "itkSimilarity2DTransform.h"
 #include "itkTranslationTransform.h"
 
+// Interpolation
+#include "otbBCOInterpolateImageFunction.h"
+
 namespace otb {
 
 /** \class HomologousPointExtractionModuleModel
@@ -128,6 +131,10 @@ public:
   /** Output */
   typedef StreamingResampleImageFilter<VectorImageType, VectorImageType, double>         ResampleFilterType;
   typedef ResampleFilterType::TransformType                                              ResampleTransformType;
+
+    /** Interpolation will be bicubic */
+  typedef otb::BCOInterpolateImageFunction<VectorImageType> BCOInterpolatorType;
+
 
   /** Get the visualization models */
   VisualizationModelPointerType GetVisualizationModel(unsigned int id)
