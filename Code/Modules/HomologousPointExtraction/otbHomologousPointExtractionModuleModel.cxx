@@ -199,11 +199,13 @@ HomologousPointExtractionModuleModel
       ScalesType scales(2);
       scales.Fill(0.01);
       this->GenericRegistration<TranslationTransformType>(scales);
+      this->NotifyAll();
       break;
       }
     case otb::AFFINE:
       {
       this->AffineLeastSquareRegistration();
+      this->NotifyAll();
       break;
       }
     case otb::SIMILARITY2D:
@@ -216,8 +218,9 @@ HomologousPointExtractionModuleModel
       // Translation scale
       scales[2] = 1000;
       scales[3] = 1000;
-
+      
       this->GenericRegistration<Similarity2DTransformType>(scales);
+      this->NotifyAll();
       break;
       }
     default:

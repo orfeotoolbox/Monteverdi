@@ -45,6 +45,8 @@ HomologousPointExtractionModuleView
   m_Green[3] = 0.5;
 
   m_ColorList.clear();
+
+  m_GUIBuilt = false;
 }
 
 HomologousPointExtractionModuleView
@@ -110,6 +112,10 @@ HomologousPointExtractionModuleView
 
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
+
+  // Set the built flag
+  m_GUIBuilt = true;
+  std::cout<<"Built flag: "<<m_GUIBuilt<<std::endl;
 }
 
 void
@@ -344,6 +350,7 @@ HomologousPointExtractionModuleView
   tMeanError->value("");
   gGuess->deactivate();
   m_Controller->SetTransformationAvailable(false);
+  this->Notify();
 }
 
 void
@@ -398,7 +405,20 @@ void
 HomologousPointExtractionModuleView
 ::Notify()
 {
+  std::cout<<m_GUIBuilt<<" "<<m_Controller.IsNotNull()<<std::endl;
+  if(m_GUIBuilt && m_Controller.IsNotNull())
+    {
+    std::cout<<m_Controller->GetTransformationAvailable()<<std::endl;
 
+    if(m_Controller->GetTransformationAvailable())
+      {
+      this->guiQuit->activate();
+      }
+    else
+      {
+      this->guiQuit->deactivate();
+      }
+    }
 }
 
 void

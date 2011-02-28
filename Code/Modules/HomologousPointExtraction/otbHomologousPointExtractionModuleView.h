@@ -124,6 +124,8 @@ private:
   ColorListType m_ColorList;
   /** Green color */
   ColorType m_Green;
+
+  bool m_GUIBuilt;
 };
 } //end namespace otb
 

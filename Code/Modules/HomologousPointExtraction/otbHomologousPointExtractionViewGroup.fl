@@ -64,8 +64,8 @@ class HomologousPointExtractionViewGroup {open
           } {}
           Fl_Button guiQuit {
             label {Save/Quit}
-            callback {Quit();}
-            tooltip {Quit application} xywh {61 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            callback {Quit();} selected
+            tooltip {Quit application} xywh {61 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186 deactivate
           }
           Fl_Round_Button {} {
             label {Rectify moving image}
@@ -210,6 +210,6 @@ class HomologousPointExtractionViewGroup {open
   } {}
   Function {HideAll()} {open return_type {virtual void}
   } {}
-  Function {Rectify(bool flag)} {open selected return_type void
+  Function {Rectify(bool flag)} {open return_type void
   } {}
 } 

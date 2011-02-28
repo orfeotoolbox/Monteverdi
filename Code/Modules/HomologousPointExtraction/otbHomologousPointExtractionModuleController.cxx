@@ -206,16 +206,16 @@ void
 HomologousPointExtractionModuleController
 ::ClearPointList()
 {
-  m_Model->ClearIndexesList();
   this->SetTransformationAvailable(false);
+  m_Model->ClearIndexesList();
 }
 
 void
 HomologousPointExtractionModuleController
 ::DeletePointFromList(unsigned int id)
 {
-  m_Model->RemovePointFromList(id);
   this->SetTransformationAvailable(false);
+  m_Model->RemovePointFromList(id);
 }
 
 void
@@ -276,8 +276,8 @@ HomologousPointExtractionModuleController
 
   try
     {
-    m_Model->ComputeTransform(m_TransformType);
     this->SetTransformationAvailable(true);
+    m_Model->ComputeTransform(m_TransformType);
     this->UpdateStats();
     }
   catch (itk::ExceptionObject& err)
