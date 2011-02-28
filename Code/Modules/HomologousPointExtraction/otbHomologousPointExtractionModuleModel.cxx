@@ -145,14 +145,15 @@ HomologousPointExtractionModuleModel
     if (m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2)
       {
       found = true;
-      itkExceptionMacro(
-        << "At most one of the 2 given index " << id1 << " or " << id2 << " already appears in the list.");
       }
     j++;
     }
 
-  IndexCoupleType paire(id1, id2);
-  m_IndexesList.push_back(paire);
+  if(!found)
+    {
+    IndexCoupleType paire(id1, id2);
+    m_IndexesList.push_back(paire);
+    }
 }
 
 void
