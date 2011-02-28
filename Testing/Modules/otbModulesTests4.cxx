@@ -38,4 +38,5 @@ void RegisterTests()
   REGISTER_TEST(otbPolarimetricSynthesisTest);
   REGISTER_TEST(otbColorMappingModuleTest);
   REGISTER_TEST(otbDEMToImageGeneratorModuleTest);
+  REGISTER_TEST(otbImageStatisticsModuleTest);
 }

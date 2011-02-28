@@ -10,60 +10,49 @@ class SarCalibrationModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {Open dataset} open
-      xywh {503 250 360 130} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide
+      label {SAR Calibration} open
+      xywh {503 250 360 155} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Button bOK {
         label {Save/Quit}
         callback {this->OK();}
-        xywh {274 99 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {274 112 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {174 99 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Group {} {
-        label {Output file} open
-        xywh {10 20 343 29} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
-      } {
-        Fl_Round_Button bCalib {
-          label {Radiometric Calibration}
-          callback {if(bCalib->value()==1)
-{
-bBrightness->value(0);
-}}
-          xywh {168 25 15 15} down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186 align 4
-        }
-        Fl_Round_Button bBrightness {
-          label Brightness
-          callback {if(bBrightness->value()==1)
-{
-bCalib->value(0);
-}} selected
-          xywh {275 25 15 15} down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 4
-        }
+        xywh {174 112 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Group {} {
         label {Scale representation} open
-        xywh {12 66 343 24} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
+        xywh {10 20 343 28} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 5
       } {
         Fl_Round_Button bLin {
           label Linear
           callback {if(bLin->value()==1)
 {
 bdB->value(0);
+vThresholdLogDisplay->hide();
 }}
-          xywh {149 73 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
+          xywh {165 27 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX value 1 color 7 labelfont 1 labelsize 12 labelcolor 186 align 4
         }
         Fl_Round_Button bdB {
           label {Log(dB)}
           callback {if(bdB->value()==1)
 {
 bLin->value(0);
+vThresholdLogDisplay->show();
 }}
-          xywh {199 73 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {210 27 20 15} type Radio down_box PLASTIC_ROUND_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 8
         }
+      }
+      Fl_Check_Button bEnableNoise {
+        label {Enable Noise}
+        xywh {15 51 115 25} down_box DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Value_Input vThresholdLogDisplay {
+        label {Threshold Value (dB):} selected
+        xywh {150 75 40 20} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 185 minimum -60 maximum 0 step 1 value -30 hide
       }
     }
   }

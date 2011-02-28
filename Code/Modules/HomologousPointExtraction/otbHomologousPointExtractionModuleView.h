@@ -79,6 +79,7 @@ public:
   virtual void ClearTransformationInfo();
   virtual void Evaluate();
   virtual void HideAll();
+  virtual void Rectify(bool flag);
 
   void UpdateListSelectionColor(bool whichOne);
   void ChangePointValue(IndexType index, unsigned int viewId);
@@ -123,6 +124,8 @@ private:
   ColorListType m_ColorList;
   /** Green color */
   ColorType m_Green;
+
+  bool m_GUIBuilt;
 };
 } //end namespace otb
 

@@ -60,8 +60,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl);
+                             double originY);
   virtual void InitializeWGS84Transform();
   virtual void SetDEMPath(std::string dem);
 

@@ -24,6 +24,7 @@
 #include "otbProjectionView.h"
 #include "otbProjectionModel.h"
 #include "otbProjectionController.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 namespace otb
 {
@@ -53,7 +54,11 @@ public:
   itkGetObjectMacro(View, ProjectionView);
 
   // Input typedef
-  typedef ProjectionModel::InputImageType InputImageType;
+  typedef ProjectionModel::InputImageType  InputImageType;
+  typedef ProjectionModel::SingleImageType SingleImageType;
+
+  /** Cast SingleImage to ImageType (VectorImage) */
+  typedef ImageToVectorImageCastFilter<SingleImageType, InputImageType> CastSingleImageFilter;
 
 protected:
   /** Constructor */
@@ -96,6 +101,9 @@ private:
 
   // The model
   ProjectionModel::Pointer m_Model;
+
+  // Cast Filter
+  CastSingleImageFilter::Pointer m_CastFilter;
 };
 
 } // End namespace otb

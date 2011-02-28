@@ -153,7 +153,7 @@ protected:
   void ComputeTileNumber();
 
   // Check the map parameters.
-  int CheckMapParameters();
+  virtual void CheckMapParameters();
 
   // Create output with template image type (for multiple possible working pixel type)
   void CreateOutput();

@@ -240,34 +240,34 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvSarCalibrationModuleNoMDTest ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
 	0 # scalar image
-	0 # Radiometric Calib
 	0 # Linear
+	0 # Without/With Noise
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear ${Modules_TESTS3} otbSarCalibrationModuleTest
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
 	0 # Linear
+	1 # With Noise
 )
-ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB ${Modules_TESTS3} otbSarCalibrationModuleTest
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricLinear_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	0 # Radiometric Calib
-	1 # Linear
-)
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessLinear ${Modules_TESTS3} otbSarCalibrationModuleTest
-	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-	1 # is complex
-	1 # Radiometric Calib
 	0 # Linear
+	0 # Without Noise
 )
-ADD_TEST(moTvSarCalibrationModuleCplxTestBrightnessDB ${Modules_TESTS3} otbSarCalibrationModuleTest
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WN ${Modules_TESTS3} otbSarCalibrationModuleTest
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	1 # is complex
-	1 # Radiometric Calib
 	1 # Linear
+	1 # With Noise
+)
+ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WoN ${Modules_TESTS3} otbSarCalibrationModuleTest
+	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+	1 # is complex
+	1 # Linear
+	0 # Without Noise
 )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -427,6 +427,18 @@ ADD_TEST(moTvDEMToImageGeneratorModuleTest ${Modules_TESTS4} otbDEMToImageGenera
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
+#------------- Image Statistics Module Tests ---------------------------
+ADD_TEST(moTvImageStatisticsModuleTestImage  ${Modules_TESTS4}
+	otbImageStatisticsModuleTest
+	0 # otbImage
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+)
+
+ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4} 
+	otbImageStatisticsModuleTest
+	1 # otbVectorImage
+	${INPUTDATA}/maur.tif
+)
 
 
 SET(Modules_SRCS1
@@ -484,6 +496,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbPolarimetricSynthesisTest.cxx
   otbColorMappingModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
+  otbImageStatisticsModuleTest.cxx
 )
 
 

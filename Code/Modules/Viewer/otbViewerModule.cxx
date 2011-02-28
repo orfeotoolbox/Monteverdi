@@ -310,7 +310,20 @@ namespace otb
       generator->SetImage(image);
       FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20,
                                   otbGetTextMacro("Generating QuickLook ..."));
-      generator->GenerateLayer();
+      try
+        {
+        generator->GenerateLayer();
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        itk::OStringStream oss;
+        oss << "Problem occurred while generation of QuickLook. The following error was returned:\n";
+        oss << err.GetDescription();
+        err.SetDescription(oss.str());
+        this->Quit();
+        throw;
+        }
+
       ImageLayerType::Pointer imageLayer = generator->GetLayer();
 
       // Work with standard rendering function
@@ -380,6 +393,13 @@ namespace otb
       guiViewerSetupPackedLayout->set();
       m_WindowsLayout = PACKED_WINDOWS_LAYOUT;
     }
+
+    const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(0);
+    std::ostringstream title;
+    title << "[" << dow.GetSourceInstanceId() << "] " << dow.GetSourceOutputKey();
+    bSetupWindow->copy_label(title.str().c_str());
+    m_SplittedWindows->SetLabel(title.str().c_str());
+    m_PackedWindows->SetLabel(title.str().c_str());
 
     // No constrast stretch (NO_CONTRAST_STRETCH)
     guiContrastStretchSelection->add("Linear 0-255");

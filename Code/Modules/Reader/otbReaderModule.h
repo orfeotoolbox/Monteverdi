@@ -31,6 +31,8 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
+#include "otbGDALImageIO.h"
+
 namespace otb
 {
 /** \class ReaderModule
@@ -88,6 +90,7 @@ protected:
   virtual void Cancel();
 
   virtual void TypeChanged();
+  virtual void DatasetChanged();
   virtual void Hide();
 
   void OpenOpticalImage();
@@ -105,6 +108,17 @@ private:
   VectorReaderType::Pointer        m_VectorReader;
   ComplexImageReaderType::Pointer  m_ComplexReader;
   LabeledVectorReaderType::Pointer m_LabeledVectorReader;
+
+  // Vector of string needed to manage hdf file
+  std::vector<std::string>         m_Names;
+  std::vector<std::string>         m_Desc;
+
+  /** Detect if the file is a hdf file read its subdataset info. In our case a hdf file is composed of subdataset and readable with GDAL */
+  bool IsHdfFile(std::string filepath);
+
+  /** Detect and replace "/" in m_Desc strings to avoid problem with Choice Widget vDataset*/
+  bool CheckDataSetString();
+
 };
 
 } // End namespace otb

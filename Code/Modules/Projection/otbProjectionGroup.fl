@@ -14,22 +14,23 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label Projection open
-      xywh {482 183 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {3 177 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 visible
     } {
       Fl_Button guiOK {
         label {Save / Quit}
         callback {OK();}
         tooltip {Compute result} xywh {336 427 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
-      Fl_Tabs m_TabsMode {open
-        xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
+      Fl_Tabs m_TabsMode {
+        callback {this->TabPositionHandler();} open
+        xywh {5 9 420 411} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group AllGrp {
-          label {Input image} open
+          label {Input image} open selected
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard {} {
-            label {Geographical coordinates} open
+            label {Origin Geographical coordinates} open
             xywh {31 67 370 98} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5
           } {
             Fl_Group {} {open
@@ -63,7 +64,7 @@ this->UpdateLongLat();}
           }
           Fl_Choice iMapSelection {
             label {Input map projection}
-            callback {this->UpdateMapParam();} open
+            callback {this->UpdateMapParam();}
             tooltip {Select the map projection type} xywh {175 175 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186 deactivate
           } {
             MenuItem {} {
@@ -106,7 +107,7 @@ iSensorModel->show();}
             }
           }
           Fl_Wizard iMapType {
-            label {Input cartographic coordinates} open
+            label {Input cartographic coordinates}
             xywh {30 220 376 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5 deactivate
           } {
             Fl_Group iUTM {open
@@ -167,28 +168,32 @@ this->UpdateInputTMTransform();}
           }
           Fl_Check_Button guiRPCEstimator {
             label {Estimate Input RPC Model}
-            callback {this->UpdateRpcEstimation();} selected
+            callback {this->UpdateRpcEstimation();}
             xywh {35 400 170 15} down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
         Fl_Group {} {
-          label {Output image}
+          label {Output image} open
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
             label {Size X}
+            callback {this->UpdateLongLat();}
             tooltip {Enter the X output size} xywh {177 42 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSizeY {
             label {Size Y}
+            callback {this->UpdateLongLat();}
             tooltip {Enter the Y output size} xywh {177 79 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSpacingX {
             label {Spacing X}
+            callback {this->UpdateLongLat();}
             tooltip {Enter X spacing} xywh {177 117 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSpacingY {
             label {Spacing Y}
+            callback {this->UpdateLongLat();}
             tooltip {Enter Y spacing} xywh {177 155 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Choice guiMapSelection {
@@ -328,7 +333,7 @@ this->UpdateTMTransform();}
           }
         }
         Fl_Group {} {
-          label Settings open
+          label Settings
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
@@ -451,7 +456,7 @@ SetInterpolatorType(MAP_SINC);}
         }
         Fl_Group {} {
           label DEM
-          xywh {5 31 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group {} {open
             xywh {20 69 395 174}
@@ -489,6 +494,19 @@ vAverageElevation->deactivate();
               label {Elevation value    }
               xywh {182 209 153 24}
             }
+          }
+        }
+        Fl_Group gQuickLook {
+          label Quicklook open
+          xywh {5 32 420 387} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+        } {
+          Fl_Group gPreviewWindow {open
+            xywh {15 36 400 344} resizable
+          } {}
+          Fl_Check_Button bDispalyPreview {
+            label {Preview Projected Image}
+            callback {this->DisplayPreviewWidget();}
+            xywh {225 390 175 15} box PLASTIC_DOWN_BOX down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
       }
@@ -530,5 +548,9 @@ vAverageElevation->deactivate();
   Function {UpdateDEMUse()} {open return_type {virtual void}
   } {}
   Function {UpdateRpcEstimation()} {open return_type {virtual void}
+  } {}
+  Function {DisplayPreviewWidget()} {open protected return_type {virtual void}
+  } {}
+  Function {TabPositionHandler()} {open return_type {virtual void}
   } {}
 } 

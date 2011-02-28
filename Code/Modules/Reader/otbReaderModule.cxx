@@ -41,7 +41,7 @@ ReaderModule::ReaderModule()
   vType->add(otbGetTextMacro("Unknown"));
   vType->add(otbGetTextMacro("Optical image"));
   vType->add(otbGetTextMacro("SAR image"));
-  vType->add(otbGetTextMacro("Vector"));
+  vType->add(otbGetTextMacro("Vector Data"));
   vType->value(0);
 
   // Deactivate ok for now
@@ -76,72 +76,112 @@ void ReaderModule::Analyse()
   // Is type found ?
   bool typeFound = false;
 
-  // Get the filename from the filepath
-  ossimFilename lFile = ossimFilename(filepath);
+  // Is hdf type
+  bool typeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
 
-  // Try different types
-  try
+  if (typeHdf)
     {
-    // Read the image
-    m_FPVReader->SetFileName(filepath);
-    m_FPVReader->GenerateOutputInformation();
-
-    switch (m_FPVReader->GetImageIO()->GetPixelType())
+    CheckDataSetString();
+    // Fill vDataset with subdataset descriptor info
+    for (unsigned int itSubDataset = 0; itSubDataset < (unsigned int) m_Desc.size(); itSubDataset++)
       {
-      // handle the radar case
-      case itk::ImageIOBase::COMPLEX:
-        vType->value(2);
-        // If we are still here, this is a readable image
-        typeFound = true;
-        break;
-
-      // handle the optical case
-      default:
-        vType->value(1);
-        // If we are still here, this is a readable image
-        typeFound = true;
-        break;
+      vDataset->add(m_Desc[itSubDataset].c_str());
       }
-    }
-  catch (itk::ExceptionObject)
-    {
-    // Silent catch
-    }
+    vDataset->set_visible();
+    vDataset->value(0);
 
-  if (!typeFound)
-    {
-    try
-      {
-      VectorReaderType::Pointer vectorReader = VectorReaderType::New();
-      vectorReader->SetFileName(filepath);
-      vectorReader->GenerateOutputInformation();
-      vType->value(3);
-      typeFound = true;
-      }
-    catch (itk::ExceptionObject)
-      {
-      // Silent catch
-      vType->value(0);
-      }
-    }
-
-  // Activate/ deactivate ok
-  if (!typeFound)
-    {
-    vType->value(0);
-    bOk->deactivate();
+    vType->value(1); // We assume that hdf file is composed of optical image
+    bOk->activate();
     }
   else
     {
-    bOk->activate();
+    // Try different types
+    try
+      {
+      // Read the image
+      m_FPVReader->SetFileName(filepath);
+      m_FPVReader->GenerateOutputInformation();
+
+      // Special action if we use the GDAL image IO
+      if (strcmp(m_FPVReader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+        {
+        if ((dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex())
+          { // Complex Data
+          vType->value(2);
+          typeFound = true;
+          }
+        else
+          { // Real Data
+          vType->value(1);
+          typeFound = true;
+          }
+        }
+      else // if we don't use GDAL Image IO
+        {
+        switch (m_FPVReader->GetImageIO()->GetPixelType())
+          {
+          // handle the radar case
+          case itk::ImageIOBase::COMPLEX:
+            vType->value(2);
+            // If we are still here, this is a readable image
+            typeFound = true;
+            break;
+            // handle the optical case
+          default:
+            vType->value(1);
+            // If we are still here, this is a readable image
+            typeFound = true;
+            break;
+          }
+        }
+      }
+    catch (itk::ExceptionObject&)
+      {
+      // Silent catch
+      }
+
+    if (!typeFound)
+      {
+      try
+        {
+        VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+        vectorReader->SetFileName(filepath);
+        vectorReader->GenerateOutputInformation();
+        vType->value(3);
+        typeFound = true;
+        }
+      catch (itk::ExceptionObject&)
+        {
+        // Silent catch
+        vType->value(0);
+        }
+      }
+
+    // Activate/ deactivate ok
+    if (!typeFound)
+      {
+      vType->value(0);
+      bOk->deactivate();
+      }
+    else
+      {
+      bOk->activate();
+      }
     }
 
   std::string name = vName->value();
 
   if (name.empty())
     {
-    ossimFilename fname (vFilePath->value());
-    vName->value(fname.fileNoExtension());
+    if (typeHdf)
+      {
+      vName->value(m_Desc[0].c_str());
+      }
+    else
+      {
+      ossimFilename fname(vFilePath->value());
+      vName->value(fname.fileNoExtension());
+      }
     }
 }
 
@@ -189,20 +229,41 @@ void ReaderModule::TypeChanged()
     }
 }
 
+void ReaderModule::DatasetChanged()
+{
+	vName->value(m_Desc[vDataset->value()].c_str());
+}
+
 void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId;
+  ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
+
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  {
+    filepath += ":";
+    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
+    filepath += ossDatasetId.str();
+  }
 
   m_FPVReader->SetFileName(filepath);
   m_FPVReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
-  oss << "Image read from file: " << lFile.file();
-  ossId << vName->value();
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+    {
+    oss << "Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    ossId << vName->value();//m_Desc[vDataset->value()];
+    }
+  else
+    {
+    oss << "Image read from file: " << lFile.file();
+    ossId << vName->value();
+    }
+
   this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
@@ -210,15 +271,32 @@ void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId;
+  ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
+
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  {
+    filepath += ":";
+    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
+    filepath += ossDatasetId.str();
+  }
 
   m_ComplexReader->SetFileName(filepath);
   m_ComplexReader->GenerateOutputInformation();
 
-  oss << "Complex image read from file: " << lFile.file();
-  ossId << vName->value();
+  // Add the full data set as a descriptor
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+    {
+    oss << "Complex Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    ossId << vName->value();//m_Desc[vDataset->value()];
+    }
+  else
+    {
+    oss << "Complex image read from file: " << lFile.file();
+    ossId << vName->value();
+    }
+
   this->AddOutputDescriptor(m_ComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
@@ -250,6 +328,10 @@ void ReaderModule::Browse()
     return;
     }
   vFilePath->value(filename);
+  // Need to clear these variables
+  m_Desc.clear();
+  m_Names.clear();
+  vDataset->clear();
   this->Analyse();
 }
 
@@ -262,6 +344,50 @@ void ReaderModule::Hide()
 {
   wFileChooserWindow->hide();
 }
-} // End namespace otb
 
+bool ReaderModule::IsHdfFile(std::string filepath)
+{
+  GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  readerGDAL->SetFileName(filepath);
+  if (readerGDAL->CanReadFile(filepath.c_str()))
+    {
+    if (!readerGDAL->GetSubDatasetInfo(m_Names, m_Desc))
+      {
+      return false; // There are no subdataset in this file
+      }
+    }
+  else
+    {
+    return false; // GDAL cannot read this file
+    }
+  return true;
+}
+
+bool ReaderModule::CheckDataSetString()
+{
+  if (!m_Desc.empty())
+    {
+    for (size_t it = 0; it < m_Desc.size(); it++)
+      {
+      string key("/");
+      size_t found;
+      do
+        {
+        found = m_Desc[it].find(key);
+        if (found!=string::npos)
+          {
+          m_Desc[it].replace(found,key.length()," ");
+          }
+        }
+      while(found!=string::npos);
+      }
+    return true;
+    }
+  else
+    {
+    return false;
+    }
+}
+
+} // End namespace otb
 #endif

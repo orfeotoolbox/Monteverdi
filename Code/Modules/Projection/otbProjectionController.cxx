@@ -59,12 +59,11 @@ ProjectionController
                 double spacingX,
                 double spacingY,
                 double originX,
-                double originY,
-                bool isUl)
+                double originY)
 {
   try
     {
-    m_Model->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY, isUl);
+    m_Model->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY);
     }
   catch (itk::ExceptionObject& err)
     {

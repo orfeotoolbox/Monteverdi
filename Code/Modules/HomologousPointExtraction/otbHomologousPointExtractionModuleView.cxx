@@ -45,6 +45,8 @@ HomologousPointExtractionModuleView
   m_Green[3] = 0.5;
 
   m_ColorList.clear();
+
+  m_GUIBuilt = false;
 }
 
 HomologousPointExtractionModuleView
@@ -110,6 +112,9 @@ HomologousPointExtractionModuleView
 
   // Link pixel descriptors (not do before because widgets have to be instanciated)
   m_Controller->LinkPixelDescriptors();
+
+  // Set the built flag
+  m_GUIBuilt = true;
 }
 
 void
@@ -175,6 +180,9 @@ HomologousPointExtractionModuleView
   m_SecondImageView->GetFullWidget()->show();
   m_SecondImageView->GetScrollWidget()->show();
   m_SecondImageView->GetZoomWidget()->show();
+
+  m_FirstImageView->GetScrollWidget()->set_visible_focus();
+  m_SecondImageView->GetScrollWidget()->set_visible_focus();
 }
 
 void
@@ -344,6 +352,7 @@ HomologousPointExtractionModuleView
   tMeanError->value("");
   gGuess->deactivate();
   m_Controller->SetTransformationAvailable(false);
+  this->Notify();
 }
 
 void
@@ -398,7 +407,18 @@ void
 HomologousPointExtractionModuleView
 ::Notify()
 {
+  if(m_GUIBuilt && m_Controller.IsNotNull())
+    {
 
+    if(m_Controller->GetTransformationAvailable())
+      {
+      this->guiQuit->activate();
+      }
+    else
+      {
+      this->guiQuit->deactivate();
+      }
+    }
 }
 
 void
@@ -414,6 +434,13 @@ HomologousPointExtractionModuleView
 ::HideAll()
 {
   wMainWindow->hide();
+}
+
+void
+HomologousPointExtractionModuleView
+::Rectify(bool flag)
+{
+  m_Controller->SetRectifyMode(flag);
 }
 
 } // end namespace

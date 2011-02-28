@@ -53,8 +53,7 @@ public:
                              double spacingX,
                              double spacingY,
                              double originX,
-                             double originY,
-                             bool isUl)  = 0;
+                             double originY)  = 0;
   virtual void UpdateInputUTMTransform(int zone, bool north) = 0;
   virtual void InitializeInputLambertIITransform() = 0;
   virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing) = 0;

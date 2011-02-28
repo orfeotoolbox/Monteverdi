@@ -27,7 +27,6 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbStreamingResampleImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
 #include "itkContinuousIndex.h"
 
 //Vis
@@ -47,6 +46,9 @@
 #include "itkAffineTransform.h"
 #include "itkSimilarity2DTransform.h"
 #include "itkTranslationTransform.h"
+
+// Interpolation
+#include "otbBCOInterpolateImageFunction.h"
 
 namespace otb {
 
@@ -127,9 +129,12 @@ public:
   typedef itk::LevenbergMarquardtOptimizer::ScalesType ScalesType;
 
   /** Output */
-  typedef StreamingResampleImageFilter<ImageType, ImageType, double>                     ResampleFilterType;
+  typedef StreamingResampleImageFilter<VectorImageType, VectorImageType, double>         ResampleFilterType;
   typedef ResampleFilterType::TransformType                                              ResampleTransformType;
-  typedef PerBandVectorImageFilter<VectorImageType, VectorImageType, ResampleFilterType> PerBandFilterType;
+
+    /** Interpolation will be bicubic */
+  typedef otb::BCOInterpolateImageFunction<VectorImageType> BCOInterpolatorType;
+
 
   /** Get the visualization models */
   VisualizationModelPointerType GetVisualizationModel(unsigned int id)
@@ -186,6 +191,10 @@ public:
   /** Get Transform Parameters*/
   itkGetMacro(TransformParameters, ParametersType);
 
+  /** Set the rectify or superimpose mode */
+  itkSetMacro(RectifyMode,bool);
+  itkGetMacro(RectifyMode,bool);
+
 protected:
 
   /** Constructor */
@@ -220,12 +229,13 @@ private:
 
   /** Resampler filter */
   ResampleFilterType::Pointer m_Resampler;
-  PerBandFilterType::Pointer  m_PerBander;
 
   TransformType::Pointer m_Transform;
 
   bool m_OutputChanged;
 
+  // Rectify or superimpose mode
+  bool m_RectifyMode;
 };
 
 } //end namespace otb

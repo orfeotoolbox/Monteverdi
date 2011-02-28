@@ -50,6 +50,14 @@
 
 #include "otbProjectionEnum.h"
 
+// rendering the preview
+#include "itkRGBAPixel.h"
+#include "otbImageWidget.h"
+#include "otbImage.h"
+#include "otbImageLayer.h"
+#include "otbImageLayerGenerator.h"
+#include "otbImageLayerRenderingModel.h"
+
 namespace otb
 {
 /** \class ProjectionView
@@ -82,6 +90,19 @@ public:
   typedef ModelType::IndexType       IndexType;
   typedef ModelType::SingleImageType SingleImageType;
 
+  /** Widget for the preview*/
+  typedef ImageWidget<>              ImageWidgetType;
+  typedef ImageWidgetType::SizeType  SizeType;
+  typedef ImageWidgetType::Pointer   ImageWidgetPointerType;
+  
+  /** Useful typedefs for the preview rendering */
+  typedef Image<itk::RGBAPixel<unsigned char> >        ViewerImageType;
+  typedef otb::ImageLayer<ImageType, ViewerImageType>  LayerType;
+  typedef otb::ImageLayerGenerator<LayerType>          LayerGeneratorType;
+  
+  typedef otb::ImageLayerRenderingModel<ViewerImageType>   VisuModelType;
+
+
   // Called before building the GUI
   virtual void InitializeAction();
   // Init2ialize transform and show the GUI
@@ -101,6 +122,9 @@ public:
 
   // Hide the GUI
   virtual void Hide();
+
+  // Tab position handler
+  virtual void TabPositionHandler();
 
 protected:
 
@@ -163,6 +187,12 @@ protected:
   // Find parameter value in the projection Ref tree
   virtual bool FindParameter(OGRSpatialReference oSRS, const char * inParam, double * paramValue);
 
+  // Display preview widget
+  virtual void DisplayPreviewWidget();
+
+  // Method to update the model output attributes
+  void UpdateOutputRegion();
+  
   /** Constructor */
   ProjectionView();
   /** Destructor */
@@ -175,6 +205,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   ProjectionMapType          m_MapType;
+  ProjectionMapType          m_PreviousMapType;
   ProjectionInterpolatorType m_InterpType;
 
   // Flag to determine if there is an output
@@ -185,6 +216,12 @@ private:
 
   // Controller instance
   ProjectionControllerInterface::Pointer m_Controller;
+
+  /**ImageWidget for my preview*/
+  ImageWidgetPointerType                 m_PreviewWidget;
+  
+  ModelType::ResampleFilterType::Pointer m_Transform;
+  
 };
 
 } // End namespace otb

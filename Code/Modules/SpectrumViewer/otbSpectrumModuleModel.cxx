@@ -109,6 +109,7 @@ SpectrumModuleModel
   m_LayerGenerator->SetImage(m_InputImage);
   // TODO: the test fails when decommenting the following line (although the module is usable in Monteverdi)
   //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+
   m_LayerGenerator->GenerateLayer();
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();
@@ -128,8 +129,24 @@ SpectrumModuleModel
   statFilter->SetInput(tempImage);
   statFilter->Update();
 
-  m_LayerGenerator->GetLayer()->SetMinValues(statFilter->GetMinimum());
-  m_LayerGenerator->GetLayer()->SetMaxValues(statFilter->GetMaximum());
+  ImageType::PixelType min = statFilter->GetMinimum();
+  ImageType::PixelType max = statFilter->GetMaximum();
+
+  // Limit the bounds arbitrarily : performance issue with files containing arbitrary values (like uninitialized memory)
+  for (int i = 0; i < min.GetSize(); i++)
+    {
+    if (min [i] < 0)
+      {
+      min[i] = 0;
+      }
+    if (max [i] > 65535)
+      {
+      max[i] = 65535;
+      }
+    }
+
+  m_LayerGenerator->GetLayer()->SetMinValues(min);
+  m_LayerGenerator->GetLayer()->SetMaxValues(max);
 }
 
 void

@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -10,8 +10,8 @@ class ReaderModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Open dataset} open
-      xywh {443 191 365 180} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      label {Open dataset} open selected
+      xywh {628 357 365 260} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         callback {this->Analyse();}
@@ -19,13 +19,13 @@ class ReaderModuleGUI {open
       }
       Fl_Return_Button bOk {
         label Open
-        callback {this->OpenDataSet();} selected
-        xywh {265 145 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        callback {this->OpenDataSet();}
+        xywh {265 210 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {165 145 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {165 210 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bBrowse {
         label {...}
@@ -41,6 +41,11 @@ class ReaderModuleGUI {open
         label {Name }
         xywh {100 106 195 24} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 185
       }
+      Fl_Choice vDataset {
+        label {You try to open a hdf file, please select a sub dataset}
+        callback {this->DatasetChanged();} open
+        xywh {100 161 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 hide
+      } {}
     }
   }
   Function {OpenDataSet()} {open protected return_type {virtual void}
@@ -54,5 +59,7 @@ class ReaderModuleGUI {open
   Function {TypeChanged()} {open protected return_type {virtual void}
   } {}
   Function {~ReaderModuleGUI()} {open return_type virtual
+  } {}
+  Function {DatasetChanged()} {open return_type {virtual void}
   } {}
 } 

@@ -46,7 +46,7 @@
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
-#include "otbOrthorectificationModule.h"
+//#include "otbOrthorectificationModule.h"
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
@@ -79,6 +79,7 @@
 #include "otbPolarimetricSynthesisModule.h"
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
+#include "otbImageStatisticsModule.h"
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -152,6 +153,7 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
+  model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Image Statistics"));
 
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
@@ -190,8 +192,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
   
   /***********  Geometry menu *******************/
-  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
-                                                       otbGetTextMacro("Geometry/Orthorectification"));
+//   model->RegisterModule<otb::OrthorectificationModule>("Orthorectification",
+//                                                        otbGetTextMacro("Geometry/Orthorectification"));
   model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition",
                                                     otbGetTextMacro("Geometry/Superimpose two images"));
