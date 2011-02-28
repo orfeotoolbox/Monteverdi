@@ -152,6 +152,7 @@ protected:
   virtual void FocusOn(IndexType id1, IndexType id2);
   virtual void Evaluate(IndexType id);
   virtual void OK();
+  virtual void SetRectifyMode(bool flag);
 
   ModelType* GetModel();
 

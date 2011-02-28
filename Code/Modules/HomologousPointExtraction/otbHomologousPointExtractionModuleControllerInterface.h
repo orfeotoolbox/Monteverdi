@@ -50,6 +50,8 @@ public:
   virtual void ComputeTransform() = 0;
   virtual void FocusOn(IndexType id1, IndexType id2) = 0;
   virtual void Evaluate(IndexType id) = 0;
+  virtual void SetRectifyMode(bool flag) = 0;
+
   virtual void OK() = 0;
 
   virtual ModelType* GetModel() = 0;

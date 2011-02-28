@@ -416,4 +416,11 @@ HomologousPointExtractionModuleView
   wMainWindow->hide();
 }
 
+void
+HomologousPointExtractionModuleView
+::Rectify(bool flag)
+{
+  m_Controller->SetRectifyMode(flag);
+}
+
 } // end namespace

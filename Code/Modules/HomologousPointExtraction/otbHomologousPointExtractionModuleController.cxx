@@ -398,4 +398,19 @@ HomologousPointExtractionModuleController
     }
 }
 
+void
+HomologousPointExtractionModuleController
+::SetRectifyMode(bool flag)
+{
+  try
+    {
+    m_Model->SetRectifyMode(flag);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+}
+
 } // end namespace otb

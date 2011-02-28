@@ -191,6 +191,10 @@ public:
   /** Get Transform Parameters*/
   itkGetMacro(TransformParameters, ParametersType);
 
+  /** Set the rectify or superimpose mode */
+  itkSetMacro(RectifyMode,bool);
+  itkGetMacro(RectifyMode,bool);
+
 protected:
 
   /** Constructor */
@@ -230,6 +234,8 @@ private:
 
   bool m_OutputChanged;
 
+  // Rectify or superimpose mode
+  bool m_RectifyMode;
 };
 
 } //end namespace otb
