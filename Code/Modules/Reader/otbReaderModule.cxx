@@ -214,7 +214,7 @@ void ReaderModule::OpenDataSet()
         else
           {
           // Check if it is a multiband image of scalar (only monoband complex image can go here)
-          if (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2)
+          if ( (!(dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex()) && (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2))
             {
             itk::OStringStream oss;
             oss << "You try to open a two bands image of scalar as a SAR image, \n" << \
