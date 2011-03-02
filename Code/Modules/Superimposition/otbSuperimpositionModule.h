@@ -26,6 +26,8 @@
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
+#include "otbSuperimpositionEnum.h"
+
 namespace otb
 {
 /** \class SuperimpositionModule
@@ -78,7 +80,10 @@ protected:
   virtual void Browse();
   virtual void Cancel();
 
-  void SetupFilters();
+  /** Interpolator selection callbacks*/
+  virtual void SetInterpolatorType(InterpolatorType interp);
+  virtual InterpolatorType GetInterpolatorType();
+  virtual void UpdateInterpolator();
 
 private:
   SuperimpositionModule(const Self&); //purposely not implemented
@@ -87,6 +92,8 @@ private:
   ResampleFilterType::Pointer  m_Resampler;
   CastImageFilterType::Pointer m_CastFixedFilter;
   CastImageFilterType::Pointer m_CastMovingFilter;
+
+  InterpolatorType     m_InterpType;
 };
 
 } // End namespace otb

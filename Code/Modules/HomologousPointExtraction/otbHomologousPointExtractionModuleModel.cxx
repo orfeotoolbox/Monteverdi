@@ -31,7 +31,7 @@ namespace otb
 {
 
 HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m_VisualizationModel(),
-  m_BlendingFunction(), m_Output(), m_Resampler(), m_PerBander()
+                                                                               m_BlendingFunction(), m_Output(), m_Resampler(), m_RectifyMode(true)
 {
   VisualizationModelType::Pointer visualizationModel1 = VisualizationModelType::New();
   VisualizationModelType::Pointer visualizationModel2 = VisualizationModelType::New();
@@ -57,7 +57,6 @@ HomologousPointExtractionModuleModel::HomologousPointExtractionModuleModel() : m
 
   m_Output = VectorImageType::New();
   m_Resampler = ResampleFilterType::New();
-  m_PerBander = PerBandFilterType::New();
   m_IndexesList.clear();
 
   m_OutputChanged = false;
@@ -146,14 +145,15 @@ HomologousPointExtractionModuleModel
     if (m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2)
       {
       found = true;
-      itkExceptionMacro(
-        << "At most one of the 2 given index " << id1 << " or " << id2 << " already appears in the list.");
       }
     j++;
     }
 
-  IndexCoupleType paire(id1, id2);
-  m_IndexesList.push_back(paire);
+  if(!found)
+    {
+    IndexCoupleType paire(id1, id2);
+    m_IndexesList.push_back(paire);
+    }
 }
 
 void
@@ -174,21 +174,15 @@ HomologousPointExtractionModuleModel
 
   PointType fixedPoint;
   PointType movingPoint;
-  PointType firstOrig = m_FirstInputImage->GetOrigin();
-  PointType secondOrig = m_SecondInputImage->GetOrigin();
 
   for (unsigned int i = 0; i < m_IndexesList.size(); i++)
     {
     IndexType idFix, idMov;
     idFix = m_IndexesList[i].first;
-    idFix[0] += static_cast<int>(firstOrig[0]);
-    idFix[1] += static_cast<int>(firstOrig[1]);
     m_FirstInputImage->TransformIndexToPhysicalPoint(idFix, fixedPoint);
     fix->SetPoint(i, fixedPoint);
 
     idMov = m_IndexesList[i].second;
-    idMov[0] += static_cast<int>(secondOrig[0]);
-    idMov[1] += static_cast<int>(secondOrig[1]);
     m_SecondInputImage->TransformIndexToPhysicalPoint(idMov, movingPoint);
     mov->SetPoint(i, movingPoint);
     }
@@ -205,11 +199,13 @@ HomologousPointExtractionModuleModel
       ScalesType scales(2);
       scales.Fill(0.01);
       this->GenericRegistration<TranslationTransformType>(scales);
+      this->NotifyAll();
       break;
       }
     case otb::AFFINE:
       {
       this->AffineLeastSquareRegistration();
+      this->NotifyAll();
       break;
       }
     case otb::SIMILARITY2D:
@@ -222,8 +218,9 @@ HomologousPointExtractionModuleModel
       // Translation scale
       scales[2] = 1000;
       scales[3] = 1000;
-
+      
       this->GenericRegistration<Similarity2DTransformType>(scales);
+      this->NotifyAll();
       break;
       }
     default:
@@ -292,22 +289,25 @@ HomologousPointExtractionModuleModel
   vnl_sparse_matrix<double> ax(nbPoints, 3), ay(nbPoints, 3);
   vnl_vector<double>        bx(nbPoints), by(nbPoints);
 
-  PointType firstOrig = m_FirstInputImage->GetOrigin();
-  PointType secondOrig = m_SecondInputImage->GetOrigin();
+  PointType fixedPoint;
+  PointType movingPoint;
 
   for (unsigned int i = 0; i < nbPoints; i++)
     {
+    m_FirstInputImage->TransformIndexToPhysicalPoint(m_IndexesList[i].first, fixedPoint);
+    m_SecondInputImage->TransformIndexToPhysicalPoint(m_IndexesList[i].second,movingPoint);
 
-    ax(i, 0) = m_IndexesList[i].first[0] + static_cast<int>(firstOrig[0]);
-    ax(i, 1) = m_IndexesList[i].first[1] + static_cast<int>(firstOrig[1]);
+
+    ax(i, 0) = fixedPoint[0];
+    ax(i, 1) = fixedPoint[1];
     ax(i, 2) = 1.;
 
-    ay(i, 0) = m_IndexesList[i].first[0] + static_cast<int>(firstOrig[0]);
-    ay(i, 1) = m_IndexesList[i].first[1] + static_cast<int>(firstOrig[1]);
+    ay(i, 0) = fixedPoint[0];
+    ay(i, 1) = fixedPoint[1];
     ay(i, 2) = 1.;
 
-    bx[i] = m_IndexesList[i].second[0] + static_cast<int>(secondOrig[0]);
-    by[i] = m_IndexesList[i].second[1] + static_cast<int>(secondOrig[1]);
+    bx[i] = movingPoint[0];
+    by[i] = movingPoint[1];
     }
 
   vnl_sparse_matrix_linear_system<double> linearSystemX(ax, bx), linearSystemY(ay, by);
@@ -392,17 +392,9 @@ HomologousPointExtractionModuleModel
   typename T::OutputPointType outPoint;
   ContinuousIndexType idOut;
 
-  PointType firstOrig = m_FirstInputImage->GetOrigin();
-  PointType secondOrig = m_SecondInputImage->GetOrigin();
-  index[0] += static_cast<int>(firstOrig[0]);
-  index[1] += static_cast<int>(firstOrig[1]);
-
   m_FirstInputImage->TransformIndexToPhysicalPoint(index, inPoint);
   outPoint = transform->TransformPoint(inPoint);
   m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint, idOut);
-
-  idOut[0] -= static_cast<int>(secondOrig[0]);
-  idOut[1] -= static_cast<int>(secondOrig[1]);
 
   return idOut;
 }
@@ -457,20 +449,14 @@ HomologousPointExtractionModuleModel
   ContinuousIndexType idOut;
   IndexType           idStarted;
 
-  PointType firstOrig = m_FirstInputImage->GetOrigin();
-  PointType secondOrig = m_SecondInputImage->GetOrigin();
-
   for (unsigned int i = 0; i < inList.size(); i++)
     {
-    idStarted[0] = inList[i][0] + static_cast<int>(firstOrig[0]);
-    idStarted[1] = inList[i][1] + static_cast<int>(firstOrig[1]);
+    idStarted[0] = inList[i][0];
+    idStarted[1] = inList[i][1];
 
     m_FirstInputImage->TransformIndexToPhysicalPoint(inList[i], inPoint);
     outPoint = transform->TransformPoint(inPoint);
     m_SecondInputImage->TransformPhysicalPointToContinuousIndex(outPoint, idOut);
-
-    idOut[0] -= static_cast<int>(secondOrig[0]);
-    idOut[1] -= static_cast<int>(secondOrig[1]);
 
     outList.push_back(idOut);
     }
@@ -483,14 +469,33 @@ HomologousPointExtractionModuleModel
 ::OK()
 {
   // Import parameters from fixed image
-  m_Resampler->SetOutputSize(m_FirstInputImage->GetLargestPossibleRegion().GetSize());
-  m_Resampler->SetOutputSpacing(m_FirstInputImage->GetSpacing());
-  m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
-  m_Resampler->UpdateOutputInformation();
-  m_PerBander->SetInput(m_SecondInputImage);
-  m_PerBander->SetFilter(m_Resampler);
-  m_PerBander->UpdateOutputInformation();
-  m_Output = m_PerBander->GetOutput();
+  VectorImageType::PixelType defaultValue;
+  itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
+                                                        m_SecondInputImage->GetNumberOfComponentsPerPixel());
+  BCOInterpolatorType::Pointer  bcoInterpolator = BCOInterpolatorType::New();
+  bcoInterpolator->SetInputImage(m_SecondInputImage);
+
+  m_Resampler->SetInput(m_SecondInputImage);
+  m_Resampler->SetEdgePaddingValue(defaultValue);
+  m_Resampler->SetInterpolator(bcoInterpolator);
+
+  if(m_RectifyMode)
+    {
+    // If in rectify mode, use the second image information
+    m_Resampler->SetOutputSize(m_SecondInputImage->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputSpacing(m_SecondInputImage->GetSpacing());
+    m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
+    }
+  else
+    {
+    // If in superimpose mode, use the first image information
+    m_Resampler->SetOutputSize(m_SecondInputImage->GetLargestPossibleRegion().GetSize());
+    m_Resampler->SetOutputSpacing(m_SecondInputImage->GetSpacing());
+    m_Resampler->SetOutputOrigin(m_SecondInputImage->GetOrigin());
+    }
+
+    m_Resampler->GetOutput()->UpdateOutputInformation();
+  m_Output = m_Resampler->GetOutput();
 
   m_OutputChanged = true;
   this->NotifyAll();

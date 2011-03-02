@@ -359,14 +359,19 @@ bool MonteverdiModel::IsCached(const std::string& instanceId, const std::string&
   // Retrieve the output map
   OutputDataDescriptorMapType outputs = GetModuleOutputsByInstanceId(instanceId);
 
-  // Retrieve the output data descriptor
-  OutputDataDescriptorMapType::const_iterator outIt = outputs.find(outputKey);
-  if (outIt == outputs.end())
+  OutputDataDescriptorMapType::const_iterator it = outputs.begin();
+  for( it = outputs.begin(); it != outputs.end(); ++it )
+    {
+    if (it->GetDataKey() == outputKey)
+      break;
+    }
+
+  if (it == outputs.end())
     {
     itkExceptionMacro(<< "Module " << instanceId << " has no output with key " << outputKey);
     }
 
-  return outIt->second.IsCached();
+  return it->IsCached();
 }
 
 /** Start caching the given data */

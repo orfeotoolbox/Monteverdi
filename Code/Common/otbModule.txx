@@ -70,7 +70,8 @@ template <typename T> void Module::AddOutputDescriptor(T* data,
                                                        bool cached)
 {
   // Check if the key already exists
-  if (m_OutputsMap.count(key) > 0)
+  if (IsOutputKeyPresent(key))
+//  if (m_OutputsMap.count(key) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << key << " already exists !");
     }
@@ -85,7 +86,7 @@ template <typename T> void Module::AddOutputDescriptor(T* data,
   OutputDataDescriptor desc(wrapper, key, description, cached);
 
   // Insert it into the map
-  m_OutputsMap[key] = desc;
+  m_OutputsMap.push_back(desc);
 }
 
 /** Add a new output descritpor (SmartPointer version) */
@@ -119,7 +120,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
   ossId << key;
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -134,7 +136,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
   OutputDataDescriptor descWhole(wrapperWhole, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descWhole;
+  //m_OutputsMap[ossId.str()] = descWhole;
+  m_OutputsMap.push_back(descWhole);
 
   // Then, add each band
 
@@ -158,7 +161,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     ossId << key << " (" << otbGetTextMacro("band") << " " << band + 1 << ")";
 
     // Check if the key already exists
-    if (m_OutputsMap.count(ossId.str()) > 0)
+    if (IsOutputKeyPresent(ossId.str()))
+  //    if (m_OutputsMap.count(ossId.str()) > 0)
       {
       itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
       }
@@ -173,7 +177,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     OutputDataDescriptor desc(wrapper, ossId.str(), oss.str(), cached);
 
     // Insert it into the map
-    m_OutputsMap[ossId.str()] = desc;
+    //m_OutputsMap[ossId.str()] = desc;
+    m_OutputsMap.push_back(desc);
     }
 
   // Then, if needed, add the amplitude
@@ -192,7 +197,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     ossId << key << " (" << otbGetTextMacro("amplitude") << ")";
 
     // Check if the key already exists
-    if (m_OutputsMap.count(ossId.str()) > 0)
+    if (IsOutputKeyPresent(ossId.str()))
+  //    if (m_OutputsMap.count(ossId.str()) > 0)
       {
       itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
       }
@@ -207,7 +213,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     OutputDataDescriptor desc(wrapper, ossId.str(), oss.str(), cached);
 
     // Insert it into the map
-    m_OutputsMap[ossId.str()] = desc;
+    //m_OutputsMap[ossId.str()] = desc;
+    m_OutputsMap.push_back(desc);
     }
 }
 
@@ -445,7 +452,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   ossId << key;
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -460,7 +468,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   OutputDataDescriptor descWhole(wrapperWhole, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descWhole;
+  //m_OutputsMap[ossId.str()] = descWhole;
+  m_OutputsMap.push_back(descWhole);
 
   // Then, add real, imaginary, module and phase parts
 
@@ -482,7 +491,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   ossId << key << " (" << otbGetTextMacro("Real part") << ")";
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -497,7 +507,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   OutputDataDescriptor descReal(wrapperReal, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descReal;
+  //m_OutputsMap[ossId.str()] = descReal;
+  m_OutputsMap.push_back(descReal);
 
   // Imaginary part
   typename ImaginaryFilterType::Pointer imaginaryFilter = ImaginaryFilterType::New();
@@ -509,7 +520,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   ossId << key << " (" << otbGetTextMacro("Imaginary part") << ")";
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -524,7 +536,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   OutputDataDescriptor descImaginary(wrapperImaginary, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descImaginary;
+  //m_OutputsMap[ossId.str()] = descImaginary;
+  m_OutputsMap.push_back(descImaginary);
 
   // Modulus part
   typename ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
@@ -536,7 +549,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   ossId << key << " (" << otbGetTextMacro("Modulus part") << ")";
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -551,7 +565,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   OutputDataDescriptor descModulus(wrapperModulus, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descModulus;
+  //m_OutputsMap[ossId.str()] = descModulus;
+  m_OutputsMap.push_back(descModulus);
 
   // Phase part
   typename PhaseFilterType::Pointer PhaseFilter = PhaseFilterType::New();
@@ -563,7 +578,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   ossId << key << " (" << otbGetTextMacro("Phase part") << ")";
 
   // Check if the key already exists
-  if (m_OutputsMap.count(ossId.str()) > 0)
+  if (IsOutputKeyPresent(ossId.str()))
+//  if (m_OutputsMap.count(ossId.str()) > 0)
     {
     itkExceptionMacro(<< "An Output with key " << ossId.str() << " already exists !");
     }
@@ -578,7 +594,8 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   OutputDataDescriptor descPhase(wrapperPhase, ossId.str(), oss.str(), cached);
 
   // Insert it into the map
-  m_OutputsMap[ossId.str()] = descPhase;
+  //m_OutputsMap[ossId.str()] = descPhase;
+  m_OutputsMap.push_back(descModulus);
 }
 
 /** Partial specialization for the complex image case (SmartPointer version) */

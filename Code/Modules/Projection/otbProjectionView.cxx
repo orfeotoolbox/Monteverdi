@@ -100,7 +100,9 @@ ProjectionView::Notify()
     this->UpdateMapParam();
     // Update the output
     this->UpdateOutputParameters();
-    // 
+    // Update output whole origin image long/lat
+    this->UpdateLongLat();
+    // Update the output region
     this->UpdateOutputRegion();
     }
 

@@ -14,7 +14,7 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label Projection open
-      xywh {482 183 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 visible
+      xywh {3 177 435 470} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 visible
     } {
       Fl_Button guiOK {
         label {Save / Quit}
@@ -173,23 +173,27 @@ this->UpdateInputTMTransform();}
           }
         }
         Fl_Group {} {
-          label {Output image}
+          label {Output image} open
           xywh {5 30 420 389} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Input guiSizeX {
             label {Size X}
+            callback {this->UpdateLongLat();}
             tooltip {Enter the X output size} xywh {177 42 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSizeY {
             label {Size Y}
+            callback {this->UpdateLongLat();}
             tooltip {Enter the Y output size} xywh {177 79 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSpacingX {
             label {Spacing X}
+            callback {this->UpdateLongLat();}
             tooltip {Enter X spacing} xywh {177 117 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Input guiSpacingY {
             label {Spacing Y}
+            callback {this->UpdateLongLat();}
             tooltip {Enter Y spacing} xywh {177 155 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
           }
           Fl_Choice guiMapSelection {

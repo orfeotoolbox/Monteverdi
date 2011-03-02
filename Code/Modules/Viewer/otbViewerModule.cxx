@@ -206,6 +206,9 @@ namespace otb
 
     // build the DEM GUI
     this->BuildDEM();
+
+	// build the Screen shot GUI
+    this->BuildScreenShot();
   }
 
 
@@ -391,6 +394,13 @@ namespace otb
       m_WindowsLayout = PACKED_WINDOWS_LAYOUT;
     }
 
+    const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(0);
+    std::ostringstream title;
+    title << "[" << dow.GetSourceInstanceId() << "] " << dow.GetSourceOutputKey();
+    bSetupWindow->copy_label(title.str().c_str());
+    m_SplittedWindows->SetLabel(title.str().c_str());
+    m_PackedWindows->SetLabel(title.str().c_str());
+
     // No constrast stretch (NO_CONTRAST_STRETCH)
     guiContrastStretchSelection->add("Linear 0-255");
 
@@ -428,7 +438,7 @@ namespace otb
       this->UpdateTabHistogram();
 
       // Show the interface setup
-      gVectorData->value(guiTabData);
+      gVectorData->value(guiTabSetup);
       bSetupWindow->show();
 
       // Update the color composition window
@@ -1711,6 +1721,62 @@ namespace otb
     this->BusyOff();
   }
 
+  /**
+  * Proceed to screen shot
+  * 0 : zoon
+  * 1 : full
+  * 2 : naviagtion (ie. scroll)
+  */
+   void ViewerModule::ScreenShot(unsigned int id)
+   {
+		const char * filename = NULL;
+
+		filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
+
+		if (filename == NULL)
+		{
+			MsgReporter::GetInstance()->SendError("Empty file name!");
+			return;
+		}
+		ScreenShotFilterType::Pointer screener = ScreenShotFilterType::New();
+		screener->SetNumberOfChannels(3);
+		screener->SetFileName(filename);
+		screener->SetInverseXSpacing(true);
+
+		switch (id)
+        {
+			case 0:
+			{
+				screener->SetBuffer(m_View->GetZoomWidget()->GetOpenGlBuffer());
+				screener->SetImageSize(m_View->GetZoomWidget()->GetOpenGlBufferedRegion().GetSize());
+				break;
+			}
+			case 1:
+			{
+				screener->SetBuffer(m_View->GetFullWidget()->GetOpenGlBuffer());
+				screener->SetImageSize(m_View->GetFullWidget()->GetOpenGlBufferedRegion().GetSize());
+				break;
+			}
+			case 2:
+			{
+				screener->SetBuffer(m_View->GetScrollWidget()->GetOpenGlBuffer());
+				screener->SetImageSize(m_View->GetScrollWidget()->GetOpenGlBufferedRegion().GetSize());
+				break;
+			}
+			default:
+			{
+				itkExceptionMacro("Invalid id view for screen shot");
+			}
+		}
+		
+		screener->Update();
+		
+		// The record is very fast, we need to warm the user that everything is OK.
+		itk::OStringStream oss;
+        oss << "Image '" << filename << "' saved";
+		MsgReporter::GetInstance()->SendMsg( oss.str() );
+   }
+      
 
   /**
    *
@@ -1751,6 +1817,8 @@ namespace otb
     m_DisplayWindow->Hide();
     // Hide the DEM Window
     wDEM->hide();
+	// Hide the Screen shot Window
+    wScreenShot->hide();
     // Hide the Setup Propreties Window
     bSetupWindow->hide();
   }

@@ -78,6 +78,8 @@ SpectrumModuleView
   // Build the fltk code
   SpectrumModuleViewGroup::Build();
 
+  wMainWindow->label("test");
+
   // Register controllers
   m_ImageView->SetController(m_SpectrumModuleController->GetImageWidgetController());
 
@@ -159,6 +161,7 @@ void
 SpectrumModuleView
 ::RefreshVisualization()
 {
+
   m_ImageView->Update();
 }
 

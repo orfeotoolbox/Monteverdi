@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0109 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -15,7 +15,7 @@ class HomologousPointExtractionViewGroup {open
     Fl_Window wMainWindow {
       label {Homologous point extraction}
       callback {this->HideAll();} open
-      xywh {155 359 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {482 138 800 600} type Double box PLASTIC_DOWN_BOX color 48 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tile {} {open
         xywh {0 0 205 600}
@@ -26,7 +26,7 @@ class HomologousPointExtractionViewGroup {open
           Fl_Choice gTransform {
             label Transformation
             callback {ClearTransformationInfo();} open
-            xywh {5 38 190 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+            xywh {7 38 190 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           } {
             MenuItem {} {
               label Translation
@@ -43,29 +43,39 @@ class HomologousPointExtractionViewGroup {open
           }
           Fl_Output tTransform {
             label {Transform value}
-            xywh {5 100 190 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+            xywh {7 86 190 25} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Browser tError {
             label {Point errors}
             callback {this->UpdateListSelectionColor(false);}
-            tooltip {Euclidean distances} xywh {5 160 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            tooltip {Euclidean distances} xywh {7 134 190 150} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Output tMeanError {
             label {Mean square error}
-            xywh {5 349 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
+            xywh {7 307 190 25} box PLASTIC_DOWN_BOX selection_color 186 labelfont 1 labelsize 12 labelcolor 186 align 1
           }
           Fl_Group gPixelValue1 {
             label {Pixel values} open
-            xywh {5 421 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+            xywh {7 355 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Group gPixelValue2 {
             label {Pixel values} open
-            xywh {5 421 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
+            xywh {7 355 190 115} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
           } {}
           Fl_Button guiQuit {
             label {Save/Quit}
-            callback {Quit();}
-            tooltip {Quit application} xywh {59 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+            callback {Quit();} selected
+            tooltip {Quit application} xywh {61 562 80 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186 deactivate
+          }
+          Fl_Round_Button {} {
+            label {Rectify moving image}
+            callback {this->Rectify(true);}
+            tooltip {Warp moving image to rectify it according to homologous points. Origin, spacing and size match those of the moving image.} xywh {7 481 185 15} type Radio down_box ROUND_DOWN_BOX value 1 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Round_Button {} {
+            label {Superimpose moving to fix}
+            callback {this->Rectify(false);}
+            tooltip {Warp moving image so that it superimposes to fix image according to homologous points. Origin, spacing and size match those of the fix image.} xywh {7 501 190 15} type Radio down_box ROUND_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
           }
         }
       }
@@ -87,7 +97,7 @@ class HomologousPointExtractionViewGroup {open
               xywh {210 20 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
             Fl_Group gZoom1 {
-              label {Zoom fix} open selected
+              label {Zoom fix} open
               xywh {210 420 200 175} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             } {}
           }
@@ -199,5 +209,7 @@ class HomologousPointExtractionViewGroup {open
   Function {Evaluate()} {open return_type {virtual void}
   } {}
   Function {HideAll()} {open return_type {virtual void}
+  } {}
+  Function {Rectify(bool flag)} {open return_type void
   } {}
 } 
