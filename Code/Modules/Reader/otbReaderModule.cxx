@@ -404,6 +404,12 @@ void ReaderModule::Hide()
 bool ReaderModule::IsHdfFile(std::string filepath)
 {
   GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  // in case of hdr file (.hdr), GDAL want the header file as filepath
+  string::size_type loc = filepath.find( ".hdr", 0 );
+  if ( loc != string::npos )
+    {
+    filepath.erase(loc, 4);
+    }
   readerGDAL->SetFileName(filepath);
   if (readerGDAL->CanReadFile(filepath.c_str()))
     {
