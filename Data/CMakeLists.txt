@@ -1,5 +1,14 @@
+IF( UNIX )
+
 SET(PIXMAPS_DIR ${CMAKE_INSTALL_PREFIX}/share/pixmaps)
 SET(DESKTOP_FILES_DIR ${CMAKE_INSTALL_PREFIX}/share/applications)
 
-INSTALL(FILES Icons/monteverdi.xpm Icons/monteverdi.png DESTINATION ${PIXMAPS_DIR})
-INSTALL(FILES monteverdi.desktop DESTINATION ${DESKTOP_FILES_DIR})
+INSTALL(FILES Icons/monteverdi.xpm Icons/monteverdi.png
+        DESTINATION ${PIXMAPS_DIR}
+        COMPONENT Resources)
+        
+INSTALL(FILES monteverdi.desktop
+        DESTINATION ${DESKTOP_FILES_DIR}
+        COMPONENT Resources)
+
+ENDIF( UNIX )

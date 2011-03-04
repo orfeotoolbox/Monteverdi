@@ -359,20 +359,21 @@ IF(WIN32 AND NOT UNIX)
 
 SET(CPACK_NSIS_MODIFY_PATH ON)
 
-# Find path to GDAL DLL
-FIND_PATH(CPACK_OTB_DLL_PATH gdal17.dll)
-MARK_AS_ADVANCED(CPACK_OTB_DLL_PATH)
-MESSAGE(CPACK_OTB_DLL_PATH)
-
 # Install DLL needed by Monteverdi
 # This part is "OSGeo specific" because it makes assumption about the naming of the DLLs,
 # and the fact that they can all be found in the GDAL bin directory
-# It supposes that GDAL version is 1.7
+# It supposes that GDAL version is 1.8
+
+# Find path to GDAL DLL
+FIND_PATH(CPACK_OTB_DLL_PATH gdal18.dll)
+MARK_AS_ADVANCED(CPACK_OTB_DLL_PATH)
+MESSAGE("Found OSGeo DLL path : ${CPACK_OTB_DLL_PATH}")
+
 INSTALL(FILES
 ${CPACK_OTB_DLL_PATH}/adrg.dll
 ${CPACK_OTB_DLL_PATH}/comerr32.dll
 ${CPACK_OTB_DLL_PATH}/dted.dll
-${CPACK_OTB_DLL_PATH}/gdal17.dll
+${CPACK_OTB_DLL_PATH}/gdal18.dll
 ${CPACK_OTB_DLL_PATH}/geos_c.dll
 ${CPACK_OTB_DLL_PATH}/geotiff.dll
 ${CPACK_OTB_DLL_PATH}/gssapi32.dll
@@ -410,19 +411,21 @@ ${CPACK_OTB_DLL_PATH}/sqlite3.dll
 ${CPACK_OTB_DLL_PATH}/ssleay32.dll
 ${CPACK_OTB_DLL_PATH}/szlibdll.dll
 ${CPACK_OTB_DLL_PATH}/vrf.dll
-${CPACK_OTB_DLL_PATH}/xerces-c_2_7.dll
+${CPACK_OTB_DLL_PATH}/xerces-c_3_1.dll
 ${CPACK_OTB_DLL_PATH}/xerces-depdom_2_7.dll
 ${CPACK_OTB_DLL_PATH}/zlib1.dll
 ${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll
 DESTINATION bin
 COMPONENT Runtime)
 
-#
+
 # Need to include csv files provided with OSGeo that contains some needed EPSG definitions
 # For GDAL 1.6, those files are located in OSGEO_ROOT/apps/gdal-16/share/gdal
 # This path is available from the GDAL_DATA env var (from an OSGeo shell with gdal16.bat executed)
-#
-INSTALL(DIRECTORY $ENV{GDAL_DATA}
+# We use a FIND_PATH because typically $ENV{GDAL_DATA} contains backslashes which issue a warning
+FIND_PATH(GDAL_DATA epsg.wkt $ENV{GDAL_DATA})
+
+INSTALL(DIRECTORY ${GDAL_DATA}
         DESTINATION share
         COMPONENT Resources)
 
