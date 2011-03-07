@@ -696,7 +696,7 @@ ProjectionView::InitializeAction()
   if (!m_InputProjectionUnknown)
     {
     // Get the utm Zone && hemisphere  from a long,lat point in the image
-    typedef UtmMapProjection<otb::FORWARD> utmMapProjectionType;
+    typedef UtmMapProjection<otb::Transform::FORWARD> utmMapProjectionType;
     utmMapProjectionType::Pointer utmProjection  =   utmMapProjectionType::New();
     int                           zone = utmProjection->GetZoneFromGeoPoint(geoPoint);
     oss.str("");
