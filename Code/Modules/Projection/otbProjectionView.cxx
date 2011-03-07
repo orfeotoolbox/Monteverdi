@@ -43,6 +43,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbMsgReporter.h"
 #include "otbUtmMapProjection.h"
+#include "otbMapProjections.h"
 
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
@@ -696,9 +697,10 @@ ProjectionView::InitializeAction()
   if (!m_InputProjectionUnknown)
     {
     // Get the utm Zone && hemisphere  from a long,lat point in the image
-    typedef UtmMapProjection<otb::Transform::FORWARD> utmMapProjectionType;
-    utmMapProjectionType::Pointer utmProjection  =   utmMapProjectionType::New();
-    int                           zone = utmProjection->GetZoneFromGeoPoint(geoPoint);
+    UtmForwardProjection::Pointer utmProjection = UtmForwardProjection::New();
+
+
+    int zone = utmProjection->GetZoneFromGeoPoint(geoPoint);
     oss.str("");
     oss << zone;
     guiUTMZone->value(oss.str().c_str());
