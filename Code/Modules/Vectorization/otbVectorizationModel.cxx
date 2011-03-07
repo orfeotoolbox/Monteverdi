@@ -236,7 +236,7 @@ void VectorizationModel
 void VectorizationModel
 ::SetDataNodeFieldAsString(DataNodeType* node, const std::string& name, const std::string& value)
 {
-  std::cout << "Setting field " << name << " with value " << value << " to node " << node << std::endl;
+  otbMsgDevMacro( "Setting field " << name << " with value " << value << " to node " << node );
   node->SetFieldAsString(name, value);
   this->NotifyAll();
 }
