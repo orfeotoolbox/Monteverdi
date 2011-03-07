@@ -438,7 +438,7 @@ namespace otb
       this->UpdateTabHistogram();
 
       // Show the interface setup
-      gVectorData->value(guiTabSetup);
+      gVectorData->value(guiTabData);
       bSetupWindow->show();
 
       // Update the color composition window
@@ -1723,60 +1723,47 @@ namespace otb
 
   /**
   * Proceed to screen shot
-  * 0 : zoon
-  * 1 : full
-  * 2 : naviagtion (ie. scroll)
   */
-   void ViewerModule::ScreenShot(unsigned int id)
+   void ViewerModule::ScreenShot()
    {
-		const char * filename = NULL;
-
-		filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
-
-		if (filename == NULL)
-		{
-			MsgReporter::GetInstance()->SendError("Empty file name!");
-			return;
-		}
-		ScreenShotFilterType::Pointer screener = ScreenShotFilterType::New();
-		screener->SetNumberOfChannels(3);
-		screener->SetFileName(filename);
-		screener->SetInverseXSpacing(true);
-
-		switch (id)
-        {
-			case 0:
-			{
-				screener->SetBuffer(m_View->GetZoomWidget()->GetOpenGlBuffer());
-				screener->SetImageSize(m_View->GetZoomWidget()->GetOpenGlBufferedRegion().GetSize());
-				break;
-			}
-			case 1:
-			{
-				screener->SetBuffer(m_View->GetFullWidget()->GetOpenGlBuffer());
-				screener->SetImageSize(m_View->GetFullWidget()->GetOpenGlBufferedRegion().GetSize());
-				break;
-			}
-			case 2:
-			{
-				screener->SetBuffer(m_View->GetScrollWidget()->GetOpenGlBuffer());
-				screener->SetImageSize(m_View->GetScrollWidget()->GetOpenGlBufferedRegion().GetSize());
-				break;
-			}
-			default:
-			{
-				itkExceptionMacro("Invalid id view for screen shot");
-			}
-		}
-		
-		screener->Update();
-		
-		// The record is very fast, we need to warm the user that everything is OK.
-		itk::OStringStream oss;
-        oss << "Image '" << filename << "' saved";
-		MsgReporter::GetInstance()->SendMsg( oss.str() );
+     const char * filename = NULL;
+     
+     filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
+     
+     if (filename == NULL)
+       {
+         MsgReporter::GetInstance()->SendError("Empty file name!");
+         return;
+       }
+     ScreenShotFilterType::Pointer screener = ScreenShotFilterType::New();
+     screener->SetNumberOfChannels(3);
+     screener->SetFileName(filename);
+     screener->SetInverseXSpacing(true);
+     
+     if(rbScreenZoom->value() == 1)
+       {
+         screener->SetBuffer(m_View->GetZoomWidget()->GetOpenGlBuffer());
+         screener->SetImageSize(m_View->GetZoomWidget()->GetOpenGlBufferedRegion().GetSize());
+       }
+     else if(rbScreenFull->value() == 1)
+       {
+         screener->SetBuffer(m_View->GetFullWidget()->GetOpenGlBuffer());
+         screener->SetImageSize(m_View->GetFullWidget()->GetOpenGlBufferedRegion().GetSize());
+       }
+     else if(rbScreenNav->value() == 1 )
+       {
+         screener->SetBuffer(m_View->GetScrollWidget()->GetOpenGlBuffer());
+         screener->SetImageSize(m_View->GetScrollWidget()->GetOpenGlBufferedRegion().GetSize());
+       }
+     else
+       {
+         itkExceptionMacro("Invalid id view for screen shot");
+       }
+     
+     screener->Update();
+    
    }
-      
+  
 
   /**
    *

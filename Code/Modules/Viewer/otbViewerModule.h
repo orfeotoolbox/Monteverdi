@@ -275,7 +275,7 @@ public:
   virtual void UpdateTabHistogram();
   virtual void UpdatePixelInformationWindow();
   virtual void UpdateVectorDataListShowed(unsigned int selectedItem, std::string status);
-  virtual void ScreenShot(unsigned int id);
+  virtual void ScreenShot();
 
   /** Setup Color Composition Callbacks*/
   virtual void GrayScaleSet();
