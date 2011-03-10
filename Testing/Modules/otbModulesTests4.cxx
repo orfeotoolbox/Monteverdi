@@ -39,4 +39,5 @@ void RegisterTests()
   REGISTER_TEST(otbColorMappingModuleTest);
   REGISTER_TEST(otbDEMToImageGeneratorModuleTest);
   REGISTER_TEST(otbImageStatisticsModuleTest);
+  REGISTER_TEST(otbRasterizationModuleTest);
 }
