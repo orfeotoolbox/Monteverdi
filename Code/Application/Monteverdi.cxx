@@ -80,8 +80,10 @@
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
-#include "otbRasterizationModule.h"
 
+#ifdef OTB_USE_MAPNIK
+#include "otbRasterizationModule.h"
+#endif
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -151,7 +153,11 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
+
+#ifdef OTB_USE_MAPNIK
   model->RegisterModule<otb::RasterizationModule>("Rasterize", otbGetTextMacro("File/Rasterize vector data"));
+#endif
+
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
