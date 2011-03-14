@@ -148,7 +148,7 @@ void WriterModule::Run()
 void WriterModule::SaveDataSet()
 {
   std::string fileName = vFilePath->value();
-  ifstream isFileNameExist( fileName.c_str() );
+  std::ifstream isFileNameExist( fileName.c_str() );
   bool isProcessing = true;
 
   if(isFileNameExist && m_CheckFileExistance==true)
