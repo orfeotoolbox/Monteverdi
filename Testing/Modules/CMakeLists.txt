@@ -173,6 +173,7 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
+
 #------------- BandMath Module Test ---------------------------
 
 ADD_TEST(moTvBandMathModuleTest ${Modules_TESTS2} otbBandMathModuleTest
@@ -440,6 +441,16 @@ ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4}
 	${INPUTDATA}/maur.tif
 )
 
+#------------- Rasterization Module Tests ---------------------------
+
+ADD_TEST(moTvRasterizationImageModuleTest ${Modules_TESTS4} otbRasterizationModuleTest
+${INPUTDATA}/polygon.tif
+${INPUTDATA}/Rasterization/polgons.shp
+${TEMP}/moTvRasterizationImageModule.tif 
+)
+
+
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -497,6 +508,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbColorMappingModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
   otbImageStatisticsModuleTest.cxx
+  otbRasterizationModuleTest.cxx
 )
 
 
