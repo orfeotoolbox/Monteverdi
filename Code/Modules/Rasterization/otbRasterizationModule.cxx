@@ -36,6 +36,13 @@ RasterizationModule::RasterizationModule()
 	this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data to rasterize"));
 	this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Support Image"));
 
+	m_InputImage=ImageType::New();
+	m_InputVectorData=VectorDataType::New();
+	m_VectorDataProjFilter = VectorDataProjectionFilterType::New();
+	m_VectorDataProperties = VectorDataPropertiesType::New();
+	m_VectorDataExtractROI = VectorDataExtractROIType::New();
+	m_VectorDataRendering = VectorDataToImageFilterType::New();
+
 }
 
 /** Destructor */
@@ -114,14 +121,12 @@ void RasterizationModule::Run()
 
 	// VectorData reprojection to be coherent with image projection reference
 
-	m_VectorDataProjFilter = VectorDataProjectionFilterType::New();
 	m_VectorDataProjFilter->SetInput(m_InputVectorData);
 
 	// set the projection ref with Image projection ref
 	m_VectorDataProjFilter->SetOutputProjectionRef(imageProjectionRef);
 
 	// Converting the VectorData
-	m_VectorDataProperties = VectorDataPropertiesType::New();
 	m_VectorDataProperties->SetVectorDataObject(m_InputVectorData);
 	m_VectorDataProperties->ComputeBoundingRegion();
 
@@ -132,12 +137,10 @@ void RasterizationModule::Run()
 	region.SetOrigin(origin);
 	region.SetRegionProjection(imageProjectionRef);
 
-	m_VectorDataExtractROI = VectorDataExtractROIType::New();
 	m_VectorDataExtractROI->SetRegion(region);
 	m_VectorDataExtractROI->SetInput(m_VectorDataProjFilter->GetOutput());
 
 	// rendering
-	m_VectorDataRendering = VectorDataToImageFilterType::New();
 	m_VectorDataRendering->SetInput(m_VectorDataExtractROI->GetOutput());
 	m_VectorDataRendering->SetSize(size);
 	m_VectorDataRendering->SetOrigin(origin);

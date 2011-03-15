@@ -23,18 +23,11 @@
 
 // include the OTB/ITK elements
 #include "otbImage.h"
-
-// Image
 #include "otbVectorImage.h"
-
-
-//VectorData
 #include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataProperties.h"
-
-//Rasterization
 #include "otbVectorDataToImageFilter.h"
 
 
