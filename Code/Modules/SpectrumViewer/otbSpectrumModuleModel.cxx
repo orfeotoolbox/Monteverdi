@@ -107,9 +107,8 @@ SpectrumModuleModel
 
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);
-  // TODO: the test fails when decommenting the following line (although the module is usable in Monteverdi)
-  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
 
+  FltkFilterWatcher qlwatcher(m_LayerGenerator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_LayerGenerator->GenerateLayer();
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();

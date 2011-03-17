@@ -115,7 +115,7 @@ GCPToSensorModelModel
   // Generate the layer
   m_ImageGenerator->SetImage(image);
   m_ImageGenerator->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_ImageGenerator->GenerateLayer();
 
   std::vector<unsigned int> channels;

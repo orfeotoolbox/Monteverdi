@@ -308,7 +308,7 @@ namespace otb
       // Generate the layer
       ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
       generator->SetImage(image);
-      FltkFilterWatcher qlwatcher(generator->GetResampler()->GetStreamer(), 0, 0, 200, 20,
+      FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20,
                                   otbGetTextMacro("Generating QuickLook ..."));
       try
         {

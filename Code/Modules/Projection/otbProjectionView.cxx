@@ -981,7 +981,7 @@ ProjectionView::DisplayPreviewWidget()
       // Generate the layer
       LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
       layerGenerator->SetImage(m_Transform->GetOutput());
-      FltkFilterWatcher qlwatcher(layerGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+      FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
       layerGenerator->GenerateLayer();
    
       // Render
