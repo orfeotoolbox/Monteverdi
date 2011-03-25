@@ -110,6 +110,7 @@ private:
   VectorDataPropertiesType::Pointer 		m_VectorDataProperties;
   VectorDataExtractROIType::Pointer 	    m_VectorDataExtractROI;
   VectorDataToImageFilterType::Pointer      m_VectorDataRendering;
+  ImageType::Pointer                        m_OutputImage;
 };
 
 } // End namespace otb
