@@ -212,7 +212,7 @@ void TileMapImportModule::Ok()
 
     // Configure m_Model
     m_Model->SetImageGeometry(m_ReaderTile->GetOutput()->GetImageKeywordlist());
-    dynamic_cast<ossimTileMapModel*>(m_Model->GetOssimModel())->setDepth(m_Depth);
+    dynamic_cast<ossimplugins::ossimTileMapModel*>(m_Model->GetOssimModel())->setDepth(m_Depth);
 
     if (!m_Model)
       {

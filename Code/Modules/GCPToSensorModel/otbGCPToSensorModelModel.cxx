@@ -551,7 +551,7 @@ GCPToSensorModelModel
 
   // Configure m_Model
   inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(m_Depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(m_Depth);
   if (!inverseModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
@@ -750,7 +750,7 @@ GCPToSensorModelModel
 
     // Configure m_Model
     inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
-    dynamic_cast<ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(depth);
+    dynamic_cast<ossimplugins::ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(depth);
 
     if (!inverseModel)
       {
@@ -809,7 +809,7 @@ GCPToSensorModelModel
 
   // Configure m_Model
   forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
   if (!forwardModel)
     {
@@ -861,7 +861,7 @@ GCPToSensorModelModel
 
   // Configure m_Model
   forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
   if (!forwardModel)
     {
@@ -900,7 +900,7 @@ GCPToSensorModelModel
 
   // Configure m_Model
   forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
   if (!forwardModel)
     {
