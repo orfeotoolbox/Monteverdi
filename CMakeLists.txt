@@ -415,6 +415,10 @@ ${CPACK_OTB_DLL_PATH}/xerces-c_3_1.dll
 ${CPACK_OTB_DLL_PATH}/xerces-depdom_2_7.dll
 ${CPACK_OTB_DLL_PATH}/zlib1.dll
 ${CPACK_OTB_DLL_PATH}/zlib_osgeo.dll
+${CPACK_OTB_DLL_PATH}/mapnik.dll
+${CPACK_OTB_DLL_PATH}/icuuc42.dll
+${CPACK_OTB_DLL_PATH}/icudt42.dll
+${CPACK_OTB_DLL_PATH}/icuin42.dll
 DESTINATION bin
 COMPONENT Runtime)
 
