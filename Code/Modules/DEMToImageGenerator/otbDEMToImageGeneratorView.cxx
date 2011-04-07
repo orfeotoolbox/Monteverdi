@@ -256,7 +256,6 @@ DEMToImageGeneratorView::UpdateProjectionRef()
   std::string projectionRef;
 //  m_Controller->GetModel()->GetDEMToImageGenerator()->UpdateOutputInformation();
   projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputProjectionRef();
-  std::cout << "DEMToImageGeneratorView::UpdateProjectionRef()" << projectionRef << std::endl;
 
   if(projectionRef.empty())
     {
@@ -265,8 +264,7 @@ DEMToImageGeneratorView::UpdateProjectionRef()
 
     if(kwl.GetSize())
       {
-        std::cout << "ICI" << std::endl;
-        projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
+      projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
       }
     else
       {
