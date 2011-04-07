@@ -192,7 +192,20 @@ protected:
 
   // Method to update the model output attributes
   void UpdateOutputRegion();
-  
+
+  /** Method updating the Output Origin Geographical Coordinates */
+  virtual void UpdateOriginGeographicalCoordinates();
+
+  /** Activate all the map parameters when the mode used is User
+    * selection 
+    */
+  virtual void ActivateMapParamaters();
+
+  /** Dectivate all the map parameters when the mode used is not User
+    * selection 
+    */
+  virtual void DeactivateMapParamaters();
+
   /** Constructor */
   ProjectionView();
   /** Destructor */

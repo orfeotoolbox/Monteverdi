@@ -74,6 +74,9 @@ ProjectionView::ProjectionView()
   iTRANSMERCATOREast->value("0");
   iTRANSMERCATORNorth->value("0");
   iTRANSMERCATORScale->value("1");
+  guiCenterPixel->value(1);
+  guiULPixel->value(0);
+  guiUserDefinition->value(0);
   m_InterpType = MAP_LINEAR_;
   m_MapType = MAP_UTM;
   m_PreviousMapType = MAP_UNKOWN;
@@ -87,6 +90,52 @@ ProjectionView::ProjectionView()
   gPreviewWindow->resizable(gPreviewWindow);
   m_PreviewWidget->resize(gPreviewWindow->x(), gPreviewWindow->y(), gPreviewWindow->w(), gPreviewWindow->h() );
   m_Transform = ModelType::ResampleFilterType::New(); 
+}
+
+// Activate all the map parameters
+void ProjectionView::ActivateMapParamaters()
+{
+  // activate all the MapType parameters in the GUI
+  guiLongSelection->activate();
+  guiLatSelection->activate();
+
+  guiUTMEastSelection->activate();
+  guiUTMNorthSelection->activate();
+  guiUTMZone->activate();
+  guiUTMNorth->activate();
+  guiUTMSouth->activate();
+
+  guiLambertEastSelection->activate();
+  guiLambertNorthSelection->activate();
+
+  guiTRANSMERCATOREast->activate();
+  guiTRANSMERCATORNorth->activate();
+  guiTRANSMERCATORScale->activate();
+  guiTransmercatorNorthSelection->activate();
+  guiTransmercatorEastSelection->activate();
+}
+
+// Deactivate all the map parameters
+void ProjectionView::DeactivateMapParamaters()
+{
+  // Deactivate all the MapType parameters in the GUI
+  guiLongSelection->deactivate();
+  guiLatSelection->deactivate();
+
+  guiUTMEastSelection->deactivate();
+  guiUTMNorthSelection->deactivate();
+  guiUTMZone->deactivate();
+  guiUTMNorth->deactivate();
+  guiUTMSouth->deactivate();
+
+  guiLambertEastSelection->deactivate();
+  guiLambertNorthSelection->deactivate();
+
+  guiTRANSMERCATOREast->deactivate();
+  guiTRANSMERCATORNorth->deactivate();
+  guiTRANSMERCATORScale->deactivate();
+  guiTransmercatorNorthSelection->deactivate();
+  guiTransmercatorEastSelection->deactivate();
 }
 
 /**
@@ -103,6 +152,8 @@ ProjectionView::Notify()
     this->UpdateOutputParameters();
     // Update output whole origin image long/lat
     this->UpdateLongLat();
+    // Update the origin cartographic coordinates
+    this->UpdateOriginGeographicalCoordinates();
     // Update the output region
     this->UpdateOutputRegion();
     }
@@ -260,6 +311,8 @@ ProjectionView
 {
   try
     {
+    // First deactivate all the map paramters : default behavior
+    this->DeactivateMapParamaters();
     // Notify the controller that the GUI is going to be shown
     // Note that call is useful for transform initialization and paramters initiaization
     // Get the projection initial parameters
@@ -268,16 +321,10 @@ ProjectionView
     this->UpdateUTMTransform();
     // Edit the GUI following the projection computed when UpdateUTMTransform Called
     this->InitializeAction();
-
-    // test if the good parameters are available
-    // int resCheckImageParameters = this->CheckImageParameters();
-    int resCheckImageParameters = 0;
-
-    if (resCheckImageParameters == 1)
-      {
-      itkExceptionMacro(<< "Invalid image parameters");
-      }
-
+    // Update the map param (UTM)
+    this->UpdateMapParam();
+    
+    // finally show the GUI
     this->ShowGUI();
     }
   catch (itk::ExceptionObject& err)
@@ -405,6 +452,14 @@ ProjectionView
       fl_alert("Problem with map projection type, please contact developpers");
       break;
     }
+  
+  // Tell the model that the output region has changed since the
+  // output geographical coordinates changes the cartographic orign in
+  // the  user defined mode
+  if(guiUserDefinition->value())
+    {
+    this->UpdateOutputRegion();
+    }
 }
 
 /**
@@ -421,47 +476,56 @@ ProjectionView
     // Get the transform from the model
     TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
-    // Set the index to be the center of the ROI selected by the user
-    if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
+    // Do that if the Mode User Definition is not set
+    if (guiUserDefinition->value() == 0)
       {
-      // Get the cartographic middle point 
-      point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
-        + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+      // Set the index to be the center of the ROI selected by the user
+      if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
+        {
+        // Get the cartographic middle point 
+        point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
+          + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
       
-      point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
-        + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+        point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
+          + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
       
-      // Get the cartographic coordinates of the UL point of the
-      // region centered on the output middle point 
-      point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2.;
-      point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2.;
+        // Get the cartographic coordinates of the UL point of the
+        // region centered on the output middle point 
+        point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2.;
+        point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2.;
+        }
+      else if (guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
+        {
+        // Get the output Cartographic origin
+        point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0];
+        point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1];
+        }
+    
+      // Transform to geo 
+      geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
+    
+      // Fill the datas in the GUI
+      itk::OStringStream oss;
+      oss << setiosflags(std::ios_base::fixed);
+      oss.str("");
+      oss << geoPoint[0];
+      guiLongSelection->value(oss.str().c_str());
+      oss.str("");
+      oss << geoPoint[1];
+      guiLatSelection->value(oss.str().c_str());
+
+      //Update the Map parameters
+      this->UpdateMapParam();
       }
-    else if (guiULPixel->value() == 1 && guiCenterPixel->value() == 0)
+    else
       {
-      // Get the output Cartographic origin
-      point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0];
-      point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1];
+      this->UpdateOriginGeographicalCoordinates();
       }
-    
-    // Transform to geo 
-    geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
-    
-    // Fill the datas in the GUI
-    itk::OStringStream oss;
-    oss << setiosflags(std::ios_base::fixed);
-    oss.str("");
-    oss << geoPoint[0];
-    guiLongSelection->value(oss.str().c_str());
-    oss.str("");
-    oss << geoPoint[1];
-    guiLatSelection->value(oss.str().c_str());
-
-    //Update the Map parameters
-    this->UpdateMapParam();
-
-    // Update the output origin in the model
-    this->UpdateOutputRegion();
     }
+  
+  // Common to both modes
+  // Update the output origin in the model
+  this->UpdateOutputRegion();
 }
 
 /**
@@ -681,7 +745,7 @@ ProjectionView::InitializeAction()
   middlePoint[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2;
 
   // Transform to geo projection
-  geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
+  geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
 
   // Fill the datas in the GUI
   itk::OStringStream oss;
@@ -717,18 +781,7 @@ ProjectionView::InitializeAction()
     this->UpdateUTMTransform();
     // End of filling the utm parameters
     }
-
-  // Transform middle point to carto projection: it is done here cause we wait for the
-  // update of the transform following the utm zone found
-  outputPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
-
-  oss.str("");
-  oss << outputPoint[0];
-  guiUTMEastSelection->value(oss.str().c_str());
-  oss.str("");
-  oss << outputPoint[1];
-  guiUTMNorthSelection->value(oss.str().c_str());
-
+  
   // Update the output parameters
   this->UpdateOutputParameters();
 }
@@ -1045,7 +1098,7 @@ ProjectionView::DisplayPreviewWidget()
 
     p4[0] = m_Controller->GetModel()->GetOutputOrigin()[0];
     p4[1] = m_Controller->GetModel()->GetOutputOrigin()[1] + atoi(guiSizeY->value())*atof(guiSpacingY->value());
-    
+
     //Build the VectorData
     PolygonType::Pointer polygon = PolygonType::New();
     polygon->AddVertex(p1);
@@ -1098,5 +1151,75 @@ void ProjectionView::TabPositionHandler()
     bDispalyPreview->hide();
     }
 }
+
+// Used to update the geographic origin of the output 
+// image when changing the cartographic coordinates
+void ProjectionView::UpdateOriginGeographicalCoordinates()
+{
+  ModelType::OutputPointType  cartoPoint;
+  ModelType::OutputPointType  geoPoint;
+  
+  // Get the Transform from the model in order to project the new
+  // carto point in WGS84 and update the Long/Lat fields
+  TransformType::Pointer rsTransform  = m_Controller->GetModel()->GetInverseTransform();
+
+  itk::OStringStream oss;
+  oss << setiosflags(std::ios_base::fixed);
+  oss.str("");
+
+  switch (this->GetMapType())
+    {
+    case MAP_UTM:
+    {
+    cartoPoint[1] = atof(guiUTMNorthSelection->value());
+    cartoPoint[0] = atof(guiUTMEastSelection->value());
+    break;
+    }
+    case MAP_LAMBERT2:
+    {
+    cartoPoint[1] = atof(guiLambertNorthSelection->value());
+    cartoPoint[0] = atof(guiLambertEastSelection->value());
+    break;
+    }
+    case MAP_TRANSMERCATOR:
+    {
+    cartoPoint[1] = atof(guiTransmercatorNorthSelection->value());
+    cartoPoint[0] = atof(guiTransmercatorEastSelection->value());
+    break;
+    }
+    case MAP_WGS84:
+    {
+    // Since no WGS84 param are available in the GUI, 
+    // 
+    cartoPoint[1] = atof(guiLatSelection->value());
+    cartoPoint[0] = atof(guiLongSelection->value());
+    break;
+    }
+    default:
+      fl_alert("Problem with map projection type, please contact developpers");
+      break;
+    }
+  
+  // Project the carto point in WGS84 using the transform set in
+  // the model
+  geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(cartoPoint);  
+
+  // Update the GUI
+  oss.str("");
+  oss << geoPoint[1];
+  guiLatSelection->value(oss.str().c_str());
+  oss.str("");
+  oss << geoPoint[0];
+  guiLongSelection->value(oss.str().c_str());
+
+  // Update output region 
+  // tell the model that the output region has been modified
+  unsigned int sizeX    = atoi(guiSizeX->value());
+  unsigned int sizeY    = atoi(guiSizeY->value());
+  double       spacingX = atof(guiSpacingX->value());
+  double       spacingY = atof(guiSpacingY->value());
+  m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, geoPoint[0], geoPoint[1]);
+}
+
 
 }// End namespace otb
