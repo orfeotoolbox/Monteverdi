@@ -141,13 +141,13 @@ void ProjectionModel
  */
 void
 ProjectionModel
-::UpdateUTMTransform(int zone, bool north)
+::UpdateUTMTransform(int zone, bool hemisphere)
 {
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-  
+
   utmProjection->SetZone(zone);
-  utmProjection->SetHemisphere(north);
+  utmProjection->SetHemisphere(hemisphere);
   m_OutputProjectionRef = utmProjection->GetWkt();
   
   // Build the Generic RS transform
