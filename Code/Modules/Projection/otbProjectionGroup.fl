@@ -31,12 +31,14 @@ class ProjectionGroup {open
         } {
           Fl_Choice guiMapSelection {
             label {Map Projection}
-            callback {this->UpdateMapParam();}
+            callback {this->UpdateMapParam();} open
             tooltip {Select the map projection type} xywh {179 47 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
               label UTM
-              callback {m_MapType->show();
+              callback {guiEastSelection->show();
+guiNorthSelection->show();
+m_MapType->show();
 m_UTM->show();
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
@@ -47,7 +49,9 @@ this->UpdateUTMTransform();}
             }
             MenuItem {} {
               label LAMBERT2
-              callback {m_MapType->show();
+              callback {guiEastSelection->show();
+guiNorthSelection->show();
+m_MapType->show();
 m_UTM->hide();
 m_Lambert2->show();
 m_TRANSMERCATOR->hide();
@@ -58,18 +62,25 @@ this->UpdateLambertIITransform();}
             }
             MenuItem {} {
               label TRANSMERCATOR
-              callback {m_MapType->show();
+              callback {guiEastSelection->show();
+guiNorthSelection->show();
+m_MapType->show();
 m_UTM->hide();
 m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
 SetMapType(MAP_TRANSMERCATOR);
-this->UpdateTMTransform();}
+this->UpdateTMTransform();} selected
               xywh {30 30 100 25} labelsize 11
             }
             MenuItem {} {
               label {WGS 84}
-              callback {m_MapType->hide();
+              callback {m_MapType->show();
+m_UTM->hide();
+m_Lambert2->hide();
+m_TRANSMERCATOR->hide();
+guiEastSelection->hide();
+guiNorthSelection->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_WGS84);
 this->UpdateWGS84Transform();}
@@ -80,7 +91,7 @@ this->UpdateWGS84Transform();}
             label {Output Origin cartographic coordinates } open
             xywh {15 91 400 94} box PLASTIC_DOWN_BOX color 41 selection_color 7 labelsize 12 align 5
           } {
-            Fl_Group {} {open
+            Fl_Group {} {
               xywh {15 100 400 78} selection_color 7
             } {
               Fl_Input guiLongSelection {
@@ -96,12 +107,12 @@ this->UpdateWGS84Transform();}
               Fl_Input guiEastSelection {
                 label Easting
                 callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the longitude of the output image center} xywh {279 108 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the longitude of the output image center} xywh {279 107 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Input guiNorthSelection {
                 label Northing
                 callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the latitude of the output image center} xywh {279 148 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the latitude of the output image center} xywh {279 147 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
           }
@@ -148,7 +159,7 @@ if(guiULPixel->value() == 1
                 label Zone
                 callback {this->UpdateUTMTransform();
 this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the zone number} xywh {85 285 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the zone number} xywh {81 288 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
               Fl_Round_Button guiUTMNorth {
                 label {Northern hemisphere}
@@ -156,7 +167,7 @@ this->UpdateOriginGeographicalCoordinates();}
 guiUTMSouth->value(0);
 this->UpdateUTMTransform();
 this->UpdateOriginGeographicalCoordinates();}
-                xywh {35 315 18 37} down_box ROUND_DOWN_BOX value 1 align 8
+                xywh {25 318 35 39} down_box ROUND_DOWN_BOX value 1 align 8
               }
               Fl_Round_Button guiUTMSouth {
                 label {Southern hemisphere}
@@ -164,10 +175,10 @@ this->UpdateOriginGeographicalCoordinates();}
 guiUTMNorth->value(0);
 this->UpdateUTMTransform();
 this->UpdateOriginGeographicalCoordinates();}
-                xywh {35 343 18 37} down_box ROUND_DOWN_BOX
+                xywh {25 353 35 39} down_box ROUND_DOWN_BOX align 8
               }
             }
-            Fl_Group m_TRANSMERCATOR {open selected
+            Fl_Group m_TRANSMERCATOR {open
               xywh {15 268 225 174} selection_color 7 hide
             } {
               Fl_Input guiTRANSMERCATOREast {
