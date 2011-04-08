@@ -23,6 +23,7 @@
 #include "vnl/vnl_random.h"
 
 #include "otbImageToGenericRSOutputParameters.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -146,8 +147,10 @@ ProjectionModel
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
 
-  utmProjection->SetZone(zone);
-  utmProjection->SetHemisphere(hemisphere);
+  std::string hem = "N";
+  if(!hemisphere) hem = "S";
+    
+  utmProjection->SetHemisphere(hem[0]);
   m_OutputProjectionRef = utmProjection->GetWkt();
   
   // Build the Generic RS transform
