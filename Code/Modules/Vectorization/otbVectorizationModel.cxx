@@ -483,12 +483,12 @@ void VectorizationModel
 void VectorizationModel
 ::RightIndexClicked(const IndexType & index, RegionType ExtRegion)
 {
-  DataNodeType::Pointer PolygonNode = DataNodeType::New();
-  PolygonNode->SetNodeType(otb::FEATURE_POLYGON);
-  PolygonNode->SetNodeId("FEATURE_POLYGON");
-  PolygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
+  DataNodeType::Pointer polygonNode = DataNodeType::New();
+  polygonNode->SetNodeType(otb::FEATURE_POLYGON);
+  polygonNode->SetNodeId("FEATURE_POLYGON");
+  polygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
   m_VectorDataModel->GetVectorData()->GetDataTree()->Add(
-    PolygonNode,
+    polygonNode,
     m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
   
   this->NotifyAll();
