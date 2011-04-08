@@ -61,7 +61,11 @@
 namespace otb
 {
 /** \class ProjectionView
- *  \brief
+ *  \brief This class is the view part of the projection module. It
+ *  handles the user interaction with the GUI, and launch the
+ *  processings in the model part.
+ * 
+ * TODO : remove switch/cases on View
  *
  * \ingroup
  * \ingroup

@@ -98,21 +98,19 @@ void ProjectionView::ActivateMapParamaters()
   // activate all the MapType parameters in the GUI
   guiLongSelection->activate();
   guiLatSelection->activate();
+  
+  //   guiUTMZone->activate();
+  //   guiUTMNorth->activate();
+  //   guiUTMSouth->activate();
 
-  guiUTMEastSelection->activate();
-  guiUTMNorthSelection->activate();
-  guiUTMZone->activate();
-  guiUTMNorth->activate();
-  guiUTMSouth->activate();
+  //   guiEastSelection->activate();
+  //   guiNorthSelection->activate();
 
-  guiLambertEastSelection->activate();
-  guiLambertNorthSelection->activate();
-
-  guiTRANSMERCATOREast->activate();
-  guiTRANSMERCATORNorth->activate();
-  guiTRANSMERCATORScale->activate();
-  guiTransmercatorNorthSelection->activate();
-  guiTransmercatorEastSelection->activate();
+  //   guiTRANSMERCATOREast->activate();
+  //   guiTRANSMERCATORNorth->activate();
+  //   guiTRANSMERCATORScale->activate();
+  guiNorthSelection->activate();
+  guiEastSelection->activate();
 }
 
 // Deactivate all the map parameters
@@ -122,20 +120,18 @@ void ProjectionView::DeactivateMapParamaters()
   guiLongSelection->deactivate();
   guiLatSelection->deactivate();
 
-  guiUTMEastSelection->deactivate();
-  guiUTMNorthSelection->deactivate();
-  guiUTMZone->deactivate();
-  guiUTMNorth->deactivate();
-  guiUTMSouth->deactivate();
+  //   guiUTMZone->deactivate();
+  //   guiUTMNorth->deactivate();
+  //   guiUTMSouth->deactivate();
 
-  guiLambertEastSelection->deactivate();
-  guiLambertNorthSelection->deactivate();
+  //   guiEastSelection->deactivate();
+  //   guiNorthSelection->deactivate();
 
-  guiTRANSMERCATOREast->deactivate();
-  guiTRANSMERCATORNorth->deactivate();
-  guiTRANSMERCATORScale->deactivate();
-  guiTransmercatorNorthSelection->deactivate();
-  guiTransmercatorEastSelection->deactivate();
+  //   guiTRANSMERCATOREast->deactivate();
+  //   guiTRANSMERCATORNorth->deactivate();
+  //   guiTRANSMERCATORScale->deactivate();
+  guiNorthSelection->deactivate();
+  guiEastSelection->deactivate();
 }
 
 /**
@@ -416,10 +412,10 @@ ProjectionView
     newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
     oss.str("");
     oss << newCartoPoint[1];
-    guiUTMNorthSelection->value(oss.str().c_str());
+    guiNorthSelection->value(oss.str().c_str());
     oss.str("");
     oss << newCartoPoint[0];
-    guiUTMEastSelection->value(oss.str().c_str());
+    guiEastSelection->value(oss.str().c_str());
     break;
     }
     case MAP_LAMBERT2:
@@ -427,10 +423,10 @@ ProjectionView
     newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
     oss.str("");
     oss << newCartoPoint[1];
-    guiLambertNorthSelection->value(oss.str().c_str());
+    guiNorthSelection->value(oss.str().c_str());
     oss.str("");
     oss << newCartoPoint[0];
-    guiLambertEastSelection->value(oss.str().c_str());
+    guiEastSelection->value(oss.str().c_str());
     break;
     }
     case MAP_TRANSMERCATOR:
@@ -438,10 +434,10 @@ ProjectionView
     newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
     oss.str("");
     oss << newCartoPoint[1];
-    guiTransmercatorNorthSelection->value(oss.str().c_str());
+    guiNorthSelection->value(oss.str().c_str());
     oss.str("");
     oss << newCartoPoint[0];
-    guiTransmercatorEastSelection->value(oss.str().c_str());
+    guiEastSelection->value(oss.str().c_str());
     break;
     }
     case MAP_WGS84:
@@ -1171,20 +1167,20 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
     {
     case MAP_UTM:
     {
-    cartoPoint[1] = atof(guiUTMNorthSelection->value());
-    cartoPoint[0] = atof(guiUTMEastSelection->value());
+    cartoPoint[1] = atof(guiNorthSelection->value());
+    cartoPoint[0] = atof(guiEastSelection->value());
     break;
     }
     case MAP_LAMBERT2:
     {
-    cartoPoint[1] = atof(guiLambertNorthSelection->value());
-    cartoPoint[0] = atof(guiLambertEastSelection->value());
+    cartoPoint[1] = atof(guiNorthSelection->value());
+    cartoPoint[0] = atof(guiEastSelection->value());
     break;
     }
     case MAP_TRANSMERCATOR:
     {
-    cartoPoint[1] = atof(guiTransmercatorNorthSelection->value());
-    cartoPoint[0] = atof(guiTransmercatorEastSelection->value());
+    cartoPoint[1] = atof(guiNorthSelection->value());
+    cartoPoint[0] = atof(guiEastSelection->value());
     break;
     }
     case MAP_WGS84:
@@ -1203,7 +1199,7 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
   // Project the carto point in WGS84 using the transform set in
   // the model
   geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(cartoPoint);  
-
+  
   // Update the GUI
   oss.str("");
   oss << geoPoint[1];

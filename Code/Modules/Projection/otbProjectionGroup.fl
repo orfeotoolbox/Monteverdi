@@ -14,79 +14,21 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label Projection open
-      xywh {509 53 430 520} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 visible
+      xywh {465 24 430 500} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 visible
     } {
       Fl_Button guiOK {
         label {Save / Quit}
         callback {OK();}
-        tooltip {Compute result} xywh {345 475 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
+        tooltip {Compute result} xywh {345 456 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
       Fl_Tabs m_TabsMode {
         callback {this->TabPositionHandler();} open
-        xywh {5 9 420 463} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
+        xywh {5 9 420 443} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group {} {
           label {Output image} open
-          xywh {5 30 420 442} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1
         } {
-          Fl_Wizard {} {
-            label {Output Origin ( Geographical )} open
-            xywh {20 291 205 174} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 align 5
-          } {
-            Fl_Group {} {open
-              xywh {20 291 205 174} selection_color 7
-            } {
-              Fl_Round_Button guiCenterPixel {
-                label Centered
-                callback {// deactivate the other round buttons
-guiULPixel->value(0);
-guiCenterPixel->value(1);
-guiUserDefinition->value(0);
-
-// do the job
-this->UpdateLongLat();
-
-//Deactivate all the MapType parameters in the GUI
-this->DeactivateMapParamaters();}
-                tooltip {If checked, use the output center image coordinates to be the center of the projected image} xywh {30 349 19 15} down_box ROUND_DOWN_BOX value 1 color 7 labelcolor 186
-              }
-              Fl_Round_Button guiULPixel {
-                label {Upper-Left as output origin}
-                callback {// deactivate the other round buttons
-guiULPixel->value(1);
-guiCenterPixel->value(0);
-guiUserDefinition->value(0);
-
-// do the job
-this->UpdateLongLat();
-
-// Deactivate all the map parameters
-this->DeactivateMapParamaters();}
-                tooltip {If checked, use the upper left output image pixel coordinates to be the origin of the projected image} xywh {30 324 19 15} down_box ROUND_DOWN_BOX color 7 labelcolor 186
-              }
-              Fl_Input guiLongSelection {
-                label Longitude
-                callback {UpdateMapParam();}
-                tooltip {Enter the longitude of the output image center} xywh {90 383 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiLatSelection {
-                label Latitude
-                callback {UpdateMapParam();}
-                tooltip {Enter the latitude of the output image center} xywh {90 423 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Round_Button guiUserDefinition {
-                label {User Defined Parameters}
-                callback {// deactivate the other round buttons
-guiULPixel->value(0);
-guiCenterPixel->value(0);
-guiUserDefinition->value(1);
-
-// activate all the map parameters
-this->ActivateMapParamaters();}
-                tooltip {Id checked, user parameters are used to configure the projection} xywh {30 299 18 15} down_box ROUND_DOWN_BOX color 7 labelcolor 186
-              }
-            }
-          }
           Fl_Choice guiMapSelection {
             label {Map Projection}
             callback {this->UpdateMapParam();}
@@ -122,7 +64,7 @@ m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
 SetMapType(MAP_TRANSMERCATOR);
-this->UpdateTMTransform();} selected
+this->UpdateTMTransform();}
               xywh {30 30 100 25} labelsize 11
             }
             MenuItem {} {
@@ -136,88 +78,30 @@ this->UpdateWGS84Transform();}
           }
           Fl_Wizard m_MapType {
             label {Output Origin cartographic coordinates } open
-            xywh {20 93 390 169} box PLASTIC_DOWN_BOX color 41 selection_color 7 labelsize 12 align 5
+            xywh {15 91 400 94} box PLASTIC_DOWN_BOX color 41 selection_color 7 labelsize 12 align 5
           } {
-            Fl_Group m_UTM {
-              xywh {20 93 390 169} selection_color 7
+            Fl_Group {} {open
+              xywh {15 100 400 78} selection_color 7
             } {
-              Fl_Input guiUTMZone {
-                label Zone
-                callback {this->UpdateUTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the zone number} xywh {177 186 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              Fl_Input guiLongSelection {
+                label Longitude
+                callback {UpdateMapParam();}
+                tooltip {Enter the longitude of the output image center} xywh {85 107 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
-              Fl_Input guiUTMEastSelection {
+              Fl_Input guiLatSelection {
+                label Latitude
+                callback {UpdateMapParam();}
+                tooltip {Enter the latitude of the output image center} xywh {84 147 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiEastSelection {
                 label Easting
                 callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the easting of the output image center} xywh {177 106 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the longitude of the output image center} xywh {279 108 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
-              Fl_Input guiUTMNorthSelection {
+              Fl_Input guiNorthSelection {
                 label Northing
                 callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the northing of the output image center} xywh {177 146 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Round_Button guiUTMNorth {
-                label {Northern hemisphere}
-                callback {guiUTMNorth->value(1);
-guiUTMSouth->value(0);
-this->UpdateUTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                xywh {178 225 18 37} down_box ROUND_DOWN_BOX value 1 align 132
-              }
-              Fl_Round_Button guiUTMSouth {
-                label {Southern hemisphere}
-                callback {guiUTMSouth->value(1);
-guiUTMNorth->value(0);
-this->UpdateUTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                xywh {222 225 18 37} down_box ROUND_DOWN_BOX
-              }
-            }
-            Fl_Group m_Lambert2 {
-              xywh {42 95 360 157} selection_color 7 hide
-            } {
-              Fl_Input guiLambertEastSelection {
-                label Easting
-                callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the easting of the output image center} xywh {177 143 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiLambertNorthSelection {
-                label Northing
-                callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the northing of the output image center} xywh {177 183 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-            }
-            Fl_Group m_TRANSMERCATOR {
-              xywh {42 95 360 157} selection_color 7 hide
-            } {
-              Fl_Input guiTRANSMERCATOREast {
-                label {False easting}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();}
-                tooltip {Enter false easting} xywh {177 163 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187 deactivate
-              }
-              Fl_Input guiTRANSMERCATORNorth {
-                label {False northing}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();}
-                tooltip {Enter false northing} xywh {177 194 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187 deactivate
-              }
-              Fl_Input guiTRANSMERCATORScale {
-                label {Scale factor}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();}
-                tooltip {Enter scale factor} xywh {177 225 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187 hide
-              }
-              Fl_Input guiTransmercatorEastSelection {
-                label Easting
-                callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the easting of the output image center} xywh {177 101 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiTransmercatorNorthSelection {
-                label Northing
-                callback {this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter the northing of the output image center} xywh {177 132 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+                tooltip {Enter the latitude of the output image center} xywh {279 148 130 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
           }
@@ -227,7 +111,7 @@ this->UpdateTMTransform();}
 if(guiULPixel->value() == 1 
    || guiCenterPixel->value() == 1)
    this->UpdateLongLat();}
-            tooltip {Enter the X output size} xywh {250 289 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
+            tooltip {Enter the X output size} xywh {250 266 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
           }
           Fl_Input guiSizeY {
             label {Size Y}
@@ -235,7 +119,7 @@ if(guiULPixel->value() == 1
 if(guiULPixel->value() == 1 
    || guiCenterPixel->value() == 1)
    this->UpdateLongLat();}
-            tooltip {Enter the Y output size} xywh {250 339 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
+            tooltip {Enter the Y output size} xywh {250 316 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
           }
           Fl_Input guiSpacingX {
             label {Spacing X}
@@ -243,7 +127,7 @@ if(guiULPixel->value() == 1
 if(guiULPixel->value() == 1 
    || guiCenterPixel->value() == 1)
    this->UpdateLongLat();}
-            tooltip {Enter X spacing} xywh {250 389 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
+            tooltip {Enter X spacing} xywh {250 366 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
           }
           Fl_Input guiSpacingY {
             label {Spacing Y}
@@ -251,12 +135,110 @@ if(guiULPixel->value() == 1
 if(guiULPixel->value() == 1 
    || guiCenterPixel->value() == 1)
    this->UpdateLongLat();}
-            tooltip {Enter Y spacing} xywh {250 439 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
+            tooltip {Enter Y spacing} xywh {250 416 160 25} box EMBOSSED_BOX color 54 selection_color 39 labelsize 13 labelcolor 186 align 5 textcolor 187
+          }
+          Fl_Group {} {
+            label {Map parameters} open
+            xywh {15 268 225 174} box PLASTIC_DOWN_BOX color 50 labelsize 12 labelcolor 194 align 5
+          } {
+            Fl_Group m_UTM {open
+              xywh {15 268 225 174} selection_color 7
+            } {
+              Fl_Input guiUTMZone {
+                label Zone
+                callback {this->UpdateUTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                tooltip {Enter the zone number} xywh {85 285 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Round_Button guiUTMNorth {
+                label {Northern hemisphere}
+                callback {guiUTMNorth->value(1);
+guiUTMSouth->value(0);
+this->UpdateUTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                xywh {35 315 18 37} down_box ROUND_DOWN_BOX value 1 align 8
+              }
+              Fl_Round_Button guiUTMSouth {
+                label {Southern hemisphere}
+                callback {guiUTMSouth->value(1);
+guiUTMNorth->value(0);
+this->UpdateUTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                xywh {35 343 18 37} down_box ROUND_DOWN_BOX
+              }
+            }
+            Fl_Group m_TRANSMERCATOR {open selected
+              xywh {15 268 225 174} selection_color 7 hide
+            } {
+              Fl_Input guiTRANSMERCATOREast {
+                label {False easting}
+                callback {//UpdateLongLat();
+this->UpdateTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                tooltip {Enter false easting} xywh {115 301 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTRANSMERCATORNorth {
+                label {False northing}
+                callback {//UpdateLongLat();
+this->UpdateTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                tooltip {Enter false northing} xywh {115 332 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+              Fl_Input guiTRANSMERCATORScale {
+                label {Scale factor}
+                callback {//UpdateLongLat();
+this->UpdateTMTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                tooltip {Enter scale factor} xywh {115 363 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
+            Fl_Group m_Lambert2 {
+              xywh {15 268 225 174} selection_color 7 hide
+            } {}
+          }
+          Fl_Round_Button guiCenterPixel {
+            label Centered
+            callback {// deactivate the other round buttons
+guiULPixel->value(0);
+guiCenterPixel->value(1);
+guiUserDefinition->value(0);
+
+// do the job
+this->UpdateLongLat();
+
+//Deactivate all the MapType parameters in the GUI
+this->DeactivateMapParamaters();}
+            tooltip {If checked, use the output center image coordinates to be the center of the projected image} xywh {220 225 19 15} down_box ROUND_DOWN_BOX value 1 color 7 labelcolor 186
+          }
+          Fl_Round_Button guiULPixel {
+            label {Upper-Left as output origin}
+            callback {// deactivate the other round buttons
+guiULPixel->value(1);
+guiCenterPixel->value(0);
+guiUserDefinition->value(0);
+
+// do the job
+this->UpdateLongLat();
+
+// Deactivate all the map parameters
+this->DeactivateMapParamaters();}
+            tooltip {If checked, use the upper left output image pixel coordinates to be the origin of the projected image} xywh {220 200 19 15} down_box ROUND_DOWN_BOX color 7 labelcolor 186
+          }
+          Fl_Round_Button guiUserDefinition {
+            label {User Defined Parameters}
+            callback {// deactivate the other round buttons
+guiULPixel->value(0);
+guiCenterPixel->value(0);
+guiUserDefinition->value(1);
+
+// activate all the map parameters
+this->ActivateMapParamaters();}
+            tooltip {Id checked, user parameters are used to configure the projection} xywh {20 200 18 15} down_box ROUND_DOWN_BOX color 7 labelcolor 186
           }
         }
         Fl_Group AllGrp {
           label {Input image}
-          xywh {5 30 420 442} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Choice iMapSelection {
             label {Input map projection}
@@ -370,14 +352,14 @@ this->UpdateInputTMTransform();}
         }
         Fl_Group {} {
           label Settings
-          xywh {5 30 420 442} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
             label {Interpolator parameters}
-            xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
+            xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
           } {
             Fl_Group guiLinear {open
-              xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186
+              xywh {44 119 356 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186
             } {}
             Fl_Group guiNearest {open
               xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
@@ -447,7 +429,7 @@ this->UpdateInputTMTransform();}
           }
           Fl_Choice guiInterpSelection {
             label Interpolator
-            tooltip {Select the Orthorectif Interpolator} xywh {155 75 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
+            tooltip {Select the Orthorectif Interpolator} xywh {155 70 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186
           } {
             MenuItem {} {
               label Linear
@@ -491,14 +473,14 @@ SetInterpolatorType(MAP_SINC);}
           }
           Fl_Group {} {
             label {DEM selection} open
-            xywh {44 281 356 174} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
+            xywh {44 275 356 166} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
           } {
             Fl_Round_Button choiceDEM {
               label {Use DEM}
               callback {choiceElevation->clear();
 vAverageElevation->deactivate();
 this->UpdateDEMUse();}
-              xywh {56 297 90 21} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 labelsize 12 labelcolor 186
+              xywh {56 291 90 21} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX color 7 labelsize 12 labelcolor 186
             }
             Fl_Round_Button choiceElevation {
               label {Use average elevation}
@@ -512,25 +494,25 @@ else
 {
 vAverageElevation->deactivate();
 }}
-              xywh {56 389 149 21} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX value 1 color 7 labelsize 12 labelcolor 186
+              xywh {56 383 149 21} box PLASTIC_DOWN_BOX down_box ROUND_DOWN_BOX value 1 color 7 labelsize 12 labelcolor 186
             }
             Fl_File_Input vDEMPath {
-              xywh {55 329 291 37} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 when 1 textcolor 186
+              xywh {55 323 291 37} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 when 1 textcolor 186
             }
             Fl_Button bBrowse {
               label {...}
               callback {this->Browse();}
-              xywh {350 338 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+              xywh {350 332 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
             }
             Fl_Value_Input vAverageElevation {
               label {Elevation value    }
-              xywh {202 421 108 24} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186
+              xywh {202 415 108 24} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186
             }
           }
         }
         Fl_Group gQuickLook {
           label Quicklook
-          xywh {5 30 420 442} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Group gPreviewWindow {open
             xywh {15 36 400 380} resizable
