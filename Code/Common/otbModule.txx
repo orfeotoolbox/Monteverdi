@@ -233,9 +233,6 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
                                                        const std::string& description,
                                                        bool cached)
 {
-  // Update output information
-  data->UpdateOutputInformation();
-
   // Stringstream used to enhance descriptions
   itk::OStringStream oss, ossId;
 
