@@ -152,8 +152,8 @@ SupervisedClassificationModel
   vproj->SetInputProjectionRef(m_VectorROIs->GetProjectionRef());
   vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
   vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  vproj->SetOutputOrigin(m_InputImage->GetOrigin());
-  vproj->SetOutputSpacing(m_InputImage->GetSpacing());
+  //vproj->SetOutputOrigin(m_InputImage->GetOrigin());
+  //vproj->SetOutputSpacing(m_InputImage->GetSpacing());
   
   vproj->Update();
 
