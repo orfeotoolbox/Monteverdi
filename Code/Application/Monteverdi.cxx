@@ -43,6 +43,8 @@
 #endif
 #endif
 
+#include "otbMsgReporter.h"
+
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
@@ -301,18 +303,28 @@ int main(int argc, char* argv[])
         Fl::check();
         std::vector<std::string> moduleVector;
 
-        // Get the ModuleInstanceId
-        std::string readerId = model->CreateModuleByKey("Reader");
-
-        // Get the module itself
-        otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
-
-        // Simulate file chooser and ok callback
-        otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-        readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
-        readerModule->Analyse();
-        readerModule->bOk->do_callback();
-        Fl::check();
+        ossimFilename lFile(parseResult->GetParameterString("--ImageList", i));
+        if( lFile.exists() )
+          {
+            // Get the ModuleInstanceId
+            std::string readerId = model->CreateModuleByKey("Reader");
+            
+            // Get the module itself
+            otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+            
+            // Simulate file chooser and ok callback
+            otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+            readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+            readerModule->Analyse();
+            readerModule->bOk->do_callback();
+            Fl::check();
+          }
+        else
+          {
+            itk::OStringStream oss;
+            oss << "The file "<<lFile<<" does not exist.";
+            otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
+          }
         }
     }
 
