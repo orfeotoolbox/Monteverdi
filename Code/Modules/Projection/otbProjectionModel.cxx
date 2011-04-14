@@ -23,7 +23,6 @@
 #include "vnl/vnl_random.h"
 
 #include "otbImageToGenericRSOutputParameters.h"
-#include "otbUtils.h"
 
 namespace otb
 {
