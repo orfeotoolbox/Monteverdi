@@ -5,13 +5,13 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class SARPolarimetryModuleGUI {open
+class SARPolarimetryConversionModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
       label {SAR Polarimetry} open
-      xywh {746 247 400 540} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 495 0 0} visible
+      xywh {670 166 400 370} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 495 0 0} visible
     } {
       Fl_Group {} {
         label {Sinclair to...} open
@@ -39,7 +39,7 @@ class SARPolarimetryModuleGUI {open
         }
         Fl_Check_Button rb_RecCirCoh {
           label {Reciprocal Circular Coherency}
-          xywh {25 144 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          xywh {25 146 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
         }
         Fl_Check_Button rb_RecCov {
           label {Reciprocal Covariance}
@@ -51,70 +51,45 @@ class SARPolarimetryModuleGUI {open
         xywh {10 245 375 75} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 align 5
       } {
         Fl_Check_Button rb_MuePolDegPow {
-          label {Polarization degree and power}
-          xywh {40 260 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          label {Polarization degree and power} selected
+          xywh {40 260 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186 deactivate
         }
         Fl_Check_Button rb_MueRecCv {
-          label {Reciprocal Covariance}
-          xywh {35 290 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-        }
-      }
-      Fl_Group {} {
-        label {Reciprocal...} open
-        xywh {5 342 390 133} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 align 5
-      } {
-        Fl_Check_Button rb_RecCohMue {
-          label {Coherency to Mueller}
-          xywh {25 352 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-        }
-        Fl_Check_Button rb_RecCovCohDeg {
-          label {Covariance to coherency degree}
-          xywh {25 374 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-        }
-        Fl_Check_Button rb_RecCovRecCoh {
-          label {Covariance to reciprocal coherency}
-          xywh {26 398 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-        }
-        Fl_Check_Button rb_RecHAlp {
-          label {H Alpha}
-          xywh {25 422 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-        }
-        Fl_Check_Button rb_RecLinCov {
-          label {Linear covariance to reciprocal circular covariance}
-          xywh {25 447 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          label {Reciprocal Covariance} selected
+          xywh {35 290 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186 deactivate
         }
       }
       Fl_Group {} {open
-        xywh {0 479 400 56}
+        xywh {0 334 400 201}
       } {
         Fl_Button {} {
           label {Check all}
           callback {this->CheckAll(true);}
-          xywh {139 505 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+          xywh {139 334 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
         }
         Fl_Return_Button bQuit {
           label Quit
           callback {this->Quit();}
-          xywh {314 505 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {314 334 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button {} {
           label {Uncheck all}
           callback {this->CheckAll(false);}
-          xywh {45 505 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+          xywh {45 334 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
         }
         Fl_Return_Button bOK {
           label Ok
           callback {this->Ok();}
-          xywh {227 505 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {227 334 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
     }
   }
   Function {Quit()} {open protected return_type {virtual void}
   } {}
-  Function {~SARPolarimetryModuleGUI()} {open return_type virtual
+  Function {~SARPolarimetryConversionModuleGUI()} {open return_type virtual
   } {}
-  Function {Ok()} {open selected protected return_type {virtual void}
+  Function {Ok()} {open protected return_type {virtual void}
   } {}
   Function {CheckAll(bool)} {open protected return_type {virtual void}
   } {}

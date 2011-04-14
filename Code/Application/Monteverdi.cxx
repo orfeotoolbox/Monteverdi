@@ -82,7 +82,7 @@
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
-#include "otbSARPolarimetryModule.h"
+#include "otbSARPolarimetryConversionModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -194,8 +194,8 @@ int main(int argc, char* argv[])
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
                                                  otbGetTextMacro("SAR/Polarimetric Synthesis"));
-  model->RegisterModule<otb::SARPolarimetryModule>("Polarimetry",
-                                                 otbGetTextMacro("SAR/Polarimetry"));
+  model->RegisterModule<otb::SARPolarimetryConversionModule>("Polarimetry",
+                                                 otbGetTextMacro("SAR/Polarimetric Conversion/Non reciprocal"));
   
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",

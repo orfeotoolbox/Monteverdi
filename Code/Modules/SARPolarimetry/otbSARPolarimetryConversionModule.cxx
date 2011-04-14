@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbSARPolarimetryModule.h"
+#include "otbSARPolarimetryConversionModule.h"
 
 #include "otbFltkFilterWatcher.h"
 #include "otbMsgReporter.h"
@@ -23,7 +23,7 @@
 namespace otb
 {
 /** Constructor */
-  SARPolarimetryModule::SARPolarimetryModule()
+  SARPolarimetryConversionModule::SARPolarimetryConversionModule()
 {
   // First, do constructor stuffs 
   // Input images
@@ -37,30 +37,31 @@ namespace otb
   m_SinclairToReciprocalCircularCovarianceMatrixFilter = SinclairToReciprocalCircularCovarianceMatrixFilterType::New();
   m_SinclairToReciprocalCoherencyMatrixFilter = SinclairToReciprocalCoherencyMatrixFilterType::New();
 
+  m_SinclairToCovarianceMatrixFilter = SinclairToCovarianceMatrixFilterType::New();
+  m_SinclairToCircularCovarianceMatrixFilter = SinclairToCircularCovarianceMatrixFilterType::New();
+  m_SinclairToCoherencyMatrixFilter = SinclairToCoherencyMatrixFilterType::New();
+  m_SinclairToMuellerMatrixFilter = SinclairToMuellerMatrixFilterType::New();
+
   // Add inputs
-  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Statistics for image"), true, false);
-  this->AddTypeToInputDescriptor<ImageType>("InputImage");
-  this->AddTypeToInputDescriptor<ComplexImageType>("InputImage");
-  this->AddTypeToInputDescriptor<ComplexVectorImageType>("InputImage");
-  this->AddInputDescriptor<ComplexImageType>("TheHHImage", otbGetTextMacro("HH Image"), true, false);
-  this->AddInputDescriptor<ComplexImageType>("TheHVImage", otbGetTextMacro("HV Image"), true, false);
-  this->AddInputDescriptor<ComplexImageType>("TheVHImage", otbGetTextMacro("VH Image"), true, false);
-  this->AddInputDescriptor<ComplexImageType>("TheVVImage", otbGetTextMacro("VV Image"), true, false);
+  this->AddInputDescriptor<ComplexImageType>("HHImage", otbGetTextMacro("HH Image"));
+  this->AddInputDescriptor<ComplexImageType>("HVImage", otbGetTextMacro("HV Image (used for reciprocal process)"));
+  this->AddInputDescriptor<ComplexImageType>("VHImage", otbGetTextMacro("VH Image( optional)"), true, false);
+  this->AddInputDescriptor<ComplexImageType>("VVImage", otbGetTextMacro("VV Image"));
 }
 
 /** Destructor */
-SARPolarimetryModule::~SARPolarimetryModule()
+SARPolarimetryConversionModule::~SARPolarimetryConversionModule()
 {}
 
 /** PrintSelf method */
-void SARPolarimetryModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void SARPolarimetryConversionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
-void SARPolarimetryModule::Run()
+void SARPolarimetryConversionModule::Run()
 {
   // While the viewer is shown, it is busy
   this->BusyOn();
@@ -107,61 +108,72 @@ void SARPolarimetryModule::Run()
   
 }
 
-  void SARPolarimetryModule::CheckInputs()
+  void SARPolarimetryConversionModule::CheckInputs()
   {
-    m_HHImage = this->GetInputData<ComplexImageType>("TheHHImage");
-    m_HVImage = this->GetInputData<ComplexImageType>("TheHVImage");
-    m_VHImage = this->GetInputData<ComplexImageType>("TheVHImage");
-    m_VVImage = this->GetInputData<ComplexImageType>("TheVVImage");
+    m_HHImage = this->GetInputData<ComplexImageType>("HHImage");
+    m_HVImage = this->GetInputData<ComplexImageType>("HVImage");
+    m_VHImage = this->GetInputData<ComplexImageType>("VHImage");
+    m_VVImage = this->GetInputData<ComplexImageType>("VVImage");
 
-    bool isOK = false;
-    // User doesn't use HH, HV, VH, VV
-    if( m_HHImage.IsNull() && m_HVImage.IsNull() && m_VHImage.IsNull() && m_VVImage.IsNull() ) 
-      {
-        isOK = true;
-      }
-    //  User uses HH, HV, VH, VV
-    else if( m_HHImage.IsNotNull() && m_HVImage.IsNotNull() && m_VHImage.IsNotNull() && m_VVImage.IsNotNull() )
-      {
-        isOK = true;
-      }
-    
-    if(isOK == false)
+    if( m_HHImage.IsNull() || m_HVImage.IsNull() || m_VVImage.IsNull() )
       {
         MsgReporter::GetInstance()->SendError("Invalid Inputs. HH, HV, VH and VV has all to be set.");
         this->Quit();
       }
-
   }
 
 
-void SARPolarimetryModule::InitChecks()
+void SARPolarimetryConversionModule::InitChecks()
 {
   // The CheckInputs methods insures that both HH, VH, HV and VV are set or not
-  if(m_VVImage.IsNull())
+  if(m_VHImage.IsNull())
     {
       rb_CirCov->deactivate();
       rb_Coh->deactivate();
       rb_Cov->deactivate();
-      rb_RecCoh->deactivate();
       rb_Mue->deactivate();
-      rb_RecCirCoh->deactivate();
-      rb_RecCov->deactivate();
     }
 }
-
-  void SARPolarimetryModule::Ok()
-  {
-    this->ClearOutputDescriptors();
-    if( rb_CirCov->value() == true )
-      {
-      }
-    if( rb_Coh->value() == true )
-      {
-      }
-    if( rb_Cov->value() == true )
-      {
-      }
+  
+void SARPolarimetryConversionModule::Ok()
+{
+  this->ClearOutputDescriptors();
+  if( rb_CirCov->value() == true )
+    {
+      m_SinclairToCircularCovarianceMatrixFilter->SetInputHH(m_HHImage);
+      m_SinclairToCircularCovarianceMatrixFilter->SetInputHV(m_HVImage);
+      m_SinclairToCircularCovarianceMatrixFilter->SetInputVH(m_VHImage);
+      m_SinclairToCircularCovarianceMatrixFilter->SetInputVV(m_VVImage);
+    this->AddOutputDescriptor(m_SinclairToCircularCovarianceMatrixFilter->GetOutput(), "SinclairToCircularCovarianceMatrixFilter",
+                                  otbGetTextMacro("Sinclair to circular covariance image"));
+    }
+  if( rb_Coh->value() == true )
+    {
+      m_SinclairToCoherencyMatrixFilter->SetInputHH(m_HHImage);
+      m_SinclairToCoherencyMatrixFilter->SetInputHV(m_HVImage);
+      m_SinclairToCoherencyMatrixFilter->SetInputVH(m_VHImage);
+      m_SinclairToCoherencyMatrixFilter->SetInputVV(m_VVImage);
+   this->AddOutputDescriptor(m_SinclairToCoherencyMatrixFilter->GetOutput(), "SinclairToCoherencyMatrixFilter",
+                                  otbGetTextMacro("Sinclair to coherency image"));
+    }
+  if( rb_Cov->value() == true )
+    {
+      m_SinclairToCovarianceMatrixFilter->SetInputHH(m_HHImage);
+      m_SinclairToCovarianceMatrixFilter->SetInputHV(m_HVImage);
+      m_SinclairToCovarianceMatrixFilter->SetInputVH(m_VHImage);
+      m_SinclairToCovarianceMatrixFilter->SetInputVV(m_VVImage);
+   this->AddOutputDescriptor(m_SinclairToCovarianceMatrixFilter->GetOutput(), "SinclairToCovarianceMatrixFilter",
+                                  otbGetTextMacro("Sinclair to covariance image"));
+    }
+  if( rb_Mue->value() == true )
+    {
+      m_SinclairToMuellerMatrixFilter->SetInputHH(m_HHImage);
+      m_SinclairToMuellerMatrixFilter->SetInputHV(m_HVImage);
+      m_SinclairToMuellerMatrixFilter->SetInputVH(m_VHImage);
+      m_SinclairToMuellerMatrixFilter->SetInputVV(m_VVImage);
+   this->AddOutputDescriptor(m_SinclairToMuellerMatrixFilter->GetOutput(), "SinclairToMuellerMatrixFilter",
+                                  otbGetTextMacro("Sinclair to Mueller image"));
+    }
     // SinclairToReciprocalCoherencyMatrixFilter
     if( rb_RecCoh->value() == true )
       {
@@ -170,9 +182,6 @@ void SARPolarimetryModule::InitChecks()
         m_SinclairToReciprocalCoherencyMatrixFilter-> SetInputVV( m_VVImage );
         this->AddOutputDescriptor(m_SinclairToReciprocalCoherencyMatrixFilter->GetOutput(), "SinclairToReciprocalCoherencyImage",
                                   otbGetTextMacro("Sinclair to reciprocal coherency image"));
-      }
-    if( rb_Mue->value() == true )
-      {
       }
     // SinclairToReciprocalCircularCovarianceMatrixFilter
     if( rb_RecCirCoh->value() == true )
@@ -203,7 +212,7 @@ void SARPolarimetryModule::InitChecks()
      
 
 
-  void SARPolarimetryModule::Quit()
+  void SARPolarimetryConversionModule::Quit()
   {
     // 1First, clear any previous output
     this->ClearOutputDescriptors();
@@ -213,7 +222,7 @@ void SARPolarimetryModule::InitChecks()
   }
   
 
-  void SARPolarimetryModule::CheckAll(bool val)
+  void SARPolarimetryConversionModule::CheckAll(bool val)
 {
   rb_CirCov->value(val);
   rb_Coh->value(val);
@@ -224,12 +233,7 @@ void SARPolarimetryModule::InitChecks()
   rb_RecCov->value(val);
   rb_MuePolDegPow->value(val);
   rb_MueRecCv->value(val);
-  rb_RecCohMue->value(val);
-  rb_RecCovCohDeg->value(val);
-  rb_RecCovRecCoh->value(val);
-  rb_RecHAlp->value(val);
-  rb_RecLinCov->value(val);
-  
+ 
 }
 
 

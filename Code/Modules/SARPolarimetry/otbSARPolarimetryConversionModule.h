@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSARPolarimetryModule_h
-#define __otbSARPolarimetryModule_h
+#ifndef __otbSARPolarimetryConversionModule_h
+#define __otbSARPolarimetryConversionModule_h
 
 // include the base class
 #include "otbModule.h"
 
 // include the GUI
-#include "otbSARPolarimetryModuleGUI.h"
+#include "otbSARPolarimetryConversionModuleGUI.h"
 
 // include the OTB/ITK elements
 #include "otbSinclairReciprocalImageFilter.h"
@@ -30,21 +30,27 @@
 #include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 
+#include "otbSinclairImageFilter.h"
+#include "otbSinclairToCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCoherencyMatrixFunctor.h"
+#include "otbSinclairToMuellerMatrixFunctor.h"
+
 namespace otb
 {
-/** \class SARPolarimetryModule
+/** \class SARPolarimetryConversionModule
  *  \brief This is the SARPolarimetry module
  *
  * Description of the module.
  *
  */
 
-class ITK_EXPORT SARPolarimetryModule
-  : public Module, public SARPolarimetryModuleGUI
+class ITK_EXPORT SARPolarimetryConversionModule
+  : public Module, public SARPolarimetryConversionModuleGUI
 {
 public:
   /** Standard class typedefs */
-  typedef SARPolarimetryModule             Self;
+  typedef SARPolarimetryConversionModule             Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -53,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SARPolarimetryModule, Module);
+  itkTypeMacro(SARPolarimetryConversionModule, Module);
 
   /** Data typedefs */
   /// Dataset
@@ -63,17 +69,28 @@ public:
   typedef TypeManager::Floating_Point_Complex_VectorImage ComplexVectorImageType;
 
   typedef ComplexImageType::PixelType ComplexImagePixelType;
+  typedef VectorImageType::PixelType VectorImagePixelType;
   typedef ComplexVectorImageType::PixelType ComplexVectorImagePixelType;
 
   /** Functors definitions */
-  typedef Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType> SinclairToReciprocalCovarianceMatrixFunctorType;
+  typedef Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType>         SinclairToReciprocalCovarianceMatrixFunctorType;
   typedef Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType> SinclairToReciprocalCircularCovarianceMatrixFunctorType;
-  typedef Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType> SinclairToReciprocalCoherencyMatrixFunctorType;
+  typedef Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType>          SinclairToReciprocalCoherencyMatrixFunctorType;
    
+  typedef Functor::SinclairToCovarianceMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType>         SinclairToCovarianceMatrixFunctorType;
+  typedef Functor::SinclairToCircularCovarianceMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType> SinclairToCircularCovarianceMatrixFunctorType;
+  typedef Functor::SinclairToCoherencyMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexVectorImagePixelType>          SinclairToCoherencyMatrixFunctorType;
+  typedef Functor::SinclairToMuellerMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, VectorImagePixelType>                   SinclairToMuellerMatrixFunctorType;
+
   /** Filters typedefs */
   typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCovarianceMatrixFunctorType>         SinclairToReciprocalCovarianceMatrixFilterType; 
   typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCircularCovarianceMatrixFunctorType> SinclairToReciprocalCircularCovarianceMatrixFilterType;
   typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCoherencyMatrixFunctorType>          SinclairToReciprocalCoherencyMatrixFilterType;
+
+  typedef otb::SinclairImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToCovarianceMatrixFunctorType>         SinclairToCovarianceMatrixFilterType;
+  typedef otb::SinclairImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToCircularCovarianceMatrixFunctorType> SinclairToCircularCovarianceMatrixFilterType;
+  typedef otb::SinclairImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToCoherencyMatrixFunctorType>          SinclairToCoherencyMatrixFilterType;
+  typedef otb::SinclairImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexImageType, VectorImageType, SinclairToMuellerMatrixFunctorType>                   SinclairToMuellerMatrixFilterType;
 
   /** Show the Module GUI */
   virtual bool CanShow(){return true; }
@@ -95,10 +112,10 @@ public:
 
 protected:
   /** Constructor */
-  SARPolarimetryModule();
+  SARPolarimetryConversionModule();
 
   /** Destructor */
-  virtual ~SARPolarimetryModule();
+  virtual ~SARPolarimetryConversionModule();
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -116,7 +133,7 @@ protected:
   void InitChecks();
 
 private:
-  SARPolarimetryModule(const Self&); //purposely not implemented
+  SARPolarimetryConversionModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   /** Input images */
@@ -129,7 +146,11 @@ private:
   SinclairToReciprocalCovarianceMatrixFilterType::Pointer m_SinclairToReciprocalCovarianceMatrixFilter;
   SinclairToReciprocalCircularCovarianceMatrixFilterType::Pointer m_SinclairToReciprocalCircularCovarianceMatrixFilter;
   SinclairToReciprocalCoherencyMatrixFilterType::Pointer m_SinclairToReciprocalCoherencyMatrixFilter;
-   
+
+  SinclairToCovarianceMatrixFilterType::Pointer m_SinclairToCovarianceMatrixFilter;
+  SinclairToCircularCovarianceMatrixFilterType::Pointer m_SinclairToCircularCovarianceMatrixFilter ;
+  SinclairToCoherencyMatrixFilterType::Pointer m_SinclairToCoherencyMatrixFilter;
+  SinclairToMuellerMatrixFilterType::Pointer m_SinclairToMuellerMatrixFilter;
   };
 
 } // End namespace otb
