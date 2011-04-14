@@ -98,7 +98,7 @@ void PolarimetricSynthesisController::LoadImages()
   }
   catch (itk::ExceptionObject & err)
   {
-    fl_alert(err.GetDescription());
+  fl_alert("%s", err.GetDescription());
   }
 }
 

@@ -132,7 +132,7 @@ SpectrumModuleModel
   ImageType::PixelType max = statFilter->GetMaximum();
 
   // Limit the bounds arbitrarily : performance issue with files containing arbitrary values (like uninitialized memory)
-  for (int i = 0; i < min.GetSize(); i++)
+  for (unsigned int i = 0; i < min.GetSize(); i++)
     {
     if (min [i] < 0)
       {

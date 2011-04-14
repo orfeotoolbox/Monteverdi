@@ -1805,7 +1805,7 @@ SupervisedClassificationAppli
   }
   catch( itk::ExceptionObject& exc )
   {
-    fl_alert(exc.what());
+  fl_alert("%s", exc.what());
     return;
   }
 
