@@ -306,7 +306,6 @@ void ReaderModule::OpenOpticalImage()
 
 void ReaderModule::OpenMultiSarImage()
 {
-  std::cout << "OpenMultisarImage" <<std::endl;
   // First, clear any existing output
   this->ClearOutputDescriptors();
   ostringstream oss, ossId, ossDatasetId;
