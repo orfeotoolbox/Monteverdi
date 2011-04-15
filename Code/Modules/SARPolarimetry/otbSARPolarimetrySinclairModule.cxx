@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbSARPolarimetryConversionModule.h"
+#include "otbSARPolarimetrySinclairModule.h"
 
 #include "otbFltkFilterWatcher.h"
 #include "otbMsgReporter.h"
@@ -23,7 +23,7 @@
 namespace otb
 {
 /** Constructor */
-  SARPolarimetryConversionModule::SARPolarimetryConversionModule()
+  SARPolarimetrySinclairModule::SARPolarimetrySinclairModule()
 {
   // First, do constructor stuffs 
   // Input images
@@ -50,18 +50,18 @@ namespace otb
 }
 
 /** Destructor */
-SARPolarimetryConversionModule::~SARPolarimetryConversionModule()
+SARPolarimetrySinclairModule::~SARPolarimetrySinclairModule()
 {}
 
 /** PrintSelf method */
-void SARPolarimetryConversionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void SARPolarimetrySinclairModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
-void SARPolarimetryConversionModule::Run()
+void SARPolarimetrySinclairModule::Run()
 {
   // While the viewer is shown, it is busy
   this->BusyOn();
@@ -70,60 +70,28 @@ void SARPolarimetryConversionModule::Run()
   this->CheckInputs();
   this->InitChecks();
 
-  unsigned int nbOfChannels(1);
-  
-  // Init the list of inputs image
-  /*
-  m_InputImage = this->GetInputData<VectorImageType>("InputImage");
-  if (m_InputImage.IsNull())
-    {
-      ImageType::Pointer image = this->GetInputData<ImageType>("InputImage");
-      
-      if(image.IsNotNull() == true)
-        {
-          m_ImageToVectorImageFilter = ImageToVectorImageCastFilterType::New();
-          // Cast image into vectorImage
-          m_ImageToVectorImageFilter->SetInput( image );
-          m_ImageToVectorImageFilter->UpdateOutputInformation();
-          
-          m_InputImage = m_ImageToVectorImageFilter->GetOutput();
-          
-          // Compute nb of channels
-          nbOfChannels = m_InputImage->GetNumberOfComponentsPerPixel();
-          // Compute image size
-          imSize = m_InputImage->GetLargestPossibleRegion().GetSize();
-        }
-      else
-        {
-          this->Quit();
-          itkExceptionMacro(<< "The input image number " << 0 << " is Null.");
-        }
-    }
-  */  
-  //m_InputImage->UpdateOutputInformation();
-  // Compute nb of channels
-  //nbOfChannels = m_InputImage->GetNumberOfComponentsPerPixel();
-  
   this->Show();
   
 }
 
-  void SARPolarimetryConversionModule::CheckInputs()
-  {
-    m_HHImage = this->GetInputData<ComplexImageType>("HHImage");
-    m_HVImage = this->GetInputData<ComplexImageType>("HVImage");
-    m_VHImage = this->GetInputData<ComplexImageType>("VHImage");
-    m_VVImage = this->GetInputData<ComplexImageType>("VVImage");
-
-    if( m_HHImage.IsNull() || m_HVImage.IsNull() || m_VVImage.IsNull() )
-      {
-        MsgReporter::GetInstance()->SendError("Invalid Inputs. HH, HV, VH and VV has all to be set.");
-        this->Quit();
-      }
-  }
-
-
-void SARPolarimetryConversionModule::InitChecks()
+/** Check inputs configuration. */
+void SARPolarimetrySinclairModule::CheckInputs()
+{
+  m_HHImage = this->GetInputData<ComplexImageType>("HHImage");
+  m_HVImage = this->GetInputData<ComplexImageType>("HVImage");
+  m_VHImage = this->GetInputData<ComplexImageType>("VHImage");
+  m_VVImage = this->GetInputData<ComplexImageType>("VVImage");
+  
+  if( m_HHImage.IsNull() || m_HVImage.IsNull() || m_VVImage.IsNull() )
+    {
+      MsgReporter::GetInstance()->SendError("Invalid Inputs. HH, HV, VH and VV has all to be set.");
+      this->Quit();
+    }
+}
+  
+  
+/** Check/uncheck all */
+void SARPolarimetrySinclairModule::InitChecks()
 {
   // The CheckInputs methods insures that both HH, VH, HV and VV are set or not
   if(m_VHImage.IsNull())
@@ -135,7 +103,7 @@ void SARPolarimetryConversionModule::InitChecks()
     }
 }
   
-void SARPolarimetryConversionModule::Ok()
+void SARPolarimetrySinclairModule::Ok()
 {
   this->ClearOutputDescriptors();
   if( rb_CirCov->value() == true )
@@ -212,7 +180,7 @@ void SARPolarimetryConversionModule::Ok()
      
 
 
-  void SARPolarimetryConversionModule::Quit()
+  void SARPolarimetrySinclairModule::Quit()
   {
     // 1First, clear any previous output
     this->ClearOutputDescriptors();
@@ -222,7 +190,7 @@ void SARPolarimetryConversionModule::Ok()
   }
   
 
-  void SARPolarimetryConversionModule::CheckAll(bool val)
+  void SARPolarimetrySinclairModule::CheckAll(bool val)
 {
   rb_CirCov->value(val);
   rb_Coh->value(val);
@@ -231,9 +199,6 @@ void SARPolarimetryConversionModule::Ok()
   rb_Mue->value(val);
   rb_RecCirCoh->value(val);
   rb_RecCov->value(val);
-  rb_MuePolDegPow->value(val);
-  rb_MueRecCv->value(val);
- 
 }
 
 

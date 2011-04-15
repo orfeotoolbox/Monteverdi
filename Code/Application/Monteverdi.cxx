@@ -82,7 +82,9 @@
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
-#include "otbSARPolarimetryConversionModule.h"
+#include "otbSARPolarimetrySinclairModule.h"
+#include "otbSARPolarimetryMuellerModule.h"
+//#include "otbSARPolarimetryAnalysisModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -194,9 +196,13 @@ int main(int argc, char* argv[])
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
                                                  otbGetTextMacro("SAR/Polarimetric Synthesis"));
-  model->RegisterModule<otb::SARPolarimetryConversionModule>("Polarimetry",
-                                                 otbGetTextMacro("SAR/Polarimetric Conversion/Non reciprocal"));
-  
+  model->RegisterModule<otb::SARPolarimetrySinclairModule>("PolarimetrySinclair",
+                                                 otbGetTextMacro("SAR/Polarimetric Conversion/Sinclair to"));
+   model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
+                                                 otbGetTextMacro("SAR/Polarimetric Conversion/Mueller to"));
+   //model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
+   //otbGetTextMacro("SAR/Polarimetric Analysis/"));
+
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              otbGetTextMacro("Learning/SVM classification"));

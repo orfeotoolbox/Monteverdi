@@ -550,9 +550,9 @@ GCPToSensorModelModel
   InverseModelPointerType inverseModel = InverseModelType::New();
 
   // Configure m_Model
-  inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
+  bool resModel = inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(m_Depth);
-  if (!inverseModel)
+  if (!resModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
@@ -749,10 +749,10 @@ GCPToSensorModelModel
     InverseModelPointerType inverseModel = InverseModelType::New();
 
     // Configure m_Model
-    inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
+    bool resModel = inverseModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
     dynamic_cast<ossimplugins::ossimTileMapModel*>(inverseModel->GetOssimModel())->setDepth(depth);
 
-    if (!inverseModel)
+    if (!resModel)
       {
       itkExceptionMacro(<< "Unable to create projection.");
       }
@@ -808,10 +808,10 @@ GCPToSensorModelModel
   ForwardModelPointerType forwardModel = ForwardModelType::New();
 
   // Configure m_Model
-  forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
+  bool resModel = forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
-  if (!forwardModel)
+  if (!resModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
@@ -860,10 +860,10 @@ GCPToSensorModelModel
   ForwardModelPointerType forwardModel = ForwardModelType::New();
 
   // Configure m_Model
-  forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
+  bool resModel = forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
-  if (!forwardModel)
+  if (!resModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
@@ -899,10 +899,10 @@ GCPToSensorModelModel
   ForwardModelPointerType forwardModel = ForwardModelType::New();
 
   // Configure m_Model
-  forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
+  bool resModel = forwardModel->SetImageGeometry(m_MapReader->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(forwardModel->GetOssimModel())->setDepth(m_Depth);
 
-  if (!forwardModel)
+  if (!resModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
@@ -944,9 +944,9 @@ GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int dept
   ForwardModelPointerType forwardModel = ForwardModelType::New();
 
   // Configure model
-  forwardModel->SetImageGeometry(m_GCPsToRPCSensorModelImageFilter->GetKeywordlist());
+  bool resModel = forwardModel->SetImageGeometry(m_GCPsToRPCSensorModelImageFilter->GetKeywordlist());
 
-  if (!forwardModel)
+  if (!resModel)
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }

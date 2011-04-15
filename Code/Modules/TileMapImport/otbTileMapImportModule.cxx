@@ -211,14 +211,13 @@ void TileMapImportModule::Ok()
     m_Model = ModelType::New();
 
     // Configure m_Model
-    m_Model->SetImageGeometry(m_ReaderTile->GetOutput()->GetImageKeywordlist());
-    dynamic_cast<ossimplugins::ossimTileMapModel*>(m_Model->GetOssimModel())->setDepth(m_Depth);
-
-    if (!m_Model)
+    bool resModel = m_Model->SetImageGeometry(m_ReaderTile->GetOutput()->GetImageKeywordlist());
+    if (!resModel)
       {
       itkExceptionMacro(<< "Unable to create projection.");
       }
 
+    dynamic_cast<ossimplugins::ossimTileMapModel*>(m_Model->GetOssimModel())->setDepth(m_Depth);
     // Set lon/lat
     PointType lonLatPoint;
     lonLatPoint[0]  = m_Longitude;

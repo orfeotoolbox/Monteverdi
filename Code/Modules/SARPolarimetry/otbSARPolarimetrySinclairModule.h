@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSARPolarimetryConversionModule_h
-#define __otbSARPolarimetryConversionModule_h
+#ifndef __otbSARPolarimetrySinclairModule_h
+#define __otbSARPolarimetrySinclairModule_h
 
 // include the base class
 #include "otbModule.h"
 
 // include the GUI
-#include "otbSARPolarimetryConversionModuleGUI.h"
+#include "otbSARPolarimetrySinclairModuleGUI.h"
 
 // include the OTB/ITK elements
 #include "otbSinclairReciprocalImageFilter.h"
@@ -38,19 +38,19 @@
 
 namespace otb
 {
-/** \class SARPolarimetryConversionModule
+/** \class SARPolarimetrySinclairModule
  *  \brief This is the SARPolarimetry module
  *
  * Description of the module.
  *
  */
 
-class ITK_EXPORT SARPolarimetryConversionModule
-  : public Module, public SARPolarimetryConversionModuleGUI
+class ITK_EXPORT SARPolarimetrySinclairModule
+  : public Module, public SARPolarimetrySinclairModuleGUI
 {
 public:
   /** Standard class typedefs */
-  typedef SARPolarimetryConversionModule             Self;
+  typedef SARPolarimetrySinclairModule             Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SARPolarimetryConversionModule, Module);
+  itkTypeMacro(SARPolarimetrySinclairModule, Module);
 
   /** Data typedefs */
   /// Dataset
@@ -112,10 +112,10 @@ public:
 
 protected:
   /** Constructor */
-  SARPolarimetryConversionModule();
+  SARPolarimetrySinclairModule();
 
   /** Destructor */
-  virtual ~SARPolarimetryConversionModule();
+  virtual ~SARPolarimetrySinclairModule();
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -133,7 +133,7 @@ protected:
   void InitChecks();
 
 private:
-  SARPolarimetryConversionModule(const Self&); //purposely not implemented
+  SARPolarimetrySinclairModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   /** Input images */
