@@ -83,7 +83,7 @@
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
 #include "otbSARPolarimetrySinclairModule.h"
-#include "otbSARPolarimetryMuellerModule.h"
+//#include "otbSARPolarimetryMuellerModule.h"
 //#include "otbSARPolarimetryAnalysisModule.h"
 
 #ifdef OTB_USE_MAPNIK
@@ -198,8 +198,8 @@ int main(int argc, char* argv[])
                                                  otbGetTextMacro("SAR/Polarimetric Synthesis"));
   model->RegisterModule<otb::SARPolarimetrySinclairModule>("PolarimetrySinclair",
                                                  otbGetTextMacro("SAR/Polarimetric Conversion/Sinclair to"));
-   model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
-                                                 otbGetTextMacro("SAR/Polarimetric Conversion/Mueller to"));
+  //model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
+  //otbGetTextMacro("SAR/Polarimetric Conversion/Mueller to"));
    //model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
    //otbGetTextMacro("SAR/Polarimetric Analysis/"));
 
