@@ -18,6 +18,7 @@
 
 #include "otbTileMapImportModule.h"
 #include "otbTileMapImageIOHelper.h"
+#include "otbTileMapTransform.h"
 
 namespace otb
 {
@@ -208,16 +209,10 @@ void TileMapImportModule::Ok()
     m_ReaderTile->UpdateOutputInformation();
 
     // Create Model
-    m_Model = ModelType::New();
+    typedef otb::TileMapTransform<otb::TransformDirection::FORWARD> TransformType;
+    TransformType::Pointer transform = TransformType::New();
+    transform->SetDepth(m_Depth);
 
-    // Configure m_Model
-    bool resModel = m_Model->SetImageGeometry(m_ReaderTile->GetOutput()->GetImageKeywordlist());
-    if (!resModel)
-      {
-      itkExceptionMacro(<< "Unable to create projection.");
-      }
-
-    dynamic_cast<ossimplugins::ossimTileMapModel*>(m_Model->GetOssimModel())->setDepth(m_Depth);
     // Set lon/lat
     PointType lonLatPoint;
     lonLatPoint[0]  = m_Longitude;
@@ -225,7 +220,7 @@ void TileMapImportModule::Ok()
 
     // Transform lon/lat to pixel
     PointType tilePoint;
-    tilePoint = m_Model->TransformPoint(lonLatPoint);
+    tilePoint = transform->TransformPoint(lonLatPoint);
 
     // Set parameters for extract ROI
     long int startX = static_cast<long int>(tilePoint[0]);
