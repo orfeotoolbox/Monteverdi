@@ -52,8 +52,8 @@ void SARPolarimetryMuellerModule::Run()
   // While the viewer is shown, it is busy
   this->BusyOn();
 
-  this->CheckInputs();
   this->BuildGUI();
+  this->CheckInputs();
 
   this->Show();
   
@@ -86,21 +86,33 @@ void SARPolarimetryMuellerModule::CheckInputs()
 void SARPolarimetryMuellerModule::Ok()
 {
   this->ClearOutputDescriptors();
-  
+  bool hasOutput = false;  
+
   if( rb_MuePolDegPow->value() == true )
     {
       m_MuellerToPolarisationDegreeAndPowerImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_MuellerToPolarisationDegreeAndPowerImageFilter->GetOutput(), "MuellerToPolarisationDegreeAndPowerImageFilter", otbGetTextMacro("Mueller to polarisation degree and power image"));
+      this->AddOutputDescriptor(m_MuellerToPolarisationDegreeAndPowerImageFilter->GetOutput(), "MuellerToPolarisationDegreeAndPowerImageFilter", 
+                                otbGetTextMacro("Mueller to polarisation degree and power image"));
+     hasOutput = true;
     }
   if( rb_MueRecCv->value() == true )
     {
       m_MuellerToReciprocalCovarianceImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_MuellerToReciprocalCovarianceImageFilter->GetOutput(), "MuellerToReciprocalCovarianceImageFilter", otbGetTextMacro("Mueller to reciprocal covarianc image"));
+      this->AddOutputDescriptor(m_MuellerToReciprocalCovarianceImageFilter->GetOutput(), "MuellerToReciprocalCovarianceImageFilter", 
+                                otbGetTextMacro("Mueller to reciprocal covarianc image"));
+     hasOutput = true;
     }
   
-  this->NotifyOutputsChange();
+  if( hasOutput==true )
+    { 
+      this->NotifyOutputsChange();
+    }
+  else
+    {
+      MsgReporter::GetInstance()->SendWarning( "No process selected." );
+    }
   this->Hide();
   // Once module is closed, it is no longer busy
     this->BusyOff();

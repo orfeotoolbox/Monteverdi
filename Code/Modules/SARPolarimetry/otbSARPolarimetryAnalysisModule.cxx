@@ -63,7 +63,7 @@ void SARPolarimetryAnalysisModule::Run()
 void SARPolarimetryAnalysisModule::CheckInputs()
 {
   m_InputImage = this->GetInputData<ComplexVectorImageType>("InputImage");
-       std::cout<<"-------------------------------------"<<std::endl;
+
   if( m_InputImage.IsNull() )
     {
       MsgReporter::GetInstance()->SendError("No input image detected.");
@@ -78,14 +78,12 @@ void SARPolarimetryAnalysisModule::CheckInputs()
           rb_HAlpha->value(1);
           rb_Syn->deactivate();
           gSynthParam->deactivate(); // activate parameter selection
-          std::cout<<"-------------------------------------"<<std::endl;
         }
       else if( m_InputImage->GetNumberOfComponentsPerPixel() == 4 )
         {
           rb_HAlpha->deactivate();
           rb_Syn->value(1);
           gSynthParam->activate(); // activate parameter selection
-     std::cout<<"+++++++++++++++++++++++++++++++++++++++"<<std::endl;
         }
       else
         {
@@ -100,16 +98,16 @@ void SARPolarimetryAnalysisModule::CheckInputs()
 
 void SARPolarimetryAnalysisModule::Ok()
 {   
-std::cout<<"================================================="<<std::endl;
-
   this->ClearOutputDescriptors();
-  
+  bool hasOutput = false;  
+
   if( rb_HAlpha->value() == true )
     {
       m_ReciprocalHAlphaImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalHAlphaImageFilter->GetOutput(), "ReciprocalHAlphaImageFilter", otbGetTextMacro("Reciprocal H-Alpha image"));
-      std::cout<<"************************************************"<<std::endl;
+      this->AddOutputDescriptor(m_ReciprocalHAlphaImageFilter->GetOutput(), "ReciprocalHAlphaImageFilter",
+                                otbGetTextMacro("Reciprocal H-Alpha image"));
+      hasOutput = true;
     }
   if( rb_Syn->value() == true )
     {
@@ -118,18 +116,21 @@ std::cout<<"================================================="<<std::endl;
       m_MultiChannelsPolarimetricSynthesisFilter->SetKhiR( static_cast<double>(v_KhiR->value()) );
       m_MultiChannelsPolarimetricSynthesisFilter->SetPsiI( static_cast<double>(v_PsiI->value()) );
       m_MultiChannelsPolarimetricSynthesisFilter->SetPsiR( static_cast<double>(v_PsiR->value()) );
-
-      std::cout<<static_cast<double>(v_KhiI->value())<<std::endl;
-      std::cout<<static_cast<double>(v_KhiR->value())<<std::endl;
-      std::cout<<static_cast<double>(v_PsiI->value())<<std::endl;
-      std::cout<<static_cast<double>(v_PsiR->value())<<std::endl;
   
-      this->AddOutputDescriptor(m_MultiChannelsPolarimetricSynthesisFilter->GetOutput(), "MultiChannelsPolarimetricSynthesisFilter", otbGetTextMacro("Polarimetric synthesis image"));
+      this->AddOutputDescriptor(m_MultiChannelsPolarimetricSynthesisFilter->GetOutput(), "MultiChannelsPolarimetricSynthesisFilter", 
+                                otbGetTextMacro("Polarimetric synthesis image"));
+      hasOutput = true;
     }
   
-std::cout<<"************************************************"<<std::endl;
-  this->NotifyOutputsChange();
-std::cout<<"************************************************"<<std::endl;
+  if( hasOutput==true )
+    { 
+      this->NotifyOutputsChange();
+    }
+  else
+    {
+      MsgReporter::GetInstance()->SendWarning( "No process selected." );
+    }
+
   this->Hide();
   // Once module is closed, it is no longer busy
     this->BusyOff();

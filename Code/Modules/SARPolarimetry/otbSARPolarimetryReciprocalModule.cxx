@@ -53,9 +53,9 @@ void SARPolarimetryReciprocalModule::Run()
   // While the viewer is shown, it is busy
   this->BusyOn();
 
-  this->CheckInputs();
   this->BuildGUI();
-
+  this->CheckInputs();
+ 
   this->Show();
   
 }
@@ -96,27 +96,41 @@ void SARPolarimetryReciprocalModule::CheckInputs()
 void SARPolarimetryReciprocalModule::Ok()
 {
   this->ClearOutputDescriptors();
-  
+  bool hasOutput = false;  
+
   if( rb_RecCoh->value() == true )
     {
       m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->GetOutput(), "ReciprocalCovarianceToReciprocalCoherencyImageFilter", otbGetTextMacro("Reciprocal to rec. coherency image"));
+      this->AddOutputDescriptor(m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->GetOutput(), "ReciprocalCovarianceToReciprocalCoherencyImageFilter",
+                                otbGetTextMacro("Reciprocal to rec. coherency image"));
+      hasOutput = true;
     }
   if( rb_CohDeg->value() == true )
     {
       m_ReciprocalCovarianceToCoherencyDegreeImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCovarianceToCoherencyDegreeImageFilter->GetOutput(), "ReciprocalCovarianceToCoherencyDegreeImageFilter", otbGetTextMacro("Reciprocal to cohenrency degree image"));
+      this->AddOutputDescriptor(m_ReciprocalCovarianceToCoherencyDegreeImageFilter->GetOutput(), "ReciprocalCovarianceToCoherencyDegreeImageFilter", 
+                                otbGetTextMacro("Reciprocal to cohenrency degree image"));
+      hasOutput = true;
     }
   if( rb_Mue->value() == true )
     {
       m_ReciprocalCoherencyToMuellerImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCoherencyToMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter", otbGetTextMacro("RecCoherency to Mueller image"));
+      this->AddOutputDescriptor(m_ReciprocalCoherencyToMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter", 
+                                otbGetTextMacro("RecCoherency to Mueller image"));
+      hasOutput = true;
     }
 
-  this->NotifyOutputsChange();
+  if( hasOutput==true )
+    { 
+      this->NotifyOutputsChange();
+    }
+  else
+    {
+      MsgReporter::GetInstance()->SendWarning( "No process selected." );
+    }
   this->Hide();
   // Once module is closed, it is no longer busy
     this->BusyOff();

@@ -10,37 +10,39 @@ class SARPolarimetryAnalysisModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {SAR Analysis conversion} open
-      xywh {1025 341 400 355} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 495 0 0} visible
+      label {SAR Analysis conversion} open selected
+      xywh {753 273 400 215} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 215 0 0} visible
     } {
-      Fl_Group gSynthParam {
-        label {Synthesis parameters} open
-        xywh {15 60 375 75} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 align 5 deactivate
+      Fl_Group {} {open
+        xywh {0 0 400 190}
       } {
-        Fl_Value_Input v_PsiI {
-          label {Incident psi}
-          xywh {127 71 50 24} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+06 maximum 1e+06 step 0.5
-        }
-        Fl_Value_Input v_PsiR {
-          label {Reflected psi}
-          xywh {209 71 50 24} box PLASTIC_DOWN_BOX labelcolor 186 align 8 minimum -1e+06 maximum 1e+06 step 0.5
-        }
-        Fl_Value_Input v_KhiI {
-          label {Incident khi}
-          xywh {127 101 50 24} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+06 maximum 1e+06 step 0.5
-        }
-        Fl_Value_Input v_KhiR {
-          label {Reflected Khi}
-          xywh {209 101 50 24} box PLASTIC_DOWN_BOX labelcolor 186 align 8 minimum -1e+06 maximum 1e+06 step 0.5
-        }
-      }
-      Fl_Check_Button rb_HAlpha {
-        label {H Alpha}
-        xywh {110 245 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
-      }
-      Fl_Check_Button rb_Syn {
-        label Synthesis
-        callback {if(rb_Syn->value() == 0)
+        Fl_Group {} {open
+          xywh {5 3 390 136} box PLASTIC_DOWN_BOX color 7
+        } {
+          Fl_Group gSynthParam {
+            label {Synthesis parameters} open
+            xywh {14 58 375 75} box PLASTIC_DOWN_BOX color 55 labelcolor 186 align 5 deactivate
+          } {
+            Fl_Value_Input v_PsiI {
+              label {Incident psi}
+              xywh {126 69 50 24} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+06 maximum 1e+06 step 0.5
+            }
+            Fl_Value_Input v_PsiR {
+              label {Reflected psi}
+              xywh {208 69 50 24} box PLASTIC_DOWN_BOX labelcolor 186 align 8 minimum -1e+06 maximum 1e+06 step 0.5
+            }
+            Fl_Value_Input v_KhiI {
+              label {Incident khi}
+              xywh {126 99 50 24} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+06 maximum 1e+06 step 0.5
+            }
+            Fl_Value_Input v_KhiR {
+              label {Reflected Khi}
+              xywh {208 99 50 24} box PLASTIC_DOWN_BOX labelcolor 186 align 8 minimum -1e+06 maximum 1e+06 step 0.5
+            }
+          }
+          Fl_Check_Button rb_Syn {
+            label Synthesis
+            callback {if(rb_Syn->value() == 0)
 {
 gSynthParam->deactivate();
 }
@@ -48,31 +50,37 @@ else
 {
 gSynthParam->activate();
 }}
-        xywh {125 20 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+            xywh {139 12 95 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          }
+        }
+        Fl_Group {} {open
+          xywh {5 145 390 35} box PLASTIC_DOWN_BOX color 7
+        } {
+          Fl_Check_Button rb_HAlpha {
+            label {Reciprocal H Alpha}
+            xywh {115 153 145 19} down_box PLASTIC_DOWN_BOX labelcolor 186
+          }
+        }
       }
-      Fl_Group {} {open
-        xywh {5 320 395 30}
-      } {
-        Fl_Button {} {
-          label {Check all}
-          callback {this->CheckAll(true);}
-          xywh {149 330 80 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
-        }
-        Fl_Return_Button bQuit {
-          label Quit
-          callback {this->Quit();}
-          xywh {324 330 76 20} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Button {} {
-          label {Uncheck all}
-          callback {this->CheckAll(false);}
-          xywh {55 330 80 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
-        }
-        Fl_Return_Button bOK {
-          label Ok
-          callback {this->Ok();}
-          xywh {237 330 80 20} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
-        }
+      Fl_Button {} {
+        label {Check all}
+        callback {this->CheckAll(true);}
+        xywh {143 191 80 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+      }
+      Fl_Return_Button bQuit {
+        label Quit
+        callback {this->Quit();}
+        xywh {318 191 76 20} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button {} {
+        label {Uncheck all}
+        callback {this->CheckAll(false);}
+        xywh {49 191 80 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelcolor 186
+      }
+      Fl_Return_Button bOK {
+        label Ok
+        callback {this->Ok();}
+        xywh {231 191 80 20} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
@@ -80,7 +88,7 @@ gSynthParam->activate();
   } {}
   Function {~SARPolarimetryAnalysisModuleGUI()} {open return_type virtual
   } {}
-  Function {Ok()} {open selected protected return_type {virtual void}
+  Function {Ok()} {open protected return_type {virtual void}
   } {}
   Function {CheckAll(bool)} {open protected return_type {virtual void}
   } {}

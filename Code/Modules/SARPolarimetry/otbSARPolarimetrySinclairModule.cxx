@@ -65,7 +65,7 @@ void SARPolarimetrySinclairModule::Run()
 {
   // While the viewer is shown, it is busy
   this->BusyOn();
-  
+
   this->BuildGUI();
   this->CheckInputs();
   this->InitChecks();
@@ -106,14 +106,17 @@ void SARPolarimetrySinclairModule::InitChecks()
 void SARPolarimetrySinclairModule::Ok()
 {
   this->ClearOutputDescriptors();
+  bool hasOutput = false;
+
   if( rb_CirCov->value() == true )
     {
       m_SinclairToCircularCovarianceMatrixFilter->SetInputHH(m_HHImage);
       m_SinclairToCircularCovarianceMatrixFilter->SetInputHV(m_HVImage);
       m_SinclairToCircularCovarianceMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCircularCovarianceMatrixFilter->SetInputVV(m_VVImage);
-    this->AddOutputDescriptor(m_SinclairToCircularCovarianceMatrixFilter->GetOutput(), "SinclairToCircularCovarianceMatrixFilter",
-                                  otbGetTextMacro("Sinclair to circular covariance image"));
+      this->AddOutputDescriptor(m_SinclairToCircularCovarianceMatrixFilter->GetOutput(), "SinclairToCircularCovarianceMatrixFilter",
+                                otbGetTextMacro("Sinclair to circular covariance image"));
+      hasOutput = true;
     }
   if( rb_Coh->value() == true )
     {
@@ -121,8 +124,9 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToCoherencyMatrixFilter->SetInputHV(m_HVImage);
       m_SinclairToCoherencyMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCoherencyMatrixFilter->SetInputVV(m_VVImage);
-   this->AddOutputDescriptor(m_SinclairToCoherencyMatrixFilter->GetOutput(), "SinclairToCoherencyMatrixFilter",
-                                  otbGetTextMacro("Sinclair to coherency image"));
+      this->AddOutputDescriptor(m_SinclairToCoherencyMatrixFilter->GetOutput(), "SinclairToCoherencyMatrixFilter",
+                                otbGetTextMacro("Sinclair to coherency image"));
+      hasOutput = true;
     }
   if( rb_Cov->value() == true )
     {
@@ -130,8 +134,9 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToCovarianceMatrixFilter->SetInputHV(m_HVImage);
       m_SinclairToCovarianceMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCovarianceMatrixFilter->SetInputVV(m_VVImage);
-   this->AddOutputDescriptor(m_SinclairToCovarianceMatrixFilter->GetOutput(), "SinclairToCovarianceMatrixFilter",
-                                  otbGetTextMacro("Sinclair to covariance image"));
+      this->AddOutputDescriptor(m_SinclairToCovarianceMatrixFilter->GetOutput(), "SinclairToCovarianceMatrixFilter",
+                                otbGetTextMacro("Sinclair to covariance image"));
+      hasOutput = true;
     }
   if( rb_Mue->value() == true )
     {
@@ -139,43 +144,55 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToMuellerMatrixFilter->SetInputHV(m_HVImage);
       m_SinclairToMuellerMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToMuellerMatrixFilter->SetInputVV(m_VVImage);
-   this->AddOutputDescriptor(m_SinclairToMuellerMatrixFilter->GetOutput(), "SinclairToMuellerMatrixFilter",
-                                  otbGetTextMacro("Sinclair to Mueller image"));
+      this->AddOutputDescriptor(m_SinclairToMuellerMatrixFilter->GetOutput(), "SinclairToMuellerMatrixFilter",
+                                otbGetTextMacro("Sinclair to Mueller image"));
+      hasOutput = true;
     }
-    // SinclairToReciprocalCoherencyMatrixFilter
-    if( rb_RecCoh->value() == true )
-      {
-        m_SinclairToReciprocalCoherencyMatrixFilter->SetInputHH( m_HHImage );
-        m_SinclairToReciprocalCoherencyMatrixFilter->SetInputHV_VH( m_HVImage );
-        m_SinclairToReciprocalCoherencyMatrixFilter-> SetInputVV( m_VVImage );
-        this->AddOutputDescriptor(m_SinclairToReciprocalCoherencyMatrixFilter->GetOutput(), "SinclairToReciprocalCoherencyImage",
-                                  otbGetTextMacro("Sinclair to reciprocal coherency image"));
-      }
-    // SinclairToReciprocalCircularCovarianceMatrixFilter
-    if( rb_RecCirCoh->value() == true )
-      {
-        m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputHH( m_HHImage );
-        m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
-        m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputVV( m_VVImage );
-        this->AddOutputDescriptor(m_SinclairToReciprocalCircularCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCircularCovariance",
-                                  otbGetTextMacro("Sinclair to reciprocal circular covariance"));
-      }
-    // SinclairToReciprocalCovarianceMatrixFilter
-    if( rb_RecCov->value() == true )
-      {
-        m_SinclairToReciprocalCovarianceMatrixFilter->SetInputHH( m_HHImage );
-        m_SinclairToReciprocalCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
-        m_SinclairToReciprocalCovarianceMatrixFilter->SetInputVV( m_VVImage );
-        this->AddOutputDescriptor(m_SinclairToReciprocalCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCovariance",
-                                  otbGetTextMacro("Sinclair to reciprocal covariance"));
-      }
-
-    this->NotifyOutputsChange();
-    this->Hide();
-    // Once module is closed, it is no longer busy
-    this->BusyOff();
-  }
-
+  // SinclairToReciprocalCoherencyMatrixFilter
+  if( rb_RecCoh->value() == true )
+    {
+      m_SinclairToReciprocalCoherencyMatrixFilter->SetInputHH( m_HHImage );
+      m_SinclairToReciprocalCoherencyMatrixFilter->SetInputHV_VH( m_HVImage );
+      m_SinclairToReciprocalCoherencyMatrixFilter-> SetInputVV( m_VVImage );
+      this->AddOutputDescriptor(m_SinclairToReciprocalCoherencyMatrixFilter->GetOutput(), "SinclairToReciprocalCoherencyImage",
+                                otbGetTextMacro("Sinclair to reciprocal coherency image"));
+      hasOutput = true;
+    }
+  // SinclairToReciprocalCircularCovarianceMatrixFilter
+  if( rb_RecCirCoh->value() == true )
+    {
+      m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputHH( m_HHImage );
+      m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
+      m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputVV( m_VVImage );
+      this->AddOutputDescriptor(m_SinclairToReciprocalCircularCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCircularCovariance",
+                                otbGetTextMacro("Sinclair to reciprocal circular covariance"));
+      hasOutput = true;
+    }
+  // SinclairToReciprocalCovarianceMatrixFilter
+  if( rb_RecCov->value() == true )
+    {
+      m_SinclairToReciprocalCovarianceMatrixFilter->SetInputHH( m_HHImage );
+      m_SinclairToReciprocalCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
+      m_SinclairToReciprocalCovarianceMatrixFilter->SetInputVV( m_VVImage );
+      this->AddOutputDescriptor(m_SinclairToReciprocalCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCovariance",
+                                otbGetTextMacro("Sinclair to reciprocal covariance"));
+      hasOutput = true;
+    }
+  
+  if( hasOutput==true )
+    { 
+      this->NotifyOutputsChange();
+    }
+  else
+    {
+      MsgReporter::GetInstance()->SendWarning( "No process selected." );
+    }
+  
+  this->Hide();
+  // Once module is closed, it is no longer busy
+  this->BusyOff();
+}
+  
      
      
 
