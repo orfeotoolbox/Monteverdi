@@ -32,7 +32,7 @@ namespace otb
   m_InputImage = VectorImageType::New();
 
   // Add inputs
-  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Input Image"));
+  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Input Image (multi channel real image, 16 channels)"));
 }
 
 /** Destructor */

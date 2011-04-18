@@ -43,10 +43,10 @@ namespace otb
   m_SinclairToMuellerMatrixFilter = SinclairToMuellerMatrixFilterType::New();
 
   // Add inputs
-  this->AddInputDescriptor<ComplexImageType>("HHImage", otbGetTextMacro("HH Image"));
-  this->AddInputDescriptor<ComplexImageType>("HVImage", otbGetTextMacro("HV Image (used for reciprocal process)"));
-  this->AddInputDescriptor<ComplexImageType>("VHImage", otbGetTextMacro("VH Image( optional)"), true, false);
-  this->AddInputDescriptor<ComplexImageType>("VVImage", otbGetTextMacro("VV Image"));
+  this->AddInputDescriptor<ComplexImageType>("HHImage", otbGetTextMacro("HH Image (mono channel complex image)"));
+  this->AddInputDescriptor<ComplexImageType>("HVImage", otbGetTextMacro("HV Image (mono channel complex image used for reciprocal process)"));
+  this->AddInputDescriptor<ComplexImageType>("VHImage", otbGetTextMacro("VH Image (mono channel complex image, optional)"), true, false);
+  this->AddInputDescriptor<ComplexImageType>("VVImage", otbGetTextMacro("VV Image (mono channel complex image)"));
 }
 
 /** Destructor */

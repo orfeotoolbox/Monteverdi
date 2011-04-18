@@ -33,7 +33,7 @@ namespace otb
   m_InputImage = ComplexVectorImageType::New();
 
   // Add inputs
-  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", otbGetTextMacro("Input Image"));
+  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", otbGetTextMacro("Input Image (multi channel complex image, 6 or 10 channels)"));
 }
 
 /** Destructor */
