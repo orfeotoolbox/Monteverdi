@@ -84,7 +84,8 @@
 #include "otbImageStatisticsModule.h"
 #include "otbSARPolarimetrySinclairModule.h"
 #include "otbSARPolarimetryMuellerModule.h"
-#include "otbSARPolarimetryRecCovarianceModule.h"
+#include "otbSARPolarimetryReciprocalModule.h"
+#include "otbSARPolarimetryAnalysisModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -200,8 +201,10 @@ int main(int argc, char* argv[])
                                                  otbGetTextMacro("SAR/Polarimetric conversion/Sinclair to"));
    model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
                                                  otbGetTextMacro("SAR/Polarimetric conversion/Mueller to"));
-  model->RegisterModule<otb::SARPolarimetryRecCovarianceModule>("PolarimetryAnalysis",
-                                                 otbGetTextMacro("SAR/Polarimetric conversion/Rec. covariance to"));
+  model->RegisterModule<otb::SARPolarimetryReciprocalModule>("PolarimetryReciprocal",
+                                                 otbGetTextMacro("SAR/Polarimetric conversion/Reciprocal... to"));
+  model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
+                                                 otbGetTextMacro("SAR/Analysis"));
 
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",

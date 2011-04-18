@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbSARPolarimetryRecCovarianceModule.h"
+#include "otbSARPolarimetryReciprocalModule.h"
 
 #include "otbFltkFilterWatcher.h"
 #include "otbMsgReporter.h"
@@ -23,11 +23,12 @@
 namespace otb
 {
 /** Constructor */
-  SARPolarimetryRecCovarianceModule::SARPolarimetryRecCovarianceModule()
+  SARPolarimetryReciprocalModule::SARPolarimetryReciprocalModule()
 {
   // Filters
   m_ReciprocalCovarianceToReciprocalCoherencyImageFilter = ReciprocalCovarianceToReciprocalCoherencyImageFilterType::New();
   m_ReciprocalCovarianceToCoherencyDegreeImageFilter = ReciprocalCovarianceToCoherencyDegreeImageFilterType::New();
+  m_ReciprocalCoherencyToMuellerImageFilter = ReciprocalCoherencyToMuellerImageFilterType::New();
 
   m_InputImage = ComplexVectorImageType::New();
 
@@ -36,18 +37,18 @@ namespace otb
 }
 
 /** Destructor */
-SARPolarimetryRecCovarianceModule::~SARPolarimetryRecCovarianceModule()
+SARPolarimetryReciprocalModule::~SARPolarimetryReciprocalModule()
 {}
 
 /** PrintSelf method */
-void SARPolarimetryRecCovarianceModule::PrintSelf(std::ostream& os, itk::Indent indent) const
+void SARPolarimetryReciprocalModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
-void SARPolarimetryRecCovarianceModule::Run()
+void SARPolarimetryReciprocalModule::Run()
 {
   // While the viewer is shown, it is busy
   this->BusyOn();
@@ -60,7 +61,7 @@ void SARPolarimetryRecCovarianceModule::Run()
 }
 
 /** Check inputs configuration */
-void SARPolarimetryRecCovarianceModule::CheckInputs()
+void SARPolarimetryReciprocalModule::CheckInputs()
 {
   m_InputImage = this->GetInputData<ComplexVectorImageType>("InputImage");
   
@@ -72,7 +73,16 @@ void SARPolarimetryRecCovarianceModule::CheckInputs()
   else
     {
       m_InputImage->UpdateOutputInformation();
-      if( m_InputImage->GetNumberOfComponentsPerPixel() != 6)
+      if( m_InputImage->GetNumberOfComponentsPerPixel() == 6)
+        {
+          rb_Mue->deactivate();
+        }
+      else if( m_InputImage->GetNumberOfComponentsPerPixel() == 10)
+        {
+          rb_CohDeg->deactivate();
+          rb_RecCoh->deactivate();
+        }
+      else
         {
           itk::OStringStream oss;
           oss << "Invalid Input, must have 6 channels instead of " << m_InputImage->GetNumberOfComponentsPerPixel() << ".";
@@ -83,7 +93,7 @@ void SARPolarimetryRecCovarianceModule::CheckInputs()
 }
 
 
-void SARPolarimetryRecCovarianceModule::Ok()
+void SARPolarimetryReciprocalModule::Ok()
 {
   this->ClearOutputDescriptors();
   
@@ -91,15 +101,21 @@ void SARPolarimetryRecCovarianceModule::Ok()
     {
       m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->GetOutput(), "ReciprocalCovarianceToReciprocalCoherencyImageFilter", otbGetTextMacro("RecCovariance to rec. coherency image"));
+      this->AddOutputDescriptor(m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->GetOutput(), "ReciprocalCovarianceToReciprocalCoherencyImageFilter", otbGetTextMacro("Reciprocal to rec. coherency image"));
     }
   if( rb_CohDeg->value() == true )
     {
       m_ReciprocalCovarianceToCoherencyDegreeImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCovarianceToCoherencyDegreeImageFilter->GetOutput(), "ReciprocalCovarianceToCoherencyDegreeImageFilter", otbGetTextMacro("RecCovariance to cohenrency degree image"));
+      this->AddOutputDescriptor(m_ReciprocalCovarianceToCoherencyDegreeImageFilter->GetOutput(), "ReciprocalCovarianceToCoherencyDegreeImageFilter", otbGetTextMacro("Reciprocal to cohenrency degree image"));
     }
-  
+  if( rb_Mue->value() == true )
+    {
+      m_ReciprocalCoherencyToMuellerImageFilter->SetInput(m_InputImage);
+      
+      this->AddOutputDescriptor(m_ReciprocalCoherencyToMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter", otbGetTextMacro("RecCoherency to Mueller image"));
+    }
+
   this->NotifyOutputsChange();
   this->Hide();
   // Once module is closed, it is no longer busy
@@ -108,7 +124,7 @@ void SARPolarimetryRecCovarianceModule::Ok()
   
   
   
-void SARPolarimetryRecCovarianceModule::Quit()
+void SARPolarimetryReciprocalModule::Quit()
 {
   // 1First, clear any previous output
   this->ClearOutputDescriptors();
@@ -118,10 +134,17 @@ void SARPolarimetryRecCovarianceModule::Quit()
 }
   
   
-void SARPolarimetryRecCovarianceModule::CheckAll(bool val)
+void SARPolarimetryReciprocalModule::CheckAll(bool val)
 {
-  rb_CohDeg->value(val);
-  rb_RecCoh->value(val); 
+  if( m_InputImage->GetNumberOfComponentsPerPixel() == 10)
+    {
+      rb_Mue->value(val);
+    }
+  else if( m_InputImage->GetNumberOfComponentsPerPixel() == 6)
+    {
+      rb_CohDeg->value(val);
+      rb_RecCoh->value(val);
+    }
 }
 
 
