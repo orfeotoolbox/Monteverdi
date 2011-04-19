@@ -313,8 +313,8 @@ Orthorectification::PointToLongLat(ForwardSensorInputPointType point)
   latLongPoint[1] = 0;
   ImagePointerType           image = m_InputImage;
   ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-  bool resModel = sensor->SetImageGeometry(image->GetImageKeywordlist());
-  if (!resModel)
+  sensor->SetImageGeometry(image->GetImageKeywordlist());
+  if ( sensor->IsValidSensorModel() == false )
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
@@ -540,9 +540,9 @@ int
 Orthorectification::CheckImageParameters()
 {
   ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-  bool resModel = sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
+  sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
   
-  if (!resModel)
+  if ( sensor->IsValidSensorModel() == false )
     {
       return 1;
     }
@@ -826,15 +826,14 @@ void
 Orthorectification::SelectAction()
 {
   bool outputDone = false;
-  bool containsKeywordlist = true;
 
   ImagePointerType image = m_InputImage;
   // test if the image has KeywordList
   ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-  containsKeywordlist = sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
+  sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
   
   // If orthorectifed
-  if (outputDone == false && containsKeywordlist == true)
+  if ( outputDone == false && sensor->IsValidSensorModel() == true )
     {
     // Update Easting and northing values
     ForwardSensorInputPointType point;
@@ -962,8 +961,8 @@ Orthorectification
   ImagePointerType image =  m_InputImage;
   // test if the image has Keywordlist
   ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-  bool resModel = sensor->SetImageGeometry(image->GetImageKeywordlist());
-  if( !resModel )
+  sensor->SetImageGeometry(image->GetImageKeywordlist());
+  if( sensor->IsValidSensorModel() == false )
   {
     MsgReporter::GetInstance()->SendError("Invalid image: No ImageKeywordlist found");
     return;
@@ -1125,8 +1124,8 @@ Orthorectification::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
   DoubleVectorType outVectPoint(2, 0);
 
   InverseSensorType::Pointer sensor = InverseSensorType::New();
-  bool resModel = sensor->SetImageGeometry(image->GetImageKeywordlist());
-  if (!resModel)
+  sensor->SetImageGeometry(image->GetImageKeywordlist());
+  if ( sensor->IsValidSensorModel() == false )
     {
       itkExceptionMacro(<< "Unable to create projection.");
     }

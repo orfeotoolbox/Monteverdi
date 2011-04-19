@@ -913,9 +913,9 @@ GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int dept
   ForwardModelPointerType forwardModel = ForwardModelType::New();
 
   // Configure model
-  bool resModel = forwardModel->SetImageGeometry(m_GCPsToRPCSensorModelImageFilter->GetKeywordlist());
+  forwardModel->SetImageGeometry(m_GCPsToRPCSensorModelImageFilter->GetKeywordlist());
 
-  if (!resModel)
+  if (forwardModel->IsValidSensorModel() == false )
     {
     itkExceptionMacro(<< "Unable to create projection.");
     }
