@@ -183,6 +183,9 @@ public:
   /** Update Output */
   void OK();
 
+  /** Return ftrue if one of the two index already exists in the list. */
+  bool ExistsIndexes(IndexType id1, IndexType id);
+
   /** Get the output changed flag */
   itkGetMacro(OutputChanged, bool);
   /** Get Output image */

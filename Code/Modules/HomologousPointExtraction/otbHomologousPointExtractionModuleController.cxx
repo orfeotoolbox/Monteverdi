@@ -206,15 +206,24 @@ HomologousPointExtractionModuleController
     MsgReporter::GetInstance()->SendError(oss2.str().c_str());
     return;
     }
+
+  if( m_Model->ExistsIndexes( id1, id2 ) )
+    {
+      itk::OStringStream oss3;
+      oss3 << "Enable to add (" << id1 << " " << id2 << "). At least one of the index has already been added.";
+      MsgReporter::GetInstance()->SendError(oss3.str().c_str());
+      return;
+    }
+
   try
     {
-    m_Model->AddIndexesToList(id1, id2);
-    m_View->AddPointsToList(id1, id2);
+      m_Model->AddIndexesToList(id1, id2);
+      m_View->AddPointsToList(id1, id2);
     }
   catch (itk::ExceptionObject& err)
     {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    return;
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
     }
 }
 
