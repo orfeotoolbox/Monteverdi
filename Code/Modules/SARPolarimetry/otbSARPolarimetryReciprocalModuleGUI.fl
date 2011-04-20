@@ -19,11 +19,11 @@ class SARPolarimetryReciprocalModuleGUI {open
       } {
         Fl_Check_Button rb_CohDeg {
           label {To coherency degree}
-          xywh {80 30 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          xywh {80 30 230 20} down_box DOWN_BOX labelcolor 186
         }
         Fl_Check_Button rb_RecCoh {
           label {To reciprocal coherency}
-          xywh {80 65 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          xywh {80 65 230 20} down_box DOWN_BOX labelcolor 186
         }
       }
       Fl_Group {} {
@@ -32,7 +32,7 @@ class SARPolarimetryReciprocalModuleGUI {open
       } {
         Fl_Check_Button rb_Mue {
           label {To Mueller}
-          xywh {80 128 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+          xywh {80 128 230 20} down_box DOWN_BOX labelcolor 186
         }
       }
       Fl_Button {} {

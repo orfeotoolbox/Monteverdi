@@ -10,7 +10,7 @@ class SARPolarimetryMuellerModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {SAR Mueller conversion} open selected
+      label {SAR Mueller conversion} open
       xywh {1025 556 400 115} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 115 0 0} visible
     } {
       Fl_Button {} {
@@ -34,12 +34,12 @@ class SARPolarimetryMuellerModuleGUI {open
         xywh {232 85 80 20} box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button rb_MuePolDegPow {
-        label {Polarization degree and power}
-        xywh {75 11 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+        label {Polarization degree and power} selected
+        xywh {75 11 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_MueRecCv {
-        label {Reciprocal Covariance}
-        xywh {75 41 230 20} down_box PLASTIC_DOWN_BOX labelcolor 186
+        label {Reciprocal Covariance} selected
+        xywh {75 41 230 20} down_box DOWN_BOX labelcolor 186
       }
     }
   }

@@ -725,7 +725,7 @@ void
 ProjectionView::InitializeAction()
 {
   IndexType index;
-  PointType middlePoint, geoPoint, outputPoint, outputPoint1;
+  PointType middlePoint, geoPoint;
 
   // Get the transform from the model
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
