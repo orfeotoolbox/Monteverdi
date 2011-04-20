@@ -67,6 +67,8 @@ ProjectionView::ProjectionView()
 {
   // Build the Gui
   this->CreateGUI();
+  pBusyBar->minimum(0);
+  pBusyBar->maximum(1);
 
   // Initiliaze the GUI values
   guiUTMZone->value("31");
@@ -1023,7 +1025,8 @@ ProjectionView::DisplayPreviewWidget()
         m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
         m_Transform->SetOutputSize(estimator->GetOutputSize());
         m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
-        
+        m_Transform->SetEdgePaddingValue(0);
+
         // Update the MapType
         m_PreviousMapType = this->GetMapType();
         }
@@ -1035,6 +1038,12 @@ ProjectionView::DisplayPreviewWidget()
       shrinker->SetInput(m_Transform->GetOutput());
       shrinker->SetShrinkFactor(1);
       shrinker->GetStreamer()->SetAutomaticStrippedStreaming(0);
+
+      // Show busy bar
+      this->pBusyBar->value(1);
+      this->pBusyBar->show();
+      Fl::check();
+
       shrinker->Update();
       
       // build the rendering model
@@ -1049,6 +1058,11 @@ ProjectionView::DisplayPreviewWidget()
       rendering->AddLayer(layerGenerator->GetLayer());
       rendering->Update();
     
+      // Hide busy bar
+      this->pBusyBar->value(0);
+      this->pBusyBar->hide();
+      Fl::check();
+
       // Fill the previewWidget with the quicklook of the projected
       // image 
       ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
