@@ -56,6 +56,8 @@
 #include "otbFltkFilterWatcher.h"
 #include "otbVectorDataFileWriter.h"
 
+#include "otbStreamingShrinkImageFilter.h"
+
 namespace otb
 {
 /**
@@ -1025,11 +1027,20 @@ ProjectionView::DisplayPreviewWidget()
         // Update the MapType
         m_PreviousMapType = this->GetMapType();
         }
+
+      // Streaming Shrink : Persistent class, will process tile by tile 
+      // to avoid memory allocation issues.
+      typedef StreamingShrinkImageFilter<ImageType, ImageType>   StreamingShrinkType;
+      StreamingShrinkType::Pointer shrinker = StreamingShrinkType::New();
+      shrinker->SetInput(m_Transform->GetOutput());
+      shrinker->SetShrinkFactor(1);
+      shrinker->GetStreamer()->SetAutomaticStrippedStreaming(0);
+      shrinker->Update();
       
       // build the rendering model
       // Generate the layer
       LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-      layerGenerator->SetImage(m_Transform->GetOutput());
+      layerGenerator->SetImage(shrinker->GetOutput());
       FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
       layerGenerator->GenerateLayer();
    
