@@ -752,6 +752,14 @@ VectorDataTreeBrowser<TVectorData>
     return;
     }
 
+  // Ignore Documents
+  std::stringstream ss;
+  ss << node->label();
+  if (ss.str().find("Document") == 0)
+    {
+    return;
+    }
+
   // Look up this node in the node table
   typename DataToFluNodeMapType::iterator it = m_NodeMap.begin();
   bool                                    found = false;
@@ -910,7 +918,8 @@ VectorDataTreeBrowser<TVectorData>
       if (this->rdata.showRoot && (this->rdata.root->children() == 0)) this->set_hilighted(this->rdata.root);
       else
         {
-        // find the last node by repeatedly looking for the last child until there are no more branches
+        // find the last node by repeatedly looking for the last child
+        // until there are no more branches 
         Node *n = &root;
         while (n->children() && n->open())
           n = n->child(n->children() - 1);
