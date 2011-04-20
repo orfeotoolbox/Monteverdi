@@ -16,11 +16,6 @@ class ProjectionGroup {open
       label Projection open
       xywh {465 24 430 500} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 visible
     } {
-      Fl_Button guiOK {
-        label {Save / Quit}
-        callback {OK();}
-        tooltip {Compute result} xywh {345 456 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
-      }
       Fl_Tabs m_TabsMode {
         callback {this->TabPositionHandler();} open
         xywh {5 9 420 443} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
@@ -70,7 +65,7 @@ m_Lambert2->hide();
 m_TRANSMERCATOR->show();
 this->m_MapType->redraw();
 SetMapType(MAP_TRANSMERCATOR);
-this->UpdateTMTransform();} selected
+this->UpdateTMTransform();}
               xywh {30 30 100 25} labelsize 11
             }
             MenuItem {} {
@@ -534,6 +529,15 @@ vAverageElevation->deactivate();
             xywh {235 425 175 15} box PLASTIC_DOWN_BOX down_box DOWN_BOX labelsize 12 labelcolor 186
           }
         }
+      }
+      Fl_Progress pBusyBar {
+        label {Computing Quicklook} selected
+        xywh {5 469 330 15} box PLASTIC_DOWN_BOX selection_color 1 labelsize 12 labelcolor 186 hide
+      }
+      Fl_Button guiOK {
+        label {Save / Quit}
+        callback {OK();}
+        tooltip {Compute result} xywh {345 456 80 40} box PLASTIC_DOWN_BOX shortcut 0x71 color 7 selection_color 23 labelcolor 186
       }
     }
   }

@@ -786,6 +786,7 @@ VectorDataTreeBrowser<TVectorData>
     if (m) m->do_callback(this, m->user_data());
     }
   // Else if we are on a key node
+  /*
   else if (node->parent()->label() == m_AttributesKey)
     {
     Fl_Menu_Item popup_menu[2] = {
@@ -799,6 +800,7 @@ VectorDataTreeBrowser<TVectorData>
     if (m) m->do_callback(this, m->user_data());
 
     }
+  */
   /*
   else if (node->parent()->label() == m_GeometricDataKey
            || node->parent()->label() == m_ExteriorRingKey
