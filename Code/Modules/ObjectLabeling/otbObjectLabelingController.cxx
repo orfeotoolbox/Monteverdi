@@ -77,8 +77,8 @@ void ObjectLabelingController::OpenImage(VectorImageType* vimage, LabeledImageTy
     }
   catch (itk::ExceptionObject & err)
     {
-    ossimString ossStr(err.GetDescription());
-    if (ossStr.contains("End point not with +/-1 line from line") == true)
+    std::string desc = err.GetDescription();
+    if (desc.find("End point not with +/-1 line from line") != std::string::npos)
       {
       itk::OStringStream oss;
       oss << "Invalid label image, too many labels";

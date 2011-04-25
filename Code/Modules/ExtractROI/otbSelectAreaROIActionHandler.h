@@ -140,10 +140,10 @@ public:
                 {
                 m_StopIndex = lIndex;
 
-                minX = min(m_StartIndex[0], m_StopIndex[0]);
-                minY = min(m_StartIndex[1], m_StopIndex[1]);
-                maxX = max(m_StartIndex[0], m_StopIndex[0]);
-                maxY = max(m_StartIndex[1], m_StopIndex[1]);
+                minX = std::min(m_StartIndex[0], m_StopIndex[0]);
+                minY = std::min(m_StartIndex[1], m_StopIndex[1]);
+                maxX = std::max(m_StartIndex[0], m_StopIndex[0]);
+                maxY = std::max(m_StartIndex[1], m_StopIndex[1]);
 
                 lIndex2[0] = minX;
                 lIndex2[1] = minY;
@@ -179,10 +179,10 @@ public:
               // only redraw the red box in the widget
               m_StopIndex = lIndex;
 
-              minX = min(m_StartIndex[0], m_StopIndex[0]);
-              minY = min(m_StartIndex[1], m_StopIndex[1]);
-              maxX = max(m_StartIndex[0], m_StopIndex[0]);
-              maxY = max(m_StartIndex[1], m_StopIndex[1]);
+              minX = std::min(m_StartIndex[0], m_StopIndex[0]);
+              minY = std::min(m_StartIndex[1], m_StopIndex[1]);
+              maxX = std::max(m_StartIndex[0], m_StopIndex[0]);
+              maxY = std::max(m_StartIndex[1], m_StopIndex[1]);
 
               lIndex2[0] = minX;
               lIndex2[1] = minY;

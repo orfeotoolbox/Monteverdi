@@ -23,6 +23,9 @@
 
 #include "otbCachingModule.h"
 
+// TODO rely on itksys instead!
+#include "base/ossimFilename.h"
+
 namespace otb
 {
 /** Constructor */
@@ -53,6 +56,7 @@ CachingModule::CachingModule()
 /** Destructor */
 CachingModule::~CachingModule()
 {
+  // TODO rely on itksys instead!
   // Here we try to delete any created file if possible
   ossimFilename ofname(m_FilePath);
 

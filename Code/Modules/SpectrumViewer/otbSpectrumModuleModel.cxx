@@ -343,11 +343,11 @@ SpectrumModuleModel
     }
 
   /** text format (cvs) export */
-  ofstream csvFile(address.str().c_str(), ios::out | ios::trunc);
+  std::ofstream csvFile(address.str().c_str(), std::ios::out | std::ios::trunc);
 
   if (csvFile)
     {
-    csvFile << content.str() << endl;
+    csvFile << content.str() << std::endl;
     csvFile.close();
     }
   else
