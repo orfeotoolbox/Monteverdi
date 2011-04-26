@@ -26,10 +26,6 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "itkExceptionObject.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 #include "otbMsgReporter.h"
 #include "otbImageKeywordlist.h"
 

@@ -18,7 +18,6 @@
 
 =========================================================================*/
 #include "otbPixelSpectrumView.h"
-#include "ossim/base/ossimString.h"
 
 namespace otb
 {

@@ -238,7 +238,7 @@ void GCPToSensorModelModel
 {
   // Declare a stringstream to be used later
   itk::OStringStream oss;
-  oss << fixed << setprecision(6);
+  oss << std::fixed << std::setprecision(6);
 
   // Build an xml document
   TiXmlDocument     doc;
