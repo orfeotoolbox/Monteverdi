@@ -594,7 +594,7 @@ VectorizationModel
   stdFilter->SetRadius(gaborRad);
   stdFilter->SetNumberOfDirection(nbDir);
   stdFilter->SetInitialDirection(firstDir);
-  stdFilter->SetPhi(phi/180.0*M_PI);
+  stdFilter->SetPhi(phi/180.0*CONST_PI);
 
   msImageFilter->SetInput(stdFilter->GetOutput());
   msImageFilter->SetSpatialRadius(spatialRadius);
