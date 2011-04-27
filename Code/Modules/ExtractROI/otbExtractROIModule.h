@@ -115,6 +115,8 @@ public:
   virtual void Show()
   {
     wExtractROIWindow->show();
+    m_View->GetScrollWidget()->show();
+    m_Model->Update();
   }
 
 protected:
