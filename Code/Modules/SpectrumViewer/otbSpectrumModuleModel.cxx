@@ -43,7 +43,7 @@ SpectrumModuleModel
   m_SpectralAnglefilter = SpectralFilterType::New();
   m_SpectralAnglefilterQL = SpectralFilterType::New();
 
-  m_OriginalDynamic = (int) (255 / M_PI);
+  m_OriginalDynamic = (int) (255 / CONST_PI);
   m_LastBWContrast = m_OriginalDynamic;
   m_rescaleFilterImage = rescaleFiltertype::New();
   m_rescaleFilterQL = rescaleFiltertype::New();
@@ -64,7 +64,7 @@ SpectrumModuleModel
   // color map
   m_Colormap = ColorMapFunctorType::New();
   m_Colormap->SetMinimumInputValue(0);
-  m_Colormap->SetMaximumInputValue(255 / M_PI);
+  m_Colormap->SetMaximumInputValue(255 / CONST_PI);
 
   // filter to cast rgb image to vector image
   m_RgbToVectorFilter = RGBtoVectorImageCastFilterType::New();
