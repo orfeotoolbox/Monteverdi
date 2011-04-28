@@ -26,10 +26,6 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "itkExceptionObject.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 #include "otbMsgReporter.h"
 #include "otbImageKeywordlist.h"
 
@@ -148,7 +144,7 @@ DEMToImageGeneratorView
 
   std::string srtmDirectory = std::string(iDEMPath->value());
   m_Controller->SetDEMDirectoryPath(srtmDirectory.c_str());
-  m_Controller->GetModel()->GetDEMToImageGenerator()->GetTransform()->InstanciateTransform();
+  m_Controller->GetModel()->GetDEMToImageGenerator()->InstanciateTransform();
 
   m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY);
 

@@ -30,7 +30,7 @@ int otbProjectionModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname = argv[1];
-  bool         run = atoi(argv[2]);
+  int          run = atoi(argv[2]);
 
   typedef otb::ProjectionModule::InputImageType ImageType;
   typedef otb::ImageFileReader<ImageType>       ReaderType;
@@ -42,8 +42,7 @@ int otbProjectionModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  ossimFilename          vcutIn(infname);
-  wrapperIn.SetDescription(vcutIn.file());
+  wrapperIn.SetDescription(itksys::SystemTools::GetFilenameName(infname));
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
 
   module->AddInputByKey("InputImage", wrapperIn);
@@ -54,8 +53,6 @@ int otbProjectionModuleTest(int argc, char* argv[])
   /*module*/ specificModule->GetView()->guiSizeY->value("100");
 
   //Simulate click button
-  specificModule->GetView()->guiOK->do_callback();
-
   if (run)
     {
     Fl::run();
@@ -64,6 +61,7 @@ int otbProjectionModuleTest(int argc, char* argv[])
     {
     Fl::check();
     }
+  specificModule->GetView()->guiOK->do_callback();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");
 

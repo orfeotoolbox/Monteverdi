@@ -410,7 +410,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
 
   // Compute max depth
   int maxDepth =
-    static_cast<int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+    static_cast<int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                          vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = curIdx;
@@ -837,7 +837,7 @@ TileExportModule::GenerateKMLRoot(std::string title,
   kmlname << m_FileName;
   kmlname << m_KmlExtension;
   m_RootKmlFile.open(kmlname.str().c_str());
-  m_RootKmlFile << fixed << setprecision(6);
+  m_RootKmlFile << std::fixed << std::setprecision(6);
 
   m_RootKmlFile << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   m_RootKmlFile << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1052,7 +1052,7 @@ GenerateBoundingKML(double north, double south, double east, double west)
   kmlname << "bound_" << m_CurrentProduct << m_KmlExtension;
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1117,7 +1117,7 @@ GenerateKML(std::string pathname, int depth, int x, int y, double north, double 
   kmlname << y << ".kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1167,7 +1167,7 @@ GenerateKMLWithLink(std::string pathname,
   kmlname << y << ".kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1343,7 +1343,7 @@ GenerateKMLExtended(std::string pathname, int depth, int x, int y,
   kmlname << y << "xt.kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1398,7 +1398,7 @@ GenerateKMLExtendedWithLink(std::string pathname,
   kmlname << y << "xt.kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;

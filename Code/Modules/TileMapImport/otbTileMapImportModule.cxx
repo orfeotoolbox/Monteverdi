@@ -20,6 +20,9 @@
 #include "otbTileMapImageIOHelper.h"
 #include "otbTileMapTransform.h"
 
+//FIXME replace by itksys
+#include "base/ossimFilename.h"
+
 namespace otb
 {
 /** Constructor */

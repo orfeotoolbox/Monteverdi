@@ -60,7 +60,7 @@ void DEMToImageGeneratorModel
 ::UpdateOutputParametersFromImage(InputImageType::Pointer inputImage)
 {
   m_DEMToImageGenerator->SetOutputParametersFromImage(inputImage.GetPointer());
-  m_DEMToImageGenerator->GetTransform()->InstanciateTransform();
+  m_DEMToImageGenerator->InstanciateTransform();
   this->SetUseInputImage(true);
 
   InputImageType::IndexType index;
@@ -120,6 +120,7 @@ DEMToImageGeneratorModel
   m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
   m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
   m_DEMToImageGenerator->SetOutputSpacing(m_OutputSpacing);
+  m_DEMToImageGenerator->InstanciateTransform();
   m_Output        = m_DEMToImageGenerator->GetOutput();
 
   this->NotifyAll();

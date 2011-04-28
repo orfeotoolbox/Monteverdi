@@ -76,8 +76,8 @@ ImageToStdGaborConvolutionFilter<TInputImage, TOutputImage>
     typename GaborFilterGeneratorType::Pointer gaborFilter  = GaborFilterGeneratorType::New();
     // Generate the filter profile
     gaborFilter->SetTheta(-currentDirection);
-    gaborFilter->SetU0(0.25*cos(-currentDirection/180.0*M_PI));
-    gaborFilter->SetV0(0.25*sin(-currentDirection/180.0*M_PI));
+    gaborFilter->SetU0(0.25*cos(-currentDirection/180.0*CONST_PI));
+    gaborFilter->SetV0(0.25*sin(-currentDirection/180.0*CONST_PI));
     gaborFilter->SetA(m_A);
     gaborFilter->SetB(m_B);
     gaborFilter->SetRadius(m_Radius);

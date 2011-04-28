@@ -118,22 +118,7 @@ GCPToSensorModelModel
   m_ImageGenerator->GenerateQuicklookOn();
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_ImageGenerator->GenerateLayer();
-
-  std::vector<unsigned int> channels;
-  if (image->GetNumberOfComponentsPerPixel() == 3)
-    {
-    channels.push_back(0);
-    channels.push_back(1);
-    channels.push_back(2);
-    }
-  else if (image->GetNumberOfComponentsPerPixel() > 3)
-    {
-    channels.push_back(2);
-    channels.push_back(1);
-    channels.push_back(0);
-    }
-  if (channels.size() == 3) m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-
+ 
   m_ImageGenerator->GetLayer()->SetName("InputImage");
 
   // Clear previous layers
@@ -238,7 +223,7 @@ void GCPToSensorModelModel
 {
   // Declare a stringstream to be used later
   itk::OStringStream oss;
-  oss << fixed << setprecision(6);
+  oss << std::fixed << std::setprecision(6);
 
   // Build an xml document
   TiXmlDocument     doc;

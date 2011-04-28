@@ -32,6 +32,9 @@
 // Overlay result display
 #include "itkCastImageFilter.h"
 
+// TODO rely on itksys instead!
+#include "base/ossimFilename.h"
+
 namespace otb
 {
 /// Constructor
