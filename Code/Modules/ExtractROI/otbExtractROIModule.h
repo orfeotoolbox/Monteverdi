@@ -71,6 +71,11 @@ public:
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
 
+
+  typedef FloatingVectorImageType::RegionType  VectorImageRegionType;
+  typedef FloatingImageType::RegionType        ImageRegionType;
+
+
   /// Multi channels Extract ROI filter
   typedef MultiChannelExtractROI<InternalPixelType, InternalPixelType> VectorImageExtractROIFilterType;
   /// Mono channel Extract ROI filter
