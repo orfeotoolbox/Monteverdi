@@ -82,6 +82,7 @@
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
+#include "otbBayesianFusionModule.h"
 #include "otbSARPolarimetrySinclairModule.h"
 #include "otbSARPolarimetryMuellerModule.h"
 #include "otbSARPolarimetryReciprocalModule.h"
@@ -183,7 +184,8 @@ int main(int argc, char* argv[])
   /***********  Filtering menu *******************/
   model->RegisterModule<otb::BandMathModule>("BandMath", otbGetTextMacro("Filtering/BandMath"));
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
-  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening"));
+  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening/Simple RCS pan-sharpening"));
+  model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion",otbGetTextMacro("Filtering/Pansharpening/Bayesian fusion"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
