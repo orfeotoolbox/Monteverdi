@@ -117,9 +117,11 @@ OpticalCalibrationModule
   // Test the sensor : only QB, IKONOS and Spot are supported
   if (sensorID.find("QB02") == std::string::npos &&
       sensorID.find("Spot") == std::string::npos &&
+      sensorID.find("WV02") == std::string::npos &&
+      sensorID.find("Formosat") == std::string::npos &&
       sensorID.find("IKONOS-2") == std::string::npos)
     {
-    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5 and QuickBird are supported.");
+    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5,QuickBird, WorldView2 and Formosat2 are supported.");
     return false;
     }
 
@@ -405,6 +407,7 @@ OpticalCalibrationModule
     bProgress->show();
     Fl::check();
     m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+
     bProgress->hide();
     Fl::check();
     m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
