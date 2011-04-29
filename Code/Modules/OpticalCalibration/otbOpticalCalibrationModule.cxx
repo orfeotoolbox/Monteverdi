@@ -535,8 +535,9 @@ OpticalCalibrationModule
   if (cfname == NULL)
     {
     otbMsgDebugMacro(<< "Empty file name!");
-	return;
-	}
+    return;
+    }
+
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teAeronetFile->value(cfname);
@@ -552,8 +553,9 @@ OpticalCalibrationModule
   if (cfname == NULL)
     {
     otbMsgDebugMacro(<< "Empty file name!");
-	return;
-	}
+    return;
+    }
+
   ossimFilename fname(cfname);
   m_LastPath = fname.path();
   teFFVFile->value(cfname);
