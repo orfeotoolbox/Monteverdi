@@ -26,10 +26,6 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "itkExceptionObject.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 #include "otbMsgReporter.h"
 #include "otbImageKeywordlist.h"
 
@@ -148,7 +144,7 @@ DEMToImageGeneratorView
 
   std::string srtmDirectory = std::string(iDEMPath->value());
   m_Controller->SetDEMDirectoryPath(srtmDirectory.c_str());
-  m_Controller->GetModel()->GetDEMToImageGenerator()->GetTransform()->InstanciateTransform();
+  m_Controller->GetModel()->GetDEMToImageGenerator()->InstanciateTransform();
 
   m_Controller->ProjectRegion(sizeX, sizeY, spacingX, spacingY, originX, originY);
 
@@ -256,7 +252,6 @@ DEMToImageGeneratorView::UpdateProjectionRef()
   std::string projectionRef;
 //  m_Controller->GetModel()->GetDEMToImageGenerator()->UpdateOutputInformation();
   projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputProjectionRef();
-  std::cout << "DEMToImageGeneratorView::UpdateProjectionRef()" << projectionRef << std::endl;
 
   if(projectionRef.empty())
     {
@@ -265,8 +260,7 @@ DEMToImageGeneratorView::UpdateProjectionRef()
 
     if(kwl.GetSize())
       {
-        std::cout << "ICI" << std::endl;
-        projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
+      projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
       }
     else
       {

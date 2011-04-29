@@ -103,6 +103,11 @@ void SuperimpositionModule::Ok()
   m_Resampler->SetInput(vmoving);
   m_Resampler->SetOutputParametersFromImage(vfixed);
   
+  VectorImageType::PixelType defaultValue;
+  itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
+                                                      vmoving->GetNumberOfComponentsPerPixel());
+  m_Resampler->SetEdgePaddingValue(defaultValue);
+
   if (choiceDEM->value() == 1)
     {
     m_Resampler->SetDEMDirectory(vDEMPath->value());

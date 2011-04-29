@@ -31,7 +31,6 @@
 #include "otbTileMapImageIO.h"
 #include "otbTileMapImageIOHelper.h"
 #include "otbImageFileReader.h"
-#include "ossim/projection/ossimTileMapModel.h"
 #include "otbInverseSensorModel.h"
 #include "otbForwardSensorModel.h"
 

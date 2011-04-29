@@ -57,6 +57,9 @@ void ProjectionModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ProjectionModule::Run()
 {
+  // While thev module is shown, it is busy
+  this->BusyOn();
+
   InputImageType::Pointer inputImage = this->GetInputData<InputImageType>("InputImage");
   
   // Try to get a single image
@@ -93,6 +96,7 @@ void ProjectionModule::Notify()
     // Send an event to Monteverdi application
     //this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
     this->NotifyOutputsChange();
+    this->BusyOff();
     }
 }
 

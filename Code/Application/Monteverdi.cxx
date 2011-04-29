@@ -43,6 +43,8 @@
 #endif
 #endif
 
+#include "otbMsgReporter.h"
+
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
@@ -80,6 +82,14 @@
 #include "otbDEMToImageGeneratorModule.h"
 #include "otbColorMappingModule.h"
 #include "otbImageStatisticsModule.h"
+#include "otbSARPolarimetrySinclairModule.h"
+#include "otbSARPolarimetryMuellerModule.h"
+#include "otbSARPolarimetryReciprocalModule.h"
+#include "otbSARPolarimetryAnalysisModule.h"
+
+#ifdef OTB_USE_MAPNIK
+#include "otbRasterizationModule.h"
+#endif
 
 #ifdef OTB_USE_CURL
 #include "otbTileMapImportModule.h"
@@ -149,6 +159,11 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
+
+#ifdef OTB_USE_MAPNIK
+  model->RegisterModule<otb::RasterizationModule>("Rasterize", otbGetTextMacro("File/Rasterize vector data"));
+#endif
+
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
 #ifdef OTB_USE_CURL
   model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
@@ -181,8 +196,16 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
-                                                 otbGetTextMacro("SAR/Polarimetric Synthesis"));
-  
+                                                 otbGetTextMacro("SAR/Polarimetric synthesis"));
+  model->RegisterModule<otb::SARPolarimetrySinclairModule>("PolarimetrySinclair",
+                                                 otbGetTextMacro("SAR/Polarimetric conversion/Sinclair to"));
+   model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
+                                                 otbGetTextMacro("SAR/Polarimetric conversion/Mueller to"));
+  model->RegisterModule<otb::SARPolarimetryReciprocalModule>("PolarimetryReciprocal",
+                                                 otbGetTextMacro("SAR/Polarimetric conversion/Reciprocal... to"));
+  model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
+                                                 otbGetTextMacro("SAR/Analysis"));
+
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              otbGetTextMacro("Learning/SVM classification"));
@@ -289,18 +312,28 @@ int main(int argc, char* argv[])
         Fl::check();
         std::vector<std::string> moduleVector;
 
-        // Get the ModuleInstanceId
-        std::string readerId = model->CreateModuleByKey("Reader");
-
-        // Get the module itself
-        otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
-
-        // Simulate file chooser and ok callback
-        otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-        readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
-        readerModule->Analyse();
-        readerModule->bOk->do_callback();
-        Fl::check();
+        ossimFilename lFile(parseResult->GetParameterString("--ImageList", i));
+        if( lFile.exists() )
+          {
+            // Get the ModuleInstanceId
+            std::string readerId = model->CreateModuleByKey("Reader");
+            
+            // Get the module itself
+            otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+            
+            // Simulate file chooser and ok callback
+            otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+            readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+            readerModule->Analyse();
+            readerModule->bOk->do_callback();
+            Fl::check();
+          }
+        else
+          {
+            itk::OStringStream oss;
+            oss << "The file "<<lFile<<" does not exist.";
+            otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
+          }
         }
     }
 

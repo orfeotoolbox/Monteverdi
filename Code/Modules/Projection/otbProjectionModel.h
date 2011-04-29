@@ -112,7 +112,7 @@ public:
                              double originY);
 
   /** Update the UTM Projection*/
-  virtual void UpdateUTMTransform(int zone, bool north);
+  virtual void UpdateUTMTransform(int zone, bool hemisphere);
 
   /** Initialize the Lambert II Projection*/
   virtual void InitializeLambertIITransform();

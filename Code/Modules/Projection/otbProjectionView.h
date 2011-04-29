@@ -61,7 +61,11 @@
 namespace otb
 {
 /** \class ProjectionView
- *  \brief
+ *  \brief This class is the view part of the projection module. It
+ *  handles the user interaction with the GUI, and launch the
+ *  processings in the model part.
+ * 
+ * TODO : remove switch/cases on View
  *
  * \ingroup
  * \ingroup
@@ -192,7 +196,20 @@ protected:
 
   // Method to update the model output attributes
   void UpdateOutputRegion();
-  
+
+  /** Method updating the Output Origin Geographical Coordinates */
+  virtual void UpdateOriginGeographicalCoordinates();
+
+  /** Activate all the map parameters when the mode used is User
+    * selection 
+    */
+  virtual void ActivateMapParamaters();
+
+  /** Dectivate all the map parameters when the mode used is not User
+    * selection 
+    */
+  virtual void DeactivateMapParamaters();
+
   /** Constructor */
   ProjectionView();
   /** Destructor */

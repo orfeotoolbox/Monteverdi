@@ -489,7 +489,8 @@ void ObjectLabelingView::ClassName()
 }
 void ObjectLabelingView::Objects()
 {
-  m_Controller->SelectObject(lObjects->value()-1);
+  if(lObjects->value())
+    m_Controller->SelectObject(lObjects->value()-1);
 }
 
 void ObjectLabelingView::RemoveObject()

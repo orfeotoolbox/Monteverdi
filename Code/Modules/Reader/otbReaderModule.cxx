@@ -275,7 +275,7 @@ void ReaderModule::OpenOpticalImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId, ossDatasetId;
+  std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -306,10 +306,9 @@ void ReaderModule::OpenOpticalImage()
 
 void ReaderModule::OpenMultiSarImage()
 {
-  std::cout << "OpenMultisarImage" <<std::endl;
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId, ossDatasetId;
+  std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -327,7 +326,7 @@ void ReaderModule::OpenSarImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId, ossDatasetId;
+  std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 
@@ -360,7 +359,7 @@ void ReaderModule::OpenVector()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
-  ostringstream oss, ossId;
+  std::ostringstream oss, ossId;
   std::string   filepath = vFilePath->value();
   ossimFilename lFile = ossimFilename(filepath);
 

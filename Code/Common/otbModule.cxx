@@ -287,6 +287,10 @@ bool Module::IsBusy() const
 /** Does this module have a lock on pipeline ? */
 bool Module::IsLockingPipeline() const
 {
+  /*bool isLocked = m_NeedsPipelineLocking && m_Busy;
+  otbMsgDevMacro(<< "IsLockingPipeline (m_NeedsPipelineLocking && m_Busy) = ("
+                 << m_NeedsPipelineLocking << " AND " << m_Busy << ") -> "
+                 << isLocked);*/
   return m_NeedsPipelineLocking && m_Busy;
 }
 

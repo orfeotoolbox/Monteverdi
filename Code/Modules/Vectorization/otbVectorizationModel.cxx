@@ -154,8 +154,8 @@ void VectorizationModel
   RemoteSensingRegionType            rsRegion;
   RemoteSensingRegionType::IndexType rsOrigin;
   RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = min(pul[0], plr[0]);
-  rsOrigin[1] = min(pul[1], plr[1]);
+  rsOrigin[0] = std::min(pul[0], plr[0]);
+  rsOrigin[1] = std::min(pul[1], plr[1]);
   rsSize[0] = vcl_abs(pul[0] - plr[0]);
   rsSize[1] = vcl_abs(pul[1] - plr[1]);
 
@@ -483,12 +483,12 @@ void VectorizationModel
 void VectorizationModel
 ::RightIndexClicked(const IndexType & index, RegionType ExtRegion)
 {
-  DataNodeType::Pointer PolygonNode = DataNodeType::New();
-  PolygonNode->SetNodeType(otb::FEATURE_POLYGON);
-  PolygonNode->SetNodeId("FEATURE_POLYGON");
-  PolygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
+  DataNodeType::Pointer polygonNode = DataNodeType::New();
+  polygonNode->SetNodeType(otb::FEATURE_POLYGON);
+  polygonNode->SetNodeId("FEATURE_POLYGON");
+  polygonNode->SetPolygonExteriorRing( m_SelectedPolygon);
   m_VectorDataModel->GetVectorData()->GetDataTree()->Add(
-    PolygonNode,
+    polygonNode,
     m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
   
   this->NotifyAll();
@@ -594,7 +594,7 @@ VectorizationModel
   stdFilter->SetRadius(gaborRad);
   stdFilter->SetNumberOfDirection(nbDir);
   stdFilter->SetInitialDirection(firstDir);
-  stdFilter->SetPhi(phi/180.0*M_PI);
+  stdFilter->SetPhi(phi/180.0*CONST_PI);
 
   msImageFilter->SetInput(stdFilter->GetOutput());
   msImageFilter->SetSpatialRadius(spatialRadius);

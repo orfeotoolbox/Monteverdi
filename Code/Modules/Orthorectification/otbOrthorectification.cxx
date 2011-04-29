@@ -314,6 +314,12 @@ Orthorectification::PointToLongLat(ForwardSensorInputPointType point)
   ImagePointerType           image = m_InputImage;
   ForwardSensorType::Pointer sensor = ForwardSensorType::New();
   sensor->SetImageGeometry(image->GetImageKeywordlist());
+  if ( sensor->IsValidSensorModel() == false )
+    {
+    itkExceptionMacro(<< "Unable to create projection.");
+    }
+
+  
 
   latLongPoint = sensor->TransformPoint(point);
   outVectPoint[0] = static_cast<double>(latLongPoint[0]);
@@ -533,16 +539,15 @@ Orthorectification::UpdateDEMSpacing()
 int
 Orthorectification::CheckImageParameters()
 {
-  try
+  ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+  sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
+  
+  if ( sensor->IsValidSensorModel() == false )
     {
-    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-    sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
+      return 1;
     }
-  catch (itk::ExceptionObject&)
-    {
-    return 1;
-    }
-  if (strcmp("", guiSizeX->value()) == 0 || strcmp("", guiSizeY->value()) == 0)
+ 
+if (strcmp("", guiSizeX->value()) == 0 || strcmp("", guiSizeY->value()) == 0)
     {
     MsgReporter::GetInstance()->SendError("Please, set Size values...");
     return 1;
@@ -821,22 +826,14 @@ void
 Orthorectification::SelectAction()
 {
   bool outputDone = false;
-  bool containsKeywordlist = true;
 
   ImagePointerType image = m_InputImage;
   // test if the image has KeywordList
-  try
-    {
-    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-    sensor->SetImageGeometry(image->GetImageKeywordlist());
-    }
-  catch (itk::ExceptionObject&)
-    {
-    containsKeywordlist = false;
-    }
-
+  ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+  sensor->SetImageGeometry(m_InputImage->GetImageKeywordlist());
+  
   // If orthorectifed
-  if (outputDone == false && containsKeywordlist == true)
+  if ( outputDone == false && sensor->IsValidSensorModel() == true )
     {
     // Update Easting and northing values
     ForwardSensorInputPointType point;
@@ -963,16 +960,13 @@ Orthorectification
   guiImageExtent->ClearLongLatList();
   ImagePointerType image =  m_InputImage;
   // test if the image has Keywordlist
-  try
-    {
-    ForwardSensorType::Pointer sensor = ForwardSensorType::New();
-    sensor->SetImageGeometry(image->GetImageKeywordlist());
-    }
-  catch (itk::ExceptionObject&)
-    {
+  ForwardSensorType::Pointer sensor = ForwardSensorType::New();
+  sensor->SetImageGeometry(image->GetImageKeywordlist());
+  if( sensor->IsValidSensorModel() == false )
+  {
     MsgReporter::GetInstance()->SendError("Invalid image: No ImageKeywordlist found");
     return;
-    }
+  }
   ForwardSensorInputPointType point;
 
   // upper left
@@ -1131,7 +1125,11 @@ Orthorectification::CartoToImagePoint(InverseSensorInputPointType cartoPoint)
 
   InverseSensorType::Pointer sensor = InverseSensorType::New();
   sensor->SetImageGeometry(image->GetImageKeywordlist());
-
+  if ( sensor->IsValidSensorModel() == false )
+    {
+      itkExceptionMacro(<< "Unable to create projection.");
+    }
+  
   // geo to carto point
   switch (this->GetMapType())
     {

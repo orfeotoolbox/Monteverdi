@@ -23,7 +23,6 @@
 #include "itkMetaDataDictionary.h"
 #include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
-#include "base/ossimKeywordlist.h"
 #include "FL/fl_message.H"
 
 namespace otb

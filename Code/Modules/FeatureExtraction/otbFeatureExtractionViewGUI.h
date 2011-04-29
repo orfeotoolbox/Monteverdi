@@ -36,7 +36,6 @@
 #include "otbFeatureExtractionControllerInterface.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "otbImageViewerBase.h"
 #include "otbObjectList.h"
 #include "otbImageView.h"
 

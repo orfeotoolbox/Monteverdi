@@ -64,9 +64,12 @@ ProjectionModel
 {
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-  
+
+  std::string hem = "N";
+  if(!north) hem = "S";
+    
+  utmProjection->SetHemisphere(hem[0]);
   utmProjection->SetZone(zone);
-  utmProjection->SetHemisphere(north);
   std::string utmRef = utmProjection->GetWkt();
   
   // Report projection ref (not done by the resample filter)
@@ -141,13 +144,16 @@ void ProjectionModel
  */
 void
 ProjectionModel
-::UpdateUTMTransform(int zone, bool north)
+::UpdateUTMTransform(int zone, bool hemisphere)
 {
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-  
+
+  std::string hem = "N";
+  if(!hemisphere) hem = "S";
+    
+  utmProjection->SetHemisphere(hem[0]);
   utmProjection->SetZone(zone);
-  utmProjection->SetHemisphere(north);
   m_OutputProjectionRef = utmProjection->GetWkt();
   
   // Build the Generic RS transform

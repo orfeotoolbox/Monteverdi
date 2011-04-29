@@ -299,7 +299,7 @@ WriterViewGUI
 ::OK()
 {
   std::string filepath = vFilePath->value();
-  ifstream isFileNameExist( filepath.c_str() );
+  std::ifstream isFileNameExist( filepath.c_str() );
   bool isProcessing = true;
 
   if(isFileNameExist && m_CheckFileExistance==true)

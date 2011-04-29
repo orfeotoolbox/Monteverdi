@@ -403,8 +403,15 @@ void ExtractROIModule::Ok()
       m_ImageExtractROIFilter->SetSizeX(offSize[0]);
       m_ImageExtractROIFilter->SetSizeY(offSize[1]);
       m_ImageExtractROIFilter->SetInput(image);
+
       this->ClearOutputDescriptors();
       this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(), "OutputImage", otbGetTextMacro("Image extracted"));
+
+      ImageRegionType newRequestedRegion;
+      newRequestedRegion.SetSize(0,0);
+      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()),static_cast<unsigned long>(vStartY->value()));
+      m_ImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion);
+
       this->NotifyOutputsChange();
       }
     else if (image.IsNull() && !vectorImage.IsNull())
@@ -423,10 +430,18 @@ void ExtractROIModule::Ok()
       m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
       m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
       m_VectorImageExtractROIFilter->SetInput(vectorImage);
+
       this->ClearOutputDescriptors();
       this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
                                 otbGetTextMacro("Image extracted"));
+
+      VectorImageRegionType newRequestedRegion;
+      newRequestedRegion.SetSize(0,0);
+      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()),static_cast<unsigned long>(vStartY->value()));
+      m_VectorImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion);
+
       this->NotifyOutputsChange();
+
       }
 
     wExtractROIWindow->hide();

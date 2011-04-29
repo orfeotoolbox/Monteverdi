@@ -173,6 +173,7 @@ ${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
+
 #------------- BandMath Module Test ---------------------------
 
 ADD_TEST(moTvBandMathModuleTest ${Modules_TESTS2} otbBandMathModuleTest
@@ -440,6 +441,17 @@ ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4}
 	${INPUTDATA}/maur.tif
 )
 
+#------------- Rasterization Module Tests ---------------------------
+IF(OTB_USE_MAPNIK)
+	ADD_TEST(moTvRasterizationImageModuleTest ${Modules_TESTS4} otbRasterizationModuleTest
+	${INPUTDATA}/polygon.tif
+	${INPUTDATA}/Rasterization/polgons.shp
+	${TEMP}/moTvRasterizationImageModule.tif 
+	)
+ENDIF(OTB_USE_MAPNIK)
+
+
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -486,6 +498,8 @@ SET(Modules_SRCS4
 )
 ENDIF(OTB_USE_CURL)
 
+
+
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationModuleTest.cxx
   otbObjectLabelingOpenImage.cxx
@@ -497,8 +511,14 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbColorMappingModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
   otbImageStatisticsModuleTest.cxx
+ 
 )
 
+IF(OTB_USE_MAPNIK)
+SET(Modules_SRCS4 ${Modules_SRCS4}
+  otbRasterizationModuleTest.cxx
+)
+ENDIF(OTB_USE_MAPNIK)
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)

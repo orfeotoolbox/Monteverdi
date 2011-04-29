@@ -317,12 +317,12 @@ rbScreenZoom->value(1);
 }}
         xywh {20 95 220 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Return_Button {} {
+      Fl_Button {} {
         label Ok
         callback {ScreenShot();}
         tooltip {Save changes and leave viewer set up interface} xywh {90 142 75 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Button gQuitScreen {
+      Fl_Return_Button gQuitScreen {
         label Quit
         callback {wScreenShot->hide();}
         xywh {175 142 64 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff1b color 7 labelfont 1 labelsize 12 labelcolor 186

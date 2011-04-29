@@ -39,4 +39,8 @@ void RegisterTests()
   REGISTER_TEST(otbColorMappingModuleTest);
   REGISTER_TEST(otbDEMToImageGeneratorModuleTest);
   REGISTER_TEST(otbImageStatisticsModuleTest);
+
+#ifdef OTB_USE_MAPNIK
+  REGISTER_TEST(otbRasterizationModuleTest);
+#endif
 }

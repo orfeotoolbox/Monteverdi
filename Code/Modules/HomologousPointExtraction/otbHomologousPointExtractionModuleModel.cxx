@@ -102,7 +102,7 @@ HomologousPointExtractionModuleModel
   // Generate the layer
   m_ImageGenerator[id]->SetImage(image);
   m_ImageGenerator[id]->GenerateQuicklookOn();
-  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_ImageGenerator[id]->GenerateLayer();
 
   std::vector<unsigned int> channels;
@@ -134,25 +134,33 @@ HomologousPointExtractionModuleModel
   //m_IsImageReady = true;
 }
 
+bool
+HomologousPointExtractionModuleModel
+::ExistsIndexes(IndexType id1, IndexType id2)
+{
+  bool found(false);
+  unsigned int j(0);
+  while (j < m_IndexesList.size() && found==false)
+    {
+      if (m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2)
+        {
+          found = true;
+        }
+      j++;
+    }
+
+  return found;
+}
+
+
 void
 HomologousPointExtractionModuleModel
 ::AddIndexesToList(IndexType id1, IndexType id2)
 {
-  bool         found = false;
-  unsigned int j = 0;
-  while (j < m_IndexesList.size() && !found)
+  if( this->ExistsIndexes( id1, id2 ) == false )
     {
-    if (m_IndexesList[j].first == id1 || m_IndexesList[j].second == id2)
-      {
-      found = true;
-      }
-    j++;
-    }
-
-  if(!found)
-    {
-    IndexCoupleType paire(id1, id2);
-    m_IndexesList.push_back(paire);
+      IndexCoupleType paire(id1, id2);
+      m_IndexesList.push_back(paire);
     }
 }
 
@@ -162,6 +170,7 @@ HomologousPointExtractionModuleModel
 {
   if (id >= m_IndexesList.size()) itkExceptionMacro(
       << "Impossible to erase the " << id << " element. Out of vector size (" << m_IndexesList.size() << ").");
+
 
   m_IndexesList.erase(m_IndexesList.begin() + id);
 }

@@ -118,7 +118,7 @@ namespace otb
     m_ImageGenerator->GenerateQuicklookOff();
     m_ImageGenerator->SetQuicklook(m_VectorImage);
     m_ImageGenerator->SetSubsamplingRate(1);
-    FltkFilterWatcher qlwatcher(m_ImageGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+    FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
     m_ImageGenerator->GenerateLayer();
 
     m_ImageLayerRenderingFunction = m_ImageGenerator->GetLayer()->GetRenderingFunction();

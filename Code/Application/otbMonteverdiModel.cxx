@@ -593,13 +593,28 @@ bool MonteverdiModel::SplitCachingModuleId(const std::string& instanceId,
 
 bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string& lockingInstanceId) const
 {
+  otbMsgDevMacro( << "\n*****MonteverdiModel::IsModuleLocked() BEGIN with instanceID = " << instanceId );
+
   // First, extract the connected components of the connections graph
   std::vector<int> component(num_vertices(m_ConnectionGraph->GetGraphContainer()));
-  connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]);
+
+  int outputvalue = connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]);
+  otbMsgDevMacro(<<"Nb of group of connected component =" << outputvalue );
+  otbMsgDevMacro(<<"ConnectionGraph (nb Vertex , nb Edge) ="
+                 << m_ConnectionGraph->GetNumberOfVertices() << ", "
+                 << m_ConnectionGraph->GetNumberOfEdges());
 
   // Then, find the component to which instanceId belongs
   otb::GraphVertexIterator<ConnectionGraphType> vertexIt(m_ConnectionGraph);
   vertexIt.GoToBegin();
+
+  /*for ( int it=0; it <component.size(); it++)
+    {
+    otbMsgDevMacro(<<"vertex[" << it << "] (" << vertexIt.Get()<<  ") belongs to component ="
+                   << component[it] );
+    ++vertexIt;
+    }
+  vertexIt.GoToBegin();*/
 
   while (!vertexIt.IsAtEnd() && vertexIt.Get() != instanceId)
     {
@@ -611,7 +626,9 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
     }
 
   // Store the component id
-  int componentId = vertexIt.GetVertexDescriptor();
+  int componentId = component[vertexIt.GetVertexDescriptor()];
+  otbMsgDevMacro(<<"  ComponentId of current vertex ("<<  vertexIt.Get()
+                 <<") = " << componentId );
 
   // Now, look in the connection graph if another module is locking
   // this connected component
@@ -621,9 +638,14 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
 
   while (!vertexIt.IsAtEnd() && !resp)
     {
+    otbMsgDevMacro(<<"Vertex (name, descriptor, component): " << vertexIt.Get() << ", "
+                   << vertexIt.GetVertexDescriptor() << ", "
+                   << component[vertexIt.GetVertexDescriptor()]);
     // If we are in the same component
     if (component[vertexIt.GetVertexDescriptor()] == componentId)
       {
+      otbMsgDevMacro(<< vertexIt.Get() << " is connected to " << instanceId);
+
       Module::Pointer currentModule = this->GetModuleByInstanceId(vertexIt.Get());
 
       if (currentModule->IsLockingPipeline())
@@ -632,8 +654,13 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
         lockingInstanceId = vertexIt.Get();
         }
       }
+    else
+      {
+      otbMsgDevMacro(<< vertexIt.Get() << " is not connected to " << instanceId );
+      }
     ++vertexIt;
     }
+  otbMsgDevMacro(<< "*****MonteverdiModel::IsModuleLocked() END (" << instanceId << " -> " << resp << ")");
   return resp;
 }
 
@@ -677,7 +704,7 @@ void MonteverdiModel::ExportGraphToXML(const std::string& fname) const
   //TODO improve the support of exportation of Monteverdi graph to XML file
   // Declare a stringstream to be used later
   itk::OStringStream oss;
-  oss << fixed << setprecision(6);
+  oss << std::fixed << std::setprecision(6);
 
   // Build an xml document
   TiXmlDocument     doc;

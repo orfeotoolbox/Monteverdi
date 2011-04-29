@@ -35,7 +35,6 @@
 #include "otbInverseSensorModel.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileWriter.h"
-#include "ossim/projection/ossimTileMapModel.h"
 
 #include "otbMsgReporter.h"
 

@@ -43,7 +43,7 @@ SpectrumModuleModel
   m_SpectralAnglefilter = SpectralFilterType::New();
   m_SpectralAnglefilterQL = SpectralFilterType::New();
 
-  m_OriginalDynamic = (int) (255 / M_PI);
+  m_OriginalDynamic = (int) (255 / CONST_PI);
   m_LastBWContrast = m_OriginalDynamic;
   m_rescaleFilterImage = rescaleFiltertype::New();
   m_rescaleFilterQL = rescaleFiltertype::New();
@@ -64,7 +64,7 @@ SpectrumModuleModel
   // color map
   m_Colormap = ColorMapFunctorType::New();
   m_Colormap->SetMinimumInputValue(0);
-  m_Colormap->SetMaximumInputValue(255 / M_PI);
+  m_Colormap->SetMaximumInputValue(255 / CONST_PI);
 
   // filter to cast rgb image to vector image
   m_RgbToVectorFilter = RGBtoVectorImageCastFilterType::New();
@@ -107,9 +107,8 @@ SpectrumModuleModel
 
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);
-  // TODO: the test fails when decommenting the following line (although the module is usable in Monteverdi)
-  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetResampler(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
 
+  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_LayerGenerator->GenerateLayer();
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();
@@ -133,7 +132,7 @@ SpectrumModuleModel
   ImageType::PixelType max = statFilter->GetMaximum();
 
   // Limit the bounds arbitrarily : performance issue with files containing arbitrary values (like uninitialized memory)
-  for (int i = 0; i < min.GetSize(); i++)
+  for (unsigned int i = 0; i < min.GetSize(); i++)
     {
     if (min [i] < 0)
       {
@@ -344,11 +343,11 @@ SpectrumModuleModel
     }
 
   /** text format (cvs) export */
-  ofstream csvFile(address.str().c_str(), ios::out | ios::trunc);
+  std::ofstream csvFile(address.str().c_str(), std::ios::out | std::ios::trunc);
 
   if (csvFile)
     {
-    csvFile << content.str() << endl;
+    csvFile << content.str() << std::endl;
     csvFile.close();
     }
   else

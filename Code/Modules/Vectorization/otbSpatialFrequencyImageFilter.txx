@@ -235,7 +235,7 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
           y[i] = m_WindowSize - y[i]; // shifted to : from -h/2 to h/2
         else
           y[i] = -y[i];
-        theta[i] = 90 - vcl_atan( y[i] / static_cast<float>(x[i]) ) * 180 / M_PI; // azimuth, from 0� (North) to 90� (East) and 180� (South)
+        theta[i] = 90 - vcl_atan( y[i] / static_cast<float>(x[i]) ) * 180 / CONST_PI; // azimuth, from 0 (North) to 90 (East) and 180 (South)
     
         float wx = x[i] / static_cast<float>(m_WindowSize);
         float wy = y[i] / static_cast<float>(m_WindowSize);
