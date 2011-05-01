@@ -131,7 +131,7 @@ DEMToImageGeneratorModel
  */
 void
 DEMToImageGeneratorModel
-::ProcessHillShading(double azimutAngle,double elevationAngle, unsigned int radius)
+::ProcessHillShading(double azimutAngle, double elevationAngle, unsigned int radius)
 {
   //Compute the resolution (Vincenty formula)
   double lon1 = m_OutputOrigin[0];
@@ -154,7 +154,6 @@ DEMToImageGeneratorModel
   m_HillShadingProcess = true;
   this->NotifyAll();
 }
-
 
 
 /**
@@ -189,7 +188,6 @@ DEMToImageGeneratorModel
   m_ReliefProcess = true;
   this->NotifyAll();
 }
-
 
 
 /**

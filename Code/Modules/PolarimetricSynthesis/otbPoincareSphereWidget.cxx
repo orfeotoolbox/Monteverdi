@@ -25,7 +25,7 @@ namespace otb
  * Constructor.
  */
 PoincareSphereWidget::PoincareSphereWidget()
-    : Fl_Gl_Window(0,0,0,0,0)
+    : Fl_Gl_Window(0, 0, 0, 0, 0)
 {
   m_Resolution = 30;
   m_GridSize = 15;
@@ -48,7 +48,7 @@ PoincareSphereWidget::~PoincareSphereWidget()
 void PoincareSphereWidget::Init(int x, int y, int w, int h, const char * l)
 {
   this->label(l);
-  this->resize(x,y,w,h);
+  this->resize(x, y, w, h);
 }
 
 int PoincareSphereWidget::handle(int event)
@@ -108,16 +108,15 @@ void PoincareSphereWidget::draw(void)
   {
     valid(1);
     glLoadIdentity();
-    unsigned int viewPortSize = std::min(w(),h());
-    glViewport(0,0,viewPortSize,viewPortSize);
+    unsigned int viewPortSize = std::min(w(), h());
+    glViewport(0, 0, viewPortSize, viewPortSize);
   }
 
   InitGL();
 
 
-
-  glRotatef(m_RotateAngle2,1,0,0);
-  glRotatef(m_RotateAngle1,0,0,1);
+  glRotatef(m_RotateAngle2, 1, 0, 0);
+  glRotatef(m_RotateAngle1, 0, 0, 1);
 
   DrawSphere();
 
@@ -133,7 +132,7 @@ void PoincareSphereWidget::draw(void)
 void PoincareSphereWidget::InitGL()
 {
   glClearDepth(1.0);
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   glShadeModel(GL_SMOOTH);
 
   glClearColor((float)1.0, (float)1.0, (float)1.0, (float)1.0);
@@ -147,7 +146,7 @@ void PoincareSphereWidget::InitGL()
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-1.3,1.3,-1.3,1.3,-1.3,1.3);
+  glOrtho(-1.3, 1.3, -1.3, 1.3, -1.3, 1.3);
 }
 
 void PoincareSphereWidget::ToggleLight()
@@ -156,19 +155,19 @@ void PoincareSphereWidget::ToggleLight()
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
 
-  const GLfloat paramLight[4] = {1.0,1.0,1.0,1.0};
-  const GLfloat paramAmbient[4] = {0.5,0.5,0.5,1.0};
+  const GLfloat paramLight[4] = {1.0, 1.0, 1.0, 1.0};
+  const GLfloat paramAmbient[4] = {0.5, 0.5, 0.5, 1.0};
 
-  glLightfv(GL_LIGHT0,GL_DIFFUSE,paramLight);
-  glLightfv(GL_LIGHT1,GL_AMBIENT,paramAmbient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, paramLight);
+  glLightfv(GL_LIGHT1, GL_AMBIENT, paramAmbient);
 }
 
 void PoincareSphereWidget::DrawSphere()
 {
   glPushMatrix();
-  glColor4d(0.75,0.75,0.75,0.5);
-  glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-  this->RenderSphere(1.,m_GridSize,m_Resolution);
+  glColor4d(0.75, 0.75, 0.75, 0.5);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  this->RenderSphere(1., m_GridSize, m_Resolution);
   glPopMatrix();
 }
 
@@ -178,30 +177,30 @@ void PoincareSphereWidget::DrawAxis()
   glPushMatrix();
   glLineWidth(2);
   glBegin(GL_LINES);
-  glColor3d(1,0,0);
-  glVertex2f(-1,0);
-  glVertex2f(1,0);
-  glColor3d(0,1,0);
-  glVertex2f(0,-1);
-  glVertex2f(0,1);
-  glColor3d(0,0,1);
-  glVertex3f(0,0,-1);
-  glVertex3f(0,0,1);
+  glColor3d(1, 0, 0);
+  glVertex2f(-1, 0);
+  glVertex2f(1, 0);
+  glColor3d(0, 1, 0);
+  glVertex2f(0, -1);
+  glVertex2f(0, 1);
+  glColor3d(0, 0, 1);
+  glVertex3f(0, 0, -1);
+  glVertex3f(0, 0, 1);
   glEnd();
   glLineWidth(1);
 
-  gl_font(fl_font(),12);
+  gl_font(fl_font(), 12);
 
-  glColor3d(1,0,0);
-  glRasterPos3f(-1.2,0,0);
-  gl_draw("VL",2);
-  glRasterPos3f(1.1,0,0);
-  gl_draw("HL",2);
-  glColor3d(0,0,1);
-  glRasterPos3f(0,0,-1.2);
-  gl_draw("LC",2);
-  glRasterPos3f(0,0,1.1);
-  gl_draw("RC",2);
+  glColor3d(1, 0, 0);
+  glRasterPos3f(-1.2, 0, 0);
+  gl_draw("VL", 2);
+  glRasterPos3f(1.1, 0, 0);
+  gl_draw("HL", 2);
+  glColor3d(0, 0, 1);
+  glRasterPos3f(0, 0, -1.2);
+  gl_draw("LC", 2);
+  glRasterPos3f(0, 0, 1.1);
+  gl_draw("RC", 2);
 
   glPopMatrix();
 }
@@ -211,23 +210,23 @@ void PoincareSphereWidget::DrawPlans()
 
   glPushMatrix();
   // Bleu
-  glColor4d(0.9,0.9,1.0,1);
-  glTranslatef(0.0,0.0,-0.8);
-  glNormal3i(0,0,1);
-  glRectf(-0.8,-0.8,0.8,0.8);
+  glColor4d(0.9, 0.9, 1.0, 1);
+  glTranslatef(0.0, 0.0, -0.8);
+  glNormal3i(0, 0, 1);
+  glRectf(-0.8, -0.8, 0.8, 0.8);
 
   // Vert
-  glColor4d(.9,1.0,0.9,1);
-  glRotatef(90,1,0,0);
-  glTranslatef(-0.8,0.0,-0.8);
-  glNormal3i(0,0,1);
-  glRectf(0,0,1.6,1.6);
+  glColor4d(.9, 1.0, 0.9, 1);
+  glRotatef(90, 1, 0, 0);
+  glTranslatef(-0.8, 0.0, -0.8);
+  glNormal3i(0, 0, 1);
+  glRectf(0, 0, 1.6, 1.6);
 
   // Rouge
-  glColor4d(1.0,0.9,0.9,1);
-  glRotatef(-90,0,1,0);
-  glNormal3i(0,0,1);
-  glRectf(0,0,1.6,1.6);
+  glColor4d(1.0, 0.9, 0.9, 1);
+  glRotatef(-90, 0, 1, 0);
+  glNormal3i(0, 0, 1);
+  glRectf(0, 0, 1.6, 1.6);
   glPopMatrix();
 
 }
@@ -236,17 +235,17 @@ void PoincareSphereWidget::DrawTorus()
 {
   glLineWidth(2);
   glPushMatrix();
-  glColor4d(0.25,0.25,0.25,1.);
-  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  glColor4d(0.25, 0.25, 0.25, 1.);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   this->RenderCircle(1., m_Resolution);
 
   glPushMatrix();
-  glRotatef(90,1,0,0);
+  glRotatef(90, 1, 0, 0);
   this->RenderCircle(1., m_Resolution);
   glPopMatrix();
 
   glPushMatrix();
-  glRotatef(90,0,1,0);
+  glRotatef(90, 0, 1, 0);
   this->RenderCircle(1., m_Resolution);
   glPopMatrix();
 
@@ -272,12 +271,12 @@ void PoincareSphereWidget::DrawVectors()
   glLineWidth(3);
   glBegin(GL_LINES);
 
-  glColor3d(1,0.647,0);
-  glVertex3d(0,0,0);
-  glVertex3d(xi,yi,zi);
-  glColor3d(0.627,0.125,0.94);
-  glVertex3d(0,0,0);
-  glVertex3d(xr,yr,zr);
+  glColor3d(1, 0.647, 0);
+  glVertex3d(0, 0, 0);
+  glVertex3d(xi, yi, zi);
+  glColor3d(0.627, 0.125, 0.94);
+  glVertex3d(0, 0, 0);
+  glVertex3d(xr, yr, zr);
   glEnd();
   glLineWidth(1);
 
@@ -297,7 +296,7 @@ void PoincareSphereWidget::RenderSphere(double radius, unsigned int thetaResolut
       double x = radius * vcl_cos(-CONST_PI/2+static_cast<double>(i)*thetaStep)*vcl_cos(-CONST_PI+static_cast<double>(j)*phiStep);
       double y = radius * vcl_cos(-CONST_PI/2+static_cast<double>(i)*thetaStep)*vcl_sin(-CONST_PI+static_cast<double>(j)*phiStep);
       double z = radius * vcl_sin(-CONST_PI/2+static_cast<double>(i)*thetaStep);
-      glVertex3d(x,y,z);
+      glVertex3d(x, y, z);
     }
     glEnd();
   }
@@ -311,7 +310,7 @@ void PoincareSphereWidget::RenderSphere(double radius, unsigned int thetaResolut
       double x = radius * vcl_cos(-CONST_PI/2+static_cast<double>(i)*thetaStep)*vcl_cos(-CONST_PI+static_cast<double>(j)*phiStep);
       double y = radius * vcl_cos(-CONST_PI/2+static_cast<double>(i)*thetaStep)*vcl_sin(-CONST_PI+static_cast<double>(j)*phiStep);
       double z = radius * vcl_sin(-CONST_PI/2+static_cast<double>(i)*thetaStep);
-      glVertex3d(x,y,z);
+      glVertex3d(x, y, z);
     }
     glEnd();
   }
@@ -326,7 +325,7 @@ void PoincareSphereWidget::RenderCircle(double radius, unsigned int resolution)
   {
     double x = radius * vcl_cos(static_cast<double>(i)*step);
     double y = radius * vcl_sin(static_cast<double>(i)*step);
-    glVertex2d(x,y);
+    glVertex2d(x, y);
   }
   glEnd();
 }

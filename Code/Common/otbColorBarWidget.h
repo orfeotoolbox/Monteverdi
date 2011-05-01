@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ColorBarWidget,Object);
+  itkTypeMacro(ColorBarWidget, Object);
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Precision     Floating_Point_PrecisionType;
@@ -65,7 +65,6 @@ public:
   typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>  ColorMapFilterType;
   typedef ColorMapFilterType::ColormapType ColormapType;
   typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType> RGBtoVectorImageCastFilterType;
-
 
 
   /** Initialize the widget */

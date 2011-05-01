@@ -124,7 +124,7 @@ SarCalibrationModule
 {
   std::string msgAboutNoise(", with noise");
   std::string msgDescriptor;
-  double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
+  double valueT = pow(10.0, static_cast<double>(vThresholdLogDisplay->value())/10.0);
 
   m_ComplexCalibFilter->SetInput(m_ComplexInputImage);
   m_ComplexBrightnessFilter->SetInput(m_ComplexInputImage);
@@ -171,7 +171,7 @@ SarCalibrationModule
 {
   std::string msgAboutNoise(", with noise");
   std::string msgDescriptor;
-  double valueT = pow(10.0,static_cast<double>(vThresholdLogDisplay->value())/10.0);
+  double valueT = pow(10.0, static_cast<double>(vThresholdLogDisplay->value())/10.0);
 
   m_CalibFilter->SetInput(m_InputImage);
   m_BrightnessCalibFilter->SetInput(m_InputImage);

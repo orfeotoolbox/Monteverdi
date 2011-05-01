@@ -59,7 +59,7 @@ public:
   typedef TransformType::OutputPointType OutputPointType;
 
   /** Output */
-  typedef GenericRSResampleImageFilter<InputImageType, 
+  typedef GenericRSResampleImageFilter<InputImageType,
                                        InputImageType>       ResampleFilterType;
   
   /** SetInputImage */
@@ -141,7 +141,7 @@ public:
     m_UseDEM = value;
   }
   /** Update the Estimate Input rpc Model flag value*/
-  itkSetMacro(EstimateInputRPCModel,bool);
+  itkSetMacro(EstimateInputRPCModel, bool);
 
   /** Get the output projection ref*/
   itkGetStringMacro(OutputProjectionRef);

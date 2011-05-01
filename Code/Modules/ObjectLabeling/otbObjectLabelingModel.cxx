@@ -54,9 +54,9 @@ namespace otb
     // Build the selected polygon vector data
     DataNodeType::Pointer root = m_SelectedPolygon->GetDataTree()->GetRoot()->Get();
 
-    m_SelectedPolygon->GetDataTree()->Add(document,root);
-    m_SelectedPolygon->GetDataTree()->Add(folder,document);
-    m_SelectedPolygon->GetDataTree()->Add(m_SelectedPolygonNode,folder);
+    m_SelectedPolygon->GetDataTree()->Add(document, root);
+    m_SelectedPolygon->GetDataTree()->Add(folder, document);
+    m_SelectedPolygon->GetDataTree()->Add(m_SelectedPolygonNode, folder);
 
     // Building the margin sampling vector data
     m_MarginSampledPolygon = VectorDataType::New();
@@ -68,8 +68,8 @@ namespace otb
 
     root = m_MarginSampledPolygon->GetDataTree()->GetRoot()->Get();
 
-    m_MarginSampledPolygon->GetDataTree()->Add(document,root);
-    m_MarginSampledPolygon->GetDataTree()->Add(m_MarginSampledFolder,document);
+    m_MarginSampledPolygon->GetDataTree()->Add(document, root);
+    m_MarginSampledPolygon->GetDataTree()->Add(m_MarginSampledFolder, document);
 
     // Build the SVM objects
     m_SVMEstimator = SVMEstimatorType::New();
@@ -180,7 +180,7 @@ namespace otb
     m_AvailableFeatures.clear();
 
     std::vector<std::string> features = m_LabelMap->GetNthLabelObject(0)->GetAvailableAttributes();
-    for(std::vector<std::string>::const_iterator fit = features.begin();fit!=features.end();++fit)
+    for(std::vector<std::string>::const_iterator fit = features.begin(); fit!=features.end(); ++fit)
       {
       m_AvailableFeatures[*fit]=true;
       }
@@ -213,14 +213,14 @@ namespace otb
     m_ColorMapper->ClearChangeMap();
 
     // For each classes
-    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
+    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end(); ++oit)
       {
       VectorPixelType newValue(3);
       newValue[0]=oit->m_Color[0];
       newValue[1]=oit->m_Color[1];
       newValue[2]=oit->m_Color[2];
       otbMsgDevMacro(<<"New value: "<<newValue);
-      m_ColorMapper->SetChange(oit->m_Label,newValue);
+      m_ColorMapper->SetChange(oit->m_Label, newValue);
       }
 
     // Generate the layer
@@ -271,7 +271,7 @@ namespace otb
 
     LabelType label = m_LabeledImage->GetPixel(sampleIndex);
 
-    this->AddSampleToClass(label,classIndex);
+    this->AddSampleToClass(label, classIndex);
     this->NotifyAll("Update");
   }
 
@@ -287,7 +287,7 @@ namespace otb
       DataNodeType::Pointer polygonNode = DataNodeType::New();
       PolygonType::Pointer polygon = m_LabelMap->GetLabelObject(label)->GetPolygon();
       polygonNode->SetPolygonExteriorRing(polygon);
-      m_Classes[classIndex].m_VectorData->GetDataTree()->Add(polygonNode,m_Classes[classIndex].m_Folder);
+      m_Classes[classIndex].m_VectorData->GetDataTree()->Add(polygonNode, m_Classes[classIndex].m_Folder);
       }
   }
 
@@ -296,13 +296,13 @@ namespace otb
   {
     if(classIndex < m_Classes.size())
       {
-      ObjectClassType::LabelVectorType::iterator lit = find(m_Classes[classIndex].m_Samples.begin(),m_Classes[classIndex].m_Samples.end(),label);
+      ObjectClassType::LabelVectorType::iterator lit = find(m_Classes[classIndex].m_Samples.begin(), m_Classes[classIndex].m_Samples.end(), label);
 
       if(lit!=m_Classes[classIndex].m_Samples.end())
         {
         // Erase the polygon in the VectorData
         TreeNodeType * node = const_cast<TreeNodeType *> (m_Classes[classIndex].m_VectorData->GetDataTree()->GetNode(m_Classes[classIndex].m_Folder));
-        unsigned int childrenIndex = std::distance(m_Classes[classIndex].m_Samples.begin(),lit);
+        unsigned int childrenIndex = std::distance(m_Classes[classIndex].m_Samples.begin(), lit);
         node->Remove(node->GetChild(childrenIndex));
         // Erase the sample from the list
         m_Classes[classIndex].m_Samples.erase(lit);
@@ -320,7 +320,7 @@ namespace otb
       // Erase the polygons in the VectorData
       TreeNodeType * node = const_cast<TreeNodeType *> (m_Classes[classIndex].m_VectorData->GetDataTree()->GetNode(m_Classes[classIndex].m_Folder));
       unsigned int nbChildren = node->CountChildren();
-      for(unsigned int i = 0; i<nbChildren;++i)
+      for(unsigned int i = 0; i<nbChildren; ++i)
         {
         node->Remove(node->GetChild(nbChildren-i-1));
         }
@@ -338,7 +338,7 @@ namespace otb
     PolygonType::RegionType rsRegion = polygon->GetBoundingRegion();
     PolygonType::PointType center;
 
-    for(unsigned int dim = 0; dim<VectorImageType::ImageDimension;++dim)
+    for(unsigned int dim = 0; dim<VectorImageType::ImageDimension; ++dim)
       {
       center[dim]= polygon->GetBoundingRegion().GetOrigin()[dim]
                                                             +polygon->GetBoundingRegion().GetSize()[dim]/2;
@@ -346,7 +346,7 @@ namespace otb
 
     VectorImageType::IndexType pindex;
 
-    m_VectorImage->TransformPhysicalPointToIndex(center,pindex);
+    m_VectorImage->TransformPhysicalPointToIndex(center, pindex);
     m_VisualizationModel->SetExtractRegionCenter(pindex);
     m_VisualizationModel->SetScaledExtractRegionCenter(pindex);
 
@@ -434,8 +434,8 @@ namespace otb
       itkExceptionMacro(<<"No image loaded, please load an image first.");
       }
 
-    newClass.m_VectorData->GetDataTree()->Add(document,root);
-    newClass.m_VectorData->GetDataTree()->Add(folder1,document);
+    newClass.m_VectorData->GetDataTree()->Add(document, root);
+    newClass.m_VectorData->GetDataTree()->Add(folder1, document);
     newClass.m_VectorData->SetProjectionRef(m_VectorImage->GetProjectionRef());
 
     // Push back the new class
@@ -646,7 +646,7 @@ namespace otb
       // If sample is already selected
       if(this->IsSampleSelected(label))
         {
-        this->AddSampleToClass(label,this->GetSelectedClass());
+        this->AddSampleToClass(label, this->GetSelectedClass());
         this->ClearSelectedSample();
         }
       else
@@ -718,7 +718,7 @@ namespace otb
     TiXmlElement * classes = new TiXmlElement( "Classes" );
     root->LinkEndChild( classes );
 
-    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
+    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end(); ++oit)
       {
       TiXmlElement * currentClass = new TiXmlElement( "Class" );
       currentClass->SetAttribute("label", oit->m_Label);
@@ -738,7 +738,7 @@ namespace otb
       TiXmlElement * samples = new TiXmlElement( "Samples" );
       currentClass->LinkEndChild( samples );
 
-      for(ObjectClassType::LabelVectorType::const_iterator lit = oit->m_Samples.begin(); lit != oit->m_Samples.end();++lit)
+      for(ObjectClassType::LabelVectorType::const_iterator lit = oit->m_Samples.begin(); lit != oit->m_Samples.end(); ++lit)
         {
         TiXmlElement * sample = new TiXmlElement( "Sample" );
         sample->SetAttribute("lbl", *lit);
@@ -778,7 +778,7 @@ namespace otb
     TiXmlElement * classes = new TiXmlElement( "Classes" );
     root->LinkEndChild( classes );
 
-    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
+    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end(); ++oit)
       {
       TiXmlElement * currentClass = new TiXmlElement( "Class" );
       currentClass->SetAttribute("label", oit->m_Label);
@@ -796,7 +796,7 @@ namespace otb
     // For each feature
     AvailableFeaturesMapType::const_iterator fit;
 
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end(); ++fit)
       {
       // If it is selected
       if(fit->second)
@@ -922,7 +922,7 @@ namespace otb
     // Erase the previous margin sampled polygons
     TreeNodeType * node = const_cast<TreeNodeType *> (m_MarginSampledPolygon->GetDataTree()->GetNode(m_MarginSampledFolder));
     unsigned int nbChildren = node->CountChildren();
-    for(unsigned int i = 0; i<nbChildren;++i)
+    for(unsigned int i = 0; i<nbChildren; ++i)
       {
       node->Remove(node->GetChild(nbChildren-i-1));
       }
@@ -943,7 +943,7 @@ namespace otb
     labelMap2SampleList->SetInputLabelMap(m_LabelMap);
     // Enable features chosen by user
     AvailableFeaturesMapType::const_iterator fit;
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end(); ++fit)
       {
       if (fit->second)
         {
@@ -975,7 +975,7 @@ namespace otb
     ClassLabelMap2ListSampleFilterType::Pointer trainingSampleGenerator = ClassLabelMap2ListSampleFilterType::New();
     trainingSampleGenerator->SetInputLabelMap(trainingLabelMap);
     // Enable features chosen by user
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end(); ++fit)
       {
       if (fit->second)
         {
@@ -1030,7 +1030,7 @@ namespace otb
 
     // For each margin sample
     for(MarginSamplerType::IndexVectorType::const_iterator sit = m_MarginSampler->GetMarginSamples().begin();
-        sit!=m_MarginSampler->GetMarginSamples().end();++sit)
+        sit!=m_MarginSampler->GetMarginSamples().end(); ++sit)
       {
       // Add sample to margin samples vector
       m_MarginSamples.push_back(m_LabelMap->GetNthLabelObject(*sit)->GetLabel());
@@ -1040,7 +1040,7 @@ namespace otb
       DataNodeType::Pointer polygonNode = DataNodeType::New();
       PolygonType::Pointer polygon = /**sfunctor(*/m_LabelMap->GetNthLabelObject(*sit)->GetPolygon()/**)*/;
       polygonNode->SetPolygonExteriorRing(polygon);
-      m_MarginSampledPolygon->GetDataTree()->Add(polygonNode,m_MarginSampledFolder);
+      m_MarginSampledPolygon->GetDataTree()->Add(polygonNode, m_MarginSampledFolder);
       }
 
     otbMsgDevMacro(<<"Done.");
@@ -1059,7 +1059,7 @@ namespace otb
     classifier->SetInPlace(true);
     // Enable features chosen by user
     AvailableFeaturesMapType::const_iterator fit;
-    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end();++fit)
+    for(fit = m_AvailableFeatures.begin(); fit!=m_AvailableFeatures.end(); ++fit)
       {
       if (fit->second)
         {
@@ -1071,7 +1071,7 @@ namespace otb
     m_VectorDataExporter->SetInput(m_LabelMap);
     m_VectorDataExporter->Update();
 
-    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
+    typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
     ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
     vectorDataProjection->SetInput(m_VectorDataExporter->GetOutput());
 
@@ -1111,19 +1111,19 @@ namespace otb
       newValue[1]=255*m_Classes[0].m_Color[1];
       newValue[2]=255*m_Classes[0].m_Color[2];
       otbMsgDevMacro(<<"New value: "<<newValue);
-      m_ColorMapper->SetChange(1,newValue);
-      m_ColorMapper->SetChange(2,defaultValue);
+      m_ColorMapper->SetChange(1, newValue);
+      m_ColorMapper->SetChange(2, defaultValue);
       }
 
     // For each classes
-    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end();++oit)
+    for(ObjectClassVectorType::const_iterator oit = m_Classes.begin(); oit != m_Classes.end(); ++oit)
       {
       VectorPixelType newValue(3);
       newValue[0]=255*oit->m_Color[0];
       newValue[1]=255*oit->m_Color[1];
       newValue[2]=255*oit->m_Color[2];
       otbMsgDevMacro(<<"New value: "<<oit->m_Label<<" "<<newValue);
-      m_ColorMapper->SetChange(oit->m_Label,newValue);
+      m_ColorMapper->SetChange(oit->m_Label, newValue);
       }
 
     m_ColorMapper->Update();

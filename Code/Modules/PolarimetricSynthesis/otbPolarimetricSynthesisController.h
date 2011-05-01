@@ -30,7 +30,6 @@ See OTBCopyright.txt for details.
 //#include "otbMouseClickActionHandler.h"
 
 
-
 namespace otb
 {
 class PolarimetricSynthesisController
@@ -53,22 +52,22 @@ public:
 
    typedef ImageWidgetController                                     WidgetsControllerType;
    typedef WidgetResizingActionHandler
-     <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
+     <VisualizationModelType, ImageViewType>                          ResizingHandlerType;
    typedef ChangeScaledExtractRegionActionHandler
-   <VisualizationModelType,ImageViewType>                            ChangeScaledRegionHandlerType;
+   <VisualizationModelType, ImageViewType>                            ChangeScaledRegionHandlerType;
    typedef ChangeExtractRegionActionHandler
-       <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+       <VisualizationModelType, ImageViewType>                        ChangeRegionHandlerType;
    typedef ChangeScaleActionHandler
-   <VisualizationModelType,ImageViewType>                            ChangeScaleHandlerType;
+   <VisualizationModelType, ImageViewType>                            ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler
      < PixelDescriptionModelType, ImageViewType>                     PixelDescriptionActionHandlerType;
 /*
   typedef otb::MouseClickActionHandler
-   <PolarimetricSynthesisModel,ImageViewType>                        MouseClickActionHandlerType;
+   <PolarimetricSynthesisModel, ImageViewType>                        MouseClickActionHandlerType;
 */
 
   /** Standard type macros */
-  itkTypeMacro(PolarimetricSynthesisController,Superclass);
+  itkTypeMacro(PolarimetricSynthesisController, Superclass);
   itkNewMacro(Self);
 
   /** Set the view */
@@ -124,7 +123,7 @@ public:
   virtual bool IsVEmissionMode();
 
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetsController,WidgetsControllerType);
+  itkGetObjectMacro(WidgetsController, WidgetsControllerType);
 
 
 protected:

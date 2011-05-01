@@ -30,13 +30,13 @@
 // Convolution filter
 #include "otbConvolutionImageFilter.h"
 
-// Standard Deviation 
+// Standard Deviation
 #include "otbVarianceImageFilter.h"
 #include "itkSqrtImageFilter.h"
 #include "otbConvolutionImageFilter.h"
 #include "otbImageListToVectorImageFilter.h"
 
-// 
+//
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbImageList.h"
 #include "otbImage.h"
@@ -48,24 +48,24 @@ namespace otb
 {
 /** \class ImageToStdGaborConvolutionFilter
  * \brief Convolution with a Gabor kernel
- *        
+ *
  *  This class generate a Gabor Kernel following the direction set
  *  by the user with the method SetDirection. The input image is than
  *  convoluted with the kernel using the streamed and multithreaded
- *  filter  otb::ConvolutionImageFilter.      
- * 
+ *  filter  otb::ConvolutionImageFilter.
+ *
  * The output image is the concatenation of the amplitude image, the
  * standard deviation of each convoluted band with the gabor filter in
  * each direction set.
- * 
+ *
  * You can have access to the Gabor filter parameters to tune the
  * kernel you need using the same interface than the
- * otb::GaborFilterGenerator class. 
+ * otb::GaborFilterGenerator class.
  * The filter implements also the GenerateOutputInformation to compute
  * the number of components per pixel of the output image.
  *
  * \sa GaborFilterGenerator
- * \ingroup 
+ * \ingroup
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToStdGaborConvolutionFilter :
@@ -75,7 +75,7 @@ public:
 
   /** Standard class typedefs. */
   typedef ImageToStdGaborConvolutionFilter                          Self;
-  typedef itk::ImageToImageFilter<TInputImage ,TOutputImage > Superclass;
+  typedef itk::ImageToImageFilter<TInputImage , TOutputImage > Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
 
@@ -97,11 +97,11 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename InputImageType::SizeType    InputSizeType;
 
-  /** Image List */ 
+  /** Image List */
   typedef otb::Image<OutputInternalPixelType>             SingleImageType;
   typedef otb::ImageList<SingleImageType>                 ImageListType;
 
-  typedef VectorImageToIntensityImageFilter<InputImageType, 
+  typedef VectorImageToIntensityImageFilter<InputImageType,
                                             SingleImageType> IntensityChannelFilterType;
   
   
@@ -109,47 +109,46 @@ public:
 
   typedef GaborFilterGenerator<InternalInputPixelType>      GaborFilterGeneratorType;
 
-  typedef ConvolutionImageFilter<SingleImageType,  
+  typedef ConvolutionImageFilter<SingleImageType,
                                  SingleImageType,
-                                 itk::ZeroFluxNeumannBoundaryCondition<SingleImageType>, 
-                                 OutputInternalPixelType                                
+                                 itk::ZeroFluxNeumannBoundaryCondition<SingleImageType>,
+                                 OutputInternalPixelType
                                  >                           ConvolutionFilterType;
   typedef typename ConvolutionFilterType::ArrayType                   ArrayType;
   
-  typedef VarianceImageFilter<SingleImageType, 
+  typedef VarianceImageFilter<SingleImageType,
                               SingleImageType >              VarianceFilterType;
   typedef typename VarianceFilterType::InputSizeType         RadiusType;
 
-  typedef itk::SqrtImageFilter<SingleImageType, 
+  typedef itk::SqrtImageFilter<SingleImageType,
                                SingleImageType >             SqrtImageFilterType;
 
 
-
   typedef VectorRescaleIntensityImageFilter
-  <InputImageType,OutputImageType>                           RescalerFilterType;
+  <InputImageType, OutputImageType>                           RescalerFilterType;
 
 
-  typedef ImageListToVectorImageFilter<ImageListType, 
+  typedef ImageListToVectorImageFilter<ImageListType,
                                        OutputImageType>      ImageToVectorFilterType;
 
-  typedef otb::VectorImageToImageListFilter<InputImageType, 
+  typedef otb::VectorImageToImageListFilter<InputImageType,
                                             ImageListType>    VectorImageToImageListFilterType;
   
 
   /** Method to access the gabor filter parameters*/
-  itkSetMacro(Radius,RadiusType);
-  itkSetMacro(A,InternalInputPixelType);
-  itkSetMacro(B,InternalInputPixelType);
-  itkSetMacro(Theta,InternalInputPixelType);
+  itkSetMacro(Radius, RadiusType);
+  itkSetMacro(A, InternalInputPixelType);
+  itkSetMacro(B, InternalInputPixelType);
+  itkSetMacro(Theta, InternalInputPixelType);
   itkSetMacro(U0, InternalInputPixelType);
   itkSetMacro(V0, InternalInputPixelType);
   itkSetMacro(Phi, InternalInputPixelType);
   
   /** Method to get the parameters values used*/
-  itkGetMacro(Radius,RadiusType);
-  itkGetMacro(A,InternalInputPixelType);
-  itkGetMacro(B,InternalInputPixelType);
-  itkGetMacro(Theta,InternalInputPixelType);
+  itkGetMacro(Radius, RadiusType);
+  itkGetMacro(A, InternalInputPixelType);
+  itkGetMacro(B, InternalInputPixelType);
+  itkGetMacro(Theta, InternalInputPixelType);
   itkGetMacro(U0, InternalInputPixelType);
   itkGetMacro(V0, InternalInputPixelType);
   itkGetMacro(Phi, InternalInputPixelType);
@@ -163,7 +162,7 @@ public:
   }
   
   // Variance Radius : cannot use the object macro cause a SetRadius
-  // method is already defined for the m_GaborFilter attribute. 
+  // method is already defined for the m_GaborFilter attribute.
   void SetVarianceRadius(const RadiusType& radius)
   {
     m_VarianceRadius = radius;
@@ -203,17 +202,17 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   std::vector<typename GaborFilterGeneratorType::Pointer>    m_GaborFilterList;
-  std::vector<typename VarianceFilterType::Pointer>          m_VarianceFilterList;    
+  std::vector<typename VarianceFilterType::Pointer>          m_VarianceFilterList;
   std::vector<typename ConvolutionFilterType::Pointer>       m_ConvolutionFilterList;
   std::vector<typename SqrtImageFilterType::Pointer>         m_SqrtImageFilterList;
   
   typename RescalerFilterType::Pointer          m_RescaleFilter;
-  typename IntensityChannelFilterType::Pointer  m_IntensityFilter; 
+  typename IntensityChannelFilterType::Pointer  m_IntensityFilter;
   
   typename ImageToVectorFilterType::Pointer     m_ImageListToImageVectorFilter;
   typename VectorImageToImageListFilterType::Pointer  m_VectorImageToListFilter;
 
-  // Gabor stuff 
+  // Gabor stuff
   unsigned int                          m_NumberOfDirection;
   double                                m_InitialDirection;
   RadiusType                            m_Radius;

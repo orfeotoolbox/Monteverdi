@@ -19,12 +19,11 @@
 #include "itkPreOrderTreeIterator.h"
 
 
-
 namespace otb
 {
 
 VectorizationModel::
-VectorizationModel(): m_DEMPath(""),m_UseDEM(false),
+VectorizationModel(): m_DEMPath(""), m_UseDEM(false),
                       m_ExtractRegionUpdated(false),
                       m_ActualLayerNumber(0)
 {
@@ -42,10 +41,10 @@ VectorizationModel(): m_DEMPath(""),m_UseDEM(false),
   // Output changed flag
   m_OutputChanged = false;
   
-  // Extract Filter 
+  // Extract Filter
   m_ExtractImageFilter = ExtractImageFilterType::New();
   
-  // Selected Polygon on right click in automatic mode 
+  // Selected Polygon on right click in automatic mode
   m_SelectedPolygon     = PolygonType::New();
   m_SelectedPolygonNode = DataNodeType::New();
 
@@ -58,9 +57,9 @@ VectorizationModel(): m_DEMPath(""),m_UseDEM(false),
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
 
-  m_SelectedVectorData->GetDataTree()->Add(document,root);
-  m_SelectedVectorData->GetDataTree()->Add(folder,document);
-  m_SelectedVectorData->GetDataTree()->Add(m_SelectedPolygonNode,folder);
+  m_SelectedVectorData->GetDataTree()->Add(document, root);
+  m_SelectedVectorData->GetDataTree()->Add(folder, document);
+  m_SelectedVectorData->GetDataTree()->Add(m_SelectedPolygonNode, folder);
 }
 
 VectorizationModel
@@ -165,10 +164,10 @@ void VectorizationModel
   rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
 
   // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion); 
+  vdextract->SetRegion(rsRegion);
   if (m_UseDEM==true)
     {
-    if (!m_DEMPath.empty()) 
+    if (!m_DEMPath.empty())
       {
       vdextract->SetDEMDirectory(m_DEMPath);
       }
@@ -176,7 +175,7 @@ void VectorizationModel
       {
       itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
       }
-    }  
+    }
   // Reproject VectorData in image projection
   vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vdextract->GetOutput());
@@ -288,7 +287,7 @@ void VectorizationModel
           {
           // Since PolylineParametricPath does not provide read-write
           // access to the vertex list, nor a method to remove a given
-          // vertex, we must use a const_cast here. 
+          // vertex, we must use a const_cast here.
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonExteriorRing()->GetVertexList());
@@ -302,7 +301,7 @@ void VectorizationModel
           {
           // Since PolylineParametricPath does not provide read-write
           // access to the vertex list, nor a method to remove a given
-          // vertex, we must use a const_cast here. 
+          // vertex, we must use a const_cast here.
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
@@ -346,7 +345,7 @@ void VectorizationModel
         {
         // Since PolylineParametricPath does not provide read-write
         // access to the vertex list, nor a method to set a given
-        // vertex, we must use a const_cast here. 
+        // vertex, we must use a const_cast here.
         DataNodeType::LineType::VertexListType * pointContainer
           = const_cast<DataNodeType::LineType::VertexListType *>(
             node->GetLine()->GetVertexList());
@@ -363,7 +362,7 @@ void VectorizationModel
           {
           // Since PolylineParametricPath does not provide read-write
           // access to the vertex list, nor a method to set a given
-          // vertex, we must use a const_cast here. 
+          // vertex, we must use a const_cast here.
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonExteriorRing()->GetVertexList());
@@ -378,7 +377,7 @@ void VectorizationModel
           {
           // Since PolylineParametricPath does not provide read-write
           // access to the vertex list, nor a method to set a given
-          // vertex, we must use a const_cast here. 
+          // vertex, we must use a const_cast here.
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
@@ -402,7 +401,7 @@ VectorizationModel
 ::OK()
 {
   typedef otb::VectorDataProjectionFilter
-    <VectorDataType,VectorDataType>                    ProjectionFilterType;
+    <VectorDataType, VectorDataType>                    ProjectionFilterType;
   ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
   vectorDataProjection->SetInput(m_VectorDataModel->GetVectorData());
 
@@ -454,7 +453,7 @@ VectorizationModel
   index[0] = static_cast<IndexType::IndexValueType>(point[0]);
   index[1] = static_cast<IndexType::IndexValueType>(point[1]);
 
-  // Center the view around the defined index 
+  // Center the view around the defined index
   m_VisualizationModel->SetScaledExtractRegionCenter(index);
   m_VisualizationModel->SetExtractRegionCenter(index);
   m_VisualizationModel->Update();
@@ -476,9 +475,9 @@ void VectorizationModel
     }
 }
 
-/** 
+/**
  * Add the polygon to the tree browser.
- * 
+ *
  */
 void VectorizationModel
 ::RightIndexClicked(const IndexType & index, RegionType ExtRegion)
@@ -499,7 +498,7 @@ void VectorizationModel
  * show the different polygon that the point belongs to.
  */
 void VectorizationModel
-::LeftIndexClicked(const IndexType & index, 
+::LeftIndexClicked(const IndexType & index,
                    RegionType ExtRegion)
 {
   if(m_LastRegionSelected == ExtRegion)
@@ -534,14 +533,14 @@ VectorizationModel::GenerateLayers()
 
     
     // Generate new layer (labeled image) for each algorithm
-    m_LabelImageVector.push_back(GenerateMeanshiftClustering(10,30,100));
-    m_LabelImageVector.push_back(GenerateMeanshiftClustering(3,50,150));
-    m_LabelImageVector.push_back(GenerateMeanshiftClustering(2,5,10));
-    m_LabelImageVector.push_back(GenerateWatershedClustering(1, 0.05,0.0, 2, 15));
-    m_LabelImageVector.push_back(GenerateWatershedClustering(2, 0.1,0.0, 2, 15));
-    m_LabelImageVector.push_back(GenerateWatershedClustering(3, 0.05,0.005, 2, 12));
-    m_LabelImageVector.push_back(GenerateWatershedClustering(4, 0.1,0.01, 2, 15));
-    m_LabelImageVector.push_back(GenerateWatershedClustering(5, 0.15,0.001, 2, 15));
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(10, 30, 100));
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(3, 50, 150));
+    m_LabelImageVector.push_back(GenerateMeanshiftClustering(2, 5, 10));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(1, 0.05, 0.0, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(2, 0.1, 0.0, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(3, 0.05, 0.005, 2, 12));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(4, 0.1, 0.01, 2, 15));
+    m_LabelImageVector.push_back(GenerateWatershedClustering(5, 0.15, 0.001, 2, 15));
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 40, 100));
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 30, 5, 8, 7, 40, 100));
     m_LabelImageVector.push_back(GenerateGaborClustering(20, 0, 0.32, 0.48, 45, 3, 8, 7, 25, 150));
@@ -552,11 +551,11 @@ VectorizationModel::GenerateLayers()
     m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(4, 32, 3));
     m_LabelImageVector.push_back(GenerateFastFourierTransformLayer(5, 32, 3));
 #endif
-    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(1,256));
-    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(2,256));
-    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(3,256));
-    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(4,256));
-    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(5,256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(1, 256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(2, 256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(3, 256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(4, 256));
+    m_LabelImageVector.push_back(GenerateGrowingRegionLayer(5, 256));
     
     for(unsigned int i=0; i<m_LabelImageVector.size(); i++)
       m_LabelMapVector.push_back(ConvertLabelImageToLabelMap(m_LabelImageVector[i]));
@@ -572,21 +571,21 @@ VectorizationModel
   m_SelectedPolygonNode->SetPolygonExteriorRing(PolygonType::New());
 }
 
-/** 
-  * Standard Deviation of a gabor convoluted image 
+/**
+  * Standard Deviation of a gabor convoluted image
   */
 VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::GenerateGaborClustering(unsigned int gaborRad, double phi, 
-                          double a, double b, double firstDir, int nbDir, 
-                          unsigned int varRad, int spatialRadius, double rangeRadius, 
+::GenerateGaborClustering(unsigned int gaborRad, double phi,
+                          double a, double b, double firstDir, int nbDir,
+                          unsigned int varRad, int spatialRadius, double rangeRadius,
                           int minRegionSize)
 {
   // Instanciate the objects
   StdGaborFilterType::Pointer stdFilter = StdGaborFilterType::New();
   MeanShiftVectorImageFilterType::Pointer msImageFilter = MeanShiftVectorImageFilterType::New();
   
-  // 
+  //
   stdFilter->SetInput(m_ExtractImageFilter->GetOutput());
   stdFilter->SetA(a);
   stdFilter->SetB(b);
@@ -620,11 +619,11 @@ VectorizationModel
  */
 VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::GenerateMeanshiftClustering(int spatialRadius, 
-                              double rangeRadius, 
+::GenerateMeanshiftClustering(int spatialRadius,
+                              double rangeRadius,
                               int minRegionSize)
 {
-  MeanShiftVectorImageFilterType::Pointer 
+  MeanShiftVectorImageFilterType::Pointer
     msImageFilter = MeanShiftVectorImageFilterType::New();
   
   msImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
@@ -655,8 +654,8 @@ VectorizationModel::LabeledImagePointerType
 VectorizationModel
 ::GenerateGrowingRegionLayer(unsigned int channel, unsigned long numberofhistogramsbins)
 {
-  VectorImageToImageListFilterType::Pointer	    image2List      = VectorImageToImageListFilterType::New();
-  OtsuThresholdImageFilterType::Pointer	        otsuFilter      = OtsuThresholdImageFilterType::New();
+  VectorImageToImageListFilterType::Pointer           image2List      = VectorImageToImageListFilterType::New();
+  OtsuThresholdImageFilterType::Pointer               otsuFilter      = OtsuThresholdImageFilterType::New();
   BinaryImageToLabelMapFilterType::Pointer      binary2LabelMap = BinaryImageToLabelMapFilterType::New();
   IntensityChannelFilterType::Pointer           intensityFilter = IntensityChannelFilterType::New();
   LabelMapToLabelImageType::Pointer             lm2li           = LabelMapToLabelImageType::New();
@@ -703,7 +702,7 @@ VectorizationModel
   GradientAnisotropicDiffusionFilterType::Pointer diffusionFilter    = GradientAnisotropicDiffusionFilterType::New();
   GradientMagnitudeFilterType::Pointer            gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
   WatershedFilterType::Pointer                    watershedFilter    = WatershedFilterType::New();
-  VectorImageToImageListFilterType::Pointer	  image2List         = VectorImageToImageListFilterType::New();
+  VectorImageToImageListFilterType::Pointer         image2List         = VectorImageToImageListFilterType::New();
   IntensityChannelFilterType::Pointer             intensityFilter    = IntensityChannelFilterType::New();
   
   if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel>0)
@@ -730,7 +729,7 @@ VectorizationModel
   // the watershedFilter filter does not give the choice to choose the output image
   // type, cast it into the labeled image type
   typedef itk::CastImageFilter
-    <WatershedFilterType::OutputImageType,LabeledImageType>    CastFilterType;
+    <WatershedFilterType::OutputImageType, LabeledImageType>    CastFilterType;
   
   CastFilterType::Pointer castFilter = CastFilterType::New();
   castFilter->SetInput(watershedFilter->GetOutput());
@@ -752,8 +751,8 @@ VectorizationModel
 #ifdef USE_FFTWF
 VectorizationModel::LabeledImagePointerType
 VectorizationModel
-::GenerateFastFourierTransformLayer(int channel, 
-                                    int windowSize, 
+::GenerateFastFourierTransformLayer(int channel,
+                                    int windowSize,
                                     unsigned short threshold)
 {
   VectorImageToImageListFilterType::Pointer  image2List  = VectorImageToImageListFilterType::New();
@@ -793,12 +792,11 @@ VectorizationModel
 
 
 
-
 VectorizationModel::LabelMapPointerType
 VectorizationModel
 ::ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage)
 {
-  LabelImageToLabelMapFilterType::Pointer  
+  LabelImageToLabelMapFilterType::Pointer
     LI2LM = LabelImageToLabelMapFilterType::New();
   
   LI2LM->SetBackgroundValue(itk::NumericTraits<LabelType>::max());

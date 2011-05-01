@@ -89,7 +89,7 @@ public:
         int maxX, minX, maxY, minY;
 
         // Get the clicked index
-        typename WidgetType::PointType screenPoint, imagePoint;    /*, lScreenSizePoint, lImageSizePoint;*/
+        typename WidgetType::PointType screenPoint, imagePoint;    /*, lScreenSizePoint, lImageSizePoint; */
         screenPoint = m_Widget->GetMousePosition();
 
         // Transform to image point

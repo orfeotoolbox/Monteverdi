@@ -249,7 +249,7 @@ private:
   {
     // Search for the key in the output map
     OutputDataDescriptorMapType::const_iterator it = m_OutputsMap.begin();
-    for( ; it != m_OutputsMap.end(); it++ )
+    for(; it != m_OutputsMap.end(); it++ )
       {
       if (it->GetDataKey() == key)
         break;

@@ -42,7 +42,6 @@ See OTBCopyright.txt for details.
 #include "otbPixelDescriptionModel.h"
 
 
-
 namespace otb
 {
 
@@ -72,7 +71,7 @@ public:
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(PolarimetricSynthesisModel,Object);
+  itkTypeMacro(PolarimetricSynthesisModel, Object);
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -88,36 +87,36 @@ public:
 //  typedef double                                                                   PixelType;
   typedef TypeManager::Floating_Point_Precision                                    PixelType;
   typedef std::complex<PixelType>                                                  ComplexPixelType;
-  typedef otb::Image<ComplexPixelType,2>                                           ComplexImageType;
+  typedef otb::Image<ComplexPixelType, 2>                                           ComplexImageType;
   typedef ComplexImageType::SizeType                                               SizeType;
-  typedef otb::Image<PixelType,2>                                                  OutputImageType;
-  typedef otb::VectorImage<PixelType,2>                                            DoubleVectorImageType;
-  typedef otb::VectorImage<ComplexPixelType,2>                                     ComplexVectorImageType;
+  typedef otb::Image<PixelType, 2>                                                  OutputImageType;
+  typedef otb::VectorImage<PixelType, 2>                                            DoubleVectorImageType;
+  typedef otb::VectorImage<ComplexPixelType, 2>                                     ComplexVectorImageType;
   typedef ComplexVectorImageType::PixelType                                        ComplexVectorPixelType;
   typedef otb::ImageFileReader<ComplexImageType>                                   ImageReaderType;
   typedef otb::ImageFileReader<ComplexVectorImageType>                             VectorImageReaderType;
   typedef otb::ImageList<ComplexImageType>                                         ComplexImageListType;
   typedef otb::ImageList<OutputImageType>                                          DoubleImageListType;
-  typedef otb::ImageListToVectorImageFilter<ComplexImageListType,ComplexVectorImageType>  ComplexImageListToVectorImageFilterType;
-  typedef otb::ImageListToVectorImageFilter<DoubleImageListType,DoubleVectorImageType> DoubleImageListToVectorImageFilterType;
-  typedef otb::StreamingShrinkImageFilter<ComplexVectorImageType,ComplexVectorImageType> ShrinkFilterType;
-  typedef otb::MultiChannelsPolarimetricSynthesisFilter<ComplexVectorImageType,OutputImageType> PolarimetricSynthesisFilterType;
+  typedef otb::ImageListToVectorImageFilter<ComplexImageListType, ComplexVectorImageType>  ComplexImageListToVectorImageFilterType;
+  typedef otb::ImageListToVectorImageFilter<DoubleImageListType, DoubleVectorImageType> DoubleImageListToVectorImageFilterType;
+  typedef otb::StreamingShrinkImageFilter<ComplexVectorImageType, ComplexVectorImageType> ShrinkFilterType;
+  typedef otb::MultiChannelsPolarimetricSynthesisFilter<ComplexVectorImageType, OutputImageType> PolarimetricSynthesisFilterType;
   typedef itk::ImageRegionConstIterator< ComplexVectorImageType >                  ComplexIteratorType;
   typedef itk::ImageRegionConstIterator< OutputImageType >                         OutputIteratorType;
-  typedef itk::Vector<itk::NumericTraits<PixelType>::RealType,1>                   MeasurementVectorType;
+  typedef itk::Vector<itk::NumericTraits<PixelType>::RealType, 1>                   MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType>                       ListSampleType;
   typedef double                                                                   HistogramMeasurementType;
   typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,
-  HistogramMeasurementType,itk::Statistics::DenseFrequencyContainer,1>           HistogramGeneratorType;
+  HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType;
   typedef  HistogramGeneratorType::HistogramType                                   HistogramType;
   typedef otb::StreamingImageFileWriter<DoubleVectorImageType>                     WriterRGBType;
   typedef otb::StreamingImageFileWriter<OutputImageType>                           WriterGrayType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef Image<RGBPixelType,2>                                          RGBImageType;
-  typedef ImageLayer<DoubleVectorImageType,RGBImageType>                       LayerType;
-  //typedef ImageLayer<OutputImageType,RGBImageType>                       GrayLayerType;
+  typedef Image<RGBPixelType, 2>                                          RGBImageType;
+  typedef ImageLayer<DoubleVectorImageType, RGBImageType>                       LayerType;
+  //typedef ImageLayer<OutputImageType, RGBImageType>                       GrayLayerType;
   typedef ImageLayerGenerator<LayerType>                                 LayerGeneratorType;
   typedef ImageLayerRenderingModel<RGBImageType>                         VisualizationModelType;
   typedef PixelDescriptionModel<RGBImageType>                            PixelDescriptionModelType;
@@ -147,42 +146,42 @@ public:
   void SetRedPolarizationMode(PolarizationMode mode);
   void SetGreenPolarizationMode(PolarizationMode mode);
   void SetBluePolarizationMode(PolarizationMode mode);
-  itkSetMacro(RGB,bool);
-  itkSetMacro(HEmissionMode,bool);
-  itkSetMacro(VEmissionMode,bool);
-  itkSetMacro(QuicklookSize,SizeType);
+  itkSetMacro(RGB, bool);
+  itkSetMacro(HEmissionMode, bool);
+  itkSetMacro(VEmissionMode, bool);
+  itkSetMacro(QuicklookSize, SizeType);
 
   /** Getters */
-  itkGetMacro(GrayPsiI,double);
-  itkGetMacro(GrayPsiR,double);
-  itkGetMacro(GrayKhiI,double);
-  itkGetMacro(GrayKhiR,double);
-  itkGetMacro(RedPsiI,double);
-  itkGetMacro(RedPsiR,double);
-  itkGetMacro(RedKhiI,double);
-  itkGetMacro(RedKhiR,double);
-  itkGetMacro(GreenPsiI,double);
-  itkGetMacro(GreenPsiR,double);
-  itkGetMacro(GreenKhiI,double);
-  itkGetMacro(GreenKhiR,double);
-  itkGetMacro(BluePsiI,double);
-  itkGetMacro(BluePsiR,double);
-  itkGetMacro(BlueKhiI,double);
-  itkGetMacro(BlueKhiR,double);
+  itkGetMacro(GrayPsiI, double);
+  itkGetMacro(GrayPsiR, double);
+  itkGetMacro(GrayKhiI, double);
+  itkGetMacro(GrayKhiR, double);
+  itkGetMacro(RedPsiI, double);
+  itkGetMacro(RedPsiR, double);
+  itkGetMacro(RedKhiI, double);
+  itkGetMacro(RedKhiR, double);
+  itkGetMacro(GreenPsiI, double);
+  itkGetMacro(GreenPsiR, double);
+  itkGetMacro(GreenKhiI, double);
+  itkGetMacro(GreenKhiR, double);
+  itkGetMacro(BluePsiI, double);
+  itkGetMacro(BluePsiR, double);
+  itkGetMacro(BlueKhiI, double);
+  itkGetMacro(BlueKhiR, double);
 
-  itkGetMacro(RGB,bool);
-  itkGetMacro(HEmissionMode,bool);
-  itkGetMacro(VEmissionMode,bool);
-  itkGetMacro(GrayPolarizationMode,PolarizationMode);
-  itkGetMacro(RedPolarizationMode,PolarizationMode);
-  itkGetMacro(GreenPolarizationMode,PolarizationMode);
-  itkGetMacro(BluePolarizationMode,PolarizationMode);
-  itkGetMacro(QuicklookSize,SizeType);
-  itkGetMacro(Valid,bool);
-  itkGetObjectMacro(ShrinkFilter,ShrinkFilterType);
-  itkGetMacro(Min,double);
-  itkGetMacro(Max,double);
-  itkGetMacro(ShrinkFactor,unsigned int);
+  itkGetMacro(RGB, bool);
+  itkGetMacro(HEmissionMode, bool);
+  itkGetMacro(VEmissionMode, bool);
+  itkGetMacro(GrayPolarizationMode, PolarizationMode);
+  itkGetMacro(RedPolarizationMode, PolarizationMode);
+  itkGetMacro(GreenPolarizationMode, PolarizationMode);
+  itkGetMacro(BluePolarizationMode, PolarizationMode);
+  itkGetMacro(QuicklookSize, SizeType);
+  itkGetMacro(Valid, bool);
+  itkGetObjectMacro(ShrinkFilter, ShrinkFilterType);
+  itkGetMacro(Min, double);
+  itkGetMacro(Max, double);
+  itkGetMacro(ShrinkFactor, unsigned int);
 
   /** Get the output images */
   DoubleVectorImageType * GetOutputVectorImage();
@@ -203,14 +202,14 @@ public:
   void GenerateQuicklook();
 
   /** Setter / getter polarimetric Image*/
-  itkSetObjectMacro(ImageHH,ComplexImageType);
-  itkSetObjectMacro(ImageHV,ComplexImageType);
-  itkSetObjectMacro(ImageVH,ComplexImageType);
-  itkSetObjectMacro(ImageVV,ComplexImageType);
-  itkGetObjectMacro(ImageHH,ComplexImageType);
-  itkGetObjectMacro(ImageHV,ComplexImageType);
-  itkGetObjectMacro(ImageVH,ComplexImageType);
-  itkGetObjectMacro(ImageVV,ComplexImageType);
+  itkSetObjectMacro(ImageHH, ComplexImageType);
+  itkSetObjectMacro(ImageHV, ComplexImageType);
+  itkSetObjectMacro(ImageVH, ComplexImageType);
+  itkSetObjectMacro(ImageVV, ComplexImageType);
+  itkGetObjectMacro(ImageHH, ComplexImageType);
+  itkGetObjectMacro(ImageHV, ComplexImageType);
+  itkGetObjectMacro(ImageVH, ComplexImageType);
+  itkGetObjectMacro(ImageVV, ComplexImageType);
 
 protected:
 

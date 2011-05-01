@@ -335,7 +335,7 @@ SpectrumModuleModel
   content << "# The following data represents the whole spectrum at the index " << "( " <<
   m_PixelSpectrumModel->GetSpectrumIndexByID(id)[0] << " , " << m_PixelSpectrumModel->GetSpectrumIndexByID(id)[1] <<
   " )\n\n";
-  content << "# Channel;Intensity\n";
+  content << "# Channel; Intensity\n";
 
   for (int i = 0; i < size; i++)
     {

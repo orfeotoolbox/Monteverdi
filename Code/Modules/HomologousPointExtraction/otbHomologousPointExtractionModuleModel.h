@@ -195,8 +195,8 @@ public:
   itkGetMacro(TransformParameters, ParametersType);
 
   /** Set the rectify or superimpose mode */
-  itkSetMacro(RectifyMode,bool);
-  itkGetMacro(RectifyMode,bool);
+  itkSetMacro(RectifyMode, bool);
+  itkGetMacro(RectifyMode, bool);
 
 protected:
 

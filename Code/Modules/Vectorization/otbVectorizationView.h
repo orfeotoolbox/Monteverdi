@@ -81,8 +81,8 @@ public:
   virtual void NextGeometryIsPolygonIntCallback();
   virtual void ChangeNavigationModeCallback();
   virtual void UpdateColorCallback();
-  virtual void UpdateAlphaCallback();  
-  virtual void OKCallback();  
+  virtual void UpdateAlphaCallback();
+  virtual void OKCallback();
 
   /** GUI callbacks*/
   virtual void ButtonAutomaticCallbackOn();

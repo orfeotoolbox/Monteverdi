@@ -73,14 +73,14 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 // This is a struct class, so attributes are public
-template <class TLabel> 
+template <class TLabel>
 class ObjectClass
 {
 public:
   typedef TLabel                           LabelType;
   typedef std::vector<LabelType>           LabelVectorType;
-  typedef itk::FixedArray<double,4>        ColorType;
-  typedef otb::VectorData<double,2>        VectorDataType;
+  typedef itk::FixedArray<double, 4>        ColorType;
+  typedef otb::VectorData<double, 2>        VectorDataType;
   typedef VectorDataType::DataNodeType     DataNodeType;
 
   /** Class label */
@@ -90,7 +90,7 @@ public:
   /** Class color */
   ColorType       m_Color;
   /** Label object samples */
-  LabelVectorType m_Samples; 
+  LabelVectorType m_Samples;
   /** VectorData representing the samples */
   VectorDataType::Pointer m_VectorData;
   /** Pointer to the folder */
@@ -108,7 +108,7 @@ public:
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(ObjectLabelingModel,Object);
+  itkTypeMacro(ObjectLabelingModel, Object);
 
   /** New macro*/
   itkNewMacro(Self);
@@ -122,13 +122,13 @@ public:
   typedef LabeledImageType::IndexType             IndexType;
   typedef VectorImageType::PixelType              VectorPixelType;
   
-  typedef AttributesMapLabelObjectWithClassLabel<LabelType,2,double,LabelType>  LabelObjectType;
+  typedef AttributesMapLabelObjectWithClassLabel<LabelType, 2, double, LabelType>  LabelObjectType;
   typedef LabelObjectType::AttributesValueType                                  AttributesValueType;
   typedef LabelObjectType::AttributesMapType                                    AttributesMapType;
   typedef itk::LabelMap<LabelObjectType>                                        LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>        LabelMapFilterType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>        LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                           ShapeLabelMapFilterType;
-  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType,VectorImageType> BandsStatsLabelMapFilterType;
+  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatsLabelMapFilterType;
   typedef MinMaxAttributesLabelMapFilter<LabelMapType>                          MinMaxLabelMapFilterType;
   typedef NormalizeAttributesLabelMapFilter<LabelMapType>                       NormalizeLabelMapFilterType;
 
@@ -144,25 +144,25 @@ public:
   typedef LabelMapToVectorDataFilter<LabelMapType, VectorDataType, LabelObjectWithClassLabelFieldsFunctorType>
                                                                    LabelMapToVectorDataFilterType;
 
-  typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType,LabeledImageType> ClassLabelFilterType;
-  typedef ChangeLabelImageFilter<LabeledImageType,VectorImageType>                     ChangeLabelFilterType;
+  typedef LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType, LabeledImageType> ClassLabelFilterType;
+  typedef ChangeLabelImageFilter<LabeledImageType, VectorImageType>                     ChangeLabelFilterType;
 
-  // Learning typedefs 
+  // Learning typedefs
   typedef itk::VariableLengthVector<AttributesValueType>                           VectorType;
-  typedef itk::FixedArray<LabelType,1>                                             TrainingVectorType;
+  typedef itk::FixedArray<LabelType, 1>                                             TrainingVectorType;
   typedef itk::Statistics::ListSample<VectorType>                                  ListSampleType;
   typedef itk::Statistics::ListSample<TrainingVectorType>                          TrainingListSampleType;
   typedef LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType,
-    ListSampleType,TrainingListSampleType>                                         ClassLabelMap2ListSampleFilterType;
-  typedef LabelMapToSampleListFilter<LabelMapType,ListSampleType>                  LabelMap2ListSampleFilterType;
-  typedef std::map<std::string,bool>                                               AvailableFeaturesMapType;
+    ListSampleType, TrainingListSampleType>                                         ClassLabelMap2ListSampleFilterType;
+  typedef LabelMapToSampleListFilter<LabelMapType, ListSampleType>                  LabelMap2ListSampleFilterType;
+  typedef std::map<std::string, bool>                                               AvailableFeaturesMapType;
 
   // SVMs
   typedef Functor::VariableLengthVectorToMeasurementVectorFunctor<VectorType> MeasurementVectorFunctorType;
-  typedef SVMSampleListModelEstimator<ListSampleType,TrainingListSampleType,
+  typedef SVMSampleListModelEstimator<ListSampleType, TrainingListSampleType,
     MeasurementVectorFunctorType>                                             SVMEstimatorType;
   typedef LabelMapSVMClassifier<LabelMapType>                                 LabelMapSVMClassifierType;
-  typedef SVMMarginSampler<ListSampleType,SVMEstimatorType::SVMModelType>     MarginSamplerType;
+  typedef SVMMarginSampler<ListSampleType, SVMEstimatorType::SVMModelType>     MarginSamplerType;
 
   // KMeans
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
@@ -173,23 +173,23 @@ public:
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef Image<RGBPixelType,2>                                          RGBImageType;
-  typedef ImageLayer<VectorImageType,RGBImageType>                       LayerType;
-  typedef ImageLayer<LabeledImageType,RGBImageType>                      LabeledLayerType;
+  typedef Image<RGBPixelType, 2>                                          RGBImageType;
+  typedef ImageLayer<VectorImageType, RGBImageType>                       LayerType;
+  typedef ImageLayer<LabeledImageType, RGBImageType>                      LabeledLayerType;
   typedef ImageLayerGenerator<LayerType>                                 LayerGeneratorType;
   typedef ImageLayerGenerator<LabeledLayerType>                          LabeledLayerGeneratorType;
   typedef ImageLayerRenderingModel<RGBImageType>                         VisualizationModelType;
   typedef PixelDescriptionModel<RGBImageType>                            PixelDescriptionModelType;
   typedef DataNodeType::PolygonType                                      PolygonType;
-  typedef SimplifyPathFunctor<PolygonType,PolygonType>                   SimplifyPolygonFunctorType;
+  typedef SimplifyPathFunctor<PolygonType, PolygonType>                   SimplifyPolygonFunctorType;
   typedef Function::UniformAlphaBlendingFunction<LayerGeneratorType::ImageLayerType::OutputPixelType> BlendingFunctionType;
   typedef LayerGeneratorType::ImageLayerType::RenderingFunctionType      RenderingFunctionType;
 
   /** Get the origin */
-  itkGetConstReferenceMacro(Origin,VectorImageType::PointType);
+  itkGetConstReferenceMacro(Origin, VectorImageType::PointType);
   
   /** Get the spacing */
-  itkGetConstReferenceMacro(Spacing,VectorImageType::SpacingType);
+  itkGetConstReferenceMacro(Spacing, VectorImageType::SpacingType);
 
   /** Open an image with its associated label map */
   void OpenImage(VectorImageType* vimage, LabeledImageType* limage);
@@ -283,14 +283,14 @@ public:
   void SaveClassification();
 
   /** Get the visualization models */
-  itkGetObjectMacro(VisualizationModel,VisualizationModelType);
-  itkGetObjectMacro(PixelDescriptionModel,PixelDescriptionModelType);
+  itkGetObjectMacro(VisualizationModel, VisualizationModelType);
+  itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType);
 
   /** Get the selected label polygon */
-  itkGetObjectMacro(SelectedPolygon,VectorDataType);
+  itkGetObjectMacro(SelectedPolygon, VectorDataType);
   
   /** Get the margin sampled polygons */
-  itkGetObjectMacro(MarginSampledPolygon,VectorDataType);
+  itkGetObjectMacro(MarginSampledPolygon, VectorDataType);
 
  /** Get the list of available features */
   AvailableFeaturesMapType GetAvailableFeatures() const
@@ -314,11 +314,11 @@ public:
   void ClearClassification();
 
   /** Get current accuracy */
-  itkGetMacro(Accuracy,double);  
+  itkGetMacro(Accuracy, double);
 
   /** Get the SVM Estimator */
-  itkGetObjectMacro(SVMEstimator,SVMEstimatorType);
-  itkGetObjectMacro(MarginSampler,MarginSamplerType);
+  itkGetObjectMacro(SVMEstimator, SVMEstimatorType);
+  itkGetObjectMacro(MarginSampler, MarginSamplerType);
 
   /** Get margin samples */
   const LabelVectorType & GetMarginSamples() const
@@ -333,10 +333,10 @@ public:
   void ChangeClassificationOpacity(double opacity);
 
   /** Get vector image */
-  itkGetConstObjectMacro(VectorImage,VectorImageType);
-  itkGetObjectMacro(LabeledOutput,LabeledImageType);
-  itkGetObjectMacro(ColoredOutput,VectorImageType);
-  itkGetObjectMacro(VectorDataOutput,VectorDataType);
+  itkGetConstObjectMacro(VectorImage, VectorImageType);
+  itkGetObjectMacro(LabeledOutput, LabeledImageType);
+  itkGetObjectMacro(ColoredOutput, VectorImageType);
+  itkGetObjectMacro(VectorDataOutput, VectorDataType);
 
   /** Get displayed channels list */
   std::vector<unsigned int> GetChannels();
@@ -388,7 +388,7 @@ private:
   std::string                        m_LabeledImageFile;
 
   /** Vector reader */
-  VectorImageType::Pointer           m_VectorImage; 
+  VectorImageType::Pointer           m_VectorImage;
 
   /** Vector Image source file */
   std::string                        m_VectorImageFile;
@@ -397,7 +397,7 @@ private:
   LabelMapType::Pointer              m_LabelMap;
 
   /** Selected label */
-  LabelType                          m_SelectedLabel; 
+  LabelType                          m_SelectedLabel;
 
   /** Selected class */
   unsigned int                       m_SelectedClass;

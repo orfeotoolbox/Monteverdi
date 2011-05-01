@@ -359,7 +359,7 @@ SupervisedClassificationAppli
   VectorDataType::Pointer vData = reader->GetOutput();
   
   typedef VectorDataProjectionFilter<
-    VectorDataType,VectorDataType>                VectorDataProjectionFilterType;
+    VectorDataType, VectorDataType>                VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>    VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
   typedef VectorDataType::DataNodeType::PointType PointType;
@@ -407,7 +407,7 @@ SupervisedClassificationAppli
   rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
   
   // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion); 
+  vdextract->SetRegion(rsRegion);
   vdextract->UpdateOutputInformation();
   
   //TODO : add DEM management ?

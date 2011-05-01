@@ -264,15 +264,15 @@ HomologousPointExtractionModuleModel
 
 /** This code is commented out because it only handles the Rigid2DTransform
 
-  typedef itk::LandmarkBasedTransformInitializer<T,VectorImageType,VectorImageType> TransformInitializerType;
+  typedef itk::LandmarkBasedTransformInitializer<T, VectorImageType, VectorImageType> TransformInitializerType;
   typename TransformInitializerType::Pointer ti = TransformInitializerType::New();
   typename TransformInitializerType::LandmarkPointContainer fixedLandmarks, movingLandmarks;
-  typename TransformInitializerType::LandmarkPointType fixedPoint,movingPoint;
+  typename TransformInitializerType::LandmarkPointType fixedPoint, movingPoint;
 
-  for(IndexesListType::const_iterator it = m_IndexesList.begin(); it!=m_IndexesList.end();++it)
+  for(IndexesListType::const_iterator it = m_IndexesList.begin(); it!=m_IndexesList.end(); ++it)
     {
-    m_FirstInputImage->TransformIndexToPhysicalPoint(it->first,fixedPoint);
-    m_SecondInputImage->TransformIndexToPhysicalPoint(it->second,movingPoint);
+    m_FirstInputImage->TransformIndexToPhysicalPoint(it->first, fixedPoint);
+    m_SecondInputImage->TransformIndexToPhysicalPoint(it->second, movingPoint);
 
     fixedLandmarks.push_back(fixedPoint);
     movingLandmarks.push_back(movingPoint);
@@ -304,7 +304,7 @@ HomologousPointExtractionModuleModel
   for (unsigned int i = 0; i < nbPoints; i++)
     {
     m_FirstInputImage->TransformIndexToPhysicalPoint(m_IndexesList[i].first, fixedPoint);
-    m_SecondInputImage->TransformIndexToPhysicalPoint(m_IndexesList[i].second,movingPoint);
+    m_SecondInputImage->TransformIndexToPhysicalPoint(m_IndexesList[i].second, movingPoint);
 
 
     ax(i, 0) = fixedPoint[0];

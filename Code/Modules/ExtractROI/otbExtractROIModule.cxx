@@ -145,7 +145,7 @@ void ExtractROIModule::Run()
       vLatitude2->deactivate();
       bUpdate->deactivate();
       bUpdate->deactivate();
-	  MsgReporter::GetInstance()->SendError(e.GetDescription());
+         MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else if (image.IsNull() && !vectorImage.IsNull())
@@ -186,7 +186,7 @@ void ExtractROIModule::Run()
       vLong2->deactivate();
       vLatitude2->deactivate();
       bUpdate->deactivate();
-	  MsgReporter::GetInstance()->SendError(e.GetDescription());
+         MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
   else
@@ -408,9 +408,9 @@ void ExtractROIModule::Ok()
       this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(), "OutputImage", otbGetTextMacro("Image extracted"));
 
       /*ImageRegionType newRequestedRegion;
-      newRequestedRegion.SetSize(0,0);
-      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()),static_cast<unsigned long>(vStartY->value()));
-      m_ImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion);*/
+      newRequestedRegion.SetSize(0, 0);
+      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()), static_cast<unsigned long>(vStartY->value()));
+      m_ImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion); */
 
       this->NotifyOutputsChange();
       }
@@ -436,9 +436,9 @@ void ExtractROIModule::Ok()
                                 otbGetTextMacro("Image extracted"));
 
      /* VectorImageRegionType newRequestedRegion;
-      newRequestedRegion.SetSize(0,0);
-      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()),static_cast<unsigned long>(vStartY->value()));
-      m_VectorImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion);*/
+      newRequestedRegion.SetSize(0, 0);
+      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()), static_cast<unsigned long>(vStartY->value()));
+      m_VectorImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion); */
 
       this->NotifyOutputsChange();
 

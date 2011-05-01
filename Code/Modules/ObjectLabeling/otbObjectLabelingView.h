@@ -44,9 +44,9 @@ namespace otb
  *
  */
 class ObjectLabelingView
-      : public EventsListener<std::string>, 
-	public ObjectLabelingGUI, 
-	public itk::Object
+      : public EventsListener<std::string>,
+       public ObjectLabelingGUI,
+       public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -57,7 +57,7 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(ObjectLabelingView,Object);
+  itkTypeMacro(ObjectLabelingView, Object);
 
   /** Visualization typedefs */
   typedef ObjectLabelingModel::RGBPixelType              RGBPixelType;
@@ -126,8 +126,8 @@ public:
   void UpdateViewerSetup();
 
   /** Get a pointer to the view parts for the controller */
-  itkGetObjectMacro(ImageView,ImageViewType);
-  itkGetObjectMacro(PixelView,PixelViewType);
+  itkGetObjectMacro(ImageView, ImageViewType);
+  itkGetObjectMacro(PixelView, PixelViewType);
 
 protected:
   /** Constructor */

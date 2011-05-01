@@ -68,19 +68,18 @@ public:
   typedef ImageType::IndexType                            IndexType;
 
   // Vector Data
-  typedef TypeManager::Vector_Data				  VectorDataType;
-  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType>   VectorDataProjectionFilterType;
+  typedef TypeManager::Vector_Data                              VectorDataType;
+  typedef VectorDataProjectionFilter<VectorDataType, VectorDataType>   VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
   typedef VectorDataProperties<VectorDataType>            VectorDataPropertiesType;
 
   // Rasterization
    typedef otb::VectorDataToImageFilter<VectorDataType,
-     ImageType>         								  VectorDataToImageFilterType;
+     ImageType>                                                                   VectorDataToImageFilterType;
 
   // Misc
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
   typedef RemoteSensingRegionType::SizeType               SizePhyType;
-
 
 
   /** Check if the input file contains valid support information. */
@@ -105,10 +104,10 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   ImageType::Pointer                        m_InputImage; //image used to retrieve data support
-  VectorDataType::Pointer					m_InputVectorData; // Data Vector
+  VectorDataType::Pointer                                   m_InputVectorData; // Data Vector
   VectorDataProjectionFilterType::Pointer   m_VectorDataProjFilter; // Data vector projection filter
-  VectorDataPropertiesType::Pointer 		m_VectorDataProperties;
-  VectorDataExtractROIType::Pointer 	    m_VectorDataExtractROI;
+  VectorDataPropertiesType::Pointer               m_VectorDataProperties;
+  VectorDataExtractROIType::Pointer            m_VectorDataExtractROI;
   VectorDataToImageFilterType::Pointer      m_VectorDataRendering;
   ImageType::Pointer                        m_OutputImage;
 };

@@ -43,7 +43,7 @@ int otbVectorizationClassification(int argc, char* argv[])
   
   typedef otb::VectorizationModule::FloatingVectorImageType ImageType;
   typedef otb::VectorizationModule::VectorDataType          VectorDataType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;  
+  typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>         VDReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>         VDWriterType;
 
@@ -111,7 +111,7 @@ int otbVectorizationClassification(int argc, char* argv[])
   VDReaderType::Pointer vdReader2 = VDReaderType::New();
   vdReader2->SetFileName(tmpVdName);
   vdReader2->Update();
-  otb::DataObjectWrapper wrapperVdIn = otb::DataObjectWrapper::Create(vdReader2->GetOutput()); 
+  otb::DataObjectWrapper wrapperVdIn = otb::DataObjectWrapper::Create(vdReader2->GetOutput());
 
   // Add Input Image
   module2->AddInputByKey("InputImage", wrapperIn);

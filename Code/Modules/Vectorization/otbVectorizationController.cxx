@@ -227,7 +227,7 @@ void VectorizationController::FocusOnDataNode(const IndexType& index)
 /**
  * Used to set the automatic vectordata action handler
  */
-void 
+void
 VectorizationController::ButtonAutomaticCallbackOn()
 {
   this->InitializeCommonActionHandler();
@@ -240,11 +240,11 @@ VectorizationController::ButtonAutomaticCallbackOn()
 /**
  * Used to set the automatic vectordata action handler
  */
-void 
+void
 VectorizationController::ExtractRegion()
 {
   // Get the extracted region
-  VectorizationModel::RegionType  extractedRegion 
+  VectorizationModel::RegionType  extractedRegion
     = m_View->GetImageView()->GetExtractRegionGlComponent()->GetRegion();
   // Set the right extract region to the model
   m_Model->ExtractRegionOfImage(extractedRegion);
@@ -255,7 +255,7 @@ VectorizationController::ExtractRegion()
 /**
  * Used to set the manual vectordata action handler
  */
-void 
+void
 VectorizationController::ButtonAutomaticCallbackOff()
 {
   this->InitializeCommonActionHandler();
@@ -267,7 +267,7 @@ VectorizationController::ButtonAutomaticCallbackOff()
   * Add the common handlers for the manual and automatic geometric
   * features selection mode
   */
-void 
+void
 VectorizationController::InitializeCommonActionHandler()
 {
   m_WidgetController->ClearAllActionHandlers();

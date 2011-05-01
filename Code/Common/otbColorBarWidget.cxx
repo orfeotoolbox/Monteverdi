@@ -26,7 +26,7 @@ namespace otb
  * Constructor.
  */
 ColorBarWidget::ColorBarWidget()
-    : Fl_Window(0,0,0,0,0)
+    : Fl_Window(0, 0, 0, 0, 0)
 {
   m_ScalarImage = SingleImageType::New();
 }
@@ -43,7 +43,7 @@ void ColorBarWidget::Init(int x, int y, int w, int h, const char * l)
 {
 
   this->label(l);
-  this->resize(x,y,w,h);
+  this->resize(x, y, w, h);
 
   SingleImageType::RegionType region;
   SingleImageType::IndexType index;
@@ -92,7 +92,7 @@ void ColorBarWidget::draw(void)
   unsigned int height = colorBarFilter->GetOutput()->GetLargestPossibleRegion().GetSize(1);
   unsigned int width  = colorBarFilter->GetOutput()->GetLargestPossibleRegion().GetSize(0);
 
-  unsigned int dim = width * height *3 ;
+  unsigned int dim = width * height *3;
 
   typedef itk::ImageRegionConstIterator<ColorMapFilterType::OutputImageType> ImageRegionConstIteratorType;
 
@@ -111,13 +111,12 @@ void ColorBarWidget::draw(void)
       colormap[ pos    ] = itColorBar.Get()[0];
       colormap[ pos +1 ] = itColorBar.Get()[1];
       colormap[ pos +2 ] = itColorBar.Get()[2];
-      pos +=3 ;
+      pos +=3;
       ++itColorBar;
     }
 
   fl_draw_image(colormap.GetDataPointer(), 0 , 0, width, height, 3 );
 }
-
 
 
 }// end namespace otb

@@ -116,8 +116,8 @@ DEMToImageGeneratorView
 ::ShowGUI()
 {
   m_ColorBarWidget = ColorBarWidgetType::New();
-  m_ColorBarWidget->Init(oColorBar->x(),oColorBar->y(),
-                   oColorBar->w(),oColorBar->h(),"Color Bar");
+  m_ColorBarWidget->Init(oColorBar->x(), oColorBar->y(),
+                   oColorBar->w(), oColorBar->h(),"Color Bar");
   oColorBar->add(m_ColorBarWidget);
   oColorBar->box(FL_NO_BOX);
   m_ColorBarWidget->SetColormap(m_Controller->GetModel()->GetColormap());
@@ -159,8 +159,7 @@ DEMToImageGeneratorView
     unsigned int radius         = oRadiusHillShading->value();
 
 
-
-    m_Controller->ProcessHillShading( azimutAngle, elevationAngle,radius);
+    m_Controller->ProcessHillShading( azimutAngle, elevationAngle, radius);
 
     // Display the color relief
     if(oColorRelief->value() == 1)
@@ -176,7 +175,6 @@ DEMToImageGeneratorView
   // hide the GUI
   this->Hide();
 }
-
 
 
 void
@@ -197,7 +195,6 @@ DEMToImageGeneratorView
   // hide the GUI
   guiMainWindow->hide();
 }
-
 
 
 
@@ -264,14 +261,13 @@ DEMToImageGeneratorView::UpdateProjectionRef()
       }
     else
       {
-      projectionRef ="GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]]";
+      projectionRef ="GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]], PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
       }
     }
   m_projectionRefBuffer->text(projectionRef.c_str());
 
   oOutputProjectionRef->buffer(m_projectionRefBuffer);
 }
-
 
 
 
@@ -317,7 +313,6 @@ void DEMToImageGeneratorView::UpdateHillShading()
     oMaxValue->deactivate();
     }
 }
-
 
 
 

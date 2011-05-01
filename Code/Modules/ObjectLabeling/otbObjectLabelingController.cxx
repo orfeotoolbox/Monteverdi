@@ -25,9 +25,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-ObjectLabelingController::ObjectLabelingController() : m_View(), m_WidgetsController(), 
-									     m_ResizingHandler(),m_ChangeScaleHandler(), m_ChangeRegionHandler(), 
-						       m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler(), m_MouseClickHandler()
+ObjectLabelingController::ObjectLabelingController() : m_View(), m_WidgetsController(),
+                                                                    m_ResizingHandler(), m_ChangeScaleHandler(), m_ChangeRegionHandler(),
+                                                 m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler(), m_MouseClickHandler()
 {
   // Build the widgets controller
   m_WidgetsController         = WidgetsControllerType::New();
@@ -109,7 +109,7 @@ void ObjectLabelingController::ClassSelected(unsigned int classIndex)
 }
 
 void ObjectLabelingController::ClearSelectedClass()
-{ 
+{
   try
     {
     m_Model->ClearSelectedClass();
@@ -121,7 +121,7 @@ void ObjectLabelingController::ClearSelectedClass()
 }
 
 void ObjectLabelingController::AddClass()
-{  
+{
   try
     {
     m_Model->AddClass();
@@ -143,7 +143,7 @@ void ObjectLabelingController::RemoveClass(unsigned int classIndex)
     }
 }
 void ObjectLabelingController::ClearClasses()
-{  
+{
   try
     {
     m_Model->ClearClasses();
@@ -153,33 +153,33 @@ void ObjectLabelingController::ClearClasses()
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingController::ChangeClassColor(unsigned int classIndex,const ColorType & color)
+void ObjectLabelingController::ChangeClassColor(unsigned int classIndex, const ColorType & color)
 {
   try
     {
-    m_Model->SetClassColor(color,classIndex);
+    m_Model->SetClassColor(color, classIndex);
     }
   catch(itk::ExceptionObject & err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingController::ChangeClassName(unsigned int classIndex,const char * name)
+void ObjectLabelingController::ChangeClassName(unsigned int classIndex, const char * name)
 {
   try
     {
-    m_Model->SetClassName(name,classIndex);
+    m_Model->SetClassName(name, classIndex);
     }
   catch(itk::ExceptionObject & err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-void ObjectLabelingController::ChangeClassLabel(unsigned int classIndex,const LabelType & label)
+void ObjectLabelingController::ChangeClassLabel(unsigned int classIndex, const LabelType & label)
 {
   try
     {
-    m_Model->SetClassLabel(label,classIndex);
+    m_Model->SetClassLabel(label, classIndex);
     }
   catch(itk::ExceptionObject & err)
     {
@@ -192,7 +192,7 @@ void ObjectLabelingController::RemoveObject(unsigned int objectIndex)
     {
     try
       {
-      m_Model->RemoveSampleFromClass(m_Model->GetClass(m_Model->GetSelectedClass()).m_Samples[objectIndex],m_Model->GetSelectedClass());
+      m_Model->RemoveSampleFromClass(m_Model->GetClass(m_Model->GetSelectedClass()).m_Samples[objectIndex], m_Model->GetSelectedClass());
       }
     catch(itk::ExceptionObject & err)
       {
@@ -216,7 +216,7 @@ void ObjectLabelingController::SelectObject(unsigned int objectIndex)
       {
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       }
-    }				    
+    }
 }
 
 void ObjectLabelingController::ClearObjects()
@@ -310,7 +310,7 @@ void ObjectLabelingController::ChangeKernelType(int kernel)
 }
 
 void ObjectLabelingController::ChangeNumberOfCrossValidationFolders(unsigned int nb)
-{ 
+{
   try
     {
     m_Model->GetSVMEstimator()->SetNumberOfCrossValidationFolders(nb);
@@ -422,11 +422,11 @@ void ObjectLabelingController::ClearClassification()
     }
 }
 
-void ObjectLabelingController::ChangeFeatureState(const std::string & fname,bool state)
+void ObjectLabelingController::ChangeFeatureState(const std::string & fname, bool state)
 {
   try
     {
-    m_Model->ChangeFeatureState(fname,state);
+    m_Model->ChangeFeatureState(fname, state);
     }
   catch(itk::ExceptionObject & err)
     {
@@ -458,7 +458,7 @@ void ObjectLabelingController::UpdateViewerDisplay()
     {
       channels.push_back(atoi(m_View->iRChannelChoice->value())-1);
       channels.push_back(atoi(m_View->iGChannelChoice->value())-1);
-      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);							    
+      channels.push_back(atoi(m_View->iBChannelChoice->value())-1);
     }
   else if (m_View->rViewerSetupGrayscaleMode->value())
     {

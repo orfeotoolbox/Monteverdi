@@ -29,7 +29,7 @@ PolarimetricSynthesisModule::PolarimetricSynthesisModule()
   m_RealToComplexFilter.resize(4);
   m_ImaginaryToComplexFilter.resize(4);
   m_RealAndImaginaryToComplexFilter.resize(4);
-  for(unsigned int i = 0 ; i < 4 ; ++i)
+  for(unsigned int i = 0; i < 4; ++i)
     {
       m_RealToComplexFilter[i] = RealImageToComplexImageFilterType::New();
       m_ImaginaryToComplexFilter[i] = ImaginaryImageToComplexImageFilterType::New();
@@ -51,14 +51,14 @@ PolarimetricSynthesisModule::PolarimetricSynthesisModule()
   m_Model->RegisterListener(this);
 
   // Then, describe inputs needed by the module
-  this->AddInputDescriptor<ImageType>("InputImageHHReal","HH Image (Real Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageHHImag","HH Image (Imaginary Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageHVReal","HV Image (Real Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageHVImag","HV Image (Imaginary Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageVHReal","VH Image (Real Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageVHImag","VH Image (Imaginary Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageVVReal","VV Image (Real Part)",true,false);
-  this->AddInputDescriptor<ImageType>("InputImageVVImag","VV Image (Imaginary Part)",true,false);
+  this->AddInputDescriptor<ImageType>("InputImageHHReal","HH Image (Real Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageHHImag","HH Image (Imaginary Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageHVReal","HV Image (Real Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageHVImag","HV Image (Imaginary Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageVHReal","VH Image (Real Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageVHImag","VH Image (Imaginary Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageVVReal","VV Image (Real Part)", true, false);
+  this->AddInputDescriptor<ImageType>("InputImageVVImag","VV Image (Imaginary Part)", true, false);
 }
 
 /** Destructor */
@@ -126,10 +126,10 @@ void PolarimetricSynthesisModule::Run()
   ComplexImageType::Pointer vhImage;
   ComplexImageType::Pointer vvImage;
 
-  hhImage = CombineData(0,hhRealImage,hhImagImage);
-  hvImage = CombineData(1,hvRealImage,hvImagImage);
-  vhImage = CombineData(2,vhRealImage,vhImagImage);
-  vvImage = CombineData(3,vvRealImage,vvImagImage);
+  hhImage = CombineData(0, hhRealImage, hhImagImage);
+  hvImage = CombineData(1, hvRealImage, hvImagImage);
+  vhImage = CombineData(2, vhRealImage, vhImagImage);
+  vvImage = CombineData(3, vvRealImage, vvImagImage);
 
   if( hhImage.IsNull() && hvImage.IsNull() &&
       vhImage.IsNull() && vvImage.IsNull() )

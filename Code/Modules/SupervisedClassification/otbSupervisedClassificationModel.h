@@ -78,7 +78,7 @@ public:
   typedef VectorDataType::Pointer    VectorDataPointerType;
 
    // Reprojection filter
-  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> 
+  typedef VectorDataProjectionFilter<VectorDataType, VectorDataType>
     VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>  VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType  RemoteSensingRegionType;

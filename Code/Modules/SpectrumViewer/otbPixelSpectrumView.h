@@ -188,7 +188,7 @@ public:
   /** Find which radioSpectralButton is seleted */
   void FindWhoIsSelected();
 
-  /** change curve color by Id      color: [0;1] */
+  /** change curve color by Id      color: [0; 1] */
   void ChangeCurveColor(unsigned int id, float r, float g, float b, float a);
 
   void ZoomRouletteCallBack();
@@ -237,7 +237,6 @@ private:
 
   int m_MaximumNumberOfBand;
   int m_MaximumAmplitude;
-
 
 
 }; // end class

@@ -94,7 +94,7 @@ void ProjectionModule::Notify()
     this->ClearOutputDescriptors();
     this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", otbGetTextMacro("Projected image"));
     // Send an event to Monteverdi application
-    //this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    //this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     this->NotifyOutputsChange();
     this->BusyOff();
     }

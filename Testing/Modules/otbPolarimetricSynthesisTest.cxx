@@ -39,7 +39,7 @@ int otbPolarimetricSynthesisTest(int argc, char* argv[])
 
   ReaderType::Pointer imageReader = ReaderType::New();
   
-  // Input Image 
+  // Input Image
   imageReader->SetFileName(inputFilename);
   imageReader->GenerateOutputInformation();
 

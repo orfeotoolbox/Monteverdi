@@ -154,7 +154,7 @@ void
 WriterViewGUI
 ::OpenImage()
 {
-//   const char * cfname = fl_file_chooser("Pick an image file", "*.*",m_LastPath.c_str());
+//   const char * cfname = fl_file_chooser("Pick an image file", "*.*", m_LastPath.c_str());
   Fl::check();
   guiMainWindow->redraw();
   if (cfname == NULL || strlen(cfname)<1)

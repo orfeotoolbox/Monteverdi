@@ -188,16 +188,16 @@ void TileExportModule::SaveDataSet()
   std::string filepath = vFilePath->value();
   if (!filepath.empty())
     {
-    m_Path = itksys::SystemTools::GetFilenamePath(filepath);    
+    m_Path = itksys::SystemTools::GetFilenamePath(filepath);
     
     // Problem if the path if empty : it means we are in the current
-    // directory 
+    // directory
     if(m_Path.empty())
       m_Path = "./";
     
     m_FileName = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
     
-    // Expand the path and check if the directory is writeable 
+    // Expand the path and check if the directory is writeable
     ossimFilename path(m_Path);
     path.createDirectory();
     
@@ -775,7 +775,7 @@ TileExportModule::GetCuttenFileName(std::string description, unsigned int idx)
   std::string currentImageName;
   std::string tempName;
 //  if(found == std::string::npos ||  found2 == std::string::npos || found == found2)
-//    tempName =  description.substr(found+1,found2-found-1);
+//    tempName =  description.substr(found+1, found2-found-1);
 //  else
 //    {
   itk::OStringStream oss;

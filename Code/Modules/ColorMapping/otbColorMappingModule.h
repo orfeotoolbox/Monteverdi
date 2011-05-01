@@ -65,7 +65,7 @@ public:
   typedef otb::Image<RGBPixelType, 2>               RGBImageType;
 
     // ColorMapping Class typedefs
-  typedef itk::ShiftScaleImageFilter<SingleImageType,SingleImageType>                     ShiftScaleImageFilterType;
+  typedef itk::ShiftScaleImageFilter<SingleImageType, SingleImageType>                     ShiftScaleImageFilterType;
   typedef itk::ScalarToRGBColormapImageFilter<SingleImageType, RGBImageType>              ColorMapFilterType;
   typedef otb::Functor::ReliefColormapFunctor<Floating_Point_PrecisionType, RGBPixelType> ReliefColorMapFunctorType;
   typedef otb::RGBImageToVectorImageCastFilter<RGBImageType, OutputImageType>             RGBtoVectorImageCastFilterType;

@@ -57,7 +57,7 @@ ObjectLabelingModule::~ObjectLabelingModule()
 void ObjectLabelingModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 

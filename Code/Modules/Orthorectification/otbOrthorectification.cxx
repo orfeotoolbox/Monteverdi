@@ -487,7 +487,7 @@ Orthorectification
 ::UpdateOutputParameters()
 {
   // Ccompute the output parameters stuff
-  typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;  
+  typedef otb::ImageToGenericRSOutputParameters<ImageType>  OutputParamEstimatorType;
   OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
   
   estimator->SetInput(m_InputImage);
@@ -655,7 +655,7 @@ Orthorectification
     default:
       MsgReporter::GetInstance()->SendError("Problem with map projection type, please contact developpers");
       break;
-    } 
+    }
 }
 
 int
@@ -784,7 +784,7 @@ CreateOutput()
   start[0] = 0;
   start[1] = 0;
 
-  OriginPointType origin = static_cast<OriginPointType>(m_OutputOrigin); 
+  OriginPointType origin = static_cast<OriginPointType>(m_OutputOrigin);
 
   m_OrthoFilter->SetInput(m_InputImage);
   m_OrthoFilter->SetOutputStartIndex(start);

@@ -68,7 +68,7 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
 
   // Simulate display options
   specificModule->GetView()->mOpacity->value(0.35);
-  specificModule->GetView()->mOpacity->do_callback();  
+  specificModule->GetView()->mOpacity->do_callback();
   specificModule->GetView()->mBoundButton->value(1);
   specificModule->GetView()->mBoundButton->do_callback();
   specificModule->GetView()->mClustersButton->value(1);

@@ -70,14 +70,14 @@ public:
   typedef TypeManager::Floating_Point_Image         ImageType;
   typedef TypeManager::Floating_Point_Complex_Image ComplexImageType;
 
-  typedef otb::RealAndImaginaryImageToComplexImageFilter<ImageType,ImageType,
+  typedef otb::RealAndImaginaryImageToComplexImageFilter<ImageType, ImageType,
               ComplexImageType>  RealAndImaginaryImageToComplexImageFilterType;
   typedef otb::RealImageToComplexImageFilter<ImageType,
               ComplexImageType>  RealImageToComplexImageFilterType;
   typedef otb::ImaginaryImageToComplexImageFilter<ImageType,
               ComplexImageType>  ImaginaryImageToComplexImageFilterType;
 
-  itkGetObjectMacro(View,ViewType);
+  itkGetObjectMacro(View, ViewType);
 
 protected:
   /** Constructor */

@@ -69,7 +69,7 @@ public:
     return m_ResultVisuController;
   }
 
-  //itkSetObjectMacro(View,ViewType);
+  //itkSetObjectMacro(View, ViewType);
   void SetView(ViewPointerType pView)
   {
     m_View = pView;

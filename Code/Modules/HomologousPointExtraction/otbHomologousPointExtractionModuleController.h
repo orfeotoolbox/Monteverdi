@@ -113,8 +113,8 @@ protected:
   typedef ChangeScaledExtractRegionActionHandler<VisualizationModelType, ImageViewType> ChangeScaledRegionHandlerType;
   typedef ChangeScaleActionHandler<VisualizationModelType, ImageViewType>               ChangeScaleHandlerType;
   typedef MouseClickActionHandler<MouseClickedController, ImageViewType>                MouseClickedHandlertype;
-  typedef ArrowKeyMoveActionHandler<VisualizationModelType,ImageViewType>               ArrowKeyMoveActionHandlerType;
-  typedef DragFullWindowActionHandler<VisualizationModelType,ImageViewType>             DragActionHandlerType;
+  typedef ArrowKeyMoveActionHandler<VisualizationModelType, ImageViewType>               ArrowKeyMoveActionHandlerType;
+  typedef DragFullWindowActionHandler<VisualizationModelType, ImageViewType>             DragActionHandlerType;
 
   typedef PixelDescriptionModel<RGBImageType>                                     PixelDescriptionModelType;
   typedef PixelDescriptionActionHandler<PixelDescriptionModelType, ImageViewType> PixelDescriptionActionHandlerType;

@@ -121,7 +121,7 @@ OpticalCalibrationModule
       sensorID.find("Formosat") == std::string::npos &&
       sensorID.find("IKONOS-2") == std::string::npos)
     {
-    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5,QuickBird, WorldView2 and Formosat2 are supported.");
+    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5, QuickBird, WorldView2 and Formosat2 are supported.");
     return false;
     }
 
@@ -234,7 +234,7 @@ OpticalCalibrationModule
   tHelper->insert("Please note that:\n");
   tHelper->insert("- The spectral unit is 1e-6m.\n");
   tHelper->insert("- If the field UserStep is not specified, a default\n");
-  tHelper->insert("  value of 0,0025.1e-6m is considered.\n");
+  tHelper->insert("  value of 0, 0025.1e-6m is considered.\n");
   tHelper->insert("- Order have an importance. You have to respect the band image order.\n");
   tHelper->insert("- If no spectral sensitivity file is specified, the module will use metadata\n");
   tHelper->insert("  to compute them.\n");

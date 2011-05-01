@@ -56,7 +56,7 @@ public:
   typedef VectorizationModel
   ::VectorDataModelType                       VectorDataModelType;
   typedef VectorDataModelType::VectorDataType VectorDataType;
-  typedef VectorDataType::Pointer             VectorDataPointer; 
+  typedef VectorDataType::Pointer             VectorDataPointer;
   typedef VectorizationModel
   ::VectorImageType                           VectorImageType;
 

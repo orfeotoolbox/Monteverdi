@@ -99,7 +99,7 @@ public:
   /** Orthoirectification filter */
   typedef otb::UtmInverseProjection                DefaultMapType;
   typedef OrthoRectificationFilter<ImageType,
-                                   ImageType, 
+                                   ImageType,
                                    DefaultMapType> OrthorectificationFilterType;
   typedef OrthorectificationFilterType::PointType  OriginPointType;
   
@@ -231,7 +231,7 @@ private:
   int               m_TileNumber;
   double            m_MaxTileSize;
 
-  // 
+  //
   std::string       m_CartographicProjectionRef;
   
   //Input & Outputs Images

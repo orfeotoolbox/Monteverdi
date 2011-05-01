@@ -54,10 +54,10 @@ int otbExtractROIModuleGenericTest(int argc, char* argv[])
   // If multi channel
   if(atoi(argv[1]) != 0)
   {
-	specificModule->vChannelId->value(2);
-	Fl::check();
-	specificModule->vChannelId->value(3);
-	Fl::check();
+       specificModule->vChannelId->value(2);
+       Fl::check();
+       specificModule->vChannelId->value(3);
+       Fl::check();
   }
 
   //Compute full stat
@@ -65,10 +65,10 @@ int otbExtractROIModuleGenericTest(int argc, char* argv[])
   // If multi channel
   if(atoi(argv[1]) != 0)
   {
-	specificModule->vChannelId->value(1);
-	Fl::check();
-	specificModule->vChannelId->value(3);
-	Fl::check();
+       specificModule->vChannelId->value(1);
+       Fl::check();
+       specificModule->vChannelId->value(3);
+       Fl::check();
   }
   
   // Show covariance matrix
@@ -92,13 +92,13 @@ int otbImageStatisticsModuleTest(int argc, char* argv[])
   int res = EXIT_FAILURE;
   if( argv[0] == 0)
   {
-	typedef otb::ImageStatisticsModule::ImageType ImageType;
-	res = otbExtractROIModuleGenericTest<ImageType>(argc, argv);
+       typedef otb::ImageStatisticsModule::ImageType ImageType;
+       res = otbExtractROIModuleGenericTest<ImageType>(argc, argv);
   }
   else
   {
-	typedef otb::ImageStatisticsModule::VectorImageType VectorImageType;
-	res = otbExtractROIModuleGenericTest<VectorImageType>(argc, argv);
+       typedef otb::ImageStatisticsModule::VectorImageType VectorImageType;
+       res = otbExtractROIModuleGenericTest<VectorImageType>(argc, argv);
   }
 
   return res;

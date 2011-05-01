@@ -58,7 +58,7 @@ public:
   typedef PixelSpectrumControllerType::Pointer PixelSpectrumControllerPointerType;
 
   /** Methods */
-  //itkSetObjectMacro(SpectrumModuleModel,SpectrumModuleModelType);
+  //itkSetObjectMacro(SpectrumModuleModel, SpectrumModuleModelType);
   itkGetObjectMacro(SpectrumModuleModel, SpectrumModuleModelType);
 
   virtual void SetSpectrumModuleModel(SpectrumModuleModelType * m) = 0;

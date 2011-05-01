@@ -28,7 +28,6 @@
 #include "base/ossimKeywordlist.h"
 
 
-
 namespace otb
 {
 namespace Functor
@@ -129,12 +128,12 @@ protected:
       kwl.remove("sensor");
       kwl.add("sensor", "", true);
       
-      imageKeywordlist.SetKeywordlist(kwl); 
+      imageKeywordlist.SetKeywordlist(kwl);
       
       itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
       
       // Update the output MetaDataDictionary
-      this->GetOutput()->SetMetaDataDictionary(dict);      
+      this->GetOutput()->SetMetaDataDictionary(dict);
     }
 
   /// Copy output requested region to input requested region

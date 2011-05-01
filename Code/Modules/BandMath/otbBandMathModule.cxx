@@ -63,8 +63,8 @@ void BandMathModule::Hide()
   ui_Help->value(0);
 }
 
-/** 
- * The custom run command 
+/**
+ * The custom run command
  */
 void BandMathModule::Run()
 {
@@ -97,7 +97,7 @@ void BandMathModule::Run()
     
     // From here on, the input is either an Image or a vectorImage
     // The input is an image
-    if (image.IsNotNull()) 
+    if (image.IsNotNull())
       {
       std::ostringstream tmpParserVarName;
       tmpParserVarName << "im" << imageId+1 << "b1";
@@ -144,7 +144,7 @@ void BandMathModule::Run()
   this->Show();
 }
 
-/** 
+/**
  * Help Initialization
  */
 void BandMathModule::InitHelp()
@@ -167,7 +167,7 @@ void BandMathModule::InitHelp()
   ui_HelpText->value(helpContent.str().c_str());
 }
 
-/** 
+/**
  * Change a Variable name
  */
 void BandMathModule::ChangeVarName()
@@ -246,7 +246,7 @@ void BandMathModule::LiveCheck()
  * Add Indexes
  */
 void BandMathModule::AddIndexes()
-{  
+{
   std::vector<std::string> tmpVarNames;
   
   tmpVarNames.resize(4);
@@ -256,9 +256,9 @@ void BandMathModule::AddIndexes()
   tmpVarNames.at(3) =  "physical index Y";
 
   for(unsigned int j=0; j < 4; j++)
-    { 
+    {
     ui_ImageNameList->add(tmpVarNames.at(j).c_str());
-    ui_ImageNames->add(tmpVarNames.at(j).c_str());  
+    ui_ImageNames->add(tmpVarNames.at(j).c_str());
     ui_VarNames->add(m_BandMathFilter->GetNthInputName(m_NumberOfInputBands+j).c_str());
     }
   

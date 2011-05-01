@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(FineCorrelationModule,Module);
+  itkTypeMacro(FineCorrelationModule, Module);
 
   /** Data typedefs */
   /// Dataset
@@ -94,12 +94,12 @@ public:
   typedef TypeManager::Deformation_Field_Type                           DeformationFieldType;
   typedef TypeManager::Deformation_Value_Type                           DeformationValueType;
   
-  typedef FineRegistrationImageFilter<ImageType,ImageType,DeformationFieldType> CorrelationFilterType;
-  typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType>                 GaussianFilterType;
-  typedef StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType>    WarpFilterType;
+  typedef FineRegistrationImageFilter<ImageType, ImageType, DeformationFieldType> CorrelationFilterType;
+  typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>                 GaussianFilterType;
+  typedef StreamingWarpImageFilter<ImageType, ImageType, DeformationFieldType>    WarpFilterType;
 
   typedef FieldComponentExtractor<DeformationValueType, PixelType> ExtractFunctorType;
-  typedef itk::UnaryFunctorImageFilter<DeformationFieldType, ImageType, ExtractFunctorType> ExtractFilterType; 
+  typedef itk::UnaryFunctorImageFilter<DeformationFieldType, ImageType, ExtractFunctorType> ExtractFilterType;
   
   typedef itk::AbsImageFilter<ImageType, ImageType> AbsImageFilterType;
 protected:
@@ -116,7 +116,7 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
+  virtual bool CanShow(){return true; };
   
   /** Show the Module GUI */
   virtual void Show()

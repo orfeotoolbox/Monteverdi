@@ -64,7 +64,7 @@ namespace otb
  *  \brief This class is the view part of the projection module. It
  *  handles the user interaction with the GUI, and launch the
  *  processings in the model part.
- * 
+ *
  * TODO : remove switch/cases on View
  *
  * \ingroup
@@ -138,7 +138,7 @@ protected:
   // Update the use dem statuts
   void UpdateDEMUse();
 
-  // 
+  //
   virtual void RetrieveInputProjection();
 
   // Launch the orthorectification & Quit the application
@@ -201,12 +201,12 @@ protected:
   virtual void UpdateOriginGeographicalCoordinates();
 
   /** Activate all the map parameters when the mode used is User
-    * selection 
+    * selection
     */
   virtual void ActivateMapParamaters();
 
   /** Dectivate all the map parameters when the mode used is not User
-    * selection 
+    * selection
     */
   virtual void DeactivateMapParamaters();
 

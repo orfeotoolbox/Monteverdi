@@ -56,8 +56,8 @@ int otbDEMToImageGeneratorModuleTest(int argc, char* argv[])
   specificModule->GetView()->oSizeX->value(oss.str().c_str());
   specificModule->GetView()->oSizeY->value(oss.str().c_str());
   oss.str("50");
-  specificModule->GetView()->oSpacingX->value(oss.str().c_str());;
-  specificModule->GetView()->oSpacingY->value(oss.str().c_str());;
+  specificModule->GetView()->oSpacingX->value(oss.str().c_str()); ;
+  specificModule->GetView()->oSpacingY->value(oss.str().c_str()); ;
 //  specificModule->GetView()->oRadiusHillShading
   Fl::check();
 

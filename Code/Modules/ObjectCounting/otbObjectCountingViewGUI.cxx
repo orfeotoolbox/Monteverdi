@@ -236,7 +236,7 @@ ObjectCountingViewGUI
 //   guiMainWindow->redraw();
 //   if (cfname == NULL || strlen(cfname)<1)
 //   {
-//     return ;
+//     return;
 //   }
 //   m_Controller->OpenImage( cfname );
 }
@@ -265,7 +265,7 @@ ObjectCountingViewGUI
 //   guiMainWindow->redraw();
 //   if (cfname == NULL || strlen(cfname)<1)
 //   {
-//     return ;
+//     return;
 //   }
 //   m_Controller->SaveResult(cfname);
 //   mSavePoly->activate();

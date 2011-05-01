@@ -48,7 +48,7 @@ VectorizationView
   m_Color[3]=1;
   
 
-  // 
+  //
   m_SelectedPolygonGLComponent = VectorDataGlComponentType::New();
 }
   
@@ -124,7 +124,7 @@ VectorizationView
   vNavigationMode->redraw();
 
   // Register controllers
-  m_ImageView->SetController(m_WidgetController); 
+  m_ImageView->SetController(m_WidgetController);
   
   // Show
   this->Show();
@@ -136,11 +136,11 @@ void
 VectorizationView
 ::InitColor()
 {
-  Fl::check(); 
+  Fl::check();
   m_Color =  m_VectorDataGlComponent->GetColor();
   
   fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
-           static_cast<unsigned char>((double)(255) * m_Color[1]), 
+           static_cast<unsigned char>((double)(255) * m_Color[1]),
            static_cast<unsigned char>((double)(255) * m_Color[2]));
   
   Fl::check();
@@ -152,7 +152,7 @@ VectorizationView
   vAlpha->value(m_Color[3]);
   vAlpha->redraw();
   sAlpha->value(m_Color[3]);
-  sAlpha->redraw(); 
+  sAlpha->redraw();
 }
 
 void

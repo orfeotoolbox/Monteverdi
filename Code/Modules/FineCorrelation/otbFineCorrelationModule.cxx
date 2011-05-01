@@ -55,7 +55,7 @@ FineCorrelationModule::~FineCorrelationModule()
 void FineCorrelationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 
@@ -64,13 +64,13 @@ void FineCorrelationModule::Run()
 {
   // First step is to retrieve the inputs
 
-    ImageType::Pointer referenceImage = this->GetInputData<ImageType>("ReferenceInputImage",0);
+    ImageType::Pointer referenceImage = this->GetInputData<ImageType>("ReferenceInputImage", 0);
     if( referenceImage.IsNull())
     {
       itkExceptionMacro(<<"The input reference image is Null.");
     }
 
-    ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage",0);
+    ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage", 0);
     if( secondaryImage.IsNull())
       {
       itkExceptionMacro(<<"The input secondary image is Null.");
@@ -86,7 +86,7 @@ void FineCorrelationModule::OK()
   {
     this->Hide();
     
-    ImageType::Pointer referenceImage = this->GetInputData<ImageType>("ReferenceInputImage",0);
+    ImageType::Pointer referenceImage = this->GetInputData<ImageType>("ReferenceInputImage", 0);
     if( referenceImage.IsNull())
       {
       itkExceptionMacro(<<"The input reference image is Null.");
@@ -95,7 +95,7 @@ void FineCorrelationModule::OK()
     // Update reference image output information
     referenceImage->UpdateOutputInformation();
 
-    ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage",0);
+    ImageType::Pointer secondaryImage = this->GetInputData<ImageType>("SecondaryInputImage", 0);
     if( secondaryImage.IsNull())
       {
       itkExceptionMacro(<<"The input secondary image is Null.");
@@ -164,7 +164,7 @@ void FineCorrelationModule::OK()
       }
 
     // Last, when all outputs where declared, notify listeners
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated",m_InstanceId));
+    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
 
   };
 

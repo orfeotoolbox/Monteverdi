@@ -270,7 +270,7 @@ void ReaderModule::TypeChanged()
 
 void ReaderModule::DatasetChanged()
 {
-	vName->value(m_Desc[vDataset->value()].c_str());
+       vName->value(m_Desc[vDataset->value()].c_str());
 }
 
 void ReaderModule::OpenOpticalImage()
@@ -283,7 +283,7 @@ void ReaderModule::OpenOpticalImage()
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
     filepath += ":";
-    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
+    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
     filepath += ossDatasetId.str();
   }
 
@@ -294,7 +294,7 @@ void ReaderModule::OpenOpticalImage()
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
     oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
-    ossId << vName->value();//m_Desc[vDataset->value()];
+    ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
     {
@@ -332,7 +332,7 @@ void ReaderModule::OpenSarImage()
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
     filepath += ":";
-    ossDatasetId << vDataset->value() ; // Following the convention in GDALImageIO
+    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
     filepath += ossDatasetId.str();
   }
 
@@ -343,7 +343,7 @@ void ReaderModule::OpenSarImage()
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
     oss << "Complex Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
-    ossId << vName->value();//m_Desc[vDataset->value()];
+    ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
     {
@@ -435,7 +435,7 @@ bool ReaderModule::CheckDataSetString()
         found = m_Desc[it].find(key);
         if (found!=string::npos)
           {
-          m_Desc[it].replace(found,key.length()," ");
+          m_Desc[it].replace(found, key.length()," ");
           }
         }
       while(found!=string::npos);

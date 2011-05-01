@@ -46,17 +46,17 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(PoincareSphereWidget,Object);
+  itkTypeMacro(PoincareSphereWidget, Object);
 
 
   /** Initialize the widget */
   virtual void Init(int x, int y, int w, int h, const char * l);
   virtual int handle(int event);
 
-  /*    itkSetMacro(PsiI,double);
-      itkSetMacro(PsiR,double);
-      itkSetMacro(KhiI,double);
-      itkSetMacro(KhiR,double);*/
+  /*    itkSetMacro(PsiI, double);
+      itkSetMacro(PsiR, double);
+      itkSetMacro(KhiI, double);
+      itkSetMacro(KhiR, double); */
   void SetPsiI(double val)
   {
     m_PsiI=2*val;

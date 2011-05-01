@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   //parser->AddInputImage();
   parser->AddOption("--FirstInputImage", "First input image.", "-in1", true);
   parser->AddOption("--SecondInputImage", "Second input image.", "-in2", true);
-  //parser->AddOption("--Output", "Image Name where Output Image will be written.","-out",true);
+  //parser->AddOption("--Output", "Image Name where Output Image will be written.","-out", true);
 
   try
     {

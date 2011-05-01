@@ -75,7 +75,7 @@ public:
 
   typedef otb::DEMToImageGenerator<InputImageType> DEMToImageGeneratorType;
   /** Output */
-  typedef GenericRSResampleImageFilter<InputImageType, 
+  typedef GenericRSResampleImageFilter<InputImageType,
                                        InputImageType>       ResampleFilterType;
   
   typedef otb::HillShadingFilter<InputImageType, InputImageType> HillShadingFilterType;

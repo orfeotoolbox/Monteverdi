@@ -281,7 +281,7 @@ public:
   /** Get ProcessObject */
   itkGetObjectMacro(ProcessObjectModel, itk::ProcessObject);
   itkSetObjectMacro(ProcessObjectModel, itk::ProcessObject);
-//   itkGetObjectMacro(VectorWriter,VectorWriterType);
+//   itkGetObjectMacro(VectorWriter, VectorWriterType);
 
   /** Chain lsit */
   void CreateFilterList(int filterId);

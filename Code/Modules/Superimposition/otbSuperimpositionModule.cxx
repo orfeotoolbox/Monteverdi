@@ -41,7 +41,7 @@ SuperimpositionModule::SuperimpositionModule()
   this->AddInputDescriptor<VectorImageType>("ReferenceImage",
                                             otbGetTextMacro("Reference image for reprojection"));
   this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
-  this->AddInputDescriptor<VectorImageType>("InputImage", 
+  this->AddInputDescriptor<VectorImageType>("InputImage",
                                             otbGetTextMacro("Image to reproject"));
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
@@ -99,7 +99,7 @@ void SuperimpositionModule::Ok()
   vfixed->UpdateOutputInformation();
   vmoving->UpdateOutputInformation();
   
-  // Resampler 
+  // Resampler
   m_Resampler->SetInput(vmoving);
   m_Resampler->SetOutputParametersFromImage(vfixed);
   
@@ -118,7 +118,7 @@ void SuperimpositionModule::Ok()
     }
   
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_Resampler->GetOutput(), "Reprojected image", 
+  this->AddOutputDescriptor(m_Resampler->GetOutput(), "Reprojected image",
                             otbGetTextMacro("Image superimposable to reference"));
   this->NotifyOutputsChange();
 

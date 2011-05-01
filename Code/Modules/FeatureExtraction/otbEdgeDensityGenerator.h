@@ -61,7 +61,7 @@ public:
       CountFunctionType> SobelEdgeDensityFilterType;
 
   /* TODO */
-  //typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType  ,CountFunctionType> GradientEdgeDensityFilterType;
+  //typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType  , CountFunctionType> GradientEdgeDensityFilterType;
 
   // AddEdgeDensityFilter
   void AddEdgeDensityFilter(ModelPointerType pModel, FeatureType pType, std::vector<double> params)

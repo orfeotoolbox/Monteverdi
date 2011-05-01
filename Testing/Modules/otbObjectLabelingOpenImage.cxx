@@ -39,7 +39,7 @@ int otbObjectLabelingOpenImage(int argc, char* argv[])
   ReaderType::Pointer imageReader = ReaderType::New();
   LabeledReaderType::Pointer segmentedImageReader = LabeledReaderType::New();
   
-  // Input Image 
+  // Input Image
   imageReader->SetFileName(inputFilename);
   imageReader->GenerateOutputInformation();
   // Segmented Image
@@ -54,14 +54,14 @@ int otbObjectLabelingOpenImage(int argc, char* argv[])
   otb::DataObjectWrapper wrapperSegmentedIn = otb::DataObjectWrapper::Create(segmentedImageReader->GetOutput());
   std::cout << "Segmented Input wrapper : " << wrapperSegmentedIn << std::endl << std::endl;
   
-  // Object Labeling Module 
+  // Object Labeling Module
   otb::ObjectLabelingModule::Pointer objectLabelingModule = otb::ObjectLabelingModule::New();
   otb::Module::Pointer      olabelingModule    = objectLabelingModule.GetPointer();
   std::cout << "Module : " << olabelingModule << std::endl << std::endl;
 
   // Configure module
   olabelingModule->AddInputByKey("InputImage", wrapperIn);
-  olabelingModule->AddInputByKey("LabeledImage",wrapperSegmentedIn );
+  olabelingModule->AddInputByKey("LabeledImage", wrapperSegmentedIn );
   olabelingModule->Start();
 
 

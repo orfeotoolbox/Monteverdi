@@ -233,14 +233,14 @@ void PolarimetricSynthesisModel::WirePipeline()
 void PolarimetricSynthesisModel::ComputeNormalizationFactors()
 {
   ComplexIteratorType it;
-  it = ComplexIteratorType(m_Quicklook,m_Quicklook->GetLargestPossibleRegion());
+  it = ComplexIteratorType(m_Quicklook, m_Quicklook->GetLargestPossibleRegion());
   it.GoToBegin();
 
   ListSampleType::Pointer listSample = ListSampleType::New();
   while ( !it.IsAtEnd() )
   {
     ComplexVectorPixelType pixel = it.Get();
-    for (unsigned int i = 0;i<m_Quicklook->GetNumberOfComponentsPerPixel();++i)
+    for (unsigned int i = 0; i<m_Quicklook->GetNumberOfComponentsPerPixel(); ++i)
     {
       listSample->PushBack(static_cast<double>(pixel[i].real()*pixel[i].real() + pixel[i].imag()*pixel[i].imag()));
     }
@@ -254,10 +254,10 @@ void PolarimetricSynthesisModel::ComputeNormalizationFactors()
   size.Fill(256);
   generator->SetNumberOfBins(size);
   generator->Update();
-  m_Min = generator->GetOutput()->Quantile(0,0.02);
-  m_Max = generator->GetOutput()->Quantile(0,0.98);
-  m_AbsoluteMin = generator->GetOutput()->Quantile(0,0);
-  m_AbsoluteMax =  generator->GetOutput()->Quantile(0,1);
+  m_Min = generator->GetOutput()->Quantile(0, 0.02);
+  m_Max = generator->GetOutput()->Quantile(0, 0.98);
+  m_AbsoluteMin = generator->GetOutput()->Quantile(0, 0);
+  m_AbsoluteMax =  generator->GetOutput()->Quantile(0, 1);
 }
 
 void PolarimetricSynthesisModel::SetupEmission(Color value)
@@ -356,8 +356,8 @@ void PolarimetricSynthesisModel::GenerateQuicklook()
   m_ShrinkFilter->SetInput(m_ImageListToVectorImageFilter->GetOutput());
   largestRegionSize = m_ImageListToVectorImageFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
 
-  unsigned int maxQuicklook = std::max(m_QuicklookSize[0],m_QuicklookSize[1]);
-  unsigned int maxLargest   = std::max(largestRegionSize[0],largestRegionSize[1]);
+  unsigned int maxQuicklook = std::max(m_QuicklookSize[0], m_QuicklookSize[1]);
+  unsigned int maxLargest   = std::max(largestRegionSize[0], largestRegionSize[1]);
   m_ShrinkFactor = maxLargest/maxQuicklook;
   if (m_ShrinkFactor == 0)
   {
@@ -381,19 +381,19 @@ void PolarimetricSynthesisModel::GenerateOutputHistogram(Color value)
     {
     case GRAYSCALE :
       m_GrayQuicklookPolarimetricSynthesisFilter->Update();
-      it = OutputIteratorType(m_GrayQuicklookPolarimetricSynthesisFilter->GetOutput(),m_GrayQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
+      it = OutputIteratorType(m_GrayQuicklookPolarimetricSynthesisFilter->GetOutput(), m_GrayQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
       break;
     case RED :
       m_RedQuicklookPolarimetricSynthesisFilter->Update();
-      it = OutputIteratorType(m_RedQuicklookPolarimetricSynthesisFilter->GetOutput(),m_RedQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
+      it = OutputIteratorType(m_RedQuicklookPolarimetricSynthesisFilter->GetOutput(), m_RedQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
       break;
     case GREEN :
       m_GreenQuicklookPolarimetricSynthesisFilter->Update();
-      it = OutputIteratorType(m_GreenQuicklookPolarimetricSynthesisFilter->GetOutput(),m_GreenQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
+      it = OutputIteratorType(m_GreenQuicklookPolarimetricSynthesisFilter->GetOutput(), m_GreenQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
       break;
     case BLUE :
       m_BlueQuicklookPolarimetricSynthesisFilter->Update();
-      it = OutputIteratorType(m_BlueQuicklookPolarimetricSynthesisFilter->GetOutput(),m_BlueQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
+      it = OutputIteratorType(m_BlueQuicklookPolarimetricSynthesisFilter->GetOutput(), m_BlueQuicklookPolarimetricSynthesisFilter->GetOutput()->GetLargestPossibleRegion());
       break;
     }
 
@@ -411,7 +411,7 @@ void PolarimetricSynthesisModel::GenerateOutputHistogram(Color value)
     HistogramGeneratorType::HistogramType::SizeType size;
     size.Fill(256);
     m_HistogramGenerator->SetNumberOfBins(size);
-    MeasurementVectorType min,max;
+    MeasurementVectorType min, max;
     min[0]= m_AbsoluteMin;
     max[0]= m_AbsoluteMax;
     m_HistogramGenerator->SetHistogramMin(min);

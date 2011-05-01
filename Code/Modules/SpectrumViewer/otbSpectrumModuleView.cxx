@@ -188,7 +188,7 @@ SpectrumModuleView
   helpContent << "+/-: Change the representation scale"<< std::endl;
 
   this->wHelpText->value(helpContent.str().c_str());
-  wInfo->position(wMainWindow->x() + wMainWindow->w(),wMainWindow->y());
+  wInfo->position(wMainWindow->x() + wMainWindow->w(), wMainWindow->y());
   wInfo->show();
 }
 
@@ -418,7 +418,7 @@ SpectrumModuleView
     if (filename == NULL)
       {
       otbMsgDebugMacro(<<"Empty file name!");
-      return ;
+      return;
       }
 
     m_SpectrumModuleController->WriteSpreadsheetFile(id, filename);

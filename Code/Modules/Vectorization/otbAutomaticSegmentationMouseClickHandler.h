@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(AutomaticSegmentationMouseClickHandler,ImageWidgetActionHandler);
+  itkTypeMacro(AutomaticSegmentationMouseClickHandler, ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                      ModelType;
@@ -166,8 +166,8 @@ public:
 
 protected:
   /** Constructor */
-  AutomaticSegmentationMouseClickHandler() : m_View(), m_Model(), 
-                                             m_ActiveOnScrollWidget(true), 
+  AutomaticSegmentationMouseClickHandler() : m_View(), m_Model(),
+                                             m_ActiveOnScrollWidget(true),
                                              m_ActiveOnFullWidget(true),
                                              m_ActiveOnZoomWidget(true),
                                              m_AddMouseButton(1),
@@ -197,7 +197,7 @@ private:
   bool             m_ActiveOnFullWidget;
   bool             m_ActiveOnZoomWidget;
 
-  // Button selection 
+  // Button selection
   int              m_AddMouseButton;
   int              m_EndMouseButton;
 

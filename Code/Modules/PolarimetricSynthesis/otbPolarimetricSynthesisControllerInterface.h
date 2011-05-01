@@ -37,7 +37,7 @@ public:
   typedef itk::Index<2>                    IndexType;
 
   /** Standard type macros */
-  itkTypeMacro(PolarimetricSynthesisControllerInterface,Superclass);
+  itkTypeMacro(PolarimetricSynthesisControllerInterface, Superclass);
 
   /** Users actions */
   virtual void LoadImages() = 0;

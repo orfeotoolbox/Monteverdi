@@ -20,7 +20,6 @@
 #define __otbSpatialFrequencyImageFilter_txx
 
 
-
 #include "otbSpatialFrequencyImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -43,7 +42,7 @@ SpatialFrequencyImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 SpatialFrequencyImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
@@ -51,7 +50,7 @@ SpatialFrequencyImageFilter<TInputImage, TOutputImage>
   Superclass::GenerateInputRequestedRegion();
   
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr = 
+  typename Superclass::InputImagePointer inputPtr =
     const_cast< TInputImage * >( this->GetInput() );
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
   
@@ -121,7 +120,7 @@ template< class TInputImage, class TOutputImage>
 void
 SpatialFrequencyImageFilter< TInputImage, TOutputImage>
 ::AfterThreadedGenerateData() {
-  for (int i = 0; i < this->GetNumberOfThreads(); i++) 
+  for (int i = 0; i < this->GetNumberOfThreads(); i++)
     {
     fftwf_destroy_plan(plan[i]);
     fftwf_free(fftin[i]);
@@ -158,15 +157,15 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
 
   typename InputImageType::IndexType pixelIndex;
   const InputPixelType *buf = image->GetBufferPointer();
-  int width = imageSize[0]; 
+  int width = imageSize[0];
   int height = imageSize[1];
   const int ROW = 1;
   const int COL = 0;
 
-  buf += (adjustedOutputRegionForThreadStartPixelIndex[ROW] - inputImageRequestedRegionStartPixelIndex[ROW]) 
-    * width  
-    + adjustedOutputRegionForThreadStartPixelIndex[COL] 
-    - inputImageRequestedRegionStartPixelIndex[COL] ;
+  buf += (adjustedOutputRegionForThreadStartPixelIndex[ROW] - inputImageRequestedRegionStartPixelIndex[ROW])
+    * width
+    + adjustedOutputRegionForThreadStartPixelIndex[COL]
+    - inputImageRequestedRegionStartPixelIndex[COL];
 
   int usedWidth = m_WindowSize / 2 + 1;
   int fftSize = m_WindowSize * (m_WindowSize / 2 + 1);
@@ -185,7 +184,7 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
       k = 0;
       idx = I * width + J;
       for (i = 0; i < m_WindowSize; i++, idx += (width - m_WindowSize)) {
-        for (j = 0; j < m_WindowSize; j++, idx++) 
+        for (j = 0; j < m_WindowSize; j++, idx++)
           {
           fftin[threadId][k++] = buf[idx];
           }
@@ -199,7 +198,7 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
         fftin[threadId][i] = fftout[threadId][i][0] * fftout[threadId][i][0] + fftout[threadId][i][1] * fftout[threadId][i][1];
 
       // Remove systematic maximum at 0 frequency (average)
-      // and also at [0,1], [1,0] and [-1,0] (uninteresting wavelength = windows size)
+      // and also at [0, 1], [1, 0] and [-1, 0] (uninteresting wavelength = windows size)
       fftin[threadId][0] = 0;
       fftin[threadId][1] = 0;
       fftin[threadId][usedWidth] = 0;
@@ -225,9 +224,9 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
           }
         }
     
-      float lambda[3], theta[3]; // wavelength and angle of maxima, starting at the second one (first maximum is always at [0,0])
+      float lambda[3], theta[3]; // wavelength and angle of maxima, starting at the second one (first maximum is always at [0, 0])
       int x[3], y[3]; // shifted coordinates, from the second one
-      //max at [0,0] removed : for (i = 1; i < 3; i++) {
+      //max at [0, 0] removed : for (i = 1; i < 3; i++) {
       for (i = 0; i < 3; i++) {
         x[i] = imax[i] % usedWidth;
         y[i] = imax[i] / usedWidth; // from 0 to (height - 1)

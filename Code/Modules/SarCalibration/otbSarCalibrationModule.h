@@ -60,13 +60,13 @@ public:
 
   // SarCalibration Class typedefs
   typedef SarRadiometricCalibrationToImageFilter<ImageType, ImageType>               CalibrationFilterType;
-  typedef SarRadiometricCalibrationToImageFilter<ComplexImageType,ImageType>         CalibrationComplexFilterType;
+  typedef SarRadiometricCalibrationToImageFilter<ComplexImageType, ImageType>         CalibrationComplexFilterType;
 
   // SarBrightness Class typedefs
   typedef SarBrightnessToImageFilter<ImageType, ImageType>               BrightnessFilterType;
-  typedef SarBrightnessToImageFilter<ComplexImageType,ImageType>         BrightnessComplexFilterType;
+  typedef SarBrightnessToImageFilter<ComplexImageType, ImageType>         BrightnessComplexFilterType;
 
-  typedef otb::Log10ThresholdedImageFilter<ImageType,ImageType>          Log10TImageFilterType;
+  typedef otb::Log10ThresholdedImageFilter<ImageType, ImageType>          Log10TImageFilterType;
   /** Check metadat validity */
   bool CheckMetadata();
 

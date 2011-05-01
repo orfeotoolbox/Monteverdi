@@ -408,7 +408,7 @@ MonteverdiViewGUI
   FluTreeBrowser::Node* root = m_Tree->first();
 
   //Clear existing Module outputs before adding new entries
-//   for (unsigned int i=0;i<n->children();++i)
+//   for (unsigned int i=0; i<n->children(); ++i)
 //   {
 //     otbGenericMsgDebugMacro( << "remove node " << n->child(i)->label() );
 //     n->remove(n->child(i));

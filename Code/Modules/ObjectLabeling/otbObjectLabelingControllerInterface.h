@@ -40,7 +40,7 @@ public:
 
 
   /** Standard type macros */
-  itkTypeMacro(ObjectLabelingControllerInterface,Superclass);
+  itkTypeMacro(ObjectLabelingControllerInterface, Superclass);
 
   /** Users actions */
   virtual void AddClass() = 0;
@@ -70,7 +70,7 @@ public:
   virtual void ClearMarginSamples() = 0;
   virtual void Classify() = 0;
   virtual void ClearClassification() = 0;
-  virtual void ChangeFeatureState(const std::string& fname,bool state) = 0;
+  virtual void ChangeFeatureState(const std::string& fname, bool state) = 0;
   virtual void ChangeClassificationOpacity(double value) = 0;
   virtual void UpdateViewerDisplay() =0;
   virtual void OpenImage(VectorImageType*, LabeledImageType*) =0;

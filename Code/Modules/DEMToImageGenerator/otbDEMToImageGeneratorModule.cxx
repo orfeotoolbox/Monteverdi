@@ -36,7 +36,7 @@ DEMToImageGeneratorModule::DEMToImageGeneratorModule()
   m_Model->RegisterListener(m_View);
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage","reference image ",true,false);
+  this->AddInputDescriptor<InputImageType>("InputImage","reference image ", true, false);
 }
 
 /** Destructor */

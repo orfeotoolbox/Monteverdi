@@ -70,8 +70,8 @@ ColorMappingModule
 
   // Build the GUI
   this->BuildGUI();
-  m_ColorBarWidget->Init(oColorBar->x(),oColorBar->y(),
-                   oColorBar->w(),oColorBar->h(),"Color Bar");
+  m_ColorBarWidget->Init(oColorBar->x(), oColorBar->y(),
+                   oColorBar->w(), oColorBar->h(),"Color Bar");
   oColorBar->add(m_ColorBarWidget);
   oColorBar->box(FL_NO_BOX);
   m_ColorBarWidget->show();

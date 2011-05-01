@@ -614,7 +614,7 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
                    << component[it] );
     ++vertexIt;
     }
-  vertexIt.GoToBegin();*/
+  vertexIt.GoToBegin(); */
 
   while (!vertexIt.IsAtEnd() && vertexIt.Get() != instanceId)
     {

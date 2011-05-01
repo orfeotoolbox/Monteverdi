@@ -73,10 +73,10 @@ int main(int argc, char* argv[])
 //   Fl::check();
 
 //   // Uncheck channels
-//   view->guiChannelSelection->checked(1,false);
-//   view->guiChannelSelection->checked(2,false);
-//   view->guiChannelSelection->checked(3,false);
-//   view->guiChannelSelection->checked(4,false);
+//   view->guiChannelSelection->checked(1, false);
+//   view->guiChannelSelection->checked(2, false);
+//   view->guiChannelSelection->checked(3, false);
+//   view->guiChannelSelection->checked(4, false);
 
 //   // Update Channels
 //   view->UpdateChannels();

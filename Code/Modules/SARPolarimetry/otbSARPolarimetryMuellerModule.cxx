@@ -86,13 +86,13 @@ void SARPolarimetryMuellerModule::CheckInputs()
 void SARPolarimetryMuellerModule::Ok()
 {
   this->ClearOutputDescriptors();
-  bool hasOutput = false;  
+  bool hasOutput = false;
 
   if( rb_MuePolDegPow->value() == true )
     {
       m_MuellerToPolarisationDegreeAndPowerImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_MuellerToPolarisationDegreeAndPowerImageFilter->GetOutput(), "MuellerToPolarisationDegreeAndPowerImageFilter", 
+      this->AddOutputDescriptor(m_MuellerToPolarisationDegreeAndPowerImageFilter->GetOutput(), "MuellerToPolarisationDegreeAndPowerImageFilter",
                                 otbGetTextMacro("Mueller to polarisation degree and power image"));
      hasOutput = true;
     }
@@ -100,13 +100,13 @@ void SARPolarimetryMuellerModule::Ok()
     {
       m_MuellerToReciprocalCovarianceImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_MuellerToReciprocalCovarianceImageFilter->GetOutput(), "MuellerToReciprocalCovarianceImageFilter", 
+      this->AddOutputDescriptor(m_MuellerToReciprocalCovarianceImageFilter->GetOutput(), "MuellerToReciprocalCovarianceImageFilter",
                                 otbGetTextMacro("Mueller to reciprocal covarianc image"));
      hasOutput = true;
     }
   
   if( hasOutput==true )
-    { 
+    {
       this->NotifyOutputsChange();
     }
   else
@@ -133,7 +133,7 @@ void SARPolarimetryMuellerModule::Quit()
 void SARPolarimetryMuellerModule::CheckAll(bool val)
 {
   rb_MuePolDegPow->value(val);
-  rb_MueRecCv->value(val); 
+  rb_MueRecCv->value(val);
 }
 
 

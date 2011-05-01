@@ -47,10 +47,10 @@
 // Segmentation Mean shift
 #include "otbMeanShiftVectorImageFilter.h"
 
-// Gabor convolution 
+// Gabor convolution
 #include "otbImageToStdGaborConvolutionFilter.h"
 
-// Growing Region 
+// Growing Region
 #include "itkOtsuThresholdImageFilter.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
@@ -62,7 +62,7 @@
 #include "itkWatershedImageFilter.h"
 #include "itkCastImageFilter.h"
 
-// 
+//
 #include "itkScalarConnectedComponentImageFilter.h"
 #ifdef USE_FFTWF
 #include "otbSpatialFrequencyImageFilter.h"
@@ -123,13 +123,13 @@ public:
   
   // Reprojection filter
   typedef VectorDataProjectionFilter<
-    VectorDataType,VectorDataType>                VectorDataProjectionFilterType;
+    VectorDataType, VectorDataType>                VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>    VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
   
   // Label Type
   typedef TypeManager::Label_Short_Precision      LabelType;
-  typedef TypeManager::Labeled_Short_Image        LabeledImageType; 
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
   typedef LabeledImageType::Pointer               LabeledImagePointerType;
 
   typedef ObjectList<LabeledImageType>            LabeledImageListType;
@@ -140,9 +140,9 @@ public:
   typedef ExtractImageFilterType::Pointer         ExtractImageFilterPointerType;
   
   // Transform label image to label map
-  typedef itk::LabelObject<LabelType, 2>          LabelObjectType; 
-  typedef itk::LabelMap<LabelObjectType>	  LabelMapType;
-  typedef      LabelMapType::Pointer 		  LabelMapPointerType;
+  typedef itk::LabelObject<LabelType, 2>          LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>         LabelMapType;
+  typedef      LabelMapType::Pointer                 LabelMapPointerType;
   typedef itk::LabelImageToLabelMapFilter
   <LabeledImageType, LabelMapType>                LabelImageToLabelMapFilterType;
   
@@ -151,13 +151,13 @@ public:
 
   // MeanShift
   typedef MeanShiftVectorImageFilter<
-    VectorImageType, 
-    VectorImageType, 
+    VectorImageType,
+    VectorImageType,
     LabeledImageType>                             MeanShiftVectorImageFilterType;
 
   // Image To Gabor convoluted image
   typedef ImageToStdGaborConvolutionFilter
-  <VectorImageType,VectorImageType>               StdGaborFilterType;
+  <VectorImageType, VectorImageType>               StdGaborFilterType;
 
   // Growing region
   typedef TypeManager::Floating_Point_Image       SingleImageType;
@@ -174,7 +174,7 @@ public:
   <LabelMapType, LabeledImageType>                LabelMapToLabelImageType;
 
 
-  // Watershed 
+  // Watershed
   typedef itk::GradientAnisotropicDiffusionImageFilter
   <SingleImageType, SingleImageType>              GradientAnisotropicDiffusionFilterType;
   typedef itk::GradientMagnitudeImageFilter
@@ -184,10 +184,10 @@ public:
 
   //Fast Fourier Transform
   typedef itk::ScalarConnectedComponentImageFilter
-  <LabeledImageType,LabeledImageType>	          ScalarConnectedComponentFilterType;
+  <LabeledImageType, LabeledImageType>                 ScalarConnectedComponentFilterType;
 #ifdef USE_FFTWF
   typedef SpatialFrequencyImageFilter
-  <SingleImageType,LabeledImageType>              SpatialFrequencyImageFilterType;
+  <SingleImageType, LabeledImageType>              SpatialFrequencyImageFilterType;
 #endif
   
   /** Get the visualization model */
@@ -226,7 +226,7 @@ public:
   void ExtractRegionOfImage(RegionType ExtRegion);
 
   // Generate the segmented image of the full region seen on the full
-  // image 
+  // image
   void GenerateLayers();
 
   // Methods necessary for the automatic mode : called from the
@@ -235,51 +235,51 @@ public:
   
   void LeftIndexClicked(const IndexType & index, RegionType ExtRegion);
 
-  // Put the next methods protected 
-  LabeledImagePointerType GenerateMeanshiftClustering(int spatialRadius, 
-                                                      double rangeRadius, 
+  // Put the next methods protected
+  LabeledImagePointerType GenerateMeanshiftClustering(int spatialRadius,
+                                                      double rangeRadius,
                                                       int minRegionSize);
 
-  LabeledImagePointerType GenerateGaborClustering(unsigned int gaborRad, double phi, 
-                                                  double a, double b, double firstDir, 
-                                                  int nbDir, unsigned int varRad, 
-                                                  int spatialRadius, double rangeRadius, 
+  LabeledImagePointerType GenerateGaborClustering(unsigned int gaborRad, double phi,
+                                                  double a, double b, double firstDir,
+                                                  int nbDir, unsigned int varRad,
+                                                  int spatialRadius, double rangeRadius,
                                                   int minRegionSize);
 
   LabeledImagePointerType GenerateGrowingRegionLayer(unsigned int channel,
                                                      unsigned long numberofhistogramsbins);
   
   LabeledImagePointerType GenerateWatershedClustering(unsigned int channel,
-                                                      double level, 
-                                                      double threshold, 
-                                                      double conductanceParameter, 
+                                                      double level,
+                                                      double threshold,
+                                                      double conductanceParameter,
                                                       unsigned int numberOfIterations );
 #ifdef USE_FFTWF
-  LabeledImagePointerType GenerateFastFourierTransformLayer(int channel, 
-                                                            int windowSize, 
+  LabeledImagePointerType GenerateFastFourierTransformLayer(int channel,
+                                                            int windowSize,
                                                             unsigned short threshold);
-#endif    
+#endif
   
   LabelMapPointerType ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage);
 
   // Delete the generated label map relative to the previous extracted
-  // image 
+  // image
   void DeleteLayers();
   
   /** Macro to get the selected polygon to visualize */
-  itkGetObjectMacro(SelectedVectorData,VectorDataType);
+  itkGetObjectMacro(SelectedVectorData, VectorDataType);
 
   /** Get the list of the selected algorithms */
   std::vector<std::string> GetAlgorithmsNameList()
-    { 
+    {
       return m_AlgorithmsNameList;
     }
   
   /** Get the actual layer number */
-  itkGetMacro(ActualLayerNumber,int);
+  itkGetMacro(ActualLayerNumber, int);
   
   /** Get the flag for the extract region update */
-  itkGetMacro(ExtractRegionUpdated,bool);
+  itkGetMacro(ExtractRegionUpdated, bool);
   
   /** Output accessor. */
   itkGetObjectMacro(Output, VectorDataType);

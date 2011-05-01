@@ -115,10 +115,10 @@ void ObjectLabelingView::Build()
   gZoom->resizable(m_ImageView->GetZoomWidget());
   gPixelDescription->resizable(m_PixelView->GetPixelDescriptionWidget());
 
-  m_ImageView->GetZoomWidget()->resize(gZoom->x(),gZoom->y(),gZoom->w(),gZoom->h());
-  m_ImageView->GetFullWidget()->resize(gFullResolution->x(),gFullResolution->y(),gFullResolution->w(),gFullResolution->h());
-  m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
-  m_PixelView->GetPixelDescriptionWidget()->resize(gPixelDescription->x(),gPixelDescription->y(),gPixelDescription->w(),gPixelDescription->h());
+  m_ImageView->GetZoomWidget()->resize(gZoom->x(), gZoom->y(), gZoom->w(), gZoom->h());
+  m_ImageView->GetFullWidget()->resize(gFullResolution->x(), gFullResolution->y(), gFullResolution->w(), gFullResolution->h());
+  m_ImageView->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h());
+  m_PixelView->GetPixelDescriptionWidget()->resize(gPixelDescription->x(), gPixelDescription->y(), gPixelDescription->w(), gPixelDescription->h());
 
  // Show and refresh the interface
   this->wMainWindow->show();
@@ -154,7 +154,7 @@ void ObjectLabelingView::UpdateViewerSetup()
   iGChannelChoice->clear();
   iBChannelChoice->clear();
   
-  for (unsigned int i = 0;i<lNbComponent;++i)
+  for (unsigned int i = 0; i<lNbComponent; ++i)
     {
       oss.str("");
       oss<<i+1;
@@ -170,14 +170,14 @@ void ObjectLabelingView::UpdateViewerSetup()
   if(lNbComponent > 2)
     {
       rViewerSetupColorMode->do_callback();
-      iRChannelChoice->value(std::min(channels[0],lNbComponent-1));
-      iGChannelChoice->value(std::min(channels[1],lNbComponent-1));
-      iBChannelChoice->value(std::min(channels[2],lNbComponent-1));
+      iRChannelChoice->value(std::min(channels[0], lNbComponent-1));
+      iGChannelChoice->value(std::min(channels[1], lNbComponent-1));
+      iBChannelChoice->value(std::min(channels[2], lNbComponent-1));
     }
   else
     {
       rViewerSetupGrayscaleMode->do_callback();
-      iGrayscaleChannelChoice->value(std::min(channels[0],lNbComponent-1));
+      iGrayscaleChannelChoice->value(std::min(channels[0], lNbComponent-1));
     }
   wViewerSetupWindow->redraw();
 }
@@ -189,7 +189,7 @@ void ObjectLabelingView::SetController(ObjectLabelingControllerInterface * contr
 
 void ObjectLabelingView::SetWidgetsController(ImageWidgetController * controller)
 {
-  m_WidgetsController = controller; 
+  m_WidgetsController = controller;
 }
 
 void ObjectLabelingView::Notify(const std::string & event)
@@ -235,7 +235,7 @@ void ObjectLabelingView::RefreshVisualization()
 
 
   // Create all VectorDataGlComponentType to reflect the model
-  for(unsigned int classIndex = 0; classIndex < m_Model->GetNumberOfClasses();++classIndex)
+  for(unsigned int classIndex = 0; classIndex < m_Model->GetNumberOfClasses(); ++classIndex)
     {
       VectorDataGlComponentType::Pointer glComp = VectorDataGlComponentType::New();
       glComp->SetVectorData(m_Model->GetClass(classIndex).m_VectorData);
@@ -298,14 +298,14 @@ void ObjectLabelingView::RefreshInterface()
     bClearClasses->deactivate();
     }
 
-  // Features update 
+  // Features update
   lFeatures->clear();
   ObjectLabelingModel::AvailableFeaturesMapType myvector = m_Model->GetAvailableFeatures();
   ObjectLabelingModel::AvailableFeaturesMapType::const_iterator fit = myvector.begin();
 
   while(fit != myvector.end())
     {
-    lFeatures->add(fit->first.c_str(),fit->second);
+    lFeatures->add(fit->first.c_str(), fit->second);
     ++fit;
     }
 
@@ -326,7 +326,7 @@ void ObjectLabelingView::RefreshInterface()
 
   lMarginSamples->value(lvalue);
 
-  // Read the accuracy value 
+  // Read the accuracy value
   vAccuracy->value(m_Model->GetAccuracy());
 
   // Read parameters
@@ -362,11 +362,11 @@ void ObjectLabelingView::UpdateClassInformation()
     vClassName->activate();
     vClassName->value(m_Model->GetClass(classIndex).m_Name.c_str());
     Fl_Color flColor = fl_color_cube(static_cast<int>((FL_NUM_RED - 1) *m_Model->GetClass(classIndex).m_Color[0]),
-				     static_cast<int>((FL_NUM_GREEN - 1) *m_Model->GetClass(classIndex).m_Color[1]),
-				     static_cast<int>((FL_NUM_BLUE - 1) *m_Model->GetClass(classIndex).m_Color[2]));
+                                 static_cast<int>((FL_NUM_GREEN - 1) *m_Model->GetClass(classIndex).m_Color[1]),
+                                 static_cast<int>((FL_NUM_BLUE - 1) *m_Model->GetClass(classIndex).m_Color[2]));
     bClassColor->activate();
     lClasses->selection_color(flColor);
-    bClassColor->color(flColor);    
+    bClassColor->color(flColor);
 
     // Update the sample list
     ObjectLabelingModel::ObjectClassType::LabelVectorType::const_iterator sit = m_Model->GetClass(classIndex).m_Samples.begin();
@@ -400,7 +400,7 @@ void ObjectLabelingView::UpdateClassInformation()
     bClassColor->color(gObjectsInterface->color());
     }
   bClassColor->redraw();
-  lClasses->redraw();  
+  lClasses->redraw();
 }
 
 void ObjectLabelingView::Classes()
@@ -440,7 +440,7 @@ void ObjectLabelingView::RemoveClass()
 
 void ObjectLabelingView::ClearClasses()
 {
-//  for(unsigned int i = 0; i<m_Model->GetNumberOfClasses();++i)
+//  for(unsigned int i = 0; i<m_Model->GetNumberOfClasses(); ++i)
 //    {
 //    m_ImageView->GetFullWidget()->RemoveGlComponent(3+i);
 //    m_ImageView->GetScrollWidget()->RemoveGlComponent(3+i);
@@ -459,7 +459,7 @@ void ObjectLabelingView::ClassColor()
      double b = m_Model->GetClass(m_Model->GetSelectedClass()).m_Color[2];
      double a = m_Model->GetClass(m_Model->GetSelectedClass()).m_Color[3];
      
-     bool ok = fl_color_chooser("Changed class color:",r,g,b);
+     bool ok = fl_color_chooser("Changed class color:", r, g, b);
      
      if (ok)
        {
@@ -468,7 +468,7 @@ void ObjectLabelingView::ClassColor()
        color[1]=g;
        color[2]=b;
        color[3]=a;
-       m_Controller->ChangeClassColor(m_Model->GetSelectedClass(),color);
+       m_Controller->ChangeClassColor(m_Model->GetSelectedClass(), color);
        }
     }
   
@@ -477,15 +477,15 @@ void ObjectLabelingView::ClassLabel()
 {
   if(m_Model->HasSelectedClass())
     {
-    m_Controller->ChangeClassLabel(m_Model->GetSelectedClass(),atoi(vClassLabel->value()));
+    m_Controller->ChangeClassLabel(m_Model->GetSelectedClass(), atoi(vClassLabel->value()));
     }
 }
 void ObjectLabelingView::ClassName()
 {
   if(m_Model->HasSelectedClass())
     {
-    m_Controller->ChangeClassName(m_Model->GetSelectedClass(),vClassName->value());
-    } 
+    m_Controller->ChangeClassName(m_Model->GetSelectedClass(), vClassName->value());
+    }
 }
 void ObjectLabelingView::Objects()
 {
@@ -520,7 +520,7 @@ void ObjectLabelingView::SaveSamplesToXMLFile()
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    return;
     }
 
   m_Controller->SaveSamplesToXMLFile(filename);
@@ -536,7 +536,7 @@ void ObjectLabelingView::SaveClassificationParametersToXMLFile()
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    return;
     }
 
   m_Controller->SaveClassificationParametersToXMLFile(filename);
@@ -552,7 +552,7 @@ void ObjectLabelingView::LoadSamplesFromXMLFile()
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    return;
     }
 
   m_Controller->LoadSamplesFromXMLFile(filename);
@@ -628,7 +628,7 @@ void ObjectLabelingView::Classify()
   bBusy->show();
   Fl::flush();
   for(VectorDataGlComponentVectorType::iterator  git = m_VectorDataGlComponents.begin();
-      git!=m_VectorDataGlComponents.end();++git)
+      git!=m_VectorDataGlComponents.end(); ++git)
     {
     (*git)->SetVisible(false);
     }
@@ -639,7 +639,7 @@ void ObjectLabelingView::Classify()
 void ObjectLabelingView::ClearClassification()
 {
   for(VectorDataGlComponentVectorType::iterator  git = m_VectorDataGlComponents.begin();
-      git!=m_VectorDataGlComponents.end();++git)
+      git!=m_VectorDataGlComponents.end(); ++git)
     {
     (*git)->SetVisible(true);
     }
@@ -649,16 +649,16 @@ void ObjectLabelingView::ClearClassification()
 void ObjectLabelingView::Features()
 {
   // Walk the feature list
-  for(int i = 1; i<=lFeatures->nitems();++i)
+  for(int i = 1; i<=lFeatures->nitems(); ++i)
     {
     std::string fname = lFeatures->text(i);
     if(lFeatures->checked(i))
       {
-      m_Controller->ChangeFeatureState(fname,true);
+      m_Controller->ChangeFeatureState(fname, true);
       }
     else
       {
-      m_Controller->ChangeFeatureState(fname,false);
+      m_Controller->ChangeFeatureState(fname, false);
       }
     }
 }

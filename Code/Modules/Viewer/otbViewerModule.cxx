@@ -207,7 +207,7 @@ namespace otb
     // build the DEM GUI
     this->BuildDEM();
 
-	// build the Screen shot GUI
+       // build the Screen shot GUI
     this->BuildScreenShot();
   }
 
@@ -240,7 +240,7 @@ namespace otb
     ImageType::SizeType firstImageSize;
 
     // Load and process all selected images
-    for (unsigned int i = 0 ; i < GetNumberOfInputDataByKey("InputImage") ; i++)
+    for (unsigned int i = 0; i < GetNumberOfInputDataByKey("InputImage"); i++)
     {
       std::string desc;
 
@@ -372,7 +372,7 @@ namespace otb
     guiTransparentImageSelection->value(m_CurrentTransparentImage);
 
     // Load and process vector data sources
-    for (unsigned int i = 0 ; i < GetNumberOfInputDataByKey("VectorData") ; i++)
+    for (unsigned int i = 0; i < GetNumberOfInputDataByKey("VectorData"); i++)
     {
       VectorDataType::Pointer vdata = GetInputData<VectorDataType>("VectorData", i);
       m_VectorDataList->PushBack(vdata);
@@ -527,7 +527,7 @@ namespace otb
 
     // Ge the index of the corner of the image
     ImageType::IndexType ul, ur, ll, lr;
-    ImageType::PointType pul,pur,pll,plr;
+    ImageType::PointType pul, pur, pll, plr;
     ul = image->GetLargestPossibleRegion().GetIndex();
     ur = ul;
     ll = ul;
@@ -538,17 +538,17 @@ namespace otb
     ll[1] += image->GetLargestPossibleRegion().GetSize()[1];
 
     // Transform to physical point
-    image->TransformIndexToPhysicalPoint(ul,pul);
-    image->TransformIndexToPhysicalPoint(ur,pur);
-    image->TransformIndexToPhysicalPoint(ll,pll);
-    image->TransformIndexToPhysicalPoint(lr,plr);
+    image->TransformIndexToPhysicalPoint(ul, pul);
+    image->TransformIndexToPhysicalPoint(ur, pur);
+    image->TransformIndexToPhysicalPoint(ll, pll);
+    image->TransformIndexToPhysicalPoint(lr, plr);
 
     // Build the cartographic region
     RemoteSensingRegionType rsRegion;
     RemoteSensingRegionType::IndexType rsOrigin;
     RemoteSensingRegionType::SizeType  rsSize;
-    rsOrigin[0]= std::min(pul[0],plr[0]);
-    rsOrigin[1]= std::min(pul[1],plr[1]);
+    rsOrigin[0]= std::min(pul[0], plr[0]);
+    rsOrigin[1]= std::min(pul[1], plr[1]);
     rsSize[0]=vcl_abs(pul[0]-plr[0]);
     rsSize[1]=vcl_abs(pul[1]-plr[1]);
 
@@ -789,11 +789,11 @@ namespace otb
   void ViewerModule::UpdateVectorDataListShowed(unsigned int selectedItem, std::string status)
   {
     /* Update the ImageList using the status label "+" or "-" */
-    std::string filename = this->GetInputDataDescription<VectorDataType>("VectorData",selectedItem-1);
+    std::string filename = this->GetInputDataDescription<VectorDataType>("VectorData", selectedItem-1);
 
     itk::OStringStream oss;
     oss<<status<<filename;
-    dVDList->text(selectedItem,oss.str().c_str());
+    dVDList->text(selectedItem, oss.str().c_str());
     oss.str("");
   }
 
@@ -844,7 +844,7 @@ namespace otb
 
       // Update the status of the selectedItem vector data
       m_DisplayedVectorData[selectedIndex-1] = false;
-      this->UpdateVectorDataListShowed(selectedIndex,m_UndisplayedLabel);
+      this->UpdateVectorDataListShowed(selectedIndex, m_UndisplayedLabel);
 
       //Redraw all the widgets
       this->RedrawWidget();
@@ -866,7 +866,7 @@ namespace otb
 
       // Update the display status of each vector
       m_DisplayedVectorData[i] = false;
-      this->UpdateVectorDataListShowed(i+1,m_UndisplayedLabel);
+      this->UpdateVectorDataListShowed(i+1, m_UndisplayedLabel);
     }
     //Redraw all the widgets
     this->RedrawWidget();
@@ -891,7 +891,7 @@ namespace otb
         m_View->GetZoomWidget()->GetNthGlComponent(selectedIndex-1)->SetVisible(true);
         // Set visible status to selected VectorDataGl Compenents
         m_DisplayedVectorData[selectedIndex-1] = true;
-        this->UpdateVectorDataListShowed(selectedIndex,m_DisplayedLabel);
+        this->UpdateVectorDataListShowed(selectedIndex, m_DisplayedLabel);
       }
       //Redraw all the widgets
       this->RedrawWidget();
@@ -914,7 +914,7 @@ namespace otb
         m_View->GetFullWidget()->GetNthGlComponent(i+1)->SetVisible(true);
         m_View->GetZoomWidget()->GetNthGlComponent(i)->SetVisible(true);
         m_DisplayedVectorData[i] = true;
-        this->UpdateVectorDataListShowed(i+1,m_DisplayedLabel);
+        this->UpdateVectorDataListShowed(i+1, m_DisplayedLabel);
       }
     }
     //Redraw all the widgets
@@ -955,7 +955,7 @@ namespace otb
       double g = (double)curColor[1];
       double b = (double)curColor[2];
 
-      int ok = fl_color_chooser(otbGetTextMacro("Changed class color"),r,g,b);
+      int ok = fl_color_chooser(otbGetTextMacro("Changed class color"), r, g, b);
 
       if (ok)
       {
@@ -1025,7 +1025,7 @@ namespace otb
       m_GenerateRandomColor = false;
 
       // Reproject using the DEM this time
-      for (unsigned int i = 0; i < m_VectorDataList->Size();i++)
+      for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
       {
         this->UpdateVectorData(i);
       }
@@ -1599,7 +1599,7 @@ namespace otb
     if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
     {
       paramsMinMax.SetSize(params.GetSize() - 2);
-      for (unsigned int i = 0 ; i < paramsMinMax.GetSize() ; i++)
+      for (unsigned int i = 0; i < paramsMinMax.GetSize(); i++)
       {
         paramsMinMax[i] = params[i + 2];
       }
@@ -1610,7 +1610,7 @@ namespace otb
     }
 
     // Update the parameters
-    for (unsigned int i = 0 ; i < paramsMinMax.Size() ; i = i + 2)
+    for (unsigned int i = 0; i < paramsMinMax.Size(); i = i + 2)
     {
       unsigned int n = i / 2;
 
@@ -1626,7 +1626,7 @@ namespace otb
     if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
     {
       params[1] = guiSetStandardDeviation->value();
-      for (unsigned int i = 0 ; i < paramsMinMax.GetSize() ; i++)
+      for (unsigned int i = 0; i < paramsMinMax.GetSize(); i++)
       {
         params[i + 2] = paramsMinMax[i];
       }
@@ -1804,7 +1804,7 @@ namespace otb
     m_DisplayWindow->Hide();
     // Hide the DEM Window
     wDEM->hide();
-	// Hide the Screen shot Window
+       // Hide the Screen shot Window
     wScreenShot->hide();
     // Hide the Setup Propreties Window
     bSetupWindow->hide();

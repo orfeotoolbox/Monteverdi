@@ -53,7 +53,7 @@ ProjectionModel::
 
 ///////////////////////////////////////////////////////////////
 /**     CASE : input transform is not allowed */
-/////////////// /////////////// /////////////// /////////////// 
+/////////////// /////////////// /////////////// ///////////////
 
 /**
  * Update the input Projection Ref
@@ -118,7 +118,7 @@ void ProjectionModel
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
-  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  transMercatorProjection->SetParameters(falseEasting, falseNorthing, scale);
   std::string tmRef =   transMercatorProjection->GetWkt();
   
   // Report projection ref (not done by the resample filter)
@@ -210,7 +210,7 @@ void ProjectionModel
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
-  transMercatorProjection->SetParameters(falseEasting,falseNorthing,scale);
+  transMercatorProjection->SetParameters(falseEasting, falseNorthing, scale);
   m_OutputProjectionRef = transMercatorProjection->GetWkt();
   
   // Build the Generic RS transform
@@ -271,7 +271,7 @@ void ProjectionModel
 ::UpdateOutputParameters()
 {
   // Ccompute the output parameters stuff
-  typedef otb::ImageToGenericRSOutputParameters<InputImageType>  OutputParamEstimatorType;  
+  typedef otb::ImageToGenericRSOutputParameters<InputImageType>  OutputParamEstimatorType;
   OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
   
   estimator->SetInput(m_InputImage);
@@ -343,7 +343,7 @@ ProjectionModel
     m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
     }
   
-  // Default padding value 
+  // Default padding value
   InputImageType::PixelType defaultValue;
   itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
                                                      m_InputImage->GetNumberOfComponentsPerPixel());

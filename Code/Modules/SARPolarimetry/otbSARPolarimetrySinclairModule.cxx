@@ -25,7 +25,7 @@ namespace otb
 /** Constructor */
   SARPolarimetrySinclairModule::SARPolarimetrySinclairModule()
 {
-  // First, do constructor stuffs 
+  // First, do constructor stuffs
   // Input images
   m_HHImage = ComplexImageType::New();
   m_HVImage = ComplexImageType::New();
@@ -180,7 +180,7 @@ void SARPolarimetrySinclairModule::Ok()
     }
   
   if( hasOutput==true )
-    { 
+    {
       this->NotifyOutputsChange();
     }
   else

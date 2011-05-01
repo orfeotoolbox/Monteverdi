@@ -42,7 +42,7 @@ public:
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(ObjectLabelingController,Superclass);
+  itkTypeMacro(ObjectLabelingController, Superclass);
   itkNewMacro(Self);
 
   /** Widgets controller and action handlers */
@@ -50,18 +50,18 @@ public:
   typedef ObjectLabelingModel::VisualizationModelType    VisualizationModelType;
   typedef ObjectLabelingModel::PixelDescriptionModelType PixelDescriptionModelType;
   typedef ImageWidgetController                                     WidgetsControllerType;
-  typedef WidgetResizingActionHandler 
-    <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
+  typedef WidgetResizingActionHandler
+    <VisualizationModelType, ImageViewType>                          ResizingHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-  <VisualizationModelType,ImageViewType>                            ChangeScaledRegionHandlerType;
+  <VisualizationModelType, ImageViewType>                            ChangeScaledRegionHandlerType;
   typedef ChangeExtractRegionActionHandler
-      <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+      <VisualizationModelType, ImageViewType>                        ChangeRegionHandlerType;
   typedef ChangeScaleActionHandler
-  <VisualizationModelType,ImageViewType>                            ChangeScaleHandlerType;
+  <VisualizationModelType, ImageViewType>                            ChangeScaleHandlerType;
  typedef otb::PixelDescriptionActionHandler
     < PixelDescriptionModelType, ImageViewType>                     PixelDescriptionActionHandlerType;
   typedef otb::MouseClickActionHandler
-  <ObjectLabelingModel,ImageViewType>                    MouseClickActionHandlerType;
+  <ObjectLabelingModel, ImageViewType>                    MouseClickActionHandlerType;
   
   /** Image typedefs*/
   typedef ObjectLabelingControllerInterface::VectorImageType        VectorImageType;
@@ -119,7 +119,7 @@ public:
  
   
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetsController,WidgetsControllerType);
+  itkGetObjectMacro(WidgetsController, WidgetsControllerType);
   
 protected:
   /** Constructor */

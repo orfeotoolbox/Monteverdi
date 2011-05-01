@@ -97,9 +97,9 @@ void SARPolarimetryAnalysisModule::CheckInputs()
 
 
 void SARPolarimetryAnalysisModule::Ok()
-{   
+{
   this->ClearOutputDescriptors();
-  bool hasOutput = false;  
+  bool hasOutput = false;
 
   if( rb_HAlpha->value() == true )
     {
@@ -117,13 +117,13 @@ void SARPolarimetryAnalysisModule::Ok()
       m_MultiChannelsPolarimetricSynthesisFilter->SetPsiI( static_cast<double>(v_PsiI->value()) );
       m_MultiChannelsPolarimetricSynthesisFilter->SetPsiR( static_cast<double>(v_PsiR->value()) );
   
-      this->AddOutputDescriptor(m_MultiChannelsPolarimetricSynthesisFilter->GetOutput(), "MultiChannelsPolarimetricSynthesisFilter", 
+      this->AddOutputDescriptor(m_MultiChannelsPolarimetricSynthesisFilter->GetOutput(), "MultiChannelsPolarimetricSynthesisFilter",
                                 otbGetTextMacro("Polarimetric synthesis image"));
       hasOutput = true;
     }
   
   if( hasOutput==true )
-    { 
+    {
       this->NotifyOutputsChange();
     }
   else
@@ -151,7 +151,7 @@ void SARPolarimetryAnalysisModule::Quit()
 void SARPolarimetryAnalysisModule::CheckAll(bool val)
 {
   rb_HAlpha->value(val);
-  rb_Syn->value(val); 
+  rb_Syn->value(val);
 }
 
 

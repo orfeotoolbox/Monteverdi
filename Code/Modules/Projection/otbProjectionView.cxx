@@ -89,7 +89,7 @@ ProjectionView::ProjectionView()
   gPreviewWindow->box(FL_NO_BOX);
   gPreviewWindow->resizable(gPreviewWindow);
   m_PreviewWidget->resize(gPreviewWindow->x(), gPreviewWindow->y(), gPreviewWindow->w(), gPreviewWindow->h() );
-  m_Transform = ModelType::ResampleFilterType::New(); 
+  m_Transform = ModelType::ResampleFilterType::New();
 }
 
 // Activate all the map parameters
@@ -478,15 +478,15 @@ ProjectionView
       // Set the index to be the center of the ROI selected by the user
       if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
         {
-        // Get the cartographic middle point 
-        point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
-          + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+        // Get the cartographic middle point
+        point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0]
+          + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2;
       
-        point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
-          + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+        point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1]
+          + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2;
       
         // Get the cartographic coordinates of the UL point of the
-        // region centered on the output middle point 
+        // region centered on the output middle point
         point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2.;
         point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2.;
         }
@@ -497,7 +497,7 @@ ProjectionView
         point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1];
         }
     
-      // Transform to geo 
+      // Transform to geo
       geoPoint    = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
     
       // Fill the datas in the GUI
@@ -536,15 +536,15 @@ ProjectionView
   // Apply the transform to the middle point of the image
   if (guiCenterPixel->value() == 1 && guiULPixel->value() == 0)
     {
-    // Get the cartographic middle point 
-    point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
-      + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+    // Get the cartographic middle point
+    point[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0]
+      + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2;
     
-    point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
-      + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+    point[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1]
+      + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2;
     
     // Get the cartographic coordinates of the UL point of the
-    // region centered on the output middle point 
+    // region centered on the output middle point
     point[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2;
     point[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2;
     }
@@ -728,15 +728,15 @@ ProjectionView::InitializeAction()
   // Get the transform from the model
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
-  // Get the cartographic middle middlePoint 
-  middlePoint[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0] 
-    + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2; 
+  // Get the cartographic middle middlePoint
+  middlePoint[0] = m_Controller->GetModel()->GetWholeOutputOrigin()[0]
+    + m_Controller->GetModel()->GetWholeOutputSize()[0]* m_Controller->GetModel()->GetWholeOutputSpacing()[0]/2;
   
-  middlePoint[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1] 
-    + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2; 
+  middlePoint[1] = m_Controller->GetModel()->GetWholeOutputOrigin()[1]
+    + m_Controller->GetModel()->GetWholeOutputSize()[1]* m_Controller->GetModel()->GetWholeOutputSpacing()[1]/2;
 
   // Get the UL corner cartographic coordinates of the
-  // region centered on the whole output middlePoint 
+  // region centered on the whole output middlePoint
   middlePoint[0] -= atoi(guiSizeX->value())*atof(guiSpacingX->value()) / 2;
   middlePoint[1] -= atoi(guiSizeY->value())*atof(guiSpacingY->value()) / 2;
 
@@ -756,7 +756,7 @@ ProjectionView::InitializeAction()
   // Update map parameters if inputTransform known
   if (!m_InputProjectionUnknown)
     {
-    // Get the utm Zone && hemisphere  from a long,lat point in the image
+    // Get the utm Zone && hemisphere  from a long, lat point in the image
     UtmForwardProjection::Pointer utmProjection = UtmForwardProjection::New();
 
 
@@ -953,7 +953,7 @@ ProjectionView::UpdateDEMUse()
     vDEMPath->activate();
     bBrowse->activate();
     m_Controller->GetModel()->SetUseDEM(true);
-    } 
+    }
   else
     {
     m_Controller->GetModel()->SetUseDEM(false);
@@ -986,7 +986,7 @@ ProjectionView::DisplayPreviewWidget()
     // Get the current output projectionRef computed in the model part
     std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
        
-    // Get the previewWidget size 
+    // Get the previewWidget size
     SizeType previewSize;
     previewSize[0] = gPreviewWindow->w();
     previewSize[1] = gPreviewWindow->h();
@@ -1006,13 +1006,13 @@ ProjectionView::DisplayPreviewWidget()
       
     // Display the preview image only if the check box is selected
     if(bDispalyPreview->value())
-      {      
-      // Two cases when the Display button is set to ON : 
+      {
+      // Two cases when the Display button is set to ON :
       // - The mapType changed : reproject
       // - The mapType does not changed : use the previous projected
       // image
       if(m_PreviousMapType != this->GetMapType())
-        {         
+        {
         // Reproject the image with a final size equal to the previewWidget
         // size  and relative spacing
         m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
@@ -1027,7 +1027,7 @@ ProjectionView::DisplayPreviewWidget()
         m_PreviousMapType = this->GetMapType();
         }
 
-      // Streaming Shrink : Persistent class, will process tile by tile 
+      // Streaming Shrink : Persistent class, will process tile by tile
       // to avoid memory allocation issues.
       typedef StreamingShrinkImageFilter<ImageType, ImageType>   StreamingShrinkType;
       StreamingShrinkType::Pointer shrinker = StreamingShrinkType::New();
@@ -1046,7 +1046,7 @@ ProjectionView::DisplayPreviewWidget()
       // Generate the layer
       LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
       layerGenerator->SetImage(shrinker->GetOutput());
-      FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
+      FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
       layerGenerator->GenerateLayer();
    
       // Render
@@ -1060,14 +1060,14 @@ ProjectionView::DisplayPreviewWidget()
       Fl::check();
 
       // Fill the previewWidget with the quicklook of the projected
-      // image 
+      // image
       ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
       m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
       }
     else
       {
       // Create a temp image : cause no vectordataGlComponent
-      // rendering without an image layer.   
+      // rendering without an image layer.
       ViewerImageType::Pointer  tempImage  = ViewerImageType::New();
       ImageType::RegionType            tempRegion;
       ImageType::RegionType::IndexType index;
@@ -1097,13 +1097,13 @@ ProjectionView::DisplayPreviewWidget()
     document->SetNodeType(otb::DOCUMENT);
     folder->SetNodeType(otb::FOLDER);
     DataNodeType::Pointer root = userROI->GetDataTree()->GetRoot()->Get();
-    userROI->GetDataTree()->Add(document,root);
-    userROI->GetDataTree()->Add(folder,document);
-    userROI->GetDataTree()->Add(polygonNode,folder);
+    userROI->GetDataTree()->Add(document, root);
+    userROI->GetDataTree()->Add(folder, document);
+    userROI->GetDataTree()->Add(polygonNode, folder);
     userROI->SetProjectionRef(outputMap);
 
     // build the 4 corners of the selected roi
-    PolygonType::VertexType  p1,p2,p3,p4;
+    PolygonType::VertexType  p1, p2, p3, p4;
     p1[0] = m_Controller->GetModel()->GetOutputOrigin()[0];
     p1[1] = m_Controller->GetModel()->GetOutputOrigin()[1];
 
@@ -1169,7 +1169,7 @@ void ProjectionView::TabPositionHandler()
     }
 }
 
-// Used to update the geographic origin of the output 
+// Used to update the geographic origin of the output
 // image when changing the cartographic coordinates
 void ProjectionView::UpdateOriginGeographicalCoordinates()
 {
@@ -1206,8 +1206,8 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
     }
     case MAP_WGS84:
     {
-    // Since no WGS84 param are available in the GUI, 
-    // 
+    // Since no WGS84 param are available in the GUI,
+    //
     cartoPoint[1] = atof(guiLatSelection->value());
     cartoPoint[0] = atof(guiLongSelection->value());
     break;
@@ -1219,7 +1219,7 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
   
   // Project the carto point in WGS84 using the transform set in
   // the model
-  geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(cartoPoint);  
+  geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(cartoPoint);
   
   // Update the GUI
   oss.str("");
@@ -1229,7 +1229,7 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
   oss << geoPoint[0];
   guiLongSelection->value(oss.str().c_str());
 
-  // Update output region 
+  // Update output region
   // tell the model that the output region has been modified
   unsigned int sizeX    = atoi(guiSizeX->value());
   unsigned int sizeY    = atoi(guiSizeY->value());

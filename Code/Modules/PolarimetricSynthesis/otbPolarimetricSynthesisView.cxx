@@ -85,7 +85,7 @@ void PolarimetricSynthesisView::Build()
     gGrayTabs->show();
   }
 
-  m_PoincareSphereWidget->Init(gSphere->x(),gSphere->y(),gSphere->w(),gSphere->h(),"Poincare sphere");
+  m_PoincareSphereWidget->Init(gSphere->x(), gSphere->y(), gSphere->w(), gSphere->h(),"Poincare sphere");
   gSphere->add(m_PoincareSphereWidget);
   gSphere->box(FL_NO_BOX);
   m_PoincareSphereWidget->show();
@@ -93,7 +93,6 @@ void PolarimetricSynthesisView::Build()
 
   //this->RefreshInterface();
 }
-
 
 
 void PolarimetricSynthesisView::SetController(PolarimetricSynthesisControllerInterface * controller)
@@ -140,7 +139,7 @@ void PolarimetricSynthesisView::RefreshViewer()
     m_FullWidget  = FullWidgetType::New();
     m_FullWidget->SetInput(image);
     m_FullWidget->SetController(m_Controller);
-    m_FullWidget->Init(gFullResolution->x(),gFullResolution->y(),gFullResolution->w(),gFullResolution->h(),"Full resolution");
+    m_FullWidget->Init(gFullResolution->x(), gFullResolution->y(), gFullResolution->w(), gFullResolution->h(),"Full resolution");
     gFullResolution->box(FL_NO_BOX);
     gFullResolution->add(m_FullWidget);
 
@@ -151,8 +150,8 @@ void PolarimetricSynthesisView::RefreshViewer()
     }
     else
     {
-      m_FullWidget->GetTransferFunctionList()->SetNthElement(1,m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
-      m_FullWidget->GetTransferFunctionList()->SetNthElement(2,m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
+      m_FullWidget->GetTransferFunctionList()->SetNthElement(1, m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
+      m_FullWidget->GetTransferFunctionList()->SetNthElement(2, m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
     }
     m_FullWidget->Show();
   }
@@ -178,12 +177,12 @@ void PolarimetricSynthesisView::RefreshViewer()
     m_ScrollWidget  = ScrollWidgetType::New();
     m_ScrollWidget->SetController(m_Controller);
     m_ScrollWidget->SetInput(quicklook);
-    m_ScrollWidget->Init(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h(),"Scroll");
+    m_ScrollWidget->Init(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h(),"Scroll");
     m_ScrollWidget->SetFormOverlayVisible(true);
     gScroll->add(m_ScrollWidget);
     gScroll->box(FL_NO_BOX);
     m_ScrollWidget->GetFormList()->PushBack(box);
-    m_ScrollWidget->GetTransferFunctionList()->SetNthElement(0,m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
+    m_ScrollWidget->GetTransferFunctionList()->SetNthElement(0, m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
     if (!m_Model->GetRGB())
     {
       m_ScrollWidget->GetTransferFunctionList()->PushBack(m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
@@ -191,14 +190,14 @@ void PolarimetricSynthesisView::RefreshViewer()
     }
     else
     {
-      m_ScrollWidget->GetTransferFunctionList()->SetNthElement(1,m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
-      m_ScrollWidget->GetTransferFunctionList()->SetNthElement(2,m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
+      m_ScrollWidget->GetTransferFunctionList()->SetNthElement(1, m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
+      m_ScrollWidget->GetTransferFunctionList()->SetNthElement(2, m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
     }
     m_ScrollWidget->Show();
   }
   else
   {
-    m_ScrollWidget->GetFormList()->SetNthElement(0,box);
+    m_ScrollWidget->GetFormList()->SetNthElement(0, box);
     m_ScrollWidget->SetInput(quicklook);
     m_ScrollWidget->ClearBufferedRegion();
   }
@@ -228,7 +227,7 @@ void PolarimetricSynthesisView::RefreshViewer()
 //   m_HistogramWidget = HistogramWidgetType::New();
 //   m_HistogramWidget->SetTransferFunction(m_FullWidget->GetTransferFunctionList()->GetNthElement(0));
 //   m_HistogramWidget->SetHistogram(m_Model->GetOutputHistogram());
-//   m_HistogramWidget->resize(gHistogram->x(),gHistogram->y(),gHistogram->w(),gHistogram->h());
+//   m_HistogramWidget->resize(gHistogram->x(), gHistogram->y(), gHistogram->w(), gHistogram->h());
 //   gHistogram->add(m_HistogramWidget);
 //   m_HistogramWidget->show();
 //       }
@@ -248,7 +247,6 @@ void PolarimetricSynthesisView::Notify(const std::string & event)
     Fl::flush();
     }
 }
-
 
 
 

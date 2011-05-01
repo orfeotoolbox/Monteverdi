@@ -55,8 +55,8 @@ public:
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
 
-  typedef otb::BayesianFusionFilter<FloatingVectorImageType,FloatingVectorImageType,
-    FloatingImageType,FloatingVectorImageType> BayesianFusionFilterType;
+  typedef otb::BayesianFusionFilter<FloatingVectorImageType, FloatingVectorImageType,
+    FloatingImageType, FloatingVectorImageType> BayesianFusionFilterType;
 
 protected:
   /** Constructor */

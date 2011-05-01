@@ -47,8 +47,8 @@ public:
   typedef typename ControllerType::Pointer ControllerPointerType;
   typedef typename Superclass::IndexType   IndexType;
 
-  itkSetObjectMacro(Controller,ControllerType);
-  itkGetObjectMacro(Controller,ControllerType);
+  itkSetObjectMacro(Controller, ControllerType);
+  itkGetObjectMacro(Controller, ControllerType);
 
   /** Default mode handling, without ROI selection */
   virtual int handle(int event)

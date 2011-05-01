@@ -48,7 +48,7 @@ int otbProjectionModuleTest(int argc, char* argv[])
   module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
 
-  // Put OutputSize to 100,100
+  // Put OutputSize to 100, 100
   /*module*/ specificModule->GetView()->guiSizeX->value("100");
   /*module*/ specificModule->GetView()->guiSizeY->value("100");
 

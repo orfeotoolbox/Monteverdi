@@ -94,7 +94,7 @@ DEMToImageGeneratorController
  */
 void
 DEMToImageGeneratorController
-::ProcessHillShading(double azimutAngle,double elevationAngle,unsigned int radius)
+::ProcessHillShading(double azimutAngle, double elevationAngle, unsigned int radius)
 {
   try
     {
@@ -122,7 +122,6 @@ DEMToImageGeneratorController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
 
 
 } // end namespace otb

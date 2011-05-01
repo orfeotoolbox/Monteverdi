@@ -55,7 +55,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ObjectLabelingModule,Module);
+  itkTypeMacro(ObjectLabelingModule, Module);
 
   /** MVC typedefs */
   typedef otb::ObjectLabelingController ControllerType;

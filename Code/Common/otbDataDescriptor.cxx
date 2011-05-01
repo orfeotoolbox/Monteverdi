@@ -109,7 +109,7 @@ const DataObjectWrapper& DataDescriptor::GetNthData(const unsigned int& idx) con
   catch (std::out_of_range& err)
     {
     itkGenericExceptionMacro(<< "Index " << idx << " out of range for descriptor " << m_DataKey);
-	MsgReporter::GetInstance()->SendError(std::string("Out of Range : ")+ err.what());
+       MsgReporter::GetInstance()->SendError(std::string("Out of Range : ")+ err.what());
     }
 }
 

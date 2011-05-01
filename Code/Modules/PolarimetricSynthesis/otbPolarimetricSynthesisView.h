@@ -67,13 +67,13 @@ public:
 
   /** Standards macros */
   itkNewMacro(Self);
-  itkTypeMacro(PolarimetricSynthesisView,Object);
+  itkTypeMacro(PolarimetricSynthesisView, Object);
 
   // Pixel type
 //  typedef double PixelType;
   typedef TypeManager::Floating_Point_Precision                                    PixelType;
-  typedef otb::InteractiveScrollWidget<PixelType,PolarimetricSynthesisControllerInterface>            ScrollWidgetType;
-  typedef otb::PolarimetricSynthesisFullWidget<PixelType,PolarimetricSynthesisControllerInterface>    FullWidgetType;
+  typedef otb::InteractiveScrollWidget<PixelType, PolarimetricSynthesisControllerInterface>            ScrollWidgetType;
+  typedef otb::PolarimetricSynthesisFullWidget<PixelType, PolarimetricSynthesisControllerInterface>    FullWidgetType;
   typedef FullWidgetType::ImageType                          ImageType;
   typedef ImageType::IndexType                               IndexType;
   typedef ImageType::SizeType                                SizeType;
@@ -81,9 +81,9 @@ public:
   typedef ImageWidgetBoxForm                                 BoxType;
   typedef BoxType::ColorType                                 ColorType;
   typedef PolarimetricSynthesisModel::OutputImageType SingleImageType;
-  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType> VectorCastFilterType;
+  typedef ImageToVectorImageCastFilter<SingleImageType, ImageType> VectorCastFilterType;
   typedef PolarimetricSynthesisModel::HistogramType HistogramType;
-  /*   typedef PolarimetricSynthesisHistogramWidget<HistogramType,PixelType> HistogramWidgetType; */
+  /*   typedef PolarimetricSynthesisHistogramWidget<HistogramType, PixelType> HistogramWidgetType; */
   typedef otb::PoincareSphereWidget                          PoincareSphereWidgetType;
 
   /** Visualization typedefs */
@@ -94,7 +94,7 @@ public:
   typedef PixelDescriptionView<PixelDescriptionModelType>           PixelViewType;
 
 
-  itkGetObjectMacro(FullWidget,FullWidgetType);
+  itkGetObjectMacro(FullWidget, FullWidgetType);
 
   /** Event from the model */
   virtual void Notify(const std::string & event);

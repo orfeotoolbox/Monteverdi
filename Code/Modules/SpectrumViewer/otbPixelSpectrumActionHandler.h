@@ -121,7 +121,7 @@ public:
             m_Controller->UpdateCurrentPixelSpectrum(index);
 
             std::ostringstream oss;
-            oss << "( x: " << index[0] << " ; y: " << index[1] << " )";
+            oss << "( x: " << index[0] << "; y: " << index[1] << " )";
             m_Controller->SetViewIndex(oss.str());
 
             return true;

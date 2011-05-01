@@ -26,7 +26,7 @@ template <class TInputImage, class TOutputImage>
 ImageToStdGaborConvolutionFilter<TInputImage, TOutputImage>
 ::ImageToStdGaborConvolutionFilter():m_NumberOfDirection(3),
                      m_InitialDirection(0.),
-                     m_A(0.25),m_B(0.35)
+                     m_A(0.25), m_B(0.35)
 {
   m_RescaleFilter  = RescalerFilterType::New();
   m_IntensityFilter = IntensityChannelFilterType::New();
@@ -44,7 +44,7 @@ void
 ImageToStdGaborConvolutionFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
-  typename ImageListType::Pointer   imageList = ImageListType::New();; 
+  typename ImageListType::Pointer   imageList = ImageListType::New(); ;
   
   // Get the intensity image if the nb components are greater than 1
   unsigned int nbComponents = this->GetInput()->GetNumberOfComponentsPerPixel();
@@ -125,14 +125,14 @@ ImageToStdGaborConvolutionFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutput>
 void
 ImageToStdGaborConvolutionFilter<TInputImage, TOutput>
-::GenerateOutputInformation() 
+::GenerateOutputInformation()
 {
  // call the superclass's implementation of this method
  Superclass::GenerateOutputInformation();
  
  // Compute the number of components  : input number of components(N) +
- //  m_NumberOfDirection  
- unsigned int outputNumberOfComponentsPerPixel = 
+ //  m_NumberOfDirection
+ unsigned int outputNumberOfComponentsPerPixel =
    this->GetInput()->GetNumberOfComponentsPerPixel() + m_NumberOfDirection;
  
  // Add the intensity if vector image

@@ -102,7 +102,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ViewerModule,Module);
+  itkTypeMacro(ViewerModule, Module);
 
   /** Dataset */
   typedef TypeManager::Floating_Point_Precision     PixelType;
@@ -122,7 +122,7 @@ public:
 
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char>             RGBPixelType;
-  typedef Image<RGBPixelType,2>                     OutputImageType;
+  typedef Image<RGBPixelType, 2>                     OutputImageType;
 
   /** Image layer type */
   typedef ImageLayer<ImageType, OutputImageType>    ImageLayerType;
@@ -176,15 +176,15 @@ public:
 
   /** Standard action handlers */
   typedef otb::WidgetResizingActionHandler
-  <RenderingModelType,ViewType>                     ResizingHandlerType;
+  <RenderingModelType, ViewType>                     ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-  <RenderingModelType,ViewType>                     ChangeScaledRegionHandlerType;
+  <RenderingModelType, ViewType>                     ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-  <RenderingModelType,ViewType>                     ChangeRegionHandlerType;
+  <RenderingModelType, ViewType>                     ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-  <RenderingModelType,ViewType>                     ChangeScaleHandlerType;
+  <RenderingModelType, ViewType>                     ChangeScaleHandlerType;
   typedef otb::ArrowKeyMoveActionHandler
-  <RenderingModelType,ViewType>                     ArrowKeyMoveActionHandlerType;
+  <RenderingModelType, ViewType>                     ArrowKeyMoveActionHandlerType;
   typedef otb::HistogramActionHandler
     <RenderingModelType, ViewType,
      RenderingFunctionType>                         HistogramActionHandlerType;
@@ -202,14 +202,14 @@ public:
 
     /** VectorData overlay */
   typedef VectorDataProjectionFilter
-  <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
+  <VectorDataType, VectorDataType>                    VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType       RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
   typedef VectorDataFileReader<VectorDataType>       VectorDataFileReaderType;
 
   /** Cast SingleImage to VectorImageType*/
-  typedef ImageToVectorImageCastFilter<SingleImageType,ImageType>     CastSingleImageFilter;
+  typedef ImageToVectorImageCastFilter<SingleImageType, ImageType>     CastSingleImageFilter;
 
   /** VectorData ObjectList*/
   typedef ObjectList<VectorDataType>                 VectorDataListType;

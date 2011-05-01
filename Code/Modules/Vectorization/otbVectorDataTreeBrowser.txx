@@ -776,7 +776,7 @@ VectorDataTreeBrowser<TVectorData>
     Fl_Menu_Item popup_menu[4] = {
         {"Delete geometry",  0, DeleteGeometryCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
         { "Add field",  0, AddFieldCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
-        {"Focus", 0, FocusCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK }, 
+        {"Focus", 0, FocusCallback, this, 0, FL_NORMAL_LABEL, FL_HELVETICA, 12, FL_BLACK },
         {NULL}};
     
     int x, y;
@@ -921,7 +921,7 @@ VectorDataTreeBrowser<TVectorData>
       else
         {
         // find the last node by repeatedly looking for the last child
-        // until there are no more branches 
+        // until there are no more branches
         Node *n = &root;
         while (n->children() && n->open())
           n = n->child(n->children() - 1);

@@ -61,7 +61,7 @@ public:
   typedef GenericRSResampleImageFilter<VectorImageType,
                                        VectorImageType>    ResampleFilterType;
   /** Cast otb::Image types*/
-  typedef ImageToVectorImageCastFilter<ImageType, 
+  typedef ImageToVectorImageCastFilter<ImageType,
                                        VectorImageType>    CastImageFilterType;
   
 protected:

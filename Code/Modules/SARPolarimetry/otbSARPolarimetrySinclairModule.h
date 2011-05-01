@@ -83,7 +83,7 @@ public:
   typedef Functor::SinclairToMuellerMatrixFunctor<ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, ComplexImagePixelType, VectorImagePixelType>                   SinclairToMuellerMatrixFunctorType;
 
   /** Filters typedefs */
-  typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCovarianceMatrixFunctorType>         SinclairToReciprocalCovarianceMatrixFilterType; 
+  typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCovarianceMatrixFunctorType>         SinclairToReciprocalCovarianceMatrixFilterType;
   typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCircularCovarianceMatrixFunctorType> SinclairToReciprocalCircularCovarianceMatrixFilterType;
   typedef SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, SinclairToReciprocalCoherencyMatrixFunctorType>          SinclairToReciprocalCoherencyMatrixFilterType;
 
@@ -148,7 +148,7 @@ private:
   SinclairToReciprocalCoherencyMatrixFilterType::Pointer m_SinclairToReciprocalCoherencyMatrixFilter;
 
   SinclairToCovarianceMatrixFilterType::Pointer m_SinclairToCovarianceMatrixFilter;
-  SinclairToCircularCovarianceMatrixFilterType::Pointer m_SinclairToCircularCovarianceMatrixFilter ;
+  SinclairToCircularCovarianceMatrixFilterType::Pointer m_SinclairToCircularCovarianceMatrixFilter;
   SinclairToCoherencyMatrixFilterType::Pointer m_SinclairToCoherencyMatrixFilter;
   SinclairToMuellerMatrixFilterType::Pointer m_SinclairToMuellerMatrixFilter;
   };

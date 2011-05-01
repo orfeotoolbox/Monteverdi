@@ -60,7 +60,7 @@ public:
   /// Dataset
   typedef TypeManager::Floating_Point_Image       ImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
-  typedef VectorImageType::SizeType SizeType; 
+  typedef VectorImageType::SizeType SizeType;
 
   typedef ImageToVectorImageCastFilter<ImageType, VectorImageType> ImageToVectorImageCastFilterType;
 
@@ -75,13 +75,13 @@ public:
   virtual void Show()
   {
     wMainWindow->show();
-	wCovarianceWindow->hide();
+       wCovarianceWindow->hide();
   }
 
   virtual void Hide()
   {
     wMainWindow->hide();
-	wCovarianceWindow->hide();
+       wCovarianceWindow->hide();
    }
 
   virtual void Quit();
@@ -116,7 +116,7 @@ private:
   ImageToVectorImageCastFilterType::Pointer m_ImageToVectorImageFilter;
   StatisticsImageFilterType::Pointer m_StatisticsFilter;
   MinMaxImageFilterType::Pointer m_MinMaxFilter;
-	VectorImageType::Pointer m_InputImage;
+       VectorImageType::Pointer m_InputImage;
   bool m_FullStat;
   };
 

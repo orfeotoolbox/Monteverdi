@@ -186,7 +186,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::BandMathModule>("BandMath", otbGetTextMacro("Filtering/BandMath"));
   model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening/Simple RCS pan-sharpening"));
-  model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion",otbGetTextMacro("Filtering/Pansharpening/Bayesian fusion"));
+  model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion", otbGetTextMacro("Filtering/Pansharpening/Bayesian fusion"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
                                                              otbGetTextMacro("Learning/SVM classification"));
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
                                                               otbGetTextMacro(
-									      "Learning/SVM classification (EXPERIMENTAL)"));
+                                                                     "Learning/SVM classification (EXPERIMENTAL)"));
   model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
   
   /***********  Geometry menu *******************/
