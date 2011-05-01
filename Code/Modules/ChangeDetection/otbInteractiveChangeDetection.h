@@ -290,7 +290,7 @@ private:
 
   /// Caster
   CastFilterPointerType m_CastFilter
- ;
+;
 
   /// Colors
   ColorType m_Class1Color;

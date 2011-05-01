@@ -249,7 +249,6 @@ void PolarimetricSynthesisView::Notify(const std::string & event)
 }
 
 
-
 void PolarimetricSynthesisView::SaveAndQuitCallback()
 {
   m_Controller->Save();

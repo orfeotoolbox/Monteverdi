@@ -197,7 +197,6 @@ DEMToImageGeneratorView
 }
 
 
-
 /**
  *
  */
@@ -270,7 +269,6 @@ DEMToImageGeneratorView::UpdateProjectionRef()
 }
 
 
-
 /**
  * Browse DEM
  */
@@ -313,7 +311,6 @@ void DEMToImageGeneratorView::UpdateHillShading()
     oMaxValue->deactivate();
     }
 }
-
 
 
 } // End namespace otb

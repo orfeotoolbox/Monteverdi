@@ -791,7 +791,6 @@ VectorizationModel
 #endif
 
 
-
 VectorizationModel::LabelMapPointerType
 VectorizationModel
 ::ConvertLabelImageToLabelMap(LabeledImagePointerType inputImage)
