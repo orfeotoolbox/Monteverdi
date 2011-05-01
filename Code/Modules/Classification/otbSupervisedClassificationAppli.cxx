@@ -39,7 +39,6 @@
 #include "otbFltkWriterWatcher.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataExtractROI.h"
-#include "base/ossimFilename.h"
 
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
@@ -331,8 +330,7 @@ SupervisedClassificationAppli
     }
 
   m_ROIsImageFileName = std::string(cfname);
-  ossimFilename fname(m_ROIsImageFileName.c_str());
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(m_ROIsImageFileName);
   this->LoadROIsImage();
 }
 
@@ -456,19 +454,19 @@ SupervisedClassificationAppli
     }
 
   // If the specified directory doesn't exists, create it.
-  ossimFilename ossDir = ossimFilename(dirname);
-  if (!ossDir.exists())
+  bool isFile = false;
+  if (!itksys::SystemTools::FileExists(dirname, isFile))
     {
-    ossDir.createDirectory();
+    itksys::SystemTools::MakeDirectory(dirname);
     }
   else
     {
     // the the soecify file is not a directory -> error message
-    if (!ossDir.isDir())
+    if (isFile)
       {
       itk::OStringStream oss;
       oss.str("");
-      oss << ossDir.file() << " already exists as a file.";
+      oss << dirname << " already exists as a file.";
       oss << "Please select a valid directory or set a new one name that will be created." << std::endl;
       MsgReporter::GetInstance()->SendError(oss.str().c_str());
       return;
@@ -559,8 +557,7 @@ SupervisedClassificationAppli
     ++cit;
     ++vectorDataVectorIterator;
     }
-  ossimFilename fname(dirname);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(dirname);
 }
 
 /**
@@ -664,8 +661,7 @@ SupervisedClassificationAppli
     }
   m_ModelFileName = std::string(cfname);
 
-  ossimFilename fname(m_ModelFileName.c_str());
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(m_ModelFileName);
   this->LoadSVMModel();
 }
 
@@ -709,8 +705,7 @@ SupervisedClassificationAppli
 
   std::string filename = std::string(cfname);
   m_Estimator->SaveModel(filename.c_str());
-  ossimFilename fname(filename.c_str());
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(filename);
 }
 
 /** Setup Callbacks */
