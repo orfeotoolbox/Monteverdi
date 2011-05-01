@@ -19,8 +19,10 @@
 #define __otbReaderModule_cxx
 
 #include "otbReaderModule.h"
-#include <FLU/Flu_File_Chooser.h>
-#include "base/ossimFilename.h"
+
+#include "itksys/SystemTools.hxx"
+#include "FLU/Flu_File_Chooser.h"
+
 #include "otbMsgReporter.h"
 #include "otbI18n.h"
 
@@ -191,8 +193,8 @@ void ReaderModule::Analyse()
       }
     else
       {
-      ossimFilename fname(vFilePath->value());
-      vName->value(fname.fileNoExtension());
+      std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(vFilePath->value());
+      vName->value(fname.c_str());
       }
     }
 }
@@ -277,7 +279,6 @@ void ReaderModule::OpenOpticalImage()
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
-  ossimFilename lFile = ossimFilename(filepath);
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
@@ -292,12 +293,12 @@ void ReaderModule::OpenOpticalImage()
   // Add the full data set as a descriptor
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
-    oss << "Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
     ossId << vName->value();//m_Desc[vDataset->value()];
     }
   else
     {
-    oss << "Image read from file: " << lFile.file();
+    oss << "Image read from file: " <<  itksys::SystemTools::GetFilenameName(filepath);
     ossId << vName->value();
     }
 
@@ -310,13 +311,12 @@ void ReaderModule::OpenMultiSarImage()
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
-  ossimFilename lFile = ossimFilename(filepath);
 
   m_VComplexReader->SetFileName(filepath);
   m_VComplexReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
-  oss << "Vector Float Complex image read from file: " << lFile.file();
+  oss << "Vector Float Complex image read from file: " << itksys::SystemTools::GetFilenameName(filepath);
   ossId << vName->value();
 
   this->AddOutputDescriptor(m_VComplexReader->GetOutput(), ossId.str(), oss.str(), true);
@@ -328,7 +328,6 @@ void ReaderModule::OpenSarImage()
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId, ossDatasetId;
   std::string   filepath = vFilePath->value();
-  ossimFilename lFile = ossimFilename(filepath);
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
@@ -343,12 +342,12 @@ void ReaderModule::OpenSarImage()
   // Add the full data set as a descriptor
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
-    oss << "Complex Image read from file: " << lFile.file() << " SUBDATASET = " << ossDatasetId.str();
+    oss << "Complex Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
     ossId << vName->value();//m_Desc[vDataset->value()];
     }
   else
     {
-    oss << "Complex image read from file: " << lFile.file();
+    oss << "Complex image read from file: " << itksys::SystemTools::GetFilenameName(filepath);
     ossId << vName->value();
     }
 
@@ -361,12 +360,11 @@ void ReaderModule::OpenVector()
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId;
   std::string   filepath = vFilePath->value();
-  ossimFilename lFile = ossimFilename(filepath);
 
   m_VectorReader->SetFileName(filepath);
   m_VectorReader->GenerateOutputInformation();
 
-  oss << "Vector read from file: " << lFile.file();
+  oss << "Vector read from file: " << itksys::SystemTools::GetFilenameName(filepath);
   ossId << vName->value() << " (whole dataset)";
   this->AddOutputDescriptor(m_VectorReader->GetOutput(), ossId.str(), oss.str());
 }
