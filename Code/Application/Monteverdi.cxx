@@ -15,6 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <string>
+#include <ctime>
+#include <iostream>
+
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_PNG_Image.H>
+
+#include "itksys/SystemTools.hxx"
 
 #include "ConfigureMonteverdi.h"
 
@@ -23,15 +33,6 @@
 #include "otbMonteverdiController.h"
 #include "otbSplashScreen.h"
 #include "otbI18n.h"
-
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_PNG_Image.H>
-
-#include <string>
-#include <ctime>
-#include <iostream>
 
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
@@ -314,8 +315,8 @@ int main(int argc, char* argv[])
         Fl::check();
         std::vector<std::string> moduleVector;
 
-        ossimFilename lFile(parseResult->GetParameterString("--ImageList", i));
-        if( lFile.exists() )
+        std::string filename = parseResult->GetParameterString("--ImageList", i);
+        if( itksys::SystemTools::FileExists(filename.c_str()) )
           {
             // Get the ModuleInstanceId
             std::string readerId = model->CreateModuleByKey("Reader");
@@ -333,7 +334,7 @@ int main(int argc, char* argv[])
         else
           {
             itk::OStringStream oss;
-            oss << "The file "<<lFile<<" does not exist.";
+            oss << "The file "<< filename <<" does not exist.";
             otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
           }
         }

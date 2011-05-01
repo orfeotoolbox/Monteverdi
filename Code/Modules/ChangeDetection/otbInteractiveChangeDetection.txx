@@ -32,9 +32,6 @@
 // Overlay result display
 #include "itkCastImageFilter.h"
 
-// TODO rely on itksys instead!
-#include "base/ossimFilename.h"
-
 namespace otb
 {
 /// Constructor
@@ -321,8 +318,7 @@ InteractiveChangeDetection<TPixel>
   Log("Saving SVM model.");
   m_Estimator->GetModel()->SaveModel(filename);
 
-  ossimFilename fname(filename);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(filename);
 }
 
 template <class TPixel>
@@ -336,8 +332,7 @@ InteractiveChangeDetection<TPixel>
     return;
     }
   m_ModelFileName = std::string(filename);
-  ossimFilename fname(m_ModelFileName.c_str());
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(m_ModelFileName.c_str());
   this->LoadSVMModel();
 }
 
@@ -432,8 +427,7 @@ InteractiveChangeDetection<TPixel>
     Log(err.GetDescription());
     }
 
-  ossimFilename fname(filename);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(filename);
 }
 
 template <class TPixel>
@@ -491,8 +485,7 @@ InteractiveChangeDetection<TPixel>
     Log(err.GetDescription());
     }
 
-  ossimFilename fname(filename);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(filename);
 }
 
 template <class TPixel>
