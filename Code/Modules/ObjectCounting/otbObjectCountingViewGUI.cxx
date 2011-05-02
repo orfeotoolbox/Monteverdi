@@ -17,7 +17,7 @@ See OTBCopyright.txt for details.
 =========================================================================*/
 
 #include "otbObjectCountingViewGUI.h"
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Text_Buffer.H>
 #include "otbMacro.h"
@@ -231,7 +231,7 @@ void
 ObjectCountingViewGUI
 ::OpenImage()
 {
-//   const char * cfname = fl_file_chooser("Select an Input Image", "*.*",".");
+//   const char * cfname = flu_file_chooser("Select an Input Image", "*.*",".");
 //   Fl::check();
 //   guiMainWindow->redraw();
 //   if (cfname == NULL || strlen(cfname)<1)
@@ -260,7 +260,7 @@ void
 ObjectCountingViewGUI
 ::SaveResult()
 {
-//   const char * cfname = fl_file_chooser("Save Output Image as", "*.*",".");
+//   const char * cfname = flu_file_chooser("Save Output Image as", "*.*",".");
 //   Fl::check();
 //   guiMainWindow->redraw();
 //   if (cfname == NULL || strlen(cfname)<1)
@@ -275,7 +275,7 @@ void
 ObjectCountingViewGUI
 ::SavePolygon()
 {
-  const char * cfname = fl_file_chooser("Vector data file:", "*.shp\t*.kml", ".");
+  const char * cfname = flu_file_chooser("Vector data file:", "*.shp\t*.kml", ".");
   Fl::check();
   guiMainWindow->redraw();
   if (cfname == NULL || strlen(cfname) < 1)

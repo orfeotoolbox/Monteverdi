@@ -243,6 +243,10 @@ class ViewerModuleGroup {open
         label Load
         callback {const char *cfname = flu_dir_chooser("Choose DEM directory...", "");
 Fl::check();
+if (cfname == NULL)
+{
+  return;
+}
 wDEM->redraw();
 gDEMPath->value(cfname);
 gDEMPath->redraw();}

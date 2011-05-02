@@ -18,7 +18,7 @@
 
 #include "otbSupervisedClassificationAppli.h"
 
-#include <FL/Fl_File_Chooser.H>
+#include <FLU/Flu_File_Chooser.h>
 #include <FL/fl_ask.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Text_Buffer.H>
@@ -322,7 +322,7 @@ void
 SupervisedClassificationAppli
 ::ImportROIsImage()
 {
-  const char * cfname = fl_file_chooser("Pick an image file", "*.*", m_LastPath.c_str());
+  const char * cfname = flu_file_chooser("Pick an image file", "*.*", m_LastPath.c_str());
   Fl::check();
   if (cfname == NULL || strlen(cfname) < 1)
     {
@@ -341,7 +341,7 @@ void
 SupervisedClassificationAppli
 ::ImportVectorData()
 {
-  const char * cfname = fl_file_chooser("Vector data file:", "*.shp\t*.kml", m_LastPath.c_str());
+  const char * cfname = flu_file_chooser("Vector data file:", "*.shp\t*.kml", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;
@@ -447,7 +447,7 @@ void
 SupervisedClassificationAppli
 ::ExportAllVectorData()
 {
-  const char* dirname = fl_dir_chooser("Select directory:", m_LastPath.c_str());
+  const char* dirname = flu_dir_chooser("Select directory:", m_LastPath.c_str());
   if (dirname == NULL || strlen(dirname) < 1)
     {
     return;
@@ -654,7 +654,7 @@ void
 SupervisedClassificationAppli
 ::OpenSVMModel()
 {
-  const char * cfname = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
+  const char * cfname = flu_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;
@@ -697,7 +697,7 @@ void
 SupervisedClassificationAppli
 ::SaveSVMModel()
 {
-  const char * cfname = fl_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
+  const char * cfname = flu_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;

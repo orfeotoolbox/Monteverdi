@@ -19,6 +19,8 @@
 =========================================================================*/
 #include "otbSpectrumModuleView.h"
 
+#include <FLU/Flu_File_Chooser.h>
+
 namespace otb {
 
 SpectrumModuleView
@@ -413,7 +415,7 @@ SpectrumModuleView
 
     const char * filename = NULL;
 
-    filename = fl_file_chooser("Save Spectrum as CSV", "*.*",".");
+    filename = flu_file_chooser("Save Spectrum as CSV", "*.*",".");
 
     if (filename == NULL)
       {

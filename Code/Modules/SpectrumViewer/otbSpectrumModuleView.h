@@ -31,8 +31,6 @@
 #include "otbSpectrumModuleControllerInterface.h"
 #include "otbSpectrumModuleViewGroup.h"
 
-#include "FL/Fl_File_Chooser.H"
-
 namespace otb {
 
 class SpectrumModuleView
@@ -45,8 +43,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   typedef SpectrumModuleViewGroup       Superclass;
-
-  typedef Fl_File_Chooser FileChooserType;
 
   /** New macro */
   itkNewMacro(Self);
