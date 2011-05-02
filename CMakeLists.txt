@@ -419,6 +419,7 @@ ${CPACK_OTB_DLL_PATH}/mapnik.dll
 ${CPACK_OTB_DLL_PATH}/icuuc42.dll
 ${CPACK_OTB_DLL_PATH}/icudt42.dll
 ${CPACK_OTB_DLL_PATH}/icuin42.dll
+${CPACK_OTB_DLL_PATH}/libxml2.dll
 DESTINATION bin
 COMPONENT Runtime)
 
