@@ -23,9 +23,6 @@
 
 #include <FL/fl_ask.H>
 
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 #include "otbMacro.h"
 #include "otbI18n.h"
 #include "otbMsgReporter.h"

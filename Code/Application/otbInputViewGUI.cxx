@@ -24,8 +24,6 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Browser.H>
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
