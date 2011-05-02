@@ -37,6 +37,7 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   // Put in the tests
   const char * infname  = argv[1];
   const char * outvdname   = argv[2];
+  const char * outfname   = argv[3];
 
   typedef otb::ConnectedComponentSegmentationModule::VectorImageType       VectorImageType;
   typedef otb::ConnectedComponentSegmentationModule::VectorDataType  VectorDataType;
@@ -45,7 +46,7 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
  
   typedef otb::ImageFileReader<VectorImageType>           ImageReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>       VectorDataWriterType;
-
+  typedef otb::ImageFileWriter<LabelImageType>      ImageWriterType;
 
   // Image reader
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -74,11 +75,8 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   
   Fl::check();
 
-  Fl::run();
-
-
+  // Fl::run();
   // Exit the GUI and save the result
- 
   specificModule->ui_Update->do_callback();
 
   specificModule->ui_Ok->do_callback();
@@ -90,6 +88,7 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   std::cout << "Output wrappers: " << vdWrapperOut << " " << imageWrapperOut << std::endl;
 
   VectorDataType::Pointer outVectorData = dynamic_cast<VectorDataType *>(vdWrapperOut.GetDataObject());
+  LabelImageType::Pointer outLabelImage = dynamic_cast<LabelImageType *>(imageWrapperOut.GetDataObject());
   
   //Write the vector data
   std::cout << "Write output vector data" << outvdname << std::endl;
@@ -97,6 +96,13 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   vdWriter->SetFileName(outvdname);
   vdWriter->SetInput(outVectorData);
   vdWriter->Update();
+
+  //Write the vector data
+   std::cout << "Write output image" << outfname << std::endl;
+   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
+   imageWriter->SetFileName(outfname);
+   imageWriter->SetInput(outLabelImage);
+   imageWriter->Update();
   return EXIT_SUCCESS;
 
 }

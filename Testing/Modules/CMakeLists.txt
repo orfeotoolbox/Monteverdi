@@ -455,6 +455,7 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTest  ${Modules_TESTS4}
 	otbConnectedComponentSegmentationModuleTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${TEMP}/moTvConnectedComponentSegmentationModule.shp 
+        ${TEMP}/moTvConnectedComponentSegmentationModule.tif
 )
 
 
