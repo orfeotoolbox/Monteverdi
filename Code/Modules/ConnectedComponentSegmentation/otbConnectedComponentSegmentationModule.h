@@ -85,7 +85,6 @@ typedef enum {
   } TmpOutputEnumType;
 
 
-
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -96,12 +95,10 @@ namespace otb
 const unsigned int     Dimension = 2;
 
 
-
 class ITK_EXPORT ConnectedComponentSegmentationModule
   : public Module, public ConnectedComponentSegmentationModuleGUI
 {
 public:
-
 
 
   /** Standard class typedefs */
@@ -109,7 +106,6 @@ public:
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
 
 
   /** New macro */
@@ -120,34 +116,32 @@ public:
 
 
 
-
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image            ImageType;
   typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
-  typedef otb::Image<unsigned int,Dimension>           LabelImageType;
+  typedef otb::Image<unsigned int, Dimension>           LabelImageType;
 
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef Image<RGBPixelType, Dimension>        LayerOutputImageType;
   typedef Image<RGBPixelType, Dimension>        RGBImageType;
 
-  typedef otb::VectorData<double,Dimension>                                 VectorDataType;
+  typedef otb::VectorData<double, Dimension>                                 VectorDataType;
   typedef VectorDataType::Pointer                                           VectorDataPointerType;
 
   typedef Parser                                       ParserType;
 
   /** Image layer type */
-  typedef ImageLayer<VectorImageType,LayerOutputImageType> VectorImageLayerType;
+  typedef ImageLayer<VectorImageType, LayerOutputImageType> VectorImageLayerType;
   typedef VectorImageLayerType::Pointer                VectorImageLayerPointerType;
 
-  typedef ImageLayer<ImageType,LayerOutputImageType> ImageLayerType;
+  typedef ImageLayer<ImageType, LayerOutputImageType> ImageLayerType;
   typedef ImageLayerType::Pointer                ImageLayerPointerType;
 
-  typedef ImageLayer<RGBImageType,LayerOutputImageType> RGBImageLayerType;
+  typedef ImageLayer<RGBImageType, LayerOutputImageType> RGBImageLayerType;
   typedef RGBImageLayerType::Pointer                RGBImageLayerPointerType;
 
-  typedef ImageLayer<LabelImageType,LayerOutputImageType> LabelLayerType;
+  typedef ImageLayer<LabelImageType, LayerOutputImageType> LabelLayerType;
   typedef LabelLayerType::Pointer                LabelLayerPointerType;
-
 
 
   /** layer generator type */
@@ -190,38 +184,36 @@ public:
 
    typedef Functor::ConnectedComponentMuParserFunctor<VectorImageType::PixelType>  CCFunctorType;
 
-   typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType,LabelImageType,CCFunctorType,ImageType> ConnectedComponentFilterType;
+   typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType, LabelImageType, CCFunctorType, ImageType> ConnectedComponentFilterType;
 
-   typedef otb::MaskMuParserFilter<VectorImageType,ImageType>  MaskMuParserFilterType;
-
+   typedef otb::MaskMuParserFilter<VectorImageType, ImageType>  MaskMuParserFilterType;
 
 
    typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType          LayerOutputPixelType;
    typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
 
    // Labelization
-   typedef itk::RelabelComponentImageFilter<LabelImageType,LabelImageType> RelabelComponentFilterType;
+   typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
    typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>     AttributesMapLabelObjectType;
-   typedef itk::AttributeLabelObject<unsigned int, Dimension,double>   AttributesLabelObjectType;
+   typedef itk::AttributeLabelObject<unsigned int, Dimension, double>   AttributesLabelObjectType;
 
    typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>                             AttributesLabelMapType;
-   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType,AttributesLabelMapType>            LabelImageToLabelMapFilterType;
+   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>            LabelImageToLabelMapFilterType;
 
    typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>                      LabelObjectOpeningFilterType;
 
 
    typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType> RadiometricLabelMapFilterType;
    typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
-   typedef itk::ShapeLabelObject<unsigned int,Dimension>                            ShapeLabelObjectType;
-   typedef itk::LabelObject<unsigned int,Dimension>                            LabelObjectType;
+   typedef itk::ShapeLabelObject<unsigned int, Dimension>                            ShapeLabelObjectType;
+   typedef itk::LabelObject<unsigned int, Dimension>                            LabelObjectType;
    typedef itk::LabelMap<ShapeLabelObjectType>                                     ShapeLabelMapType;
 
-   typedef itk::LabelImageToShapeLabelMapFilter<LabelImageType,ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
-   typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType,LabelImageType> LabelMapToLabelImageFilterType;
+   typedef itk::LabelImageToShapeLabelMapFilter<LabelImageType, ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
+   typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
 
-    typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType,VectorDataType>                          LabelMapToVectorDataFilterType;
-
+    typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType>                          LabelMapToVectorDataFilterType;
 
 
 protected:
@@ -376,7 +368,6 @@ private:
   // attributes
   bool             m_ShapeReducedSetOfAttributes;
   bool             m_StatsReducedSetOfAttributes;
-
 
 
   /** The rendering model */
