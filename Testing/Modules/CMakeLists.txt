@@ -450,6 +450,12 @@ IF(OTB_USE_MAPNIK)
 	)
 ENDIF(OTB_USE_MAPNIK)
 
+#------------- Connected Componenet Module Tests ---------------------------
+ADD_TEST(moTvConnectedComponentSegmentationModuleTest  ${Modules_TESTS4}
+	otbConnectedComponentSegmentationModuleTest
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${TEMP}/moTvConnectedComponentSegmentationModule.shp 
+)
 
 
 
@@ -511,6 +517,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbColorMappingModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
   otbImageStatisticsModuleTest.cxx
+  otbConnectedComponentSegmentationModuleTest.cxx
  
 )
 

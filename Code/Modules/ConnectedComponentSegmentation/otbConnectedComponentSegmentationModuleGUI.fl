@@ -1,0 +1,141 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0110 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class ConnectedComponentSegmentationModuleGUI {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window ui_HelpWindow {
+      label Help
+      callback {this->Hide()}
+      xywh {965 136 515 630} type Double visible
+    } {
+      Fl_Output ui_HelpText {selected
+        xywh {0 0 515 630} type Multiline
+      }
+    }
+    Fl_Window guiMainWindow {
+      label {ConnectedComponentSegmentation module}
+      callback {this->Hide()} open
+      xywh {366 169 960 825} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
+    } {
+      Fl_Button ui_Ok {
+        label {Save/Quit}
+        callback {OK();}
+        xywh {821 785 100 25} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
+      }
+      Fl_Input ui_CCExpression {
+        label {Enter Connected Component Formula :}
+        callback {LiveCheckCC();}
+        xywh {13 85 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+      }
+      Fl_Button ui_Help {
+        label Help
+        callback {if(ui_Help->value())
+{
+ui_HelpWindow->position(guiMainWindow->x() + guiMainWindow->w(),guiMainWindow->y());
+ui_HelpWindow->show();
+}
+else
+{
+ui_HelpWindow->hide();
+}}
+        xywh {820 748 100 25} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+      }
+      Fl_Input ui_MaskExpression {
+        label {Enter Mask Formula :}
+        callback {LiveCheckMask();}
+        xywh {13 40 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+      }
+      Fl_Input ui_OBIAExpression {
+        label {Enter OBIA Formula :}
+        callback {LiveCheckOBIA();}
+        xywh {13 135 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+      }
+      Fl_Group gImageViewer {open
+        xywh {26 186 600 540} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186
+      } {}
+      Fl_Group gScroll {
+        label {Navigation View} open
+        xywh {659 185 260 260} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gTmpUpdate {open
+        xywh {71 725 249 110} when 1
+      } {
+        Fl_Button ui_Update {
+          label Update
+          callback {UpdateTmpOutput();}
+          xywh {87 785 215 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+        }
+        Fl_Choice uiTmpOutputSelection {
+          label {Display }
+          callback {TmpOutputSelection()} open
+          xywh {87 748 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 textcolor 186
+        } {}
+      }
+      Fl_Value_Input uiMinSize {
+        label {Object min area :}
+        callback {this->SetObjectMinArea();}
+        xywh {569 748 50 25} selection_color 186 labelcolor 186 maximum 1e+06 step 1 value 2 textcolor 186
+      }
+      Fl_Group gZoom {
+        label {Zoom View} open
+        xywh {660 464 260 260} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Choice ui_VarNamesMask {
+        label {Variables Names}
+        callback {QuickAddMask()}
+        xywh {729 40 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+      } {}
+      Fl_Choice ui_VarNamesCC {
+        callback {QuickAddCC()}
+        xywh {729 86 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+      } {}
+      Fl_Choice ui_VarNamesOBIA {
+        callback {QuickAddOBIA()}
+        xywh {729 135 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+      } {}
+    }
+  }
+  Function {ConnectedComponentSegmentationModuleGUI()} {} {}
+  Function {~ConnectedComponentSegmentationModuleGUI()} {return_type virtual
+  } {}
+  Function {Process()} {return_type {virtual void}
+  } {}
+  Function {Hide()} {return_type {virtual void}
+  } {}
+  Function {ChangeVarName()} {return_type {virtual void}
+  } {}
+  Function {QuickAddMask()} {return_type {virtual void}
+  } {}
+  Function {InitHelp()} {return_type {virtual void}
+  } {}
+  Function {LiveCheckCC()} {return_type {virtual void}
+  } {}
+  Function {AddIndexes()} {return_type {virtual void}
+  } {}
+  Function {LiveCheckMask()} {return_type {virtual void}
+  } {}
+  Function {LiveCheckOBIA()} {return_type {virtual void}
+  } {}
+  Function {make_window()} {open
+  } {}
+  Function {DisplayDataMask()} {return_type {virtual void}
+  } {}
+  Function {SetObjectMinArea()} {return_type {virtual void}
+  } {}
+  Function {TmpOutputSelection()} {return_type {virtual void}
+  } {}
+  Function {OK()} {return_type {virtual void}
+  } {}
+  Function {UpdateTmpOutput()} {return_type {virtual void}
+  } {}
+  Function {QuickAddCC()} {return_type {virtual void}
+  } {}
+  Function {QuickAddOBIA()} {return_type {virtual void}
+  } {}
+} 

@@ -88,6 +88,7 @@
 #include "otbSARPolarimetryMuellerModule.h"
 #include "otbSARPolarimetryReciprocalModule.h"
 #include "otbSARPolarimetryAnalysisModule.h"
+#include "otbConnectedComponentSegmentationModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -193,6 +194,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
   model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));
+  model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", otbGetTextMacro("Filtering/Connected Component segmentation"));
 
   /***********  SAR menu *******************/
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
