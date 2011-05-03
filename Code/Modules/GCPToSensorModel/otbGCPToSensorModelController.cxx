@@ -18,9 +18,6 @@
 
 #include "otbGCPToSensorModelController.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimDirectory.h"
-
 #include "otbMsgReporter.h"
 //#include <FL/fl_ask.H>
 
@@ -226,23 +223,14 @@ GCPToSensorModelController
 ::SetDEMPath(const std::string& DEMPath)
 {
   // Check if DEM path is valid
-  try
+  DEMHandler::Pointer dem = DEMHandler::New();
+  if (dem->IsValidDEMDirectory(DEMPath.c_str()))
     {
-    // Try to open DEM directory
-    ossimElevManager * elevManager = ossimElevManager::instance();
-    ossimFilename      ossimDEMDir;
-    ossimDEMDir = ossimFilename(DEMPath.c_str());
-    ossimDirectory od(DEMPath.c_str());
-    if (!elevManager->loadElevationPath(ossimDEMDir))
-      {
-      itkExceptionMacro("Invalid directory \"" << DEMPath << "\", no DEM files found!");
-      }
     m_DEMPath = DEMPath;
     }
-  catch (itk::ExceptionObject& err)
+  else
     {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    return;
+    MsgReporter::GetInstance()->SendError("Invalid directory \"" + DEMPath + "\", no DEM files found!");
     }
 }
 

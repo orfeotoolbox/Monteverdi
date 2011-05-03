@@ -21,7 +21,6 @@
 #include "otbTileMapTransform.h"
 
 #include "tinyxml.h"
-#include "base/ossimFilename.h"
 
 #ifdef OTB_USE_CURL
 #include "otbPlaceNameToLonLat.h"
@@ -37,8 +36,9 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_BlendingFunction(), m_InputImage(), m_Output(), m_OutputChanged(false),
   m_DEMPath(""), m_ElevMgt(GCP), m_MeanElevation(0.), m_DEMHandler(),
   m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_PlaceName(""),
-  m_Latitude(0.), m_Longitude(0.), m_Depth(0), m_SelectedLatitude(0.),
-  m_SelectedLongitude(0.), m_SizeX(0), m_SizeY(0), m_Region(), m_ServerName(""),
+  m_Latitude(0.), m_Longitude(0.), m_Depth(2), m_SelectedLatitude(0.),
+  m_SelectedLongitude(0.), m_SizeX(0), m_SizeY(0), m_Region(), 
+  m_ServerName("http://tile.openstreetmap.org/"),
   m_CacheDirectory(""), m_MapVisualizationModel(), m_MapImageGenerator(),
   m_MapBlendingFunction(), m_PlaceNameChanged(false), m_LatLongChanged(false),
   m_DepthChanged(false), m_HasNewMap(false), m_SelectedPointChanged(false),
@@ -68,19 +68,9 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
 
   m_MapBlendingFunction->SetAlpha(0.6);
 
-  m_ServerName      = "http://tile.openstreetmap.org/";
-
   // Use expand because CurlHelper can have pb when the path is relative
-  ossimFilename changeDir = "./Caching";
-  m_CacheDirectory = changeDir.expand();
-
-  ossimFilename cachingDir(m_CacheDirectory);
-  cachingDir.createDirectory();
-
-  m_PlaceName = "";
-  m_Latitude  = 0.;
-  m_Longitude = 0.;
-  m_Depth     = static_cast<unsigned int>(2);
+  m_CacheDirectory = itksys::SystemTools::CollapseFullPath("./Caching");
+  itksys::SystemTools::MakeDirectory(m_CacheDirectory.c_str());
 
   // Configure Tile
   m_TileIO = TileMapType::New();
