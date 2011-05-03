@@ -37,7 +37,7 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_DEMPath(""), m_ElevMgt(GCP), m_MeanElevation(0.), m_DEMHandler(),
   m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_PlaceName(""),
   m_Latitude(0.), m_Longitude(0.), m_Depth(2), m_SelectedLatitude(0.),
-  m_SelectedLongitude(0.), m_SizeX(0), m_SizeY(0), m_Region(), 
+  m_SelectedLongitude(0.), m_SizeX(0), m_SizeY(0), m_Region(),
   m_ServerName("http://tile.openstreetmap.org/"),
   m_CacheDirectory(""), m_MapVisualizationModel(), m_MapImageGenerator(),
   m_MapBlendingFunction(), m_PlaceNameChanged(false), m_LatLongChanged(false),

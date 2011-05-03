@@ -829,7 +829,7 @@ ProjectionView::GetInterpolatorType()
 void
 ProjectionView::UpdateUTMTransform()
 {
- m_HaveUpdatePreview = true; 
+ m_HaveUpdatePreview = true;
 
   //Get the projection parameters
   int  utmZone = atoi(guiUTMZone->value());

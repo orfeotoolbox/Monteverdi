@@ -115,7 +115,6 @@ public:
   itkTypeMacro(ConnectedComponentSegmentationModule, Module);
 
 
-
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image            ImageType;
   typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
