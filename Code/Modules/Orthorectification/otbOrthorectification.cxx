@@ -28,10 +28,6 @@
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
-#include "elevation/ossimElevManager.h"
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 // Maps include
 #include "otbMapProjections.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -125,18 +121,16 @@ Orthorectification
     }
 
   // Check directory availability
-  ossimElevManager * elevManager = ossimElevManager::instance();
-  ossimFilename      ossimDEMDir;
-  ossimDEMDir = ossimFilename(cfname);
-  ossimDirectory od(cfname);
-  if (!elevManager->loadElevationPath(ossimDEMDir))
+  DEMHandler::Pointer dem = DEMHandler::New();
+  if (dem->IsValidDEMDirectory(cfname))
+    {
+    guiDEMPath->value(cfname);
+    }
+  else
     {
     MsgReporter::GetInstance()->SendError("Invalid directory, no DEM files found!");
     this->OpenDEM();
-    return;
-
     }
-  guiDEMPath->value(cfname);
 }
 
 void
