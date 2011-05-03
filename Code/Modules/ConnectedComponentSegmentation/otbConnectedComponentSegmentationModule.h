@@ -326,6 +326,10 @@ private:
   bool                                  m_IsCCExpressionOK;
   bool                                  m_IsOBIAExpressionOK;
 
+  std::string                           m_CurrentExpressionMask;
+  std::string                           m_CurrentExpressionCC;
+  std::string                           m_CurrentExpressionOBIA;
+
   unsigned int                      m_MinObjectSize;
 
   unsigned int                      m_NumberOfInputBands;

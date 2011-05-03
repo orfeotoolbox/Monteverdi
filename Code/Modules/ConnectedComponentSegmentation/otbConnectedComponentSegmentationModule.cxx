@@ -27,12 +27,13 @@
 
 #include <time.h>
 
-double diffclock(clock_t clock1, clock_t clock2)
+double diffclock(clock_t clock1,clock_t clock2)
 {
   double diffticks=clock1-clock2;
   double diffms=(diffticks*1000)/CLOCKS_PER_SEC;
   return diffms;
 }
+
 
 
 
@@ -73,9 +74,11 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_WidgetsController->AddActionHandler(m_ChangeScaleHandler);
 
 
+
   // Wire the MVC
   m_View->SetModel(m_RenderingModel);
   m_View->SetController(m_WidgetsController);
+
 
 
   // Add the resizing handler
@@ -125,6 +128,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_View->GetFullWidget()->show();
   m_View->GetScrollWidget()->show();
   m_View->GetZoomWidget()->show();
+
 
 
   // Describe inputs
@@ -236,12 +240,12 @@ void ConnectedComponentSegmentationModule::OBIA_functor_init()
       m_StatAttributes.push_back("Sum");
      };
 
-  m_OBIAOpeningFilter->SetAttributes(m_ShapeAttributes, m_StatAttributes, m_NumberOfInputBands);
+  m_OBIAOpeningFilter->SetAttributes(m_ShapeAttributes,m_StatAttributes,m_NumberOfInputBands);
 }
 
 
-/**
- * The custom run command
+/** 
+ * The custom run command 
  */
 void ConnectedComponentSegmentationModule::Run()
 {
@@ -280,8 +284,8 @@ void ConnectedComponentSegmentationModule::Run()
   m_OBIAOpeningColorMapper = ColorMapFilterType::New();
 
   itk::ImageRegion<2> imageRegion;
-  imageRegion.SetSize(1, 1);
-  imageRegion.SetIndex(1, 1);
+  imageRegion.SetSize(1,1);
+  imageRegion.SetIndex(1,1);
 
   m_InputImage->SetRequestedRegion(imageRegion);
   m_InputImage->Update();
@@ -352,10 +356,10 @@ void ConnectedComponentSegmentationModule::Run()
 void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
 {
 
-  const std::map<std::string, double*>& variables = m_MaskFilter->GetVar();
+  const std::map<std::string,double*>& variables = m_MaskFilter->GetVar();
 
   // Get the number of variables
-  std::map<std::string, double*>::const_iterator item = variables.begin();
+  std::map<std::string,double*>::const_iterator item = variables.begin();
 
   // Query the variables
   for (; item!=variables.end(); ++item)
@@ -366,6 +370,7 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
 }
 
 
+
 void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
 {
 
@@ -374,22 +379,23 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
   tempFunctor.SetExpression(ui_CCExpression->value());
 
   // Define the iterators
-  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage , m_InputImage->GetRequestedRegion());
+  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage ,m_InputImage->GetRequestedRegion());
   inputIt.GoToBegin();
+
 
 
   try
   {
-    tempFunctor(inputIt.Get(), inputIt.Get());
+    tempFunctor(inputIt.Get(),inputIt.Get());
   }
   catch(itk::ExceptionObject& err)
   {
     itkWarningMacro(<< err);
   }
 
-  const std::map<std::string, double*> & variables= tempFunctor.GetVar();
+  const std::map<std::string,double*> & variables= tempFunctor.GetVar();
 
-  std::map<std::string, double*>::const_iterator item = variables.begin();
+  std::map<std::string,double*>::const_iterator item = variables.begin();
 
   // Query the variables
   for (; item!=variables.end(); ++item)
@@ -398,15 +404,16 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
     }
 
 
+
 }
 
 void ConnectedComponentSegmentationModule::UpdateOBIAFormulaVariablesList()
 {
 
-  const std::map<std::string, double*>& variables = m_OBIAOpeningFilter->GetVar();
+  const std::map<std::string,double*>& variables = m_OBIAOpeningFilter->GetVar();
 
   // Get the number of variables
-  std::map<std::string, double*>::const_iterator item = variables.begin();
+  std::map<std::string,double*>::const_iterator item = variables.begin();
 
   // Query the variables
   for (; item!=variables.end(); ++item)
@@ -418,7 +425,8 @@ void ConnectedComponentSegmentationModule::UpdateOBIAFormulaVariablesList()
 
 
 
-/**
+
+/** 
  * Help Initialization
  */
 void ConnectedComponentSegmentationModule::InitHelp()
@@ -441,7 +449,7 @@ void ConnectedComponentSegmentationModule::QuickAddMask()
   std::ostringstream tmpExpression;
   // ui_VarNamesMask->select(idx);
 
-  tmpExpression << ui_MaskExpression->value() << " " <<ui_VarNamesMask->text();
+  tmpExpression << ui_MaskExpression->value() << " " <<ui_VarNamesMask->text() ;
   ui_MaskExpression->value(tmpExpression.str().c_str());
   ui_MaskExpression->take_focus();
 
@@ -457,7 +465,7 @@ void ConnectedComponentSegmentationModule::QuickAddCC()
   std::ostringstream tmpExpression;
   // ui_VarNamesMask->select(idx);
 
-  tmpExpression << ui_CCExpression->value() << " " <<ui_VarNamesCC->text();
+  tmpExpression << ui_CCExpression->value() << " " <<ui_VarNamesCC->text() ;
   ui_CCExpression->value(tmpExpression.str().c_str());
   ui_CCExpression->take_focus();
 
@@ -473,7 +481,7 @@ void ConnectedComponentSegmentationModule::QuickAddOBIA()
   std::ostringstream tmpExpression;
   // ui_VarNamesMask->select(idx);
 
-  tmpExpression << ui_OBIAExpression->value() << " " <<ui_VarNamesOBIA->text();
+  tmpExpression << ui_OBIAExpression->value() << " " <<ui_VarNamesOBIA->text() ;
   ui_OBIAExpression->value(tmpExpression.str().c_str());
   ui_OBIAExpression->take_focus();
 
@@ -525,6 +533,7 @@ void ConnectedComponentSegmentationModule::CheckProcess()
 
 
 
+
 void ConnectedComponentSegmentationModule::LiveCheckMask()
 {
   m_IsMaskExpressionOK = true;
@@ -571,13 +580,14 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
   CCFunctorType& checkFunctor= m_CCFilter->GetFunctor();
   checkFunctor.SetExpression(ui_CCExpression->value());
   // Define the iterators
-  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage , m_InputImage->GetRequestedRegion());
+  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage ,m_InputImage->GetRequestedRegion());
   inputIt.GoToBegin();
+
 
 
   try
   {
-    checkFunctor(inputIt.Get(), inputIt.Get());
+    checkFunctor(inputIt.Get(),inputIt.Get());
     m_IsCCExpressionOK = true;
     ui_CCExpression->color(FL_GREEN);
     ui_CCExpression->tooltip("The Expression is Not Valid");
@@ -641,6 +651,7 @@ void ConnectedComponentSegmentationModule::UpdateTmpOutput()
 }
 
 
+
 void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 {
   //test layer generation
@@ -655,11 +666,16 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     {
     mask_expression=ui_MaskExpression->value();
     }
-  //std::cout<<"mask_expression "<<mask_expression<<std::endl;
-  if(m_MaskFilter->GetExpression()!=mask_expression)
-    {
+
+  if(m_CurrentExpressionMask.compare(m_MaskFilter->GetExpression()))
+  {
 
     m_HasToGenerateMaskLayer =true;
+
+    }
+
+  if(m_HasToGenerateMaskLayer || !m_MaskOutputReady)
+    {
 
     // mask has to be regenerated, all processing has to be regenerated
     m_CCSegmentationReady=false;
@@ -667,13 +683,10 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     m_OBIAOpeningOutputReady=false;
 
 
-    }
-
-  if(m_HasToGenerateMaskLayer || !m_MaskOutputReady)
-    {
     m_RenderingModel->DeleteLayerByName("Mask");
 
     m_MaskFilter->SetExpression(mask_expression);
+    m_CurrentExpressionMask=mask_expression;
     m_MaskGenerator->SetImage(m_MaskFilter->GetOutput());
     m_MaskGenerator->GenerateQuicklookOff();
     m_MaskGenerator->GenerateLayer();
@@ -694,19 +707,22 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 {
 
-  if(!m_CCSegmentationReady || m_CCFilter->GetFunctor().GetExpression()!=ui_CCExpression->value())
-     {
-     m_HasToGenerateCCSegmentationLayer =true;
-     // CC segmentation has to be regenerated, further processing has to be regenerated
-     m_RelabelOutputReady=false;
-     m_OBIAOpeningOutputReady=false;
-     }
 
+    if( m_CurrentExpressionCC.compare(m_CCFilter->GetFunctor().GetExpression()))
+       {
+       m_HasToGenerateCCSegmentationLayer =true;
+       // CC segmentation has to be regenerated, further processing has to be regenerated
+       m_RelabelOutputReady=false;
+       m_OBIAOpeningOutputReady=false;
 
-  if(m_HasToGenerateCCSegmentationLayer)
+       }
+
+  if(m_HasToGenerateCCSegmentationLayer || !m_CCSegmentationReady)
     {
       m_CCFilter->SetMaskImage(m_MaskFilter->GetOutput());
-      m_CCFilter->GetFunctor().SetExpression(ui_CCExpression->value());
+      m_CurrentExpressionCC=ui_CCExpression->value();
+      m_CCFilter->GetFunctor().SetExpression(m_CurrentExpressionCC);
+
       m_CCColorMapper->SetInput(m_CCFilter->GetOutput());
 
 
@@ -734,7 +750,6 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
   if(!m_RelabelOutputReady || m_CCRelabelFilter->GetMinimumObjectSize()!=minObjectSize)
     {
         m_HasToGenerateRelabelLayer =true;
-        // CC segmentation has to be regenerated, further processing has to be regenerated
         m_OBIAOpeningOutputReady=false;
     }
 
@@ -767,15 +782,71 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
 
 void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 {
-  if(!m_OBIAOpeningOutputReady || m_OBIAOpeningFilter->GetExpression()!=ui_OBIAExpression->value())
+  if(m_CurrentExpressionOBIA.compare(m_OBIAOpeningFilter->GetExpression()))
     {
     m_HasToGenerateOBIAOpeningLayer =true;
-    // CC segmentation has to be regenerated, further processing has to be regenerated
-    m_OBIAOpeningOutputReady=false;
+
     }
 
-  if(m_HasToGenerateOBIAOpeningLayer)
+  if(m_HasToGenerateOBIAOpeningLayer || !m_OBIAOpeningOutputReady)
     {
+
+       m_CCImageToCCLabelMapFilter->SetInput(m_CCRelabelFilter->GetOutput());
+       m_CCImageToCCLabelMapFilter->SetBackgroundValue(0);
+
+       // intermediate step : Fusion
+       // TBD
+
+       // shape attributes computation
+       m_ShapeLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
+       //m_ShapeLabelMapFilter->SetReducedAttributeSet(false);
+       m_ShapeLabelMapFilter->SetReducedAttributeSet(m_ShapeReducedSetOfAttributes);
+       // band stat attributes computation
+
+       m_RadiometricLabelMapFilter->SetInput(m_ShapeLabelMapFilter->GetOutput());
+       // m_RadiometricLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
+
+       m_RadiometricLabelMapFilter->SetFeatureImage(m_InputImage);
+       //m_RadiometricLabelMapFilter->SetReducedAttributeSet(false);
+       m_RadiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
+       m_RadiometricLabelMapFilter->Update();
+
+
+       m_AttributesLabelMap=m_RadiometricLabelMapFilter->GetOutput();
+       //AttributesLabelMap->SetAdjacencyMap(labelImageToLabelMap->GetOutput()->GetAdjacencyMap());
+
+       // TODO JGU  code clean is necessary
+       // DBG OUTPUT
+
+       // step 4 OBIA Filtering using shape and radiometric object characteristics
+
+
+       if( m_NoOBIAOpening)
+           {
+           m_OutputLabelMap=m_RadiometricLabelMapFilter->GetOutput();
+           m_CurrentExpressionOBIA="";
+           }
+         else
+           {
+           m_CurrentExpressionOBIA=ui_OBIAExpression->value();
+           m_OBIAOpeningFilter->SetExpression(m_CurrentExpressionOBIA);
+
+           m_OBIAOpeningFilter->SetInput(m_RadiometricLabelMapFilter->GetOutput());
+           m_OBIAOpeningFilter->Update();
+           m_OutputLabelMap=m_OBIAOpeningFilter->GetOutput();
+           }
+
+
+
+         m_OBIAOpeningLabelMapToLabelImageFilter->SetInput(m_OutputLabelMap);
+         m_OBIAOpeningLabelMapToLabelImageFilter->Update();
+
+         m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
+
+
+
+
     m_RenderingModel->DeleteLayerByName("OBIA Opening");
 
     m_OBIAOpeningGenerator->SetImage( m_OBIAOpeningColorMapper->GetOutput());
@@ -793,6 +864,7 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_HasToGenerateOBIAOpeningLayer=false;
     }
 }
+
 
 
 
@@ -832,75 +904,6 @@ void ConnectedComponentSegmentationModule::Process()
   if(uiTmpOutputSelection->value()>SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION)
     {
 
-    m_CCImageToCCLabelMapFilter->SetInput(m_CCRelabelFilter->GetOutput());
-    m_CCImageToCCLabelMapFilter->SetBackgroundValue(0);
-
-    // intermediate step : Fusion
-    // TBD
-
-    // shape attributes computation
-    m_ShapeLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
-    //m_ShapeLabelMapFilter->SetReducedAttributeSet(false);
-    m_ShapeLabelMapFilter->SetReducedAttributeSet(m_ShapeReducedSetOfAttributes);
-    // band stat attributes computation
-
-    m_RadiometricLabelMapFilter->SetInput(m_ShapeLabelMapFilter->GetOutput());
-    // m_RadiometricLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
-
-    m_RadiometricLabelMapFilter->SetFeatureImage(m_InputImage);
-    //m_RadiometricLabelMapFilter->SetReducedAttributeSet(false);
-    m_RadiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
-    m_RadiometricLabelMapFilter->Update();
-
-
-    m_AttributesLabelMap=m_RadiometricLabelMapFilter->GetOutput();
-    //AttributesLabelMap->SetAdjacencyMap(labelImageToLabelMap->GetOutput()->GetAdjacencyMap());
-
-    // TODO JGU  code clean is necessary
-    // DBG OUTPUT
-
-    // step 4 OBIA Filtering using shape and radiometric object characteristics
-
-
-    //unsigned int nb_obj=m_AttributesLabelMap->GetNumberOfLabelObjects();
-    //std::cout<<"number of attributes map label objects : "<<nb_obj<<std::endl;
-
-    //std::cout<<"OBIA opening ";
-    //time(&t_begin);
-    //LabelObjectOpeningFilterType::Pointer opening= LabelObjectOpeningFilterType::New();
-    if( m_NoOBIAOpening)
-      {
-      m_OutputLabelMap=m_RadiometricLabelMapFilter->GetOutput();
-      }
-    else
-      {
-      m_OBIAOpeningFilter->SetExpression(ui_OBIAExpression->value());
-      m_OBIAOpeningFilter->SetInput(m_RadiometricLabelMapFilter->GetOutput());
-      m_OBIAOpeningFilter->Update();
-      m_OutputLabelMap=m_OBIAOpeningFilter->GetOutput();
-      }
-
-
-    //nb_obj=m_OutputLabelMap->GetNumberOfLabelObjects();
-    //std::cout<<"number of attributes map label objects after opening : "<<nb_obj<<std::endl;
-
-
-    /*   AttributesMapLabelObjectType::Pointer Object_3941=m_OutputLabelMap->GetLabelObject(3941);
-
-    std::vector<std::string> m_AttributesName=Object_3941->GetAvailableAttributes();
-
-    for (unsigned int i=0; i<Object_3941->GetNumberOfAttributes(); i++)
-      {
-
-      std::cout<<" "<<(m_AttributesName.at(i)).c_str()<<" "<<Object_3941->GetAttribute((m_AttributesName.at(i)).c_str())<<std::endl;
-
-
-      }*/
-
-    m_OBIAOpeningLabelMapToLabelImageFilter->SetInput(m_OutputLabelMap);
-    m_OBIAOpeningLabelMapToLabelImageFilter->Update();
-
-    m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
 
     this->UpdateOBIAOpeningLayer();
 
@@ -940,15 +943,17 @@ void ConnectedComponentSegmentationModule::Process()
   m_RenderingModel->Update();
   this->Show();
   //time(&t_end);
-  //std::cout<< double(difftime(t_end, t_begin)) <<"s"<<std::endl;
+  //std::cout<< double(difftime(t_end,t_begin)) <<"s"<<std::endl;
 
 }
+
 
 
 
 void ConnectedComponentSegmentationModule::ProcessCC()
 {
   //std::cout<<"process  ...."<<std::endl;
+
 
 
   // launch CC //
