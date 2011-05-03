@@ -381,6 +381,9 @@ private:
   std::vector<std::string>  m_ShapeAttributes;
   std::vector<std::string>  m_StatAttributes;
 
+  unsigned int              m_NbOfObjectsAfterCC;
+  unsigned int              m_NbOfObjectsAfterOBIA;
+
 
 };
 

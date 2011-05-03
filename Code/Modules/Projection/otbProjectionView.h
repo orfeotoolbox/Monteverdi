@@ -100,11 +100,10 @@ public:
   typedef ImageWidgetType::Pointer   ImageWidgetPointerType;
   
   /** Useful typedefs for the preview rendering */
-  typedef Image<itk::RGBAPixel<unsigned char> >        ViewerImageType;
-  typedef otb::ImageLayer<ImageType, ViewerImageType>  LayerType;
-  typedef otb::ImageLayerGenerator<LayerType>          LayerGeneratorType;
-  
-  typedef otb::ImageLayerRenderingModel<ViewerImageType>   VisuModelType;
+  typedef Image<itk::RGBAPixel<unsigned char> >          ViewerImageType;
+  typedef otb::ImageLayer<ImageType, ViewerImageType>    LayerType;
+  typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
+  typedef otb::ImageLayerRenderingModel<ViewerImageType> VisuModelType;
 
 
   // Called before building the GUI
@@ -238,7 +237,12 @@ private:
   ImageWidgetPointerType                 m_PreviewWidget;
   
   ModelType::ResampleFilterType::Pointer m_Transform;
-  
+
+  LayerGeneratorType::Pointer m_QLImageLayerGenerator;
+  VisuModelType::Pointer m_QLImageRenderingModel;
+  bool m_QLImageLayerGeneratorComputed;
+
+  bool m_HaveUpdatePreview;
 };
 
 } // End namespace otb

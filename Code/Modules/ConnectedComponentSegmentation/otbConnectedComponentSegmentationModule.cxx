@@ -759,6 +759,8 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
     m_CCRelabelFilter->SetInput(m_CCFilter->GetOutput());
     m_CCRelabelFilter->SetMinimumObjectSize(minObjectSize);
     //
+
+   // unsigned int nb_obj=m_AttributesLabelMap->GetNumberOfLabelObjects()
     m_RelabelColorMapper->SetInput( m_CCRelabelFilter->GetOutput());
 
     m_RenderingModel->DeleteLayerByName("Relabel");
@@ -771,10 +773,15 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
 
     m_RenderingModel->AddLayer(m_RelabelGenerator->GetLayer());
 
-
+    m_CCRelabelFilter->Update();
     // m_RenderingModel->Update();
     m_CCRelabelFilter->GetOutput()->UpdateOutputInformation();
     m_RelabelColorMapper->GetOutput()->UpdateOutputInformation();
+
+    m_NbOfObjectsAfterCC=m_CCRelabelFilter->GetNumberOfObjects();
+    std::ostringstream Outputmsg;
+    Outputmsg <<m_NbOfObjectsAfterCC<<" labeled objects. ";
+    ui_OutputInfos->value(Outputmsg.str().c_str());
     m_HasToGenerateRelabelLayer=false;
     }
 }
@@ -836,8 +843,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
            m_OutputLabelMap=m_OBIAOpeningFilter->GetOutput();
            }
 
-
-
          m_OBIAOpeningLabelMapToLabelImageFilter->SetInput(m_OutputLabelMap);
          m_OBIAOpeningLabelMapToLabelImageFilter->Update();
 
@@ -861,6 +866,12 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     // m_RenderingModel->Update();
     m_OBIAOpeningFilter->GetOutput()->UpdateOutputInformation();
     m_OBIAOpeningColorMapper->GetOutput()->UpdateOutputInformation();
+
+    m_NbOfObjectsAfterOBIA=m_OutputLabelMap->GetNumberOfLabelObjects();
+    std::ostringstream Outputmsg;
+    Outputmsg <<m_NbOfObjectsAfterCC<<" labeled objects."<<m_NbOfObjectsAfterOBIA<< " objects after OBIA.";
+    ui_OutputInfos->value(Outputmsg.str().c_str());
+
     m_HasToGenerateOBIAOpeningLayer=false;
     }
 }

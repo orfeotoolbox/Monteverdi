@@ -82,7 +82,12 @@ ProjectionView::ProjectionView()
   m_PreviousMapType = MAP_UNKOWN;
   m_InputProjectionUnknown = false;
  
-  m_PreviewWidget          =  ImageWidgetType::New();
+  m_QLImageLayerGeneratorComputed = false;
+  m_QLImageLayerGenerator = LayerGeneratorType::New();
+  m_QLImageRenderingModel = VisuModelType::New();
+  m_HaveUpdatePreview = true;
+
+  m_PreviewWidget =  ImageWidgetType::New();
   //init the previewWindow
   m_PreviewWidget->label("PreviewWidget");
   gPreviewWindow->add(m_PreviewWidget);
@@ -346,6 +351,8 @@ void
 ProjectionView
 ::UpdateOutputRegion()
 {
+ m_HaveUpdatePreview = true;
+
   // tell the model to project the region edited in the GUI
   unsigned int sizeX    = atoi(guiSizeX->value());
   unsigned int sizeY    = atoi(guiSizeY->value());
@@ -393,6 +400,8 @@ void
 ProjectionView
 ::UpdateMapParam()
 {
+ m_HaveUpdatePreview = true;
+
   ModelType::OutputPointType geoPoint, newCartoPoint;
   // Get the new values of Long/Lat from the gui
   geoPoint[0] = atof(guiLongSelection->value());
@@ -465,6 +474,8 @@ void
 ProjectionView
 ::UpdateLongLat()
 {
+  m_HaveUpdatePreview = true;
+
   if (!m_InputProjectionUnknown)
     {
     PointType point, geoPoint;
@@ -531,6 +542,8 @@ void
 ProjectionView
 ::UpdateUnavailableLongLat()
 {
+ m_HaveUpdatePreview = true;
+
   PointType point, geoPoint;
 
   // Apply the transform to the middle point of the image
@@ -580,6 +593,8 @@ void
 ProjectionView
 ::UpdateOutputParameters()
 {
+ m_HaveUpdatePreview = true;
+
   itk::OStringStream oss;
   oss.str("");
   oss << m_Controller->GetModel()->GetOutputSpacing()[0];
@@ -600,6 +615,8 @@ int
 ProjectionView
 ::UpdateInterpolator()
 {
+ m_HaveUpdatePreview = true;
+
   int res = 0;
 
   switch (this->GetInterpolatorType())
@@ -812,6 +829,8 @@ ProjectionView::GetInterpolatorType()
 void
 ProjectionView::UpdateUTMTransform()
 {
+ m_HaveUpdatePreview = true; 
+
   //Get the projection parameters
   int  utmZone = atoi(guiUTMZone->value());
   bool north = guiUTMNorth->value();
@@ -827,6 +846,8 @@ ProjectionView::UpdateUTMTransform()
 void
 ProjectionView::UpdateLambertIITransform()
 {
+ m_HaveUpdatePreview = true;
+
   m_Controller->InitializeLambertIITransform();
 }
 
@@ -837,6 +858,8 @@ ProjectionView::UpdateLambertIITransform()
 void
 ProjectionView::UpdateWGS84Transform()
 {
+ m_HaveUpdatePreview = true;
+
   m_Controller->InitializeWGS84Transform();
 }
 
@@ -846,6 +869,8 @@ ProjectionView::UpdateWGS84Transform()
 void
 ProjectionView::UpdateTMTransform()
 {
+ m_HaveUpdatePreview = true;
+
   m_Controller->UpdateTMTransform(atof(guiTRANSMERCATORScale->value()),
                                   atof(guiTRANSMERCATOREast->value()),
                                   atof(guiTRANSMERCATORNorth->value()));
@@ -854,6 +879,8 @@ ProjectionView::UpdateTMTransform()
 void
 ProjectionView::UpdateInputUTMTransform()
 {
+ m_HaveUpdatePreview = true;
+
   //Get the projection parameters
   int  utmZone = atoi(iUTMZone->value());
   bool north = iUTMNorth->value();
@@ -872,6 +899,8 @@ ProjectionView::UpdateInputUTMTransform()
 void
 ProjectionView::UpdateInputLambertIITransform()
 {
+ m_HaveUpdatePreview = true;
+
   m_Controller->InitializeInputLambertIITransform();
 
   // Update the whole transformation
@@ -884,6 +913,8 @@ ProjectionView::UpdateInputLambertIITransform()
 void
 ProjectionView::UpdateInputTMTransform()
 {
+ m_HaveUpdatePreview = true;
+
   m_Controller->UpdateInputTMTransform(atof(iTRANSMERCATORScale->value()),
                                        atof(iTRANSMERCATOREast->value()),
                                        atof(iTRANSMERCATORNorth->value()));
@@ -898,6 +929,8 @@ ProjectionView::UpdateInputTMTransform()
 void
 ProjectionView::UpToDateTransform()
 {
+ m_HaveUpdatePreview = true;
+
   switch (this->GetMapType())
     {
     case MAP_UTM:
@@ -946,6 +979,8 @@ ProjectionView::Browse()
 void
 ProjectionView::UpdateDEMUse()
 {
+ m_HaveUpdatePreview = true;
+
   // Update following the choiceDEM radio button
   // value
   if(choiceDEM->value())
@@ -966,6 +1001,8 @@ ProjectionView::UpdateDEMUse()
 void
 ProjectionView::UpdateRpcEstimation()
 {
+ m_HaveUpdatePreview = true;
+
   // Update following the choiceDEM radio button
   // value
   if(guiRPCEstimator->value())
@@ -980,9 +1017,6 @@ ProjectionView::DisplayPreviewWidget()
   if(!m_Controller->GetModel()->GetInputImage()->GetProjectionRef().empty()
      ||m_Controller->GetModel()->GetInputImage()->GetImageKeywordlist().GetSize()> 0)
     {
-    // Clear the previous GlComponents
-    m_PreviewWidget->ClearGlComponents();
-
     // Get the current output projectionRef computed in the model part
     std::string outputMap = m_Controller->GetModel()->GetOutputProjectionRef();
        
@@ -1000,87 +1034,133 @@ ProjectionView::DisplayPreviewWidget()
     estimator->SetOutputProjectionRef(outputMap);
     estimator->ForceSizeTo(previewSize);
     estimator->Compute();
+    
+    // Clear the previous GlComponents
+    m_PreviewWidget->ClearGlComponents();
 
-    // Clear the previous widget buffer
-    m_PreviewWidget->ClearBuffer();
-      
     // Display the preview image only if the check box is selected
     if(bDispalyPreview->value())
       {
-      // Two cases when the Display button is set to ON :
-      // - The mapType changed : reproject
-      // - The mapType does not changed : use the previous projected
-      // image
-      if(m_PreviousMapType != this->GetMapType())
-        {
-        // Reproject the image with a final size equal to the previewWidget
-        // size  and relative spacing
-        m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
-        m_Transform->SetOutputProjectionRef(outputMap);
-        m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
-        m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
-        m_Transform->SetOutputSize(estimator->GetOutputSize());
-        m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
-        m_Transform->SetEdgePaddingValue(0);
+        if(  m_HaveUpdatePreview == true )
+          {
+            // Clear the previous GlComponents
+            //m_PreviewWidget->ClearGlComponents();
+            // Clear the previous widget buffer
+            m_PreviewWidget->ClearBuffer();
 
-        // Update the MapType
-        m_PreviousMapType = this->GetMapType();
-        }
-
-      // Streaming Shrink : Persistent class, will process tile by tile
-      // to avoid memory allocation issues.
-      typedef StreamingShrinkImageFilter<ImageType, ImageType>   StreamingShrinkType;
-      StreamingShrinkType::Pointer shrinker = StreamingShrinkType::New();
-      shrinker->SetInput(m_Transform->GetOutput());
-      shrinker->SetShrinkFactor(1);
-      shrinker->GetStreamer()->SetAutomaticStrippedStreaming(0);
-
-      // Show busy bar
-      this->pBusyBar->value(1);
-      this->pBusyBar->show();
-      Fl::check();
-
-      shrinker->Update();
-      
-      // build the rendering model
-      // Generate the layer
-      LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
-      layerGenerator->SetImage(shrinker->GetOutput());
-      FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
-      layerGenerator->GenerateLayer();
-   
-      // Render
-      VisuModelType::Pointer rendering = VisuModelType::New();
-      rendering->AddLayer(layerGenerator->GetLayer());
-      rendering->Update();
-    
-      // Hide busy bar
-      this->pBusyBar->value(0);
-      this->pBusyBar->hide();
-      Fl::check();
-
-      // Fill the previewWidget with the quicklook of the projected
-      // image
-      ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
-      m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+            // Compute input rendering function
+            if( m_QLImageLayerGeneratorComputed == false )
+              {
+                // Show busy bar
+                this->pBusyBar->copy_label("Compute input histogram");
+                this->pBusyBar->value(1);
+                this->pBusyBar->show();
+                Fl::check();
+                
+                m_QLImageLayerGenerator = LayerGeneratorType::New();
+                m_QLImageLayerGenerator->SetImage(m_Controller->GetModel()->GetInputImage());
+                m_QLImageLayerGenerator->GenerateLayer();
+                
+                m_QLImageRenderingModel->AddLayer(m_QLImageLayerGenerator->GetLayer());
+                m_QLImageRenderingModel->Update();
+                
+                m_QLImageLayerGenerator->GetRenderingFunction()->SetAutoMinMax(false);
+                m_QLImageLayerGeneratorComputed = true;
+                
+                // Show busy bar
+                this->pBusyBar->value(1);
+                this->pBusyBar->show();
+                this->pBusyBar->copy_label("Computing Quicklook");
+                Fl::check();
+              }
+            
+            // Two cases when the Display button is set to ON :
+            // - The mapType changed : reproject
+            // - The mapType does not changed : use the previous projected
+            // image
+            if(m_PreviousMapType != this->GetMapType())
+              {
+                // Reproject the image with a final size equal to the previewWidget
+                // size  and relative spacing
+                m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
+                m_Transform->SetOutputProjectionRef(outputMap);
+                m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
+                m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
+                m_Transform->SetOutputSize(estimator->GetOutputSize());
+                m_Transform->SetDeformationFieldSpacing(10.*estimator->GetOutputSpacing());
+                m_Transform->SetEdgePaddingValue(0);
+                
+                // Update the MapType
+                m_PreviousMapType = this->GetMapType();
+              }
+            
+            // Streaming Shrink : Persistent class, will process tile by tile
+            // to avoid memory allocation issues.
+            typedef StreamingShrinkImageFilter<ImageType, ImageType>   StreamingShrinkType;
+            StreamingShrinkType::Pointer shrinker = StreamingShrinkType::New();
+            shrinker->SetInput(m_Transform->GetOutput());
+            shrinker->SetShrinkFactor(1);
+            shrinker->GetStreamer()->SetAutomaticStrippedStreaming(0);
+            
+            // Show busy bar
+            this->pBusyBar->value(1);
+            this->pBusyBar->show();
+            Fl::check();
+            
+            shrinker->Update();
+            
+            // build the rendering model
+            // Generate the layer
+            LayerGeneratorType::Pointer layerGenerator = LayerGeneratorType::New();
+            layerGenerator->SetImage(shrinker->GetOutput());
+            layerGenerator->SetRenderingFunction(m_QLImageLayerGenerator->GetRenderingFunction() );
+            FltkFilterWatcher qlwatcher(layerGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
+            layerGenerator->GenerateLayer();
+            
+            // Render
+            VisuModelType::Pointer rendering = VisuModelType::New();
+            rendering->AddLayer(layerGenerator->GetLayer());
+            rendering->Update();
+            
+            // Hide busy bar
+            this->pBusyBar->value(0);
+            this->pBusyBar->hide();
+            Fl::check();
+            
+            // Fill the previewWidget with the quicklook of the projected
+            // image
+            ViewerImageType * quickLook = rendering->GetRasterizedQuicklook();
+            m_PreviewWidget->ReadBuffer(quickLook, quickLook->GetLargestPossibleRegion());
+            
+            m_HaveUpdatePreview = false;
+         }
+        else
+          {
+            m_PreviewWidget->show();
+            gPreviewWindow->show();
+            bDispalyPreview->show();
+          }
       }
     else
       {
-      // Create a temp image : cause no vectordataGlComponent
-      // rendering without an image layer.
-      ViewerImageType::Pointer  tempImage  = ViewerImageType::New();
-      ImageType::RegionType            tempRegion;
-      ImageType::RegionType::IndexType index;
-      index.Fill(0);
-      tempRegion.SetIndex(index);
-      tempRegion.SetSize(estimator->GetOutputSize());
-      
-      tempImage->SetRegions(tempRegion);
-      tempImage->Allocate();
-      tempImage->FillBuffer(0.);
-
-      // Fill the previewWidget with the temp black image
-      m_PreviewWidget->ReadBuffer(tempImage, tempRegion);
+        // Clear the previous widget buffer
+        m_PreviewWidget->ClearBuffer();
+        
+        // Create a temp image : cause no vectordataGlComponent
+        // rendering without an image layer.
+        ViewerImageType::Pointer  tempImage  = ViewerImageType::New();
+        ImageType::RegionType            tempRegion;
+        ImageType::RegionType::IndexType index;
+        index.Fill(0);
+        tempRegion.SetIndex(index);
+        tempRegion.SetSize(estimator->GetOutputSize());
+        
+        tempImage->SetRegions(tempRegion);
+        tempImage->Allocate();
+        tempImage->FillBuffer(0.);
+        
+        // Fill the previewWidget with the temp black image
+        m_PreviewWidget->ReadBuffer(tempImage, tempRegion);
       }
     
     // Compose the VectorDataGLComponent (Region Selected by the user)
@@ -1173,6 +1253,8 @@ void ProjectionView::TabPositionHandler()
 // image when changing the cartographic coordinates
 void ProjectionView::UpdateOriginGeographicalCoordinates()
 {
+ m_HaveUpdatePreview = true;
+
   ModelType::OutputPointType  cartoPoint;
   ModelType::OutputPointType  geoPoint;
   

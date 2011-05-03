@@ -505,10 +505,10 @@ OpticalCalibrationModule
     m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
     m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
 
-    this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(), "TOA image (*1000)", otbGetTextMacro("TOA image (*1000)"));
-    this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(), "TOC image (*1000)", otbGetTextMacro("TOC image (*1000)"));
+    this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(), "TOA image (*1000)", otbGetTextMacro("TOA image 1000"));
+    this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(), "TOC image (*1000)", otbGetTextMacro("TOC image 1000"));
     this->AddOutputDescriptor(m_DiffTOATOCMultiplier->GetOutput(), "Difference TOA-TOC image (*1000)",
-                              otbGetTextMacro("Difference TOA-TOC image (*1000)"));
+                              otbGetTextMacro("Difference TOA-TOC image 1000"));
     }
   else
     {

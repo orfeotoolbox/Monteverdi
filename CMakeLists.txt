@@ -420,6 +420,7 @@ ${CPACK_OTB_DLL_PATH}/icuuc42.dll
 ${CPACK_OTB_DLL_PATH}/icudt42.dll
 ${CPACK_OTB_DLL_PATH}/icuin42.dll
 ${CPACK_OTB_DLL_PATH}/libxml2.dll
+${CPACK_OTB_DLL_PATH}/iconv.dll
 DESTINATION bin
 COMPONENT Runtime)
 
