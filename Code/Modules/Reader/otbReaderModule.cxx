@@ -211,27 +211,31 @@ void ReaderModule::OpenDataSet()
       case 2:
         if (m_MultibandComplexImage)
           {
+          // Only sar image readable by gdal can go here
           this->OpenMultiSarImage();
           }
         else
           {
-          // Check if it is a multiband image of scalar (only monoband complex image can go here)
-          if ( (!(dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex()) && (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2))
+          if (strcmp(m_FPVReader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
             {
-            itk::OStringStream oss;
-            oss << "You try to open a two bands image of scalar as a SAR image, \n" << \
-                            "we consider that first band is Real part and second band is Imaginary part.\n"<< \
-                            "This warning message occurred with: " << vFilePath->value();
-            MsgReporter::GetInstance()->SendWarning(oss.str());
-            }
-          else if (m_FPVReader->GetImageIO()->GetNumberOfComponents()  > 2)
-            {
-            itk::OStringStream oss;
-            oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a SAR image, \n" << \
-                "we consider only that first band is Real part and second band is Imaginary part. \n"<< \
-                "Rest of data are not considered.\n" << \
-                "This warning message occurred with: " << vFilePath->value();
-            MsgReporter::GetInstance()->SendWarning(oss.str());
+            // Check if it is a multiband image of scalar (only monoband complex image can go here)
+            if ( (!(dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex()) && (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2))
+              {
+              itk::OStringStream oss;
+              oss << "You try to open a two bands image of scalar as a SAR image, \n" << \
+                     "we consider that first band is Real part and second band is Imaginary part.\n"<< \
+                     "This warning message occurred with: " << vFilePath->value();
+              MsgReporter::GetInstance()->SendWarning(oss.str());
+              }
+            else if (m_FPVReader->GetImageIO()->GetNumberOfComponents()  > 2)
+              {
+              itk::OStringStream oss;
+              oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a SAR image, \n" << \
+                     "we consider only that first band is Real part and second band is Imaginary part. \n"<< \
+                     "Rest of data are not considered.\n" << \
+                     "This warning message occurred with: " << vFilePath->value();
+              MsgReporter::GetInstance()->SendWarning(oss.str());
+              }
             }
           this->OpenSarImage();
           }
