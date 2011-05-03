@@ -760,7 +760,7 @@ ProjectionView::InitializeAction()
     UtmForwardProjection::Pointer utmProjection = UtmForwardProjection::New();
 
 
-    int zone = utmProjection->GetZoneFromGeoPoint(geoPoint);
+    int zone = Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
     oss.str("");
     oss << zone;
     guiUTMZone->value(oss.str().c_str());

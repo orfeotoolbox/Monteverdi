@@ -343,11 +343,7 @@ Orthorectification
   latLongPoint[0] = latLongPointDouble[0];
   latLongPoint[1] = latLongPointDouble[1];
 
-  typedef UtmForwardProjection UtmProjectionType;
-  UtmProjectionType::Pointer        utmProjection = UtmProjectionType::New();
-  UtmProjectionType::InputPointType geoPoint;
-
-  int utmZone = utmProjection->GetZoneFromGeoPoint(latLongPoint);
+  int utmZone = Utils::GetZoneFromGeoPoint(latLongPoint[0], latLongPoint[1]);
 
   itk::OStringStream oss;
   oss.str("");
@@ -396,10 +392,7 @@ Orthorectification
     {
     case UTM:
       {
-      typedef UtmForwardProjection UtmProjectionType;
-      UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-
-      int utmZone = utmProjection->GetZoneFromGeoPoint(latLongPoint);
+      int utmZone = Utils::GetZoneFromGeoPoint(latLongPoint[0], latLongPoint[1]);
 
       oss << utmZone;
       guiUTMZone->value(oss.str().c_str());
