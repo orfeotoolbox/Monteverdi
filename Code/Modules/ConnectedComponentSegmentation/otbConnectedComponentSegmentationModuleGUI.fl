@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
@@ -14,24 +14,24 @@ class ConnectedComponentSegmentationModuleGUI {open
       callback {this->Hide()}
       xywh {965 136 515 630} type Double visible
     } {
-      Fl_Output ui_HelpText {selected
+      Fl_Output ui_HelpText {
         xywh {0 0 515 630} type Multiline
       }
     }
     Fl_Window guiMainWindow {
       label {ConnectedComponentSegmentation module}
       callback {this->Hide()} open
-      xywh {366 169 960 825} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
+      xywh {366 169 1035 915} type Single box PLASTIC_DOWN_BOX color 53 selection_color 53 labelcolor 187 align 17 resizable visible
     } {
       Fl_Button ui_Ok {
         label {Save/Quit}
         callback {OK();}
-        xywh {821 785 100 25} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
+        xywh {848 871 125 25} box PLASTIC_DOWN_BOX color 55 selection_color 51 labelfont 1 labelcolor 186
       }
       Fl_Input ui_CCExpression {
         label {Enter Connected Component Formula :}
         callback {LiveCheckCC();}
-        xywh {13 85 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+        xywh {13 85 600 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1 textcolor 186
       }
       Fl_Button ui_Help {
         label Help
@@ -44,61 +44,77 @@ else
 {
 ui_HelpWindow->hide();
 }}
-        xywh {820 748 100 25} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+        xywh {847 834 125 25} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
       }
       Fl_Input ui_MaskExpression {
         label {Enter Mask Formula :}
         callback {LiveCheckMask();}
-        xywh {13 40 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+        xywh {13 35 600 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1 textcolor 186
       }
       Fl_Input ui_OBIAExpression {
         label {Enter OBIA Formula :}
-        callback {LiveCheckOBIA();}
-        xywh {13 135 700 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1
+        callback {LiveCheckOBIA();} selected
+        xywh {13 135 600 25} box PLASTIC_DOWN_BOX selection_color 7 labelfont 1 labelcolor 186 align 1 when 1 textcolor 186
       }
       Fl_Group gImageViewer {open
-        xywh {26 186 600 540} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186
+        xywh {26 186 650 615} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186
       } {}
       Fl_Group gScroll {
         label {Navigation View} open
-        xywh {659 185 260 260} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
+        xywh {707 185 300 300} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
       } {}
       Fl_Group gTmpUpdate {open
-        xywh {71 725 249 110} when 1
+        xywh {71 811 249 110} when 1
       } {
         Fl_Button ui_Update {
           label Update
           callback {UpdateTmpOutput();}
-          xywh {87 785 215 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
+          xywh {87 871 215 25} box PLASTIC_DOWN_BOX labelfont 1 labelcolor 186
         }
         Fl_Choice uiTmpOutputSelection {
           label {Display }
           callback {TmpOutputSelection()} open
-          xywh {87 748 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 textcolor 186
+          xywh {87 834 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 textcolor 186
         } {}
       }
       Fl_Value_Input uiMinSize {
         label {Object min area :}
         callback {this->SetObjectMinArea();}
-        xywh {569 748 50 25} selection_color 186 labelcolor 186 maximum 1e+06 step 1 value 2 textcolor 186
+        xywh {493 834 50 25} selection_color 186 labelcolor 186 maximum 1e+06 step 1 value 2 textcolor 186
       }
       Fl_Group gZoom {
         label {Zoom View} open
-        xywh {660 464 260 260} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
+        xywh {708 502 300 300} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
       } {}
       Fl_Choice ui_VarNamesMask {
         label {Variables Names}
         callback {QuickAddMask()}
-        xywh {729 40 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+        xywh {634 35 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
       } {}
       Fl_Choice ui_VarNamesCC {
         callback {QuickAddCC()}
-        xywh {729 86 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+        xywh {634 85 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
       } {}
       Fl_Choice ui_VarNamesOBIA {
         callback {QuickAddOBIA()}
-        xywh {729 135 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
+        xywh {634 135 215 25} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
       } {}
+      Fl_Group gVarNamesInfos {open
+        xywh {852 25 170 140}
+      } {
+        Fl_Output ui_VarNamesInfosMask {
+          xywh {862 35 150 24} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 186 textcolor 186
+        }
+        Fl_Output ui_VarNamesInfosCC {
+          xywh {862 85 150 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 186 textcolor 186
+        }
+        Fl_Output ui_VarNamesInfosOBIA {
+          xywh {862 135 150 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 186 textcolor 186
+        }
+      }
+      Fl_Output ui_OutputInfos {
+        xywh {368 870 350 25} box PLASTIC_DOWN_BOX selection_color 7 labelcolor 186 textcolor 186
+      }
     }
   }
   Function {ConnectedComponentSegmentationModuleGUI()} {} {}
