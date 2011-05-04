@@ -20,37 +20,21 @@
 #include "otbTileMapImageIOHelper.h"
 #include "otbTileMapTransform.h"
 
-//FIXME replace by itksys
-#include "base/ossimFilename.h"
-
 namespace otb
 {
 /** Constructor */
-TileMapImportModule::TileMapImportModule()
+TileMapImportModule::TileMapImportModule():
+  m_PlaceName(""), m_CountryName(""),
+  m_Latitude(-1000), m_Longitude(-1000), m_Depth(1),
+  m_SizeX(500), m_SizeY(500),
+  m_ServerName("http://tile.openstreetmap.org/"),
+  m_CacheDirectory(""),
+  m_OutputKey("OutputImage")
 {
-  // Init
-  m_PlaceName = "";
-  m_CountryName = "";
-
-  m_Latitude = -1000;
-  m_Longitude = -1000;
-
-  m_Depth = 1;
-
-  m_SizeX = 500;
-  m_SizeY = 500;
-
-  m_ServerName = "http://tile.openstreetmap.org/";
-
   // Use expand because CurlHelper can have pb when the path is relative
-  ossimFilename changeDir = "./Caching";
-  m_CacheDirectory = changeDir.expand();
-
-  // Create the caching dir if not already created
-  ossimFilename cachingDir(m_CacheDirectory);
-  cachingDir.createDirectory();
-
-  m_OutputKey = "OutputImage";
+  // Create the caching dir if not already created  
+  m_CacheDirectory = itksys::SystemTools::CollapseFullPath("./Caching");
+  itksys::SystemTools::MakeDirectory(m_CacheDirectory.c_str());
 
   // Build GUI
   this->BuildGUI();
