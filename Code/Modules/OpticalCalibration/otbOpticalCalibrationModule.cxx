@@ -17,10 +17,10 @@
 =========================================================================*/
 #include "otbOpticalCalibrationModule.h"
 
+#include "itksys/SystemTools.hxx"
 #include "itkMetaDataDictionary.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include "otbOpticalImageMetadataInterface.h"
-#include "ossim/base/ossimFilename.h"
 #include "FLU/Flu_File_Chooser.h"
 #include "otbMsgReporter.h"
 
@@ -194,15 +194,15 @@ OpticalCalibrationModule
   itk::OStringStream oss;
   oss.str("");
   oss << "Optical calibration module: ";
-  ossimFilename myFile(this->GetInputDataDescription<ImageType>("InputImage", 0));
-  oss << myFile.file();
+  std::string myFile(this->GetInputDataDescription<ImageType>("InputImage", 0));
+  oss << itksys::SystemTools::GetFilenameName(myFile);
   oss << " (" << m_InputImage->GetNumberOfComponentsPerPixel();
   if (m_InputImage->GetNumberOfComponentsPerPixel() != 1) oss << " bands , ";
   else oss << " band , ";
 
   oss << m_InputImage->GetLargestPossibleRegion().GetSize() << ")";
   wMainWindow->copy_label(oss.str().c_str());
-  m_LastPath = myFile.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(myFile);
 }
 
 void
@@ -538,8 +538,7 @@ OpticalCalibrationModule
     return;
     }
 
-  ossimFilename fname(cfname);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(cfname);
   teAeronetFile->value(cfname);
   teAeronetFile->redraw();
 }
@@ -556,8 +555,7 @@ OpticalCalibrationModule
     return;
     }
 
-  ossimFilename fname(cfname);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(cfname);
   teFFVFile->value(cfname);
   teFFVFile->redraw();
 }

@@ -21,8 +21,6 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Text_Buffer.H>
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
@@ -161,8 +159,7 @@ WriterViewGUI
   {
     return;
   }
-  ossimFilename fname(cfname);
-  m_LastPath = fname.path();
+  m_LastPath = itksys::SystemTools::GetFilenamePath(cfname);
 
   this->ClearImage();
   m_WriterController->OpenInputImage(cfname);

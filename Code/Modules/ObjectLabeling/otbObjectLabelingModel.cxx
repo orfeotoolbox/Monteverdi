@@ -19,14 +19,16 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbObjectLabelingModel_cxx
 
 #include "otbObjectLabelingModel.h"
+
+#include <cstdlib>
+
+#include "itksys/SystemTools.hxx"
 #include "otbImageFileWriter.h"
-#include "base/ossimFilename.h"
 #include "otbFltkFilterWatcher.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbVectorDataProjectionFilter.h"
 
-#include <cstdlib>
 
 namespace otb
 {
@@ -755,8 +757,8 @@ namespace otb
     itk::OStringStream oss;
 
     // Build the model name
-    ossimFilename tmpfname(fname);
-    ossimFilename svmExt = tmpfname.noExtension().setExtension("svm");
+    std::string svmExt = itksys::SystemTools::GetFilenameWithoutLastExtension(fname);
+    svmExt += ".svm";
 
     // Save the model to the svm file
     m_SVMEstimator->GetModel()->SaveModel(svmExt);
@@ -771,7 +773,7 @@ namespace otb
 
     // The svm model file
     TiXmlElement * svmModelFile = new TiXmlElement( "SVMModelFile" );
-    svmModelFile->LinkEndChild(new TiXmlText(svmExt));
+    svmModelFile->LinkEndChild(new TiXmlText(svmExt.c_str()));
     root->LinkEndChild( svmModelFile );
 
     // The classes
