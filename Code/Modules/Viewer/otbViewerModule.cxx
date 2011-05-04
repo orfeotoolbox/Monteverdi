@@ -319,9 +319,8 @@ namespace otb
         itk::OStringStream oss;
         oss << "Problem occurred while generation of QuickLook. The following error was returned:\n";
         oss << err.GetDescription();
-        err.SetDescription(oss.str());
+        MsgReporter::GetInstance()->SendError(oss.str());
         this->Quit();
-        throw;
         }
 
       ImageLayerType::Pointer imageLayer = generator->GetLayer();
