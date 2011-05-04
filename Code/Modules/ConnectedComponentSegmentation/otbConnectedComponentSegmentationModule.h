@@ -100,48 +100,46 @@ class ITK_EXPORT ConnectedComponentSegmentationModule
 {
 public:
 
-
   /** Standard class typedefs */
-  typedef ConnectedComponentSegmentationModule                Self;
-  typedef Module                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
+  typedef ConnectedComponentSegmentationModule Self;
+  typedef Module                               Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** New macro */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
+  ;
 
   /** Type macro */
-  itkTypeMacro(ConnectedComponentSegmentationModule, Module);
-
+  itkTypeMacro(ConnectedComponentSegmentationModule, Module)
+  ;
 
   // Convenient typedefs
-  typedef TypeManager::Floating_Point_Image            ImageType;
-  typedef TypeManager::Floating_Point_VectorImage      VectorImageType;
-  typedef otb::Image<unsigned int, Dimension>           LabelImageType;
+  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_VectorImage VectorImageType;
+  typedef otb::Image<unsigned int, Dimension>     LabelImageType;
 
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef Image<RGBPixelType, Dimension>        LayerOutputImageType;
-  typedef Image<RGBPixelType, Dimension>        RGBImageType;
+  typedef itk::RGBPixel<unsigned char>   RGBPixelType;
+  typedef Image<RGBPixelType, Dimension> LayerOutputImageType;
+  typedef Image<RGBPixelType, Dimension> RGBImageType;
 
-  typedef otb::VectorData<double, Dimension>                                 VectorDataType;
-  typedef VectorDataType::Pointer                                           VectorDataPointerType;
+  typedef otb::VectorData<double, Dimension> VectorDataType;
+  typedef VectorDataType::Pointer            VectorDataPointerType;
 
-  typedef Parser                                       ParserType;
+  typedef Parser ParserType;
 
   /** Image layer type */
   typedef ImageLayer<VectorImageType, LayerOutputImageType> VectorImageLayerType;
-  typedef VectorImageLayerType::Pointer                VectorImageLayerPointerType;
+  typedef VectorImageLayerType::Pointer                     VectorImageLayerPointerType;
 
   typedef ImageLayer<ImageType, LayerOutputImageType> ImageLayerType;
-  typedef ImageLayerType::Pointer                ImageLayerPointerType;
+  typedef ImageLayerType::Pointer                     ImageLayerPointerType;
 
   typedef ImageLayer<RGBImageType, LayerOutputImageType> RGBImageLayerType;
-  typedef RGBImageLayerType::Pointer                RGBImageLayerPointerType;
+  typedef RGBImageLayerType::Pointer                     RGBImageLayerPointerType;
 
   typedef ImageLayer<LabelImageType, LayerOutputImageType> LabelLayerType;
-  typedef LabelLayerType::Pointer                LabelLayerPointerType;
-
+  typedef LabelLayerType::Pointer                          LabelLayerPointerType;
 
   /** layer generator type */
   typedef ImageLayerGenerator<VectorImageLayerType> VectorImageLayerGeneratorType;
@@ -151,69 +149,65 @@ public:
   typedef ImageLayerGeneratorType::Pointer    ImageLayerGeneratorPointerType;
 
   typedef ImageLayerGenerator<RGBImageLayerType> RGBImageLayerGeneratorType;
-  typedef ImageLayerGeneratorType::Pointer    RGBImageLayerGeneratorPointerType;
+  typedef ImageLayerGeneratorType::Pointer       RGBImageLayerGeneratorPointerType;
 
   typedef ImageLayerGenerator<LabelLayerType> LabelLayerGeneratorType;
   typedef LabelLayerGeneratorType::Pointer    LabelLayerGeneratorPointerType;
 
-
   /** Rendering model type */
   typedef ImageLayerRenderingModel<LayerOutputImageType> RenderingModelType;
-  typedef RenderingModelType::Pointer               RenderingModelPointerType;
+  typedef RenderingModelType::Pointer                    RenderingModelPointerType;
 
   /** View type */
   typedef ImageView<RenderingModelType> ViewType;
 
-  typedef ViewType::Pointer             ViewPointerType;
+  typedef ViewType::Pointer ViewPointerType;
 
   /** Widget controller */
   typedef ImageWidgetController         WidgetControllerType;
   typedef WidgetControllerType::Pointer WidgetControllerPointerType;
 
-
-  typedef otb::WidgetResizingActionHandler<RenderingModelType, ViewType>                        ResizingHandlerType;
+  typedef otb::WidgetResizingActionHandler<RenderingModelType, ViewType>            ResizingHandlerType;
   typedef otb::ChangeExtractRegionActionHandler<RenderingModelType, ViewType>       ChangeRegionHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler<RenderingModelType, ViewType> ChangeScaledRegionHandlerType;
   typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType>               ChangeScaleHandlerType;
 
   // colored label image typedef
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>  ColorMapFunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                            ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
 
+  typedef Functor::ConnectedComponentMuParserFunctor<VectorImageType::PixelType> CCFunctorType;
 
-   typedef Functor::ConnectedComponentMuParserFunctor<VectorImageType::PixelType>  CCFunctorType;
+  typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType, LabelImageType, CCFunctorType, ImageType>
+      ConnectedComponentFilterType;
 
-   typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType, LabelImageType, CCFunctorType, ImageType> ConnectedComponentFilterType;
+  typedef otb::MaskMuParserFilter<VectorImageType, ImageType> MaskMuParserFilterType;
 
-   typedef otb::MaskMuParserFilter<VectorImageType, ImageType>  MaskMuParserFilterType;
+  typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType     LayerOutputPixelType;
+  typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
 
+  // Labelization
+  typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
+  typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>   AttributesMapLabelObjectType;
+  typedef itk::AttributeLabelObject<unsigned int, Dimension, double>       AttributesLabelObjectType;
 
-   typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType          LayerOutputPixelType;
-   typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
+  typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType> AttributesLabelMapType;
+  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>
+      LabelImageToLabelMapFilterType;
 
-   // Labelization
-   typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
-   typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>     AttributesMapLabelObjectType;
-   typedef itk::AttributeLabelObject<unsigned int, Dimension, double>   AttributesLabelObjectType;
+  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType> LabelObjectOpeningFilterType;
 
-   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>                             AttributesLabelMapType;
-   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>            LabelImageToLabelMapFilterType;
+  typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType>
+      RadiometricLabelMapFilterType;
+  typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType> ShapeLabelMapFilterType;
+  typedef itk::ShapeLabelObject<unsigned int, Dimension>             ShapeLabelObjectType;
+  typedef itk::LabelObject<unsigned int, Dimension>                  LabelObjectType;
+  typedef itk::LabelMap<ShapeLabelObjectType>                        ShapeLabelMapType;
 
-   typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>                      LabelObjectOpeningFilterType;
+  typedef itk::LabelImageToShapeLabelMapFilter<LabelImageType, ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
+  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
-
-   typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType> RadiometricLabelMapFilterType;
-   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
-   typedef itk::ShapeLabelObject<unsigned int, Dimension>                            ShapeLabelObjectType;
-   typedef itk::LabelObject<unsigned int, Dimension>                            LabelObjectType;
-   typedef itk::LabelMap<ShapeLabelObjectType>                                     ShapeLabelMapType;
-
-   typedef itk::LabelImageToShapeLabelMapFilter<LabelImageType, ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
-   typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
-
-
-    typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType>                          LabelMapToVectorDataFilterType;
-
+  typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
 protected:
   /** Constructor */
@@ -229,15 +223,17 @@ protected:
   virtual void Run();
 
   /** Show the Module GUI */
-  virtual bool CanShow(){return true; }
+  virtual bool CanShow()
+  {
+    return true;
+  }
 
   /** Show the Module GUI */
   virtual void Show();
 
-
   /** Hide the Module GUI */
   virtual void Hide();
-  
+
   /** OK callback*/
   virtual void OK();
 
@@ -262,25 +258,22 @@ protected:
   virtual void CheckProcess();
 
   /** Process CC Callback*/
-   virtual void ProcessCC();
+  virtual void Process();
 
-   /** Process CC Callback*/
-    virtual void Process();
+  /** Tmp Output Choice **/
+  virtual void TmpOutputSelection();
 
-   /** Tmp Output Choice **/
-   virtual void TmpOutputSelection();
+  /** Generate the mask layer **/
+  virtual void UpdateMaskLayer();
+  virtual void UpdateCCSegmentationLayer();
+  virtual void UpdateRelabelLayer();
+  virtual void OBIA_functor_init();
+  virtual void UpdateOBIAOpeningLayer();
 
-   /** Generate the mask layer **/
-   virtual void UpdateMaskLayer();
-   virtual void UpdateCCSegmentationLayer();
-   virtual void UpdateRelabelLayer();
-   virtual void OBIA_functor_init();
-   virtual void UpdateOBIAOpeningLayer();
-
-   /** update variable list **/
-   virtual void UpdateMaskFormulaVariablesList();
-   virtual void UpdateCCFormulaVariablesList();
-   virtual void UpdateOBIAFormulaVariablesList();
+  /** update variable list **/
+  virtual void UpdateMaskFormulaVariablesList();
+  virtual void UpdateCCFormulaVariablesList();
+  virtual void UpdateOBIAFormulaVariablesList();
 
 private:
   ConnectedComponentSegmentationModule(const Self&); //purposely not implemented
@@ -292,57 +285,57 @@ private:
   // IO
 
   /** Pointer to the image */
-  VectorImageType::Pointer               m_InputImage;
+  VectorImageType::Pointer m_InputImage;
 
   /** Pointer to the mask output */
-  ImageType::Pointer                     m_InputMask;
+  ImageType::Pointer m_InputMask;
 
-  LabelImageType::Pointer                m_OutputLabelImage;
-  VectorDataPointerType                  m_OutputVectorData;
+  LabelImageType::Pointer m_OutputLabelImage;
+  VectorDataPointerType m_OutputVectorData;
 
-  AttributesLabelMapType::Pointer        m_OutputLabelMap;
+  AttributesLabelMapType::Pointer m_OutputLabelMap;
 
   // Filter
-  ConnectedComponentFilterType::Pointer   m_CCFilter;
-  MaskMuParserFilterType::Pointer         m_MaskFilter;
+  ConnectedComponentFilterType::Pointer m_CCFilter;
+  MaskMuParserFilterType::Pointer m_MaskFilter;
   //LabelObjectOpeningFilterType::Pointer   m_OpeningFilter;
-  RelabelComponentFilterType::Pointer     m_CCRelabelFilter;
-  ColorMapFilterType::Pointer             m_CCColorMapper;
-  ColorMapFilterType::Pointer             m_RelabelColorMapper;
-  LabelObjectOpeningFilterType::Pointer   m_OBIAOpeningFilter;
+  RelabelComponentFilterType::Pointer m_CCRelabelFilter;
+  ColorMapFilterType::Pointer m_CCColorMapper;
+  ColorMapFilterType::Pointer m_RelabelColorMapper;
+  LabelObjectOpeningFilterType::Pointer m_OBIAOpeningFilter;
   LabelMapToLabelImageFilterType::Pointer m_OBIAOpeningLabelMapToLabelImageFilter;
-  ColorMapFilterType::Pointer             m_OBIAOpeningColorMapper;
+  ColorMapFilterType::Pointer m_OBIAOpeningColorMapper;
   LabelImageToLabelMapFilterType::Pointer m_CCImageToCCLabelMapFilter;
-  ShapeLabelMapFilterType::Pointer        m_ShapeLabelMapFilter;
-  RadiometricLabelMapFilterType::Pointer  m_RadiometricLabelMapFilter;
+  ShapeLabelMapFilterType::Pointer m_ShapeLabelMapFilter;
+  RadiometricLabelMapFilterType::Pointer m_RadiometricLabelMapFilter;
   LabelMapToVectorDataFilterType::Pointer m_OBIAOpeningLabelMapToVectorDataFilter;
 
   AttributesLabelMapType::Pointer m_AttributesLabelMap;
 
-  bool                                  m_IsMaskExpressionOK;
-  bool                                  m_NoMask;
-  bool                                  m_NoOBIAOpening;
-  bool                                  m_IsCCExpressionOK;
-  bool                                  m_IsOBIAExpressionOK;
+  bool m_IsMaskExpressionOK;
+  bool m_NoMask;
+  bool m_NoOBIAOpening;
+  bool m_IsCCExpressionOK;
+  bool m_IsOBIAExpressionOK;
 
-  std::string                           m_CurrentExpressionMask;
-  std::string                           m_CurrentExpressionCC;
-  std::string                           m_CurrentExpressionOBIA;
+  std::string m_CurrentExpressionMask;
+  std::string m_CurrentExpressionCC;
+  std::string m_CurrentExpressionOBIA;
 
-  unsigned int                      m_MinObjectSize;
+  unsigned int m_MinObjectSize;
 
-  unsigned int                      m_NumberOfInputBands;
+  unsigned int m_NumberOfInputBands;
 
   // MVC Variables
 
   /** Action handlers */
-  ResizingHandlerType::Pointer           m_ResizingHandler;
-  ChangeRegionHandlerType::Pointer       m_ChangeRegionHandler;
+  ResizingHandlerType::Pointer m_ResizingHandler;
+  ChangeRegionHandlerType::Pointer m_ChangeRegionHandler;
   ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
-  ChangeScaleHandlerType::Pointer        m_ChangeScaleHandler;
+  ChangeScaleHandlerType::Pointer m_ChangeScaleHandler;
 
   /** The widget controller */
-   WidgetControllerPointerType m_WidgetsController;
+  WidgetControllerPointerType m_WidgetsController;
 
   /** The view */
   ViewPointerType m_View;
@@ -351,38 +344,35 @@ private:
   /** The image layer */
   VectorImageLayerPointerType m_InputImageLayer;
   VectorImageLayerGeneratorType::Pointer m_ImageGenerator;
-  ImageLayerGeneratorType::Pointer       m_MaskGenerator;
-  RGBImageLayerGeneratorType::Pointer    m_CCSegmentationGenerator;
-  RGBImageLayerGeneratorType::Pointer    m_RelabelGenerator;
-  RGBImageLayerGeneratorType::Pointer    m_OBIAOpeningGenerator;
+  ImageLayerGeneratorType::Pointer m_MaskGenerator;
+  RGBImageLayerGeneratorType::Pointer m_CCSegmentationGenerator;
+  RGBImageLayerGeneratorType::Pointer m_RelabelGenerator;
+  RGBImageLayerGeneratorType::Pointer m_OBIAOpeningGenerator;
 
   // flag for layer generation
-  bool                             m_HasToGenerateMaskLayer;
-  bool                             m_HasToGenerateCCSegmentationLayer;
-  bool                             m_HasToGenerateRelabelLayer;
-  bool                             m_HasToGenerateOBIAOpeningLayer;
+  bool m_HasToGenerateMaskLayer;
+  bool m_HasToGenerateCCSegmentationLayer;
+  bool m_HasToGenerateRelabelLayer;
+  bool m_HasToGenerateOBIAOpeningLayer;
 
   // output first generation flag
-  bool                             m_MaskOutputReady;
-  bool                             m_CCSegmentationReady;
-  bool                             m_RelabelOutputReady;
-  bool                             m_OBIAOpeningOutputReady;
+  bool m_MaskOutputReady;
+  bool m_CCSegmentationReady;
+  bool m_RelabelOutputReady;
+  bool m_OBIAOpeningOutputReady;
 
   // attributes
-  bool             m_ShapeReducedSetOfAttributes;
-  bool             m_StatsReducedSetOfAttributes;
-
+  bool m_ShapeReducedSetOfAttributes;
+  bool m_StatsReducedSetOfAttributes;
 
   /** The rendering model */
   RenderingModelPointerType m_RenderingModel;
 
+  std::vector<std::string> m_ShapeAttributes;
+  std::vector<std::string> m_StatAttributes;
 
-  std::vector<std::string>  m_ShapeAttributes;
-  std::vector<std::string>  m_StatAttributes;
-
-  unsigned int              m_NbOfObjectsAfterCC;
-  unsigned int              m_NbOfObjectsAfterOBIA;
-
+  unsigned int m_NbOfObjectsAfterCC;
+  unsigned int m_NbOfObjectsAfterOBIA;
 
 };
 
