@@ -23,9 +23,6 @@
 
 #include "otbCachingModule.h"
 
-// TODO rely on itksys instead!
-#include "base/ossimFilename.h"
-
 namespace otb
 {
 /** Constructor */
@@ -56,25 +53,24 @@ CachingModule::CachingModule()
 /** Destructor */
 CachingModule::~CachingModule()
 {
-  // TODO rely on itksys instead!
-  // Here we try to delete any created file if possible
-  ossimFilename ofname(m_FilePath);
+   // Here we try to delete any created file if possible
 
   // try to remove the file
-  if (ofname.exists() && m_EraseFile)
+  if (itksys::SystemTools::FileExists(m_FilePath.c_str()) && m_EraseFile)
     {
-    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << ofname);
-    ofname.wildcardRemove();
+    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << m_FilePath);
+    itksys::SystemTools::RemoveFile(m_FilePath.c_str());
     }
 
   // if a .geom file exists, delete it also
-  ossimFilename ofnameGeom = ofname.noExtension().setExtension(".geom");
+  std::string ofnameGeom = itksys::SystemTools::GetFilenameWithoutLastExtension(m_FilePath);
+  ofnameGeom += ".geom";
 
   // try to remove the file
-  if (ofnameGeom.exists() && m_EraseFile)
+  if (itksys::SystemTools::FileExists(ofnameGeom.c_str()) && m_EraseFile)
     {
     otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << ofnameGeom);
-    ofnameGeom.wildcardRemove();
+    itksys::SystemTools::RemoveFile(ofnameGeom.c_str());
     }
 
 }
@@ -125,8 +121,7 @@ double CachingModule::GetProgress() const
 
 bool CachingModule::RemoveCachingDirectory() const
 {
-  ossimFilename cachingDir(m_CachingPath);
-  return cachingDir.remove();
+  return itksys::SystemTools::RemoveADirectory(m_CachingPath.c_str());
 }
 
 void CachingModule::ThreadedWatch()
@@ -187,8 +182,7 @@ void CachingModule::ThreadedRun()
   std::string outputKey = inputIt->second.GetNthData(0).GetSourceOutputKey();
 
   // Create the caching dir if not already created
-  ossimFilename cachingDir(m_CachingPath);
-  cachingDir.createDirectory();
+  itksys::SystemTools::MakeDirectory(m_CachingPath.c_str());
 
   // Create description
   itk::OStringStream oss;
