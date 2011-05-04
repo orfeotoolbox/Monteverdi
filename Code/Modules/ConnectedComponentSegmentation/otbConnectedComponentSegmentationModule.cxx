@@ -491,7 +491,6 @@ void ConnectedComponentSegmentationModule::CheckProcess()
 }
 
 
-
 void ConnectedComponentSegmentationModule::LiveCheckMask()
 {
   m_IsMaskExpressionOK = true;
@@ -642,7 +641,6 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 
     }
 }
-
 
 
 void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
@@ -796,7 +794,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_HasToGenerateOBIAOpeningLayer = false;
     }
 }
-
 
 
 void ConnectedComponentSegmentationModule::Process()

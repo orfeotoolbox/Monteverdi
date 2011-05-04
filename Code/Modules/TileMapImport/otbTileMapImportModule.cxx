@@ -32,7 +32,7 @@ TileMapImportModule::TileMapImportModule():
   m_OutputKey("OutputImage")
 {
   // Use expand because CurlHelper can have pb when the path is relative
-  // Create the caching dir if not already created  
+  // Create the caching dir if not already created
   m_CacheDirectory = itksys::SystemTools::CollapseFullPath("./Caching");
   itksys::SystemTools::MakeDirectory(m_CacheDirectory.c_str());
 

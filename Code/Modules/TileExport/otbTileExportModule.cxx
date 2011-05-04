@@ -365,7 +365,7 @@ void TileExportModule::SaveDataSet()
   m_KmzFile = NULL;
 
   // close the GUI
-  this->Hide();    
+  this->Hide();
 }
 
 /**
