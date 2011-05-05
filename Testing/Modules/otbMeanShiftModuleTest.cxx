@@ -29,10 +29,6 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname  = argv[1];
-  const char * oufname1 = argv[2];
-  const char * oufname2 = argv[3];
-  const char * oufname3 = argv[4];
-  const char * oufname4 = argv[5];
   const unsigned int spaRad     = atoi(argv[6]);
   const unsigned int speRad     = atoi(argv[7]);
   const unsigned int minRegSize = atoi(argv[8]);

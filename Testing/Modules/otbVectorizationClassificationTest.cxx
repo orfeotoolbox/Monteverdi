@@ -35,7 +35,7 @@ int otbVectorizationClassification(int argc, char* argv[])
   const char * tmpVdName= argv[3];
   const char * outfname = argv[4];
 
-  const char * DEMfname;
+  const char * DEMfname = "";
   if(argc>5)
     {
       DEMfname = argv[5];

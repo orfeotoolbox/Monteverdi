@@ -739,7 +739,6 @@ ProjectionView
 void
 ProjectionView::InitializeAction()
 {
-  IndexType index;
   PointType middlePoint, geoPoint;
 
   // Get the transform from the model

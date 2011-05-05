@@ -97,7 +97,7 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
 
   // Memory allocation
   int nbOfPixels = m_WindowSize * m_WindowSize;
-  int usedWidth = m_WindowSize / 2 + 1;
+  //int usedWidth = m_WindowSize / 2 + 1;
   int fftSize = m_WindowSize * (m_WindowSize / 2 + 1);
 
   fftin = static_cast<float **>(malloc(this->GetNumberOfThreads() * sizeof(float *)));
@@ -168,14 +168,13 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
     - inputImageRequestedRegionStartPixelIndex[COL];
 
   int usedWidth = m_WindowSize / 2 + 1;
-  int fftSize = m_WindowSize * (m_WindowSize / 2 + 1);
+  unsigned int fftSize = m_WindowSize * (m_WindowSize / 2 + 1);
 
   // Copy input window data
   unsigned int i, j; // coordinates within window
   unsigned int I, J; // window coordinates (upper left corner)
   unsigned int k;
   unsigned int idx;
-  float spacing = image->GetSpacing()[0];
 
   //for (iit.GoToBegin(), azit.GoToBegin(), wlit.GoToBegin(); ! iit.IsAtEnd(); ++iit, ++azit, ++wlit) {
   for (I = 0; I < /*<=*/ height - m_WindowSize; I++)
@@ -238,7 +237,7 @@ SpatialFrequencyImageFilter< TInputImage, TOutputImage>
     
         float wx = x[i] / static_cast<float>(m_WindowSize);
         float wy = y[i] / static_cast<float>(m_WindowSize);
-        lambda[i] = 1.0 / vcl_sqrt(wx * wx + wy * wy); // in pixels, multiply by spacing to get meters
+        lambda[i] = 1.0 / vcl_sqrt(wx * wx + wy * wy); // in pixels, multiply by spacing to get meters, given by: float spacing = image->GetSpacing()[0]
       }
     
       pixelIndex[ROW] = I + m_WindowSize / 2 + adjustedOutputRegionForThreadStartPixelIndex[ROW];

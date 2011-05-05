@@ -125,6 +125,10 @@ ColorMappingModule
 ::UpdateColorBar()
 {
   ColorMapFilterType::ColormapEnumType     colormapEnum;
+  // By default colormapEnum is initialized at Red but following code
+  // will used this variable only if its modified by the following switch
+  // statement
+  colormapEnum = ColorMapFilterType::Red;
 
   switch (iColorMap->value())
   {

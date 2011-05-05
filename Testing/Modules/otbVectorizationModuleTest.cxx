@@ -34,7 +34,7 @@ int otbVectorizationModuleTest(int argc, char* argv[])
   const char * vdname   = argv[2];
   const char * outfname = argv[3];
   
-  const char * DEMfname;
+  const char * DEMfname = "";
   if(argc>4)
     {
       DEMfname = argv[4];

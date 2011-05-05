@@ -762,7 +762,7 @@ VectorizationModel
   
 
   // Choose the input following the channel selected
-  if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel>0)
+  if( (channel < static_cast<int>(m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1) ) && (channel > 0) )
     {
     image2List->SetInput(m_ExtractImageFilter->GetOutput());
     image2List->UpdateOutputInformation();
