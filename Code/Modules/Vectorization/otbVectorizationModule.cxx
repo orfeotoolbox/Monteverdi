@@ -17,9 +17,8 @@
 =========================================================================*/
 #include "otbVectorizationModule.h"
 #include <FLU/Flu_File_Chooser.h>
-#include "base/ossimFilename.h"
+#include "itksys/SystemTools.hxx"
 #include "otbMsgReporter.h"
-
 
 namespace otb
 {
@@ -76,11 +75,10 @@ void VectorizationModule::Run()
     Fl::check();
     if(cfname != NULL)
       {
-      ossimFilename dir(cfname);
-      if( dir.isDir() )
+      if( itksys::SystemTools::FileIsDirectory(cfname) )
         {
         m_Model->SetUseDEM(true);
-        m_Model->SetDEMPath(dir);
+        m_Model->SetDEMPath(cfname);
         }
       else
         {

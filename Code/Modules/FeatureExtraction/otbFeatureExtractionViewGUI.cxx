@@ -20,8 +20,6 @@
 #include <FL/Fl_File_Chooser.H>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Text_Buffer.H>
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 #include "otbFeature.h"

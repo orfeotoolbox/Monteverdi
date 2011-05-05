@@ -20,7 +20,6 @@
 
 #include "otbSuperimpositionModule.h"
 #include <FLU/Flu_File_Chooser.h>
-#include "base/ossimFilename.h"
 #include "otbMsgReporter.h"
 
 // Interpolators
