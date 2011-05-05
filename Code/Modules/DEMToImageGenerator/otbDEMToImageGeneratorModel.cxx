@@ -16,9 +16,10 @@
 
 =========================================================================*/
 #include "otbDEMToImageGeneratorModel.h"
-#include <ogr_spatialref.h>
-#include "otbMapProjection.h"
+
 #include <string>
+
+#include <ogr_spatialref.h>
 #include "otbImageFileReader.h"
 #include "otbMath.h"
 
@@ -28,12 +29,9 @@ namespace otb
 /**
  * Constructor
  */
-DEMToImageGeneratorModel::DEMToImageGeneratorModel()
+DEMToImageGeneratorModel::DEMToImageGeneratorModel():
+  m_UseInputImage(false),  m_HillShadingProcess(false), m_ReliefProcess(false)
 {
-  m_UseInputImage = false;
-  m_HillShadingProcess = false;
-  m_ReliefProcess = false;
-
   m_DEMToImageGenerator = DEMToImageGeneratorType::New();
   m_HillShading = HillShadingFilterType::New();
   m_ReliefColored = VectorImageType::New();
