@@ -108,11 +108,11 @@ public:
 
   /** New macro */
   itkNewMacro(Self)
- ;
+;
 
   /** Type macro */
   itkTypeMacro(ConnectedComponentSegmentationModule, Module)
- ;
+;
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image       ImageType;
