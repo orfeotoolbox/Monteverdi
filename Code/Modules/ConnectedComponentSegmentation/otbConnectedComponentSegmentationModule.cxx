@@ -657,9 +657,12 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 
   if (m_HasToGenerateCCSegmentationLayer || !m_CCSegmentationReady)
     {
+
+    // Functor Update
     m_CCFilter->SetMaskImage(m_MaskFilter->GetOutput());
     m_CurrentExpressionCC = ui_CCExpression->value();
     m_CCFilter->GetFunctor().SetExpression(m_CurrentExpressionCC);
+    m_CCFilter->Modified(); // Modified() method must be explicitly called to take into account Functor change
 
     m_CCColorMapper->SetInput(m_CCFilter->GetOutput());
 
