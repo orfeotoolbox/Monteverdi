@@ -23,7 +23,6 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
-#include "base/ossimFilename.h"
 
 int otbSpectrumViewerModuleTest(int argc, char* argv[])
 {
@@ -46,8 +45,7 @@ int otbSpectrumViewerModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  ossimFilename          vcutIn(infname);
-  wrapperIn.SetDescription(vcutIn.file());
+  wrapperIn.SetDescription(itksys::SystemTools::GetFilenameName(infname));
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
 
   module->AddInputByKey("InputImage", wrapperIn);

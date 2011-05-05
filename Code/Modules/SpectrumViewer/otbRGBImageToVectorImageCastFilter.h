@@ -25,8 +25,6 @@
 #include "itkMetaDataDictionary.h"
 #include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
-#include "base/ossimKeywordlist.h"
-
 
 namespace otb
 {
@@ -117,19 +115,13 @@ protected:
       // Load MetaDataDictionary
       itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
       ImageKeywordlist imageKeywordlist;
-      // Extract ossimKWL
+      // Extract KWL
       if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
         {
           itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
         }
-      // Change sensor to empty string
-      ossimKeywordlist kwl;
-      imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-      kwl.remove("sensor");
-      kwl.add("sensor", "", true);
-      
-      imageKeywordlist.SetKeywordlist(kwl);
-      
+      imageKeywordlist.ClearMetadataByKey("sensor");
+
       itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
       
       // Update the output MetaDataDictionary
