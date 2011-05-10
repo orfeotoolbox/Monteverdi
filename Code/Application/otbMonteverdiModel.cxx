@@ -19,8 +19,10 @@
 #define __otbMonteverdiModel_cxx
 
 #include "otbMonteverdiModel.h"
+
 #include "otbGraphVertexIterator.h"
 #include "otbGraphOutEdgeIterator.h"
+#include "otbMacro.h"
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
@@ -598,7 +600,7 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
   // First, extract the connected components of the connections graph
   std::vector<int> component(num_vertices(m_ConnectionGraph->GetGraphContainer()));
 
-  otbMsgDevMacro(<<"Nb of group of connected component =" << connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]); );
+  otbMsgDevMacro(<<"Nb of group of connected component =" << connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]) );
   otbMsgDevMacro(<<"ConnectionGraph (nb Vertex , nb Edge) ="
                  << m_ConnectionGraph->GetNumberOfVertices() << ", "
                  << m_ConnectionGraph->GetNumberOfEdges());
