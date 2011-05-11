@@ -560,7 +560,7 @@ void MonteverdiViewGUI
   if( erase==true )
     {
       tConfirmErase->value( m_MonteverdiModel->GetCachingPath().c_str() );
-      wConfirmCachingWindow->show(); 
+      wConfirmCachingWindow->show();
     }
   else
     {
