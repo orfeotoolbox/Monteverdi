@@ -555,8 +555,25 @@ void MonteverdiViewGUI
 void MonteverdiViewGUI
 ::EraseCaching(bool erase)
 {
-  m_MonteverdiModel->SetEraseCaching(erase);
   wEraseCaching2Window->hide();
+
+  if( erase==true )
+    {
+      tConfirmErase->value( m_MonteverdiModel->GetCachingPath().c_str() );
+      wConfirmCachingWindow->show(); 
+    }
+  else
+    {
+      this->Quit();
+    }
+}
+
+void MonteverdiViewGUI
+::ConfirmEraseCaching( bool erase )
+{
+  wConfirmCachingWindow->hide();
+  m_MonteverdiModel->SetEraseCaching(erase);
+ 
   this->Quit();
 }
 

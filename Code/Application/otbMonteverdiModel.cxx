@@ -23,11 +23,13 @@
 #include "otbGraphVertexIterator.h"
 #include "otbGraphOutEdgeIterator.h"
 #include "otbMacro.h"
+#include "otbMsgReporter.h"
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graphviz.hpp>
-// #include <boost/graph/iteration_macros.hpp>
+
+#include <itksys/Directory.hxx>
 
 #include "tinyxml.h"
 
@@ -56,17 +58,18 @@ MonteverdiModel::Close()
   //Remove Caching directory
   if (m_EraseCaching)
     {
-    // Look for the caching module instance id
-    CachingModuleMapType::const_iterator it = m_CachingModuleMap.begin();
+     // If data in cach, erase the directory
+      if( m_CachingModuleMap.size() > 0 )
+        {
+          bool resRemove = itksys::SystemTools::RemoveADirectory( this->GetCachingPath().c_str() );
 
-    // through all cached module instances
-    while (it != m_CachingModuleMap.end())
-      {
-      it->second->EraseFileOn();
-      ++it;
-      }
+          if( resRemove == false )
+            {
+              MsgReporter::GetInstance()->SendError("Can't erase chaching directory...");
+            }
+        }
     }
-
+  
   m_ModuleDescriptorMap.clear();
   m_ModuleMap.clear();
   m_InstancesCountMap.clear();
@@ -772,6 +775,19 @@ void MonteverdiModel::ExportGraphToXML(const std::string& fname) const
   // Finally, write the file
   doc.SaveFile(fname.c_str());
 }
+
+
+std::string MonteverdiModel::GetCachingPath()
+{
+  // Create a local instance of the caching module
+  CachingModule::Pointer cache = CachingModule::New();
+
+  std::string fullPath;
+  fullPath = itksys::SystemTools::GetRealPath( cache->GetCachingPath().c_str() );
+
+  return ( fullPath );
+}
+
 } // End namespace
 
 #endif

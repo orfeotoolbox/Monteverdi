@@ -117,6 +117,8 @@ protected:
   void OpenEraseCaching();
   /** Open the pop up image to choose if we erase the caching directory */
   void EraseCaching(bool erase);
+  /** Open the pop up window to confirm the caching directory removing */
+  void ConfirmEraseCaching( bool erase );
 
   /** Close the pop up image and return to the main window */
   void CancelEraseCaching();

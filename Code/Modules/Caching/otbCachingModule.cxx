@@ -39,7 +39,6 @@ CachingModule::CachingModule()
   m_CachingPath = "Caching/";
   m_FilePath = "";
   m_WatchProgress = true;
-  m_EraseFile = false;
 
   // Build gui
   this->BuildGUI();
@@ -53,26 +52,8 @@ CachingModule::CachingModule()
 /** Destructor */
 CachingModule::~CachingModule()
 {
-   // Here we try to delete any created file if possible
-
-  // try to remove the file
-  if (itksys::SystemTools::FileExists(m_FilePath.c_str()) && m_EraseFile)
-    {
-    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << m_FilePath);
-    itksys::SystemTools::RemoveFile(m_FilePath.c_str());
-    }
-
-  // if a .geom file exists, delete it also
-  std::string ofnameGeom = itksys::SystemTools::GetFilenameWithoutLastExtension(m_FilePath);
-  ofnameGeom += ".geom";
-
-  // try to remove the file
-  if (itksys::SystemTools::FileExists(ofnameGeom.c_str()) && m_EraseFile)
-    {
-    otbGenericMsgDebugMacro(<< "Cleaning up all cache files with base " << ofnameGeom);
-    itksys::SystemTools::RemoveFile(ofnameGeom.c_str());
-    }
-
+  // The producted file is not erase here.
+  // We remove the entire Caching directory.
 }
 
 /** PrintSelf method */
@@ -165,6 +146,19 @@ void CachingModule::ThreadedWatch()
 
 void CachingModule::ThreadedRun()
 {
+  // Check caching dir permission
+  // Create the caching dir if not already created
+  bool isOK = itksys::SystemTools::MakeDirectory( m_CachingPath.c_str() );
+
+  if( isOK == false )
+    {
+      itk::OStringStream oss;
+      oss<<"Not enough permission for write in the caching directory ";
+      oss<<itksys::SystemTools::GetRealPath(m_CachingPath.c_str())<<".";
+      MsgReporter::GetInstance()->SendError(oss.str());
+      return;
+    }
+
   this->BusyOn();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
@@ -180,9 +174,6 @@ void CachingModule::ThreadedRun()
 
   std::string sourceId = inputIt->second.GetNthData(0).GetSourceInstanceId();
   std::string outputKey = inputIt->second.GetNthData(0).GetSourceOutputKey();
-
-  // Create the caching dir if not already created
-  itksys::SystemTools::MakeDirectory(m_CachingPath.c_str());
 
   // Create description
   itk::OStringStream oss;
@@ -295,7 +286,7 @@ void CachingModule::HideWindowCallback(void * data)
 
   if (caching.IsNotNull())
     {
-    caching->HideWindow();
+      caching->HideWindow();
     }
 }
 

@@ -187,6 +187,10 @@ protected:
   void GetGraphvizDotFile(const std::string& fname) const;
 
   void ExportGraphToXML(const std::string& fname) const;
+
+  /** Get the caching directory path. */
+  std::string GetCachingPath();
+
 protected:
 
   /** This is protected for the singleton. Use GetInstance() instead. */

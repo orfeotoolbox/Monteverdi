@@ -72,17 +72,18 @@ public:
   itkSetMacro(WatchProgress, bool);
   itkBooleanMacro(WatchProgress);
 
-  itkSetMacro(EraseFile, bool);
-  itkBooleanMacro(EraseFile);
-
   // Return the writing progress
   double GetProgress() const;
 
   /** Run the module */
   virtual void Run();
 
-  //Remove the Caching directory
+  /** Remove the Caching directory */
   bool RemoveCachingDirectory() const;
+
+  /** Cach path getter */
+  itkGetConstMacro(CachingPath, std::string);
+
 protected:
   /** Constructor */
   CachingModule();
@@ -137,9 +138,6 @@ private:
 
   //error msg
   std::string m_ErrorMsg;
-
-  //erase cached file
-  bool m_EraseFile;
 };
 
 } // End namespace otb

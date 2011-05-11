@@ -33,7 +33,7 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wInputWindow {
       label {Set inputs}
-      xywh {511 294 330 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 hide resizable
+      xywh {396 407 330 150} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Return_Button bOk {
         label Ok
@@ -100,23 +100,44 @@ class MonteverdiViewGroup {open
     }
     Fl_Window wEraseCaching2Window {
       label {Erase the caching directory?}
-      callback {this->Quit();} open
-      xywh {531 309 410 55} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+      callback {this->EraseCaching(false);} open selected
+      xywh {531 309 370 55} type Double box PLASTIC_DOWN_BOX color 43 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
     } {
+      Fl_Return_Button bCancelCaching {
+        label Cancel
+        callback {this->CancelEraseCaching();}
+        xywh {10 20 110 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
       Fl_Return_Button bYes {
         label Yes
         callback {this->EraseCaching(true);}
-        xywh {165 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {130 20 110 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bNo {
         label No
         callback {this->EraseCaching(false);}
-        xywh {290 20 115 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {250 20 110 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Return_Button bCancelCaching {
-        label Cancel
-        callback {this->CancelEraseCaching();} selected
-        xywh {15 20 110 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+    }
+    Fl_Window wConfirmCachingWindow {
+      label {Erase caching directory confirmation...}
+      callback {this->ConfirmEraseCaching( false );
+wConfirmCachingWindow->hide();} open
+      xywh {673 560 460 100} type Double box PLASTIC_DOWN_BOX color 43 labelfont 1 labelsize 12 labelcolor 186 resizable modal visible
+    } {
+      Fl_Return_Button {} {
+        label No
+        callback {this->ConfirmEraseCaching( false );}
+        xywh {305 65 110 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Return_Button {} {
+        label Yes
+        callback {this->ConfirmEraseCaching( true );}
+        xywh {45 65 110 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Output tConfirmErase {
+        label {You're about to remove the following directory, do you confirm?}
+        xywh {5 21 445 24} box NO_BOX labelcolor 186 align 5 textfont 1 textcolor 186
       }
     }
   }
@@ -135,5 +156,7 @@ class MonteverdiViewGroup {open
   Function {OpenEraseCaching()} {return_type {virtual void}
   } {}
   Function {CancelEraseCaching()} {return_type {virtual void}
+  } {}
+  Function {ConfirmEraseCaching( bool val )} {return_type {virtual void}
   } {}
 } 
