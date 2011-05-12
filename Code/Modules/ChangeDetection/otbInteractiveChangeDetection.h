@@ -306,6 +306,9 @@ private:
 
   // Flag to determine if there is an output
   bool m_HasOutput;
+
+  // Flag to know if a learning was made
+  bool m_HasLearn;
 };
 
 } // end namespace otb

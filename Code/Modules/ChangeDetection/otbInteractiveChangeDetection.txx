@@ -76,6 +76,7 @@ InteractiveChangeDetection<TPixel>
   m_CastFilter = CastFilterType::New();
 
   m_HasOutput = false;
+  m_HasLearn = false;
 
   m_LastPath = ".";
 }
@@ -187,34 +188,34 @@ InteractiveChangeDetection<TPixel>
   typename PolygonType::Pointer pol = PolygonType::New();
   pol->SetValue(m_LeftViewer->GetNextROILabel());
   m_LeftViewer->GetPolygonROIList()->PushBack(pol);
-
+  
   if (bPolygonalROI->value())
     {
-    m_LeftViewer->SetPolygonalROISelectionMode(true);
-    m_RightViewer->SetPolygonalROISelectionMode(true);
-    m_CenterViewer->SetPolygonalROISelectionMode(true);
-    m_LeftViewer->SetRectangularROISelectionMode(false);
-    m_RightViewer->SetRectangularROISelectionMode(false);
-    m_CenterViewer->SetRectangularROISelectionMode(false);
-    Log("Switching to polygonal ROI selection mode.");
-    bEndPolygon->activate();
-    bEraseLastPoint->activate();
-
+      m_LeftViewer->SetPolygonalROISelectionMode(true);
+      m_RightViewer->SetPolygonalROISelectionMode(true);
+      m_CenterViewer->SetPolygonalROISelectionMode(true);
+      m_LeftViewer->SetRectangularROISelectionMode(false);
+      m_RightViewer->SetRectangularROISelectionMode(false);
+      m_CenterViewer->SetRectangularROISelectionMode(false);
+      Log("Switching to polygonal ROI selection mode.");
+      bEndPolygon->activate();
+      bEraseLastPoint->activate();
     }
   else
     {
-    m_LeftViewer->SetPolygonalROISelectionMode(false);
-    m_RightViewer->SetPolygonalROISelectionMode(false);
-    m_CenterViewer->SetPolygonalROISelectionMode(false);
-    m_LeftViewer->SetRectangularROISelectionMode(true);
-    m_RightViewer->SetRectangularROISelectionMode(true);
-    m_CenterViewer->SetRectangularROISelectionMode(true);
-    Log("Switching to rectangular ROI selection mode.");
-    bEndPolygon->deactivate();
-    bEraseLastPoint->deactivate();
+      m_LeftViewer->SetPolygonalROISelectionMode(false);
+      m_RightViewer->SetPolygonalROISelectionMode(false);
+      m_CenterViewer->SetPolygonalROISelectionMode(false);
+      m_LeftViewer->SetRectangularROISelectionMode(true);
+      m_RightViewer->SetRectangularROISelectionMode(true);
+      m_CenterViewer->SetRectangularROISelectionMode(true);
+      Log("Switching to rectangular ROI selection mode.");
+      bEndPolygon->deactivate();
+      bEraseLastPoint->deactivate();
     }
-
+  
 }
+
 /// What to do on principal action
 template <class TPixel>
 void
@@ -285,7 +286,7 @@ InteractiveChangeDetection<TPixel>
   Fl::check();
 }
 
-// Gestion des �v�nements boutons
+
 template <class TPixel>
 void
 InteractiveChangeDetection<TPixel>
@@ -358,28 +359,32 @@ void
 InteractiveChangeDetection<TPixel>
 ::SaveResultImage()
 {
-  // Pipeline wiring (correction bug #98)
-  m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
-
-  typename OverlayImageType::PixelType color1(3), color2(3);
-
-  color1[0] = static_cast<unsigned char>(m_Class1Color[0] * 255);
-  color1[1] = static_cast<unsigned char>(m_Class1Color[1] * 255);
-  color1[2] = static_cast<unsigned char>(m_Class1Color[2] * 255);
-
-  color2[0] = static_cast<unsigned char>(m_Class2Color[0] * 255);
-  color2[1] = static_cast<unsigned char>(m_Class2Color[1] * 255);
-  color2[2] = static_cast<unsigned char>(m_Class2Color[2] * 255);
-
-  m_ChangeLabelFilter->SetChange(m_Label1, color1);
-  m_ChangeLabelFilter->SetChange(m_Label2, color2);
-  m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
-  m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
-  m_Output = m_ChangeLabelFilter->GetOutput();
-
-  m_HasOutput = true;
+  if( m_HasLearn==true )
+    {
+      // Pipeline wiring (correction bug #98)
+      m_ClassificationFilter->SetInput(m_ListToImageFilter1->GetOutput());
+      
+      typename OverlayImageType::PixelType color1(3), color2(3);
+      
+      color1[0] = static_cast<unsigned char>(m_Class1Color[0] * 255);
+      color1[1] = static_cast<unsigned char>(m_Class1Color[1] * 255);
+      color1[2] = static_cast<unsigned char>(m_Class1Color[2] * 255);
+      
+      color2[0] = static_cast<unsigned char>(m_Class2Color[0] * 255);
+      color2[1] = static_cast<unsigned char>(m_Class2Color[1] * 255);
+      color2[2] = static_cast<unsigned char>(m_Class2Color[2] * 255);
+      
+      m_ChangeLabelFilter->SetChange(m_Label1, color1);
+      m_ChangeLabelFilter->SetChange(m_Label2, color2);
+      m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
+      m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
+      m_Output = m_ChangeLabelFilter->GetOutput();
+      
+      m_HasOutput = true;
+    }
+  
   this->NotifyAll();
-
+  
   //hide the gui
   this->Hide();
 }
@@ -575,6 +580,9 @@ InteractiveChangeDetection<TPixel>
   m_Estimator->SetCacheSize(static_cast<int>(this->svmCacheSize->value()));
   m_Estimator->DoProbabilityEstimates(static_cast<bool>(this->svmPE->value()));
   m_Estimator->DoShrinking(static_cast<bool>(this->svmShrinking->value()));
+
+  m_HasLearn = false;
+  m_HasOutput = false;
 }
 
 template <class TPixel>
@@ -631,23 +639,23 @@ InteractiveChangeDetection<TPixel>::ChangeDetectionLearn()
 
   try
     {
-
-    m_Estimator->SetInputSampleList(sampleList);
-    m_Estimator->SetTrainingSampleList(trainingSampleList);
-    m_Estimator->Update();
-    m_ClassificationFilter->SetModel(m_Estimator->GetModel());
-
-    //
-    Log("Estimation completed.");
-    this->bLearn->set();
-    this->miSaveModel->activate();
-    this->bDisplayResults->activate();
+      m_Estimator->SetInputSampleList(sampleList);
+      m_Estimator->SetTrainingSampleList(trainingSampleList);
+      m_Estimator->Update();
+      m_ClassificationFilter->SetModel(m_Estimator->GetModel());
+      
+      //
+      Log("Estimation completed.");
+      this->bLearn->set();
+      this->miSaveModel->activate();
+      this->bDisplayResults->activate();
+      
+      m_HasLearn = true;
     }
   catch(itk::ExceptionObject & err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-
 }
 
 template <class TPixel>
