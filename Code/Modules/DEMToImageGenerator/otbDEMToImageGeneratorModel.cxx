@@ -137,8 +137,8 @@ DEMToImageGeneratorModel
   double lat1 = m_OutputOrigin[1];
   double lat2 = m_OutputOrigin[1] + m_OutputSize[1] * m_OutputSpacing[1];
   double R = 6371; // km
-  double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
-                      vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
+//double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
+//                    vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
 //double res = d / vcl_sqrt(2.0);
 
   m_HillShading->SetRadius(radius);
