@@ -185,7 +185,7 @@ PixelSpectrumModel
 {
 
   int size = m_SeveralSpectrumData.size();
-  int visible;
+  int visible = false;
 
   for (int j = 0; j < size; j++)
     {
