@@ -264,6 +264,7 @@ PixelSpectrumModel
 ::GetSpectrumIndexByID(int id)
 {
   IndexType ret;
+  ret.Fill(0);
   int       size = m_SeveralSpectrumData.size();
 
   for (int i = 0; i < size; i++)
