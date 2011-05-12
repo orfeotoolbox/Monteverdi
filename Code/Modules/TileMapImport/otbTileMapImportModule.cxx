@@ -25,7 +25,7 @@ namespace otb
 /** Constructor */
 TileMapImportModule::TileMapImportModule():
   m_PlaceName(""), m_CountryName(""),
-  m_Latitude(-1000), m_Longitude(-1000), m_Depth(1),
+  m_Longitude(-1000), m_Latitude(-1000), m_Depth(1),
   m_SizeX(500), m_SizeY(500),
   m_ServerName("http://tile.openstreetmap.org/"),
   m_CacheDirectory(""),
