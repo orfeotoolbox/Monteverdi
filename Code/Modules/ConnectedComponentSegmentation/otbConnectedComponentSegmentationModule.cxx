@@ -35,6 +35,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
 {
   // Build a view
   m_View = ViewType::New();
+  m_PixelView = PixelViewType::New();
 
   // Build a controller
   m_WidgetsController = WidgetControllerType::New();
@@ -43,11 +44,17 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_ImageGenerator = VectorImageLayerGeneratorType::New();
   m_MaskGenerator = ImageLayerGeneratorType::New();
   m_CCSegmentationGenerator = RGBImageLayerGeneratorType::New();
-  m_RelabelGenerator = RGBImageLayerGeneratorType::New();
+
+  m_RelabelRGBGenerator = RGBImageLayerGeneratorType::New();
   m_OBIAOpeningGenerator = RGBImageLayerGeneratorType::New();
+
+  m_CCSegmentationLabelGenerator = LabelLayerGeneratorType::New();
+  m_RelabelGenerator = LabelLayerGeneratorType::New();
+  m_OBIAOpeningLabelGenerator = LabelLayerGeneratorType::New();
 
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
+  m_PixelDescriptionModel = PixelDescriptionModelType::New();
 
   // Build the handlers
   m_ResizingHandler = ResizingHandlerType::New();
@@ -55,14 +62,22 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_ChangeScaledRegionHandler = ChangeScaledRegionHandlerType::New();
   m_ChangeScaleHandler = ChangeScaleHandlerType::New();
 
+  // Add the pixel description action handler
+  m_PixelActionHandler = PixelDescriptionActionHandlerType::New();
+  m_PixelActionHandler->SetView(m_View);
+  m_PixelActionHandler->SetModel(m_PixelDescriptionModel);
+
   // Add the action handlers to the widgets controller
   m_WidgetsController->AddActionHandler(m_ResizingHandler);
   m_WidgetsController->AddActionHandler(m_ChangeRegionHandler);
   m_WidgetsController->AddActionHandler(m_ChangeScaledRegionHandler);
   m_WidgetsController->AddActionHandler(m_ChangeScaleHandler);
+  m_WidgetsController->AddActionHandler(m_PixelActionHandler);
 
   // Wire the MVC
   m_View->SetModel(m_RenderingModel);
+  m_PixelView->SetModel(m_PixelDescriptionModel);
+
   m_View->SetController(m_WidgetsController);
 
   // Add the resizing handler
@@ -91,19 +106,28 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
 
   // Build the GUI
   this->CreateGUI();
+  this->pBusyBar->minimum(0);
+  this->pBusyBar->maximum(1);
 
+  this->pBusyBar->value(0);
+  this->pBusyBar->hide();
+  Fl::check();
   // Remove registered visualization components from the interface
   gImageViewer->add(m_View->GetFullWidget());
   gScroll->add(m_View->GetScrollWidget());
   gZoom->add(m_View->GetZoomWidget());
+  gPixelDescription->add(m_PixelView->GetPixelDescriptionWidget());
 
   gImageViewer->resizable(m_View->GetFullWidget());
   gScroll->resizable(m_View->GetScrollWidget());
   gScroll->resizable(m_View->GetZoomWidget());
+  gPixelDescription->resizable(m_PixelView->GetPixelDescriptionWidget());
 
   m_View->GetFullWidget()->resize(gImageViewer->x(), gImageViewer->y(), gImageViewer->w(), gImageViewer->h());
   m_View->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(), gScroll->h());
   m_View->GetZoomWidget()->resize(gZoom->x(), gZoom->y(), gZoom->w(), gZoom->h());
+  m_PixelView->GetPixelDescriptionWidget()->resize(gPixelDescription->x(), gPixelDescription->y(),
+                                                   gPixelDescription->w(), gPixelDescription->h());
 
   // Show and refresh the interface
   // this->wMainWindow->show();
@@ -111,6 +135,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_View->GetFullWidget()->show();
   m_View->GetScrollWidget()->show();
   m_View->GetZoomWidget()->show();
+  m_PixelView->GetPixelDescriptionWidget()->show();
 
   // Describe inputs
   this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, false);
@@ -121,7 +146,8 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
  * Destructor
  */
 ConnectedComponentSegmentationModule::~ConnectedComponentSegmentationModule()
-{}
+{
+}
 
 /**
  * PrintSelf method
@@ -139,16 +165,18 @@ void ConnectedComponentSegmentationModule::Hide()
 {
   guiMainWindow->hide();
   ui_HelpWindow->hide();
-  ui_Help->value(0);
+  guiFormula->hide();
 }
 
 void ConnectedComponentSegmentationModule::Show()
 {
   // Show the main window
   guiMainWindow->show();
+  guiFormula->show();
   m_View->GetScrollWidget()->show();
   m_View->GetFullWidget()->show();
   m_View->GetZoomWidget()->show();
+  m_PixelView->GetPixelDescriptionWidget()->show();
 }
 
 void ConnectedComponentSegmentationModule::OBIA_functor_init()
@@ -221,7 +249,6 @@ void ConnectedComponentSegmentationModule::OBIA_functor_init()
   m_OBIAOpeningFilter->SetAttributes(m_ShapeAttributes, m_StatAttributes, m_NumberOfInputBands);
 }
 
-
 /**
  * The custom run command
  */
@@ -289,10 +316,12 @@ void ConnectedComponentSegmentationModule::Run()
 
   // Clear previous layers
   m_RenderingModel->ClearLayers();
+  m_PixelDescriptionModel->ClearLayers();
   // m_InputImageLayer->SetVisible(false);
 
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(m_InputImageLayer);
+  m_PixelDescriptionModel->AddLayer(m_InputImageLayer);
   m_RenderingModel->Update();
 
   // other layers has to be generated
@@ -342,10 +371,8 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
     }
 }
 
-
 void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
 {
-
 
   CCFunctorType& tempFunctor = m_CCFilter->GetFunctor();
   tempFunctor.SetExpression(ui_CCExpression->value());
@@ -360,7 +387,7 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
     }
   catch (itk::ExceptionObject& err)
     {
-    itkWarningMacro(<< err);
+    itkDebugMacro(<< err);
     }
 
   const std::map<std::string, double*> & variables = tempFunctor.GetVar();
@@ -391,21 +418,19 @@ void ConnectedComponentSegmentationModule::UpdateOBIAFormulaVariablesList()
 
 }
 
-
 /**
  * Help Initialization
  */
 void ConnectedComponentSegmentationModule::InitHelp()
 {
   std::ostringstream helpContent;
-  helpContent << "- Connected Component Segmentation module "<< std::endl<< std::endl;
+  helpContent << "- Connected Component Segmentation module " << std::endl << std::endl;
   helpContent << "Fill each formula, choose your visualization output and click on Update button" << std::endl;
-  helpContent << "If Mask formula is left blank, no mask used"<< std::endl;
+  helpContent << "If Mask formula is left blank, no mask used" << std::endl;
   helpContent << "If OBIA formula is left blank, no post processing is applied " << std::endl;
 
   ui_HelpText->value(helpContent.str().c_str());
 }
-
 
 /**
  * Quick add a variable name into the expression
@@ -421,7 +446,6 @@ void ConnectedComponentSegmentationModule::QuickAddMask()
   LiveCheckMask();
 }
 
-
 /**
  * Quick add a variable name into the expression
  */
@@ -436,7 +460,6 @@ void ConnectedComponentSegmentationModule::QuickAddCC()
   LiveCheckCC();
 }
 
-
 /**
  * Quick add a variable name into the expression
  */
@@ -450,7 +473,6 @@ void ConnectedComponentSegmentationModule::QuickAddOBIA()
 
   LiveCheckOBIA();
 }
-
 
 void ConnectedComponentSegmentationModule::CheckProcess()
 {
@@ -489,7 +511,6 @@ void ConnectedComponentSegmentationModule::CheckProcess()
     }
 
 }
-
 
 void ConnectedComponentSegmentationModule::LiveCheckMask()
 {
@@ -553,7 +574,6 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
 
 }
 
-
 void ConnectedComponentSegmentationModule::LiveCheckOBIA()
 {
   m_NoOBIAOpening = false;
@@ -577,7 +597,6 @@ void ConnectedComponentSegmentationModule::LiveCheckOBIA()
     m_NoOBIAOpening = true;
     ui_OBIAExpression->tooltip("No OBIA Opening, all labeled object are valid");
     }
-
   ui_OBIAExpression->redraw();
   this->CheckProcess();
 
@@ -592,7 +611,6 @@ void ConnectedComponentSegmentationModule::UpdateTmpOutput()
 {
   this->Process();
 }
-
 
 void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 {
@@ -619,13 +637,17 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
   if (m_HasToGenerateMaskLayer || !m_MaskOutputReady)
     {
 
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
+
     // mask has to be regenerated, all processing has to be regenerated
     m_CCSegmentationReady = false;
     m_RelabelOutputReady = false;
     m_OBIAOpeningOutputReady = false;
 
     m_RenderingModel->DeleteLayerByName("Mask");
-
+    m_MaskFilter->SetNumberOfThreads(1);
     m_MaskFilter->SetExpression(mask_expression);
     m_CurrentExpressionMask = mask_expression;
     m_MaskGenerator->SetImage(m_MaskFilter->GetOutput());
@@ -642,11 +664,10 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     }
 }
 
-
 void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 {
 
-    if (m_CurrentExpressionCC.compare(m_CCFilter->GetFunctor().GetExpression()))
+  if (m_CurrentExpressionCC.compare(m_CCFilter->GetFunctor().GetExpression()))
     {
     m_HasToGenerateCCSegmentationLayer = true;
     // CC segmentation has to be regenerated, further processing has to be regenerated
@@ -657,6 +678,10 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 
   if (m_HasToGenerateCCSegmentationLayer || !m_CCSegmentationReady)
     {
+
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
 
     // Functor Update
     m_CCFilter->SetMaskImage(m_MaskFilter->GetOutput());
@@ -669,10 +694,15 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
     m_RenderingModel->DeleteLayerByName("CCSegmentation");
 
     m_CCSegmentationGenerator->SetImage(m_CCColorMapper->GetOutput());
+    m_CCSegmentationLabelGenerator->SetImage(m_CCFilter->GetOutput());
 
     m_CCSegmentationGenerator->GenerateQuicklookOff();
     m_CCSegmentationGenerator->GenerateLayer();
     m_CCSegmentationGenerator->GetLayer()->SetName("CCSegmentation");
+
+    m_CCSegmentationLabelGenerator->GenerateQuicklookOff();
+    m_CCSegmentationLabelGenerator->GenerateLayer();
+    m_CCSegmentationLabelGenerator->GetLayer()->SetName("CCSegmentationLabel");
 
     m_RenderingModel->AddLayer(m_CCSegmentationGenerator->GetLayer());
 
@@ -685,6 +715,7 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 
 void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
 {
+
   double minObjectSize = uiMinSize->value();
   if (!m_RelabelOutputReady || m_CCRelabelFilter->GetMinimumObjectSize() != minObjectSize)
     {
@@ -694,36 +725,47 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
 
   if (m_HasToGenerateRelabelLayer)
     {
+
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
+
     m_CCRelabelFilter->SetInput(m_CCFilter->GetOutput());
     m_CCRelabelFilter->SetMinimumObjectSize(minObjectSize);
 
     m_RelabelColorMapper->SetInput(m_CCRelabelFilter->GetOutput());
 
-    m_RenderingModel->DeleteLayerByName("Relabel");
+    m_RenderingModel->DeleteLayerByName("RelabelRGB");
 
-    m_RelabelGenerator->SetImage(m_RelabelColorMapper->GetOutput());
+    m_RelabelRGBGenerator->SetImage(m_RelabelColorMapper->GetOutput());
+
+    m_RelabelRGBGenerator->GenerateQuicklookOff();
+    m_RelabelRGBGenerator->GenerateLayer();
+    m_RelabelRGBGenerator->GetLayer()->SetName("RelabelRGB");
+
+    m_RelabelGenerator->SetImage(m_CCRelabelFilter->GetOutput());
 
     m_RelabelGenerator->GenerateQuicklookOff();
     m_RelabelGenerator->GenerateLayer();
     m_RelabelGenerator->GetLayer()->SetName("Relabel");
 
-    m_RenderingModel->AddLayer(m_RelabelGenerator->GetLayer());
+    m_RenderingModel->AddLayer(m_RelabelRGBGenerator->GetLayer());
 
-    m_CCRelabelFilter->Update();
+    //m_CCRelabelFilter->Update();
     m_CCRelabelFilter->GetOutput()->UpdateOutputInformation();
     m_RelabelColorMapper->GetOutput()->UpdateOutputInformation();
 
-    m_NbOfObjectsAfterCC = m_CCRelabelFilter->GetNumberOfObjects();
-    std::ostringstream Outputmsg;
-    Outputmsg << m_NbOfObjectsAfterCC << " labeled objects. ";
-    ui_OutputInfos->value(Outputmsg.str().c_str());
+    //m_NbOfObjectsAfterCC = m_CCRelabelFilter->GetNumberOfObjects();
+    // std::ostringstream Outputmsg;
+    // Outputmsg << m_NbOfObjectsAfterCC << " labeled objects. ";
+    // ui_OutputInfos->value(Outputmsg.str().c_str());
     m_HasToGenerateRelabelLayer = false;
     }
 }
 
-
 void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 {
+
   if (m_CurrentExpressionOBIA.compare(m_OBIAOpeningFilter->GetExpression()))
     {
     m_HasToGenerateOBIAOpeningLayer = true;
@@ -733,9 +775,13 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
   if (m_HasToGenerateOBIAOpeningLayer || !m_OBIAOpeningOutputReady)
     {
 
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
+
     m_CCImageToCCLabelMapFilter->SetInput(m_CCRelabelFilter->GetOutput());
     m_CCImageToCCLabelMapFilter->SetBackgroundValue(0);
-
+    m_CCImageToCCLabelMapFilter->SetNumberOfThreads(1);
     // intermediate step : Fusion
     // TBD
 
@@ -743,6 +789,9 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_ShapeLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
     //m_ShapeLabelMapFilter->SetReducedAttributeSet(false);
     m_ShapeLabelMapFilter->SetReducedAttributeSet(m_ShapeReducedSetOfAttributes);
+    m_ShapeLabelMapFilter->SetComputePolygon(false);
+    m_ShapeLabelMapFilter->SetLabelImage(m_CCRelabelFilter->GetOutput());
+
     // band stat attributes computation
 
     m_RadiometricLabelMapFilter->SetInput(m_ShapeLabelMapFilter->GetOutput());
@@ -750,54 +799,65 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_RadiometricLabelMapFilter->SetFeatureImage(m_InputImage);
 
     m_RadiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
-    m_RadiometricLabelMapFilter->Update();
+    // m_RadiometricLabelMapFilter->Update();
 
-    m_AttributesLabelMap = m_RadiometricLabelMapFilter->GetOutput();
+    //   m_AttributesLabelMap = m_RadiometricLabelMapFilter->GetOutput();
 
     // step 4 OBIA Filtering using shape and radiometric object attributes.
-
+    // m_RadiometricLabelMapFilter->GetOutput()->UpdateOutputInformation();
     if (m_NoOBIAOpening)
       {
       m_OutputLabelMap = m_RadiometricLabelMapFilter->GetOutput();
+      // m_OutputLabelMap = m_ShapeLabelMapFilter->GetOutput();
+
       m_CurrentExpressionOBIA = "";
       }
     else
       {
       m_CurrentExpressionOBIA = ui_OBIAExpression->value();
+
       m_OBIAOpeningFilter->SetExpression(m_CurrentExpressionOBIA);
 
       m_OBIAOpeningFilter->SetInput(m_RadiometricLabelMapFilter->GetOutput());
-      m_OBIAOpeningFilter->Update();
+      //m_OBIAOpeningFilter->SetInput(m_ShapeLabelMapFilter->GetOutput());
       m_OutputLabelMap = m_OBIAOpeningFilter->GetOutput();
       }
+    //m_OutputLabelMap = m_ShapeLabelMapFilter->GetOutput();
 
     m_OBIAOpeningLabelMapToLabelImageFilter->SetInput(m_OutputLabelMap);
-    m_OBIAOpeningLabelMapToLabelImageFilter->Update();
+    m_OBIAOpeningLabelMapToLabelImageFilter->UpdateOutputInformation();
 
     m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
 
     m_RenderingModel->DeleteLayerByName("OBIA Opening");
 
     m_OBIAOpeningGenerator->SetImage(m_OBIAOpeningColorMapper->GetOutput());
+    // m_OBIAOpeningGenerator->SetImage(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
 
     m_OBIAOpeningGenerator->GenerateQuicklookOff();
     m_OBIAOpeningGenerator->GenerateLayer();
     m_OBIAOpeningGenerator->GetLayer()->SetName("OBIA Opening");
 
+    m_OBIAOpeningLabelGenerator->SetImage(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
+    m_OBIAOpeningLabelGenerator->GenerateQuicklookOff();
+    m_OBIAOpeningLabelGenerator->GenerateLayer();
+    m_OBIAOpeningLabelGenerator->GetLayer()->SetName("OBIA Opening Label");
+
     m_RenderingModel->AddLayer(m_OBIAOpeningGenerator->GetLayer());
 
-    m_OBIAOpeningFilter->GetOutput()->UpdateOutputInformation();
+    // m_OBIAOpeningFilter->GetOutput()->UpdateOutputInformation();
+    m_OutputLabelMap->UpdateOutputInformation();
     m_OBIAOpeningColorMapper->GetOutput()->UpdateOutputInformation();
 
-    m_NbOfObjectsAfterOBIA = m_OutputLabelMap->GetNumberOfLabelObjects();
-    std::ostringstream Outputmsg;
-    Outputmsg << m_NbOfObjectsAfterCC << " labeled objects." << m_NbOfObjectsAfterOBIA << " objects after OBIA.";
-    ui_OutputInfos->value(Outputmsg.str().c_str());
+    //m_NbOfObjectsAfterOBIA = m_OutputLabelMap->GetNumberOfLabelObjects();
+    //std::ostringstream Outputmsg;
+    // Outputmsg << m_NbOfObjectsAfterCC << " labeled objects." << m_NbOfObjectsAfterOBIA << " objects after OBIA.";
+    // ui_OutputInfos->value(Outputmsg.str().c_str());
 
     m_HasToGenerateOBIAOpeningLayer = false;
     }
 }
-
 
 void ConnectedComponentSegmentationModule::Process()
 {
@@ -812,7 +872,6 @@ void ConnectedComponentSegmentationModule::Process()
     {
 
     this->UpdateCCSegmentationLayer();
-    m_CCFilter->Update();
     m_CCSegmentationReady = true;
     }
 
@@ -832,43 +891,60 @@ void ConnectedComponentSegmentationModule::Process()
     m_OBIAOpeningOutputReady = true;
     }
 
+  this->pBusyBar->value(0);
+  this->pBusyBar->hide();
+  Fl::check();
+
   // Layer choice
   m_MaskGenerator->GetLayer()->SetVisible(false);
   m_CCSegmentationGenerator->GetLayer()->SetVisible(false);
+  m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(false);
+  m_RelabelRGBGenerator->GetLayer()->SetVisible(false);
   m_RelabelGenerator->GetLayer()->SetVisible(false);
   m_ImageGenerator->GetLayer()->SetVisible(false);
   m_OBIAOpeningGenerator->GetLayer()->SetVisible(false);
+  m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(false);
+
+  // m_PixelDescriptionModel->ClearLayers();
 
   if (uiTmpOutputSelection->value() == INPUT_IMAGE)
     {
     m_ImageGenerator->GetLayer()->SetVisible(true);
+    //  m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
     }
 
   if (uiTmpOutputSelection->value() == MASK_IMAGE)
     {
     m_MaskGenerator->GetLayer()->SetVisible(true);
+    //   m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == CONNECTED_COMPONENT_SEGMENTATION_OUTPUT)
     {
     m_CCSegmentationGenerator->GetLayer()->SetVisible(true);
+    m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(true);
+    //  m_PixelDescriptionModel->AddLayer(m_CCSegmentationLabelGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION)
     {
+    m_RelabelRGBGenerator->GetLayer()->SetVisible(true);
     m_RelabelGenerator->GetLayer()->SetVisible(true);
+    //  m_PixelDescriptionModel->AddLayer(m_RelabelGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == OUTPUT)
     {
     m_OBIAOpeningGenerator->GetLayer()->SetVisible(true);
+    m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(true);
+    //  m_PixelDescriptionModel->AddLayer(m_OBIAOpeningLabelGenerator->GetLayer());
     }
+  m_PixelDescriptionModel->NotifyAll();
 
   m_RenderingModel->Update();
   this->Show();
-
 }
-
 
 void ConnectedComponentSegmentationModule::TmpOutputSelection()
 {
+
   this->CheckProcess();
   this->Show();
 }
@@ -882,19 +958,22 @@ void ConnectedComponentSegmentationModule::OK()
   this->ClearOutputDescriptors();
 
   if (m_MaskOutputReady)
+    {
+    m_MaskFilter->Update();
     this->AddOutputDescriptor(m_MaskFilter->GetOutput(), "OutputMask", otbGetTextMacro("Mask image"));
+    }
   else MsgReporter::GetInstance()->SendWarning("No mask generation");
-  if (m_CCSegmentationReady)
-    this->AddOutputDescriptor(m_CCFilter->GetOutput(), "CCSegmentationOutput",
-                              otbGetTextMacro("Connected Component Segmentation labeled output"));
-  else MsgReporter::GetInstance()->SendWarning("No CC Segmentation has been applied");
-  if (m_RelabelOutputReady)
-    this->AddOutputDescriptor(m_CCRelabelFilter->GetOutput(), "RelabelOutput",
-                              otbGetTextMacro("Relabeled Image with small objects rejection"));
-  else MsgReporter::GetInstance()->SendWarning("Segmentation output relabeling not available");
-  if (m_OBIAOpeningOutputReady)
-    this->AddOutputDescriptor(m_OutputLabelMap, "OBIAOpeningOutput", otbGetTextMacro("OBIA Opening output"));
-  else MsgReporter::GetInstance()->SendWarning("OBIA output not available");
+  //  if (m_CCSegmentationReady)
+  //   this->AddOutputDescriptor(m_CCFilter->GetOutput(), "CCSegmentationOutput",
+  //                              otbGetTextMacro("Connected Component Segmentation labeled output"));
+  //  else MsgReporter::GetInstance()->SendWarning("No CC Segmentation has been applied");
+  //  if (m_RelabelOutputReady)
+  //    this->AddOutputDescriptor(m_CCRelabelFilter->GetOutput(), "RelabelOutput",
+  //                              otbGetTextMacro("Relabeled Image with small objects rejection"));
+  //  else MsgReporter::GetInstance()->SendWarning("Segmentation output relabeling not available");
+  //  if (m_OBIAOpeningOutputReady)
+  //    this->AddOutputDescriptor(m_OutputLabelMap, "OBIAOpeningOutput", otbGetTextMacro("OBIA Opening output"));
+  //  else MsgReporter::GetInstance()->SendWarning("OBIA output not available");
 
   if (m_OBIAOpeningOutputReady)
     {
@@ -902,13 +981,20 @@ void ConnectedComponentSegmentationModule::OK()
     // transform OBIA opening output to vector data and label image
 
     m_OBIAOpeningLabelMapToVectorDataFilter->SetInput(m_OutputLabelMap);
+
     m_OBIAOpeningLabelMapToVectorDataFilter->Update();
 
     m_OutputVectorData = m_OBIAOpeningLabelMapToVectorDataFilter->GetOutput();
 
-    m_OutputLabelImage = m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput();
+    m_OutputVectorData->Update();
 
-    this->AddOutputDescriptor(m_OutputLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
+    m_OBIAOpeningLabelMapToLabelImageFilter->Update();
+
+    m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
+    m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
+
+    this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
     this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
 
     }

@@ -26,7 +26,7 @@
 #include <itkScalarToRGBPixelFunctor.h>
 #include <itkUnaryFunctorImageFilter.h>
 
-#include "itkRelabelComponentImageFilter.h"
+#include "otbRelabelComponentImageFilter.h"
 
 #include "otbImageLayer.h"
 #include "otbImageLayerRenderingModel.h"
@@ -58,8 +58,9 @@
 #include <itkLabelObject.h>
 #include "itkLabelImageToShapeLabelMapFilter.h"
 #include <iostream>
+#include <otbLabelMapToLabelImageFilter.h>
 
-#include <otbLabelImageToLabelMapWithAdjacencyFilter.h>
+//#include <otbLabelImageToLabelMapWithAdjacencyFilter.h>
 
 #include "otbImageWidgetController.h"
 #include "otbWidgetResizingActionHandler.h"
@@ -70,6 +71,9 @@
 #include "otbMouseClickActionHandler.h"
 
 #include "otbImageLayerGenerator.h"
+#include "otbPixelDescriptionModel.h"
+#include "otbPixelDescriptionView.h"
+#include "otbPixelDescriptionActionHandler.h"
 
 #include "otbImage.h"
 #include <otbLabelMapToVectorDataFilter.h>
@@ -127,7 +131,7 @@ public:
   typedef VectorDataType::Pointer            VectorDataPointerType;
 
   typedef Parser ParserType;
-
+  typedef ImageType::RegionType         RegionType;
   /** Image layer type */
   typedef ImageLayer<VectorImageType, LayerOutputImageType> VectorImageLayerType;
   typedef VectorImageLayerType::Pointer                     VectorImageLayerPointerType;
@@ -158,6 +162,11 @@ public:
   typedef ImageLayerRenderingModel<LayerOutputImageType> RenderingModelType;
   typedef RenderingModelType::Pointer                    RenderingModelPointerType;
 
+  /** Pixel type */
+  typedef PixelDescriptionModel<RGBImageType>                       PixelDescriptionModelType;
+  typedef PixelDescriptionView<PixelDescriptionModelType>           PixelViewType;
+
+
   /** View type */
   typedef ImageView<RenderingModelType> ViewType;
 
@@ -171,6 +180,8 @@ public:
   typedef otb::ChangeExtractRegionActionHandler<RenderingModelType, ViewType>       ChangeRegionHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler<RenderingModelType, ViewType> ChangeScaledRegionHandlerType;
   typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType>               ChangeScaleHandlerType;
+  typedef otb::PixelDescriptionActionHandler
+     < PixelDescriptionModelType, ViewType>                                         PixelDescriptionActionHandlerType;
 
   // colored label image typedef
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                            ColorMapFunctorType;
@@ -187,7 +198,7 @@ public:
   typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
 
   // Labelization
-  typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
+  typedef otb::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
   typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>   AttributesMapLabelObjectType;
   typedef itk::AttributeLabelObject<unsigned int, Dimension, double>       AttributesLabelObjectType;
 
@@ -203,11 +214,10 @@ public:
   typedef itk::ShapeLabelObject<unsigned int, Dimension>             ShapeLabelObjectType;
   typedef itk::LabelObject<unsigned int, Dimension>                  LabelObjectType;
   typedef itk::LabelMap<ShapeLabelObjectType>                        ShapeLabelMapType;
-
-  typedef itk::LabelImageToShapeLabelMapFilter<LabelImageType, ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
-  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
+  typedef otb::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
   typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
+
 
 protected:
   /** Constructor */
@@ -281,6 +291,9 @@ private:
 
   // Class attributes
 
+  itkGetObjectMacro(PixelView, PixelViewType);
+ // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
+  itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType);
 
   // IO
 
@@ -290,7 +303,7 @@ private:
   /** Pointer to the mask output */
   ImageType::Pointer m_InputMask;
 
-  LabelImageType::Pointer m_OutputLabelImage;
+  RGBImageType::Pointer m_OutputRGBLabelImage;
   VectorDataPointerType m_OutputVectorData;
 
   AttributesLabelMapType::Pointer m_OutputLabelMap;
@@ -333,6 +346,7 @@ private:
   ChangeRegionHandlerType::Pointer m_ChangeRegionHandler;
   ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
   ChangeScaleHandlerType::Pointer m_ChangeScaleHandler;
+  PixelDescriptionActionHandlerType::Pointer m_PixelActionHandler;
 
   /** The widget controller */
   WidgetControllerPointerType m_WidgetsController;
@@ -340,14 +354,26 @@ private:
   /** The view */
   ViewPointerType m_View;
 
+  /** Pixel view */
+  PixelViewType::Pointer                         m_PixelView;
+
   /** Layer Generator*/
   /** The image layer */
   VectorImageLayerPointerType m_InputImageLayer;
   VectorImageLayerGeneratorType::Pointer m_ImageGenerator;
   ImageLayerGeneratorType::Pointer m_MaskGenerator;
   RGBImageLayerGeneratorType::Pointer m_CCSegmentationGenerator;
-  RGBImageLayerGeneratorType::Pointer m_RelabelGenerator;
+  RGBImageLayerGeneratorType::Pointer m_RelabelRGBGenerator;
   RGBImageLayerGeneratorType::Pointer m_OBIAOpeningGenerator;
+
+  LabelLayerGeneratorType::Pointer m_CCSegmentationLabelGenerator;
+  LabelLayerGeneratorType::Pointer m_RelabelGenerator;
+  LabelLayerGeneratorType::Pointer m_OBIAOpeningLabelGenerator;
+
+  /** Pixel description model */
+   PixelDescriptionModelType::Pointer m_PixelDescriptionModel;
+
+
 
   // flag for layer generation
   bool m_HasToGenerateMaskLayer;
