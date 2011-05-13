@@ -374,7 +374,6 @@ private:
    PixelDescriptionModelType::Pointer m_PixelDescriptionModel;
 
 
-
   // flag for layer generation
   bool m_HasToGenerateMaskLayer;
   bool m_HasToGenerateCCSegmentationLayer;
