@@ -84,7 +84,6 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
 
-
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
