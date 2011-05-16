@@ -475,7 +475,7 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTest  ${Modules_TESTS4}
 #    1
 #    10
 #)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+#ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
