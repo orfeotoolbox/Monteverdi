@@ -455,10 +455,27 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTest  ${Modules_TESTS4}
 	otbConnectedComponentSegmentationModuleTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${TEMP}/moTvConnectedComponentSegmentationModule.shp 
-        ${TEMP}/moTvConnectedComponentSegmentationModule.tif
+    0
+    "b3>100"
+    "distance<40"
+    1
+    10
 )
 
 
+# this test is very long
+#IF(OTB_DATA_USE_LARGEINPUT)
+#ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
+#    otbConnectedComponentSegmentationModuleTest
+#    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+#    ${TEMP}/moTvConnectedComponentSegmentationModuleQB.shp 
+#    0
+#    "b3>100"
+#    "distance<40"
+#    1
+#    10
+#)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx

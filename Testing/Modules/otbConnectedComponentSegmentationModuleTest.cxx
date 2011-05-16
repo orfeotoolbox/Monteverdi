@@ -1,20 +1,21 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
+#define protected public
 
 #include "otbConnectedComponentSegmentationModule.h"
 
@@ -24,29 +25,30 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 
-
-
 int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
 {
   otb::ConnectedComponentSegmentationModule::Pointer specificModule = otb::ConnectedComponentSegmentationModule::New();
-  otb::Module::Pointer            module = specificModule.GetPointer();
+  otb::Module::Pointer module = specificModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
 
-
   // Put in the tests
-  const char * infname  = argv[1];
-  const char * outvdname   = argv[2];
-  const char * outfname   = argv[3];
+  const char * infname = argv[1];
+  const char * outvdname = argv[2];
+  bool run = atoi(argv[3]);
 
-  typedef otb::ConnectedComponentSegmentationModule::VectorImageType       VectorImageType;
-  typedef otb::ConnectedComponentSegmentationModule::VectorDataType  VectorDataType;
-  typedef otb::ConnectedComponentSegmentationModule::LabelImageType  LabelImageType;
+  const char * maskExpression =  argv[4];
+  const char * ccExpression =  argv[5];
+  const char * obiaExpression =  argv[6];
+  int minObjSize =  atoi(argv[7]);
 
- 
-  typedef otb::ImageFileReader<VectorImageType>           ImageReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>       VectorDataWriterType;
-  typedef otb::ImageFileWriter<LabelImageType>      ImageWriterType;
+  typedef otb::ConnectedComponentSegmentationModule::VectorImageType VectorImageType;
+  typedef otb::ConnectedComponentSegmentationModule::VectorDataType VectorDataType;
+  typedef otb::ConnectedComponentSegmentationModule::LabelImageType LabelImageType;
+
+  typedef otb::ImageFileReader<VectorImageType> ImageReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
+  typedef otb::ImageFileWriter<LabelImageType> ImageWriterType;
 
   // Image reader
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -54,42 +56,46 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   // Add Wrapper Input
-   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-   std::cout << "Input wrapper: " << wrapperIn << std::endl;
-   module->AddInputByKey("InputImage", wrapperIn);
+  otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
+  std::cout << "Input wrapper: " << wrapperIn << std::endl;
+  module->AddInputByKey("InputImage", wrapperIn);
 
-   module->Start();
+  module->Start();
 
-
-
-   Fl::check();
-
-
-  // Simulate Operation
-  specificModule->ui_MaskExpression->value("intensity > 50");
-  specificModule->ui_CCExpression->value("distance < 15");
-  specificModule->ui_OBIAExpression->value("SHAPE_Elongation > 5");
-
-  specificModule->uiMinSize->value(15);
-  specificModule->uiTmpOutputSelection->value(OUTPUT);
-  
   Fl::check();
 
-  // Fl::run();
+  // Simulate Operation
+  specificModule->ui_MaskExpression->value(maskExpression);
+  specificModule->ui_CCExpression->value(ccExpression);
+  specificModule->ui_OBIAExpression->value(obiaExpression);
+
+  specificModule->LiveCheckMask();
+  specificModule->LiveCheckCC();
+  specificModule->LiveCheckOBIA();
+
+  specificModule->uiMinSize->value(minObjSize);
+  specificModule->uiTmpOutputSelection->value(otb::ConnectedComponentSegmentationModule::OUTPUT);
+
+  if (!run)
+    {
+    Fl::check();
+    }
+  else
+    {
+    Fl::run();
+    }
+
   // Exit the GUI and save the result
-  specificModule->ui_Update->do_callback();
+  ///specificModule->ui_Update->do_callback();
 
   specificModule->ui_Ok->do_callback();
 
   otb::DataObjectWrapper vdWrapperOut = module->GetOutputByKey("OutputVectorData");
-  otb::DataObjectWrapper imageWrapperOut = module->GetOutputByKey("OutputLabelImage");
 
+  std::cout << "Output wrappers: " << vdWrapperOut << std::endl;
 
-  std::cout << "Output wrappers: " << vdWrapperOut << " " << imageWrapperOut << std::endl;
+  VectorDataType::Pointer outVectorData = dynamic_cast<VectorDataType *> (vdWrapperOut.GetDataObject());
 
-  VectorDataType::Pointer outVectorData = dynamic_cast<VectorDataType *>(vdWrapperOut.GetDataObject());
-  LabelImageType::Pointer outLabelImage = dynamic_cast<LabelImageType *>(imageWrapperOut.GetDataObject());
-  
   //Write the vector data
   std::cout << "Write output vector data" << outvdname << std::endl;
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
@@ -97,12 +103,6 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   vdWriter->SetInput(outVectorData);
   vdWriter->Update();
 
-  //Write the vector data
-   std::cout << "Write output image" << outfname << std::endl;
-   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
-   imageWriter->SetFileName(outfname);
-   imageWriter->SetInput(outLabelImage);
-   imageWriter->Update();
   return EXIT_SUCCESS;
 
 }

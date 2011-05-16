@@ -80,13 +80,9 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorData.h"
 
-typedef enum {
-    INPUT_IMAGE,
-    MASK_IMAGE,
-    CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
-    SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
-    OUTPUT,
-  } TmpOutputEnumType;
+
+#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
+
 
 
 namespace otb
@@ -97,7 +93,6 @@ namespace otb
  *
  */
 const unsigned int     Dimension = 2;
-
 
 class ITK_EXPORT ConnectedComponentSegmentationModule
   : public Module, public ConnectedComponentSegmentationModuleGUI
@@ -217,6 +212,20 @@ public:
   typedef otb::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
   typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
+
+  typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
+      <VectorImageType,
+      LabelImageType,
+      ImageType,
+      VectorDataType> StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType;
+
+  typedef enum {
+      INPUT_IMAGE,
+      MASK_IMAGE,
+      CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
+      SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
+      OUTPUT,
+    } TmpOutputEnumType;
 
 
 protected:
