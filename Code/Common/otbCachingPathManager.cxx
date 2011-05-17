@@ -116,7 +116,6 @@ CachingPathManager
 }
 
 
-
 void
 CachingPathManager
 ::ChangeCachingPath()
@@ -216,7 +215,7 @@ bool
 CachingPathManager
 ::CachingDirExists()
 {
-  bool res = itksys::SystemTools::FileExists( m_CachingPath.c_str() ); 
+  bool res = itksys::SystemTools::FileExists( m_CachingPath.c_str() );
 }
 
 }
