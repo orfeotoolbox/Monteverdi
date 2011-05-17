@@ -19,6 +19,7 @@
 #include "otbGCPToSensorModelModel.h"
 #include "otbFltkFilterWatcher.h"
 #include "otbTileMapTransform.h"
+#include "otbCachingPathManager.h"
 
 #include "tinyxml.h"
 
@@ -69,8 +70,9 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_MapBlendingFunction->SetAlpha(0.6);
 
   // Use expand because CurlHelper can have pb when the path is relative
-  m_CacheDirectory = itksys::SystemTools::CollapseFullPath("./Caching");
-  itksys::SystemTools::MakeDirectory(m_CacheDirectory.c_str());
+  CachingPathManager::GetInstance()->GetAValidCachingPath();
+  m_CacheDirectory = CachingPathManager::GetInstance()->GetFullCachingPath();
+  CachingPathManager::GetInstance()->CreateCachingDirectory();
 
   // Configure Tile
   m_TileIO = TileMapType::New();

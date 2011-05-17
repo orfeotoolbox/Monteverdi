@@ -24,6 +24,7 @@
 #include "otbGraphOutEdgeIterator.h"
 #include "otbMacro.h"
 #include "otbMsgReporter.h"
+#include "otbCachingPathManager.h"
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
@@ -59,9 +60,9 @@ MonteverdiModel::Close()
   if (m_EraseCaching)
     {
      // If data in cach, erase the directory
-      if( m_CachingModuleMap.size() > 0 )
+  if(  CachingPathManager::GetInstance()->CachingDirExists() == true )
         {
-          bool resRemove = itksys::SystemTools::RemoveADirectory( this->GetCachingPath().c_str() );
+          bool resRemove = itksys::SystemTools::RemoveADirectory( CachingPathManager::GetInstance()->GetFullCachingPath().c_str() );
 
           if( resRemove == false )
             {
@@ -777,6 +778,7 @@ void MonteverdiModel::ExportGraphToXML(const std::string& fname) const
 }
 
 
+/*
 std::string MonteverdiModel::GetCachingPath()
 {
   // Create a local instance of the caching module
@@ -787,6 +789,7 @@ std::string MonteverdiModel::GetCachingPath()
 
   return ( fullPath );
 }
+*/
 
 } // End namespace
 

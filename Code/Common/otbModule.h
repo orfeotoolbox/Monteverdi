@@ -102,12 +102,6 @@ public:
    * protected virtual run method */
   void Start();
 
-  /** Check conditions before launching process */
-  virtual int CheckValidity()
-  {
-    return 0;
-  }
-
   /** Notify outputs change */
   void NotifyOutputsChange();
 

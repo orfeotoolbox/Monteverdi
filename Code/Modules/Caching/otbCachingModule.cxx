@@ -20,6 +20,7 @@
 #include <FL/Fl.H>
 #include <algorithm>
 #include "otbMsgReporter.h"
+#include "otbCachingPathManager.h"
 
 #include "otbCachingModule.h"
 
@@ -36,7 +37,9 @@ CachingModule::CachingModule()
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
 
-  m_CachingPath = "Caching/";
+  //CachingPathManager::GetInstance()->GetAValidCachingPath();
+  m_CachingPath = CachingPathManager::GetInstance()->GetCachingPath();
+
   m_FilePath = "";
   m_WatchProgress = true;
 
@@ -145,6 +148,7 @@ void CachingModule::ThreadedWatch()
 }
 
 // Call in the otbModule::Run()
+/*
 int CachingModule::CheckValidity()
 {
   int res = 0;
@@ -165,6 +169,7 @@ int CachingModule::CheckValidity()
 
   return res;
 }
+*/
 
 void CachingModule::ThreadedRun()
 {
@@ -316,8 +321,10 @@ void CachingModule::ShowWindowCallback(void * data)
 
 void CachingModule::Run()
 {
-  this->StartProcess2();
+  CachingPathManager::GetInstance()->GetAValidCachingPath();
+  m_CachingPath = CachingPathManager::GetInstance()->GetCachingPath();
 
+  this->StartProcess2();
   if (m_WatchProgress)
     {
     this->StartProcess1();

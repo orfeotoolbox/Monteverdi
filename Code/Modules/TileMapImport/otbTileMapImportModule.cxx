@@ -19,6 +19,7 @@
 #include "otbTileMapImportModule.h"
 #include "otbTileMapImageIOHelper.h"
 #include "otbTileMapTransform.h"
+#include "otbCachingPathManager.h"
 
 namespace otb
 {
@@ -33,8 +34,9 @@ TileMapImportModule::TileMapImportModule():
 {
   // Use expand because CurlHelper can have pb when the path is relative
   // Create the caching dir if not already created
-  m_CacheDirectory = itksys::SystemTools::CollapseFullPath("./Caching");
-  itksys::SystemTools::MakeDirectory(m_CacheDirectory.c_str());
+  CachingPathManager::GetInstance()->GetAValidCachingPath();
+  m_CacheDirectory = CachingPathManager::GetInstance()->GetFullCachingPath();
+  CachingPathManager::GetInstance()->CreateCachingDirectory();
 
   // Build GUI
   this->BuildGUI();

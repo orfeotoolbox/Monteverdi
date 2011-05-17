@@ -26,6 +26,7 @@
 #include "otbMacro.h"
 #include "otbI18n.h"
 #include "otbMsgReporter.h"
+#include "otbCachingPathManager.h"
 
 #include "itkExceptionObject.h"
 #include "flu_pixmaps.h"
@@ -549,7 +550,7 @@ MonteverdiViewGUI
 void MonteverdiViewGUI
 ::OpenEraseCaching()
 {
-  if( this->GetMonteverdiModel()->GetCachingModuleMap().size() != 0 )
+  if( CachingPathManager::GetInstance()->CachingDirExists() == true )
     {
       wEraseCaching2Window->show();
     }
@@ -566,7 +567,7 @@ void MonteverdiViewGUI
 
   if( erase==true )
     {
-      tConfirmErase->value( m_MonteverdiModel->GetCachingPath().c_str() );
+      tConfirmErase->value( CachingPathManager::GetInstance()->GetFullCachingPath().c_str() );
       wConfirmCachingWindow->show();
     }
   else
