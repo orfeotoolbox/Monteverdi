@@ -108,6 +108,11 @@ protected:
   itkGetMacro(EraseCaching, bool);
   itkSetMacro(EraseCaching, bool);
 
+   CachingModuleMapType GetCachingModuleMap() const
+  {
+    return m_CachingModuleMap;
+  }
+
   /** Get Connection Graph*/
   itkGetConstObjectMacro(ConnectionGraph, ConnectionGraphType);
 

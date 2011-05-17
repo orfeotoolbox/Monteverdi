@@ -96,6 +96,9 @@ protected:
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
 
+  // Check if the caching dir is writable, launched by the otbModule::Run method
+  virtual int CheckValidity();
+
   // Update the progress bar
   void UpdateProgress();
 

@@ -144,8 +144,10 @@ void CachingModule::ThreadedWatch()
   Fl::unlock();
 }
 
-void CachingModule::ThreadedRun()
+// Call in the otbModule::Run()
+int CachingModule::CheckValidity()
 {
+  int res = 0;
   // Check caching dir permission
   // Create the caching dir if not already created
   bool isOK = itksys::SystemTools::MakeDirectory( m_CachingPath.c_str() );
@@ -153,12 +155,19 @@ void CachingModule::ThreadedRun()
   if( isOK == false )
     {
       itk::OStringStream oss;
-      oss<<"Not enough permission for write in the caching directory ";
-      oss<<itksys::SystemTools::GetRealPath(m_CachingPath.c_str())<<".";
+      oss<<"Not enough permission for write caching in ";
+      oss<<itksys::SystemTools::GetRealPath(".")<<".";
       MsgReporter::GetInstance()->SendError(oss.str());
-      return;
+      wCachingWindow->hide();
+      Fl::check();
+      res = 1;
     }
 
+  return res;
+}
+
+void CachingModule::ThreadedRun()
+{
   this->BusyOn();
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");

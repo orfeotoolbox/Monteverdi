@@ -85,6 +85,7 @@ public:
     /** Getters */
     const std::string GetOutputKey(){return m_OutputKey; }
     const std::string GetModuleInstanceId(){return m_ModuleInstanceId; }
+    
 
 protected:
     // key to identify the module instance
@@ -100,6 +101,9 @@ protected:
 
   /** Get the inputViewGUI */
   itkGetObjectMacro(InputViewGUI, InputViewGUI);
+
+  /** Get the model */
+  itkGetConstObjectMacro(MonteverdiModel, MonteverdiModelType);
 
   /** Process event from the model */
   virtual void Notify(const MonteverdiEvent& event);
@@ -171,7 +175,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /** Pointer to the model */
-  MonteverdiModel::Pointer m_MonteverdiModel;
+  MonteverdiModelType::Pointer m_MonteverdiModel;
   /** Pointer to the controller */
   itk::WeakPointer<MonteverdiControllerInterface> m_MonteverdiController;
 

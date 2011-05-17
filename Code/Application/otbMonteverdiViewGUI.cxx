@@ -549,7 +549,14 @@ MonteverdiViewGUI
 void MonteverdiViewGUI
 ::OpenEraseCaching()
 {
-  wEraseCaching2Window->show();
+  if( this->GetMonteverdiModel()->GetCachingModuleMap().size() != 0 )
+    {
+      wEraseCaching2Window->show();
+    }
+  else
+    {
+      this->Quit();
+    }
 }
 
 void MonteverdiViewGUI

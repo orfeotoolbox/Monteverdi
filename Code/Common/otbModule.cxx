@@ -211,11 +211,16 @@ void Module::Start()
 /** The custom run command */
 void Module::Run()
 {
-  // Start the threaded run
-  this->StartProcess2();
-
-  // Start the watcher
-  this->StartProcess1();
+  // Check validity
+  if( this->CheckValidity() == 0 )
+    {
+      // Start the threaded run
+      this->StartProcess2();
+      
+      // Start the watcher
+      this->StartProcess1();
+    }
+  // else, we assume that a message error is already launch in the overloaded CheckValidity method
 }
 
 /** Notify outputs change */
