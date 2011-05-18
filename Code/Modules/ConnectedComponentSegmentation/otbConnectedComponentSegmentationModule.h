@@ -84,7 +84,6 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
 
-
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -107,11 +106,11 @@ public:
 
   /** New macro */
   itkNewMacro(Self)
-  ;
+ ;
 
   /** Type macro */
   itkTypeMacro(ConnectedComponentSegmentationModule, Module)
-  ;
+ ;
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image ImageType;
@@ -268,7 +267,6 @@ protected:
   virtual void QuickAddOBIA();
 
 
-
   virtual void SetObjectMinArea();
 
   virtual void UpdateTmpOutput();
@@ -301,10 +299,10 @@ private:
   // Class attributes
 
   itkGetObjectMacro(PixelView, PixelViewType)
-  ;
+ ;
   // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
   itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType)
-  ;
+ ;
 
   // IO
 

@@ -157,7 +157,7 @@ void BandMathModule::InitHelp()
   helpContent << "-- Hyperbholic Functions" << std::endl << "sinh() - cosh() - tanh()" << std::endl;
   helpContent << "-- Arcus Hyperbolic Functions" << std::endl << "asinh() - acosh() - atanh()" << std::endl;
   helpContent << "-- Logarithm Functions" << std::endl << "log2() - log10() - log() - ln()" << std::endl;
-  helpContent << "-- Conditional Functions" << std::endl << "if(condition,then,else)" << std::endl;
+  helpContent << "-- Conditional Functions" << std::endl << "if(condition, then, else)" << std::endl;
   helpContent << "-- Misc" << std::endl << "exp() - sqrt() - sign() - rint() - abs() - if()" << std::endl;
   helpContent << "-- Functions With Variable Number of Arguments" << std::endl;
   helpContent << "sum() - avg() - min() - max()" << std::endl;
