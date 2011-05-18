@@ -91,7 +91,7 @@ protected:
   /** Show the Module GUI */
   virtual void Show()
   {
-//    m_View->Show();
+    m_View->Show();
   }
 
   /** Show the Module GUI */
