@@ -286,7 +286,8 @@ void ConnectedComponentSegmentationModule::Run()
 
   itk::ImageRegion<2> imageRegion;
   imageRegion.SetSize(1, 1);
-  imageRegion.SetIndex(1, 1);
+  imageRegion.SetSize(0, 1);
+  imageRegion.SetIndex(m_InputImage->GetLargestPossibleRegion().GetIndex());
 
   m_InputImage->SetRequestedRegion(imageRegion);
   m_InputImage->Update();
