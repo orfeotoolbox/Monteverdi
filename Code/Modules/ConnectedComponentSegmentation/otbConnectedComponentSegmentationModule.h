@@ -84,6 +84,7 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
 
+
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -100,66 +101,66 @@ public:
 
   /** Standard class typedefs */
   typedef ConnectedComponentSegmentationModule Self;
-  typedef Module                               Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef Module Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro */
   itkNewMacro(Self)
-;
+  ;
 
   /** Type macro */
   itkTypeMacro(ConnectedComponentSegmentationModule, Module)
-;
+  ;
 
   // Convenient typedefs
-  typedef TypeManager::Floating_Point_Image       ImageType;
+  typedef TypeManager::Floating_Point_Image ImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
-  typedef otb::Image<unsigned int, Dimension>     LabelImageType;
+  typedef otb::Image<unsigned int, Dimension> LabelImageType;
 
-  typedef itk::RGBPixel<unsigned char>   RGBPixelType;
+  typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef Image<RGBPixelType, Dimension> LayerOutputImageType;
   typedef Image<RGBPixelType, Dimension> RGBImageType;
 
   typedef otb::VectorData<double, Dimension> VectorDataType;
-  typedef VectorDataType::Pointer            VectorDataPointerType;
+  typedef VectorDataType::Pointer VectorDataPointerType;
 
+  typedef VectorImageType::PixelType PixelType;
   typedef Parser ParserType;
-  typedef ImageType::RegionType         RegionType;
+  typedef ImageType::RegionType RegionType;
   /** Image layer type */
   typedef ImageLayer<VectorImageType, LayerOutputImageType> VectorImageLayerType;
-  typedef VectorImageLayerType::Pointer                     VectorImageLayerPointerType;
+  typedef VectorImageLayerType::Pointer VectorImageLayerPointerType;
 
   typedef ImageLayer<ImageType, LayerOutputImageType> ImageLayerType;
-  typedef ImageLayerType::Pointer                     ImageLayerPointerType;
+  typedef ImageLayerType::Pointer ImageLayerPointerType;
 
   typedef ImageLayer<RGBImageType, LayerOutputImageType> RGBImageLayerType;
-  typedef RGBImageLayerType::Pointer                     RGBImageLayerPointerType;
+  typedef RGBImageLayerType::Pointer RGBImageLayerPointerType;
 
   typedef ImageLayer<LabelImageType, LayerOutputImageType> LabelLayerType;
-  typedef LabelLayerType::Pointer                          LabelLayerPointerType;
+  typedef LabelLayerType::Pointer LabelLayerPointerType;
 
   /** layer generator type */
   typedef ImageLayerGenerator<VectorImageLayerType> VectorImageLayerGeneratorType;
-  typedef VectorImageLayerGeneratorType::Pointer    VectorImageLayerGeneratorPointerType;
+  typedef VectorImageLayerGeneratorType::Pointer VectorImageLayerGeneratorPointerType;
 
   typedef ImageLayerGenerator<ImageLayerType> ImageLayerGeneratorType;
-  typedef ImageLayerGeneratorType::Pointer    ImageLayerGeneratorPointerType;
+  typedef ImageLayerGeneratorType::Pointer ImageLayerGeneratorPointerType;
 
   typedef ImageLayerGenerator<RGBImageLayerType> RGBImageLayerGeneratorType;
-  typedef ImageLayerGeneratorType::Pointer       RGBImageLayerGeneratorPointerType;
+  typedef ImageLayerGeneratorType::Pointer RGBImageLayerGeneratorPointerType;
 
   typedef ImageLayerGenerator<LabelLayerType> LabelLayerGeneratorType;
-  typedef LabelLayerGeneratorType::Pointer    LabelLayerGeneratorPointerType;
+  typedef LabelLayerGeneratorType::Pointer LabelLayerGeneratorPointerType;
 
   /** Rendering model type */
   typedef ImageLayerRenderingModel<LayerOutputImageType> RenderingModelType;
-  typedef RenderingModelType::Pointer                    RenderingModelPointerType;
+  typedef RenderingModelType::Pointer RenderingModelPointerType;
 
   /** Pixel type */
-  typedef PixelDescriptionModel<RGBImageType>                       PixelDescriptionModelType;
-  typedef PixelDescriptionView<PixelDescriptionModelType>           PixelViewType;
-
+  typedef PixelDescriptionModel<RGBImageType> PixelDescriptionModelType;
+  typedef PixelDescriptionView<PixelDescriptionModelType> PixelViewType;
 
   /** View type */
   typedef ImageView<RenderingModelType> ViewType;
@@ -167,18 +168,17 @@ public:
   typedef ViewType::Pointer ViewPointerType;
 
   /** Widget controller */
-  typedef ImageWidgetController         WidgetControllerType;
+  typedef ImageWidgetController WidgetControllerType;
   typedef WidgetControllerType::Pointer WidgetControllerPointerType;
 
-  typedef otb::WidgetResizingActionHandler<RenderingModelType, ViewType>            ResizingHandlerType;
-  typedef otb::ChangeExtractRegionActionHandler<RenderingModelType, ViewType>       ChangeRegionHandlerType;
+  typedef otb::WidgetResizingActionHandler<RenderingModelType, ViewType> ResizingHandlerType;
+  typedef otb::ChangeExtractRegionActionHandler<RenderingModelType, ViewType> ChangeRegionHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler<RenderingModelType, ViewType> ChangeScaledRegionHandlerType;
-  typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType>               ChangeScaleHandlerType;
-  typedef otb::PixelDescriptionActionHandler
-     < PixelDescriptionModelType, ViewType>                                         PixelDescriptionActionHandlerType;
+  typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType> ChangeScaleHandlerType;
+  typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType, ViewType> PixelDescriptionActionHandlerType;
 
   // colored label image typedef
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                            ColorMapFunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long> ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
 
   typedef Functor::ConnectedComponentMuParserFunctor<VectorImageType::PixelType> CCFunctorType;
@@ -188,13 +188,13 @@ public:
 
   typedef otb::MaskMuParserFilter<VectorImageType, ImageType> MaskMuParserFilterType;
 
-  typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType     LayerOutputPixelType;
+  typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType LayerOutputPixelType;
   typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
 
   // Labelization
   typedef otb::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
-  typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>   AttributesMapLabelObjectType;
-  typedef itk::AttributeLabelObject<unsigned int, Dimension, double>       AttributesLabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double> AttributesMapLabelObjectType;
+  typedef itk::AttributeLabelObject<unsigned int, Dimension, double> AttributesLabelObjectType;
 
   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType> AttributesLabelMapType;
   typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>
@@ -205,27 +205,31 @@ public:
   typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType>
       RadiometricLabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType> ShapeLabelMapFilterType;
-  typedef itk::ShapeLabelObject<unsigned int, Dimension>             ShapeLabelObjectType;
-  typedef itk::LabelObject<unsigned int, Dimension>                  LabelObjectType;
-  typedef itk::LabelMap<ShapeLabelObjectType>                        ShapeLabelMapType;
+  typedef itk::ShapeLabelObject<unsigned int, Dimension> ShapeLabelObjectType;
+  typedef itk::LabelObject<unsigned int, Dimension> LabelObjectType;
+  typedef itk::LabelMap<ShapeLabelObjectType> ShapeLabelMapType;
   typedef otb::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
   typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
-  typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
-      <VectorImageType,
-      LabelImageType,
-      ImageType,
-      VectorDataType> StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType;
+  typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter<VectorImageType, LabelImageType,
+      ImageType, VectorDataType> StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
-  typedef enum {
-      INPUT_IMAGE,
-      MASK_IMAGE,
-      CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
-      SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
-      OUTPUT,
-    } TmpOutputEnumType;
+  typedef enum
+  {
+    INPUT_IMAGE,
+    MASK_IMAGE,
+    CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
+    SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
+    OUTPUT,
+  } TmpOutputEnumType;
 
+public :
+
+  /** Expression live checking */
+   virtual void LiveCheckCC();
+   virtual void LiveCheckMask();
+   virtual void LiveCheckOBIA();
 
 protected:
   /** Constructor */
@@ -263,10 +267,7 @@ protected:
   virtual void QuickAddCC();
   virtual void QuickAddOBIA();
 
-  /** Expression live checking */
-  virtual void LiveCheckCC();
-  virtual void LiveCheckMask();
-  virtual void LiveCheckOBIA();
+
 
   virtual void SetObjectMinArea();
 
@@ -299,9 +300,11 @@ private:
 
   // Class attributes
 
-  itkGetObjectMacro(PixelView, PixelViewType);
- // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
-  itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType);
+  itkGetObjectMacro(PixelView, PixelViewType)
+  ;
+  // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
+  itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType)
+  ;
 
   // IO
 
@@ -363,7 +366,7 @@ private:
   ViewPointerType m_View;
 
   /** Pixel view */
-  PixelViewType::Pointer                         m_PixelView;
+  PixelViewType::Pointer m_PixelView;
 
   /** Layer Generator*/
   /** The image layer */
@@ -379,8 +382,7 @@ private:
   LabelLayerGeneratorType::Pointer m_OBIAOpeningLabelGenerator;
 
   /** Pixel description model */
-   PixelDescriptionModelType::Pointer m_PixelDescriptionModel;
-
+  PixelDescriptionModelType::Pointer m_PixelDescriptionModel;
 
   // flag for layer generation
   bool m_HasToGenerateMaskLayer;

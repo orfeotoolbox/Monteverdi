@@ -15,8 +15,6 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#define protected public
-
 #include "otbConnectedComponentSegmentationModule.h"
 
 #include "otbImage.h"
@@ -93,7 +91,6 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   otb::DataObjectWrapper vdWrapperOut = module->GetOutputByKey("OutputVectorData");
 
   std::cout << "Output wrappers: " << vdWrapperOut << std::endl;
-
   VectorDataType::Pointer outVectorData = dynamic_cast<VectorDataType *> (vdWrapperOut.GetDataObject());
 
   //Write the vector data
