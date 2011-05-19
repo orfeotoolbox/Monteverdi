@@ -342,8 +342,14 @@ namespace otb
       m_RenderingFunctionList->PushBack(renderer);
       m_ContrastStretchList.push_back(LINEAR_CONTRAST_STRETCH);
 
-      guiOpaqueImageSelection->add(desc.c_str());
-      guiTransparentImageSelection->add(desc.c_str());
+      // Add the module where the image comes from.
+      // This was done because if two image has the same description, the Fl_Choice will only contain 1 possible item.
+
+      const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(i);
+      itk::OStringStream text;
+      text << "[" << dow.GetSourceInstanceId() << "] "<<desc;
+      guiOpaqueImageSelection->add(text.str().c_str());
+      guiTransparentImageSelection->add(text.str().c_str());
       m_AlphaBlendingList.push_back(ALPHA_BLENDING_DEFAULT);
     }
 
