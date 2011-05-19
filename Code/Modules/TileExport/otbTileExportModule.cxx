@@ -22,6 +22,8 @@
 #include "itksys/SystemTools.hxx"
 #include <FLU/Flu_File_Chooser.h>
 #include "otbMsgReporter.h"
+#include "otbGeoInformationConversion.h"
+
 
 namespace otb
 {
@@ -29,23 +31,35 @@ namespace otb
  * Constructor
  */
 TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
-  m_HasLegend(false), m_HasLogo(false), m_TileSize(-1), m_KmzFile(NULL),
-  m_RootKmlFile(), m_TempRootKmlFile(), m_Cancel(false),
-  m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0), m_CurrentProduct(0), m_CurrentDepth(-1),
-  m_RegionOfInterestKmlGenerated(false), m_CenterPointVector(), m_ProductVector()
+                                       m_HasLegend(false), m_HasLogo(false), 
+                                       m_TileSize(-1), m_KmzFile(NULL), m_RootKmlFile(), 
+                                       m_TempRootKmlFile(), m_Cancel(false),
+                                       m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0), 
+                                       m_CurrentProduct(0), m_CurrentDepth(-1),
+                                       m_RegionOfInterestKmlGenerated(false), 
+                                       m_CenterPointVector(), m_ProductVector()                                       
 
 {
   // Add a multiple inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"), false);
+  this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
   this->AddInputDescriptor<FloatingVectorImageType>("InputLegend", otbGetTextMacro("Input Legend"), true, true);
+  // TODO
+  //this->AddTypeToInputDescriptor<SingleImageType>("InputLegend");
   this->AddInputDescriptor<FloatingVectorImageType>("InputLogo", otbGetTextMacro("Input Logos"), true);
-
+  // TODO
+  //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo");
+  
   // Initialize some values
+  // TODO : fix those values 
   m_UpperLeftCorner.Fill(1000.);
   m_UpperRightCorner.Fill(1000.);
   m_LowerLeftCorner.Fill(1000.);
   m_LowerRightCorner.Fill(1000.);
 
+  // Instanciate the caster
+  m_CastToVectorImageFilter = CastToVectorImageFilterType::New();
+  
   // Build the GUI
   this->BuildGUI();
 }
@@ -70,24 +84,38 @@ void TileExportModule::Run()
 {
   // Get & rescale intensity of the input image
   m_VectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  m_VectorImage->UpdateOutputInformation();
+  
+  // Try to get a single image
+  // If the input image is an otb::Image instead of VectorImage then cast it
+  // in Vector Image and continue the processing
+  SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage");
+  
+  if (!singleImage.IsNull() && m_VectorImage.IsNull())
+    {
+    m_CastToVectorImageFilter->SetInput(singleImage);
+    m_CastToVectorImageFilter->UpdateOutputInformation();
+    m_VectorImage = m_CastToVectorImageFilter->GetOutput();
+    }
 
+  if (m_VectorImage.IsNull())
+    {
+    MsgReporter::GetInstance()->SendError("Input Image Is null");
+    }
+  
+  m_VectorImage->UpdateOutputInformation();
+  
   // Set channel GUI
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
-
-  for (unsigned int i = 1; i <= numberOfChannel; i++)
+  
+  for (unsigned int idx = 1; idx <= numberOfChannel; idx++)
     {
     std::ostringstream val;
-    val << i;
+    val << idx;
     this->cRedChannel->add(val.str().c_str());
     this->cGreenChannel->add(val.str().c_str());
     this->cBlueChannel->add(val.str().c_str());
     }
-
-  this->cRedChannel->value(0);
-  this->cGreenChannel->value(1);
-  this->cBlueChannel->value(2);
-
+  
   // Set tile size GUI
   this->cTileSize->add("64");
   this->cTileSize->add("128");
@@ -108,57 +136,60 @@ void TileExportModule::Run()
   // Show the GUI
   this->Show();
 
-  // Add the product to the list of product
-  for (unsigned int i = 0; i < this->GetNumberOfInputDataByKey("InputImage"); i++)
+  // Get the filename
+  std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage");
+  m_CurrentImageName = this->GetCuttenFileName(fname, 0);
+  
+  // Create an information class for each new product
+  ProductInformationType newProduct;
+  newProduct.m_Id   = 0;
+  newProduct.m_Name = m_CurrentImageName;
+  newProduct.m_Description = "Image Product";
+  
+  // Activate or not the Geo group
+  if (!this->IsProductHaveMetaData(0) && gExtended->value())
     {
-    // Get the filename
-    std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-    std::string cuttenName = this->GetCuttenFileName(fname, i);
+    vgxGELatLongBoxGroup->activate();
+    }
+  
+  // Try to guess them
+  if (m_VectorImage->GetNumberOfComponentsPerPixel() > 3)
+    {
+    newProduct.m_Composition[0] = 2;
+    newProduct.m_Composition[1] = 1;
+    newProduct.m_Composition[2] = 0;
 
-    // Create an information class for each new product
-    ProductInformationType newProduct;
-    newProduct.m_Id   = i;
-    newProduct.m_Name = cuttenName;
-    newProduct.m_Description = "Image Product";
+    this->cRedChannel->value(2);
+    this->cGreenChannel->value(1);
+    this->cBlueChannel->value(0);
+    }
+  else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 3)
+    {
+    newProduct.m_Composition[0] = 0;
+    newProduct.m_Composition[1] = 1;
+    newProduct.m_Composition[2] = 2;
 
-    // Activate or not the Geo group
-    if (!this->IsProductHaveMetaData(i) && gExtended->value())
-      {
-      vgxGELatLongBoxGroup->activate();
-      }
+    this->cRedChannel->value(0);
+    this->cGreenChannel->value(1);
+    this->cBlueChannel->value(2);
+    }
+  else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 1)
+    {
+    newProduct.m_Composition[0] = 0;
+    newProduct.m_Composition[1] = 0;
+    newProduct.m_Composition[2] = 0;
 
-    // Get the current input
-    FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage", i);
-
-    // While there are multiple inputs, it is difficult to tune the
-    // gui with the right values for the channels,
-    // Try to guess them
-    if (image->GetNumberOfComponentsPerPixel() > 3)
-      {
-      newProduct.m_Composition[0] = 2;
-      newProduct.m_Composition[1] = 1;
-      newProduct.m_Composition[2] = 0;
-      }
-    else if (image->GetNumberOfComponentsPerPixel() == 3)
-      {
-      newProduct.m_Composition[0] = 0;
-      newProduct.m_Composition[1] = 1;
-      newProduct.m_Composition[2] = 2;
-      }
-    else if (image->GetNumberOfComponentsPerPixel() == 1)
-      {
-      newProduct.m_Composition[0] = 0;
-      newProduct.m_Composition[1] = 0;
-      newProduct.m_Composition[2] = 0;
-      }
-
-    // Initialize the corners with a high value
+    this->cRedChannel->value(0);
+    this->cGreenChannel->value(0);
+    this->cBlueChannel->value(0);
+    }
+  
+  // Initialize the corners with a high value
     for (unsigned int it = 0; it < newProduct.m_CornerList.Size(); it++)
       newProduct.m_CornerList[it] = 1000.;
-
+    
     // Add the product class to the list
     m_ProductVector.push_back(newProduct);
-    }
 }
 
 /**
@@ -291,17 +322,6 @@ void TileExportModule::SaveDataSet()
   // process all the input images
   m_NbOfInput = this->GetNumberOfInputDataByKey("InputImage");
 
-  // Progress bar
-  pBarProd->minimum(0.0);
-  pBarProd->maximum(1.0);
-  pBarProd->value(0);
-
-  std::ostringstream labelValueStart;
-  labelValueStart << " 0 / ";
-  labelValueStart << m_NbOfInput;
-
-  pBarProd->copy_label(labelValueStart.str().c_str());
-
   // Mutliple Inputs
   for (unsigned int i = 0; i < m_NbOfInput; i++)
     {
@@ -309,13 +329,7 @@ void TileExportModule::SaveDataSet()
       {
       break;
       }
-    // Get the filename
-    std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-    m_CurrentImageName = this->GetCuttenFileName(fname, i);
-
-    // Get the current input
-    m_VectorImage  = this->GetInputData<FloatingVectorImageType>("InputImage", i);
-
+    
     // While there are multiple inputs, it is difficult to tune the
     // gui with the right values for the channels,
     // Try to guess them
@@ -339,21 +353,11 @@ void TileExportModule::SaveDataSet()
       }
 
     // Do the tiling for the current image
-    if (this->IsProductHaveMetaData(i)) this->Tiling(i);
-    else this->ExportNonGeoreferencedProduct(i);
-
-    // Progress bar
-    float progressValue = i + 1;
-
-    std::ostringstream labelValue;
-    labelValue << progressValue;
-    labelValue << " / ";
-    labelValue << m_NbOfInput;
-
-    pBarProd->copy_label(labelValue.str().c_str());
-
-    Fl::check();
-
+    if (this->IsProductHaveMetaData(0)) 
+      this->Tiling(0);
+    else 
+      this->ExportNonGeoreferencedProduct(i);
+    
     m_CurrentProduct++;
     }
 
@@ -388,13 +392,8 @@ void TileExportModule::Tiling(unsigned int curIdx)
   outMax.Fill(255);
 
   // Build wgs ref to compute long/lat
-  OGRSpatialReference oSRS;
-  oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = NULL;
-  oSRS.exportToWkt(&wgsRef);
-
-  // Update image base information
-  m_VectorImage->UpdateOutputInformation();
+  // 4326 is the SRID number of WGS84
+  std::string wgsRef = otb::GeoInformationConversion::ToWKT(4326);
 
   // Get the image size
   SizeType size;
@@ -441,17 +440,18 @@ void TileExportModule::Tiling(unsigned int curIdx)
       }
 
     // Resample image to the max Depth
-    int sampleRatioValue = static_cast<int>(vcl_pow(2., (maxDepth - depth)));
-
+    int sampleRatioValue = 1 << (maxDepth - depth);
+    
     if (sampleRatioValue > 1)
       {
       m_StreamingShrinkImageFilter = StreamingShrinkImageFilterType::New();
-
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
+      m_StreamingShrinkImageFilter->GetStreamer()->SetAutomaticStrippedStreaming(0);
+      m_StreamingShrinkImageFilter->Update();
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
-      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput()); //m_ResampleVectorImage);
+      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
       m_VectorRescaleIntensityImageFilter->SetOutputMaximum(outMax);
 
@@ -484,12 +484,12 @@ void TileExportModule::Tiling(unsigned int curIdx)
 
       m_ResampleVectorImage = m_VectorRescaleIntensityImageFilter->GetOutput();
       }
-
+    
     m_ResampleVectorImage->UpdateOutputInformation();
-
+    
     // Get the image size
     size = m_ResampleVectorImage->GetLargestPossibleRegion().GetSize();
-
+    
     sizeX = size[0];
     sizeY = size[1];
 
@@ -541,11 +541,10 @@ void TileExportModule::Tiling(unsigned int curIdx)
         m_VectorImageExtractROIFilter->SetSizeX(extractSize[0]);
         m_VectorImageExtractROIFilter->SetSizeY(extractSize[1]);
 
-        // Set Channel to extract
-        m_VectorImageExtractROIFilter->SetChannel(m_ProductVector[m_CurrentProduct].m_Composition[0] + 1);
-        m_VectorImageExtractROIFilter->SetChannel(m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
-        m_VectorImageExtractROIFilter->SetChannel(m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
-
+        // Set Channels to extract : limited to three channels 
+        for (unsigned int idx = 0; idx < numberOfChannel && idx < 3; idx++)
+          m_VectorImageExtractROIFilter->SetChannel(m_ProductVector[m_CurrentProduct].m_Composition[idx] + 1);
+        
         // Set extract roi input
         m_VectorImageExtractROIFilter->SetInput(m_ResampleVectorImage);
 
@@ -559,8 +558,10 @@ void TileExportModule::Tiling(unsigned int curIdx)
         // Search Lat/Lon box
         m_Transform = TransformType::New();
         m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
-        m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
+        m_Transform->SetInputProjectionRef(m_ResampleVectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
+        if(!m_DEMDirectory.empty())
+          m_Transform->SetDEMDirectory(m_DEMDirectory);
         m_Transform->InstanciateTransform();
 
         InputPointType  inputPoint;
@@ -614,6 +615,10 @@ void TileExportModule::Tiling(unsigned int curIdx)
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
+
+        InputPointType testPoint;
+        testPoint[0] =  indexTile[0];
+        testPoint[1] =  indexTile[1];
         OutputPointType lowerLeftCorner = outputPoint;
 
         // Compute lower right corner
@@ -636,7 +641,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType upperLeftCorner = outputPoint;
-
+        
         /** END GX LAT LON */
 
         // Create KML - Filename - PathName - tile number - North - South - East - West
@@ -712,14 +717,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
         labelValue << nbTile;
 
         pBar->copy_label(labelValue.str().c_str());
-
-        // General progress bar
-        float nbPart = 1.0 / m_NbOfInput;
-        float increment = nbPart / nbTile;
-
-        progressValue = pBarProd->value() + increment;
-        pBarProd->value(progressValue);
-
+        
         Fl::check();
 
         y++;
@@ -763,20 +761,13 @@ TileExportModule::RegionOfInterestProcess()
 std::string
 TileExportModule::GetCuttenFileName(std::string description, unsigned int idx)
 {
-//  size_t found       = description.find_first_of(":");
-//  size_t found2      = description.find_first_of(".");
-
   std::string currentImageName;
   std::string tempName;
-//  if(found == std::string::npos ||  found2 == std::string::npos || found == found2)
-//    tempName =  description.substr(found+1, found2-found-1);
-//  else
-//    {
+
   itk::OStringStream oss;
   oss << "tiles_" << idx;
   tempName = oss.str();
-//    }
-
+  
   // Replace all the blanks in the string
   unsigned int i = 0;
   while (i < tempName.length())
@@ -784,7 +775,7 @@ TileExportModule::GetCuttenFileName(std::string description, unsigned int idx)
     if (tempName[i] != ' ') currentImageName += tempName[i];
     i++;
     }
-
+  
   return currentImageName;
 }
 
@@ -1576,76 +1567,9 @@ TileExportModule::RootKmlProcess(double north, double south, double east, double
   // Add the flag netwotk link for each input image
   this->AddNetworkLinkToRootKML(north, south, east, west, m_CurrentImageName, true, 0);
 
-  // Root kml must be the first kml created
-  // Mutliple Inputs
-  for (unsigned int i = 1; i < this->GetNumberOfInputDataByKey("InputImage"); i++)
-    {
-    if (m_Cancel)
-      {
-      break;
-      }
-
-    // Method to write a legend in the kmz
-    this->AddCurrentProductLegends(i);
-
-    // Get the filename
-    std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-    std::string currentImageName = this->GetCuttenFileName(fname, i);
-
-    // Compute the center of the image because
-    // needed to edit the flag LookAt to fly from an
-    // image to an other
-
-    if (IsProductHaveMetaData(i))
-      {
-      // Get the pĥysical coordinate of the center
-      SizeType tempSize =
-        this->GetInputData<FloatingVectorImageType>("InputImage", i)->GetLargestPossibleRegion().GetSize();
-      InputPointType tempPoint, tempPointOrigin;
-      IndexType      tempIndex, tempIndexOrigin;
-      tempIndex[0] = tempSize[0];
-      tempIndex[1] = tempSize[1];
-      tempIndexOrigin.Fill(0);
-
-      this->GetInputData<FloatingVectorImageType>("InputImage", i)->TransformIndexToPhysicalPoint(tempIndex, tempPoint);
-      this->GetInputData<FloatingVectorImageType>("InputImage", i)->TransformIndexToPhysicalPoint(tempIndexOrigin,
-                                                                                                  tempPointOrigin);
-
-      // Compute the transform
-      TransformType::Pointer tempTransform = TransformType::New();
-      tempTransform->SetInputKeywordList(this->GetInputData<FloatingVectorImageType>("InputImage",
-                                                                                     i)->GetImageKeywordlist());
-      tempTransform->SetInputProjectionRef(this->GetInputData<FloatingVectorImageType>("InputImage",
-                                                                                       i)->GetProjectionRef());
-      //tempTransform->SetOutputProjectionRef(wgsRef);
-      tempTransform->InstanciateTransform();
-
-      OutputPointType tempOutputPoint, tempOutputPointOrigin;
-      tempOutputPoint = tempTransform->TransformPoint(tempPoint);
-      tempOutputPointOrigin = tempTransform->TransformPoint(tempPointOrigin);
-
-      this->AddNetworkLinkToRootKML(tempOutputPointOrigin[1],
-                                    tempOutputPoint[1], tempOutputPointOrigin[0],
-                                    tempOutputPoint[0], currentImageName, false,
-                                    i);
-      }
-    else
-      {
-      if (vcl_abs(m_ProductVector[i].m_CornerList[0] - 1000.) > 1e-15 &&
-          vcl_abs(m_ProductVector[i].m_CornerList[1] - 1000.) > 1e-15 &&
-          vcl_abs(m_ProductVector[i].m_CornerList[2] - 1000.) > 1e-15 &&
-          vcl_abs(m_ProductVector[i].m_CornerList[3] - 1000.) > 1e-15)
-        {
-        double northi = vGELatUL->value();
-        double southi = vGELatLR->value();
-        double easti  = vGELongLR->value();
-        double westi  = vGELongUL->value();
-
-        this->AddNetworkLinkToRootKML(northi, southi, easti, westi, currentImageName, false, i);
-        }
-      }
-    }
-
+  // Method to write a legend in the kmz
+  this->AddCurrentProductLegends(0);
+  
   // Last thing to do is to close the root kml
   this->CloseRootKML();
 
@@ -1738,15 +1662,10 @@ TileExportModule::BoundingBoxKmlProcess(double north, double south, double east,
   */
 bool
 TileExportModule::
-IsProductHaveMetaData(unsigned int indexClicked)
+IsProductHaveMetaData(unsigned int itkNotUsed(indexClicked))
 {
-  // Update Output Information for the product tested
-  this->GetInputData<FloatingVectorImageType>("InputImage", indexClicked)->UpdateOutputInformation();
-
-  bool emptyProjRef = this->GetInputData<FloatingVectorImageType>("InputImage", indexClicked)->GetProjectionRef().empty();
-  bool emptyKWL     =
-    this->GetInputData<FloatingVectorImageType>("InputImage",
-                                                indexClicked)->GetImageKeywordlist().GetSize() == 0 ? true : false;
+  bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
+  bool emptyKWL     = m_VectorImage->GetImageKeywordlist().GetSize() == 0 ? true : false;
   return !emptyProjRef || !emptyKWL;
 }
 
@@ -1756,8 +1675,7 @@ IsProductHaveMetaData(unsigned int indexClicked)
 bool
 TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
-  unsigned int nbComponent =
-    this->GetInputData<FloatingVectorImageType>("InputImage", clickedIndex)->GetNumberOfComponentsPerPixel();
+  unsigned int nbComponent = m_VectorImage->GetNumberOfComponentsPerPixel();
 
   if (this->cRedChannel->value() >= static_cast<int>(nbComponent)) this->cRedChannel->value(nbComponent - 1);  // Set the RedChannel on
                                                                                                               // the component - 1
@@ -1865,9 +1783,8 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
   jpg_absolute_path << m_Path << "/0.jpg";
 
   // Write the file on the disk
-  FloatingVectorImageType::Pointer nonGeoImage = this->GetInputData<FloatingVectorImageType>("InputImage", curIdx);
   CastFilterType::Pointer          castFiler = CastFilterType::New();
-  castFiler->SetInput(nonGeoImage);
+  castFiler->SetInput(m_VectorImage);
 
   m_VectorWriter = VectorWriterType::New();
   m_VectorWriter->SetFileName(jpg_absolute_path.str().c_str());
@@ -1959,6 +1876,43 @@ TileExportModule::HandleCornersGroup()
       }
     }
 }
+/**
+ * BrowseDEM Callback
+ */
+void TileExportModule::BrowseDEM()
+{
+  const char * filename = NULL;
+
+  filename = flu_dir_chooser("Choose the folder...", "*.*","");
+  
+  if (filename == NULL)
+    {
+    otbMsgDebugMacro(<<"Empty file name!");
+    return ;
+    }
+  vDEMDirectory->value(filename);
+  
+  // Set the DEM directory
+  m_DEMDirectory = filename; 
+}
+
+/**
+ * Use DEM callback
+ */
+void TileExportModule::UseDEM()
+{
+  if (cUseDEM->value())
+    {
+    vDEMDirectory->activate();
+    bBrowseDEM->activate();
+    } 
+  else
+    {
+    vDEMDirectory->deactivate();
+    bBrowseDEM->deactivate();
+    }
+}
+
 
 } // End namespace otb
 

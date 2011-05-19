@@ -11,28 +11,28 @@ class TileExportModuleGUI {open
   } {
     Fl_Window guiMainWindow {
       label {Google Earth export data} open
-      xywh {574 171 485 600} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable size_range {490 520 490 520} visible
+      xywh {574 171 485 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable size_range {490 520 490 520} visible
     } {
       Fl_Tabs {} {
         label Informations open
-        xywh {0 15 485 595} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+        xywh {0 15 485 634} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
       } {
         Fl_Group {} {
           label {Kmz Setup} open
-          xywh {0 45 485 555} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {0 45 485 604} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Button bCancel {
             label Cancel
             callback {this->Cancel();}
-            xywh {297 567 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {297 615 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Return_Button bOk {
             label Save
             callback {this->SaveDataSet();}
-            xywh {387 568 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+            xywh {387 615 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
           }
-          Fl_Progress pBar {selected
-            xywh {18 534 450 26} box PLASTIC_DOWN_BOX selection_color 1
+          Fl_Progress pBar {
+            xywh {18 580 450 26} box PLASTIC_DOWN_BOX selection_color 1
           }
           Fl_Group {} {
             label {Output KMZ filename} open
@@ -61,12 +61,9 @@ class TileExportModuleGUI {open
               tooltip {Uncheck if using GoogleEearth version less than 5.0} xywh {283 248 140 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX value 1 color 7 selection_color 186 labelfont 1 labelsize 12 labelcolor 186
             }
           }
-          Fl_Progress pBarProd {selected
-            xywh {18 501 450 26} box PLASTIC_DOWN_BOX selection_color 1
-          }
           Fl_Group {} {
             label {Channels Parameters}
-            xywh {18 159 450 50} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 5
+            xywh {18 159 450 50} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
           } {
             Fl_Choice cRedChannel {
               label Red
@@ -121,67 +118,95 @@ class TileExportModuleGUI {open
           }
           Fl_Group vgxGELatLongBoxGroup {
             label {No Geographical Information : please Set the 4 corners coordinates} open
-            xywh {18 310 450 179} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 5 deactivate
+            xywh {18 390 450 179} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 5 deactivate
           } {
             Fl_Group {} {
               label {Upper Left} open
-              xywh {25 330 195 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {25 410 195 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELatUL {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 369 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -90 maximum 90 step 1e-06
+                xywh {90 449 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -90 maximum 90 step 1e-06
               }
               Fl_Value_Input vgxGELongUL {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 340 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {90 420 130 21} box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
             }
             Fl_Group {} {
               label {Lower Right} open
-              xywh {245 419 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {245 499 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongLR {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 428 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {303 508 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatLR {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 455 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {303 535 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
             }
             Fl_Group {} {
               label {Upper Right} open
-              xywh {245 335 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {245 415 200 66} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongUR {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 342 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {303 422 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatUR {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {303 369 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {303 449 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
             }
             Fl_Group {} {
               label {Lower Left} open
-              xywh {25 416 205 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {25 496 205 72} color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
             } {
               Fl_Value_Input vgxGELongLL {
                 label Longitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 429 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
+                xywh {90 509 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 minimum -180 maximum 180 step 1e-06
               }
               Fl_Value_Input vgxGELatLL {
                 label Latitude
                 callback {this->UpdateProductInformations();}
-                xywh {90 456 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
+                xywh {90 536 130 21} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186 when 3 minimum -90 maximum 90 step 1e-06
               }
+            }
+          }
+          Fl_Group {} {
+            label {Choose input DEM directory} open
+            xywh {20 307 450 60} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 5
+          } {
+            Fl_File_Input vDEMDirectory {
+              xywh {130 317 265 35} box PLASTIC_DOWN_BOX labelcolor 186 deactivate
+            }
+            Fl_Button bBrowseDEM {
+              label {...}
+              callback {this->BrowseDEM();}
+              xywh {410 327 40 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 deactivate
+            }
+            Fl_Check_Button cUseDEM {
+              label {Use DEM}
+              callback {if(cUseDEM->value() == 1)
+{
+  this->vDEMDirectory->activate();
+  this->bBrowseDEM->activate();
+}
+else
+{
+  this->vDEMDirectory->deactivate();
+  this->bBrowseDEM->deactivate();
+}
+this->UseDEM();}
+              xywh {30 327 85 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 186 labelsize 12 labelcolor 186 when 1
             }
           }
         }
@@ -203,5 +228,9 @@ class TileExportModuleGUI {open
   Function {StoreAssociations()} {open return_type {virtual void}
   } {}
   Function {HandleCornersGroup()} {open return_type {virtual void}
+  } {}
+  Function {UseDEM()} {open selected return_type {virtual void}
+  } {}
+  Function {BrowseDEM()} {open return_type {virtual void}
   } {}
 } 

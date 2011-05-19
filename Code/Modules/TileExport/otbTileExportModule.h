@@ -26,6 +26,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 #include "otbStreamingShrinkImageFilter.h"
 
@@ -33,7 +34,7 @@
 
 #include "itkCastImageFilter.h"
 
-#include <ogr_spatialref.h>
+//#include <ogr_spatialref.h>
 
 #include "itkTimeProbe.h"
 
@@ -91,24 +92,27 @@ public:
   typedef TypeManager::Label_Char_Precision       OutputPixelType;
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager::Labeled_Char_VectorImage   CharVectorImageType;
-
+  typedef TypeManager::Floating_Point_Image       SingleImageType;
+  
   // Region
   typedef FloatingVectorImageType::RegionType RegionType;
   typedef FloatingVectorImageType::SizeType   SizeType;
   typedef FloatingVectorImageType::IndexType  IndexType;
 
   /// Multi channels Extract ROI filter
-  typedef MultiChannelExtractROI<InternalPixelType, OutputPixelType> VectorImageExtractROIFilterType;
+  typedef MultiChannelExtractROI<InternalPixelType, 
+                                 OutputPixelType>                    VectorImageExtractROIFilterType;
 
   // Writer
-  typedef ImageFileWriter<CharVectorImageType> VectorWriterType;
+  typedef ImageFileWriter<CharVectorImageType>                       VectorWriterType;
 
   // Resampler
-  typedef StreamingShrinkImageFilter<FloatingVectorImageType, FloatingVectorImageType> StreamingShrinkImageFilterType;
+  typedef StreamingShrinkImageFilter<FloatingVectorImageType, 
+                                     FloatingVectorImageType>        StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<FloatingVectorImageType,
-      FloatingVectorImageType> VectorRescaleIntensityImageFilterType;
+                                            FloatingVectorImageType> VectorRescaleIntensityImageFilterType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;
@@ -116,14 +120,19 @@ public:
   typedef TransformType::OutputPointType OutputPointType;
 
   // Cast Image Filter
-  typedef itk::CastImageFilter<FloatingVectorImageType, CharVectorImageType> CastFilterType;
+  typedef itk::CastImageFilter<FloatingVectorImageType, 
+                               CharVectorImageType>                 CastFilterType;
 
   //
-  typedef ProductInformations                 ProductInformationType;
-  typedef std::vector<ProductInformationType> ProductInformationVectorType;
+  typedef ProductInformations                                       ProductInformationType;
+  typedef std::vector<ProductInformationType>                       ProductInformationVectorType;
+
+  /** Cast SingleImage to VectorImageType*/
+  typedef ImageToVectorImageCastFilter<SingleImageType, 
+                                       FloatingVectorImageType>     CastToVectorImageFilterType;
 
   // Timer
-  typedef itk::TimeProbe TimerType;
+  typedef itk::TimeProbe            TimerType;
 
   /** New macro */
   itkNewMacro(Self);
@@ -196,6 +205,12 @@ protected:
   /** Handle Corners coordinates group*/
   virtual void HandleCornersGroup();
 
+  /** Use dem */
+  virtual void UseDEM();
+  
+  /** Browse DEM */
+  virtual void BrowseDEM();
+
 private:
   TileExportModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -258,7 +273,7 @@ private:
   void AddCurrentProductLegends(unsigned int curProd);
 
   /** If Product selected have metadatas*/
-  bool IsProductHaveMetaData(unsigned int indexClicked);
+  bool IsProductHaveMetaData(unsigned int itkNotUsed(indexClicked));
 
   /** Method to avoid code duplication*/
   /** call the method that generates the bounding box kml*/
@@ -335,13 +350,16 @@ private:
   std::vector<std::pair<double, double> > m_CenterPointVector;
 
   // Product Info vector type
-  ProductInformationVectorType m_ProductVector;
+  ProductInformationVectorType            m_ProductVector;
 
   // Geo Corners Coordinates
-  OutputPointType m_UpperLeftCorner;
-  OutputPointType m_UpperRightCorner;
-  OutputPointType m_LowerLeftCorner;
-  OutputPointType m_LowerRightCorner;
+  OutputPointType                         m_UpperLeftCorner;
+  OutputPointType                         m_UpperRightCorner;
+  OutputPointType                         m_LowerLeftCorner;
+  OutputPointType                         m_LowerRightCorner;
+  
+  // Cast to vectorImage filter 
+  CastToVectorImageFilterType::Pointer    m_CastToVectorImageFilter;
 };
 
 } // End namespace otb
