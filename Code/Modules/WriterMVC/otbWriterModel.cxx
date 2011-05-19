@@ -343,6 +343,7 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 
     rescaler->SetOutputMinimum(minimum);
     rescaler->SetOutputMaximum(maximum);
+    rescaler->SetAutomaticInputMinMaxComputation( false );
 
     rescaler->SetInput(i2VI->GetOutput());
     writer->SetInput(rescaler->GetOutput());
