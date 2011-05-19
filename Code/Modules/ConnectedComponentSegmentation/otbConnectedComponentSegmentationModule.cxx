@@ -138,13 +138,11 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_PixelView->GetPixelDescriptionWidget()->show();
 
 
-
   // INPUT_IMAGE
   uiTmpOutputSelection->add("Input image");
 
   // Default value : INPUT_IMAGE
   uiTmpOutputSelection->value(INPUT_IMAGE);
-
 
 
 
@@ -377,7 +375,7 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
   // Define the iterators
   try
     {
-    tempFunctor(pixel,pixel);
+    tempFunctor(pixel, pixel);
     }
   catch (itk::ExceptionObject& err)
     {
@@ -588,7 +586,7 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
   try
     {
     PixelType pixel=m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
-    checkFunctor(pixel,pixel);
+    checkFunctor(pixel, pixel);
     m_IsCCExpressionOK = true;
     ui_CCExpression->color(FL_GREEN);
     ui_CCExpression->tooltip("The Expression is Valid");

@@ -106,11 +106,11 @@ public:
 
   /** New macro */
   itkNewMacro(Self)
- ;
+;
 
   /** Type macro */
   itkTypeMacro(ConnectedComponentSegmentationModule, Module)
- ;
+;
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image ImageType;
@@ -299,10 +299,10 @@ private:
   // Class attributes
 
   itkGetObjectMacro(PixelView, PixelViewType)
- ;
+;
   // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
   itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType)
- ;
+;
 
   // IO
 
