@@ -1,20 +1,20 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
 #ifndef __otbConnectedComponentSegmentationModule_cxx
 #define __otbConnectedComponentSegmentationModule_cxx
 
@@ -47,9 +47,9 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_RelabelRGBGenerator = RGBImageLayerGeneratorType::New();
   m_OBIAOpeningGenerator = RGBImageLayerGeneratorType::New();
 
-//  m_CCSegmentationLabelGenerator = LabelLayerGeneratorType::New();
-//  m_RelabelGenerator = LabelLayerGeneratorType::New();
-//  m_OBIAOpeningLabelGenerator = LabelLayerGeneratorType::New();
+  m_CCSegmentationLabelGenerator = LabelLayerGeneratorType::New();
+  m_RelabelGenerator = LabelLayerGeneratorType::New();
+  m_OBIAOpeningLabelGenerator = LabelLayerGeneratorType::New();
 
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -136,6 +136,17 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_View->GetScrollWidget()->show();
   m_View->GetZoomWidget()->show();
   m_PixelView->GetPixelDescriptionWidget()->show();
+
+
+
+  // INPUT_IMAGE
+  uiTmpOutputSelection->add("Input image");
+
+  // Default value : INPUT_IMAGE
+  uiTmpOutputSelection->value(INPUT_IMAGE);
+
+
+
 
   // Describe inputs
   this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, false);
@@ -323,6 +334,7 @@ void ConnectedComponentSegmentationModule::Run()
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(m_InputImageLayer);
   m_PixelDescriptionModel->AddLayer(m_InputImageLayer);
+  m_PixelDescriptionModel->NotifyAll();
   m_RenderingModel->Update();
 
   // other layers has to be generated
@@ -331,25 +343,8 @@ void ConnectedComponentSegmentationModule::Run()
   m_HasToGenerateRelabelLayer = true;
   m_HasToGenerateOBIAOpeningLayer = true;
 
-  // INPUT_IMAGE
-  uiTmpOutputSelection->add("Input image");
 
-  // MASK_OUTPUT
-  uiTmpOutputSelection->add("Mask Output");
-
-  //  CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
-
-  uiTmpOutputSelection->add("Segmentation output");
-
-  //  SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
-  uiTmpOutputSelection->add("Segmentation after small objects rejection");
-
-  //   OUTPUT
-  uiTmpOutputSelection->add("Filter Output");
-
-  // Default value : INPUT_IMAGE
-  uiTmpOutputSelection->value(INPUT_IMAGE);
-
+  //uiTmpOutputSelection->->deactivate();
   // Initialize the help window
   this->InitHelp();
 
@@ -378,13 +373,11 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
   CCFunctorType& tempFunctor = m_CCFilter->GetFunctor();
   tempFunctor.SetExpression(ui_CCExpression->value());
 
+  PixelType pixel=m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
   // Define the iterators
-  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage, m_InputImage->GetRequestedRegion());
-  inputIt.GoToBegin();
-
   try
     {
-    tempFunctor(inputIt.Get(), inputIt.Get());
+    tempFunctor(pixel,pixel);
     }
   catch (itk::ExceptionObject& err)
     {
@@ -478,6 +471,41 @@ void ConnectedComponentSegmentationModule::QuickAddOBIA()
 void ConnectedComponentSegmentationModule::CheckProcess()
 {
 
+  int maxVal=0;
+  uiTmpOutputSelection->remove(OUTPUT);
+  uiTmpOutputSelection->remove(SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION);
+  uiTmpOutputSelection->remove(CONNECTED_COMPONENT_SEGMENTATION_OUTPUT);
+  uiTmpOutputSelection->remove(MASK_IMAGE);
+
+  if (m_IsMaskExpressionOK)
+  {
+    uiTmpOutputSelection->add("Mask Output");
+    maxVal++;
+    if (m_IsCCExpressionOK)
+      {
+      maxVal++;
+      uiTmpOutputSelection->add("Segmentation output");
+      maxVal++;
+      uiTmpOutputSelection->add("Segmentation after small objects rejection");
+
+      if (m_IsOBIAExpressionOK)
+        {
+        uiTmpOutputSelection->add("Filter Output");
+        maxVal++;
+        }
+      }
+  }
+
+  if(uiTmpOutputSelection->value()>maxVal)
+    {
+
+    uiTmpOutputSelection->value(maxVal);
+    }
+
+  uiTmpOutputSelection->redraw();
+  this->Process();
+
+/*
   if (uiTmpOutputSelection->value() == INPUT_IMAGE)
     {
     ui_Update->activate();
@@ -510,7 +538,7 @@ void ConnectedComponentSegmentationModule::CheckProcess()
       ui_Update->activate();
     else ui_Update->deactivate();
     }
-
+*/
 }
 
 void ConnectedComponentSegmentationModule::LiveCheckMask()
@@ -527,7 +555,9 @@ void ConnectedComponentSegmentationModule::LiveCheckMask()
     if (!(m_IsMaskExpressionOK = m_MaskFilter->CheckExpression()))
       {
       ui_MaskExpression->color(FL_RED);
+      ui_MaskExpression->tooltip("The Expression is not Valid");
       m_NoMask = true;
+
       }
 
     }
@@ -554,20 +584,19 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
 
   CCFunctorType& checkFunctor = m_CCFilter->GetFunctor();
   checkFunctor.SetExpression(ui_CCExpression->value());
-  // Define the iterators
-  itk::ImageConstIterator<VectorImageType> inputIt(m_InputImage, m_InputImage->GetRequestedRegion());
-  inputIt.GoToBegin();
 
   try
     {
-    checkFunctor(inputIt.Get(), inputIt.Get());
+    PixelType pixel=m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
+    checkFunctor(pixel,pixel);
     m_IsCCExpressionOK = true;
     ui_CCExpression->color(FL_GREEN);
-    ui_CCExpression->tooltip("The Expression is Not Valid");
+    ui_CCExpression->tooltip("The Expression is Valid");
     }
   catch (itk::ExceptionObject& err)
     {
-    ui_CCExpression->tooltip(err.GetDescription());
+     ui_CCExpression->tooltip("The Expression is Not Valid");
+     err.GetDescription();
     }
 
   ui_CCExpression->redraw();
@@ -596,7 +625,7 @@ void ConnectedComponentSegmentationModule::LiveCheckOBIA()
     {
     ui_OBIAExpression->color(FL_GREEN);
     m_NoOBIAOpening = true;
-    ui_OBIAExpression->tooltip("No OBIA Opening, all labeled object are valid");
+    ui_OBIAExpression->tooltip("No OBIA Opening, all labeled objects are valid");
     }
   ui_OBIAExpression->redraw();
   this->CheckProcess();
@@ -605,6 +634,7 @@ void ConnectedComponentSegmentationModule::LiveCheckOBIA()
 
 void ConnectedComponentSegmentationModule::SetObjectMinArea()
 {
+  this->CheckProcess();
 }
 
 void ConnectedComponentSegmentationModule::UpdateTmpOutput()
@@ -629,9 +659,7 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 
   if (m_CurrentExpressionMask.compare(m_MaskFilter->GetExpression()))
     {
-
     m_HasToGenerateMaskLayer = true;
-
     }
 
   if (m_HasToGenerateMaskLayer || !m_MaskOutputReady)
@@ -647,7 +675,6 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     m_OBIAOpeningOutputReady = false;
 
     m_RenderingModel->DeleteLayerByName("Mask");
-    m_MaskFilter->SetNumberOfThreads(1);
     m_MaskFilter->SetExpression(mask_expression);
     m_CurrentExpressionMask = mask_expression;
     m_MaskGenerator->SetImage(m_MaskFilter->GetOutput());
@@ -657,9 +684,7 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 
     m_RenderingModel->AddLayer(m_MaskGenerator->GetLayer());
 
-    // m_RenderingModel->Update();
     m_MaskFilter->GetOutput()->UpdateOutputInformation();
-    // m_HasToGenerateMaskLayer=false;
 
     }
 }
@@ -694,18 +719,18 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
     m_RenderingModel->DeleteLayerByName("CCSegmentation");
 
     m_CCSegmentationGenerator->SetImage(m_CCColorMapper->GetOutput());
-//    m_CCSegmentationLabelGenerator->SetImage(m_CCFilter->GetOutput());
+    m_CCSegmentationLabelGenerator->SetImage(m_CCFilter->GetOutput());
 
     m_CCSegmentationGenerator->GenerateQuicklookOff();
     m_CCSegmentationGenerator->GenerateLayer();
     m_CCSegmentationGenerator->GetLayer()->SetName("CCSegmentation");
-/*
+
     m_CCSegmentationLabelGenerator->GenerateQuicklookOff();
     m_CCSegmentationLabelGenerator->GenerateLayer();
     m_CCSegmentationLabelGenerator->GetLayer()->SetName("CCSegmentationLabel");
-*/
-    m_RenderingModel->AddLayer(m_CCSegmentationGenerator->GetLayer());
 
+    m_RenderingModel->AddLayer(m_CCSegmentationGenerator->GetLayer());
+    m_RenderingModel->AddLayer(m_CCSegmentationLabelGenerator->GetLayer());
     // m_RenderingModel->Update();
     m_CCFilter->GetOutput()->UpdateOutputInformation();
     m_CCColorMapper->GetOutput()->UpdateOutputInformation();
@@ -743,25 +768,18 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
     m_RelabelRGBGenerator->GenerateLayer();
     m_RelabelRGBGenerator->GetLayer()->SetName("RelabelRGB");
 
-    /*
     m_RelabelGenerator->SetImage(m_CCRelabelFilter->GetOutput());
 
     m_RelabelGenerator->GenerateQuicklookOff();
     m_RelabelGenerator->GenerateLayer();
     m_RelabelGenerator->GetLayer()->SetName("Relabel");
-    */
-
 
     m_RenderingModel->AddLayer(m_RelabelRGBGenerator->GetLayer());
+    m_RenderingModel->AddLayer(m_RelabelGenerator->GetLayer());
 
-    //m_CCRelabelFilter->Update();
     m_CCRelabelFilter->GetOutput()->UpdateOutputInformation();
     m_RelabelColorMapper->GetOutput()->UpdateOutputInformation();
 
-    //m_NbOfObjectsAfterCC = m_CCRelabelFilter->GetNumberOfObjects();
-    // std::ostringstream Outputmsg;
-    // Outputmsg << m_NbOfObjectsAfterCC << " labeled objects. ";
-    // ui_OutputInfos->value(Outputmsg.str().c_str());
     m_HasToGenerateRelabelLayer = false;
     }
 }
@@ -783,7 +801,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 
     m_CCImageToCCLabelMapFilter->SetInput(m_CCRelabelFilter->GetOutput());
     m_CCImageToCCLabelMapFilter->SetBackgroundValue(0);
-    m_CCImageToCCLabelMapFilter->SetNumberOfThreads(1);
     // intermediate step : Fusion
     // TBD
 
@@ -801,8 +818,7 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_RadiometricLabelMapFilter->SetFeatureImage(m_InputImage);
 
     m_RadiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
-    // m_RadiometricLabelMapFilter->Update();
-    //   m_AttributesLabelMap = m_RadiometricLabelMapFilter->GetOutput();
+
 
     // step 4 OBIA Filtering using shape and radiometric object attributes.
     // m_RadiometricLabelMapFilter->GetOutput()->UpdateOutputInformation();
@@ -830,26 +846,23 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_RenderingModel->DeleteLayerByName("OBIA Opening");
 
     m_OBIAOpeningGenerator->SetImage(m_OBIAOpeningColorMapper->GetOutput());
-    // m_OBIAOpeningGenerator->SetImage(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
     m_OBIAOpeningGenerator->GenerateQuicklookOff();
     m_OBIAOpeningGenerator->GenerateLayer();
     m_OBIAOpeningGenerator->GetLayer()->SetName("OBIA Opening");
-    /*
+
     m_OBIAOpeningLabelGenerator->SetImage(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
 
     m_OBIAOpeningLabelGenerator->GenerateQuicklookOff();
     m_OBIAOpeningLabelGenerator->GenerateLayer();
     m_OBIAOpeningLabelGenerator->GetLayer()->SetName("OBIA Opening Label");
-    */
-    m_RenderingModel->AddLayer(m_OBIAOpeningGenerator->GetLayer());
 
-    // m_OBIAOpeningFilter->GetOutput()->UpdateOutputInformation();
+    m_RenderingModel->AddLayer(m_OBIAOpeningGenerator->GetLayer());
+    m_RenderingModel->AddLayer(m_OBIAOpeningLabelGenerator->GetLayer());
+
     m_OutputLabelMap->UpdateOutputInformation();
     m_OBIAOpeningColorMapper->GetOutput()->UpdateOutputInformation();
-    //m_NbOfObjectsAfterOBIA = m_OutputLabelMap->GetNumberOfLabelObjects();
-    //std::ostringstream Outputmsg;
-    // Outputmsg << m_NbOfObjectsAfterCC << " labeled objects." << m_NbOfObjectsAfterOBIA << " objects after OBIA.";
-    // ui_OutputInfos->value(Outputmsg.str().c_str());
+
 
     m_HasToGenerateOBIAOpeningLayer = false;
     }
@@ -894,44 +907,61 @@ void ConnectedComponentSegmentationModule::Process()
   // Layer choice
   m_MaskGenerator->GetLayer()->SetVisible(false);
   m_CCSegmentationGenerator->GetLayer()->SetVisible(false);
-//  m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(false);
+  m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(false);
   m_RelabelRGBGenerator->GetLayer()->SetVisible(false);
-//  m_RelabelGenerator->GetLayer()->SetVisible(false);
+  m_RelabelGenerator->GetLayer()->SetVisible(false);
   m_ImageGenerator->GetLayer()->SetVisible(false);
   m_OBIAOpeningGenerator->GetLayer()->SetVisible(false);
-//  m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(false);
+  m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(false);
 
-  // m_PixelDescriptionModel->ClearLayers();
+  m_PixelDescriptionModel->ClearLayers();
 
   if (uiTmpOutputSelection->value() == INPUT_IMAGE)
     {
     m_ImageGenerator->GetLayer()->SetVisible(true);
-    //  m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
+    m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
     }
 
   if (uiTmpOutputSelection->value() == MASK_IMAGE)
     {
     m_MaskGenerator->GetLayer()->SetVisible(true);
-    //   m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
+
+     m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == CONNECTED_COMPONENT_SEGMENTATION_OUTPUT)
     {
     m_CCSegmentationGenerator->GetLayer()->SetVisible(true);
-//    m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(true);
-    //  m_PixelDescriptionModel->AddLayer(m_CCSegmentationLabelGenerator->GetLayer());
+    m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(true);
+
+    BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
+    blender->SetAlpha(1);
+    m_CCSegmentationLabelGenerator->SetBlendingFunction(blender);
+
+    m_PixelDescriptionModel->AddLayer(m_CCSegmentationLabelGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION)
     {
     m_RelabelRGBGenerator->GetLayer()->SetVisible(true);
-//    m_RelabelGenerator->GetLayer()->SetVisible(true);
-    //  m_PixelDescriptionModel->AddLayer(m_RelabelGenerator->GetLayer());
+    m_RelabelGenerator->GetLayer()->SetVisible(true);
+    BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
+    blender->SetAlpha(1);
+
+    m_RelabelGenerator->SetBlendingFunction(blender);
+    m_PixelDescriptionModel->AddLayer(m_RelabelGenerator->GetLayer());
+
     }
   if (uiTmpOutputSelection->value() == OUTPUT)
     {
+
     m_OBIAOpeningGenerator->GetLayer()->SetVisible(true);
-//    m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(true);
-    //  m_PixelDescriptionModel->AddLayer(m_OBIAOpeningLabelGenerator->GetLayer());
+    m_OBIAOpeningLabelGenerator->GetLayer()->SetVisible(true);
+
+    BlendingFunctionType::Pointer blender = BlendingFunctionType::New();
+    blender->SetAlpha(1);
+    m_OBIAOpeningLabelGenerator->SetBlendingFunction(blender);
+    m_PixelDescriptionModel->AddLayer(m_OBIAOpeningLabelGenerator->GetLayer());
     }
+
   m_PixelDescriptionModel->NotifyAll();
 
   m_RenderingModel->Update();
@@ -958,39 +988,37 @@ void ConnectedComponentSegmentationModule::OK()
     // close the GUI
     this->Hide();
 
-    StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
-      streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
+     StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
+        streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
 
     streamingFilter->GetFilter()->SetInput(m_InputImage);
 
     if (m_NoMask)
       streamingFilter->GetFilter()->SetMaskExpression("1");
-    else
-      streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
+    else streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
 
     streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
     streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
 
     if (m_NoOBIAOpening)
       streamingFilter->GetFilter()->SetOBIAExpression("1");
-    else
-      streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
-
+    else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
 
     FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
                                 otbGetTextMacro("Processing entire image ..."));
+
     streamingFilter->GetStreamer()->SetTileDimensionTiledStreaming(1024);
     streamingFilter->Update();
 
     m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
 
-/*
-    m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+    /*
+     m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
 
-    m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
+     m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
 
-    this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
-*/
+     this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
+     */
     this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
 
     }
@@ -998,7 +1026,6 @@ void ConnectedComponentSegmentationModule::OK()
   this->NotifyOutputsChange();
   // Once module is closed, it is no longer busy
   this->BusyOff();
-
 
 }
 
