@@ -104,7 +104,8 @@ DEMToImageGeneratorModel
   OutputPointType geoPoint;
   geoPoint[0] = originX;
   geoPoint[1] = originY;
-  m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
+  m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->
+                    GetSecondTransform()->TransformPoint(geoPoint);
 
 }
 
