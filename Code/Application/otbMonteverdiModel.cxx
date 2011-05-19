@@ -603,6 +603,7 @@ bool MonteverdiModel::IsModuleLocked(const std::string& instanceId, std::string&
 
   // First, extract the connected components of the connections graph
   std::vector<int> component(num_vertices(m_ConnectionGraph->GetGraphContainer()));
+  connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]);
 
   otbMsgDevMacro(<<"Nb of group of connected component =" << connected_components(m_ConnectionGraph->GetGraphContainer(), &component[0]) );
   otbMsgDevMacro(<<"ConnectionGraph (nb Vertex , nb Edge) ="
