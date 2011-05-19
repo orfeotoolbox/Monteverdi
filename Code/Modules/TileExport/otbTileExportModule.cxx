@@ -37,8 +37,7 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
                                        m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0), 
                                        m_CurrentProduct(0), m_CurrentDepth(-1),
                                        m_RegionOfInterestKmlGenerated(false), 
-                                       m_CenterPointVector(), m_ProductVector()                                       
-
+                                       m_CenterPointVector(), m_ProductVector()
 {
   // Add a multiple inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"), false);
@@ -405,7 +404,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
   // Compute max depth
   int maxDepth =
     static_cast<int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                         vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+                              vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = curIdx;
 
@@ -1677,14 +1676,18 @@ TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
 {
   unsigned int nbComponent = m_VectorImage->GetNumberOfComponentsPerPixel();
 
-  if (this->cRedChannel->value() >= static_cast<int>(nbComponent)) this->cRedChannel->value(nbComponent - 1);  // Set the RedChannel on
-                                                                                                              // the component - 1
-                                                                                                              // position if the value
-                                                                                                              // exceed the number of components
+  // Set the RedChannel on
+  // the component - 1
+  // position if the value
+  // exceed the number of components
+  if (this->cRedChannel->value() >= static_cast<int>(nbComponent)) 
+    this->cRedChannel->value(nbComponent - 1);  
 
-  if (this->cGreenChannel->value() >= static_cast<int>(nbComponent)) this->cGreenChannel->value(nbComponent - 1);
+  if (this->cGreenChannel->value() >= static_cast<int>(nbComponent)) 
+    this->cGreenChannel->value(nbComponent - 1);
 
-  if (this->cBlueChannel->value() >= static_cast<int>(nbComponent)) this->cBlueChannel->value(nbComponent - 1);
+  if (this->cBlueChannel->value() >= static_cast<int>(nbComponent)) 
+    this->cBlueChannel->value(nbComponent - 1);
 
   Fl::flush();
 
@@ -1888,7 +1891,7 @@ void TileExportModule::BrowseDEM()
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
-    return ;
+    return;
     }
   vDEMDirectory->value(filename);
   
