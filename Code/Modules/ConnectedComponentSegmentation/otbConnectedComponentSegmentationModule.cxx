@@ -42,6 +42,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   // Layer Generators
   m_ImageGenerator = VectorImageLayerGeneratorType::New();
   m_MaskGenerator = ImageLayerGeneratorType::New();
+
   m_CCSegmentationGenerator = RGBImageLayerGeneratorType::New();
 
   m_RelabelRGBGenerator = RGBImageLayerGeneratorType::New();
@@ -50,6 +51,20 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_CCSegmentationLabelGenerator = LabelLayerGeneratorType::New();
   m_RelabelGenerator = LabelLayerGeneratorType::New();
   m_OBIAOpeningLabelGenerator = LabelLayerGeneratorType::New();
+
+  // we instantiate a render for the mask layer to disable outlier rejetection
+  m_MaskRenderer = StandardRenderingFunctionType::New();
+  m_MaskRenderer->SetAutoMinMax(false);
+
+  // Get the rendering function extrema parameters
+
+  ParametersType paramsMinMax;
+  paramsMinMax.SetSize(2);
+  paramsMinMax[0] = 0.0;
+  paramsMinMax[1] = 1.0;
+  m_MaskRenderer->SetParameters(paramsMinMax);
+
+  m_MaskGenerator->SetRenderingFunction(m_MaskRenderer);
 
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -678,6 +693,10 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     m_MaskGenerator->SetImage(m_MaskFilter->GetOutput());
     m_MaskGenerator->GenerateQuicklookOff();
     m_MaskGenerator->GenerateLayer();
+    m_MaskGenerator->GetLayer()->SetMinValues(0);
+    m_MaskGenerator->GetLayer()->SetMaxValues(1);
+
+
     m_MaskGenerator->GetLayer()->SetName("Mask");
 
     m_RenderingModel->AddLayer(m_MaskGenerator->GetLayer());
@@ -923,8 +942,7 @@ void ConnectedComponentSegmentationModule::Process()
   if (uiTmpOutputSelection->value() == MASK_IMAGE)
     {
     m_MaskGenerator->GetLayer()->SetVisible(true);
-
-     m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
+    m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == CONNECTED_COMPONENT_SEGMENTATION_OUTPUT)
     {
@@ -961,8 +979,8 @@ void ConnectedComponentSegmentationModule::Process()
     }
 
   m_PixelDescriptionModel->NotifyAll();
-
   m_RenderingModel->Update();
+
   this->Show();
 }
 

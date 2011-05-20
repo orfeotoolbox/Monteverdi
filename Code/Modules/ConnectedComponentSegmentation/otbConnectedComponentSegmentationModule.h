@@ -214,6 +214,12 @@ public:
   typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter<VectorImageType, LabelImageType,
       ImageType, VectorDataType> StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
+  typedef Function::RenderingFunction<ImageType::PixelType, RGBPixelType> RenderingFunctionType;
+
+  typedef Function::StandardRenderingFunction<ImageType::PixelType,
+                                                RGBPixelType> StandardRenderingFunctionType;
+  typedef StandardRenderingFunctionType::ParametersType     ParametersType;
+
   typedef enum
   {
     INPUT_IMAGE,
@@ -374,6 +380,8 @@ private:
   RGBImageLayerGeneratorType::Pointer m_CCSegmentationGenerator;
   RGBImageLayerGeneratorType::Pointer m_RelabelRGBGenerator;
   RGBImageLayerGeneratorType::Pointer m_OBIAOpeningGenerator;
+
+  RenderingFunctionType::Pointer m_MaskRenderer;
 
   LabelLayerGeneratorType::Pointer m_CCSegmentationLabelGenerator;
   LabelLayerGeneratorType::Pointer m_RelabelGenerator;
