@@ -152,14 +152,11 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_View->GetZoomWidget()->show();
   m_PixelView->GetPixelDescriptionWidget()->show();
 
-
   // INPUT_IMAGE
   uiTmpOutputSelection->add("Input image");
 
   // Default value : INPUT_IMAGE
   uiTmpOutputSelection->value(INPUT_IMAGE);
-
-
 
   // Describe inputs
   this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, false);
@@ -356,7 +353,6 @@ void ConnectedComponentSegmentationModule::Run()
   m_HasToGenerateRelabelLayer = true;
   m_HasToGenerateOBIAOpeningLayer = true;
 
-
   //uiTmpOutputSelection->->deactivate();
   // Initialize the help window
   this->InitHelp();
@@ -386,7 +382,7 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
   CCFunctorType& tempFunctor = m_CCFilter->GetFunctor();
   tempFunctor.SetExpression(ui_CCExpression->value());
 
-  PixelType pixel=m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
+  PixelType pixel = m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
   // Define the iterators
   try
     {
@@ -484,14 +480,14 @@ void ConnectedComponentSegmentationModule::QuickAddOBIA()
 void ConnectedComponentSegmentationModule::CheckProcess()
 {
 
-  int maxVal=0;
+  int maxVal = 0;
   uiTmpOutputSelection->remove(OUTPUT);
   uiTmpOutputSelection->remove(SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION);
   uiTmpOutputSelection->remove(CONNECTED_COMPONENT_SEGMENTATION_OUTPUT);
   uiTmpOutputSelection->remove(MASK_IMAGE);
 
   if (m_IsMaskExpressionOK)
-  {
+    {
     uiTmpOutputSelection->add("Mask Output");
     maxVal++;
     if (m_IsCCExpressionOK)
@@ -507,9 +503,9 @@ void ConnectedComponentSegmentationModule::CheckProcess()
         maxVal++;
         }
       }
-  }
+    }
 
-  if(uiTmpOutputSelection->value()>maxVal)
+  if (uiTmpOutputSelection->value() > maxVal)
     {
 
     uiTmpOutputSelection->value(maxVal);
@@ -518,40 +514,6 @@ void ConnectedComponentSegmentationModule::CheckProcess()
   uiTmpOutputSelection->redraw();
   this->Process();
 
-/*
-  if (uiTmpOutputSelection->value() == INPUT_IMAGE)
-    {
-    ui_Update->activate();
-    }
-
-  if (uiTmpOutputSelection->value() == MASK_IMAGE)
-    {
-    if (m_IsMaskExpressionOK)
-      ui_Update->activate();
-    else ui_Update->deactivate();
-    }
-
-  if (uiTmpOutputSelection->value() == CONNECTED_COMPONENT_SEGMENTATION_OUTPUT)
-    {
-    if (m_IsCCExpressionOK && m_IsMaskExpressionOK)
-      ui_Update->activate();
-    else ui_Update->deactivate();
-    }
-
-  if (uiTmpOutputSelection->value() == SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION)
-    {
-    if (m_IsCCExpressionOK && m_IsMaskExpressionOK)
-      ui_Update->activate();
-    else ui_Update->deactivate();
-    }
-
-  if (uiTmpOutputSelection->value() == OUTPUT)
-    {
-    if (m_IsCCExpressionOK && m_IsMaskExpressionOK && m_IsOBIAExpressionOK)
-      ui_Update->activate();
-    else ui_Update->deactivate();
-    }
-*/
 }
 
 void ConnectedComponentSegmentationModule::LiveCheckMask()
@@ -600,7 +562,7 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
 
   try
     {
-    PixelType pixel=m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
+    PixelType pixel = m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
     checkFunctor(pixel, pixel);
     m_IsCCExpressionOK = true;
     ui_CCExpression->color(FL_GREEN);
@@ -608,8 +570,8 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
     }
   catch (itk::ExceptionObject& err)
     {
-     ui_CCExpression->tooltip("The Expression is Not Valid");
-     err.GetDescription();
+    ui_CCExpression->tooltip("The Expression is Not Valid");
+    err.GetDescription();
     }
 
   ui_CCExpression->redraw();
@@ -695,7 +657,6 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     m_MaskGenerator->GenerateLayer();
     m_MaskGenerator->GetLayer()->SetMinValues(0);
     m_MaskGenerator->GetLayer()->SetMaxValues(1);
-
 
     m_MaskGenerator->GetLayer()->SetName("Mask");
 
@@ -836,7 +797,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 
     m_RadiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
 
-
     // step 4 OBIA Filtering using shape and radiometric object attributes.
     // m_RadiometricLabelMapFilter->GetOutput()->UpdateOutputInformation();
     if (m_NoOBIAOpening)
@@ -879,7 +839,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 
     m_OutputLabelMap->UpdateOutputInformation();
     m_OBIAOpeningColorMapper->GetOutput()->UpdateOutputInformation();
-
 
     m_HasToGenerateOBIAOpeningLayer = false;
     }
@@ -999,51 +958,76 @@ void ConnectedComponentSegmentationModule::OK()
   this->CheckProcess();
   this->ClearOutputDescriptors();
 
-  if (1)
+  // close the GUI
+  this->Hide();
+
+  StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
+      streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
+
+  streamingFilter->GetFilter()->SetInput(m_InputImage);
+
+  if (m_NoMask)
+    streamingFilter->GetFilter()->SetMaskExpression("1");
+  else streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
+
+  streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
+  streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
+
+  if (m_NoOBIAOpening)
+    streamingFilter->GetFilter()->SetOBIAExpression("1");
+  else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
+
+  FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
+                              otbGetTextMacro("Processing entire image ..."));
+
+  streamingFilter->GetStreamer()->SetTileDimensionTiledStreaming(1024);
+  streamingFilter->Update();
+
+  m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
+
+  /*
+   * Reprojection of the output VectorData
+   *
+   * The output of the Filter is in image physical coordinates,
+   * projection WKT applied if the input image has one
+   *
+   * We need to reproject in WGS84 if the input image is in sensor model geometry
+   */
+
+  std::string projRef = m_InputImage->GetProjectionRef();
+  ImageKeywordlist kwl = m_InputImage->GetImageKeywordlist();
+
+  if (projRef.empty() && kwl.GetSize() > 0)
     {
-    // close the GUI
-    this->Hide();
+    // image is in sensor model geometry
 
-     StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
-        streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
+    // Reproject VectorData in image projection
+    typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
 
-    streamingFilter->GetFilter()->SetInput(m_InputImage);
+    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(m_OutputVectorData);
+    vproj->SetInputKeywordList(kwl);
+    vproj->SetInputOrigin(m_InputImage->GetOrigin());
+    vproj->SetInputSpacing(m_InputImage->GetSpacing());
 
-    if (m_NoMask)
-      streamingFilter->GetFilter()->SetMaskExpression("1");
-    else streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
-
-    streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
-    streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
-
-    if (m_NoOBIAOpening)
-      streamingFilter->GetFilter()->SetOBIAExpression("1");
-    else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
-
-    FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
-                                otbGetTextMacro("Processing entire image ..."));
-
-    streamingFilter->GetStreamer()->SetTileDimensionTiledStreaming(1024);
-    streamingFilter->Update();
-
-    m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
-
-    /*
-     m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
-
-     m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
-
-     this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
-     */
-    this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
-
+    vproj->Update();
+    m_OutputVectorData = vproj->GetOutput();
     }
+
+  /*
+   m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
+   m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
+
+   this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
+   */
+  this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
 
   this->NotifyOutputsChange();
   // Once module is closed, it is no longer busy
   this->BusyOff();
-
 }
+
 
 } // End namespace otb
 
