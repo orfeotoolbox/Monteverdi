@@ -20,8 +20,9 @@
 
 #include "otbConnectedComponentSegmentationModule.h"
 #include "otbMsgReporter.h"
-
+#include <FLU/Flu_File_Chooser.h>
 #include "otbFltkFilterWatcher.h"
+#include "itksys/SystemTools.hxx"
 
 #include "otbVectorImageToImageListFilter.h"
 
@@ -959,7 +960,7 @@ void ConnectedComponentSegmentationModule::OK()
   this->ClearOutputDescriptors();
 
   // close the GUI
-  this->Hide();
+ //this->Hide();
 
   StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
       streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
@@ -999,6 +1000,7 @@ void ConnectedComponentSegmentationModule::OK()
 
   if (projRef.empty() && kwl.GetSize() > 0)
     {
+
     // image is in sensor model geometry
 
     // Reproject VectorData in image projection
@@ -1009,6 +1011,24 @@ void ConnectedComponentSegmentationModule::OK()
     vproj->SetInputKeywordList(kwl);
     vproj->SetInputOrigin(m_InputImage->GetOrigin());
     vproj->SetInputSpacing(m_InputImage->GetSpacing());
+
+    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+    Fl::check();
+    if (cfname != NULL)
+      {
+
+      if (itksys::SystemTools::FileIsDirectory(cfname))
+        {
+        vproj->SetDEMDirectory(cfname);
+        }
+      else
+        {
+        itk::OStringStream oss;
+        oss << "Invalid DEM directory " << cfname << ".";
+        MsgReporter::GetInstance()->SendError(oss.str());
+        }
+
+      }
 
     vproj->Update();
     m_OutputVectorData = vproj->GetOutput();
@@ -1026,6 +1046,8 @@ void ConnectedComponentSegmentationModule::OK()
   this->NotifyOutputsChange();
   // Once module is closed, it is no longer busy
   this->BusyOff();
+  // Close the GUI
+  this->Hide();
 }
 
 
