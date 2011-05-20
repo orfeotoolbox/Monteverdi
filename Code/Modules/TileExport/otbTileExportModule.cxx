@@ -31,12 +31,12 @@ namespace otb
  * Constructor
  */
 TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
-                                       m_HasLegend(false), m_HasLogo(false), 
-                                       m_TileSize(-1), m_KmzFile(NULL), m_RootKmlFile(), 
+                                       m_HasLegend(false), m_HasLogo(false),
+                                       m_TileSize(-1), m_KmzFile(NULL), m_RootKmlFile(),
                                        m_TempRootKmlFile(), m_Cancel(false),
-                                       m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0), 
+                                       m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0),
                                        m_CurrentProduct(0), m_CurrentDepth(-1),
-                                       m_RegionOfInterestKmlGenerated(false), 
+                                       m_RegionOfInterestKmlGenerated(false),
                                        m_CenterPointVector(), m_ProductVector()
 {
   // Add a multiple inputs
@@ -50,7 +50,7 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
   //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo");
   
   // Initialize some values
-  // TODO : fix those values 
+  // TODO : fix those values
   m_UpperLeftCorner.Fill(1000.);
   m_UpperRightCorner.Fill(1000.);
   m_LowerLeftCorner.Fill(1000.);
@@ -352,9 +352,9 @@ void TileExportModule::SaveDataSet()
       }
 
     // Do the tiling for the current image
-    if (this->IsProductHaveMetaData(0)) 
+    if (this->IsProductHaveMetaData(0))
       this->Tiling(0);
-    else 
+    else
       this->ExportNonGeoreferencedProduct(i);
     
     m_CurrentProduct++;
@@ -540,7 +540,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
         m_VectorImageExtractROIFilter->SetSizeX(extractSize[0]);
         m_VectorImageExtractROIFilter->SetSizeY(extractSize[1]);
 
-        // Set Channels to extract : limited to three channels 
+        // Set Channels to extract : limited to three channels
         for (unsigned int idx = 0; idx < numberOfChannel && idx < 3; idx++)
           m_VectorImageExtractROIFilter->SetChannel(m_ProductVector[m_CurrentProduct].m_Composition[idx] + 1);
         
@@ -1680,13 +1680,13 @@ TileExportModule::CheckAndCorrectComposition(unsigned int clickedIndex)
   // the component - 1
   // position if the value
   // exceed the number of components
-  if (this->cRedChannel->value() >= static_cast<int>(nbComponent)) 
-    this->cRedChannel->value(nbComponent - 1);  
+  if (this->cRedChannel->value() >= static_cast<int>(nbComponent))
+    this->cRedChannel->value(nbComponent - 1);
 
-  if (this->cGreenChannel->value() >= static_cast<int>(nbComponent)) 
+  if (this->cGreenChannel->value() >= static_cast<int>(nbComponent))
     this->cGreenChannel->value(nbComponent - 1);
 
-  if (this->cBlueChannel->value() >= static_cast<int>(nbComponent)) 
+  if (this->cBlueChannel->value() >= static_cast<int>(nbComponent))
     this->cBlueChannel->value(nbComponent - 1);
 
   Fl::flush();
@@ -1896,7 +1896,7 @@ void TileExportModule::BrowseDEM()
   vDEMDirectory->value(filename);
   
   // Set the DEM directory
-  m_DEMDirectory = filename; 
+  m_DEMDirectory = filename;
 }
 
 /**
@@ -1908,7 +1908,7 @@ void TileExportModule::UseDEM()
     {
     vDEMDirectory->activate();
     bBrowseDEM->activate();
-    } 
+    }
   else
     {
     vDEMDirectory->deactivate();
