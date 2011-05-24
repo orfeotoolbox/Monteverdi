@@ -75,7 +75,6 @@ protected:
   class MyChangeExtractRegionActionHandler : public ChangeExtractRegionActionHandler<TModel, TView>
   {
 public:
-    //virtual bool HandleWidgetEvent(std::string widgetId, int event)
     /** Standard class typedefs */
     typedef MyChangeExtractRegionActionHandler              Self;
     typedef ChangeExtractRegionActionHandler<TModel, TView> Superclass;
@@ -88,7 +87,7 @@ public:
 
     itkSetObjectMacro(Controller, FeatureExtractionControllerInterface);
 
-    virtual bool HandleWidgetEvent(std::string widgetId, int event)
+    virtual bool HandleWidgetEvent(const std::string & widgetId, int event)
     {
       // Declare the view and model because IsNotNull() doesn't compile with the setters...
       typename TView::Pointer view = this->GetView();
