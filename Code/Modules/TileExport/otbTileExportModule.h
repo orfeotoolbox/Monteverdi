@@ -100,14 +100,14 @@ public:
   typedef FloatingVectorImageType::IndexType  IndexType;
 
   /// Multi channels Extract ROI filter
-  typedef MultiChannelExtractROI<InternalPixelType, 
+  typedef MultiChannelExtractROI<InternalPixelType,
                                  OutputPixelType>                    VectorImageExtractROIFilterType;
 
   // Writer
   typedef ImageFileWriter<CharVectorImageType>                       VectorWriterType;
 
   // Resampler
-  typedef StreamingShrinkImageFilter<FloatingVectorImageType, 
+  typedef StreamingShrinkImageFilter<FloatingVectorImageType,
                                      FloatingVectorImageType>        StreamingShrinkImageFilterType;
 
   // Intensity Rescale
@@ -120,7 +120,7 @@ public:
   typedef TransformType::OutputPointType OutputPointType;
 
   // Cast Image Filter
-  typedef itk::CastImageFilter<FloatingVectorImageType, 
+  typedef itk::CastImageFilter<FloatingVectorImageType,
                                CharVectorImageType>                 CastFilterType;
 
   //
@@ -128,7 +128,7 @@ public:
   typedef std::vector<ProductInformationType>                       ProductInformationVectorType;
 
   /** Cast SingleImage to VectorImageType*/
-  typedef ImageToVectorImageCastFilter<SingleImageType, 
+  typedef ImageToVectorImageCastFilter<SingleImageType,
                                        FloatingVectorImageType>     CastToVectorImageFilterType;
 
   // Timer
@@ -358,7 +358,7 @@ private:
   OutputPointType                         m_LowerLeftCorner;
   OutputPointType                         m_LowerRightCorner;
   
-  // Cast to vectorImage filter 
+  // Cast to vectorImage filter
   CastToVectorImageFilterType::Pointer    m_CastToVectorImageFilter;
 };
 

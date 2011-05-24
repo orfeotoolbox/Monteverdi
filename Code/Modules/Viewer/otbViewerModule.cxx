@@ -560,7 +560,8 @@ namespace otb
     rsRegion.SetOrigin(rsOrigin);
     rsRegion.SetSize(rsSize);
     rsRegion.SetRegionProjection(image->GetProjectionRef());
-    rsRegion.SetKeywordList(image->GetImageKeywordlist());
+    if (image->GetProjectionRef().empty())
+      rsRegion.SetKeywordList(image->GetImageKeywordlist());
 
     // Set the cartographic region to the extract roi filter
     vdextract->SetRegion(rsRegion);
@@ -573,8 +574,10 @@ namespace otb
     vproj = VectorDataProjectionFilterType::New();
     vproj->SetInput(vdextract->GetOutput());
     vproj->SetInputProjectionRef(m_VectorDataList->GetNthElement(index)->GetProjectionRef());
-    vproj->SetOutputKeywordList(image->GetImageKeywordlist());
+
     vproj->SetOutputProjectionRef(image->GetProjectionRef());
+    if (image->GetProjectionRef().empty())
+      vproj->SetOutputKeywordList(image->GetImageKeywordlist());
     vproj->SetOutputOrigin(image->GetOrigin());
     vproj->SetOutputSpacing(image->GetSpacing());
     if (!m_DEMDirectory.empty())
