@@ -451,15 +451,15 @@ IF(OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 
 #------------- Connected Componenet Module Tests ---------------------------
-ADD_TEST(moTvConnectedComponentSegmentationModuleTest  ${Modules_TESTS4}
+ADD_TEST(moTvConnectedComponentSegmentationModuleTestNoMask  ${Modules_TESTS4}
 	otbConnectedComponentSegmentationModuleTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
-	${TEMP}/moTvConnectedComponentSegmentationModule.shp 
+	${TEMP}/moTvConnectedComponentSegmentationModuleNoMask.shp 
     0
-    "b3>100"
+    ""
     "distance<40"
-    1
-    10
+    "SHAPE_Elongation > 1"
+    15
 )
 
 
