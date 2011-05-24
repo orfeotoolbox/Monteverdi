@@ -351,6 +351,8 @@ InteractiveChangeDetection<TPixel>
   this->miSaveModel->activate();
   this->bDisplayResults->activate();
 
+  m_HasLearn=true;
+
   Log("SVM Model loaded");
 }
 
