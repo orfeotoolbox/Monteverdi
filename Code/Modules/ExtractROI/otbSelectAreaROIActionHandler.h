@@ -73,12 +73,12 @@ public:
    * \param event The event
    * \return The handling return code
    */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(const std::string & widgetId, int event)
   {
     // if left mouse button pressed
     if (Fl::event_button() != FL_LEFT_MOUSE)
       {
-      return false;
+        return false;
       }
 
     if (m_Model.IsNotNull() && this->GetIsActive())
