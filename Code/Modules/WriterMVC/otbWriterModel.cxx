@@ -341,6 +341,8 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 
     typename RescalerType::Pointer rescaler = RescalerType::New();
 
+    rescaler->SetInputMaximum(inputMaximum);
+    rescaler->SetInputMinimum(inputMinimum);
     rescaler->SetOutputMinimum(minimum);
     rescaler->SetOutputMaximum(maximum);
     rescaler->SetAutomaticInputMinMaxComputation( false );
