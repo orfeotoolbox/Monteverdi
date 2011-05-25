@@ -644,7 +644,6 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     this->pBusyBar->value(1);
     this->pBusyBar->show();
     Fl::check();
-
     // mask has to be regenerated, all processing has to be regenerated
     m_CCSegmentationReady = false;
     m_RelabelOutputReady = false;
@@ -686,7 +685,6 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
     this->pBusyBar->value(1);
     this->pBusyBar->show();
     Fl::check();
-
     // Functor Update
     m_CCFilter->SetMaskImage(m_MaskFilter->GetOutput());
     m_CurrentExpressionCC = ui_CCExpression->value();
@@ -774,10 +772,10 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 
   if (m_HasToGenerateOBIAOpeningLayer || !m_OBIAOpeningOutputReady)
     {
+
     this->pBusyBar->value(1);
     this->pBusyBar->show();
     Fl::check();
-
     m_CCImageToCCLabelMapFilter->SetInput(m_CCRelabelFilter->GetOutput());
     m_CCImageToCCLabelMapFilter->SetBackgroundValue(0);
     // intermediate step : Fusion
@@ -877,10 +875,6 @@ void ConnectedComponentSegmentationModule::Process()
     m_OBIAOpeningOutputReady = true;
     }
 
-  this->pBusyBar->value(0);
-  this->pBusyBar->hide();
-  Fl::check();
-
   // Layer choice
   m_MaskGenerator->GetLayer()->SetVisible(false);
   m_CCSegmentationGenerator->GetLayer()->SetVisible(false);
@@ -942,11 +936,13 @@ void ConnectedComponentSegmentationModule::Process()
   m_RenderingModel->Update();
 
   this->Show();
+  this->pBusyBar->value(0);
+  this->pBusyBar->hide();
+  Fl::check();
 }
 
 void ConnectedComponentSegmentationModule::TmpOutputSelection()
 {
-
   this->CheckProcess();
   this->Show();
 }
@@ -960,7 +956,7 @@ void ConnectedComponentSegmentationModule::OK()
   this->ClearOutputDescriptors();
 
   // close the GUI
- //this->Hide();
+  //this->Hide();
 
   StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
       streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
