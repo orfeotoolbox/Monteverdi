@@ -21,6 +21,7 @@
 #include "itkImageRegion.h"
 
 #include "otbForwardSensorModel.h"
+#include "otbFltkFilterWatcher.h"
 
 namespace otb
 {
@@ -113,6 +114,9 @@ void ExtractROIModule::Run()
 
     m_Generator = LayerGeneratorType::New();
     m_Generator->SetImage(image);
+
+    FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20,
+                                otbGetTextMacro("Generating QuickLook ..."));
     m_Generator->GenerateLayer();
     m_Model->AddLayer(m_Generator->GetLayer());
 
@@ -126,7 +130,6 @@ void ExtractROIModule::Run()
       m_Transform->InstanciateTransform();
 
       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
-
       if (isNotAProjection)
         {
         vLong1->deactivate();
@@ -156,6 +159,9 @@ void ExtractROIModule::Run()
     /** Add view */
     m_VectorGenerator = VectorLayerGeneratorType::New();
     m_VectorGenerator->SetImage(vectorImage);
+
+    FltkFilterWatcher qlwatcher(m_VectorGenerator->GetProgressSource(), 0, 0, 200, 20,
+                                otbGetTextMacro("Generating QuickLook ..."));
     m_VectorGenerator->GenerateLayer();
     m_Model->AddLayer(m_VectorGenerator->GetLayer());
 
