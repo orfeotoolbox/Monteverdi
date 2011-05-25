@@ -340,6 +340,7 @@ ${INPUTDATA}/Capitole-Shadows.shp
 ${TEMP}/vecTvVectorizationModuleTestOutput.kml
 ${INPUTDATA}/DEM/srtm_directory
 )
+SET_TESTS_PROPERTIES(vecTvVectorizationModuleTest PROPERTIES DEPENDS moTvVectorizationClassification)
 
 #-------------  Object Labeling Module 
 ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
@@ -399,7 +400,7 @@ ${TEMP}/moTvVectorizationClassificationMiniPipeline.shp
 ${TEMP}/moTvVectorizationClassificationMiniPipeline.tif
 ${INPUTDATA}/DEM/srtm_directory
 )
-
+SET_TESTS_PROPERTIES(moTvVectorizationClassification PROPERTIES DEPENDS moTvMeanShiftModuleTest)
 
 
 #------------- Mean Shift Clustering Module Tests ---------------------------

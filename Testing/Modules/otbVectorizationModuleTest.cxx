@@ -60,9 +60,10 @@ int otbVectorizationModuleTest(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
   std::cout << "Input image wrapper: " << wrapperIn << std::endl;
   module->AddInputByKey("InputImage", wrapperIn);
+  std::cout << "AddInputByKey => OK" <<std::endl;
 
   module->Start();
-
+  std::cout << "module->Start() => OK" <<std::endl;
   
   if(argc>4)
     {
