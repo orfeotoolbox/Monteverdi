@@ -235,8 +235,8 @@ void ExtractROIModule::Run()
 
     lIndexStart[0]  = static_cast<long int>(vStartX->value());
     lIndexStart[1]  = static_cast<long int>(vStartY->value());
-    lIndexEnd[0]    = static_cast<long int>(lIndexStart[0] + vSizeX->value());
-    lIndexEnd[1]    = static_cast<long int>(lIndexStart[1] + vSizeY->value());
+    lIndexEnd[0]    = static_cast<long int>(lIndexStart[0] + vSizeX->value() - 1);
+    lIndexEnd[1]    = static_cast<long int>(lIndexStart[1] + vSizeY->value() - 1);
 
     if (!image.IsNull() && vectorImage.IsNull())
       {
