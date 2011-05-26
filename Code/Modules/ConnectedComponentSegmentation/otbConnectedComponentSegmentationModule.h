@@ -229,12 +229,20 @@ public:
     OUTPUT,
   } TmpOutputEnumType;
 
-public :
+public:
 
   /** Expression live checking */
-   virtual void LiveCheckCC();
-   virtual void LiveCheckMask();
-   virtual void LiveCheckOBIA();
+  virtual void LiveCheckCC();
+  virtual void LiveCheckMask();
+  virtual void LiveCheckOBIA();
+
+  /** DEM directory accessors. */
+  itkGetConstMacro(DEMPath, std::string);
+  itkSetMacro(DEMPath, std::string);
+
+  /** Use DEM or not accessor. */
+  itkGetMacro(UseDEM, bool);
+  itkSetMacro(UseDEM, bool);
 
 protected:
   /** Constructor */
@@ -298,6 +306,7 @@ protected:
   virtual void UpdateCCFormulaVariablesList();
   virtual void UpdateOBIAFormulaVariablesList();
 
+
 private:
   ConnectedComponentSegmentationModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -305,10 +314,13 @@ private:
   // Class attributes
 
   itkGetObjectMacro(PixelView, PixelViewType)
-;
+  ;
   // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
   itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType)
 ;
+
+
+
 
   // IO
 
@@ -349,6 +361,13 @@ private:
   std::string m_CurrentExpressionMask;
   std::string m_CurrentExpressionCC;
   std::string m_CurrentExpressionOBIA;
+
+  /** DEM directory path. */
+   std::string                   m_DEMPath;
+
+   /** Use DEM or not. */
+   bool                          m_UseDEM;
+
 
   unsigned int m_MinObjectSize;
 
