@@ -62,6 +62,7 @@ void VectorizationModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void VectorizationModule::Run()
 {
+  std::cout << "VectorizationModule::Run() ..." << std::endl;
   // Untill window closing, module will be busy
   this->BusyOn();
   
@@ -69,8 +70,10 @@ void VectorizationModule::Run()
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
   
+  std::cout << "Number of VD Input: " << this->GetNumberOfInputDataByKey("VectorData") <<std::endl;
   if(this->GetNumberOfInputDataByKey("VectorData") > 0)
     {
+    std::cout << "Number of VD Input > 0" << std::endl;
     const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
     Fl::check();
     if(cfname != NULL)
@@ -96,6 +99,7 @@ void VectorizationModule::Run()
   // One of this pointer will be NULL:
   if (fpvImage.IsNotNull())
     {
+    std::cout << "Input image is not null (" << fpvImage.IsNotNull() << ")"<< std::endl;
     // Process the input as an FloatingVectorImageType
     m_View->BuildInterface();
     m_Model->SetImage(fpvImage);
@@ -105,18 +109,21 @@ void VectorizationModule::Run()
     {
     itkExceptionMacro(<< "Input image is NULL.");
     }
-  
+  std::cout << "m_View->BuildInterface() and m_Model->SetImage() DONE "<< std::endl;
   
   for( unsigned int i=0; i<this->GetNumberOfInputDataByKey("VectorData"); i++ )
     {
+    std::cout << "Add Vector Data ("<< i << "/" << this->GetNumberOfInputDataByKey("VectorData") <<")"<< std::endl;
     VectorDataType::Pointer vdata = this->GetInputData<VectorDataType>("VectorData", i);
     if(vdata.IsNotNull())
       {
       // Load the vector data (still empty otherwise !!!)
       vdata->Update();
+      std::cout << "Update the Vector Data "<< std::endl;
       if (vdata->Size() <= 1000)
         {
         m_Controller->AddVectorData(vdata);
+        std::cout << "m_Controller->AddVectorData(vdata) DONE "<< std::endl;
         }
       else
         {
@@ -128,7 +135,7 @@ void VectorizationModule::Run()
       itkExceptionMacro(<< "Input vector data is NULL.");
       }
     }
-  
+  std::cout << "VectorizationModule::Run() DONE" << std::endl;
   
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...

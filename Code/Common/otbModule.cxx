@@ -196,6 +196,7 @@ void Module::LoadCachedData(const DataObjectWrapper& data, const std::string& ke
  * protected virtual run method */
 void Module::Start()
 {
+  std::cout << "Module::Start() ..." << std::endl;
   // Check input parameters
   for (InputDataDescriptorMapType::const_iterator it = m_InputsMap.begin(); it != m_InputsMap.end(); ++it)
     {
@@ -206,6 +207,7 @@ void Module::Start()
     }
   // Once parameters have been checked, the run method can be triggered.
   this->Run();
+  std::cout << "Module::Start() DONE" << std::endl;
 }
 
 /** The custom run command */
