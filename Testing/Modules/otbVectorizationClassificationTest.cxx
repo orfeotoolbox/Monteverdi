@@ -56,17 +56,15 @@ int otbVectorizationClassification(int argc, char* argv[])
   VDReaderType::Pointer vdReader = VDReaderType::New();
   vdReader->SetFileName(vdname);
   vdReader->Update();
-  std::cout << "VD Reader Update => OK" <<std::endl;
+
   // Image reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-  std::cout << "IMG Reader GenerateOutputInformation => OK" << static_cast<ImageType::Pointer>(reader->GetOutput())<<std::endl;
+
   // Add Wrapper Input image
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout << "Create DataObjectWrapper => OK" <<std::endl;
   module1->AddInputByKey("InputImage", wrapperIn);
-  std::cout << "AddInputByKey => OK" <<std::endl;
 
   module1->Start();
 

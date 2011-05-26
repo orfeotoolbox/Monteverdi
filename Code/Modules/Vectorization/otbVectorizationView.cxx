@@ -102,7 +102,6 @@ void
 VectorizationView
 ::BuildInterface()
 {
-  std::cout << "VectorizationView::BuildInterface() ..." << std::endl;
   if (!m_Controller)
     {
     itkExceptionMacro(<< "Controller is not set, can not build view.");
@@ -115,7 +114,6 @@ VectorizationView
 
   // Build the fltk code
   this->CreateGUI();
-  std::cout << "this->CreateGUI() DONE" << std::endl;
 
   // Display navigation modes
   vNavigationMode->add(
@@ -131,7 +129,6 @@ VectorizationView
   // Show
   this->Show();
   this->InitColor();
-  std::cout << "VectorizationView::BuildInterface() DONE" << std::endl;
 }
 
 
@@ -139,31 +136,24 @@ void
 VectorizationView
 ::InitColor()
 {
-  std::cout << "VectorizationView::InitColor() ..." << std::endl;
   Fl::check();
   m_Color =  m_VectorDataGlComponent->GetColor();
-  std::cout << "m_Color: " << m_Color <<std::endl;
-  
+
+  // Code commented to avoid segfault with crontab and dora nightly
   /*fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
            static_cast<unsigned char>((double)(255) * m_Color[1]),
-           static_cast<unsigned char>((double)(255) * m_Color[2]));
-  std::cout << " fl_color() OK" <<std::endl;*/
+           static_cast<unsigned char>((double)(255) * m_Color[2]));*/
   Fl::check();
-  std::cout << " Fl::check() OK" <<std::endl;
   
-  // Change the color of the text
+  // Init the color of the text
   //bColor->color(fl_color());
-  bColor->color(FL_RED);
+  bColor->color(FL_RED); // set directly to red color
   bColor->redraw();
-  std::cout << "bColor->redraw() OK" <<std::endl;
   
   vAlpha->value(m_Color[3]);
   vAlpha->redraw();
-  std::cout << "vAlpha->redraw() OK" <<std::endl;
   sAlpha->value(m_Color[3]);
   sAlpha->redraw();
-  std::cout << "sAlpha->redraw() OK" <<std::endl;
-  std::cout << "VectorizationView::InitColor() DONE" << std::endl;
 }
 
 void
@@ -189,7 +179,6 @@ void
 VectorizationView
 ::Show()
 {
-  std::cout << "VectorizationView::Show() ..." << std::endl;
   wMainWindow->position(0, 45);
   wMainWindow->show();
 
@@ -228,7 +217,6 @@ VectorizationView
   
   // Update the tree
   m_VectorDataTreeBrowser->show();
-  std::cout << "VectorizationView::Show() DONE" << std::endl;
 }
 
 void

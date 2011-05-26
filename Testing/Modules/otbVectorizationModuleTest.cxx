@@ -27,8 +27,6 @@ int otbVectorizationModuleTest(int argc, char* argv[])
   otb::VectorizationModule::Pointer specificModule = otb::VectorizationModule::New();
   otb::Module::Pointer              module = specificModule.GetPointer();
 
-  std::cout << "Module: " << module << std::endl;
-
   // Put in the tests
   const char * infname  = argv[1];
   const char * vdname   = argv[2];
@@ -58,12 +56,9 @@ int otbVectorizationModuleTest(int argc, char* argv[])
 
   // Add Wrapper Input image
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
-  std::cout << "Input image wrapper: " << wrapperIn << std::endl;
   module->AddInputByKey("InputImage", wrapperIn);
-  std::cout << "AddInputByKey => OK" <<std::endl;
 
   module->Start();
-  std::cout << "module->Start() => OK" <<std::endl;
   
   if(argc>4)
     {
