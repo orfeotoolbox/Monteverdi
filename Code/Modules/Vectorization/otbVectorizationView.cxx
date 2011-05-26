@@ -102,6 +102,7 @@ void
 VectorizationView
 ::BuildInterface()
 {
+  std::cout << "VectorizationView::BuildInterface() ..." << std::endl;
   if (!m_Controller)
     {
     itkExceptionMacro(<< "Controller is not set, can not build view.");
@@ -114,6 +115,7 @@ VectorizationView
 
   // Build the fltk code
   this->CreateGUI();
+  std::cout << "this->CreateGUI() DONE" << std::endl;
 
   // Display navigation modes
   vNavigationMode->add(
@@ -129,6 +131,7 @@ VectorizationView
   // Show
   this->Show();
   this->InitColor();
+  std::cout << "VectorizationView::BuildInterface() DONE" << std::endl;
 }
 
 
@@ -136,6 +139,7 @@ void
 VectorizationView
 ::InitColor()
 {
+  std::cout << "VectorizationView::InitColor() ..." << std::endl;
   Fl::check();
   m_Color =  m_VectorDataGlComponent->GetColor();
   
@@ -153,6 +157,7 @@ VectorizationView
   vAlpha->redraw();
   sAlpha->value(m_Color[3]);
   sAlpha->redraw();
+  std::cout << "VectorizationView::InitColor() DONE" << std::endl;
 }
 
 void
@@ -178,6 +183,7 @@ void
 VectorizationView
 ::Show()
 {
+  std::cout << "VectorizationView::Show() ..." << std::endl;
   wMainWindow->position(0, 45);
   wMainWindow->show();
 
@@ -216,6 +222,7 @@ VectorizationView
   
   // Update the tree
   m_VectorDataTreeBrowser->show();
+  std::cout << "VectorizationView::Show() DONE" << std::endl;
 }
 
 void
