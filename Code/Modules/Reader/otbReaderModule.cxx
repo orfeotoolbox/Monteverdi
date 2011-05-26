@@ -92,9 +92,8 @@ void ReaderModule::Analyse()
       {
       vDataset->add(m_Desc[itSubDataset].c_str());
       }
-    vDataset->set_visible();
     vDataset->value(0);
-    vDataset->activate();
+    vDataset->activate()
 
     vType->value(1); // We assume that hdf file is composed of real image
     bOk->activate();
