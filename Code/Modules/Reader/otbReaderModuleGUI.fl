@@ -10,7 +10,7 @@ class ReaderModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wFileChooserWindow {
-      label {Open dataset} open selected
+      label {Open dataset} open
       xywh {628 357 365 260} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
@@ -42,8 +42,8 @@ class ReaderModuleGUI {open
         xywh {100 106 195 24} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 185
       }
       Fl_Choice vDataset {
-        label {You try to open a hdf file, please select a sub dataset}
-        callback {this->DatasetChanged();} open
+        label {Please select the hdf sub dataset you want to open}
+        callback {this->DatasetChanged();} open selected
         xywh {100 161 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 hide
       } {}
     }
