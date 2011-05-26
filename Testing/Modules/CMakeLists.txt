@@ -1,7 +1,11 @@
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(BASELINE_APPLICATION_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
+SET(DEMDATA ${OTB_DATA_ROOT}/Examples/DEM_srtm)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
+
+SET(TOL 0.0)
 
 # Large Input 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -451,32 +455,47 @@ IF(OTB_USE_MAPNIK)
 	)
 ENDIF(OTB_USE_MAPNIK)
 
-#------------- Connected Componenet Module Tests ---------------------------
+
+
+
+
+
+#------------- Connected Component Module Tests ---------------------------
+
+
+
 ADD_TEST(moTvConnectedComponentSegmentationModuleTestNoMask  ${Modules_TESTS4}
-	otbConnectedComponentSegmentationModuleTest
+	 --compare-ogr ${TOL}
+	${BASELINE_APPLICATION_FILES}/ccTvConnectedComponentSegmentationNoMask.shp 
+	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp 
+    otbConnectedComponentSegmentationModuleTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
-	${TEMP}/moTvConnectedComponentSegmentationModuleNoMask.shp 
+	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp 
     0
-    ""
-    "distance<40"
-    "SHAPE_Elongation > 1"
+    "1"
+    "distance<10"
+    "SHAPE_Elongation > 8"
     15
 )
 
 
 # this test is very long
-#IF(OTB_DATA_USE_LARGEINPUT)
-#ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
-#    otbConnectedComponentSegmentationModuleTest
-#    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-#    ${TEMP}/moTvConnectedComponentSegmentationModuleQB.shp 
-#    0
-#    "b3>100"
-#    "distance<40"
-#    1
-#    10
-#)
-#ENDIF(OTB_DATA_USE_LARGEINPUT)
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
+     --compare-ogr ${TOL}
+    ${BASELINE_APPLICATION_FILES}/ccTvConnectedComponentSegmentationLargeInput.shp
+    ${TEMP}/ccTvConnectedComponentSegmentationLargeInput.shp 
+    otbConnectedComponentSegmentationModuleTest
+    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+    ${TEMP}/ccTvConnectedComponentSegmentationLargeInput.shp
+    0
+    "intensity >300"
+    "distance<20"
+    "SHAPE_Elongation > 5"
+    100
+    ${DEMDATA}
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx

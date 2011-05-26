@@ -35,10 +35,20 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
   const char * outvdname = argv[2];
   bool run = atoi(argv[3]);
 
-  const char * maskExpression =  argv[4];
-  const char * ccExpression =  argv[5];
-  const char * obiaExpression =  argv[6];
-  int minObjSize =  atoi(argv[7]);
+  const char * maskExpression = argv[4];
+  const char * ccExpression = argv[5];
+  const char * obiaExpression = argv[6];
+  int minObjSize = atoi(argv[7]);
+  const char * DEMDirectory;
+
+  if (argc == 9)
+    {
+    DEMDirectory = argv[8];
+    }
+  else
+    {
+    DEMDirectory = NULL;
+    }
 
   typedef otb::ConnectedComponentSegmentationModule::VectorImageType VectorImageType;
   typedef otb::ConnectedComponentSegmentationModule::VectorDataType VectorDataType;
@@ -85,6 +95,14 @@ int otbConnectedComponentSegmentationModuleTest(int argc, char* argv[])
 
   // Exit the GUI and save the result
   ///specificModule->ui_Update->do_callback();
+
+  // test DEMDictory
+
+  if (DEMDirectory != NULL)
+    {
+    specificModule->SetUseDEM(true);
+    specificModule->SetDEMPath(DEMDirectory);
+    }
 
   specificModule->ui_Ok->do_callback();
 
