@@ -142,7 +142,7 @@ VectorizationView
   // Code commented to avoid segfault with crontab and dora nightly
   /*fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
            static_cast<unsigned char>((double)(255) * m_Color[1]),
-           static_cast<unsigned char>((double)(255) * m_Color[2]));*/
+           static_cast<unsigned char>((double)(255) * m_Color[2])); */
   Fl::check();
   
   // Init the color of the text
