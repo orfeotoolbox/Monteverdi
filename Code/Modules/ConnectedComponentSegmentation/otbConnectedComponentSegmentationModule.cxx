@@ -977,7 +977,6 @@ void ConnectedComponentSegmentationModule::OK()
   FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
                               otbGetTextMacro("Processing entire image ..."));
 
-  streamingFilter->GetStreamer()->SetTileDimensionTiledStreaming(1024);
   streamingFilter->Update();
 
   m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
