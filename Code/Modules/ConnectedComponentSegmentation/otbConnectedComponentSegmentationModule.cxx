@@ -120,6 +120,10 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_RelabelOutputReady = false;
   m_OBIAOpeningOutputReady = false;
 
+  //use a DEM
+  m_UseDEM = false;
+  m_DEMPath = "";
+
   // Build the GUI
   this->CreateGUI();
   this->pBusyBar->minimum(0);
@@ -1007,8 +1011,17 @@ void ConnectedComponentSegmentationModule::OK()
     vproj->SetInputOrigin(m_InputImage->GetOrigin());
     vproj->SetInputSpacing(m_InputImage->GetSpacing());
 
-    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
-    Fl::check();
+    const char *cfname;
+    if (!m_UseDEM)
+      {
+
+      cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+      Fl::check();
+      }
+    else
+      {
+      cfname = m_DEMPath.c_str();
+      }
     if (cfname != NULL)
       {
 
@@ -1022,7 +1035,6 @@ void ConnectedComponentSegmentationModule::OK()
         oss << "Invalid DEM directory " << cfname << ".";
         MsgReporter::GetInstance()->SendError(oss.str());
         }
-
       }
 
     vproj->Update();
