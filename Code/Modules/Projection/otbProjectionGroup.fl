@@ -21,7 +21,7 @@ class ProjectionGroup {open
         xywh {5 9 420 443} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group {} {
-          label {Output image} open
+          label {Output image} open selected
           xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1
         } {
           Fl_Choice guiMapSelection {
@@ -357,21 +357,21 @@ this->UpdateInputTMTransform();}
           }
         }
         Fl_Group {} {
-          label Settings
+          label Settings open
           xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Wizard m_InterpType {
-            label {Interpolator parameters}
+            label {Interpolator parameters} open
             xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 align 5
           } {
             Fl_Group guiLinear {open
-              xywh {44 119 356 121} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186
+              xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 hide
             } {}
             Fl_Group guiNearest {open
-              xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
+              xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
             } {}
-            Fl_Group guiSinC {
-              xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
+            Fl_Group guiSinC {open
+              xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
             } {
               Fl_Choice guiSincWindow {
                 label Interpolator
@@ -414,8 +414,8 @@ this->UpdateInputTMTransform();}
                 xywh {174 196 160 25}
               }
             }
-            Fl_Group guiSplines {
-              xywh {44 124 356 121} labelsize 12 hide
+            Fl_Group guiSplines {open
+              xywh {44 119 356 126} labelsize 12 hide
             } {
               Fl_Counter guiSplineOrder {
                 label Radius
@@ -423,8 +423,8 @@ this->UpdateInputTMTransform();}
                 xywh {174 174 160 25} align 4 minimum 0 maximum 5 step 1
               }
             }
-            Fl_Group guiBCO {open
-              xywh {44 124 356 121} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
+            Fl_Group guiBCO {
+              xywh {44 119 356 126} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 hide
             } {
               Fl_Counter guiBCORadius {
                 label {BCO Radius}
@@ -531,7 +531,7 @@ vAverageElevation->deactivate();
         }
       }
       Fl_Progress pBusyBar {
-        label {Computing Quicklook} selected
+        label {Computing Quicklook}
         xywh {5 469 330 15} box PLASTIC_DOWN_BOX selection_color 1 labelsize 12 labelcolor 186 hide
       }
       Fl_Button guiOK {
