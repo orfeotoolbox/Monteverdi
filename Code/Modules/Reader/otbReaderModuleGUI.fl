@@ -44,7 +44,7 @@ class ReaderModuleGUI {open
       Fl_Choice vDataset {
         label {Please select the hdf sub dataset you want to open}
         callback {this->DatasetChanged();} open selected
-        xywh {100 161 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 hide
+        xywh {100 161 195 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 deactivate
       } {}
     }
   }

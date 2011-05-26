@@ -95,11 +95,11 @@ protected:
   virtual void DatasetChanged();
   virtual void Hide();
 
-  void OpenOpticalImage();
+  void OpenRealImage();
 
-  void OpenSarImage();
+  void OpenComplexImage();
 
-  void OpenMultiSarImage();
+  void OpenMultiComplexImage();
 
   void OpenVector();
 

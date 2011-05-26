@@ -44,8 +44,8 @@ ReaderModule::ReaderModule()
 
   // Expose supported data type:
   vType->add(otbGetTextMacro("Unknown"));
-  vType->add(otbGetTextMacro("Optical image"));
-  vType->add(otbGetTextMacro("SAR image"));
+  vType->add(otbGetTextMacro("Real image"));
+  vType->add(otbGetTextMacro("Complex image"));
   vType->add(otbGetTextMacro("Vector Data"));
   vType->value(0);
 
@@ -94,8 +94,9 @@ void ReaderModule::Analyse()
       }
     vDataset->set_visible();
     vDataset->value(0);
+    vDataset->activate();
 
-    vType->value(1); // We assume that hdf file is composed of optical image
+    vType->value(1); // We assume that hdf file is composed of real image
     bOk->activate();
     }
   else
@@ -140,7 +141,7 @@ void ReaderModule::Analyse()
             // If we are still here, this is a readable image
             typeFound = true;
             break;
-            // handle the optical case
+            // handle the real case
           default:
             vType->value(1);
             // If we are still here, this is a readable image
@@ -206,13 +207,13 @@ void ReaderModule::OpenDataSet()
     switch (vType->value())
       {
       case 1:
-        this->OpenOpticalImage();
+        this->OpenRealImage();
         break;
       case 2:
         if (m_MultibandComplexImage)
           {
           // Only sar image readable by gdal can go here
-          this->OpenMultiSarImage();
+          this->OpenMultiComplexImage();
           }
         else
           {
@@ -222,7 +223,7 @@ void ReaderModule::OpenDataSet()
             if ( (!(dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex()) && (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2))
               {
               itk::OStringStream oss;
-              oss << "You try to open a two bands image of scalar as a SAR image, \n" << \
+              oss << "You try to open a two bands image of scalar as a Complex image, \n" << \
                      "we consider that first band is Real part and second band is Imaginary part.\n"<< \
                      "This warning message occurred with: " << vFilePath->value();
               MsgReporter::GetInstance()->SendWarning(oss.str());
@@ -230,14 +231,14 @@ void ReaderModule::OpenDataSet()
             else if (m_FPVReader->GetImageIO()->GetNumberOfComponents()  > 2)
               {
               itk::OStringStream oss;
-              oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a SAR image, \n" << \
+              oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a Complex image, \n" << \
                      "we consider only that first band is Real part and second band is Imaginary part. \n"<< \
                      "Rest of data are not considered.\n" << \
                      "This warning message occurred with: " << vFilePath->value();
               MsgReporter::GetInstance()->SendWarning(oss.str());
               }
             }
-          this->OpenSarImage();
+          this->OpenComplexImage();
           }
         break;
       case 3:
@@ -274,10 +275,10 @@ void ReaderModule::TypeChanged()
 
 void ReaderModule::DatasetChanged()
 {
-       vName->value(m_Desc[vDataset->value()].c_str());
+  vName->value(m_Desc[vDataset->value()].c_str());
 }
 
-void ReaderModule::OpenOpticalImage()
+void ReaderModule::OpenRealImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
@@ -309,7 +310,7 @@ void ReaderModule::OpenOpticalImage()
   this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
-void ReaderModule::OpenMultiSarImage()
+void ReaderModule::OpenMultiComplexImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
@@ -326,7 +327,7 @@ void ReaderModule::OpenMultiSarImage()
   this->AddOutputDescriptor(m_VComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
-void ReaderModule::OpenSarImage()
+void ReaderModule::OpenComplexImage()
 {
   // First, clear any existing output
   this->ClearOutputDescriptors();
