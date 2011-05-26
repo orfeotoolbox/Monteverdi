@@ -144,15 +144,16 @@ VectorizationView
   m_Color =  m_VectorDataGlComponent->GetColor();
   std::cout << "m_Color: " << m_Color <<std::endl;
   
-  fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
+  /*fl_color(static_cast<unsigned char>((double)(255) * m_Color[0]),
            static_cast<unsigned char>((double)(255) * m_Color[1]),
            static_cast<unsigned char>((double)(255) * m_Color[2]));
-  std::cout << " fl_color() OK" <<std::endl;
+  std::cout << " fl_color() OK" <<std::endl;*/
   Fl::check();
   std::cout << " Fl::check() OK" <<std::endl;
   
   // Change the color of the text
-  bColor->color(fl_color());
+  //bColor->color(fl_color());
+  bColor->color(FL_RED);
   bColor->redraw();
   std::cout << "bColor->redraw() OK" <<std::endl;
   
