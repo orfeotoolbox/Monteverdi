@@ -10,7 +10,7 @@ class SARPolarimetrySinclairModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {SAR Sinclair conversion} open selected
+      label {Sinclair matrix to} open
       xywh {670 166 400 270} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 270 0 0} visible
     } {
       Fl_Button {} {
@@ -35,31 +35,31 @@ class SARPolarimetrySinclairModuleGUI {open
       }
       Fl_Check_Button rb_CirCov {
         label {Circular covariance matrix}
-        xywh {85 17 230 20} down_box DOWN_BOX labelcolor 186
+        tooltip {Available if at least VH (or HV image) has been set.} xywh {85 17 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_Coh {
         label {Coherency matrix}
-        xywh {85 47 230 20} down_box DOWN_BOX labelcolor 186
+        tooltip {Available if at least VH (or HV image) has been set.} xywh {85 47 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_Cov {
         label {Covariance matrix}
-        xywh {85 77 230 20} down_box DOWN_BOX labelcolor 186
+        tooltip {Available if at least VH (or HV image) has been set.} xywh {85 77 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_Mue {
         label {Mueller matrix}
-        xywh {85 107 230 20} down_box DOWN_BOX labelcolor 186
+        tooltip {Available if VH and HV images has been set.} xywh {85 107 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_RecCov {
-        label {Reciprocal Covariance}
-        xywh {85 136 230 21} down_box DOWN_BOX labelcolor 186
+        label {Reciprocal covariance matrix}
+        tooltip {Available if VH and HV images has been set.} xywh {85 136 230 21} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_RecCirCoh {
-        label {Reciprocal Circular Coherency}
-        xywh {85 167 230 20} down_box DOWN_BOX labelcolor 186
+        label {Reciprocal circular coherency matrix}
+        tooltip {Available if VH and HV images has been set.} xywh {85 167 230 20} down_box DOWN_BOX labelcolor 186
       }
       Fl_Check_Button rb_RecCoh {
-        label {Reciprocal Coherency}
-        xywh {85 197 230 20} down_box DOWN_BOX labelcolor 186
+        label {Reciprocal coherency matrix}
+        tooltip {Available if VH and HV images has been set.} xywh {85 197 230 20} down_box DOWN_BOX labelcolor 186
       }
     }
   }

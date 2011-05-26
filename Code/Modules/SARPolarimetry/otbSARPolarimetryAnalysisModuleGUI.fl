@@ -10,7 +10,7 @@ class SARPolarimetryAnalysisModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {SAR Analysis conversion} open
+      label {SAR Analysis} open selected
       xywh {753 273 400 215} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 215 0 0} visible
     } {
       Fl_Group {} {open
@@ -49,16 +49,16 @@ gSynthParam->deactivate();
 else
 {
 gSynthParam->activate();
-}} selected
-            xywh {139 12 95 20} down_box DOWN_BOX labelcolor 186
+}}
+            tooltip {Available in th einput image has 6 channels.} xywh {139 12 95 20} down_box DOWN_BOX labelcolor 186
           }
         }
         Fl_Group {} {open
           xywh {5 145 390 35} box PLASTIC_DOWN_BOX color 7
         } {
           Fl_Check_Button rb_HAlpha {
-            label {Reciprocal H Alpha} selected
-            xywh {115 153 145 19} down_box DOWN_BOX labelcolor 186
+            label {Reciprocal H Alpha}
+            tooltip {Available in th einput image has 4 channels.} xywh {115 153 145 19} down_box DOWN_BOX labelcolor 186
           }
         }
       }

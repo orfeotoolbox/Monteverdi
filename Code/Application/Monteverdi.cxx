@@ -201,15 +201,15 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
-                                                 otbGetTextMacro("SAR/Polarimetric synthesis"));
+                                                 otbGetTextMacro("SAR/Polarimetry/Synthesis"));
   model->RegisterModule<otb::SARPolarimetrySinclairModule>("PolarimetrySinclair",
-                                                 otbGetTextMacro("SAR/Polarimetric conversion/Sinclair to"));
+                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From Sinclair matrix to"));
    model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
-                                                 otbGetTextMacro("SAR/Polarimetric conversion/Mueller to"));
+                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From Mueller matrix to"));
   model->RegisterModule<otb::SARPolarimetryReciprocalModule>("PolarimetryReciprocal",
-                                                 otbGetTextMacro("SAR/Polarimetric conversion/Reciprocal... to"));
+                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From reciprocal matrix to"));
   model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
-                                                 otbGetTextMacro("SAR/Analysis"));
+                                                 otbGetTextMacro("SAR/Polarimetry/Analysis"));
 
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
