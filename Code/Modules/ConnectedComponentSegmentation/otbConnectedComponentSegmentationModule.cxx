@@ -961,101 +961,121 @@ void ConnectedComponentSegmentationModule::TmpOutputSelection()
  */
 void ConnectedComponentSegmentationModule::OK()
 {
-  this->CheckProcess();
+
+  // check if the expression are ok
+  this->LiveCheckMask();
+  this->LiveCheckOBIA();
+  this->LiveCheckCC();
+
   this->ClearOutputDescriptors();
 
-  // close the GUI
-  //this->Hide();
-
-  StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
-      streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
-
-  streamingFilter->GetFilter()->SetInput(m_InputImage);
-
-  if (m_NoMask)
-    streamingFilter->GetFilter()->SetMaskExpression("1");
-  else streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
-
-  streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
-  streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
-
-  if (m_NoOBIAOpening)
-    streamingFilter->GetFilter()->SetOBIAExpression("1");
-  else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
-
-  FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
-                              otbGetTextMacro("Processing entire image ..."));
-
-  streamingFilter->Update();
-
-  m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
-
-  /*
-   * Reprojection of the output VectorData
-   *
-   * The output of the Filter is in image physical coordinates,
-   * projection WKT applied if the input image has one
-   *
-   * We need to reproject in WGS84 if the input image is in sensor model geometry
-   */
-
-  std::string projRef = m_InputImage->GetProjectionRef();
-  ImageKeywordlist kwl = m_InputImage->GetImageKeywordlist();
-
-  if (projRef.empty() && kwl.GetSize() > 0)
+  //  if the pipeline is ok
+  if (m_IsOBIAExpressionOK && m_IsCCExpressionOK && m_IsMaskExpressionOK)
     {
+    // close the GUI
+    //this->Hide();
 
-    // image is in sensor model geometry
+    StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
+        streamingFilter = StreamingConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
 
-    // Reproject VectorData in image projection
-    typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
+    streamingFilter->GetFilter()->SetInput(m_InputImage);
 
-    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-    vproj->SetInput(m_OutputVectorData);
-    vproj->SetInputKeywordList(kwl);
-    vproj->SetInputOrigin(m_InputImage->GetOrigin());
-    vproj->SetInputSpacing(m_InputImage->GetSpacing());
+    if (m_NoMask)
+      streamingFilter->GetFilter()->SetMaskExpression("1");
+    else streamingFilter->GetFilter()->SetMaskExpression(m_MaskFilter->GetExpression());
 
-    const char *cfname;
-    if (!m_UseDEM)
+    streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
+    streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
+
+    if (m_NoOBIAOpening)
+      streamingFilter->GetFilter()->SetOBIAExpression("1");
+    else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
+
+    FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
+                                otbGetTextMacro("Processing entire image ..."));
+
+    streamingFilter->Update();
+
+    m_OutputVectorData = streamingFilter->GetFilter()->GetOutputVectorData();
+
+    /*
+     * Reprojection of the output VectorData
+     *
+     * The output of the Filter is in image physical coordinates,
+     * projection WKT applied if the input image has one
+     *
+     * We need to reproject in WGS84 if the input image is in sensor model geometry
+     */
+
+    std::string projRef = m_InputImage->GetProjectionRef();
+    ImageKeywordlist kwl = m_InputImage->GetImageKeywordlist();
+
+    if (projRef.empty() && kwl.GetSize() > 0)
       {
 
-      cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
-      Fl::check();
-      }
-    else
-      {
-      cfname = m_DEMPath.c_str();
-      }
-    if (cfname != NULL)
-      {
+      // image is in sensor model geometry
 
-      if (itksys::SystemTools::FileIsDirectory(cfname))
+      // Reproject VectorData in image projection
+      typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
+
+      VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+      vproj->SetInput(m_OutputVectorData);
+      vproj->SetInputKeywordList(kwl);
+      vproj->SetInputOrigin(m_InputImage->GetOrigin());
+      vproj->SetInputSpacing(m_InputImage->GetSpacing());
+
+      const char *cfname;
+      if (!m_UseDEM)
         {
-        vproj->SetDEMDirectory(cfname);
+
+        cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+        Fl::check();
         }
       else
         {
-        itk::OStringStream oss;
-        oss << "Invalid DEM directory " << cfname << ".";
-        MsgReporter::GetInstance()->SendError(oss.str());
+        cfname = m_DEMPath.c_str();
         }
+      if (cfname != NULL)
+        {
+
+        if (itksys::SystemTools::FileIsDirectory(cfname))
+          {
+          vproj->SetDEMDirectory(cfname);
+          }
+        else
+          {
+          itk::OStringStream oss;
+          oss << "Invalid DEM directory " << cfname << ".";
+          MsgReporter::GetInstance()->SendError(oss.str());
+          }
+        }
+
+      vproj->Update();
+      m_OutputVectorData = vproj->GetOutput();
       }
 
-    vproj->Update();
-    m_OutputVectorData = vproj->GetOutput();
+    /*
+     m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+
+     m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
+
+     this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
+     */
+    this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
+
+    this->NotifyOutputsChange();
     }
+  else
+    {
+    itk::OStringStream oss;
+    oss << "At least one formula is wrong" << std::endl
+        << " Mask expression " << m_IsMaskExpressionOK << std::endl
+        << " CC Segmentation expression " << m_IsCCExpressionOK << std::endl
+        << " Object Analysis formula " << m_IsOBIAExpressionOK << std::endl;
 
-  /*
-   m_OBIAOpeningColorMapper->SetInput(m_OBIAOpeningLabelMapToLabelImageFilter->GetOutput());
+    MsgReporter::GetInstance()->SendError(oss.str());
 
-   m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
-
-   this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
-   */
-  this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
-
-  this->NotifyOutputsChange();
+    }
   // Once module is closed, it is no longer busy
   this->BusyOff();
   // Close the GUI
