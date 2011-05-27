@@ -111,8 +111,13 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_NoOBIAOpening = true;
 
   // reduced set of attributes
-  m_ShapeReducedSetOfAttributes = true;
-  m_StatsReducedSetOfAttributes = true;
+  m_ShapeReducedSetOfAttributes = false;
+  m_StatsReducedSetOfAttributes = false;
+  m_ComputeFlusser = false;
+  m_ComputePolygon =false;
+  m_ComputeFeretDiameter=false;
+  m_ComputePerimeter=false;
+
 
   // output not available
   m_MaskOutputReady = false;
@@ -209,17 +214,6 @@ void ConnectedComponentSegmentationModule::OBIA_functor_init()
 {
 
   m_ShapeAttributes.push_back("Elongation");
-  m_ShapeAttributes.push_back("Flusser01");
-  m_ShapeAttributes.push_back("Flusser02");
-  m_ShapeAttributes.push_back("Flusser03");
-  m_ShapeAttributes.push_back("Flusser04");
-  m_ShapeAttributes.push_back("Flusser05");
-  m_ShapeAttributes.push_back("Flusser06");
-  m_ShapeAttributes.push_back("Flusser07");
-  m_ShapeAttributes.push_back("Flusser08");
-  m_ShapeAttributes.push_back("Flusser09");
-  m_ShapeAttributes.push_back("Flusser10");
-  m_ShapeAttributes.push_back("Flusser11");
   m_ShapeAttributes.push_back("PhysicalSize");
 
   if (!m_ShapeReducedSetOfAttributes)
@@ -246,6 +240,30 @@ void ConnectedComponentSegmentationModule::OBIA_functor_init()
     m_ShapeAttributes.push_back("Size");
     m_ShapeAttributes.push_back("SizeOnBorder");
     };
+
+  if (m_ComputeFlusser)
+    {
+
+    m_ShapeAttributes.push_back("Flusser01");
+    m_ShapeAttributes.push_back("Flusser02");
+    m_ShapeAttributes.push_back("Flusser03");
+    m_ShapeAttributes.push_back("Flusser04");
+    m_ShapeAttributes.push_back("Flusser05");
+    m_ShapeAttributes.push_back("Flusser06");
+    m_ShapeAttributes.push_back("Flusser07");
+    m_ShapeAttributes.push_back("Flusser08");
+    m_ShapeAttributes.push_back("Flusser09");
+    m_ShapeAttributes.push_back("Flusser10");
+    m_ShapeAttributes.push_back("Flusser11");
+    }
+  if (m_ComputeFeretDiameter) m_ShapeAttributes.push_back("FeretDiameter");
+
+  if (m_ComputePerimeter)
+    {
+    //TO DO JGU
+    //check of m_PerimeterCalculator->HasLabel(label) is needed to
+    // add Perimeter and Roundness
+    }
 
   m_StatAttributes.push_back("Kurtosis");
   m_StatAttributes.push_back("Mean");
@@ -794,7 +812,12 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_ShapeLabelMapFilter->SetInput(m_CCImageToCCLabelMapFilter->GetOutput());
     //m_ShapeLabelMapFilter->SetReducedAttributeSet(false);
     m_ShapeLabelMapFilter->SetReducedAttributeSet(m_ShapeReducedSetOfAttributes);
-    m_ShapeLabelMapFilter->SetComputePolygon(false);
+    m_ShapeLabelMapFilter->SetComputePolygon(m_ComputePolygon);
+    m_ShapeLabelMapFilter->SetComputeFlusser(m_ComputeFlusser);
+    m_ShapeLabelMapFilter->SetComputeFeretDiameter(m_ComputeFeretDiameter);
+    m_ShapeLabelMapFilter->SetComputeFlusser(m_ComputeFlusser);
+
+
     m_ShapeLabelMapFilter->SetLabelImage(m_CCRelabelFilter->GetOutput());
 
     // band stat attributes computation
@@ -820,6 +843,7 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
       m_OBIAOpeningFilter->SetExpression(m_CurrentExpressionOBIA);
 
       m_OBIAOpeningFilter->SetInput(m_RadiometricLabelMapFilter->GetOutput());
+
       //m_OBIAOpeningFilter->SetInput(m_ShapeLabelMapFilter->GetOutput());
       m_OutputLabelMap = m_OBIAOpeningFilter->GetOutput();
       }
@@ -986,6 +1010,13 @@ void ConnectedComponentSegmentationModule::OK()
 
     streamingFilter->GetFilter()->SetConnectedComponentExpression(m_CCFilter->GetFunctor().GetExpression());
     streamingFilter->GetFilter()->SetMinimumObjectSize(uiMinSize->value());
+    streamingFilter->GetFilter()->SetShapeReducedSetOfAttributes(m_ShapeReducedSetOfAttributes);
+    streamingFilter->GetFilter()->SetComputePolygon(m_ComputePolygon);
+    streamingFilter->GetFilter()->SetComputePerimeter(m_ComputePerimeter);
+    streamingFilter->GetFilter()->SetComputeFeretDiameter(m_ComputeFeretDiameter);
+    streamingFilter->GetFilter()->SetComputeFlusser(m_ComputeFlusser);
+
+
 
     if (m_NoOBIAOpening)
       streamingFilter->GetFilter()->SetOBIAExpression("1");

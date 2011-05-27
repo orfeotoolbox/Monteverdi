@@ -422,7 +422,11 @@ private:
 
   // attributes
   bool m_ShapeReducedSetOfAttributes;
+  bool m_ComputeFlusser;
+  bool m_ComputePolygon;
   bool m_StatsReducedSetOfAttributes;
+  bool m_ComputeFeretDiameter;
+  bool m_ComputePerimeter;
 
   /** The rendering model */
   RenderingModelPointerType m_RenderingModel;
