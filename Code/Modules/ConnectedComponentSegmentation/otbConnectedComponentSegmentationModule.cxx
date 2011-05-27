@@ -433,10 +433,15 @@ void ConnectedComponentSegmentationModule::InitHelp()
 {
   std::ostringstream helpContent;
   helpContent << "- Connected Component Segmentation module " << std::endl << std::endl;
+  helpContent << " The aim of this module is to performs connected component based segmentation \n with user defined segmentation criteria, followed by an object analysis post processing."<< std::endl<<std::endl;
   helpContent << "Fill each formula, choose your visualization output and click on Update button" << std::endl;
+  helpContent << "If formula area is colored in red the expression is not valid" << std::endl;
+  helpContent << "Available variables for each expression can be found using the dedicated choice menu \n on the right of each formula."<<std::endl;
   helpContent << "If Mask formula is left blank, no mask used" << std::endl;
-  helpContent << "If OBIA formula is left blank, no post processing is applied " << std::endl;
-
+  helpContent << "If Object analysis formula is left blank, no post processing is applied " << std::endl;
+  helpContent << "Save and quit button process the entire image, and output a vector data of labeled objects." <<std::endl;
+  helpContent << "More informations and examples can be found on OTB wiki"<<std::endl;
+  helpContent << "http://wiki.orfeo-toolbox.org/index.php/Connected_component_segmentation_module"<<std::endl;
   ui_HelpText->value(helpContent.str().c_str());
 }
 

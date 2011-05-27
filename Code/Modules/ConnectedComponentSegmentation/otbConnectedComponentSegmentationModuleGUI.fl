@@ -11,10 +11,10 @@ class ConnectedComponentSegmentationModuleGUI {open
   } {
     Fl_Window ui_HelpWindow {
       label Help open
-      xywh {965 136 515 630} type Double visible
+      xywh {491 266 635 530} type Double visible
     } {
       Fl_Output ui_HelpText {
-        xywh {0 0 515 630} type Multiline
+        xywh {5 0 625 530} type Multiline
       }
     }
     Fl_Window guiMainWindow {
@@ -40,7 +40,7 @@ ui_HelpWindow->hide();
 }}
         xywh {520 574 95 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Group gImageViewer {open
+      Fl_Group gImageViewer {open selected
         xywh {5 5 510 590} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
       } {}
       Fl_Group gScroll {
@@ -57,7 +57,7 @@ ui_HelpWindow->hide();
       } {}
     }
     Fl_Window guiFormula {
-      label Formula open selected
+      label Formula open
       xywh {27 624 735 275} type Double box PLASTIC_DOWN_BOX color 23 labelcolor 186 when 1 visible
     } {
       Fl_Input ui_MaskExpression {
