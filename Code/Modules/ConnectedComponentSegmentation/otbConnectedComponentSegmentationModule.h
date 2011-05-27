@@ -272,6 +272,9 @@ protected:
   /** OK callback*/
   virtual void OK();
 
+  /** Cancel callback*/
+  virtual void Cancel();
+
   /** Help Initialization */
   virtual void InitHelp();
 

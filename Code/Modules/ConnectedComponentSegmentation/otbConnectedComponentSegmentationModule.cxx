@@ -540,7 +540,7 @@ void ConnectedComponentSegmentationModule::CheckProcess()
     }
 
   uiTmpOutputSelection->redraw();
-  this->Process();
+  //this->Process();
 
 }
 
@@ -642,6 +642,7 @@ void ConnectedComponentSegmentationModule::SetObjectMinArea()
 
 void ConnectedComponentSegmentationModule::UpdateTmpOutput()
 {
+  this->CheckProcess();
   this->Process();
 }
 
@@ -979,7 +980,15 @@ void ConnectedComponentSegmentationModule::TmpOutputSelection()
   this->CheckProcess();
   this->Show();
 }
-
+/**
+ * Cancel CallBack
+ */
+void ConnectedComponentSegmentationModule::Cancel()
+{
+  this->ClearOutputDescriptors();
+  this->BusyOff();
+  this->Hide();
+}
 /**
  * OK CallBack
  */

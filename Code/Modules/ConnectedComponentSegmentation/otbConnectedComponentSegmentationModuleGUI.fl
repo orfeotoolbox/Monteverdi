@@ -27,20 +27,7 @@ class ConnectedComponentSegmentationModuleGUI {open
         callback {OK();}
         xywh {625 574 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 51 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Button ui_Help {
-        label Help
-        callback {if(ui_Help->value())
-{
-ui_HelpWindow->position(guiMainWindow->x() + guiMainWindow->w(),guiMainWindow->y());
-ui_HelpWindow->show();
-}
-else
-{
-ui_HelpWindow->hide();
-}}
-        xywh {520 574 95 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
-      }
-      Fl_Group gImageViewer {open selected
+      Fl_Group gImageViewer {open
         xywh {5 5 510 590} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelcolor 186
       } {}
       Fl_Group gScroll {
@@ -55,10 +42,15 @@ ui_HelpWindow->hide();
         label {Pixel Description} open
         xywh {520 445 200 120} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
       } {}
+      Fl_Button ui_Cancel {
+        label Cancel
+        callback {this->Cancel();}
+        xywh {520 573 95 20} box PLASTIC_DOWN_BOX color 23 selection_color 51 labelfont 1 labelsize 12 labelcolor 186
+      }
     }
     Fl_Window guiFormula {
       label Formula open
-      xywh {27 624 735 275} type Double box PLASTIC_DOWN_BOX color 23 labelcolor 186 when 1 visible
+      xywh {636 277 735 275} type Double box PLASTIC_DOWN_BOX color 23 labelcolor 186 when 1 visible
     } {
       Fl_Input ui_MaskExpression {
         label {Enter Mask Formula :}
@@ -70,15 +62,15 @@ ui_HelpWindow->hide();
         callback {LiveCheckCC();}
         xywh {5 50 565 20} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1 textsize 12 textcolor 186
       }
-      Fl_Input ui_OBIAExpression {
-        label {Enter Object analysis Formula :}
-        callback {LiveCheckOBIA();}
-        xywh {5 120 565 20} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1 textsize 12 textcolor 186
-      }
       Fl_Value_Input uiMinSize {
         label {Objects min area :}
         callback {this->SetObjectMinArea();}
         xywh {112 85 50 20} selection_color 186 labelsize 12 labelcolor 186 when 4 maximum 1e+06 step 1 value 2 textsize 12 textcolor 186
+      }
+      Fl_Input ui_OBIAExpression {
+        label {Enter Object analysis Formula :}
+        callback {LiveCheckOBIA();}
+        xywh {5 120 565 20} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1 textsize 12 textcolor 186
       }
       Fl_Output ui_OutputInfos {
         xywh {5 155 565 80} box PLASTIC_DOWN_BOX color 23 selection_color 7 labelsize 12 labelcolor 186 align 20 textsize 12 textcolor 186
@@ -97,17 +89,35 @@ ui_HelpWindow->hide();
         xywh {580 120 150 20} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelcolor 186 align 1 when 6 textcolor 186
       } {}
       Fl_Group gTmpUpdate {open
-        xywh {580 180 150 55} when 1
+        xywh {579 157 155 55} when 1
       } {
         Fl_Choice uiTmpOutputSelection {
           label {Display }
-          callback {UpdateTmpOutput();} open
-          xywh {580 180 150 20} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 textsize 12 textcolor 186
+          callback {CheckProcess();} open
+          xywh {580 157 150 20} box PLASTIC_THIN_DOWN_BOX down_box BORDER_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 textsize 12 textcolor 186
         } {}
+        Fl_Button ui_Update {
+          label Update
+          callback {this->UpdateTmpOutput()}
+          xywh {579 186 150 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        }
       }
       Fl_Progress pBusyBar {
         label {Computing ...}
         xywh {5 250 725 15} selection_color 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button ui_Help {
+        label Help
+        callback {if(ui_Help->value())
+{
+ui_HelpWindow->position(guiMainWindow->x() + guiMainWindow->w(),guiMainWindow->y());
+ui_HelpWindow->show();
+}
+else
+{
+ui_HelpWindow->hide();
+}}
+        xywh {580 212 150 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       }
     }
   }
@@ -147,5 +157,9 @@ ui_HelpWindow->hide();
   Function {QuickAddCC()} {return_type {virtual void}
   } {}
   Function {QuickAddOBIA()} {return_type {virtual void}
+  } {}
+  Function {Cancel()} {return_type {virtual void}
+  } {}
+  Function {CheckProcess()} {selected return_type {virtual void}
   } {}
 } 
