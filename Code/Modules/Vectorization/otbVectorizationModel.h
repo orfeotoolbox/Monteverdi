@@ -326,7 +326,7 @@ private:
   /** Has a new output or not. */
   bool                          m_OutputChanged;
 
-  /** DEM directoryu path. */
+  /** DEM directory path. */
   std::string                   m_DEMPath;
 
   /** Use DEM or not. */
