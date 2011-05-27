@@ -101,7 +101,7 @@ void SARPolarimetryAnalysisModule::Ok()
   this->ClearOutputDescriptors();
   bool hasOutput = false;
 
-  if( rb_HAlpha->value() == true )
+  if( rb_HAlpha->value() )
     {
       m_ReciprocalHAlphaImageFilter->SetInput(m_InputImage);
       
@@ -109,7 +109,7 @@ void SARPolarimetryAnalysisModule::Ok()
                                 otbGetTextMacro("Reciprocal H-Alpha image"));
       hasOutput = true;
     }
-  if( rb_Syn->value() == true )
+  if( rb_Syn->value() )
     {
       m_MultiChannelsPolarimetricSynthesisFilter->SetInput(m_InputImage);
       m_MultiChannelsPolarimetricSynthesisFilter->SetKhiI( static_cast<double>(v_KhiI->value()) );
@@ -122,7 +122,7 @@ void SARPolarimetryAnalysisModule::Ok()
       hasOutput = true;
     }
   
-  if( hasOutput==true )
+  if( hasOutput )
     {
       this->NotifyOutputsChange();
     }

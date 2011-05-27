@@ -98,7 +98,7 @@ void SARPolarimetryReciprocalModule::Ok()
   this->ClearOutputDescriptors();
   bool hasOutput = false;
 
-  if( rb_RecCoh->value() == true )
+  if( rb_RecCoh->value() )
     {
       m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->SetInput(m_InputImage);
       
@@ -106,7 +106,7 @@ void SARPolarimetryReciprocalModule::Ok()
                                 otbGetTextMacro("Reciprocal to rec. coherency image"));
       hasOutput = true;
     }
-  if( rb_CohDeg->value() == true )
+  if( rb_CohDeg->value() )
     {
       m_ReciprocalCovarianceToCoherencyDegreeImageFilter->SetInput(m_InputImage);
       
@@ -114,7 +114,7 @@ void SARPolarimetryReciprocalModule::Ok()
                                 otbGetTextMacro("Reciprocal to cohenrency degree image"));
       hasOutput = true;
     }
-  if( rb_Mue->value() == true )
+  if( rb_Mue->value() )
     {
       m_ReciprocalCoherencyToMuellerImageFilter->SetInput(m_InputImage);
       
@@ -123,7 +123,7 @@ void SARPolarimetryReciprocalModule::Ok()
       hasOutput = true;
     }
 
-  if( hasOutput==true )
+  if( hasOutput )
     {
       this->NotifyOutputsChange();
     }
@@ -133,7 +133,7 @@ void SARPolarimetryReciprocalModule::Ok()
     }
   this->Hide();
   // Once module is closed, it is no longer busy
-    this->BusyOff();
+  this->BusyOff();
 }
   
   

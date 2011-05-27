@@ -179,7 +179,7 @@ void SARPolarimetrySinclairModule::Ok()
       hasOutput = true;
     }
   
-  if( hasOutput==true )
+  if( hasOutput )
     {
       this->NotifyOutputsChange();
     }
@@ -193,21 +193,16 @@ void SARPolarimetrySinclairModule::Ok()
   this->BusyOff();
 }
   
-     
-     
-
-
-  void SARPolarimetrySinclairModule::Quit()
-  {
-    // 1First, clear any previous output
-    this->ClearOutputDescriptors();
-    this->Hide();
-    // Once module is closed, it is no longer busy
-    this->BusyOff();
-  }
+void SARPolarimetrySinclairModule::Quit()
+{
+  // 1First, clear any previous output
+  this->ClearOutputDescriptors();
+  this->Hide();
+  // Once module is closed, it is no longer busy
+  this->BusyOff();
+}
   
-
-  void SARPolarimetrySinclairModule::CheckAll(bool val)
+void SARPolarimetrySinclairModule::CheckAll(bool val)
 {
   rb_CirCov->value(val);
   rb_Coh->value(val);
@@ -217,6 +212,5 @@ void SARPolarimetrySinclairModule::Ok()
   rb_RecCirCoh->value(val);
   rb_RecCov->value(val);
 }
-
 
 } // End namespace otb

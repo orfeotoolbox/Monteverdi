@@ -88,7 +88,7 @@ void SARPolarimetryMuellerModule::Ok()
   this->ClearOutputDescriptors();
   bool hasOutput = false;
 
-  if( rb_MuePolDegPow->value() == true )
+  if( rb_MuePolDegPow->value() )
     {
       m_MuellerToPolarisationDegreeAndPowerImageFilter->SetInput(m_InputImage);
       
@@ -96,7 +96,7 @@ void SARPolarimetryMuellerModule::Ok()
                                 otbGetTextMacro("Mueller to polarisation degree and power image"));
      hasOutput = true;
     }
-  if( rb_MueRecCv->value() == true )
+  if( rb_MueRecCv->value() )
     {
       m_MuellerToReciprocalCovarianceImageFilter->SetInput(m_InputImage);
       
@@ -105,7 +105,7 @@ void SARPolarimetryMuellerModule::Ok()
      hasOutput = true;
     }
   
-  if( hasOutput==true )
+  if( hasOutput )
     {
       this->NotifyOutputsChange();
     }
@@ -115,7 +115,7 @@ void SARPolarimetryMuellerModule::Ok()
     }
   this->Hide();
   // Once module is closed, it is no longer busy
-    this->BusyOff();
+  this->BusyOff();
 }
   
   
