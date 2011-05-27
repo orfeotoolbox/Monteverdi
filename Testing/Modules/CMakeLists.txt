@@ -1,7 +1,7 @@
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(BASELINE_APPLICATION_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
-SET(DEMDATA ${OTB_DATA_ROOT}/Examples/DEM_srtm)
+SET(DEMDATA ${OTB_DATA_ROOT}/Input/DEM/srtm_directory)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
 
