@@ -1026,7 +1026,6 @@ void ConnectedComponentSegmentationModule::OK()
     streamingFilter->GetFilter()->SetComputeFlusser(m_ComputeFlusser);
 
 
-
     if (m_NoOBIAOpening)
       streamingFilter->GetFilter()->SetOBIAExpression("1");
     else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());

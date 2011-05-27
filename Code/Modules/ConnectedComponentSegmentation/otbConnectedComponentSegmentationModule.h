@@ -317,11 +317,10 @@ private:
   // Class attributes
 
   itkGetObjectMacro(PixelView, PixelViewType)
- ;
+;
   // itkGetObjectMacro(VisualizationModel, VisualizationModelType);
   itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType)
 ;
-
 
 
   // IO
