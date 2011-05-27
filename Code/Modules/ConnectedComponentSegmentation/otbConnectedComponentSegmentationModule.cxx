@@ -328,6 +328,26 @@ void ConnectedComponentSegmentationModule::Run()
   m_RelabelColorMapper = ColorMapFilterType::New();
   m_OBIAOpeningColorMapper = ColorMapFilterType::New();
 
+  // Generate the layer
+  m_ImageGenerator->SetImage(m_InputImage);
+  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20,
+                              otbGetTextMacro("Generating QuickLook ..."));
+  m_ImageGenerator->GenerateLayer();
+
+  m_InputImageLayer = m_ImageGenerator->GetLayer();
+  m_InputImageLayer->SetName("ImageLayer");
+
+  // Clear previous layers
+  m_RenderingModel->ClearLayers();
+  m_PixelDescriptionModel->ClearLayers();
+  // m_InputImageLayer->SetVisible(false);
+
+  // Add the generated layer to the rendering model
+  m_RenderingModel->AddLayer(m_InputImageLayer);
+  m_PixelDescriptionModel->AddLayer(m_InputImageLayer);
+  m_PixelDescriptionModel->NotifyAll();
+  m_RenderingModel->Update();
+
   itk::ImageRegion<2> imageRegion;
   imageRegion.SetSize(1, 1);
   imageRegion.SetSize(0, 1);
@@ -349,26 +369,6 @@ void ConnectedComponentSegmentationModule::Run()
   this->OBIA_functor_init();
   this->UpdateOBIAFormulaVariablesList();
   this->LiveCheckOBIA();
-
-  // Generate the layer
-  m_ImageGenerator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20,
-                              otbGetTextMacro("Generating QuickLook ..."));
-  m_ImageGenerator->GenerateLayer();
-
-  m_InputImageLayer = m_ImageGenerator->GetLayer();
-  m_InputImageLayer->SetName("ImageLayer");
-
-  // Clear previous layers
-  m_RenderingModel->ClearLayers();
-  m_PixelDescriptionModel->ClearLayers();
-  // m_InputImageLayer->SetVisible(false);
-
-  // Add the generated layer to the rendering model
-  m_RenderingModel->AddLayer(m_InputImageLayer);
-  m_PixelDescriptionModel->AddLayer(m_InputImageLayer);
-  m_PixelDescriptionModel->NotifyAll();
-  m_RenderingModel->Update();
 
   // other layers has to be generated
   m_HasToGenerateMaskLayer = true;
