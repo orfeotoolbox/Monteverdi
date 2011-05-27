@@ -331,7 +331,7 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
       inputMaximum[m_OutputListOrder[i]] = static_cast<InputInternalPixelType>(iMax);
       }
 
-    typedef typename OutputImageType::PixelType OutputPixelType;
+    typedef typename CastOutputImageType::PixelType OutputPixelType;
     OutputPixelType minimum;
     OutputPixelType maximum;
     minimum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
