@@ -49,7 +49,6 @@
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
-//#include "otbOrthorectificationModule.h"
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
@@ -89,6 +88,7 @@
 #include "otbSARPolarimetryReciprocalModule.h"
 #include "otbSARPolarimetryAnalysisModule.h"
 #include "otbConnectedComponentSegmentationModule.h"
+#include "otbVectorDataTransformModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -234,6 +234,9 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::DEMToImageGeneratorModule>("DEM To Image Generator",
                                                      otbGetTextMacro("Geometry/DEM To Image Generator"));
 
+  model->RegisterModule<otb::VectorDataTransformModule>("VectorData Transform",
+                                                        otbGetTextMacro("Geometry/VectorData Transform"));
+  
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();

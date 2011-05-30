@@ -1,0 +1,115 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+decl {\#include <FLU/Flu_File_Chooser.h>} {public
+} 
+
+class VectorDataTransformGUI {open
+} {
+  Function {BuildGUI()} {open return_type void
+  } {
+    Fl_Window wMainWindow {
+      label {OSM based Classification }
+      callback {this->Exit();} open
+      xywh {196 24 965 645} type Double box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Group gFullResolution {
+        label {Full Resolution} open
+        xywh {231 21 489 617} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable
+      } {}
+      Fl_Group gScroll {
+        label {Navigation Map} open
+        xywh {5 21 220 220} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gZoom {
+        label Zoom
+        xywh {5 254 220 214} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group gPixelDescription {
+        label {Pixel Description}
+        xywh {5 483 220 155} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186
+      } {}
+      Fl_Group bBusy {
+        label {Thinking, please wait ...}
+        xywh {725 613 135 27} box PLASTIC_DOWN_FRAME color 1 labelfont 1 labelsize 12 labelcolor 1 align 16 hide
+      } {}
+      Fl_Button bSave {
+        label {Save / Quit}
+        callback {this->Exit();}
+        xywh {861 610 98 29} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 178
+      }
+      Fl_Progress pBar {
+        label label
+        xywh {735 620 210 20} box PLASTIC_DOWN_BOX selection_color 89 labelfont 1 labelsize 12 labelcolor 186 hide
+      }
+      Fl_Group gObjectsInterface {
+        label {VectorData Transform parameters} open
+        xywh {730 25 230 580} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Button bDisplayTrainingClass {
+          label {Display VectorData }
+          callback {this->DisplayVectorData();}
+          xywh {796 343 135 27} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+        }
+        Fl_Button bHideTrainingClass {
+          label {Hide VectorData }
+          callback {this->HideVectorData();}
+          xywh {797 383 135 27} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186
+        }
+        Fl_Spinner guiTranslationX {
+          label {Translation X}
+          callback {this->ApplyTransformToVectorData();}
+          xywh {855 136 75 23} type Float box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -30000 maximum 30000 value 1
+        }
+        Fl_Spinner guiTranslationY {
+          label {Translation Y}
+          callback {this->ApplyTransformToVectorData();}
+          xywh {855 176 75 24} type Float box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -3000 maximum 3000 value 1
+        }
+        Fl_Spinner guiRotationAngle {
+          label {Rotation Angle}
+          callback {this->ApplyTransformToVectorData();} selected
+          xywh {855 214 75 24} type Float box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -180 maximum 180 value 1
+        }
+        Fl_Spinner guiScale {
+          label {Scale }
+          callback {this->ApplyTransformToVectorData();}
+          xywh {855 99 75 23} type Float box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -3000 maximum 3000 step 0.1 value 1
+        }
+        Fl_Check_Button guiRenderBoundariesOnly {
+          label {Render Boundaries Only}
+          callback {this->ApplyTransformToVectorData();}
+          xywh {768 424 165 20} box PLASTIC_DOWN_BOX down_box DOWN_BOX color 7 labelsize 12 labelcolor 186
+        }
+        Fl_Spinner guiCenterX {
+          label {Center of Rotation X}
+          callback {this->ApplyTransformToVectorData();}
+          xywh {855 248 75 24} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -30000 maximum 30000 value 1
+        }
+        Fl_Spinner guiCenterY {
+          label {Center Of Rotation Y}
+          callback {this->ApplyTransformToVectorData();}
+          xywh {855 285 75 24} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelsize 12 labelcolor 186 minimum -30000 maximum 30000 step 0.5 value 1
+        }
+      }
+    }
+  }
+  Function {VectorDataTransformGUI()} {} {}
+  Function {~VectorDataTransformGUI()} {return_type virtual
+  } {}
+  Function {Exit()} {return_type {virtual void}
+  } {}
+  Function {ApplyTransformToVectorData()} {return_type {virtual void}
+  } {}
+  Function {DisplayVectorData()} {return_type {virtual void}
+  } {}
+  Function {HideVectorData()} {return_type {virtual void}
+  } {}
+} 

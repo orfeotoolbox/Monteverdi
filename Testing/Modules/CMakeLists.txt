@@ -478,7 +478,6 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTestNoMask  ${Modules_TESTS4}
     15
 )
 
-
 # this test is very long
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
@@ -496,6 +495,21 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
     ${DEMDATA}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+# ----------------- VectorData TransformModule testing -------------------
+ADD_TEST(moTvVectorDataTransformModuleTest  ${Modules_TESTS4}
+     --compare-ogr ${TOL}
+    ${BASELINE_APPLICATION_FILES}/mvTvVectorDataTransformModuleOutput.shp
+    ${TEMP}/mvTvVectorDataTransformModuleOutput.shp
+    otbVectorDataTransformTest
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+    ${TEMP}/mvTvVectorDataTransformModuleOutput.shp
+    15.   # translation X
+    -15.  # translation Y
+    30    # rotation
+)
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -556,7 +570,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbDEMToImageGeneratorModuleTest.cxx
   otbImageStatisticsModuleTest.cxx
   otbConnectedComponentSegmentationModuleTest.cxx
- 
+  otbVectorDataTransformTest.cxx
 )
 
 IF(OTB_USE_MAPNIK)
