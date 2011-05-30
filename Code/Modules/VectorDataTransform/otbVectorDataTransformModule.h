@@ -30,7 +30,7 @@ namespace otb
 {
 /** \class VectorDataTransformModule
  *
- *  \brief 
+ *  \brief
  *
  */
 

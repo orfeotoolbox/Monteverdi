@@ -41,7 +41,7 @@ public:
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(VectorDataTransformController,Superclass);
+  itkTypeMacro(VectorDataTransformController, Superclass);
   itkNewMacro(Self);
 
   typedef VectorDataTransformModel ModelType;
@@ -52,21 +52,21 @@ public:
   typedef VectorDataTransformModel::PixelDescriptionModelType PixelDescriptionModelType;
   
   typedef ImageWidgetController                                 WidgetsControllerType;
-  typedef WidgetResizingActionHandler 
-    <VisualizationModelType,ImageViewType>                      ResizingHandlerType;
+  typedef WidgetResizingActionHandler
+    <VisualizationModelType, ImageViewType>                      ResizingHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-  <VisualizationModelType,ImageViewType>                        ChangeScaledRegionHandlerType;
+  <VisualizationModelType, ImageViewType>                        ChangeScaledRegionHandlerType;
   typedef ChangeExtractRegionActionHandler
-  <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
+  <VisualizationModelType, ImageViewType>                        ChangeRegionHandlerType;
   typedef ChangeScaleActionHandler
-  <VisualizationModelType,ImageViewType>                        ChangeScaleHandlerType;
+  <VisualizationModelType, ImageViewType>                        ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler
   < PixelDescriptionModelType, ImageViewType>                   PixelDescriptionActionHandlerType;
   
   /** User action */
   virtual void Exit();
-  virtual void ApplyTransformToVectorData(double scale, double angle, 
-                                          double translationX, 
+  virtual void ApplyTransformToVectorData(double scale, double angle,
+                                          double translationX,
                                           double translationY,
                                           double centerX, double centerY);
   
@@ -86,7 +86,7 @@ public:
   }
 
   /** Get the widgets controller */
-  itkGetObjectMacro(WidgetsController,WidgetsControllerType);
+  itkGetObjectMacro(WidgetsController, WidgetsControllerType);
 
 protected:
   /** Constructor */

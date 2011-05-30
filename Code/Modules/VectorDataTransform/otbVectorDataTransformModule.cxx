@@ -56,7 +56,7 @@ VectorDataTransformModule::~VectorDataTransformModule()
 void VectorDataTransformModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */

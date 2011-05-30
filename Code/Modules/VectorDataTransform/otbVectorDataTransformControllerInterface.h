@@ -34,13 +34,13 @@ public:
   typedef itk::SmartPointer<const Self>                ConstPointer;
   
   /** Standard type macros */
-  itkTypeMacro(VectorDataTransformControllerInterface,Superclass);
+  itkTypeMacro(VectorDataTransformControllerInterface, Superclass);
 
   /** Users actions */
   virtual void Exit() = 0;
-  virtual void ApplyTransformToVectorData(double scale, double angle, 
-                                          double translationX, 
-                                          double translationY, 
+  virtual void ApplyTransformToVectorData(double scale, double angle,
+                                          double translationX,
+                                          double translationY,
                                           double centerX, double centerY) = 0;
 
   virtual void SetModel(VectorDataTransformModel * model)

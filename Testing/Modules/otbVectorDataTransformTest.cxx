@@ -53,7 +53,7 @@ int otbVectorDataTransformTest(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(imageReader->GetOutput());
   std::cout << "Input wrapper : " << wrapperIn << std::endl << std::endl;
 
-  // Open VectorData 
+  // Open VectorData
   VdReaderType::Pointer vdreader = VdReaderType::New();
   vdreader->SetFileName(inputVectorDataFileName);
   vdreader->Update();
@@ -82,7 +82,7 @@ int otbVectorDataTransformTest(int argc, char* argv[])
   vdTransformModule->GetView()->bSave->do_callback();
   Fl::check();
 
-  // VectorData transform module output 
+  // VectorData transform module output
   otb::DataObjectWrapper wrapperOut = vdtModule->GetOutputByKey("TransformedVectorData");
   std::cout << "Output wrapper: " << wrapperOut << std::endl;
   VectorDataType::Pointer transformedVd = dynamic_cast<VectorDataType *>(wrapperOut.GetDataObject());

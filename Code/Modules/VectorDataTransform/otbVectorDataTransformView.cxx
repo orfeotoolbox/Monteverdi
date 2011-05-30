@@ -23,20 +23,20 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_File_Chooser.H>
 #include <FL/fl_draw.H>
 
-// VectorData Iterator 
+// VectorData Iterator
 #include "itkPreOrderTreeIterator.h"
 
 namespace otb
 {
 
-VectorDataTransformView::VectorDataTransformView() : m_Controller(), 
-                                                           m_Model(), m_ImageView(), 
+VectorDataTransformView::VectorDataTransformView() : m_Controller(),
+                                                           m_Model(), m_ImageView(),
                                                            m_PixelView()
 {
   m_ImageView = ImageViewType::New();
   m_PixelView = PixelViewType::New();
 
-  // set the green color 
+  // set the green color
   m_Green.Fill(0.);
   m_Green[1] = 1.;
   m_Green[3] = 1.;
@@ -129,7 +129,7 @@ void VectorDataTransformView::SetController(VectorDataTransformControllerInterfa
 
 void VectorDataTransformView::SetWidgetsController(ImageWidgetController * controller)
 {
-  m_WidgetsController = controller; 
+  m_WidgetsController = controller;
 }
 
 void VectorDataTransformView::Notify(const std::string & event)
@@ -150,12 +150,12 @@ void VectorDataTransformView::Notify(const std::string & event)
     }
 }
 
-// Done in a specific method cause one need the input 
+// Done in a specific method cause one need the input
 // image to be opened to get its size information
 void VectorDataTransformView::InitializeGui()
 {
   // Get the size and the origin of the input vectorImage
-  VectorDataTransformModel::VectorImageType::SizeType size = 
+  VectorDataTransformModel::VectorImageType::SizeType size =
     m_Model->GetVectorImage()->GetLargestPossibleRegion().GetSize();
   
   // Initialize the parameters of the transform in the GUI
@@ -175,16 +175,16 @@ void VectorDataTransformView::Exit()
 
 void VectorDataTransformView::DisplayVectorData()
 {
-  VectorDataGlComponentType::Pointer glComp = 
+  VectorDataGlComponentType::Pointer glComp =
     dynamic_cast<VectorDataGlComponentType*>(m_ImageView->GetFullWidget()->GetNthGlComponent(1));
     
   // Set Visible to true cause in HideOSMVectorData it is turned to off
   glComp->SetVisible(true);
 
-  // Update with the new transformed vector data 
+  // Update with the new transformed vector data
   glComp->SetVectorData(m_Model->GetTransformedVectorData());
 
-  // Rendering boundaries only 
+  // Rendering boundaries only
   if(guiRenderBoundariesOnly->value() == 1)
     glComp->RenderPolygonBoundariesOnlyOn();
   else
@@ -200,7 +200,7 @@ void VectorDataTransformView::DisplayVectorData()
 void VectorDataTransformView::HideVectorData()
 {
   // Get the OSM VectorDataGlComponent
-  VectorDataGlComponentType::Pointer glComp = 
+  VectorDataGlComponentType::Pointer glComp =
     dynamic_cast<VectorDataGlComponentType*>(m_ImageView->GetFullWidget()->GetNthGlComponent(1));
 
   // hiding the OSM VectorData means to set Visible to false
@@ -220,7 +220,7 @@ void VectorDataTransformView::ApplyTransformToVectorData()
   double centerX = guiCenterX->value();
   double centerY = guiCenterY->value();
   
-  m_Controller->ApplyTransformToVectorData(scale, angle, translationX, 
+  m_Controller->ApplyTransformToVectorData(scale, angle, translationX,
                                            translationY, centerX, centerY);
 }
 

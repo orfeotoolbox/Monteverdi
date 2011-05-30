@@ -52,14 +52,14 @@ public:
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(VectorDataTransformModel,Object);
+  itkTypeMacro(VectorDataTransformModel, Object);
 
   /** Algorithms typedef */
   typedef      TypeManager::Floating_Point_VectorImage                   VectorImageType;
   typedef      TypeManager::Floating_Point_Image                         ImageType;
   typedef      VectorImageType::PixelType                                VectorPixelType;
   
-  // VectorDataType 
+  // VectorDataType
   typedef TypeManager::Vector_Data                                       VectorDataType;
   typedef VectorDataType::DataNodeType                                   DataNodeType;
 
@@ -69,8 +69,8 @@ public:
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;
-  typedef      Image<RGBPixelType,2>                                     RGBImageType;
-  typedef      ImageLayer<VectorImageType,RGBImageType>                  LayerType;
+  typedef      Image<RGBPixelType, 2>                                     RGBImageType;
+  typedef      ImageLayer<VectorImageType, RGBImageType>                  LayerType;
   typedef      ImageLayerGenerator<LayerType>                            LayerGeneratorType;
   typedef      ImageLayerRenderingModel<RGBImageType>                    VisualizationModelType;
   typedef      PixelDescriptionModel<RGBImageType>                       PixelDescriptionModelType;
@@ -79,8 +79,8 @@ public:
   /** type for channels histogram */
   typedef std::vector<double>                                        ChannelsHistogramType;
   
-  // Transform typedefs 
-  typedef otb::VectorDataTransformFilter<VectorDataType, 
+  // Transform typedefs
+  typedef otb::VectorDataTransformFilter<VectorDataType,
                                          VectorDataType>             VectorDataTransformType;
   typedef itk::CenteredSimilarity2DTransform<double>                 TransformType;
   typedef TransformType::ParametersType                              ParametersType;
@@ -92,16 +92,16 @@ public:
   void OpenInputs(const VectorImageType * image, const VectorDataType * inputVd);
   
   /** Get the visualization models */
-  itkGetObjectMacro(VisualizationModel,VisualizationModelType);
-  itkGetObjectMacro(PixelDescriptionModel,PixelDescriptionModelType);
+  itkGetObjectMacro(VisualizationModel, VisualizationModelType);
+  itkGetObjectMacro(PixelDescriptionModel, PixelDescriptionModelType);
   
   /** Input Image Accessor*/
-  itkGetConstObjectMacro(VectorImage,VectorImageType);
+  itkGetConstObjectMacro(VectorImage, VectorImageType);
 
-  /** Transformed VectorData accessor */ 
+  /** Transformed VectorData accessor */
   itkGetObjectMacro(TransformedVectorData, VectorDataType);
 
-  /** Transformed VectorData accessor */ 
+  /** Transformed VectorData accessor */
   itkGetObjectMacro(OutputVectorData, VectorDataType);
   
   std::vector<unsigned int> GetChannels()
@@ -110,8 +110,8 @@ public:
   }
 
   /** Apply Transform to Vector Data */
-  void ApplyTransformToVectorData(double scale, double angle, 
-                                  double translationX, 
+  void ApplyTransformToVectorData(double scale, double angle,
+                                  double translationX,
                                   double translationY,
                                   double centerX, double centerY);
 

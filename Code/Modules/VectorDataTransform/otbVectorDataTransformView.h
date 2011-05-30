@@ -36,8 +36,8 @@ namespace otb
  *
  */
 class ITK_EXPORT VectorDataTransformView
-  :  public EventsListener<std::string>, 
-     public VectorDataTransformGUI,  
+  :  public EventsListener<std::string>,
+     public VectorDataTransformGUI,
      public itk::Object
 {
 public:
@@ -49,14 +49,14 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(VectorDataTransformView,Object);
+  itkTypeMacro(VectorDataTransformView, Object);
 
   /** Visualization typedefs */
   typedef VectorDataTransformModel::RGBPixelType              RGBPixelType;
   typedef VectorDataTransformModel::VisualizationModelType    VisualizationModelType;
   typedef VectorDataTransformModel::PixelDescriptionModelType PixelDescriptionModelType;
 
-  typedef ImageView<VisualizationModelType>                   ImageViewType;  
+  typedef ImageView<VisualizationModelType>                   ImageViewType;
   typedef PixelDescriptionView<PixelDescriptionModelType>     PixelViewType;
   
   typedef VectorDataTransformModel::VectorDataType            VectorDataType;
@@ -64,7 +64,7 @@ public:
   typedef std::vector<VectorDataGlComponentType * >           VectorDataGlComponentVectorType;
 
   /** VectorData Color type  */
-  typedef itk::FixedArray<double,4>                           ColorType;
+  typedef itk::FixedArray<double, 4>                           ColorType;
 
   /** Event from the model */
   virtual void Notify(const std::string & event);
@@ -110,8 +110,8 @@ public:
   virtual void Show();
   
   /** Get a pointer to the view parts for the controller */
-  itkGetObjectMacro(ImageView,ImageViewType);
-  itkGetObjectMacro(PixelView,PixelViewType);
+  itkGetObjectMacro(ImageView, ImageViewType);
+  itkGetObjectMacro(PixelView, PixelViewType);
   
 protected:
   /** Constructor */

@@ -25,9 +25,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-VectorDataTransformController::VectorDataTransformController() : m_View(), m_WidgetsController(), 
-                                                                 m_ResizingHandler(), m_ChangeScaleHandler(), 
-                                                                 m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(), 
+VectorDataTransformController::VectorDataTransformController() : m_View(), m_WidgetsController(),
+                                                                 m_ResizingHandler(), m_ChangeScaleHandler(),
+                                                                 m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(),
                                                                  m_PixelDescriptionHandler()
 {
   // Build the widgets controller
@@ -75,8 +75,8 @@ void VectorDataTransformController::SetView(VectorDataTransformView * view)
 }
 
 
-void VectorDataTransformController::ApplyTransformToVectorData(double scale, double angle, 
-                                                               double translationX, 
+void VectorDataTransformController::ApplyTransformToVectorData(double scale, double angle,
+                                                               double translationX,
                                                                double translationY,
                                                                double centerX, double centerY)
 {
@@ -89,7 +89,6 @@ void VectorDataTransformController::ApplyTransformToVectorData(double scale, dou
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
-
 
 
 } // end namespace otb

@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-VectorDataTransformModel::VectorDataTransformModel() : m_VisualizationModel(), 
+VectorDataTransformModel::VectorDataTransformModel() : m_VisualizationModel(),
                                                        m_PixelDescriptionModel(),
                                                        m_VectorImage(),
                                                        m_TransformedVectorData()
@@ -74,7 +74,7 @@ void VectorDataTransformModel::OpenInputs(const VectorImageType * image, const V
 
   m_VisualizationModel->Update();
 
-  // Strore the input vector data projectionRef 
+  // Strore the input vector data projectionRef
   m_InputVectorDataProjectionRef = inputVd->GetProjectionRef();
 
   // Project it to be able to visualize it in the GUI
@@ -89,15 +89,15 @@ void VectorDataTransformModel::OpenInputs(const VectorImageType * image, const V
   m_InputVectorData = vproj->GetOutput();
   
   // Apply an identity transform to be showned in the GUI
-  this->ApplyTransformToVectorData(1., 0., 0., 0., 0.,0.);
+  this->ApplyTransformToVectorData(1., 0., 0., 0., 0., 0.);
 
   // inputs opened notification
   this->NotifyAll("InputsOpened");
 }
 
-void 
-VectorDataTransformModel::ApplyTransformToVectorData(double scale, double angle, 
-                                                     double translationX, 
+void
+VectorDataTransformModel::ApplyTransformToVectorData(double scale, double angle,
+                                                     double translationX,
                                                      double translationY,
                                                      double centerX, double centerY)
 {
@@ -106,9 +106,9 @@ VectorDataTransformModel::ApplyTransformToVectorData(double scale, double angle,
   parameters[0] = scale;                                                 // Scale
   parameters[1] = CONST_PI*angle/180.;                                   // Rotation Angle in radian
   parameters[2] = centerX;                                               // Center of the rotation (X)
-  parameters[3] = centerY;                                               // Center of the rotation (Y) 
+  parameters[3] = centerY;                                               // Center of the rotation (Y)
   parameters[4] = translationX * m_VectorImage->GetSpacing()[0];         // Translation (X)
-  parameters[5] = translationY * vcl_abs(m_VectorImage->GetSpacing()[1]);// Translation (Y)
+  parameters[5] = translationY * vcl_abs(m_VectorImage->GetSpacing()[1]); // Translation (Y)
 
   transform->SetParameters(parameters);
   
@@ -124,7 +124,7 @@ VectorDataTransformModel::ApplyTransformToVectorData(double scale, double angle,
   this->NotifyAll("VectorDataUpdated");
 }
 
-void 
+void
 VectorDataTransformModel::GenerateOuputVectorData()
 {
   VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
@@ -141,7 +141,7 @@ VectorDataTransformModel::GenerateOuputVectorData()
   this->NotifyAll("OutputsUpdated");
 }
 
-void 
+void
 VectorDataTransformModel::Exit()
 {
   // Generate the output VectorData
