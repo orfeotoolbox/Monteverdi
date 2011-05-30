@@ -254,5 +254,3 @@ VectorDataTransformView::Show()
 
  
 } //end namespace otb
-
-

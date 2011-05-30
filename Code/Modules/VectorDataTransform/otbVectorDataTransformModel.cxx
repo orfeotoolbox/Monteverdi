@@ -101,13 +101,13 @@ VectorDataTransformModel::ApplyTransformToVectorData(double scale, double angle,
                                                      double translationY,
                                                      double centerX, double centerY)
 {
-  TransformType::Pointer transform = TransformType::New();     
+  TransformType::Pointer transform = TransformType::New();
   ParametersType parameters(6);
   parameters[0] = scale;                                                 // Scale
   parameters[1] = CONST_PI*angle/180.;                                   // Rotation Angle in radian
   parameters[2] = centerX;                                               // Center of the rotation (X)
   parameters[3] = centerY;                                               // Center of the rotation (Y) 
-  parameters[4] = translationX * m_VectorImage->GetSpacing()[0];         // Translation (X) 
+  parameters[4] = translationX * m_VectorImage->GetSpacing()[0];         // Translation (X)
   parameters[5] = translationY * vcl_abs(m_VectorImage->GetSpacing()[1]);// Translation (Y)
 
   transform->SetParameters(parameters);

@@ -35,7 +35,7 @@ class VectorDataTransformController
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataTransformController Self;
+  typedef VectorDataTransformController     Self;
   typedef itk::Object                       Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
@@ -51,17 +51,17 @@ public:
   typedef VectorDataTransformModel::VisualizationModelType    VisualizationModelType;
   typedef VectorDataTransformModel::PixelDescriptionModelType PixelDescriptionModelType;
   
-  typedef ImageWidgetController                                     WidgetsControllerType;
+  typedef ImageWidgetController                                 WidgetsControllerType;
   typedef WidgetResizingActionHandler 
-    <VisualizationModelType,ImageViewType>                          ResizingHandlerType;
+    <VisualizationModelType,ImageViewType>                      ResizingHandlerType;
   typedef ChangeScaledExtractRegionActionHandler
-  <VisualizationModelType,ImageViewType>                            ChangeScaledRegionHandlerType;
+  <VisualizationModelType,ImageViewType>                        ChangeScaledRegionHandlerType;
   typedef ChangeExtractRegionActionHandler
   <VisualizationModelType,ImageViewType>                        ChangeRegionHandlerType;
   typedef ChangeScaleActionHandler
-  <VisualizationModelType,ImageViewType>                            ChangeScaleHandlerType;
+  <VisualizationModelType,ImageViewType>                        ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler
-  < PixelDescriptionModelType, ImageViewType>                     PixelDescriptionActionHandlerType;
+  < PixelDescriptionModelType, ImageViewType>                   PixelDescriptionActionHandlerType;
   
   /** User action */
   virtual void Exit();
@@ -99,7 +99,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */
-  VectorDataTransformView *                   m_View;
+  VectorDataTransformView *                  m_View;
 
   /** Widgets controller */
   WidgetsControllerType::Pointer             m_WidgetsController;

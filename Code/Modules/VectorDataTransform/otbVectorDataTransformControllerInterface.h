@@ -28,7 +28,7 @@ class VectorDataTransformControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataTransformControllerInterface Self;
+  typedef VectorDataTransformControllerInterface       Self;
   typedef itk::Object                                  Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;

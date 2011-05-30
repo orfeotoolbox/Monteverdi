@@ -107,4 +107,3 @@ void VectorDataTransformModule::Notify(const std::string & event)
      }
 }
 } // End namespace otb
-

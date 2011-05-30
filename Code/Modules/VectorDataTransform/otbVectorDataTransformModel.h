@@ -47,9 +47,9 @@ class VectorDataTransformModel
 public:
   /** Standard class typedefs */
   typedef VectorDataTransformModel                           Self;
-  typedef itk::Object                                           Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef itk::Object                                        Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Standard type macro */
   itkTypeMacro(VectorDataTransformModel,Object);

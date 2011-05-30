@@ -26,8 +26,9 @@ namespace otb
 {
 
 VectorDataTransformController::VectorDataTransformController() : m_View(), m_WidgetsController(), 
-							       m_ResizingHandler(),m_ChangeScaleHandler(), m_ChangeRegionHandler(), 
-                                                                     m_ChangeScaledRegionHandler(), m_PixelDescriptionHandler()//, m_MouseClickHandler()
+                                                                 m_ResizingHandler(), m_ChangeScaleHandler(), 
+                                                                 m_ChangeRegionHandler(), m_ChangeScaledRegionHandler(), 
+                                                                 m_PixelDescriptionHandler()
 {
   // Build the widgets controller
   m_WidgetsController         = WidgetsControllerType::New();

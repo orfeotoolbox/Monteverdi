@@ -39,7 +39,7 @@ class ITK_EXPORT VectorDataTransformModule
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataTransformModule          Self;
+  typedef VectorDataTransformModule     Self;
   typedef Module                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -96,9 +96,9 @@ private:
   VectorDataTransformModule(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  ControllerType::Pointer m_Controller;
-  ViewType::Pointer m_View;
-  ModelType::Pointer m_Model;
+  ControllerType::Pointer  m_Controller;
+  ViewType::Pointer        m_View;
+  ModelType::Pointer       m_Model;
 
   CastImageFilter::Pointer m_CastImageFilter;
 };
