@@ -92,6 +92,7 @@ void ReaderModule::Analyse()
       {
       vDataset->add(m_Desc[itSubDataset].c_str());
       }
+    vDataset->set_visible();
     vDataset->value(0);
     vDataset->activate();
 
