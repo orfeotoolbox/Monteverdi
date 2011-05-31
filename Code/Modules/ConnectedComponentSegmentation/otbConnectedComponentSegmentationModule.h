@@ -86,6 +86,7 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
 
+
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -366,6 +367,8 @@ private:
   std::string m_CurrentExpressionMask;
   std::string m_CurrentExpressionCC;
   std::string m_CurrentExpressionOBIA;
+
+  std::ostringstream m_FunList;
 
   /** DEM directory path. */
    std::string                   m_DEMPath;

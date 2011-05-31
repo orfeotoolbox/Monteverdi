@@ -409,6 +409,27 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
     // TODO JGU adapt GUI to allow user defined spectralangle reference pixel
     if (strcmp(item->first.c_str(), "spectralAngle")) ui_VarNamesMask->add(item->first.c_str());
     }
+  const mu::funmap_type & functions = m_MaskFilter->GetFunList();
+  mu::funmap_type::const_iterator funItem = functions.begin();
+
+  int nbArgs;
+  // Query the functions, the function list is same for all expression
+  // hence the list is displayed in help window
+  for (; funItem != functions.end(); ++funItem)
+    {
+    mu::ParserCallback funCallback=funItem->second;
+    nbArgs=funCallback.GetArgc();
+
+    if(nbArgs!=-1)
+      {
+       m_FunList<<funItem->first.c_str()<<" "<<nbArgs<<std::endl;
+       }
+    else
+      {
+      m_FunList<<funItem->first.c_str()<<" X"<<std::endl;
+      }
+    }
+
 }
 
 void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
@@ -453,7 +474,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAFormulaVariablesList()
     {
     ui_VarNamesOBIA->add(item->first.c_str());
     }
-
 }
 
 /**
@@ -471,12 +491,19 @@ void ConnectedComponentSegmentationModule::InitHelp()
           helpContent
           << "Available variables for each expression can be found using the dedicated choice menu \n on the right of each formula."
       << std::endl;
+  helpContent << "Available functions for each expression can be found below." << std::endl;
   helpContent << "If Mask formula is left blank, no mask used" << std::endl;
   helpContent << "If Object analysis formula is left blank, no post processing is applied " << std::endl;
   helpContent << "Save and quit button process the entire image, and output a vector data of labeled objects."
       << std::endl;
   helpContent << "More informations and examples can be found on OTB wiki" << std::endl;
   helpContent << "http://wiki.orfeo-toolbox.org/index.php/Connected_component_segmentation_module" << std::endl;
+  helpContent << std::endl;
+  helpContent << "Available functions"<<std::endl;
+  helpContent << "(second column is the number of arguments, X denotes variable list of arguments)  :";
+  helpContent << std::endl;
+  helpContent << m_FunList.str();
+  helpContent << std::endl;
   ui_HelpText->value(helpContent.str().c_str());
 }
 
