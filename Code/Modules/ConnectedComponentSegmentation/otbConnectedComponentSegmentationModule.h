@@ -45,6 +45,8 @@
 //Mask Mu parser filter
 #include "otbMaskMuParserFilter.h"
 
+#include "itkMaskImageFilter.h"
+
 // OBIA filtering
 #include <otbAttributesMapLabelObject.h>
 #include <otbLabelImageToLabelMapWithAdjacencyFilter.h>
@@ -105,12 +107,10 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro */
-  itkNewMacro(Self)
-;
+  itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ConnectedComponentSegmentationModule, Module)
-;
+  itkTypeMacro(ConnectedComponentSegmentationModule, Module);
 
   // Convenient typedefs
   typedef TypeManager::Floating_Point_Image ImageType;
@@ -127,6 +127,7 @@ public:
   typedef VectorImageType::PixelType PixelType;
   typedef Parser ParserType;
   typedef ImageType::RegionType RegionType;
+
   /** Image layer type */
   typedef ImageLayer<VectorImageType, LayerOutputImageType> VectorImageLayerType;
   typedef VectorImageLayerType::Pointer VectorImageLayerPointerType;
@@ -186,6 +187,8 @@ public:
       ConnectedComponentFilterType;
 
   typedef otb::MaskMuParserFilter<VectorImageType, ImageType> MaskMuParserFilterType;
+  typedef itk::MaskImageFilter<VectorImageType,ImageType,VectorImageType> MaskImageFilterType;
+
 
   typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType LayerOutputPixelType;
   typedef Function::UniformAlphaBlendingFunction<LayerOutputPixelType> BlendingFunctionType;
@@ -223,7 +226,8 @@ public:
   typedef enum
   {
     INPUT_IMAGE,
-    MASK_IMAGE,
+    MASK,
+    MASKED_IMAGE,
     CONNECTED_COMPONENT_SEGMENTATION_OUTPUT,
     SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION,
     OUTPUT,
@@ -339,7 +343,7 @@ private:
   // Filter
   ConnectedComponentFilterType::Pointer m_CCFilter;
   MaskMuParserFilterType::Pointer m_MaskFilter;
-  //LabelObjectOpeningFilterType::Pointer   m_OpeningFilter;
+  MaskImageFilterType::Pointer m_MaskImageFilter;
   RelabelComponentFilterType::Pointer m_CCRelabelFilter;
   ColorMapFilterType::Pointer m_CCColorMapper;
   ColorMapFilterType::Pointer m_RelabelColorMapper;
@@ -397,6 +401,7 @@ private:
   VectorImageLayerPointerType m_InputImageLayer;
   VectorImageLayerGeneratorType::Pointer m_ImageGenerator;
   ImageLayerGeneratorType::Pointer m_MaskGenerator;
+  VectorImageLayerGeneratorType::Pointer m_MaskedImageGenerator;
   RGBImageLayerGeneratorType::Pointer m_CCSegmentationGenerator;
   RGBImageLayerGeneratorType::Pointer m_RelabelRGBGenerator;
   RGBImageLayerGeneratorType::Pointer m_OBIAOpeningGenerator;

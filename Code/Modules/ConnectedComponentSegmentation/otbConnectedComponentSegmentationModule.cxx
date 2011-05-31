@@ -43,6 +43,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   // Layer Generators
   m_ImageGenerator = VectorImageLayerGeneratorType::New();
   m_MaskGenerator = ImageLayerGeneratorType::New();
+  m_MaskedImageGenerator = VectorImageLayerGeneratorType::New();
 
   m_CCSegmentationGenerator = RGBImageLayerGeneratorType::New();
 
@@ -114,10 +115,9 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_ShapeReducedSetOfAttributes = false;
   m_StatsReducedSetOfAttributes = false;
   m_ComputeFlusser = false;
-  m_ComputePolygon =false;
-  m_ComputeFeretDiameter=false;
-  m_ComputePerimeter=false;
-
+  m_ComputePolygon = false;
+  m_ComputeFeretDiameter = false;
+  m_ComputePerimeter = false;
 
   // output not available
   m_MaskOutputReady = false;
@@ -315,6 +315,7 @@ void ConnectedComponentSegmentationModule::Run()
   // Instantiate filters
   m_CCFilter = ConnectedComponentFilterType::New();
   m_MaskFilter = MaskMuParserFilterType::New();
+  m_MaskImageFilter = MaskImageFilterType::New();
   m_CCRelabelFilter = RelabelComponentFilterType::New();
   m_OBIAOpeningFilter = LabelObjectOpeningFilterType::New();
   m_OBIAOpeningLabelMapToLabelImageFilter = LabelMapToLabelImageFilterType::New();
@@ -337,6 +338,9 @@ void ConnectedComponentSegmentationModule::Run()
   m_InputImageLayer = m_ImageGenerator->GetLayer();
   m_InputImageLayer->SetName("ImageLayer");
 
+  m_MaskedImageGenerator->SetImage(m_InputImage);
+  m_MaskedImageGenerator->GenerateLayer();
+
   // Clear previous layers
   m_RenderingModel->ClearLayers();
   m_PixelDescriptionModel->ClearLayers();
@@ -358,6 +362,12 @@ void ConnectedComponentSegmentationModule::Run()
 
   // if no data we don't use mask
   m_MaskFilter->SetInput(m_InputImage);
+  m_MaskImageFilter->SetInput1(m_InputImage);
+
+  PixelType backgroundPixel = m_InputImage->GetPixel(m_InputImage->GetBufferedRegion().GetIndex());
+  backgroundPixel.Fill(0.0);
+  m_MaskImageFilter->SetOutsideValue(backgroundPixel);
+
   this->UpdateMaskFormulaVariablesList();
   this->LiveCheckMask();
   //
@@ -451,15 +461,20 @@ void ConnectedComponentSegmentationModule::InitHelp()
 {
   std::ostringstream helpContent;
   helpContent << "- Connected Component Segmentation module " << std::endl << std::endl;
-  helpContent << " The aim of this module is to performs connected component based segmentation \n with user defined segmentation criteria, followed by an object analysis post processing."<< std::endl<<std::endl;
+              helpContent
+              << " The aim of this module is to performs connected component based segmentation \n with user defined segmentation criteria, followed by an object analysis post processing."
+          << std::endl << std::endl;
   helpContent << "Fill each formula, choose your visualization output and click on Update button" << std::endl;
   helpContent << "If formula area is colored in red the expression is not valid" << std::endl;
-  helpContent << "Available variables for each expression can be found using the dedicated choice menu \n on the right of each formula."<<std::endl;
+          helpContent
+          << "Available variables for each expression can be found using the dedicated choice menu \n on the right of each formula."
+      << std::endl;
   helpContent << "If Mask formula is left blank, no mask used" << std::endl;
   helpContent << "If Object analysis formula is left blank, no post processing is applied " << std::endl;
-  helpContent << "Save and quit button process the entire image, and output a vector data of labeled objects." <<std::endl;
-  helpContent << "More informations and examples can be found on OTB wiki"<<std::endl;
-  helpContent << "http://wiki.orfeo-toolbox.org/index.php/Connected_component_segmentation_module"<<std::endl;
+  helpContent << "Save and quit button process the entire image, and output a vector data of labeled objects."
+      << std::endl;
+  helpContent << "More informations and examples can be found on OTB wiki" << std::endl;
+  helpContent << "http://wiki.orfeo-toolbox.org/index.php/Connected_component_segmentation_module" << std::endl;
   ui_HelpText->value(helpContent.str().c_str());
 }
 
@@ -512,18 +527,22 @@ void ConnectedComponentSegmentationModule::CheckProcess()
   uiTmpOutputSelection->remove(OUTPUT);
   uiTmpOutputSelection->remove(SEGMENTATION_AFTER_SMALL_OBJECTS_REJECTION);
   uiTmpOutputSelection->remove(CONNECTED_COMPONENT_SEGMENTATION_OUTPUT);
-  uiTmpOutputSelection->remove(MASK_IMAGE);
+  uiTmpOutputSelection->remove(MASKED_IMAGE);
+  uiTmpOutputSelection->remove(MASK);
 
   if (m_IsMaskExpressionOK)
     {
+    maxVal++;
     uiTmpOutputSelection->add("Mask Output");
     maxVal++;
+    uiTmpOutputSelection->add("Masked Image");
+
     if (m_IsCCExpressionOK)
       {
       maxVal++;
       uiTmpOutputSelection->add("Segmentation output");
       maxVal++;
-      uiTmpOutputSelection->add("Segmentation after small objects rejection");
+      uiTmpOutputSelection->add("Relabeling with small objects rejection");
 
       if (m_IsOBIAExpressionOK)
         {
@@ -690,8 +709,19 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
 
     m_RenderingModel->AddLayer(m_MaskGenerator->GetLayer());
 
-    m_MaskFilter->GetOutput()->UpdateOutputInformation();
+    //Masked Image
+    m_MaskImageFilter->SetInput2(m_MaskFilter->GetOutput());
+    m_RenderingModel->DeleteLayerByName("Masked Image");
 
+    m_MaskedImageGenerator->SetImage(m_MaskImageFilter->GetOutput());
+    m_MaskedImageGenerator->GenerateQuicklookOff();
+    m_MaskedImageGenerator->GenerateLayer();
+    m_MaskedImageGenerator->GetLayer()->SetName("Masked Image");
+    m_RenderingModel->AddLayer(m_MaskedImageGenerator->GetLayer());
+
+    //update generator output information
+    m_MaskFilter->GetOutput()->UpdateOutputInformation();
+    m_MaskImageFilter->GetOutput()->UpdateOutputInformation();
     }
 }
 
@@ -818,7 +848,6 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
     m_ShapeLabelMapFilter->SetComputeFeretDiameter(m_ComputeFeretDiameter);
     m_ShapeLabelMapFilter->SetComputeFlusser(m_ComputeFlusser);
 
-
     m_ShapeLabelMapFilter->SetLabelImage(m_CCRelabelFilter->GetOutput());
 
     // band stat attributes computation
@@ -886,7 +915,7 @@ void ConnectedComponentSegmentationModule::Process()
     m_MaskOutputReady = true;
     }
 
-  if (uiTmpOutputSelection->value() > MASK_IMAGE)
+  if (uiTmpOutputSelection->value() > MASK)
     {
 
     this->UpdateCCSegmentationLayer();
@@ -911,6 +940,7 @@ void ConnectedComponentSegmentationModule::Process()
 
   // Layer choice
   m_MaskGenerator->GetLayer()->SetVisible(false);
+  m_MaskedImageGenerator->GetLayer()->SetVisible(false);
   m_CCSegmentationGenerator->GetLayer()->SetVisible(false);
   m_CCSegmentationLabelGenerator->GetLayer()->SetVisible(false);
   m_RelabelRGBGenerator->GetLayer()->SetVisible(false);
@@ -927,10 +957,15 @@ void ConnectedComponentSegmentationModule::Process()
     m_PixelDescriptionModel->AddLayer(m_ImageGenerator->GetLayer());
     }
 
-  if (uiTmpOutputSelection->value() == MASK_IMAGE)
+  if (uiTmpOutputSelection->value() == MASK)
     {
     m_MaskGenerator->GetLayer()->SetVisible(true);
     m_PixelDescriptionModel->AddLayer(m_MaskGenerator->GetLayer());
+    }
+  if (uiTmpOutputSelection->value() == MASKED_IMAGE)
+    {
+    m_MaskedImageGenerator->GetLayer()->SetVisible(true);
+    m_PixelDescriptionModel->AddLayer(m_MaskedImageGenerator->GetLayer());
     }
   if (uiTmpOutputSelection->value() == CONNECTED_COMPONENT_SEGMENTATION_OUTPUT)
     {
@@ -1025,7 +1060,6 @@ void ConnectedComponentSegmentationModule::OK()
     streamingFilter->GetFilter()->SetComputeFeretDiameter(m_ComputeFeretDiameter);
     streamingFilter->GetFilter()->SetComputeFlusser(m_ComputeFlusser);
 
-
     if (m_NoOBIAOpening)
       streamingFilter->GetFilter()->SetOBIAExpression("1");
     else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
@@ -1107,10 +1141,9 @@ void ConnectedComponentSegmentationModule::OK()
   else
     {
     itk::OStringStream oss;
-    oss << "At least one formula is wrong" << std::endl
-        << " Mask expression " << m_IsMaskExpressionOK << std::endl
-        << " CC Segmentation expression " << m_IsCCExpressionOK << std::endl
-        << " Object Analysis formula " << m_IsOBIAExpressionOK << std::endl;
+    oss << "At least one formula is wrong" << std::endl << " Mask expression " << m_IsMaskExpressionOK << std::endl
+        << " CC Segmentation expression " << m_IsCCExpressionOK << std::endl << " Object Analysis formula "
+        << m_IsOBIAExpressionOK << std::endl;
 
     MsgReporter::GetInstance()->SendError(oss.str());
 
@@ -1120,7 +1153,6 @@ void ConnectedComponentSegmentationModule::OK()
   // Close the GUI
   this->Hide();
 }
-
 
 } // End namespace otb
 
