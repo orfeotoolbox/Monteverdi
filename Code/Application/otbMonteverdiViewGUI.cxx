@@ -469,7 +469,7 @@ MonteverdiViewGUI
   int countIt = 0;
   while(it != lDataMap.end())
     {
-    std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
+    otbMsgDevMacro( << static_cast<OutputDataDescriptor>(*it));
 
     // Is it a vector image ?
     if (it->GetDataType() == "Floating_Point_VectorImage"
@@ -495,14 +495,14 @@ MonteverdiViewGUI
             && ( it->GetDataType() != "Labeled_Char_VectorImage" )
             && ( it->GetDataType() != "Floating_Point_Complex_VectorImage") )
         {
-        std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
+        otbMsgDevMacro( << static_cast<OutputDataDescriptor>(*it));
 
         // Is it a set of scalar bands ?
         if(  it->GetDataType() == "Labeled_Short_Image"
              || it->GetDataType() == "Floating_Point_Image" )
           {
           // check if it is a band which belongs to the vector image
-          if (it->GetDataType().c_str() == prevDataType)
+          if (it->GetDataType().c_str() == prevDataType) // This condition is perhaps too light ?
             {
             new_node_sub = new_node->add_branch(it->GetDataKey().c_str());
             new_node_sub->parent()->open(true);
@@ -543,7 +543,7 @@ MonteverdiViewGUI
           int count = 0;
           while ((count <4) && (it != lDataMap.end()))
             {
-            std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
+            otbMsgDevMacro( << static_cast<OutputDataDescriptor>(*it) );
             new_node_sub_sub = new_node_sub->add_branch(it->GetDataKey().c_str());
             new_node_sub_sub->parent()->open(true);
 
@@ -559,10 +559,6 @@ MonteverdiViewGUI
 
             count++;
             }
-          }
-        else
-          {
-          std::cout << "Error" << std::endl;
           }
         new_node_sub->branch_icons(&scalarImage, &scalarImage);
         }
