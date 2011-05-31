@@ -326,7 +326,7 @@ MonteverdiViewGUI
             n->parent()->parent()->parent()->parent()->is_root() )
     {
     std::string instanceId;
-    std::string outputId =  n->label();;
+    std::string outputId =  n->label(); ;
     // We exclude the case of informations node
     if (outputId == m_BranchNameInfo)
       {
@@ -462,8 +462,8 @@ MonteverdiViewGUI
   //TODO
   //n->droppable(true);
 
-  FluTreeBrowser::Node* new_node ;
-  FluTreeBrowser::Node* new_node_info ;
+  FluTreeBrowser::Node* new_node;
+  FluTreeBrowser::Node* new_node_info;
 
   it = lDataMap.begin();
   int countIt = 0;

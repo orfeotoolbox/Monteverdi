@@ -86,7 +86,6 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
 
-
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -188,7 +187,7 @@ public:
       ConnectedComponentFilterType;
 
   typedef otb::MaskMuParserFilter<VectorImageType, ImageType> MaskMuParserFilterType;
-  typedef itk::MaskImageFilter<VectorImageType,ImageType,VectorImageType> MaskImageFilterType;
+  typedef itk::MaskImageFilter<VectorImageType, ImageType, VectorImageType> MaskImageFilterType;
 
 
   typedef ImageLayerGeneratorType::ImageLayerType::OutputPixelType LayerOutputPixelType;
