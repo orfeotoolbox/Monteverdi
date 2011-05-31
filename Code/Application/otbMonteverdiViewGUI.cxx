@@ -435,41 +435,147 @@ MonteverdiViewGUI
   //TODO
   //n->droppable(true);
 
-  for (it = lDataMap.begin(); it != lDataMap.end(); it++)
+  FluTreeBrowser::Node* new_node ;
+
+  it = lDataMap.begin();
+  int countIt = 0;
+  while(it != lDataMap.end())
     {
-    otbMsgDevMacro(<< "Add node " << it->GetDataKey() )
+    std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
 
-    FluTreeBrowser::Node* new_node = n->add_branch(it->GetDataKey().c_str());
-
-    // add informations to the targeted module
-    new_node->add(it->GetDataDescription().c_str());
-    new_node->add(it->GetDataType().c_str());
-    new_node->parent()->open(true);
-
-
-    //new_node->open(close);
-    n->branch_icons(&process, &process);
-
+    // Is it a vector image ?
     if (it->GetDataType() == "Floating_Point_VectorImage"
-        || it->GetDataType() == "Floating_Point_Complex_Image"
-        || it->GetDataType() == "Labeled_Char_VectorImage")
+        || it->GetDataType() == "Labeled_Char_VectorImage"
+        || it->GetDataType() == "Floating_Point_Complex_VectorImage")
       {
+      //std::cout << "Try to add node from a vector image" << std::endl;
+      new_node = n->add_branch(it->GetDataKey().c_str());
+      new_node->add(it->GetDataDescription().c_str());
+      new_node->add(it->GetDataType().c_str());
+      new_node->parent()->open(true);
+      //std::cout << "Add node OK" << std::endl;
+
+      it++;
+      countIt++;
+      // keep some infos
+      std::string prevDataType = it->GetDataType().c_str();
+
+      // main vector image is added, so we need to add these bands
+      FluTreeBrowser::Node* new_node_sub;
+      while ( (it != lDataMap.end()) && (it->GetDataType() != "Floating_Point_VectorImage")
+            && ( it->GetDataType() != "Labeled_Char_VectorImage" )
+            && ( it->GetDataType() != "Floating_Point_Complex_VectorImage") )
+        {
+        std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
+
+        // Is it a set of scalar bands ?
+        if(  it->GetDataType() == "Labeled_Short_Image"
+             || it->GetDataType() == "Floating_Point_Image" )
+          {
+          // check if it is a band which belongs to the vector image
+          if (it->GetDataType().c_str() == prevDataType)
+            {
+            //std::cout << "\t Try to add band" << std::endl;
+            new_node_sub = new_node->add_branch(it->GetDataKey().c_str());
+            new_node_sub->add(it->GetDataDescription().c_str());
+            new_node_sub->add(it->GetDataType().c_str());
+            new_node_sub->parent()->open(true);
+            new_node_sub->branch_icons(&scalarImage, &scalarImage);
+
+            prevDataType.clear();
+            prevDataType = it->GetDataType().c_str();
+            it++;
+            countIt++;
+
+            //std::cout << "\t Add band OK" << std::endl;
+            }
+          else
+            {
+            // Not a band
+            //std::cout << "not a band" << std::endl;
+            break;
+            }
+          }
+        // Is it a set of complex bands ?
+        else if (it->GetDataType() == "Floating_Point_Complex_Image")
+          {
+          //std::cout << "\t Try to add node_sub complex" << std::endl;
+          new_node_sub = new_node->add_branch(it->GetDataKey().c_str());
+          new_node_sub->add(it->GetDataDescription().c_str());
+          new_node_sub->add(it->GetDataType().c_str());
+          new_node_sub->parent()->open(true);
+          //std::cout << "\t Add node_sub complex OK" << std::endl;
+
+          it++;
+          countIt++;
+
+          // Each complex band generate a set of 4 scalar images so we need to add it.
+          FluTreeBrowser::Node* new_node_sub_sub;
+          int count = 0;
+          while ((count <4) && (it != lDataMap.end()))
+            {
+            std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
+            //std::cout << "\t\t Try to add node_sub_sub scalar" << std::endl;
+            new_node_sub_sub = new_node_sub->add_branch(it->GetDataKey().c_str());
+            new_node_sub_sub->add(it->GetDataDescription().c_str());
+            new_node_sub_sub->add(it->GetDataType().c_str());
+            new_node_sub_sub->parent()->open(true);
+
+            new_node_sub_sub->branch_icons(&scalarImage, &scalarImage);
+            //std::cout << "\t\t Add node_sub_sub scalar OK" << std::endl;
+
+            it++;
+            countIt++;
+
+            count++;
+            }
+          }
+        else
+          {
+          std::cout << "Error" << std::endl;
+          }
+        new_node_sub->branch_icons(&scalarImage, &scalarImage);
+        //std::cout << "add all sub node OK" << std::endl;
+        }
       new_node->branch_icons(&vectorImage, &vectorImage);
       }
-    else if (it->GetDataType() == "Labeled_Short_Image"
-             || it->GetDataType() == "Floating_Point_Image")
+
+    else if ( it->GetDataType() == "Floating_Point_Image"
+            || it->GetDataType() == "Labeled_Short_Image")
       {
+      //std::cout << "Try to add node from a scalar image" << std::endl;
+      new_node = n->add_branch(it->GetDataKey().c_str());
+      new_node->add(it->GetDataDescription().c_str());
+      new_node->add(it->GetDataType().c_str());
+      new_node->parent()->open(true);
       new_node->branch_icons(&scalarImage, &scalarImage);
+      //std::cout << "Add node OK" << std::endl;
+
+      it++;
+      countIt++;
       }
     else if (it->GetDataType() == "Labeled_Vector_Data"
              || it->GetDataType() == "Vector_Data")
       {
+      //std::cout << "Try to add VectorData node" << std::endl;
+      new_node = n->add_branch(it->GetDataKey().c_str());
+      new_node->add(it->GetDataDescription().c_str());
+      new_node->add(it->GetDataType().c_str());
+      new_node->parent()->open(true);
       new_node->branch_icons(&vectorData, &vectorData);
+      //std::cout << "Add VectorData node OK" << std::endl;
+      it++;
       }
     else
       {
+      //std::cout << "default case" << std::endl;
       new_node->branch_icons(&blue_dot, &blue_dot);
+      //std::cout << "default case end" << std::endl;
+      it++;
       }
+
+    n->branch_icons(&process, &process);
+    //new_node->open(close);
     } // end datas loop
 }
 

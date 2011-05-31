@@ -340,8 +340,8 @@ void ReaderModule::OpenComplexImage()
     filepath += ossDatasetId.str();
   }
 
-  m_ComplexReader->SetFileName(filepath);
-  m_ComplexReader->GenerateOutputInformation();
+  m_VComplexReader->SetFileName(filepath);
+  m_VComplexReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
@@ -355,7 +355,7 @@ void ReaderModule::OpenComplexImage()
     ossId << vName->value();
     }
 
-  this->AddOutputDescriptor(m_ComplexReader->GetOutput(), ossId.str(), oss.str(), true);
+  this->AddOutputDescriptor(m_VComplexReader->GetOutput(), ossId.str(), oss.str(), true);
 }
 
 void ReaderModule::OpenVector()
