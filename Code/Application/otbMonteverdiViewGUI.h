@@ -188,6 +188,9 @@ private:
   /** The help box text buffer */
   Fl_Text_Buffer * m_HelpTextBuffer;
 
+  /** The name set to the FLU tree branch which store the information about the output */
+  std::string m_BranchNameInfo;
+
 };
 } //end namespace otb
 

@@ -64,6 +64,8 @@ MonteverdiViewGUI
   m_MonteverdiModel->RegisterListener(this);
 
   m_HelpTextBuffer = new Fl_Text_Buffer();
+
+  m_BranchNameInfo = "Informations";
 }
 
 MonteverdiViewGUI
@@ -319,12 +321,37 @@ MonteverdiViewGUI
       }
     }
   // node is a output
-  else if (n->parent()->parent()->is_root())
+  else if ( n->parent()->parent()->is_root() ||
+            n->parent()->parent()->parent()->is_root() ||
+            n->parent()->parent()->parent()->parent()->is_root() )
     {
-    std::string instanceId = n->parent()->label();
-    std::string outputId = n->label();
-    bool        cacheable = m_MonteverdiModel->SupportsCaching(instanceId, outputId) && !m_MonteverdiModel->IsCached(
-      instanceId, outputId);
+    std::string instanceId;
+    std::string outputId =  n->label();;
+    // We exclude the case of informations node
+    if (outputId == m_BranchNameInfo)
+      {
+      return;
+      }
+    // To retrieve the good instanceId we need to find where we are in the tree
+    if (n->parent()->parent()->is_root())
+      {
+      instanceId = n->parent()->label();
+      }
+    else if (n->parent()->parent()->parent()->is_root())
+      {
+      instanceId = n->parent()->parent()->label();
+      }
+    else if (n->parent()->parent()->parent()->parent()->is_root())
+      {
+      instanceId = n->parent()->parent()->parent()->label();
+      }
+    else
+      {
+      return;
+      }
+
+    bool cacheable = m_MonteverdiModel->SupportsCaching(instanceId, outputId)
+                    && !m_MonteverdiModel->IsCached(instanceId, outputId);
     bool viewable = m_MonteverdiModel->SupportsViewing(instanceId, outputId);
     bool writable = m_MonteverdiModel->SupportsWriting(instanceId, outputId);
 
@@ -436,6 +463,7 @@ MonteverdiViewGUI
   //n->droppable(true);
 
   FluTreeBrowser::Node* new_node ;
+  FluTreeBrowser::Node* new_node_info ;
 
   it = lDataMap.begin();
   int countIt = 0;
@@ -448,12 +476,13 @@ MonteverdiViewGUI
         || it->GetDataType() == "Labeled_Char_VectorImage"
         || it->GetDataType() == "Floating_Point_Complex_VectorImage")
       {
-      //std::cout << "Try to add node from a vector image" << std::endl;
       new_node = n->add_branch(it->GetDataKey().c_str());
-      new_node->add(it->GetDataDescription().c_str());
-      new_node->add(it->GetDataType().c_str());
       new_node->parent()->open(true);
-      //std::cout << "Add node OK" << std::endl;
+
+      new_node_info = new_node->add_branch(m_BranchNameInfo.c_str());
+      new_node_info->add(it->GetDataDescription().c_str());
+      new_node_info->add(it->GetDataType().c_str());
+      new_node_info->branch_icons(&book, &book);
 
       it++;
       countIt++;
@@ -475,36 +504,36 @@ MonteverdiViewGUI
           // check if it is a band which belongs to the vector image
           if (it->GetDataType().c_str() == prevDataType)
             {
-            //std::cout << "\t Try to add band" << std::endl;
             new_node_sub = new_node->add_branch(it->GetDataKey().c_str());
-            new_node_sub->add(it->GetDataDescription().c_str());
-            new_node_sub->add(it->GetDataType().c_str());
             new_node_sub->parent()->open(true);
+
+            new_node_info = new_node_sub->add_branch(m_BranchNameInfo.c_str());
+            new_node_info->add(it->GetDataDescription().c_str());
+            new_node_info->add(it->GetDataType().c_str());
+            new_node_info->branch_icons(&book, &book);
+
             new_node_sub->branch_icons(&scalarImage, &scalarImage);
 
             prevDataType.clear();
             prevDataType = it->GetDataType().c_str();
             it++;
             countIt++;
-
-            //std::cout << "\t Add band OK" << std::endl;
             }
           else
-            {
-            // Not a band
-            //std::cout << "not a band" << std::endl;
+            { // Not a band
             break;
             }
           }
         // Is it a set of complex bands ?
         else if (it->GetDataType() == "Floating_Point_Complex_Image")
           {
-          //std::cout << "\t Try to add node_sub complex" << std::endl;
           new_node_sub = new_node->add_branch(it->GetDataKey().c_str());
-          new_node_sub->add(it->GetDataDescription().c_str());
-          new_node_sub->add(it->GetDataType().c_str());
           new_node_sub->parent()->open(true);
-          //std::cout << "\t Add node_sub complex OK" << std::endl;
+
+          new_node_info = new_node_sub->add_branch(m_BranchNameInfo.c_str());
+          new_node_info->add(it->GetDataDescription().c_str());
+          new_node_info->add(it->GetDataType().c_str());
+          new_node_info->branch_icons(&book, &book);
 
           it++;
           countIt++;
@@ -515,14 +544,15 @@ MonteverdiViewGUI
           while ((count <4) && (it != lDataMap.end()))
             {
             std::cout << lDataMap[countIt] << " |"<< countIt+1 << "/" << lDataMap.size()<< "|"<<std::endl;
-            //std::cout << "\t\t Try to add node_sub_sub scalar" << std::endl;
             new_node_sub_sub = new_node_sub->add_branch(it->GetDataKey().c_str());
-            new_node_sub_sub->add(it->GetDataDescription().c_str());
-            new_node_sub_sub->add(it->GetDataType().c_str());
             new_node_sub_sub->parent()->open(true);
 
+            new_node_info = new_node_sub_sub->add_branch(m_BranchNameInfo.c_str());
+            new_node_info->add(it->GetDataDescription().c_str());
+            new_node_info->add(it->GetDataType().c_str());
+            new_node_info->branch_icons(&book, &book);
+
             new_node_sub_sub->branch_icons(&scalarImage, &scalarImage);
-            //std::cout << "\t\t Add node_sub_sub scalar OK" << std::endl;
 
             it++;
             countIt++;
@@ -535,7 +565,6 @@ MonteverdiViewGUI
           std::cout << "Error" << std::endl;
           }
         new_node_sub->branch_icons(&scalarImage, &scalarImage);
-        //std::cout << "add all sub node OK" << std::endl;
         }
       new_node->branch_icons(&vectorImage, &vectorImage);
       }
@@ -543,13 +572,15 @@ MonteverdiViewGUI
     else if ( it->GetDataType() == "Floating_Point_Image"
             || it->GetDataType() == "Labeled_Short_Image")
       {
-      //std::cout << "Try to add node from a scalar image" << std::endl;
       new_node = n->add_branch(it->GetDataKey().c_str());
-      new_node->add(it->GetDataDescription().c_str());
-      new_node->add(it->GetDataType().c_str());
       new_node->parent()->open(true);
+
+      new_node_info = new_node->add_branch(m_BranchNameInfo.c_str());
+      new_node_info->add(it->GetDataDescription().c_str());
+      new_node_info->add(it->GetDataType().c_str());
+      new_node_info->branch_icons(&book, &book);
+
       new_node->branch_icons(&scalarImage, &scalarImage);
-      //std::cout << "Add node OK" << std::endl;
 
       it++;
       countIt++;
@@ -557,20 +588,21 @@ MonteverdiViewGUI
     else if (it->GetDataType() == "Labeled_Vector_Data"
              || it->GetDataType() == "Vector_Data")
       {
-      //std::cout << "Try to add VectorData node" << std::endl;
       new_node = n->add_branch(it->GetDataKey().c_str());
-      new_node->add(it->GetDataDescription().c_str());
-      new_node->add(it->GetDataType().c_str());
       new_node->parent()->open(true);
+
+      new_node_info = new_node->add_branch(m_BranchNameInfo.c_str());
+      new_node_info->add(it->GetDataDescription().c_str());
+      new_node_info->add(it->GetDataType().c_str());
+      new_node_info->branch_icons(&book, &book);
+
       new_node->branch_icons(&vectorData, &vectorData);
-      //std::cout << "Add VectorData node OK" << std::endl;
+
       it++;
       }
     else
       {
-      //std::cout << "default case" << std::endl;
       new_node->branch_icons(&blue_dot, &blue_dot);
-      //std::cout << "default case end" << std::endl;
       it++;
       }
 
