@@ -407,7 +407,7 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
     {
     // spectralangle is not usable without choice of reference pixel
     // TODO JGU adapt GUI to allow user defined spectralangle reference pixel
-    if (strcmp(item->first.c_str(), "spectralangle")) ui_VarNamesMask->add(item->first.c_str());
+    if (strcmp(item->first.c_str(), "spectralAngle")) ui_VarNamesMask->add(item->first.c_str());
     }
 }
 
