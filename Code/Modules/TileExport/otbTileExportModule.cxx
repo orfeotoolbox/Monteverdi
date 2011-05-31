@@ -37,7 +37,8 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
                                        m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0),
                                        m_CurrentProduct(0), m_CurrentDepth(-1),
                                        m_RegionOfInterestKmlGenerated(false),
-                                       m_CenterPointVector(), m_ProductVector()
+                                       m_CenterPointVector(), m_ProductVector(),
+                                       m_InputHaveMetaData(true)
 {
   // Add a multiple inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"), false);
@@ -102,6 +103,9 @@ void TileExportModule::Run()
     }
   
   m_VectorImage->UpdateOutputInformation();
+
+  // Update the IsProductHaveMetaData
+  this->IsProductHaveMetaData(0);
   
   // Set channel GUI
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
@@ -146,7 +150,7 @@ void TileExportModule::Run()
   newProduct.m_Description = "Image Product";
   
   // Activate or not the Geo group
-  if (!this->IsProductHaveMetaData(0) && gExtended->value())
+  if (!m_InputHaveMetaData && gExtended->value())
     {
     vgxGELatLongBoxGroup->activate();
     }
@@ -352,7 +356,7 @@ void TileExportModule::SaveDataSet()
       }
 
     // Do the tiling for the current image
-    if (this->IsProductHaveMetaData(0))
+    if (m_InputHaveMetaData)
       this->Tiling(0);
     else
       this->ExportNonGeoreferencedProduct(i);
@@ -902,7 +906,7 @@ AddNetworkLinkToRootKML(double north,
   // Add network link
   // If not geo add a ground Overlay with image
   // as an icon
-  if (this->IsProductHaveMetaData(pos))
+  if (m_InputHaveMetaData)
     {
     m_RootKmlFile << "\t\t\t<NetworkLink>" << std::endl;
     m_RootKmlFile << "\t\t\t\t<name>" << m_ProductVector[pos].m_Name << "</name>" <<  std::endl;
@@ -1054,7 +1058,7 @@ GenerateBoundingKML(double north, double south, double east, double west)
   fileTest << "\t\t\t<altitudeMode>clampedToGround</altitudeMode>" << std::endl;
   fileTest << "\t\t\t<coordinates>" << std::endl;
 
-  if (this->IsProductHaveMetaData(m_CurrentProduct))
+  if (m_InputHaveMetaData)
     {
     fileTest << "\t\t\t\t\t" <<  west << "," << north << std::endl;
     fileTest << "\t\t\t\t\t" <<  east << "," << north << std::endl;
@@ -1657,15 +1661,16 @@ TileExportModule::BoundingBoxKmlProcess(double north, double south, double east,
 
 /**
   * Is Product Selected have geograhical
-  * Informations
+  * Update the global flag
   */
-bool
+void
 TileExportModule::
 IsProductHaveMetaData(unsigned int itkNotUsed(indexClicked))
 {
   bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
   bool emptyKWL     = m_VectorImage->GetImageKeywordlist().GetSize() == 0 ? true : false;
-  return !emptyProjRef || !emptyKWL;
+
+  m_InputHaveMetaData = (!emptyProjRef || !emptyKWL);
 }
 
 /**
@@ -1824,7 +1829,7 @@ TileExportModule::UpdateProductInformations()
     }
 
   // If non geo Product, Fill the corners
-  if (!IsProductHaveMetaData(indexClicked))
+  if (!m_InputHaveMetaData)
     {
     // The case we export the product in a GX:LatLong box
     if (gExtended->value())
@@ -1858,14 +1863,14 @@ void
 TileExportModule::HandleCornersGroup()
 {
   // Case 1 : Product geo : don't show the group
-  if (this->IsProductHaveMetaData(0))
+  if (m_InputHaveMetaData)
     {
     vgxGELatLongBoxGroup->deactivate();
     vGELatLongBoxGroup->hide();
     }
 
   // Case 2 : Product non geo : Depends on the extend button
-  if (!this->IsProductHaveMetaData(0))
+  if (!m_InputHaveMetaData)
     {
     if (gExtended->value())
       {

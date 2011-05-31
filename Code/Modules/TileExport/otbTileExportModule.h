@@ -273,7 +273,7 @@ private:
   void AddCurrentProductLegends(unsigned int curProd);
 
   /** If Product selected have metadatas*/
-  bool IsProductHaveMetaData(unsigned int itkNotUsed(indexClicked));
+  void IsProductHaveMetaData(unsigned int itkNotUsed(indexClicked));
 
   /** Method to avoid code duplication*/
   /** call the method that generates the bounding box kml*/
@@ -360,6 +360,9 @@ private:
   
   // Cast to vectorImage filter
   CastToVectorImageFilterType::Pointer    m_CastToVectorImageFilter;
+
+  // flag storing if the image have metada
+  bool                                    m_InputHaveMetaData;
 };
 
 } // End namespace otb
