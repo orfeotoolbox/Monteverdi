@@ -134,14 +134,12 @@ void ReaderModule::Analyse()
         {
         switch (m_FPVReader->GetImageIO()->GetPixelType())
           {
-          // handle the radar case
-          case itk::ImageIOBase::COMPLEX:
+          case itk::ImageIOBase::COMPLEX: // handle the radar case
             vType->value(2);
             // If we are still here, this is a readable image
             typeFound = true;
             break;
-            // handle the real case
-          default:
+          default: // handle the real case
             vType->value(1);
             // If we are still here, this is a readable image
             typeFound = true;
@@ -262,9 +260,49 @@ void ReaderModule::OpenDataSet()
 
 void ReaderModule::TypeChanged()
 {
+  // Is type found is correct?
+  bool typeFoundCorrect = false;
   if (vType->value() > 0)
     {
-    bOk->activate();
+    // Get the path
+    std::string filepath = vFilePath->value();
+
+    // Check if the choice is correct
+    try
+      {
+      // Read the image
+      m_FPVReader->SetFileName(filepath);
+      m_FPVReader->GenerateOutputInformation();
+      if (vType->value() < 3)
+        {
+        typeFoundCorrect = true;
+        bOk->activate();
+        }
+
+      }
+    catch (itk::ExceptionObject&)
+      {
+      // Silent catch
+      }
+
+    if (!typeFoundCorrect)
+      {
+      try
+        {
+        VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+        vectorReader->SetFileName(filepath);
+        vectorReader->GenerateOutputInformation();
+        if ( vType->value() != 3)
+          {
+          bOk->activate();
+          }
+        }
+      catch (itk::ExceptionObject&)
+        { // Silent catch
+        vType->value(0);
+        bOk->deactivate();
+        }
+      }
     }
   else
     {
