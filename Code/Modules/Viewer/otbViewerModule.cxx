@@ -27,6 +27,8 @@
 #include "otbFltkFilterWatcher.h"
 #include "otbMsgReporter.h"
 #include "otbViewerConst.h"
+#include <boost/algorithm/string.hpp>
+
 
 
 namespace otb
@@ -516,79 +518,19 @@ namespace otb
    */
   void ViewerModule::UpdateVectorData(unsigned int index)
   {
-    VectorDataProjectionFilterType::Pointer vproj;
-    VectorDataExtractROIType::Pointer vdextract;
-
-    // Extract The part of the VectorData that actually overlaps with
-    // the image extent
-    vdextract = VectorDataExtractROIType::New();
-    vdextract->SetInput(m_VectorDataList->GetNthElement(index));
-
-    // Select the current image
-    ImageType::Pointer image =
-      m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
-
-    // Find the geographic region of interest
-
-    // Ge the index of the corner of the image
-    ImageType::IndexType ul, ur, ll, lr;
-    ImageType::PointType pul, pur, pll, plr;
-    ul = image->GetLargestPossibleRegion().GetIndex();
-    ur = ul;
-    ll = ul;
-    lr = ul;
-    ur[0] += image->GetLargestPossibleRegion().GetSize()[0];
-    lr[0] += image->GetLargestPossibleRegion().GetSize()[0];
-    lr[1] += image->GetLargestPossibleRegion().GetSize()[1];
-    ll[1] += image->GetLargestPossibleRegion().GetSize()[1];
-
-    // Transform to physical point
-    image->TransformIndexToPhysicalPoint(ul, pul);
-    image->TransformIndexToPhysicalPoint(ur, pur);
-    image->TransformIndexToPhysicalPoint(ll, pll);
-    image->TransformIndexToPhysicalPoint(lr, plr);
-
-    // Build the cartographic region
-    RemoteSensingRegionType rsRegion;
-    RemoteSensingRegionType::IndexType rsOrigin;
-    RemoteSensingRegionType::SizeType  rsSize;
-    rsOrigin[0]= std::min(pul[0], plr[0]);
-    rsOrigin[1]= std::min(pul[1], plr[1]);
-    rsSize[0]=vcl_abs(pul[0]-plr[0]);
-    rsSize[1]=vcl_abs(pul[1]-plr[1]);
-
-    rsRegion.SetOrigin(rsOrigin);
-    rsRegion.SetSize(rsSize);
-    rsRegion.SetRegionProjection(image->GetProjectionRef());
-    if (image->GetProjectionRef().empty())
-      rsRegion.SetKeywordList(image->GetImageKeywordlist());
-
-    // Set the cartographic region to the extract roi filter
-    vdextract->SetRegion(rsRegion);
+    VectorDataReprojectionType::Pointer reproj = VectorDataReprojectionType::New();
+    reproj->SetInputImage(m_InputImageList->GetNthElement(m_CurrentOpaqueImage));
+    reproj->SetInputVectorData(m_VectorDataList->GetNthElement(index).GetPointer());
+    reproj->SetUseOutputSpacingAndOriginFromImage(true);
     if (!m_DEMDirectory.empty())
     {
-      vdextract->SetDEMDirectory(m_DEMDirectory);
+      reproj->SetDEMDirectory(m_DEMDirectory);
     }
-
-    // Reproject VectorData in image projection
-    vproj = VectorDataProjectionFilterType::New();
-    vproj->SetInput(vdextract->GetOutput());
-    vproj->SetInputProjectionRef(m_VectorDataList->GetNthElement(index)->GetProjectionRef());
-
-    vproj->SetOutputProjectionRef(image->GetProjectionRef());
-    if (image->GetProjectionRef().empty())
-      vproj->SetOutputKeywordList(image->GetImageKeywordlist());
-    vproj->SetOutputOrigin(image->GetOrigin());
-    vproj->SetOutputSpacing(image->GetSpacing());
-    if (!m_DEMDirectory.empty())
-    {
-      vproj->SetDEMDirectory(m_DEMDirectory);
-    }
-    vproj->Update();
+    reproj->Update();
 
     // Create a VectorData gl component
     VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
-    vgl->SetVectorData(vproj->GetOutput());
+    vgl->SetVectorData(reproj->GetOutput());
 
     // Flag to Generate Random Color or to use saved colors (used only when DEM use is requested)
     if (m_GenerateRandomColor)

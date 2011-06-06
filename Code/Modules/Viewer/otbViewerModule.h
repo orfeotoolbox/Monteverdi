@@ -74,6 +74,7 @@
 #include "otbBlendingFunction.h"
 #include "itkRescaleIntensityImageFilter.h"
 
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
 namespace otb
 {
@@ -201,12 +202,9 @@ public:
   typedef  PixelDescriptionViewType::Pointer         PixelDescriptionViewPointerType;
 
     /** VectorData overlay */
-  typedef VectorDataProjectionFilter
-  <VectorDataType, VectorDataType>                    VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
-  typedef VectorDataExtractROIType::RegionType       RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;
   typedef VectorDataFileReader<VectorDataType>       VectorDataFileReaderType;
+  typedef VectorDataIntoImageProjectionFilter<VectorDataType, ImageType> VectorDataReprojectionType;
 
   /** Cast SingleImage to VectorImageType*/
   typedef ImageToVectorImageCastFilter<SingleImageType, ImageType>     CastSingleImageFilter;
