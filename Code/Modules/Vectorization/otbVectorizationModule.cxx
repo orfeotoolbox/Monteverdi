@@ -113,14 +113,7 @@ void VectorizationModule::Run()
       {
       // Load the vector data (still empty otherwise !!!)
       vdata->Update();
-      if (vdata->Size() <= 1000)
-        {
-        m_Controller->AddVectorData(vdata);
-        }
-      else
-        {
-        itkExceptionMacro("The Input Shapefile Contains to Many Features to be Loaded");
-        }
+      m_Controller->AddVectorData(vdata);
       }
     else
       {

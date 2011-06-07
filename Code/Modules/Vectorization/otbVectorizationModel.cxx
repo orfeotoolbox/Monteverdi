@@ -18,6 +18,8 @@
 #include "otbVectorizationModel.h"
 #include "itkPreOrderTreeIterator.h"
 
+#include "otbVectorDataIntoImageProjectionFilter.h"
+
 
 namespace otb
 {
@@ -119,86 +121,37 @@ void VectorizationModel
     {
       itkExceptionMacro("Invalid input image.");
     }
-  
-  // Vector data reprojection
-  VectorDataProjectionFilterType::Pointer vproj;
-  VectorDataExtractROIType::Pointer       vdextract;
 
-  // Extract The part of the VectorData that actually overlaps with
-  // the image extent
-  vdextract = VectorDataExtractROIType::New();
-  vdextract->SetInput(vData);
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType>
+    VectorDataReprojectionType;
 
-  // Find the geographic region of interest
-
-  // Ge the index of the corner of the image
-  IndexType ul, ur, ll, lr;
-  PointType pul, pur, pll, plr;
-  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-
-  // Transform to physical point
-  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
-  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
-  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
-  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
-
-  // Build the cartographic region
-  RemoteSensingRegionType            rsRegion;
-  RemoteSensingRegionType::IndexType rsOrigin;
-  RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = std::min(pul[0], plr[0]);
-  rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
-
-  rsRegion.SetOrigin(rsOrigin);
-  rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
-
-  // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
+  VectorDataReprojectionType::Pointer reproj = VectorDataReprojectionType::New();
+  reproj->SetInputImage(m_InputImage);
+  reproj->SetInputVectorData(vData.GetPointer());
+  // We want to transform into image index coordinates
+  reproj->SetUseOutputSpacingAndOriginFromImage(true);
   if (m_UseDEM==true)
     {
     if (!m_DEMPath.empty())
       {
-      vdextract->SetDEMDirectory(m_DEMPath);
+      reproj->SetDEMDirectory(m_DEMPath);
       }
     else
       {
       itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
       }
     }
-  // Reproject VectorData in image projection
-  vproj = VectorDataProjectionFilterType::New();
-  vproj->SetInput(vdextract->GetOutput());
-  vproj->SetInputProjectionRef(vData->GetProjectionRef());
-  vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  vproj->SetOutputOrigin(m_InputImage->GetOrigin());
-  vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  
-  if (m_UseDEM==true)
+  reproj->Update();
+
+  VectorDataType::Pointer vdata = reproj->GetOutput();
+  if (vdata->Size() <= 1000)
     {
-    if (!m_DEMPath.empty())
-      {
-      vproj->SetDEMDirectory(m_DEMPath);
-      }
-    else
-      {
-      itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
-      }
+    m_VectorDataModel->AddVectorData(vdata);
     }
-  
-  vproj->Update();
-  m_VectorDataModel->AddVectorData(vproj->GetOutput());
+  else
+    {
+    itkExceptionMacro("The Input VectorData contains to many features to be loaded");
+    }
 }
 
 void VectorizationModel
