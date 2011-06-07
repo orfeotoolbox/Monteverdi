@@ -18,6 +18,7 @@
 
 #include "otbSupervisedClassificationModel.h"
 #include "otbFltkFilterWatcher.h"
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
 namespace otb
 {
@@ -95,69 +96,22 @@ void
 SupervisedClassificationModel
 ::ReprojectVectorData()
 {
- if(m_InputImage.IsNull())
+  if(m_InputImage.IsNull())
     {
       itkExceptionMacro("Invalid input image.");
     }
-  
-  // Vector data reprojection
-  VectorDataProjectionFilterType::Pointer vproj;
-  VectorDataExtractROIType::Pointer       vdextract;
 
-  // Extract The part of the VectorData that actually overlaps with
-  // the image extent
-  vdextract = VectorDataExtractROIType::New();
-  vdextract->SetInput(m_VectorROIs);
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, ImageType>
+    VectorDataReprojectionType;
 
-  // Find the geographic region of interest
+  VectorDataReprojectionType::Pointer reproj = VectorDataReprojectionType::New();
+  reproj->SetInputImage(m_InputImage);
+  reproj->SetInputVectorData(m_VectorROIs.GetPointer());
 
-  // Ge the index of the corner of the image
-  IndexType ul, ur, ll, lr;
-  PointType pul, pur, pll, plr;
-  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-
-  // Transform to physical point
-  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
-  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
-  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
-  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
-
-  // Build the cartographic region
-  RemoteSensingRegionType            rsRegion;
-  RemoteSensingRegionType::IndexType rsOrigin;
-  RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = std::min(pul[0], plr[0]);
-  rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
-
-  rsRegion.SetOrigin(rsOrigin);
-  rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
-
-  // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
-  
-  // Reproject VectorData in image projection
-  vproj = VectorDataProjectionFilterType::New();
-  vproj->SetInput(vdextract->GetOutput());
-  vproj->SetInputProjectionRef(m_VectorROIs->GetProjectionRef());
-  vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  //vproj->SetOutputOrigin(m_InputImage->GetOrigin());
-  //vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  
-  vproj->Update();
-
-  m_VectorROIs = vproj->GetOutput();
+  // We want to transform into image physical coordinates
+  reproj->SetUseOutputSpacingAndOriginFromImage(false);
+  reproj->Update();
+  m_VectorROIs = reproj->GetOutput();
 }
 
 void
