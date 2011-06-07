@@ -576,6 +576,9 @@ namespace otb
     // Update the histogram tab
     UpdateTabHistogram();
 
+    // Reload quantiles
+    UpdateQuantiles();
+
     // Refresh the displayed informations
     RedrawWidget();
   }
