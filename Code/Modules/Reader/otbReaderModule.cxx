@@ -428,6 +428,8 @@ void ReaderModule::Browse()
   m_Desc.clear();
   m_Names.clear();
   vDataset->clear();
+  vName->value("");
+
   this->Analyse();
 }
 
