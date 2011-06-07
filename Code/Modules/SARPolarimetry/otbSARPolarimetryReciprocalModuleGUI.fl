@@ -10,7 +10,7 @@ class SARPolarimetryReciprocalModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {Reciprocal matrix to} open selected
+      label {Reciprocal matrix to} open
       xywh {1124 633 400 200} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 200 0 0} visible
     } {
       Fl_Group {} {
@@ -18,11 +18,11 @@ class SARPolarimetryReciprocalModuleGUI {open
         xywh {5 20 390 80} box PLASTIC_DOWN_BOX color 55 labelcolor 186 align 5
       } {
         Fl_Check_Button rb_CohDeg {
-          label {Coherency degree matrix}
+          label {Coherency degree matrix} selected
           tooltip {Available if input image has 10 channels.} xywh {80 30 230 20} down_box DOWN_BOX labelcolor 186
         }
         Fl_Check_Button rb_RecCoh {
-          label {Reciprocal coherency matrix}
+          label {Reciprocal coherency matrix} selected
           tooltip {Available if input image has 10 channels.} xywh {80 65 230 20} down_box DOWN_BOX labelcolor 186
         }
       }
@@ -31,8 +31,8 @@ class SARPolarimetryReciprocalModuleGUI {open
         xywh {5 120 390 35} box PLASTIC_DOWN_BOX color 55 labelcolor 186 align 5
       } {
         Fl_Check_Button rb_Mue {
-          label {Mueller matrix}
-          tooltip {Available if input image has 6 channels.} xywh {80 128 230 20} down_box DOWN_BOX labelcolor 186
+          label {Reciprocal Mueller matrix}
+          tooltip {Available if input image has 10 channels.} xywh {80 128 230 20} down_box DOWN_BOX labelcolor 186
         }
       }
       Fl_Button {} {

@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", otbGetTextMacro("Filtering/Connected Component segmentation"));
 
   /***********  SAR menu *******************/
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle image"));
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle"));
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
                                                  otbGetTextMacro("SAR/Compute intensity and log-intensity"));
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",

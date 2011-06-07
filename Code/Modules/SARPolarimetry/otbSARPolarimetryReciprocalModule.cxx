@@ -28,7 +28,7 @@ namespace otb
   // Filters
   m_ReciprocalCovarianceToReciprocalCoherencyImageFilter = ReciprocalCovarianceToReciprocalCoherencyImageFilterType::New();
   m_ReciprocalCovarianceToCoherencyDegreeImageFilter = ReciprocalCovarianceToCoherencyDegreeImageFilterType::New();
-  m_ReciprocalCoherencyToMuellerImageFilter = ReciprocalCoherencyToMuellerImageFilterType::New();
+  m_ReciprocalCoherencyToReciprocalMuellerImageFilter = ReciprocalCoherencyToReciprocalMuellerImageFilterType::New();
 
   m_InputImage = ComplexVectorImageType::New();
 
@@ -116,9 +116,9 @@ void SARPolarimetryReciprocalModule::Ok()
     }
   if( rb_Mue->value() )
     {
-      m_ReciprocalCoherencyToMuellerImageFilter->SetInput(m_InputImage);
+      m_ReciprocalCoherencyToReciprocalMuellerImageFilter->SetInput(m_InputImage);
       
-      this->AddOutputDescriptor(m_ReciprocalCoherencyToMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter",
+      this->AddOutputDescriptor(m_ReciprocalCoherencyToReciprocalMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter",
                                 otbGetTextMacro("RecCoherency to Mueller image"));
       hasOutput = true;
     }

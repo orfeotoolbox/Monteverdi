@@ -27,7 +27,7 @@
 // include the OTB/ITK elements
 #include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
 #include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
-#include "otbReciprocalCoherencyToMuellerImageFilter.h"
+#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
 
 namespace otb
@@ -63,7 +63,7 @@ public:
   /** Filters typedefs */
   typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter<ComplexVectorImageType, ComplexVectorImageType> ReciprocalCovarianceToReciprocalCoherencyImageFilterType;
   typedef ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexVectorImageType, ComplexVectorImageType>     ReciprocalCovarianceToCoherencyDegreeImageFilterType;
-  typedef ReciprocalCoherencyToMuellerImageFilter<ComplexVectorImageType, VectorImageType>                     ReciprocalCoherencyToMuellerImageFilterType;
+  typedef ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexVectorImageType, VectorImageType>                     ReciprocalCoherencyToReciprocalMuellerImageFilterType;
 
   /** Show the Module GUI */
   virtual bool CanShow(){return true; }
@@ -110,7 +110,7 @@ private:
 
   ReciprocalCovarianceToReciprocalCoherencyImageFilterType::Pointer       m_ReciprocalCovarianceToReciprocalCoherencyImageFilter;
   ReciprocalCovarianceToCoherencyDegreeImageFilterType::Pointer m_ReciprocalCovarianceToCoherencyDegreeImageFilter;
-  ReciprocalCoherencyToMuellerImageFilterType::Pointer m_ReciprocalCoherencyToMuellerImageFilter;
+  ReciprocalCoherencyToReciprocalMuellerImageFilterType::Pointer m_ReciprocalCoherencyToReciprocalMuellerImageFilter;
 
   };
 
