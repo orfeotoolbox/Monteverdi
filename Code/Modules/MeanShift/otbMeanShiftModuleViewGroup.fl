@@ -58,8 +58,8 @@ class MeanShiftModuleViewGroup {open
         }
         Fl_Value_Slider mSpectralRadius {
           label {Spectral radius}
-          callback {SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));}
-          tooltip {Set the mean shift spectral radius} xywh {531 411 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 100 step 1 value 15 textsize 14
+          callback {SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));} selected
+          tooltip {Set the mean shift spectral radius} xywh {531 411 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 maximum 500 step 1 value 15 textsize 14
         }
         Fl_Value_Slider mMinRegionSize {
           label {Min region size}
@@ -88,7 +88,7 @@ class MeanShiftModuleViewGroup {open
         }
         Fl_Button {} {
           label Close
-          callback {this->Exit();} selected
+          callback {this->Exit();}
           xywh {604 531 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
       }
