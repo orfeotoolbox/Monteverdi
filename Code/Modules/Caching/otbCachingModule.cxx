@@ -37,8 +37,10 @@ CachingModule::CachingModule()
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
 
-  //CachingPathManager::GetInstance()->GetAValidCachingPath();
-  m_CachingPath = CachingPathManager::GetInstance()->GetCachingPath();
+    // Create the caching dir if not already created
+  CachingPathManager::GetInstance()->GetAValidCachingPath();
+  m_CachingPath = CachingPathManager::GetInstance()->GetFullCachingPath();
+  CachingPathManager::GetInstance()->CreateCachingDirectory();
 
   m_FilePath = "";
   m_WatchProgress = true;
@@ -147,29 +149,6 @@ void CachingModule::ThreadedWatch()
   Fl::unlock();
 }
 
-// Call in the otbModule::Run()
-/*
-int CachingModule::CheckValidity()
-{
-  int res = 0;
-  // Check caching dir permission
-  // Create the caching dir if not already created
-  bool isOK = itksys::SystemTools::MakeDirectory( m_CachingPath.c_str() );
-
-  if( isOK == false )
-    {
-      itk::OStringStream oss;
-      oss<<"Not enough permission for write caching in ";
-      oss<<itksys::SystemTools::GetRealPath(".")<<".";
-      MsgReporter::GetInstance()->SendError(oss.str());
-      wCachingWindow->hide();
-      Fl::check();
-      res = 1;
-    }
-
-  return res;
-}
-*/
 
 void CachingModule::ThreadedRun()
 {
