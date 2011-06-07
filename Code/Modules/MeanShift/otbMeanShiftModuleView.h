@@ -43,7 +43,7 @@ public:
   virtual void SwitchClusters();
   virtual void SwitchBoundaries();
   virtual void SetSpatialRadius(unsigned int sr);
-  virtual void SetSpectralRadius(unsigned int sr);
+  virtual void SetSpectralRadius(double sr);
   virtual void SetMinRegionSize(unsigned int mr);
   virtual void SetOpacity(double op);
   virtual void ViewerSetupOkCallback();

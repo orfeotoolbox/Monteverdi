@@ -73,7 +73,7 @@ void MeanShiftModuleView::Build()
 
   this->RefreshInterface();
   SetSpatialRadius(static_cast<unsigned int>(this->mSpatialRadius->value()));
-  SetSpectralRadius(static_cast<unsigned int>(this->mSpectralRadius->value()));
+  SetSpectralRadius(static_cast<double>(this->mSpectralRadius->value()));
   SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));
 
   this->UpdateViewerSetup();
@@ -113,6 +113,7 @@ void MeanShiftModuleView::RunSegmentation()
 {
   m_Controller->RunSegmentation();
   this->mClustersButton->value(1);
+  this->mClustersButton->do_callback();
 }
 
 void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
@@ -120,7 +121,7 @@ void MeanShiftModuleView::SetSpatialRadius(unsigned int sr)
   m_Controller->SetSpatialRadius(sr);
 }
 
-void MeanShiftModuleView::SetSpectralRadius(unsigned int sr)
+void MeanShiftModuleView::SetSpectralRadius(double sr)
 {
   m_Controller->SetSpectralRadius(sr);
 }

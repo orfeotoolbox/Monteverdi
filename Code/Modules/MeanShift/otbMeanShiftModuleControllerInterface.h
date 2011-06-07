@@ -26,7 +26,7 @@ public:
   virtual void SwitchClusters(bool sc) = 0;
   virtual void SwitchBoundaries(bool sb) = 0;
   virtual void SetSpatialRadius(unsigned int sr) = 0;
-  virtual void SetSpectralRadius(unsigned int sr) = 0;
+  virtual void SetSpectralRadius(double sr) = 0;
   virtual void SetMinRegionSize(unsigned int mr) = 0;
   virtual void SetOpacity(double op) = 0;
   virtual void UpdateViewerDisplay() = 0;

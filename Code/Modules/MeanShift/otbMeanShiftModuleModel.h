@@ -87,7 +87,7 @@ public:
   void SwitchBoundaries(bool sc);
 
   void SetSpatialRadius(unsigned int sr);
-  void SetSpectralRadius(unsigned int sr);
+  void SetSpectralRadius(double sr);
   void SetMinRegionSize(unsigned int mr);
   // change opacity between the image (input or cluster) and the boundaries one
   void SetOpacity(double op);
@@ -129,7 +129,7 @@ private:
   LabelLayerGeneratorType::Pointer m_BoundariesGenerator;
 
   unsigned int              m_SpatialRadius;
-  unsigned int              m_SpectralRadius;
+  double                    m_SpectralRadius;
   unsigned int              m_MinRegionSize;
   std::vector<unsigned int> m_Channels;
 

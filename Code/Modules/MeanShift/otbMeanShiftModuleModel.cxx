@@ -41,7 +41,7 @@ MeanShiftModuleModel
 }
 void
 MeanShiftModuleModel
-::SetSpectralRadius(unsigned int sr){
+::SetSpectralRadius(double sr){
   m_SpectralRadius = sr;
   m_MeanShift->SetRangeRadius(m_SpectralRadius);
 }
@@ -124,6 +124,8 @@ MeanShiftModuleModel
     m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
 
     m_ClustersGenerator->GetLayer()->SetName("Segmentation");
+    m_ClustersGenerator->GetLayer()->SetVisible(false);
+
     m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
     m_BoundariesGenerator->GetLayer()->SetVisible(false);
 
@@ -147,7 +149,8 @@ MeanShiftModuleModel
 {
   if (m_IsImageReady)
     {
-    m_ClustersGenerator->GetLayer()->SetVisible(sc);
+      m_ClustersGenerator->GetLayer()->SetVisible(sc);
+      m_ImageGenerator->GetLayer()->SetVisible(!sc);
     }
 
   m_VisualizationModel->Update();

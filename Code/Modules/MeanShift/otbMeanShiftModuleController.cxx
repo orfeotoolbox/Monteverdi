@@ -65,7 +65,7 @@ MeanShiftModuleController
 
 void
 MeanShiftModuleController
-::SetSpectralRadius(unsigned int sr)
+::SetSpectralRadius(double sr)
 {
   m_Model->SetSpectralRadius(sr);
 }
