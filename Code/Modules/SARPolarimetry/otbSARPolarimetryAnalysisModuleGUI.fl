@@ -10,7 +10,7 @@ class SARPolarimetryAnalysisModuleGUI {open
   Function {BuildGUI()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
-      label {SAR Analysis} open selected
+      label {SAR Analysis} open
       xywh {753 273 400 215} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable hotspot size_range {400 215 0 0} visible
     } {
       Fl_Group {} {open
@@ -36,7 +36,7 @@ class SARPolarimetryAnalysisModuleGUI {open
               xywh {126 99 50 24} box PLASTIC_DOWN_BOX labelcolor 186 minimum -1e+06 maximum 1e+06 step 0.5
             }
             Fl_Value_Input v_KhiR {
-              label {Reflected Khi}
+              label {Reflected khi} selected
               xywh {208 99 50 24} box PLASTIC_DOWN_BOX labelcolor 186 align 8 minimum -1e+06 maximum 1e+06 step 0.5
             }
           }
