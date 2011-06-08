@@ -72,9 +72,6 @@ class ConnectedComponentSegmentationModuleGUI {open
         callback {LiveCheckOBIA();}
         xywh {5 120 565 20} box PLASTIC_DOWN_BOX color 23 selection_color 49 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1 textsize 12 textcolor 186
       }
-      Fl_Output ui_OutputInfos {
-        xywh {5 155 565 80} box PLASTIC_DOWN_BOX color 23 selection_color 7 labelsize 12 labelcolor 186 align 20 textsize 12 textcolor 186
-      }
       Fl_Choice ui_VarNamesMask {
         label {Variables Names}
         callback {QuickAddMask()}
@@ -119,6 +116,9 @@ ui_HelpWindow->hide();
 }}
         xywh {580 212 150 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       }
+      Fl_Group gObjectDescription {open selected
+        xywh {5 155 565 80} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
+      } {}
     }
   }
   Function {ConnectedComponentSegmentationModuleGUI()} {} {}
@@ -160,6 +160,6 @@ ui_HelpWindow->hide();
   } {}
   Function {Cancel()} {return_type {virtual void}
   } {}
-  Function {CheckProcess()} {selected return_type {virtual void}
+  Function {CheckProcess()} {return_type {virtual void}
   } {}
 } 

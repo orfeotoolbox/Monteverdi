@@ -82,9 +82,11 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorData.h"
 
+#include "otbNoStretchRenderingFunction.h"
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
+#include "otbObjectDescriptionActionHandler.h"
 
 namespace otb
 {
@@ -170,12 +172,16 @@ public:
   /** Widget controller */
   typedef ImageWidgetController WidgetControllerType;
   typedef WidgetControllerType::Pointer WidgetControllerPointerType;
+  typedef ViewType::ImageWidgetType                              WidgetType;
 
+  /** handler **/
   typedef otb::WidgetResizingActionHandler<RenderingModelType, ViewType> ResizingHandlerType;
   typedef otb::ChangeExtractRegionActionHandler<RenderingModelType, ViewType> ChangeRegionHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler<RenderingModelType, ViewType> ChangeScaledRegionHandlerType;
   typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType> ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType, ViewType> PixelDescriptionActionHandlerType;
+  typedef otb::ObjectDescriptionActionHandler<PixelDescriptionModelType,ViewType> ObjectDescriptionActionHandlerType;
+
 
   // colored label image typedef
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long> ColorMapFunctorType;
@@ -221,6 +227,10 @@ public:
 
   typedef Function::StandardRenderingFunction<ImageType::PixelType,
                                                 RGBPixelType> StandardRenderingFunctionType;
+
+  typedef Function::NoStretchRenderingFunction<RGBPixelType,
+      RGBPixelType> NoStretchRenderingFunctionType;
+
   typedef StandardRenderingFunctionType::ParametersType     ParametersType;
 
   typedef enum
@@ -388,6 +398,7 @@ private:
   ChangeScaledRegionHandlerType::Pointer m_ChangeScaledRegionHandler;
   ChangeScaleHandlerType::Pointer m_ChangeScaleHandler;
   PixelDescriptionActionHandlerType::Pointer m_PixelActionHandler;
+  ObjectDescriptionActionHandlerType::Pointer m_ObjectDescriptionActionHandler;
 
   /** The widget controller */
   WidgetControllerPointerType m_WidgetsController;
