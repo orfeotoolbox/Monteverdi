@@ -93,8 +93,8 @@ void AddHarTexturesFilter(ModelPointerType pModel,
                           TextureVectorType pHarList,
                           SizeType pRadius,
                           OffsetType pOff,
-                          double minHar, 
-                          double maxHar, 
+                          double minHar,
+                          double maxHar,
                           unsigned int pBin)
 {
   std::vector<double> minHarVect(pModel->GetInputImageList()->Size(), minHar);
@@ -108,8 +108,8 @@ void AddHarTexturesFilter(ModelPointerType pModel,
                           TextureVectorType pHarList,
                           SizeType pRadius,
                           OffsetType pOff,
-                          std::vector<double> minHarVect, 
-                          std::vector<double> maxHarVect, 
+                          std::vector<double> minHarVect,
+                          std::vector<double> maxHarVect,
                           unsigned int pBin)
 {
   for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)

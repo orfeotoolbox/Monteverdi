@@ -45,11 +45,11 @@ public:
 
   /** Method for creation through the object factory */
   itkNewMacro(Self)
-  ;
+ ;
 
   /** Runtime information */
   itkTypeMacro(ObjectDescriptionActionHandler, ImageWidgetActionHandler)
-  ;
+ ;
 
   /** Model typedefs */
   typedef TModel ModelType;
@@ -215,13 +215,13 @@ public:
 
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model, ModelType)
-  ;itkGetObjectMacro(Model, ModelType)
-  ;
+ ; itkGetObjectMacro(Model, ModelType)
+ ;
 
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View, ViewType)
-  ;itkGetObjectMacro(View, ViewType)
-  ;
+ ; itkGetObjectMacro(View, ViewType)
+ ;
 
 protected:
   /** Constructor */

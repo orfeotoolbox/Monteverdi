@@ -180,7 +180,7 @@ public:
   typedef otb::ChangeScaledExtractRegionActionHandler<RenderingModelType, ViewType> ChangeScaledRegionHandlerType;
   typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType> ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType, ViewType> PixelDescriptionActionHandlerType;
-  typedef otb::ObjectDescriptionActionHandler<PixelDescriptionModelType,ViewType> ObjectDescriptionActionHandlerType;
+  typedef otb::ObjectDescriptionActionHandler<PixelDescriptionModelType, ViewType> ObjectDescriptionActionHandlerType;
 
 
   // colored label image typedef

@@ -394,7 +394,7 @@ FeatureExtractionController
         if( m_View->guiHarCk->value() )
           {
             double minHar = static_cast<double>(m_View->guiHarMin->value());
-            double maxHar =static_cast<double>(m_View->guiHarMax->value()) ;
+            double maxHar =static_cast<double>(m_View->guiHarMax->value());
             m_Model->AddHaralickTextureFilter(harList, rad, off, minHar, maxHar, bin);
           }
         else
