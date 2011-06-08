@@ -391,7 +391,18 @@ FeatureExtractionController
 
         unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiHarBin->value()));
 
-        m_Model->AddHaralickTextureFilter(harList, rad, off, bin);
+        if( m_View->guiHarCk->value() )
+          {
+            double minHar = static_cast<double>(m_View->guiHarMin->value());
+            double maxHar =static_cast<double>(m_View->guiHarMax->value()) ;
+            m_Model->AddHaralickTextureFilter(harList, rad, off, minHar, maxHar, bin);
+          }
+        else
+          {
+            m_Model->AddHaralickTextureFilter(harList, rad, off, bin);
+          }
+
+        
         break;
         }
       case FeatureInfo::TEXT_ADV:

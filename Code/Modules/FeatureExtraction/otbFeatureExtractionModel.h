@@ -425,6 +425,17 @@ public:
   itkGetMacro(VisuModel, VisuModelPointerType);
   itkGetMacro(ResultVisuModel, VisuModelPointerType);
 
+  /** Image max accessors*/
+  const std::vector<double> GetMinValues()
+  {
+    return m_MinValues;
+  }
+  /** Image min accessors*/
+  const std::vector<double> GetMaxValues()
+  {
+    return m_MaxValues;
+  }
+
   /** Image selected max accessors*/
   const std::vector<double> GetSelectedMinValues()
   {
@@ -478,8 +489,10 @@ public:
   /** This have for aim to factorized the previous AddFunctions code*/
   void AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess);
 
-  /** Add Haralick testure */
-  void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
+  /** Add Haralick testure with given min max */
+  void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin);
+  /** Add Haralick testure with given default min max */
+ void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
 
   /** Add Haralick testure */
   void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin);

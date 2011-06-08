@@ -70,146 +70,181 @@ public:
   /** Methods */
   /************/
 
-  // AddHarTexturesFilter
-  void AddHarTexturesFilter(ModelPointerType pModel,
-                            TextureVectorType pHarList,
-                            SizeType pRadius,
-                            OffsetType pOff,
-                            unsigned int pBin)
-  {
-    for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
-      {
+// AddHarTexturesFilter using computed image min/max
+void AddHarTexturesFilter(ModelPointerType pModel,
+                          TextureVectorType pHarList,
+                          SizeType pRadius,
+                          OffsetType pOff,
+                          unsigned int pBin)
+{
+  std::vector<double> minHarVect, maxHarVect;
+  
+  for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
+    {
+      minHarVect.push_back(pModel->GetSelectedMinValues()[i]);
+      maxHarVect.push_back(pModel->GetSelectedMaxValues()[i]);
+    }
+
+  this->AddHarTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
+}
+
+// AddHarTexturesFilter using user's image min/max
+void AddHarTexturesFilter(ModelPointerType pModel,
+                          TextureVectorType pHarList,
+                          SizeType pRadius,
+                          OffsetType pOff,
+                          double minHar, 
+                          double maxHar, 
+                          unsigned int pBin)
+{
+  std::vector<double> minHarVect(pModel->GetInputImageList()->Size(), minHar);
+  std::vector<double> maxHarVect(pModel->GetInputImageList()->Size(), maxHar);
+  
+  this->AddHarTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
+}
+
+// AddHarTexturesFilter
+void AddHarTexturesFilter(ModelPointerType pModel,
+                          TextureVectorType pHarList,
+                          SizeType pRadius,
+                          OffsetType pOff,
+                          std::vector<double> minHarVect, 
+                          std::vector<double> maxHarVect, 
+                          unsigned int pBin)
+{
+  for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
+    {
       HarTexturesFilterType::Pointer filter = HarTexturesFilterType::New();
       filter->SetRadius(pRadius);
       filter->SetOffset(pOff);
       filter->SetNumberOfBinsPerAxis(pBin);
-
-      filter->SetInputImageMinimum(static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]));
-      filter->SetInputImageMaximum(static_cast<SinglePixelType>(pModel->GetSelectedMaxValues()[i]));
+      
+      filter->SetInputImageMinimum(static_cast<SinglePixelType>(minHarVect[i]));
+      filter->SetInputImageMaximum(static_cast<SinglePixelType>(minHarVect[i]));
       filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
-
+      
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
-        itk::OStringStream oss;
-        //oss << "Haralick Text: ";
-
-        switch (pHarList[textId])
-          {
-          case HaralickTexture::ENERGY:
+          itk::OStringStream oss;
+          //oss << "Haralick Text: ";
+          
+          switch (pHarList[textId])
             {
-            oss << "Energy: ";
-            break;
+            case HaralickTexture::ENERGY:
+              {
+                oss << "Energy: ";
+                break;
+              }
+            case HaralickTexture::ENTROPY:
+              {
+                oss << "Entropy: ";
+                break;
+              }
+            case HaralickTexture::CORRELATION:
+              {
+                oss << "Correlation: ";
+                break;
+              }
+            case HaralickTexture::INERTIA:
+              {
+                oss << "Inertia: ";
+                break;
+              }
+            case HaralickTexture::INVDIFMO:
+              {
+                oss << "Inv. Diff. Moment: ";
+                break;
+              }
+            case HaralickTexture::CLUSPRO:
+              {
+                oss << "Cluster Pro.: ";
+                break;
+              }
+            case HaralickTexture::CLUSHA:
+              {
+                oss << "Cluster Shade: ";
+                break;
+              }
+            case HaralickTexture::HARCORR:
+              {
+                oss << "Har. Corr: ";
+                break;
+              }
+            default:
+              {
+                break;
+              }
             }
-          case HaralickTexture::ENTROPY:
-            {
-            oss << "Entropy: ";
-            break;
-            }
-          case HaralickTexture::CORRELATION:
-            {
-            oss << "Correlation: ";
-            break;
-            }
-          case HaralickTexture::INERTIA:
-            {
-            oss << "Inertia: ";
-            break;
-            }
-          case HaralickTexture::INVDIFMO:
-            {
-            oss << "Inv. Diff. Moment: ";
-            break;
-            }
-          case HaralickTexture::CLUSPRO:
-            {
-            oss << "Cluster Pro.: ";
-            break;
-            }
-          case HaralickTexture::CLUSHA:
-            {
-            oss << "Cluster Shade: ";
-            break;
-            }
-          case HaralickTexture::HARCORR:
-            {
-            oss << "Har. Corr: ";
-            break;
-            }
-          default:
-            {
-            break;
-            }
-          }
-
-        oss << pOff << ", " << pRadius << ", " << pBin << ", min: " << pModel->GetSelectedMinValues()[i] <<
-        ", max: " << pModel->GetSelectedMaxValues()[i];
-        std::string mess = oss.str();
-        pModel->AddFeatureFilter(filter, m_TextToHarMap[pHarList.at(textId)], i, 0, mess);
+          
+          oss << pOff << ", " << pRadius << ", " << pBin << ", min: " << minHarVect[i] <<
+            ", max: " << maxHarVect[i];
+          std::string mess = oss.str();
+          pModel->AddFeatureFilter(filter, m_TextToHarMap[pHarList.at(textId)], i, 0, mess);
         }
-      }
-  }
-
-  SingleImagePointerType GenerateHaralickTextureOutputImage(ModelPointerType pModel,
-                                                            FeatureType pType,
-                                                            unsigned int pInputListId)
-  {
-    SingleImagePointerType         image =  SingleImageType::New();
-    HarTexturesFilterType::Pointer filter =
-      dynamic_cast<HarTexturesFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(
-                                                                       pInputListId)));
-    switch (pType)
+    }
+}
+ 
+SingleImagePointerType GenerateHaralickTextureOutputImage(ModelPointerType pModel,
+                                                          FeatureType pType,
+                                                          unsigned int pInputListId)
+{
+  SingleImagePointerType image =  SingleImageType::New();
+  HarTexturesFilterType::Pointer filter =
+    dynamic_cast<HarTexturesFilterType*>(static_cast<FilterType *>(
+                                                                   pModel->GetFilterList()->GetNthElement(pInputListId)));
+  switch (pType)
+    {
+    case FeatureInfo::TEXT_HAR_ENERGY:
       {
-      case FeatureInfo::TEXT_HAR_ENERGY:
-        {
         image = filter->GetEnergyOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_ENTROPY:
-        {
+      }
+    case FeatureInfo::TEXT_HAR_ENTROPY:
+      {
         image = filter->GetEntropyOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_CORR:
+      }
+    case FeatureInfo::TEXT_HAR_CORR:
         {
-        image = filter->GetCorrelationOutput();
-        break;
+          image = filter->GetCorrelationOutput();
+          break;
         }
-      case FeatureInfo::TEXT_HAR_INVDIFMO:
-        {
+    case FeatureInfo::TEXT_HAR_INVDIFMO:
+      {
         image = filter->GetInverseDifferenceMomentOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_CLUSPRO:
-        {
+      }
+    case FeatureInfo::TEXT_HAR_CLUSPRO:
+      {
         image = filter->GetClusterProminenceOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_CLUSHA:
-        {
+      }
+    case FeatureInfo::TEXT_HAR_CLUSHA:
+      {
         image = filter->GetClusterShadeOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_HARCORR:
-        {
+      }
+    case FeatureInfo::TEXT_HAR_HARCORR:
+      {
         image = filter->GetHaralickCorrelationOutput();
         break;
-        }
-      case FeatureInfo::TEXT_HAR_INERTIA:
-        {
+      }
+    case FeatureInfo::TEXT_HAR_INERTIA:
+      {
         image = filter->GetInertiaOutput();
         break;
-        }
-      default:
-        {
-        }
       }
-    return image;
-  }
-
+    default:
+      {
+      }
+    }
+  return image;
+}
+ 
 protected:
-
+ 
 private:
-  std::map<TextureType, FeatureType> m_TextToHarMap;
+ std::map<TextureType, FeatureType> m_TextToHarMap;
 };
 
 }

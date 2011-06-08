@@ -18,7 +18,7 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {37 267 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {450 328 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -138,7 +138,7 @@ guiSFSRatMaxConsNb->deactivate();}
               MenuItem {} {
                 label Haralick1
                 callback {UpdateParameterArea(30);
-SetFeatureType(otb::FeatureInfo::TEXT_HAR);} selected
+SetFeatureType(otb::FeatureInfo::TEXT_HAR);}
                 tooltip {Haralick textures.} xywh {10 10 30 20}
               }
               MenuItem {} {
@@ -401,13 +401,13 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
           }
           Fl_Wizard guiParameter {
             label {Feature Parameters} open
-            xywh {206 318 241 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+            xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
-            Fl_Group guiNothing {
-              xywh {206 318 240 140} color 7
+            Fl_Group guiNothing {selected
+              xywh {200 318 246 140} color 7
             } {}
             Fl_Group guiTouzi {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiTouziRadius {
                 label Radius
@@ -415,7 +415,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiHarris {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiHarrisSigmaD {
                 label {Sigma D}
@@ -431,7 +431,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiSpectAngle {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Output guiSpectAnglePixelCoordinates {
                 label {Pixel coordinates}
@@ -443,7 +443,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiMorpho {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiMorphoInitVal {
                 label {Initial Value}
@@ -459,7 +459,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiRadius {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiRadiusX {
                 label {Radius along X}
@@ -471,7 +471,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiGrad {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiGradSigma {
                 label Sigma
@@ -479,7 +479,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiRAndNIR {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiRAndNIRR {
                 label {Red channel}
@@ -491,7 +491,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiPVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiPVIR {
                 label {Red channel}
@@ -511,7 +511,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiSAVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiSAVIR {
                 label {Red channel}
@@ -527,7 +527,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiMSAVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiMSAVIR {
                 label {Red channel}
@@ -543,7 +543,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiTSAVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiTSAVIR {
                 label {Red channel}
@@ -567,7 +567,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiWDVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiWDVIR {
                 label {Red channel}
@@ -583,7 +583,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiARVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiARVIR {
                 label {Red channel}
@@ -603,7 +603,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiEVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiEVIR {
                 label {Red channel}
@@ -635,7 +635,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiTSARVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiTSARVIR {
                 label {Red channel}
@@ -663,7 +663,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiAVI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiAVIR {
                 label {Red channel}
@@ -691,7 +691,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiSoil {
-              xywh {206 318 240 140} align 0 hide
+              xywh {200 318 246 140} align 0 hide
             } {
               Fl_Counter guiSoilG {
                 label {Green channel}
@@ -703,7 +703,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiIB2 {
-              xywh {206 318 240 140} align 0 hide
+              xywh {200 318 246 140} align 0 hide
             } {
               Fl_Counter guiIB2G {
                 label {Green channel}
@@ -719,7 +719,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiNDBI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiNDBITM4 {
                 label {TM4 channel}
@@ -751,7 +751,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiSRWI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiSRWIR860 {
                 label {Rho 860 Index}
@@ -763,7 +763,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiNDWI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiNDWINIR {
                 label {NIR channel}
@@ -775,7 +775,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiNDWI2 {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiNDWI2G {
                 label {Green channel}
@@ -787,7 +787,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiMNDWI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiMNDWIG {
                 label {Green channel}
@@ -799,7 +799,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiNDPI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiNDPIMIR {
                 label {MIR channel}
@@ -811,7 +811,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiNDTI {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiNDTIR {
                 label {Red channel}
@@ -823,7 +823,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiSFS {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiSFSSpectralThreshold {
                 label {Spectral Thresh}
@@ -847,7 +847,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiEdgeCanny {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiEdgeCannyRadius {
                 label Radius
@@ -871,7 +871,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiEdgeSobel {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Counter guiEdgeSobelRadiusX {
                 label {Radius along X}
@@ -891,7 +891,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiMS {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiMSSpatial {
                 label {Spatial Radius}
@@ -910,67 +910,88 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
               }
             }
-            Fl_Group guiHaralick {
-              xywh {206 318 240 140} hide
+            Fl_Group guiHaralick {open
+              xywh {200 318 246 140} hide
             } {
               Fl_Check_Browser guiHarList {
-                xywh {210 323 233 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
+                xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
               }
               Fl_Group {} {
                 label Radius open
-                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                xywh {204 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarRadiusX {
                   label X
-                  tooltip {Neighborhood radius.} xywh {227 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                  tooltip {Neighborhood radius.} xywh {220 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
                 Fl_Value_Input guiHarRadiusY {
                   label Y
-                  tooltip {Neighborhood radius.} xywh {227 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                  tooltip {Neighborhood radius.} xywh {220 435 28 17} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
               }
               Fl_Group {} {
                 label Offset open
-                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                xywh {254 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarOffsetX {
                   label X
-                  tooltip {Used offset value.} xywh {283 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                  tooltip {Used offset value.} xywh {270 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
                 Fl_Value_Input guiHarOffsetY {
                   label Y
-                  tooltip {Used offset value.} xywh {282 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                  tooltip {Used offset value.} xywh {269 435 28 17} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
               }
-              Fl_Group {} {
-                label {Quantization levels} open
-                xywh {324 405 120 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+              Fl_Input_Choice guiHarBin {
+                label {Quant.
+ levels} open
+                tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 align 1 textsize 12
               } {
-                Fl_Input_Choice guiHarBin {
-                  label Bin open
-                  tooltip {Histogram bin size.} xywh {363 421 65 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 textsize 12
-                } {
-                  MenuItem {} {
-                    label 8
-                    xywh {0 0 30 20}
-                  }
-                  MenuItem {} {
-                    label 16
-                    xywh {10 10 30 20}
-                  }
-                  MenuItem {} {
-                    label 32
-                    xywh {20 20 30 20}
-                  }
-                  MenuItem {} {
-                    label 64
-                    xywh {30 30 30 20}
-                  }
+                MenuItem {} {
+                  label 8
+                  xywh {5 5 30 20}
                 }
+                MenuItem {} {
+                  label 16
+                  xywh {15 15 30 20}
+                }
+                MenuItem {} {
+                  label 32
+                  xywh {25 25 30 20}
+                }
+                MenuItem {} {
+                  label 64
+                  xywh {35 35 30 20}
+                }
+              }
+              Fl_Group guiHarIm {
+                label Image open
+                xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+              } {
+                Fl_Value_Input guiHarMin {
+                  label Min
+                  callback {if( static_cast<double>(guiHarMin->value()) > static_cast<double>(guiHarMax->value()) )
+{
+guiHarMin->value(guiHarMax->value());
+}}
+                  tooltip {Used offset value.} xywh {334 412 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+                }
+                Fl_Value_Input guiHarMax {
+                  label Max
+                  callback {if( static_cast<double>(guiHarMax->value()) < static_cast<double>(guiHarMin->value()) )
+{
+guiHarMax->value(guiHarMin->value());
+}}
+                  tooltip {Used offset value.} xywh {334 435 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+                }
+              }
+              Fl_Check_Button guiHarCk {
+                callback {this->UpdateHarMinMax();}
+                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
               }
             }
             Fl_Group guiAdvanced {
-              xywh {206 318 240 140} hide
+              xywh {200 318 246 140} hide
             } {
               Fl_Check_Browser guiAdvList {
                 xywh {210 323 233 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
@@ -1028,8 +1049,8 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 }
               }
             }
-            Fl_Group guiPanTex {open
-              xywh {206 318 240 140} hide
+            Fl_Group guiPanTex {
+              xywh {200 318 246 140} hide
             } {
               Fl_Value_Input guiPanTexRadiusX {
                 label {Radius X}
@@ -1191,5 +1212,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
   Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
   } {}
   Function {Cancel()} {open return_type {virtual void}
+  } {}
+  Function {UpdateHarMinMax()} {open return_type {virtual void}
   } {}
 } 

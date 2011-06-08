@@ -228,6 +228,8 @@ FeatureExtractionViewGUI
       if (event != "SetInputImage")
         {
         this->UpdateChannels();
+        guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
+        guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
         }
       this->UpdateInformation();
       }
@@ -457,6 +459,24 @@ FeatureExtractionViewGUI
 {
   m_FeatureExtractionController->CreateFeature(m_FeatureType);
 }
+
+void
+FeatureExtractionViewGUI
+::UpdateHarMinMax()
+{
+  if( guiHarCk->value() != 0 )
+    {
+      guiHarIm->activate();
+      
+      guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
+      guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );     
+    }
+  else
+    {
+      guiHarIm->deactivate();
+    }
+}
+
 
 void
 FeatureExtractionViewGUI

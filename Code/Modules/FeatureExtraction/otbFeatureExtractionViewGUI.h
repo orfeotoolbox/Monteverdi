@@ -156,6 +156,7 @@ protected:
   virtual void Cancel();
   virtual void AddFeature();
   virtual void OK();
+  virtual void UpdateHarMinMax();
 
   void InitParameterGroupList();
   void InitTextureLists();

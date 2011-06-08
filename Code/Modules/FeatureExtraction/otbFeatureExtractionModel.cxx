@@ -463,6 +463,14 @@ FeatureExtractionModel
 
 void
 FeatureExtractionModel
+::AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin)
+{
+  HaralickTexturesGenerator lHarTexturesGenerator;
+  lHarTexturesGenerator.AddHarTexturesFilter(this, harList, radius, offset, minHar, maxHar, bin);
+}
+
+void
+FeatureExtractionModel
 ::AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin)
 {
   HaralickTexturesGenerator lHarTexturesGenerator;
