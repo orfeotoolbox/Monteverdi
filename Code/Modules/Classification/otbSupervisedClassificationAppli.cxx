@@ -42,6 +42,7 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
 #include "otbMsgReporter.h"
 
@@ -347,81 +348,28 @@ SupervisedClassificationAppli
     return;
     }
   std::string filename = std::string(cfname);
-  if (m_ClassesMap.empty())
-    {
-    this->AddClass();
-    }
 
   VectorDataFileReaderPointerType reader = VectorDataFileReaderType::New();
   reader->SetFileName(filename.c_str());
   reader->Update();
 
-  VectorDataType::Pointer vData = reader->GetOutput();
-  
-  typedef VectorDataProjectionFilter<
-    VectorDataType, VectorDataType>                VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType>    VectorDataExtractROIType;
-  typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
-  typedef VectorDataType::DataNodeType::PointType PointType;
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, ImageType>
+    VectorDataReprojectionType;
+  VectorDataReprojectionType::Pointer reproj = VectorDataReprojectionType::New();
+  reproj->SetInputImage(m_InputImage);
+  reproj->SetInputVectorData(reader->GetOutput());
+  // We want to transform into image physical coordinates
+  reproj->SetUseOutputSpacingAndOriginFromImage(true);
+  // TODO : add DEM management for reprojection on sensor model geometry rasters
+  reproj->Update();
 
-  // Vector data reprojection
-  VectorDataExtractROIType::Pointer       vdextract;
+  if (m_ClassesMap.empty())
+    {
+    this->AddClass();
+    }
 
-  // Extract The part of the VectorData that actually overlaps with
-  // the image extent
-  vdextract = VectorDataExtractROIType::New();
-  vdextract->SetInput(vData);
 
-  // Find the geographic region of interest
-
-  // Ge the index of the corner of the image
-  IndexType ul, ur, ll, lr;
-  PointType pul, pur, pll, plr;
-  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-
-  // Transform to physical point
-  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
-  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
-  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
-  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
-
-  // Build the cartographic region
-  RemoteSensingRegionType            rsRegion;
-  RemoteSensingRegionType::IndexType rsOrigin;
-  RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = std::min(pul[0], plr[0]);
-  rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
-
-  rsRegion.SetOrigin(rsOrigin);
-  rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
-  
-  // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
-  vdextract->UpdateOutputInformation();
-  
-  //TODO : add DEM management ?
-  
-  // Reproject VectorData in image projection
-  VectorDataProjectionFilterType::Pointer  vproj = VectorDataProjectionFilterType::New();
-  vproj->SetInput(vdextract->GetOutput());
-  vproj->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  vproj->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  vproj->SetOutputOrigin(m_InputImage->GetOrigin());
-  vproj->SetOutputSpacing(m_InputImage->GetSpacing());
-  vproj->Update();
-
-  TreeIteratorType it(vproj->GetOutput()->GetDataTree());
+  TreeIteratorType it(reproj->GetOutput()->GetDataTree());
   it.GoToBegin();
 
   while (!it.IsAtEnd())
