@@ -1627,15 +1627,20 @@ namespace otb
    */
   void ViewerModule::UpdatePixelInformationWindow()
   {
-    //Create buffer for the guiViewerInformation
-    Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
-    bPixelInfo->buffer(buffer);
-
     // Set the index
     ImageType::IndexType     index;
     index[0] = static_cast<ImageType::IndexType::IndexValueType>(bX->value());
     index[1] = static_cast<ImageType::IndexType::IndexValueType>(bY->value());
 
+    // Center the view around the index selected
+    m_RenderingModel->SetScaledExtractRegionCenter(index);
+    m_RenderingModel->SetExtractRegionCenter(index);
+    m_RenderingModel->Update();
+
+    //Create buffer for the guiViewerInformation
+    Fl_Text_Buffer * buffer = new Fl_Text_Buffer();
+    bPixelInfo->buffer(buffer);
+  
     // Select the current image layer
     ImageLayerType::Pointer imageLayer =
       m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
@@ -1646,11 +1651,6 @@ namespace otb
     bPixelInfo->buffer()->remove(0, bPixelInfo->buffer()->length());
     oss << imageLayer->GetPixelDescription(index);
     bPixelInfo->insert(oss.str().c_str());
-
-    // Center the view around the index selected
-    m_RenderingModel->SetScaledExtractRegionCenter(index);
-    m_RenderingModel->SetExtractRegionCenter(index);
-    m_RenderingModel->Update();
   }
 
 
