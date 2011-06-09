@@ -24,6 +24,8 @@
 #include <iostream>
 #include "otbTestMain.h"
 
+#include "otbConfigure.h"
+
 void RegisterTests()
 {
 #ifdef OTB_USE_CURL

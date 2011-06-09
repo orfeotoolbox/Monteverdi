@@ -17,8 +17,6 @@ SET(Modules_TESTS2 ${CXX_TEST_PATH}/otbModulesTests2)
 SET(Modules_TESTS3 ${CXX_TEST_PATH}/otbModulesTests3)
 SET(Modules_TESTS4 ${CXX_TEST_PATH}/otbModulesTests4)
 
-
-
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests1 ----------------------------------------
 #----------------------------------------------------------------------------------------------
@@ -593,16 +591,13 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
 ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
 ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
-IF(OTB_USE_CURL)
+
 ADD_EXECUTABLE(otbModulesTests4 otbModulesTests4.cxx ${Modules_SRCS4})
-ENDIF(OTB_USE_CURL)
 
 TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
-IF(OTB_USE_CURL)
 TARGET_LINK_LIBRARIES(otbModulesTests4 ${LIST_MODULE_LIBRARIES} OTBIO OTBProjections OTBCommon OTBTesting)
-ENDIF(OTB_USE_CURL)
 
 # CPack installation: only Monteverdi application
 #IF(NOT OTB_INSTALL_NO_LIBRARIES)
