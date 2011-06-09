@@ -171,10 +171,7 @@ protected:
 
   /** Save callback*/
   virtual void SaveDataSet();
-
-  /** Cancel callback*/
-  virtual void Cancel();
-
+  
   /**
    * Add file to KMZ : return the number of error when writing the
    * file in the kmz
@@ -295,74 +292,65 @@ private:
   std::string m_KmlExtension;
 
   // Pointer to the vector image
-  FloatingVectorImageType::Pointer m_VectorImage;
-  FloatingVectorImageType::Pointer m_ResampleVectorImage;
+  FloatingVectorImageType::Pointer         m_VectorImage;
+  FloatingVectorImageType::Pointer         m_ResampleVectorImage;
 
   // Extract ROI
   VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
 
   // Writer
-  VectorWriterType::Pointer m_VectorWriter;
+  VectorWriterType::Pointer                m_VectorWriter;
 
   // Resampler
-  StreamingShrinkImageFilterType::Pointer m_StreamingShrinkImageFilter;
+  StreamingShrinkImageFilterType::Pointer  m_StreamingShrinkImageFilter;
 
   // Rescale intensity
   VectorRescaleIntensityImageFilterType::Pointer m_VectorRescaleIntensityImageFilter;
 
   // Transformer
-  TransformType::Pointer m_Transform;
+  TransformType::Pointer                m_Transform;
 
   // DEM directory
-  std::string m_DEMDirectory;
+  std::string                           m_DEMDirectory;
 
   // Legend
-  FloatingVectorImageType::Pointer m_Logo;
-  std::ostringstream               m_LogoFilename;
-  bool                             m_HasLegend;
-  bool                             m_HasLogo;
+  FloatingVectorImageType::Pointer      m_Logo;
+  std::ostringstream                    m_LogoFilename;
+  bool                                  m_HasLegend;
+  bool                                  m_HasLogo;
 
   // Tile size
-  int m_TileSize;
+  int                                   m_TileSize;
 
   // KMZ file
-  kmlengine::KmzFilePtr m_KmzFile;
+  kmlengine::KmzFilePtr                 m_KmzFile;
 
   // KMZ file name
-  std::ostringstream m_KmzFileName;
+  std::ostringstream                    m_KmzFileName;
 
   // the kml root ofstream
-  std::ofstream m_RootKmlFile;
-  std::ofstream m_TempRootKmlFile;
+  std::ofstream                         m_RootKmlFile;
 
-  // Cancel
-  bool m_Cancel;
-
-  // Max
-  int          m_MaxDepth;
-  unsigned int m_CurIdx;
-  unsigned int m_NbOfInput;
-  unsigned int m_CurrentProduct;
-  int          m_CurrentDepth;
-
-  // Center points vector
-  bool                                    m_RegionOfInterestKmlGenerated;
-  std::vector<std::pair<double, double> > m_CenterPointVector;
+  // variable used when tiling the image
+  int                                   m_MaxDepth;
+  unsigned int                          m_CurIdx;
+  unsigned int                          m_CurrentProduct;
+  int                                   m_CurrentDepth;
 
   // Product Info vector type
-  ProductInformationVectorType            m_ProductVector;
+  ProductInformationVectorType          m_ProductVector;
 
   // Geo Corners Coordinates
-  OutputPointType                         m_UpperLeftCorner;
-  OutputPointType                         m_UpperRightCorner;
-  OutputPointType                         m_LowerLeftCorner;
-  OutputPointType                         m_LowerRightCorner;
+  OutputPointType                       m_UpperLeftCorner;
+  OutputPointType                       m_UpperRightCorner;
+  OutputPointType                       m_LowerLeftCorner;
+  OutputPointType                       m_LowerRightCorner;
   
   // Cast to vectorImage filter
-  CastToVectorImageFilterType::Pointer    m_CastToVectorImageFilter;
+  CastToVectorImageFilterType::Pointer  m_CastToVectorImageFilter;
 
   // flag storing if the image have metada
-  bool                                    m_InputHaveMetaData;
+  bool                                   m_InputHaveMetaData;
 };
 
 } // End namespace otb

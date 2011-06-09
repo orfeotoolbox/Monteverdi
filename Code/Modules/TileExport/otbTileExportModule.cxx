@@ -32,12 +32,10 @@ namespace otb
  */
 TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
                                        m_HasLegend(false), m_HasLogo(false),
-                                       m_TileSize(-1), m_KmzFile(NULL), m_RootKmlFile(),
-                                       m_TempRootKmlFile(), m_Cancel(false),
-                                       m_MaxDepth(0), m_CurIdx(0), m_NbOfInput(0),
-                                       m_CurrentProduct(0), m_CurrentDepth(-1),
-                                       m_RegionOfInterestKmlGenerated(false),
-                                       m_CenterPointVector(), m_ProductVector(),
+                                       m_TileSize(-1), m_KmzFile(NULL),
+                                       m_RootKmlFile(), m_MaxDepth(0),
+                                       m_CurIdx(0), m_CurrentProduct(0),
+                                       m_CurrentDepth(-1), m_ProductVector(),
                                        m_InputHaveMetaData(true)
 {
   // Add a multiple inputs
@@ -322,65 +320,17 @@ void TileExportModule::SaveDataSet()
   // Store the legend associations
   this->StoreAssociations();
 
-  // process all the input images
-  m_NbOfInput = this->GetNumberOfInputDataByKey("InputImage");
-
-  // Mutliple Inputs
-  for (unsigned int i = 0; i < m_NbOfInput; i++)
-    {
-    if (m_Cancel)
-      {
-      break;
-      }
-    
-    // While there are multiple inputs, it is difficult to tune the
-    // gui with the right values for the channels,
-    // Try to guess them
-    if (m_VectorImage->GetNumberOfComponentsPerPixel() > 3)
-      {
-      this->cRedChannel->value(2);
-      this->cGreenChannel->value(1);
-      this->cBlueChannel->value(0);
-      }
-    else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 3)
-      {
-      this->cRedChannel->value(0);
-      this->cGreenChannel->value(1);
-      this->cBlueChannel->value(2);
-      }
-    else if (m_VectorImage->GetNumberOfComponentsPerPixel() == 1)
-      {
-      this->cRedChannel->value(0);
-      this->cGreenChannel->value(0);
-      this->cBlueChannel->value(0);
-      }
-
-    // Do the tiling for the current image
-    if (m_InputHaveMetaData)
-      this->Tiling(0);
-    else
-      this->ExportNonGeoreferencedProduct(i);
-    
-    m_CurrentProduct++;
-    }
-
-  // Add the covered region kml
-  this->RegionOfInterestProcess();
+  // Do the tiling for the current image
+  if (m_InputHaveMetaData)
+    this->Tiling(0);
+  else
+    this->ExportNonGeoreferencedProduct(0);
 
   // Reset the boost::intrusive_ptr<KmzFile> :
   // TODO : when upgrading boost > 1.42 use method release().
   m_KmzFile = NULL;
 
   // close the GUI
-  this->Hide();
-}
-
-/**
- * Cancel callback
- */
-void TileExportModule::Cancel()
-{
-  m_Cancel = true;
   this->Hide();
 }
 
@@ -432,20 +382,13 @@ void TileExportModule::Tiling(unsigned int curIdx)
 
   for (int depth = 0; depth <= maxDepth; depth++)
     {
-
     // update the attribute value Current Depth
     m_CurrentDepth = depth;
 
-    // Check if cancel button was pushed
-    if (m_Cancel == true)
-      {
-      break;
-      }
-
     // Resample image to the max Depth
     int sampleRatioValue = 1 << (maxDepth - depth);
-    
-    if (sampleRatioValue > 1)
+
+    if ( sampleRatioValue > 1)
       {
       m_StreamingShrinkImageFilter = StreamingShrinkImageFilterType::New();
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
@@ -458,7 +401,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
       m_VectorRescaleIntensityImageFilter->SetOutputMaximum(outMax);
 
-      if (depth == 0)
+      if ( depth == 0)
         {
         m_VectorRescaleIntensityImageFilter->Update();
         inMin = m_VectorRescaleIntensityImageFilter->GetInputMinimum();
@@ -727,34 +670,6 @@ void TileExportModule::Tiling(unsigned int curIdx)
         }
       x++;
       y = 0;
-      }
-    }
-}
-
-/**
- * Add the region of interest kml if any
- *
- */
-void
-TileExportModule::RegionOfInterestProcess()
-{
-  // Add the region of interest kml once
-  // Add the region of interest kml at the end
-  if (m_RegionOfInterestKmlGenerated)
-    {
-    // Add the root kml in the kmz
-    std::ostringstream roi_in_kmz;
-    roi_in_kmz << "roi/regionOfInterest" << m_KmlExtension;
-    std::ostringstream roi_absolute_path;
-    roi_absolute_path << m_Path << "/regionOfInterest" << m_KmlExtension;
-
-    // Add the root file in the kmz
-    this->AddFileToKMZ(roi_absolute_path, roi_in_kmz);
-
-    // Remove the roiing files with stdio method :remove
-    if (remove(roi_absolute_path.str().c_str()) != 0)
-      {
-      itkExceptionMacro(<< "Error while deleting the file" << roi_absolute_path.str());
       }
     }
 }
