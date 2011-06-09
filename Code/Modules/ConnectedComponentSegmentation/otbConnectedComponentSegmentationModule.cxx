@@ -603,8 +603,12 @@ void ConnectedComponentSegmentationModule::CheckProcess()
 
   if (uiTmpOutputSelection->value() > maxVal)
     {
-
-    uiTmpOutputSelection->value(maxVal);
+    ui_Update->deactivate();
+    // uiTmpOutputSelection->value(maxVal);
+    }
+  else
+    {
+    ui_Update->activate();
     }
 
   uiTmpOutputSelection->redraw();
@@ -619,7 +623,8 @@ void ConnectedComponentSegmentationModule::LiveCheckMask()
 
   ui_MaskExpression->color(FL_GREEN);
   ui_MaskExpression->tooltip("The Expression is Valid");
-
+  ui_CCExpression->activate();
+  this->LiveCheckCC();
   if (strcmp(ui_MaskExpression->value(), ""))
     {
     m_MaskFilter->SetExpression(ui_MaskExpression->value());
@@ -629,6 +634,10 @@ void ConnectedComponentSegmentationModule::LiveCheckMask()
       ui_MaskExpression->tooltip("The Expression is not Valid");
       m_NoMask = true;
 
+      // deactivate other formula
+      ui_CCExpression->deactivate();
+      uiMinSize->deactivate();
+      ui_OBIAExpression->deactivate();
       }
 
     }
@@ -636,10 +645,12 @@ void ConnectedComponentSegmentationModule::LiveCheckMask()
     {
     m_MaskFilter->SetExpression(ui_MaskExpression->value());
     m_NoMask = true;
-
+    ui_CCExpression->activate();
+    this->LiveCheckCC();
     }
 
   ui_MaskExpression->redraw();
+
   this->CheckProcess();
 
 }
@@ -664,11 +675,19 @@ void ConnectedComponentSegmentationModule::LiveCheckCC()
     m_IsCCExpressionOK = true;
     ui_CCExpression->color(FL_GREEN);
     ui_CCExpression->tooltip("The Expression is Valid");
+
+    uiMinSize->activate();
+    ui_OBIAExpression->activate();
     }
   catch (itk::ExceptionObject& err)
     {
     ui_CCExpression->tooltip("The Expression is Not Valid");
     err.GetDescription();
+
+    // deactivate other formula
+    uiMinSize->deactivate();
+    ui_OBIAExpression->deactivate();
+
     }
 
   ui_CCExpression->redraw();
