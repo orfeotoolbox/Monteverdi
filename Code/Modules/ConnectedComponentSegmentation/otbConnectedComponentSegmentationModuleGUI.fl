@@ -13,8 +13,12 @@ class ConnectedComponentSegmentationModuleGUI {open
       label Help open
       xywh {491 266 635 530} type Double visible
     } {
-      Fl_Output ui_HelpText {
-        xywh {5 0 625 530} type Multiline
+      Fl_Scroll {} {open
+        xywh {5 0 625 530} type VERTICAL_ALWAYS
+      } {
+        Fl_Output ui_HelpText {selected
+          xywh {5 5 625 1000} type Multiline color 23 textcolor 24
+        }
       }
     }
     Fl_Window guiMainWindow {
@@ -50,7 +54,7 @@ class ConnectedComponentSegmentationModuleGUI {open
     }
     Fl_Window guiFormula {
       label Formula open
-      xywh {636 277 735 275} type Double box PLASTIC_DOWN_BOX color 23 labelcolor 186 when 1 visible
+      xywh {636 277 735 275} type Double box PLASTIC_DOWN_BOX color 23 labelcolor 186 when 1 hide
     } {
       Fl_Input ui_MaskExpression {
         label {Enter Mask Formula :}
@@ -116,7 +120,7 @@ ui_HelpWindow->hide();
 }}
         xywh {580 212 150 20} type Toggle box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Group gObjectDescription {open selected
+      Fl_Group gObjectDescription {open
         xywh {5 155 565 80} box PLASTIC_DOWN_BOX color 23 labelsize 12 labelcolor 186
       } {}
     }
