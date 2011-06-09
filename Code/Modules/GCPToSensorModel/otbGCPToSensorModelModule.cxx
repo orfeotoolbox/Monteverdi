@@ -96,11 +96,15 @@ void GCPToSensorModelModule::Run()
     // Process the input as an FloatingVectorImageType
     m_View->BuildInterface();
     m_Model->SetImage(fpvImage);
-#ifdef OTB_USE_CURL
-    m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
-#else
-    m_View->wMapWindow->hide();
-#endif
+    
+    if (CurlHelperInterface::IsCurlAvailable())
+      {
+      m_Model->SetMap(m_View->gMFull->w(), m_View->gMFull->h());
+      }
+    else
+      {
+      m_View->wMapWindow->hide();
+      }
     }
   else
     {

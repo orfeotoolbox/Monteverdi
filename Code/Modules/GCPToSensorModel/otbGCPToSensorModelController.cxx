@@ -19,7 +19,7 @@
 #include "otbGCPToSensorModelController.h"
 
 #include "otbMsgReporter.h"
-//#include <FL/fl_ask.H>
+#include "otbCurlHelperInterface.h"
 
 namespace otb
 {
@@ -204,18 +204,19 @@ GCPToSensorModelController
   m_ChangeRegionHandler->GetModel()->SetExtractRegionCenter(id);
   m_ChangeRegionHandler->GetModel()->Update();
 
-#ifdef OTB_USE_CURL
-  try
+  if (otb::CurlHelperInterface::IsCurlAvailable())
     {
-    // Focus on map
-    m_Model->CenterMapOnSelectedPoint(id[0], id[1], 16);
+    try
+      {
+      // Focus on map
+      m_Model->CenterMapOnSelectedPoint(id[0], id[1], 16);
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+      return;
+      }
     }
-  catch (itk::ExceptionObject& err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    return;
-    }
-#endif
 }
 
 void

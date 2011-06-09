@@ -44,6 +44,9 @@
 
 #include "itkPointSet.h"
 
+// To Get curl Status
+#include "otbCurlHelperInterface.h"
+
 namespace otb {
 
 /** \class GCPToSensorModelModel

@@ -21,6 +21,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbCurlHelperInterface.h"
 
 int otbGCPToSensorModelModuleTest(int argc, char* argv[])
 {
@@ -51,32 +52,33 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   module->Start();
 
   //Fl::run();
-#ifdef OTB_USE_CURL
-  // Simulate mapSearch
-  // Set placename and update lat/long
-  std::string parisFrance = "Paris 04 Hôtel-de-Ville France";
-  std::string paris = "Paris";
-
-  gcpModule->GetView()->vMPlaceName->value(paris.c_str());
-  Fl::check();
-
-  gcpModule->GetView()->bMUpdateLonLat->do_callback();
-  Fl::check();
-
-  gcpModule->GetView()->bMUpdatePlaceName->do_callback();
-  Fl::check();
-  // Check result
-  if (parisFrance != gcpModule->GetView()->vMPlaceName->value())
+  if (otb::CurlHelperInterface::IsCurlAvailable() )
     {
-    return EXIT_FAILURE;
-    }
+    // Simulate mapSearch
+    // Set placename and update lat/long
+    std::string parisFrance = "Paris 04 Hôtel-de-Ville France";
+    std::string paris = "Paris";
 
-  gcpModule->GetView()->vMDepth->value(13);
-  Fl::check();
-  // Refresh map
-  gcpModule->GetView()->bRefreshMap->do_callback();
-  Fl::check();
-#endif
+    gcpModule->GetView()->vMPlaceName->value(paris.c_str());
+    Fl::check();
+
+    gcpModule->GetView()->bMUpdateLonLat->do_callback();
+    Fl::check();
+
+    gcpModule->GetView()->bMUpdatePlaceName->do_callback();
+    Fl::check();
+    // Check result
+    if (parisFrance != gcpModule->GetView()->vMPlaceName->value())
+      {
+      return EXIT_FAILURE;
+      }
+
+    gcpModule->GetView()->vMDepth->value(13);
+    Fl::check();
+    // Refresh map
+    gcpModule->GetView()->bRefreshMap->do_callback();
+    Fl::check();
+    }
 
   // Simulate add point
   // P1
