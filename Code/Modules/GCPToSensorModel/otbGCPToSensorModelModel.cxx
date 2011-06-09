@@ -966,5 +966,4 @@ GCPToSensorModelModel::CenterMapOnSelectedPoint(long int x, long int y, int dept
 }
 
 
-
 } // namespace otb
