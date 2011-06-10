@@ -42,26 +42,8 @@ void VectorDataTransformModel::OpenInputs(const VectorImageType * image, const V
   m_ImageGenerator->SetImage(const_cast<VectorImageType *>(m_VectorImage.GetPointer()));
   m_ImageGenerator->GenerateLayer();
   
-  if(m_VectorImage->GetNumberOfComponentsPerPixel() > 3)
-    {
-    m_Channels.push_back(2);
-    m_Channels.push_back(1);
-    m_Channels.push_back(0);
-    }
-  else if(m_VectorImage->GetNumberOfComponentsPerPixel() == 3)
-    {
-    m_Channels.push_back(0);
-    m_Channels.push_back(1);
-    m_Channels.push_back(2);
-    }
-  else if(m_VectorImage->GetNumberOfComponentsPerPixel() == 1)
-    {
-    m_Channels.push_back(0);
-    m_Channels.push_back(0);
-    m_Channels.push_back(0);
-    }
-
-  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
+ 
+  m_Channels = m_ImageGenerator->GetLayer()->GetRenderingFunction()->GetChannelList();
   m_ImageGenerator->GetLayer()->SetName("Image");
 
   // Clear previous layers

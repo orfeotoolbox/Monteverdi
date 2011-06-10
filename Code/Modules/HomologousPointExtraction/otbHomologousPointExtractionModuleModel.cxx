@@ -105,21 +105,6 @@ HomologousPointExtractionModuleModel
   FltkFilterWatcher qlwatcher(m_ImageGenerator[id]->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_ImageGenerator[id]->GenerateLayer();
 
-  std::vector<unsigned int> channels;
-  if (image->GetNumberOfComponentsPerPixel() == 3)
-    {
-    channels.push_back(0);
-    channels.push_back(1);
-    channels.push_back(2);
-    }
-  else if (image->GetNumberOfComponentsPerPixel() > 3)
-    {
-    channels.push_back(2);
-    channels.push_back(1);
-    channels.push_back(0);
-    }
-  if (channels.size() == 3) m_ImageGenerator[id]->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-
   if (id == 0) m_ImageGenerator[id]->GetLayer()->SetName("FirstImage");
   else m_ImageGenerator[id]->GetLayer()->SetName("SecondImage");
 

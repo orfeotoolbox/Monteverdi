@@ -553,22 +553,6 @@ GCPToSensorModelModel
 
     m_MapVisualizationModel->SetExtractRegion(m_Region);
 
-    // Generate Image
-    std::vector<unsigned int> channels;
-    if (m_MapReader->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
-      {
-      channels.push_back(0);
-      channels.push_back(1);
-      channels.push_back(2);
-      }
-    else if (m_MapReader->GetOutput()->GetNumberOfComponentsPerPixel() > 3)
-      {
-      channels.push_back(2);
-      channels.push_back(1);
-      channels.push_back(0);
-      }
-    if (channels.size() == 3) m_MapImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-
     m_MapImageGenerator->GetLayer()->GetRenderingFunction()->SetAutoMinMax(false);
 
     m_MapImageGenerator->GetLayer()->SetName("MapImage");

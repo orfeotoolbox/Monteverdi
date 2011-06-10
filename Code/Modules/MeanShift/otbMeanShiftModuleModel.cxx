@@ -68,23 +68,7 @@ MeanShiftModuleModel
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
-  m_Channels.clear();
-  if (m_InputImage->GetNumberOfComponentsPerPixel() > 3)
-    {
-    m_Channels.clear();
-    m_Channels.push_back(2);
-    m_Channels.push_back(1);
-    m_Channels.push_back(0);
-    }
-  else
-    {
-    for (unsigned int i = 0; i < m_InputImage->GetNumberOfComponentsPerPixel(); i++)
-      {
-      m_Channels.push_back(i);
-      }
-    }
-
-  m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
+  m_Channels = m_ImageGenerator->GetLayer()->GetRenderingFunction()->GetChannelList();
 
   m_ImageGenerator->GetLayer()->SetName("Image");
 
