@@ -85,22 +85,7 @@ VectorizationModel
   m_ImageGenerator->SetImage(image);
   m_ImageGenerator->GenerateQuicklookOn();
   m_ImageGenerator->GenerateLayer();
-  /*
-  std::vector<unsigned int> channels;
-  if (image->GetNumberOfComponentsPerPixel() == 3)
-    {
-    channels.push_back(0);
-    channels.push_back(1);
-    channels.push_back(2);
-    }
-  else if (image->GetNumberOfComponentsPerPixel() > 3)
-    {
-    channels.push_back(2);
-    channels.push_back(1);
-    channels.push_back(0);
-    }
-  if (channels.size() == 3) m_ImageGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(channels);
-  */
+
   m_ImageGenerator->GetLayer()->SetName("InputImage");
 
   // Clear previous layers
