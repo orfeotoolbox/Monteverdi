@@ -1678,44 +1678,51 @@ namespace otb
   */
    void ViewerModule::ScreenShot()
    {
+     if(rbScreenZoom->value() == 1)
+       {
+         this->SaveScreenShot( "Save Zoom view screen shot as...", m_View->GetZoomWidget());
+       }
+
+     if(rbScreenFull->value() == 1)
+       {
+         this->SaveScreenShot( "Save Full view screen shot as...", m_View->GetFullWidget());
+       }
+
+     if( rbScreenNav->value() == 1 )
+       {
+         this->SaveScreenShot( "Save Navigation view screen shot as...", m_View->GetScrollWidget());
+       }
+     
+     if( rbScreenNav->value() != 1 && rbScreenFull->value() != 1 &&  rbScreenZoom->value() != 1 )
+       {
+         MsgReporter::GetInstance()->SendError("No view selected for screen shot...");
+       }
+
+     wScreenShot->hide();
+   }
+  
+  void ViewerModule::SaveScreenShot( const char * winLab, ImageWidgetType * widget)
+   {
      const char * filename = NULL;
      
-     filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
+     ScreenShotFilterType::Pointer screener = ScreenShotFilterType::New();
+     screener->SetNumberOfChannels(3);
+     screener->SetInverseXSpacing(true);
+     
+     filename = flu_file_chooser(otbGetTextMacro(winLab), "*.*", "");
      
      if (filename == NULL)
        {
          MsgReporter::GetInstance()->SendError("Empty file name!");
          return;
        }
-     ScreenShotFilterType::Pointer screener = ScreenShotFilterType::New();
-     screener->SetNumberOfChannels(3);
+     
      screener->SetFileName(filename);
-     screener->SetInverseXSpacing(true);
-     
-     if(rbScreenZoom->value() == 1)
-       {
-         screener->SetBuffer(m_View->GetZoomWidget()->GetOpenGlBuffer());
-         screener->SetImageSize(m_View->GetZoomWidget()->GetOpenGlBufferedRegion().GetSize());
-       }
-     else if(rbScreenFull->value() == 1)
-       {
-         screener->SetBuffer(m_View->GetFullWidget()->GetOpenGlBuffer());
-         screener->SetImageSize(m_View->GetFullWidget()->GetOpenGlBufferedRegion().GetSize());
-       }
-     else if(rbScreenNav->value() == 1 )
-       {
-         screener->SetBuffer(m_View->GetScrollWidget()->GetOpenGlBuffer());
-         screener->SetImageSize(m_View->GetScrollWidget()->GetOpenGlBufferedRegion().GetSize());
-       }
-     else
-       {
-         itkExceptionMacro("Invalid id view for screen shot");
-       }
-     
+     screener->SetBuffer(widget->GetOpenGlBuffer());
+     screener->SetImageSize(widget->GetOpenGlBufferedRegion().GetSize());
      screener->Update();
-    
    }
-  
+
 
   /**
    *

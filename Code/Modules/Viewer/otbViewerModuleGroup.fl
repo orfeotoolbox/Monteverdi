@@ -25,7 +25,7 @@ class ViewerModuleGroup {open
       } {
         Fl_Group guiTabData {
           label Data
-          callback {this->TabSetupPosition();} selected
+          callback {this->TabSetupPosition();}
           tooltip {Vector data properties} xywh {0 30 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Text_Display dROIColor {
@@ -277,49 +277,19 @@ bDEM->value(0);
   } {
     Fl_Window wScreenShot {
       label Screenshots open
-      xywh {374 302 260 175} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {374 302 260 175} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
-      Fl_Round_Button rbScreenZoom {
-        label {Save zoom resolution view}
-        callback {if(rbScreenZoom->value() == 1)
-{
-rbScreenFull->value(0);
-rbScreenNav->value(0);
-}
-else
-{
-rbScreenFull->value(1);
-rbScreenNav->value(1);
-}}
-        xywh {20 20 220 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      Fl_Check_Button rbScreenZoom {
+        label {Save zoom view}
+        xywh {20 20 20 20} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Round_Button rbScreenFull {
-        label {Save full resolution view}
-        callback {if(rbScreenFull->value() == 1)
-{
-rbScreenZoom->value(0);
-rbScreenNav->value(0);
-}
-else
-{
-rbScreenZoom->value(1);
-rbScreenNav->value(1);
-}}
-        xywh {20 57 220 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      Fl_Check_Button rbScreenFull {
+        label {Save full view}
+        xywh {20 57 20 20} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
-      Fl_Round_Button rbScreenNav {
-        label {Save navigation view}
-        callback {if(rbScreenNav->value() == 1)
-{
-rbScreenFull->value(0);
-rbScreenZoom->value(0);
-}
-else
-{
-rbScreenFull->value(1);
-rbScreenZoom->value(1);
-}}
-        xywh {20 95 220 23} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+      Fl_Check_Button rbScreenNav {
+        label {Save navigation view} selected
+        xywh {20 95 20 20} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button {} {
         label Ok

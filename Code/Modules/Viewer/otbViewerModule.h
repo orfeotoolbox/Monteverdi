@@ -141,6 +141,7 @@ public:
   /** View type */
   typedef ImageView<RenderingModelType>             ViewType;
   typedef ViewType::Pointer                         ViewPointerType;
+  typedef ViewType::ImageWidgetType                 ImageWidgetType;
 
   /** Widget controller */
   typedef ImageWidgetController                     WidgetControllerType;
@@ -307,6 +308,7 @@ public:
   virtual void RefreshTabHistogram();
   virtual void RefreshTabPixelDescription();
 
+  void SaveScreenShot( const char * winLab, ImageWidgetType * widget);
 
 private:
   ViewerModule(const Self&); //purposely not implemented
