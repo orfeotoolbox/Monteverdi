@@ -68,6 +68,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
 
   m_MaskGenerator->SetRenderingFunction(m_MaskRenderer);
 
+
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
   m_PixelDescriptionModel = PixelDescriptionModelType::New();
@@ -824,6 +825,7 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
     m_RenderingModel->DeleteLayerByName("CCSegmentation");
 
     m_CCSegmentationGenerator->SetImage(m_CCColorMapper->GetOutput());
+
     m_CCSegmentationLabelGenerator->SetImage(m_CCFilter->GetOutput());
 
     m_CCSegmentationGenerator->GenerateQuicklookOff();
@@ -836,10 +838,15 @@ void ConnectedComponentSegmentationModule::UpdateCCSegmentationLayer()
 
     m_RenderingModel->AddLayer(m_CCSegmentationGenerator->GetLayer());
     m_RenderingModel->AddLayer(m_CCSegmentationLabelGenerator->GetLayer());
-    // m_RenderingModel->Update();
     m_CCFilter->GetOutput()->UpdateOutputInformation();
+    // ColorMapper MetDataDictionnary need to be cleared to avoid bandlist problem
+    // for example with WV2 img
+    itk::MetaDataDictionary blankMetaDataDictionary;
+    m_CCColorMapper->GetOutput()->SetMetaDataDictionary(blankMetaDataDictionary);
     m_CCColorMapper->GetOutput()->UpdateOutputInformation();
+
     m_HasToGenerateCCSegmentationLayer = false;
+
     }
 }
 
@@ -862,7 +869,6 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
 
     m_CCRelabelFilter->SetInput(m_CCFilter->GetOutput());
     m_CCRelabelFilter->SetMinimumObjectSize(minObjectSize);
-
     m_RelabelColorMapper->SetInput(m_CCRelabelFilter->GetOutput());
 
     m_RenderingModel->DeleteLayerByName("RelabelRGB");
@@ -883,6 +889,10 @@ void ConnectedComponentSegmentationModule::UpdateRelabelLayer()
     m_RenderingModel->AddLayer(m_RelabelGenerator->GetLayer());
 
     m_CCRelabelFilter->GetOutput()->UpdateOutputInformation();
+    // ColorMapper MetDataDictionnary need to be cleared to avoid bandlist problem
+    // for example with WV2 img
+    itk::MetaDataDictionary blankMetaDataDictionary;
+    m_RelabelColorMapper->GetOutput()->SetMetaDataDictionary(blankMetaDataDictionary);
     m_RelabelColorMapper->GetOutput()->UpdateOutputInformation();
 
     m_HasToGenerateRelabelLayer = false;
@@ -970,7 +980,8 @@ void ConnectedComponentSegmentationModule::UpdateOBIAOpeningLayer()
 
     m_RenderingModel->AddLayer(m_OBIAOpeningGenerator->GetLayer());
     m_RenderingModel->AddLayer(m_OBIAOpeningLabelGenerator->GetLayer());
-
+    itk::MetaDataDictionary blankMetaDataDictionary;
+    m_OBIAOpeningColorMapper->GetOutput()->SetMetaDataDictionary(blankMetaDataDictionary);
     m_OBIAOpeningColorMapper->GetOutput()->UpdateOutputInformation();
 
     if (m_ObjectDescriptionActionHandler->GetAttributesLabelMap() != m_OutputLabelMap)
@@ -1082,7 +1093,6 @@ void ConnectedComponentSegmentationModule::Process()
 
   m_PixelDescriptionModel->NotifyAll();
   m_RenderingModel->Update();
-
   this->Show();
   this->pBusyBar->value(0);
   this->pBusyBar->hide();
