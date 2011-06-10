@@ -38,18 +38,6 @@ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
-#------------- Ortho Rectification Tests ---------------------------
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvOrthorectificationModuleTest ${Modules_TESTS1}  otbOrthorectificationModuleTest
-${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
-${TEMP}/OrthorectificationModuleOuptut.tif
-)
-ADD_TEST(moTvOrthorectificationSingleImageModuleTest ${Modules_TESTS1}  otbOrthorectificationSingleImageModuleTest
-${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF   
-${TEMP}/OrthorectificationSingleImageModuleOuptut.tif
-)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
 #------------- Feature Extraction Tests ---------------------------
 ADD_TEST(moTvFeatureExtractionModuleTest  ${Modules_TESTS1} otbFeatureExtractionModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
@@ -514,8 +502,6 @@ otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
 otbReaderModuleTest.cxx 
 otbWriterModuleTest.cxx
-otbOrthorectificationModuleTest.cxx
-otbOrthorectificationSingleImageModuleTest.cxx
 otbFeatureExtractionModuleTest.cxx
 otbSupervisedClassificationModuleTest.cxx
 otbReaderWriterModuleTest.cxx
@@ -619,10 +605,6 @@ TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCounti
 #    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
 #    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
 #ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
-
-#ADD_EXECUTABLE(otbOrthorectificationApplication ${OR_SRCS} ${otbOrthorectificationApplication_FLTK_UI_SRCS})
-#TARGET_LINK_LIBRARIES(otbOrthorectificationApplication  otbOrthorectificationModule)
-
 
 #ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionApplication_test_interne.cxx)
 #TARGET_LINK_LIBRARIES(otbFeatureExtractionApplication otbMonteverdi otbFeatureExtractionModule otbReaderModule)

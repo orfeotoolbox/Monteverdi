@@ -29,8 +29,6 @@ void RegisterTests()
   REGISTER_TEST(otbSpeckleFilteringApplication);
   REGISTER_TEST(otbSpeckleFilteringModuleTest);
   REGISTER_TEST(otbReaderModuleTest);
-  REGISTER_TEST(otbOrthorectificationModuleTest);
-  REGISTER_TEST(otbOrthorectificationSingleImageModuleTest);
   REGISTER_TEST(otbFeatureExtractionModuleTest);
   REGISTER_TEST(otbSupervisedClassificationModuleTest);
   REGISTER_TEST(otbWriterModuleTest);

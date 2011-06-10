@@ -23,7 +23,6 @@
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
 #include "otbFeatureExtractionModule.h"
-#include "otbOrthorectificationModule.h"
 #include "otbViewerModule.h"
 #include "otbWriterModule.h"
 #include "otbSupervisedClassificationModule.h"
@@ -53,7 +52,6 @@ int otbMonteverdiApplicationReaderViewer(int argc, char* argv[])
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", "Filtering/Despeckle");
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
-  model->RegisterModule<otb::OrthorectificationModule>("Orthorectification", "Geometry/Ortho Rectification");
   model->RegisterModule<otb::WriterModule> ("Writer", "File/Export dataset");
   model->RegisterModule<otb::ViewerModule> ("Viewer", "Visualization/View image");
 
