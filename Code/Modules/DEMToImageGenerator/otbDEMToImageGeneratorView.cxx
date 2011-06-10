@@ -328,14 +328,14 @@ void DEMToImageGeneratorView::UpdateSpacing()
   cartoPointUL = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(latLongPointUL);
   //std::cout << latLongPointUL <<" -> " << cartoPointUL <<std::endl;
 
-  double sizeX = strtod(oSizeX->value(),NULL);
-  double sizeY = strtod(oSizeY->value(),NULL);
+  double sizeX = strtod(oSizeX->value(), NULL);
+  double sizeY = strtod(oSizeY->value(), NULL);
 
-  double spacingXm = strtod(oSpacingXm->value(),NULL) ;
-  double spacingYm = strtod(oSpacingYm->value(),NULL) ;
+  double spacingXm = strtod(oSpacingXm->value(), NULL);
+  double spacingYm = strtod(oSpacingYm->value(), NULL);
 
-  cartoPointLR[0] = cartoPointUL[0] + sizeX * spacingXm ;
-  cartoPointLR[1] = cartoPointUL[1] + sizeY * spacingYm ;
+  cartoPointLR[0] = cartoPointUL[0] + sizeX * spacingXm;
+  cartoPointLR[1] = cartoPointUL[1] + sizeY * spacingYm;
 
   TransformType::Pointer rsInverseTransform = TransformType::New();
   rsTransform->GetInverse(rsInverseTransform);
@@ -343,7 +343,7 @@ void DEMToImageGeneratorView::UpdateSpacing()
 
   //std::cout << cartoPointLR << " -> "<< latLongPointLR << std::endl;
 
-  if (!Utils::IsLonLatValid(latLongPointLR[0],latLongPointLR[1]))
+  if (!Utils::IsLonLatValid(latLongPointLR[0], latLongPointLR[1]))
     {
     return;
     }
@@ -381,11 +381,11 @@ void DEMToImageGeneratorView::UpdateSpacingMeter()
 
   OutputPointType latLongPointLR;
   latLongPointLR[0] = latLongPointUL[0]
-                      + copysign(1.0,latLongPointUL[0])
+                      + copysign(1.0, latLongPointUL[0])
                       * strtod(oSizeX->value(), NULL)
                       * strtod(oSpacingX->value(), NULL);
   latLongPointLR[1] = latLongPointUL[1]
-                      + copysign(1.0,latLongPointUL[1])
+                      + copysign(1.0, latLongPointUL[1])
                       * strtod(oSizeY->value(), NULL)
                       * strtod(oSpacingY->value(), NULL);
 
@@ -432,11 +432,11 @@ void DEMToImageGeneratorView::UpdateSpacingMeter()
   //std::cout << latLongPointUL <<" -> " << cartoPointUL <<std::endl;
   //std::cout << latLongPointLR <<" -> " << cartoPointLR <<std::endl;
 
-  double sizeX = strtod(oSizeX->value(),NULL);
-  double sizeY = strtod(oSizeY->value(),NULL);
+  double sizeX = strtod(oSizeX->value(), NULL);
+  double sizeY = strtod(oSizeY->value(), NULL);
 
-  double spacingXm = (cartoPointLR[0] - cartoPointUL[0]) / sizeX ;
-  double spacingYm = (cartoPointLR[1] - cartoPointUL[1]) / sizeY ;
+  double spacingXm = (cartoPointLR[0] - cartoPointUL[0]) / sizeX;
+  double spacingYm = (cartoPointLR[1] - cartoPointUL[1]) / sizeY;
 
   itk::OStringStream oss;
   oss.str("");
