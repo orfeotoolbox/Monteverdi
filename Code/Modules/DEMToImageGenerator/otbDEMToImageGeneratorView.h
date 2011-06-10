@@ -82,7 +82,9 @@ public:
   typedef ModelType::OutputPointType PointType;
   typedef ModelType::IndexType       IndexType;
   typedef ModelType::SingleImageType SingleImageType;
-  typedef otb::ColorBarWidget ColorBarWidgetType;
+  typedef otb::ColorBarWidget        ColorBarWidgetType;
+
+  typedef std::vector<double>        DoubleVectorType;
 
 
   // Initialize transform and show the GUI
@@ -122,6 +124,12 @@ protected:
   /** Callback for showing the Azimut and elevation angle  area*/
   virtual void UpdateHillShading();
 
+  /** Callback */
+  virtual void UpdateSpacing();
+
+  /** Callback */
+  virtual void UpdateSpacingMeter();
+
   /** Model Notificatin catcher*/
   virtual void Notify();
 
@@ -131,7 +139,6 @@ protected:
   /** Destructor */
   virtual ~DEMToImageGeneratorView()
   {
-    delete m_projectionRefBuffer;
   }
 
 private:
@@ -146,9 +153,6 @@ private:
 
   // Controller instance
   DEMToImageGeneratorControllerInterface::Pointer m_Controller;
-
-  /** Projection reference buffer for the Text Display widget*/
-  Fl_Text_Buffer * m_projectionRefBuffer;
 
   /** Color bar widget */
   ColorBarWidgetType::Pointer              m_ColorBarWidget;

@@ -99,6 +99,7 @@ public:
   itkGetMacro(OutputSize, SizeType);
   itkGetMacro(OutputOrigin, PointType);
   itkGetMacro(OutputSpacing, SpacingType);
+  itkGetMacro(OutputSpacingMeter, SpacingType);
 
   /** Get DEMToImage generator object */
   itkGetObjectMacro(DEMToImageGenerator, DEMToImageGeneratorType);
@@ -168,6 +169,7 @@ private:
   SizeType    m_OutputSize;
   PointType   m_OutputOrigin;
   SpacingType m_OutputSpacing;
+  SpacingType m_OutputSpacingMeter;
 
   // Outputs
   DEMToImageGeneratorType::Pointer m_DEMToImageGenerator;

@@ -82,10 +82,12 @@ DEMToImageGeneratorController
   try
     {
     m_Model->SetDEMDirectoryPath(DEMDirectory);
+    m_View->guiOK->activate();
     }
   catch (itk::ExceptionObject& err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
+    m_View->guiOK->deactivate();
     }
 }
 

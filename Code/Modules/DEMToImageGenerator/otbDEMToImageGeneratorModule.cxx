@@ -19,6 +19,7 @@
 #define __otbDEMToImageGeneratorModule_cxx
 
 #include "otbDEMToImageGeneratorModule.h"
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -58,6 +59,20 @@ void DEMToImageGeneratorModule::Run()
   if (inputImage.IsNotNull())
     {
     inputImage->UpdateOutputInformation();
+    if (inputImage->GetProjectionRef().empty())
+      {
+      ImageKeywordlist kwl;
+      kwl = inputImage->GetImageKeywordlist();
+      if(kwl.GetSize() == 0)
+        {
+        // index type image => return
+        m_View->Hide();
+        MsgReporter::GetInstance()->SendError("Wrong type of input image: index image without "
+                                                "projection reference or keyword list.\n"
+                                                "This message occurs with the DEMTotImageGenarator module.");
+        return;
+        }
+      }
     m_Model->UpdateOutputParametersFromImage(inputImage);
     }
   m_View->Show();

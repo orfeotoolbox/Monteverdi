@@ -67,6 +67,7 @@ void DEMToImageGeneratorModel
   inputImage->TransformIndexToPhysicalPoint(index, point);
   // Transform to geo and to Choosen projection
   m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
+  //std::cout << "index -> point -> geoPoint: " << index << " -> " << point << " -> " << m_OutputOrigin <<std::endl;
 
   index[0]= inputImage->GetLargestPossibleRegion().GetSize()[0];
   index[1]= inputImage->GetLargestPossibleRegion().GetSize()[1];
@@ -77,7 +78,32 @@ void DEMToImageGeneratorModel
   inputImage->TransformIndexToPhysicalPoint(index, point);
   // Transform to geo and to Choosen projection
   geoPoint = m_DEMToImageGenerator->GetTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
-  m_OutputSpacing = inputImage->GetSpacing();
+  //std::cout << "index -> point -> geoPoint: " << index << " -> " << point << " -> " << geoPoint <<std::endl;
+
+  // Compute output spacing with the 2 geo point
+  m_OutputSpacing[0] =  (geoPoint[0] - m_OutputOrigin[0] ) / m_OutputSize[0];
+  m_OutputSpacing[1] =  (geoPoint[1] - m_OutputOrigin[1] ) / m_OutputSize[1];
+
+  // Try to get the spacing in meter
+  if (!inputImage->GetProjectionRef().empty())
+    {
+    m_OutputSpacingMeter = inputImage->GetSpacing();
+    }
+  else
+    {
+    ImageKeywordlist kwl;
+    kwl = m_DEMToImageGenerator->GetOutputKeywordList();
+    if( (kwl.GetSize()>0) && kwl.HasKey("meters_per_pixel_x") && kwl.HasKey("meters_per_pixel_x"))
+      {
+      m_OutputSpacingMeter[0] = atof(kwl.GetMetadataByKey("meters_per_pixel_x").c_str());
+      m_OutputSpacingMeter[1] = atof(kwl.GetMetadataByKey("meters_per_pixel_y").c_str());
+      }
+    else
+      {
+      m_OutputSpacingMeter[0] = 0;
+      m_OutputSpacingMeter[1] = 0;
+      }
+    }
 }
 
 /**
@@ -106,7 +132,6 @@ DEMToImageGeneratorModel
   geoPoint[1] = originY;
   m_OutputOrigin = m_DEMToImageGenerator->GetTransform()->GetTransform()->
                     GetSecondTransform()->TransformPoint(geoPoint);
-
 }
 
 /**
@@ -116,9 +141,13 @@ void
 DEMToImageGeneratorModel
 ::ReprojectImage()
 {
-  m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
-  m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
-  m_DEMToImageGenerator->SetOutputSpacing(m_OutputSpacing);
+  if (!m_UseInputImage)
+  {
+    m_DEMToImageGenerator->SetOutputOrigin(m_OutputOrigin);
+    m_DEMToImageGenerator->SetOutputSize(m_OutputSize);
+    m_DEMToImageGenerator->SetOutputSpacing(m_OutputSpacing);
+  }
+
   m_DEMToImageGenerator->InstanciateTransform();
   m_Output        = m_DEMToImageGenerator->GetOutput();
 
@@ -138,17 +167,17 @@ DEMToImageGeneratorModel
   //double lat1 = m_OutputOrigin[1];
   //double lat2 = m_OutputOrigin[1] + m_OutputSize[1] * m_OutputSpacing[1];
   //double R = 6371; // km
-//double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
-//                    vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
-//double res = d / vcl_sqrt(2.0);
+  //double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
+  //                    vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
+  //double res = d / vcl_sqrt(2.0);
 
   m_HillShading->SetRadius(radius);
   m_HillShading->SetInput(m_DEMToImageGenerator->GetOutput());
   m_HillShading->SetAzimuthLight(azimutAngle* CONST_PI_180);
   m_HillShading->SetElevationLight(elevationAngle * CONST_PI_180);
 
-//  m_HillShading->GetFunctor().SetXRes(res);
-//  m_HillShading->GetFunctor().SetYRes(res);
+  //m_HillShading->GetFunctor().SetXRes(res);
+  //m_HillShading->GetFunctor().SetYRes(res);
 
   m_HillShadingProcess = true;
   this->NotifyAll();

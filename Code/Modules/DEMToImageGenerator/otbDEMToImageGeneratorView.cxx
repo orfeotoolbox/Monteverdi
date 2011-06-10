@@ -32,6 +32,9 @@
 #include "itkContinuousIndex.h"
 #include <ogr_spatialref.h>
 
+#include "otbUtils.h"
+#include "otbMapProjections.h"
+
 namespace otb
 {
 /**
@@ -42,7 +45,6 @@ DEMToImageGeneratorView::DEMToImageGeneratorView()
   // Build the Gui
   this->CreateGUI();
   m_InputImageUnknown = false;
-  m_projectionRefBuffer = new Fl_Text_Buffer();
 }
 
 /**
@@ -77,17 +79,14 @@ DEMToImageGeneratorView
 ::Show()
 {
   m_InputImageUnknown = m_Controller->GetModel()->GetUseInputImage();
-  gDEM->show();
-  iSRTMDEMPath->activate();
+  gOutputImage->show();
+
   try
     {
     if (m_InputImageUnknown)
       {
       this->UpdateOutputParameters();
-      }
-    else
-      {
-      this->UpdateProjectionRef();
+      gOutputParam->deactivate();
       }
 
     // test if the good parameters are available
@@ -105,7 +104,6 @@ DEMToImageGeneratorView
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-
 }
 
 /**
@@ -168,9 +166,7 @@ DEMToImageGeneratorView
       double max = oMaxValue->value();
       m_Controller->ProcessColorRelief(min, max, oWithHillShading->value());
       }
-
     }
-
 
   // hide the GUI
   this->Hide();
@@ -207,12 +203,6 @@ DEMToImageGeneratorView
 {
   itk::OStringStream oss;
 
-  IndexType index;
-  PointType point, geoPoint;
-
-  /** Origin value */
-  index.Fill(0);
-
   oss.str("");
   oss << m_Controller->GetModel()->GetOutputOrigin()[0];
   oOriginX->value(oss.str().c_str());
@@ -230,42 +220,27 @@ DEMToImageGeneratorView
   oSpacingY->value(oss.str().c_str());
 
   oss.str("");
+  oss << m_Controller->GetModel()->GetOutputSpacingMeter()[0];
+  oSpacingXm->value(oss.str().c_str());
+
+  oss.str("");
+  oss << m_Controller->GetModel()->GetOutputSpacingMeter()[1];
+  oSpacingYm->value(oss.str().c_str());
+
+  oss.str("");
   oss << m_Controller->GetModel()->GetOutputSize()[0];
   oSizeX->value(oss.str().c_str());
 
   oss.str("");
   oss << m_Controller->GetModel()->GetOutputSize()[1];
   oSizeY->value(oss.str().c_str());
-
-
-  this->UpdateProjectionRef();
 }
 
 
 void
 DEMToImageGeneratorView::UpdateProjectionRef()
 {
-  std::string projectionRef;
-//  m_Controller->GetModel()->GetDEMToImageGenerator()->UpdateOutputInformation();
-  projectionRef = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputProjectionRef();
-
-  if(projectionRef.empty())
-    {
-    ImageKeywordlist kwl;
-    kwl = m_Controller->GetModel()->GetDEMToImageGenerator()->GetOutputKeywordList();
-
-    if(kwl.GetSize())
-      {
-      projectionRef += kwl.GetMetadataByKey("sensor") + " SENSOR MODEL";
-      }
-    else
-      {
-      projectionRef ="GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]], PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
-      }
-    }
-  m_projectionRefBuffer->text(projectionRef.c_str());
-
-  oOutputProjectionRef->buffer(m_projectionRefBuffer);
+  m_Controller->GetModel()->GetDEMToImageGenerator()->UpdateOutputInformation();
 }
 
 
@@ -296,21 +271,181 @@ void DEMToImageGeneratorView::UpdateHillShading()
     {
     oAzimutLight->activate();
     oElevationLight->activate();
-    oColorRelief->activate();
     oRadiusHillShading->activate();
-    oMinValue->activate();
-    oMaxValue->activate();
+    oWithHillShading->activate();
     }
   else
     {
     oAzimutLight->deactivate();
     oElevationLight->deactivate();
-    oColorRelief->deactivate();
     oRadiusHillShading->deactivate();
-    oMinValue->deactivate();
-    oMaxValue->deactivate();
+    oWithHillShading->deactivate();
     }
 }
 
+void DEMToImageGeneratorView::UpdateSpacing()
+{
+  if ( (oSizeX->value() == 0) || (oSizeY->value() == 0) )
+    {
+    return;
+    }
+
+  typedef TransformType::OutputPointType OutputPointType;
+  OutputPointType latLongPointUL, latLongPointLR;
+  latLongPointUL[0] = strtod(oOriginX->value(), NULL);
+  latLongPointUL[1] = strtod(oOriginY->value(), NULL);
+
+  int utmZoneUL = Utils::GetZoneFromGeoPoint(latLongPointUL[0], latLongPointUL[1]);
+
+  // Project the new geo Point
+  OutputPointType cartoPointUL, cartoPointLR;
+  TransformType::Pointer rsTransform = TransformType::New();
+
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+
+  std::string hem = "N";
+  if(latLongPointUL[0] < 0)
+    {
+    hem = "S";
+    }
+
+  utmProjection->SetHemisphere(hem[0]);
+  utmProjection->SetZone(utmZoneUL);
+  std::string outputProjectionRef = utmProjection->GetWkt();
+
+  char * wgs84Ref;
+  OGRSpatialReference oSRS;
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.exportToWkt(&wgs84Ref);
+  std::string inputProjectionRef = wgs84Ref;
+
+  // Build a Generic RS transform WGS84 -> UTM
+  rsTransform->SetInputProjectionRef(inputProjectionRef);
+  rsTransform->SetOutputProjectionRef(outputProjectionRef);
+  rsTransform->InstanciateTransform();
+
+  cartoPointUL = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(latLongPointUL);
+  //std::cout << latLongPointUL <<" -> " << cartoPointUL <<std::endl;
+
+  double sizeX = strtod(oSizeX->value(),NULL);
+  double sizeY = strtod(oSizeY->value(),NULL);
+
+  double spacingXm = strtod(oSpacingXm->value(),NULL) ;
+  double spacingYm = strtod(oSpacingYm->value(),NULL) ;
+
+  cartoPointLR[0] = cartoPointUL[0] + sizeX * spacingXm ;
+  cartoPointLR[1] = cartoPointUL[1] + sizeY * spacingYm ;
+
+  TransformType::Pointer rsInverseTransform = TransformType::New();
+  rsTransform->GetInverse(rsInverseTransform);
+  latLongPointLR = rsInverseTransform->GetTransform()->GetFirstTransform()->TransformPoint(cartoPointLR);
+
+  //std::cout << cartoPointLR << " -> "<< latLongPointLR << std::endl;
+
+  if (!Utils::IsLonLatValid(latLongPointLR[0],latLongPointLR[1]))
+    {
+    return;
+    }
+  int utmZoneLR = Utils::GetZoneFromGeoPoint(latLongPointLR[0], latLongPointLR[1]);
+  if (utmZoneUL != utmZoneLR)
+    {
+    return;
+    }
+
+  double spacingX = (latLongPointLR[0] - latLongPointUL[0]) / sizeX;
+  double spacingY = (latLongPointLR[1] - latLongPointUL[1]) / sizeY;
+
+  itk::OStringStream oss;
+  oss.str("");
+  oss << spacingX;
+  oSpacingX->value(oss.str().c_str());
+  oss.str("");
+  oss << spacingY;
+  oSpacingY->value(oss.str().c_str());
+
+}
+
+void DEMToImageGeneratorView::UpdateSpacingMeter()
+{
+  if ( (atoi(oSizeX->value()) == 0) || (atoi(oSizeY->value()) == 0) )
+    {
+    return;
+    }
+
+  typedef TransformType::OutputPointType OutputPointType;
+
+  OutputPointType latLongPointUL;
+  latLongPointUL[0] = strtod(oOriginX->value(), NULL);
+  latLongPointUL[1] = strtod(oOriginY->value(), NULL);
+
+  OutputPointType latLongPointLR;
+  latLongPointLR[0] = latLongPointUL[0]
+                      + copysign(1.0,latLongPointUL[0])
+                      * strtod(oSizeX->value(), NULL)
+                      * strtod(oSpacingX->value(), NULL);
+  latLongPointLR[1] = latLongPointUL[1]
+                      + copysign(1.0,latLongPointUL[1])
+                      * strtod(oSizeY->value(), NULL)
+                      * strtod(oSpacingY->value(), NULL);
+
+  int utmZoneUL = Utils::GetZoneFromGeoPoint(latLongPointUL[0], latLongPointUL[1]);
+  int utmZoneLR = Utils::GetZoneFromGeoPoint(latLongPointLR[0], latLongPointLR[1]);
+
+  if (utmZoneUL != utmZoneLR)
+    {
+    return;
+    }
+
+  // Project the new geo Point
+  OutputPointType cartoPointUL, cartoPointLR;
+  TransformType::Pointer rsTransform = TransformType::New();
+
+  typedef UtmInverseProjection UtmProjectionType;
+  UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+
+  std::string hem = "N";
+  if(latLongPointUL[0] < 0)
+    {
+    hem = "S";
+    }
+
+  utmProjection->SetHemisphere(hem[0]);
+  utmProjection->SetZone(utmZoneUL);
+  std::string outputProjectionRef = utmProjection->GetWkt();
+
+  char * wgs84Ref;
+  OGRSpatialReference oSRS;
+  oSRS.SetWellKnownGeogCS("WGS84");
+  oSRS.exportToWkt(&wgs84Ref);
+  std::string inputProjectionRef = wgs84Ref;
+
+  // Build a Generic RS transform WGS84 -> UTM
+  rsTransform->SetInputProjectionRef(inputProjectionRef);
+
+  rsTransform->SetOutputProjectionRef(outputProjectionRef);
+  rsTransform->InstanciateTransform();
+
+  cartoPointUL = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(latLongPointUL);
+  cartoPointLR = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(latLongPointLR);
+
+  //std::cout << latLongPointUL <<" -> " << cartoPointUL <<std::endl;
+  //std::cout << latLongPointLR <<" -> " << cartoPointLR <<std::endl;
+
+  double sizeX = strtod(oSizeX->value(),NULL);
+  double sizeY = strtod(oSizeY->value(),NULL);
+
+  double spacingXm = (cartoPointLR[0] - cartoPointUL[0]) / sizeX ;
+  double spacingYm = (cartoPointLR[1] - cartoPointUL[1]) / sizeY ;
+
+  itk::OStringStream oss;
+  oss.str("");
+  oss << spacingXm;
+  oSpacingXm->value(oss.str().c_str());
+  oss.str("");
+  oss << spacingYm;
+  oSpacingYm->value(oss.str().c_str());
+
+}
 
 } // End namespace otb
