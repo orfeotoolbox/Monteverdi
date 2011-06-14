@@ -428,20 +428,17 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
     if ( *item == "spectralAngle" )
       ui_VarNamesMask->add(item->c_str());
     }
-  const mu::funmap_type & functions = m_MaskFilter->GetFunList();
-  mu::funmap_type::const_iterator funItem = functions.begin();
+  Parser::FunctionMapType functions = m_MaskFilter->GetFunList();
+  Parser::FunctionMapType::const_iterator funItem = functions.begin();
 
   int nbArgs;
   // Query the functions, the function list is same for all expression
   // hence the list is displayed in help window
   for (; funItem != functions.end(); ++funItem)
     {
-    mu::ParserCallback funCallback = funItem->second;
-    nbArgs = funCallback.GetArgc();
-
-    if (nbArgs != -1)
+    if(funItem->second != -1)
       {
-      m_FunList << funItem->first.c_str() << " " << nbArgs << std::endl;
+       m_FunList<<funItem->first.c_str()<<" "<<funItem->second<<std::endl;
       }
     else
       {
