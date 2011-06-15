@@ -14,14 +14,14 @@ class ProjectionGroup {open
   } {
     Fl_Window guiMainWindow {
       label Projection open
-      xywh {465 24 430 500} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 visible
+      xywh {329 197 430 500} type Double box PLASTIC_DOWN_BOX color 7 selection_color 7 labelcolor 187 visible
     } {
       Fl_Tabs m_TabsMode {
         callback {this->TabPositionHandler();} open
         xywh {5 9 420 443} box PLASTIC_UP_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0 when 1
       } {
         Fl_Group {} {
-          label {Output image} open selected
+          label {Output image} open
           xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1
         } {
           Fl_Choice guiMapSelection {
@@ -37,6 +37,7 @@ m_MapType->show();
 m_UTM->show();
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
+m_EPSG->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_UTM);
 this->UpdateUTMTransform();}
@@ -50,6 +51,7 @@ m_MapType->show();
 m_UTM->hide();
 m_Lambert2->show();
 m_TRANSMERCATOR->hide();
+m_EPSG->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_LAMBERT2);
 this->UpdateLambertIITransform();}
@@ -63,6 +65,7 @@ m_MapType->show();
 m_UTM->hide();
 m_Lambert2->hide();
 m_TRANSMERCATOR->show();
+m_EPSG->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_TRANSMERCATOR);
 this->UpdateTMTransform();}
@@ -74,12 +77,27 @@ this->UpdateTMTransform();}
 m_UTM->hide();
 m_Lambert2->hide();
 m_TRANSMERCATOR->hide();
+m_EPSG->hide();
 guiEastSelection->hide();
 guiNorthSelection->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_WGS84);
 this->UpdateWGS84Transform();}
               xywh {40 40 100 25} labelsize 11
+            }
+            MenuItem {} {
+              label EPSG
+              callback {m_EPSG->show();
+m_MapType->show();
+m_UTM->hide();
+m_Lambert2->hide();
+m_TRANSMERCATOR->hide();
+guiEastSelection->show();
+guiNorthSelection->show();
+this->m_MapType->redraw();
+SetMapType(MAP_RSID);
+this->UpdateEPSGTransform();}
+              xywh {50 50 100 25} labelsize 11
             }
           }
           Fl_Wizard m_MapType {
@@ -198,9 +216,20 @@ this->UpdateOriginGeographicalCoordinates();}
                 tooltip {Enter scale factor} xywh {115 363 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
               }
             }
-            Fl_Group m_Lambert2 {
+            Fl_Group m_Lambert2 {open
               xywh {15 268 225 174} selection_color 7 hide
             } {}
+            Fl_Group m_EPSG {open
+              xywh {15 268 225 174} selection_color 7 hide
+            } {
+              Fl_Input guiRSIDNumber {
+                label RSID
+                callback {this->TestUpdateEPSGTransform();
+this->UpdateEPSGTransform();
+this->UpdateOriginGeographicalCoordinates();}
+                tooltip {Enter the RSID Number} xywh {81 288 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
+              }
+            }
           }
           Fl_Round_Button guiCenterPixel {
             label Centered
@@ -243,12 +272,12 @@ this->ActivateMapParamaters();}
           }
         }
         Fl_Group AllGrp {
-          label {Input image}
+          label {Input image} open
           xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
         } {
           Fl_Choice iMapSelection {
             label {Input map projection}
-            callback {this->UpdateMapParam();}
+            callback {this->UpdateMapParam();} open
             tooltip {Select the map projection type} xywh {170 75 160 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 54 selection_color 55 labelcolor 186 deactivate
           } {
             MenuItem {} {
@@ -291,7 +320,7 @@ iSensorModel->show();}
             }
           }
           Fl_Wizard iMapType {
-            label {Input cartographic coordinates}
+            label {Input cartographic coordinates} open
             xywh {25 130 376 170} box PLASTIC_DOWN_BOX color 48 selection_color 7 labelsize 12 align 5 deactivate
           } {
             Fl_Group iUTM {open
@@ -572,6 +601,8 @@ vAverageElevation->deactivate();
   } {}
   Function {UpdateWGS84Transform()} {open return_type {virtual void}
   } {}
+  Function {UpdateEPSGTransform()} {open return_type {virtual void}
+  } {}
   Function {Browse()} {open return_type {virtual void}
   } {}
   Function {UpdateDEMUse()} {open return_type {virtual void}
@@ -587,5 +618,7 @@ vAverageElevation->deactivate();
   Function {DeactivateMapParamaters()} {open return_type {virtual void}
   } {}
   Function {ActivateMapParamaters()} {open return_type {virtual void}
+  } {}
+  Function {TestUpdateEPSGTransform()} {open selected return_type {virtual void}
   } {}
 } 

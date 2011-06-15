@@ -32,24 +32,24 @@ namespace otb
  */
 ProjectionModel::ProjectionModel()
 {
-  m_OutputChanged    = false;
+  m_OutputChanged = false;
   m_TransformChanged = false;
   m_TempTransformChanged = false;
-  m_UseDEM               = false;
+  m_UseDEM = false;
   m_EstimateInputRPCModel = false;
 
   m_Resampler = ResampleFilterType::New();
 
-  m_Transform        = TransformType::New();
+  m_Transform = TransformType::New();
   m_InverseTransform = TransformType::New();
 }
 
 /**
  * Destructor
  */
-ProjectionModel::
-~ProjectionModel()
-{}
+ProjectionModel::~ProjectionModel()
+{
+}
 
 ///////////////////////////////////////////////////////////////
 /**     CASE : input transform is not allowed */
@@ -58,20 +58,18 @@ ProjectionModel::
 /**
  * Update the input Projection Ref
  */
-void
-ProjectionModel
-::UpdateInputUTMTransform(int zone, bool north)
+void ProjectionModel::UpdateInputUTMTransform(int zone, bool north)
 {
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
 
   std::string hem = "N";
-  if(!north) hem = "S";
-    
+  if (!north) hem = "S";
+
   utmProjection->SetHemisphere(hem[0]);
   utmProjection->SetZone(zone);
   std::string utmRef = utmProjection->GetWkt();
-  
+
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, utmRef);
@@ -89,13 +87,12 @@ ProjectionModel
 /**
  * Update the input Projection LambertII Projection Ref
  */
-void ProjectionModel
-::InitializeInputLambertIITransform()
+void ProjectionModel::InitializeInputLambertIITransform()
 {
   typedef Lambert2EtenduForwardProjection Lambert2Type;
   Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
-  std::string  lambertRef = lambert2Projection->GetWkt();
-  
+  std::string lambertRef = lambert2Projection->GetWkt();
+
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, lambertRef);
@@ -113,14 +110,13 @@ void ProjectionModel
 /**
  * Initialize the Transmercator Projection and Transform
  */
-void ProjectionModel
-::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
+void ProjectionModel::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
   transMercatorProjection->SetParameters(falseEasting, falseNorthing, scale);
-  std::string tmRef =   transMercatorProjection->GetWkt();
-  
+  std::string tmRef = transMercatorProjection->GetWkt();
+
   // Report projection ref (not done by the resample filter)
   itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, tmRef);
@@ -135,6 +131,26 @@ void ProjectionModel
   m_TempTransformChanged = false;
 }
 
+void ProjectionModel::UpdateInputEPSGTransform(int rsidNumber)
+{
+
+  std::string epsgRef = otb::GeoInformationConversion::ToWKT(rsidNumber);
+
+  // Report projection ref (not done by the resample filter)
+  itk::MetaDataDictionary& dict = m_InputImage->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, epsgRef);
+
+  // Up To date the transform
+  m_Transform->SetInputProjectionRef(epsgRef);
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+
+  m_TempTransformChanged = true;
+  this->NotifyAll();
+  m_TempTransformChanged = false;
+
+}
+
 //////////////////////////////////////////////////////////////////
 /**     END CASE : input transform is not accessible */
 //////////////////////////////////////////////////////////////////
@@ -142,27 +158,25 @@ void ProjectionModel
 /**
  *
  */
-void
-ProjectionModel
-::UpdateUTMTransform(int zone, bool hemisphere)
+void ProjectionModel::UpdateUTMTransform(int zone, bool hemisphere)
 {
   typedef UtmInverseProjection UtmProjectionType;
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
 
   std::string hem = "N";
-  if(!hemisphere) hem = "S";
-    
+  if (!hemisphere) hem = "S";
+
   utmProjection->SetHemisphere(hem[0]);
   utmProjection->SetZone(zone);
   m_OutputProjectionRef = utmProjection->GetWkt();
-  
+
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
 
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->InstanciateTransform();
-  
+
   // Get the transform
   m_Transform->GetInverse(m_InverseTransform);
 
@@ -175,11 +189,33 @@ ProjectionModel
   m_TransformChanged = false;
 }
 
+void ProjectionModel::UpdateEPSGTransform(int rsidNumber)
+{
+
+  m_OutputProjectionRef = otb::GeoInformationConversion::ToWKT(rsidNumber);
+
+  // Build the Generic RS transform
+  m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
+  m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
+
+  m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
+  m_Transform->InstanciateTransform();
+
+  // Get the inverse
+  m_Transform->GetInverse(m_InverseTransform);
+
+  this->UpdateOutputParameters();
+
+  m_TransformChanged = true;
+  this->NotifyAll();
+  m_TransformChanged = false;
+
+}
+
 /**
  * Initialize the Remote Sensing Transform
  */
-void ProjectionModel
-::InitializeLambertIITransform()
+void ProjectionModel::InitializeLambertIITransform()
 {
   typedef Lambert2EtenduForwardProjection Lambert2Type;
   Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
@@ -205,14 +241,13 @@ void ProjectionModel
 /**
  * Initialize the Transmercator Projection and Transform
  */
-void ProjectionModel
-::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
+void ProjectionModel::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
   transMercatorProjection->SetParameters(falseEasting, falseNorthing, scale);
   m_OutputProjectionRef = transMercatorProjection->GetWkt();
-  
+
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -233,9 +268,7 @@ void ProjectionModel
 /**
  *
  */
-void
-ProjectionModel
-::UpdateWGS84Transform()
+void ProjectionModel::UpdateWGS84Transform()
 {
   // Build the Output Projection Ref
   // WGS84
@@ -244,7 +277,7 @@ ProjectionModel
   oSRS.SetWellKnownGeogCS("WGS84");
   oSRS.exportToWkt(&wgs84Ref);
   m_OutputProjectionRef = wgs84Ref;
-  
+
   // Build the Generic RS transform
   m_Transform->SetInputProjectionRef(m_InputImage->GetProjectionRef());
   m_Transform->SetInputDictionary(m_InputImage->GetMetaDataDictionary());
@@ -267,39 +300,32 @@ ProjectionModel
 /**
  * Compute the new Origin, Spacing & Size of the output
  */
-void ProjectionModel
-::UpdateOutputParameters()
+void ProjectionModel::UpdateOutputParameters()
 {
   // Ccompute the output parameters stuff
-  typedef otb::ImageToGenericRSOutputParameters<InputImageType>  OutputParamEstimatorType;
+  typedef otb::ImageToGenericRSOutputParameters<InputImageType> OutputParamEstimatorType;
   OutputParamEstimatorType::Pointer estimator = OutputParamEstimatorType::New();
-  
+
   estimator->SetInput(m_InputImage);
   estimator->SetOutputProjectionRef(m_OutputProjectionRef);
   estimator->Compute();
 
   // Edit the output image parmaters
-  m_OutputOrigin      = estimator->GetOutputOrigin();
+  m_OutputOrigin = estimator->GetOutputOrigin();
   m_OutputSpacing = estimator->GetOutputSpacing();
-  m_OutputSize    = estimator->GetOutputSize();
+  m_OutputSize = estimator->GetOutputSize();
 
   // Keep a copy of the origin of the whole projected image
-  m_WholeOutputOrigin  = estimator->GetOutputOrigin();
+  m_WholeOutputOrigin = estimator->GetOutputOrigin();
   m_WholeOutputSpacing = estimator->GetOutputSpacing();
-  m_WholeOutputSize    = estimator->GetOutputSize();
+  m_WholeOutputSize = estimator->GetOutputSize();
 }
 
 /**
  *
  */
-void
-ProjectionModel
-::ProjectRegion(unsigned int sizeX,
-                unsigned int sizeY,
-                double spacingX,
-                double spacingY,
-                double originX,
-                double originY)
+void ProjectionModel::ProjectRegion(unsigned int sizeX, unsigned int sizeY, double spacingX, double spacingY,
+                                    double originX, double originY)
 {
   // Edit the size
   m_OutputSize[0] = sizeX;
@@ -319,9 +345,7 @@ ProjectionModel
 /**
  *
  */
-void
-ProjectionModel
-::ReprojectImage()
+void ProjectionModel::ReprojectImage()
 {
   // Fill the resampler parameters
   m_Resampler->SetInput(m_InputImage);
@@ -336,20 +360,19 @@ ProjectionModel
     m_Resampler->EstimateInputRpcModelOn();
     m_Resampler->SetInputRpcGridSize(20);
     }
-  
+
   // Use the DEM
-  if(m_UseDEM)
+  if (m_UseDEM)
     {
     m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
     }
-  
+
   // Default padding value
   InputImageType::PixelType defaultValue;
-  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue,
-                                                     m_InputImage->GetNumberOfComponentsPerPixel());
+  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue, m_InputImage->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
 
-  m_Output        = m_Resampler->GetOutput();
+  m_Output = m_Resampler->GetOutput();
   m_OutputChanged = true;
   this->NotifyAll();
   m_OutputChanged = false;
@@ -358,11 +381,9 @@ ProjectionModel
 /**
  *
  */
-void
-ProjectionModel
-::SetDEMPath(std::string dem)
+void ProjectionModel::SetDEMPath(std::string dem)
 {
-  if(m_UseDEM)
+  if (m_UseDEM)
     {
     // Update the transform and the inverse one
     m_Transform->SetDEMDirectory(dem);
@@ -378,13 +399,10 @@ ProjectionModel
     }
 }
 
-
 /**
  *
  */
-void
-ProjectionModel
-::NotifyListener(ListenerBase * listener)
+void ProjectionModel::NotifyListener(ListenerBase * listener)
 {
   listener->Notify();
 }

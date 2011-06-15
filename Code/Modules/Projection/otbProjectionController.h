@@ -50,9 +50,11 @@ public:
   // Methods
   virtual void ReprojectImage();
   virtual void UpdateUTMTransform(int zone, bool north);
+  virtual void UpdateEPSGTransform(int rsidNumber);
   virtual void InitializeLambertIITransform();
   virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing);
   virtual void UpdateInputUTMTransform(int zone, bool north);
+  virtual void UpdateInputEPSGTransform(int rsidNumber);
   virtual void InitializeInputLambertIITransform();
   virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
   virtual void ProjectRegion(unsigned int sizeX,

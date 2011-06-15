@@ -89,6 +89,25 @@ ProjectionController
     }
 }
 
+
+
+/**
+ *
+ */
+void
+ProjectionController
+::UpdateEPSGTransform(int rsidNumber)
+{
+  try
+    {
+    m_Model->UpdateEPSGTransform(rsidNumber);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
 /**
  *
  */
@@ -139,6 +158,25 @@ ProjectionController
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
 }
+
+
+/**
+ *
+ */
+void
+ProjectionController
+::UpdateInputEPSGTransform(int rsidNumber)
+{
+  try
+    {
+    m_Model->UpdateInputEPSGTransform(rsidNumber);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
+}
+
 
 /**
  *

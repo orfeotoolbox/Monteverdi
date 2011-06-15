@@ -172,6 +172,9 @@ protected:
   virtual void UpdateTMTransform();
   //
   virtual void UpdateWGS84Transform();
+  //
+  virtual void UpdateEPSGTransform();
+
 
   virtual void UpdateInputUTMTransform();
   //
@@ -179,8 +182,14 @@ protected:
   //
   virtual void UpdateInputTMTransform();
   //
+  virtual void UpdateInputEPSGTransform();
+   //
   virtual void UpToDateTransform();
   
+  // test if the value entered correspond to valid rsid number
+  virtual void TestUpdateEPSGTransform();
+
+
   // Set the estimation rpc model possible
   virtual void UpdateRpcEstimation();
 

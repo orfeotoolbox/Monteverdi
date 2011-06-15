@@ -46,6 +46,7 @@ public:
   /** Virtual pure Methods*/
   virtual void ReprojectImage() = 0;
   virtual void UpdateUTMTransform(int zone, bool north) = 0;
+  virtual void UpdateEPSGTransform(int rsidNumber) = 0;
   virtual void InitializeLambertIITransform() = 0;
   virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing) = 0;
   virtual void ProjectRegion(unsigned int sizeX,
@@ -55,6 +56,7 @@ public:
                              double originX,
                              double originY)  = 0;
   virtual void UpdateInputUTMTransform(int zone, bool north) = 0;
+  virtual void UpdateInputEPSGTransform(int rsidNumber) = 0;
   virtual void InitializeInputLambertIITransform() = 0;
   virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing) = 0;
   virtual void InitializeWGS84Transform() = 0;

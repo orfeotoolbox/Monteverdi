@@ -114,6 +114,9 @@ public:
   /** Update the UTM Projection*/
   virtual void UpdateUTMTransform(int zone, bool hemisphere);
 
+  /** Update the EPSG Projection*/
+   virtual void UpdateEPSGTransform(int rsidNumber);
+
   /** Initialize the Lambert II Projection*/
   virtual void InitializeLambertIITransform();
 
@@ -123,11 +126,15 @@ public:
   /** Update the Input UTM Projection*/
   virtual void UpdateInputUTMTransform(int zone, bool north);
 
+  /** Update the EPSG Projection*/
+  virtual void UpdateInputEPSGTransform(int rsidNumber);
+
   /** Initialize the Input Lambert II Projection*/
   virtual void InitializeInputLambertIITransform();
 
   /** Initialize the Input transmecator proejction */
   virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
+
 
   /** Initialize the WGS84 transform*/
   void UpdateWGS84Transform();
