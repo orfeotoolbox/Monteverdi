@@ -120,7 +120,7 @@ void AddHarTexturesFilter(ModelPointerType pModel,
       filter->SetNumberOfBinsPerAxis(pBin);
       
       filter->SetInputImageMinimum(static_cast<SinglePixelType>(minHarVect[i]));
-      filter->SetInputImageMaximum(static_cast<SinglePixelType>(minHarVect[i]));
+      filter->SetInputImageMaximum(static_cast<SinglePixelType>(maxHarVect[i]));
       filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
       
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
