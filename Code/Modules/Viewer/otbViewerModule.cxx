@@ -425,9 +425,7 @@ namespace otb
     // Quantiles are only displayed when the linear stretch is selected
     guiGroupQuantiles->show();
 
-    guiGroupStandardDeviation->resize(guiGroupQuantiles->x(), guiGroupQuantiles->y(),
-                                      guiGroupQuantiles->w(), guiGroupQuantiles->h());
-    guiGroupStandardDeviation->hide();
+    guiSetStandardDeviation->hide();
 
     // Show everything
     m_DisplayWindow->Show();
@@ -446,9 +444,12 @@ namespace otb
       // Show the interface setup
       gVectorData->value(guiTabData);
       bSetupWindow->show();
-
+      
       // Update the color composition window
       this->UpdateViewerSetupWindow();
+
+      // Update NoData value
+      guiSetNoData->value( static_cast<double>( m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage)->GetNoDataValue() ) );
     }
     catch(itk::ExceptionObject & err)
     {
@@ -1455,6 +1456,8 @@ namespace otb
     ChannelListType channels =
       imageLayer->GetRenderingFunction()->GetChannelList();
 
+    guiSetStandardDeviation->hide();
+
     RenderingFunctionType::Pointer renderer;
 
     if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
@@ -1466,6 +1469,8 @@ namespace otb
     {
       renderer = GaussianRenderingFunctionType::New();
       contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
+      guiSetStandardDeviation->value(m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage)->GetParameters()[1]);
+      guiSetStandardDeviation->show();
     }
     else if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
     {
@@ -1479,6 +1484,7 @@ namespace otb
     }
 
     renderer->SetChannelList(channels);
+    renderer->SetNoDataValue( static_cast<ImageType::InternalPixelType>(guiSetNoData->value() ) );
     imageLayer->SetRenderingFunction(renderer);
     m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
     m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
@@ -1518,15 +1524,6 @@ namespace otb
     m_GreenVaCurveL->SetVisible(isVisible);
     m_RedVaCurveR->SetVisible(isVisible);
     m_RedVaCurveL->SetVisible(isVisible);
-
-    if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
-    {
-      guiGroupStandardDeviation->show();
-    }
-    else
-    {
-      guiGroupStandardDeviation->hide();
-    }
 
     UpdateQuantiles(lowerQuantile, upperQuantile);
   }
@@ -1588,6 +1585,7 @@ namespace otb
       params = paramsMinMax;
     }
     renderer->SetParameters(params);
+    renderer->SetNoDataValue( static_cast<ImageType::InternalPixelType>(guiSetNoData->value() ) );
     m_RenderingModel->Update();
 
     // Redraw the histogram curves
@@ -1621,6 +1619,15 @@ namespace otb
     m_RenderingModel->Update();
   }
 
+
+  /**
+   *
+   */
+  void ViewerModule::UpdateNoData()
+  {
+    // Simply call the SetContrastStretch to recreate the rendering function to have the new sample lists
+    this->SetContrastStretch();
+  }
 
   /**
    *

@@ -121,9 +121,13 @@ public:
   typedef SplittedWidgetManager                     SplittedWidgetManagerType;
   typedef SplittedWidgetManagerType::Pointer        SplittedWidgetManagerPointerType;
 
+  /** Input image convenient typedefs */
+  typedef ImageType::PixelType                      InputPixelType;
+  typedef ImageType::InternalPixelType              InputInternalPixelType;
+
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char>             RGBPixelType;
-  typedef Image<RGBPixelType, 2>                     OutputImageType;
+  typedef Image<RGBPixelType, 2>                    OutputImageType;
 
   /** Image layer type */
   typedef ImageLayer<ImageType, OutputImageType>    ImageLayerType;
@@ -291,6 +295,7 @@ public:
   virtual void UpdateQuantiles();
   virtual void UpdateQuantiles(double lowerQuantile, double upperQuantile);
   virtual void UpdateStandardDeviation();
+  virtual void UpdateNoData();
   virtual void ShowHide();
   virtual void Quit();
 

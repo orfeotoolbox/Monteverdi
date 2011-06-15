@@ -17,16 +17,16 @@ class ViewerModuleGroup {open
     Fl_Window bSetupWindow {
       label {Data properties}
       callback {this->Quit();} open
-      xywh {529 408 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
+      xywh {33 153 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
         callback {this->TabSetupPosition();} open
-        xywh {0 0 700 305} box PLASTIC_DOWN_BOX resizable
+        xywh {0 0 724 308} box PLASTIC_DOWN_BOX resizable
       } {
         Fl_Group guiTabData {
           label Data
           callback {this->TabSetupPosition();}
-          tooltip {Vector data properties} xywh {0 30 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
+          tooltip {Vector data properties} xywh {0 30 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Text_Display dROIColor {
             tooltip {Display the selected ROI color} xywh {660 225 25 25} box ENGRAVED_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186
@@ -104,7 +104,7 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiTabSetup {
           label Setup
-          callback {this->TabSetupPosition();} open
+          callback {this->TabSetupPosition();}
           xywh {0 30 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186 hide
         } {
           Fl_Round_Button guiViewerSetupGrayscaleMode {
@@ -156,46 +156,57 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiTabHistogram {
           label Histogram
-          callback {this->TabSetupPosition();}
-          xywh {0 30 700 275} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186 hide
+          callback {this->TabSetupPosition();} open
+          xywh {0 30 724 278} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Group gHistogram {open
-            xywh {5 35 690 265} color 48 labelsize 12
+            xywh {5 35 719 273} color 48 labelsize 12
           } {
-            Fl_Group guiGroupQuantiles {open
-              xywh {400 225 290 70}
+            Fl_Group guiGroupNoData {open
+              xywh {370 215 160 60}
             } {
-              Fl_Value_Input bUpperQuantile {
-                label {Upper quantile %:}
-                xywh {555 230 40 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+              Fl_Value_Input guiSetNoData {
+                label {No data value}
+                xywh {469 225 55 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 minimum -1e-06 maximum 1e+06 step 0.5 textcolor 186
               }
-              Fl_Value_Input bLowerQuantile {
-                label {Lower quantile %:}
-                xywh {555 265 40 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
-              }
-              Fl_Button bQuantilesApply {
+              Fl_Button guiApplyNoData {
                 label Apply
-                callback {this->UpdateQuantiles();}
-                xywh {605 265 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+                callback {this->UpdateNoData();}
+                xywh {404 255 80 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
               }
             }
             Fl_Choice guiContrastStretchSelection {
               label {Contrast enhancement}
               callback {this->SetContrastStretch();}
-              xywh {425 195 170 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 5 textcolor 186
+              xywh {539 195 155 20} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 1 textcolor 186
             } {}
-            Fl_Group guiGroupStandardDeviation {open
-              xywh {100 225 290 70}
+            Fl_Group guiGroupQuantiles {open
+              xywh {540 218 154 59}
             } {
-              Fl_Value_Input guiSetStandardDeviation {
-                label {Standard deviation:}
-                xywh {255 265 40 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 value 1 textcolor 186
+              Fl_Value_Input bUpperQuantile {
+                label {Upper quantile %}
+                xywh {652 225 40 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
               }
-              Fl_Button guiApplyStandardDeviation {
-                label Apply
-                callback {this->UpdateStandardDeviation();}
-                xywh {305 265 80 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+              Fl_Value_Input bLowerQuantile {
+                label {Lower quantile %}
+                xywh {652 254 40 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
               }
+            }
+            Fl_Value_Input guiSetStandardDeviation {
+              label {Standard deviation %}
+              xywh {578 241 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 maximum 1000 step 0.5 value 1 textcolor 186 hide
+            }
+            Fl_Button bQuantilesApply {
+              label Apply
+              callback {if (guiSetStandardDeviation->visible() == true )
+{
+this->UpdateStandardDeviation();
+}
+else
+{
+this->UpdateQuantiles();
+}} selected
+              xywh {578 283 80 20} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             }
           }
         }
@@ -237,7 +248,7 @@ class ViewerModuleGroup {open
   } {
     Fl_Window wDEM {
       label {DEM Selection} open
-      xywh {630 620 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {670 763 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Button gLoadDEM {
         label Load
@@ -277,7 +288,7 @@ bDEM->value(0);
   } {
     Fl_Window wScreenShot {
       label Screenshots open
-      xywh {374 302 260 175} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {374 302 260 175} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 hide resizable
     } {
       Fl_Check_Button rbScreenZoom {
         label {Save zoom view}
@@ -288,7 +299,7 @@ bDEM->value(0);
         xywh {20 57 20 20} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Check_Button rbScreenNav {
-        label {Save navigation view} selected
+        label {Save navigation view}
         xywh {20 95 20 20} down_box DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button {} {
@@ -360,5 +371,7 @@ bDEM->value(0);
   Function {UpdateStandardDeviation()} {open return_type {virtual void}
   } {}
   Function {ScreenShot()} {open return_type {virtual void}
+  } {}
+  Function {UpdateNoData()} {open return_type {virtual void}
   } {}
 } 
