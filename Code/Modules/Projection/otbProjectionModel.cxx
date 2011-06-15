@@ -311,7 +311,7 @@ void ProjectionModel::UpdateOutputParameters()
   estimator->Compute();
 
   // Keep the max absolute spacing value
-  double maxAbsSpVal = std::max( std::abs(estimator->GetOutputSpacing()[0]), 
+  double maxAbsSpVal = std::max( std::abs(estimator->GetOutputSpacing()[0]),
                                  std::abs(estimator->GetOutputSpacing()[1]));
 
   // Edit the output image parmaters
