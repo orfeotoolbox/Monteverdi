@@ -415,17 +415,18 @@ void ConnectedComponentSegmentationModule::Run()
 void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
 {
 
-  const std::map<std::string, double*>& variables = m_MaskFilter->GetVar();
+  std::vector<std::string> variables = m_MaskFilter->GetVar();
 
   // Get the number of variables
-  std::map<std::string, double*>::const_iterator item = variables.begin();
+  std::vector<std::string>::const_iterator item = variables.begin();
 
   // Query the variables
   for (; item != variables.end(); ++item)
     {
     // spectralangle is not usable without choice of reference pixel
     // TODO JGU adapt GUI to allow user defined spectralangle reference pixel
-    if (strcmp(item->first.c_str(), "spectralAngle")) ui_VarNamesMask->add(item->first.c_str());
+    if ( *item == "spectralAngle" )
+      ui_VarNamesMask->add(item->c_str());
     }
   const mu::funmap_type & functions = m_MaskFilter->GetFunList();
   mu::funmap_type::const_iterator funItem = functions.begin();
