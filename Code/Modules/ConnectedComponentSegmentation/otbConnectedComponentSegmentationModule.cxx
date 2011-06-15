@@ -425,13 +425,12 @@ void ConnectedComponentSegmentationModule::UpdateMaskFormulaVariablesList()
     {
     // spectralangle is not usable without choice of reference pixel
     // TODO JGU adapt GUI to allow user defined spectralangle reference pixel
-    if ( *item == "spectralAngle" )
+    if ( *item != "spectralAngle" )
       ui_VarNamesMask->add(item->c_str());
     }
   Parser::FunctionMapType functions = m_MaskFilter->GetFunList();
   Parser::FunctionMapType::const_iterator funItem = functions.begin();
 
-  int nbArgs;
   // Query the functions, the function list is same for all expression
   // hence the list is displayed in help window
   for (; funItem != functions.end(); ++funItem)
