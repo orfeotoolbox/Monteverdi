@@ -381,13 +381,13 @@ void DEMToImageGeneratorView::UpdateSpacingMeter()
 
   OutputPointType latLongPointLR;
   latLongPointLR[0] = latLongPointUL[0]
-                      + copysign(1.0, latLongPointUL[0])
-                      * strtod(oSizeX->value(), NULL)
-                      * strtod(oSpacingX->value(), NULL);
+                      + (latLongPointUL[0] > 0 ? 1.0 : 2.0)
+                         * strtod(oSizeX->value(), NULL)
+                         * strtod(oSpacingX->value(), NULL);
   latLongPointLR[1] = latLongPointUL[1]
-                      + copysign(1.0, latLongPointUL[1])
-                      * strtod(oSizeY->value(), NULL)
-                      * strtod(oSpacingY->value(), NULL);
+                      + (latLongPointUL[1] > 0 ? 1.0 : 2.0)
+                         * strtod(oSizeY->value(), NULL)
+                         * strtod(oSpacingY->value(), NULL);
 
   int utmZoneUL = Utils::GetZoneFromGeoPoint(latLongPointUL[0], latLongPointUL[1]);
   int utmZoneLR = Utils::GetZoneFromGeoPoint(latLongPointLR[0], latLongPointLR[1]);
