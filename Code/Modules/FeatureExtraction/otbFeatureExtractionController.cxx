@@ -419,7 +419,17 @@ FeatureExtractionController
 
         unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiAdvBin->value()));
 
-        m_Model->AddAdvancedTextureFilter(advList, rad, off, bin);
+       if( m_View->guiAdvHarCk->value() )
+          {
+            double minHar = static_cast<double>(m_View->guiAdvHarMin->value());
+            double maxHar =static_cast<double>(m_View->guiAdvHarMax->value());
+            m_Model->AddAdvancedTextureFilter(advList, rad, off, minHar, maxHar, bin);
+          }
+        else
+          {
+            m_Model->AddAdvancedTextureFilter(advList, rad, off, bin);
+          }
+
 
         break;
         }

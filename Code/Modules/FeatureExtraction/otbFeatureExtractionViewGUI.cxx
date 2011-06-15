@@ -230,6 +230,8 @@ FeatureExtractionViewGUI
         this->UpdateChannels();
         guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
         guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
+        guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
+        guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
         }
       this->UpdateInformation();
       }
@@ -477,6 +479,22 @@ FeatureExtractionViewGUI
     }
 }
 
+void
+FeatureExtractionViewGUI
+::UpdateAdvHarMinMax()
+{
+  if( guiAdvHarCk->value() != 0 )
+    {
+      guiAdvHarIm->activate();
+      
+      guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
+      guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
+    }
+  else
+    {
+      guiAdvHarIm->deactivate();
+    }
+}
 
 void
 FeatureExtractionViewGUI

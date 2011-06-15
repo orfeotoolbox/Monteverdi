@@ -479,6 +479,14 @@ FeatureExtractionModel
 
 void
 FeatureExtractionModel
+::AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin)
+{
+  AdvancedTexturesGenerator lAdvTexturesGenerator;
+  lAdvTexturesGenerator.AddAdvTexturesFilter(this, advList, radius, offset, minHar, maxHar, bin);
+}
+
+void
+FeatureExtractionModel
 ::AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin)
 {
   AdvancedTexturesGenerator lAdvTexturesGenerator;

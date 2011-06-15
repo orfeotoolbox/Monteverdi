@@ -491,11 +491,13 @@ public:
 
   /** Add Haralick testure with given min max */
   void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin);
-  /** Add Haralick testure with given default min max */
+  /** Add Haralick testure with default min max */
  void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
 
-  /** Add Haralick testure */
-  void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, unsigned int bin);
+  /** Add Haralick testure with given min max */
+  void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin);
+  /** Add Haralick testure with default min max */
+  void AddAdvancedTextureFilter(AdvancedTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
 
   /** Generate output image */
   void GenerateOutputImage();

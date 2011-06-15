@@ -18,7 +18,7 @@ class FeatureExtractionViewGroup {open
     Fl_Window guiMainWindow {
       label {Feature Extraction Application}
       callback {Quit();} open
-      xywh {450 328 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Tabs {} {open
         xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
@@ -917,7 +917,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
               }
               Fl_Group {} {
-                label Radius open
+                label Radius
                 xywh {204 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarRadiusX {
@@ -930,7 +930,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 }
               }
               Fl_Group {} {
-                label Offset open
+                label Offset
                 xywh {254 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarOffsetX {
@@ -942,27 +942,9 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                   tooltip {Used offset value.} xywh {269 435 28 17} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
               }
-              Fl_Input_Choice guiHarBin {
-                label {Quant.
- levels} open
-                tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 align 1 textsize 12
-              } {
-                MenuItem {} {
-                  label 8
-                  xywh {5 5 30 20}
-                }
-                MenuItem {} {
-                  label 16
-                  xywh {15 15 30 20}
-                }
-                MenuItem {} {
-                  label 32
-                  xywh {25 25 30 20}
-                }
-                MenuItem {} {
-                  label 64
-                  xywh {35 35 30 20}
-                }
+              Fl_Check_Button guiHarCk {
+                callback {this->UpdateHarMinMax();}
+                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
               }
               Fl_Group guiHarIm {
                 label Image open
@@ -985,67 +967,106 @@ guiHarMax->value(guiHarMin->value());
                   tooltip {Used offset value.} xywh {334 435 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
                 }
               }
-              Fl_Check_Button guiHarCk {
-                callback {this->UpdateHarMinMax();}
-                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
+              Fl_Input_Choice guiHarBin {
+                label {Quant.
+ levels}
+                tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 align 1 textsize 12
+              } {
+                MenuItem {} {
+                  label 8
+                  xywh {5 5 30 20}
+                }
+                MenuItem {} {
+                  label 16
+                  xywh {15 15 30 20}
+                }
+                MenuItem {} {
+                  label 32
+                  xywh {25 25 30 20}
+                }
+                MenuItem {} {
+                  label 64
+                  xywh {35 35 30 20}
+                }
               }
             }
-            Fl_Group guiAdvanced {
+            Fl_Group guiAdvanced {open
               xywh {200 318 246 140} hide
             } {
               Fl_Check_Browser guiAdvList {
-                xywh {210 323 233 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
+                xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
               }
               Fl_Group {} {
-                label Radius open
-                xywh {210 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                label Radius
+                xywh {204 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiAdvRadiusX {
                   label X
-                  tooltip {Neighborhood radius.} xywh {227 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                  tooltip {Neighborhood radius.} xywh {220 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
                 Fl_Value_Input guiAdvRadiusY {
                   label Y
-                  tooltip {Neighborhood radius.} xywh {227 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+                  tooltip {Neighborhood radius.} xywh {220 435 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
                 }
               }
               Fl_Group {} {
-                label Offset open
-                xywh {267 405 55 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+                label Offset
+                xywh {254 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiAdvOffsetX {
                   label X
-                  tooltip {Used offset value.} xywh {283 410 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                  tooltip {Used offset value.} xywh {270 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
                 Fl_Value_Input guiAdvOffsetY {
                   label Y
-                  tooltip {Used offset value.} xywh {282 433 35 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+                  tooltip {Used offset value.} xywh {270 435 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
                 }
               }
-              Fl_Group {} {
-                label {Quantization levels} open
-                xywh {324 405 120 50} box PLASTIC_DOWN_BOX color 55 labelsize 12
+              Fl_Check_Button guiAdvHarCk {
+                callback {this->UpdateAdvHarMinMax();}
+                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
+              }
+              Fl_Group guiAdvHarIm {
+                label Image open
+                xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
-                Fl_Input_Choice guiAdvBin {
-                  label Bin open
-                  tooltip {Histogram bin size.} xywh {363 421 65 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 textsize 12
-                } {
-                  MenuItem {} {
-                    label 8
-                    xywh {10 10 30 20}
-                  }
-                  MenuItem {} {
-                    label 16
-                    xywh {20 20 30 20}
-                  }
-                  MenuItem {} {
-                    label 32
-                    xywh {30 30 30 20}
-                  }
-                  MenuItem {} {
-                    label 64
-                    xywh {40 40 30 20}
-                  }
+                Fl_Value_Input guiAdvHarMin {
+                  label Min
+                  callback {if( static_cast<double>(guiAdvHarMin->value()) > static_cast<double>(guiAdvHarMax->value()) )
+{
+guiAdvHarMin->value(guiAdvHarMax->value());
+}}
+                  tooltip {Used offset value.} xywh {334 412 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+                }
+                Fl_Value_Input guiAdvHarMax {
+                  label Max
+                  callback {if( static_cast<double>(guiAdvHarMax->value()) < static_cast<double>(guiAdvHarMin->value()) )
+{
+guiAdvHarMax->value(guiAdvHarMin->value());
+}}
+                  tooltip {Used offset value.} xywh {334 435 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+                }
+              }
+              Fl_Input_Choice guiAdvBin {
+                label {Quant.
+ levels}
+                tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 align 1 textsize 12
+              } {
+                MenuItem {} {
+                  label 8
+                  xywh {15 15 30 20}
+                }
+                MenuItem {} {
+                  label 16
+                  xywh {25 25 30 20}
+                }
+                MenuItem {} {
+                  label 32
+                  xywh {35 35 30 20}
+                }
+                MenuItem {} {
+                  label 64
+                  xywh {45 45 30 20}
                 }
               }
             }
@@ -1214,5 +1235,7 @@ guiHarMax->value(guiHarMin->value());
   Function {Cancel()} {open return_type {virtual void}
   } {}
   Function {UpdateHarMinMax()} {open return_type {virtual void}
+  } {}
+  Function {UpdateAdvHarMinMax()} {open return_type {virtual void}
   } {}
 } 

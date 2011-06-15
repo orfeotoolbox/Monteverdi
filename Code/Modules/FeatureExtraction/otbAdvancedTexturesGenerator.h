@@ -71,10 +71,45 @@ public:
   /** Methods */
   /************/
 
+// AddHarTexturesFilter using computed image min/max
   void AddAdvTexturesFilter(ModelPointerType pModel,
                             TextureVectorType pHarList,
                             SizeType pRadius,
                             OffsetType pOff,
+                            unsigned int pBin)
+  {
+    std::vector<double> minHarVect, maxHarVect;
+    
+    for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
+      {
+        minHarVect.push_back(pModel->GetSelectedMinValues()[i]);
+        maxHarVect.push_back(pModel->GetSelectedMaxValues()[i]);
+      }
+    
+    this->AddAdvTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
+  }
+  
+  // AddHarTexturesFilter using user's image min/max
+  void AddAdvTexturesFilter(ModelPointerType pModel,
+                            TextureVectorType pHarList,
+                            SizeType pRadius,
+                            OffsetType pOff,
+                            double minHar,
+                            double maxHar,
+                            unsigned int pBin)
+  {
+    std::vector<double> minHarVect(pModel->GetInputImageList()->Size(), minHar);
+    std::vector<double> maxHarVect(pModel->GetInputImageList()->Size(), maxHar);
+  
+    this->AddAdvTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
+  }
+  
+  void AddAdvTexturesFilter(ModelPointerType pModel,
+                            TextureVectorType pHarList,
+                            SizeType pRadius,
+                            OffsetType pOff,
+                            std::vector<double> minHarVect,
+                            std::vector<double> maxHarVect,
                             unsigned int pBin)
   {
     for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
@@ -84,8 +119,8 @@ public:
       filter->SetOffset(pOff);
       filter->SetNumberOfBinsPerAxis(pBin);
 
-      filter->SetInputImageMinimum(static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]));
-      filter->SetInputImageMaximum(static_cast<SinglePixelType>(pModel->GetSelectedMaxValues()[i]));
+      filter->SetInputImageMinimum(static_cast<SinglePixelType>(minHarVect[i]));
+      filter->SetInputImageMaximum(static_cast<SinglePixelType>(maxHarVect[i]));
       filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
 
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
