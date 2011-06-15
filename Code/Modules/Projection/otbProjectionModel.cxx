@@ -310,15 +310,25 @@ void ProjectionModel::UpdateOutputParameters()
   estimator->SetOutputProjectionRef(m_OutputProjectionRef);
   estimator->Compute();
 
+  // Keep the max absolute spacing value
+  double maxAbsSpVal = std::max( std::abs(estimator->GetOutputSpacing()[0]), 
+                                 std::abs(estimator->GetOutputSpacing()[1]));
+
   // Edit the output image parmaters
   m_OutputOrigin = estimator->GetOutputOrigin();
-  m_OutputSpacing = estimator->GetOutputSpacing();
+  // Force the spacing to be samein X and Y
+  m_OutputSpacing[0] = estimator->GetOutputSpacing()[0] > 0 ? maxAbsSpVal : -maxAbsSpVal;
+  m_OutputSpacing[1] = estimator->GetOutputSpacing()[1] > 0 ? maxAbsSpVal : -maxAbsSpVal;
   m_OutputSize = estimator->GetOutputSize();
 
   // Keep a copy of the origin of the whole projected image
   m_WholeOutputOrigin = estimator->GetOutputOrigin();
   m_WholeOutputSpacing = estimator->GetOutputSpacing();
+  // Force the spacing to be samein X and Y
+  m_WholeOutputSpacing[0] = estimator->GetOutputSpacing()[0] > 0 ? maxAbsSpVal : -maxAbsSpVal;
+  m_WholeOutputSpacing[1] = estimator->GetOutputSpacing()[1] > 0 ? maxAbsSpVal : -maxAbsSpVal;
   m_WholeOutputSize = estimator->GetOutputSize();
+
 }
 
 /**
