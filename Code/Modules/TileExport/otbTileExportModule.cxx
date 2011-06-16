@@ -42,10 +42,9 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"), false);
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
   this->AddInputDescriptor<FloatingVectorImageType>("InputLegend", otbGetTextMacro("Input Legend"), true, true);
-  // TODO
-  //this->AddTypeToInputDescriptor<SingleImageType>("InputLegend");
-  // TODO
-  //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo");
+  //this->AddTypeToInputDescriptor<SingleImageType>("InputLegend"); //TODO
+  this->AddInputDescriptor<FloatingVectorImageType>("InputLogo", otbGetTextMacro("Input Logo"), true, false);
+  //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo"); //TODO
   
   // Initialize some values
   // TODO : fix those values
