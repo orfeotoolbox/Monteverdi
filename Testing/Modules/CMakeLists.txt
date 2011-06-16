@@ -464,25 +464,6 @@ ADD_TEST(moTvConnectedComponentSegmentationModuleTestNoMask  ${Modules_TESTS4}
     15
 )
 
-# this test is very long
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(moTvConnectedComponentSegmentationModuleTestQB  ${Modules_TESTS4}
-     --compare-ogr ${TOL}
-    ${BASELINE_APPLICATION_FILES}/ccTvConnectedComponentSegmentationLargeInput.shp
-    ${TEMP}/ccTvConnectedComponentSegmentationLargeInput.shp 
-    otbConnectedComponentSegmentationModuleTest
-    ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-    ${TEMP}/ccTvConnectedComponentSegmentationLargeInput.shp
-    0
-    "intensity >300"
-    "distance<20"
-    "SHAPE_Elongation > 5"
-    100
-    ${DEMDATA}
-)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-
 # ----------------- VectorData TransformModule testing -------------------
 ADD_TEST(moTvVectorDataTransformModuleTest  ${Modules_TESTS4}
      --compare-ogr ${TOL}
