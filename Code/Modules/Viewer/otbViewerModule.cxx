@@ -1016,11 +1016,6 @@ namespace otb
     {
       this->GrayScaleSet();
     }
-    else
-    {
-      this->RGBSet();
-    }
-
   }
 
 
