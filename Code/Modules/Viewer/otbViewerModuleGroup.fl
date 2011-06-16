@@ -198,7 +198,7 @@ class ViewerModuleGroup {open
             }
             Fl_Button bQuantilesApply {
               label Apply
-              callback {if (guiSetStandardDeviation->visible() == true )
+              callback {if (guiSetStandardDeviation->visible() != 0 )
 {
 this->UpdateStandardDeviation();
 }
