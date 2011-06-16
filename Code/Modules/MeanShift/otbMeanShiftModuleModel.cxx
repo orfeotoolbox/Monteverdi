@@ -68,8 +68,6 @@ MeanShiftModuleModel
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook...");
   m_ImageGenerator->GenerateLayer();
 
-  m_Channels = m_ImageGenerator->GetLayer()->GetRenderingFunction()->GetChannelList();
-
   m_ImageGenerator->GetLayer()->SetName("Image");
 
   // Clear previous layers
@@ -79,6 +77,8 @@ MeanShiftModuleModel
   m_VisualizationModel->AddLayer(m_ImageGenerator->GetLayer());
 
   m_VisualizationModel->Update();
+
+  m_Channels = m_ImageGenerator->GetLayer()->GetRenderingFunction()->GetChannelList();
 
   this->NotifyAll("SetInputImage");
   m_IsImageReady = true;
