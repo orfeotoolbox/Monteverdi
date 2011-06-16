@@ -324,8 +324,12 @@ GCPToSensorModelView
 {
   const char * cfname = NULL;
 
-  // Choose directory
-  cfname = flu_dir_chooser(otbGetTextMacro("Choose the dataset dir..."), "");
+  const char* defaultPath = "";
+  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+    {
+    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
+    }
+  cfname = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), defaultPath);
 
   if (cfname == NULL)
     {

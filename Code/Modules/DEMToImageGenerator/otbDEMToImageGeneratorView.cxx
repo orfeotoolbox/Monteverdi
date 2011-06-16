@@ -252,8 +252,14 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
 {
   const char * srtmDirectory = NULL;
 
+  const char* defaultPath = "";
+  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+    {
+    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
+    }
+
   // Choose file
-  srtmDirectory = flu_dir_chooser(otbGetTextMacro("Choose the SRTM DEM directory ..."), "");
+  srtmDirectory = flu_dir_chooser(otbGetTextMacro("Choose the SRTM DEM directory ..."), defaultPath);
   
   if (srtmDirectory  == NULL)
     {

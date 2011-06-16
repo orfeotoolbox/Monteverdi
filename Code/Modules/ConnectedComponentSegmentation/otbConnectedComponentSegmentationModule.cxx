@@ -1186,14 +1186,20 @@ void ConnectedComponentSegmentationModule::OK()
       const char *cfname;
       if (!m_UseDEM)
         {
+        const char* defaultPath = "";
+        if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+          {
+          defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
+          }
 
-        cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+        cfname = flu_dir_chooser("Choose DEM directory if you want to...", defaultPath);
         Fl::check();
         }
       else
         {
         cfname = m_DEMPath.c_str();
         }
+
       if (cfname != NULL)
         {
 

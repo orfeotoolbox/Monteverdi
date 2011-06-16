@@ -44,7 +44,6 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
   this->AddInputDescriptor<FloatingVectorImageType>("InputLegend", otbGetTextMacro("Input Legend"), true, true);
   // TODO
   //this->AddTypeToInputDescriptor<SingleImageType>("InputLegend");
-  this->AddInputDescriptor<FloatingVectorImageType>("InputLogo", otbGetTextMacro("Input Logos"), true);
   // TODO
   //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo");
   
@@ -1806,7 +1805,13 @@ void TileExportModule::BrowseDEM()
 {
   const char * filename = NULL;
 
-  filename = flu_dir_chooser("Choose the folder...", "*.*","");
+  const char* defaultPath = "";
+  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+    {
+    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
+    }
+
+  filename = flu_dir_chooser("Choose the folder...", defaultPath);
   
   if (filename == NULL)
     {
