@@ -403,8 +403,8 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             label {Feature Parameters} open
             xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
-            Fl_Group guiNothing {selected
-              xywh {200 318 246 140} color 7
+            Fl_Group guiNothing {
+              xywh {200 318 246 140} color 7 hide
             } {}
             Fl_Group guiTouzi {
               xywh {200 318 246 140} hide
@@ -911,7 +911,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiHaralick {open
-              xywh {200 318 246 140} hide
+              xywh {200 318 246 140}
             } {
               Fl_Check_Browser guiHarList {
                 xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
@@ -943,11 +943,11 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
                 }
               }
               Fl_Check_Button guiHarCk {
+                label {Set min/max}
                 callback {this->UpdateHarMinMax();}
-                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
+                tooltip {Set min/max or use the estimated values.} xywh {375 394 11 11} down_box DOWN_BOX value 1 labelsize 12 align 4
               }
-              Fl_Group guiHarIm {
-                label Image open
+              Fl_Group guiHarIm {open
                 xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiHarMin {
@@ -1023,11 +1023,11 @@ guiHarMax->value(guiHarMin->value());
                 }
               }
               Fl_Check_Button guiAdvHarCk {
+                label {Set min/max}
                 callback {this->UpdateAdvHarMinMax();}
-                tooltip {Use default computed values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
+                tooltip {Set min/max or use the estimated values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
               }
-              Fl_Group guiAdvHarIm {
-                label Image open
+              Fl_Group guiAdvHarIm {open selected
                 xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiAdvHarMin {
