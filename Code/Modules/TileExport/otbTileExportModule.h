@@ -208,6 +208,9 @@ protected:
   /** Browse DEM */
   virtual void BrowseDEM();
 
+  /** Hide the GUI */
+  virtual void Quit();
+
 private:
   TileExportModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

@@ -1840,6 +1840,14 @@ void TileExportModule::UseDEM()
     }
 }
 
+/**
+ * Quit the GUI
+ */
+void TileExportModule::Quit()
+{
+  this->Hide();
+}
+
 
 } // End namespace otb
 

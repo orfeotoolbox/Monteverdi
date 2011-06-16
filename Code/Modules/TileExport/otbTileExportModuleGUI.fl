@@ -23,7 +23,7 @@ class TileExportModuleGUI {open
         } {
           Fl_Button bCancel {
             label Cancel
-            callback {this->Cancel();}
+            callback {this->Quit();}
             xywh {297 615 81 25} box PLASTIC_DOWN_BOX color 55 selection_color 7 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Return_Button bOk {
@@ -217,7 +217,7 @@ this->UseDEM();}
   } {}
   Function {Browse()} {open return_type {virtual void}
   } {}
-  Function {Cancel()} {open return_type {virtual void}
+  Function {Quit()} {open selected return_type {virtual void}
   } {}
   Function {~TileExportModuleGUI()} {open return_type virtual
   } {}
@@ -229,7 +229,7 @@ this->UseDEM();}
   } {}
   Function {HandleCornersGroup()} {open return_type {virtual void}
   } {}
-  Function {UseDEM()} {open selected return_type {virtual void}
+  Function {UseDEM()} {open return_type {virtual void}
   } {}
   Function {BrowseDEM()} {open return_type {virtual void}
   } {}
