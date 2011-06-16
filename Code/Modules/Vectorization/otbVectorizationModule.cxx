@@ -71,7 +71,14 @@ void VectorizationModule::Run()
   
   if(this->GetNumberOfInputDataByKey("VectorData") > 0)
     {
-    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", "");
+    const char* defaultPath = "";
+
+    if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+      {
+      defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
+      }
+
+    const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", defaultPath);
     Fl::check();
     if(cfname != NULL)
       {
