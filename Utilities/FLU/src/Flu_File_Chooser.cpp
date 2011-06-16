@@ -2775,8 +2775,6 @@ int Flu_File_Chooser :: popupContextMenu( Entry *entry )
   if( selection )
     {
 
-/// WARNING
-printf("warning : revenir ( Flu_File_Chooser ) !!!!!!!!! \n");
       int handler = (intptr_t)(selection->user_data());
       //int * temp = (int *)(selection->user_data());
       //int handler = *temp ;

@@ -2984,17 +2984,11 @@ Flu_Tree_Browser::Node* Flu_Tree_Browser :: add_leaf( const char* path, const ch
 
 unsigned int Flu_Tree_Browser :: remove( const char *fullpath )
 {
-/// WARNING
-printf("warning : revenir ( File Tree Browser ) %s !!!!!!!!! \n",fullpath);
-
   unsigned int *pui_node = (unsigned int *)root.modify( fullpath, Node::REMOVE, rdata );
-
-// Replaced "toc !%d\n" by "toc !\n"
-printf("toc !\n");
 
   //unsigned int ui_node = *pui_node;
 
-//printf(" %d \n",ui_node);
+  //printf(" %d \n",ui_node);
   return(1);
 }
 
