@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class KMeansModuleGUI {open
 } {
@@ -41,11 +41,11 @@ class KMeansModuleGUI {open
         xywh {0 46 300 31}
       }
       Fl_Spinner vNumberOfIterations {
-        label {Max. nb.  of iterations }
-        xywh {170 146 85 24} maximum 1e+06 step 1000
+        label {Max. nb.  of iterations } selected
+        xywh {170 146 85 24} maximum 1e+06 step 100 value 100
       }
       Fl_Value_Input vConvergenceThreshold {
-        label {Convergence threshold } selected
+        label {Convergence threshold }
         xywh {170 181 85 23} step 1e-05 value 0.0001
       }
     }
@@ -58,4 +58,4 @@ class KMeansModuleGUI {open
   } {}
   Function {UpdateNumberOfSamples()} {open return_type {virtual void}
   } {}
-}
+} 
