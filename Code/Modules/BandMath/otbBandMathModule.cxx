@@ -19,7 +19,6 @@
 #define __otbBandMathModule_cxx
 
 
-
 #include "otbBandMathModule.h"
 #include "otbMsgReporter.h"
 
