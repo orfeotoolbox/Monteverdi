@@ -18,6 +18,8 @@
 #ifndef __otbBandMathModule_cxx
 #define __otbBandMathModule_cxx
 
+
+
 #include "otbBandMathModule.h"
 #include "otbMsgReporter.h"
 
@@ -73,6 +75,7 @@ void BandMathModule::Run()
   unsigned int numberOfInputImages = this->GetNumberOfInputDataByKey("InputImage");
   unsigned int bandId = 0;
   unsigned int imageId = 0;
+  bool validInputs = true;
   
   m_ChannelExtractorList = ExtractROIFilterListType::New();
 
@@ -99,6 +102,16 @@ void BandMathModule::Run()
     // The input is an image
     if (image.IsNotNull())
       {
+      image->UpdateOutputInformation();
+      if (imageId>0)
+        {
+        if (m_BandMathFilter->GetNthInput(0)->GetLargestPossibleRegion().GetSize() != image->GetLargestPossibleRegion().GetSize())
+          {
+          MsgReporter::GetInstance()->SendError("Input Images Must Have The Same Size.");
+          validInputs = false;
+          }
+        }
+
       std::ostringstream tmpParserVarName;
       tmpParserVarName << "im" << imageId+1 << "b1";
 
@@ -112,6 +125,16 @@ void BandMathModule::Run()
     // The input is an vectorImage
     else
       {
+      if (imageId>0)
+        {
+        vectorImage->UpdateOutputInformation();
+        if (m_BandMathFilter->GetNthInput(0)->GetLargestPossibleRegion().GetSize() != vectorImage->GetLargestPossibleRegion().GetSize())
+          {
+          MsgReporter::GetInstance()->SendError("Input Images Must Have The Same Size.");
+          validInputs = false;
+          }
+        }
+
       // Extract bands from the vectorImage
       for(unsigned int j = 0; j < vectorImage->GetNumberOfComponentsPerPixel(); j++)
         {
@@ -141,7 +164,10 @@ void BandMathModule::Run()
   this->InitHelp();
   
   // Show the GUI
-  this->Show();
+  if (validInputs)
+    {
+    this->Show();
+    }
 }
 
 /**
