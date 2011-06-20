@@ -194,9 +194,21 @@ void KMeansModule::ThreadedRun()
   // First, sample data
   SamplingFilterType::Pointer sampler = SamplingFilterType::New();
   sampler->SetInput(image);
-  sampler->SetShrinkFactor(static_cast<unsigned int>(vcl_floor(vcl_sqrt(100 / vNumberOfSamples->value()))));
+  
+  const double percentageOfTotalNbSamples = vNumberOfSamples->value() / 100;
+  const double theoricNBSamplesForKMeans = image->GetLargestPossibleRegion().GetNumberOfPixels()
+                                      * percentageOfTotalNbSamples;
+  const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
+  const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
+  
+  const double shrinkFactor
+    = vcl_floor(vcl_sqrt(image->GetLargestPossibleRegion().GetNumberOfPixels()
+                         / actualNBSamplesForKMeans ));
+  
+  sampler->SetShrinkFactor(shrinkFactor);
   m_ProcessObject = sampler;
   sampler->Update();
+
 
   // Then, build the sample list
   unsigned int nbComp = sampler->GetOutput()->GetNumberOfComponentsPerPixel();
