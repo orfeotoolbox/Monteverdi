@@ -14,17 +14,17 @@ class DEMToImageGeneratorGUI {open
   } {
     Fl_Window guiMainWindow {
       label {DEM To Image Generator} open
-      xywh {521 460 450 490} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
+      xywh {521 432 450 490} type Double box PLASTIC_DOWN_BOX color 23 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Tabs m_TabsMode {open
         xywh {5 14 440 426} box PLASTIC_DOWN_BOX color 57 selection_color 47 labelfont 2 labelsize 12 align 0
       } {
         Fl_Group gOutputImage {
           label {Output image} open
-          xywh {5 30 440 410} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1
+          xywh {5 30 440 410} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Group gOutputParam {
-            label {ROI selection parameters} open selected
+            label {ROI selection parameters} open
             xywh {15 201 420 224} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 align 5
           } {
             Fl_Input oOriginX {
@@ -93,8 +93,8 @@ class DEMToImageGeneratorGUI {open
           }
         }
         Fl_Group {} {
-          label {Hill Shading} open
-          xywh {5 30 440 410} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          label {Hill Shading} open selected
+          xywh {5 30 440 410} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Group oHillShading {
             xywh {26 88 369 125} box PLASTIC_DOWN_BOX
@@ -115,7 +115,7 @@ class DEMToImageGeneratorGUI {open
           Fl_Check_Button oHillShadingAsOutput {
             label {Export Hill Shading}
             callback {this->UpdateHillShading()}
-            xywh {30 55 25 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
+            xywh {30 55 167 25} down_box DOWN_BOX value 1 labelfont 1 labelcolor 186
           }
           Fl_Check_Button oColorRelief {
             label {Display Color Relief}
@@ -138,9 +138,9 @@ class DEMToImageGeneratorGUI {open
               Fl_Group oColorBar {open
                 xywh {105 269 210 25}
               } {}
-              Fl_Round_Button oWithHillShading {
+              Fl_Check_Button oWithHillShading {
                 label {With Hill Shading }
-                xywh {58 320 138 21} down_box ROUND_DOWN_BOX
+                xywh {144 319 138 21} down_box DOWN_BOX
               }
             }
           }

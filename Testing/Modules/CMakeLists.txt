@@ -410,11 +410,22 @@ ADD_TEST(moTvColorMappingModuleTest ${Modules_TESTS4} otbColorMappingModuleTest
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #------------- DEMToImageGenerator Module Tests ---------------------------
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(moTvDEMToImageGeneratorModuleTest ${Modules_TESTS4} otbDEMToImageGeneratorModuleTest
-	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${INPUTDATA}/DEM/srtm_directory
+        6.5
+        45.5
+        500
+        500
+        0.002
+        -0.002
 	${TEMP}/moTvDEMToImageGeneratorModule.tif
+)
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvDEMToImageGeneratorModuleTest_FromImage ${Modules_TESTS4} otbDEMToImageGeneratorModuleTest
+	${INPUTDATA}/DEM/srtm_directory
+	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${TEMP}/moTvDEMToImageGeneratorModule_FromImage.tif
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
