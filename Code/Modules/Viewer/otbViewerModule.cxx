@@ -1468,31 +1468,36 @@ namespace otb
     ChannelListType channels =
       imageLayer->GetRenderingFunction()->GetChannelList();
 
-    guiSetStandardDeviation->hide();
-
-    RenderingFunctionType::Pointer renderer;
+       RenderingFunctionType::Pointer renderer;
 
     if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
     {
       renderer = StandardRenderingFunctionType::New();
       contrastStretch = LINEAR_CONTRAST_STRETCH;
+      guiSetStandardDeviation->hide();
+      guiGroupQuantiles->show();
     }
     else if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
     {
       renderer = GaussianRenderingFunctionType::New();
       contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
       guiSetStandardDeviation->value(m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage)->GetParameters()[1]);
+      guiGroupQuantiles->hide();
       guiSetStandardDeviation->show();
     }
     else if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
     {
       renderer = SquareRootRenderingFunctionType::New();
       contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
+      guiGroupQuantiles->show();
+      guiSetStandardDeviation->hide();
     }
     else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
     {
       renderer = NoStretchRenderingFunctionType::New();
       contrastStretch = NO_CONTRAST_STRETCH;
+      guiGroupQuantiles->hide();
+      guiSetStandardDeviation->hide();
     }
 
     renderer->SetChannelList(channels);

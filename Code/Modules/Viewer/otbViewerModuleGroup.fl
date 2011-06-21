@@ -104,7 +104,7 @@ class ViewerModuleGroup {open
         }
         Fl_Group guiTabSetup {
           label Setup
-          callback {this->TabSetupPosition();} open selected
+          callback {this->TabSetupPosition();} open
           xywh {0 30 700 275} box PLASTIC_DOWN_BOX color 48 labelfont 1 labelsize 12 labelcolor 186
         } {
           Fl_Button bScreenShot {
@@ -177,7 +177,7 @@ class ViewerModuleGroup {open
               xywh {266 207 166 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             }
           }
-          Fl_Group guiGroupQuantiles {
+          Fl_Group guiGroupStretch {
             label {Contrast enhancement} open
             xywh {468 52 210 144} box PLASTIC_DOWN_FRAME
           } {
@@ -186,13 +186,21 @@ class ViewerModuleGroup {open
               callback {this->SetContrastStretch();}
               xywh {476 72 187 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 1 textcolor 186
             } {}
-            Fl_Value_Input bUpperQuantile {
-              label {Upper quantile %}
-              xywh {604 102 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+            Fl_Group guiGroupQuantiles {open selected
+              xywh {475 97 187 60}
+            } {
+              Fl_Value_Input bUpperQuantile {
+                label {Upper quantile %}
+                xywh {606 101 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+              }
+              Fl_Value_Input bLowerQuantile {
+                label {Lower quantile %}
+                xywh {606 131 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+              }
             }
-            Fl_Value_Input bLowerQuantile {
-              label {Lower quantile %}
-              xywh {604 130 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+            Fl_Value_Input guiSetStandardDeviation {
+              label {Standard deviation %}
+              xywh {564 119 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 maximum 1000 step 0.5 value 1 textcolor 186 hide
             }
             Fl_Button bQuantilesApply {
               label Apply
@@ -204,7 +212,7 @@ else
 {
 this->UpdateQuantiles();
 }}
-              xywh {483 159 175 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+              xywh {476 159 187 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
             }
           }
         }
@@ -215,12 +223,7 @@ this->UpdateQuantiles();
         } {
           Fl_Group gHistogram {open
             xywh {5 35 719 273} color 48 labelsize 12
-          } {
-            Fl_Value_Input guiSetStandardDeviation {
-              label {Standard deviation %}
-              xywh {578 241 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 maximum 1000 step 0.5 value 1 textcolor 186 hide
-            }
-          }
+          } {}
         }
         Fl_Group guiTabPixelDescription {
           label {Pixel description}
@@ -256,11 +259,11 @@ this->UpdateQuantiles();
       }
     }
   }
-  Function {BuildDEM()} {open return_type {virtual void}
+  Function {BuildDEM()} {return_type {virtual void}
   } {
     Fl_Window wDEM {
       label {DEM Selection} open
-      xywh {670 763 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {109 624 390 100} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Button gLoadDEM {
         label Load
@@ -301,7 +304,7 @@ bDEM->value(0);
       }
     }
   }
-  Function {BuildScreenShot()} {open return_type {virtual void}
+  Function {BuildScreenShot()} {return_type {virtual void}
   } {
     Fl_Window wScreenShot {
       label Screenshots open
