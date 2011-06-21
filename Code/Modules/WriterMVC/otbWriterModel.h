@@ -90,6 +90,12 @@ public:
   typedef SingleImageType::IndexType         SingleIndexType;
   typedef SingleImageType::RegionType        SingleSpacingType;
   typedef SingleImageType::SizeType          SingleSizeType;
+  /** Labeled Image Type */
+  typedef TypeManager::Labeled_Short_Image   LabeledImageType;
+  typedef LabeledImageType::Pointer          LabeledImagePointerType;
+  typedef ImageToVectorImageCastFilter<LabeledImageType, InputImageType>
+                                             LabeledCasterType;
+  typedef ObjectList<LabeledCasterType>      LabeledCasterListType;
 
   /** Containers typedefs */
   typedef ObjectList<SingleImageType>  SingleImageListType;
@@ -147,6 +153,7 @@ public:
 
   /** input image Pointer */
   void SetInputImage(InputImagePointerType image);
+  void SetInputImage(LabeledImagePointerType image);
 
   /** Generate image layers */
   void GenerateLayers();
@@ -376,6 +383,9 @@ private:
 
   //error msg
   std::string m_ErrorMsg;
+
+  //Labeled caster filter list
+  LabeledCasterListType::Pointer  m_LabeledCasterList;
 
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);

@@ -68,6 +68,7 @@ public:
   /// Dataset
   typedef WriterModel::InputImageType      FloatingVectorImageType;
   typedef FloatingVectorImageType::Pointer FPVImagePointerType;
+  typedef WriterModel::LabeledImageType    LabeledImageType;
 
   itkGetObjectMacro(View, WriterViewGUI);
 

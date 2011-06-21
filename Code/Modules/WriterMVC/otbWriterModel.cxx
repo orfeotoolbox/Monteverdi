@@ -60,6 +60,9 @@ WriterModel::WriterModel()
   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
 
+  //labeled caster list
+  m_LabeledCasterList = LabeledCasterListType::New();
+
   m_ProcessObjectModel = m_FPVWriter;
 }
 
@@ -90,6 +93,43 @@ WriterModel
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
 
   lVisuGenerator->SetImage(image);
+  lVisuGenerator->GenerateLayer();
+  lVisuGenerator->GetLayer()->SetName("Image");
+  // Add the layer to the model
+  m_VisuModel->ClearLayers();
+  m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
+
+  // Render
+  m_VisuModel->Update();
+
+  //Set Input Writer
+  m_FPVWriter->SetInput(m_InputImage);
+  // Notify the observers
+  this->NotifyAll("SetInputImage");
+}
+
+void
+WriterModel
+::SetInputImage(LabeledImagePointerType image)
+{
+  LabeledCasterType::Pointer labeledCastFilter = LabeledCasterType::New();
+  m_LabeledCasterList->PushBack(labeledCastFilter);
+
+  labeledCastFilter->SetInput(image);
+
+  // Set the input image
+  m_InputImage = labeledCastFilter->GetOutput();
+  m_InputImage->UpdateOutputInformation();
+
+  m_NumberOfChannels = m_InputImage->GetNumberOfComponentsPerPixel();
+
+  // Togle the valid flag
+  m_HasInput = true;
+
+  // Generate image layers
+  LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
+
+  lVisuGenerator->SetImage(m_InputImage);
   lVisuGenerator->GenerateLayer();
   lVisuGenerator->GetLayer()->SetName("Image");
   // Add the layer to the model
