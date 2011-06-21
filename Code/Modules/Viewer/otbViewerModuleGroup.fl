@@ -186,7 +186,7 @@ class ViewerModuleGroup {open
               callback {this->SetContrastStretch();}
               xywh {476 72 187 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 1 textcolor 186
             } {}
-            Fl_Group guiGroupQuantiles {open selected
+            Fl_Group guiGroupQuantiles {open
               xywh {475 97 187 60}
             } {
               Fl_Value_Input bUpperQuantile {
@@ -199,8 +199,8 @@ class ViewerModuleGroup {open
               }
             }
             Fl_Value_Input guiSetStandardDeviation {
-              label {Standard deviation %}
-              xywh {564 119 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 maximum 1000 step 0.5 value 1 textcolor 186 hide
+              label {Standard deviation %} selected
+              xywh {528 119 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 maximum 1000 step 0.05 value 1 textcolor 186 hide
             }
             Fl_Button bQuantilesApply {
               label Apply
