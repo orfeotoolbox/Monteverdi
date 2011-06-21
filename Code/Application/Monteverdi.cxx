@@ -108,10 +108,8 @@ int main(int argc, char* argv[])
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
-
-  parser->AddInputImage(false); //Optional parameter
-  parser->AddOptionNParams("--InputVectorData", "input VectorDatas list ", "-ivd",false);
-  parser->AddOptionNParams("--ImageList", "image list", "-iml", false);
+  parser->AddOption("--InputImage", "input image file name to be visualized in the monteverdi viewer", "-in", 1, false);
+  parser->AddOptionNParams("--InputList", "inputs can be images and vectorDatas (are not visualized in the viewer)", "-il", false);
   parser->SetProgramDescription("Monteverdi launcher");
   //   parser->AddOption("--NoSplashScreen", "Deactivate the splash screen","-NoSplash", 0, false);
 
@@ -243,7 +241,7 @@ int main(int argc, char* argv[])
   Fl::lock();
 
   //Test if there is an input image (optional)
-  if (parseResult->IsOptionInputImagePresent())
+  if (parseResult->IsOptionPresent("--InputImage"))
     {
     Fl::check();
     std::vector<std::string> moduleVector;
@@ -292,40 +290,15 @@ int main(int argc, char* argv[])
     Fl::check();
     }
 
-  if (parseResult->IsOptionPresent("--InputVectorData"))
+  if (parseResult->IsOptionPresent("--InputList"))
     {
-    int numberOfVectorDatas = parseResult->GetNumberOfParameters("--InputVectorData");
-
-    for(unsigned int idx = 0; idx < numberOfVectorDatas; ++idx)
-      {
-      Fl::check();
-      std::vector<std::string> moduleVector;
-
-      // Get the ModuleInstanceId
-      std::string readerId = model->CreateModuleByKey("Reader");
-
-      // Get the module itself
-      otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
-
-      // Simulate file chooser and ok callback
-      otb::ReaderModule::Pointer readerModule =
-        static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-      readerModule->vFilePath->value(parseResult->GetParameterString("--InputVectorData", idx).c_str());
-      readerModule->Analyse();
-      readerModule->bOk->do_callback();
-      Fl::check();
-      }
-    }
-
-  if (parseResult->IsOptionPresent("--ImageList"))
-    {
-      int numberOfImage = parseResult->GetNumberOfParameters("--ImageList");
+      int numberOfImage = parseResult->GetNumberOfParameters("--InputList");
       for (int i = 0; i < numberOfImage; i++)
         {
         Fl::check();
         std::vector<std::string> moduleVector;
 
-        std::string filename = parseResult->GetParameterString("--ImageList", i);
+        std::string filename = parseResult->GetParameterString("--InputList", i);
         if( itksys::SystemTools::FileExists(filename.c_str()) )
           {
             // Get the ModuleInstanceId
@@ -336,7 +309,7 @@ int main(int argc, char* argv[])
             
             // Simulate file chooser and ok callback
             otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-            readerModule->vFilePath->value(parseResult->GetParameterString("--ImageList", i).c_str());
+            readerModule->vFilePath->value(parseResult->GetParameterString("--InputList", i).c_str());
             readerModule->Analyse();
             readerModule->bOk->do_callback();
             Fl::check();
