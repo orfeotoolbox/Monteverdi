@@ -192,6 +192,9 @@ namespace otb
     // Instanciation of the Image To VectorImage filter list
     m_CastFilterList = CastFilterListType::New();
 
+    // Instanciation of the LabeledImage To VectorImage filter list
+    m_LabeledCastFilterList = LabeledCastFilterListType::New();
+
     // Data List Instance
     m_VectorDataList      = VectorDataListType::New();
     m_InputImageList      = ImageListType::New();
@@ -200,6 +203,7 @@ namespace otb
     // Describe inputs
     this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to display"), false, true);
     this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
+    this->AddTypeToInputDescriptor<LabeledImageType>("InputImage");
     this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data to display"), true, true);
 
     // Build GUI
@@ -208,7 +212,7 @@ namespace otb
     // build the DEM GUI
     this->BuildDEM();
 
-       // build the Screen shot GUI
+    // build the Screen shot GUI
     this->BuildScreenShot();
   }
 
@@ -256,6 +260,7 @@ namespace otb
         // If the input image is an otb::Image instead of VectorImage then
         // cast it in Vector Image and continue the processing
         SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType>("InputImage", i);
+        LabeledImageType::Pointer labeledImage = this->GetInputData<LabeledImageType>("InputImage", i);
 
         if (singleImage.IsNotNull())
         {
@@ -267,6 +272,18 @@ namespace otb
 
           // Get the description
           desc = this->GetInputDataDescription<SingleImageType>("InputImage", i);
+        }
+
+        if (labeledImage.IsNotNull())
+        {
+          CastLabeledImageFilter::Pointer labeledCastFilter = CastLabeledImageFilter::New();
+          m_LabeledCastFilterList->PushBack(labeledCastFilter);
+
+          labeledCastFilter->SetInput(labeledImage);
+          image = labeledCastFilter->GetOutput();
+
+          // Get the description
+          desc = this->GetInputDataDescription<LabeledImageType>("InputImage", i);
         }
 
         // First check if there is actually an input image
