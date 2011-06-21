@@ -33,7 +33,7 @@ int otbDEMToImageGeneratorModuleTest(int argc, char* argv[])
   const char * demrep  = argv[1];
 
   typedef otb::DEMToImageGeneratorModule::InputImageType  ImageType;
-  typedef ImageType::PixelType                            PixelType; 
+  typedef ImageType::PixelType                            PixelType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::ImageFileWriter<ImageType>                 WriterType;
   typedef otb::ExtractROI<PixelType, PixelType>           ExtractType;
