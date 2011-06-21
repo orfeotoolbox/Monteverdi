@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
 
   parser->AddInputImage(false); //Optional parameter
-  parser->AddOption("--InputVectorData", "input vector data file name ", "-ivd", 1, false);
+  parser->AddOptionNParams("--InputVectorData", "input VectorDatas list ", "-ivd",false);
   parser->AddOptionNParams("--ImageList", "image list", "-iml", false);
   parser->SetProgramDescription("Monteverdi launcher");
   //   parser->AddOption("--NoSplashScreen", "Deactivate the splash screen","-NoSplash", 0, false);
@@ -294,22 +294,27 @@ int main(int argc, char* argv[])
 
   if (parseResult->IsOptionPresent("--InputVectorData"))
     {
-    Fl::check();
-    std::vector<std::string> moduleVector;
+    int numberOfVectorDatas = parseResult->GetNumberOfParameters("--InputVectorData");
 
-    // Get the ModuleInstanceId
-    std::string readerId = model->CreateModuleByKey("Reader");
+    for(unsigned int idx = 0; idx < numberOfVectorDatas; ++idx)
+      {
+      Fl::check();
+      std::vector<std::string> moduleVector;
 
-    // Get the module itself
-    otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+      // Get the ModuleInstanceId
+      std::string readerId = model->CreateModuleByKey("Reader");
 
-    // Simulate file chooser and ok callback
-    otb::ReaderModule::Pointer readerModule =
-      static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-    readerModule->vFilePath->value(parseResult->GetParameterString("--InputVectorData").c_str());
-    readerModule->Analyse();
-    readerModule->bOk->do_callback();
-    Fl::check();
+      // Get the module itself
+      otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+
+      // Simulate file chooser and ok callback
+      otb::ReaderModule::Pointer readerModule =
+        static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+      readerModule->vFilePath->value(parseResult->GetParameterString("--InputVectorData", idx).c_str());
+      readerModule->Analyse();
+      readerModule->bOk->do_callback();
+      Fl::check();
+      }
     }
 
   if (parseResult->IsOptionPresent("--ImageList"))
