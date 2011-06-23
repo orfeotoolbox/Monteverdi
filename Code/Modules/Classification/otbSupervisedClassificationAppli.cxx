@@ -484,11 +484,28 @@ SupervisedClassificationAppli
     oss << dirname << "\\" << filename << ".shp";
 
     // Add the projection to the vectordata
-    (*vectorDataVectorIterator)->SetProjectionRef(m_InputImage->GetProjectionRef());
-    (*vectorDataVectorIterator)->SetMetaDataDictionary(m_InputImage->GetMetaDataDictionary());
+    typedef otb::VectorDataProjectionFilter<VectorDataType,
+                                            VectorDataType>    ProjectionFilterType;
+    ProjectionFilterType::Pointer vectorDataProjection = ProjectionFilterType::New();
+    vectorDataProjection->SetInput((*vectorDataVectorIterator));
+
+    VectorDataType::DataNodeType::PointType lNewOrigin;
+    lNewOrigin[0] = m_InputImage->GetOrigin()[0];
+    lNewOrigin[1] = m_InputImage->GetOrigin()[1];
+
+    vectorDataProjection->SetInputOrigin(lNewOrigin);
+    vectorDataProjection->SetInputSpacing(m_InputImage->GetSpacing());
+
+    std::string projectionRef;
+    itk::ExposeMetaData<std::string>(m_InputImage->GetMetaDataDictionary(),
+                                     MetaDataKey::ProjectionRefKey, projectionRef );
+    vectorDataProjection->SetInputProjectionRef(projectionRef);
+    vectorDataProjection->SetInputKeywordList(m_InputImage->GetImageKeywordlist());
+
+    vectorDataProjection->Update();
 
     VectorDataFileWriterPointerType writer = VectorDataFileWriterType::New();
-    writer->SetInput(*vectorDataVectorIterator);
+    writer->SetInput(vectorDataProjection->GetOutput());
     writer->SetFileName(oss.str());
     oss.str("");
     try
