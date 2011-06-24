@@ -645,7 +645,7 @@ void TileExportModule::Tiling(unsigned int curIdx)
         this->AddFileToKMZ(kml_absolute_path, kml_in_kmz);
 
         // Remove the unecessary files
-        if ( (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str())==false) 
+        if ( (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str())==false)
              ||  (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false) )
           {
           itkExceptionMacro(
