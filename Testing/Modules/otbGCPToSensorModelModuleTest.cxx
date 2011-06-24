@@ -45,18 +45,17 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-//  std::cout<<reader->GetOutput()->GetImageKeywordlist()<<std::endl;
+  //  std::cout<<reader->GetOutput()->GetImageKeywordlist()<<std::endl;
   otb::DataObjectWrapper wrapperIn = otb::DataObjectWrapper::Create(reader->GetOutput());
 
   module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
 
-  //Fl::run();
   if (otb::CurlHelperInterface::IsCurlAvailable() )
     {
     // Simulate mapSearch
     // Set placename and update lat/long
-    std::string parisFrance = "Paris 04 Hôtel-de-Ville France";
+    std::string parisFrance = "Paris 01 Louvre France";
     std::string paris = "Paris";
 
     gcpModule->GetView()->vMPlaceName->value(paris.c_str());
@@ -67,10 +66,13 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
 
     gcpModule->GetView()->bMUpdatePlaceName->do_callback();
     Fl::check();
+
     // Check result
     if (parisFrance != gcpModule->GetView()->vMPlaceName->value())
       {
-      return EXIT_FAILURE;
+        std::cout<<"Placename error..."<<std::endl;
+        std::cout<<"Waiting for "<<parisFrance<<" and receiver "<<gcpModule->GetView()->vMPlaceName->value()<<std::endl;
+        return EXIT_FAILURE;
       }
 
     gcpModule->GetView()->vMDepth->value(13);
