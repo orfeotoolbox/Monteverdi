@@ -306,7 +306,7 @@ void TileExportModule::SaveDataSet()
     this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
 
     // Remove the logo file
-    if (itksys::SystemTools::RemoveFile(logo_absolut_path.str().c_str()) != 0)
+    if (itksys::SystemTools::RemoveFile(logo_absolut_path.str().c_str()) == false)
       {
       itk::OStringStream oss;
       oss << "Error while deleting the file" << logo_absolut_path.str();
@@ -645,7 +645,8 @@ void TileExportModule::Tiling(unsigned int curIdx)
         this->AddFileToKMZ(kml_absolute_path, kml_in_kmz);
 
         // Remove the unecessary files
-        if (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str()) ||  remove(jpg_absolute_path.str().c_str()))
+        if ( (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str())==false) 
+             ||  (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false) )
           {
           itkExceptionMacro(
             << "Error while deleting the file" << kml_absolute_path.str() << "or file " << jpg_absolute_path.str());
@@ -1500,7 +1501,7 @@ TileExportModule::RootKmlProcess(double north, double south, double east, double
   this->AddFileToKMZ(root_absolute_path, root_in_kmz);
 
   // Remove the root files
-  if (itksys::SystemTools::RemoveFile(root_absolute_path.str().c_str()) != 0)
+  if (itksys::SystemTools::RemoveFile(root_absolute_path.str().c_str()) == false)
     {
     itkExceptionMacro(<< "Error while deleting the file" << root_absolute_path.str());
     }
@@ -1539,9 +1540,10 @@ TileExportModule::AddCurrentProductLegends(unsigned int curProd)
     this->AddFileToKMZ(legend_absolut_path, legend_root_path_in_kmz);
 
     // Remove the legend file
-    if (itksys::SystemTools::RemoveFile(legend_absolut_path.str().c_str()) != 0)
+    if (itksys::SystemTools::RemoveFile(legend_absolut_path.str().c_str()) == false)
       {
-      itkExceptionMacro(<< "Error while deleting the file" << legend_absolut_path.str());
+        std::cout<<legend_root_path_in_kmz.str()<<std::endl;
+      itkExceptionMacro(<< "Error while deleting the file " << legend_absolut_path.str());
       }
     }
 }
@@ -1566,7 +1568,7 @@ TileExportModule::BoundingBoxKmlProcess(double north, double south, double east,
   this->AddFileToKMZ(bound_absolute_path, bound_in_kmz);
 
   // Remove the bounding files
-  if (itksys::SystemTools::RemoveFile(bound_absolute_path.str().c_str()) != 0)
+  if (itksys::SystemTools::RemoveFile(bound_absolute_path.str().c_str()) == false)
     {
     itkExceptionMacro(<< "Error while deleting the file" << bound_absolute_path.str());
     }
@@ -1716,7 +1718,7 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
   this->AddFileToKMZ(jpg_absolute_path, jpg_in_kmz);
 
   // Remove the unecessary files
-  if (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()))
+  if (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false)
     {
     itkExceptionMacro(<< "Error while deleting the file " << jpg_absolute_path.str());
     }
