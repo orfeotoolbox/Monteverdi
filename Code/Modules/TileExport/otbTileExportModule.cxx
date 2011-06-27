@@ -1618,7 +1618,7 @@ TileExportModule::BoundingBoxKmlProcess(double north, double south, double east,
 /**
   * Is Product Selected have geograhical
   * Update the global flag
-  */
+  *
   * Is Product Selected have geograhical
   * Update the global flag
   */
