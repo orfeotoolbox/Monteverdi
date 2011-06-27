@@ -44,6 +44,8 @@
 
 #include "itkFixedArray.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 

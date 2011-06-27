@@ -1807,20 +1807,31 @@ void TileExportModule::BrowseDEM()
   const char * filename = NULL;
 
   const char* defaultPath = "";
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+  if (otb::ConfigurationFile::GetInstance()->IsValid())
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
 
   filename = flu_dir_chooser("Choose the folder...", defaultPath);
-  
+
   if (filename == NULL)
     {
     otbMsgDebugMacro(<<"Empty file name!");
     return;
     }
+
+  typedef otb::DEMHandler DEMHandlerType;
+  DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+
+  if (!DEMTest->IsValidDEMDirectory(filename))
+    {
+     m_DEMDirectory = "";
+     MsgReporter::GetInstance()->SendError("invalid DEM directory, no DEM directory has been set.");
+     return;
+    }
+
   vDEMDirectory->value(filename);
-  
+
   // Set the DEM directory
   m_DEMDirectory = filename;
 }
