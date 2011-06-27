@@ -306,12 +306,20 @@ void TileExportModule::SaveDataSet()
     this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
 
     // Remove the logo file
-    if (itksys::SystemTools::RemoveFile(logo_absolut_path.str().c_str()) == false)
+    if( itksys::SystemTools::FileExists(logo_absolut_path.str().c_str()) == true )
       {
-      itk::OStringStream oss;
-      oss << "Error while deleting the file" << logo_absolut_path.str();
-      MsgReporter::GetInstance()->SendError(oss.str());
-      this->Hide();
+        if (itksys::SystemTools::RemoveFile(logo_absolut_path.str().c_str()) == false)
+          {
+            itk::OStringStream oss;
+            oss << "Error while deleting the logo file " << logo_absolut_path.str();
+            MsgReporter::GetInstance()->SendError(oss.str());
+            this->Hide();
+          }
+      }
+    else
+      {
+        //TODO : remove log when bug closed
+        std::cout<<"LOG: Impossible to remove logo file, because doesn't exist... "<<logo_absolut_path.str()<<std::endl;
       }
     }
 
@@ -645,11 +653,20 @@ void TileExportModule::Tiling(unsigned int curIdx)
         this->AddFileToKMZ(kml_absolute_path, kml_in_kmz);
 
         // Remove the unecessary files
-        if ( (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str())==false)
-             ||  (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false) )
+        if( itksys::SystemTools::FileExists(kml_absolute_path.str().c_str()) == true &&
+            itksys::SystemTools::FileExists(jpg_absolute_path.str().c_str()) == true )
           {
+            if ( (itksys::SystemTools::RemoveFile(kml_absolute_path.str().c_str())==false)
+                 ||  (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false) )
+              {
           itkExceptionMacro(
-            << "Error while deleting the file" << kml_absolute_path.str() << "or file " << jpg_absolute_path.str());
+                            << "Error while deleting the file" << kml_absolute_path.str() << "or file " << jpg_absolute_path.str());
+              }
+          }
+        else
+          {
+            //TODO : remove log when bug closed
+            std::cout<<"LOG: Impossible to remove kml and jpeg files, at least, one of them doesn't exist... "<<kml_absolute_path.str()<<"  "<<jpg_absolute_path.str()<<std::endl;
           }
 
         // Progress bar
@@ -1501,9 +1518,17 @@ TileExportModule::RootKmlProcess(double north, double south, double east, double
   this->AddFileToKMZ(root_absolute_path, root_in_kmz);
 
   // Remove the root files
-  if (itksys::SystemTools::RemoveFile(root_absolute_path.str().c_str()) == false)
+  if( itksys::SystemTools::FileExists(root_absolute_path.str().c_str()) == true )
     {
-    itkExceptionMacro(<< "Error while deleting the file" << root_absolute_path.str());
+      if ( itksys::SystemTools::RemoveFile(root_absolute_path.str().c_str()) == false )
+        {
+          itkExceptionMacro(<< "Error while deleting the root file " << root_absolute_path.str());
+        }
+    }
+  else
+    {
+      //TODO : remove log when bug closed
+      std::cout<<"LOG: Impossible to remove root file, because doesn't exist... "<<root_absolute_path.str()<<std::endl;
     }
 }
 
@@ -1540,10 +1565,18 @@ TileExportModule::AddCurrentProductLegends(unsigned int curProd)
     this->AddFileToKMZ(legend_absolut_path, legend_root_path_in_kmz);
 
     // Remove the legend file
-    if (itksys::SystemTools::RemoveFile(legend_absolut_path.str().c_str()) == false)
+    if( itksys::SystemTools::FileExists(legend_absolut_path.str().c_str()) == true )
       {
-        std::cout<<legend_root_path_in_kmz.str()<<std::endl;
-      itkExceptionMacro(<< "Error while deleting the file " << legend_absolut_path.str());
+        if (itksys::SystemTools::RemoveFile(legend_absolut_path.str().c_str()) == false)
+          {
+            std::cout<<legend_root_path_in_kmz.str()<<std::endl;
+            itkExceptionMacro(<< "Error while deleting the legend file " << legend_absolut_path.str());
+          }
+      }
+    else
+      {
+        //TODO : remove log when bug closed
+        std::cout<<"LOG: Impossible to remove legend file, because doesn't exist... "<<legend_absolut_path.str()<<std::endl;
       }
     }
 }
@@ -1568,13 +1601,24 @@ TileExportModule::BoundingBoxKmlProcess(double north, double south, double east,
   this->AddFileToKMZ(bound_absolute_path, bound_in_kmz);
 
   // Remove the bounding files
-  if (itksys::SystemTools::RemoveFile(bound_absolute_path.str().c_str()) == false)
+  if( itksys::SystemTools::FileExists(bound_absolute_path.str().c_str()) == true )
     {
-    itkExceptionMacro(<< "Error while deleting the file" << bound_absolute_path.str());
+      if (itksys::SystemTools::RemoveFile(bound_absolute_path.str().c_str()) == false)
+        {
+          itkExceptionMacro(<< "Error while deleting the bound file" << bound_absolute_path.str());
+        }
+    }
+  else
+    {
+      //TODO : remove log when bug closed
+      std::cout<<"LOG: Impossible to remove bound file, because doesn't exist... "<<bound_absolute_path.str()<<std::endl;
     }
 }
 
 /**
+  * Is Product Selected have geograhical
+  * Update the global flag
+  */
   * Is Product Selected have geograhical
   * Update the global flag
   */
@@ -1718,9 +1762,17 @@ TileExportModule::ExportNonGeoreferencedProduct(unsigned int curIdx)
   this->AddFileToKMZ(jpg_absolute_path, jpg_in_kmz);
 
   // Remove the unecessary files
-  if (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false)
+  if( itksys::SystemTools::FileExists(jpg_absolute_path.str().c_str()) == true )
     {
-    itkExceptionMacro(<< "Error while deleting the file " << jpg_absolute_path.str());
+      if (itksys::SystemTools::RemoveFile(jpg_absolute_path.str().c_str()) == false)
+        {
+          itkExceptionMacro(<< "Error while deleting the file " << jpg_absolute_path.str());
+        }
+    }
+  else
+    {
+      //TODO : remove log when bug closed
+      std::cout<<"LOG: Impossible to remove jpg file, because doesn't exist... "<<jpg_absolute_path.str()<<std::endl;
     }
 }
 
@@ -1808,6 +1860,7 @@ void TileExportModule::BrowseDEM()
 
   const char* defaultPath = "";
   if (otb::ConfigurationFile::GetInstance()->IsValid())
+  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
