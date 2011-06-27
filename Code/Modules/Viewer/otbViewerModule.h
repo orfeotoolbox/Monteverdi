@@ -76,6 +76,8 @@
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 
