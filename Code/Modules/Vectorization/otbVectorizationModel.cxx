@@ -117,7 +117,11 @@ void VectorizationModel
   reproj->SetUseOutputSpacingAndOriginFromImage(true);
   if (m_UseDEM==true)
     {
-    if (!m_DEMPath.empty())
+
+    typedef otb::DEMHandler DEMHandlerType;
+    DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+
+    if (!m_DEMPath.empty() && DEMTest->IsValidDEMDirectory(m_DEMPath.c_str()))
       {
       reproj->SetDEMDirectory(m_DEMPath);
       }

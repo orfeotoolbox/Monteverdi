@@ -71,6 +71,8 @@
 // Extract ROI
 #include "itkExtractImageFilter.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb {
 
 /** \class VectorizationModel
