@@ -185,7 +185,6 @@ public:
   typedef otb::ObjectDescriptionActionHandler<PixelDescriptionModelType, ViewType> ObjectDescriptionActionHandlerType;
 
 
-
   // colored label image typedef
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long> ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
