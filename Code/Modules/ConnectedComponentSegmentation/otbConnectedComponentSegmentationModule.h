@@ -88,6 +88,8 @@
 
 #include "otbObjectDescriptionActionHandler.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 /** \class ConnectedComponentSegmentationModule
@@ -181,6 +183,7 @@ public:
   typedef otb::ChangeScaleActionHandler<RenderingModelType, ViewType> ChangeScaleHandlerType;
   typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType, ViewType> PixelDescriptionActionHandlerType;
   typedef otb::ObjectDescriptionActionHandler<PixelDescriptionModelType, ViewType> ObjectDescriptionActionHandlerType;
+
 
 
   // colored label image typedef

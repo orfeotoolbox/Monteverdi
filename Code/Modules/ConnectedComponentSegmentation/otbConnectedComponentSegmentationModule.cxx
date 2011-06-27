@@ -1203,16 +1203,23 @@ void ConnectedComponentSegmentationModule::OK()
       if (cfname != NULL)
         {
 
-        if (itksys::SystemTools::FileIsDirectory(cfname))
+        // check the directory
+        typedef otb::DEMHandler DEMHandlerType;
+        DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+
+        if (itksys::SystemTools::FileIsDirectory(cfname) && DEMTest->IsValidDEMDirectory(cfname))
           {
           vproj->SetDEMDirectory(cfname);
           }
         else
           {
           itk::OStringStream oss;
-          oss << "Invalid DEM directory " << cfname << ".";
+          oss << "Invalid DEM directory " << cfname << "."<<std::endl;
+          oss << "Output Vector Data will be created without DEM information" <<std::endl;
           MsgReporter::GetInstance()->SendError(oss.str());
           }
+
+
         }
 
       vproj->Update();
