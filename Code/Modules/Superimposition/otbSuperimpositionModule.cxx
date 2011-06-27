@@ -130,7 +130,7 @@ void SuperimpositionModule::Browse()
   const char * filename = NULL;
 
   const char* defaultPath = "";
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+  if (otb::ConfigurationFile::GetInstance()->IsValid())
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
@@ -139,6 +139,15 @@ void SuperimpositionModule::Browse()
   if (filename == NULL)
     {
     otbMsgDebugMacro(<< "Empty file name!");
+    return;
+    }
+
+  typedef otb::DEMHandler DEMHandlerType;
+  DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+
+  if (!DEMTest->IsValidDEMDirectory(filename))
+    {
+    MsgReporter::GetInstance()->SendError("invalid DEM directory, no DEM directory has been set.");
     return;
     }
   vDEMPath->value(filename);

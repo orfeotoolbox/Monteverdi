@@ -28,6 +28,8 @@
 
 #include "otbSuperimpositionEnum.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 /** \class SuperimpositionModule
