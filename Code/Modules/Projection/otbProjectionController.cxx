@@ -234,6 +234,15 @@ void
 ProjectionController
 ::SetDEMPath(std::string dem)
 {
+
+  typedef otb::DEMHandler DEMHandlerType;
+  DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+
+  if (!DEMTest->IsValidDEMDirectory(dem.c_str()))
+    {
+    m_Model->SetUseDEM(false);
+    MsgReporter::GetInstance()->SendError("invalid DEM directory, no DEM directory has been set.");
+    }
   try
     {
     m_Model->SetDEMPath(dem);
@@ -242,6 +251,7 @@ ProjectionController
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
+
 }
 
 

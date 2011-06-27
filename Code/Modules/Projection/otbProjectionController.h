@@ -22,6 +22,8 @@
 #include "otbProjectionControllerInterface.h"
 #include "otbProjectionView.h"
 
+#include "otbDEMHandler.h"
+
 namespace otb
 {
 class ITK_EXPORT ProjectionController
