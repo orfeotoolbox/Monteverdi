@@ -33,6 +33,7 @@
 #include <FL/Fl_Menu_Window.H>
 #include <FL/Fl_Group.H>
 //#include <FLU/Flu_Tree_Browser.h>
+#include "otbFl_DND_Box.h"
 #include "otbFluTreeBrowser.h"
 #include "otbMonteverdiEnum.h"
 
@@ -136,6 +137,9 @@ protected:
   /** OK output rename window callback */
   void OutputRenameOk();
 
+  /** Open the Drag and dropped files */
+  void OpenDroppedFiles();
+
 protected:
   /** Constructor */
   MonteverdiViewGUI();
@@ -181,6 +185,9 @@ private:
 
   /** The Flu tree browser */
   FluTreeBrowser *m_Tree;
+
+  /** The Fl_Box handling DND */
+  Fl_DND_Box *m_DnDBox;
 
   /** The module input selection interface */
   InputViewGUI::Pointer m_InputViewGUI;

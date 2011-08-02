@@ -60,6 +60,14 @@ MonteverdiViewGUI
   m_Tree = new FluTreeBrowser(gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree ");
   m_Tree->insertion_mode(FLU_INSERT_BACK);
 
+  // Initialize DnD box and register to this class to receive its notifications
+  // 0.95 to avoid scrollbar deactivation due to Fl_Move event
+  // In Fl_DND_Box the Fl_Move event is catched to avoid segfaults
+  // (begin dragging and dropping nothing in the DND area)
+  // the 0.95 decrease the DND area to not take the scrollbar into account
+  m_DnDBox = new Fl_DND_Box(gTreeGroup->x(), gTreeGroup->y(), 0.95*gTreeGroup->w(), gTreeGroup->h(), "");
+  m_DnDBox->RegisterListener(this);
+
   m_MonteverdiModel = MonteverdiModel::GetInstance();
   m_MonteverdiModel->RegisterListener(this);
 
@@ -72,6 +80,7 @@ MonteverdiViewGUI
 ::~MonteverdiViewGUI()
 {
   delete m_HelpTextBuffer;
+  delete m_DnDBox;
 }
 
 void
@@ -200,6 +209,8 @@ MonteverdiViewGUI
   wMainWindow->resizable(gTreeGroup);
   m_Tree->show_root(false);
 
+  // Build the DND Box, actually only add it to the view gui
+  wMainWindow->add(m_DnDBox);
 }
 
 /** BuildInputsGUI create an instance of a small GUI where the user will select his inputs
@@ -620,7 +631,7 @@ MonteverdiViewGUI
 ::Notify(const MonteverdiEvent& event)
 {
 
-  otbGenericMsgDebugMacro(<< "View: Received event " << event.GetType() << " from module " << event.GetInstanceId());
+  //otbGenericMsgDebugMacro(<< "View: Received event " << event.GetType() << " from module " << event.GetInstanceId());
 
   // Event received : new instance of module is created
   // -> Open a inputs Window
@@ -636,7 +647,14 @@ MonteverdiViewGUI
   else if (event.GetType() == "Cancel")
     {
 //       this->UpdateTree(event.GetInstanceId());
-
+    }
+  else if (event.GetType() == "FileDropped")
+    {
+    this->OpenDroppedFiles();
+    }
+  else if (event.GetType() == "EventTransfered")
+    {
+    m_Tree->handle(m_DnDBox->GetTransferedEvent());
     }
   // Event received : UNKNOWN EVENT
   else
@@ -731,5 +749,13 @@ MonteverdiViewGUI
 {
   wHelpWindow->show();
 }
+
+void
+MonteverdiViewGUI
+::OpenDroppedFiles()
+{
+  m_MonteverdiModel->OpenDroppedFiles(m_DnDBox->GetFileNameList());
+}
+
 
 } // end namespace otb

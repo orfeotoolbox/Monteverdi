@@ -25,12 +25,14 @@
 #include "otbMacro.h"
 #include "otbMsgReporter.h"
 #include "otbCachingPathManager.h"
+#include "otbReaderModule.h"
 
 // For pipeline locking mechanism
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graphviz.hpp>
 
 #include <itksys/Directory.hxx>
+#include "itksys/SystemTools.hxx"
 
 #include "tinyxml.h"
 
@@ -791,6 +793,36 @@ std::string MonteverdiModel::GetCachingPath()
   return ( fullPath );
 }
 */
+
+
+void MonteverdiModel::OpenDroppedFiles(const std::vector<std::string>& listFiles)
+{
+  for (unsigned int idx = 0; idx < listFiles.size(); ++idx)
+    {
+    std::string filename = listFiles[idx];
+    if ( itksys::SystemTools::FileExists(filename.c_str()) )
+      {
+      // Get the ModuleInstanceId
+      std::string readerId = this->CreateModuleByKey("Reader");
+            
+      // Get the module itself
+      otb::Module::Pointer module = this->GetModuleByInstanceId(readerId);
+
+      // Simulate file chooser and ok callback
+      otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
+      readerModule->vFilePath->value(filename.c_str());
+      readerModule->Analyse();
+      readerModule->bOk->do_callback();
+      Fl::check();
+      }
+    else
+      {
+      std::ostringstream oss;
+      oss << "The file "<< filename <<" does not exist.";
+      otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
+      }
+    }
+}
 
 } // End namespace
 

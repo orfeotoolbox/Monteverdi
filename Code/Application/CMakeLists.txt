@@ -14,6 +14,7 @@ otbInputViewComponent.cxx
 otbInputViewGUI.cxx
 otbMonteverdiPixmaps.cxx
 otbFluTreeBrowser.cxx
+otbFl_DND_Box.cxx
 )
 
 SET(VIEW_FL_SRCS

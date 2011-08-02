@@ -196,6 +196,9 @@ protected:
   /** Get the caching directory path. */
   std::string GetCachingPath();
 
+  /** Open Drag and Dropped files */
+  void OpenDroppedFiles(const std::vector<std::string>& listFiles);
+
 protected:
 
   /** This is protected for the singleton. Use GetInstance() instead. */
