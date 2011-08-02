@@ -34,7 +34,7 @@ public:
 
   // Constructor
   Fl_DND_Box(int X, int Y, int W, int H, const char *L = 0)
-    : Fl_Box(X,Y,W,H,L),m_DragDetected(false){}
+    : Fl_Box(X, Y, W, H, L), m_DragDetected(false){}
 
   // Desctructor
   virtual ~Fl_DND_Box(){}

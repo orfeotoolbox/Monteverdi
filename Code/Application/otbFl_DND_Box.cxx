@@ -63,8 +63,8 @@ int Fl_DND_Box::handle(int e)
       // Under Win32 the files name are stored with no file://
       m_FileNameList.push_back(token);
 #else
-      // Remove the "file://" form the strings : subst(7,end)
-      m_FileNameList.push_back(token.substr(7,token.size()));
+      // Remove the "file://" form the strings : subst(7, end)
+      m_FileNameList.push_back(token.substr(7, token.size()));
 #endif
       }
 
