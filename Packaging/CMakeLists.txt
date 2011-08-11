@@ -25,10 +25,6 @@ SET(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi_SOURCE_DIR}/Copyright/OTBCopyright
 # appear.
 SET(CPACK_PACKAGE_EXECUTABLES "monteverdi" "Monteverdi application")
 
-IF( UNIX AND NOT APPLE )
-  ADD_SUBDIRECTORY( Linux )
-ENDIF( UNIX AND NOT APPLE )
-
 IF( APPLE )
   ADD_SUBDIRECTORY( MacOS )
 ENDIF( APPLE )
@@ -39,5 +35,12 @@ ENDIF( WIN32 AND NOT UNIX )
 
 INCLUDE(InstallRequiredSystemLibraries)
 INCLUDE(CPack)
+
+ELSE(OTB_USE_CPACK)
+
+# CPack is not used for GNU/Linux packaging
+IF( UNIX AND NOT APPLE )
+  ADD_SUBDIRECTORY( Linux )
+ENDIF( UNIX AND NOT APPLE )
 
 ENDIF(OTB_USE_CPACK)
