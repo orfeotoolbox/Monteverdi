@@ -320,6 +320,7 @@ private:
   bool                                       m_HasCloseModule;
   bool                                       m_ResultShown;
   std::vector<OutputVectorDataType::Pointer> m_OutputVector;
+  bool                                       m_UpToDateResult;
 };
 
 } // end namespace otb

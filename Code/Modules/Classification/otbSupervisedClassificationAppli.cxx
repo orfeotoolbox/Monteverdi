@@ -62,6 +62,7 @@ SupervisedClassificationAppli
   m_HasOutputVector = false;
   m_HasCloseModule = false;
   m_ResultShown = false;
+  m_UpToDateResult = false;
 
   m_ImageViewer               = ImageViewerType::New();
   m_Output                    = OutputImageType::New();
@@ -1779,6 +1780,7 @@ SupervisedClassificationAppli
 
   // Launch the classification
   this->SetupClassification();
+  m_UpToDateResult = false;
 }
 
 /**
@@ -1871,20 +1873,26 @@ SupervisedClassificationAppli
 void
 SupervisedClassificationAppli
 ::ShowImage()
-{
-  if (m_ResultViewer.IsNotNull())
-    {
-    FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
-    guiFullWindow->remove(full);
+{ 
+   m_ResultViewer->Hide();
 
-    if (m_ImageViewer->GetUseScroll())
+   if (m_ResultViewer.IsNotNull())
+   {
+      FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
+      guiFullWindow->remove(full);
+      guiFullWindow->redraw();
+   
+      if (m_ResultViewer->GetUseScroll())
       {
-      ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
-      guiScrollWindow->remove(scroll);
+         ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
+         guiScrollWindow->remove(scroll);
+         guiScrollWindow->redraw();
       }
-    }
+   }
+
 
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
+  full = m_ImageViewer->GetFullWidget();
   full->resize(0, 0, guiFullWindow->w(), guiFullWindow->h());
   guiFullWindow->add(full);
   guiFullWindow->resizable(full);
@@ -1893,15 +1901,15 @@ SupervisedClassificationAppli
 
   if (m_ImageViewer->GetUseScroll())
     {
-    ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
-    guiScrollWindow->add(scroll);
-    guiScrollWindow->resizable(scroll);
-    guiScrollWindow->show();
-    scroll->show();
+      ScrollWidgetPointerType scroll = m_ImageViewer->GetScrollWidget();
+      guiScrollWindow->add(scroll);
+      guiScrollWindow->resizable(scroll);
+      guiScrollWindow->show();
+      scroll->show();
     }
-  m_ImageViewer->Update();
-  this->Update();
-  m_ResultShown = false;
+
+   this->Update();
+   m_ResultShown = false;
 }
 
 /**
@@ -1911,30 +1919,36 @@ void
 SupervisedClassificationAppli
 ::ShowResults()
 {
-  m_ChangeLabelFilter->UpdateOutputInformation();
-  m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
+  if (m_UpToDateResult == false)
+  {
+      m_ChangeLabelFilter->UpdateOutputInformation();
+      m_ChangeLabelFilter->GetOutput()->UpdateOutputInformation();
 
-  // Cast for result viewer display
-  m_CastFilter = CastFilterType::New();
-  m_CastFilter->SetInput(m_ChangeLabelFilter->GetOutput());
-  m_CastFilter->UpdateOutputInformation();
+     // Cast for result viewer display
+      m_CastFilter = CastFilterType::New();
+      m_CastFilter->SetInput(m_ChangeLabelFilter->GetOutput());
+      m_CastFilter->UpdateOutputInformation();
 
-  m_ResultViewer = ImageViewerType::New();
-  m_ResultViewer->SetImage(m_InputImage);
-  m_ResultViewer->SetImageOverlay(m_CastFilter->GetOutput());
-  m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
-  m_ResultViewer->SetShowClass(true);
-  m_ResultViewer->SetClassesMap(m_ClassesMap);
-  m_ResultViewer->SetUseImageOverlay(true);
-  m_ResultViewer->SetShowHistograms(false);
-  m_ResultViewer->SetPixLocOutput(oPixLocValue);
-  m_ResultViewer->SetShowZoomWidget(false);
-  m_ResultViewer->SetLabel("Result image");
-  m_ResultViewer->Build();
-  m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value() * 255));
+      m_ResultViewer = ImageViewerType::New();
+      m_ResultViewer->SetImage(m_InputImage);
+      m_ResultViewer->SetImageOverlay(m_CastFilter->GetOutput());
+      m_ResultViewer->SetLabeledImage(m_ClassificationFilter->GetOutput());
+      m_ResultViewer->SetShowClass(true);
+      m_ResultViewer->SetClassesMap(m_ClassesMap);
+      m_ResultViewer->SetUseImageOverlay(true);
+      m_ResultViewer->SetShowHistograms(false);
+      m_ResultViewer->SetPixLocOutput(oPixLocValue);
+      m_ResultViewer->SetShowZoomWidget(false);
+      m_ResultViewer->SetLabel("Result image");
+      m_ResultViewer->Build();
+      m_ResultViewer->SetImageOverlayOpacity(static_cast<unsigned char>(slTrainingSetOpacity->value() * 255));
+      m_UpToDateResult = true;
+  }
 
   this->VisualisationSetupOk();
 
+  if (m_ImageViewer.IsNotNull())
+    {
   FullWidgetPointerType full = m_ImageViewer->GetFullWidget();
   guiFullWindow->remove(full);
   guiFullWindow->redraw();
@@ -1945,8 +1959,9 @@ SupervisedClassificationAppli
     guiScrollWindow->remove(scroll);
     guiScrollWindow->redraw();
     }
+  }
 
-  full = m_ResultViewer->GetFullWidget();
+  FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
   full->resize(0, 0, guiFullWindow->w(), guiFullWindow->h());
   guiFullWindow->add(full);
   guiFullWindow->resizable(full);
@@ -1973,16 +1988,19 @@ void
 SupervisedClassificationAppli
 ::DisplayResults()
 {
-  if (static_cast<int>(bDisplay->value()) == 0)
-    {
-    this->ShowImage();
-    }
+   bDisplay->deactivate();
+   if (static_cast<int>(bDisplay->value()) == 0)
+   {
+       this->ShowImage();
+   }
   else
     {
-    this->SetupClassification();
-    this->ShowResults();
+       this->SetupClassification();
+       this->ShowResults();
     }
+   bDisplay->activate();
 }
+
 
 /**
 *
