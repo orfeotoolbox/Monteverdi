@@ -67,6 +67,7 @@ public:
   /** OTB typedefs */
   /// Dataset
   typedef WriterModel::InputImageType      FloatingVectorImageType;
+  typedef WriterModel::SingleImageType     FloatingImageType;
   typedef FloatingVectorImageType::Pointer FPVImagePointerType;
   typedef WriterModel::LabeledImageType    LabeledImageType;
 

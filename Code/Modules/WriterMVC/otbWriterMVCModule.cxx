@@ -43,6 +43,8 @@ WriterMVCModule::WriterMVCModule()
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
   this->AddTypeToInputDescriptor<LabeledImageType>("InputDataSet");
+  this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
+
 
   m_Model->RegisterListener(this);
 }
@@ -66,11 +68,20 @@ void WriterMVCModule::Run()
 
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
 
+  FloatingImageType::Pointer monoImage = this->GetInputData<FloatingImageType>("InputDataSet");
+
   LabeledImageType::Pointer labeledImage = this->GetInputData<LabeledImageType>("InputDataSet");
 
+ 
   if (vectorImage.IsNotNull())
     {
     m_Model->SetInputImage(vectorImage);
+    m_View->Show();
+    m_Model->GenerateLayers();
+    }
+  else if (monoImage.IsNotNull())
+    {
+    m_Model->SetInputImage(monoImage);
     m_View->Show();
     m_Model->GenerateLayers();
     }

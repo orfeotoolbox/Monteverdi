@@ -43,25 +43,28 @@ WriterModel::WriterModel()
   m_IntensityFilter          = IntensityFilterType::New();
   m_Reader                   = ReaderType::New();
 
-  // init input image + m_HasInput
+  // Init input image + m_HasInput
   this->InitInput();
 
   // Instantiate the model
   m_VisuModel = VisuModelType::New();
   m_ResultVisuModel = VisuModelType::New();
 
-  //Instantiate output image attributes
+  // Instantiate output image attributes
   m_image = SingleImageType::New();
   m_imageList = ImageListType::New();
   m_iL2VI = ImageListToVectorImageFilterType::New();
 
-  //Input and Writers
+  // Input and Writers
   m_InputImage = InputImageType::New();
   m_FPVWriter = FPVWriterType::New();
 //   m_VectorWriter = VectorWriterType::New();
 
-  //labeled caster list
+  // Labeled caster list
   m_LabeledCasterList = LabeledCasterListType::New();
+
+  // Mono channel image caster list
+  m_ImageCasterList = ImageCasterListType::New();
 
   m_ProcessObjectModel = m_FPVWriter;
 }
@@ -93,6 +96,43 @@ WriterModel
   LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
 
   lVisuGenerator->SetImage(image);
+  lVisuGenerator->GenerateLayer();
+  lVisuGenerator->GetLayer()->SetName("Image");
+  // Add the layer to the model
+  m_VisuModel->ClearLayers();
+  m_VisuModel->AddLayer(lVisuGenerator->GetLayer());
+
+  // Render
+  m_VisuModel->Update();
+
+  //Set Input Writer
+  m_FPVWriter->SetInput(m_InputImage);
+  // Notify the observers
+  this->NotifyAll("SetInputImage");
+}
+
+void
+WriterModel
+::SetInputImage(SingleImagePointerType image)
+{
+  ImageCasterType::Pointer imageCastFilter = ImageCasterType::New();
+  m_ImageCasterList->PushBack(imageCastFilter);
+
+  imageCastFilter->SetInput(image);
+
+  // Set the input image
+  m_InputImage = imageCastFilter->GetOutput();
+  m_InputImage->UpdateOutputInformation();
+
+  m_NumberOfChannels = m_InputImage->GetNumberOfComponentsPerPixel();
+
+  // Togle the valid flag
+  m_HasInput = true;
+
+  // Generate image layers
+  LayerGeneratorPointerType lVisuGenerator = LayerGeneratorType::New();
+
+  lVisuGenerator->SetImage(m_InputImage);
   lVisuGenerator->GenerateLayer();
   lVisuGenerator->GetLayer()->SetName("Image");
   // Add the layer to the model
