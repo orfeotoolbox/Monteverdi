@@ -68,6 +68,24 @@ protected:
   /** The custom run command */
   virtual void Run();
 
+  /** Show the Module GUI */
+  virtual void Show()
+  {
+    m_SupervisedClassification->bClassesBrowser->show();
+  }
+
+  /** Hide the Module GUI */
+  virtual void Hide()
+  {
+    m_SupervisedClassification->bClassesBrowser->hide();
+    m_SupervisedClassification->guiSVMSetup->hide();
+    m_SupervisedClassification->guiVisualisationSetup->hide();
+    m_SupervisedClassification->guiFullWindow->hide();
+    m_SupervisedClassification->guiScrollWindow->hide();
+    m_SupervisedClassification->guiChangeClassName->hide();
+    m_SupervisedClassification->guiValidationWindow->hide();
+  } 
+
   /** Notify Monteverdi application that supervised classification has a result */
   void Notify();
 
