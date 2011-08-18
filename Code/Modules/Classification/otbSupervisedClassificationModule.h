@@ -84,7 +84,7 @@ protected:
     m_SupervisedClassification->guiScrollWindow->hide();
     m_SupervisedClassification->guiChangeClassName->hide();
     m_SupervisedClassification->guiValidationWindow->hide();
-  } 
+  }
 
   /** Notify Monteverdi application that supervised classification has a result */
   void Notify();

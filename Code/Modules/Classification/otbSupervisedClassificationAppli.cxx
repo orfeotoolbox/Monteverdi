@@ -1873,7 +1873,7 @@ SupervisedClassificationAppli
 void
 SupervisedClassificationAppli
 ::ShowImage()
-{ 
+{
    m_ResultViewer->Hide();
 
    if (m_ResultViewer.IsNotNull())
