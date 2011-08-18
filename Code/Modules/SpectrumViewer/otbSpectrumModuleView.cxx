@@ -149,6 +149,7 @@ SpectrumModuleView
   else
     {
     this->wNotMultispectral->show();
+    this->m_SpectrumModuleController->Quit();
     }
 }
 
