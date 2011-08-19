@@ -1016,9 +1016,9 @@ SupervisedClassificationAppli
 
   if (theClass == NULL)
     {
-    return;
+      return;
     }
-
+  
   std::vector<PolygonListType::Iterator> toRemove;
   for (PolygonListType::Iterator pit = m_TrainingSet->Begin();
        pit != m_TrainingSet->End(); ++pit)
@@ -1045,6 +1045,8 @@ SupervisedClassificationAppli
     {
     m_ValidationSet->Erase(*it);
     }
+
+  
   m_ClassesMap.erase(m_ClassesMap.begin() + selectedItem - 1);
   dClassList->remove(selectedItem);
 
@@ -1101,7 +1103,6 @@ SupervisedClassificationAppli
   ClassPointerType resp = NULL;
 
   unsigned int selectedItem = dClassList->value();
-
   if (selectedItem > 0)
     {
     resp = m_ClassesMap[selectedItem - 1];
@@ -1712,66 +1713,99 @@ SupervisedClassificationAppli
 ::Learn()
 {
   bLearn->clear();
-
+  
   if (m_ClassesMap.size() <= 1)
     {
-    fl_alert("At least two classes are required to do classification!");
-    return;
+      fl_alert("At least two classes are required to do classification!");
+      return;
     }
-
+  
   if (bRandomGeneration->value())
     {
-    this->JointlyGenerateTrainingAndValidationSamplesFromROIs();
+      this->JointlyGenerateTrainingAndValidationSamplesFromROIs();
     }
   else
     {
-    this->GenerateTrainingSamplesFromROIs();
+      this->GenerateTrainingSamplesFromROIs();
     }
-
+  
+  // Link map between vector index and existing label
+  // classical case          : label (1, 2, 3, 4) => index (0, 1, 2, 3)
+  // class 3 supressed       : label (1, 2, 4)    => index (0, 1, 2)
+  // class 1 and 3 supressed : label (2, 4)    => index (0, 1)
+  
+  ClassesMapType::iterator      classesIt = m_ClassesMap.begin();
+  unsigned int nbOfLabel = m_ClassesMap.size();
+  
+  // Get and Sort the label list
+  std::vector<unsigned int> labelList;
+  while ( classesIt != m_ClassesMap.end() )
+    {
+      labelList.push_back( (*classesIt)->GetId() );
+      ++classesIt;
+    }
+  std::sort(labelList.begin(), labelList.end());
+  
+  // Construct the link map (label, index)
+  unsigned int count = 0;
+  std::map<unsigned int, unsigned int> linkMap;
+  for(unsigned int j=0; j<=labelList[nbOfLabel-1]; j++)
+    {
+      for( unsigned k=0; k<nbOfLabel; k++)
+        {
+          if( j == labelList[k] )
+            {
+              linkMap[labelList[k]] = count;
+              count++;
+            }
+        }
+    }
+  
   TrainingListSampleType::ConstIterator sampleValIter = m_TrainingListLabelSample->Begin();
   TrainingListSampleType::ConstIterator sampleValEnd  = m_TrainingListLabelSample->End();
-
-  std::vector<double> sampleCount(m_ClassesMap.size(), 0.);
-
+  
+  std::vector<double> sampleCount(m_ClassesMap.size(), 0.); 
+  
   while (sampleValIter != sampleValEnd)
     {
-    sampleCount[sampleValIter.GetMeasurementVector()[0] - 1] += 1;
-    ++sampleValIter;
+      sampleCount[ linkMap[sampleValIter.GetMeasurementVector()[0]] ] += 1;
+      ++sampleValIter;
     }
-
-  ClassesMapType::iterator      classesIt = m_ClassesMap.begin();
+  
+  classesIt = m_ClassesMap.begin();
   std::vector<double>::iterator countIt = sampleCount.begin();
-
-  while (countIt != sampleCount.end() && classesIt != m_ClassesMap.end())
+  
+  while (countIt != sampleCount.end() && classesIt != m_ClassesMap.end() )
     {
-    if (*countIt == 0)
-      {
-      itk::OStringStream oss;
-      oss << "Class " << (*classesIt)->GetName() << " has no training sample, cannot do SVM estimation." << std::endl;
-      MsgReporter::GetInstance()->SendError(oss.str().c_str());
-      return;
-      }
-    ++countIt;
-    ++classesIt;
+      if (*countIt == 0)
+        {
+          itk::OStringStream oss;
+          oss << "Class " << (*classesIt)->GetName() << " has no training sample, cannot do SVM estimation." << std::endl;
+          MsgReporter::GetInstance()->SendError(oss.str().c_str());
+          return;
+        }
+      
+      ++countIt;
+      ++classesIt;
     }
-
+  
   m_Estimator = EstimatorType::New();
   this->SVMSetupOk();
   m_Estimator->SetInputSampleList(m_TrainingListSample);
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
-
+  
   try
-  {
-    m_Estimator->Update();
-  }
+    {
+      m_Estimator->Update();
+    }
   catch( itk::ExceptionObject& exc )
-  {
-  fl_alert("%s", exc.what());
-    return;
-  }
-
+    {
+      fl_alert("%s", exc.what());
+      return;
+    }
+  
   m_Model = m_Estimator->GetModel();
-
+  
   bLearn->set();
   bSaveClassifAsVectorData->activate();
   bSaveSVMModel->activate();
@@ -1780,6 +1814,7 @@ SupervisedClassificationAppli
 
   // Launch the classification
   this->SetupClassification();
+
   m_UpToDateResult = false;
 }
 
