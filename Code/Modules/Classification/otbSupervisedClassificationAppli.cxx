@@ -1764,7 +1764,7 @@ SupervisedClassificationAppli
   TrainingListSampleType::ConstIterator sampleValIter = m_TrainingListLabelSample->Begin();
   TrainingListSampleType::ConstIterator sampleValEnd  = m_TrainingListLabelSample->End();
   
-  std::vector<double> sampleCount(m_ClassesMap.size(), 0.); 
+  std::vector<double> sampleCount(m_ClassesMap.size(), 0.);
   
   while (sampleValIter != sampleValEnd)
     {
