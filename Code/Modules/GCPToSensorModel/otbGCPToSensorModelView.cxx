@@ -448,11 +448,23 @@ GCPToSensorModelView
 
 void
 GCPToSensorModelView
+::Save()
+{
+  bool isProcessOK = m_Controller->OK();
+  if ( isProcessOK )
+    {
+      this->HideAll();
+    }
+}
+
+void
+GCPToSensorModelView
 ::Quit()
 {
-  m_Controller->OK();
+  m_Controller->Quit();
   this->HideAll();
 }
+
 
 void
 GCPToSensorModelView

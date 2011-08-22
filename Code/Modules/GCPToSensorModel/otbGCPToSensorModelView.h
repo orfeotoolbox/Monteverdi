@@ -67,6 +67,7 @@ public:
 
   /** Fluid call backs*/
   virtual void Quit();
+  virtual void Save();
 
   /** Set the controller */
   void SetController(GCPToSensorModelControllerInterface*);
@@ -95,6 +96,12 @@ public:
   virtual void UpdatePlaceName();
   virtual void UpdateLonLat();
   virtual void DisplayMap();
+
+  /** Get the number of selected GCP points */
+  unsigned int GetNumberOfGCPPoints()
+  {
+    return this->lPointList->size();
+  }
 
   void UpdateListSelectionColor();
   void ChangePointValue(ContinuousIndexType index); //, unsigned int viewId );
@@ -127,8 +134,6 @@ private:
   ImageWidgetController::Pointer m_WidgetController;
   /** Pointer to the widgets controller */
   ImageWidgetController::Pointer m_MapWidgetController;
-  /** Pointer to the model */
-  //GCPToSensorModelModel::Pointer                m_Model;
   /** Image view */
   ImageViewType::Pointer m_ImageView;
   ImageViewType::Pointer m_MapView;

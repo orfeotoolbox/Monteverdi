@@ -77,7 +77,7 @@ class GCPToSensorModelViewGroup {open
           }
         }
       }
-      Fl_Group grParam {open
+      Fl_Group grParam {open selected
         xywh {10 595 1220 200} box PLASTIC_DOWN_BOX color 7
       } {
         Fl_Choice cProjType {
@@ -131,10 +131,10 @@ class GCPToSensorModelViewGroup {open
           label {Pixel Values} open
           tooltip {pixel information} xywh {20 615 200 170} box PLASTIC_DOWN_BOX color 7 labelsize 12 labelcolor 186 align 5
         } {}
-        Fl_Button bOk {
-          label {Save/Quit}
+        Fl_Button bQuit {
+          label Quit
           callback {Quit();}
-          tooltip {Quit Application} xywh {1115 746 105 39} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 16 labelcolor 186
+          tooltip {Quit Application} xywh {1115 754 105 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 16 labelcolor 186
         }
         Fl_Button guiImport {
           label {Import ...}
@@ -145,6 +145,11 @@ class GCPToSensorModelViewGroup {open
           label {Export ...}
           callback {ExportGcpsToXmlFile();}
           tooltip {Focus on the selected point couple.} xywh {825 715 75 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+        }
+        Fl_Button bSave {
+          label Save
+          callback {Save();}
+          tooltip {Quit Application} xywh {994 754 105 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 48 labelfont 1 labelsize 16 labelcolor 186
         }
       }
       Fl_Group wMapWindow {
@@ -320,12 +325,14 @@ wDEMWindow->hide();}
   } {}
   Function {ShowMap()} {open return_type {virtual void}
   } {}
-  Function {UpdateLonLat()} {open selected return_type {virtual void}
+  Function {UpdateLonLat()} {open return_type {virtual void}
   } {}
   Function {UpdatePlaceName()} {open return_type {virtual void}
   } {}
   Function {ImportGcpsFromXmlFile()} {open return_type {virtual void}
   } {}
   Function {ExportGcpsToXmlFile()} {open return_type {virtual void}
+  } {}
+  Function {Save()} {open return_type {virtual void}
   } {}
 } 

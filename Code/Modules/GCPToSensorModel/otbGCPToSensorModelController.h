@@ -151,7 +151,8 @@ protected:
   virtual void SetDEMPath(const std::string& filePath);
   virtual void ChangeDEM();
   virtual void ReloadGCPsList();
-  virtual void OK();
+  virtual bool OK();
+  virtual void Quit();
   virtual void ExportGcpsToXmlFile(const char * fname);
   virtual void ImportGcpsFromXmlFile(const char * fname);
 

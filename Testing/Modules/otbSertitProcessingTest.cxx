@@ -115,7 +115,7 @@ int otbSertitProcessingTest(int argc, char* argv[])
   Fl::check();
 
   // Launch GCP To sensor Model module
-  gcpToSensorModelModule->GetView()->bOk->do_callback();
+  gcpToSensorModelModule->GetView()->bSave->do_callback();
   Fl::check();
 
   // Output wrapper

@@ -124,6 +124,7 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   Fl::check();
   std::string DEMPath = argv[2];
   gcpModule->GetController()->SetDEMPath(DEMPath);
+  gcpModule->GetView()->tDEMFile->value(argv[2]);
   gcpModule->GetView()->bOkDEM->do_callback();
   Fl::check();
 
@@ -149,10 +150,11 @@ int otbGCPToSensorModelModuleTest(int argc, char* argv[])
   Fl::check();
 
   // Simulate import
-  gcpModule->GetController()->ImportGcpsFromXmlFile(argv[2]);
+  gcpModule->GetController()->ImportGcpsFromXmlFile(argv[3]);
+  Fl::check();
 
   // Simulate Ok button callback
-  gcpModule->GetView()->bOk->do_callback();
+  gcpModule->GetView()->bSave->do_callback();
   Fl::check();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");

@@ -156,8 +156,14 @@ public:
   /** Update Output */
   void OK();
 
+  /** Quit without output */
+  void Quit();
+
   /** Get the output changed flag */
   itkGetMacro(OutputChanged, bool);
+
+  /** Get the quit without process flag.  */
+  itkGetMacro(QuitWithoutOutput, bool);
 
   /** Get Output image */
   itkGetObjectMacro(Output, VectorImageType);
@@ -223,6 +229,10 @@ public:
   itkGetMacro(Depth, unsigned int);
   itkSetMacro(Depth, unsigned int);
 
+
+  /** Get the minimum number of GCP point to have a "valid" sensor model. */
+  itkGetConstMacro(MinNbOfGCP, unsigned int);
+
   /** Increase Depth with a value */
   void IncreaseDepth(int value, long int x, long y);
 
@@ -286,6 +296,9 @@ private:
   /** Output changed */
   bool m_OutputChanged;
 
+  /** Quit without processing */
+  bool m_QuitWithoutOutput;
+
   /** DEM directory path*/
   std::string m_DEMPath;
 
@@ -334,6 +347,9 @@ private:
 
   /** Cross indexes container */
   CrossIndexesContainerType m_CrossIndexesContainer;
+
+  /** Minimum number of GCP point to have a "valid" sensor model. */
+  const unsigned int m_MinNbOfGCP;
 
 };
 

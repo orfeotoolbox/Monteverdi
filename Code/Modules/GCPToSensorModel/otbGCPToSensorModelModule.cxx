@@ -118,18 +118,22 @@ void GCPToSensorModelModule::Run()
 /** The Notify */
 void GCPToSensorModelModule::Notify()
 {
-
   if (m_Model->GetOutputChanged())
     {
-    this->ClearOutputDescriptors();
-    // Add outputs
-    FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-    this->AddOutputDescriptor(filteredOutput, "OutputImage", otbGetTextMacro("Input image with new keyword list"));
+      this->ClearOutputDescriptors();
+      // Add outputs
+      FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
+      this->AddOutputDescriptor(filteredOutput, "OutputImage", otbGetTextMacro("Input image with new keyword list"));
+      this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+      // Once module is closed, it is no longer busy
+      this->BusyOff();
     }
-
-  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
-
-  // Once module is closed, it is no longer busy
-  this->BusyOff();
+  // Quit button pushed => nothing to be done
+  else if( m_Model->GetQuitWithoutOutput() )
+    {
+      this->ClearOutputDescriptors();
+      // Once module is closed, it is no longer busy
+      this->BusyOff();
+    }
 }
 } // End namespace otb

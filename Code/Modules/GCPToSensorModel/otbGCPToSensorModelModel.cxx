@@ -32,7 +32,7 @@ namespace otb
 GCPToSensorModelModel::
 GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer(), m_ErrorsContainer(),
   m_GroundError(0.), m_MeanError(0.), m_VisualizationModel(), m_ImageGenerator(),
-  m_BlendingFunction(), m_InputImage(), m_Output(), m_OutputChanged(false),
+  m_BlendingFunction(), m_InputImage(), m_Output(), m_OutputChanged(false), m_QuitWithoutOutput(false),
   m_DEMPath(""), m_ElevMgt(GCP), m_MeanElevation(0.), m_DEMHandler(),
   m_GCPsContainerHasChanged(false), m_MapReader(), m_TileIO(), m_PlaceName(""),
   m_Latitude(0.), m_Longitude(0.), m_Depth(2), m_SelectedLatitude(0.),
@@ -41,7 +41,7 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_CacheDirectory(""), m_MapVisualizationModel(), m_MapImageGenerator(),
   m_MapBlendingFunction(), m_PlaceNameChanged(false), m_LatLongChanged(false),
   m_DepthChanged(false), m_HasNewMap(false), m_SelectedPointChanged(false),
-  m_CrossIndexesContainer()
+  m_CrossIndexesContainer(), m_MinNbOfGCP(4)
 {
   // Visualization
   m_VisualizationModel  = VisualizationModelType::New();
@@ -493,6 +493,14 @@ GCPToSensorModelModel
   m_Output->UpdateOutputInformation();
 
   m_OutputChanged = true;
+  this->NotifyAll();
+}
+
+void
+GCPToSensorModelModel
+::Quit()
+{
+  m_QuitWithoutOutput = true;
   this->NotifyAll();
 }
 

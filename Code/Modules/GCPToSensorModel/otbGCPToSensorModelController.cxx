@@ -303,19 +303,37 @@ GCPToSensorModelController
     }
 }
 
-void
+bool
 GCPToSensorModelController
 ::OK()
 {
-  try
+  if( m_View->GetNumberOfGCPPoints() >= m_Model->GetMinNbOfGCP() )
     {
-    m_Model->OK();
+      try
+        {
+          m_Model->OK();
+        }
+      catch (itk::ExceptionObject& err)
+        {
+          MsgReporter::GetInstance()->SendError(err.GetDescription());
+          return false;
+        }
+      return true;
     }
-  catch (itk::ExceptionObject& err)
+  else
     {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    return;
+      itk::OStringStream oss;
+      oss<<"The module waits for "<<m_Model->GetMinNbOfGCP()<<" GCP points to compute the sensor model, only "<<m_View->GetNumberOfGCPPoints()<<" provided."<<std::endl;
+      MsgReporter::GetInstance()->SendError( oss.str().c_str());
+      return false;
     }
+}
+
+void
+GCPToSensorModelController
+::Quit()
+{
+  m_Model->Quit();
 }
 
 void
