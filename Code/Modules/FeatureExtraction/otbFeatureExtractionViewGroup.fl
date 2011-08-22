@@ -404,7 +404,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
             xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
           } {
             Fl_Group guiNothing {
-              xywh {200 318 246 140} color 7 hide
+              xywh {200 318 246 140} color 7
             } {}
             Fl_Group guiTouzi {
               xywh {200 318 246 140} hide
@@ -911,7 +911,7 @@ SetFeatureType(otb::FeatureInfo::ORIGINAL);}
               }
             }
             Fl_Group guiHaralick {open
-              xywh {200 318 246 140}
+              xywh {200 318 246 140} hide
             } {
               Fl_Check_Browser guiHarList {
                 xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
@@ -1027,7 +1027,7 @@ guiHarMax->value(guiHarMin->value());
                 callback {this->UpdateAdvHarMinMax();}
                 tooltip {Set min/max or use the estimated values.} xywh {364 394 11 11} down_box DOWN_BOX value 1
               }
-              Fl_Group guiAdvHarIm {open selected
+              Fl_Group guiAdvHarIm {open
                 xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
               } {
                 Fl_Value_Input guiAdvHarMin {
@@ -1116,8 +1116,10 @@ guiAdvHarMax->value(guiAdvHarMin->value());
           }
           Fl_Browser guiFeatureListAction {
             label {Feature Image List}
-            callback {UpdateFeaturePreview();}
-            tooltip {Contains each Computed Feature} xywh {456 318 200 205} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+            callback {UpdateFeaturePreview();} selected
+            tooltip {Contains each Computed Feature.
+The selected one is display in the Feature view.
+Pay attention, the dynamic is adapted to the extract.} xywh {456 318 200 205} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
           }
           Fl_Text_Display guiFeatInfo {
             label {Feature Information}
