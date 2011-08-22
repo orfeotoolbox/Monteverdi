@@ -97,7 +97,7 @@ std::string MonteverdiModel::CreateModuleByKey(const std::string& key)
 
     // Register module instance
     module->SetInstanceId(oss.str());
-    m_ModuleMap.push_back( module );//[oss.str()] = module;
+    m_ModuleMap.push_back( module ); //[oss.str()] = module;
     m_ConnectionGraph->AddVertex(oss.str());
 
     // Register the main model to receive events from the new module
