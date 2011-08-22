@@ -63,7 +63,8 @@ protected:
   };
 
   /** Map of open modules */
-  typedef std::map<std::string, Module::Pointer> ModuleMapType;
+  //typedef std::map<std::string, Module::Pointer> ModuleMapType;
+  typedef std::vector<Module::Pointer> ModuleMapType;
 
   // Map of registered modules
   typedef std::map<std::string, RegisteredModuleDescriptor> ModuleDescriptorMapType;

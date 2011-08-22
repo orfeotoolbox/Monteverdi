@@ -315,7 +315,21 @@ MonteverdiViewGUI
 
     std::string moduleId   = n->label();
 
-    bool canShowModule = m_MonteverdiModel->GetModuleMap()[moduleId]->CanShow();
+    // Look for the instance id
+    ModuleMapType::const_iterator mcIt = m_MonteverdiModel->GetModuleMap().begin();
+    ModuleMapType::const_iterator mcItEnd = m_MonteverdiModel->GetModuleMap().end();
+
+    for(; mcIt!= mcItEnd; mcIt++)
+      {
+        if( (*mcIt)->GetInstanceId() == moduleId)
+          break;
+      }
+    if( mcIt == mcItEnd )
+      {
+        itkExceptionMacro(<< "No module found with instanceId " << moduleId << ".");
+      }
+    
+    bool canShowModule = (*mcIt)->CanShow();
     m_Tree->GetModuleMenu()->LaunchModuleMenu(canShowModule);
     if (m_Tree->GetModuleMenu()->GetModuleMenuOutput() == RENAME_MODULE)
       {
@@ -327,8 +341,8 @@ MonteverdiViewGUI
     //Show the module with current parameters
     if (m_Tree->GetModuleMenu()->GetModuleMenuOutput() == (SHOW_MODULE && canShowModule))
       {
-      //Call controller?
-      m_MonteverdiModel->GetModuleMap()[moduleId]->Show();
+        //Call controller?
+        (*mcIt)->Show();
       }
     }
   // node is a output
@@ -681,7 +695,7 @@ MonteverdiViewGUI
     {
     for (iter = modMap.begin(); iter != modMap.end(); iter++)
       {
-      (*iter).second->Hide();
+      (*iter)->Hide();
       }
     }
 

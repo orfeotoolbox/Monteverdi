@@ -97,7 +97,7 @@ std::string MonteverdiModel::CreateModuleByKey(const std::string& key)
 
     // Register module instance
     module->SetInstanceId(oss.str());
-    m_ModuleMap[oss.str()] = module;
+    m_ModuleMap.push_back( module );//[oss.str()] = module;
     m_ConnectionGraph->AddVertex(oss.str());
 
     // Register the main model to receive events from the new module
@@ -134,7 +134,7 @@ const std::vector<std::string> MonteverdiModel::GetAvailableModuleInstanceIds() 
   ModuleMapType::const_iterator mcIt;
   for (mcIt = m_ModuleMap.begin(); mcIt != m_ModuleMap.end(); mcIt++)
     {
-    availableModulesInstances.push_back(mcIt->first);
+      availableModulesInstances.push_back( (*mcIt)->GetInstanceId() );
     }
   return availableModulesInstances;
 }
@@ -156,12 +156,17 @@ const
 /** Get the pointer to the module by an instanceId */
 Module * MonteverdiModel::GetModuleByInstanceId(const std::string& instanceId) const
 {
-  ModuleMapType::const_iterator it_in;
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.begin();
 
-  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(instanceId);
+  for(; mcIt!= m_ModuleMap.end(); mcIt++)
+    {
+      if( (*mcIt)->GetInstanceId() == instanceId)
+        break;
+    }
+
   if (mcIt != m_ModuleMap.end())
     {
-    return mcIt->second;
+      return (*mcIt);
     }
   else
     {
@@ -231,7 +236,14 @@ void MonteverdiModel::AddGraphConnection(const std::string& sourceModuleId,
 void MonteverdiModel::ChangeInstanceId(const std::string& oldInstanceId,  const std::string& newInstanceId)
 {
   // Look for the old instance id
-  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(oldInstanceId);
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.begin();
+  unsigned int oldId = 0;
+  for(; mcIt!= m_ModuleMap.end(); mcIt++)
+    {
+      oldId++;
+      if( (*mcIt)->GetInstanceId() == oldInstanceId)
+        break;
+    }
 
   if (mcIt == m_ModuleMap.end())
     {
@@ -256,18 +268,26 @@ void MonteverdiModel::ChangeInstanceId(const std::string& oldInstanceId,  const 
     }
 
   // Check if the new instanceId is in use
-  if (m_ModuleMap.count(newInstanceId) > 0)
+  ModuleMapType::const_iterator mcItTmp = m_ModuleMap.begin();
+  unsigned int count = 0;
+  for(; mcItTmp!= m_ModuleMap.end(); mcItTmp++)
     {
-    itkExceptionMacro(<< "InstanceId " << newInstanceId << " already exists");
+      if( (*mcItTmp)->GetInstanceId() == newInstanceId)
+        count++;
+    }
+  
+  if ( count > 0)
+    {
+    itkExceptionMacro(<< "InstanceId " << newInstanceId << " already exists.");
     }
 
   // Retrieve the module pointer
-  Module::Pointer module = mcIt->second;
+  Module::Pointer module = (*mcIt);
 
   // Register module instance
   module->SetInstanceId(newInstanceId);
-  m_ModuleMap[newInstanceId] = module;
-  m_ModuleMap.erase(oldInstanceId);
+  m_ModuleMap.push_back( module );
+  m_ModuleMap.erase( m_ModuleMap.begin() + oldId);
 }
 
 void MonteverdiModel::ChangeOutputDataKey(const std::string& instanceId,
@@ -275,14 +295,22 @@ void MonteverdiModel::ChangeOutputDataKey(const std::string& instanceId,
                                           const std::string& newKey)
 {
   // Look for the old instance id
-  ModuleMapType::const_iterator mcIt = m_ModuleMap.find(instanceId);
+  ModuleMapType::const_iterator mcIt = m_ModuleMap.begin();
+  unsigned int oldId = 0;
+  for(; mcIt!= m_ModuleMap.end(); mcIt++)
+    {
+      oldId++;
+      if( (*mcIt)->GetInstanceId() == instanceId)
+        break;
+    }
 
   if (mcIt == m_ModuleMap.end())
     {
-    itkExceptionMacro(<< "No module found with instanceId " << instanceId << ".");
+      itkExceptionMacro(<< "No module found with instanceId " << instanceId << ".");
     }
+  
 
-  mcIt->second->ChangeOutputKey(oldKey, newKey);
+  (*mcIt)->ChangeOutputKey(oldKey, newKey);
 
   // Update connection graph as well
 
@@ -410,7 +438,7 @@ void MonteverdiModel::StartWriting(const std::string& instanceId, const std::str
 
   // Register module instance
   writer->SetInstanceId(oss.str());
-  m_ModuleMap[oss.str()] = writer;
+  m_ModuleMap.push_back( static_cast< Module::Pointer >(writer) );
   m_ConnectionGraph->AddVertex(oss.str());
 
   // Add the graph connection
@@ -451,7 +479,7 @@ void MonteverdiModel::StartViewing(const std::string& instanceId, const std::str
 
   // Register module instance
   viewer->SetInstanceId(oss.str());
-  m_ModuleMap[oss.str()] = viewer;
+  m_ModuleMap.push_back( static_cast<Module::Pointer>(viewer) );
   m_ConnectionGraph->AddVertex(oss.str());
 
   // Add the graph connection
