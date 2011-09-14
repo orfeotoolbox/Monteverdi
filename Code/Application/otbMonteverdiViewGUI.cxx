@@ -316,8 +316,9 @@ MonteverdiViewGUI
     std::string moduleId   = n->label();
 
     // Look for the instance id
-    ModuleMapType::const_iterator mcIt = m_MonteverdiModel->GetModuleMap().begin();
-    ModuleMapType::const_iterator mcItEnd = m_MonteverdiModel->GetModuleMap().end();
+    ModuleMapType modMap = m_MonteverdiModel->GetModuleMap();
+    ModuleMapType::const_iterator mcIt =  modMap.begin();
+    ModuleMapType::const_iterator mcItEnd = modMap.end();
 
     for(; mcIt!= mcItEnd; mcIt++)
       {
