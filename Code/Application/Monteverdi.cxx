@@ -167,10 +167,11 @@ int main(int argc, char* argv[])
 #endif
 
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
-  if (otb::CurlHelperInterface::IsCurlAvailable())
-    {
+
+#ifdef OTB_USE_CURL
     model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
-    }
+#endif
+
   model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Image Statistics"));
 
   /***********  Visu menu *******************/
