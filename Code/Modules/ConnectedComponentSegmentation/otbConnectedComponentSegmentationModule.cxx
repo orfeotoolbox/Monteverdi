@@ -290,6 +290,7 @@ void ConnectedComponentSegmentationModule::OBIA_functor_init()
 
   if (!m_StatsReducedSetOfAttributes)
     {
+    m_StatAttributes.push_back("Elongation");
     m_StatAttributes.push_back("CenterOfGravity0");
     m_StatAttributes.push_back("CenterOfGravity1");
     m_StatAttributes.push_back("FirstMaximumIndex0");
