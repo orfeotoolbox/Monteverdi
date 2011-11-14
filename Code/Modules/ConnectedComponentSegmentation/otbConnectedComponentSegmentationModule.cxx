@@ -185,7 +185,9 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   uiTmpOutputSelection->value(INPUT_IMAGE);
 
   // Describe inputs
-  this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, false);
+
+  this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, true);
+  this->AddTypeToInputDescriptor<ImageType> ("InputImage");
 
 }
 
