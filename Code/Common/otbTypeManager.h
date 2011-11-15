@@ -23,6 +23,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbVectorData.h"
+#include "otbImageWithQuicklook.h"
 #include "itkFixedArray.h"
 
 #include "itkObject.h"
@@ -75,6 +76,8 @@ public:
   // Vector Data Types
   typedef otb::VectorData<double>                        Vector_Data;
   typedef otb::VectorData<double, 2, short unsigned int> Labeled_Vector_Data;
+
+  typedef otb::ImageWithQuicklook<Label_Short_Precision, 2> UInt16ImageWithQuicklook;
 
   /** Standard type macro */
   itkTypeMacro(TypeManager, itk::Object);

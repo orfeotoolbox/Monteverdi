@@ -96,6 +96,7 @@ protected:
   virtual void Hide();
 
   void OpenRealImage();
+  void OpenRealImageWithQuicklook();
 
   void OpenComplexImage();
 

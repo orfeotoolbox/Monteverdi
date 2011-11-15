@@ -330,9 +330,6 @@ void ReaderModule::OpenRealImage()
     filepath += ossDatasetId.str();
   }
 
-  m_FPVReader->SetFileName(filepath);
-  m_FPVReader->GenerateOutputInformation();
-
   // Add the full data set as a descriptor
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
@@ -345,7 +342,14 @@ void ReaderModule::OpenRealImage()
     ossId << vName->value();
     }
 
+  m_FPVReader->SetFileName(filepath);
+  m_FPVReader->GenerateOutputInformation();
   this->AddOutputDescriptor(m_FPVReader->GetOutput(), ossId.str(), oss.str(), true);
+}
+
+void ReaderModule::OpenRealImageWithQuicklook()
+{
+
 }
 
 void ReaderModule::OpenMultiComplexImage()

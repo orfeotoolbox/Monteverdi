@@ -48,6 +48,8 @@ TypeManager::TypeManager() : m_IdToNameMap()
 
   this->RegisterType<Vector_Data>("Vector_Data");
   this->RegisterType<Labeled_Vector_Data>("Labeled_Vector_Data");
+
+  this->RegisterType<UInt16ImageWithQuicklook>("PleiadesImage");
 }
 
 /** Destructor */
