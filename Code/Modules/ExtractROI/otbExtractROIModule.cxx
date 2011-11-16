@@ -31,6 +31,7 @@ ExtractROIModule::ExtractROIModule()
   // Describe inputs
   this->AddInputDescriptor<FloatingImageType>("InputImage", otbGetTextMacro("Image to read"));
   this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
+  this->AddTypeToInputDescriptor<FloatImageWithQuicklook>("InputImage");
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
   m_ImageExtractROIFilter       = ImageExtractROIFilterType::New();
   m_Transform                   = TransformType::New();
@@ -95,8 +96,9 @@ void ExtractROIModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 /** The custom run command */
 void ExtractROIModule::Run()
 {
-  FloatingImageType::Pointer       image              = this->GetInputData<FloatingImageType>("InputImage");
-  FloatingVectorImageType::Pointer vectorImage  = this->GetInputData<FloatingVectorImageType>("InputImage");
+  FloatingImageType::Pointer       image         = this->GetInputData<FloatingImageType>("InputImage");
+  FloatingVectorImageType::Pointer vectorImage   = this->GetInputData<FloatingVectorImageType>("InputImage");
+  FloatImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<FloatImageWithQuicklook>("InputImage");
 
   itk::ImageRegion<2> imageRegion;
 
@@ -107,7 +109,7 @@ void ExtractROIModule::Run()
   vLong2->activate();
   vLatitude2->activate();
 
-  if (!image.IsNull() && vectorImage.IsNull())
+  if (image.IsNotNull())
     {
     image->UpdateOutputInformation();
     imageRegion = image->GetLargestPossibleRegion();
@@ -151,7 +153,7 @@ void ExtractROIModule::Run()
          MsgReporter::GetInstance()->SendError(e.GetDescription());
       }
     }
-  else if (image.IsNull() && !vectorImage.IsNull())
+  else if (vectorImage.IsNotNull())
     {
     vectorImage->UpdateOutputInformation();
     imageRegion = vectorImage->GetLargestPossibleRegion();
@@ -162,6 +164,53 @@ void ExtractROIModule::Run()
 
     FltkFilterWatcher qlwatcher(m_VectorGenerator->GetProgressSource(), 0, 0, 200, 20,
                                 otbGetTextMacro("Generating QuickLook ..."));
+    m_VectorGenerator->GenerateLayer();
+    m_Model->AddLayer(m_VectorGenerator->GetLayer());
+
+    try
+      {
+      const itk::MetaDataDictionary& inputDict = vectorImage->GetMetaDataDictionary();
+      m_Transform->SetInputDictionary(inputDict);
+      m_Transform->SetInputProjectionRef(vectorImage->GetProjectionRef());
+//      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
+//      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
+      m_Transform->InstanciateTransform();
+
+      isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
+
+      if (isNotAProjection)
+        {
+        vLong1->deactivate();
+        vLatitude1->deactivate();
+        vLong2->deactivate();
+        vLatitude2->deactivate();
+        bUpdate->deactivate();
+        }
+      }
+    catch (itk::ExceptionObject& e)
+      {
+      vLong1->deactivate();
+      vLatitude1->deactivate();
+      vLong2->deactivate();
+      vLatitude2->deactivate();
+      bUpdate->deactivate();
+         MsgReporter::GetInstance()->SendError(e.GetDescription());
+      }
+    }
+  else if (vectorImageQL.IsNotNull())
+    {
+    vectorImage = vectorImageQL->GetImage();
+    vectorImage->UpdateOutputInformation();
+    imageRegion = vectorImage->GetLargestPossibleRegion();
+
+    /** Add view */
+    m_VectorGenerator = VectorLayerGeneratorType::New();
+    m_VectorGenerator->SetImage(vectorImage);
+
+    m_VectorGenerator->GenerateQuicklookOff();
+    m_VectorGenerator->SetQuicklook(vectorImageQL->GetQuicklook());
+    m_VectorGenerator->SetSubsamplingRate(10);
+
     m_VectorGenerator->GenerateLayer();
     m_Model->AddLayer(m_VectorGenerator->GetLayer());
 
@@ -238,12 +287,12 @@ void ExtractROIModule::Run()
     lIndexEnd[0]    = static_cast<long int>(lIndexStart[0] + vSizeX->value() - 1);
     lIndexEnd[1]    = static_cast<long int>(lIndexStart[1] + vSizeY->value() - 1);
 
-    if (!image.IsNull() && vectorImage.IsNull())
+    if (image.IsNotNull())
       {
       image->TransformIndexToPhysicalPoint(lIndexStart, pto1);
       image->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
       }
-    else if (image.IsNull() && !vectorImage.IsNull())
+    else if (vectorImage.IsNotNull())
       {
       vectorImage->TransformIndexToPhysicalPoint(lIndexStart, pto1);
       vectorImage->TransformIndexToPhysicalPoint(lIndexEnd, pto2);
@@ -390,10 +439,11 @@ void ExtractROIModule::Ok()
     {
     FloatingImageType::Pointer       image = this->GetInputData<FloatingImageType>("InputImage");
     FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
+    FloatImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<FloatImageWithQuicklook>("InputImage");
 
     IndexType  idxInit;
     OffsetType offSize;
-    if (!image.IsNull() && vectorImage.IsNull())
+    if (image.IsNotNull())
       {
       // Get input image
       FloatingImageType::Pointer image = this->GetInputData<FloatingImageType>("InputImage");
@@ -420,7 +470,7 @@ void ExtractROIModule::Ok()
 
       this->NotifyOutputsChange();
       }
-    else if (image.IsNull() && !vectorImage.IsNull())
+    else if (vectorImage.IsNotNull())
       {
       // Get Input Vector Image
       FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputImage");
@@ -449,7 +499,32 @@ void ExtractROIModule::Ok()
       this->NotifyOutputsChange();
 
       }
+    else if (vectorImageQL.IsNotNull())
+      {
+      idxInit[0] = static_cast<unsigned long>(vStartX->value());
+      idxInit[1] = static_cast<unsigned long>(vStartY->value());
 
+      offSize[0] = static_cast<unsigned long>(vSizeX->value());
+      offSize[1] = static_cast<unsigned long>(vSizeY->value());
+
+      m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
+      m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
+      m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
+      m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
+      m_VectorImageExtractROIFilter->SetInput(vectorImageQL->GetImage());
+
+      this->ClearOutputDescriptors();
+      this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
+                                otbGetTextMacro("Image extracted"));
+
+     /* VectorImageRegionType newRequestedRegion;
+      newRequestedRegion.SetSize(0, 0);
+      newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()), static_cast<unsigned long>(vStartY->value()));
+      m_VectorImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion); */
+
+      this->NotifyOutputsChange();
+
+      }
     wExtractROIWindow->hide();
     }
   catch (itk::ExceptionObject& err)

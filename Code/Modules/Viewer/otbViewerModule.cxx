@@ -206,6 +206,7 @@ ViewerModule::ViewerModule() :
   this->AddInputDescriptor<ImageType> ("InputImage", otbGetTextMacro("Image to display"), false, true);
   this->AddTypeToInputDescriptor<SingleImageType> ("InputImage");
   this->AddTypeToInputDescriptor<LabeledImageType> ("InputImage");
+  this->AddTypeToInputDescriptor<FloatImageWithQuicklook> ("InputImage");
   this->AddInputDescriptor<VectorDataType> ("VectorData", otbGetTextMacro("Vector data to display"), true, true);
 
   // Build GUI
@@ -251,6 +252,7 @@ void ViewerModule::Run()
 
     // Get the input image
     ImageType::Pointer image = this->GetInputData<ImageType> ("InputImage", i);
+    FloatImageWithQuicklook::Pointer imageQL = this->GetInputData<FloatImageWithQuicklook> ("InputImage", i);
 
     // If the image pointer is null, the data is probably a single band
     // (single image)
@@ -260,8 +262,6 @@ void ViewerModule::Run()
       // If the input image is an otb::Image instead of VectorImage then
       // cast it in Vector Image and continue the processing
       SingleImageType::Pointer singleImage = this->GetInputData<SingleImageType> ("InputImage", i);
-      LabeledImageType::Pointer labeledImage = this->GetInputData<LabeledImageType> ("InputImage", i);
-
       if (singleImage.IsNotNull())
         {
         CastSingleImageFilter::Pointer castFilter = CastSingleImageFilter::New();
@@ -274,6 +274,7 @@ void ViewerModule::Run()
         desc = this->GetInputDataDescription<SingleImageType> ("InputImage", i);
         }
 
+      LabeledImageType::Pointer labeledImage = this->GetInputData<LabeledImageType> ("InputImage", i);
       if (labeledImage.IsNotNull())
         {
         CastLabeledImageFilter::Pointer labeledCastFilter = CastLabeledImageFilter::New();
@@ -281,6 +282,14 @@ void ViewerModule::Run()
 
         labeledCastFilter->SetInput(labeledImage);
         image = labeledCastFilter->GetOutput();
+
+        // Get the description
+        desc = this->GetInputDataDescription<LabeledImageType> ("InputImage", i);
+        }
+
+      if (imageQL.IsNotNull())
+        {
+        image = imageQL->GetImage();
 
         // Get the description
         desc = this->GetInputDataDescription<LabeledImageType> ("InputImage", i);
@@ -326,10 +335,18 @@ void ViewerModule::Run()
     // Generate the layer
     ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
     generator->SetImage(image);
-    FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20,
-                                otbGetTextMacro("Generating QuickLook ..."));
+
+    if (imageQL.IsNotNull())
+      {
+      generator->GenerateQuicklookOff();
+      generator->SetQuicklook(imageQL->GetQuicklook());
+      generator->SetSubsamplingRate(10);
+      }
+
     try
       {
+      FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20,
+                                  otbGetTextMacro("Generating QuickLook ..."));
       generator->GenerateLayer();
       }
     catch (itk::ExceptionObject & err)

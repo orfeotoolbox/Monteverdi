@@ -113,6 +113,7 @@ public:
   typedef TypeManager::Floating_Point_VectorImage   ImageType;
   typedef TypeManager::Vector_Data                  VectorDataType;
   typedef TypeManager::Labeled_Short_Image          LabeledImageType;
+  typedef TypeManager::FloatImageWithQuicklook      FloatImageWithQuicklook;
 
   /** WidgetManager related types definition */
   typedef WidgetManager                             WidgetManagerType;
