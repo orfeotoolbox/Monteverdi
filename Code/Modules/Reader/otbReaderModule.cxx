@@ -26,6 +26,9 @@
 #include "otbMsgReporter.h"
 #include "otbI18n.h"
 
+#include "otbStreamingShrinkImageFilter.h"
+#include "otbFltkFilterWatcher.h"
+
 namespace otb
 {
 /** Constructor */
@@ -205,7 +208,8 @@ void ReaderModule::OpenDataSet()
     switch (vType->value())
       {
       case 1:
-        this->OpenRealImage();
+        //this->OpenRealImage();
+        this->OpenRealImageWithQuicklook();
         break;
       case 2:
         if (m_MultibandComplexImage)
@@ -349,7 +353,50 @@ void ReaderModule::OpenRealImage()
 
 void ReaderModule::OpenRealImageWithQuicklook()
 {
+  // First, clear any existing output
+  this->ClearOutputDescriptors();
+  std::ostringstream oss, ossId, ossDatasetId;
+  std::string   filepath = vFilePath->value();
 
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  {
+    filepath += ":";
+    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
+    filepath += ossDatasetId.str();
+  }
+
+  // Add the full data set as a descriptor
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+    {
+    oss << "Image+QL read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    ossId << vName->value(); //m_Desc[vDataset->value()];
+    }
+  else
+    {
+    oss << "Image+QL read from file: " <<  itksys::SystemTools::GetFilenameName(filepath);
+    ossId << vName->value();
+    }
+
+  m_FPVReader->SetFileName(filepath);
+  m_FPVReader->GenerateOutputInformation();
+
+  ImageWithQuicklook::Pointer imageWithQL = ImageWithQuicklook::New();
+  imageWithQL->SetImage(m_FPVReader->GetOutput());
+
+  typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType> StreamingShrinkImageFilterType;
+  StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+  shrinker->SetInput(m_FPVReader->GetOutput());
+  FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
+                              otbGetTextMacro("Generating QuickLook ..."));
+  shrinker->Update();
+
+  FloatingVectorImageType::Pointer ql = shrinker->GetOutput();
+  ql->DisconnectPipeline();
+
+  imageWithQL->SetImage(m_FPVReader->GetOutput());
+  imageWithQL->SetQuicklook(ql);
+
+  this->AddOutputDescriptor(imageWithQL, ossId.str(), oss.str(), true);
 }
 
 void ReaderModule::OpenMultiComplexImage()

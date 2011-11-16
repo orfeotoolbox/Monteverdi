@@ -77,7 +77,7 @@ public:
   typedef otb::VectorData<double>                        Vector_Data;
   typedef otb::VectorData<double, 2, short unsigned int> Labeled_Vector_Data;
 
-  typedef otb::ImageWithQuicklook<Label_Short_Precision, 2> UInt16ImageWithQuicklook;
+  typedef otb::ImageWithQuicklook<Floating_Point_Precision, 2> FloatImageWithQuicklook;
 
   /** Standard type macro */
   itkTypeMacro(TypeManager, itk::Object);

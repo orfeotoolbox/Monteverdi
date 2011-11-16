@@ -622,9 +622,17 @@ MonteverdiViewGUI
 
       it++;
       }
-    else
+    else if (it->GetDataType() == "PleiadesImage")
       {
-      new_node->branch_icons(&blue_dot, &blue_dot);
+      new_node = n->add_branch(it->GetDataKey().c_str());
+      new_node->parent()->open(true);
+
+      new_node_info = new_node->add_branch(m_BranchNameInfo.c_str());
+      new_node_info->add(it->GetDataDescription().c_str());
+      new_node_info->add(it->GetDataType().c_str());
+      new_node_info->branch_icons(&book, &book);
+
+      new_node->branch_icons(&vectorData, &vectorData);
       it++;
       }
 

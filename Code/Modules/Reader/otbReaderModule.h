@@ -68,6 +68,8 @@ public:
   typedef TypeManager::Vector_Data         VectorType;
   typedef TypeManager::Labeled_Vector_Data LabeledVectorType;
 
+  typedef TypeManager::FloatImageWithQuicklook ImageWithQuicklook;
+
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
   typedef ImageFileReader<ComplexImageType>        ComplexImageReaderType;

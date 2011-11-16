@@ -46,7 +46,10 @@ public:
   typedef otb::VectorImage<TPixel, VImageDimension> VectorImageType;
 
   itkGetObjectMacro(Image, VectorImageType);
+  itkSetObjectMacro(Image, VectorImageType);
+
   itkGetObjectMacro(Quicklook, VectorImageType);
+  itkSetObjectMacro(Quicklook, VectorImageType);
 
 protected:
   /** Constructor */
