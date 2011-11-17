@@ -127,6 +127,9 @@ private:
   /** Detect if the file is a hdf file read its subdataset info. In our case a hdf file is composed of subdataset and readable with GDAL */
   bool IsHdfFile(std::string filepath);
 
+  /** Detect if the file is a JP2 file read its subdataset info */
+  bool IsJP2File(std::string filepath);
+
   /** Detect and replace "/" in m_Desc strings to avoid problem with Choice Widget vDataset*/
   bool CheckDataSetString();
 

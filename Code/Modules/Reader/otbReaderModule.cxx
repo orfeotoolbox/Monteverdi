@@ -29,8 +29,21 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 
+#include "otbJPEG2000ImageIO.h"
+
 namespace otb
 {
+
+enum ImageType
+{
+  ImageType_Unknown = 0,
+  ImageType_RealImage,
+  ImageType_ComplexImage,
+  ImageType_VectorData,
+  ImageType_PleiadesImage
+};
+
+
 /** Constructor */
 ReaderModule::ReaderModule()
 {
@@ -50,7 +63,8 @@ ReaderModule::ReaderModule()
   vType->add(otbGetTextMacro("Real image"));
   vType->add(otbGetTextMacro("Complex image"));
   vType->add(otbGetTextMacro("Vector Data"));
-  vType->value(0);
+  vType->add(otbGetTextMacro("Pleiades Image"));
+  vType->value(ImageType_Unknown);
 
   // Deactivate ok for now
   bOk->deactivate();
@@ -86,6 +100,7 @@ void ReaderModule::Analyse()
 
   // Is hdf type
   bool typeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
+  bool typeJP2 = IsJP2File(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
 
   if (typeHdf)
     {
@@ -96,10 +111,15 @@ void ReaderModule::Analyse()
       vDataset->add(m_Desc[itSubDataset].c_str());
       }
     vDataset->set_visible();
-    vDataset->value(0);
+    vDataset->value(ImageType_Unknown);
     vDataset->activate();
 
-    vType->value(1); // We assume that hdf file is composed of real image
+    vType->value(ImageType_RealImage); // We assume that hdf file is composed of real image
+    bOk->activate();
+    }
+  else if (typeJP2)
+    {
+    vType->value(ImageType_PleiadesImage);
     bOk->activate();
     }
   else
@@ -116,7 +136,7 @@ void ReaderModule::Analyse()
         {
         if ((dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex())
           { // Complex Data
-          vType->value(2);
+          vType->value(ImageType_ComplexImage);
           typeFound = true;
           // Detect if it is a Mono or Multiband Complex Image
           if (m_FPVReader->GetImageIO()->GetNumberOfComponents() / 2 == 1) // cf otb and its management of conversion of Multi/MonobandComplexImage for /2
@@ -129,8 +149,8 @@ void ReaderModule::Analyse()
             }
           }
         else
-          { // Real Data
-          vType->value(1);
+          {
+          vType->value(ImageType_RealImage);
           typeFound = true;
           }
         }
@@ -139,12 +159,12 @@ void ReaderModule::Analyse()
         switch (m_FPVReader->GetImageIO()->GetPixelType())
           {
           case itk::ImageIOBase::COMPLEX: // handle the radar case
-            vType->value(2);
+            vType->value(ImageType_ComplexImage);
             // If we are still here, this is a readable image
             typeFound = true;
             break;
           default: // handle the real case
-            vType->value(1);
+            vType->value(ImageType_RealImage);
             // If we are still here, this is a readable image
             typeFound = true;
             break;
@@ -163,20 +183,20 @@ void ReaderModule::Analyse()
         VectorReaderType::Pointer vectorReader = VectorReaderType::New();
         vectorReader->SetFileName(filepath);
         vectorReader->GenerateOutputInformation();
-        vType->value(3);
+        vType->value(ImageType_VectorData);
         typeFound = true;
         }
       catch (itk::ExceptionObject&)
         {
         // Silent catch
-        vType->value(0);
+        vType->value(ImageType_Unknown);
         }
       }
 
     // Activate/ deactivate ok
     if (!typeFound)
       {
-      vType->value(0);
+      vType->value(ImageType_Unknown);
       bOk->deactivate();
       }
     else
@@ -207,11 +227,10 @@ void ReaderModule::OpenDataSet()
     {
     switch (vType->value())
       {
-      case 1:
-        //this->OpenRealImage();
-        this->OpenRealImageWithQuicklook();
+      case ImageType_RealImage:
+        this->OpenRealImage();
         break;
-      case 2:
+      case ImageType_ComplexImage:
         if (m_MultibandComplexImage)
           {
           // Only sar image readable by gdal can go here
@@ -243,8 +262,11 @@ void ReaderModule::OpenDataSet()
           this->OpenComplexImage();
           }
         break;
-      case 3:
+      case ImageType_VectorData:
         this->OpenVector();
+        break;
+      case ImageType_PleiadesImage:
+        this->OpenRealImageWithQuicklook();
         break;
       default:
         itkExceptionMacro(<< "Unknow dataset type.");
@@ -267,7 +289,7 @@ void ReaderModule::TypeChanged()
 {
   // Is type found is correct?
   bool typeFoundCorrect = false;
-  if (vType->value() > 0)
+  if (vType->value() != ImageType_Unknown)
     {
     // Get the path
     std::string filepath = vFilePath->value();
@@ -278,7 +300,9 @@ void ReaderModule::TypeChanged()
       // Read the image
       m_FPVReader->SetFileName(filepath);
       m_FPVReader->GenerateOutputInformation();
-      if (vType->value() < 3)
+      if (vType->value() == ImageType_RealImage
+          || vType->value() == ImageType_ComplexImage
+          || vType->value() == ImageType_PleiadesImage)
         {
         typeFoundCorrect = true;
         bOk->activate();
@@ -297,14 +321,14 @@ void ReaderModule::TypeChanged()
         VectorReaderType::Pointer vectorReader = VectorReaderType::New();
         vectorReader->SetFileName(filepath);
         vectorReader->GenerateOutputInformation();
-        if ( vType->value() != 3)
+        if ( vType->value() == ImageType_VectorData)
           {
           bOk->activate();
           }
         }
       catch (itk::ExceptionObject&)
         { // Silent catch
-        vType->value(0);
+        vType->value(ImageType_Unknown);
         bOk->deactivate();
         }
       }
@@ -368,12 +392,12 @@ void ReaderModule::OpenRealImageWithQuicklook()
   // Add the full data set as a descriptor
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
     {
-    oss << "Image+QL read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
     ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
     {
-    oss << "Image+QL read from file: " <<  itksys::SystemTools::GetFilenameName(filepath);
+    oss << "Image read from file: " <<  itksys::SystemTools::GetFilenameName(filepath);
     ossId << vName->value();
     }
 
@@ -516,6 +540,13 @@ bool ReaderModule::IsHdfFile(std::string filepath)
     return false; // GDAL cannot read this file
     }
   return true;
+}
+
+
+bool ReaderModule::IsJP2File(std::string filepath)
+{
+  JPEG2000ImageIO::Pointer jp2ImageIO = JPEG2000ImageIO::New();
+  return jp2ImageIO->CanReadFile(filepath.c_str());
 }
 
 bool ReaderModule::CheckDataSetString()
