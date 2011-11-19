@@ -136,6 +136,13 @@ private:
   /** Detect and replace "/" in m_Desc strings to avoid problem with Choice Widget vDataset*/
   bool CheckDataSetString();
 
+  /* Get the coarsest resolution overview from the file
+   * This function is optimized for JPEG2000 files
+   * If the file format does not provide support for overviews,
+   * use the standard StreamingShrinkImageFilter
+   *
+   * TODO: support GDAL Overviews */
+  FloatingVectorImageType::Pointer MakeQuicklook(std::string filepath);
 };
 
 } // End namespace otb

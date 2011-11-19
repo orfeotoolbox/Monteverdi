@@ -46,16 +46,15 @@ enum ImageType
 
 /** Constructor */
 ReaderModule::ReaderModule()
+: m_FPVReader(FPVReaderType::New()),
+  m_VectorReader(VectorReaderType::New()),
+  m_ComplexReader(ComplexImageReaderType::New()),
+  m_VComplexReader(VComplexImageReaderType::New()),
+  m_LabeledVectorReader(LabeledVectorReaderType::New()),
+  m_TypeHdf(false),
+  m_TypeJPEG2000(false),
+  m_MultibandComplexImage(false)
 {
-  // Build filters
-  m_FPVReader = FPVReaderType::New();
-  m_VectorReader = VectorReaderType::New();
-  m_LabeledVectorReader = LabeledVectorReaderType::New();
-  m_ComplexReader = ComplexImageReaderType::New();
-  m_VComplexReader = VComplexImageReaderType::New();
-
-  m_MultibandComplexImage = false;
-
   this->BuildGUI();
 
   // Expose supported data type:
@@ -71,9 +70,6 @@ ReaderModule::ReaderModule()
 
   // No name for now
   vName->value("");
-
-  m_TypeHdf = false;
-  m_TypeJPEG2000 = false;
 }
 
 /** Destructor */
@@ -401,13 +397,15 @@ void ReaderModule::OpenRealImageWithQuicklook()
   // First, clear any existing output
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId, ossDatasetId;
+
   std::string   filepath = vFilePath->value();
+  std::string   otbFilepath = filepath;
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
-    filepath += ":";
+    otbFilepath += ":";
     ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
-    filepath += ossDatasetId.str();
+    otbFilepath += ossDatasetId.str();
   }
 
   // Add the full data set as a descriptor
@@ -426,26 +424,48 @@ void ReaderModule::OpenRealImageWithQuicklook()
     ossId << vName->value();
     }
 
-  m_FPVReader->SetFileName(filepath);
+  m_FPVReader->SetFileName(otbFilepath);
   m_FPVReader->GenerateOutputInformation();
 
   ImageWithQuicklook::Pointer imageWithQL = ImageWithQuicklook::New();
   imageWithQL->SetImage(m_FPVReader->GetOutput());
-
-  typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType> StreamingShrinkImageFilterType;
-  StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
-  shrinker->SetInput(m_FPVReader->GetOutput());
-  FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
-                              otbGetTextMacro("Generating QuickLook ..."));
-  shrinker->Update();
-
-  FloatingVectorImageType::Pointer ql = shrinker->GetOutput();
-  ql->DisconnectPipeline();
-
-  imageWithQL->SetImage(m_FPVReader->GetOutput());
-  imageWithQL->SetQuicklook(ql);
+  imageWithQL->SetQuicklook(MakeQuicklook(filepath));
 
   this->AddOutputDescriptor(imageWithQL, ossId.str(), oss.str(), true);
+}
+
+ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::string filepath)
+{
+  FloatingVectorImageType::Pointer quicklook;
+
+  if (m_TypeJPEG2000)
+    {
+    FPVReaderType::Pointer qlReader = FPVReaderType::New();
+
+    qlReader->SetFileName(filepath);
+    if (!m_Desc.empty() && vDataset->visible() )
+      {
+      qlReader->SetAdditionalNumber(m_Desc.size() - 1);
+      }
+
+    qlReader->Update();
+    quicklook = qlReader->GetOutput();
+    quicklook->DisconnectPipeline();
+    }
+
+  if (quicklook.IsNull())
+    {
+    typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType> StreamingShrinkImageFilterType;
+    StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+    shrinker->SetInput(m_FPVReader->GetOutput());
+    FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
+                                otbGetTextMacro("Generating QuickLook ..."));
+    shrinker->Update();
+
+    quicklook = shrinker->GetOutput();
+    quicklook->DisconnectPipeline();
+    }
+  return quicklook;
 }
 
 void ReaderModule::OpenMultiComplexImage()
