@@ -72,8 +72,8 @@ ReaderModule::ReaderModule()
   // No name for now
   vName->value("");
 
-  bool m_TypeHdf = false;
-  bool m_TypeJPEG2000 = false;
+  m_TypeHdf = false;
+  m_TypeJPEG2000 = false;
 }
 
 /** Destructor */
