@@ -97,9 +97,14 @@ void ReaderModule::Analyse()
   // Is type found ?
   bool typeFound = false;
 
-  // Is hdf type
-  m_TypeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
   m_TypeJPEG2000 = IsJPEG2000File(filepath); // For us a JPEG2000 file is readable with JPEG2000ImageIO
+
+  // GDAL Jasper driver segfaults on Pleiades files
+  if (!m_TypeJPEG2000)
+    {
+    // For us a hdf file is composed of subdataset and readable with GDAL
+    m_TypeHdf = IsHdfFile(filepath);
+    }
 
   if (m_TypeHdf)
     {
