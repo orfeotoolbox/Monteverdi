@@ -32,6 +32,7 @@
 #include "otbVectorDataFileReader.h"
 
 #include "otbGDALImageIO.h"
+#include "otbJPEG2000ImageIO.h"
 
 namespace otb
 {
@@ -120,6 +121,8 @@ private:
   // Vector of string needed to manage hdf file
   std::vector<std::string>         m_Names;
   std::vector<std::string>         m_Desc;
+  bool m_TypeHdf;
+  bool m_TypeJPEG2000;
 
   /** Flag needed to select the openSAR method */
   bool m_MultibandComplexImage;
@@ -127,8 +130,8 @@ private:
   /** Detect if the file is a hdf file read its subdataset info. In our case a hdf file is composed of subdataset and readable with GDAL */
   bool IsHdfFile(std::string filepath);
 
-  /** Detect if the file is a JP2 file read its subdataset info */
-  bool IsJP2File(std::string filepath);
+  /** Detect if the file is a JPEG2000 file and read its resolution info. In our case a JPEG2000 file is readable with JPEG2000ImageIO */
+  bool IsJPEG2000File(std::string filepath);
 
   /** Detect and replace "/" in m_Desc strings to avoid problem with Choice Widget vDataset*/
   bool CheckDataSetString();

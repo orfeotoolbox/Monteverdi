@@ -71,6 +71,9 @@ ReaderModule::ReaderModule()
 
   // No name for now
   vName->value("");
+
+  bool m_TypeHdf = false;
+  bool m_TypeJPEG2000 = false;
 }
 
 /** Destructor */
@@ -99,10 +102,10 @@ void ReaderModule::Analyse()
   bool typeFound = false;
 
   // Is hdf type
-  bool typeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
-  bool typeJP2 = IsJP2File(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
+  m_TypeHdf = IsHdfFile(filepath); // For us a hdf file is composed of subdataset and readable with GDAL
+  m_TypeJPEG2000 = IsJPEG2000File(filepath); // For us a JPEG2000 file is readable with JPEG2000ImageIO
 
-  if (typeHdf)
+  if (m_TypeHdf)
     {
     CheckDataSetString();
     // Fill vDataset with subdataset descriptor info
@@ -113,14 +116,25 @@ void ReaderModule::Analyse()
     vDataset->set_visible();
     vDataset->value(ImageType_Unknown);
     vDataset->activate();
+    vDataset->copy_label("Please select the hdf sub dataset you want to open");
 
     vType->value(ImageType_RealImage); // We assume that hdf file is composed of real image
     bOk->activate();
     }
-  else if (typeJP2)
+  else if (m_TypeJPEG2000)
     {
+	  // Fill vDataset with resolution descriptor info
+	  for (unsigned int itRes = 0; itRes < (unsigned int) m_Desc.size(); itRes++)
+	    {
+	    vDataset->add(m_Desc[itRes].c_str());
+	    }
+	  vDataset->set_visible();
+	  vDataset->value(0);
+	  vDataset->activate();
+	  vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
+
     vType->value(ImageType_PleiadesImage);
-    bOk->activate();
+	  bOk->activate();
     }
   else
     {
@@ -209,13 +223,17 @@ void ReaderModule::Analyse()
 
   if (name.empty())
     {
-    if (typeHdf)
+    if (m_TypeHdf)
       {
       vName->value(m_Desc[0].c_str());
       }
+    else if (m_TypeJPEG2000)
+      {
+    	vName->value(m_Names[0].c_str());
+      }
     else
       {
-      std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(vFilePath->value());
+      std::string fname = itksys::SystemTools::GetFilenameWithoutLastExtension(vFilePath->value());
       vName->value(fname.c_str());
       }
     }
@@ -341,7 +359,10 @@ void ReaderModule::TypeChanged()
 
 void ReaderModule::DatasetChanged()
 {
-  vName->value(m_Desc[vDataset->value()].c_str());
+  if (m_TypeJPEG2000)
+	  vName->value(m_Names[vDataset->value()].c_str());
+  if (m_TypeHdf)
+    vName->value(m_Desc[vDataset->value()].c_str());
 }
 
 void ReaderModule::OpenRealImage()
@@ -390,9 +411,13 @@ void ReaderModule::OpenRealImageWithQuicklook()
   }
 
   // Add the full data set as a descriptor
-  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a file which need additional info
     {
-    oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    if (m_TypeHdf)
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    if (m_TypeJPEG2000)
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " RESOLUTION = " << ossDatasetId.str();
+
     ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
@@ -458,9 +483,13 @@ void ReaderModule::OpenComplexImage()
   m_VComplexReader->GenerateOutputInformation();
 
   // Add the full data set as a descriptor
-  if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
+  if (!m_Desc.empty() && vDataset->visible() ) // it is a file which need additional info
     {
-    oss << "Complex Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    if (m_TypeHdf)
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+    if (m_TypeJPEG2000)
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " RESOLUTION = " << ossDatasetId.str();
+
     ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
@@ -521,6 +550,8 @@ void ReaderModule::Hide()
 bool ReaderModule::IsHdfFile(std::string filepath)
 {
   GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  std::vector<string> names;
+
   // in case of hdr file (.hdr), GDAL want the header file as filepath
   string::size_type loc = filepath.find( ".hdr", 0 );
   if ( loc != string::npos )
@@ -530,7 +561,7 @@ bool ReaderModule::IsHdfFile(std::string filepath)
   readerGDAL->SetFileName(filepath);
   if (readerGDAL->CanReadFile(filepath.c_str()))
     {
-    if (!readerGDAL->GetSubDatasetInfo(m_Names, m_Desc))
+    if (!readerGDAL->GetSubDatasetInfo(names, m_Desc))
       {
       return false; // There are no subdataset in this file
       }
@@ -539,14 +570,48 @@ bool ReaderModule::IsHdfFile(std::string filepath)
     {
     return false; // GDAL cannot read this file
     }
+
+  for (unsigned int itID = 0; itID < names.size(); itID++)
+    {
+    std::string fname = itksys::SystemTools::GetFilenameWithoutLastExtension(filepath);
+
+    std::ostringstream oss;
+    oss << fname.c_str()  << "_SubDatasetID_"<< itID;
+    m_Names.push_back(oss.str());
+    }
+
   return true;
 }
 
-
-bool ReaderModule::IsJP2File(std::string filepath)
+bool ReaderModule::IsJPEG2000File(std::string filepath)
 {
-  JPEG2000ImageIO::Pointer jp2ImageIO = JPEG2000ImageIO::New();
-  return jp2ImageIO->CanReadFile(filepath.c_str());
+  JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+
+  std::vector<unsigned int> res;
+
+  readerJPEG2000->SetFileName(filepath);
+  if (readerJPEG2000->CanReadFile(filepath.c_str()))
+    {
+    if (!readerJPEG2000->GetResolutionInfo(res, m_Desc))
+      {
+      return false; // There are no resolution in this file
+      }
+    }
+  else
+    {
+    return false; // JPEG2000ImageIO cannot read this file
+    }
+
+  for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+    {
+    std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
+
+	  std::ostringstream oss;
+	  oss << fname.c_str()  << "_res_"<< *itRes;
+	  m_Names.push_back(oss.str());
+    }
+
+  return true;
 }
 
 bool ReaderModule::CheckDataSetString()
