@@ -51,6 +51,9 @@ public:
   itkGetObjectMacro(Quicklook, VectorImageType);
   itkSetObjectMacro(Quicklook, VectorImageType);
 
+  itkSetMacro(ShrinkFactor, unsigned int);
+  itkGetMacro(ShrinkFactor, unsigned int);
+
 protected:
   /** Constructor */
   ImageWithQuicklook() {}
@@ -70,6 +73,7 @@ private:
 
   typename VectorImageType::Pointer m_Image;
   typename VectorImageType::Pointer m_Quicklook;
+  unsigned int m_ShrinkFactor;
 
 };
 } // end namespace otb

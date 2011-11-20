@@ -209,7 +209,7 @@ void ExtractROIModule::Run()
 
     m_VectorGenerator->GenerateQuicklookOff();
     m_VectorGenerator->SetQuicklook(vectorImageQL->GetQuicklook());
-    m_VectorGenerator->SetSubsamplingRate(10);
+    m_VectorGenerator->SetSubsamplingRate(vectorImageQL->GetShrinkFactor());
 
     m_VectorGenerator->GenerateLayer();
     m_Model->AddLayer(m_VectorGenerator->GetLayer());

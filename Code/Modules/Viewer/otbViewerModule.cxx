@@ -340,7 +340,7 @@ void ViewerModule::Run()
       {
       generator->GenerateQuicklookOff();
       generator->SetQuicklook(imageQL->GetQuicklook());
-      generator->SetSubsamplingRate(10);
+      generator->SetSubsamplingRate(imageQL->GetShrinkFactor());
       }
 
     try

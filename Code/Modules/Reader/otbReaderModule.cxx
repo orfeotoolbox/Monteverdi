@@ -434,28 +434,32 @@ void ReaderModule::OpenRealImageWithQuicklook()
 
   ImageWithQuicklook::Pointer imageWithQL = ImageWithQuicklook::New();
   imageWithQL->SetImage(m_FPVReader->GetOutput());
-  imageWithQL->SetQuicklook(MakeQuicklook(filepath));
-
+  unsigned int shrinkFactor = 1;
+  FloatingVectorImageType::Pointer quicklook = MakeQuicklook(filepath, shrinkFactor);
+  imageWithQL->SetQuicklook(quicklook);
+  imageWithQL->SetShrinkFactor(shrinkFactor);
   this->AddOutputDescriptor(imageWithQL, ossId.str(), oss.str(), true);
 }
 
-ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::string filepath)
+ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::string filepath, unsigned int& shrinkFactor)
 {
   FloatingVectorImageType::Pointer quicklook;
-
   if (m_TypeJPEG2000)
     {
     FPVReaderType::Pointer qlReader = FPVReaderType::New();
-
+    unsigned int resolution = 0;
     qlReader->SetFileName(filepath);
     if (!m_Desc.empty() && vDataset->visible() )
       {
-      qlReader->SetAdditionalNumber(m_Desc.size() - 1);
+      resolution = m_Desc.size() - 1;
+      qlReader->SetAdditionalNumber(resolution);
+
       }
 
     qlReader->Update();
     quicklook = qlReader->GetOutput();
     quicklook->DisconnectPipeline();
+    shrinkFactor = (1 << resolution);
     }
 
   if (quicklook.IsNull())
@@ -466,10 +470,12 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
     FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
                                 otbGetTextMacro("Generating QuickLook ..."));
     shrinker->Update();
+    shrinkFactor = shrinker->GetShrinkFactor();
 
     quicklook = shrinker->GetOutput();
     quicklook->DisconnectPipeline();
     }
+
   return quicklook;
 }
 

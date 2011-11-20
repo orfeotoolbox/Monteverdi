@@ -142,7 +142,7 @@ private:
    * use the standard StreamingShrinkImageFilter
    *
    * TODO: support GDAL Overviews */
-  FloatingVectorImageType::Pointer MakeQuicklook(std::string filepath);
+  FloatingVectorImageType::Pointer MakeQuicklook(std::string filepath, unsigned int& shrinkFactor);
 };
 
 } // End namespace otb
