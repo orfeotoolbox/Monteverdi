@@ -405,11 +405,13 @@ void ReaderModule::OpenRealImageWithQuicklook()
 
   std::string   filepath = vFilePath->value();
   std::string   otbFilepath = filepath;
+  unsigned int resolution = 0;
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
+    resolution = vDataset->value();
     otbFilepath += ":";
-    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
+    ossDatasetId << resolution; // Following the convention in GDALImageIO
     otbFilepath += ossDatasetId.str();
   }
 
@@ -437,7 +439,9 @@ void ReaderModule::OpenRealImageWithQuicklook()
   unsigned int shrinkFactor = 1;
   FloatingVectorImageType::Pointer quicklook = MakeQuicklook(filepath, shrinkFactor);
   imageWithQL->SetQuicklook(quicklook);
-  imageWithQL->SetShrinkFactor(shrinkFactor);
+
+  // We may read the image at lower resolution.
+  imageWithQL->SetShrinkFactor(shrinkFactor / (1<<resolution));
   this->AddOutputDescriptor(imageWithQL, ossId.str(), oss.str(), true);
 }
 
