@@ -124,18 +124,18 @@ void ReaderModule::Analyse()
     }
   else if (m_TypeJPEG2000)
     {
-	  // Fill vDataset with resolution descriptor info
-	  for (unsigned int itRes = 0; itRes < (unsigned int) m_Desc.size(); itRes++)
-	    {
-	    vDataset->add(m_Desc[itRes].c_str());
-	    }
-	  vDataset->set_visible();
-	  vDataset->value(0);
-	  vDataset->activate();
-	  vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
+         // Fill vDataset with resolution descriptor info
+         for (unsigned int itRes = 0; itRes < (unsigned int) m_Desc.size(); itRes++)
+           {
+           vDataset->add(m_Desc[itRes].c_str());
+           }
+         vDataset->set_visible();
+         vDataset->value(0);
+         vDataset->activate();
+         vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
 
     vType->value(ImageType_PleiadesImage);
-	  bOk->activate();
+         bOk->activate();
     }
   else
     {
@@ -230,7 +230,7 @@ void ReaderModule::Analyse()
       }
     else if (m_TypeJPEG2000)
       {
-    	vName->value(m_Names[0].c_str());
+           vName->value(m_Names[0].c_str());
       }
     else
       {
@@ -361,7 +361,7 @@ void ReaderModule::TypeChanged()
 void ReaderModule::DatasetChanged()
 {
   if (m_TypeJPEG2000)
-	  vName->value(m_Names[vDataset->value()].c_str());
+         vName->value(m_Names[vDataset->value()].c_str());
   if (m_TypeHdf)
     vName->value(m_Desc[vDataset->value()].c_str());
 }
@@ -641,9 +641,9 @@ bool ReaderModule::IsJPEG2000File(std::string filepath)
     {
     std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(filepath);
 
-	  std::ostringstream oss;
-	  oss << fname.c_str()  << "_res_"<< *itRes;
-	  m_Names.push_back(oss.str());
+         std::ostringstream oss;
+         oss << fname.c_str()  << "_res_"<< *itRes;
+         m_Names.push_back(oss.str());
     }
 
   return true;
