@@ -122,103 +122,104 @@ void ReaderModule::Analyse()
     vType->value(ImageType_RealImage); // We assume that hdf file is composed of real image
     bOk->activate();
     }
-  else if (m_TypeJPEG2000)
-    {
-         // Fill vDataset with resolution descriptor info
-         for (unsigned int itRes = 0; itRes < (unsigned int) m_Desc.size(); itRes++)
-           {
-           vDataset->add(m_Desc[itRes].c_str());
-           }
-         vDataset->set_visible();
-         vDataset->value(0);
-         vDataset->activate();
-         vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
-
-    vType->value(ImageType_PleiadesImage);
-         bOk->activate();
-    }
   else
-    {
-    // Try different types
-    try
+    if (m_TypeJPEG2000)
       {
-      // Read the image
-      m_FPVReader->SetFileName(filepath);
-      m_FPVReader->GenerateOutputInformation();
-
-      // Special action if we use the GDAL image IO
-      if (strcmp(m_FPVReader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+      // Fill vDataset with resolution descriptor info
+      for (unsigned int itRes = 0; itRes < (unsigned int) m_Desc.size(); itRes++)
         {
-        if ((dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex())
-          { // Complex Data
-          vType->value(ImageType_ComplexImage);
-          typeFound = true;
-          // Detect if it is a Mono or Multiband Complex Image
-          if (m_FPVReader->GetImageIO()->GetNumberOfComponents() / 2 == 1) // cf otb and its management of conversion of Multi/MonobandComplexImage for /2
-            {
-            m_MultibandComplexImage = false;
+        vDataset->add(m_Desc[itRes].c_str());
+        }
+      vDataset->set_visible();
+      vDataset->value(0);
+      vDataset->activate();
+      vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
+
+      vType->value(ImageType_PleiadesImage);
+      bOk->activate();
+      }
+    else
+      {
+      // Try different types
+      try
+        {
+        // Read the image
+        m_FPVReader->SetFileName(filepath);
+        m_FPVReader->GenerateOutputInformation();
+
+        // Special action if we use the GDAL image IO
+        if (strcmp(m_FPVReader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
+          {
+          if ((dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex())
+            { // Complex Data
+            vType->value(ImageType_ComplexImage);
+            typeFound = true;
+            // Detect if it is a Mono or Multiband Complex Image
+            if (m_FPVReader->GetImageIO()->GetNumberOfComponents() / 2 == 1) // cf otb and its management of conversion of Multi/MonobandComplexImage for /2
+              {
+              m_MultibandComplexImage = false;
+              }
+            else
+              {
+              m_MultibandComplexImage = true;
+              }
             }
           else
             {
-            m_MultibandComplexImage = true;
+            vType->value(ImageType_RealImage);
+            typeFound = true;
             }
           }
-        else
+        else // if we don't use GDAL Image IO
           {
-          vType->value(ImageType_RealImage);
-          typeFound = true;
+          switch (m_FPVReader->GetImageIO()->GetPixelType())
+            {
+            case itk::ImageIOBase::COMPLEX: // handle the radar case
+              vType->value(ImageType_ComplexImage);
+              // If we are still here, this is a readable image
+              typeFound = true;
+              break;
+            default: // handle the real case
+              vType->value(ImageType_RealImage);
+              // If we are still here, this is a readable image
+              typeFound = true;
+              break;
+            }
           }
-        }
-      else // if we don't use GDAL Image IO
-        {
-        switch (m_FPVReader->GetImageIO()->GetPixelType())
-          {
-          case itk::ImageIOBase::COMPLEX: // handle the radar case
-            vType->value(ImageType_ComplexImage);
-            // If we are still here, this is a readable image
-            typeFound = true;
-            break;
-          default: // handle the real case
-            vType->value(ImageType_RealImage);
-            // If we are still here, this is a readable image
-            typeFound = true;
-            break;
-          }
-        }
-      }
-    catch (itk::ExceptionObject&)
-      {
-      // Silent catch
-      }
-
-    if (!typeFound)
-      {
-      try
-        {
-        VectorReaderType::Pointer vectorReader = VectorReaderType::New();
-        vectorReader->SetFileName(filepath);
-        vectorReader->GenerateOutputInformation();
-        vType->value(ImageType_VectorData);
-        typeFound = true;
         }
       catch (itk::ExceptionObject&)
         {
         // Silent catch
+        }
+
+      if (!typeFound)
+        {
+        try
+          {
+          VectorReaderType::Pointer vectorReader = VectorReaderType::New();
+          vectorReader->SetFileName(filepath);
+          vectorReader->GenerateOutputInformation();
+          vType->value(ImageType_VectorData);
+          typeFound = true;
+          }
+        catch (itk::ExceptionObject&)
+          {
+          // Silent catch
+          vType->value(ImageType_Unknown);
+          }
+        }
+
+      // Activate/ deactivate ok
+      if (!typeFound)
+        {
         vType->value(ImageType_Unknown);
+        bOk->deactivate();
+        }
+      else
+        {
+        bOk->activate();
         }
       }
-
-    // Activate/ deactivate ok
-    if (!typeFound)
-      {
-      vType->value(ImageType_Unknown);
-      bOk->deactivate();
-      }
-    else
-      {
-      bOk->activate();
-      }
-    }
 
   std::string name = vName->value();
 
@@ -228,15 +229,16 @@ void ReaderModule::Analyse()
       {
       vName->value(m_Desc[0].c_str());
       }
-    else if (m_TypeJPEG2000)
-      {
-           vName->value(m_Names[0].c_str());
-      }
     else
-      {
-      std::string fname = itksys::SystemTools::GetFilenameWithoutLastExtension(vFilePath->value());
-      vName->value(fname.c_str());
-      }
+      if (m_TypeJPEG2000)
+        {
+        vName->value(m_Names[0].c_str());
+        }
+      else
+        {
+        std::string fname = itksys::SystemTools::GetFilenameWithoutLastExtension(vFilePath->value());
+        vName->value(fname.c_str());
+        }
     }
 }
 
