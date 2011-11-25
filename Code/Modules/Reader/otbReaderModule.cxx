@@ -29,7 +29,9 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 
-#include "otbJPEG2000ImageIO.h"
+#if defined(OTB_USE_JPEG2000)
+# include "otbJPEG2000ImageIO.h"
+#endif
 
 namespace otb
 {
@@ -622,6 +624,7 @@ bool ReaderModule::IsHdfFile(std::string filepath)
 
 bool ReaderModule::IsJPEG2000File(std::string filepath)
 {
+#if defined(OTB_USE_JPEG2000)
   JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
   std::vector<unsigned int> res;
@@ -649,6 +652,9 @@ bool ReaderModule::IsJPEG2000File(std::string filepath)
     }
 
   return true;
+#else
+  return false;
+#endif
 }
 
 bool ReaderModule::CheckDataSetString()
