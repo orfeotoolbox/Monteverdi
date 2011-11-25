@@ -31,9 +31,6 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
-#include "otbGDALImageIO.h"
-#include "otbJPEG2000ImageIO.h"
-
 namespace otb
 {
 /** \class ReaderModule

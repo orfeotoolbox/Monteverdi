@@ -29,6 +29,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 
+#include "otbConfigure.h"
 #if defined(OTB_USE_JPEG2000)
 # include "otbJPEG2000ImageIO.h"
 #endif
