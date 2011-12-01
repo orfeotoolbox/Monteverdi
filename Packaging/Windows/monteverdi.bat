@@ -8,8 +8,8 @@
 :: Set GDAL_DATA env. variable
 @set GDAL_DATA=%CURRENT_SCRIPT_DIR%..\share\gdal
 
-:: Set current dir to TEMP dir because Monteverdi generates temporary files and need write access
-@cd %TEMP%
+:: Set current dir to HOME dir because Monteverdi generates temporary files and need write access
+@cd %HOME%
 
 :: Start Monteverdi
 @"%CURRENT_SCRIPT_DIR%monteverdi.exe"
