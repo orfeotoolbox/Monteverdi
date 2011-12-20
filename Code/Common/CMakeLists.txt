@@ -3,7 +3,7 @@ FILE(GLOB OTBMonteverdiCommon_SRCS "*.cxx" )
 SET(OTBMonteverdiCommon_SRCS ${OTBMonteverdiCommon_SRCS})
 
 ADD_LIBRARY(OTBMonteverdiCommon ${OTBMonteverdiCommon_SRCS} )
-TARGET_LINK_LIBRARIES(OTBMonteverdiCommon OTBIO OTBCommon OTBGui flu)
+TARGET_LINK_LIBRARIES(OTBMonteverdiCommon OTBIO OTBCommon OTBGui OTBVisualization flu)
 
 
 IF(NOT Monteverdi_INSTALL_NO_LIBRARIES)
