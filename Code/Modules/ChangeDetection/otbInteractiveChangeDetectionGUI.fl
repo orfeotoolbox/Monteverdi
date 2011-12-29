@@ -436,71 +436,71 @@ CenterViewerColorCompositionCallback();}
     }
   }
   Function {Show(void)} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Hide(void)} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Update(void)} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Synchronize(void)} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {EraseLastPoint()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {EraseAllClickedPoints()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ChangeDetectionLearn()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {AcquireSecondClass()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {AcquireFirstClass()} {selected return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LoadLeftImage()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LoadRightImage()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DisplayResultsButtonToggled()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Log(const char * log)} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Quit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SaveSVMModel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SaveResultImage()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenSVMModel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ChangeClass1Color()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ChangeClass2Color()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ChangeTrainingSetOpacity()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Setup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SVMSetupOk()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SVMSetupCancel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UseChangeDetectorsToggled()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {PolygonalROIToggled()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {EraseLastPolygon()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {EndPolygon()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {HistogramTabSetup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LeftViewerColorCompositionCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {RightViewerColorCompositionCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CenterViewerColorCompositionCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ImportVectorData()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ExportVectorData()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 
 
 declblock {\#ifdef _MSC_VER} {open public after {\#endif}

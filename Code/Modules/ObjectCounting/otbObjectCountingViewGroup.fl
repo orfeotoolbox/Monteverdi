@@ -105,37 +105,37 @@ class ObjectCountingViewGroup {open
       }
     }
   }
-  Function {ObjectCountingViewGroup()} {} {}
+  Function {ObjectCountingViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~ObjectCountingViewGroup()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenImage()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Quit()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {RunPreview()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SaveResult()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ActivateClassifArea(int i)} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateThresholdValue()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateSpatialRadius()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateRangeRadius()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateScale()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateMinRegionSize()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SavePolygon()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UseSmoothing()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateNuParameter()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Exit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Close()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 

@@ -11,7 +11,7 @@ decl {\#include "otbOpticalCalibrationEnum.h"} {public
 class OpticalCalibrationViewGroup {open
 } {
   Function {QuitCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Build()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
@@ -230,19 +230,19 @@ teAeronetFile->redraw();}
     }
   }
   Function {~OpticalCalibrationViewGroup()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpticalCalibrationViewGroup()} {open
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenAeronetFileCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenFFVFileCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateRadiativeTermsCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ReloadChannelTermsCallback(bool updateImage)} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SaveAndQuitCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateParametersCallback()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 

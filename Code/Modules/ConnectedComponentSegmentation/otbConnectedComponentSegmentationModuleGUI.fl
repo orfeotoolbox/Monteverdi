@@ -125,45 +125,45 @@ ui_HelpWindow->hide();
       } {}
     }
   }
-  Function {ConnectedComponentSegmentationModuleGUI()} {} {}
+  Function {ConnectedComponentSegmentationModuleGUI()} {}  {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~ConnectedComponentSegmentationModuleGUI()} {return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Process()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Hide()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ChangeVarName()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {QuickAddMask()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {InitHelp()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LiveCheckCC()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {AddIndexes()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LiveCheckMask()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LiveCheckOBIA()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {make_window()} {open
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DisplayDataMask()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SetObjectMinArea()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {TmpOutputSelection()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OK()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateTmpOutput()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {QuickAddCC()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {QuickAddOBIA()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Cancel()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CheckProcess()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 

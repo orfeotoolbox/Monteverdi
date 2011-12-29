@@ -8,7 +8,7 @@ code_name {.cxx}
 class MonteverdiViewGroup {open
 } {
   Function {~MonteverdiViewGroup()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Build()} {open return_type {virtual void}
   } {
     Fl_Window wMainWindow {
@@ -142,21 +142,21 @@ wConfirmCachingWindow->hide();} open
     }
   }
   Function {Quit()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {InputsGUIOk()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {InputsGUICancel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {RenameOk()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OutputRenameOk()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {EraseCaching(bool erase)} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenEraseCaching()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CancelEraseCaching()} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ConfirmEraseCaching( bool val )} {return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 

@@ -125,13 +125,13 @@ class ImageStatisticsModuleGUI {open
     }
   }
   Function {Quit()} {open protected return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~ImageStatisticsModuleGUI()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Ok()} {open protected return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {UpdateChannelStat()} {open protected return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ComputeFullStat()} {open protected return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 
