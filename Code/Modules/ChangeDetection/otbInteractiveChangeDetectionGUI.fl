@@ -16,9 +16,9 @@ declblock {\#ifdef _MSC_VER} {open public after {\#endif}
 class otbInteractiveChangeDetectionGUI {open
 } {
   Function {otbInteractiveChangeDetectionGUI()} {open
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~otbInteractiveChangeDetectionGUI()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CreateGUI()} {open
   } {
     Fl_Window iviewWindowPrincipal {
