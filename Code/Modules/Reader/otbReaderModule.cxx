@@ -60,6 +60,12 @@ ReaderModule::ReaderModule()
 {
   this->BuildGUI();
 
+  // Hide busy bar
+  pBusyBar->minimum(0);
+  pBusyBar->maximum(1);
+  pBusyBar->hide();
+
+
   // Expose supported data type:
   vType->add(otbGetTextMacro("Unknown"));
   vType->add(otbGetTextMacro("Real image"));
@@ -464,11 +470,19 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
       qlReader->SetAdditionalNumber(resolution);
 
       }
-
+    
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
     qlReader->Update();
+    this->pBusyBar->value(0);
+    this->pBusyBar->hide();
+    Fl::check();
+
     quicklook = qlReader->GetOutput();
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << resolution);
+
     }
 
   if (quicklook.IsNull())
@@ -478,7 +492,13 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
     shrinker->SetInput(m_FPVReader->GetOutput());
     FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
                                 otbGetTextMacro("Generating QuickLook ..."));
+    this->pBusyBar->value(1);
+    this->pBusyBar->show();
+    Fl::check();
     shrinker->Update();
+    this->pBusyBar->value(0);
+    this->pBusyBar->hide();
+    Fl::check();
     shrinkFactor = shrinker->GetShrinkFactor();
 
     quicklook = shrinker->GetOutput();
