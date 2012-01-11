@@ -155,7 +155,7 @@ void UncompressJpeg2000Module::Run()
   m_SelectAreaHandler->SetTileHintY(m_TileHintY);
 
   // Compute the total number of tiles
-  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 ) ) 
+  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 ) )
     * ( vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) + 0.5 ) );
   
   std::cout<<m_TileHintX<<"  "<<imageRegion.GetSize()[0]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 )<<std::endl;
