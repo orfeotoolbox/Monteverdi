@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class UncompressJpeg2000ModuleGUI {open selected
+class UncompressJpeg2000ModuleGUI {open
 } {
   Function {BuildGUI()} {open return_type {virtual void}
   } {
@@ -35,38 +35,42 @@ class UncompressJpeg2000ModuleGUI {open selected
               label Res
               xywh {495 68 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
-            Fl_Value_Output vNbTile {
-              label {Nb Tile}
-              xywh {652 68 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+            Fl_Value_Output vNbTiles {
+              label {Nb Tiles} selected
+              xywh {650 68 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
           }
         }
         Fl_Wizard {} {
           label {Definition of the ROI extracted} open
-          xywh {402 138 396 73} box PLASTIC_DOWN_BOX align 5
+          xywh {402 127 396 92} box PLASTIC_DOWN_BOX align 5
         } {
           Fl_Group guiSelectArea {open
-            xywh {402 138 396 73} align 0
+            xywh {402 127 396 92} align 0
           } {
             Fl_Value_Input vStartX {
               label {Start X}
               callback {this->UpdateRegion();}
-              xywh {495 147 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+              xywh {495 133 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vStartY {
               label {Start Y}
               callback {this->UpdateRegion();}
-              xywh {650 147 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+              xywh {650 133 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vSizeX {
               label {Size X}
               callback {this->UpdateRegion();}
-              xywh {495 177 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+              xywh {495 163 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
             Fl_Value_Input vSizeY {
               label {Size Y}
               callback {this->UpdateRegion();}
-              xywh {650 177 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+              xywh {650 163 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Output vNbTileExt {
+              label {Nb Tiles}
+              xywh {570 189 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
           }
         }

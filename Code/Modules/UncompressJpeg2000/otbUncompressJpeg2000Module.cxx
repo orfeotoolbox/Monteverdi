@@ -40,7 +40,9 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   m_Controller                  = ControllerType::New();
   m_ResizingHandler             = ResizingHandlerType::New();
   m_SelectAreaHandler           = SelectAreaHandlerType::New();
-  m_regionGl                    = RegionGlComponentType::New();
+  m_RegionGl                    = RegionGlComponentType::New();
+
+  m_ResolutionFactor = 0;
 
   m_View->SetModel(m_Model);
   m_View->SetController(m_Controller);
@@ -51,13 +53,13 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   color[1] = 1;
   color[2] = 0;
   color[3] = 1;
-  m_regionGl->SetColor(color);
-  m_View->GetScrollWidget()->AddGlComponent(m_regionGl);
+  m_RegionGl->SetColor(color);
+  m_View->GetScrollWidget()->AddGlComponent(m_RegionGl);
 
   // Add the select area handler
   m_SelectAreaHandler->SetModel(m_Model);
   m_SelectAreaHandler->SetWidget(m_View->GetScrollWidget());
-  m_SelectAreaHandler->SetRegionGlComponent(m_regionGl);
+  m_SelectAreaHandler->SetRegionGlComponent(m_RegionGl);
   m_Controller->AddActionHandler(m_SelectAreaHandler);
 
   // Add the resizing handler
@@ -101,31 +103,48 @@ void UncompressJpeg2000Module::Run()
 
   typedef ForwardSensorModel<double> ForwardSensorType;
 
-  if (vectorImageQL.IsNotNull())
-    {
-    vectorImage = vectorImageQL->GetImage();
-    vectorImage->UpdateOutputInformation();
-    imageRegion = vectorImage->GetLargestPossibleRegion();
-
-    /** Add view */
-    m_VectorGenerator = VectorLayerGeneratorType::New();
-    m_VectorGenerator->SetImage(vectorImage);
-
-    m_VectorGenerator->GenerateQuicklookOff();
-    m_VectorGenerator->SetQuicklook(vectorImageQL->GetQuicklook());
-    m_VectorGenerator->SetSubsamplingRate(vectorImageQL->GetShrinkFactor());
-
-    m_VectorGenerator->GenerateLayer();
-    m_Model->AddLayer(m_VectorGenerator->GetLayer());
-    }
-  else
+  if (vectorImageQL.IsNull())
     {
     itkExceptionMacro("The image pointer is not initialized!!");
     }
 
+  vectorImage = vectorImageQL->GetImage();
+  vectorImage->UpdateOutputInformation();
+  imageRegion = vectorImage->GetLargestPossibleRegion();
+  
+  /** Add view */
+  m_VectorGenerator = VectorLayerGeneratorType::New();
+  m_VectorGenerator->SetImage(vectorImage);
+
+  m_VectorGenerator->GenerateQuicklookOff();
+  m_VectorGenerator->SetQuicklook(vectorImageQL->GetQuicklook());
+  m_VectorGenerator->SetSubsamplingRate(vectorImageQL->GetShrinkFactor());
+
+  m_VectorGenerator->GenerateLayer();
+  m_Model->AddLayer(m_VectorGenerator->GetLayer());
+    
+  itk::ExposeMetaData<unsigned int>(vectorImage->GetMetaDataDictionary(),
+                                    MetaDataKey::ResolutionFactor,
+                                    m_ResolutionFactor);
+  vRes->value(m_ResolutionFactor);
+
+  itk::ExposeMetaData<unsigned int>(vectorImage->GetMetaDataDictionary(),
+                                    MetaDataKey::TileHintX,
+                                    m_TileHintX);
+
+  itk::ExposeMetaData<unsigned int>(vectorImage->GetMetaDataDictionary(),
+                                    MetaDataKey::TileHintY,
+                                    m_TileHintY);
+
+  // Compute the total number of tiles
+  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) ) + 0.5 ) 
+    * ( vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) ) + 0.5 );
+  
+  vNbTiles->value( nbTiles );
+
   m_SelectAreaHandler->SetLargestRegion(imageRegion);
 
-  m_regionGl->SetRegion(imageRegion);
+  m_RegionGl->SetRegion(imageRegion);
 
   vInputImageSizeX->value(imageRegion.GetSize()[0]);
   vInputImageSizeY->value(imageRegion.GetSize()[1]);
@@ -153,6 +172,7 @@ void UncompressJpeg2000Module::Run()
   wExtractROIWindow->show();
   m_View->GetScrollWidget()->show();
   m_Model->Update();
+  
 }
 
 void UncompressJpeg2000Module::UpdateRegion()

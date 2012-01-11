@@ -169,10 +169,14 @@ private:
   SelectAreaHandlerType::Pointer m_SelectAreaHandler;
 
   // Region for select area
-  RegionGlComponentType::Pointer m_regionGl;
+  RegionGlComponentType::Pointer m_RegionGl;
 
-  bool isNotAProjection;
+  /** Image resolution */
+  unsigned int m_ResolutionFactor;
 
+  /** Tile sizes*/
+  unsigned int m_TileHintX;
+  unsigned int m_TileHintY;
 };
 
 } // End namespace otb
