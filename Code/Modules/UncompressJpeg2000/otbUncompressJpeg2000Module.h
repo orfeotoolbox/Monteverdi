@@ -171,6 +171,9 @@ private:
   // Region for select area
   RegionGlComponentType::Pointer m_RegionGl;
 
+  // Region for select tiles
+  RegionGlComponentType::Pointer m_TileRegionGl;
+
   /** Image resolution */
   unsigned int m_ResolutionFactor;
 

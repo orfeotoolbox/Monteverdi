@@ -41,6 +41,7 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   m_ResizingHandler             = ResizingHandlerType::New();
   m_SelectAreaHandler           = SelectAreaHandlerType::New();
   m_RegionGl                    = RegionGlComponentType::New();
+  m_TileRegionGl                = RegionGlComponentType::New();
 
   m_ResolutionFactor = 0;
 
@@ -49,17 +50,27 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
 
   // RegionGlComponent for select area
   ColorType color;
-  color[0] = 0;
-  color[1] = 1;
+  color[0] = 1;
+  color[1] = 0;
   color[2] = 0;
   color[3] = 1;
   m_RegionGl->SetColor(color);
   m_View->GetScrollWidget()->AddGlComponent(m_RegionGl);
 
+  ColorType tileColor;
+  tileColor[0] = 0;
+  tileColor[1] = 1;
+  tileColor[2] = 0;
+  tileColor[3] = 1;
+  m_TileRegionGl->SetColor(tileColor);
+  m_View->GetScrollWidget()->AddGlComponent(m_TileRegionGl);
+
+
   // Add the select area handler
   m_SelectAreaHandler->SetModel(m_Model);
   m_SelectAreaHandler->SetWidget(m_View->GetScrollWidget());
   m_SelectAreaHandler->SetRegionGlComponent(m_RegionGl);
+  m_SelectAreaHandler->SetTileRegionGlComponent(m_TileRegionGl);
   m_Controller->AddActionHandler(m_SelectAreaHandler);
 
   // Add the resizing handler
@@ -73,6 +84,7 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   m_SelectAreaHandler->SetStartY(vStartY);
   m_SelectAreaHandler->SetSizeX(vSizeX);
   m_SelectAreaHandler->SetSizeY(vSizeY);
+  m_SelectAreaHandler->SetNbTile(vNbTileExt);
 
   vView->add(m_View->GetScrollWidget());
   vView->resizable(m_View->GetScrollWidget());
@@ -136,15 +148,26 @@ void UncompressJpeg2000Module::Run()
                                     MetaDataKey::TileHintY,
                                     m_TileHintY);
 
-  // Compute the total number of tiles
-  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) ) + 0.5 ) 
-    * ( vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) ) + 0.5 );
+  vTileSizeX->value(m_TileHintX);
+  vTileSizeY->value(m_TileHintY);
   
+  m_SelectAreaHandler->SetTileHintX(m_TileHintX);
+  m_SelectAreaHandler->SetTileHintY(m_TileHintY);
+
+  // Compute the total number of tiles
+  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 ) ) 
+    * ( vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) + 0.5 ) );
+  
+  std::cout<<m_TileHintX<<"  "<<imageRegion.GetSize()[0]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 )<<std::endl;
+
+  std::cout<<m_TileHintY<<"  "<<imageRegion.GetSize()[1]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) + 0.5 )<<std::endl;
+
   vNbTiles->value( nbTiles );
 
   m_SelectAreaHandler->SetLargestRegion(imageRegion);
 
   m_RegionGl->SetRegion(imageRegion);
+  m_TileRegionGl->SetRegion(imageRegion);
 
   vInputImageSizeX->value(imageRegion.GetSize()[0]);
   vInputImageSizeY->value(imageRegion.GetSize()[1]);
@@ -214,7 +237,7 @@ void UncompressJpeg2000Module::Ok()
 
     IndexType  idxInit;
     OffsetType offSize;
-    if (vectorImageQL.IsNotNull())
+    if (vectorImageQL.IsNull())
       {
       idxInit[0] = static_cast<unsigned long>(vStartX->value());
       idxInit[1] = static_cast<unsigned long>(vStartY->value());

@@ -23,6 +23,7 @@
 #include "itkImageRegion.h"
 
 #include <FL/Fl_Value_Input.H>
+#include <FL/Fl_Value_Output.H>
 
 /** \class SelectTileROIActionHandler
  *   \brief Draw a rectangle on ROI.
@@ -67,6 +68,7 @@ public:
   typedef itk::ImageRegion<2>    RegionGlType;
   typedef RegionGlType::SizeType SizeType;
   typedef Fl_Value_Input         FlValueInputType;
+  typedef Fl_Value_Output        FlValueOutputType;
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -224,9 +226,10 @@ public:
 
   void UpdateGlRegion()
   {
-    IndexType lIndex;
-    SizeType  lSize;
+    IndexType lIndex, lTileIndex;
+    SizeType  lSize, lTileSize;
 
+    // Extract region
     lIndex[0] = static_cast<unsigned long>(m_StartX->value());
     lIndex[1] = static_cast<unsigned long>(m_StartY->value());
 
@@ -236,7 +239,7 @@ public:
     m_Region.SetIndex(lIndex);
     m_Region.SetSize(lSize);
     m_Region.Crop(m_LargestRegion);
-
+    
     m_RegionGlComponent->SetRegion(m_Region);
     m_RegionGlComponent->SetVisible(true);
 
@@ -247,6 +250,26 @@ public:
     m_StartY->value(lIndex[1]);
     m_SizeX->value(lSize[0]);
     m_SizeY->value(lSize[1]);
+
+    // Tile region
+    const unsigned int tileXId = vcl_floor( static_cast<double>(lIndex[0]) / static_cast<double>(m_TileHintX) );
+    const unsigned int tileYId = vcl_floor( static_cast<double>(lIndex[1]) / static_cast<double>(m_TileHintY) );
+    lTileIndex[0] = m_TileHintX*tileXId;
+    lTileIndex[1] = m_TileHintY*tileYId;
+
+    const unsigned int tileSizeXId = vcl_floor( static_cast<double>(lIndex[0]+lSize[0]-1) / static_cast<double>(m_TileHintX) );
+    const unsigned int tileSizeYId = vcl_floor( static_cast<double>(lIndex[1]+lSize[1]-1) / static_cast<double>(m_TileHintY) );
+    lTileSize[0] = (tileSizeXId-tileXId+1)*m_TileHintX;
+    lTileSize[1] = (tileSizeYId-tileYId+1)*m_TileHintY;
+
+    m_NbTile->value( (tileSizeXId-tileXId+1)*(tileSizeYId-tileYId+1) );
+
+    m_TileRegion.SetIndex(lTileIndex);
+    m_TileRegion.SetSize(lTileSize);
+    m_TileRegion.Crop(m_LargestRegion);
+
+    m_TileRegionGlComponent->SetRegion(m_TileRegion);
+    m_TileRegionGlComponent->SetVisible(true);
 
     m_Widget->redraw();
   }
@@ -263,8 +286,14 @@ public:
   itkSetObjectMacro(RegionGlComponent, RegionGlComponentType);
   itkGetObjectMacro(RegionGlComponent, RegionGlComponentType);
 
+  /** Set/Get the pointer to the TileRegionGlComponent */
+  itkSetObjectMacro(TileRegionGlComponent, RegionGlComponentType);
+  itkGetObjectMacro(TileRegionGlComponent, RegionGlComponentType);
+
   itkSetMacro(LargestRegion, RegionType);
-//      itkGetObjectMacro(LargestRegion, RegionType);
+
+  itkSetMacro(TileHintX, unsigned int);
+  itkSetMacro(TileHintY, unsigned int);
 
   /** Set/Get the pointer to the input */
   void SetStartX(FlValueInputType *fvi)
@@ -283,30 +312,20 @@ public:
   {
     m_SizeY = fvi;
   }
-  void SetLatitute1(FlValueInputType *fvi)
+  void SetNbTile(FlValueOutputType *fvo)
   {
-    m_Lat1 = fvi;
-  }
-  void SetLatitute2(FlValueInputType *fvi)
-  {
-    m_Lat2 = fvi;
-  }
-  void SetLongitude1(FlValueInputType *fvi)
-  {
-    m_Long1 = fvi;
-  }
-  void SetLongitude2(FlValueInputType *fvi)
-  {
-    m_Long2 = fvi;
+    m_NbTile = fvo;
   }
 
 protected:
   /** Constructor */
-  SelectTileROIActionHandler() : m_Widget(), m_Model(), m_RegionGlComponent()
+  SelectTileROIActionHandler() : m_Widget(), m_Model(), m_RegionGlComponent(), m_TileRegionGlComponent()
   {
     m_FirstPush = true;
     m_StartIndex.Fill(0);
     m_StopIndex.Fill(0);
+    m_TileHintX = 1;
+    m_TileHintY = 1;
   }
 
   /** Destructor */
@@ -327,8 +346,11 @@ private:
   ModelPointerType m_Model;
   // Pointer to the GlComponent
   RegionGlComponentPointerType m_RegionGlComponent;
+  // Pointer to the tiles GlComponent
+  RegionGlComponentPointerType m_TileRegionGlComponent;
   // Pointer to the Region of RegionGlComponent
   RegionGlType m_Region;
+  RegionGlType m_TileRegion;
   RegionGlType m_LargestRegion;
 
   bool m_FirstPush;
@@ -342,10 +364,13 @@ private:
   FlValueInputType *m_StartY;
   FlValueInputType *m_SizeX;
   FlValueInputType *m_SizeY;
-  FlValueInputType *m_Long1;
-  FlValueInputType *m_Lat1;
-  FlValueInputType *m_Long2;
-  FlValueInputType *m_Lat2;
+
+  // Number of tile in the extract
+  FlValueOutputType *m_NbTile;
+
+  // Tile sizes
+  unsigned int m_TileHintX;
+  unsigned int m_TileHintY;
 
 };     // end class
 } // otb namespace
