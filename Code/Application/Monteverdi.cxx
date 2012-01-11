@@ -89,6 +89,7 @@
 #include "otbSARPolarimetryAnalysisModule.h"
 #include "otbConnectedComponentSegmentationModule.h"
 #include "otbVectorDataTransformModule.h"
+#include "otbUncompressJpeg2000Module.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -160,6 +161,7 @@ int main(int argc, char* argv[])
                                                otbGetTextMacro("File/Save dataset (advanced)"));
   model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
+  model->RegisterModule<otb::UncompressJpeg2000Module>("UncompressJpeg2000Module", otbGetTextMacro("File/Uncompress Jpeg2000 image"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
 
 #ifdef OTB_USE_MAPNIK

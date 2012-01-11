@@ -1,0 +1,149 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+class UncompressJpeg2000ModuleGUI {open selected
+} {
+  Function {BuildGUI()} {open return_type {virtual void}
+  } {
+    Fl_Window wExtractROIWindow {
+      label {Select the ROI} open
+      xywh {470 255 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
+    } {
+      Fl_Group {} {open
+        xywh {400 0 401 400}
+      } {
+        Fl_Wizard {} {
+          label {Input image size information} open
+          xywh {402 25 394 75} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {402 25 394 75}
+          } {
+            Fl_Value_Output vInputImageSizeX {
+              label {Size X}
+              xywh {495 37 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+            }
+            Fl_Value_Output vInputImageSizeY {
+              label {Size Y}
+              xywh {650 37 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+            }
+            Fl_Value_Output vRes {
+              label Res
+              xywh {495 68 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+            }
+            Fl_Value_Output vNbTile {
+              label {Nb Tile}
+              xywh {652 68 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+            }
+          }
+        }
+        Fl_Wizard {} {
+          label {Definition of the ROI extracted} open
+          xywh {402 138 396 73} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group guiSelectArea {open
+            xywh {402 138 396 73} align 0
+          } {
+            Fl_Value_Input vStartX {
+              label {Start X}
+              callback {this->UpdateRegion();}
+              xywh {495 147 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vStartY {
+              label {Start Y}
+              callback {this->UpdateRegion();}
+              xywh {650 147 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vSizeX {
+              label {Size X}
+              callback {this->UpdateRegion();}
+              xywh {495 177 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vSizeY {
+              label {Size Y}
+              callback {this->UpdateRegion();}
+              xywh {650 177 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+          }
+        }
+        Fl_Wizard {} {
+          label {Extract info} open
+          xywh {402 242 396 115} box PLASTIC_DOWN_BOX align 5
+        } {
+          Fl_Group {} {open
+            xywh {402 242 396 115} align 0
+          } {
+            Fl_Value_Input vMemSize {
+              label {Extract size (Mo) }
+              xywh {640 257 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vTileTime {
+              label {Single Tile size (Mo)}
+              xywh {640 292 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+            Fl_Value_Input vProcTime {
+              label {Extract process duration (min)}
+              xywh {640 327 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
+            }
+          }
+        }
+        Fl_Group {} {open
+          xywh {402 363 396 32}
+        } {
+          Fl_Button bCancel {
+            label Cancel
+            callback {this->Cancel();}
+            xywh {605 368 80 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Return_Button bOk {
+            label Ok
+            callback {this->Ok();}
+            xywh {695 368 80 25} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+      }
+      Fl_Group vView {open
+        xywh {2 2 396 396} box PLASTIC_DOWN_BOX resizable
+      } {}
+    }
+  }
+  Function {OpenDataSet()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {Browse()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {Cancel()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {TypeChanged()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {~UncompressJpeg2000ModuleGUI()} {open return_type virtual
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {Ok()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {UpdateRegion()} {open protected return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+} 
