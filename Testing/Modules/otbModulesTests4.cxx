@@ -44,6 +44,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageStatisticsModuleTest);
   REGISTER_TEST(otbConnectedComponentSegmentationModuleTest);
   REGISTER_TEST(otbVectorDataTransformTest);
+  REGISTER_TEST(otbUncompressJpeg2000ModuleTest);
 
 #ifdef OTB_USE_MAPNIK
   REGISTER_TEST(otbRasterizationModuleTest);

@@ -489,6 +489,19 @@ ADD_TEST(moTvVectorDataTransformModuleTest  ${Modules_TESTS4}
     30    # rotation
 )
 
+
+# ----------------- Uncompress Jpeg2000 Module testing -------------------
+ADD_TEST(moTvUncompressJpeg2000ModuleTest  ${Modules_TESTS4}
+    otbUncompressJpeg2000ModuleTest
+    ${INPUTDATA}/bretagne.j2k
+    ${TEMP}/moTvUncompressJpeg2000ModuleTest.tif
+    1230 # start X
+    942  # start Y
+    72   # size X
+    59   # size Y
+)
+
+
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
@@ -547,6 +560,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbImageStatisticsModuleTest.cxx
   otbConnectedComponentSegmentationModuleTest.cxx
   otbVectorDataTransformTest.cxx
+  otbUncompressJpeg2000ModuleTest.cxx
 )
 
 IF(OTB_USE_MAPNIK)
