@@ -49,7 +49,8 @@ purple_dot((char*const*) purpledot_xpm),
 vectorImage((char*const*) vectorImage_xpm),
 scalarImage((char*const*) scalarImage_xpm),
 process    ((char*const*) process_xpm),
-vectorData ((char*const*) vectorData_xpm);
+vectorData ((char*const*) vectorData_xpm),
+pleiades ((char*const*) pleiades_xpm);
 
 MonteverdiViewGUI
 ::MonteverdiViewGUI()
@@ -632,7 +633,7 @@ MonteverdiViewGUI
       new_node_info->add(it->GetDataType().c_str());
       new_node_info->branch_icons(&book, &book);
 
-      new_node->branch_icons(&vectorData, &vectorData);
+      new_node->branch_icons(&pleiades, &pleiades);
       it++;
       }
 
