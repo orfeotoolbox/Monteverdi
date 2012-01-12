@@ -71,7 +71,7 @@ public:
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
 
-  typedef TypeManager::FloatImageWithQuicklook    FloatImageWithQuicklook;
+  //typedef TypeManager::FloatImageWithQuicklook    FloatImageWithQuicklook;
 
 
   typedef FloatingVectorImageType::RegionType  VectorImageRegionType;
