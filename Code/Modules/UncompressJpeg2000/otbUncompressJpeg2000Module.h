@@ -84,15 +84,16 @@ public:
   typedef MultiChannelExtractROI<InternalPixelType, InternalPixelType> VectorImageExtractROIFilterType;
 
   /** Inverse sensor model typedefs */
-  typedef InverseSensorModel<double>         InverseSensorType;
-  typedef InverseSensorType::InputPointType  InverseSensorInputPointType;
-  typedef InverseSensorType::OutputPointType InverseSensorOutputPointType;
+  //typedef InverseSensorModel<double>         InverseSensorType;
+  //typedef InverseSensorType::InputPointType  InverseSensorInputPointType;
+  //typedef InverseSensorType::OutputPointType InverseSensorOutputPointType;
 
-  typedef GenericRSTransform<>           TransformType;
-  typedef TransformType::OutputPointType OutputPointType;
+  //typedef GenericRSTransform<>           TransformType;
+  //typedef TransformType::OutputPointType OutputPointType;
 
   /** Typedef to cast physical point to index*/
   typedef FloatingImageType::IndexType IndexType;
+  typedef FloatingImageType::SizeType SizeType;
   typedef IndexType::OffsetType        OffsetType;
   typedef FloatingImageType::PointType PointType;
 
@@ -127,6 +128,11 @@ public:
     m_View->GetScrollWidget()->show();
     m_Model->Update();
   }
+
+  void SetFileName(std::string name)
+    {
+    m_Filename = name;
+    }
 
 protected:
   /** Constructor */
@@ -167,8 +173,8 @@ private:
   /** Pointer to the vector image extract ROI filter object */
   VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
 
-  TransformType::Pointer m_Transform;
-  TransformType::Pointer m_InverseTransform;
+  //TransformType::Pointer m_Transform;
+  //TransformType::Pointer m_InverseTransform;
 
   /** Pointer to the Model */
   ModelType::Pointer m_Model;

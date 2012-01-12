@@ -38,8 +38,8 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   this->AddInputDescriptor<FloatImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"));
 
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
-  m_Transform                   = TransformType::New();
-  m_InverseTransform            = TransformType::New();
+  //m_Transform                   = TransformType::New();
+  //m_InverseTransform            = TransformType::New();
 
   m_Model                       = ModelType::New();
   m_View                        = ViewType::New();
@@ -97,6 +97,7 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   m_View->GetScrollWidget()->resize(vView->x(), vView->y(), vView->w(), vView->h());
   
   m_CheckFileExistance = true;
+  m_Filename = "";
 }
 
 /** Destructor */
@@ -165,8 +166,8 @@ void UncompressJpeg2000Module::Run()
   m_SelectAreaHandler->SetTileHintY(m_TileHintY);
 
   // Compute the total number of tiles
-  unsigned int nbTiles = ( vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 ) )
-    * ( vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) + 0.5 ) );
+  unsigned int nbTiles = ( vcl_ceil( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) ) )
+    * ( vcl_ceil( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) ) );
   
   std::cout<<m_TileHintX<<"  "<<imageRegion.GetSize()[0]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 )<<std::endl;
 
@@ -235,10 +236,15 @@ void UncompressJpeg2000Module::UpdateRegion()
   if (sizey < vSizeY->minimum()) vSizeY->value(vSizeY->minimum());
   if ((starty + sizey) > vSizeY->maximum()) vSizeY->value(vSizeY->maximum() - starty);
 
-  /** update size on disk */
-  vMemSize->value(vSizeX->value() * vSizeY->value() * static_cast<double>(4 * m_NbBands) / 1048576.0);
-
   m_SelectAreaHandler->UpdateGlRegion();
+  
+  IndexType tileRegIndex = m_TileRegionGl->GetRegion().GetIndex();
+  SizeType tileRegSize = m_TileRegionGl->GetRegion().GetSize();
+  
+  /** update size on disk */
+  vMemSize->value( static_cast<double>(tileRegSize[0]) *
+                   static_cast<double>(tileRegSize[1]) *
+                   static_cast<double>(4 * m_NbBands) / 1048576.0);
 }
 
 
@@ -256,31 +262,32 @@ void UncompressJpeg2000Module::Ok()
     FloatingVectorImageType::Pointer vectorImage = FloatingVectorImageType::New();
 
     IndexType  idxInit;
-    OffsetType offSize;
-    if (vectorImageQL.IsNull())
+    SizeType   regSize;
+    
+    if (vectorImageQL.IsNotNull())
       {
-      idxInit[0] = static_cast<unsigned long>(vStartX->value());
-      idxInit[1] = static_cast<unsigned long>(vStartY->value());
-
-      offSize[0] = static_cast<unsigned long>(vSizeX->value());
-      offSize[1] = static_cast<unsigned long>(vSizeY->value());
+      idxInit = m_TileRegionGl->GetRegion().GetIndex();
+      regSize = m_TileRegionGl->GetRegion().GetSize();
 
       m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
       m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
-      m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
-      m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
+      m_VectorImageExtractROIFilter->SetSizeX(regSize[0]);
+      m_VectorImageExtractROIFilter->SetSizeY(regSize[1]);
       m_VectorImageExtractROIFilter->SetInput(vectorImageQL->GetImage());
       
-      const char * filename = NULL;
-      filename = flu_file_chooser(otbGetTextMacro("Choose the image file..."), "*.tif", "");
-      if (filename == NULL)
+      if (m_Filename.length() == 0)
         {
-        otbMsgDebugMacro(<< "Empty file name!");
-        return;
+        const char * filename = NULL;
+        filename = flu_file_chooser(otbGetTextMacro("Choose the image file..."), "*.tif", "");
+        if (filename == NULL)
+          {
+          otbMsgDebugMacro(<< "Empty file name!");
+          return;
+          }
+        m_Filename = filename;
         }
-      m_Filename = filename;
       
-      std::ifstream isFileNameExist( filename );
+      std::ifstream isFileNameExist( m_Filename.c_str() );
       bool isProcessing = true;
 
       if(isFileNameExist && m_CheckFileExistance==true)
@@ -326,7 +333,7 @@ void UncompressJpeg2000Module::UpdateProgress()
   //pBar->value(progress);
   wExtractROIWindow->copy_label(oss1.str().c_str());
   //pBar->copy_label(oss2.str().c_str());
-  std::cout << "Progress :"<<progress << std::endl;
+  //std::cout << "Progress :"<<progress << std::endl;
 }
 
 /** UpdateProgressCallback */
@@ -342,7 +349,7 @@ void UncompressJpeg2000Module::UpdateProgressCallback(void * data)
 
 void UncompressJpeg2000Module::ThreadedWatch()
 {
-  std::cout << "Watcher"<< std::endl;
+  //std::cout << "Watcher"<< std::endl;
 
   // Deactivate window buttons
   Fl::lock();
@@ -358,8 +365,8 @@ void UncompressJpeg2000Module::ThreadedWatch()
   double updateThres = 0.01;
   double current = 0;
   
-  std::cout <<"ProcessObjectNull: "<<m_ProcessObject.IsNull()  << std::endl;
-  std::cout <<"this->IsBusy(): "<<this->IsBusy()  << std::endl;
+  //std::cout <<"ProcessObjectNull: "<<m_ProcessObject.IsNull()  << std::endl;
+  //std::cout <<"this->IsBusy(): "<<this->IsBusy()  << std::endl;
 
   while ((m_ProcessObject.IsNull() || this->IsBusy()))
     {
@@ -376,7 +383,7 @@ void UncompressJpeg2000Module::ThreadedWatch()
     // Sleep for a while
     Sleep(500);
     }
-  std::cout << "End watcher" << std::endl;
+  //std::cout << "End watcher" << std::endl;
   // Update progress one last time
   Fl::awake(&UpdateProgressCallback, this);
 
