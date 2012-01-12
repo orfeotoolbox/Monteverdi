@@ -206,7 +206,6 @@ void UncompressJpeg2000Module::Run()
   pBar->maximum(1);
   
   wExtractROIWindow->show();
-  //pBar->copy_label("0%");
   m_View->GetScrollWidget()->show();
   m_Model->Update();
 }
@@ -292,6 +291,7 @@ void UncompressJpeg2000Module::Ok()
 
     if(isProcessing)
       {
+      pBar->copy_label("0%");
       this->StartProcess2();
       this->StartProcess1();
       }
