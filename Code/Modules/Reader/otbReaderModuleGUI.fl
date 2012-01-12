@@ -11,7 +11,7 @@ class ReaderModuleGUI {open
   } {
     Fl_Window wFileChooserWindow {
       label {Open dataset} open
-      xywh {628 357 365 255} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {628 357 365 280} type Double box DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_File_Input vFilePath {
         callback {this->Analyse();}
@@ -37,18 +37,22 @@ class ReaderModuleGUI {open
         xywh {24 161 321 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 184 align 1 hide
       } {}
       Fl_Progress pBusyBar {
-        label {Computing Quicklook} selected
-        xywh {24 187 321 15} box PLASTIC_DOWN_BOX selection_color 1 labelsize 12 labelcolor 186 hide
+        label {Computing Quicklook}
+        xywh {24 216 321 15} box PLASTIC_DOWN_BOX selection_color 1 labelsize 12 labelcolor 186 hide
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {175 219 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {175 245 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Return_Button bOk {
         label Open
         callback {this->OpenDataSet();}
-        xywh {275 219 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {275 245 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Check_Button bSaveQuicklook {
+        label {Save quicklook for future re-use} selected
+        tooltip {If checked, Monteverdi will try to write the decoded quicklook to the image directory (name: image_name_ql_by_otb.tif), so as to save decoding time next time.} xywh {69 191 235 20} down_box DOWN_BOX value 1 color 48 labelfont 1 labelsize 12 labelcolor 185 hide
       }
     }
   }

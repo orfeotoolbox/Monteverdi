@@ -142,6 +142,7 @@ void ReaderModule::Analyse()
         vDataset->add(m_Desc[itRes].c_str());
         }
       vDataset->set_visible();
+      bSaveQuicklook->set_visible();
       vDataset->value(0);
       vDataset->activate();
       vDataset->copy_label("Please select the JPEG2000 resolution you want to open");
@@ -517,7 +518,7 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
     shrinkFactor = (1 << resolution);
 
     // Try to write the ql
-    if(!qlReadFromFile)
+    if(!qlReadFromFile && (bSaveQuicklook->value() == 1))
       {
       typedef itk::CastImageFilter<FloatingVectorImageType,otb::VectorImage<unsigned short> > CastFilterType;
       typedef otb::StreamingImageFileWriter<otb::VectorImage<unsigned short> > WriterType;
