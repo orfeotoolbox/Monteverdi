@@ -42,6 +42,8 @@
 
 #include "otbInverseSensorModel.h"
 #include "otbGenericRSTransform.h"
+
+#include "otbStreamingImageFileWriter.h"
 namespace otb
 {
 /** \class UncompressJpeg2000Module
@@ -113,6 +115,8 @@ public:
   typedef ViewType::RegionGlComponentType                        RegionGlComponentType;
   typedef RegionGlComponentType::ColorType                       ColorType;
   typedef otb::SelectTileROIActionHandler<ModelType, WidgetType> SelectAreaHandlerType;
+  
+  typedef otb::StreamingImageFileWriter<FloatingVectorImageType> FPVWriterType;
 
   /** Show the Module GUI */
   virtual bool CanShow(){return true; }
@@ -139,8 +143,23 @@ protected:
   virtual void Ok();
   virtual void Cancel();
   virtual void UpdateRegion();
+  virtual void ThreadedRun();
+  virtual void ThreadedWatch();
+
+  // Update the progress bar
+  void UpdateProgress();
+  
+  void HideWindow();
 
 private:
+  // Callback to update the window label
+  static void UpdateProgressCallback(void * data);
+
+  // Callback to hide window
+  static void HideWindowCallback(void * data);
+
+  // Callback to Error reporter window
+  static void SendErrorCallback(void * data);
 
   UncompressJpeg2000Module(const Self&);   //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
@@ -180,6 +199,22 @@ private:
   /** Tile sizes*/
   unsigned int m_TileHintX;
   unsigned int m_TileHintY;
+  
+  /** Number of bands */
+  unsigned int m_NbBands;
+  
+  /** Pointer to a process object (containing the writer) */
+  itk::ProcessObject::Pointer m_ProcessObject;
+  
+  /** Flag to check file existance */
+  bool m_CheckFileExistance;
+  
+  //error msg
+  std::string m_ErrorMsg;
+  
+  /** Output filename */
+  std::string m_Filename;
+  
 };
 
 } // End namespace otb
