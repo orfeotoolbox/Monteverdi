@@ -49,7 +49,7 @@ class UncompressJpeg2000ModuleGUI {open
             xywh {402 103 394 68}
           } {
             Fl_Value_Output vTileSizeX {
-              label {Size X} selected
+              label {Size X}
               xywh {460 114 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
             Fl_Value_Output vTileSizeY {
@@ -107,6 +107,9 @@ class UncompressJpeg2000ModuleGUI {open
             label Ok
             callback {this->Ok();}
             xywh {696 370 80 27} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Progress pBar {
+            xywh {415 375 180 20} box PLASTIC_DOWN_BOX selection_color 1
           }
         }
         Fl_Wizard {} {

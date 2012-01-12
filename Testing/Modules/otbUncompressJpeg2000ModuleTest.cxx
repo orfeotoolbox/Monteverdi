@@ -45,20 +45,25 @@ int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
   otb::DataObjectWrapper wrapperIn = specificModuleReader->GetOutputByKey("Input");
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
 
+  Fl::lock();
+
   module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
   specificModule->vStartX->value(atoi(argv[3]));
   specificModule->vStartY->value(atoi(argv[4]));
   specificModule->vSizeX->value(atoi(argv[5]));
   specificModule->vSizeY->value(atoi(argv[6]));
-  
+  specificModule->vSizeY->do_callback();
   Fl::check();
 
   // Simulate Ok button callback
-  //specificModule->SetFilename( argv[2] );
+  specificModule->SetCheckFileExistance(false);
+  specificModule->SetFilename( argv[2] );
   specificModule->bOk->do_callback();
   Fl::check();
 
-  return EXIT_SUCCESS;
+  // Wait for the writer to complete
+  Fl::run();
 
+  return EXIT_SUCCESS;
 }

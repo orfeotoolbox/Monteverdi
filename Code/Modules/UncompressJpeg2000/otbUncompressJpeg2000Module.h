@@ -27,7 +27,6 @@
 // include the OTB elements
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
 
 #include "itkRGBPixel.h"
@@ -39,9 +38,6 @@
 
 #include "otbWidgetResizingActionHandler.h"
 #include "otbSelectTileROIActionHandler.h"
-
-#include "otbInverseSensorModel.h"
-#include "otbGenericRSTransform.h"
 
 #include "otbStreamingImageFileWriter.h"
 namespace otb
@@ -75,21 +71,11 @@ public:
 
   typedef TypeManager::FloatImageWithQuicklook    FloatImageWithQuicklook;
 
-
   typedef FloatingVectorImageType::RegionType  VectorImageRegionType;
   typedef FloatingImageType::RegionType        ImageRegionType;
 
-
-  /// Multi channels Extract ROI filter
+  /** Multi channels Extract ROI filter */
   typedef MultiChannelExtractROI<InternalPixelType, InternalPixelType> VectorImageExtractROIFilterType;
-
-  /** Inverse sensor model typedefs */
-  //typedef InverseSensorModel<double>         InverseSensorType;
-  //typedef InverseSensorType::InputPointType  InverseSensorInputPointType;
-  //typedef InverseSensorType::OutputPointType InverseSensorOutputPointType;
-
-  //typedef GenericRSTransform<>           TransformType;
-  //typedef TransformType::OutputPointType OutputPointType;
 
   /** Typedef to cast physical point to index*/
   typedef FloatingImageType::IndexType IndexType;
@@ -121,6 +107,7 @@ public:
 
   /** Show the Module GUI */
   virtual bool CanShow(){return true; }
+  
   /** Show the Module GUI */
   virtual void Show()
   {
@@ -129,7 +116,12 @@ public:
     m_Model->Update();
   }
 
-  void SetFileName(std::string name)
+  /** Set/Get Macro for m_CheckFileExistance flag */
+  itkSetMacro(CheckFileExistance, bool);
+  itkGetMacro(CheckFileExistance, bool);
+
+  /** Set function for the output filename */
+  void SetFilename(std::string name)
     {
     m_Filename = name;
     }
@@ -152,19 +144,20 @@ protected:
   virtual void ThreadedRun();
   virtual void ThreadedWatch();
 
-  // Update the progress bar
+  /** Update the progress bar */
   void UpdateProgress();
   
+  /** Close window */
   void HideWindow();
 
 private:
-  // Callback to update the window label
+  /** Callback to update the window label */
   static void UpdateProgressCallback(void * data);
 
-  // Callback to hide window
+  /** Callback to hide window */
   static void HideWindowCallback(void * data);
 
-  // Callback to Error reporter window
+  /** Callback to Error reporter window */
   static void SendErrorCallback(void * data);
 
   UncompressJpeg2000Module(const Self&);   //purposely not implemented
@@ -172,9 +165,6 @@ private:
 
   /** Pointer to the vector image extract ROI filter object */
   VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
-
-  //TransformType::Pointer m_Transform;
-  //TransformType::Pointer m_InverseTransform;
 
   /** Pointer to the Model */
   ModelType::Pointer m_Model;
@@ -193,10 +183,10 @@ private:
   ResizingHandlerType::Pointer   m_ResizingHandler;
   SelectAreaHandlerType::Pointer m_SelectAreaHandler;
 
-  // Region for select area
+  /** Region for selected area */
   RegionGlComponentType::Pointer m_RegionGl;
 
-  // Region for select tiles
+  /** Region for selected tiles */
   RegionGlComponentType::Pointer m_TileRegionGl;
 
   /** Image resolution */
@@ -215,12 +205,11 @@ private:
   /** Flag to check file existance */
   bool m_CheckFileExistance;
   
-  //error msg
+  /** Error message */
   std::string m_ErrorMsg;
   
   /** Output filename */
   std::string m_Filename;
-  
 };
 
 } // End namespace otb

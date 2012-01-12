@@ -20,7 +20,6 @@
 #include "otbMsgReporter.h"
 #include "itkImageRegion.h"
 
-#include "otbForwardSensorModel.h"
 #include "otbFltkFilterWatcher.h"
 
 #include <FLU/Flu_File_Chooser.h>
@@ -38,9 +37,7 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   this->AddInputDescriptor<FloatImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"));
 
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
-  //m_Transform                   = TransformType::New();
-  //m_InverseTransform            = TransformType::New();
-
+  
   m_Model                       = ModelType::New();
   m_View                        = ViewType::New();
   m_Controller                  = ControllerType::New();
@@ -70,7 +67,6 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   tileColor[3] = 1;
   m_TileRegionGl->SetColor(tileColor);
   m_View->GetScrollWidget()->AddGlComponent(m_TileRegionGl);
-
 
   // Add the select area handler
   m_SelectAreaHandler->SetModel(m_Model);
@@ -122,8 +118,6 @@ void UncompressJpeg2000Module::Run()
 
   itk::ImageRegion<2> imageRegion;
 
-  typedef ForwardSensorModel<double> ForwardSensorType;
-
   if (vectorImageQL.IsNull())
     {
     itkExceptionMacro("The image pointer is not initialized!!");
@@ -169,10 +163,6 @@ void UncompressJpeg2000Module::Run()
   unsigned int nbTiles = ( vcl_ceil( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) ) )
     * ( vcl_ceil( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) ) );
   
-  std::cout<<m_TileHintX<<"  "<<imageRegion.GetSize()[0]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[0])/static_cast<double>(m_TileHintX) + 0.5 )<<std::endl;
-
-  std::cout<<m_TileHintY<<"  "<<imageRegion.GetSize()[1]<<"  "<<vcl_floor( static_cast<double>(imageRegion.GetSize()[1])/static_cast<double>(m_TileHintY) + 0.5 )<<std::endl;
-
   vNbTiles->value( nbTiles );
   
   vTileSize->value(static_cast<double>(m_TileHintX) * 
@@ -209,13 +199,19 @@ void UncompressJpeg2000Module::Run()
   
   /** update size on disk */
   vMemSize->value(vSizeX->value() * vSizeY->value() * static_cast<double>(4 * m_NbBands) / 1048576.0);
-
+  
+  vNbTileExt->value(nbTiles);
+  
+  pBar->minimum(0);
+  pBar->maximum(1);
+  
   wExtractROIWindow->show();
+  //pBar->copy_label("0%");
   m_View->GetScrollWidget()->show();
   m_Model->Update();
-  
 }
 
+/** UpdateRegion */
 void UncompressJpeg2000Module::UpdateRegion()
 {
   unsigned long startx, starty, sizex, sizey;
@@ -247,76 +243,59 @@ void UncompressJpeg2000Module::UpdateRegion()
                    static_cast<double>(4 * m_NbBands) / 1048576.0);
 }
 
-
 /** Cancel */
 void UncompressJpeg2000Module::Cancel()
 {
   wExtractROIWindow->hide();
 }
+
 /** Ok */
 void UncompressJpeg2000Module::Ok()
 {
-//   try
-//     {
-    FloatImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<FloatImageWithQuicklook>("InputImage");
-    FloatingVectorImageType::Pointer vectorImage = FloatingVectorImageType::New();
+  FloatImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<FloatImageWithQuicklook>("InputImage");
+  FloatingVectorImageType::Pointer vectorImage = FloatingVectorImageType::New();
 
-    IndexType  idxInit;
-    SizeType   regSize;
+  IndexType  idxInit;
+  SizeType   regSize;
+  
+  if (vectorImageQL.IsNotNull())
+    {
+    idxInit = m_TileRegionGl->GetRegion().GetIndex();
+    regSize = m_TileRegionGl->GetRegion().GetSize();
+
+    m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
+    m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
+    m_VectorImageExtractROIFilter->SetSizeX(regSize[0]);
+    m_VectorImageExtractROIFilter->SetSizeY(regSize[1]);
+    m_VectorImageExtractROIFilter->SetInput(vectorImageQL->GetImage());
     
-    if (vectorImageQL.IsNotNull())
+    if (m_Filename.length() == 0)
       {
-      idxInit = m_TileRegionGl->GetRegion().GetIndex();
-      regSize = m_TileRegionGl->GetRegion().GetSize();
-
-      m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
-      m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
-      m_VectorImageExtractROIFilter->SetSizeX(regSize[0]);
-      m_VectorImageExtractROIFilter->SetSizeY(regSize[1]);
-      m_VectorImageExtractROIFilter->SetInput(vectorImageQL->GetImage());
-      
-      if (m_Filename.length() == 0)
+      const char * filename = NULL;
+      filename = flu_file_chooser(otbGetTextMacro("Choose the image file..."), "*.tif", "");
+      if (filename == NULL)
         {
-        const char * filename = NULL;
-        filename = flu_file_chooser(otbGetTextMacro("Choose the image file..."), "*.tif", "");
-        if (filename == NULL)
-          {
-          otbMsgDebugMacro(<< "Empty file name!");
-          return;
-          }
-        m_Filename = filename;
+        otbMsgDebugMacro(<< "Empty file name!");
+        return;
         }
-      
-      std::ifstream isFileNameExist( m_Filename.c_str() );
-      bool isProcessing = true;
-
-      if(isFileNameExist && m_CheckFileExistance==true)
-        {
-          isFileNameExist.close();
-          isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );
-        }
-
-      if(isProcessing)
-        {
-        this->StartProcess2();
-        this->StartProcess1();
-        }
-      
-      //FPVWriter->Update();
-
-      //this->ClearOutputDescriptors();
-      //this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
-      //                          otbGetTextMacro("Image extracted"));
-
-      //this->NotifyOutputsChange();
-
+      m_Filename = filename;
       }
-    //wExtractROIWindow->hide();
-//     }
-//   catch (itk::ExceptionObject& err)
-//     {
-//     MsgReporter::GetInstance()->SendError(err.GetDescription());
-//     }
+    
+    std::ifstream isFileNameExist( m_Filename.c_str() );
+    bool isProcessing = true;
+
+    if(isFileNameExist && m_CheckFileExistance==true)
+      {
+        isFileNameExist.close();
+        isProcessing = ::fl_choice("File already exist, do you want to overwrite this file?", "cancel", "OK", NULL );
+      }
+
+    if(isProcessing)
+      {
+      this->StartProcess2();
+      this->StartProcess1();
+      }
+    }
 }
 
 /** UpdateProgress */
@@ -330,10 +309,9 @@ void UncompressJpeg2000Module::UpdateProgress()
   oss2.str("");
   oss2 << std::floor(100 * progress);
   oss2 << "%";
-  //pBar->value(progress);
+  pBar->value(progress);
   wExtractROIWindow->copy_label(oss1.str().c_str());
-  //pBar->copy_label(oss2.str().c_str());
-  //std::cout << "Progress :"<<progress << std::endl;
+  pBar->copy_label(oss2.str().c_str());
 }
 
 /** UpdateProgressCallback */
@@ -347,10 +325,9 @@ void UncompressJpeg2000Module::UpdateProgressCallback(void * data)
     }
 }
 
+/** ThreadedWatch */
 void UncompressJpeg2000Module::ThreadedWatch()
 {
-  //std::cout << "Watcher"<< std::endl;
-
   // Deactivate window buttons
   Fl::lock();
   bCancel->deactivate();
@@ -364,9 +341,6 @@ void UncompressJpeg2000Module::ThreadedWatch()
   double last = 0;
   double updateThres = 0.01;
   double current = 0;
-  
-  //std::cout <<"ProcessObjectNull: "<<m_ProcessObject.IsNull()  << std::endl;
-  //std::cout <<"this->IsBusy(): "<<this->IsBusy()  << std::endl;
 
   while ((m_ProcessObject.IsNull() || this->IsBusy()))
     {
@@ -383,7 +357,7 @@ void UncompressJpeg2000Module::ThreadedWatch()
     // Sleep for a while
     Sleep(500);
     }
-  //std::cout << "End watcher" << std::endl;
+  
   // Update progress one last time
   Fl::awake(&UpdateProgressCallback, this);
 
@@ -400,6 +374,7 @@ void UncompressJpeg2000Module::ThreadedWatch()
   Fl::awake(&HideWindowCallback, this);
 }
 
+/** ThreadedRun */
 void UncompressJpeg2000Module::ThreadedRun()
 {
   this->BusyOn();
@@ -422,13 +397,13 @@ void UncompressJpeg2000Module::ThreadedRun()
   this->BusyOff();
 }
 
-
+/** HideWindow */
 void UncompressJpeg2000Module::HideWindow()
 {
   wExtractROIWindow->hide();
 }
 
-
+/** HideWindowCallback */
 void UncompressJpeg2000Module::HideWindowCallback(void * data)
 {
   Self::Pointer writer = static_cast<Self *>(data);
@@ -439,7 +414,7 @@ void UncompressJpeg2000Module::HideWindowCallback(void * data)
     }
 }
 
-
+/** SendErrorCallback */
 void UncompressJpeg2000Module::SendErrorCallback(void * data)
 {
   std::string * error = static_cast<std::string *>(data);
@@ -453,6 +428,5 @@ void UncompressJpeg2000Module::SendErrorCallback(void * data)
     MsgReporter::GetInstance()->SendError(error->c_str());
     }
 }
-
 
 } // End namespace otb
