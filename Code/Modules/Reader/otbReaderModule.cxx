@@ -28,6 +28,8 @@
 
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
+#include "itkCastImageFilter.h"
+#include "otbStreamingImageFileWriter.h"
 
 #include "otbConfigure.h"
 #if defined(OTB_USE_JPEG2000)
@@ -458,30 +460,86 @@ void ReaderModule::OpenRealImageWithQuicklook()
 
 ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::string filepath, unsigned int& shrinkFactor)
 {
+  std::string qlKey = "_ql_by_otb.tif";
+
   FloatingVectorImageType::Pointer quicklook;
   if (m_TypeJPEG2000)
     {
     FPVReaderType::Pointer qlReader = FPVReaderType::New();
+
+
     unsigned int resolution = 0;
-    qlReader->SetFileName(filepath);
     if (!m_Desc.empty() && vDataset->visible() )
       {
       resolution = m_Desc.size() - 1;
-      qlReader->SetAdditionalNumber(resolution);
-
       }
-    
+
+    // Compute Quicklook path
+    std::string qlFilePath = filepath + qlKey;
+    bool qlReadFromFile = true;
+
+    qlReader->SetFileName(qlFilePath);
+
     this->pBusyBar->value(1);
     this->pBusyBar->show();
     Fl::check();
-    qlReader->Update();
-    this->pBusyBar->value(0);
-    this->pBusyBar->hide();
-    Fl::check();
+
+    try
+      {
+      qlReader->Update();
+      this->pBusyBar->value(0);
+      this->pBusyBar->hide();
+      Fl::check();
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      
+      qlReadFromFile = false;
+      }
+
+    if(!qlReadFromFile)
+      {
+      qlReader = FPVReaderType::New();
+      qlReader->SetFileName(filepath);
+      if (!m_Desc.empty() && vDataset->visible() )
+        {
+        qlReader->SetAdditionalNumber(resolution);
+        }
+    
+      qlReader->Update();
+      this->pBusyBar->value(0);
+      this->pBusyBar->hide();
+      Fl::check();
+      }
 
     quicklook = qlReader->GetOutput();
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << resolution);
+
+    // Try to write the ql
+    if(!qlReadFromFile)
+      {
+      typedef itk::CastImageFilter<FloatingVectorImageType,otb::VectorImage<unsigned short> > CastFilterType;
+      typedef otb::StreamingImageFileWriter<otb::VectorImage<unsigned short> > WriterType;
+
+      CastFilterType::Pointer caster = CastFilterType::New();
+      caster->SetInput(quicklook);
+
+      WriterType::Pointer writer = WriterType::New();
+      writer->SetInput(caster->GetOutput());
+      writer->SetFileName(qlFilePath);
+      writer->WriteGeomFileOn();
+
+      try
+        {
+        writer->Update();
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        // Silent catch
+        }
+      }
+
 
     }
 
