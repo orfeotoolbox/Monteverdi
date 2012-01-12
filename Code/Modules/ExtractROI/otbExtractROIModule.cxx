@@ -202,18 +202,18 @@ void ExtractROIModule::Run()
 //     vectorImage = vectorImageQL->GetImage();
 //     vectorImage->UpdateOutputInformation();
 //     imageRegion = vectorImage->GetLargestPossibleRegion();
-// 
+//
 //     /** Add view */
 //     m_VectorGenerator = VectorLayerGeneratorType::New();
 //     m_VectorGenerator->SetImage(vectorImage);
-// 
+//
 //     m_VectorGenerator->GenerateQuicklookOff();
 //     m_VectorGenerator->SetQuicklook(vectorImageQL->GetQuicklook());
 //     m_VectorGenerator->SetSubsamplingRate(vectorImageQL->GetShrinkFactor());
-// 
+//
 //     m_VectorGenerator->GenerateLayer();
 //     m_Model->AddLayer(m_VectorGenerator->GetLayer());
-// 
+//
 //     try
 //       {
 //       const itk::MetaDataDictionary& inputDict = vectorImage->GetMetaDataDictionary();
@@ -222,9 +222,9 @@ void ExtractROIModule::Run()
 // //      m_Transform->SetInputOrigin(vectorImage->GetOrigin());
 // //      m_Transform->SetInputSpacing(vectorImage->GetSpacing());
 //       m_Transform->InstanciateTransform();
-// 
+//
 //       isNotAProjection = (m_Transform->GetTransformAccuracy() == Projection::UNKNOWN);
-// 
+//
 //       if (isNotAProjection)
 //         {
 //         vLong1->deactivate();
@@ -503,27 +503,27 @@ void ExtractROIModule::Ok()
 //       {
 //       idxInit[0] = static_cast<unsigned long>(vStartX->value());
 //       idxInit[1] = static_cast<unsigned long>(vStartY->value());
-// 
+//
 //       offSize[0] = static_cast<unsigned long>(vSizeX->value());
 //       offSize[1] = static_cast<unsigned long>(vSizeY->value());
-// 
+//
 //       m_VectorImageExtractROIFilter->SetStartX(idxInit[0]);
 //       m_VectorImageExtractROIFilter->SetStartY(idxInit[1]);
 //       m_VectorImageExtractROIFilter->SetSizeX(offSize[0]);
 //       m_VectorImageExtractROIFilter->SetSizeY(offSize[1]);
 //       m_VectorImageExtractROIFilter->SetInput(vectorImageQL->GetImage());
-// 
+//
 //       this->ClearOutputDescriptors();
 //       this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
 //                                 otbGetTextMacro("Image extracted"));
-// 
+//
 //      /* VectorImageRegionType newRequestedRegion;
 //       newRequestedRegion.SetSize(0, 0);
 //       newRequestedRegion.SetIndex(static_cast<unsigned long>(vStartX->value()), static_cast<unsigned long>(vStartY->value()));
 //       m_VectorImageExtractROIFilter->GetOutput()->SetRequestedRegion(newRequestedRegion); */
-// 
+//
 //       this->NotifyOutputsChange();
-// 
+//
 //       }
     wExtractROIWindow->hide();
     }

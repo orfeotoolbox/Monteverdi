@@ -165,8 +165,8 @@ void UncompressJpeg2000Module::Run()
   
   vNbTiles->value( nbTiles );
   
-  vTileSize->value(static_cast<double>(m_TileHintX) * 
-                   static_cast<double>(m_TileHintY) * 
+  vTileSize->value(static_cast<double>(m_TileHintX) *
+                   static_cast<double>(m_TileHintY) *
                    static_cast<double>(4 * m_NbBands) / 1048576.0);
 
   m_SelectAreaHandler->SetLargestRegion(imageRegion);

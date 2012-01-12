@@ -520,7 +520,7 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
     // Try to write the ql
     if(!qlReadFromFile && (bSaveQuicklook->value() == 1))
       {
-      typedef itk::CastImageFilter<FloatingVectorImageType,otb::VectorImage<unsigned short> > CastFilterType;
+      typedef itk::CastImageFilter<FloatingVectorImageType, otb::VectorImage<unsigned short> > CastFilterType;
       typedef otb::StreamingImageFileWriter<otb::VectorImage<unsigned short> > WriterType;
 
       CastFilterType::Pointer caster = CastFilterType::New();
