@@ -11,7 +11,7 @@ class UncompressJpeg2000ModuleGUI {open
   } {
     Fl_Window wExtractROIWindow {
       label {Select the ROI} open
-      xywh {470 255 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
+      xywh {359 199 800 400} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelcolor 186 resizable size_range {800 400 0 0} visible
     } {
       Fl_Group {} {open
         xywh {400 0 405 400}
@@ -32,12 +32,12 @@ class UncompressJpeg2000ModuleGUI {open
               xywh {678 25 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
             Fl_Value_Output vRes {
-              label Res
-              xywh {460 54 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+              label Resolution
+              xywh {520 54 40 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
             Fl_Value_Output vNbTiles {
               label {Tiles in image}
-              xywh {678 54 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+              tooltip {Number of tiles in full image} xywh {678 54 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
           }
         }
@@ -63,11 +63,11 @@ class UncompressJpeg2000ModuleGUI {open
           }
         }
         Fl_Wizard {} {
-          label {Definition of the ROI extracted} open
-          xywh {402 191 396 92} box PLASTIC_DOWN_BOX align 5
+          label {Definition of the ROI} open
+          xywh {402 191 396 62} box PLASTIC_DOWN_BOX align 5
         } {
           Fl_Group guiSelectArea {open
-            xywh {402 191 396 92} align 0
+            xywh {402 191 396 62} color 1 align 0
           } {
             Fl_Value_Input vStartX {
               label {Start X}
@@ -89,10 +89,6 @@ class UncompressJpeg2000ModuleGUI {open
               callback {this->UpdateRegion();}
               xywh {650 226 100 25} box PLASTIC_DOWN_BOX labelcolor 186 step 1
             }
-            Fl_Value_Output vNbTileExt {
-              label {Nb Tiles}
-              xywh {570 255 100 25} box PLASTIC_DOWN_BOX labelcolor 186
-            }
           }
         }
         Fl_Group {} {open
@@ -104,7 +100,7 @@ class UncompressJpeg2000ModuleGUI {open
             xywh {606 370 80 27} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
           }
           Fl_Return_Button bOk {
-            label Ok
+            label Save
             callback {this->Ok();}
             xywh {696 370 80 27} box PLASTIC_DOWN_BOX shortcut 0xff0d color 55 labelfont 1 labelsize 12 labelcolor 186
           }
@@ -113,19 +109,23 @@ class UncompressJpeg2000ModuleGUI {open
           }
         }
         Fl_Wizard {} {
-          label {Extract estimation} open
-          xywh {402 302 396 63} box PLASTIC_DOWN_BOX align 5
+          label {Extracted region} open
+          xywh {402 272 396 93} box PLASTIC_DOWN_BOX color 50 align 5
         } {
           Fl_Group {} {open
-            xywh {402 302 396 63} align 0
+            xywh {402 275 396 90} color 62 align 0
           } {
             Fl_Value_Output vMemSize {
               label {Memory size (Mo) }
               xywh {640 307 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
             Fl_Value_Output vProcTime {
-              label {Process duration (min)}
-              xywh {640 336 100 25} box PLASTIC_DOWN_BOX labelcolor 186
+              label {Process duration (min)} selected
+              xywh {640 336 100 25} box PLASTIC_DOWN_BOX labelcolor 186 hide
+            }
+            Fl_Value_Output vNbTileExt {
+              label {Number of tiles in extract}
+              xywh {640 280 100 25} box PLASTIC_DOWN_BOX labelcolor 186
             }
           }
         }
