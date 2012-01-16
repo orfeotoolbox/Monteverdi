@@ -94,6 +94,12 @@ protected:
   virtual void TypeChanged();
   virtual void DatasetChanged();
   virtual void Hide();
+  virtual void ThreadedRun();
+  virtual void ThreadedWatch();
+
+  /** Update the progress bar */
+  void UpdateProgress();
+  
 
   void OpenRealImage();
   void OpenRealImageWithQuicklook();
@@ -107,6 +113,15 @@ protected:
 private:
   ReaderModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  /** Callback to update the window label */
+  static void UpdateProgressCallback(void * data);
+
+  /** Callback to hide window */
+  static void HideWindowCallback(void * data);
+
+  /** Callback to Error reporter window */
+  static void SendErrorCallback(void * data);
 
   // Readers
   FPVReaderType::Pointer           m_FPVReader;
@@ -140,6 +155,32 @@ private:
    *
    * TODO: support GDAL Overviews */
   FloatingVectorImageType::Pointer MakeQuicklook(std::string filepath, unsigned int& shrinkFactor);
+  
+  /** Pointer to a process object (containing the quicklook reader) */
+  itk::ProcessObject::Pointer m_ProcessObject;
+  
+  /** Error message */
+  std::string m_ErrorMsg;
+  
+  /** Image with quicklook */
+  ImageWithQuicklook::Pointer m_ImageWithQL;
+  
+  /** File name for image with quicklook */
+  std::string   m_Filepath;
+  
+  /** Shrink factor for quicklook */
+  unsigned int m_ShrinkFactor;
+  
+  /** Resolution for quicklook */
+  unsigned int m_Resolution;
+  
+  /** Key for quicklook */
+  std::string m_KeyForQL;
+  
+  /** Desc for quicklook */
+  std::string m_DescForQL;
+  
+  unsigned int m_progressIndex;
 };
 
 } // End namespace otb

@@ -60,6 +60,8 @@ ReaderModule::ReaderModule()
   m_TypeJPEG2000(false),
   m_MultibandComplexImage(false)
 {
+  this->NeedsPipelineLockingOn();
+  
   this->BuildGUI();
 
   // Hide busy bar
@@ -262,6 +264,10 @@ void ReaderModule::OpenDataSet()
       {
       case ImageType_RealImage:
         this->OpenRealImage();
+        wFileChooserWindow->hide();
+        // Notify all listener
+        // TODO: this should not be done by the user
+        this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
         break;
       case ImageType_ComplexImage:
         if (m_MultibandComplexImage)
@@ -294,9 +300,17 @@ void ReaderModule::OpenDataSet()
             }
           this->OpenComplexImage();
           }
+        wFileChooserWindow->hide();
+        // Notify all listener
+        // TODO: this should not be done by the user
+        this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
         break;
       case ImageType_VectorData:
         this->OpenVector();
+        wFileChooserWindow->hide();
+        // Notify all listener
+        // TODO: this should not be done by the user
+        this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
         break;
       case ImageType_PleiadesImage:
         this->OpenRealImageWithQuicklook();
@@ -305,12 +319,6 @@ void ReaderModule::OpenDataSet()
         itkExceptionMacro(<< "Unknow dataset type.");
         break;
       }
-
-    wFileChooserWindow->hide();
-
-    // Notify all listener
-    // TODO: this should not be done by the user
-    this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     }
   catch (itk::ExceptionObject& err)
     {
@@ -417,15 +425,15 @@ void ReaderModule::OpenRealImageWithQuicklook()
   this->ClearOutputDescriptors();
   std::ostringstream oss, ossId, ossDatasetId;
 
-  std::string   filepath = vFilePath->value();
-  std::string   otbFilepath = filepath;
-  unsigned int resolution = 0;
+  m_Filepath = vFilePath->value();
+  std::string   otbFilepath = m_Filepath;
+  m_Resolution = 0;
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
-    resolution = vDataset->value();
+    m_Resolution = vDataset->value();
     otbFilepath += ":";
-    ossDatasetId << resolution; // Following the convention in GDALImageIO
+    ossDatasetId << m_Resolution; // Following the convention in GDALImageIO
     otbFilepath += ossDatasetId.str();
   }
 
@@ -433,41 +441,186 @@ void ReaderModule::OpenRealImageWithQuicklook()
   if (!m_Desc.empty() && vDataset->visible() ) // it is a file which need additional info
     {
     if (m_TypeHdf)
-      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " SUBDATASET = " << ossDatasetId.str();
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(m_Filepath) << " SUBDATASET = " << ossDatasetId.str();
     if (m_TypeJPEG2000)
-      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(filepath) << " RESOLUTION = " << ossDatasetId.str();
+      oss << "Image read from file: " << itksys::SystemTools::GetFilenameName(m_Filepath) << " RESOLUTION = " << ossDatasetId.str();
 
     ossId << vName->value(); //m_Desc[vDataset->value()];
     }
   else
     {
-    oss << "Image read from file: " <<  itksys::SystemTools::GetFilenameName(filepath);
+    oss << "Image read from file: " <<  itksys::SystemTools::GetFilenameName(m_Filepath);
     ossId << vName->value();
     }
 
   m_FPVReader->SetFileName(otbFilepath);
   m_FPVReader->GenerateOutputInformation();
 
-  ImageWithQuicklook::Pointer imageWithQL = ImageWithQuicklook::New();
-  imageWithQL->SetImage(m_FPVReader->GetOutput());
-  unsigned int shrinkFactor = 1;
-  FloatingVectorImageType::Pointer quicklook = MakeQuicklook(filepath, shrinkFactor);
-  imageWithQL->SetQuicklook(quicklook);
-
-  // We may read the image at lower resolution.
-  imageWithQL->SetShrinkFactor(shrinkFactor / (1<<resolution));
-  this->AddOutputDescriptor(imageWithQL, ossId.str(), oss.str(), true);
+  m_ImageWithQL = ImageWithQuicklook::New();
+  m_ImageWithQL->SetImage(m_FPVReader->GetOutput());
+  m_ShrinkFactor = 1;
+  
+  m_KeyForQL = ossId.str();
+  m_DescForQL = oss.str();
+  
+  // Launch quicklook computation
+  this->pBusyBar->value(0);
+  this->pBusyBar->show();
+  Fl::check();
+  this->StartProcess2();
+  this->StartProcess1();
 }
 
-ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::string filepath, unsigned int& shrinkFactor)
+/** UpdateProgress */
+void ReaderModule::UpdateProgress()
 {
-  std::string qlKey = "_ql_by_otb.tif";
+  double progress = pBusyBar->value();
+  
+  if (m_progressIndex >= 4)
+    {
+    m_progressIndex = 0;
+    }
+    
+  switch (m_progressIndex)
+    {
+    case 0:
+      {
+      progress += 0.001;
+      if (progress > 1.0)
+        {
+        progress = 0.0;
+        pBusyBar->color(FL_RED);
+        pBusyBar->selection_color(55);
+        m_progressIndex++;
+        }
+      break;
+      }
+    case 1:
+      {
+      progress += 0.001;
+      if (progress > 1.0)
+        {
+        progress = 1.0;
+        m_progressIndex++;
+        }
+      break;
+      }
+    case 2:
+      {
+      progress -= 0.001;
+      if (progress < 0.0)
+        {
+        progress = 1.0;
+        pBusyBar->color(55);
+        pBusyBar->selection_color(FL_RED);
+        m_progressIndex++;
+        }
+      break;
+      }
+    case 3:
+      {
+      progress -= 0.001;
+      if (progress < 0.0)
+        {
+        progress = 0.0;
+        m_progressIndex++;
+        }
+      break;
+      }
+    default:
+      {
+      m_progressIndex = 0;
+      break;
+      }
+    }
 
+//   double progress = m_ProcessObject->GetProgress();
+// 
+//   itk::OStringStream oss1, oss2;
+//   oss1.str("");
+//   oss1 << otbGetTextMacro("Generating QuickLook") << "  (" << std::floor(100 * progress) << "%)";
+//   oss2.str("");
+//   oss2 << std::floor(100 * progress);
+//   oss2 << "%";
+  pBusyBar->value(progress);
+  //wFileChooserWindow->copy_label(oss1.str().c_str());
+  //pBar->copy_label(oss2.str().c_str());
+}
+
+/** UpdateProgressCallback */
+void ReaderModule::UpdateProgressCallback(void * data)
+{
+  Self::Pointer qlReader = static_cast<Self *>(data);
+
+  if (qlReader.IsNotNull())
+    {
+    qlReader->UpdateProgress();
+    }
+}
+
+/** ThreadedWatch */
+void ReaderModule::ThreadedWatch()
+{
+  // Deactivate window buttons
+  Fl::lock();
+  bCancel->deactivate();
+  bOk->deactivate();
+  bBrowse->deactivate();
+  vFilePath->deactivate();
+  vType->deactivate();
+  vName->deactivate();
+  bSaveQuicklook->deactivate();
+  Fl::unlock();
+
+  double last = 0;
+  double updateThres = 0.01;
+  double current = 0;
+  m_progressIndex = 0;
+
+  while ((m_ProcessObject.IsNull() || this->IsBusy()))
+    {
+//    if (m_ProcessObject.IsNotNull())
+//      {
+//       current = m_ProcessObject->GetProgress();
+//       if (current - last > updateThres)
+//         {
+        // Make the main fltk loop update progress fields
+        Fl::awake(&UpdateProgressCallback, this);
+//        last = current;
+//        }
+//      }
+    // Sleep for a while
+    Sleep(1000);
+    }
+
+  // Update progress one last time
+  Fl::awake(&UpdateProgressCallback, this);
+
+  Fl::lock();
+  // Reactivate window buttons
+  bCancel->activate();
+  bOk->activate();
+  bBrowse->activate();
+  vFilePath->activate();
+  vType->activate();
+  vName->activate();
+  bSaveQuicklook->activate();
+  Fl::unlock();
+
+  Fl::awake(&HideWindowCallback, this);
+}
+
+/** ThreadedRun */
+void ReaderModule::ThreadedRun()
+{
+  this->BusyOn();
+    
+  std::string qlKey = "_ql_by_otb.tif";
   FloatingVectorImageType::Pointer quicklook;
+  
   if (m_TypeJPEG2000)
     {
     FPVReaderType::Pointer qlReader = FPVReaderType::New();
-
 
     unsigned int resolution = 0;
     if (!m_Desc.empty() && vDataset->visible() )
@@ -476,46 +629,44 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
       }
 
     // Compute Quicklook path
-    std::string qlFilePath = filepath + qlKey;
+    std::string qlFilePath = m_Filepath + qlKey;
     bool qlReadFromFile = true;
 
     qlReader->SetFileName(qlFilePath);
 
-    this->pBusyBar->value(1);
-    this->pBusyBar->show();
-    Fl::check();
-
     try
       {
       qlReader->Update();
-      this->pBusyBar->value(0);
-      this->pBusyBar->hide();
-      Fl::check();
       }
     catch(itk::ExceptionObject & err)
       {
-      
       qlReadFromFile = false;
       }
 
     if(!qlReadFromFile)
       {
-      qlReader = FPVReaderType::New();
-      qlReader->SetFileName(filepath);
-      if (!m_Desc.empty() && vDataset->visible() )
+      try
         {
-        qlReader->SetAdditionalNumber(resolution);
+        qlReader = FPVReaderType::New();
+        qlReader->SetFileName(m_Filepath);
+        if (!m_Desc.empty() && vDataset->visible() )
+          {
+          qlReader->SetAdditionalNumber(resolution);
+          }
+        m_ProcessObject = qlReader;
+        qlReader->Update();
         }
-    
-      qlReader->Update();
-      this->pBusyBar->value(0);
-      this->pBusyBar->hide();
-      Fl::check();
+      catch (itk::ExceptionObject& err)
+        {
+        m_ErrorMsg = err.GetDescription();
+        Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+        }
+      
       }
 
     quicklook = qlReader->GetOutput();
     quicklook->DisconnectPipeline();
-    shrinkFactor = (1 << resolution);
+    m_ShrinkFactor = (1 << resolution);
 
     // Try to write the ql
     if(!qlReadFromFile && (bSaveQuicklook->value() == 1))
@@ -540,31 +691,65 @@ ReaderModule::FloatingVectorImageType::Pointer ReaderModule::MakeQuicklook(std::
         // Silent catch
         }
       }
-
-
-    }
+    }// end Jpeg2000
 
   if (quicklook.IsNull())
     {
     typedef otb::StreamingShrinkImageFilter<FloatingVectorImageType> StreamingShrinkImageFilterType;
-    StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
-    shrinker->SetInput(m_FPVReader->GetOutput());
-    FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
-                                otbGetTextMacro("Generating QuickLook ..."));
-    this->pBusyBar->value(1);
-    this->pBusyBar->show();
-    Fl::check();
-    shrinker->Update();
-    this->pBusyBar->value(0);
-    this->pBusyBar->hide();
-    Fl::check();
-    shrinkFactor = shrinker->GetShrinkFactor();
-
-    quicklook = shrinker->GetOutput();
+    try
+      {
+      StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+      shrinker->SetInput(m_FPVReader->GetOutput());
+      //FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
+      //                            otbGetTextMacro("Generating QuickLook ..."));
+      m_ProcessObject = shrinker->GetStreamer();
+      shrinker->Update();
+      m_ShrinkFactor = shrinker->GetShrinkFactor();
+      quicklook = shrinker->GetOutput();
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      m_ErrorMsg = err.GetDescription();
+      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+      }
+ 
     quicklook->DisconnectPipeline();
     }
 
-  return quicklook;
+  m_ImageWithQL->SetQuicklook(quicklook);
+  // We may read the image at lower resolution.
+  m_ImageWithQL->SetShrinkFactor(m_ShrinkFactor / (1<<m_Resolution ));
+  this->AddOutputDescriptor(m_ImageWithQL, m_KeyForQL, m_DescForQL, true);
+  this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+  
+  m_ProcessObject = m_FPVReader;
+  this->BusyOff();
+}
+
+/** HideWindowCallback */
+void ReaderModule::HideWindowCallback(void * data)
+{
+  Self::Pointer qlReader = static_cast<Self *>(data);
+
+  if (qlReader.IsNotNull())
+    {
+    qlReader->Hide();
+    }
+}
+
+/** SendErrorCallback */
+void ReaderModule::SendErrorCallback(void * data)
+{
+  std::string * error = static_cast<std::string *>(data);
+  //TODO test if error is null
+  if (error == NULL)
+    {
+    MsgReporter::GetInstance()->SendError("Unknown error during update");
+    }
+  else
+    {
+    MsgReporter::GetInstance()->SendError(error->c_str());
+    }
 }
 
 void ReaderModule::OpenMultiComplexImage()
