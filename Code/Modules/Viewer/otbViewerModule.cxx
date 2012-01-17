@@ -742,6 +742,8 @@ void ViewerModule::ShowSelectedImages()
   blender = dynamic_cast<BlendingFunctionType *> (imageLayer->GetBlendingFunction());
   blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
   m_RenderingModel->AddLayer(imageLayer);
+  SetContrastStretch(); //image layer rendering function may have changed
+
 
   if ((m_DisplayMode == TRANSPARENCY_DISPLAY_MODE) && (m_CurrentOpaqueImage != m_CurrentTransparentImage))
     {
