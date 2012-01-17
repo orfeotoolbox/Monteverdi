@@ -742,8 +742,12 @@ void ViewerModule::ShowSelectedImages()
   blender = dynamic_cast<BlendingFunctionType *> (imageLayer->GetBlendingFunction());
   blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
   m_RenderingModel->AddLayer(imageLayer);
-  SetContrastStretch(); //image layer rendering function may have changed
 
+  //test if contrast layer have changed
+  if (guiContrastStretchSelection->value() != static_cast<int> (m_ContrastStretchList[m_CurrentOpaqueImage]))
+    {
+    SetContrastStretch();
+    }
 
   if ((m_DisplayMode == TRANSPARENCY_DISPLAY_MODE) && (m_CurrentOpaqueImage != m_CurrentTransparentImage))
     {
