@@ -19,6 +19,12 @@
 #include "otbUncompressJpeg2000Module.h"
 #include "otbReaderModule.h"
 
+#include "otbThreads.h"
+//#include "itksys/SystemTools.hxx"
+//#include "otbI18n.h"
+//#include "otbFltkFilterWatcher.h"
+//#include "FLU/Flu_File_Chooser.h"
+
 int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
 {
   // Load a jpeg2000 image
@@ -34,6 +40,12 @@ int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
   specificModuleReader->vName->value("Input");
   specificModuleReader->bOk->do_callback();
 
+  // wait for the end of quicklook generation
+  while (specificModuleReader->IsBusy())
+    {
+    otb::Threads::Sleep(1000000);
+    }
+  
   Fl::check();
 
   // Load Uncompress Jpeg2000 module
@@ -41,6 +53,8 @@ int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
   otb::Module::Pointer           module = specificModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
+  
+  
 
   otb::DataObjectWrapper wrapperIn = specificModuleReader->GetOutputByKey("Input");
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
