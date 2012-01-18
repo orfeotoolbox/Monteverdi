@@ -19,18 +19,15 @@
 #include "otbUncompressJpeg2000Module.h"
 #include "otbReaderModule.h"
 
-#include "otbThreads.h"
-//#include "itksys/SystemTools.hxx"
-//#include "otbI18n.h"
-//#include "otbFltkFilterWatcher.h"
-//#include "FLU/Flu_File_Chooser.h"
-
 int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
 {
   // Load a jpeg2000 image
   otb::ReaderModule::Pointer specificModuleReader = otb::ReaderModule::New();
   otb::Module::Pointer       moduleReader = specificModuleReader.GetPointer();
 
+  // for multithreading
+  Fl::lock();
+  
   moduleReader->Start();
   Fl::check();
 
@@ -38,28 +35,21 @@ int otbUncompressJpeg2000ModuleTest(int argc, char* argv[])
   specificModuleReader->vFilePath->value(argv[1]);
   specificModuleReader->vFilePath->do_callback();
   specificModuleReader->vName->value("Input");
+  specificModuleReader->bSaveQuicklook->value(0);
   specificModuleReader->bOk->do_callback();
-
-  // wait for the end of quicklook generation
-  while (specificModuleReader->IsBusy())
-    {
-    otb::Threads::Sleep(1000000);
-    }
-  
   Fl::check();
+  
+  // wait for the end of quicklook generation
+  Fl::run();
 
   // Load Uncompress Jpeg2000 module
   otb::UncompressJpeg2000Module::Pointer specificModule = otb::UncompressJpeg2000Module::New();
   otb::Module::Pointer           module = specificModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
-  
-  
 
   otb::DataObjectWrapper wrapperIn = specificModuleReader->GetOutputByKey("Input");
   std::cout << "Input wrapper: " << wrapperIn << std::endl;
-
-  Fl::lock();
 
   module->AddInputByKey("InputImage", wrapperIn);
   module->Start();
