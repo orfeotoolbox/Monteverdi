@@ -92,7 +92,7 @@ int otbMonteverdiApplicationExportToXML(int argc, char* argv[])
   moduleVector = model->GetAvailableModuleInstanceIds();
 
   // Get the ModuleInstanceId
-  std::string featureExtractionId = moduleVector[0];
+  std::string featureExtractionId = moduleVector[1];
 
   otbGenericMsgDebugMacro(<< "featureExtractionId " << featureExtractionId);
   // Get the module itself
@@ -155,7 +155,7 @@ int otbMonteverdiApplicationExportToXML(int argc, char* argv[])
   moduleVector = model->GetAvailableModuleInstanceIds();
 
   // Get the ModuleInstanceId
-  std::string viewerId = moduleVector[0];
+  std::string viewerId = moduleVector[2];
 
   // Get the module itself
   otb::Module::Pointer module3 = model->GetModuleByInstanceId(viewerId);
