@@ -351,6 +351,7 @@ ADD_TEST(moTvObjectLabelingColoredOutput4Bands ${Modules_TESTS4} otbObjectLabeli
   ${INPUTDATA}/maur_labelled.tif
   131 120 226 42 208 231 187 9
   ${TEMP}/moTvObjectLabelingColoredOutput4Bands.tif
+  0
 )
 
 ADD_TEST(moTvObjectLabelingColoredOutput3Bands ${Modules_TESTS4} otbObjectLabelingColoredOutput
@@ -358,6 +359,7 @@ ADD_TEST(moTvObjectLabelingColoredOutput3Bands ${Modules_TESTS4} otbObjectLabeli
   ${INPUTDATA}/maur_labelled.tif
   131 120 226 42 208 231 187 9
   ${TEMP}/moTvObjectLabelingColoredOutput3Bands.tif
+  0
 )
 
 
