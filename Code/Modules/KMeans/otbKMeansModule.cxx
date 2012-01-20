@@ -343,8 +343,8 @@ void KMeansModule::UpdateNumberOfSamplesFromAvailableRAM()
   unsigned int nbClasses = static_cast<unsigned int>(vNumberOfClasses->value());
 
   // Compute the number of maximum samples allowed by the RAM
-  m_NumberOfSampleKnowingRAM = static_cast<unsigned int>(vAvailableRAM->value()) * 1024 *1024 /(sizeof(PrecisionType) * nbComp);
-  double percentageOfImageUsed = 100 * static_cast<double>(m_NumberOfSampleKnowingRAM / image->GetLargestPossibleRegion().GetNumberOfPixels());
+  double numberOfSampleKnowingRAM = static_cast<unsigned int>(vAvailableRAM->value()) * 1024 *1024 /(sizeof(PrecisionType) * nbComp);
+  double percentageOfImageUsed = 100 * static_cast<double>(numberOfSampleKnowingRAM / image->GetLargestPossibleRegion().GetNumberOfPixels());
 
   // maximum of the image to be used is 100%
   percentageOfImageUsed = std::min(percentageOfImageUsed, 100.);

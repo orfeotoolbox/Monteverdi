@@ -203,9 +203,6 @@ private:
 
   //error msg
   std::string m_ErrorMsg;
-
-  // number of samples computed from RAM
-  double     m_NumberOfSampleKnowingRAM;
 };
 
 } // End namespace otb
