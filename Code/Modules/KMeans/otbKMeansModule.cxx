@@ -56,6 +56,7 @@ void KMeansModule::Run()
   pProgressBar->minimum(0);
   pProgressBar->maximum(1);
   wKMeansWindow->show();
+  this->UpdateNumberOfSamplesFromAvailableRAM();
   this->UpdateNumberOfSamples();
 }
 
@@ -74,8 +75,6 @@ void KMeansModule::UpdateNumberOfSamples()
 {
   vNumberOfSamples->show();
 
-  int squareRatio = static_cast<int>(100 / vNumberOfSamples->value());
-
   FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
 
   if (image.IsNull())
@@ -85,10 +84,9 @@ void KMeansModule::UpdateNumberOfSamples()
 
   image->UpdateOutputInformation();
 
-  unsigned int nbSamples = image->GetLargestPossibleRegion().GetNumberOfPixels() / squareRatio;
+  unsigned int nbSamples =  static_cast<unsigned int>(vNumberOfSamples->value() * image->GetLargestPossibleRegion().GetNumberOfPixels() / 100);
 
   itk::OStringStream oss;
-  oss.str("");
   oss << vNumberOfSamples->value() << "% of image (" << nbSamples << " samples)";
   oNumberOfSamples->copy_label(oss.str().c_str());
 }
@@ -181,8 +179,9 @@ void KMeansModule::ThreadedRun()
 {
   this->BusyOn();
 
-  FloatingVectorImageType::Pointer image = this->GetInputData<FloatingVectorImageType>("InputImage");
-
+  FloatingVectorImageType::Pointer image  = this->GetInputData<FloatingVectorImageType>("InputImage");
+  unsigned int                     nbComp = image->GetNumberOfComponentsPerPixel();
+  
   if (image.IsNull())
     {
     m_ErrorMsg = "InputImage is null";
@@ -194,13 +193,11 @@ void KMeansModule::ThreadedRun()
   // First, sample data
   SamplingFilterType::Pointer sampler = SamplingFilterType::New();
   sampler->SetInput(image);
-  
+
+  unsigned int nbClasses = static_cast<unsigned int>(vNumberOfClasses->value());
   const double percentageOfTotalNbSamples = vNumberOfSamples->value() / 100;
-  const double theoricNBSamplesForKMeans = image->GetLargestPossibleRegion().GetNumberOfPixels()
-                                      * percentageOfTotalNbSamples;
-  const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
-  const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
-  
+  const double actualNBSamplesForKMeans = image->GetLargestPossibleRegion().GetNumberOfPixels()
+                                         * percentageOfTotalNbSamples;
   const double shrinkFactor
     = vcl_floor(vcl_sqrt(image->GetLargestPossibleRegion().GetNumberOfPixels()
                          / actualNBSamplesForKMeans ));
@@ -208,11 +205,6 @@ void KMeansModule::ThreadedRun()
   sampler->SetShrinkFactor(shrinkFactor);
   m_ProcessObject = sampler;
   sampler->Update();
-
-
-  // Then, build the sample list
-  unsigned int nbComp = sampler->GetOutput()->GetNumberOfComponentsPerPixel();
-  unsigned int nbClasses = static_cast<unsigned int>(vNumberOfClasses->value());
 
   itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),
                                                        sampler->GetOutput()->GetLargestPossibleRegion());
@@ -266,6 +258,7 @@ void KMeansModule::ThreadedRun()
   otbGenericMsgDebugMacro(<< otbGetTextMacro("Tree generated"));
 
   // Estimate the centroids
+  m_Estimator = EstimatorType::New();
   m_Estimator->SetKdTree(treeGenerator->GetOutput());
   m_Estimator->SetParameters(initialCentroids);
   m_Estimator->SetMaximumIteration(static_cast<unsigned int>(vNumberOfIterations->value()));
@@ -305,6 +298,9 @@ void KMeansModule::ThreadedRun()
   this->NotifyOutputsChange();
   Fl::unlock();
 
+  // Reset the estimator
+  m_Estimator = NULL;
+
   this->BusyOff();
 }
 
@@ -336,4 +332,26 @@ void KMeansModule::SendErrorCallback(void * data)
     MsgReporter::GetInstance()->SendError(error->c_str());
     }
 }
+
+void KMeansModule::UpdateNumberOfSamplesFromAvailableRAM()
+{  
+  FloatingVectorImageType::Pointer image  = this->GetInputData<FloatingVectorImageType>("InputImage");
+  image->UpdateOutputInformation();
+
+  // Necessary informations
+  unsigned int nbComp = image->GetNumberOfComponentsPerPixel();
+  unsigned int nbClasses = static_cast<unsigned int>(vNumberOfClasses->value());
+
+  // Compute the number of maximum samples allowed by the RAM
+  m_NumberOfSampleKnowingRAM = static_cast<unsigned int>(vAvailableRAM->value()) * 1024 *1024 /(sizeof(PrecisionType) * nbComp);
+  double percentageOfImageUsed = 100 * static_cast<double>(m_NumberOfSampleKnowingRAM / image->GetLargestPossibleRegion().GetNumberOfPixels());
+
+  // maximum of the image to be used is 100%
+  percentageOfImageUsed = std::min(percentageOfImageUsed, 100.);
+  
+  // Update the GUI with the new value
+  vNumberOfSamples->value(percentageOfImageUsed);
+  this->UpdateNumberOfSamples();
+}
+
 } // End namespace otb

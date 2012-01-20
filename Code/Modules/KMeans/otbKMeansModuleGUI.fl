@@ -11,17 +11,17 @@ class KMeansModuleGUI {open
   } {
     Fl_Window wKMeansWindow {
       label {KMeans setup} open
-      xywh {574 98 300 270} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
+      xywh {574 98 300 295} type Double box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186 visible
     } {
       Fl_Return_Button bOk {
         label Ok
         callback {this->Ok();}
-        xywh {175 223 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {175 252 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Button bCancel {
         label Cancel
         callback {this->Cancel();}
-        xywh {42 223 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
+        xywh {42 252 81 25} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
       }
       Fl_Progress pProgressBar {
         label {Sampling (0%)}
@@ -41,21 +41,43 @@ class KMeansModuleGUI {open
         xywh {0 46 300 31}
       }
       Fl_Spinner vNumberOfIterations {
-        label {Max. nb.  of iterations } selected
+        label {Max. nb.  of iterations }
         xywh {170 146 85 24} maximum 1e+06 step 100 value 100
       }
       Fl_Value_Input vConvergenceThreshold {
         label {Convergence threshold }
         xywh {170 181 85 23} step 1e-05 value 0.0001
       }
+      Fl_Spinner vAvailableRAM {
+        label {Available RAM}
+        callback {this->UpdateNumberOfSamplesFromAvailableRAM();} selected
+        xywh {170 211 85 24} when 1 maximum 1e+10 value 256
+      }
     }
   }
   Function {Ok()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {Cancel()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {~KMeansModuleGUI()} {open return_type virtual
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateNumberOfSamples()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {UpdateNumberOfSamplesFromAvailableRAM()} {open return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
 } 

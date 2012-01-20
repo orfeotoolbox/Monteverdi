@@ -173,6 +173,9 @@ protected:
   // Hide the window
   void HideWindow();
 
+  // Update the number of samples knowing available RAM
+  void UpdateNumberOfSamplesFromAvailableRAM();
+
 private:
   // Callback to update the window label
   static void UpdateProgressCallback(void * data);
@@ -200,6 +203,9 @@ private:
 
   //error msg
   std::string m_ErrorMsg;
+
+  // number of samples computed from RAM
+  double     m_NumberOfSampleKnowingRAM;
 };
 
 } // End namespace otb
