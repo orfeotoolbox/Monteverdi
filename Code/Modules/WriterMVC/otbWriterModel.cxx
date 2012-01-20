@@ -20,8 +20,6 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbImageFileWriter.h"
-
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
@@ -374,7 +372,7 @@ template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
   typedef otb::VectorImage<CastOutputPixelType, 2>  CastOutputImageType;
-  typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
+  typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
 
   typename CastWriterType::Pointer writer = CastWriterType::New();
 
