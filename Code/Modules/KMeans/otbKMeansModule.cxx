@@ -334,7 +334,7 @@ void KMeansModule::SendErrorCallback(void * data)
 }
 
 void KMeansModule::UpdateNumberOfSamplesFromAvailableRAM()
-{  
+{
   FloatingVectorImageType::Pointer image  = this->GetInputData<FloatingVectorImageType>("InputImage");
   image->UpdateOutputInformation();
 
