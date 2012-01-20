@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbMonteverdiViewGUI.h"
+#include "ConfigureMonteverdi.h"
 
 #include <iostream>
 #include <cassert>
@@ -57,6 +58,13 @@ MonteverdiViewGUI
 {
   // Build the structure of the GUI (MonteverdiViewGroup)
   this->Build();
+
+  // Main window title includes the version
+  itk::OStringStream oss;
+  oss << "Monteverdi - ";
+  oss << Monteverdi_VERSION_STRING;
+  wMainWindow->copy_label(oss.str().c_str());
+
   // Files Tree
   m_Tree = new FluTreeBrowser(gTreeGroup->x(), gTreeGroup->y(), gTreeGroup->w(), gTreeGroup->h(), "Tree ");
   m_Tree->insertion_mode(FLU_INSERT_BACK);
