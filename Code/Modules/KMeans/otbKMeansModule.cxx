@@ -300,7 +300,7 @@ void KMeansModule::ThreadedRun()
   Fl::unlock();
 
   // Reset the estimator
-  m_Estimator = 0;
+  //m_Estimator = 0;
 
   this->BusyOff();
 }
