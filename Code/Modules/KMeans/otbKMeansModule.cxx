@@ -144,6 +144,7 @@ void KMeansModule::ThreadedWatch()
   vNumberOfClasses->deactivate();
   vConvergenceThreshold->deactivate();
   vNumberOfIterations->deactivate();
+  vAvailableRAM->deactivate();
   Fl::unlock();
 
   // Wait for the module to be busy
@@ -170,6 +171,7 @@ void KMeansModule::ThreadedWatch()
   vNumberOfClasses->activate();
   vConvergenceThreshold->activate();
   vNumberOfIterations->activate();
+  vAvailableRAM->activate();
   Fl::unlock();
 
   Fl::awake(&HideWindowCallback, this);
@@ -199,11 +201,10 @@ void KMeansModule::ThreadedRun()
   const double actualNBSamplesForKMeans = image->GetLargestPossibleRegion().GetNumberOfPixels()
                                          * percentageOfTotalNbSamples;
   const double shrinkFactor
-    = vcl_floor(vcl_sqrt(image->GetLargestPossibleRegion().GetNumberOfPixels()
+    = vcl_ceil(vcl_sqrt(image->GetLargestPossibleRegion().GetNumberOfPixels()
                          / actualNBSamplesForKMeans ));
-  
   sampler->SetShrinkFactor(shrinkFactor);
-  m_ProcessObject = sampler;
+  m_ProcessObject = sampler->GetStreamer();
   sampler->Update();
 
   itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),
@@ -299,7 +300,7 @@ void KMeansModule::ThreadedRun()
   Fl::unlock();
 
   // Reset the estimator
-  m_Estimator = NULL;
+  m_Estimator = 0;
 
   this->BusyOff();
 }

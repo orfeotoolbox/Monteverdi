@@ -33,7 +33,7 @@ class KMeansModuleGUI {open
       }
       Fl_Slider vNumberOfSamples {
         label {Number of samples}
-        callback {this->UpdateNumberOfSamples();}
+        callback {this->UpdateNumberOfSamples();} selected
         xywh {40 25 215 20} type {Horz Fill} box PLASTIC_DOWN_BOX selection_color 4 align 1 maximum 100 step 0.1 value 50 slider_size 0.060606
       }
       Fl_Box oNumberOfSamples {
@@ -49,9 +49,9 @@ class KMeansModuleGUI {open
         xywh {170 181 85 23} step 1e-05 value 0.0001
       }
       Fl_Spinner vAvailableRAM {
-        label {Available RAM}
-        callback {this->UpdateNumberOfSamplesFromAvailableRAM();} selected
-        xywh {170 211 85 24} when 1 maximum 1e+10 value 256
+        label {Sample list size in MB}
+        callback {this->UpdateNumberOfSamplesFromAvailableRAM();}
+        xywh {170 211 85 24} when 1 maximum 1000 value 32
       }
     }
   }
