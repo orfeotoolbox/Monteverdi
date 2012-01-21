@@ -186,6 +186,11 @@ private:
   // Callback to Error reporter window
   static void SendErrorCallback(void * data);
 
+  void RegisterSampler(itk::ProcessObject* sampler);
+  void ReleaseSampler();
+  void CreateEstimator();
+  void ReleaseEstimator();
+
   KMeansModule(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
@@ -203,6 +208,9 @@ private:
 
   //error msg
   std::string m_ErrorMsg;
+
+  // mutex to avoid race condition in progress reporting
+  itk::SimpleFastMutexLock m_Mutex;
 };
 
 } // End namespace otb

@@ -21,6 +21,8 @@
 
 #include "otbMsgReporter.h"
 #include "itkImageRegionIterator.h"
+#include "itkMutexLockHolder.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -32,7 +34,6 @@ KMeansModule::KMeansModule()
 
   m_KMeansFilter = KMeansFilterType::New();
   m_ChangeLabelFilter = ChangeLabelFilterType::New();
-  m_Estimator = EstimatorType::New();
 
   // Describe inputs
   this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Image to cluster"));
@@ -91,8 +92,34 @@ void KMeansModule::UpdateNumberOfSamples()
   oNumberOfSamples->copy_label(oss.str().c_str());
 }
 
+void KMeansModule::RegisterSampler(itk::ProcessObject* sampler)
+{
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
+  m_ProcessObject = sampler;
+}
+
+void KMeansModule::ReleaseSampler()
+{
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
+  m_ProcessObject = 0;
+}
+
+void KMeansModule::CreateEstimator()
+{
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
+  m_Estimator = EstimatorType::New();
+}
+
+void KMeansModule::ReleaseEstimator()
+{
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
+  m_Estimator = 0;
+}
+
 void KMeansModule::UpdateProgress()
 {
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
+
   itk::OStringStream oss1;
   oss1.str("");
 
@@ -108,7 +135,11 @@ void KMeansModule::UpdateProgress()
       pProgressBar->value(progress);
       pProgressBar->copy_label(oss1.str().c_str());
       }
-    else if (m_Estimator->GetCurrentIteration() == 0)
+    }
+
+  if (m_Estimator)
+    {
+    if (m_Estimator->GetCurrentIteration() == 0)
       {
       pProgressBar->value(0.);
       pProgressBar->copy_label(otbGetTextMacro("Generating decision tree"));
@@ -204,7 +235,7 @@ void KMeansModule::ThreadedRun()
     = vcl_ceil(vcl_sqrt(image->GetLargestPossibleRegion().GetNumberOfPixels()
                          / actualNBSamplesForKMeans ));
   sampler->SetShrinkFactor(shrinkFactor);
-  m_ProcessObject = sampler->GetStreamer();
+  this->RegisterSampler(sampler->GetStreamer());
   sampler->Update();
 
   itk::ImageRegionIterator<FloatingVectorImageType> it(sampler->GetOutput(),
@@ -212,10 +243,11 @@ void KMeansModule::ThreadedRun()
   it.GoToBegin();
   ListSampleType::Pointer listSample = ListSampleType::New();
 
-  SampleType min = it.Get();
-  SampleType max = it.Get();
-  listSample->PushBack(it.Get());
+  FloatingVectorImageType::PixelType pixel = it.Get();
+  SampleType mini(pixel);
+  SampleType maxi(pixel);
 
+  listSample->PushBack(it.Get());
   ++it;
 
   while (!it.IsAtEnd())
@@ -225,30 +257,38 @@ void KMeansModule::ThreadedRun()
 
     for (unsigned int i = 0; i < nbComp; ++i)
       {
-      if (min[i] > sample[i])
+      if (mini[i] > sample[i])
         {
-        min[i] = sample[i];
+        mini[i] = sample[i];
         }
-      if (max[i] < sample[i])
+      if (maxi[i] < sample[i])
         {
-        max[i] = sample[i];
+        maxi[i] = sample[i];
         }
       }
     ++it;
     }
 
-  // Next, intialiaze centroids
+  // We don't need the QL anymore
+  ReleaseSampler();
+  sampler = 0;
+
+  // Next, initialiaze centroids
   EstimatorType::ParametersType initialCentroids(nbComp * nbClasses);
+
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer generator
+    = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
 
   for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
     {
     for (unsigned int compIndex = 0; compIndex < nbComp; ++compIndex)
       {
-      initialCentroids[compIndex + classIndex * nbComp] = min[compIndex]
-                                                          + (max[compIndex] -
-                                                             min[compIndex]) * rand() / (RAND_MAX + 1.0);
+      initialCentroids[compIndex + classIndex * nbComp] =
+          generator->GetUniformVariate(mini[compIndex], maxi[compIndex]);
       }
     }
+
+  this->CreateEstimator();
 
   // Now, build the kdTree
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
@@ -259,7 +299,6 @@ void KMeansModule::ThreadedRun()
   otbGenericMsgDebugMacro(<< otbGetTextMacro("Tree generated"));
 
   // Estimate the centroids
-  m_Estimator = EstimatorType::New();
   m_Estimator->SetKdTree(treeGenerator->GetOutput());
   m_Estimator->SetParameters(initialCentroids);
   m_Estimator->SetMaximumIteration(static_cast<unsigned int>(vNumberOfIterations->value()));
@@ -272,6 +311,8 @@ void KMeansModule::ThreadedRun()
   KMeansFunctorType functor;
 
   EstimatorType::ParametersType finalCentroids = m_Estimator->GetParameters();
+
+  this->ReleaseEstimator();
 
   for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
     {
@@ -298,9 +339,6 @@ void KMeansModule::ThreadedRun()
                             otbGetTextMacro("The clustered image from kmeans classification"));
   this->NotifyOutputsChange();
   Fl::unlock();
-
-  // Reset the estimator
-  //m_Estimator = 0;
 
   this->BusyOff();
 }
