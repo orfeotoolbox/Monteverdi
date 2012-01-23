@@ -69,7 +69,8 @@ ui_AddIndexes->deactivate();} selected
     }
     Fl_Window ui_HelpWindow {
       label Help
-      callback {this->Hide()}
+      callback {ui_HelpWindow->hide();
+                ui_Help->value(0);}
       xywh {965 136 335 425} type Double visible
     } {
       Fl_Output ui_HelpText {

@@ -190,9 +190,10 @@ void BandMathModule::InitHelp()
   helpContent << "- Constants: " << std::endl << "e - log2e - log10e - ln2 - ln10 - ";
   helpContent << "pi - euler" << std::endl;
   
-  helpContent << "This filter is based on the mathematical parser library muParser. "
-      "The built in functions and operators list is available at: "
-      "http://muparser.sourceforge.net/mup_features.html" << std::endl;
+  helpContent << "This filter is based on the mathematical parser" << std::endl;
+  helpContent << "library muParser. The built in functions and" << std::endl;
+  helpContent << "operators list is available at:" << std::endl;
+  helpContent << "http://muparser.sourceforge.net/mup_features.html" << std::endl;
 
   ui_HelpText->value(helpContent.str().c_str());
 }
