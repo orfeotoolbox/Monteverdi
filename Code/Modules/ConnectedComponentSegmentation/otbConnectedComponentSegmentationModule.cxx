@@ -1183,8 +1183,8 @@ void ConnectedComponentSegmentationModule::OK()
       VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
       vproj->SetInput(m_OutputVectorData);
       vproj->SetInputKeywordList(kwl);
-      vproj->SetInputOrigin(m_InputImage->GetOrigin());
-      vproj->SetInputSpacing(m_InputImage->GetSpacing());
+      //vproj->SetInputOrigin(m_InputImage->GetOrigin());
+      //vproj->SetInputSpacing(m_InputImage->GetSpacing());
 
       const char *cfname;
       if (!m_UseDEM)
