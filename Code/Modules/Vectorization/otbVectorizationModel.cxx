@@ -19,7 +19,7 @@
 #include "itkPreOrderTreeIterator.h"
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
-
+#include "otbMsgReporter.h"
 
 namespace otb
 {
@@ -127,7 +127,11 @@ void VectorizationModel
       }
     else
       {
-      itkExceptionMacro("Invalid DEM directory: "<<m_DEMPath<<".");
+      itk::OStringStream oss;
+      oss<<"Invalid DEM directory "<<m_DEMPath<<"."<< std::endl 
+         <<"DEM will not be used, errors may occur for VectorData and image superposition";
+      
+      MsgReporter::GetInstance()->SendError(oss.str());
       }
     }
   reproj->Update();
