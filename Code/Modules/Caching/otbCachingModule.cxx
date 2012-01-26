@@ -36,6 +36,7 @@ CachingModule::CachingModule()
   this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
+  this->AddTypeToInputDescriptor<LabeledImageType>("InputDataSet");
 
     // Create the caching dir if not already created
   CachingPathManager::GetInstance()->GetAValidCachingPath();
@@ -157,6 +158,7 @@ void CachingModule::ThreadedRun()
   FloatingVectorImageType::Pointer vectorImage = this->GetInputData<FloatingVectorImageType>("InputDataSet");
   FloatingImageType::Pointer       singleImage = this->GetInputData<FloatingImageType>("InputDataSet");
   CharVectorImageType::Pointer     charVectorImage = this->GetInputData<CharVectorImageType>("InputDataSet");
+  LabeledImageType::Pointer        labeledImage = this->GetInputData<LabeledImageType>("InputDataSet");
 
   Superclass::InputDataDescriptorMapType::const_iterator inputIt = this->GetInputsMap().find("InputDataSet");
 
@@ -246,6 +248,28 @@ void CachingModule::ThreadedRun()
       fPReader->UpdateOutputInformation();
       m_ReadingProcess =  fPReader;
       this->AddOutputDescriptor(fPReader->GetOutput(), "CachedData", description, true);
+
+      // Notify new outputs
+      Fl::lock();
+      this->NotifyOutputsChange();
+      Fl::unlock();
+      }
+  else if (labeledImage.IsNotNull())
+      {
+      // Writing
+      LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
+      labeledWriter->WriteGeomFileOn();
+      labeledWriter->SetInput(labeledImage);
+      labeledWriter->SetFileName(m_FilePath);
+      m_WritingProcess = labeledWriter;
+      labeledWriter->Update();
+
+      // Reading
+      LabeledReaderType::Pointer labeledReader = LabeledReaderType::New();
+      labeledReader->SetFileName(m_FilePath);
+      labeledReader->UpdateOutputInformation();
+      m_ReadingProcess = labeledReader;
+      this->AddOutputDescriptor(labeledReader->GetOutput(), "CachedData", description, true);
 
       // Notify new outputs
       Fl::lock();

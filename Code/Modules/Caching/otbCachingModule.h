@@ -58,16 +58,19 @@ public:
   typedef TypeManager::Floating_Point_Image       FloatingImageType;
   typedef TypeManager::Floating_Point_VectorImage FloatingVectorImageType;
   typedef TypeManager::Labeled_Char_VectorImage   CharVectorImageType;
+  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
 
   /// Writers
   typedef ImageFileWriter<FloatingVectorImageType> FPVWriterType;
   typedef ImageFileWriter<CharVectorImageType>     CharVWriterType;
   typedef ImageFileWriter<FloatingImageType>       FPWriterType;
+  typedef ImageFileWriter<LabeledImageType>        LabeledWriterType;
 
   /// Readers
   typedef ImageFileReader<FloatingVectorImageType> FPVReaderType;
   typedef ImageFileReader<CharVectorImageType>     CharVReaderType;
   typedef ImageFileReader<FloatingImageType>       FPReaderType;
+  typedef ImageFileReader<LabeledImageType>        LabeledReaderType;
 
   itkSetMacro(WatchProgress, bool);
   itkBooleanMacro(WatchProgress);
