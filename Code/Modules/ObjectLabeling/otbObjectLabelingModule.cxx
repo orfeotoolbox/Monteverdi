@@ -103,9 +103,9 @@ void ObjectLabelingModule::Notify(const std::string & event)
    if (event == "OutputsUpdated")
      {
      this->ClearOutputDescriptors();
-     this->AddOutputDescriptor(m_Model->GetVectorDataOutput(),"VectorDataOutput","The classes polygons");
      this->AddOutputDescriptor(m_Model->GetLabeledOutput(),"LabeledOutput","The classes labels image");
      this->AddOutputDescriptor(m_Model->GetColoredOutput(),"ColoredOutput","The classes colors image");
+     this->AddOutputDescriptor(m_Model->GetVectorDataOutput(),"VectorDataOutput","The classes polygons");
      this->NotifyOutputsChange();
      }
    else if(event == "Quit")

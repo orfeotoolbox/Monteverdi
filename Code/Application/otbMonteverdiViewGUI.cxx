@@ -595,6 +595,14 @@ MonteverdiViewGUI
             count++;
             }
           }
+        else
+          {
+          // If the current output type is not a VectorImage nor a
+          // Image( a Vector_Data for example), the stop condition is
+          // never reached. Add a break statement to avoid infinite
+          // loop
+          break;
+          }
         new_node_sub->branch_icons(&scalarImage, &scalarImage);
         }
       new_node->branch_icons(&vectorImage, &vectorImage);
