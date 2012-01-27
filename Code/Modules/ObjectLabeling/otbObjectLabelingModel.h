@@ -79,8 +79,8 @@ class ObjectClass
 public:
   typedef TLabel                           LabelType;
   typedef std::vector<LabelType>           LabelVectorType;
-  typedef itk::FixedArray<double, 4>        ColorType;
-  typedef otb::VectorData<double, 2>        VectorDataType;
+  typedef itk::FixedArray<double, 4>       ColorType;
+  typedef TypeManager::Vector_Data         VectorDataType;
   typedef VectorDataType::DataNodeType     DataNodeType;
 
   /** Class label */
