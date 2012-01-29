@@ -292,6 +292,7 @@ ${TEMP}/haiti1.kmz
 80 340 4000 3000
 4245 1195 710 350
 )
+SET_PROPERTY(TEST moTvSertitHaitiXTTest PROPERTY RESOURCE_LOCK tile_directory)
 
 ADD_TEST(moTvSertitProcessingTestNonGeoProduct ${Modules_TESTS3}
 otbSertitProcessingTestNonGeoProduct
@@ -299,6 +300,7 @@ ${TEMP}/haitiNonGeoReferencedProductExportation.kmz
 0
 ${INPUTDATA}/Haiti_Jacmel.png
 )
+SET_PROPERTY(TEST moTvSertitProcessingTestNonGeoProduct PROPERTY RESOURCE_LOCK tile_directory)
 
 
 ADD_TEST(moTvSertitProcessingTestXtNonGeoProduct ${Modules_TESTS3}
@@ -307,6 +309,7 @@ ${TEMP}/haitiNonGeoReferencedProductExportationXT.kmz
 1
 ${INPUTDATA}/Haiti1.jpeg
 )
+SET_PROPERTY(TEST moTvSertitProcessingTestXtNonGeoProduct PROPERTY RESOURCE_LOCK tile_directory)
 
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests4 ----------------------------------------
@@ -321,6 +324,7 @@ IF(OTB_USE_CURL)
   500
   15
   )
+  SET_PROPERTY(TEST moTvTileMapImportModuleTest PROPERTY RESOURCE_LOCK tile_directory)
 ENDIF(OTB_USE_CURL)
 
 #------------- Vectorization Module Tests ---------------------------
