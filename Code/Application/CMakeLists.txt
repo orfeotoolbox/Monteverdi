@@ -50,7 +50,7 @@ IF(NOT OTB_INSTALL_NO_LIBRARIES)
 ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
 #Create Monteverdi application
-ADD_EXECUTABLE(monteverdi Monteverdi.cxx)
+ADD_EXECUTABLE(monteverdi WIN32 Monteverdi.cxx)
 TARGET_LINK_LIBRARIES(monteverdi otbMonteverdi ${LIST_MODULE_LIBRARIES} )
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS monteverdi
