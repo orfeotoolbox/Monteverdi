@@ -90,6 +90,9 @@
 #include "otbConnectedComponentSegmentationModule.h"
 #include "otbVectorDataTransformModule.h"
 #include "otbUncompressJpeg2000Module.h"
+#include "otbResampleModule.h"
+#include "otbCompareImagesModule.h"
+
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -173,8 +176,9 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
     model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
 #endif
-
-  model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Image Statistics"));
+    
+    model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Statistics/Image Statistics"));
+    model->RegisterModule<otb::CompareImagesModule>("Compare Images", otbGetTextMacro("File/Statistics/Compare images"));
 
   /***********  Visu menu *******************/
   model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
@@ -198,6 +202,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
   model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));
   model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", otbGetTextMacro("Filtering/Connected Component segmentation"));
+  model->RegisterModule<otb::ResampleModule>("Resampling", otbGetTextMacro("Filtering/Resampling"));
 
   /***********  SAR menu *******************/
   model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle"));

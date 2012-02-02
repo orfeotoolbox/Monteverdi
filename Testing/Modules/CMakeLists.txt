@@ -1,6 +1,7 @@
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(BASELINE_APPLICATION_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
+SET(BASELINE_MONTEVERDI ${OTB_DATA_ROOT}/Baseline/Monteverdi)
 SET(DEMDATA ${OTB_DATA_ROOT}/Input/DEM/srtm_directory)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
@@ -16,6 +17,7 @@ SET(Modules_TESTS1 ${CXX_TEST_PATH}/otbModulesTests1)
 SET(Modules_TESTS2 ${CXX_TEST_PATH}/otbModulesTests2)
 SET(Modules_TESTS3 ${CXX_TEST_PATH}/otbModulesTests3)
 SET(Modules_TESTS4 ${CXX_TEST_PATH}/otbModulesTests4)
+SET(Modules_TESTS5 ${CXX_TEST_PATH}/otbModulesTests5)
 
 #----------------------------------------------------------------------------------------------
 #------------------------------------ otbModulesTests1 ----------------------------------------
@@ -507,6 +509,46 @@ ADD_TEST(moTvUncompressJpeg2000ModuleTest  ${Modules_TESTS4}
     59   # size Y
 )
 
+#----------------------------------------------------------------------------------------------
+#------------------------------------ otbModulesTests5 ----------------------------------------
+#----------------------------------------------------------------------------------------------
+# ----------------- Resample Module testing -------------------
+ADD_TEST(moTvResampleModuleTest  ${Modules_TESTS5}
+--compare-image ${TOL}
+${BASELINE_MONTEVERDI}/moTvResampleModuleTest.tif
+${TEMP}/moTvResampleModuleTest.tif
+    otbResampleModuleTest
+    ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+    ${TEMP}/moTvResampleModuleTest.tif
+    20 # rotation 
+    1.5  # scale X
+    2  # scale Y
+)
+
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(moTvResampleModuleTest_QB ${Modules_TESTS5}
+  --compare-image ${TOL}
+  ${BASELINE_MONTEVERDI}/moTvResampleModuleTest_QB.tif
+  ${TEMP}/moTvResampleModuleTest_QB.tif
+  otbResampleModuleTest
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+  ${TEMP}/moTvResampleModuleTest_QB.tif
+  10 # rotation 
+  0.02  # scale X
+  0.02  # scale Y
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+# ----------------- Compare images Module testing -------------------
+ADD_TEST(moTvCompareImagesModuleTest  ${Modules_TESTS5}
+  otbCompareImagesModuleTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/GomaApres.png
+  0 # not Fl::run  
+)
+
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
@@ -575,6 +617,12 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
 )
 ENDIF(OTB_USE_MAPNIK)
 
+
+SET(Modules_SRCS5 ${Modules_SRCS5}
+  otbResampleModuleTest.cxx
+  otbCompareImagesModuleTest.cxx
+)
+
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
       SET_SOURCE_FILES_PROPERTIES(
@@ -589,34 +637,21 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
 ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
 ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
-
 ADD_EXECUTABLE(otbModulesTests4 otbModulesTests4.cxx ${Modules_SRCS4})
+ADD_EXECUTABLE(otbModulesTests5 otbModulesTests5.cxx ${Modules_SRCS5})
 
 TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 TARGET_LINK_LIBRARIES(otbModulesTests4 ${LIST_MODULE_LIBRARIES} OTBIO OTBProjections OTBCommon OTBTesting)
+TARGET_LINK_LIBRARIES(otbModulesTests5 ${LIST_MODULE_LIBRARIES} OTBIO OTBCommon OTBTesting)
 
-# CPack installation: only Monteverdi application
-#IF(NOT OTB_INSTALL_NO_LIBRARIES)
-#  INSTALL(TARGETS otbHomologousPointExtractionApplication
-#    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-#    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-#    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
-#ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
-ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
-TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule otbReaderModule)
+#ADD_EXECUTABLE(otbMeanShiftApplication otbMeanShiftApplication.cxx)
+#TARGET_LINK_LIBRARIES(otbMeanShiftApplication otbMonteverdi otbMeanShiftModule otbReaderModule)
 
-ADD_EXECUTABLE(otbObjectCountingApplication otbObjectCountingApplication.cxx)
-TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCountingModule otbReaderModule)
-# CPack installation: only Monteverdi application
-#IF(NOT OTB_INSTALL_NO_LIBRARIES) 
-#  INSTALL(TARGETS otbMeanShiftApplication
-#    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-#    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-#    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
-#ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+#ADD_EXECUTABLE(otbObjectCountingApplication otbObjectCountingApplication.cxx)
+#TARGET_LINK_LIBRARIES(otbObjectCountingApplication otbMonteverdi otbObjectCountingModule otbReaderModule)
 
 #ADD_EXECUTABLE(otbFeatureExtractionApplication otbFeatureExtractionApplication_test_interne.cxx)
 #TARGET_LINK_LIBRARIES(otbFeatureExtractionApplication otbMonteverdi otbFeatureExtractionModule otbReaderModule)
