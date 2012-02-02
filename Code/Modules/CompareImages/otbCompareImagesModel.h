@@ -92,9 +92,9 @@ public:
   void ComputeCompareImages();
   void SaveQuit();
   
-  itkGetMacro(RMSE,double);
-  itkGetMacro(PSNR,double);
-  itkGetMacro(MaxError,double);
+  itkGetMacro(RMSE, double);
+  itkGetMacro(PSNR, double);
+  itkGetMacro(MaxError, double);
   
 
 protected:
@@ -104,9 +104,9 @@ protected:
   /** Destructor */
   virtual ~CompareImagesModel();
   
-  itkSetMacro(RMSE,double);
-  itkSetMacro(PSNR,double);
-  itkSetMacro(MaxError,double);
+  itkSetMacro(RMSE, double);
+  itkSetMacro(PSNR, double);
+  itkSetMacro(MaxError, double);
 
 private:
   CompareImagesModel(const Self&); //purposely not implemented

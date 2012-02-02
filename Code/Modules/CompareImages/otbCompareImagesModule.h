@@ -37,7 +37,7 @@ namespace otb
 /** \class CompareImagesModule
  *
  *  \brief This module computes PSNR RMSE and Max error between two images
- * 
+ *
  *
  *
  */
@@ -92,7 +92,6 @@ protected:
 
   /** The custom run command */
   virtual void Run();
-
 
 
 

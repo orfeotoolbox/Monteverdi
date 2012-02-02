@@ -71,7 +71,7 @@ GetModel()
   return m_Model;
 }
 
-void 
+void
 CompareImagesController
 ::SetModel(ModelType* model)
 {

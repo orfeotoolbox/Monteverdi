@@ -43,7 +43,7 @@ public:
   itkTypeMacro(CompareImagesControllerInterface, Superclass);
 
   /*itkSetObjectMacro(Model, CompareImagesModel);
-  itkGetObjectMacro(Model, CompareImagesModel);*/
+  itkGetObjectMacro(Model, CompareImagesModel); */
   
   virtual void SetModel(CompareImagesModel* model) = 0;
   virtual ModelType* GetModel() = 0;

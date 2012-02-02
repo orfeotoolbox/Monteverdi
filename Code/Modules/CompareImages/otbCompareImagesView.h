@@ -105,7 +105,7 @@ public:
     m_Controller->GetModel()->RegisterListener(this);
   }
   
-  // Get a pointer to the view parts for the controller 
+  // Get a pointer to the view parts for the controller
   itkGetObjectMacro(LeftVisuView, VisuViewType);
   itkGetObjectMacro(RightVisuView, VisuViewType);
   
@@ -136,12 +136,12 @@ private:
   PixelDescriptionViewPointerType m_RightPixelDescriptionView;
 
 /*
-  // Pointer to the widgets controller 
+  // Pointer to the widgets controller
   ImageWidgetController::Pointer m_LeftWidgetsController;
   ImageWidgetController::Pointer m_RightWidgetsController;
 
-  // Pointer to the model 
-  CompareImagesModel::Pointer m_Model;*/
+  // Pointer to the model
+  CompareImagesModel::Pointer m_Model; */
 
   
 

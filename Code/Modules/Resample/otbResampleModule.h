@@ -79,14 +79,14 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ResampleModule,Module);
+  itkTypeMacro(ResampleModule, Module);
 
   typedef TypeManager::Floating_Point_Precision   PrecisionType;
   typedef TypeManager::Floating_Point_VectorImage ImageType;
   
   /** Output image type */
   typedef itk::RGBAPixel<unsigned char> RGBPixelType;
-  typedef Image<RGBPixelType,2>         OutputImageType;
+  typedef Image<RGBPixelType, 2>         OutputImageType;
 
   /** Image layer type */
   typedef ImageLayer<ImageType, OutputImageType>         ImageLayerType;
@@ -110,15 +110,15 @@ public:
   
   /** Standard action handlers */
   typedef otb::WidgetResizingActionHandler
-    <RenderingModelType,ViewType>                        ResizingHandlerType;
+    <RenderingModelType, ViewType>                        ResizingHandlerType;
   typedef otb::ChangeScaledExtractRegionActionHandler
-    <RenderingModelType,ViewType>                        ChangeScaledRegionHandlerType;
+    <RenderingModelType, ViewType>                        ChangeScaledRegionHandlerType;
   typedef otb::ChangeExtractRegionActionHandler
-    <RenderingModelType,ViewType>                        ChangeRegionHandlerType;
+    <RenderingModelType, ViewType>                        ChangeRegionHandlerType;
   typedef otb::ChangeScaleActionHandler
-    <RenderingModelType,ViewType>                        ChangeScaleHandlerType;
+    <RenderingModelType, ViewType>                        ChangeScaleHandlerType;
   typedef otb::ArrowKeyMoveActionHandler
-    <RenderingModelType,ViewType>                        ArrowKeyMoveActionHandlerType;
+    <RenderingModelType, ViewType>                        ArrowKeyMoveActionHandlerType;
   typedef RenderingModelType::RegionType                 RegionType;
   
   /** Filter for resampling */
@@ -149,10 +149,10 @@ public:
     ScalarType, ImageType::ImageDimension, ImageType::ImageDimension> CompositeTransformType;
   
   /** Set the input Image*/
-  itkSetObjectMacro(InputImage,ImageType);
+  itkSetObjectMacro(InputImage, ImageType);
   
   /** Show the Module GUI */
-  virtual bool CanShow(){return true;};
+  virtual bool CanShow(){return true; };
   
   /** Hide window */
   virtual void Hide();

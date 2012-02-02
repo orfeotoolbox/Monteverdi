@@ -27,7 +27,6 @@
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
 
-
 namespace otb
 {
   
@@ -107,13 +106,13 @@ namespace otb
   // Add the widgets to the GUI
   gFull->add(m_View->GetFullWidget());
   gFull->resizable(m_View->GetFullWidget());
-  m_View->GetFullWidget()->resize(gFull->x(),gFull->y(),
-                                  gFull->w(),gFull->h());
+  m_View->GetFullWidget()->resize(gFull->x(), gFull->y(),
+                                  gFull->w(), gFull->h());
 
   gScroll->add(m_View->GetScrollWidget());
   gScroll->resizable(m_View->GetScrollWidget());
-  m_View->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),
-                                    gScroll->w(),gScroll->h());
+  m_View->GetScrollWidget()->resize(gScroll->x(), gScroll->y(),
+                                    gScroll->w(), gScroll->h());
 
   // Populate combo box Interpalator
   guiInterpolator->clear();
@@ -124,7 +123,7 @@ namespace otb
   guiInterpolator->value( (int) NEARESTNEIGHBOR );
   
   //Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage",otbGetTextMacro("Image to resample"));
+  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to resample"));
 }
 
 /** Destructor */
@@ -135,7 +134,7 @@ ResampleModule::~ResampleModule()
 void ResampleModule::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /** The custom run command */
@@ -153,7 +152,7 @@ void ResampleModule::Run()
     
   // Generate the layer
   m_Generator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(),0,0,200,20,otbGetTextMacro("Generating QuickLook ..."));
+  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
   m_Generator->GenerateLayer();
   m_InputImageLayer = m_Generator->GetLayer();
   m_InputImageLayer->SetName("ImageLayer");
@@ -190,7 +189,7 @@ void ResampleModule::UpdateResampleLayer()
   // Keep the same min/max
   m_ResampleGenerator->SetRenderingFunction(m_Generator->GetRenderingFunction());
 
-  unsigned int x,y;
+  unsigned int x, y;
   x=wMainWindow->x()+(wMainWindow->w()-200)/2;
   y=wMainWindow->y()+(wMainWindow->h()-20)/2;
  
@@ -240,7 +239,7 @@ void ResampleModule::UpdateSize()
 
   
   ImageType::PointType centerPoint;
-  m_InputImage->TransformIndexToPhysicalPoint(center,centerPoint);
+  m_InputImage->TransformIndexToPhysicalPoint(center, centerPoint);
   
   //image boundary
   ImageType::IndexType ULindex, URindex, LRindex, LLindex;
@@ -255,10 +254,10 @@ void ResampleModule::UpdateSize()
   LLindex[1]=origin[1]+ m_InputImage->GetLargestPossibleRegion().GetSize()[1];
   
   ImageType::PointType orig, ULpoint, URpoint, LRpoint, LLpoint;
-  m_InputImage->TransformIndexToPhysicalPoint(ULindex,ULpoint);
-  m_InputImage->TransformIndexToPhysicalPoint(URindex,URpoint);
-  m_InputImage->TransformIndexToPhysicalPoint(LRindex,LRpoint);
-  m_InputImage->TransformIndexToPhysicalPoint(LLindex,LLpoint);
+  m_InputImage->TransformIndexToPhysicalPoint(ULindex, ULpoint);
+  m_InputImage->TransformIndexToPhysicalPoint(URindex, URpoint);
+  m_InputImage->TransformIndexToPhysicalPoint(LRindex, LRpoint);
+  m_InputImage->TransformIndexToPhysicalPoint(LLindex, LLpoint);
 
   //angle of rotation
   ScalarType rot_angle = (ScalarType ) guiRotAngle->value();
@@ -298,7 +297,7 @@ void ResampleModule::UpdateSize()
   double minY = voutput[0][1];
   double maxY = voutput[0][1];
 
-  for(unsigned int i = 0; i<voutput.size() ; i++)
+  for(unsigned int i = 0; i<voutput.size(); i++)
     {
       // Origins
       if ( minX > voutput[i][0] )
@@ -375,8 +374,8 @@ void ResampleModule::OK()
   this->ClearOutputDescriptors();
   
   this->AddOutputDescriptor(m_ResampleFilter->GetOutput(),
-			    "OutputImage",
-			    otbGetTextMacro("Resampled image"));
+                         "OutputImage",
+                         otbGetTextMacro("Resampled image"));
   
   this->NotifyOutputsChange();
 
@@ -409,7 +408,7 @@ void ResampleModule::ChangeInterpolator()
   case NEARESTNEIGHBOR :
   {
     m_NearestNeighborInterpolator = NearestNeighborInterpolateType::New();
-    m_ResampleFilter->SetInterpolator( m_NearestNeighborInterpolator ) ;
+    m_ResampleFilter->SetInterpolator( m_NearestNeighborInterpolator );
     break;
   }
     
@@ -423,7 +422,7 @@ void ResampleModule::ChangeInterpolator()
   case LINEAR:
   {
     m_LinearInterpolator = LinearInterpolateType::New();
-    m_ResampleFilter->SetInterpolator( m_LinearInterpolator ) ;
+    m_ResampleFilter->SetInterpolator( m_LinearInterpolator );
     break;
   }
   
@@ -436,8 +435,8 @@ void ResampleModule::ChangeInterpolator()
  * Change X Factor
  */
 void ResampleModule::ChangeXFactor()
-{ 
-  if( guiKeepProportion->value()==1 ) 
+{
+  if( guiKeepProportion->value()==1 )
     guiYFactor->value( guiXFactor->value() );
   
   if( vcl_abs(guiXFactor->value()) < 1e-6 )

@@ -109,7 +109,7 @@ CompareImagesView
   
   // RMSE
   stat_element = new Fl_Output(x0 + 0 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   std::ostringstream ostream_rmse;
   ostream_rmse << vcl_sqrt(GetModel()->GetRMSE());
@@ -123,10 +123,10 @@ CompareImagesView
   
   // PSNR
   stat_element = new Fl_Output(x0 + 1 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   std::ostringstream ostream_psnr;
-  ostream_psnr << GetModel()->GetPSNR(); 
+  ostream_psnr << GetModel()->GetPSNR();
   
   stat_element->value(ostream_psnr.str().c_str());
   stat_element->textfont(FL_HELVETICA_BOLD);
@@ -136,16 +136,16 @@ CompareImagesView
   
   // MaxAbsoluteError
   stat_element = new Fl_Output(x0 + 2 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   std::ostringstream ostream_maxerror;
-  ostream_maxerror << GetModel()->GetMaxError(); 
+  ostream_maxerror << GetModel()->GetMaxError();
   
   stat_element->value(ostream_maxerror.str().c_str());
   stat_element->textfont(FL_HELVETICA_BOLD);
   stat_element->clear_visible_focus();
   
-  gMatrixCompareImagess->add(stat_element);    
+  gMatrixCompareImagess->add(stat_element);
   
   gMatrixCompareImagess->redraw();
 }
@@ -162,7 +162,6 @@ CompareImagesView
       this->UpdateStats();
    }
 }
-
 
 
 
@@ -183,7 +182,7 @@ CompareImagesView
   
   // Header RMSE
   stat_element = new Fl_Output(x0 + 0 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   stat_element->value("RMSE");
   stat_element->textfont(FL_HELVETICA_BOLD);
@@ -194,7 +193,7 @@ CompareImagesView
   
   // Header PSNR
   stat_element = new Fl_Output(x0 + 1 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   stat_element->value("PSNR");
   stat_element->textfont(FL_HELVETICA_BOLD);
@@ -205,7 +204,7 @@ CompareImagesView
   
   // Header MaxError
   stat_element = new Fl_Output(x0 + 2 * stat_element_width , y0,
-			       stat_element_width, stat_element_height);
+                            stat_element_width, stat_element_height);
   
   stat_element->value("MaxError");
   stat_element->textfont(FL_HELVETICA_BOLD);
