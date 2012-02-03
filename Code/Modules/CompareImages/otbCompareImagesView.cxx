@@ -164,7 +164,6 @@ CompareImagesView
 }
 
 
-
 /**
  * Show the GUI
  */
