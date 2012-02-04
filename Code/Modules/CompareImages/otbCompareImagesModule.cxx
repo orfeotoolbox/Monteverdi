@@ -72,7 +72,7 @@ void CompareImagesModule::Run()
   inputLeftImage->UpdateOutputInformation();
 
   // One of this pointer will be NULL:
-  if (inputLeftImage.IsNotNull() and inputRightImage.IsNotNull())
+  if (inputLeftImage.IsNotNull() && inputRightImage.IsNotNull())
     {
     // Process the input as an FloatingImageType
     m_View->Show();
