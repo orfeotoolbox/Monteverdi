@@ -36,6 +36,9 @@
 # include "otbJPEG2000ImageIO.h"
 #endif
 
+#include <iostream>
+#include <fstream>
+
 namespace otb
 {
 
@@ -45,9 +48,37 @@ enum ImageType
   ImageType_RealImage,
   ImageType_ComplexImage,
   ImageType_VectorData,
-  ImageType_PleiadesImage
+  ImageType_PleiadesImage,
+  ImageType_RawImage
 };
 
+enum EnviPixelType
+{
+  EnviPixelType_Byte =0,
+  EnviPixelType_Int16,
+  EnviPixelType_UInt16,
+  EnviPixelType_Int32,
+  EnviPixelType_UInt32,
+  EnviPixelType_Int64,
+  EnviPixelType_UInt64,
+  EnviPixelType_Float32,
+  EnviPixelType_Float64,
+  EnviPixelType_Cplx32,
+  EnviPixelType_Cplx64
+};
+
+enum EnviInterleave
+{
+  EnviInterleave_BSQ =0,
+  EnviInterleave_BIP,
+  EnviInterleave_BIL
+};
+
+enum EnviByteOrder
+{
+  EnviByteOrder_LSF = 0,
+  EnviByteOrder_MSF
+};
 
 /** Constructor */
 ReaderModule::ReaderModule()
@@ -76,6 +107,7 @@ ReaderModule::ReaderModule()
   vType->add(otbGetTextMacro("Complex image"));
   vType->add(otbGetTextMacro("Vector Data"));
   vType->add(otbGetTextMacro("Pleiades Image"));
+  vType->add(otbGetTextMacro("Raw Image"));
   vType->value(ImageType_Unknown);
 
   // Deactivate ok for now
@@ -83,6 +115,42 @@ ReaderModule::ReaderModule()
 
   // No name for now
   vName->value("");
+  
+  // Fill ENVI types for raw data
+  vPixType->add(otbGetTextMacro("[ 1]: 8-bit byte"));
+  m_MapEnviPixelType[0]=1;
+  vPixType->add(otbGetTextMacro("[ 2]: 16-bit signed integer"));
+  m_MapEnviPixelType[1]=2;
+  vPixType->add(otbGetTextMacro("[12]: 16-bit unsigned integer"));
+  m_MapEnviPixelType[2]=12;
+  vPixType->add(otbGetTextMacro("[ 3]: 32-bit signed integer"));
+  m_MapEnviPixelType[3]=3;
+  vPixType->add(otbGetTextMacro("[13]: 32-bit unsigned integer"));
+  m_MapEnviPixelType[4]=13;
+  vPixType->add(otbGetTextMacro("[14]: 64-bit signed integer"));
+  m_MapEnviPixelType[5]=14;
+  vPixType->add(otbGetTextMacro("[15]: 64-bit unsigned integer"));
+  m_MapEnviPixelType[6]=15;
+  vPixType->add(otbGetTextMacro("[ 4]: 32-bit floating point"));
+  m_MapEnviPixelType[7]=4;
+  vPixType->add(otbGetTextMacro("[ 5]: 64-bit double precision floating point"));
+  m_MapEnviPixelType[8]=5;
+  vPixType->add(otbGetTextMacro("[ 6]: 2 x 32-bit complex (real-imaginary pair)"));
+  m_MapEnviPixelType[9]=6;
+  vPixType->add(otbGetTextMacro("[ 9]: 2 x 64-bit double precision complex (real-imaginary pair)"));
+  m_MapEnviPixelType[10]=9;
+  vPixType->value(EnviPixelType_Byte);
+  
+  vInterleave->add(otbGetTextMacro("BSQ"));
+  vInterleave->add(otbGetTextMacro("BIP"));
+  vInterleave->add(otbGetTextMacro("BIL"));
+  vInterleave->value(EnviInterleave_BSQ);
+  
+  vByteOrder->add(otbGetTextMacro("LSF : Least Significant byte First"));
+  vByteOrder->add(otbGetTextMacro("MSF : Most Significant byte First"));
+  vByteOrder->tooltip(otbGetTextMacro("LSF = little endian; MSF = big endian"));
+  vByteOrder->value(EnviByteOrder_LSF);
+  
 }
 
 /** Destructor */
@@ -328,6 +396,20 @@ void ReaderModule::OpenDataSet()
 
 void ReaderModule::TypeChanged()
 {
+  // Raw image special case : ask the user for image informations
+  if (vType->value() == ImageType_RawImage)
+    {
+    vType->value(ImageType_Unknown);
+    std::string filepath = vFilePath->value();
+    
+    if (filepath.size()==0)
+      {
+      return;
+      }
+    wRawTypeWindow->show();
+    return;
+    }
+  
   // Is type found is correct?
   bool typeFoundCorrect = false;
   if (vType->value() != ImageType_Unknown)
@@ -849,6 +931,7 @@ void ReaderModule::Cancel()
 void ReaderModule::Hide()
 {
   wFileChooserWindow->hide();
+  wRawTypeWindow->hide();
 }
 
 bool ReaderModule::IsHdfFile(std::string filepath)
@@ -946,6 +1029,50 @@ bool ReaderModule::CheckDataSetString()
     {
     return false;
     }
+}
+
+/** RawTypeSetup */
+void ReaderModule::RawTypeSetup()
+{
+  std::string filepath = vFilePath->value();
+  
+  // Write hdr file
+  std::ofstream hdrFile;
+  std::ostringstream oss;
+  oss << filepath << ".hdr";
+  std::string headerFilepath = oss.str();
+  hdrFile.open(headerFilepath.c_str(), std::ios_base::out | std::ios_base::trunc);
+  if (hdrFile.is_open())
+    {
+    hdrFile << "ENVI"<< std::endl;
+    hdrFile << "description = {"<< vDescription->value() << "}"<<std::endl;
+    hdrFile << "samples = "<< vWidth->value() << std::endl;
+    hdrFile << "lines = "<< vHeight->value() << std::endl;
+    hdrFile << "bands = "<< vBands->value() << std::endl;
+    hdrFile << "header offset = 0"<< std::endl;
+    hdrFile << "file type = ENVI standard" << std::endl;
+    hdrFile << "interleave = ";
+    switch (vInterleave->value())
+      {
+      case 0 : hdrFile << "bsq"<<std::endl;
+        break;
+      case 1 : hdrFile << "bip"<<std::endl;
+        break;
+      case 2 : hdrFile << "bil"<<std::endl;
+        break;
+      default : hdrFile << "bsq"<<std::endl;
+        break;
+      }
+    hdrFile << "sensor type = Unknown" << std::endl;
+    hdrFile << "data type = " << m_MapEnviPixelType[vPixType->value()] << std::endl;
+    hdrFile << "byte order = " << vByteOrder->value() << std::endl;
+    
+    hdrFile.close();
+    
+    this->Analyse();
+    this->OpenDataSet();
+    }
+  wRawTypeWindow->hide();
 }
 
 } // End namespace otb

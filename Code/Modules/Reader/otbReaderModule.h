@@ -109,6 +109,8 @@ protected:
   void OpenMultiComplexImage();
 
   void OpenVector();
+  
+  virtual void RawTypeSetup();
 
 private:
   ReaderModule(const Self&); //purposely not implemented
@@ -181,6 +183,9 @@ private:
   std::string m_DescForQL;
   
   unsigned int m_progressIndex;
+  
+  /** map for Envi pixel type in hdr files  */
+  int m_MapEnviPixelType[11];
 };
 
 } // End namespace otb
