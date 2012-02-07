@@ -1041,6 +1041,15 @@ void ReaderModule::RawTypeSetup()
   std::ostringstream oss;
   oss << filepath << ".hdr";
   std::string headerFilepath = oss.str();
+  
+  // Check write permissions
+  if (itksys::SystemTools::Touch(headerFilepath.c_str(), true) == false)
+    {
+    MsgReporter::GetInstance()->SendError("Can't write header file. ");
+    wRawTypeWindow->hide();
+    return;
+    }
+  
   hdrFile.open(headerFilepath.c_str(), std::ios_base::out | std::ios_base::trunc);
   if (hdrFile.is_open())
     {
