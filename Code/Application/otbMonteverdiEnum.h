@@ -67,4 +67,10 @@ typedef enum {
   SQUARE_ROOT_CONTRAST_STRETCH
 } ContrastStretchEnumType;
 
+typedef enum {
+  QUICKLOOK_STRETCH,
+  FULL_STRETCH,
+  ZOOM_STRETCH
+} StretchResolutionEnumType;
+
 #endif

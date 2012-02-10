@@ -376,6 +376,16 @@ void ViewerModule::Run()
     m_InputImageLayerList->PushBack(imageLayer);
     m_RenderingFunctionList->PushBack(renderer);
     m_ContrastStretchList.push_back(LINEAR_CONTRAST_STRETCH);
+    //add a viewerSetupStruct associated to each image and initialize it.
+    ViewerSetupStructType viewerSetupStruct;
+    viewerSetupStruct.pStretchResolution = QUICKLOOK_STRETCH;
+    viewerSetupStruct.pLowerQuantile = static_cast<double> (bLowerQuantile->value() / 100);
+    viewerSetupStruct.pUpperQuantile = static_cast<double> (bUpperQuantile->value() / 100);
+    viewerSetupStruct.pStandardDeviation = static_cast<double> (guiSetStandardDeviation->value());
+    viewerSetupStruct.pRGBMode = true;
+    
+
+    m_ViewerSetupStructList.push_back(viewerSetupStruct);
 
     // Add the module where the image comes from.
     // This was done because if two image has the same description, the Fl_Choice will only contain 1 possible item.
@@ -439,6 +449,9 @@ void ViewerModule::Run()
   m_SplittedWindows->SetLabel(title.str().c_str());
   m_PackedWindows->SetLabel(title.str().c_str());
 
+  //Set the default stretch mode (applied on quicklook)
+  guiStretchQL->set();
+
   // No constrast stretch (NO_CONTRAST_STRETCH)
   guiContrastStretchSelection->add("Linear 0-255");
 
@@ -487,6 +500,28 @@ void ViewerModule::Run()
     // Update NoData value
     guiSetNoData->value(
                         static_cast<double> (m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage)->GetNoDataValue()));
+                        
+    //Update the viewer setup struct
+    RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+    ChannelListType channels = renderer->GetChannelList();
+    if (channels.size() == 1)
+    {
+       m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = false;
+       m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel = channels[0] + 1;
+       m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = channels[0] + 1;
+       m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = channels[0] + 1;
+       m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = channels[0] + 1;
+    }
+    else
+    {
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = true;
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel = channels[0] + 1;
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = channels[1] + 1;
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = channels[2] + 1;
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = channels[0] + 1;
+    }
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<double> (renderer->GetNoDataValue());
+    
     }
   catch (itk::ExceptionObject & err)
     {
@@ -711,10 +746,13 @@ void ViewerModule::SetTransparentImage()
  */
 void ViewerModule::ShowPreviousImage()
 {
+  int previousOpaqueImage = m_CurrentOpaqueImage;
   m_CurrentOpaqueImage = (m_CurrentOpaqueImage - 1 + m_InputImageLayerList->Size()) % m_InputImageLayerList->Size();
   guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
 
+  this->UpdateViewerSetupWindow();
   ShowSelectedImages();
+
 }
 
 /**
@@ -724,8 +762,10 @@ void ViewerModule::ShowNextImage()
 {
   m_CurrentOpaqueImage = (m_CurrentOpaqueImage + 1) % m_InputImageLayerList->Size();
   guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
-
+  
+  this->UpdateViewerSetupWindow();
   ShowSelectedImages();
+
 }
 
 /**
@@ -743,12 +783,6 @@ void ViewerModule::ShowSelectedImages()
   blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
   m_RenderingModel->AddLayer(imageLayer);
 
-  //test if contrast layer have changed
-  if (guiContrastStretchSelection->value() != static_cast<int> (m_ContrastStretchList[m_CurrentOpaqueImage]))
-    {
-    SetContrastStretch();
-    }
-
   if ((m_DisplayMode == TRANSPARENCY_DISPLAY_MODE) && (m_CurrentOpaqueImage != m_CurrentTransparentImage))
     {
     imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentTransparentImage);
@@ -758,7 +792,29 @@ void ViewerModule::ShowSelectedImages()
     }
 
   m_RenderingModel->Update();
-
+  
+  //Update the channels used to display
+  RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
+  ChannelListType channels = renderer->GetChannelList();
+  if (channels.size() == 1)
+  {
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = false;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel = channels[0] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = channels[0] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = channels[0] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = channels[0] + 1;
+  }
+  else
+  {
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = true;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel = channels[0] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = channels[1] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = channels[2] + 1;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = channels[0] + 1;
+  }
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<double> (renderer->GetNoDataValue());
+  this->UpdateViewerSetupWindowValues();
+  
   SynchronizeAll();
 }
 
@@ -1013,6 +1069,76 @@ void ViewerModule::UpdateDEMSettings()
     }
 }
 
+
+/**
+ * Update values in the gui (for color composition and contrast) with the lattest values used for the current image.
+ */
+void ViewerModule::UpdateViewerSetupWindowValues()
+{
+  //Update values in the gui (for color composition and contrast) with the lattest values used for the current image.
+  guiRedChannelChoice->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel);
+  guiGreenChannelChoice->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel);
+  guiBlueChannelChoice->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel);
+  guiGrayscaleChannelChoice->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel);
+  if (m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode)
+    {
+    guiViewerSetupColorMode->set();
+    guiViewerSetupGrayscaleMode->clear();
+    guiGrayscaleChannelChoice->deactivate();
+    guiRedChannelChoice->activate();
+    guiGreenChannelChoice->activate();
+    guiBlueChannelChoice->activate();
+    }
+  else
+    {
+    guiViewerSetupGrayscaleMode->set();
+    guiViewerSetupColorMode->clear();
+    guiRedChannelChoice->deactivate();
+    guiGreenChannelChoice->deactivate();
+    guiBlueChannelChoice->deactivate();
+    guiGrayscaleChannelChoice->activate();
+    }
+  
+  guiContrastStretchSelection->value(m_ContrastStretchList[m_CurrentOpaqueImage]);
+  if(m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == FULL_STRETCH)
+    {
+      guiStretchQL->clear();
+      guiStretchFull->set();
+      guiStretchZoom->clear();
+    }
+  else if (m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == ZOOM_STRETCH)
+    {
+      guiStretchQL->clear();
+      guiStretchFull->clear();
+      guiStretchZoom->set();
+    }
+  else
+    {
+      guiStretchQL->set();
+      guiStretchFull->clear();
+      guiStretchZoom->clear();
+    }
+  if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH || guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
+    {
+    guiSetStandardDeviation->hide();
+    guiGroupQuantiles->show();
+    bLowerQuantile->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pLowerQuantile * 100);
+    bUpperQuantile->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pUpperQuantile * 100);
+    }
+  else
+    if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+      {
+      guiGroupQuantiles->hide();
+      guiSetStandardDeviation->show();
+      guiSetStandardDeviation->value(m_ViewerSetupStructList[m_CurrentOpaqueImage].pStandardDeviation);
+      }
+    else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
+      {
+      guiGroupQuantiles->hide();
+      guiSetStandardDeviation->hide();
+      }
+}
+
 /**
  *
  */
@@ -1035,10 +1161,13 @@ void ViewerModule::UpdateViewerSetupWindow()
 
   guiTabSetup->redraw();
 
-  if (nbComponent == 1)
+  if (nbComponent == 1 || nbComponent == 2)
     {
     this->GrayScaleSet();
     }
+    
+    
+  
 }
 
 /**
@@ -1174,17 +1303,24 @@ void ViewerModule::UpdateWindowsLayout(const WindowsLayoutEnumType windowsLayout
  */
 void ViewerModule::ViewerSetupOk()
 {
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pRedChannel = static_cast<int> (guiRedChannelChoice->value());
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = static_cast<int> (guiGreenChannelChoice->value());
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = static_cast<int> (guiBlueChannelChoice->value());
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = static_cast<int> (guiGrayscaleChannelChoice->value());
+  
   if (guiViewerSetupColorMode->value())
     {
     int redChoice = static_cast<int> (guiRedChannelChoice->value() - 1);
     int greenChoice = static_cast<int> (guiGreenChannelChoice->value() - 1);
     int blueChoice = static_cast<int> (guiBlueChannelChoice->value() - 1);
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = true;
     this->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice);
     }
   else
     if (guiViewerSetupGrayscaleMode->value())
       {
       int grayChoice = static_cast<int> (guiGrayscaleChannelChoice->value() - 1);
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pRGBMode = false;
       this->UpdateGrayScaleChannelOrder(grayChoice);
       }
 
@@ -1251,6 +1387,7 @@ void ViewerModule::UpdateRGBChannelOrder(int red, int green, int blue)
   imageLayer->SetRenderingFunction(renderer);
   renderer->Initialize(image->GetMetaDataDictionary());
   m_RenderingModel->Update();
+  
 }
 
 /**
@@ -1385,6 +1522,7 @@ void ViewerModule::UpdateTabHistogram()
 
   // Edit the channel we're changing
   m_RedHistogramHandler->SetChannel(0);
+  
 }
 
 /**
@@ -1392,6 +1530,7 @@ void ViewerModule::UpdateTabHistogram()
  */
 void ViewerModule::TabSetupPosition()
 {
+  this->UpdateViewerSetupWindowValues();
   // Select the current image layer
   ImageLayerType::Pointer imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
 
@@ -1433,6 +1572,7 @@ void ViewerModule::TabSetupPosition()
       }
 }
 
+
 /**
  *
  */
@@ -1444,11 +1584,11 @@ void ViewerModule::SetContrastStretch()
 
   ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
 
-  RenderingFunctionType::Pointer renderer;
+  //RenderingFunctionType::Pointer renderer;
 
   if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
     {
-    renderer = StandardRenderingFunctionType::New();
+    //renderer = StandardRenderingFunctionType::New();
     contrastStretch = LINEAR_CONTRAST_STRETCH;
     guiSetStandardDeviation->hide();
     guiGroupQuantiles->show();
@@ -1456,7 +1596,7 @@ void ViewerModule::SetContrastStretch()
   else
     if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
       {
-      renderer = GaussianRenderingFunctionType::New();
+      //renderer = GaussianRenderingFunctionType::New();
       contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
       guiGroupQuantiles->hide();
       guiSetStandardDeviation->show();
@@ -1464,27 +1604,146 @@ void ViewerModule::SetContrastStretch()
     else
       if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
         {
-        renderer = SquareRootRenderingFunctionType::New();
+        //renderer = SquareRootRenderingFunctionType::New();
         contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
         guiGroupQuantiles->show();
         guiSetStandardDeviation->hide();
         }
       else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
         {
-        renderer = NoStretchRenderingFunctionType::New();
+        //renderer = NoStretchRenderingFunctionType::New();
         contrastStretch = NO_CONTRAST_STRETCH;
         guiGroupQuantiles->hide();
         guiSetStandardDeviation->hide();
+        //guiGroupStretch->redraw();
         }
+   
+  if(static_cast<int>(guiStretchFull->value()) == 1)
+    {
+      imageLayer->SetComputeHistoOnFullResolution(true);
+      imageLayer->SetComputeHistoOnZoomResolution(false);
+    }
+  else if (static_cast<int>(guiStretchZoom->value()) == 1)
+    {
+      imageLayer->SetComputeHistoOnFullResolution(false);
+      imageLayer->SetComputeHistoOnZoomResolution(true);
+    }
+  else
+    {
+      imageLayer->SetComputeHistoOnFullResolution(false);
+      imageLayer->SetComputeHistoOnZoomResolution(false);
+    }
+  imageLayer->SetUpdateHisto(true);
+   
+  //renderer->SetChannelList(channels);
+  //renderer->SetNoDataValue(static_cast<ImageType::InternalPixelType> (guiSetNoData->value()));
+  //renderer->SetAutoMinMax(true);
+  //imageLayer->SetRenderingFunction(renderer);
+  //m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
+  //m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
+  
+}
+
+/**
+ * Method call when click Apply button in contrast stretch gui.
+ */
+void ViewerModule::ApplyContrastStretch()
+{
+  ImageLayerType::Pointer imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
+  imageLayer->SetUpdateHisto(true);
+  ContrastStretchEnumType contrastStretch;
+  
+  ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
+
+  RenderingFunctionType::Pointer renderer;
+
+  //create a new rendering function.
+  if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
+    {
+    renderer = StandardRenderingFunctionType::New();
+    contrastStretch = LINEAR_CONTRAST_STRETCH;
+    }
+  else if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+    renderer = GaussianRenderingFunctionType::New();
+    contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
+    }
+  else if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
+    {
+    renderer = SquareRootRenderingFunctionType::New();
+    contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
+    }
+  else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
+    {
+    renderer = NoStretchRenderingFunctionType::New();
+    contrastStretch = NO_CONTRAST_STRETCH;
+    }
 
   renderer->SetChannelList(channels);
   renderer->SetNoDataValue(static_cast<ImageType::InternalPixelType> (guiSetNoData->value()));
+  
+  renderer->SetAutoMinMax(true);
+  /*//Check if we need to compute again the histogram.
+  if ((contrastStretch == m_ContrastStretchList[m_CurrentOpaqueImage]))
+  {
+    if ((static_cast<int>(guiStretchFull->value()) == 1) && (m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == FULL_STRETCH))
+    {
+      renderer->SetAutoMinMax(false);
+    }
+    else if ((static_cast<int>(guiStretchQL->value()) == 1) && (m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == QUICKLOOK_STRETCH))
+    {
+      renderer->SetAutoMinMax(false);
+    }
+    else if ((static_cast<int>(guiStretchZoom->value()) == 1) && (m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == ZOOM_STRETCH))
+    {
+      renderer->SetAutoMinMax(false);
+    }
+    else
+    {
+      renderer->SetAutoMinMax(true);
+    }
+  }
+  else
+  {
+    renderer->SetAutoMinMax(true);
+  }*/
+
   imageLayer->SetRenderingFunction(renderer);
   m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
   m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
+  
+  //Update m_ViewerSetupStructList with selected parameters.
+  m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<ImageType::InternalPixelType> (guiSetNoData->value());
+  if(static_cast<int>(guiStretchFull->value()) == 1)
+    {
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution = FULL_STRETCH;
+    }
+  else if (static_cast<int>(guiStretchZoom->value()) == 1)
+    {
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution = ZOOM_STRETCH;
+    }
+  else
+    {
+      m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution = QUICKLOOK_STRETCH;
+    }
+  
+  
+  // Select the current rendering function
+  RenderingFunctionType::Pointer currentRenderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
   m_RenderingModel->Update();
 
+  if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
+    {
+    // Get the rendering function parameters and modify the standard deviation
+    ParametersType params;
+    params = renderer->GetParameters();
+    params[1] = guiSetStandardDeviation->value();
+    currentRenderer->SetParameters(params);
+    }
+
+  //m_RenderingModel->Update();
   UpdateQuantiles();
+
 }
 
 /**
@@ -1492,6 +1751,7 @@ void ViewerModule::SetContrastStretch()
  */
 void ViewerModule::UpdateQuantiles()
 {
+   
   double lowerQuantile, upperQuantile;
   bool isVisible;
 
@@ -1502,6 +1762,8 @@ void ViewerModule::UpdateQuantiles()
     isVisible = true;
     lowerQuantile = bLowerQuantile->value() / 100.0;
     upperQuantile = bUpperQuantile->value() / 100.0;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pLowerQuantile = lowerQuantile;
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pUpperQuantile = upperQuantile;
     }
   else
     {
@@ -1519,6 +1781,7 @@ void ViewerModule::UpdateQuantiles()
   m_RedVaCurveL->SetVisible(isVisible);
 
   UpdateQuantiles(lowerQuantile, upperQuantile);
+
 }
 
 /**
@@ -1528,7 +1791,7 @@ void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
 {
   // Select the current rendering function
   RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
-
+  
   // Cancel the automatic computation of the quantile
   renderer->SetAutoMinMax(false);
 
@@ -1563,6 +1826,7 @@ void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
   // Update the layer
   if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
     {
+    m_ViewerSetupStructList[m_CurrentOpaqueImage].pStandardDeviation = guiSetStandardDeviation->value();
     params[1] = guiSetStandardDeviation->value();
     for (unsigned int i = 0; i < paramsMinMax.GetSize(); i++)
       {
@@ -1587,6 +1851,7 @@ void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
 
   // Needed to show the curves
   TabSetupPosition();
+  
 }
 
 /**
@@ -1604,6 +1869,7 @@ void ViewerModule::UpdateStandardDeviation()
   params[1] = guiSetStandardDeviation->value();
   renderer->SetParameters(params);
   m_RenderingModel->Update();
+
 }
 
 /**
@@ -1613,6 +1879,7 @@ void ViewerModule::UpdateNoData()
 {
   // Simply call the SetContrastStretch to recreate the rendering function to have the new sample lists
   this->SetContrastStretch();
+  this->ApplyContrastStretch();
 }
 
 /**
@@ -1754,6 +2021,7 @@ void ViewerModule::Hide()
   // Hide the Setup Propreties Window
   bSetupWindow->hide();
 }
+
 
 /**
  * FIXME: code refactoring in progress...

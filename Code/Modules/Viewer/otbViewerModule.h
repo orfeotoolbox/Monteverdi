@@ -167,6 +167,7 @@ public:
   /** Rendering function */
   typedef Function::RenderingFunction<ImageType::PixelType, RGBPixelType> RenderingFunctionType;
 
+
   typedef Function::StandardRenderingFunction<ImageType::PixelType,
                                               RGBPixelType> StandardRenderingFunctionType;
   typedef StandardRenderingFunctionType::ChannelListType    ChannelListType;
@@ -247,6 +248,24 @@ public:
   /** Set/Get the Label */
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);
+  
+  /** Structure containing parameters of viewer setup */
+  struct _ViewerSetupStruct
+  {
+    unsigned int pGrayChannel;
+    unsigned int pRedChannel;
+    unsigned int pGreenChannel;
+    unsigned int pBlueChannel;
+    ImageType::InternalPixelType pNoData;
+    double pLowerQuantile;
+    double pUpperQuantile;
+    double pStandardDeviation;
+    StretchResolutionEnumType pStretchResolution;
+    bool pRGBMode;
+  };
+
+  typedef struct _ViewerSetupStruct ViewerSetupStructType;
+
 
  protected:
   /** Constructor */
@@ -297,10 +316,12 @@ public:
   virtual void UpdateWindowsLayout(const WindowsLayoutEnumType windowsLayout);
   virtual void ViewerSetupOk();
   virtual void UpdateViewerSetupWindow();
+  virtual void UpdateViewerSetupWindowValues();
   virtual void UpdateGrayScaleChannelOrder(int choice);
   virtual void UpdateRGBChannelOrder(int red, int green , int blue);
   virtual void TabSetupPosition();
   virtual void SetContrastStretch();
+  virtual void ApplyContrastStretch();
   virtual void UpdateQuantiles();
   virtual void UpdateQuantiles(double lowerQuantile, double upperQuantile);
   virtual void UpdateStandardDeviation();
@@ -336,6 +357,7 @@ private:
   int                                      m_CurrentTransparentImage;
   std::vector<double>                      m_AlphaBlendingList;
   std::vector<ContrastStretchEnumType>     m_ContrastStretchList;
+  std::vector<ViewerSetupStructType>       m_ViewerSetupStructList;
 
   /** VectorData List pointer*/
   VectorDataListType::Pointer              m_VectorDataList;
