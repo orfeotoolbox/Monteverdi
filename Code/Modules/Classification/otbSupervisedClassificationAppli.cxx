@@ -1317,7 +1317,8 @@ SupervisedClassificationAppli
 
     if (static_cast<int>(bDisplay->value()) == 1)
       {
-      m_ResultViewer->Reset();
+      m_UpToDateResult = false;
+      this->DisplayResults();
       }
 
     this->Update();
@@ -1838,6 +1839,7 @@ SupervisedClassificationAppli
     color[0] = static_cast<unsigned char>((*it)->GetColor()[0] * 255);
     color[1] = static_cast<unsigned char>((*it)->GetColor()[1] * 255);
     color[2] = static_cast<unsigned char>((*it)->GetColor()[2] * 255);
+
     m_ChangeLabelFilter->SetChange((*it)->GetId(), color);
     }
 
