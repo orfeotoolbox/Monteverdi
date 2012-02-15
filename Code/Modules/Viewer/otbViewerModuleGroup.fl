@@ -20,7 +20,7 @@ class ViewerModuleGroup {open
     Fl_Window bSetupWindow {
       label {Data properties}
       callback {this->Quit();} open
-      xywh {785 168 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
+      xywh {359 357 700 340} type Double box PLASTIC_DOWN_BOX color 47 resizable size_range {0 0 785 320} visible
     } {
       Fl_Tabs gVectorData {
         callback {this->TabSetupPosition();} open
@@ -147,23 +147,23 @@ class ViewerModuleGroup {open
             }
             Fl_Return_Button guiViewerSetupOk {
               label Apply
-              callback {ViewerSetupOk();} selected
+              callback {ViewerSetupOk();}
               tooltip {Save changes and leave viewer set up interface} xywh {25 265 185 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX shortcut 0xff0d color 7 selection_color 23 labelfont 1 labelsize 12 labelcolor 186
             }
           }
           Fl_Group {} {
             label {Windows layout} open
-            xywh {245 53 210 82} box PLASTIC_DOWN_FRAME
+            xywh {245 52 210 82} box PLASTIC_DOWN_FRAME
           } {
             Fl_Round_Button guiViewerSetupSplittedLayout {
               label {Splitted windows layout}
               callback {this->SplittedLayout();}
-              tooltip {Show informations in independent windows} xywh {258 65 185 25} type Radio box PLASTIC_DOWN_FRAME down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
+              tooltip {Show informations in independent windows} xywh {258 64 185 25} type Radio box PLASTIC_DOWN_FRAME down_box ROUND_DOWN_BOX color 7 selection_color 22 labelcolor 186
             }
             Fl_Round_Button guiViewerSetupPackedLayout {
               label {Packed windows layout}
               callback {this->PackedLayout();}
-              tooltip {Show informations in integrated windows} xywh {258 98 185 25} type Radio box PLASTIC_DOWN_FRAME down_box ROUND_DOWN_BOX value 1 color 7 selection_color 22 labelcolor 186
+              tooltip {Show informations in integrated windows} xywh {258 97 185 25} type Radio box PLASTIC_DOWN_FRAME down_box ROUND_DOWN_BOX value 1 color 7 selection_color 22 labelcolor 186
             }
           }
           Fl_Group guiGroupNoData {
@@ -182,57 +182,66 @@ class ViewerModuleGroup {open
           }
           Fl_Group guiGroupStretch {
             label {Contrast enhancement} open
-            xywh {468 54 210 235} box PLASTIC_DOWN_FRAME
+            xywh {465 52 225 245} box PLASTIC_DOWN_FRAME
           } {
-            Fl_Choice guiContrastStretchSelection {
-              label Method
-              callback {this->SetContrastStretch();}
-              xywh {479 137 187 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 1 textcolor 186
-            } {}
-            Fl_Group guiGroupQuantiles {
-              xywh {480 175 187 60}
+            Fl_Group {} {
+              label {View used for histogram} open
+              xywh {474 75 210 66} box PLASTIC_DOWN_FRAME
             } {
-              Fl_Value_Input bUpperQuantile {
-                label {Upper quantile %}
-                xywh {611 179 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+              Fl_Round_Button guiStretchFull {
+                label Full
+                callback {guiStretchFull->set();
+guiStretchQL->clear();
+guiStretchZoom->clear();
+this->SetContrastStretch();}
+                xywh {529 95 100 25} down_box ROUND_DOWN_BOX selection_color 22 labelcolor 186
               }
-              Fl_Value_Input bLowerQuantile {
-                label {Lower quantile %}
-                xywh {611 209 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+              Fl_Round_Button guiStretchZoom {
+                label Zoom
+                callback {guiStretchZoom->set();
+guiStretchFull->clear();
+guiStretchQL->clear();
+this->SetContrastStretch();}
+                xywh {529 116 100 25} down_box ROUND_DOWN_BOX selection_color 22 labelcolor 186
+              }
+              Fl_Round_Button guiStretchQL {
+                label Navigation
+                callback {guiStretchQL->set();
+guiStretchFull->clear();
+guiStretchZoom->clear();
+this->SetContrastStretch();} selected
+                xywh {529 75 100 25} down_box ROUND_DOWN_BOX selection_color 22 labelcolor 186
               }
             }
-            Fl_Value_Input guiSetStandardDeviation {
-              label {Standard deviation %}
-              xywh {530 182 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 minimum 0.001 maximum 10 step 0.001 value 0.5 textcolor 186 hide
+            Fl_Group {} {open
+              xywh {474 146 210 109} box PLASTIC_DOWN_FRAME
+            } {
+              Fl_Choice guiContrastStretchSelection {
+                label Method
+                callback {this->SetContrastStretch();}
+                xywh {488 164 187 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX color 51 selection_color 23 labelcolor 186 align 1 textcolor 186
+              } {}
+              Fl_Group guiGroupQuantiles {open
+                xywh {489 192 187 60}
+              } {
+                Fl_Value_Input bUpperQuantile {
+                  label {Upper quantile %}
+                  xywh {620 196 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+                }
+                Fl_Value_Input bLowerQuantile {
+                  label {Lower quantile %}
+                  xywh {620 226 39 25} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 maximum 100 step 0.1 value 2 textcolor 186
+                }
+              }
+              Fl_Value_Input guiSetStandardDeviation {
+                label {Standard deviation %}
+                xywh {539 213 80 20} box PLASTIC_DOWN_BOX selection_color 23 labelcolor 186 align 1 minimum 0.001 maximum 10 step 0.001 value 0.5 textcolor 186 hide
+              }
             }
             Fl_Button bQuantilesApply {
               label Apply
               callback {this->ApplyContrastStretch();}
-              xywh {480 247 187 25} box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-            }
-            Fl_Round_Button guiStretchFull {
-              label {Full resolution}
-              callback {guiStretchFull->set();
-guiStretchQL->clear();
-guiStretchZoom->clear();
-this->SetContrastStretch();}
-              xywh {485 76 25 25} down_box ROUND_DOWN_BOX
-            }
-            Fl_Round_Button guiStretchZoom {
-              label {Zoom resolution}
-              callback {guiStretchZoom->set();
-guiStretchFull->clear();
-guiStretchQL->clear();
-this->SetContrastStretch();}
-              xywh {485 97 25 25} down_box ROUND_DOWN_BOX
-            }
-            Fl_Round_Button guiStretchQL {
-              label {Quicklook resolution}
-              callback {guiStretchQL->set();
-guiStretchFull->clear();
-guiStretchZoom->clear();
-this->SetContrastStretch();}
-              xywh {485 56 25 25} down_box ROUND_DOWN_BOX
+              xywh {485 265 187 25} box PLASTIC_DOWN_BOX color 7 selection_color 1 labelfont 1 labelsize 12 labelcolor 186
             }
           }
         }
