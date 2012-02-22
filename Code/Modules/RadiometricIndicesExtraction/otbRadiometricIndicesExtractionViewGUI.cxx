@@ -69,7 +69,7 @@ RadiometricIndicesExtractionViewGUI::RadiometricIndicesExtractionViewGUI()
     m_FeatureTable[curPos+1] = panelIndex;                                                          \
     m_SpecificGUI->mMenuItem->callback((Fl_Callback*)GenericMenuItemCallback, (void*)(m_FeatureTable+curPos));\
     curPos += 2;                                                                  \
-  }  
+  }
   otbMenuItemCallbackMacro(mInit, otb::FeatureInfoRI::UNKNOWN, 0);
   otbMenuItemCallbackMacro(mNDVI, otb::FeatureInfoRI::NDVI, 1);
   otbMenuItemCallbackMacro(mRVI, otb::FeatureInfoRI::RVI, 1);
@@ -143,7 +143,7 @@ void RadiometricIndicesExtractionViewGUI::InitParameterGroupList()
   m_ParameterGroupList.push_back(m_SpecificGUI->guiNDTI); // 20
 }
 
-void 
+void
 RadiometricIndicesExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
@@ -151,10 +151,10 @@ RadiometricIndicesExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void
   SetFeatureType(*index);
 }
 
-void 
+void
 RadiometricIndicesExtractionViewGUI::GenericMenuItemCallback(Fl_Menu_* o, void* v)
 {
-  ((RadiometricIndicesExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o,v);
+  ((RadiometricIndicesExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o, v);
 }
 
 }

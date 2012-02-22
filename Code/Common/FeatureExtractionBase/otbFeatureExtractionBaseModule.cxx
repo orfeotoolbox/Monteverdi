@@ -24,7 +24,7 @@ namespace otb
 {
 /** Constructor */
 FeatureExtractionBaseModule::FeatureExtractionBaseModule()
-{ 
+{
 }
 
 /** Destructor */

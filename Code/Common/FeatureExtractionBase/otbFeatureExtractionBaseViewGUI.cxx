@@ -37,7 +37,7 @@ FeatureExtractionBaseViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_FeatureType =  0;//FeatureInfo::UNKNOWN;
+  m_FeatureType =  0; //FeatureInfo::UNKNOWN;
 
   this->CreateGUI();
 
@@ -146,7 +146,7 @@ FeatureExtractionBaseViewGUI
 //   guiHarList->add("Cluster Shade", 7);
 //   guiHarList->add("Haralick Correlation", 8);
 //   guiHarList->redraw();
-// 
+//
 //   guiAdvList->add("Variance", 1);
 //   guiAdvList->add("Mean", 2);
 //   guiAdvList->add("Sum average", 3);
@@ -364,13 +364,13 @@ FeatureExtractionBaseViewGUI
   m_SelectedPixel = GetModel()->GetInputImage()->GetPixel(id);
 //   oss.str("");
 //   oss << "[";
-// 
+//
 //   unsigned int i = 0;
 //   for (i = 0; i < m_SelectedPixel.Size() - 1; i++)
 //     {
 //     oss << m_SelectedPixel[i] << ", ";
 //     }
-// 
+//
 //   oss << m_SelectedPixel[i] << "]";
 //   guiSpectAnglePixelValue->value(oss.str().c_str());
 //   guiSpectAnglePixelValue->redraw();
@@ -456,7 +456,7 @@ FeatureExtractionBaseViewGUI
 //   if( guiHarCk->value() != 0 )
 //     {
 //       guiHarIm->activate();
-//       
+//
 //       guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
 //       guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
 //     }
@@ -473,7 +473,7 @@ FeatureExtractionBaseViewGUI
 //   if( guiAdvHarCk->value() != 0 )
 //     {
 //       guiAdvHarIm->activate();
-//       
+//
 //       guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
 //       guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
 //     }

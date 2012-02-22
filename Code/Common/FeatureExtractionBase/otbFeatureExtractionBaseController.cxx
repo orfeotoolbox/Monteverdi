@@ -293,7 +293,7 @@ FeatureExtractionBaseController
 //     {
 //     int                 beforeSize = m_Model->GetOutputFilterInformation().size();
 //     std::vector<double> params;
-// 
+//
 //     switch (featureType)
 //       {
 //       case FeatureInfo::TOUZI:
@@ -372,9 +372,9 @@ FeatureExtractionBaseController
 //         // set offset to be able to call the generic texture add filter
 //         OffsetType off;
 //         off.Fill(0);
-// 
+//
 //         unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiPanTexBin->value()));
-// 
+//
 //         m_Model->AddTextureFilter(featureType, rad, off, bin);
 //         break;
 //         }
@@ -389,9 +389,9 @@ FeatureExtractionBaseController
 //         off[1] = static_cast<int>(m_View->guiHarOffsetY->value());
 //         HaralickTextureVectorType harList;
 //         harList = this->GetHaralickTextList();
-// 
+//
 //         unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiHarBin->value()));
-// 
+//
 //         if( m_View->guiHarCk->value() )
 //           {
 //             double minHar = static_cast<double>(m_View->guiHarMin->value());
@@ -402,8 +402,8 @@ FeatureExtractionBaseController
 //           {
 //             m_Model->AddHaralickTextureFilter(harList, rad, off, bin);
 //           }
-// 
-//         
+//
+//
 //         break;
 //         }
 //       case FeatureInfo::TEXT_ADV:
@@ -417,9 +417,9 @@ FeatureExtractionBaseController
 //         off[1] = static_cast<int>(m_View->guiAdvOffsetY->value());
 //         AdvancedTextureVectorType advList;
 //         advList = this->GetAdvancedTextList();
-// 
+//
 //         unsigned int bin = static_cast<unsigned int>(atoi(m_View->guiAdvBin->value()));
-// 
+//
 //        if( m_View->guiAdvHarCk->value() )
 //           {
 //             double minHar = static_cast<double>(m_View->guiAdvHarMin->value());
@@ -430,8 +430,8 @@ FeatureExtractionBaseController
 //           {
 //             m_Model->AddAdvancedTextureFilter(advList, rad, off, bin);
 //           }
-// 
-// 
+//
+//
 //         break;
 //         }
 //       case FeatureInfo::NDVI:
@@ -683,7 +683,7 @@ FeatureExtractionBaseController
 //       m_View->AddToInputOutputFeatureLink(i);
 //       this->ChangeFilterStatus(i);
 //       }
-// 
+//
 //     m_View->guiFeatureList->redraw();
 //     m_View->guiFeatureListAction->redraw();
 //     m_View->guiOutputFeatureList->redraw();
@@ -699,7 +699,7 @@ FeatureExtractionBaseController
 //   HaralickTextureVectorType harList(m_View->guiHarList->nchecked(), HaralickTexture::UNKNOWN);
 //   int                       j = 1;
 //   int                       count = 0;
-// 
+//
 //   while (j <= m_View->guiHarList->nitems() && count < m_View->guiHarList->nchecked())
 //     {
 //     if (m_View->guiHarList->checked(j) != 0)
@@ -709,17 +709,17 @@ FeatureExtractionBaseController
 //       }
 //     j++;
 //     }
-// 
+//
 //   return harList;
 // }
 
 // FeatureExtractionBaseController::AdvancedTextureVectorType FeatureExtractionBaseController::GetAdvancedTextList()
 // {
 //   AdvancedTextureVectorType advList(m_View->guiAdvList->nchecked(), AdvancedTexture::UNKNOWN);
-// 
+//
 //   int j = 1;
 //   int count = 0;
-// 
+//
 //   while (j <= m_View->guiAdvList->nitems() && count < m_View->guiAdvList->nchecked())
 //     {
 //     if (m_View->guiAdvList->checked(j) != 0)
@@ -729,7 +729,7 @@ FeatureExtractionBaseController
 //       }
 //     j++;
 //     }
-// 
+//
 //   return advList;
 // }
 

@@ -79,7 +79,7 @@ public:
     m_MapInfo.insert(std::pair<FeatureType, std::string>(ARVI, "Atmospherically resistant vegetation index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(EVI, "Enhanced vegetation index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TSARVI,
-                                                         "Transformed soil atmospherically resistant vegetation index"));          
+                                                         "Transformed soil atmospherically resistant vegetation index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(AVI, "Angular vegetation index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(IR, "Redness index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(IC, "Color index"));
@@ -89,7 +89,7 @@ public:
     m_MapInfo.insert(std::pair<FeatureType, std::string>(ISU, "Indice des surfaces baties"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SRWI, "Simple ratio water index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(NDWI, "Normalized difference water index (Gao 1996)"));
-    m_MapInfo.insert(std::pair<FeatureType, std::string>(NDWI2, "Normalized difference water index (Mc Feeters 1996)"));   
+    m_MapInfo.insert(std::pair<FeatureType, std::string>(NDWI2, "Normalized difference water index (Mc Feeters 1996)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(MNDWI, "Modified normalized difference water index (Xu 2006)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(NDPI, "Normalized difference pond index (Lacaux & al)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(NDTI, "Normalized difference turbidity index (Lacaux & al)"));

@@ -251,11 +251,11 @@ FeatureExtractionBaseModel
 //     copy->SetShift(0);
 //     copy->SetScale(1);
 //     copy->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "Original data";
 //     std::string mess = oss.str();
-// 
+//
 //     this->AddFeatureFilter(copy, FeatureInfo::ORIGINAL, i, 0, mess);
 //     }
 // }
@@ -267,13 +267,13 @@ FeatureExtractionBaseModel
 //   TouziFilterType::SizeType radius;
 //   radius[0] = radiusX;
 //   radius[1] = radiusX;
-// 
+//
 //   for (unsigned int i = 0; i < m_InputImageList->Size(); i++)
 //     {
 //     TouziFilterType::Pointer filterTouzi = TouziFilterType::New();
 //     filterTouzi->SetRadius(radius);
 //     filterTouzi->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "TOUZI: " << radiusX;
 //     std::string mess = oss.str();
@@ -288,12 +288,12 @@ FeatureExtractionBaseModel
 //   for (unsigned int i = 0; i < m_InputImageList->Size(); i++)
 //     {
 //     HarrisType::Pointer harris = HarrisType::New();
-// 
+//
 //     harris->SetSigmaD(sigmaD);
 //     harris->SetSigmaI(sigmaI);
 //     harris->SetAlpha(alpha);
 //     harris->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "HARRIS: " << sigmaD << " , " << sigmaI << " , " << alpha;
 //     std::string mess = oss.str();
@@ -305,18 +305,18 @@ FeatureExtractionBaseModel
 // FeatureExtractionBaseModel
 // ::AddSpectralAngleFilter(InputImageType::PixelType pix)
 // {
-// 
+//
 //   if (m_NumberOfChannels < 2)
 //     {
 //     itkExceptionMacro(
 //       << "Spectral Angle Filter requires at least 2 channels, the selected picture does not have enough channel.");
 //     }
-// 
+//
 //   DistanceFilterType::Pointer angle = DistanceFilterType::New();
-// 
+//
 //   angle->SetInput(m_InputImage);
 //   angle->SetReferencePixel(pix);
-// 
+//
 //   itk::OStringStream oss;
 //   oss << "Full Image: Spect Angle: ";
 //   for (unsigned int i = 0; i < pix.Size(); ++i)
@@ -335,15 +335,15 @@ FeatureExtractionBaseModel
 //     {
 //     // Instantiation
 //     OpeningProfileFilterType::Pointer profileFilter = OpeningProfileFilterType::New();
-// 
+//
 //     profileFilter->SetProfileSize(size);
 //     profileFilter->SetInitialValue(value);
 //     profileFilter->SetStep(step);
-// 
+//
 //     profileFilter->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     profileFilter->GetOutput()->UpdateOutputInformation();
-// 
+//
 //     for (unsigned int j = 0; j < size; ++j)
 //       {
 //       itk::OStringStream oss;
@@ -362,14 +362,14 @@ FeatureExtractionBaseModel
 //     {
 //     // Instantiation
 //     ClosingProfileFilterType::Pointer profileFilter = ClosingProfileFilterType::New();
-// 
+//
 //     profileFilter->SetProfileSize(size);
 //     profileFilter->SetInitialValue(value);
 //     profileFilter->SetStep(step);
-// 
+//
 //     profileFilter->SetInput(m_InputImageList->GetNthElement(i));
 //     profileFilter->GetOutput()->UpdateOutputInformation();
-// 
+//
 //     for (unsigned int j = 0; j < size; ++j)
 //       {
 //       itk::OStringStream oss;
@@ -392,7 +392,7 @@ FeatureExtractionBaseModel
 //     VarFilterType::Pointer var = VarFilterType::New();
 //     var->SetRadius(rad);
 //     var->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "Variance: " << radiusX << ", " << radiusY;
 //     std::string mess = oss.str();
@@ -412,7 +412,7 @@ FeatureExtractionBaseModel
 //     MeanFilterType::Pointer mean = MeanFilterType::New();
 //     mean->SetRadius(rad);
 //     mean->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "Mean: " << radiusX << ", " << radiusY;
 //     std::string mess = oss.str();
@@ -429,7 +429,7 @@ FeatureExtractionBaseModel
 //     GradientFilterType::Pointer grad =  GradientFilterType::New();
 //     grad->SetSigma(sigma);
 //     grad->SetInput(m_InputImageList->GetNthElement(i));
-// 
+//
 //     itk::OStringStream oss;
 //     oss << "Rec. Gradient: " << sigma;
 //     std::string mess = oss.str();
@@ -504,7 +504,7 @@ FeatureExtractionBaseModel
 //     {
 //     itkExceptionMacro(<< "Channel indices must belong to range [1, " << m_NumberOfChannels << "]");
 //     }
-// 
+//
 //   RadiometricIndicesGenerator lRadiometricIndicesGenerator;
 //   lRadiometricIndicesGenerator.AddRAndNIRFilter(this, type, redId, nirId, params);
 // }
@@ -518,7 +518,7 @@ FeatureExtractionBaseModel
 //                        FeatureType type,
 //                        std::vector<double> params)
 // {
-// 
+//
 //   if (redId < 1 || blueId < 1 || nirId < 1 ||
 //       redId > m_NumberOfChannels || blueId > m_NumberOfChannels || nirId > m_NumberOfChannels)
 //     {
@@ -526,7 +526,7 @@ FeatureExtractionBaseModel
 //     }
 //   RadiometricIndicesGenerator lRadiometricIndicesGenerator;
 //   lRadiometricIndicesGenerator.AddRAndBAndNIRFilter(this, type, redId, blueId, nirId, params);
-// 
+//
 // }
 
 /** RAndGAndNIR */
@@ -580,7 +580,7 @@ FeatureExtractionBaseModel
 //   */
 //   bool         alreadyLinked = false;
 //   unsigned int i = 0;
-// 
+//
 //   // if not already exist
 //   while (i < m_MeanShiftFilterList->Size() && alreadyLinked == false)
 //     {
@@ -590,30 +590,30 @@ FeatureExtractionBaseModel
 //     double                       rangeCur = meanShiftTemp->GetRangeRadius();
 //     unsigned int                 minSizeCur = meanShiftTemp->GetMinimumRegionSize();
 //     double                       scaleCur = meanShiftTemp->GetScale();
-// 
+//
 //     if (spatialCur == spatial && rangeCur == range && minSizeCur == minSize && scaleCur == scale) alreadyLinked = true;
 //     i++;
 //     }
-// 
+//
 //   if (alreadyLinked == false)
 //     {
 //     ImageListType::Pointer                    imList = ImageListType::New();
 //     ImageListToVectorImageFilterType::Pointer list2Vec = ImageListToVectorImageFilterType::New();
-// 
+//
 //     // Create input vector image from selectd channels
 //     for (unsigned int j = 0; j < m_InputImageList->Size(); j++)
 //       {
 //       imList->PushBack(m_InputImageList->GetNthElement(j));
 //       }
 //     list2Vec->SetInput(imList);
-// 
+//
 //     MeanShiftFilterType::Pointer meanShift = MeanShiftFilterType::New();
 //     meanShift->SetInput(list2Vec->GetOutput());
 //     meanShift->SetSpatialRadius(spatial);
 //     meanShift->SetRangeRadius(range);
 //     meanShift->SetMinimumRegionSize(minSize);
 //     meanShift->SetScale(scale);
-// 
+//
 //     if (type == FeatureInfo::MS_SMOOTH ||  type == FeatureInfo::MS_CLUSTERED)
 //       {
 //       for (unsigned int k = 0; k < m_InputImageList->Size(); k++)
@@ -646,7 +646,7 @@ FeatureExtractionBaseModel
 //       else if (type == FeatureInfo::MS_LABELED) oss << "Labeled: ";
 //       oss << spatial << ", " << range << ", " << minSize << ", " << scale;
 //       std::string mess = oss.str();
-// 
+//
 //       this->AddFeatureFilter(meanShift, type, -1, 0, mess);
 //       }
 //     m_MSImageListList->PushBack(imList);
@@ -687,7 +687,7 @@ FeatureExtractionBaseModel
 //       else if (type == FeatureInfo::MS_BOUND) oss << "Clustered Boundries: ";
 //       oss << spatial << ", " << range << ", " << minSize << ", " << scale;
 //       std::string mess = oss.str();
-// 
+//
 //       this->AddFeatureFilter(m_MeanShiftFilterList->GetNthElement(i - 1), type, -1, 0, mess);
 //       }
 //     }
@@ -751,7 +751,7 @@ FeatureExtractionBaseModel
 //   AdvancedTexturesGenerator   lAdvTexturesGenerator;
 //   EdgeDensityGenerator        lEdgeDensityGenerator;
 //   SingleImagePointerType      image = SingleImageType::New();
-// 
+//
 //   switch (m_FilterTypeList[i])
 //     {
 //     case FeatureInfo::TOUZI:
@@ -782,7 +782,7 @@ FeatureExtractionBaseModel
 //       image = profile->GetOutput()->GetNthElement(m_OutputIndexMap[i]);
 //       break;
 //       }
-// 
+//
 //     case FeatureInfo::MORPHOLOGICALCLOSING:
 //       {
 //       ClosingProfileFilterType::Pointer profile =

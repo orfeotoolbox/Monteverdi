@@ -454,7 +454,7 @@ public:
 //   void AddOriginalData();
 //   void AddTouziFilter(unsigned int radiusX);
 //   void AddHarrisFilter(double sigmaD, double sigmaI, double alpha);
-// 
+//
 //   void AddRAndNIRFilter(unsigned int redId, unsigned int nirId, FeatureType type, std::vector<double> params);
 //   void AddRAndBAndNIRFilter(unsigned int redId,
 //                             unsigned int blueId,
@@ -467,7 +467,7 @@ public:
 //                             FeatureType type,
 //                             std::vector<double> params);
 //   void Add2ChannelsFilter(unsigned int chan1Id, unsigned int chan2Id, FeatureType type);
-// 
+//
 //   void AddSpectralAngleFilter(InputImagePixelType pix);
 //   void AddMorphoOpeningProfileFilter(unsigned int size, int value, int step);
 //   void AddMorphoClosingProfileFilter(unsigned int size, int value, int step);
@@ -476,7 +476,7 @@ public:
 //   void AddGradientFilter(double sigma);
   /** Generic method to create a texture filter*/
 //   void AddTextureFilter(FeatureType featureType, SizeType radius, OffsetType offset, unsigned int bin);
-// 
+//
 //   void AddSFSTexturesFilter(FeatureType type,
 //                             double spectralThr,
 //                             unsigned int spatialThr,
