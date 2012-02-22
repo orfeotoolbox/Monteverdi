@@ -18,6 +18,13 @@ FOREACH(moduleDir ${moduleList})
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})
     SET(LIB_NAME "otb${moduleName}Module")
     
+    SET(LINK_LIBS OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon flu tinyXML)
+    SET(DEPS_LIBS OTBMonteverdiCommon)
+    IF(${LIB_NAME} MATCHES "otbRadiometricIndicesExtractionModule")
+      SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
+      SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
+    ENDIF(${LIB_NAME} MATCHES "otbRadiometricIndicesExtractionModule")
+    
     # If Module == Tile Map Import Module
     IF(${LIB_NAME} MATCHES "otbTileMapImportModule")
       # Remove modules using curl
@@ -46,8 +53,8 @@ FOREACH(moduleDir ${moduleList})
 	ENDIF(SC_GUI_SRCS_TEMP)
 	
 	ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon flu tinyXML) 
-	ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
+	TARGET_LINK_LIBRARIES(${LIB_NAME} ${LINK_LIBS}) 
+	ADD_DEPENDENCIES(${LIB_NAME} ${DEPS_LIBS})
 	
 	SET(LIST_MODULE_LIBRARIES "${LIST_MODULE_LIBRARIES};${LIB_NAME}" )
 	
@@ -87,8 +94,8 @@ FOREACH(moduleDir ${moduleList})
 	ENDIF(SC_GUI_SRCS_TEMP)
 	
 	ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon flu tinyXML) 
-	ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
+	TARGET_LINK_LIBRARIES(${LIB_NAME} ${LINK_LIBS}) 
+	ADD_DEPENDENCIES(${LIB_NAME} ${DEPS_LIBS})
 	
 	SET(LIST_MODULE_LIBRARIES "${LIST_MODULE_LIBRARIES};${LIB_NAME}" )
 	
@@ -124,11 +131,8 @@ FOREACH(moduleDir ${moduleList})
 	ENDIF(SC_GUI_SRCS_TEMP)
 	
 	ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-	TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters 
-	                      OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry 
-	                      OTBProjections OTBSARPolarimetry OTBMonteverdiCommon 
-	                      OTBOBIA flu tinyXML) 
-	ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
+	TARGET_LINK_LIBRARIES(${LIB_NAME} ${LINK_LIBS} OTBOBIA) 
+	ADD_DEPENDENCIES(${LIB_NAME} ${DEPS_LIBS})
 	
 	# OTBGeospatialAnalysis is not generated if OTB_USE_PQXX
 	# is set to OFF

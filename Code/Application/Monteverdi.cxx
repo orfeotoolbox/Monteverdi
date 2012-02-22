@@ -92,6 +92,7 @@
 #include "otbUncompressJpeg2000Module.h"
 #include "otbResampleModule.h"
 #include "otbCompareImagesModule.h"
+#include "otbRadiometricIndicesExtractionModule.h"
 
 
 #ifdef OTB_USE_MAPNIK
@@ -198,6 +199,8 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
                                                       otbGetTextMacro("Filtering/Feature extraction"));
+  model->RegisterModule<otb::RadiometricIndicesExtractionModule>("RadiometricIndicesExtraction",
+                                                      otbGetTextMacro("Filtering/Radiometric indices extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
   model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));

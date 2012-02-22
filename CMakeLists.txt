@@ -139,6 +139,8 @@ ${OTB_INCLUDE_DIRS}
 ${Monteverdi_BINARY_DIR}/
 ${Monteverdi_SOURCE_DIR}/Code/Common
 ${Monteverdi_BINARY_DIR}/Code/Common
+${Monteverdi_SOURCE_DIR}/Code/Common/FeatureExtractionBase
+${Monteverdi_BINARY_DIR}/Code/Common/FeatureExtractionBase
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src

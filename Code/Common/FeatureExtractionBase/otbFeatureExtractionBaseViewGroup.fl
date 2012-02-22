@@ -1,0 +1,178 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+# decl {\#include "otbFeatureBase.h"} {public
+# } 
+
+class FeatureExtractionBaseViewGroup {open
+} {
+  Function {CreateGUI()} {open return_type void
+  } {
+    Fl_Window guiMainWindow {
+      label {Feature Extraction Application}
+      callback {Quit();} open
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable visible
+    } {
+      Fl_Tabs {} {open
+        xywh {5 274 655 281} box PLASTIC_DOWN_BOX color 23 labeltype NO_LABEL labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiAction {
+          label Action open
+          xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186
+        } {
+          Fl_Choice guiFeatureChoice {
+            label {Feature Choice}
+            xywh {15 318 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+          } {}
+          Fl_Wizard guiParameter {
+            label {Feature Parameters} open
+            xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+          } {
+            Fl_Group guiNothing {
+              xywh {200 318 246 140} color 7
+            } {}
+          }
+          Fl_Check_Browser guiChannelSelection {
+            label {Channels Selection}
+            callback {UpdateChannels();}
+            xywh {15 361 182 96} box PLASTIC_DOWN_BOX selection_color 139 labelfont 1 labelsize 12 labelcolor 186 align 1 when 1
+          }
+          Fl_Button guiAdd {
+            label Add
+            callback {AddFeature();}
+            tooltip {Add feature to list (one per selected channel)} xywh {186 521 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+          }
+          Fl_Browser guiFeatureListAction {
+            label {Feature Image List}
+            callback {UpdateFeaturePreview();} selected
+            tooltip {Contains each Computed Feature.
+The selected one is display in the Feature view.
+Pay attention, the dynamic is adapted to the extract.} xywh {456 318 200 205} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Text_Display guiFeatInfo {
+            label {Feature Information}
+            xywh {15 479 432 35} box PLASTIC_DOWN_BOX selection_color 49 labelfont 1 labelsize 12 labelcolor 186 textsize 12 textcolor 32
+          }
+          Fl_Progress pBar {
+            label {Updating feature preview}
+            xywh {456 528 200 17} box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186
+          }
+        }
+        Fl_Group guiOutput {
+          label Output
+          tooltip {Tools for classification} xywh {5 294 655 261} box PLASTIC_DOWN_BOX color 48 selection_color 32 labelfont 1 labelsize 12 labelcolor 186 hide
+        } {
+          Fl_Browser guiFeatureList {
+            label {Feature Image List}
+            callback {UpdateExtractView();}
+            tooltip {Contains each Computed Feature} xywh {17 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button guiAddChannel {
+            label {>>}
+            callback {AddOutputChannel();}
+            tooltip {Add mono Channel Image to Intput List} xywh {305 363 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Button guiRemoveChannel {
+            label {<<}
+            callback {RemoveOutputChannel();}
+            tooltip {Remove Mono channel Image from Output List} xywh {305 457 30 30} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 45 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Browser guiOutputFeatureList {
+            label {Selected Output Channels}
+            callback {UpdateFeaturePreviewFromOutputList();}
+            tooltip {Contains each Selected Feature for Output Generation} xywh {357 319 270 204} type Hold box PLASTIC_DOWN_BOX selection_color 1 labelfont 1 labelsize 12 labelcolor 186 align 1 when 3
+          }
+          Fl_Button guiUpChannel {
+            label {+}
+            callback {UpOutputChannel();}
+            tooltip {Change selected Feature Position in Output Image} xywh {634 398 15 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 37 labelfont 1 labelsize 20 labelcolor 186
+          }
+          Fl_Button guiDownChannel {
+            label {-}
+            callback {DownOutputChannel();}
+            tooltip {Change selected Feature Position in Output Image} xywh {634 429 15 15} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 255 selection_color 45 labelfont 1 labelsize 20 labelcolor 186
+          }
+        }
+      }
+      Fl_Button guiOK {
+        label Ok
+        callback {OK();}
+        tooltip {Save the Composition} xywh {525 563 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button guiClose {
+        label {Clear List}
+        callback {ClearFeature();}
+        tooltip {Clear Feature List} xywh {108 563 80 25} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 45 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Button guiQuit {
+        label Cancel
+        callback {Cancel();}
+        tooltip {Quit Application} xywh {400 564 115 27} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX color 7 selection_color 9 labelfont 1 labelsize 12 labelcolor 186
+      }
+      Fl_Group guiImageGroup {open
+        xywh {10 25 645 240} resizable
+      } {
+        Fl_Group gScroll {
+          label Scroll open
+          xywh {10 43 209 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Group gFull {
+          label {Full Resolution} open
+          xywh {229 43 210 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+        Fl_Group gFeature {
+          label Feature open
+          xywh {448 43 207 222} box PLASTIC_DOWN_BOX labelfont 1 labelsize 12 labelcolor 186
+        } {}
+      }
+    }
+  }
+  Function {FeatureExtractionBaseViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~FeatureExtractionBaseViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {OpenImage()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {Quit()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+#  Function {SetFeatureType(otb::FeatureInfo::FeatureType i)} {open return_type {virtual void}
+#  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {OK()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {AddFeature()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateChannels()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {AddOutputChannel()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {RemoveOutputChannel()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateFeaturePreview()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {ClearFeature()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {ClearImage()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateExtractView()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateParameterArea(unsigned int groupId)} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpOutputChannel()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {DownOutputChannel()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateFeaturePreviewFromOutputList()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {Cancel()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateHarMinMax()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {UpdateAdvHarMinMax()} {open return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+} 

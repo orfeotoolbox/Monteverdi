@@ -1,0 +1,511 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class RadiometricIndicesExtractionViewGroup {open
+} {
+  Function {CreateParameters()} {open return_type void
+  } {
+    Fl_Window wFakeWindow {
+      label {}
+      open
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable hide
+    } {
+      Fl_Choice fakeChoice {
+        label {}
+        xywh {10 10 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+      } {
+        MenuItem mInit {
+          tooltip {""} xywh {0 0 30 20}
+        }
+        Submenu {} {
+          label Vegetation open
+          tooltip Vegetation xywh {20 20 63 20}
+        } {
+          MenuItem mNDVI {
+            label NDVI
+            tooltip {Normalized Difference Vegetation Index} xywh {20 20 30 20}
+          }
+          MenuItem mRVI {
+            label RVI
+            tooltip {Ratio Vegetation Index} xywh {40 40 30 20}
+          }
+          MenuItem mPVI {
+            label PVI
+            tooltip {Perpendicular Vegetation Index} xywh {30 30 30 20}
+          }
+          MenuItem mSAVI {
+            label SAVI
+            tooltip {Soil Adjusted Vegetation Index} xywh {40 40 30 20}
+          }
+          MenuItem mMSAVI {
+            label MSAVI
+            tooltip {Modified Soil Adjusted Vegetation Index} xywh {60 60 30 20}
+          }
+          MenuItem mMSAVI2 {
+            label MSAVI2
+            tooltip {Modified Soil Adjusted Vegetation Index 2} xywh {50 50 30 20}
+          }
+          MenuItem mTSAVI {
+            label TSAVI
+            tooltip {Transformed Soil Adjusted Vegetation Index} xywh {60 60 30 20}
+          }
+          MenuItem mGEMI {
+            label GEMI
+            tooltip {non-linear index to monitor vegetation} xywh {70 70 30 20}
+          }
+          MenuItem mWDVI {
+            label WDVI
+            tooltip {Weigthted Difference Modified Vegetation Index} xywh {80 80 30 20}
+          }
+          MenuItem mIPVI {
+            label IPVI
+            tooltip {Infrared Percantage Vegetation Index} xywh {90 90 30 20}
+          }
+          MenuItem mTNDVI {
+            label TNDVI
+            tooltip {Transformed Normalized Difference Vegetation Index} xywh {100 100 30 20}
+          }
+          MenuItem mARVI {
+            label ARVI
+            tooltip {Atmospherically Resistant Vegetation Index} xywh {110 110 30 20}
+          }
+          MenuItem mEVI {
+            label EVI
+            tooltip {Enhanced Vegetation Index} xywh {120 120 30 20}
+          }
+          MenuItem mTSARVI {
+            label TSARVI
+            tooltip {Transformed Soil Atmospherically Resistant Vegetation index} xywh {130 130 30 20}
+          }
+          MenuItem mAVI {
+            label AVI
+            tooltip {Angular Vegetation index} xywh {140 140 30 20}
+          }
+        }
+        Submenu {} {
+          label Soil open
+          tooltip Soil xywh {30 30 63 20}
+        } {
+          MenuItem mRI {
+            label RI
+            tooltip {Redness Index} xywh {150 150 30 20}
+          }
+          MenuItem mCI {
+            label CI
+            tooltip {Color Index} xywh {160 160 30 20}
+          }
+          MenuItem mBI {
+            label BI
+            tooltip {Brightness Index} xywh {170 170 30 20}
+          }
+          MenuItem mBI2 {
+            label BI2
+            tooltip {Brightness Index 2} xywh {180 180 30 20}
+          }
+        }
+        Submenu {} {
+          label {Built Up} open
+          tooltip {Built Up} xywh {40 40 63 20}
+        } {
+          MenuItem mNDBI {
+            label NDBI
+            tooltip {Normalized Difference Built up Index} xywh {170 170 30 20}
+          }
+          MenuItem mISU {
+            label ISU
+            xywh {180 180 30 20}
+          }
+        }
+        Submenu {} {
+          label Water open
+          tooltip Water xywh {50 50 63 20}
+        } {
+          MenuItem mSRWI {
+            label SRWI
+            tooltip {SimpleRatio WaterIndex} xywh {30 30 30 20}
+          }
+          MenuItem mNDWI {
+            label NDWI
+            tooltip {Normalized Difference Water Index (Gao 1996)} xywh {40 40 30 20}
+          }
+          MenuItem mNDWI2 {
+            label NDWI2
+            tooltip {Normalized DIfference Water Index (Mc Feeters 1996)} xywh {50 50 30 20}
+          }
+          MenuItem mMNDWI {
+            label MNDWI
+            tooltip {Modified Normalized Difference Water Index (Xu 2006)} xywh {60 60 30 20}
+          }
+          MenuItem mNDPI {
+            label NDPI
+            tooltip {Normalized Difference Pond Index (Lacaux & al)} xywh {70 70 30 20}
+          }
+          MenuItem mNDTI {
+            label NDTI
+            tooltip {Normalized Difference Turbidity Index (Lacaux & al)} xywh {80 80 30 20}
+          }
+        }
+      }
+      Fl_Wizard fakeParameter {
+        label {Feature Parameters} open
+        xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiRAndNIR {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiRAndNIRR {
+            label {Red channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiRAndNIRNIR {
+            label {NIR channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiPVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiPVIR {
+            label {Red channel}
+            xywh {341 340 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiPVINIR {
+            label {NIR channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiPVIa {
+            label a
+            tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiPVIb {
+            label b
+            tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiSAVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiSAVIR {
+            label {Red channel}
+            xywh {341 335 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiSAVINIR {
+            label {NIR channel}
+            xywh {341 380 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiSAVIL {
+            label L
+            tooltip {Correction factor. 0 for high vegetation cover, 1 for low, and usually L = 0.5} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
+          }
+        }
+        Fl_Group guiMSAVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiMSAVIR {
+            label {Red channel}
+            xywh {341 335 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiMSAVINIR {
+            label {NIR channel}
+            xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiMSAVIs {
+            label s
+            tooltip {Soil line slope} xywh {296 420 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiTSAVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiTSAVIR {
+            label {Red channel}
+            xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiTSAVINIR {
+            label {NIR channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiTSAVIs {
+            label s
+            tooltip {Soil line slope} xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiTSAVIa {
+            label a
+            tooltip {Soil line intercept} xywh {296 403 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiTSAVIx {
+            label x
+            tooltip {Adjustement factor} xywh {296 428 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiWDVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiWDVIR {
+            label {Red channel}
+            xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiWDVINIR {
+            label {NIR channel}
+            xywh {341 380 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiWDVIs {
+            label s
+            tooltip {Slope of soil line} xywh {296 415 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiARVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiARVIR {
+            label {Red channel}
+            xywh {341 333 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiARVIB {
+            label {Blue channel}
+            xywh {341 363 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+          }
+          Fl_Counter guiARVINIR {
+            label {NIR channel}
+            xywh {341 393 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiARVIgamma {
+            label gamma
+            tooltip {gamma generally = 0.5 (default value) or 1 (depending on aerosols)} xywh {296 423 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.5
+          }
+        }
+        Fl_Group guiEVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiEVIR {
+            label {Red channel}
+            xywh {341 322 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiEVIB {
+            label {Blue channel}
+            xywh {341 341 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+          }
+          Fl_Counter guiEVINIR {
+            label {NIR channel}
+            xywh {341 360 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiEVIG {
+            label G
+            xywh {296 380 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiEVIL {
+            label L
+            xywh {296 399 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 1
+          }
+          Fl_Value_Input guiEVIC1 {
+            label C1
+            xywh {296 418 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 6
+          }
+          Fl_Value_Input guiEVIC2 {
+            label C2
+            xywh {296 438 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 7.5
+          }
+        }
+        Fl_Group guiTSARVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiTSARVIR {
+            label {Red channel}
+            xywh {341 328 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiTSARVIB {
+            label {Blue channel}
+            xywh {341 348 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+          }
+          Fl_Counter guiTSARVINIR {
+            label {NIR channel}
+            xywh {341 368 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiTSARVIa_rb {
+            label a_rb
+            tooltip {Soil line slope} xywh {296 390 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiTSARVIb_rb {
+            label b_rb
+            tooltip {Soil line intercept} xywh {296 410 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+          Fl_Value_Input guiTSARVIx {
+            label X
+            xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiAVI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiAVIR {
+            label {Red channel}
+            xywh {341 328 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiAVIG {
+            label {Green channel}
+            xywh {341 348 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+          }
+          Fl_Counter guiAVINIR {
+            label {NIR channel}
+            xywh {341 368 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiAVIlambda1 {
+            label {lambda 1}
+            tooltip {Central wavelength of the G band (0.55 for Pleiade)} xywh {296 390 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.55
+          }
+          Fl_Value_Input guiAVIlambda2 {
+            label {lambda 2}
+            tooltip {Central wavelength of the R band (0.66  for Pleiade)} xywh {296 410 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.66
+          }
+          Fl_Value_Input guiAVIlambda3 {
+            label {lambda 3}
+            tooltip {Central wavelength of the NIR band (0.84 for Pleiade)} xywh {296 430 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 0.84
+          }
+        }
+        Fl_Group guiSoil {
+          xywh {200 318 246 140} align 0 hide
+        } {
+          Fl_Counter guiSoilG {
+            label {Green channel}
+            xywh {360 358 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+          }
+          Fl_Counter guiSoilR {
+            label {Red channel}
+            xywh {360 408 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+        }
+        Fl_Group guiIB2 {
+          xywh {200 318 246 140} align 0 hide
+        } {
+          Fl_Counter guiIB2G {
+            label {Green channel}
+            xywh {360 340 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 2
+          }
+          Fl_Counter guiIB2R {
+            label {Red channel}
+            xywh {360 380 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiIB2NIR {
+            label {NIR channel}
+            xywh {360 415 75 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiNDBI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiNDBITM4 {
+            label {TM4 channel}
+            xywh {352 358 85 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+          }
+          Fl_Counter guiNDBITM5 {
+            label {TM5 channel}
+            xywh {352 408 85 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 1
+          }
+        }
+        Fl_Group guiISU {
+          xywh {207 318 240 140} hide
+        } {
+          Fl_Counter guiISUR {
+            label {Red channel}
+            xywh {341 340 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiISUNIR {
+            label {NIR channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX align 4 minimum 1 step 1 value 4
+          }
+          Fl_Value_Input guiISUa {
+            label a
+            xywh {296 378 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 100
+          }
+          Fl_Value_Input guiISUb {
+            label b
+            xywh {296 413 85 18} box PLASTIC_DOWN_BOX color 49 selection_color 8 minimum -1e+06 maximum 1e+06 step 0.05 value 25
+          }
+        }
+        Fl_Group guiSRWI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiSRWIR860 {
+            label {Rho 860 Index}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiSRWIR1240 {
+            label {Rho 1240 Index}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiNDWI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiNDWINIR {
+            label {NIR channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiNDWIMIR {
+            label {MIR channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiNDWI2 {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiNDWI2G {
+            label {Green channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiNDWI2NIR {
+            label {NIR channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiMNDWI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiMNDWIG {
+            label {Green channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiMNDWIMIR {
+            label {MIR channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiNDPI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiNDPIMIR {
+            label {MIR channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiNDPIG {
+            label {Green channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiNDTI {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiNDTIR {
+            label {Red channel}
+            xywh {341 358 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 3
+          }
+          Fl_Counter guiNDTIG {
+            label {Green channel}
+            xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        
+      }       
+    }
+  }
+  Function {RadiometricIndicesExtractionViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~RadiometricIndicesExtractionViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+} 
