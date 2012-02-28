@@ -66,7 +66,7 @@ TextureExtractionViewGUI::TextureExtractionViewGUI()
     m_FeatureTable[curPos+1] = panelIndex;                                                          \
     m_SpecificGUI->mMenuItem->callback((Fl_Callback*)GenericMenuItemCallback, (void*)(m_FeatureTable+curPos));\
     curPos += 2;                                                                  \
-  }  
+  }
   otbMenuItemCallbackMacro(mInit, otb::FeatureInfoTex::UNKNOWN, 0);
   otbMenuItemCallbackMacro(mPanTex, otb::FeatureInfoTex::TEXT_PANTEX, 4);
   otbMenuItemCallbackMacro(mSFSLen, otb::FeatureInfoTex::SFS_LEN, 1);
@@ -191,7 +191,7 @@ TextureExtractionViewGUI
 
 }
 
-void 
+void
 TextureExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
@@ -215,10 +215,10 @@ TextureExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
     }
 }
 
-void 
+void
 TextureExtractionViewGUI::GenericMenuItemCallback(Fl_Menu_* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o, v);
 }
 
 void
@@ -230,7 +230,7 @@ TextureExtractionViewGUI::HarCkCallback_i(Fl_Check_Button* o, void* v)
 void
 TextureExtractionViewGUI::HarCkCallback(Fl_Check_Button* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->user_data()))->HarCkCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->user_data()))->HarCkCallback_i(o, v);
 }
 
 void
@@ -245,7 +245,7 @@ TextureExtractionViewGUI::HarMinCallback_i(Fl_Value_Input* o, void* v)
 void
 TextureExtractionViewGUI::HarMinCallback(Fl_Value_Input* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->HarMinCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->HarMinCallback_i(o, v);
 }
 
 void
@@ -260,7 +260,7 @@ TextureExtractionViewGUI::HarMaxCallback_i(Fl_Value_Input* o, void* v)
 void
 TextureExtractionViewGUI::HarMaxCallback(Fl_Value_Input* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->HarMaxCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->HarMaxCallback_i(o, v);
 }
 
 void
@@ -272,7 +272,7 @@ TextureExtractionViewGUI::AdvHarCkCallback_i(Fl_Check_Button* o, void* v)
 void
 TextureExtractionViewGUI::AdvHarCkCallback(Fl_Check_Button* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->user_data()))->AdvHarCkCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->user_data()))->AdvHarCkCallback_i(o, v);
 }
 
 void
@@ -287,7 +287,7 @@ TextureExtractionViewGUI::AdvHarMinCallback_i(Fl_Value_Input* o, void* v)
 void
 TextureExtractionViewGUI::AdvHarMinCallback(Fl_Value_Input* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->AdvHarMinCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->AdvHarMinCallback_i(o, v);
 }
 
 void
@@ -302,7 +302,7 @@ TextureExtractionViewGUI::AdvHarMaxCallback_i(Fl_Value_Input* o, void* v)
 void
 TextureExtractionViewGUI::AdvHarMaxCallback(Fl_Value_Input* o, void* v)
 {
-  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->AdvHarMaxCallback_i(o,v);
+  ((TextureExtractionViewGUI *)(o->parent()->parent()->user_data()))->AdvHarMaxCallback_i(o, v);
 }
 
 }

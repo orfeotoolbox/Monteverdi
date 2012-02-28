@@ -50,7 +50,7 @@ MorphologyExtractionViewGUI::MorphologyExtractionViewGUI()
     m_FeatureTable[curPos+1] = panelIndex;                                                          \
     m_SpecificGUI->mMenuItem->callback((Fl_Callback*)GenericMenuItemCallback, (void*)(m_FeatureTable+curPos));\
     curPos += 2;                                                                  \
-  }  
+  }
   otbMenuItemCallbackMacro(mInit, otb::FeatureInfoMorpho::UNKNOWN, 0);
   otbMenuItemCallbackMacro(mOpening, otb::FeatureInfoMorpho::MORPHOLOGICALOPENING, 1);
   otbMenuItemCallbackMacro(mClosing, otb::FeatureInfoMorpho::MORPHOLOGICALCLOSING, 1);
@@ -80,7 +80,7 @@ void MorphologyExtractionViewGUI::InitParameterGroupList()
   m_ParameterGroupList.push_back(m_SpecificGUI->guiMorpho); // panel 1
 }
 
-void 
+void
 MorphologyExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
@@ -88,10 +88,10 @@ MorphologyExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
   SetFeatureType(*index);
 }
 
-void 
+void
 MorphologyExtractionViewGUI::GenericMenuItemCallback(Fl_Menu_* o, void* v)
 {
-  ((MorphologyExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o,v);
+  ((MorphologyExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o, v);
 }
 
 }

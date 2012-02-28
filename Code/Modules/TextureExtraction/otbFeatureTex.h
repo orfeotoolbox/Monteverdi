@@ -69,12 +69,12 @@ public:
                                                          "Tools for classification.\nItems marked as experimental are not likely to work on huge images"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_PANTEX, "Panchromatic texture"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_LEN, "Structural Feature Set: Length"));
-    m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_WID, "Structural Feature Set: Width"));    
+    m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_WID, "Structural Feature Set: Width"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_PSI, "Structural Feature Set: Pixel shape index"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_WME, "Structural Feature Set: Weighted mean"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_RAT, "Structural Feature Set: Ratio"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_SD, "Structural Feature Set: Standard deviation"));
-    m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_HAR, "Haralick's textures. Select whose wanted ones.")); 
+    m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_HAR, "Haralick's textures. Select whose wanted ones."));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_ADV, "Advanced textures. Select whose wanted ones."));
     
   }

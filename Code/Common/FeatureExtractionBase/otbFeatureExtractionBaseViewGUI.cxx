@@ -37,7 +37,7 @@ FeatureExtractionBaseViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_FeatureType =  0;//UNKNOWN
+  m_FeatureType =  0; //UNKNOWN
 
   this->CreateGUI();
 

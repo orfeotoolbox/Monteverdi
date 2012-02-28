@@ -36,7 +36,7 @@ SmoothingViewGUI::SmoothingViewGUI()
   
   // Plug the specific parameter widgets in the main window
   
-  guiParameter->add(m_SpecificGUI->guiRadius);// panel 1
+  guiParameter->add(m_SpecificGUI->guiRadius); // panel 1
   guiParameter->add(m_SpecificGUI->guiMS);
 
   this->InitParameterGroupList();
@@ -52,7 +52,7 @@ SmoothingViewGUI::SmoothingViewGUI()
     m_FeatureTable[curPos+1] = panelIndex;                                                          \
     m_SpecificGUI->mMenuItem->callback((Fl_Callback*)GenericMenuItemCallback, (void*)(m_FeatureTable+curPos));\
     curPos += 2;                                                                  \
-  }  
+  }
   otbMenuItemCallbackMacro(mInit, otb::FeatureInfoSmooth::UNKNOWN, 0);
   otbMenuItemCallbackMacro(mOriginal, otb::FeatureInfoSmooth::ORIGINAL, 0);
   otbMenuItemCallbackMacro(mMean, otb::FeatureInfoSmooth::MEAN, 1);
@@ -80,12 +80,12 @@ SmoothingViewGUI
 
 void SmoothingViewGUI::InitParameterGroupList()
 {
-  Superclass::InitParameterGroupList(); 
+  Superclass::InitParameterGroupList();
   m_ParameterGroupList.push_back(m_SpecificGUI->guiRadius); // panel 1
   m_ParameterGroupList.push_back(m_SpecificGUI->guiMS);
 }
 
-void 
+void
 SmoothingViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
@@ -93,10 +93,10 @@ SmoothingViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
   SetFeatureType(*index);
 }
 
-void 
+void
 SmoothingViewGUI::GenericMenuItemCallback(Fl_Menu_* o, void* v)
 {
-  ((SmoothingViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o,v);
+  ((SmoothingViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o, v);
 }
 
 }

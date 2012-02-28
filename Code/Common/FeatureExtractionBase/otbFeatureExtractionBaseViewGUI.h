@@ -144,7 +144,7 @@ public:
 
   itkSetMacro(FeatureExtractPreviewParentBrowser, int);
   
-  itkSetMacro(WindowTitle,std::string);
+  itkSetMacro(WindowTitle, std::string);
 
 protected:
 

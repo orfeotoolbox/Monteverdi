@@ -41,7 +41,7 @@ EdgeExtractionViewGUI::EdgeExtractionViewGUI()
   guiParameter->add(m_SpecificGUI->guiEdgeSobel);
   guiParameter->add(m_SpecificGUI->guiMS); //5
   guiParameter->add(m_SpecificGUI->guiEdgeCanny);
-  guiParameter->add(m_SpecificGUI->guiTouzi); 
+  guiParameter->add(m_SpecificGUI->guiTouzi);
 
   this->InitParameterGroupList();
   
@@ -56,7 +56,7 @@ EdgeExtractionViewGUI::EdgeExtractionViewGUI()
     m_FeatureTable[curPos+1] = panelIndex;                                                          \
     m_SpecificGUI->mMenuItem->callback((Fl_Callback*)GenericMenuItemCallback, (void*)(m_FeatureTable+curPos));\
     curPos += 2;                                                                  \
-  }  
+  }
   otbMenuItemCallbackMacro(mInit, otb::FeatureInfoEdge::UNKNOWN, 0);
   otbMenuItemCallbackMacro(mHarris, otb::FeatureInfoEdge::HARRIS, 1);
   otbMenuItemCallbackMacro(mVariance, otb::FeatureInfoEdge::VARIANCE, 2);
@@ -96,7 +96,7 @@ void EdgeExtractionViewGUI::InitParameterGroupList()
   m_ParameterGroupList.push_back(m_SpecificGUI->guiTouzi);
 }
 
-void 
+void
 EdgeExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
@@ -104,10 +104,10 @@ EdgeExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
   SetFeatureType(*index);
 }
 
-void 
+void
 EdgeExtractionViewGUI::GenericMenuItemCallback(Fl_Menu_* o, void* v)
 {
-  ((EdgeExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o,v);
+  ((EdgeExtractionViewGUI *)(o->user_data()))->GenericMenuItemCallback_i(o, v);
 }
 
 }

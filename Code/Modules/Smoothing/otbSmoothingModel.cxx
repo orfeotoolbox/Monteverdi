@@ -160,7 +160,7 @@ SmoothingModel
 //       else if (type == FeatureInfoSmooth::MS_LABELED) oss << "Labeled: ";
 //       oss << spatial << ", " << range << ", " << minSize << ", " << scale;
 //       std::string mess = oss.str();
-// 
+//
 //       this->AddFeatureFilter(meanShift, type, -1, 0, mess);
 //       }
     m_MSImageListList->PushBack(imList);
@@ -201,7 +201,7 @@ SmoothingModel
 //       else if (type == FeatureInfoSmooth::MS_BOUND) oss << "Clustered Boundries: ";
 //       oss << spatial << ", " << range << ", " << minSize << ", " << scale;
 //       std::string mess = oss.str();
-// 
+//
 //       this->AddFeatureFilter(m_MeanShiftFilterList->GetNthElement(i - 1), type, -1, 0, mess);
 //       }
     }
