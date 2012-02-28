@@ -16,9 +16,25 @@
 
 =========================================================================*/
 
-#include "otbFeatureExtractionViewGUI.h"
-#include "otbFeatureExtractionModel.h"
-#include "otbFeatureExtractionController.h"
+#include "otbRadiometricIndicesExtractionViewGUI.h"
+#include "otbRadiometricIndicesExtractionModel.h"
+#include "otbRadiometricIndicesExtractionController.h"
+
+#include "otbTextureExtractionViewGUI.h"
+#include "otbTextureExtractionModel.h"
+#include "otbTextureExtractionController.h"
+
+#include "otbMorphologyExtractionViewGUI.h"
+#include "otbMorphologyExtractionModel.h"
+#include "otbMorphologyExtractionController.h"
+
+#include "otbEdgeExtractionViewGUI.h"
+#include "otbEdgeExtractionModel.h"
+#include "otbEdgeExtractionController.h"
+
+#include "otbSmoothingViewGUI.h"
+#include "otbSmoothingModel.h"
+#include "otbSmoothingController.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -26,24 +42,48 @@
 
 int main(int argc, char* argv[])
 {
-  typedef otb::FeatureExtractionViewGUI    ViewType;
-  typedef otb::FeatureExtractionController ControllerType;
-  typedef ControllerType::ModelType        ModelType;
+  typedef otb::FeatureExtractionBaseViewGUI           BaseViewType;
+  typedef otb::FeatureExtractionBaseController        BaseControllerType;
+
+  /* --------- Choose the MVC to be tested --------- */
+//   typedef otb::RadiometricIndicesExtractionViewGUI    ViewType;
+//   typedef otb::RadiometricIndicesExtractionController ControllerType;
+//   typedef otb::RadiometricIndicesExtractionModel      ModelType;
+  
+  typedef otb::TextureExtractionViewGUI    ViewType;
+  typedef otb::TextureExtractionController ControllerType;
+  typedef otb::TextureExtractionModel      ModelType;
+
+//   typedef otb::MorphologyExtractionViewGUI    ViewType;
+//   typedef otb::MorphologyExtractionController ControllerType;
+//   typedef otb::MorphologyExtractionModel      ModelType;
+
+//   typedef otb::SmoothingViewGUI    ViewType;
+//   typedef otb::SmoothingController ControllerType;
+//   typedef otb::SmoothingModel      ModelType;
+
+//   typedef otb::EdgeExtractionViewGUI    ViewType;
+//   typedef otb::EdgeExtractionController ControllerType;
+//   typedef otb::EdgeExtractionModel      ModelType;
+  /* --------------------------------------------------- */
 
   // Instanciation of pointer
   ViewType::Pointer       view       = ViewType::New();
   ControllerType::Pointer controller = ControllerType::New();
   ModelType::Pointer      model      = ModelType::New();
+  
+  BaseViewType*       baseView        = view;
+  BaseControllerType* baseController  = controller;
 
-  view->InitVisu();
-  view->SetFeatureExtractionController(controller);
-
+  baseView->InitVisu();
+  baseView->SetFeatureExtractionBaseController(baseController);
+  
   controller->SetModel(model);
   controller->SetView(view);
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::FeatureExtractionModel::InputImageType ImageType;
+  typedef otb::FeatureExtractionBaseModel::InputImageType ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::ImageFileWriter<ImageType>             WriterType;
 
@@ -58,17 +98,17 @@ int main(int argc, char* argv[])
   view->Show();
   Fl::check();
 
-  // ------------ Chose Text feature (entropy)
-//   view->UpdateParameterArea(6);
-//   view->SetFeatureType(otb::FeatureInfo::TEXT_ENT);
+  // ------------ Chose Haralick texture feature (entropy)
+//   view->UpdateParameterArea(2);
+//   view->SetFeatureType(otb::FeatureInfoTex::TEXT_HAR_ENTROPY);
 //   Fl::check();
 
-//   view->guiTextures->show();
+//   view->m_SpecificView->guiHaralick->show();
 //   Fl::check();
-//   view->guiTextRadiusX->value(3);
-//   view->guiTextRadiusY->value(1);
-//   view->guiTextOffsetX->value(2);
-//   view->guiTextOffsetY->value(1);
+//   view->m_SpecificView->guiHarRadiusX->value(3);
+//   view->m_SpecificView->guiHarRadiusY->value(1);
+//   view->m_SpecificView->guiHarOffsetX->value(2);
+//   view->m_SpecificView->guiHarOffsetY->value(1);
 //   view->guiParameter->redraw();
 //   Fl::check();
 

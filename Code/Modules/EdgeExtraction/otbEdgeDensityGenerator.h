@@ -18,8 +18,8 @@
 #ifndef __otbEdgeDensityGenerator_h
 #define __otbEdgeDensityGenerator_h
 
-#include "otbFeature.h"
-#include "otbFeatureExtractionModel.h"
+#include "otbFeatureEdge.h"
+#include "otbEdgeExtractionModel.h"
 
 #include "otbEdgeDensityImageFilter.h"
 #include "otbBinaryImageDensityFunction.h"
@@ -37,14 +37,15 @@ namespace otb
 class EdgeDensityGenerator
 {
 public:
-  typedef FeatureExtractionModel            ModelType;
+  typedef EdgeExtractionModel               ModelType;
   typedef ModelType::Pointer                ModelPointerType;
   typedef ModelType::FilterType             FilterType;
   typedef ModelType::PixelType              PixelType;
   typedef ModelType::SingleImageType        SingleImageType;
   typedef ModelType::SingleImagePointerType SingleImagePointerType;
   typedef SingleImageType::SizeType         SizeType;
-  typedef FeatureInfo::FeatureType          FeatureType;
+  typedef FeatureInfoEdge::FeatureType      FeatureType;
+  typedef FeatureInfoBase::FeatureType      FeatureBaseType;
 
   /***************************/
   /** Filter type declaration*/
@@ -64,7 +65,7 @@ public:
   //typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType  , CountFunctionType> GradientEdgeDensityFilterType;
 
   // AddEdgeDensityFilter
-  void AddEdgeDensityFilter(ModelPointerType pModel, FeatureType pType, std::vector<double> params)
+  void AddEdgeDensityFilter(ModelPointerType pModel, FeatureBaseType pType, std::vector<double> params)
   {
 
     for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
@@ -73,7 +74,7 @@ public:
       switch (pType)
         {
         /** CASE NOT USED: ITK PROBLEM WITH CANNY FILTER*/
-        case FeatureInfo::EDGE_CANNY:
+        case FeatureInfoEdge::EDGE_CANNY:
           {
           oss << "Edge Canny: ";
 
@@ -94,7 +95,7 @@ public:
           pModel->AddFeatureFilter(edgeDetectorFilter, pType, i, 0, mess);
           break;
           }
-        case FeatureInfo::EDGE_SOBEL:
+        case FeatureInfoEdge::EDGE_SOBEL:
           {
           oss << "Edge Sobel: ";
 
@@ -123,13 +124,13 @@ public:
   }
 
   SingleImagePointerType GenerateEdgeDensityOutputImage(ModelPointerType pModel,
-                                                        FeatureType pType,
+                                                        FeatureBaseType pType,
                                                         unsigned int pInputListId)
   {
     SingleImagePointerType image =  SingleImageType::New();
     switch (pType)
       {
-      case FeatureInfo::EDGE_CANNY:
+      case FeatureInfoEdge::EDGE_CANNY:
         {
         CannyEdgeDensityFilterType::Pointer filter =
           dynamic_cast<CannyEdgeDensityFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(
@@ -139,7 +140,7 @@ public:
         image = filter->GetOutput();
         break;
         }
-      case FeatureInfo::EDGE_SOBEL:
+      case FeatureInfoEdge::EDGE_SOBEL:
         {
         SobelEdgeDensityFilterType::Pointer filter =
           dynamic_cast<SobelEdgeDensityFilterType*>(static_cast<FilterType *>(pModel->GetFilterList()->GetNthElement(

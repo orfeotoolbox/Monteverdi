@@ -37,8 +37,8 @@ RadiometricIndicesExtractionModule::RadiometricIndicesExtractionModule()
   m_View = m_ViewRI;
   m_Controller = m_ControllerRI;
   
-  m_ControllerRI->SetModelRI(m_ModelRI);
-  m_ControllerRI->SetViewRI(m_ViewRI);
+  m_ControllerRI->SetModel(m_ModelRI);
+  m_ControllerRI->SetView(m_ViewRI);
 
   m_View->SetFeatureExtractionBaseController(m_Controller);
   m_View->InitVisu();

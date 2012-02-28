@@ -48,7 +48,6 @@
 
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
-#include "otbFeatureExtractionModule.h"
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
@@ -93,7 +92,10 @@
 #include "otbResampleModule.h"
 #include "otbCompareImagesModule.h"
 #include "otbRadiometricIndicesExtractionModule.h"
-
+#include "otbTextureExtractionModule.h"
+#include "otbMorphologyExtractionModule.h"
+#include "otbSmoothingModule.h"
+#include "otbEdgeExtractionModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -197,10 +199,18 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening/Simple RCS pan-sharpening"));
   model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion", otbGetTextMacro("Filtering/Pansharpening/Bayesian fusion"));
   model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
-  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
-                                                      otbGetTextMacro("Filtering/Feature extraction"));
+//   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
+//                                                       otbGetTextMacro("Filtering/Feature extraction"));
   model->RegisterModule<otb::RadiometricIndicesExtractionModule>("RadiometricIndicesExtraction",
-                                                      otbGetTextMacro("Filtering/Radiometric indices extraction"));
+                                                      otbGetTextMacro("Filtering/Feature extraction/Radiometric indices extraction"));
+  model->RegisterModule<otb::TextureExtractionModule>("TextureExtraction",
+                                                      otbGetTextMacro("Filtering/Feature extraction/Texture extraction"));
+  model->RegisterModule<otb::MorphologyExtractionModule>("MorphologyExtraction",
+                                                      otbGetTextMacro("Filtering/Feature extraction/Morphology"));
+  model->RegisterModule<otb::SmoothingModule>("Smoothing",
+                                                      otbGetTextMacro("Filtering/Feature extraction/Smoothing"));
+  model->RegisterModule<otb::EdgeExtractionModule>("EdgeExtraction",
+                                                      otbGetTextMacro("Filtering/Feature extraction/Edge extraction"));
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
   model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));

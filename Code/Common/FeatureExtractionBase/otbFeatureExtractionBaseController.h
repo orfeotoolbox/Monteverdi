@@ -162,10 +162,6 @@ public:
   typedef MouseClickActionHandler<MouseClickedController, VisuViewType>   MouseClickedHandlertype;
 
   typedef FeatureInfoBase::FeatureType         FeatureType;
-//   typedef HaralickTexture::TextureType     HaralickTextureType;
-//   typedef AdvancedTexture::TextureType     AdvancedTextureType;
-//   typedef std::vector<HaralickTextureType> HaralickTextureVectorType;
-//   typedef std::vector<AdvancedTextureType> AdvancedTextureVectorType;
 
 /** Standard type macros */
   itkTypeMacro(FeatureExtractionBaseController, Superclass);
@@ -206,9 +202,6 @@ public:
   virtual void Cancel();
   
   virtual void CreateSpecificFeature(FeatureType featureType){}
-
-//   HaralickTextureVectorType GetHaralickTextList();
-//   AdvancedTextureVectorType GetAdvancedTextList();
 
   /** Pixel Clicked method */
   virtual void LeftMouseButtonClicked(ContinuousIndexType index);

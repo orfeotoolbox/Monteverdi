@@ -37,7 +37,7 @@ FeatureExtractionBaseViewGUI
   m_DisplayedLabelList =  StringVectorType(4, "+ ");
   m_UndisplayedLabelList =  StringVectorType(4, "+ ");
   m_DisplayStatusList = std::vector<bool>(4, true);
-  m_FeatureType =  0; //FeatureInfo::UNKNOWN;
+  m_FeatureType =  0;//UNKNOWN
 
   this->CreateGUI();
 
@@ -47,8 +47,6 @@ FeatureExtractionBaseViewGUI
   m_SelectedPixel.SetSize(0);
   m_SelectedPixel.Fill(0);
   m_FeatureExtractPreviewParentBrowser = -1;
-  //this->InitParameterGroupList();
-  //this->InitTextureLists();
 
   // Instanstiate the views
   m_VisuView = VisuViewType::New();
@@ -78,11 +76,7 @@ FeatureExtractionBaseViewGUI
 {
   assert(m_FeatureExtractionBaseController.IsNotNull() && "The controller is not created");
 
-//  this->UpdateFeatureInfo(FeatureInfo::UNKNOWN);
-  this->UpdateFeatureInfo(0);
-//   guiHarBin->value(0);
-//   guiAdvBin->value(0);
-//   guiPanTexBin->value(0);
+  this->UpdateFeatureInfo(0); // UNKNOWN
 
   pBar->minimum(0);
   pBar->maximum(1);
@@ -97,67 +91,6 @@ FeatureExtractionBaseViewGUI
 {
   m_ParameterGroupList.clear();
   m_ParameterGroupList.push_back(guiNothing);
-//   m_ParameterGroupList.push_back(guiTouzi);
-//   m_ParameterGroupList.push_back(guiHarris);
-//   m_ParameterGroupList.push_back(guiSpectAngle);
-//   m_ParameterGroupList.push_back(guiRadius);
-//   m_ParameterGroupList.push_back(guiGrad);
-//   m_ParameterGroupList.push_back(guiMorpho);
-//   m_ParameterGroupList.push_back(guiRAndNIR); // panel 7
-//   m_ParameterGroupList.push_back(guiPVI);
-//   m_ParameterGroupList.push_back(guiSAVI);
-//   m_ParameterGroupList.push_back(guiMSAVI);
-//   m_ParameterGroupList.push_back(guiTSAVI);
-//   m_ParameterGroupList.push_back(guiWDVI);
-//   m_ParameterGroupList.push_back(guiARVI);
-//   m_ParameterGroupList.push_back(guiEVI); // 14
-//   m_ParameterGroupList.push_back(guiTSARVI);
-//   m_ParameterGroupList.push_back(guiAVI);
-//   m_ParameterGroupList.push_back(guiSoil);
-//   m_ParameterGroupList.push_back(guiIB2);
-//   m_ParameterGroupList.push_back(guiNDBI);
-//   m_ParameterGroupList.push_back(guiISU); // 20
-//   m_ParameterGroupList.push_back(guiSRWI);
-//   m_ParameterGroupList.push_back(guiNDWI);
-//   m_ParameterGroupList.push_back(guiNDWI2);
-//   m_ParameterGroupList.push_back(guiMNDWI);
-//   m_ParameterGroupList.push_back(guiNDPI);
-//   m_ParameterGroupList.push_back(guiNDTI); // 26
-//   m_ParameterGroupList.push_back(guiSFS);
-//   m_ParameterGroupList.push_back(guiEdgeSobel);
-//   m_ParameterGroupList.push_back(guiMS);
-//   m_ParameterGroupList.push_back(guiHaralick);
-//   m_ParameterGroupList.push_back(guiAdvanced);
-//   m_ParameterGroupList.push_back(guiPanTex);
-  // for original data, uses guiNothing, ie.m_ParameterGroupList[0]
-
-}
-
-void
-FeatureExtractionBaseViewGUI
-::InitTextureLists()
-{
-//   guiHarList->add("Energy", 1);
-//   guiHarList->add("Entropy", 2);
-//   guiHarList->add("Correlation", 3);
-//   guiHarList->add("Inverse dif. moment", 4);
-//   guiHarList->add("Inertia", 5);
-//   guiHarList->add("Cluster Prominence", 6);
-//   guiHarList->add("Cluster Shade", 7);
-//   guiHarList->add("Haralick Correlation", 8);
-//   guiHarList->redraw();
-//
-//   guiAdvList->add("Variance", 1);
-//   guiAdvList->add("Mean", 2);
-//   guiAdvList->add("Sum average", 3);
-//   guiAdvList->add("Sum variance", 4);
-//   guiAdvList->add("Sum entropy", 5);
-//   guiAdvList->add("Difference entropy", 6);
-//   guiAdvList->add("Difference variance", 7);
-//   guiAdvList->add("Information. Correlation 1", 8);
-//   guiAdvList->add("Information Correlation 2", 9);
-//   guiAdvList->redraw();
-
 }
 
 void
@@ -168,17 +101,6 @@ FeatureExtractionBaseViewGUI
     m_ParameterGroupList[i]->hide();
 
   m_ParameterGroupList[groupId]->show();
-//   if (m_ParameterGroupList[groupId] == guiSpectAngle)
-//     {
-//     if (GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() < 2)
-//       {
-//       m_ParameterGroupList[groupId]->deactivate();
-//       }
-//     else
-//       {
-//       m_ParameterGroupList[groupId]->activate();
-//       }
-//     }
 }
 
 void
@@ -228,10 +150,6 @@ FeatureExtractionBaseViewGUI
       if (event != "SetInputImage")
         {
         this->UpdateChannels();
-//         guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
-//         guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
-//         guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
-//         guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
         }
       this->UpdateInformation();
       }
@@ -357,23 +275,8 @@ void
 FeatureExtractionBaseViewGUI
 ::UpdateSelectedPixel(const IndexType& id)
 {
-//   itk::OStringStream oss;
-//   oss << "(" << id[0] << " , " << id[1] << ")";
-//   guiSpectAnglePixelCoordinates->value(oss.str().c_str());
-//   guiSpectAnglePixelCoordinates->redraw();
   m_SelectedPixel = GetModel()->GetInputImage()->GetPixel(id);
-//   oss.str("");
-//   oss << "[";
-//
-//   unsigned int i = 0;
-//   for (i = 0; i < m_SelectedPixel.Size() - 1; i++)
-//     {
-//     oss << m_SelectedPixel[i] << ", ";
-//     }
-//
-//   oss << m_SelectedPixel[i] << "]";
-//   guiSpectAnglePixelValue->value(oss.str().c_str());
-//   guiSpectAnglePixelValue->redraw();
+  this->UpdateSelectedPixelGUI(id);
 }
 
 void
@@ -448,40 +351,6 @@ FeatureExtractionBaseViewGUI
 {
   m_FeatureExtractionBaseController->CreateFeature(m_FeatureType);
 }
-
-// void
-// FeatureExtractionBaseViewGUI
-// ::UpdateHarMinMax()
-// {
-//   if( guiHarCk->value() != 0 )
-//     {
-//       guiHarIm->activate();
-//
-//       guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
-//       guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
-//     }
-//   else
-//     {
-//       guiHarIm->deactivate();
-//     }
-// }
-
-// void
-// FeatureExtractionBaseViewGUI
-// ::UpdateAdvHarMinMax()
-// {
-//   if( guiAdvHarCk->value() != 0 )
-//     {
-//       guiAdvHarIm->activate();
-//
-//       guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
-//       guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
-//     }
-//   else
-//     {
-//       guiAdvHarIm->deactivate();
-//     }
-// }
 
 void
 FeatureExtractionBaseViewGUI

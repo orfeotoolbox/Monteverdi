@@ -18,8 +18,8 @@
 #ifndef __otbTextureFilterGenerator_h
 #define __otbTextureFilterGenerator_h
 
-#include "otbFeature.h"
-#include "otbFeatureExtractionModel.h"
+#include "otbFeatureTex.h"
+#include "otbTextureExtractionModel.h"
 #include "otbScalarImageToPanTexTextureFilter.h"
 
 namespace otb
@@ -27,7 +27,7 @@ namespace otb
 class TextureFilterGenerator
 {
 public:
-  typedef FeatureExtractionModel            ModelType;
+  typedef TextureExtractionModel            ModelType;
   typedef ModelType::Pointer                ModelPointerType;
   typedef ModelType::FilterType             FilterType;
   typedef ModelType::SizeType               SizeType;
@@ -37,13 +37,14 @@ public:
   typedef ModelType::SingleImageType        SingleImageType;
   typedef ModelType::SinglePixelType        SinglePixelType;
   typedef ModelType::SingleImagePointerType SingleImagePointerType;
-  typedef FeatureInfo::FeatureType          FeatureType;
+  typedef FeatureInfoTex::FeatureType       FeatureType;
+  typedef FeatureInfoBase::FeatureType      FeatureBaseType;
 
   // Pan Tax
   typedef ScalarImageToPanTexTextureFilter<SingleImageType, SingleImageType> PanTexFilterType;
 
   template <class TFilterTypeMethod> void GenericAddTextureFilter(ModelPointerType pModel,
-                                                                  FeatureType pType,
+                                                                  FeatureBaseType pType,
                                                                   unsigned int inputListId,
                                                                   SizeType pRadius,
                                                                   OffsetType pOff,
@@ -53,7 +54,7 @@ public:
                                                                   std::string pMsg);
 
   void GenerateTextureFilter(ModelPointerType pModel,
-                             FeatureType pType,
+                             FeatureBaseType pType,
                              SizeType pRadius,
                              OffsetType pOff,
                              unsigned int pBin)
@@ -63,7 +64,7 @@ public:
       std::string mess;
       switch (pType)
         {
-        case FeatureInfo::TEXT_PANTEX:
+        case FeatureInfoTex::TEXT_PANTEX:
           {
           // Don't call the generic method, no offset set in this filter
           SinglePixelType min = static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]);
@@ -92,12 +93,12 @@ public:
       } //  for
   }
 
-  SingleImagePointerType GenerateTextureOutputImage(ModelPointerType model,  FeatureType type, unsigned int inputListId)
+  SingleImagePointerType GenerateTextureOutputImage(ModelPointerType model,  FeatureBaseType type, unsigned int inputListId)
   {
     SingleImagePointerType image =  SingleImageType::New();
     switch (type)
       {
-      case FeatureInfo::TEXT_PANTEX:
+      case FeatureInfoTex::TEXT_PANTEX:
         {
         PanTexFilterType::Pointer panTexFilter =
           dynamic_cast<PanTexFilterType*>(static_cast<FilterType *>(model->GetFilterList()->GetNthElement(inputListId)));
@@ -118,7 +119,7 @@ public:
 template <class TFilterTypeMethod>
 void
 TextureFilterGenerator::GenericAddTextureFilter(ModelPointerType pModel,
-                                                FeatureType pType,
+                                                FeatureBaseType pType,
                                                 unsigned int inputListId,
                                                 SizeType pRadius,
                                                 OffsetType pOff,

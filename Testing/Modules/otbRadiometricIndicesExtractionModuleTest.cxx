@@ -16,13 +16,14 @@
 
 =========================================================================*/
 
-#include "otbFeatureExtractionModule.h"
+#include "otbRadiometricIndicesExtractionModule.h"
+#include "otbFeatureRI.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbFeatureExtractionModuleTest(int argc, char* argv[])
+int otbRadiometricIndicesExtractionModuleTest(int argc, char* argv[])
 {
   if (argc != 3)
     {
@@ -30,16 +31,16 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  otb::FeatureExtractionModule::Pointer specificModule = otb::FeatureExtractionModule::New();
+  otb::RadiometricIndicesExtractionModule::Pointer specificModule = otb::RadiometricIndicesExtractionModule::New();
   otb::Module::Pointer                  module = specificModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
   const char * infname = argv[1];
-  typedef otb::FeatureExtractionModule::InputImageType ImageType;
-  typedef otb::ImageFileReader<ImageType>              ReaderType;
-  typedef otb::ImageFileWriter<ImageType>              WriterType;
+  typedef otb::RadiometricIndicesExtractionModule::InputImageType ImageType;
+  typedef otb::ImageFileReader<ImageType>                         ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                         WriterType;
 
   //reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -58,28 +59,28 @@ int otbFeatureExtractionModuleTest(int argc, char* argv[])
   //Simulate use of the application
   // ------------ Chose NDVI feature
 //   std::cout<<"ndvi begin..."<<std::endl;
-  specificModule->GetView()->UpdateParameterArea(8);
-  specificModule->GetView()->SetFeatureType(otb::FeatureInfo::NDVI);
+  specificModule->GetViewRI()->UpdateParameterArea(1);
+  specificModule->GetViewRI()->SetFeatureType(otb::FeatureInfoRI::NDVI);
   Fl::check();
 
   //Select bands 2 and 3
-  specificModule->GetView()->guiRAndNIRR->value(2);
-  specificModule->GetView()->guiRAndNIRR->redraw();
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->value(2);
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->redraw();
   Fl::check();
-  specificModule->GetView()->guiRAndNIRR->do_callback();
-  specificModule->GetView()->guiRAndNIRNIR->value(1);
-  specificModule->GetView()->guiRAndNIRNIR->redraw();
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->do_callback();
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->value(1);
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->redraw();
   Fl::check();
-  specificModule->GetView()->guiRAndNIRNIR->do_callback();
+  specificModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->do_callback();
 
   //Add the feature
-  specificModule->GetView()->guiAdd->do_callback();
-  specificModule->GetView()->guiFeatureListAction->redraw();
+  specificModule->GetViewRI()->guiAdd->do_callback();
+  specificModule->GetViewRI()->guiFeatureListAction->redraw();
   Fl::check();
 
   // Simulate Ok (save) button callback
   std::cout << "save image" << std::endl;
-  specificModule->GetView()->guiOK->do_callback();
+  specificModule->GetViewRI()->guiOK->do_callback();
   Fl::check();
 
   otb::DataObjectWrapper wrapperOut = module->GetOutputByKey("OutputImage");

@@ -48,7 +48,7 @@ public:
   /** Type macro */
   itkTypeMacro(RadiometricIndicesExtractionModule, FeatureExtractionBaseModule);
 
-//  itkGetObjectMacro(View, FeatureExtractionBaseViewGUI);
+  itkGetObjectMacro(ViewRI, RadiometricIndicesExtractionViewGUI);
 
 
   /** Show the Module GUI */

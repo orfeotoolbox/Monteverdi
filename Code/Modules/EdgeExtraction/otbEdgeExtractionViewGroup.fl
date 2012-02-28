@@ -1,0 +1,171 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class EdgeExtractionViewGroup {open
+} {
+  Function {CreateParameters()} {open return_type void
+  } {
+    Fl_Window wFakeWindow {
+      label {}
+      open
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable hide
+    } {
+      Fl_Choice fakeChoice {
+        label {}
+        xywh {10 10 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+      } {
+        MenuItem mInit {
+          tooltip {""} xywh {0 0 30 20}
+        }
+        MenuItem mHarris {
+          label {Harris (experimental)}
+          tooltip {Harris Image Filter} xywh {5 5 30 20}
+        }
+        MenuItem mVariance {
+          label Variance
+          tooltip {Variance Image Filter} xywh {55 55 30 20}
+        }
+        MenuItem mGradient {
+          label {Rec. Gradient}
+          tooltip {Recursive Gradient ImageFilter} xywh {75 75 30 20}
+        }
+        MenuItem mSobel {
+          label Sobel
+          tooltip {Sobel Edge Detector} xywh {50 50 30 20}
+        }
+        MenuItem mMSBound {
+          label {Meanshift boundries}
+          tooltip {Sobel Edge Detector} xywh {80 80 30 20}
+        }
+        MenuItem mTouzi {
+          label Touzi
+          tooltip {Touzi Image Filter} xywh {15 15 30 20}
+        }
+      }
+      Fl_Wizard fakeParameter {
+        label {Feature Parameters} open
+        xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiHarris {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiHarrisSigmaD {
+            label {Sigma D}
+            xywh {298 340 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1.5
+          }
+          Fl_Value_Input guiHarrisSigmaI {
+            label {Sigma I}
+            xywh {298 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 2
+          }
+          Fl_Value_Input guiHarrisAlpha {
+            label Alpha
+            xywh {298 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 0.1
+          }
+        }
+        Fl_Group guiRadius {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiRadiusX {
+            label {Radius along X}
+            xywh {336 358 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+          }
+          Fl_Counter guiRadiusY {
+            label {Radius along Y}
+            xywh {336 408 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+          }
+        }
+        Fl_Group guiGrad {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiGradSigma {
+            label Sigma
+            xywh {288 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.05 value 2.5
+          }
+        }
+        Fl_Group guiEdgeCanny {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiEdgeCannyRadius {
+            label Radius
+            xywh {335 328 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+          }
+          Fl_Value_Input guiEdgeCannyMaxThresh {
+            label {Max Thresh}
+            xywh {335 353 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 15
+          }
+          Fl_Value_Input guiEdgeCannyMinThresh {
+            label {Min Thresh}
+            xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 3
+          }
+          Fl_Value_Input guiEdgeCannyVariance {
+            label Variance
+            xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1
+          }
+          Fl_Value_Input guiEdgeCannyMaxError {
+            label {Max Error}
+            xywh {335 428 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.001 value 0.01
+          }
+        }
+        Fl_Group guiEdgeSobel {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Counter guiEdgeSobelRadiusX {
+            label {Radius along X}
+            xywh {320 333 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+          }
+          Fl_Counter guiEdgeSobelRadiusY {
+            label {Radius along Y}
+            xywh {320 363 80 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 2
+          }
+          Fl_Value_Input guiEgdeSobelLowThresh {
+            label {Lower Thresh}
+            xywh {320 393 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5
+          }
+          Fl_Value_Input guiEgdeSobelUpThresh {
+            label {Upper Thresh}
+            xywh {320 423 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 255
+          }
+        }
+        Fl_Group guiMS {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiMSSpatial {
+            label {Spatial Radius}
+            xywh {330 335 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 3
+          }
+          Fl_Value_Input guiMSRange {
+            label {Range Radius}
+            xywh {330 365 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 10
+          }
+          Fl_Value_Input guiMSSize {
+            label {Min. Region Size}
+            xywh {330 395 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 10
+          }
+          Fl_Value_Input guiMSScale {
+            label Scale
+            xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
+          }
+        }
+        Fl_Group guiTouzi {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiTouziRadius {
+            label Radius
+            xywh {291 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+          }
+        }
+        
+      }       
+    }
+  }
+  Function {EdgeExtractionViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~EdgeExtractionViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+} 

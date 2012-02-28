@@ -22,7 +22,8 @@
 
 #include "otbReaderModule.h"
 #include "otbSpeckleFilteringModule.h"
-#include "otbFeatureExtractionModule.h"
+#include "otbRadiometricIndicesExtractionModule.h"
+#include "otbFeatureRI.h"
 #include "otbViewerModule.h"
 #include "otbWriterModule.h"
 #include "otbSupervisedClassificationModule.h"
@@ -54,7 +55,7 @@ int otbMonteverdiApplicationExportToXML(int argc, char* argv[])
   // Register modules
   model->RegisterModule<otb::ReaderModule>("Reader", "File/Import dataset");
   //model->RegisterModule<otb::SpeckleFilteringModule>("Speckle","Filtering/Despeckle");
-  model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction", "Filtering/Feature Extraction");
+  model->RegisterModule<otb::RadiometricIndicesExtractionModule>("RadiometricIndicesExtraction", "Filtering/Radiometric Indices Extraction");
   //model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification", "Learning/SVM Classification");
   model->RegisterModule<otb::WriterModule> ("Writer", "File/Export dataset");
   model->RegisterModule<otb::ViewerModule> ("Viewer", "Visualization/View image");
@@ -85,45 +86,45 @@ int otbMonteverdiApplicationExportToXML(int argc, char* argv[])
   readerModule->bOk->do_callback();
   Fl::check();
 
-  //FeatureExtraction module
+  //RadiometricIndicesExtraction module
   // Create an instance of module viewer
-  otbGenericMsgDebugMacro(<< "Create feature extraction module");
-  model->CreateModuleByKey("FeatureExtraction");
+  otbGenericMsgDebugMacro(<< "Create radiometric indices extraction module");
+  model->CreateModuleByKey("RadiometricIndicesExtraction");
   moduleVector = model->GetAvailableModuleInstanceIds();
 
   // Get the ModuleInstanceId
-  std::string featureExtractionId = moduleVector[1];
+  std::string riExtractionId = moduleVector[1];
 
-  otbGenericMsgDebugMacro(<< "featureExtractionId " << featureExtractionId);
+  otbGenericMsgDebugMacro(<< "riExtractionId " << riExtractionId);
   // Get the module itself
-  otb::Module::Pointer module2 = model->GetModuleByInstanceId(featureExtractionId);
+  otb::Module::Pointer module2 = model->GetModuleByInstanceId(riExtractionId);
 
   // Open the viewer and simulate a connexion
-  otb::FeatureExtractionModule::Pointer featureExtractionModule =
-    static_cast<otb::FeatureExtractionModule::Pointer>(dynamic_cast<otb::FeatureExtractionModule *>(module2.GetPointer()));
+  otb::RadiometricIndicesExtractionModule::Pointer RIExtractionModule =
+    static_cast<otb::RadiometricIndicesExtractionModule::Pointer>(dynamic_cast<otb::RadiometricIndicesExtractionModule *>(module2.GetPointer()));
 
   otbGenericMsgDebugMacro(<< "Input data management");
 
   typedef otb::Module::InputDataDescriptorMapType InputDataDescriptorMapType;
-  InputDataDescriptorMapType                 lInputDataMap = model->GetModuleInputsByInstanceId(featureExtractionId);
+  InputDataDescriptorMapType                 lInputDataMap = model->GetModuleInputsByInstanceId(riExtractionId);
   InputDataDescriptorMapType::const_iterator it_in;
   it_in = lInputDataMap.begin();
 
-  std::string featureExtractionInputKey = it_in->first;
+  std::string riExtractionInputKey = it_in->first;
 
-  otbGenericMsgDebugMacro(<< "featureExtractionInputKey " << featureExtractionInputKey);
+  otbGenericMsgDebugMacro(<< "riExtractionInputKey " << riExtractionInputKey);
 
   typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
   InputViewComponentMapType inputComponentMap;
   inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
 
   otbGenericMsgDebugMacro(
-    << "input component map number choices: " <<  inputComponentMap[featureExtractionInputKey]->GetNumberOfChoices());
+    << "input component map number choices: " <<  inputComponentMap[riExtractionInputKey]->GetNumberOfChoices());
 
-  for (unsigned int i = 0; i < inputComponentMap[featureExtractionInputKey]->GetNumberOfChoices(); i++)
+  for (unsigned int i = 0; i < inputComponentMap[riExtractionInputKey]->GetNumberOfChoices(); i++)
     {
-    otbGenericMsgDebugMacro(<< "input component map: " <<  inputComponentMap[featureExtractionInputKey]);
-    inputComponentMap[featureExtractionInputKey]->SelectNthChoice(i);
+    otbGenericMsgDebugMacro(<< "input component map: " <<  inputComponentMap[riExtractionInputKey]);
+    inputComponentMap[riExtractionInputKey]->SelectNthChoice(i);
     }
   Fl::check();
 
@@ -131,23 +132,23 @@ int otbMonteverdiApplicationExportToXML(int argc, char* argv[])
   Fl::check();
 
   // Set the feature extraction GUI actions
-  featureExtractionModule->GetView()->UpdateParameterArea(8);
-  featureExtractionModule->GetView()->SetFeatureType(otb::FeatureInfo::NDVI);
+  RIExtractionModule->GetViewRI()->UpdateParameterArea(1);
+  RIExtractionModule->GetViewRI()->SetFeatureType(otb::FeatureInfoRI::NDVI);
   Fl::check();
 
   //Select bands 2 and 3
-  featureExtractionModule->GetView()->guiRAndNIRR->value(2);
-  featureExtractionModule->GetView()->guiRAndNIRR->redraw();
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->value(2);
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->redraw();
   Fl::check();
-  featureExtractionModule->GetView()->guiRAndNIRR->do_callback();
-  featureExtractionModule->GetView()->guiRAndNIRNIR->value(1);
-  featureExtractionModule->GetView()->guiRAndNIRNIR->redraw();
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRR->do_callback();
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->value(1);
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->redraw();
   Fl::check();
-  featureExtractionModule->GetView()->guiRAndNIRNIR->do_callback();
+  RIExtractionModule->GetViewRI()->m_SpecificGUI->guiRAndNIRNIR->do_callback();
 
   //Add the feature
-  featureExtractionModule->GetView()->guiAdd->do_callback();
-  featureExtractionModule->GetView()->guiFeatureListAction->redraw();
+  RIExtractionModule->GetViewRI()->guiAdd->do_callback();
+  RIExtractionModule->GetViewRI()->guiFeatureListAction->redraw();
   Fl::check();
 
   // Create an instance of module viewer

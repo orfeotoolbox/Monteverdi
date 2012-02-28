@@ -41,9 +41,9 @@ ${TEMP}/readerModuleOuptut.tif
 )
 
 #------------- Feature Extraction Tests ---------------------------
-ADD_TEST(moTvFeatureExtractionModuleTest  ${Modules_TESTS1} otbFeatureExtractionModuleTest
+ADD_TEST(moTvRadiometricIndicesExtractionModuleTest  ${Modules_TESTS1} otbRadiometricIndicesExtractionModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
-${TEMP}/FeatureExtractionModuleOuptut.hdr
+${TEMP}/RadiometricIndicesExtractionModuleOuptut.hdr
 )
 
 #ADD_TEST(moTvFeatureExtractionModuleApplication  ${Modules_TESTS1} otbFeatureExtractionModuleApplication
@@ -52,7 +52,12 @@ ${TEMP}/FeatureExtractionModuleOuptut.hdr
 #)
 
 ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne otbFeatureExtractionModule)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne 
+                        otbRadiometricIndicesExtractionModule 
+                        otbTextureExtractionModule 
+                        otbMorphologyExtractionModule
+                        otbSmoothingModule
+                        otbEdgeExtractionModule)
 
 #------------- Supervised Classification Tests ---------------------------
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS1}  otbSupervisedClassificationModuleTest
@@ -555,7 +560,7 @@ otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
 otbReaderModuleTest.cxx 
 otbWriterModuleTest.cxx
-otbFeatureExtractionModuleTest.cxx
+otbRadiometricIndicesExtractionModuleTest.cxx
 otbSupervisedClassificationModuleTest.cxx
 otbReaderWriterModuleTest.cxx
 )

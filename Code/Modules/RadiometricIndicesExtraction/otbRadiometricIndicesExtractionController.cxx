@@ -223,6 +223,24 @@ RadiometricIndicesExtractionController
         m_ModelRI->Add2ChannelsFilter(RId, GId, featureType);
         break;
         }
+      case FeatureInfoRI::SPECTRALANGLE:
+        {
+        if (m_ViewRI->GetSelectedPixel().GetSize() != m_ModelRI->GetNumberOfChannels())
+          {
+          MsgReporter::GetInstance()->SendError("Reference pixel is not set!");
+          return;
+          }
+        if (m_ModelRI->GetInputImage()->GetNumberOfComponentsPerPixel() > 1)
+          {
+          m_ModelRI->AddSpectralAngleFilter(m_ViewRI->GetSelectedPixel());
+          }
+        else
+          {
+          MsgReporter::GetInstance()->SendError("Spectral Angle invalid with mono channel images");
+          return;
+          }
+        break;
+        }
       default:
         {
         return;
@@ -250,7 +268,7 @@ RadiometricIndicesExtractionController
 
 void
 RadiometricIndicesExtractionController
-::SetViewRI(RadiometricIndicesExtractionViewGUI::Pointer specificView)
+::SetView(RadiometricIndicesExtractionViewGUI::Pointer specificView)
   {
   m_ViewRI = specificView;
   FeatureExtractionBaseViewGUI::Pointer viewTemp(specificView);
@@ -259,7 +277,7 @@ RadiometricIndicesExtractionController
 
 void
 RadiometricIndicesExtractionController
-::SetModelRI(RadiometricIndicesExtractionModel::Pointer specificModel)
+::SetModel(RadiometricIndicesExtractionModel::Pointer specificModel)
   {
   m_ModelRI = specificModel;
   FeatureExtractionBaseModel::Pointer modelTemp(specificModel);

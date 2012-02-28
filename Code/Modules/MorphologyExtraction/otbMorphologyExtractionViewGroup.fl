@@ -1,0 +1,63 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class MorphologyExtractionViewGroup {open
+} {
+  Function {CreateParameters()} {open return_type void
+  } {
+    Fl_Window wFakeWindow {
+      label {}
+      open
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable hide
+    } {
+      Fl_Choice fakeChoice {
+        label {}
+        xywh {10 10 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+      } {
+        MenuItem mInit {
+          tooltip {""} xywh {0 0 30 20}
+        }
+        MenuItem mOpening {
+          label {Morphological Opening Profile (experimental)}
+          tooltip {Morphological Opening} xywh {40 40 30 20}
+        }
+        MenuItem mClosing {
+          label {Morphological Closing Profile (experimental)}
+          tooltip {Morphological Closing} xywh {50 50 30 20}
+        }
+      }
+      Fl_Wizard fakeParameter {
+        label {Feature Parameters} open
+        xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiMorpho {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiMorphoInitVal {
+            label {Initial Value}
+            xywh {306 340 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+          }
+          Fl_Value_Input guiMorphoProfileSize {
+            label {Profile Size}
+            xywh {306 380 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+          }
+          Fl_Value_Input guiMorphoStep {
+            label Step
+            xywh {306 415 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 1
+          }
+        }
+        
+      }       
+    }
+  }
+  Function {MorphologyExtractionViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~MorphologyExtractionViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+} 

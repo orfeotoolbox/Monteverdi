@@ -35,23 +35,7 @@
 
 #include "otbTypeManager.h"
 
-//Filter include:
-// Feature includes
-#include "otbTouziEdgeDetectorImageFilter.h"
-#include "otbHarrisImageFilter.h"
-#include "otbSpectralAngleDistanceImageFilter.h"
-#include "otbMorphologicalOpeningProfileFilter.h"
-#include "otbMorphologicalClosingProfileFilter.h"
-#include "itkBinaryBallStructuringElement.h"
-#include "itkVarianceImageFunction.h"
-#include "itkUnaryFunctorImageFilter.h"
-#include "itkMeanImageFilter.h"
-#include "otbVarianceImageFilter.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
-#include "itkShiftScaleImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
 // Min max filter
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
@@ -129,10 +113,6 @@ public:
    typedef unsigned int                     FeatureType;
    typedef std::vector<FeatureType>         FilterTypeListType;
    typedef std::vector<std::string>         OutputFilterInformationType;
-//   typedef HaralickTexture::TextureType     HaralickTextureType;
-//   typedef AdvancedTexture::TextureType     AdvancedTextureType;
-//   typedef std::vector<HaralickTextureType> HaralickTextureVectorType;
-//   typedef std::vector<AdvancedTextureType> AdvancedTextureVectorType;
 
   /** Concatenation typedef */
   typedef ImageList<SingleImageType>                                     ImageListType;
@@ -143,34 +123,6 @@ public:
   typedef ImageToVectorImageCastFilter<SingleImageType, OutputImageType> CasterType;
 
   typedef itk::ConstNeighborhoodIterator<SingleImageType> IteratorType;
-
-  /***************************/
-  /** Filter type declaration*/
-  /***************************/
-//   // Copy of original data
-//   typedef itk::ShiftScaleImageFilter<SingleImageType, SingleImageType> ShiftScaleFilterType;
-//   // Touzi
-//   typedef TouziEdgeDetectorImageFilter<SingleImageType, SingleImageType> TouziFilterType;
-//   // Harris
-//   typedef HarrisImageFilter<SingleImageType, SingleImageType> HarrisType;
-//   // Spectral Angle
-//   typedef SpectralAngleDistanceImageFilter<InputImageType, SingleImageType> DistanceFilterType;
-//   // Morpho
-//   typedef itk::BinaryBallStructuringElement<PixelType,
-//       2>                      StructuringElementType;
-//   typedef MorphologicalOpeningProfileFilter<SingleImageType, SingleImageType,
-//       StructuringElementType> OpeningProfileFilterType;
-//   typedef MorphologicalClosingProfileFilter<SingleImageType, SingleImageType,
-//       StructuringElementType> ClosingProfileFilterType;
-//   // Variance
-//   typedef VarianceImageFilter<SingleImageType, SingleImageType> VarFilterType;
-//   // Mean
-//   typedef itk::MeanImageFilter<SingleImageType, SingleImageType> MeanFilterType;
-//   // Gradient
-//   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<SingleImageType> GradientFilterType;
-//   // Mean Shift
-//   typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType> MeanShiftFilterType;
-//   typedef ObjectList<MeanShiftFilterType>                                              MeanShiftFilterListType;
 
   // Min max filter
   typedef StreamingStatisticsVectorImageFilter<InputImageType> VectorImageMinMaxFilterType;
@@ -450,54 +402,8 @@ public:
   /** Chain list */
   void CreateFilterList(int filterId);
 
-  /** FILTER LIST*/
-//   void AddOriginalData();
-//   void AddTouziFilter(unsigned int radiusX);
-//   void AddHarrisFilter(double sigmaD, double sigmaI, double alpha);
-//
-//   void AddRAndNIRFilter(unsigned int redId, unsigned int nirId, FeatureType type, std::vector<double> params);
-//   void AddRAndBAndNIRFilter(unsigned int redId,
-//                             unsigned int blueId,
-//                             unsigned int nirId,
-//                             FeatureType type,
-//                             std::vector<double> params);
-//   void AddRAndGAndNIRFilter(unsigned int redId,
-//                             unsigned int greenId,
-//                             unsigned int nirId,
-//                             FeatureType type,
-//                             std::vector<double> params);
-//   void Add2ChannelsFilter(unsigned int chan1Id, unsigned int chan2Id, FeatureType type);
-//
-//   void AddSpectralAngleFilter(InputImagePixelType pix);
-//   void AddMorphoOpeningProfileFilter(unsigned int size, int value, int step);
-//   void AddMorphoClosingProfileFilter(unsigned int size, int value, int step);
-//   void AddVarianceFilter(int radiusX, int radiusY);
-//   void AddMeanFilter(int radiusX, int radiusY);
-//   void AddGradientFilter(double sigma);
-  /** Generic method to create a texture filter*/
-//   void AddTextureFilter(FeatureType featureType, SizeType radius, OffsetType offset, unsigned int bin);
-//
-//   void AddSFSTexturesFilter(FeatureType type,
-//                             double spectralThr,
-//                             unsigned int spatialThr,
-//                             unsigned int nbDirection,
-//                             double alpha,
-//                             unsigned int ratioMaxConsNb);
-//   void AddEdgeDensityFilter(FeatureType type, std::vector<double> params);
-//   void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale);
-
   /** This have for aim to factorized the previous AddFunctions code*/
    void AddFeatureFilter(FilterType * filter, FeatureType type, int inputId, unsigned int indexMapval, std::string mess);
-
-  /** Add Haralick testure with given min max */
-//   void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin);
-  /** Add Haralick testure with default min max */
-//  void AddHaralickTextureFilter(HaralickTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
-
-  /** Add Haralick testure with given min max */
-//   void AddAdvancedTextureFilter(AdvancedTextureVectorType advList, SizeType radius, OffsetType offset, double minHar, double maxHar, unsigned int bin);
-  /** Add Haralick testure with default min max */
-//   void AddAdvancedTextureFilter(AdvancedTextureVectorType harList, SizeType radius, OffsetType offset, unsigned int bin);
 
   /** Generate output image */
   void GenerateOutputImage();
@@ -510,8 +416,6 @@ public:
   //void SetInputImage(std::string strfilename);
   /** Init input image */
   void InitInput();
-  /** Init mean shift */
-//  void InitMeanShiftLists();
 
   /** Get filtered single output image */
   virtual SingleImagePointerType GetSingleImage(int i);
@@ -525,11 +429,7 @@ protected:
   /** Destructor */
   virtual ~FeatureExtractionBaseModel();
   
-  /** Input number of channels */
-  unsigned int m_NumberOfChannels;
-  
-  /** Filter Type list*/
-  FilterTypeListType m_FilterTypeList;
+  std::vector<unsigned int> m_OutputIndexMap;
 
 private:
   FeatureExtractionBaseModel(const Self&); //purposely not implemented
@@ -542,12 +442,18 @@ private:
   InputImagePointerType m_InputImage;
   /** input image List*/
   SingleImageListPointerType m_InputImageList;
-  /** Output Image */
-  OutputImagePointerType m_OutputImage;
+  /** Input number of channels */
+  unsigned int m_NumberOfChannels;
+  /** Input filename*/
+  std::string m_InputFileName;
+  
   /** Filter list*/
   FilterListPointerType m_FilterList;
-
+  /** Filter Type list*/
+  FilterTypeListType m_FilterTypeList;
   
+  /** Output Image */
+  OutputImagePointerType m_OutputImage;
   /** Output Filter Information */
   OutputFilterInformationType m_OutputFilterInformation;
   /** Output Filter Information */
@@ -557,8 +463,6 @@ private:
   /** Output filename*/
   std::string m_OutputFileName;
   
-  /** Input filename*/
-  std::string m_InputFileName;
   /** Output filters selected to generate the output image. */
   std::vector<bool> m_SelectedFilters;
   /** Flags to activate/deactivate the preprocessings */
@@ -576,14 +480,9 @@ private:
   IntensityFilterType::Pointer      m_IntensityFilter;
   CasterType::Pointer               m_Caster;
 
-  std::vector<unsigned int> m_OutputIndexMap;
+  
   /** Contains the filter list order for outputs */
   std::vector<unsigned int> m_OutputListOrder;
-
-//   // For mean shift
-//   ImageListObjectListType::Pointer         m_MSImageListList;
-//   ImageListToVectorObjectListType::Pointer m_MSListToVectorFilterList;
-//   MeanShiftFilterListType::Pointer         m_MeanShiftFilterList;
 
   // Instantiate the model
   VisuModelPointerType m_VisuModel;

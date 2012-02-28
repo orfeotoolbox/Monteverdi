@@ -1,0 +1,278 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/Fl_Gl_Window.H>} {public
+} 
+
+class TextureExtractionViewGroup {open
+} {
+  Function {CreateParameters()} {open return_type void
+  } {
+    Fl_Window wFakeWindow {
+      label {}
+      open
+      xywh {356 305 665 595} type Double box PLASTIC_DOWN_BOX color 7 selection_color 255 labelsize 12 labelcolor 186 resizable hide
+    } {
+      Fl_Choice fakeChoice {
+        label {}
+        xywh {10 10 182 25} box PLASTIC_DOWN_BOX down_box BORDER_BOX labelfont 1 labelsize 12 labelcolor 186 align 1
+      } {
+        MenuItem mInit {
+          tooltip {""} xywh {0 0 30 20}
+        }
+        MenuItem mPanTex {
+          label PanTex
+          tooltip {Panchromatic Texture} xywh {50 50 30 20}
+        }
+        Submenu {} {
+          label SFS open
+          tooltip {Structural Feature Set} xywh {15 15 63 20}
+        } {
+          MenuItem mSFSLen {
+            label Length
+            tooltip Length xywh {45 45 30 20}
+          }
+          MenuItem mSFSWid {
+            label Width
+            tooltip Width xywh {55 55 30 20}
+          }
+          MenuItem mSFSPSI {
+            label PSI
+            tooltip {Pixel Shape Index} xywh {55 55 30 20}
+          }
+          MenuItem mSFSWme {
+            label {W-mean}
+            tooltip {W-Mean} xywh {65 65 30 20}
+          }
+          MenuItem mSFSRat {
+            label Ratio
+            tooltip Ratio xywh {75 75 30 20}
+          }
+          MenuItem mSFSSD {
+            label SD
+            tooltip {Standard Deviation} xywh {85 85 30 20}
+          }
+        }
+        MenuItem mHaralick1 {
+          label Haralick1
+          tooltip {Haralick textures.} xywh {10 10 30 20}
+        }
+        MenuItem mHaralick2 {
+          label Haralick2
+          tooltip {Advanced textures.} xywh {20 20 30 20}
+        }
+        
+      }
+      Fl_Wizard fakeParameter {
+        label {Feature Parameters} open
+        xywh {200 318 250 140} box PLASTIC_DOWN_FRAME color 23 selection_color 245 labelfont 1 labelsize 12 labelcolor 186
+      } {
+        Fl_Group guiSFS {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiSFSSpectralThreshold {
+            label {Spectral Thresh}
+            xywh {335 328 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 50
+          }
+          Fl_Value_Input guiSFSSpatialThreshold {
+            label {Spatial Thresh}
+            xywh {335 353 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 100
+          }
+          Fl_Value_Input guiSFSNbDirections {
+            label {Nbr of Directions}
+            xywh {335 378 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 20
+          }
+          Fl_Value_Input guiSFSAlpha {
+            label Alpha
+            xywh {335 403 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 0.05 value 1 deactivate
+          }
+          Fl_Value_Input guiSFSRatMaxConsNb {
+            label {Ratio MaxCons. Nb}
+            xywh {335 428 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 5 deactivate
+          }
+        }
+        Fl_Group guiHaralick {open
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Check_Browser guiHarList {
+            xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
+          }
+          Fl_Group {} {
+            label Radius
+            xywh {204 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiHarRadiusX {
+              label X
+              tooltip {Neighborhood radius.} xywh {220 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+            }
+            Fl_Value_Input guiHarRadiusY {
+              label Y
+              tooltip {Neighborhood radius.} xywh {220 435 28 17} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+            }
+          }
+          Fl_Group {} {
+            label Offset
+            xywh {254 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiHarOffsetX {
+              label X
+              tooltip {Used offset value.} xywh {270 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+            }
+            Fl_Value_Input guiHarOffsetY {
+              label Y
+              tooltip {Used offset value.} xywh {269 435 28 17} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+            }
+          }
+          Fl_Check_Button guiHarCk {
+            label {Set min/max}
+            tooltip {Set min/max or use the estimated values.} xywh {375 394 11 11} down_box DOWN_BOX value 1 labelsize 12 align 4
+          }
+          Fl_Group guiHarIm {open
+            xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiHarMin {
+              label Min
+              tooltip {Used offset value.} xywh {334 412 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+            }
+            Fl_Value_Input guiHarMax {
+              label Max
+              tooltip {Used offset value.} xywh {334 435 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+            }
+          }
+          Fl_Input_Choice guiHarBin {
+            label {Quant.
+ levels}
+            tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 align 1 textsize 12
+          } {
+            MenuItem {} {
+              label 8
+              xywh {5 5 30 20}
+            }
+            MenuItem {} {
+              label 16
+              xywh {15 15 30 20}
+            }
+            MenuItem {} {
+              label 32
+              xywh {25 25 30 20}
+            }
+            MenuItem {} {
+              label 64
+              xywh {35 35 30 20}
+            }
+          }
+        }
+        Fl_Group guiAdvanced {open
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Check_Browser guiAdvList {
+            xywh {205 323 240 67} box PLASTIC_DOWN_BOX labelsize 12 textsize 12
+          }
+          Fl_Group {} {
+            label Radius
+            xywh {204 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiAdvRadiusX {
+              label X
+              tooltip {Neighborhood radius.} xywh {220 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+            }
+            Fl_Value_Input guiAdvRadiusY {
+              label Y
+              tooltip {Neighborhood radius.} xywh {220 435 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+            }
+          }
+          Fl_Group {} {
+            label Offset
+            xywh {254 407 48 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiAdvOffsetX {
+              label X
+              tooltip {Used offset value.} xywh {270 412 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+            }
+            Fl_Value_Input guiAdvOffsetY {
+              label Y
+              tooltip {Used offset value.} xywh {270 435 28 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -100 maximum 100 step 1 value 1
+            }
+          }
+          Fl_Check_Button guiAdvHarCk {
+            label {Set min/max}
+            tooltip {Set min/max or use the estimated values.} xywh {375 394 11 11} down_box DOWN_BOX value 1 labelsize 12 align 4
+          }
+          Fl_Group guiAdvHarIm {open
+            xywh {304 407 85 47} box PLASTIC_DOWN_BOX color 55 labelsize 12
+          } {
+            Fl_Value_Input guiAdvHarMin {
+              label Min
+              tooltip {Used offset value.} xywh {334 412 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+            }
+            Fl_Value_Input guiAdvHarMax {
+              label Max
+              tooltip {Used offset value.} xywh {334 435 52 18} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 1
+            }
+          }
+          Fl_Input_Choice guiAdvBin {
+            label {Quant. levels}
+            tooltip {Histogram bin size.} xywh {393 419 53 18} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 185 align 1 textsize 12
+          } {
+            MenuItem {} {
+              label 8
+              xywh {15 15 30 20}
+            }
+            MenuItem {} {
+              label 16
+              xywh {25 25 30 20}
+            }
+            MenuItem {} {
+              label 32
+              xywh {35 35 30 20}
+            }
+            MenuItem {} {
+              label 64
+              xywh {45 45 30 20}
+            }
+          }
+        }
+        Fl_Group guiPanTex {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Value_Input guiPanTexRadiusX {
+            label {Radius X}
+            tooltip {Neighborhood radius.} xywh {276 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+          }
+          Fl_Value_Input guiPanTexRadiusY {
+            label {Radius Y}
+            tooltip {Neighborhood radius.} xywh {388 360 40 20} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 32 minimum 1 maximum 100 step 1 value 2
+          }
+          Fl_Input_Choice guiPanTexBin {
+            label {Bin length} open
+            tooltip {Quantization levels.} xywh {301 402 96 20} box PLASTIC_DOWN_BOX down_box PLASTIC_DOWN_BOX selection_color 7 labelsize 12 labelcolor 32 textsize 12
+          } {
+            MenuItem {} {
+              label 8
+              xywh {25 25 30 20}
+            }
+            MenuItem {} {
+              label 16
+              xywh {35 35 30 20}
+            }
+            MenuItem {} {
+              label 32
+              xywh {45 45 30 20}
+            }
+            MenuItem {} {
+              label 64
+              xywh {55 55 30 20}
+            }
+          }
+        }
+      }       
+    }
+  }
+  Function {TextureExtractionViewGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~TextureExtractionViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+} 

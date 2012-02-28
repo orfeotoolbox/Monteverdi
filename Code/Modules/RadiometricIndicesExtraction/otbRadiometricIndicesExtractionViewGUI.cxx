@@ -55,11 +55,12 @@ RadiometricIndicesExtractionViewGUI::RadiometricIndicesExtractionViewGUI()
   guiParameter->add(m_SpecificGUI->guiMNDWI);
   guiParameter->add(m_SpecificGUI->guiNDPI);
   guiParameter->add(m_SpecificGUI->guiNDTI); // 20
+  guiParameter->add(m_SpecificGUI->guiSpectAngle);
 
   this->InitParameterGroupList();
   
   // Rename window title
-  m_WindowTitle = otbGetTextMacro("Radiometric indices extraction");
+  SetWindowTitle(otbGetTextMacro("Radiometric indices extraction"));
   
   // Set up callbacks on menu items
   int curPos = 0;
@@ -98,6 +99,7 @@ RadiometricIndicesExtractionViewGUI::RadiometricIndicesExtractionViewGUI()
   otbMenuItemCallbackMacro(mMNDWI, otb::FeatureInfoRI::MNDWI, 18);
   otbMenuItemCallbackMacro(mNDPI, otb::FeatureInfoRI::NDPI, 19);
   otbMenuItemCallbackMacro(mNDTI, otb::FeatureInfoRI::NDTI, 20);
+  otbMenuItemCallbackMacro(mSpectAngle, otb::FeatureInfoRI::SPECTRALANGLE, 21);
 #undef otbMenuItemCallbackMacro
   
 }
@@ -116,6 +118,46 @@ RadiometricIndicesExtractionViewGUI
   guiFeatInfo->buffer()->remove(0, guiFeatInfo->buffer()->length());
   guiFeatInfo->insert(oss.str().c_str());
   guiFeatInfo->redraw();
+}
+
+void
+RadiometricIndicesExtractionViewGUI
+::UpdateParameterArea(unsigned int groupId)
+{
+  Superclass::UpdateParameterArea(groupId);
+  if (m_ParameterGroupList[groupId] == m_SpecificGUI->guiSpectAngle)
+    {
+    if (GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel() < 2)
+      {
+      m_ParameterGroupList[groupId]->deactivate();
+      }
+    else
+      {
+      m_ParameterGroupList[groupId]->activate();
+      }
+    }
+}
+
+void
+RadiometricIndicesExtractionViewGUI
+::UpdateSelectedPixelGUI(const IndexType& index)
+{
+  itk::OStringStream oss;
+  oss << "(" << index[0] << " , " << index[1] << ")";
+  m_SpecificGUI->guiSpectAnglePixelCoordinates->value(oss.str().c_str());
+  m_SpecificGUI->guiSpectAnglePixelCoordinates->redraw();
+  oss.str("");
+  oss << "[";
+
+  unsigned int i = 0;
+  for (i = 0; i < GetSelectedPixel().Size() - 1; i++)
+    {
+    oss << (GetSelectedPixel())[i] << ", ";
+    }
+
+  oss << (GetSelectedPixel())[i] << "]";
+  m_SpecificGUI->guiSpectAnglePixelValue->value(oss.str().c_str());
+  m_SpecificGUI->guiSpectAnglePixelValue->redraw();
 }
 
 void RadiometricIndicesExtractionViewGUI::InitParameterGroupList()
@@ -141,13 +183,14 @@ void RadiometricIndicesExtractionViewGUI::InitParameterGroupList()
   m_ParameterGroupList.push_back(m_SpecificGUI->guiMNDWI);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiNDPI);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiNDTI); // 20
+  m_ParameterGroupList.push_back(m_SpecificGUI->guiSpectAngle);
 }
 
 void
 RadiometricIndicesExtractionViewGUI::GenericMenuItemCallback_i(Fl_Menu_* o, void* v)
 {
   int *index = (int*) v;
-  UpdateParameterArea(*(index+1));
+  this->UpdateParameterArea(*(index+1));
   SetFeatureType(*index);
 }
 

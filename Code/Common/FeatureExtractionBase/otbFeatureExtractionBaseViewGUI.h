@@ -100,7 +100,7 @@ public:
   itkGetMacro(VisuView, VisuViewPointerType);
   itkGetMacro(ResultVisuView, VisuViewPointerType);
 
-  void InitWidgets();
+  virtual void InitWidgets();
   void InitVisu();
 
   /** Standard Running macro */
@@ -131,6 +131,8 @@ public:
   }
 
   virtual void UpdateSelectedPixel(const IndexType& index);
+  
+  virtual void UpdateSelectedPixelGUI(const IndexType& index) {};
 
   ModelInputPixelType GetSelectedPixel() const
   {
@@ -141,6 +143,8 @@ public:
   virtual void ClearImage();
 
   itkSetMacro(FeatureExtractPreviewParentBrowser, int);
+  
+  itkSetMacro(WindowTitle,std::string);
 
 protected:
 
@@ -156,16 +160,13 @@ protected:
   virtual void Cancel();
   virtual void AddFeature();
   virtual void OK();
-  // virtual void UpdateHarMinMax();
-  // virtual void UpdateAdvHarMinMax();
 
   virtual void InitParameterGroupList();
-  void InitTextureLists();
   
   /** Store a list avor all parameter selection group*/
   std::vector<Fl_Group*> m_ParameterGroupList;
   
-  std::string m_WindowTitle;
+  FeatureExtractionBaseModel* GetModel();
 
 private:
   FeatureExtractionBaseViewGUI(const Self&); //purposely not implemented
@@ -173,7 +174,6 @@ private:
 
   void UpdateInformation();
   void UpdateChannelSelection();
-  FeatureExtractionBaseModel* GetModel();
 
   /** Pointer to the model */
   //FeatureExtractionBaseModel::Pointer               m_FeatureExtractionBaseModel;
@@ -193,6 +193,8 @@ private:
   int              m_FeatureExtractPreviewParentBrowser;
   /** Value of the selected Pixel*/
   ModelInputPixelType m_SelectedPixel;
+  /** Title of the module window */
+  std::string m_WindowTitle;
 
   VisuViewPointerType m_VisuView;
   VisuViewPointerType m_ResultVisuView;

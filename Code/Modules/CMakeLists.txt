@@ -20,10 +20,28 @@ FOREACH(moduleDir ${moduleList})
     
     SET(LINK_LIBS OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon flu tinyXML)
     SET(DEPS_LIBS OTBMonteverdiCommon)
+    
+    # Special cases with modules using FeatureExtractionBase
     IF(${LIB_NAME} MATCHES "otbRadiometricIndicesExtractionModule")
       SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
       SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
     ENDIF(${LIB_NAME} MATCHES "otbRadiometricIndicesExtractionModule")
+    IF(${LIB_NAME} MATCHES "otbTextureExtractionModule")
+      SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
+      SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
+    ENDIF(${LIB_NAME} MATCHES "otbTextureExtractionModule")
+    IF(${LIB_NAME} MATCHES "otbMorphologyExtractionModule")
+      SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
+      SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
+    ENDIF(${LIB_NAME} MATCHES "otbMorphologyExtractionModule")
+    IF(${LIB_NAME} MATCHES "otbSmoothingModule")
+      SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
+      SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
+    ENDIF(${LIB_NAME} MATCHES "otbSmoothingModule")
+    IF(${LIB_NAME} MATCHES "otbEdgeExtractionModule")
+      SET(LINK_LIBS ${LINK_LIBS} OTBMonteverdiFeatureExtraction)
+      SET(DEPS_LIBS OTBMonteverdiFeatureExtraction)
+    ENDIF(${LIB_NAME} MATCHES "otbEdgeExtractionModule")
     
     # If Module == Tile Map Import Module
     IF(${LIB_NAME} MATCHES "otbTileMapImportModule")

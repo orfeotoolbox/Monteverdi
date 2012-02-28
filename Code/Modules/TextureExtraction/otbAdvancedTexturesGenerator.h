@@ -18,8 +18,8 @@
 #ifndef __otbAdvancedTexturesGenerator_h
 #define __otbAdvancedTexturesGenerator_h
 
-#include "otbFeature.h"
-#include "otbFeatureExtractionModel.h"
+#include "otbFeatureTex.h"
+#include "otbTextureExtractionModel.h"
 #include "otbScalarImageToAdvancedTexturesFilter.h"
 
 namespace otb
@@ -32,7 +32,7 @@ namespace otb
 class AdvancedTexturesGenerator
 {
 public:
-  typedef FeatureExtractionModel            ModelType;
+  typedef TextureExtractionModel            ModelType;
   typedef ModelType::Pointer                ModelPointerType;
   typedef ModelType::FilterType             FilterType;
   typedef ModelType::PixelType              PixelType;
@@ -42,9 +42,10 @@ public:
   typedef ModelType::SingleImagePointerType SingleImagePointerType;
   typedef ModelType::SinglePixelType        SinglePixelType;
 
-  typedef FeatureInfo::FeatureType     FeatureType;
+  typedef FeatureInfoTex::FeatureType  FeatureType;
   typedef AdvancedTexture::TextureType TextureType;
   typedef std::vector<TextureType>     TextureVectorType;
+  typedef FeatureInfoBase::FeatureType FeatureBaseType;
 
   /***************************/
   /** Filter type declaration*/
@@ -53,16 +54,16 @@ public:
 
   AdvancedTexturesGenerator()
   {
-    m_TextToHarMap[AdvancedTexture::VARIANCE] = FeatureInfo::TEXT_ADV_VARIANCE;
-    m_TextToHarMap[AdvancedTexture::MEAN] = FeatureInfo::TEXT_ADV_MEAN;
-    m_TextToHarMap[AdvancedTexture::SUMAV] = FeatureInfo::TEXT_ADV_SUMAV;
-    m_TextToHarMap[AdvancedTexture::SUMVAR] = FeatureInfo::TEXT_ADV_SUMVAR;
-    m_TextToHarMap[AdvancedTexture::SUMENT] = FeatureInfo::TEXT_ADV_SUMENT;
-    m_TextToHarMap[AdvancedTexture::DIFFENT] = FeatureInfo::TEXT_ADV_DIFFENT;
-    m_TextToHarMap[AdvancedTexture::DIFFVAR] = FeatureInfo::TEXT_ADV_DIFFVAR;
-    m_TextToHarMap[AdvancedTexture::IC1] = FeatureInfo::TEXT_ADV_IC1;
-    m_TextToHarMap[AdvancedTexture::IC2] = FeatureInfo::TEXT_ADV_IC2;
-    m_TextToHarMap[AdvancedTexture::UNKNOWN] = FeatureInfo::TEXT_ADV_UNKNOWN;
+    m_TextToHarMap[AdvancedTexture::VARIANCE] = FeatureInfoTex::TEXT_ADV_VARIANCE;
+    m_TextToHarMap[AdvancedTexture::MEAN] = FeatureInfoTex::TEXT_ADV_MEAN;
+    m_TextToHarMap[AdvancedTexture::SUMAV] = FeatureInfoTex::TEXT_ADV_SUMAV;
+    m_TextToHarMap[AdvancedTexture::SUMVAR] = FeatureInfoTex::TEXT_ADV_SUMVAR;
+    m_TextToHarMap[AdvancedTexture::SUMENT] = FeatureInfoTex::TEXT_ADV_SUMENT;
+    m_TextToHarMap[AdvancedTexture::DIFFENT] = FeatureInfoTex::TEXT_ADV_DIFFENT;
+    m_TextToHarMap[AdvancedTexture::DIFFVAR] = FeatureInfoTex::TEXT_ADV_DIFFVAR;
+    m_TextToHarMap[AdvancedTexture::IC1] = FeatureInfoTex::TEXT_ADV_IC1;
+    m_TextToHarMap[AdvancedTexture::IC2] = FeatureInfoTex::TEXT_ADV_IC2;
+    m_TextToHarMap[AdvancedTexture::UNKNOWN] = FeatureInfoTex::TEXT_ADV_UNKNOWN;
   }
 
   virtual ~AdvancedTexturesGenerator(){}
@@ -190,7 +191,7 @@ public:
   }
 
   SingleImagePointerType GenerateAdvancedTextureOutputImage(ModelPointerType pModel,
-                                                            FeatureType pType,
+                                                            FeatureBaseType pType,
                                                             unsigned int pInputListId)
   {
     SingleImagePointerType         image =  SingleImageType::New();
@@ -199,47 +200,47 @@ public:
                                                                        pInputListId)));
     switch (pType)
       {
-      case FeatureInfo::TEXT_ADV_VARIANCE:
+      case FeatureInfoTex::TEXT_ADV_VARIANCE:
         {
         image = filter->GetVarianceOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_MEAN:
+      case FeatureInfoTex::TEXT_ADV_MEAN:
         {
         image = filter->GetMeanOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_SUMAV:
+      case FeatureInfoTex::TEXT_ADV_SUMAV:
         {
         image = filter->GetSumAverageOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_SUMVAR:
+      case FeatureInfoTex::TEXT_ADV_SUMVAR:
         {
         image = filter->GetSumVarianceOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_SUMENT:
+      case FeatureInfoTex::TEXT_ADV_SUMENT:
         {
         image = filter->GetSumEntropyOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_DIFFENT:
+      case FeatureInfoTex::TEXT_ADV_DIFFENT:
         {
         image = filter->GetDifferenceEntropyOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_DIFFVAR:
+      case FeatureInfoTex::TEXT_ADV_DIFFVAR:
         {
         image = filter->GetDifferenceVarianceOutput();
         break;
         }
-      case FeatureInfo::TEXT_ADV_IC1:
+      case FeatureInfoTex::TEXT_ADV_IC1:
         {
         image = filter->GetIC1Output();
         break;
         }
-      case FeatureInfo::TEXT_ADV_IC2:
+      case FeatureInfoTex::TEXT_ADV_IC2:
         {
         image = filter->GetIC2Output();
         break;

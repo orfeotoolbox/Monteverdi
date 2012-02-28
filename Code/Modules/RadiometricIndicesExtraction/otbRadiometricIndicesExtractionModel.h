@@ -20,6 +20,8 @@
 
 #include "otbFeatureExtractionBaseModel.h"
 
+#include "otbSpectralAngleDistanceImageFilter.h"
+
 namespace otb
 {
 /** \class RadiometricIndicesExtractionModel
@@ -45,6 +47,9 @@ public:
   itkNewMacro(Self);
   //itkGetMacro(HasInput, bool);
   
+  // Spectral Angle
+  typedef SpectralAngleDistanceImageFilter<InputImageType, SingleImageType> DistanceFilterType;
+  
   void AddRAndNIRFilter(unsigned int redId, unsigned int nirId, FeatureType type, std::vector<double> params);
   void AddRAndBAndNIRFilter(unsigned int redId,
                             unsigned int blueId,
@@ -57,6 +62,8 @@ public:
                             FeatureType type,
                             std::vector<double> params);
   void Add2ChannelsFilter(unsigned int chan1Id, unsigned int chan2Id, FeatureType type);
+  
+  void AddSpectralAngleFilter(InputImagePixelType pix);
   
   /** Get filtered single output image */
   virtual SingleImagePointerType GetSingleImage(int i);

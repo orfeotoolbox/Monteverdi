@@ -51,6 +51,10 @@ public:
   /** Update feature information with Radiometric indices features */
   virtual void UpdateFeatureInfo(FeatureType feat);
   
+  virtual void UpdateParameterArea(unsigned int groupId);
+  
+  virtual void UpdateSelectedPixelGUI(const IndexType& index);
+  
   /** Specific GUI for menu items and parameters widgets */
   RadiometricIndicesExtractionViewGroup* m_SpecificGUI;
 

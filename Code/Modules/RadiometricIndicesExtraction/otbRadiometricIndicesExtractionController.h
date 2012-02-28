@@ -52,10 +52,10 @@ public:
   virtual void CreateSpecificFeature(FeatureBaseType featureType);
   
   /** Set the specific view */
-  void SetViewRI(RadiometricIndicesExtractionViewGUI::Pointer specificView);
+  void SetView(RadiometricIndicesExtractionViewGUI::Pointer specificView);
   
   /** Set the specific model */
-  void SetModelRI(RadiometricIndicesExtractionModel::Pointer specificModel);
+  void SetModel(RadiometricIndicesExtractionModel::Pointer specificModel);
 
 protected:
   /** Constructor */

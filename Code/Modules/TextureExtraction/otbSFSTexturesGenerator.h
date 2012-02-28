@@ -18,8 +18,8 @@
 #ifndef __otbSFSTexturesGenerator_h
 #define __otbSFSTexturesGenerator_h
 
-#include "otbFeature.h"
-#include "otbFeatureExtractionModel.h"
+#include "otbFeatureTex.h"
+#include "otbTextureExtractionModel.h"
 #include "otbSFSTexturesImageFilter.h"
 
 namespace otb
@@ -32,13 +32,14 @@ namespace otb
 class SFSTexturesGenerator
 {
 public:
-  typedef FeatureExtractionModel            ModelType;
+  typedef TextureExtractionModel            ModelType;
   typedef ModelType::Pointer                ModelPointerType;
   typedef ModelType::FilterType             FilterType;
   typedef ModelType::PixelType              PixelType;
   typedef ModelType::SingleImageType        SingleImageType;
   typedef ModelType::SingleImagePointerType SingleImagePointerType;
-  typedef FeatureInfo::FeatureType          FeatureType;
+  typedef FeatureInfoTex::FeatureType       FeatureType;
+  typedef FeatureInfoBase::FeatureType      FeatureBaseType;
 
   /***************************/
   /** Filter type declaration*/
@@ -51,14 +52,14 @@ public:
   /************/
 
   template <class TFilterTypeMethod> typename TFilterTypeMethod::Pointer GenericAddRAndNIRFilter(ModelPointerType model,
-                                                                                                 FeatureType type,
+                                                                                                 FeatureBaseType type,
                                                                                                  unsigned int redId,
                                                                                                  unsigned int nirId,
                                                                                                  std::string msg);
 
   // AddSFSTexturesFilter
   void AddSFSTexturesFilter(ModelPointerType pModel,
-                            FeatureType pType,
+                            FeatureBaseType pType,
                             double pSpectralThr,
                             unsigned int pSpatialThr,
                             unsigned int pNbDirection,
@@ -80,37 +81,37 @@ public:
 
       switch (pType)
         {
-        case FeatureInfo::SFS_LEN:
+        case FeatureInfoTex::SFS_LEN:
           {
           oss << "SFS Length: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::LENGTH, true); //LENGTH, SFSTexturesFilterType::WIDTH, PSI, WMEAN, RATIO, SD
           break;
           }
-        case FeatureInfo::SFS_WID:
+        case FeatureInfoTex::SFS_WID:
           {
           oss << "SFS Width: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WIDTH, true);
           break;
           }
-        case FeatureInfo::SFS_PSI:
+        case FeatureInfoTex::SFS_PSI:
           {
           oss << "SFS PSI: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::PSI, true);
           break;
           }
-        case FeatureInfo::SFS_WME:
+        case FeatureInfoTex::SFS_WME:
           {
           oss << "SFS W-mean: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::WMEAN, true);
           break;
           }
-        case FeatureInfo::SFS_RAT:
+        case FeatureInfoTex::SFS_RAT:
           {
           oss << "SFS Ratio: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::RATIO, true);
           break;
           }
-        case FeatureInfo::SFS_SD:
+        case FeatureInfoTex::SFS_SD:
           {
           oss << "SFS SD: ";
           filter->SetFeatureStatus(SFSTexturesFilterType::SD, true);
@@ -129,7 +130,7 @@ public:
 
   // GenerateSFSTextureOutputImage
   SingleImagePointerType GenerateSFSTextureOutputImage(ModelPointerType pModel,
-                                                       FeatureType pType,
+                                                       FeatureBaseType pType,
                                                        unsigned int pInputListId)
   {
     SingleImagePointerType         image =  SingleImageType::New();
@@ -138,32 +139,32 @@ public:
                                                                        pInputListId)));
     switch (pType)
       {
-      case FeatureInfo::SFS_LEN:
+      case FeatureInfoTex::SFS_LEN:
         {
         image = filter->GetLengthOutput();
         break;
         }
-      case FeatureInfo::SFS_WID:
+      case FeatureInfoTex::SFS_WID:
         {
         image = filter->GetWidthOutput();
         break;
         }
-      case FeatureInfo::SFS_PSI:
+      case FeatureInfoTex::SFS_PSI:
         {
         image = filter->GetPSIOutput();
         break;
         }
-      case FeatureInfo::SFS_WME:
+      case FeatureInfoTex::SFS_WME:
         {
         image = filter->GetWMeanOutput();
         break;
         }
-      case FeatureInfo::SFS_RAT:
+      case FeatureInfoTex::SFS_RAT:
         {
         image = filter->GetRatioOutput();
         break;
         }
-      case FeatureInfo::SFS_SD:
+      case FeatureInfoTex::SFS_SD:
         {
         image = filter->GetSDOutput();
         break;

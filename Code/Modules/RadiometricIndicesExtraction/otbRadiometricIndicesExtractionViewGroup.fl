@@ -152,6 +152,10 @@ class RadiometricIndicesExtractionViewGroup {open
             tooltip {Normalized Difference Turbidity Index (Lacaux & al)} xywh {80 80 30 20}
           }
         }
+        MenuItem mSpectAngle {
+          label {Spectral Angle}
+          tooltip {Spectral Angle Image Filter} xywh {25 25 30 20}
+        }
       }
       Fl_Wizard fakeParameter {
         label {Feature Parameters} open
@@ -499,6 +503,18 @@ class RadiometricIndicesExtractionViewGroup {open
           Fl_Counter guiNDTIG {
             label {Green channel}
             xywh {341 408 100 18} box PLASTIC_DOWN_BOX labelcolor 32 align 4 minimum 1 step 1 value 4
+          }
+        }
+        Fl_Group guiSpectAngle {
+          xywh {200 318 246 140} hide
+        } {
+          Fl_Output guiSpectAnglePixelCoordinates {
+            label {Pixel coordinates}
+            xywh {231 357 190 18} labelsize 11 labelcolor 32 align 5 textsize 11
+          }
+          Fl_Output guiSpectAnglePixelValue {
+            label {Pixel value}
+            xywh {231 408 190 18} labelsize 11 labelcolor 32 align 5 textsize 11
           }
         }
         

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFeature_h
-#define __otbFeature_h
+#ifndef __otbFeatureRI_h
+#define __otbFeatureRI_h
 
 #include "otbFeatureBase.h"
 
@@ -58,7 +58,8 @@ public:
     NDWI2,
     MNDWI,
     NDPI,
-    NDTI
+    NDTI,
+    SPECTRALANGLE
     } FeatureType;
 
   FeatureInfoRI()
@@ -93,6 +94,8 @@ public:
     m_MapInfo.insert(std::pair<FeatureType, std::string>(MNDWI, "Modified normalized difference water index (Xu 2006)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(NDPI, "Normalized difference pond index (Lacaux & al)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(NDTI, "Normalized difference turbidity index (Lacaux & al)"));
+    m_MapInfo.insert(std::pair<FeatureType, std::string>(SPECTRALANGLE,
+                                                         "Spectral angle image filter \nSelect reference pixel clicking over middle image"));
   }
 
   virtual ~FeatureInfoRI(){}
