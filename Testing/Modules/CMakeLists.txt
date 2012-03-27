@@ -40,6 +40,12 @@ ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${TEMP}/readerModuleOuptut.tif
 )
 
+#------------ Reader Module Test JPEG ---------------------------------
+ADD_TEST(moTvReaderModuleTestJPEG ${Modules_TESTS1}  otbReaderModuleTest
+${INPUTDATA}/couleurs.jpg
+${TEMP}/readerModuleJPEGOuptut.tif
+)
+
 #------------- Feature Extraction Tests ---------------------------
 ADD_TEST(moTvRadiometricIndicesExtractionModuleTest  ${Modules_TESTS1} otbRadiometricIndicesExtractionModuleTest
 ${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
