@@ -59,8 +59,8 @@ TileMapImportModule::TileMapImportModule():
   std::string servername;
   servername = "Open Street Map";    // http://tile.openstreetmap.org/
   vServername->add(servername.c_str(), "", NULL);
-  servername = "Near Map";   // http://www.nearmap.com/maps/
-  vServername->add(servername.c_str(), "", NULL);
+//  servername = "Near Map";   // http://www.nearmap.com/maps/   (access to the tiles has changed)
+//  vServername->add(servername.c_str(), "", NULL);
   servername = "Hill Shading";   // http://tile.orfeo-toolbox.org/hillShade/
   vServername->add(servername.c_str(), "", NULL);
   vServername->value(0);
