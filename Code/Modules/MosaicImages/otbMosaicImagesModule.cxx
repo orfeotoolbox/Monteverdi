@@ -94,7 +94,7 @@ void MosaicImagesModule::Run()
       TileType      tile(image,ql);
       tileMap[tindex] = tile;
       
-      //std::cout<<"Image "<<imageName<<" will be placed at "<<row<<", "<<col<<" location"<<std::endl;
+      std::cout<<"Image "<<imageName<<" will be placed at "<<row<<", "<<col<<" location"<<std::endl;
 
       // Update layout
       if(layout[0] < col)
@@ -119,8 +119,8 @@ void MosaicImagesModule::Run()
   for(TileMapType::const_iterator it = tileMap.begin();
       it!=tileMap.end();++it)
     {
-    unsigned int linearIndex = it->first.second * layout[0] + it->first.first;
-    //std::cout<<"Adding image with linear index: "<<linearIndex<<std::endl;
+    unsigned int linearIndex = it->first.first * layout[0] + it->first.second;
+    std::cout<<"Adding image with linear index: "<<linearIndex<<std::endl;
     m_VectorTileFilter->SetInput(linearIndex,it->second.first);
     m_QLVectorTileFilter->SetInput(linearIndex,it->second.second);
     }
