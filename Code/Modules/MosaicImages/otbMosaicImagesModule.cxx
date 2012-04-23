@@ -23,7 +23,7 @@ namespace otb
 MosaicImagesModule::MosaicImagesModule()
 {
   // Handle both images with quicklook and image without
-  this->AddInputDescriptor<ImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"),false,true);
+  this->AddInputDescriptor<ImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"), false, true);
   //this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
 
   // Instanciate filters
@@ -64,7 +64,7 @@ void MosaicImagesModule::Run()
   // Parse input images
   for (unsigned int i = 0; i < numberOfInputsImages; i++)
     {
-    ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage",i);
+    ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", i);
     
     if(vectorImageQL.IsNull())
       {
@@ -85,13 +85,13 @@ void MosaicImagesModule::Run()
     unsigned int row, col;
 
     // Try to parse pleiades tiles
-    bool parseSucceed = ParsePleiadeTiles(imageName,row,col);
+    bool parseSucceed = ParsePleiadeTiles(imageName, row, col);
 
     // If parsing succeed, insert into tile map
     if(parseSucceed)
       {
-      TileIndexType tindex(row,col);
-      TileType      tile(image,ql);
+      TileIndexType tindex(row, col);
+      TileType      tile(image, ql);
       tileMap[tindex] = tile;
       
       //std::cout<<"Image "<<imageName<<" will be placed at "<<row<<", "<<col<<" location"<<std::endl;
@@ -117,12 +117,12 @@ void MosaicImagesModule::Run()
 
   // Populate filters input
   for(TileMapType::const_iterator it = tileMap.begin();
-      it!=tileMap.end();++it)
+      it!=tileMap.end(); ++it)
     {
     unsigned int linearIndex = it->first.second * layout[0] + it->first.first;
     //std::cout<<"Adding image with linear index: "<<linearIndex<<std::endl;
-    m_VectorTileFilter->SetInput(linearIndex,it->second.first);
-    m_QLVectorTileFilter->SetInput(linearIndex,it->second.second);
+    m_VectorTileFilter->SetInput(linearIndex, it->second.first);
+    m_QLVectorTileFilter->SetInput(linearIndex, it->second.second);
     }
  
   // First, clear any previous output
@@ -154,8 +154,8 @@ bool MosaicImagesModule::ParsePleiadeTiles(const std::string& imageName, unsigne
   // Look for R and C flags
   std::size_t lastchar = imageName.find_last_of(".");
 
-  std::size_t rpos = imageName.find_last_of("R",lastchar);
-  std::size_t cpos = imageName.find_last_of("C",lastchar);
+  std::size_t rpos = imageName.find_last_of("R", lastchar);
+  std::size_t cpos = imageName.find_last_of("C", lastchar);
   
   // Sanity check
   if(rpos >= imageName.size() || cpos >= imageName.size())
@@ -166,8 +166,8 @@ bool MosaicImagesModule::ParsePleiadeTiles(const std::string& imageName, unsigne
   // Extract R and C index
   try
     {
-    row = strtol(imageName.substr(rpos+1,cpos - rpos + 1).c_str(),NULL,0)-1;
-    col = strtol(imageName.substr(cpos+1).c_str(),NULL,0)-1;
+    row = strtol(imageName.substr(rpos+1, cpos - rpos + 1).c_str(), NULL, 0)-1;
+    col = strtol(imageName.substr(cpos+1).c_str(), NULL, 0)-1;
     }
   catch(...)
     {

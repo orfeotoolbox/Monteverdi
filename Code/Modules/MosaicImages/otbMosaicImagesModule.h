@@ -32,7 +32,7 @@ namespace otb
 /** \class MosaicImagesModule
  *  \brief This is the MosaicImages module
  *
- * 
+ *
  *
  */
 
@@ -61,8 +61,8 @@ public:
   typedef otb::TileImageFilter<VectorImageType>   VectorTileImageFilterType;
 
   typedef std::pair<unsigned int, unsigned int> TileIndexType;
-  typedef std::pair<VectorImageType::Pointer,VectorImageType::Pointer> TileType;
-  typedef std::map<TileIndexType,TileType> TileMapType;
+  typedef std::pair<VectorImageType::Pointer, VectorImageType::Pointer> TileType;
+  typedef std::map<TileIndexType, TileType> TileMapType;
 
 protected:
   /** Constructor */
