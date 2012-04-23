@@ -96,6 +96,7 @@
 #include "otbMorphologyExtractionModule.h"
 #include "otbSmoothingModule.h"
 #include "otbEdgeExtractionModule.h"
+#include "otbMosaicImagesModule.h"
 
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
@@ -169,7 +170,7 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
   model->RegisterModule<otb::UncompressJpeg2000Module>("UncompressJpeg2000Module", otbGetTextMacro("File/Uncompress Jpeg2000 image"));
   model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
-
+  model->RegisterModule<otb::MosaicImagesModule>("Mosaic", otbGetTextMacro("File/Mosaic images"));
 #ifdef OTB_USE_MAPNIK
   model->RegisterModule<otb::RasterizationModule>("Rasterize", otbGetTextMacro("File/Rasterize vector data"));
 #endif
