@@ -23,8 +23,8 @@ namespace otb
 MosaicImagesModule::MosaicImagesModule()
 {
   // Handle both images with quicklook and image without
-  this->AddInputDescriptor<ImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"), false, true);
-  this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
+  this->AddInputDescriptor<ImageWithQuicklook>("InputImages", otbGetTextMacro("Input images to mosaic (RiCj dataset name pattern)."), false, true);
+  this->AddTypeToInputDescriptor<VectorImageType>("InputImages");
 
   // Instanciate filters
   m_VectorTileFilter   = VectorTileImageFilterType::New();
@@ -55,13 +55,13 @@ void MosaicImagesModule::Run()
 
   // First step is to retrieve the inputs
   // Get the number of input image
-  unsigned int numberOfInputsImages = this->GetNumberOfInputDataByKey("InputImage");
+  unsigned int numberOfInputsImages = this->GetNumberOfInputDataByKey("InputImages");
   if (numberOfInputsImages == 0)
     {
     itkExceptionMacro(<< "The number of inputs images is Null.");
     }
 
-  ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", 0);
+  ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImages", 0);
 
   bool quicklookAvailable = vectorImageQL.IsNotNull();
   
@@ -75,7 +75,7 @@ void MosaicImagesModule::Run()
 
     if(quicklookAvailable)
       {
-      vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", i);
+      vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImages", i);
  
       if(vectorImageQL.IsNull())
         {
@@ -90,11 +90,11 @@ void MosaicImagesModule::Run()
       shrinkFactor = vectorImageQL->GetShrinkFactor();
       
       // Retrieve band name
-      imageName = this->GetInputDataDescription<ImageWithQuicklook>("InputImage", i);
+      imageName = this->GetInputDataDescription<ImageWithQuicklook>("InputImages", i);
       }
     else
       {
-      image = this->GetInputData<VectorImageType>("InputImage", i);
+      image = this->GetInputData<VectorImageType>("InputImages", i);
  
       if(image.IsNull())
         {
@@ -104,7 +104,7 @@ void MosaicImagesModule::Run()
       nbComp = image->GetNumberOfComponentsPerPixel();
       
       // Retrieve band name
-      imageName = this->GetInputDataDescription<VectorImageType>("InputImage", i);
+      imageName = this->GetInputDataDescription<VectorImageType>("InputImages", i);
       }
     
     // Parse image name to determine the position of the tile
