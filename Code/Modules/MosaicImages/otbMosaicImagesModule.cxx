@@ -24,7 +24,7 @@ MosaicImagesModule::MosaicImagesModule()
 {
   // Handle both images with quicklook and image without
   this->AddInputDescriptor<ImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"), false, true);
-  //this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
+  this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
 
   // Instanciate filters
   m_VectorTileFilter   = VectorTileImageFilterType::New();
@@ -61,26 +61,52 @@ void MosaicImagesModule::Run()
     itkExceptionMacro(<< "The number of inputs images is Null.");
     }
 
+  ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", 0);
+
+  bool quicklookAvailable = vectorImageQL.IsNotNull();
+  
   // Parse input images
   for (unsigned int i = 0; i < numberOfInputsImages; i++)
     {
-    ImageWithQuicklook::Pointer vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", i);
-    
-    if(vectorImageQL.IsNull())
+
+    VectorImageType::Pointer image;
+    VectorImageType::Pointer ql;
+    std::string imageName;
+
+    if(quicklookAvailable)
       {
-      itkExceptionMacro("The image pointer is not initialized!!");
+      vectorImageQL = this->GetInputData<ImageWithQuicklook>("InputImage", i);
+ 
+      if(vectorImageQL.IsNull())
+        {
+        itkExceptionMacro("Could not retrieve input "<<i<<" as a Pleiades image");
+        }
+      
+      // Retrieve image and quicklook
+      image = vectorImageQL->GetImage();
+      ql    = vectorImageQL->GetQuicklook();
+      
+      nbComp = image->GetNumberOfComponentsPerPixel();
+      shrinkFactor = vectorImageQL->GetShrinkFactor();
+      
+      // Retrieve band name
+      imageName = this->GetInputDataDescription<ImageWithQuicklook>("InputImage", i);
       }
-
-    // Retrieve image and quicklook
-    VectorImageType::Pointer image = vectorImageQL->GetImage();
-    VectorImageType::Pointer ql    = vectorImageQL->GetQuicklook();
-
-    nbComp = image->GetNumberOfComponentsPerPixel();
-    shrinkFactor = vectorImageQL->GetShrinkFactor();
-
-    // Retrieve band name
-    std::string imageName = this->GetInputDataDescription<ImageWithQuicklook>("InputImage", i);
-
+    else
+      {
+      image = this->GetInputData<VectorImageType>("InputImage", i);
+ 
+      if(image.IsNull())
+        {
+        itkExceptionMacro("Could not retrieve input "<<i<<" as a multi-band image");
+        }
+      
+      nbComp = image->GetNumberOfComponentsPerPixel();
+      
+      // Retrieve band name
+      imageName = this->GetInputDataDescription<VectorImageType>("InputImage", i);
+      }
+    
     // Parse image name to determine the position of the tile
     unsigned int row, col;
 
@@ -108,12 +134,16 @@ void MosaicImagesModule::Run()
       }
     }
 
-  layout[0]+=1;
-  layout[1]+=1;
-
-  // Set the filters layout
-  m_VectorTileFilter->SetLayout(layout);
-  m_QLVectorTileFilter->SetLayout(layout);
+    layout[0]+=1;
+    layout[1]+=1;
+    
+    // Set the filters layout
+    m_VectorTileFilter->SetLayout(layout);
+    
+    if(quicklookAvailable)
+      {
+      m_QLVectorTileFilter->SetLayout(layout);
+      }
 
   // Populate filters input
   for(TileMapType::const_iterator it = tileMap.begin();
@@ -122,29 +152,47 @@ void MosaicImagesModule::Run()
     unsigned int linearIndex = it->first.first * layout[0] + it->first.second;
     std::cout<<"Adding image with linear index: "<<linearIndex<<std::endl;
     m_VectorTileFilter->SetInput(linearIndex, it->second.first);
-    m_QLVectorTileFilter->SetInput(linearIndex, it->second.second);
+    
+    if(quicklookAvailable)
+      {
+      m_QLVectorTileFilter->SetInput(linearIndex, it->second.second);
+      }
     }
  
   // First, clear any previous output
   this->ClearOutputDescriptors();
  
   // Synthetize new output
-  ImageWithQuicklook::Pointer output = ImageWithQuicklook::New();
-  output->SetImage(m_VectorTileFilter->GetOutput());
-  output->SetQuicklook(m_QLVectorTileFilter->GetOutput());
-  output->SetShrinkFactor(shrinkFactor);
+  
+  if(quicklookAvailable)
+    {
+    ImageWithQuicklook::Pointer output = ImageWithQuicklook::New();
+    output->SetImage(m_VectorTileFilter->GetOutput());
+    output->SetQuicklook(m_QLVectorTileFilter->GetOutput());
+    output->SetShrinkFactor(shrinkFactor);
+    this->AddOutputDescriptor(output, "OutputImage",
+                            otbGetTextMacro("Mosaicked image"));
+  
+    }
+  else
+    {
+    // Add an output (single version)
+    this->AddOutputDescriptor(m_VectorTileFilter->GetOutput(), "OutputImage",
+                            otbGetTextMacro("Mosaicked image"));
+ 
+    }
 
   std::cout<<"Layout: "<<layout<<std::endl;
 
   m_VectorTileFilter->GetOutput()->UpdateOutputInformation();
-  m_QLVectorTileFilter->GetOutput()->UpdateOutputInformation();
+  if(quicklookAvailable)
+    {
+    m_QLVectorTileFilter->GetOutput()->UpdateOutputInformation();
+    }
 
   //std::cout<<"Largest region: "<<m_VectorTileFilter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
   //std::cout<<"Largest QLregion: "<<m_QLVectorTileFilter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
 
- // Add an output (single version)
-  this->AddOutputDescriptor(output, "OutputImage",
-                            otbGetTextMacro("Mosaicked image"));
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
 }
