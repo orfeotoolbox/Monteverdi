@@ -24,6 +24,7 @@
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbMsgReporter.h"
+#include "otbStreamingMinMaxVectorImageFilter.h"
 
 namespace otb
 {
@@ -400,14 +401,23 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
     inputMaximum.SetSize(i2VI->GetOutput()->GetNumberOfComponentsPerPixel());
 
     int i = 0;
-    typename HistogramListType::ConstIterator it;
-    for (it = m_HistogramList->Begin(); it != m_HistogramList->End(); ++it, ++i)
+
+    typedef otb::StreamingMinMaxVectorImageFilter<InputImageType> MinMaxFilterType;
+    MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
+    minMaxFilter->SetInput(i2VI->GetOutput());
+    try
       {
-      double iMin = it.Get()->Quantile(0, 0.02);
-      double iMax = it.Get()->Quantile(0, 0.98);
-      inputMinimum[m_OutputListOrder[i]] = static_cast<InputInternalPixelType>(iMin);
-      inputMaximum[m_OutputListOrder[i]] = static_cast<InputInternalPixelType>(iMax);
+      minMaxFilter->Update();
       }
+    catch (itk::ExceptionObject& err)
+      {
+      // Make the main fltk loop update Msg reporter
+      m_ErrorMsg = err.GetDescription();
+      Fl::awake(&SendErrorCallback, &m_ErrorMsg);
+      this->Quit();
+      }
+    inputMinimum = minMaxFilter->GetMinimum();
+    inputMaximum = minMaxFilter->GetMaximum();
 
     typedef typename CastOutputImageType::PixelType OutputPixelType;
     OutputPixelType minimum;
