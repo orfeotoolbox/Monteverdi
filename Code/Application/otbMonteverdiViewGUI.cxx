@@ -366,7 +366,7 @@ MonteverdiViewGUI
             n->parent()->parent()->parent()->parent()->is_root() )
     {
     std::string instanceId;
-    std::string outputId =  n->label(); ;
+    std::string outputId = n->label();
     // We exclude the case of informations node
     if (outputId == m_BranchNameInfo || n->parent()->label() == m_BranchNameInfo)
       {
