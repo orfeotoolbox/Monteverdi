@@ -59,6 +59,15 @@ int Fl_DND_Box::handle(int e)
 
     while ( s>> token )
       {
+      // filename may contain whitespace coded as %20. Detect
+      // it and replace the 3 characters by a whitespace to be able to
+      // open the file.
+      size_t pos = token.find("%");
+      if (pos != std::string::npos)
+        {
+        token.replace( pos, 3," ");
+        }
+
 #ifdef WIN32
       // Under Win32 the files name are stored with no file://
       m_FileNameList.push_back(token);
