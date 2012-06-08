@@ -29,31 +29,31 @@
 
 namespace otb
 {
-  
+
 /** Constructor */
   ResampleModule::ResampleModule(): m_HasToGenerateLayer(true)
 {
-  
+
   m_ResampleFilter = ResampleFilterType::New();
-  
+
   m_ScalableTransform = ScalableTransformType::New();
   m_ScalableTransform->SetIdentity();
-  
+
   m_ResampleFilter->SetTransform( m_ScalableTransform );
-  
+
   // Interpolator
   m_NearestNeighborInterpolator = NearestNeighborInterpolateType::New();
-  
+
   m_BCOInterpolator = BCOInterpolatorType::New();
-  
+
   m_LinearInterpolator = LinearInterpolateType::New();
-  
+
   m_ResampleFilter->SetInterpolator( m_NearestNeighborInterpolator );
-  
+
   // Layer Generators
   m_Generator          = ImageLayerGeneratorType::New();
   m_ResampleGenerator  = ImageLayerGeneratorType::New();
-  
+
   // Build a view
   m_View                 = ViewType::New();
 
@@ -116,12 +116,12 @@ namespace otb
 
   // Populate combo box Interpalator
   guiInterpolator->clear();
-  
+
   guiInterpolator->add("Nearest Neighbor");
   guiInterpolator->add("Bi-cubic");
   guiInterpolator->add("Linear");
   guiInterpolator->value( (int) NEARESTNEIGHBOR );
-  
+
   //Describe inputs
   this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to resample"));
 }
@@ -146,10 +146,7 @@ void ResampleModule::Run()
   if(m_InputImage.IsNull()) {
     itkExceptionMacro(<<"Input image is NULL");
   }
-  
-  ImageType::PointType origin = m_InputImage->GetOrigin();
-  ImageType::SpacingType spacing = m_InputImage->GetSpacing();
-    
+
   // Generate the layer
   m_Generator->SetImage(m_InputImage);
   FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
@@ -159,13 +156,13 @@ void ResampleModule::Run()
 
   // Add the generated layer to the rendering model
   m_RenderingModel->AddLayer(m_InputImageLayer);
-  
+
   // Set size of image
   guiWidth->value( m_InputImage->GetLargestPossibleRegion().GetSize()[0] );
   guiHeight->value( m_InputImage->GetLargestPossibleRegion().GetSize()[1] );
-  
+
   m_ResampleFilter->SetInput(m_InputImage);
-  
+
   m_RenderingModel->Update();
   m_Generator->GetRenderingFunction()->SetAutoMinMax(false);
 
@@ -189,10 +186,6 @@ void ResampleModule::UpdateResampleLayer()
   // Keep the same min/max
   m_ResampleGenerator->SetRenderingFunction(m_Generator->GetRenderingFunction());
 
-  unsigned int x, y;
-  x=wMainWindow->x()+(wMainWindow->w()-200)/2;
-  y=wMainWindow->y()+(wMainWindow->h()-20)/2;
- 
    // Show busy bar
   this->pBusyBar->value(1);
   this->pBusyBar->show();
@@ -212,10 +205,10 @@ void ResampleModule::UpdateResampleLayer()
 
   m_RenderingModel->AddLayer(m_ResampleGenerator->GetLayer());
   m_ResampleImageLayer = m_ResampleGenerator->GetLayer();
-  
+
   m_HasToGenerateLayer = false;
-  
-  
+
+
 }
 
 /**
@@ -225,25 +218,25 @@ void ResampleModule::UpdateSize()
 {
   m_ResampleFilter = ResampleFilterType::New();
   m_ScalableTransform = ScalableTransformType::New();
-  
+
   m_ResampleFilter->SetInput(m_InputImage);
-  
-  
+
+
   ImageType::IndexType origin = m_InputImage->GetLargestPossibleRegion().GetIndex();
   ImageType::SpacingType spacing = m_InputImage->GetSpacing();
 
-  
+
   ImageType::IndexType center;
   center[0] = origin[0] + m_InputImage->GetLargestPossibleRegion().GetSize()[0] / 2.0;
   center[1] = origin[1] + m_InputImage->GetLargestPossibleRegion().GetSize()[1] / 2.0;
 
-  
+
   ImageType::PointType centerPoint;
   m_InputImage->TransformIndexToPhysicalPoint(center, centerPoint);
-  
+
   //image boundary
   ImageType::IndexType ULindex, URindex, LRindex, LLindex;
-  
+
   ULindex[0]=origin[0];
   ULindex[1]=origin[1];
   URindex[0]=origin[0]+ m_InputImage->GetLargestPossibleRegion().GetSize()[0];
@@ -252,7 +245,7 @@ void ResampleModule::UpdateSize()
   LRindex[1]=origin[1]+ m_InputImage->GetLargestPossibleRegion().GetSize()[1];
   LLindex[0]=origin[0];
   LLindex[1]=origin[1]+ m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  
+
   ImageType::PointType orig, ULpoint, URpoint, LRpoint, LLpoint;
   m_InputImage->TransformIndexToPhysicalPoint(ULindex, ULpoint);
   m_InputImage->TransformIndexToPhysicalPoint(URindex, URpoint);
@@ -271,27 +264,27 @@ void ResampleModule::UpdateSize()
   else m_ScalableTransform->Rotate2D( - rot_angle * CONST_PI_180 );
   m_ScalableTransform->SetCenter( centerPoint );
   m_ScalableTransform->Scale( scale );
-  
+
   //inverse transform
   ScalableTransformType::Pointer inverseTransform = ScalableTransformType::New();
   m_ScalableTransform->GetInverse(inverseTransform);
   m_ResampleFilter->SetTransform( m_ScalableTransform );
-  
+
   ImageType::PointType ULpointTrans, URpointTrans, LRpointTrans, LLpointTrans, CenterPointTrans;
-  
+
   ULpointTrans=inverseTransform->TransformPoint(ULpoint);
   URpointTrans=inverseTransform->TransformPoint(URpoint);
   LRpointTrans=inverseTransform->TransformPoint(LRpoint);
   LLpointTrans=inverseTransform->TransformPoint(LLpoint);
   CenterPointTrans=inverseTransform->TransformPoint(centerPoint);
-  
+
   //compute min and max
   std::vector<ImageType::PointType>   voutput;
   voutput.push_back(ULpointTrans);
   voutput.push_back(URpointTrans);
   voutput.push_back(LRpointTrans);
   voutput.push_back(LLpointTrans);
-  
+
   double minX = voutput[0][0];
   double maxX = voutput[0][0];
   double minY = voutput[0][1];
@@ -319,24 +312,24 @@ void ResampleModule::UpdateSize()
          maxY = voutput[i][1];
        }
     }
-  
+
   if( spacing[0] > 0 ) orig[0] = minX;
   else orig[0] = maxX;
-  
+
   if( spacing[1] > 0 ) orig[1] = minY;
   else orig[1] = maxY;
 
   m_ResampleFilter->SetOutputOrigin( orig );
-  
+
   //size of output image
   ResampleFilterType::SizeType size;
   size[0]=vcl_abs(maxX-minX);
   size[1]=vcl_abs(maxY-minY);
-  
+
   // Evaluate spacing
   ImageType::SpacingType OutputSpacing;
   OutputSpacing=spacing;
-  
+
   m_ResampleFilter->SetOutputSpacing( OutputSpacing );
   ImageType::PixelType defPix;
   defPix.SetSize( m_InputImage->GetNumberOfComponentsPerPixel() );
@@ -344,7 +337,7 @@ void ResampleModule::UpdateSize()
   m_ResampleFilter->SetEdgePaddingValue(defPix);
 
   //m_ResampleFilter->SetDeformationFieldSpacing( OutputSpacing );
-  
+
   // Evaluate size
   ResampleFilterType::SizeType RecomputedSize;
   RecomputedSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(size[0]/OutputSpacing[0])));
@@ -355,7 +348,7 @@ void ResampleModule::UpdateSize()
 
   guiWidth->value( RecomputedSize[0] );
   guiHeight->value( RecomputedSize[1] );
-  
+
 }
 
 /**
@@ -372,22 +365,22 @@ void ResampleModule::UpdateDetails()
 void ResampleModule::OK()
 {
   this->ClearOutputDescriptors();
-  
+
   this->AddOutputDescriptor(m_ResampleFilter->GetOutput(),
                          "OutputImage",
                          otbGetTextMacro("Resampled image"));
-  
+
   this->NotifyOutputsChange();
 
   // Close the GUI
   this->Hide();
 }
 
-void ResampleModule::Hide()
+void ResampleModule::Quit()
 {
   wMainWindow->hide();
 }
-  
+
 
 /**
  * Change Angle of rotation
@@ -411,21 +404,21 @@ void ResampleModule::ChangeInterpolator()
     m_ResampleFilter->SetInterpolator( m_NearestNeighborInterpolator );
     break;
   }
-    
+
   case BICUBIC :
   {
     m_BCOInterpolator = BCOInterpolatorType::New();
     m_ResampleFilter->SetInterpolator( m_BCOInterpolator );
     break;
   }
-   
+
   case LINEAR:
   {
     m_LinearInterpolator = LinearInterpolateType::New();
     m_ResampleFilter->SetInterpolator( m_LinearInterpolator );
     break;
   }
-  
+
   default:
     break;
   }
@@ -438,7 +431,7 @@ void ResampleModule::ChangeXFactor()
 {
   if( guiKeepProportion->value()==1 )
     guiYFactor->value( guiXFactor->value() );
-  
+
   if( vcl_abs(guiXFactor->value()) < 1e-6 )
     {
     guiWidth->value( 0 );
@@ -448,9 +441,9 @@ void ResampleModule::ChangeXFactor()
     }
 
   this->UpdateSize();
-  
+
 }
-  
+
 /**
  * Change Y Factor
  */
