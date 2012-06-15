@@ -28,7 +28,7 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataProperties.h"
-#include "otbVectorDataToImageFilter.h"
+#include "otbVectorDataToMapFilter.h"
 
 
 namespace otb
@@ -74,8 +74,8 @@ public:
   typedef VectorDataProperties<VectorDataType>            VectorDataPropertiesType;
 
   // Rasterization
-   typedef otb::VectorDataToImageFilter<VectorDataType,
-     ImageType>                                                                   VectorDataToImageFilterType;
+   typedef otb::VectorDataToMapFilter<VectorDataType,
+     ImageType>                                                                   VectorDataToMapFilterType;
 
   // Misc
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
@@ -108,7 +108,7 @@ private:
   VectorDataProjectionFilterType::Pointer   m_VectorDataProjFilter; // Data vector projection filter
   VectorDataPropertiesType::Pointer               m_VectorDataProperties;
   VectorDataExtractROIType::Pointer            m_VectorDataExtractROI;
-  VectorDataToImageFilterType::Pointer      m_VectorDataRendering;
+  VectorDataToMapFilterType::Pointer      m_VectorDataRendering;
   ImageType::Pointer                        m_OutputImage;
 };
 

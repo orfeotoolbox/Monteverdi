@@ -41,7 +41,7 @@ RasterizationModule::RasterizationModule()
        m_VectorDataProjFilter = VectorDataProjectionFilterType::New();
        m_VectorDataProperties = VectorDataPropertiesType::New();
        m_VectorDataExtractROI = VectorDataExtractROIType::New();
-       m_VectorDataRendering = VectorDataToImageFilterType::New();
+       m_VectorDataRendering = VectorDataToMapFilterType::New();
        m_OutputImage=ImageType::New();
 }
 
@@ -132,12 +132,13 @@ void RasterizationModule::Run()
        m_VectorDataExtractROI->SetRegion(region);
        m_VectorDataExtractROI->SetInput(m_VectorDataProjFilter->GetOutput());
        // rendering
+
        m_VectorDataRendering->SetInput(m_VectorDataExtractROI->GetOutput());
        m_VectorDataRendering->SetSize(size);
        m_VectorDataRendering->SetOrigin(origin);
        m_VectorDataRendering->SetSpacing(spacing);
        m_VectorDataRendering->SetVectorDataProjectionWKT(imageProjectionRef);
-       m_VectorDataRendering->SetRenderingStyleType(VectorDataToImageFilterType::Binary);
+       m_VectorDataRendering->SetRenderingStyleType(VectorDataToMapFilterType::Binary);
 
        // Output
        m_OutputImage=m_VectorDataRendering->GetOutput();
