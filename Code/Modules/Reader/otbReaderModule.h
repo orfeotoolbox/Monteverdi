@@ -56,6 +56,9 @@ public:
   itkTypeMacro(ReaderModule, Module);
 
   virtual void Analyse();
+
+  virtual void SynchronizeThreads();
+
   /** OTB typedefs */
   /// Dataset
   typedef TypeManager::Floating_Point_Image         FloatingImageType;

@@ -227,7 +227,7 @@ protected:
   itkSetMacro(NeedsPipelineLocking, bool);
   itkBooleanMacro(NeedsPipelineLocking);
 
-  /** Set the busy floag */
+  /** Set the busy flag */
   itkSetMacro(Busy, bool);
   itkBooleanMacro(Busy);
 

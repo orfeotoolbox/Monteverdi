@@ -283,6 +283,9 @@ int main(int argc, char* argv[])
     readerModule->bOk->do_callback();
     Fl::check();
 
+    // Need to wait the end of the reader thread in case of JPEG2000 reading
+    readerModule->SynchronizeThreads();
+
     // Create an instance of module viewer and get the ID
     std::string viewerId = model->CreateModuleByKey("Viewer");
 

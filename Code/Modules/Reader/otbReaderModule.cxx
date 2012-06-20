@@ -392,6 +392,15 @@ void ReaderModule::OpenDataSet()
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
+
+}
+
+void ReaderModule::SynchronizeThreads()
+{
+  while(this->IsBusy())
+    {
+    otb::Threads::Sleep(500);
+    }
 }
 
 void ReaderModule::TypeChanged()
@@ -549,8 +558,10 @@ void ReaderModule::OpenRealImageWithQuicklook()
   this->pBusyBar->value(0);
   this->pBusyBar->show();
   Fl::check();
-  this->StartProcess2();
-  this->StartProcess1();
+
+  this->BusyOn(); // Initialize the Busy variable in the main thread
+  this->StartProcess2(); // Launch ThreadedRun()
+  this->StartProcess1(); // Launch ThreadedWatch()
 }
 
 /** UpdateProgress */
@@ -659,7 +670,7 @@ void ReaderModule::ThreadedWatch()
   double current = 0;
   m_progressIndex = 0;
 
-  while ((m_ProcessObject.IsNull() || this->IsBusy()))
+  while ( (m_ProcessObject.IsNull() || this->IsBusy()) )
     {
 //    if (m_ProcessObject.IsNotNull())
 //      {
@@ -695,8 +706,6 @@ void ReaderModule::ThreadedWatch()
 /** ThreadedRun */
 void ReaderModule::ThreadedRun()
 {
-  this->BusyOn();
-    
   std::string qlKey = "_ql_by_otb.tif";
   FloatingVectorImageType::Pointer quicklook;
   
@@ -727,6 +736,7 @@ void ReaderModule::ThreadedRun()
 
     if(!qlReadFromFile)
       {
+      // try to compute QL from file
       try
         {
         qlReader = FPVReaderType::New();
@@ -763,7 +773,6 @@ void ReaderModule::ThreadedRun()
       writer->SetInput(caster->GetOutput());
       writer->SetFileName(qlFilePath);
       writer->WriteGeomFileOn();
-
       try
         {
         writer->Update();
