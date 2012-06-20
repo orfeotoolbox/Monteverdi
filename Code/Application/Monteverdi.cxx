@@ -265,54 +265,65 @@ int main(int argc, char* argv[])
   //Test if there is an input image (optional)
   if (parseResult->IsOptionPresent("--InputImage"))
     {
-    Fl::check();
-    std::vector<std::string> moduleVector;
 
-    // Create an instance of module reader and get the ID
-    std::string readerId = model->CreateModuleByKey("Reader");
+    if (!itksys::SystemTools::FileExists(parseResult->GetInputImage().c_str()))
+      {
+        itk::OStringStream oss;
+        oss << "The file "<< parseResult->GetInputImage().c_str() <<" does not exist.";
+        otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
+      }
+    else
+      {
+      Fl::check();
 
-    // Get the module itself
-    otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
+      std::vector<std::string> moduleVector;
 
-    // Simulate file chooser and ok callback
-    // Cyrille cast effect !
-    otb::ReaderModule::Pointer readerModule =
-      static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
-    readerModule->vFilePath->value(parseResult->GetInputImage().c_str());
-    readerModule->Analyse();
-    readerModule->bOk->do_callback();
-    Fl::check();
+      // Create an instance of module reader and get the ID
+      std::string readerId = model->CreateModuleByKey("Reader");
 
-    // Need to wait the end of the reader thread in case of JPEG2000 reading
-    readerModule->SynchronizeThreads();
+      // Get the module itself
+      otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
 
-    // Create an instance of module viewer and get the ID
-    std::string viewerId = model->CreateModuleByKey("Viewer");
+      // Simulate file chooser and ok callback
+      // Cyrille cast effect !
+      otb::ReaderModule::Pointer
+          readerModule = static_cast<otb::ReaderModule::Pointer> (dynamic_cast<otb::ReaderModule *> (module.GetPointer()));
+      readerModule->vFilePath->value(parseResult->GetInputImage().c_str());
+      readerModule->Analyse();
+      readerModule->bOk->do_callback();
+      Fl::check();
 
-    // Get the module itself
-    otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
+      // Need to wait the end of the reader thread in case of JPEG2000 reading
+      readerModule->SynchronizeThreads();
 
-    // Open the viewer and simulate a connection
-    otb::ViewerModule::Pointer viewerModule =
-      static_cast<otb::ViewerModule::Pointer>(dynamic_cast<otb::ViewerModule *>(module2.GetPointer()));
+      // Create an instance of module viewer and get the ID
+      std::string viewerId = model->CreateModuleByKey("Viewer");
 
-    typedef otb::Module::InputDataDescriptorMapType InputDataDescriptorMapType;
-    InputDataDescriptorMapType                 lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
-    InputDataDescriptorMapType::const_iterator it_in;
-    it_in = lInputDataMap.begin();
+      // Get the module itself
+      otb::Module::Pointer module2 = model->GetModuleByInstanceId(viewerId);
 
-    std::string viewerInputKey = it_in->first;
+      // Open the viewer and simulate a connection
+      otb::ViewerModule::Pointer
+          viewerModule = static_cast<otb::ViewerModule::Pointer> (dynamic_cast<otb::ViewerModule *> (module2.GetPointer()));
 
-    typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
-    InputViewComponentMapType inputComponentMap;
-    inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
+      typedef otb::Module::InputDataDescriptorMapType InputDataDescriptorMapType;
+      InputDataDescriptorMapType lInputDataMap = model->GetModuleInputsByInstanceId(viewerId);
+      InputDataDescriptorMapType::const_iterator it_in;
+      it_in = lInputDataMap.begin();
 
-    inputComponentMap[viewerInputKey]->SelectNthChoice(1);
+      std::string viewerInputKey = it_in->first;
 
-    Fl::check();
+      typedef otb::InputViewGUI::InputViewComponentMapType InputViewComponentMapType;
+      InputViewComponentMapType inputComponentMap;
+      inputComponentMap = view->GetInputViewGUI()->GetInputViewComponentMap();
 
-    view->GetInputViewGUI()->bOk->do_callback();
-    Fl::check();
+      inputComponentMap[viewerInputKey]->SelectNthChoice(1);
+
+      Fl::check();
+
+      view->GetInputViewGUI()->bOk->do_callback();
+      Fl::check();
+      }
     }
 
   if (parseResult->IsOptionPresent("--InputList"))
