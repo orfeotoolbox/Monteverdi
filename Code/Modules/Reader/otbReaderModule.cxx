@@ -723,16 +723,21 @@ void ReaderModule::ThreadedRun()
     std::string qlFilePath = m_Filepath + qlKey;
     bool qlReadFromFile = true;
 
-    qlReader->SetFileName(qlFilePath);
+    if (itksys::SystemTools::FileExists(qlFilePath.c_str()))
+      {
+      qlReader->SetFileName(qlFilePath);
 
-    try
-      {
-      qlReader->Update();
+      try
+        {
+        qlReader->Update();
+        }
+      catch (itk::ExceptionObject & err)
+        {
+        qlReadFromFile = false;
+        }
       }
-    catch(itk::ExceptionObject & err)
-      {
+    else
       qlReadFromFile = false;
-      }
 
     if(!qlReadFromFile)
       {
