@@ -13,8 +13,8 @@ ENDIF(NOT GDAL_DATA)
 
 # Gather all dlls from which Monteverdi depends, and put them aside the executable
 # For this to work, the necessary DLL must be in PATH
-INSTALL(CODE "include(BundleUtilities)
-    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/bin/monteverdi.exe\" \"\" \"\" )" COMPONENT Runtime)
+INSTALL(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake
+        COMPONENT Runtime)
 
 # For some reason, fixup_bundle won't package the msvc runtime dll
 # I guess it's because cpack already handles installing the runtime,

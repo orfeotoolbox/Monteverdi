@@ -10,4 +10,5 @@ INSTALL(DIRECTORY $ENV{GDAL_DATA}
               DESTINATION share
               COMPONENT Resources)
 
-INSTALL(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake)
+INSTALL(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake
+        COMPONENT Runtime)
