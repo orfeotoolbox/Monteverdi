@@ -10,5 +10,7 @@ INSTALL(DIRECTORY $ENV{GDAL_DATA}
               DESTINATION share
               COMPONENT Resources)
 
-INSTALL(CODE "include(BundleUtilities)
-    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/bin/monteverdi\" \"\" \"\${CMAKE_INSTALL_PREFIX}/lib/otb\" )" COMPONENT Runtime)
+INSTALL(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake)
+
+#INSTALL(CODE "include(BundleUtilities)
+#    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/bin/monteverdi\" \"\" \"\${CMAKE_INSTALL_PREFIX}/lib/otb\" )" COMPONENT Runtime)
