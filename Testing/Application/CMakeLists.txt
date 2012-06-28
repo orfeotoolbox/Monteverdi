@@ -3,7 +3,7 @@ SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
 
-# Large Input 
+# Large Input
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -20,24 +20,24 @@ ADD_TEST(apTvMonteverdiReaderViewer ${Application_TESTS} otbMonteverdiApplicatio
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 0
 )
-ADD_TEST(apTvMonteverdiGraphviz ${Application_TESTS} otbMonteverdiApplicationGraphviz
-${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-0
-${TEMP}/graphviz.dot
-)
-ADD_TEST(apTvMonteverdiXML ${Application_TESTS} otbMonteverdiApplicationExportToXML
-${INPUTDATA}/qb_RoadExtract.img
-0
-${TEMP}/monteverdi_scenario.xml
-${TEMP}/graphviz.dot
-)
+# ADD_TEST(apTvMonteverdiGraphviz ${Application_TESTS} otbMonteverdiApplicationGraphviz
+# ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+# 0
+# ${TEMP}/graphviz.dot
+# )
+# ADD_TEST(apTvMonteverdiXML ${Application_TESTS} otbMonteverdiApplicationExportToXML
+# ${INPUTDATA}/qb_RoadExtract.img
+# 0
+# ${TEMP}/monteverdi_scenario.xml
+# ${TEMP}/graphviz.dot
+# )
 
 SET(Application_SRCS
 otbMonteverdiApplicationNew.cxx
 otbMonteverdiApplicationTest.cxx
 otbMonteverdiApplicationReaderViewer.cxx
-otbMonteverdiApplicationGraphviz.cxx
-otbMonteverdiApplicationExportToXML.cxx
+#otbMonteverdiApplicationGraphviz.cxx
+#otbMonteverdiApplicationExportToXML.cxx
 )
 
 # Suppress warning Fl_RGB_Image deferencing pointeur

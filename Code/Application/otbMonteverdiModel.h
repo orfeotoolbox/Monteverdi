@@ -190,9 +190,9 @@ protected:
   }
   virtual void Close();
 
-  void GetGraphvizDotFile(const std::string& fname) const;
+  //void GetGraphvizDotFile(const std::string& fname) const;
 
-  void ExportGraphToXML(const std::string& fname) const;
+  //void ExportGraphToXML(const std::string& fname) const;
 
   /** Get the caching directory path. */
   std::string GetCachingPath();
