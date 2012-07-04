@@ -464,7 +464,7 @@ void ConnectedComponentSegmentationModule::UpdateCCFormulaVariablesList()
     }
   catch (itk::ExceptionObject& err)
     {
-    itkDebugMacro(<< err);
+    MsgReporter::GetInstance()->SendWarning(err.GetDescription());
     }
 
   const std::map<std::string, double*> & variables = tempFunctor.GetVar();

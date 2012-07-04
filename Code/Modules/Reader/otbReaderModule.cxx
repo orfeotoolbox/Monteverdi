@@ -731,7 +731,7 @@ void ReaderModule::ThreadedRun()
         {
         qlReader->Update();
         }
-      catch (itk::ExceptionObject & err)
+      catch (const itk::ExceptionObject &)
         {
         qlReadFromFile = false;
         }
@@ -782,7 +782,7 @@ void ReaderModule::ThreadedRun()
         {
         writer->Update();
         }
-      catch(itk::ExceptionObject & err)
+      catch(const itk::ExceptionObject &)
         {
         // Silent catch
         }
