@@ -171,7 +171,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
 
 
   // Show and refresh the interface
-  // this->wMainWindow->show();
+  this->guiMainWindow->show();
 
   m_View->GetFullWidget()->show();
   m_View->GetScrollWidget()->show();
