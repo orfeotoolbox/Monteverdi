@@ -167,17 +167,6 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
   m_PixelView->GetPixelDescriptionWidget()->resize(gPixelDescription->x(), gPixelDescription->y(),
                                                    gPixelDescription->w(), gPixelDescription->h());
 
-  //ObjectDataDescriptionWidget
-
-
-  // Show and refresh the interface
-  this->guiMainWindow->show();
-
-  m_View->GetFullWidget()->show();
-  m_View->GetScrollWidget()->show();
-  m_View->GetZoomWidget()->show();
-  m_PixelView->GetPixelDescriptionWidget()->show();
-
   // INPUT_IMAGE
   uiTmpOutputSelection->add("Input image");
 
