@@ -74,7 +74,7 @@ ProjectionView::ProjectionView()
   guiTRANSMERCATORScale->value("1");
   iTRANSMERCATOREast->value("0");
   iTRANSMERCATORNorth->value("0");
-  iTRANSMERCATORScale->value("1");*/
+  iTRANSMERCATORScale->value("1"); */
   guiCenterPixel->value(1);
   guiULPixel->value(0);
   guiUserDefinition->value(0);
