@@ -127,7 +127,7 @@ ProjectionController
 /**
  *
  */
-void
+/*void
 ProjectionController
 ::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
@@ -139,7 +139,7 @@ ProjectionController
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-}
+}*/
 
 /**
  *
@@ -197,7 +197,7 @@ ProjectionController
 /**
  *
  */
-void
+/*void
 ProjectionController
 ::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
@@ -209,7 +209,7 @@ ProjectionController
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }
-}
+}*/
 /**
  *
  */

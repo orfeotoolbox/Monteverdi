@@ -69,12 +69,12 @@ ProjectionView::ProjectionView()
   // Initiliaze the GUI values
   guiUTMZone->value("31");
   guiRSIDNumber->value("32631");
-  guiTRANSMERCATOREast->value("0");
+  /* guiTRANSMERCATOREast->value("0");
   guiTRANSMERCATORNorth->value("0");
   guiTRANSMERCATORScale->value("1");
   iTRANSMERCATOREast->value("0");
   iTRANSMERCATORNorth->value("0");
-  iTRANSMERCATORScale->value("1");
+  iTRANSMERCATORScale->value("1");*/
   guiCenterPixel->value(1);
   guiULPixel->value(0);
   guiUserDefinition->value(0);
@@ -206,52 +206,52 @@ void ProjectionView::RetrieveInputProjection()
         iMapSelection->value(1);
         iLambert2->show();
         iUTM->hide();
-        iTRANSMERCATOR->hide();
+        //  iTRANSMERCATOR->hide();
         }
-      else
-        if (strcmp(inputMap, "Transverse_Mercator") == 0)
-          {
-          // Get the value of the parameter scale_factor
-          if (this->FindParameter(oSRS, "scale_factor", &scale_factor))
-            {
 
-            if (scale_factor == 0.9996 /** Value Specific to UTM */)
-              {
-              iMapSelection->value(0);
-              iUTM->show();
-              iLambert2->hide();
-              iTRANSMERCATOR->hide();
+      /*   if (strcmp(inputMap, "Transverse_Mercator") == 0)
+       {
+       // Get the value of the parameter scale_factor
+       if (this->FindParameter(oSRS, "scale_factor", &scale_factor))
+       {
+       */
+      /*   if (scale_factor == 0.9996 )
+       {
+       iMapSelection->value(0);
+       iUTM->show();
+       iLambert2->hide();
+       iTRANSMERCATOR->hide();
 
-              // Get the number of the utm zone
-              int north = 0;
-              int zone = oSRS.GetUTMZone(&north);
+       // Get the number of the utm zone
+       int north = 0;
+       int zone = oSRS.GetUTMZone(&north);
 
-              // Fill the UTM Parameters in the GUI
-              itk::OStringStream oss;
-              oss << zone;
-              iUTMZone->value(oss.str().c_str());
+       // Fill the UTM Parameters in the GUI
+       itk::OStringStream oss;
+       oss << zone;
+       iUTMZone->value(oss.str().c_str());
 
-              if (north)
-                {
-                iUTMNorth->value(1);
-                iUTMSouth->value(0);
-                }
-              else
-                {
-                iUTMNorth->value(0);
-                iUTMSouth->value(1);
-                }
-              }
-            else
-              {
-              //Fill the TransverseMercator Parameters
-              iMapSelection->value(2);
-              iUTM->hide();
-              iLambert2->hide();
-              iTRANSMERCATOR->show();
-              }
-            }
-          }
+       if (north)
+       {
+       iUTMNorth->value(1);
+       iUTMSouth->value(0);
+       }
+       else
+       {
+       iUTMNorth->value(0);
+       iUTMSouth->value(1);
+       }
+       }
+       else
+       {
+       //Fill the TransverseMercator Parameters
+       iMapSelection->value(2);
+       iUTM->hide();
+       iLambert2->hide();
+       iTRANSMERCATOR->show();
+       }
+       }
+       }*/
       delete inputProjchar;
       }
     }
@@ -263,7 +263,7 @@ void ProjectionView::RetrieveInputProjection()
     iMapSelection->value(3);
     iUTM->hide();
     iLambert2->hide();
-    iTRANSMERCATOR->hide();
+    //iTRANSMERCATOR->hide();
     }
 
   // Default Case: Kwl & ProjRef  empty: Give the user the possibility to fill the proj he needs
@@ -422,7 +422,7 @@ void ProjectionView::UpdateMapParam()
       guiEastSelection->value(oss.str().c_str());
       break;
       }
-    case MAP_TRANSMERCATOR:
+/*    case MAP_TRANSMERCATOR:
       {
       newCartoPoint = rsTransform->GetTransform()->GetSecondTransform()->TransformPoint(geoPoint);
       oss.str("");
@@ -432,7 +432,7 @@ void ProjectionView::UpdateMapParam()
       oss << newCartoPoint[0];
       guiEastSelection->value(oss.str().c_str());
       break;
-      }
+      }*/
     case MAP_WGS84:
       {
       break;
@@ -847,13 +847,13 @@ void ProjectionView::UpdateWGS84Transform()
 /**
  *
  */
-void ProjectionView::UpdateTMTransform()
+/*void ProjectionView::UpdateTMTransform()
 {
   m_HaveUpdatePreview = true;
 
   m_Controller->UpdateTMTransform(atof(guiTRANSMERCATORScale->value()), atof(guiTRANSMERCATOREast->value()),
                                   atof(guiTRANSMERCATORNorth->value()));
-}
+}*/
 
 /**
  *
@@ -899,7 +899,7 @@ void ProjectionView::UpdateInputLambertIITransform()
 /**
  *
  */
-void ProjectionView::UpdateInputTMTransform()
+/*void ProjectionView::UpdateInputTMTransform()
 {
   m_HaveUpdatePreview = true;
 
@@ -908,7 +908,7 @@ void ProjectionView::UpdateInputTMTransform()
 
   // Update the whole transformation
   this->UpToDateTransform();
-}
+}*/
 
 /**
  *
@@ -945,11 +945,11 @@ void ProjectionView::UpToDateTransform()
       this->UpdateLambertIITransform();
       break;
       }
-    case MAP_TRANSMERCATOR:
+ /*   case MAP_TRANSMERCATOR:
       {
       this->UpdateTMTransform();
       break;
-      }
+      }*/
     case MAP_RSID:
       {
       this->UpdateEPSGTransform();
@@ -1293,12 +1293,12 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
       cartoPoint[0] = atof(guiEastSelection->value());
       break;
       }
-    case MAP_TRANSMERCATOR:
+/*    case MAP_TRANSMERCATOR:
       {
       cartoPoint[1] = atof(guiNorthSelection->value());
       cartoPoint[0] = atof(guiEastSelection->value());
       break;
-      }
+      }*/
     case MAP_WGS84:
       {
       // Since no WGS84 param are available in the GUI,

@@ -36,7 +36,6 @@ guiNorthSelection->show();
 m_MapType->show();
 m_UTM->show();
 m_Lambert2->hide();
-m_TRANSMERCATOR->hide();
 m_EPSG->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_UTM);
@@ -50,7 +49,6 @@ guiNorthSelection->show();
 m_MapType->show();
 m_UTM->hide();
 m_Lambert2->show();
-m_TRANSMERCATOR->hide();
 m_EPSG->hide();
 this->m_MapType->redraw();
 SetMapType(MAP_LAMBERT2);
@@ -58,25 +56,10 @@ this->UpdateLambertIITransform();}
               xywh {30 30 100 25} labelsize 11
             }
             MenuItem {} {
-              label TRANSMERCATOR
-              callback {guiEastSelection->show();
-guiNorthSelection->show();
-m_MapType->show();
-m_UTM->hide();
-m_Lambert2->hide();
-m_TRANSMERCATOR->show();
-m_EPSG->hide();
-this->m_MapType->redraw();
-SetMapType(MAP_TRANSMERCATOR);
-this->UpdateTMTransform();}
-              xywh {30 30 100 25} labelsize 11
-            }
-            MenuItem {} {
               label {WGS 84}
               callback {m_MapType->show();
 m_UTM->hide();
 m_Lambert2->hide();
-m_TRANSMERCATOR->hide();
 m_EPSG->hide();
 guiEastSelection->hide();
 guiNorthSelection->hide();
@@ -91,7 +74,6 @@ this->UpdateWGS84Transform();}
 m_MapType->show();
 m_UTM->hide();
 m_Lambert2->hide();
-m_TRANSMERCATOR->hide();
 guiEastSelection->show();
 guiNorthSelection->show();
 this->m_MapType->redraw();
@@ -191,31 +173,6 @@ this->UpdateOriginGeographicalCoordinates();}
                 xywh {25 353 35 39} down_box ROUND_DOWN_BOX align 8
               }
             }
-            Fl_Group m_TRANSMERCATOR {open
-              xywh {15 268 225 174} selection_color 7 hide
-            } {
-              Fl_Input guiTRANSMERCATOREast {
-                label {False easting}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter false easting} xywh {115 301 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiTRANSMERCATORNorth {
-                label {False northing}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter false northing} xywh {115 332 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input guiTRANSMERCATORScale {
-                label {Scale factor}
-                callback {//UpdateLongLat();
-this->UpdateTMTransform();
-this->UpdateOriginGeographicalCoordinates();}
-                tooltip {Enter scale factor} xywh {115 363 120 25} box EMBOSSED_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-            }
             Fl_Group m_Lambert2 {open
               xywh {15 268 225 174} selection_color 7 hide
             } {}
@@ -284,7 +241,6 @@ this->ActivateMapParamaters();}
               label UTM
               callback {iUTM->show();
 iLambert2->hide();
-iTRANSMERCATOR->hide();
 iSensorModel->hide();
 this->iMapType->redraw();
 this->UpdateInputUTMTransform();}
@@ -294,28 +250,16 @@ this->UpdateInputUTMTransform();}
               label LAMBERT2
               callback {iUTM->hide();
 iLambert2->show();
-iTRANSMERCATOR->hide();
 iSensorModel->hide();
 this->m_MapType->redraw();
 this->UpdateInputLambertIITransform();}
               xywh {35 35 100 25} labelsize 11
             }
             MenuItem {} {
-              label TRANSMERCATOR
-              callback {iUTM->hide();
-iLambert2->hide();
-iSensorModel->hide();
-iTRANSMERCATOR->show();
-this->m_MapType->redraw();
-this->UpdateInputTMTransform();}
-              xywh {35 35 100 25} labelsize 11
-            }
-            MenuItem {} {
               label {SENSOR MODEL}
               callback {iUTM->hide();
 iLambert2->hide();
-iTRANSMERCATOR->hide();
-iSensorModel->show();}
+iSensorModel->show();} selected
               xywh {45 45 100 25} labelsize 11
             }
           }
@@ -353,28 +297,6 @@ this->UpdateInputUTMTransform();}
               callback {this->UpdateInputLambertIITransform();} open
               xywh {31 130 360 160} hide
             } {}
-            Fl_Group iTRANSMERCATOR {open
-              xywh {31 130 360 160} hide
-            } {
-              Fl_Input iTRANSMERCATOREast {
-                label {False easting}
-                callback {//UpdateLongLat();
-this->UpdateInputTMTransform();}
-                tooltip {Enter false easting} xywh {166 201 160 25} box PLASTIC_DOWN_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input iTRANSMERCATORNorth {
-                label {False northing}
-                callback {//UpdateLongLat();
-this->UpdateInputTMTransform();}
-                tooltip {Enter false northing} xywh {166 232 160 25} box PLASTIC_DOWN_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-              Fl_Input iTRANSMERCATORScale {
-                label {Scale factor}
-                callback {//UpdateLongLat();
-this->UpdateInputTMTransform();}
-                tooltip {Enter scale factor} xywh {166 263 160 25} box PLASTIC_DOWN_BOX color 54 selection_color 39 labelcolor 186 textcolor 187
-              }
-            }
             Fl_Group iSensorModel {open
               xywh {41 140 360 160} hide
             } {}
@@ -570,55 +492,123 @@ vAverageElevation->deactivate();
       }
     }
   }
-  Function {ProjectionGroup()} {} {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {ProjectionGroup()} {} {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {~ProjectionGroup()} {open return_type virtual
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {OpenDEM()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {OK()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {SelectAction()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {SetMapType(ProjectionMapType map)} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {SetInterpolatorType(ProjectionInterpolatorType interp)} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateMapParam()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateLongLat()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateUTMTransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
-  Function {UpdateTMTransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateLambertIITransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateInputUTMTransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
-  Function {UpdateInputTMTransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateInputLambertIITransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateWGS84Transform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateEPSGTransform()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {Browse()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateDEMUse()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateRpcEstimation()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {DisplayPreviewWidget()} {open protected return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {TabPositionHandler()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {UpdateOriginGeographicalCoordinates()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {DeactivateMapParamaters()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
   Function {ActivateMapParamaters()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
-  Function {TestUpdateEPSGTransform()} {open selected return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
+  Function {TestUpdateEPSGTransform()} {open return_type {virtual void}
+  } {
+    comment {for fluid 1.3} {in_source not_in_header
+    }
+  }
 } 

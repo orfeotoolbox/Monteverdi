@@ -121,7 +121,7 @@ public:
   virtual void InitializeLambertIITransform();
 
   /** Initialize the transmecator proejction */
-  virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing);
+  //virtual void UpdateTMTransform(double scale, double falseEasting, double falseNorthing);
 
   /** Update the Input UTM Projection*/
   virtual void UpdateInputUTMTransform(int zone, bool north);
@@ -133,7 +133,7 @@ public:
   virtual void InitializeInputLambertIITransform();
 
   /** Initialize the Input transmecator proejction */
-  virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
+  //virtual void UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing);
 
 
   /** Initialize the WGS84 transform*/

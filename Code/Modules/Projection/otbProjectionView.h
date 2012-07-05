@@ -169,7 +169,7 @@ protected:
   //
   virtual void UpdateLambertIITransform();
   //
-  virtual void UpdateTMTransform();
+  // virtual void UpdateTMTransform();
   //
   virtual void UpdateWGS84Transform();
   //
@@ -180,7 +180,7 @@ protected:
   //
   virtual void UpdateInputLambertIITransform();
   //
-  virtual void UpdateInputTMTransform();
+  //virtual void UpdateInputTMTransform();
   //
   virtual void UpdateInputEPSGTransform();
    //

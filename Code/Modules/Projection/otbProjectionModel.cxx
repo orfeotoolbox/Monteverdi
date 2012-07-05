@@ -110,7 +110,7 @@ void ProjectionModel::InitializeInputLambertIITransform()
 /**
  * Initialize the Transmercator Projection and Transform
  */
-void ProjectionModel::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
+/*void ProjectionModel::UpdateInputTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
@@ -129,7 +129,7 @@ void ProjectionModel::UpdateInputTMTransform(double scale, double falseEasting, 
   m_TempTransformChanged = true;
   this->NotifyAll();
   m_TempTransformChanged = false;
-}
+}*/
 
 void ProjectionModel::UpdateInputEPSGTransform(int rsidNumber)
 {
@@ -241,7 +241,7 @@ void ProjectionModel::InitializeLambertIITransform()
 /**
  * Initialize the Transmercator Projection and Transform
  */
-void ProjectionModel::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
+/*void ProjectionModel::UpdateTMTransform(double scale, double falseEasting, double falseNorthing)
 {
   typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
   TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
@@ -263,7 +263,7 @@ void ProjectionModel::UpdateTMTransform(double scale, double falseEasting, doubl
   m_TransformChanged = true;
   this->NotifyAll();
   m_TransformChanged = false;
-}
+}*/
 
 /**
  *
