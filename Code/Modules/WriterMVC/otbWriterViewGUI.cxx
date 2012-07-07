@@ -73,6 +73,8 @@ WriterViewGUI
 {
   assert(m_WriterController.IsNotNull() && "The controller is not created");
 
+  guiMainWindow->show();
+
 // Scroll
   gScroll->add(m_VisuView->GetScrollWidget());
   gScroll->resizable(m_VisuView->GetScrollWidget());
