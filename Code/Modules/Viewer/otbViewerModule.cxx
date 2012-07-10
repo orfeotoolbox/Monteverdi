@@ -1458,6 +1458,10 @@ void ViewerModule::UpdateTabHistogram()
     m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveR);
     m_BlueCurveWidgetGroup->AddCurve(m_BlueVaCurveL);
 
+    // Set the extremum of the curve
+    m_BlueHistogramHandler->SetMinimumAbcisse(bhistogram->GetMinimum()[0]);
+    m_BlueHistogramHandler->SetMaximumAbcisse(bhistogram->GetMaximum()[0]);
+
     // Edit the channel we're changing
     m_BlueHistogramHandler->SetChannel(2);
     }
@@ -1486,6 +1490,10 @@ void ViewerModule::UpdateTabHistogram()
     // Add the asymptote to the curve
     m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveR);
     m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
+
+    // Set the extremum of the curve
+    m_GreenHistogramHandler->SetMinimumAbcisse(ghistogram->GetMinimum()[0]);    
+    m_GreenHistogramHandler->SetMaximumAbcisse(ghistogram->GetMaximum()[0]);
 
     // Edit the channel we're changing
     m_GreenHistogramHandler->SetChannel(1);
@@ -1529,6 +1537,8 @@ void ViewerModule::UpdateTabHistogram()
 
   // Edit the channel we're changing
   m_RedHistogramHandler->SetChannel(0);
+  m_RedHistogramHandler->SetMinimumAbcisse(rhistogram->GetMinimum()[0]);
+  m_RedHistogramHandler->SetMaximumAbcisse(rhistogram->GetMaximum()[0]);
   
 }
 
