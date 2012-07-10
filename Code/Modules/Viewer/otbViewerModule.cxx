@@ -1492,7 +1492,7 @@ void ViewerModule::UpdateTabHistogram()
     m_GreenCurveWidgetGroup->AddCurve(m_GreenVaCurveL);
 
     // Set the extremum of the curve
-    m_GreenHistogramHandler->SetMinimumAbcisse(ghistogram->GetMinimum()[0]);    
+    m_GreenHistogramHandler->SetMinimumAbcisse(ghistogram->GetMinimum()[0]);
     m_GreenHistogramHandler->SetMaximumAbcisse(ghistogram->GetMaximum()[0]);
 
     // Edit the channel we're changing
