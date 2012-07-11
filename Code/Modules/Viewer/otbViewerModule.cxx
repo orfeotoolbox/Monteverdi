@@ -1439,6 +1439,8 @@ void ViewerModule::UpdateTabHistogram()
     bhistogram->SetHistogramColor(m_Blue);
     bhistogram->SetLabelColor(m_Blue);
     bhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(2));
+    // Before rendering is called to get the extremum of the histogram
+    bhistogram->BeforeRendering();
     m_BlueCurveWidgetGroup->AddCurve(bhistogram);
 
     // Add to the gHistogram group
@@ -1472,6 +1474,8 @@ void ViewerModule::UpdateTabHistogram()
     ghistogram->SetHistogramColor(m_Green);
     ghistogram->SetLabelColor(m_Green);
     ghistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(1));
+    // Before rendering is called to get the extremum of the histogram
+    ghistogram->BeforeRendering();
     m_GreenCurveWidgetGroup->AddCurve(ghistogram);
 
     //Add to the gHistogram group
@@ -1522,6 +1526,8 @@ void ViewerModule::UpdateTabHistogram()
     }
 
   rhistogram->SetHistogram(imageLayer->GetHistogramList()->GetNthElement(0));
+  // Before rendering is called to get the extremum of the histogram
+  rhistogram->BeforeRendering();
   m_RedCurveWidgetGroup->AddCurve(rhistogram);
   // Left Asymptote
   m_RedVaCurveL->SetAbcisse(renderer->GetParameters().GetElement(0));
