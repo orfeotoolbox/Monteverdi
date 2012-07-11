@@ -638,9 +638,17 @@ void
 SupervisedClassificationAppli
 ::LoadSVMModel()
 {
+  if (m_ClassesMap.size() != 0) // reset class list
+    {
+    unsigned int nbClass = m_ClassesMap.size();
+    for (unsigned int classIndex = 0; classIndex < nbClass; classIndex++)
+      {
+      dClassList->value(1);
+      this->RemoveClass();
+      }
+    }
   m_Model = ModelType::New();
   m_Model->LoadModel(m_ModelFileName.c_str());
-
   m_ClassesMap.clear();
   m_CurrentLabel = 1;
 
@@ -649,6 +657,7 @@ SupervisedClassificationAppli
     this->AddClass();
     }
 
+  this->m_UpToDateResult = false;
   bLearn->set();
   bSaveClassifAsVectorData->activate();
   bSaveSVMModel->activate();
@@ -1826,16 +1835,15 @@ void
 SupervisedClassificationAppli
 ::SetupClassification()
 {
-  m_ClassificationFilter = ClassificationFilterType::New();
   m_ClassificationFilter->SetModel(m_Model);
   m_ClassificationFilter->SetInput(m_InputImage);
+  m_ChangeLabelFilter->ClearChangeMap();
   m_ChangeLabelFilter->SetInput(m_ClassificationFilter->GetOutput());
   m_ChangeLabelFilter->SetNumberOfComponentsPerPixel(3);
 
   for (ClassesMapType::iterator it = m_ClassesMap.begin(); it != m_ClassesMap.end(); ++it)
     {
     OverlayImageType::PixelType color(3);
-
     color[0] = static_cast<unsigned char>((*it)->GetColor()[0] * 255);
     color[1] = static_cast<unsigned char>((*it)->GetColor()[1] * 255);
     color[2] = static_cast<unsigned char>((*it)->GetColor()[2] * 255);
@@ -2025,17 +2033,17 @@ void
 SupervisedClassificationAppli
 ::DisplayResults()
 {
-   bDisplay->deactivate();
-   if (static_cast<int>(bDisplay->value()) == 0)
-   {
-       this->ShowImage();
-   }
+  bDisplay->deactivate();
+  if (static_cast<int> (bDisplay->value()) == 0)
+    {
+    this->ShowImage();
+    }
   else
     {
-       this->SetupClassification();
-       this->ShowResults();
+    this->SetupClassification();
+    this->ShowResults();
     }
-   bDisplay->activate();
+  bDisplay->activate();
 }
 
 
