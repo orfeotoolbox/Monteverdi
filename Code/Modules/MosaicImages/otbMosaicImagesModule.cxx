@@ -119,8 +119,6 @@ void MosaicImagesModule::Run()
       TileIndexType tindex(row, col);
       TileType      tile(image, ql);
       tileMap[tindex] = tile;
-      
-      std::cout<<"Image "<<imageName<<" will be placed at "<<row<<", "<<col<<" location"<<std::endl;
 
       // Update layout
       if(layout[0] < col)
@@ -150,7 +148,6 @@ void MosaicImagesModule::Run()
       it!=tileMap.end(); ++it)
     {
     unsigned int linearIndex = it->first.first * layout[0] + it->first.second;
-    std::cout<<"Adding image with linear index: "<<linearIndex<<std::endl;
     m_VectorTileFilter->SetInput(linearIndex, it->second.first);
     
     if(quicklookAvailable)
@@ -182,16 +179,11 @@ void MosaicImagesModule::Run()
  
     }
 
-  std::cout<<"Layout: "<<layout<<std::endl;
-
   m_VectorTileFilter->GetOutput()->UpdateOutputInformation();
   if(quicklookAvailable)
     {
     m_QLVectorTileFilter->GetOutput()->UpdateOutputInformation();
     }
-
-  //std::cout<<"Largest region: "<<m_VectorTileFilter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
-  //std::cout<<"Largest QLregion: "<<m_QLVectorTileFilter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
