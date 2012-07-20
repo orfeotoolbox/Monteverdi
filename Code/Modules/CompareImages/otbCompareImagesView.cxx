@@ -112,7 +112,7 @@ CompareImagesView
                             stat_element_width, stat_element_height);
   
   std::ostringstream ostream_rmse;
-  ostream_rmse << vcl_sqrt(GetModel()->GetRMSE());
+  ostream_rmse << GetModel()->GetRMSE();
 
   
   stat_element->value(ostream_rmse.str().c_str());
