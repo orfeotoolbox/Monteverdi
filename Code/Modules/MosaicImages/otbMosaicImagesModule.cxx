@@ -50,7 +50,7 @@ void MosaicImagesModule::Run()
 
   TileMapType tileMap;
 
-  unsigned int nbComp = 0;
+  // unsigned int nbComp = 0;
   unsigned int shrinkFactor = 0;
 
   // First step is to retrieve the inputs
@@ -86,7 +86,7 @@ void MosaicImagesModule::Run()
       image = vectorImageQL->GetImage();
       ql    = vectorImageQL->GetQuicklook();
       
-      nbComp = image->GetNumberOfComponentsPerPixel();
+      // nbComp = image->GetNumberOfComponentsPerPixel();
       shrinkFactor = vectorImageQL->GetShrinkFactor();
       
       // Retrieve band name
@@ -101,7 +101,7 @@ void MosaicImagesModule::Run()
         itkExceptionMacro("Could not retrieve input "<<i<<" as a multi-band image");
         }
       
-      nbComp = image->GetNumberOfComponentsPerPixel();
+      // nbComp = image->GetNumberOfComponentsPerPixel();
       
       // Retrieve band name
       imageName = this->GetInputDataDescription<VectorImageType>("InputImages", i);

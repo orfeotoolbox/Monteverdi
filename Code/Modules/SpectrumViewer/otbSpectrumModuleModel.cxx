@@ -230,12 +230,12 @@ SpectrumModuleModel
   m_SpectralAnglefilterQL->SetInput(m_LayerGenerator->GetLayer()->GetQuicklook());
   m_rescaleFilterQL->SetInput(m_SpectralAnglefilterQL->GetOutput());
 
-  float val = 0;
+  // float val = 0;
 
   if (m_UseColorMap)
     {
     ForceSpectralContrast(m_OriginalDynamic);
-    val = m_OriginalDynamic;
+    // val = m_OriginalDynamic;
     // set a color-mapper
     m_Colormapper->UseInputImageExtremaForScalingOff();
     m_ColormapperQL->UseInputImageExtremaForScalingOff();
@@ -260,7 +260,7 @@ SpectrumModuleModel
     {
     ForceSpectralContrast(m_LastBWContrast);
 
-    val = m_LastBWContrast;
+    // val = m_LastBWContrast;
 
     // image to vector image (in)
     m_CastImage->SetInput(m_rescaleFilterImage->GetOutput());

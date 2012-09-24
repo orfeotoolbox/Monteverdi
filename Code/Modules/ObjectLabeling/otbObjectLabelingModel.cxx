@@ -450,7 +450,7 @@ namespace otb
   ObjectLabelingModel::LabelType ObjectLabelingModel::GetNextAvailableClassLabel()
   {
     // Check for an available label
-    ObjectClassVectorType::const_iterator it = m_Classes.begin();
+    // ObjectClassVectorType::const_iterator it = m_Classes.begin();
     LabelType newLabel = 0;
     bool      available = false;
 

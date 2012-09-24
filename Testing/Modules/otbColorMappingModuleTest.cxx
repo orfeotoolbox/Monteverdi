@@ -27,8 +27,8 @@
 int otbColorMappingModuleTest(int argc, char* argv[])
 {
 
-  bool withComplex = false;
-  if (atoi(argv[2]) == 1) withComplex = true;
+  // bool withComplex = false;
+  // if (atoi(argv[2]) == 1) withComplex = true;
 
   //Internationalization
   otbI18nMacro();

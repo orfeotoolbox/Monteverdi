@@ -608,7 +608,7 @@ int ProjectionView::UpdateInterpolator()
 {
   m_HaveUpdatePreview = true;
 
-  int res = 0;
+  // int res = 0;
 
   switch (this->GetInterpolatorType())
     {
@@ -721,7 +721,7 @@ int ProjectionView::UpdateInterpolator()
       //       }
     default:
       fl_alert("Problem with map projection type, please contact developpers");
-      res = 1;
+      // res = 1;
       break;
     }
   return 0;

@@ -233,7 +233,7 @@ void UncompressJpeg2000Module::UpdateRegion()
 
   m_SelectAreaHandler->UpdateGlRegion();
   
-  IndexType tileRegIndex = m_TileRegionGl->GetRegion().GetIndex();
+  // IndexType tileRegIndex = m_TileRegionGl->GetRegion().GetIndex();
   SizeType tileRegSize = m_TileRegionGl->GetRegion().GetSize();
   
   /** update size on disk */

@@ -1603,7 +1603,7 @@ void ViewerModule::SetContrastStretch()
 {
   ImageLayerType::Pointer imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
 
-  ContrastStretchEnumType contrastStretch;
+  // ContrastStretchEnumType contrastStretch;
 
   ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
 
@@ -1612,7 +1612,7 @@ void ViewerModule::SetContrastStretch()
   if (guiContrastStretchSelection->value() == LINEAR_CONTRAST_STRETCH)
     {
     //renderer = StandardRenderingFunctionType::New();
-    contrastStretch = LINEAR_CONTRAST_STRETCH;
+    // contrastStretch = LINEAR_CONTRAST_STRETCH;
     guiSetStandardDeviation->hide();
     guiGroupQuantiles->show();
     }
@@ -1620,7 +1620,7 @@ void ViewerModule::SetContrastStretch()
     if (guiContrastStretchSelection->value() == GAUSSIAN_CONTRAST_STRETCH)
       {
       //renderer = GaussianRenderingFunctionType::New();
-      contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
+      // contrastStretch = GAUSSIAN_CONTRAST_STRETCH;
       guiGroupQuantiles->hide();
       guiSetStandardDeviation->show();
       }
@@ -1628,14 +1628,14 @@ void ViewerModule::SetContrastStretch()
       if (guiContrastStretchSelection->value() == SQUARE_ROOT_CONTRAST_STRETCH)
         {
         //renderer = SquareRootRenderingFunctionType::New();
-        contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
+        // contrastStretch = SQUARE_ROOT_CONTRAST_STRETCH;
         guiGroupQuantiles->show();
         guiSetStandardDeviation->hide();
         }
       else /* guiContrastStretchSelection->value() == NO_CONTRAST_STRETCH */
         {
         //renderer = NoStretchRenderingFunctionType::New();
-        contrastStretch = NO_CONTRAST_STRETCH;
+        // contrastStretch = NO_CONTRAST_STRETCH;
         guiGroupQuantiles->hide();
         guiSetStandardDeviation->hide();
         //guiGroupStretch->redraw();
