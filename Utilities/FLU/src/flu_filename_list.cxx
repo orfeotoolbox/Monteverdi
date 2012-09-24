@@ -25,6 +25,28 @@
 //#include <config.h>
 #include "flu-config.h"
 
+
+#if defined(__APPLE__)
+
+// Starting with MacOSX 10.8, the scandir prototype is POSIX compliant
+// We need to check MAC_OS_X_VERSION_MAX_ALLOWED MAC_OS_X_VERSION_10_8
+// macros to figure this out
+// See http://www.fltk.org/str.php?L2864 for a similar fix in FLTK sources
+
+// MAC_OS_X_VERSION_10_8 is defined in <FL/x.H>
+// starting from rev 9649
+#  include <FL/x.H>
+
+// Case where FLTK rev is < 9649
+#  ifndef MAC_OS_X_VERSION_10_8
+#    define MAC_OS_X_VERSION_10_8 1080
+#  endif
+
+// This defines MAC_OS_X_VERSION_MAX_ALLOWED
+#  include "AvailabilityMacros.h"
+
+#endif
+
 #if !defined(__GLIBC_PREREQ)
 #   define  __GLIBC_PREREQ(a,b) 0
 #endif
@@ -63,9 +85,10 @@ int flu_filename_list(const char *d, dirent ***list,
 #elif !defined(__sgi)
   // The vast majority of UNIX systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
-  // changes:
-
-#if ( defined(__GLIBC__) && __GLIBC_PREREQ(2, 10) ) || ( defined(__FreeBSD__) )
+  // changes
+#if (defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 10)) \
+    || defined(__FreeBSD__) \
+    || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8)
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #else
   int n = scandir(d, list, 0, (int(*)(const void*, const void*))sort);
