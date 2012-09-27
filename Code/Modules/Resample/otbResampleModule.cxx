@@ -373,7 +373,7 @@ void ResampleModule::OK()
   this->NotifyOutputsChange();
 
   // Close the GUI
-  this->Hide();
+  this->Quit();
 }
 
 void ResampleModule::Quit()
