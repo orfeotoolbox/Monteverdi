@@ -85,7 +85,7 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ExtractROIModule, Module);
+  itkTypeMacro(TileMapImportModule, Module);
 
   /** OTB typedefs */
 
