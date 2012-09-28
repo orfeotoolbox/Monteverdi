@@ -263,7 +263,7 @@ void ResampleModule::UpdateSize()
   if(spacing[0] > 0 && spacing[1] > 0) m_ScalableTransform->Rotate2D( rot_angle * CONST_PI_180 );
   else m_ScalableTransform->Rotate2D( - rot_angle * CONST_PI_180 );
   m_ScalableTransform->SetCenter( centerPoint );
-  m_ScalableTransform->Scale( scale );
+  // m_ScalableTransform->Scale( scale );
 
   //inverse transform
   ScalableTransformType::Pointer inverseTransform = ScalableTransformType::New();
@@ -328,7 +328,8 @@ void ResampleModule::UpdateSize()
 
   // Evaluate spacing
   ImageType::SpacingType OutputSpacing;
-  OutputSpacing=spacing;
+  OutputSpacing[0] = scale[0] * spacing[0];
+  OutputSpacing[1] = scale[1] * spacing[1];
 
   m_ResampleFilter->SetOutputSpacing( OutputSpacing );
   ImageType::PixelType defPix;
