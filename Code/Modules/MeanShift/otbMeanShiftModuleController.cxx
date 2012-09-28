@@ -111,7 +111,7 @@ MeanShiftModuleController
     {
     MsgReporter::GetInstance()->SendError(e.what());
     return;
-    }  
+    }
 }
 
 void
@@ -156,7 +156,7 @@ MeanShiftModuleController
     {
     MsgReporter::GetInstance()->SendError(e.what());
     return;
-    }  
+    }
 }
 
 void
@@ -176,7 +176,7 @@ MeanShiftModuleController
     {
     MsgReporter::GetInstance()->SendError(e.what());
     return;
-    }  
+    }
 }
 
 void
@@ -196,7 +196,7 @@ MeanShiftModuleController
     {
     MsgReporter::GetInstance()->SendError(e.what());
     return;
-    }  
+    }
 }
 
 void
@@ -216,7 +216,7 @@ MeanShiftModuleController
     {
     MsgReporter::GetInstance()->SendError(e.what());
     return;
-    }  
+    }
 }
 
 } // end namespace otb
