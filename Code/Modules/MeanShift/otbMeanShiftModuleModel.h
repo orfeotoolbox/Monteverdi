@@ -82,7 +82,7 @@ public:
   }
 
   /** Open an image */
-  void RunSegmentation();
+  void RunSegmentationModel();
   void SwitchClusters(bool sc);
   void SwitchBoundaries(bool sc);
 

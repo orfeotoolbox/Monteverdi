@@ -81,65 +81,142 @@ void
 MeanShiftModuleController
 ::UpdateViewerDisplay()
 {
-  if (!m_Model->GetIsImageReady())
+  try
     {
+    if (!m_Model->GetIsImageReady())
+      {
+      return;
+      }
+
+    std::vector<unsigned int> channels;
+    if (m_View->rViewerSetupColorMode->value())
+      {
+      channels.push_back(atoi(m_View->iRChannelChoice->value()) - 1);
+      channels.push_back(atoi(m_View->iGChannelChoice->value()) - 1);
+      channels.push_back(atoi(m_View->iBChannelChoice->value()) - 1);
+      }
+    else if (m_View->rViewerSetupGrayscaleMode->value())
+      {
+      channels.push_back(atoi(m_View->iGrayscaleChannelChoice->value()) - 1);
+      }
+
+    m_Model->UpdateViewerDisplay(channels);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
     return;
     }
-
-  std::vector<unsigned int> channels;
-  if (m_View->rViewerSetupColorMode->value())
+  catch (std::exception& e)
     {
-    channels.push_back(atoi(m_View->iRChannelChoice->value()) - 1);
-    channels.push_back(atoi(m_View->iGChannelChoice->value()) - 1);
-    channels.push_back(atoi(m_View->iBChannelChoice->value()) - 1);
-    }
-  else if (m_View->rViewerSetupGrayscaleMode->value())
-    {
-    channels.push_back(atoi(m_View->iGrayscaleChannelChoice->value()) - 1);
-    }
-
-  m_Model->UpdateViewerDisplay(channels);
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }  
 }
 
 void
 MeanShiftModuleController
 ::RunSegmentation()
 {
-  m_Model->RunSegmentation();
-
-  if (m_View->mBoundButton->value() != 0)
+  try
     {
-    m_Model->SwitchBoundaries(true);
-    }
+    m_Model->RunSegmentationModel();
 
+    if (m_View->mBoundButton->value() != 0)
+      {
+      m_Model->SwitchBoundaries(true);
+      }
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+  catch (std::exception& e)
+    {
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }
 }
 
 void
 MeanShiftModuleController
 ::SetOpacity(double op)
 {
-  m_Model->SetOpacity(op);
+  try
+    {
+    m_Model->SetOpacity(op);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+  catch (std::exception& e)
+    {
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }  
 }
 
 void
 MeanShiftModuleController
 ::SwitchClusters(bool sc)
 {
-  m_Model->SwitchClusters(sc);
+  try
+    {
+    m_Model->SwitchClusters(sc);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+  catch (std::exception& e)
+    {
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }  
 }
 
 void
 MeanShiftModuleController
 ::SwitchBoundaries(bool sb)
 {
-  m_Model->SwitchBoundaries(sb);
+  try
+    {
+    m_Model->SwitchBoundaries(sb);
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+  catch (std::exception& e)
+    {
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }  
 }
 
 void
 MeanShiftModuleController
 ::Quit()
 {
-  m_Model->Quit();
+  try
+    {
+    m_Model->Quit();
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    return;
+    }
+  catch (std::exception& e)
+    {
+    MsgReporter::GetInstance()->SendError(e.what());
+    return;
+    }  
 }
 
 } // end namespace otb

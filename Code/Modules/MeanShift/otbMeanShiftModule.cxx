@@ -99,16 +99,16 @@ void MeanShiftModule::Notify(const std::string& event)
 
     // Add outputs
     FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
-    this->AddOutputDescriptor(filteredOutput, "Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
+    if (filteredOutput.IsNotNull()) this->AddOutputDescriptor(filteredOutput, "Filtered Image", otbGetTextMacro("Result of the MeanShift filtering"));
 
     FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
-    this->AddOutputDescriptor(clusteredOutput, "Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
+    if (filteredOutput.IsNotNull()) this->AddOutputDescriptor(clusteredOutput, "Clustered Image", otbGetTextMacro("Result of the MeanShift clustering"));
 
     LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-    this->AddOutputDescriptor(labeledOutput, "Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
+    if (labeledOutput.IsNotNull()) this->AddOutputDescriptor(labeledOutput, "Labeled Image", otbGetTextMacro("Result of the MeanShift labeling"));
 
     LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
-    this->AddOutputDescriptor(boundOutput, "Boundaries Image", otbGetTextMacro("Cluster image boundaries"));
+    if (boundOutput.IsNotNull()) this->AddOutputDescriptor(boundOutput, "Boundaries Image", otbGetTextMacro("Cluster image boundaries"));
 
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
