@@ -121,7 +121,7 @@ CachingPathManager
 ::ChangeCachingPath()
 {
   const char * filename = NULL;
-  filename = flu_dir_chooser(otbGetTextMacro("Choose a caching direstory..."), "*.*", "");
+  filename = flu_dir_chooser(otbGetTextMacro("Choose a caching direstory..."), "");
   
   if (filename == NULL)
     {
