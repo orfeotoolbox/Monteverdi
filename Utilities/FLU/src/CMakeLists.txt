@@ -6,7 +6,7 @@ ENDIF(CYGWIN)
 # Handle Large File Support
 #
 # Needed to avoid Flu_FileChooser calling fl_filename_list function from FLTK,
-# leading to filename mess if FLTK is not built with lare file support
+# leading to filename mess if FLTK is not built with large file support
 #
 # We redefine fl_filename_list in function flu_filename_list
 # This involves adding the files :
