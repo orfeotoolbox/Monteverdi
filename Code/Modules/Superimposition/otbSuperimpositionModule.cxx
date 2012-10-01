@@ -129,11 +129,13 @@ void SuperimpositionModule::Browse()
 {
   const char * filename = NULL;
 
+  /*
   const char* defaultPath = "";
   if (otb::ConfigurationFile::GetInstance()->IsValid())
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
+  */
   filename = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), "*.*", "");
 
   if (filename == NULL)
