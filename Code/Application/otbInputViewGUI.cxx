@@ -47,7 +47,7 @@ InputViewGUI
 ::BuildInputInterface()
 {
   // Check if model and controller are available
-  if (m_Model.IsNotNull() && m_Controller != NULL)
+  if (m_Model.IsNotNull() && m_Controller.GetPointer() != NULL)
     {
     // Size range
     wInputWindow->size_range(wInputWindow->w(), wInputWindow->h(), wInputWindow->w(), 0, 0, 0);
