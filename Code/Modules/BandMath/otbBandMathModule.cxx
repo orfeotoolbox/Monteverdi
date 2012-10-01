@@ -246,7 +246,6 @@ void BandMathModule::LiveCheck()
 {
   ParserType::Pointer dummyParser = ParserType::New();
   std::vector<double> dummyVars;
-  double value;
   
   ui_Expression->color(FL_GREEN);
   ui_Expression->tooltip("The Expression is Valid");
@@ -262,7 +261,7 @@ void BandMathModule::LiveCheck()
   // Check the expression
   try
     {
-    value = dummyParser->Eval();
+    dummyParser->Eval();
     }
   catch(itk::ExceptionObject& err)
     {
