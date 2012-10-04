@@ -16,8 +16,8 @@ ADD_DEFINITIONS(
 #-----------------------------------------------------------------------------
 # Montevrdi version number.  An even minor number corresponds to releases.
 SET(Monteverdi_VERSION_MAJOR "1")
-SET(Monteverdi_VERSION_MINOR "12")
-SET(Monteverdi_VERSION_PATCH "1")
+SET(Monteverdi_VERSION_MINOR "13")
+SET(Monteverdi_VERSION_PATCH "0")
 
 
 # Version string should not include patch level.  The major.minor is
