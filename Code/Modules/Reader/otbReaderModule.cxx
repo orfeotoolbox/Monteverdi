@@ -488,9 +488,18 @@ void ReaderModule::OpenRealImage()
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
-    filepath += ":";
-    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
-    filepath += ossDatasetId.str();
+  if(m_TypeJPEG2000)
+    {
+    itk::OStringStream oss;
+    oss<<filepath<<"?&resol="<<vDataset->value();
+    filepath = oss.str();
+    }
+  else if(m_TypeHdf)
+    {
+    itk::OStringStream oss;
+    oss<<filepath<<"?&sdataidx="<<vDataset->value();
+    filepath= oss.str();
+    }
   }
 
   // Add the full data set as a descriptor
@@ -522,10 +531,18 @@ void ReaderModule::OpenRealImageWithQuicklook()
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
-    m_Resolution = vDataset->value();
-    otbFilepath += ":";
-    ossDatasetId << m_Resolution; // Following the convention in GDALImageIO
-    otbFilepath += ossDatasetId.str();
+  if(m_TypeJPEG2000)
+    {
+    itk::OStringStream oss;
+    oss<<otbFilepath<<"?&resol="<<vDataset->value();
+    otbFilepath = oss.str();
+    }
+  else if(m_TypeHdf)
+    {
+    itk::OStringStream oss;
+    oss<<otbFilepath<<"?&sdataidx="<<vDataset->value();
+    otbFilepath= oss.str();
+    }
   }
 
   // Add the full data set as a descriptor
@@ -745,10 +762,11 @@ void ReaderModule::ThreadedRun()
       try
         {
         qlReader = FPVReaderType::New();
-        qlReader->SetFileName(m_Filepath);
         if (!m_Desc.empty() && vDataset->visible() )
           {
-          qlReader->SetAdditionalNumber(resolution);
+          itk::OStringStream oss;
+          oss<<m_Filepath<<"?&resol="<<resolution;
+          qlReader->SetFileName(oss.str());
           }
         m_ProcessObject = qlReader;
         qlReader->Update();
@@ -874,9 +892,18 @@ void ReaderModule::OpenComplexImage()
 
   if (!m_Desc.empty() && vDataset->visible() ) // it is a hdf file
   {
-    filepath += ":";
-    ossDatasetId << vDataset->value(); // Following the convention in GDALImageIO
-    filepath += ossDatasetId.str();
+  if(m_TypeJPEG2000)
+    {
+    itk::OStringStream oss;
+    oss<<filepath<<"?&resol="<<vDataset->value();
+    filepath = oss.str();
+    }
+  else if(m_TypeHdf)
+    {
+    itk::OStringStream oss;
+    oss<<filepath<<"?&sdataidx="<<vDataset->value();
+    filepath= oss.str();
+    }
   }
 
   m_VComplexReader->SetFileName(filepath);
