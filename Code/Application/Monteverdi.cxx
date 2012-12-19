@@ -98,6 +98,8 @@
 #include "otbEdgeExtractionModule.h"
 #include "otbMosaicImagesModule.h"
 
+#include "otbExtendedFilenameToReaderOptions.h"
+
 #ifdef OTB_USE_MAPNIK
 #include "otbRasterizationModule.h"
 #endif
@@ -265,8 +267,9 @@ int main(int argc, char* argv[])
   //Test if there is an input image (optional)
   if (parseResult->IsOptionPresent("--InputImage"))
     {
-
-    if (!itksys::SystemTools::FileExists(parseResult->GetInputImage().c_str()))
+    otb::ExtendedFilenameToReaderOptions::Pointer extendedFilenameHelper = otb::ExtendedFilenameToReaderOptions::New();
+    extendedFilenameHelper->SetExtendedFileName(parseResult->GetInputImage().c_str());
+    if (!itksys::SystemTools::FileExists(extendedFilenameHelper->GetSimpleFileName()))
       {
         itk::OStringStream oss;
         oss << "The file "<< parseResult->GetInputImage().c_str() <<" does not exist.";
