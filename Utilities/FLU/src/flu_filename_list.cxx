@@ -54,9 +54,9 @@
 extern "C" {
 #ifndef HAVE_SCANDIR
   int flu_scandir (const char *dir, dirent ***namelist,
-	          int (*select)(dirent *),
-	          int (*compar)(dirent **, dirent **));
-#  define scandir	flu_scandir
+            int (*select)(dirent *),
+            int (*compar)(dirent **, dirent **));
+#  define scandir flu_scandir
 #endif
 }
 
