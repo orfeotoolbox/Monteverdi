@@ -88,7 +88,7 @@ int flu_filename_list(const char *d, dirent ***list,
   // changes
 #if (defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 10)) \
     || defined(__FreeBSD__) \
-    || (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8)
+    || (defined(__APPLE__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #else
   int n = scandir(d, list, 0, (int(*)(const void*, const void*))sort);
