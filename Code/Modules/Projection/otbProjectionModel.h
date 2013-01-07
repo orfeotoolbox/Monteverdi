@@ -157,7 +157,7 @@ public:
   itkSetMacro(AvgElevation, double);
 
   /** Get avg elevation*/
-  itkGetMacro(AvgElevation,double);
+  itkGetMacro(AvgElevation, double);
 
 protected:
   /** Constructor */
