@@ -98,7 +98,7 @@ public:
   typedef ImageWidget<>              ImageWidgetType;
   typedef ImageWidgetType::SizeType  SizeType;
   typedef ImageWidgetType::Pointer   ImageWidgetPointerType;
-  
+
   /** Useful typedefs for the preview rendering */
   typedef Image<itk::RGBAPixel<unsigned char> >          ViewerImageType;
   typedef otb::ImageLayer<ImageType, ViewerImageType>    LayerType;
@@ -185,7 +185,7 @@ protected:
   virtual void UpdateInputEPSGTransform();
    //
   virtual void UpToDateTransform();
-  
+
   // test if the value entered correspond to valid rsid number
   virtual void TestUpdateEPSGTransform();
 
@@ -218,6 +218,8 @@ protected:
     */
   virtual void DeactivateMapParamaters();
 
+  virtual void UpdateAverageElevation ();
+
   /** Constructor */
   ProjectionView();
   /** Destructor */
@@ -244,7 +246,7 @@ private:
 
   /**ImageWidget for my preview*/
   ImageWidgetPointerType                 m_PreviewWidget;
-  
+
   ModelType::ResampleFilterType::Pointer m_Transform;
 
   LayerGeneratorType::Pointer m_QLImageLayerGenerator;

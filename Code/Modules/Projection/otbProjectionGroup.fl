@@ -1,11 +1,11 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0300 
 i18n_type 1 
 i18n_include "otbI18n.h" 
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include "otbProjectionEnum.h"} {public
+decl {\#include "otbProjectionEnum.h"} {public local
 } 
 
 class ProjectionGroup {open
@@ -22,7 +22,7 @@ class ProjectionGroup {open
       } {
         Fl_Group {} {
           label {Output image} open
-          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 2 labelsize 11 when 1 hide
         } {
           Fl_Choice guiMapSelection {
             label {Map Projection}
@@ -259,7 +259,7 @@ this->UpdateInputLambertIITransform();}
               label {SENSOR MODEL}
               callback {iUTM->hide();
 iLambert2->hide();
-iSensorModel->show();} selected
+iSensorModel->show();}
               xywh {45 45 100 25} labelsize 11
             }
           }
@@ -309,7 +309,7 @@ this->UpdateInputUTMTransform();}
         }
         Fl_Group {} {
           label Settings open
-          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11 hide
+          xywh {5 30 420 422} box PLASTIC_DOWN_BOX color 7 selection_color 32 labelfont 2 labelsize 11
         } {
           Fl_Wizard m_InterpType {
             label {Interpolator parameters} open
@@ -462,7 +462,7 @@ vAverageElevation->deactivate();
               xywh {350 332 41 28} box PLASTIC_DOWN_BOX color 55 labelfont 1 labelsize 12 labelcolor 186
             }
             Fl_Value_Input vAverageElevation {
-              label {Elevation value    }
+              label {Elevation value    } selected
               xywh {202 415 108 24} box PLASTIC_DOWN_BOX labelsize 12 labelcolor 186
             }
           }

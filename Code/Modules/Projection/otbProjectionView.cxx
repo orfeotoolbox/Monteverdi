@@ -994,6 +994,11 @@ void ProjectionView::TestUpdateEPSGTransform()
   if (projRef.empty()) fl_alert("Non valid RSID number");
 }
 
+void ProjectionView::UpdateAverageElevation()
+{
+  m_Controller->GetModel()->SetAvgElevation(vAverageElevation->value());
+}
+
 void ProjectionView::UpdateDEMUse()
 {
   m_HaveUpdatePreview = true;

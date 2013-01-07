@@ -61,7 +61,7 @@ public:
   /** Output */
   typedef GenericRSResampleImageFilter<InputImageType,
                                        InputImageType>       ResampleFilterType;
-  
+
   /** SetInputImage */
   itkSetObjectMacro(InputImage, InputImageType);
   itkGetObjectMacro(InputImage, InputImageType);
@@ -138,10 +138,10 @@ public:
 
   /** Initialize the WGS84 transform*/
   void UpdateWGS84Transform();
-  
+
   /** Set the DEM Path */
   void SetDEMPath(std::string dem);
-  
+
   /** Method to modify the flag*/
   void SetUseDEM(bool value)
   {
@@ -152,7 +152,12 @@ public:
 
   /** Get the output projection ref*/
   itkGetStringMacro(OutputProjectionRef);
-  
+
+  /** Update avg elevation*/
+  itkSetMacro(AvgElevation, double);
+
+  /** Get avg elevation*/
+  itkGetMacro(AvgElevation,double);
 
 protected:
   /** Constructor */
@@ -176,6 +181,7 @@ private:
   bool                    m_UseDEM;
   bool                    m_EstimateInputRPCModel;
 
+  double m_AvgElevation;
   // Output Image Information
   SizeType    m_OutputSize;
   PointType   m_OutputOrigin;

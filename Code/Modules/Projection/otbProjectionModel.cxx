@@ -38,6 +38,8 @@ ProjectionModel::ProjectionModel()
   m_UseDEM = false;
   m_EstimateInputRPCModel = false;
 
+  m_AvgElevation = 0.;
+
   m_Resampler = ResampleFilterType::New();
 
   m_Transform = TransformType::New();
@@ -372,10 +374,10 @@ void ProjectionModel::ReprojectImage()
     }
 
   // Use the DEM
-  if (m_UseDEM)
-    {
-    m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
-    }
+  // if (m_UseDEM)
+  //   {
+  //   m_Resampler->SetDEMDirectory(m_Transform->GetDEMDirectory());
+  //   }
 
   // Default padding value
   InputImageType::PixelType defaultValue;
@@ -393,20 +395,16 @@ void ProjectionModel::ReprojectImage()
  */
 void ProjectionModel::SetDEMPath(std::string dem)
 {
+  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_AvgElevation);
+
   if (m_UseDEM)
     {
-    // Update the transform and the inverse one
-    m_Transform->SetDEMDirectory(dem);
-    m_Transform->InstanciateTransform();
-    m_Transform->GetInverse(m_InverseTransform);
+    // Update the dem directory
+    otb::DEMHandler::Instance()->OpenDEMDirectory(dem);
     }
-  else
-    {
-    // Update the transform and the inverse one
-    m_Transform->SetDEMDirectory("");
-    m_Transform->InstanciateTransform();
-    m_Transform->GetInverse(m_InverseTransform);
-    }
+
+  m_Transform->InstanciateTransform();
+  m_Transform->GetInverse(m_InverseTransform);
 }
 
 /**
