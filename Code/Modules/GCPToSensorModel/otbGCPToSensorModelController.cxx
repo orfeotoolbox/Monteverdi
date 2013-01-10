@@ -224,7 +224,7 @@ GCPToSensorModelController
 ::SetDEMPath(const std::string& DEMPath)
 {
   // Check if DEM path is valid
-  DEMHandler::Pointer dem = DEMHandler::New();
+  DEMHandler::Pointer dem = DEMHandler::Instance();
   if (dem->IsValidDEMDirectory(DEMPath.c_str()))
     {
     m_DEMPath = DEMPath;
