@@ -1175,7 +1175,6 @@ void ViewerModule::UpdateViewerSetupWindow()
     }
 
 
-
 }
 
 /**
