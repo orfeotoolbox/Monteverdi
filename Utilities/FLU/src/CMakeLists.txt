@@ -48,16 +48,16 @@ CONFIGURE_FILE(fluconfigh.cmake.in
   ${Monteverdi_BINARY_DIR}/flu-config.h)
 
 SET(CPPFILES
-Flu_Button.cpp             Flu_Combo_Tree.cpp            Flu_Float_Input.cpp  Flu_Link_Button.cpp     Flu_Separator.cpp     Flu_Wrap_Group.cpp
+Flu_Button.cpp             Flu_Combo_Tree.cpp            Flu_Float_Input.cpp  Flu_Link_Button.cpp     Flu_Separator.cpp
 Flu_Chat_Buffer.cpp        Flu_DND.cpp                   Flu_GL_Canvas.cpp    Flu_Output.cpp          Flu_Simple_Group.cpp
 Flu_Choice_Group.cpp       Flu_Dual_Progress_Meter.cpp   Flu_GL_Window.cpp    flu_pixmaps.cpp         FluSimpleString.cpp
 Flu_Collapsable_Group.cpp  Flu_Dual_Slider.cpp           Flu_Helpers.cpp      Flu_Progress.cpp        Flu_Spinner.cpp
 Flu_Combo_Box.cpp          Flu_File_Chooser.cpp          Flu_Int_Input.cpp    Flu_Progress_Meter.cpp  Flu_Toggle_Group.cpp
 Flu_Combo_List.cpp         flu_file_chooser_pixmaps.cpp  Flu_Label.cpp        Flu_Return_Button.cpp   Flu_Tree_Browser.cpp
-flu_filename_list.cxx)
+flu_filename_list.cxx      Flu_Wrap_Group.cpp)
 
 SET(CFILES
- flu_numericsort.c flu_scandir.c 
+ flu_numericsort.c flu_scandir.c
 )
 
 
@@ -77,8 +77,6 @@ ADD_LIBRARY(flu ${CPPFILES} ${CFILES})
 TARGET_LINK_LIBRARIES(flu OTBGui)
 
 INSTALL(TARGETS flu
-        RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-        LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
-
-
+        RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+        LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)

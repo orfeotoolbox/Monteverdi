@@ -160,19 +160,19 @@ ${Monteverdi_BINARY_DIR}/Code/Application
 # Monteverdi_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
 IF(NOT Monteverdi_INSTALL_BIN_DIR)
-  SET(Monteverdi_INSTALL_BIN_DIR "/bin")
+  SET(Monteverdi_INSTALL_BIN_DIR "bin")
 ENDIF(NOT Monteverdi_INSTALL_BIN_DIR)
 
 IF(NOT Monteverdi_INSTALL_LIB_DIR)
-  SET(Monteverdi_INSTALL_LIB_DIR "/lib/otb")
+  SET(Monteverdi_INSTALL_LIB_DIR "lib/otb")
 ENDIF(NOT Monteverdi_INSTALL_LIB_DIR)
 
 IF(NOT Monteverdi_INSTALL_DATA_DIR)
-  SET(Monteverdi_INSTALL_DATA_DIR "/share/otb")
+  SET(Monteverdi_INSTALL_DATA_DIR "share/otb")
 ENDIF(NOT Monteverdi_INSTALL_DATA_DIR)
 
 IF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
-  SET(Monteverdi_INSTALL_INCLUDE_DIR "/include/otb")
+  SET(Monteverdi_INSTALL_INCLUDE_DIR "include/otb")
 ENDIF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
 
 IF(NOT Monteverdi_INSTALL_PACKAGE_DIR)
@@ -202,20 +202,6 @@ ELSE(Monteverdi_BUILD_SHARED_LIBS)
     SET(Monteverdi_INSTALL_NO_LIBRARIES 1)
   ENDIF(Monteverdi_INSTALL_NO_DEVELOPMENT)
 ENDIF(Monteverdi_BUILD_SHARED_LIBS)
-
-# Because INSTALL_* commands require a leading / and because INSTALL (cmake 2.4
-# and newer) requires no leading / to install under INSTALL_PREFIX, we
-# are stripping the leading /. In the future, there should be no leading
-# / in any install directory variables
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_LIB_DIR_CM24 "${Monteverdi_INSTALL_LIB_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_BIN_DIR_CM24 "${Monteverdi_INSTALL_BIN_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_INCLUDE_DIR_CM24 "${Monteverdi_INSTALL_INCLUDE_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_PACKAGE_DIR_CM24 "${Monteverdi_INSTALL_PACKAGE_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_DOXYGEN_DIR_CM24 "${Monteverdi_INSTALL_DOXYGEN_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_TCL_DIR_CM24 "${Monteverdi_INSTALL_TCL_DIR}")
-STRING(REGEX REPLACE "^/" "" Monteverdi_INSTALL_JAVA_DIR_CM24 "${Monteverdi_INSTALL_JAVA_DIR}")
-
-
 
 # Make sure the user does not try to install on top of the build tree.
 IF(WIN32 OR APPLE OR UNIX)

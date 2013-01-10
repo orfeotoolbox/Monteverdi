@@ -6,16 +6,16 @@ SET(SC_GUI_SRCS "")
 IF(SC_GUI_SRCS_TEMP)
       FOREACH(file_gui_src ${SC_GUI_SRCS_TEMP})
         GET_FILENAME_COMPONENT(name "${file_gui_src}" NAME)
-        SET (SC_GUI_SRCS 
+        SET (SC_GUI_SRCS
           ${SC_GUI_SRCS}
           "${name}"
           )
       ENDFOREACH(file_gui_src)
-      FLTK_WRAP_UI(${LIB_NAME} ${SC_GUI_SRCS}) 
+      FLTK_WRAP_UI(${LIB_NAME} ${SC_GUI_SRCS})
       # Suppress warning Fl_RGB_Image deferencing pointeur
       IF(CMAKE_COMPILER_IS_GNUCXX)
         SET_SOURCE_FILES_PROPERTIES(
-          ${SC_SRCS} 
+          ${SC_SRCS}
           ${${LIB_NAME}_FLTK_UI_SRCS}
           PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
       ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -24,12 +24,12 @@ IF(SC_GUI_SRCS_TEMP)
 ENDIF(SC_GUI_SRCS_TEMP)
 
 ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBMonteverdiCommon flu) 
+TARGET_LINK_LIBRARIES(${LIB_NAME} OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisualization OTBVisu OTBGui OTBMonteverdiCommon flu)
 ADD_DEPENDENCIES(${LIB_NAME} OTBMonteverdiCommon)
 
 IF(NOT Monteverdi_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS ${LIB_NAME}
-    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+    RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+    LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+    ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
 ENDIF(NOT Monteverdi_INSTALL_NO_LIBRARIES)
