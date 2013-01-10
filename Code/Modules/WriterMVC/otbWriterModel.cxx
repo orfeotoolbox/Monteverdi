@@ -373,7 +373,7 @@ template <typename CastOutputPixelType>
 void WriterModel::genericImageConverter(/*const std::string & fname, const bool useScale*/)
 {
   typedef otb::VectorImage<CastOutputPixelType, 2>  CastOutputImageType;
-  typedef otb::StreamingImageFileWriter<CastOutputImageType> CastWriterType;
+  typedef otb::ImageFileWriter<CastOutputImageType> CastWriterType;
 
   typename CastWriterType::Pointer writer = CastWriterType::New();
 

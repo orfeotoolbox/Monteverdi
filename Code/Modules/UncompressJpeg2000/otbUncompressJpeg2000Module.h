@@ -39,7 +39,7 @@
 #include "otbWidgetResizingActionHandler.h"
 #include "otbSelectTileROIActionHandler.h"
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 namespace otb
 {
 /** \class UncompressJpeg2000Module
@@ -103,7 +103,7 @@ public:
   typedef RegionGlComponentType::ColorType                       ColorType;
   typedef otb::SelectTileROIActionHandler<ModelType, WidgetType> SelectAreaHandlerType;
   
-  typedef otb::StreamingImageFileWriter<FloatingVectorImageType> FPVWriterType;
+  typedef otb::ImageFileWriter<FloatingVectorImageType> FPVWriterType;
 
   /** Show the Module GUI */
   virtual bool CanShow(){return true; }

@@ -24,13 +24,13 @@ See OTBCopyright.txt for details.
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 #include "otbListenerBase.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
 #include "itkListSampleToHistogramGenerator.h"
@@ -109,8 +109,8 @@ public:
   typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,
   HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType;
   typedef  HistogramGeneratorType::HistogramType                                   HistogramType;
-  typedef otb::StreamingImageFileWriter<DoubleVectorImageType>                     WriterRGBType;
-  typedef otb::StreamingImageFileWriter<OutputImageType>                           WriterGrayType;
+  typedef otb::ImageFileWriter<DoubleVectorImageType>                     WriterRGBType;
+  typedef otb::ImageFileWriter<OutputImageType>                           WriterGrayType;
 
   /** Visualization model */
   typedef itk::RGBPixel<unsigned char>                                   RGBPixelType;

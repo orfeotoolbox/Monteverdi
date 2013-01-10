@@ -25,7 +25,7 @@ See OTBCopyright.txt for details.
 #include "otbImageToEdgePathFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataProjectionFilter.h"
@@ -712,7 +712,7 @@ ObjectCountingModel
   if (m_WhichImage == EXTRACT) m_PersistentVectorizationFilter->Update();
   else
     {
-    typedef StreamingImageFileWriter<LabeledImageType> WriterType;
+    typedef ImageFileWriter<LabeledImageType> WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(m_OutputImageName);
     writer->SetInput(m_PersistentVectorizationFilter->GetOutput());

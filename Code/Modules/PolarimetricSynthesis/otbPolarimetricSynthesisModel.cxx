@@ -16,7 +16,7 @@ See OTBCopyright.txt for details.
 
 =========================================================================*/
 #include "otbPolarimetricSynthesisModel.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 namespace otb
 {

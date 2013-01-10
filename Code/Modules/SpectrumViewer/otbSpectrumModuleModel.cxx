@@ -19,7 +19,7 @@
 =========================================================================*/
 #include "otbSpectrumModuleModel.h"
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 #include "otbMath.h"

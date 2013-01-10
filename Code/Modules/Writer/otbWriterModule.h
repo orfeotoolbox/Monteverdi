@@ -27,7 +27,7 @@
 
 // include the OTB elements
 #include "otbVectorImage.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkCastImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorData.h"
@@ -126,7 +126,7 @@ private:
   void DoWrite(TInputImage* image)
   {
     typedef itk::CastImageFilter<TInputImage, TOutputImage> CastFilterType;
-    typedef otb::StreamingImageFileWriter<TOutputImage>              WriterType;
+    typedef otb::ImageFileWriter<TOutputImage>              WriterType;
 
     typename CastFilterType::Pointer caster = CastFilterType::New();
     typename WriterType::Pointer writer = WriterType::New();
