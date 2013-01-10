@@ -1197,13 +1197,9 @@ void ConnectedComponentSegmentationModule::OK()
 
         // check the directory
         typedef otb::DEMHandler DEMHandlerType;
-        DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+        DEMHandlerType::Pointer DEMTest = DEMHandlerType::Instance();
 
-        if (itksys::SystemTools::FileIsDirectory(cfname) && DEMTest->IsValidDEMDirectory(cfname))
-          {
-          vproj->SetDEMDirectory(cfname);
-          }
-        else
+        if (!(itksys::SystemTools::FileIsDirectory(cfname) && DEMTest->IsValidDEMDirectory(cfname)))
           {
           itk::OStringStream oss;
           oss << "Invalid DEM directory " << cfname << "."<<std::endl;
@@ -1211,6 +1207,7 @@ void ConnectedComponentSegmentationModule::OK()
           MsgReporter::GetInstance()->SendError(oss.str());
           }
 
+        DEMTest->OpenDEMDirectory(cfname);
 
         }
 
