@@ -39,13 +39,13 @@ VectorizationModel(): m_DEMPath(""), m_UseDEM(false),
   // VectorData model
   m_VectorDataModel = VectorDataModelType::New();
   m_VectorDataModel->RegisterListener(this);
-  
+
   // Output changed flag
   m_OutputChanged = false;
-  
+
   // Extract Filter
   m_ExtractImageFilter = ExtractImageFilterType::New();
-  
+
   // Selected Polygon on right click in automatic mode
   m_SelectedPolygon     = PolygonType::New();
   m_SelectedPolygonNode = DataNodeType::New();
@@ -55,7 +55,7 @@ VectorizationModel(): m_DEMPath(""), m_UseDEM(false),
   DataNodeType::Pointer root     = m_SelectedVectorData->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder   = DataNodeType::New();
-  
+
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
 
@@ -119,18 +119,18 @@ void VectorizationModel
     {
 
     typedef otb::DEMHandler DEMHandlerType;
-    DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+    DEMHandlerType::Pointer DEMTest = DEMHandlerType::Instance();
 
     if (!m_DEMPath.empty() && DEMTest->IsValidDEMDirectory(m_DEMPath.c_str()))
       {
-      reproj->SetDEMDirectory(m_DEMPath);
+      DEMTest->OpenDEMDirectory(m_DEMPath);
       }
     else
       {
       itk::OStringStream oss;
       oss<<"Invalid DEM directory "<<m_DEMPath<<"."<< std::endl
          <<"DEM will not be used, errors may occur for VectorData and image superposition";
-      
+
       MsgReporter::GetInstance()->SendError(oss.str());
       }
     }
@@ -237,7 +237,7 @@ void VectorizationModel
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonExteriorRing()->GetVertexList());
-          
+
           pointContainer->DeleteIndex(index);
           }
         }
@@ -251,7 +251,7 @@ void VectorizationModel
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
-          
+
           pointContainer->DeleteIndex(index);
           }
         }
@@ -295,7 +295,7 @@ void VectorizationModel
         DataNodeType::LineType::VertexListType * pointContainer
           = const_cast<DataNodeType::LineType::VertexListType *>(
             node->GetLine()->GetVertexList());
-        
+
         pointContainer->SetElement(index, vertex);
         }
       break;
@@ -312,7 +312,7 @@ void VectorizationModel
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonExteriorRing()->GetVertexList());
-          
+
           pointContainer->SetElement(index, vertex);
           }
         }
@@ -327,7 +327,7 @@ void VectorizationModel
           DataNodeType::PolygonType::VertexListType * pointContainer
             = const_cast<DataNodeType::PolygonType::VertexListType *>(
               node->GetPolygonInteriorRings()->GetNthElement(interiorRingIndex)->GetVertexList());
-          
+
           pointContainer->SetElement(index, vertex);
           }
         }
@@ -377,7 +377,7 @@ VectorizationModel
 
   vectorDataProjection->Update();
   m_Output = vectorDataProjection->GetOutput();
-  
+
   m_OutputChanged = true;
   this->NotifyAll();
   m_OutputChanged = false;
@@ -435,7 +435,7 @@ void VectorizationModel
   m_VectorDataModel->GetVectorData()->GetDataTree()->Add(
     polygonNode,
     m_VectorDataModel->GetVectorData()->GetDataTree()->GetRoot()->Get());
-  
+
   this->NotifyAll();
   m_ActualLayerNumber = 0;
 }
@@ -453,7 +453,7 @@ void VectorizationModel
     LabelType label = m_LabelImageVector[m_ActualLayerNumber]->GetPixel(index);
     m_SelectedPolygon = Functor(m_LabelMapVector[m_ActualLayerNumber]->GetLabelObject(label));
     m_SelectedPolygonNode->SetPolygonExteriorRing(m_SelectedPolygon);
-    
+
     if(m_ActualLayerNumber == m_LabelImageVector.size()-1)
       m_ActualLayerNumber = 0;
     else
@@ -463,7 +463,7 @@ void VectorizationModel
     {
     m_ExtractRegionUpdated = false;
     }
-  
+
   this->NotifyAll();
 }
 
@@ -477,7 +477,7 @@ VectorizationModel::GenerateLayers()
 
     //
 
-    
+
     // Generate new layer (labeled image) for each algorithm
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(10, 30, 100));
     m_LabelImageVector.push_back(GenerateMeanshiftClustering(3, 50, 150));
@@ -502,7 +502,7 @@ VectorizationModel::GenerateLayers()
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(3, 256));
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(4, 256));
     m_LabelImageVector.push_back(GenerateGrowingRegionLayer(5, 256));
-    
+
     for(unsigned int i=0; i<m_LabelImageVector.size(); i++)
       m_LabelMapVector.push_back(ConvertLabelImageToLabelMap(m_LabelImageVector[i]));
     }
@@ -530,7 +530,7 @@ VectorizationModel
   // Instanciate the objects
   StdGaborFilterType::Pointer stdFilter = StdGaborFilterType::New();
   MeanShiftVectorImageFilterType::Pointer msImageFilter = MeanShiftVectorImageFilterType::New();
-  
+
   //
   stdFilter->SetInput(m_ExtractImageFilter->GetOutput());
   stdFilter->SetA(a);
@@ -571,7 +571,7 @@ VectorizationModel
 {
   MeanShiftVectorImageFilterType::Pointer
     msImageFilter = MeanShiftVectorImageFilterType::New();
-  
+
   msImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
   msImageFilter->SetSpatialRadius(spatialRadius);
   msImageFilter->SetRangeRadius(rangeRadius);
@@ -586,12 +586,12 @@ VectorizationModel
      <<rangeRadius<<"; MinRegionSize : "
      <<minRegionSize<<std::endl;
   m_AlgorithmsNameList.push_back(os.str());
-  
+
   std::cout<<"Model: Meanshift clustering: spatial radius = "
            <<spatialRadius<<", rangeradius = "
            <<rangeRadius<<", minimum region size = "
            <<minRegionSize<<std::endl;
-  
+
   return msImageFilter->GetLabeledClusteredOutput();
 }
 
@@ -605,7 +605,7 @@ VectorizationModel
   BinaryImageToLabelMapFilterType::Pointer      binary2LabelMap = BinaryImageToLabelMapFilterType::New();
   IntensityChannelFilterType::Pointer           intensityFilter = IntensityChannelFilterType::New();
   LabelMapToLabelImageType::Pointer             lm2li           = LabelMapToLabelImageType::New();
-  
+
 
   if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel > 0 )
     {
@@ -618,11 +618,11 @@ VectorizationModel
     intensityFilter->SetInput(m_ExtractImageFilter->GetOutput());
     otsuFilter->SetInput(intensityFilter->GetOutput());
     }
-  
+
   otsuFilter->SetNumberOfHistogramBins(numberofhistogramsbins);
   otsuFilter->SetOutsideValue(0);
   otsuFilter->SetInsideValue(255);
-  
+
   binary2LabelMap->SetInput(otsuFilter->GetOutput());
   binary2LabelMap->SetInputForegroundValue(255);
 
@@ -650,7 +650,7 @@ VectorizationModel
   WatershedFilterType::Pointer                    watershedFilter    = WatershedFilterType::New();
   VectorImageToImageListFilterType::Pointer         image2List         = VectorImageToImageListFilterType::New();
   IntensityChannelFilterType::Pointer             intensityFilter    = IntensityChannelFilterType::New();
-  
+
   if(channel<m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1 && channel>0)
     {
     image2List->SetInput(m_ExtractImageFilter->GetOutput());
@@ -662,7 +662,7 @@ VectorizationModel
     intensityFilter->SetInput(m_ExtractImageFilter->GetOutput());
     diffusionFilter->SetInput(intensityFilter->GetOutput());
     }
-  
+
   diffusionFilter->SetNumberOfIterations(numberOfIterations);
   diffusionFilter->SetConductanceParameter(conductanceParameter);
   diffusionFilter->SetTimeStep(0.125);
@@ -671,12 +671,12 @@ VectorizationModel
   watershedFilter->SetInput(gradientMagnitudeFilter->GetOutput());
   watershedFilter->SetLevel(level);
   watershedFilter->SetThreshold(threshold);
-  
+
   // the watershedFilter filter does not give the choice to choose the output image
   // type, cast it into the labeled image type
   typedef itk::CastImageFilter
     <WatershedFilterType::OutputImageType, LabeledImageType>    CastFilterType;
-  
+
   CastFilterType::Pointer castFilter = CastFilterType::New();
   castFilter->SetInput(watershedFilter->GetOutput());
   castFilter->Update();
@@ -685,11 +685,11 @@ VectorizationModel
   os <<"Watershed. Intensity. level : "<<level<<"; Threshold : "<<threshold
      <<"; Conductance Parameter : "<<conductanceParameter
      <<"; Nb Iterations : "<<numberOfIterations<<std::endl;
-  
+
   m_AlgorithmsNameList.push_back(os.str());
-  
+
   std::cout<<"Model : Watershed segmentation. level : "<<level<< " Threshold : "<<threshold<<std::endl;
-  
+
   return   castFilter->GetOutput();
 }
 
@@ -705,7 +705,7 @@ VectorizationModel
   SpatialFrequencyImageFilterType::Pointer   sfFilter    = SpatialFrequencyImageFilterType::New();
   ScalarConnectedComponentFilterType::Pointer azimuthToLabelImage = ScalarConnectedComponentFilterType::New();
   IntensityChannelFilterType::Pointer intensityFilter = IntensityChannelFilterType::New();
-  
+
 
   // Choose the input following the channel selected
   if( (channel < static_cast<int>(m_ExtractImageFilter->GetOutput()->GetNumberOfComponentsPerPixel()+1) ) && (channel > 0) )
@@ -722,7 +722,7 @@ VectorizationModel
 
   // Do the processing
   sfFilter->SetWindowSize(windowSize);
-  
+
   azimuthToLabelImage->SetInput(sfFilter->GetOutput());
   azimuthToLabelImage->SetDistanceThreshold(threshold);
   azimuthToLabelImage->Update();
@@ -731,7 +731,7 @@ VectorizationModel
   std::ostringstream os;
   os <<"FFT. Channel = "<<channel<<"; Window Size : "<<windowSize<<"; Threshold : "<<threshold<<std::endl;
   m_AlgorithmsNameList.push_back(os.str());
-  
+
   return azimuthToLabelImage->GetOutput();
 }
 #endif
@@ -743,7 +743,7 @@ VectorizationModel
 {
   LabelImageToLabelMapFilterType::Pointer
     LI2LM = LabelImageToLabelMapFilterType::New();
-  
+
   LI2LM->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   LI2LM->SetInput(inputImage);
   LI2LM->Update();

@@ -383,7 +383,7 @@ void ViewerModule::Run()
     viewerSetupStruct.pUpperQuantile = static_cast<double> (bUpperQuantile->value() / 100);
     viewerSetupStruct.pStandardDeviation = static_cast<double> (guiSetStandardDeviation->value());
     viewerSetupStruct.pRGBMode = true;
-    
+
 
     m_ViewerSetupStructList.push_back(viewerSetupStruct);
 
@@ -500,7 +500,7 @@ void ViewerModule::Run()
     // Update NoData value
     guiSetNoData->value(
                         static_cast<double> (m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage)->GetNoDataValue()));
-                        
+
     //Update the viewer setup struct
     RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
     ChannelListType channels = renderer->GetChannelList();
@@ -521,7 +521,7 @@ void ViewerModule::Run()
       m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = channels[0] + 1;
     }
     m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<double> (renderer->GetNoDataValue());
-    
+
     }
   catch (itk::ExceptionObject & err)
     {
@@ -590,10 +590,10 @@ void ViewerModule::UpdateVectorData(unsigned int index)
   reproj->SetInputImage(m_InputImageList->GetNthElement(m_CurrentOpaqueImage));
   reproj->SetInputVectorData(m_VectorDataList->GetNthElement(index).GetPointer());
   reproj->SetUseOutputSpacingAndOriginFromImage(true);
-  if (!m_DEMDirectory.empty())
-    {
-    reproj->SetDEMDirectory(m_DEMDirectory);
-    }
+  // if (!m_DEMDirectory.empty())
+  //   {
+  //   reproj->SetDEMDirectory(m_DEMDirectory);
+  //   }
   reproj->Update();
 
   // Create a VectorData gl component
@@ -762,7 +762,7 @@ void ViewerModule::ShowNextImage()
 {
   m_CurrentOpaqueImage = (m_CurrentOpaqueImage + 1) % m_InputImageLayerList->Size();
   guiOpaqueImageSelection->value(m_CurrentOpaqueImage);
-  
+
   this->UpdateViewerSetupWindow();
   ShowSelectedImages();
 
@@ -782,7 +782,7 @@ void ViewerModule::ShowSelectedImages()
   blender = dynamic_cast<BlendingFunctionType *> (imageLayer->GetBlendingFunction());
   blender->SetAlpha(ALPHA_BLENDING_OPAQUE);
   m_RenderingModel->AddLayer(imageLayer);
-  
+
   const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(m_CurrentOpaqueImage);
   std::ostringstream title;
   title << "[" << dow.GetSourceInstanceId() << "] " << dow.GetSourceOutputKey();
@@ -799,7 +799,7 @@ void ViewerModule::ShowSelectedImages()
     }
 
   m_RenderingModel->Update();
-  
+
   //Update the channels used to display
   RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
   ChannelListType channels = renderer->GetChannelList();
@@ -821,7 +821,7 @@ void ViewerModule::ShowSelectedImages()
   }
   m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<double> (renderer->GetNoDataValue());
   this->UpdateViewerSetupWindowValues();
-  
+
   SynchronizeAll();
 }
 
@@ -1046,7 +1046,7 @@ void ViewerModule::UpdateDEMSettings()
     m_DEMDirectory = gDEMPath->value();
 
     typedef otb::DEMHandler DEMHandlerType;
-    DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+    DEMHandlerType::Pointer DEMTest = DEMHandlerType::Instance();
 
     if (!DEMTest->IsValidDEMDirectory(m_DEMDirectory.c_str()))
       {
@@ -1054,6 +1054,7 @@ void ViewerModule::UpdateDEMSettings()
       MsgReporter::GetInstance()->SendError("invalid DEM directory, no DEM directory has been set.");
       }
 
+    DEMTest->OpenDEMDirectory(m_DEMDirectory);
     // Delete the vector data
     for (unsigned int i = 0; i < m_VectorDataList->Size(); i++)
       {
@@ -1105,7 +1106,7 @@ void ViewerModule::UpdateViewerSetupWindowValues()
     guiBlueChannelChoice->deactivate();
     guiGrayscaleChannelChoice->activate();
     }
-  
+
   guiContrastStretchSelection->value(m_ContrastStretchList[m_CurrentOpaqueImage]);
   if(m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution == FULL_STRETCH)
     {
@@ -1172,9 +1173,8 @@ void ViewerModule::UpdateViewerSetupWindow()
     {
     this->GrayScaleSet();
     }
-    
-    
-  
+
+
 }
 
 /**
@@ -1314,7 +1314,7 @@ void ViewerModule::ViewerSetupOk()
   m_ViewerSetupStructList[m_CurrentOpaqueImage].pGreenChannel = static_cast<int> (guiGreenChannelChoice->value());
   m_ViewerSetupStructList[m_CurrentOpaqueImage].pBlueChannel = static_cast<int> (guiBlueChannelChoice->value());
   m_ViewerSetupStructList[m_CurrentOpaqueImage].pGrayChannel = static_cast<int> (guiGrayscaleChannelChoice->value());
-  
+
   if (guiViewerSetupColorMode->value())
     {
     int redChoice = static_cast<int> (guiRedChannelChoice->value() - 1);
@@ -1394,7 +1394,7 @@ void ViewerModule::UpdateRGBChannelOrder(int red, int green, int blue)
   imageLayer->SetRenderingFunction(renderer);
   renderer->Initialize(image->GetMetaDataDictionary());
   m_RenderingModel->Update();
-  
+
 }
 
 /**
@@ -1545,7 +1545,7 @@ void ViewerModule::UpdateTabHistogram()
   m_RedHistogramHandler->SetChannel(0);
   m_RedHistogramHandler->SetMinimumAbcisse(rhistogram->GetMinimum()[0]);
   m_RedHistogramHandler->SetMaximumAbcisse(rhistogram->GetMaximum()[0]);
-  
+
 }
 
 /**
@@ -1640,7 +1640,7 @@ void ViewerModule::SetContrastStretch()
         guiSetStandardDeviation->hide();
         //guiGroupStretch->redraw();
         }
-   
+
   if(static_cast<int>(guiStretchFull->value()) == 1)
     {
       imageLayer->SetComputeHistoOnFullResolution(true);
@@ -1657,14 +1657,14 @@ void ViewerModule::SetContrastStretch()
       imageLayer->SetComputeHistoOnZoomResolution(false);
     }
   imageLayer->SetUpdateHisto(true);
-   
+
   //renderer->SetChannelList(channels);
   //renderer->SetNoDataValue(static_cast<ImageType::InternalPixelType> (guiSetNoData->value()));
   //renderer->SetAutoMinMax(true);
   //imageLayer->SetRenderingFunction(renderer);
   //m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
   //m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
-  
+
 }
 
 /**
@@ -1675,7 +1675,7 @@ void ViewerModule::ApplyContrastStretch()
   ImageLayerType::Pointer imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
   imageLayer->SetUpdateHisto(true);
   ContrastStretchEnumType contrastStretch;
-  
+
   ChannelListType channels = imageLayer->GetRenderingFunction()->GetChannelList();
 
   RenderingFunctionType::Pointer renderer;
@@ -1704,7 +1704,7 @@ void ViewerModule::ApplyContrastStretch()
 
   renderer->SetChannelList(channels);
   renderer->SetNoDataValue(static_cast<ImageType::InternalPixelType> (guiSetNoData->value()));
-  
+
   renderer->SetAutoMinMax(true);
   /*//Check if we need to compute again the histogram.
   if ((contrastStretch == m_ContrastStretchList[m_CurrentOpaqueImage]))
@@ -1734,7 +1734,7 @@ void ViewerModule::ApplyContrastStretch()
   imageLayer->SetRenderingFunction(renderer);
   m_RenderingFunctionList->SetNthElement(m_CurrentOpaqueImage, renderer);
   m_ContrastStretchList[m_CurrentOpaqueImage] = contrastStretch;
-  
+
   //Update m_ViewerSetupStructList with selected parameters.
   m_ViewerSetupStructList[m_CurrentOpaqueImage].pNoData = static_cast<ImageType::InternalPixelType> (guiSetNoData->value());
   if(static_cast<int>(guiStretchFull->value()) == 1)
@@ -1749,8 +1749,8 @@ void ViewerModule::ApplyContrastStretch()
     {
       m_ViewerSetupStructList[m_CurrentOpaqueImage].pStretchResolution = QUICKLOOK_STRETCH;
     }
-  
-  
+
+
   // Select the current rendering function
   RenderingFunctionType::Pointer currentRenderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
   m_RenderingModel->Update();
@@ -1774,7 +1774,7 @@ void ViewerModule::ApplyContrastStretch()
  */
 void ViewerModule::UpdateQuantiles()
 {
-   
+
   double lowerQuantile, upperQuantile;
   bool isVisible;
 
@@ -1814,7 +1814,7 @@ void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
 {
   // Select the current rendering function
   RenderingFunctionType::Pointer renderer = m_RenderingFunctionList->GetNthElement(m_CurrentOpaqueImage);
-  
+
   // Cancel the automatic computation of the quantile
   renderer->SetAutoMinMax(false);
 
@@ -1874,7 +1874,7 @@ void ViewerModule::UpdateQuantiles(double lowerQuantile, double upperQuantile)
 
   // Needed to show the curves
   TabSetupPosition();
-  
+
 }
 
 /**

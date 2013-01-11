@@ -29,7 +29,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
 #include "itkCastImageFilter.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 #include "otbConfigure.h"
 #if defined(OTB_USE_JPEG2000)
@@ -787,7 +787,7 @@ void ReaderModule::ThreadedRun()
     if(!qlReadFromFile && (bSaveQuicklook->value() == 1))
       {
       typedef itk::CastImageFilter<FloatingVectorImageType, otb::VectorImage<unsigned short> > CastFilterType;
-      typedef otb::StreamingImageFileWriter<otb::VectorImage<unsigned short> > WriterType;
+      typedef otb::ImageFileWriter<otb::VectorImage<unsigned short> > WriterType;
 
       CastFilterType::Pointer caster = CastFilterType::New();
       caster->SetInput(quicklook);

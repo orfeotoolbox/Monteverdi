@@ -55,7 +55,7 @@ GCPToSensorModelModel() : m_GCPsToRPCSensorModelImageFilter(), m_GCPsContainer()
   m_Output     = VectorImageType::New();
 
   // DEM
-  m_DEMHandler = DEMHandler::New();
+  m_DEMHandler = DEMHandler::Instance();
 
   // Filter
   m_GCPsToRPCSensorModelImageFilter = GCPsToRPCSensorModelImageFilterType::New();
@@ -108,7 +108,7 @@ GCPToSensorModelModel
   m_ImageGenerator->GenerateQuicklookOn();
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_ImageGenerator->GenerateLayer();
- 
+
   m_ImageGenerator->GetLayer()->SetName("InputImage");
 
   // Clear previous layers

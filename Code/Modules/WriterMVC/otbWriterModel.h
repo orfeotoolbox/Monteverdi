@@ -42,7 +42,7 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayerRenderingModel.h"
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbVectorDataFileWriter.h"
 
 #include "itkProcessObject.h"
@@ -149,7 +149,7 @@ public:
   /** inpuyt vector data */
   typedef TypeManager::Vector_Data VectorType;
   /// Writers
-  typedef StreamingImageFileWriter<InputImageType>  FPVWriterType;
+  typedef ImageFileWriter<InputImageType>  FPVWriterType;
   typedef VectorDataFileWriter<VectorType> VectorWriterType;
 
   itkNewMacro(Self);

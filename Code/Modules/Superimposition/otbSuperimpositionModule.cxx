@@ -35,7 +35,7 @@ SuperimpositionModule::SuperimpositionModule()
   m_Resampler        = ResampleFilterType::New();
   m_CastFixedFilter  = CastImageFilterType::New();
   m_CastMovingFilter = CastImageFilterType::New();
-    
+
   // Describe inputs
   this->AddInputDescriptor<VectorImageType>("ReferenceImage",
                                             otbGetTextMacro("Reference image for reprojection"));
@@ -81,7 +81,7 @@ void SuperimpositionModule::Ok()
     m_CastFixedFilter->SetInput(fixed);
     vfixed = m_CastFixedFilter->GetOutput();
     }
-  
+
   if (moving.IsNotNull() && vmoving.IsNull())
     {
     // Cast Image into VectorImage
@@ -97,25 +97,28 @@ void SuperimpositionModule::Ok()
   // Update input output informations
   vfixed->UpdateOutputInformation();
   vmoving->UpdateOutputInformation();
-  
+
   // Resampler
   m_Resampler->SetInput(vmoving);
   m_Resampler->SetOutputParametersFromImage(vfixed);
-  
+
   VectorImageType::PixelType defaultValue;
   itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
                                                       vmoving->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
 
+  typedef otb::DEMHandler DEMHandlerType;
+  DEMHandlerType::Pointer DEMTest = DEMHandlerType::Instance();
+
   if (choiceDEM->value() == 1)
     {
-    m_Resampler->SetDEMDirectory(vDEMPath->value());
+    DEMTest->OpenDEMDirectory(vDEMPath->value());
     }
   else
     {
-    m_Resampler->SetAverageElevation(vAverageElevation->value());
+    DEMTest->SetDefaultHeightAboveEllipsoid(vAverageElevation->value());
     }
-  
+
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_Resampler->GetOutput(), "Reprojected image",
                             otbGetTextMacro("Image superimposable to reference"));
@@ -144,7 +147,7 @@ void SuperimpositionModule::Browse()
     }
 
   typedef otb::DEMHandler DEMHandlerType;
-  DEMHandlerType::Pointer DEMTest = DEMHandlerType::New();
+  DEMHandlerType::Pointer DEMTest = DEMHandlerType::Instance();
 
   if (!DEMTest->IsValidDEMDirectory(filename))
     {

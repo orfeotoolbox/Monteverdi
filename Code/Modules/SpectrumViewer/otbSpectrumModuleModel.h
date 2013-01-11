@@ -33,7 +33,7 @@
 #include "otbPixelSpectrumModel.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
