@@ -37,6 +37,7 @@ See OTBCopyright.txt for details.
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetPolygonForm.h"
 #include "otbImageWidgetPolylineForm.h"
+#include "otbVisualizationMacro.h"
 
 namespace otb
 {

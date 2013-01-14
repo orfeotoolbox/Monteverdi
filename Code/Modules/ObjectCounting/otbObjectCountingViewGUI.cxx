@@ -21,6 +21,7 @@ See OTBCopyright.txt for details.
 #include <FL/fl_ask.H>
 #include <FL/Fl_Text_Buffer.H>
 #include "otbMacro.h"
+#include "otbVisualizationMacro.h"
 #include "itkExceptionObject.h"
 
 namespace otb

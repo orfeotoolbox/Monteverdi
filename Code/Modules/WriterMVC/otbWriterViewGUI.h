@@ -40,6 +40,7 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbObjectList.h"
 #include "otbImageView.h"
+#include "otbVisualizationMacro.h"
 
 namespace otb
 {
