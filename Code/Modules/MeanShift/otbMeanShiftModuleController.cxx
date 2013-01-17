@@ -134,7 +134,15 @@ MeanShiftModuleController
     }
   catch (std::exception& e)
     {
-    MsgReporter::GetInstance()->SendError(e.what());
+    std::string exceptionName(e.what());
+    if (exceptionName.compare("bad allocation") == 0)
+      {
+      MsgReporter::GetInstance()->SendError("Not enough memory to run a segmentation on the input image");
+      }
+    else
+      {
+      MsgReporter::GetInstance()->SendError(e.what());
+      }
     return;
     }
 }
