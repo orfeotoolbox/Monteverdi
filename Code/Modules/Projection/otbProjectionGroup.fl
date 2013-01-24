@@ -5,7 +5,7 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include "otbProjectionEnum.h"} {public local
+decl {\#include "otbProjectionEnum.h"} {public
 } 
 
 class ProjectionGroup {open
