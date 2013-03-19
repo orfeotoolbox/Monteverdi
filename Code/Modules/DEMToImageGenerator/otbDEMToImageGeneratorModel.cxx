@@ -235,7 +235,8 @@ void
 DEMToImageGeneratorModel
 ::SetDEMDirectoryPath(const char* DEMDirectory)
 {
-  m_DEMToImageGenerator->SetDEMDirectoryPath(DEMDirectory);
+  DEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
+  //m_DEMToImageGenerator->SetDEMDirectoryPath(DEMDirectory);
 }
 
 } // End namespace
