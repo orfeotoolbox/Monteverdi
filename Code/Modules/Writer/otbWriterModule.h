@@ -133,8 +133,12 @@ private:
     caster->SetInput(image);
     caster->SetInPlace(true);
     writer->SetInput(caster->GetOutput());
-    writer->SetFileName(m_Filename);
-    writer->SetWriteGeomFile(m_WriteGeomFile);
+    std::string writerFilename = m_Filename;
+    if (! m_WriteGeomFile)
+      {
+      writerFilename.append("?&writegeom=OFF");
+      }
+    writer->SetFileName(writerFilename.c_str());
     m_ProcessObject =  writer;
     writer->Update();
   }

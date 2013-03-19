@@ -383,7 +383,6 @@ void UncompressJpeg2000Module::ThreadedRun()
     {
     FPVWriterType::Pointer FPVWriter = FPVWriterType::New();
     FPVWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
-    FPVWriter->WriteGeomFileOn();
     FPVWriter->SetFileName(m_Filename.c_str());
     FPVWriter->SetAutomaticAdaptativeStreaming(256);
     m_ProcessObject = FPVWriter;

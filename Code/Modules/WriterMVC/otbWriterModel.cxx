@@ -379,8 +379,12 @@ void WriterModel::genericImageConverter(/*const std::string & fname, const bool 
 
 //     this->NotifyAll("SetWriter");
   this->SetProcessObjectModel (writer);
-  writer->SetFileName(this->GetOutputFileName().c_str());
-  writer->SetWriteGeomFile(this->GetIsWriteGeomFile());
+  std::string writerFilename = this->GetOutputFileName();
+  if (! this->GetIsWriteGeomFile())
+    {
+    writerFilename.append("?&writegeom=OFF");
+    }
+  writer->SetFileName(writerFilename.c_str());
 
   if (this->GetUseScale())
     {

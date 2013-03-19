@@ -795,7 +795,6 @@ void ReaderModule::ThreadedRun()
       WriterType::Pointer writer = WriterType::New();
       writer->SetInput(caster->GetOutput());
       writer->SetFileName(qlFilePath);
-      writer->WriteGeomFileOn();
       try
         {
         writer->Update();
