@@ -58,20 +58,21 @@ MonteverdiModel::~MonteverdiModel()
 void
 MonteverdiModel::Close()
 {
-  //Remove Caching directory
-  if (m_EraseCaching)
-    {
-     // If data in cach, erase the directory
-  if(  CachingPathManager::GetInstance()->CachingDirExists() == true )
-        {
-          bool resRemove = itksys::SystemTools::RemoveADirectory( CachingPathManager::GetInstance()->GetFullCachingPath().c_str() );
+  //It is really dangerous to let Monteverdi delete directory
+  // //Remove Caching directory
+  // if (m_EraseCaching)
+  //   {
+  //    // If data in cach, erase the directory
+  // if(  CachingPathManager::GetInstance()->CachingDirExists() == true )
+  //       {
+  //         bool resRemove = itksys::SystemTools::RemoveADirectory( CachingPathManager::GetInstance()->GetFullCachingPath().c_str() );
 
-          if( resRemove == false )
-            {
-              MsgReporter::GetInstance()->SendError("Can't erase chaching directory...");
-            }
-        }
-    }
+  //         if( resRemove == false )
+  //           {
+  //             MsgReporter::GetInstance()->SendError("Can't erase chaching directory...");
+  //           }
+  //       }
+  //   }
 
   m_ModuleDescriptorMap.clear();
   m_ModuleMap.clear();
