@@ -114,16 +114,16 @@ OpticalCalibrationModule
 
   std::string sensorID = lImageMetadataInterface->GetSensorID();
 
-  // Test the sensor : only QB, IKONOS and Spot are supported
-  if (sensorID.find("QB02") == std::string::npos &&
-      sensorID.find("Spot") == std::string::npos &&
-      sensorID.find("WV02") == std::string::npos &&
-      sensorID.find("Formosat") == std::string::npos &&
-      sensorID.find("IKONOS-2") == std::string::npos)
-    {
-    MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5, QuickBird, WorldView2 and Formosat2 are supported.");
-    return false;
-    }
+  // // Test the sensor : only QB, IKONOS and Spot are supported
+  // if (sensorID.find("QB02") == std::string::npos &&
+  //     sensorID.find("Spot") == std::string::npos &&
+  //     sensorID.find("WV02") == std::string::npos &&
+  //     sensorID.find("Formosat") == std::string::npos &&
+  //     sensorID.find("IKONOS-2") == std::string::npos)
+  //   {
+  //   MsgReporter::GetInstance()->SendError("Invalid input image. Only IKONOS-2, Spot4-5, QuickBird, WorldView2 and Formosat2 are supported.");
+  //   return false;
+  //   }
 
   // Test if needed data are available.
   try
@@ -138,6 +138,9 @@ OpticalCalibrationModule
 
     lImageMetadataInterface->GetSolarIrradiance();
     lImageMetadataInterface->GetSunElevation();
+
+    //ReflectanceToSurfaceReflectance
+    lImageMetadataInterface->GetSpectralSensitivity();
 
     }
   catch (itk::ExceptionObject& err)
@@ -384,9 +387,19 @@ OpticalCalibrationModule
     aeronetFile = true;
     }
 
+  itk::MetaDataDictionary             dict = m_InputImage->GetMetaDataDictionary();
+  OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+
   std::string ffvFile = teFFVFile->value();
   if (ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName() &&  ffvFile !=
-      "") m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(ffvFile);
+      "")
+    {
+    m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(ffvFile);
+    }
+  else
+    {
+    m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
+    }
 
   try
     {
@@ -407,6 +420,7 @@ OpticalCalibrationModule
     bProgress->show();
     Fl::check();
     m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+    m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
 
     bProgress->hide();
     Fl::check();
@@ -490,6 +504,8 @@ OpticalCalibrationModule
 
   // Add outputs
   this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(), "Luminance image", otbGetTextMacro("Luminance image"));
+
+  std::cout << "filter function: " << m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionCoef() << std::endl;
 
   if (bChangeScale->value() == 1)
     {
