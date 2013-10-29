@@ -70,7 +70,7 @@ public:
 
     for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       switch (pType)
         {
         /** CASE NOT USED: ITK PROBLEM WITH CANNY FILTER*/

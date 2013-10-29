@@ -397,7 +397,7 @@ ObjectCountingModel
     DataNodeType::Pointer folder = DataNodeType::New();
     poly->SetNodeType(otb::FEATURE_POLYGON);
     folder->SetNodeType(otb::FOLDER);
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss.str("");
     oss << i + 1;
     poly->SetNodeId(oss.str().c_str());

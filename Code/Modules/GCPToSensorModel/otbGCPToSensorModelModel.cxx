@@ -212,7 +212,7 @@ void GCPToSensorModelModel
 ::ExportGCPsToXmlFile(const char * fname) const
 {
   // Declare a stringstream to be used later
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << std::fixed << std::setprecision(6);
 
   // Build an xml document

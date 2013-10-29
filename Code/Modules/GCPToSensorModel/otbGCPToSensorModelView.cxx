@@ -201,7 +201,7 @@ GCPToSensorModelView
   sensorPoint = gcp.first;
   groundPoint = gcp.second;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << sensorPoint << " -> " << groundPoint << " Error=" << error;
 
   this->lPointList->add(oss.str().c_str());

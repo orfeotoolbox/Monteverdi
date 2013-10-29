@@ -322,7 +322,7 @@ GCPToSensorModelController
     }
   else
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<"The module waits for "<<m_Model->GetMinNbOfGCP()<<" GCP points to compute the sensor model, only "<<m_View->GetNumberOfGCPPoints()<<" provided."<<std::endl;
       MsgReporter::GetInstance()->SendError( oss.str().c_str());
       return false;

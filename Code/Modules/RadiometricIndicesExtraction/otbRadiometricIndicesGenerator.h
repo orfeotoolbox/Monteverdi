@@ -215,7 +215,7 @@ public:
         }
       case FeatureInfoRI::PVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: PVI: " << params[0] << "," << params[1] << " ";
         std::string            mess = oss.str();
         PVIFilterType::Pointer filter;
@@ -226,7 +226,7 @@ public:
         }
       case FeatureInfoRI::SAVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: SAVI: " << params[0] << " ";
         std::string             mess = oss.str();
         SAVIFilterType::Pointer filter;
@@ -236,7 +236,7 @@ public:
         }
       case FeatureInfoRI::MSAVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: MSAVI: " << params[0] << " ";
         std::string              mess = oss.str();
         MSAVIFilterType::Pointer filter;
@@ -252,7 +252,7 @@ public:
         }
       case FeatureInfoRI::TSAVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: TSAVI: " << params[0] << "," << params[1] << "," << params[2] << " ";
         std::string              mess = oss.str();
         TSAVIFilterType::Pointer filter;
@@ -270,7 +270,7 @@ public:
         }
       case FeatureInfoRI::WDVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: WDVI: " << params[0] << " ";
         std::string             mess = oss.str();
         WDVIFilterType::Pointer filter;
@@ -292,7 +292,7 @@ public:
         }
       case FeatureInfoRI::ISU:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: ISU: " << params[0] << "," << params[1] << " ";
         std::string            mess = oss.str();
         ISUFilterType::Pointer filter;
@@ -328,7 +328,7 @@ public:
         }
       case FeatureInfoRI::EVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: EVI: " << params[0] << "," << params[1] << "," << params[2] << "," << params[3] << " ";
         std::string            mess = oss.str();
         EVIFilterType::Pointer filter;
@@ -341,7 +341,7 @@ public:
         }
       case FeatureInfoRI::TSARVI:
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: TSARVI: " << params[0] << "," << params[1] << "," << params[2] << " ";
         std::string               mess = oss.str();
         TSARVIFilterType::Pointer filter;
@@ -379,7 +379,7 @@ public:
         avi->GetFunctor().SetLambdaR(params[1]);
         avi->GetFunctor().SetLambdaNir(params[2]);
 
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: AVI: " << params[0] << "," << params[1] << "," << params[2] << " " << greenId << "," <<
         redId << "," << nirId;
         std::string mess = oss.str();
@@ -394,7 +394,7 @@ public:
         ib2->SetGreenIndex(greenId);
         ib2->SetNIRIndex(nirId);
 
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: IB2: " << redId << ", " << greenId << ", " << nirId;
         std::string mess = oss.str();
         model->AddFeatureFilter(ib2, FeatureInfoRI::IB2, itk::NumericTraits<unsigned int>::max(), 0, mess);
@@ -419,7 +419,7 @@ public:
         ir->SetGreenIndex(chan1Id);
         ir->SetRedIndex(chan2Id);
 
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: IR: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ir, FeatureInfoRI::IR, itk::NumericTraits<unsigned int>::max(), 0, mess);
@@ -432,7 +432,7 @@ public:
         ic->SetGreenIndex(chan1Id);
         ic->SetRedIndex(chan2Id);
 
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: IC: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ic, FeatureInfoRI::IC, itk::NumericTraits<unsigned int>::max(), 0, mess);
@@ -445,7 +445,7 @@ public:
         ib->SetGreenIndex(chan1Id);
         ib->SetRedIndex(chan2Id);
 
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Full Image: IB: " << chan1Id << ", " << chan2Id;
         std::string mess = oss.str();
         model->AddFeatureFilter(ib, FeatureInfoRI::IB, itk::NumericTraits<unsigned int>::max(), 0, mess);
@@ -717,7 +717,7 @@ RadiometricIndicesGenerator::GenericAddRAndNIRFilter(ModelPointerType model,
                                                      unsigned int nirId,
                                                      std::string msg)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << msg;
   oss << redId << " , " << nirId;
   typename TFilterTypeMethod::Pointer filter = TFilterTypeMethod::New();
@@ -738,7 +738,7 @@ RadiometricIndicesGenerator::GenericAddRAndBAndNIRFilter(ModelPointerType model,
                                                          unsigned int nirId,
                                                          std::string msg)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << msg;
   oss << redId << " , " << blueId << " , " << nirId;
   typename TFilterTypeMethod::Pointer filter = TFilterTypeMethod::New();
@@ -759,7 +759,7 @@ RadiometricIndicesGenerator::GenericAdd2ChannelsFilter(ModelPointerType model,
                                                        unsigned int chan2Id,
                                                        std::string msg)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << msg;
   oss << chan1Id << " , " << chan2Id;
   typename TFilterTypeMethod::Pointer filter = TFilterTypeMethod::New();

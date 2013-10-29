@@ -271,7 +271,7 @@ int main(int argc, char* argv[])
     extendedFilenameHelper->SetExtendedFileName(parseResult->GetInputImage().c_str());
     if (!itksys::SystemTools::FileExists(extendedFilenameHelper->GetSimpleFileName()))
       {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "The file "<< parseResult->GetInputImage().c_str() <<" does not exist.";
         otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
       }
@@ -355,7 +355,7 @@ int main(int argc, char* argv[])
           }
         else
           {
-            itk::OStringStream oss;
+            std::ostringstream oss;
             oss << "The file "<< filename <<" does not exist.";
             otb::MsgReporter::GetInstance()->SendError( oss.str().c_str() );
           }

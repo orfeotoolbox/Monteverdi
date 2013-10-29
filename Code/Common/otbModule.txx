@@ -105,7 +105,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
                                                        bool cached)
 {
   // Stringstream used to enhance descriptions
-  itk::OStringStream oss, ossId;
+  std::ostringstream oss, ossId;
 
   // Update output information
   data->UpdateOutputInformation();
@@ -237,7 +237,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
   data->UpdateOutputInformation();
 
   // Stringstream used to enhance descriptions
-  itk::OStringStream oss, ossId;
+  std::ostringstream oss, ossId;
 
   // First, add the whole dataset
 
@@ -452,7 +452,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
                                                        bool cached)
 {
   // Stringstream used to enhance descriptions
-  itk::OStringStream oss, ossId;
+  std::ostringstream oss, ossId;
 
   // Update output information
   data->UpdateOutputInformation();

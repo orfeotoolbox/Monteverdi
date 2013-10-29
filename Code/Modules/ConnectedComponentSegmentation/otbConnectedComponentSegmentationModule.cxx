@@ -1201,7 +1201,7 @@ void ConnectedComponentSegmentationModule::OK()
 
         if (!(itksys::SystemTools::FileIsDirectory(cfname) && DEMTest->IsValidDEMDirectory(cfname)))
           {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "Invalid DEM directory " << cfname << "."<<std::endl;
           oss << "Output Vector Data will be created without DEM information" <<std::endl;
           MsgReporter::GetInstance()->SendError(oss.str());
@@ -1228,7 +1228,7 @@ void ConnectedComponentSegmentationModule::OK()
     }
   else
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "At least one formula is wrong" << std::endl << " Mask expression " << m_IsMaskExpressionOK << std::endl
         << " CC Segmentation expression " << m_IsCCExpressionOK << std::endl << " Object Analysis formula "
         << m_IsOBIAExpressionOK << std::endl;

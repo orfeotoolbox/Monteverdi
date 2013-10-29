@@ -73,7 +73,7 @@ void CachingModule::UpdateProgress()
 {
   double progress = m_WritingProcess->GetProgress();
 
-  itk::OStringStream oss1, oss2;
+  std::ostringstream oss1, oss2;
   oss1.str("");
   oss1 << otbGetTextMacro("Caching dataset") << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
@@ -171,7 +171,7 @@ void CachingModule::ThreadedRun()
   std::string outputKey = inputIt->second.GetNthData(0).GetSourceOutputKey();
 
   // Create description
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << otbGetTextMacro("Cached data from") << " " << sourceId << " (" << outputKey << ")";
   std::string description = oss.str();
   oss.str("");

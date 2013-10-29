@@ -113,7 +113,7 @@ RadiometricIndicesExtractionViewGUI
 ::UpdateFeatureInfo(FeatureType feat)
 {
   FeatureInfoRI        inf;
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << inf.GetMapInfo().find(feat)->second;
   guiFeatInfo->buffer()->remove(0, guiFeatInfo->buffer()->length());
   guiFeatInfo->insert(oss.str().c_str());
@@ -142,7 +142,7 @@ void
 RadiometricIndicesExtractionViewGUI
 ::UpdateSelectedPixelGUI(const IndexType& index)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "(" << index[0] << " , " << index[1] << ")";
   m_SpecificGUI->guiSpectAnglePixelCoordinates->value(oss.str().c_str());
   m_SpecificGUI->guiSpectAnglePixelCoordinates->redraw();

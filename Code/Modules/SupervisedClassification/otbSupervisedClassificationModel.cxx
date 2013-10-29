@@ -253,7 +253,7 @@ void
 SupervisedClassificationModel
 ::UpdateDescription()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Number of features: " <<  m_InputImage->GetNumberOfComponentsPerPixel() << "\n";
   oss << "Pixels to classify: " << m_InputImage->GetLargestPossibleRegion().GetSize() << "\n\n";
   oss << "Number of classes: " << m_NumberOfClasses << "\n\n";
@@ -289,7 +289,7 @@ SupervisedClassificationModel
 ::UpdateMatrixString()
 {
   // m_MapOfClasses contains the mapping of class name (or class number) => class index in the matrix
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Confusion matrix:\n\n";
   // write the first line
   oss << "\t";

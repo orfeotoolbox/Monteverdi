@@ -194,7 +194,7 @@ void WriterModule::UpdateProgress()
 {
   double progress = m_ProcessObject->GetProgress();
 
-  itk::OStringStream oss1, oss2;
+  std::ostringstream oss1, oss2;
   oss1.str("");
   oss1 << otbGetTextMacro("Writing dataset") << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");

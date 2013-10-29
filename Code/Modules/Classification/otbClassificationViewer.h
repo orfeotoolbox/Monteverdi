@@ -81,7 +81,7 @@ protected:
       {
       return;
       }
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << this->GetPixLocOutput()->value();
     if (m_LabeledImage->GetBufferedRegion().IsInside(index))
       {

@@ -127,7 +127,7 @@ void VectorizationModel
       }
     else
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<"Invalid DEM directory "<<m_DEMPath<<"."<< std::endl
          <<"DEM will not be used, errors may occur for VectorData and image superposition";
 

@@ -174,7 +174,7 @@ WriterViewGUI
 ::UpdateInformation()
 {
   std::string        imName = m_WriterModel->GetInputFileName();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << "Writer Application";
   oss << ": " << imName.substr(imName.find_last_of("/") + 1, imName.size());
@@ -406,7 +406,7 @@ void WriterViewGUI::UpdateProgress()
 {
   double progress = this->GetProgress();
 
-  itk::OStringStream oss1, oss2;
+  std::ostringstream oss1, oss2;
   oss1.str("");
   oss1 << "Writing dataset  (" << std::floor(100 * progress) << "%)";
   oss2.str("");

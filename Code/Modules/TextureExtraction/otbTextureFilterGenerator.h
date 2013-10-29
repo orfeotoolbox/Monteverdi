@@ -70,7 +70,7 @@ public:
           SinglePixelType min = static_cast<SinglePixelType>(pModel->GetSelectedMinValues()[i]);
           SinglePixelType max = static_cast<SinglePixelType>(pModel->GetSelectedMaxValues()[i]);
 
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "PanTex: " << pRadius << ", " << pBin << ", min: " << min << ", max: " << max;
 
           PanTexFilterType::Pointer filter = PanTexFilterType::New();
@@ -128,7 +128,7 @@ TextureFilterGenerator::GenericAddTextureFilter(ModelPointerType pModel,
                                                 double pMax,
                                                 std::string pMsg)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << pMsg;
   oss << pOff << ", " << pRadius << ", " << pBin << ", min: " << pMin << ", max: " << pMax;
   typename TFilterTypeMethod::Pointer filter = TFilterTypeMethod::New();

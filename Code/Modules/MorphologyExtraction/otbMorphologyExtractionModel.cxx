@@ -51,7 +51,7 @@ MorphologyExtractionModel
 
     for (unsigned int j = 0; j < size; ++j)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Morpho Opening: " << size << " , " << value << " , " << step << ", " << value + j * step;
       std::string mess = oss.str();
       this->AddFeatureFilter(profileFilter, FeatureInfoMorpho::MORPHOLOGICALOPENING, i, j,  mess);
@@ -77,7 +77,7 @@ MorphologyExtractionModel
 
     for (unsigned int j = 0; j < size; ++j)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Morpho Closing: " << size << " , " << value << " , " << step << ", " << value + j * step;
       std::string mess = oss.str();
       this->AddFeatureFilter(profileFilter, FeatureInfoMorpho::MORPHOLOGICALCLOSING, i, j,  mess);

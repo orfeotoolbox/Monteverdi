@@ -192,7 +192,7 @@ HomologousPointExtractionModuleController
 
   if (!m_Model->GetFirstInputImage()->GetLargestPossibleRegion().IsInside(id1))
     {
-    itk::OStringStream oss1;
+    std::ostringstream oss1;
     oss1 << "Index " << id1 << " is outside the image size " <<
     m_Model->GetFirstInputImage()->GetLargestPossibleRegion().GetSize();
     MsgReporter::GetInstance()->SendError(oss1.str().c_str());
@@ -200,7 +200,7 @@ HomologousPointExtractionModuleController
     }
   if (!m_Model->GetSecondInputImage()->GetLargestPossibleRegion().IsInside(id2))
     {
-    itk::OStringStream oss2;
+    std::ostringstream oss2;
     oss2 << "Index " << id2 << " is outside the image size " <<
     m_Model->GetSecondInputImage()->GetLargestPossibleRegion().GetSize();
     MsgReporter::GetInstance()->SendError(oss2.str().c_str());
@@ -209,7 +209,7 @@ HomologousPointExtractionModuleController
 
   if( m_Model->ExistsIndexes( id1, id2 ) )
     {
-      itk::OStringStream oss3;
+      std::ostringstream oss3;
       oss3 << "Enable to add (" << id1 << " " << id2 << "). At least one of the index has already been added.";
       MsgReporter::GetInstance()->SendError(oss3.str().c_str());
       return;
@@ -327,7 +327,7 @@ HomologousPointExtractionModuleController
     MsgReporter::GetInstance()->SendError("No transformation computed.");
     return;
     }
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << m_Model->GetTransformParameters();
   m_View->tTransform->value(oss.str().c_str());

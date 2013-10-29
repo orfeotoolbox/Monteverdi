@@ -93,7 +93,7 @@ std::string MonteverdiModel::CreateModuleByKey(const std::string& key)
     Module::Pointer module = mcIt->second.m_Constructor();
 
     // Build a unique key
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << key << m_InstancesCountMap[key];
 
     // Register module instance
@@ -427,7 +427,7 @@ void MonteverdiModel::StartWriting(const std::string& instanceId, const std::str
   writer->AddInputByKey("InputDataSet", output);
 
   // Build a unique key
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Writer";
 
   if (m_InstancesCountMap.count("Writer") > 0)
@@ -468,7 +468,7 @@ void MonteverdiModel::StartViewing(const std::string& instanceId, const std::str
   viewer->AddInputByKey("InputImage", output);
 
   // Build a unique key
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Viewer";
 
   if (m_InstancesCountMap.count("Viewer") > 0)
@@ -585,7 +585,7 @@ std::string MonteverdiModel::BuildCachingModuleId(const std::string& instanceId,
                                                   unsigned int idx)
 {
   // Create the instance id
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "[Cache] " << instanceId << ":" << outputKey << ":" << idx;
   return oss.str();
 }
@@ -740,7 +740,7 @@ MonteverdiModel::GetInstance()
 // {
 //   //TODO improve the support of exportation of Monteverdi graph to XML file
 //   // Declare a stringstream to be used later
-//   itk::OStringStream oss;
+//   std::ostringstream oss;
 //   oss << std::fixed << std::setprecision(6);
 
 //   // Build an xml document

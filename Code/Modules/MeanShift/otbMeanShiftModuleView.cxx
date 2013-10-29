@@ -169,7 +169,7 @@ void MeanShiftModuleView::UpdateViewerSetup()
     }
 
   unsigned int       lNbComponent = m_Model->GetInputImage()->GetNumberOfComponentsPerPixel();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
 
   //Clear all the choices

@@ -49,7 +49,7 @@ EdgeExtractionModel
     harris->SetAlpha(alpha);
     harris->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "HARRIS: " << sigmaD << " , " << sigmaI << " , " << alpha;
     std::string mess = oss.str();
     this->AddFeatureFilter(harris, FeatureInfoEdge::HARRIS, i, 0, mess);
@@ -69,7 +69,7 @@ EdgeExtractionModel
     var->SetRadius(rad);
     var->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Variance: " << radiusX << ", " << radiusY;
     std::string mess = oss.str();
     this->AddFeatureFilter(var, FeatureInfoEdge::VARIANCE, i, 0, mess);
@@ -86,7 +86,7 @@ EdgeExtractionModel
     grad->SetSigma(sigma);
     grad->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Rec. Gradient: " << sigma;
     std::string mess = oss.str();
     this->AddFeatureFilter(grad, FeatureInfoEdge::GRADIENT, i, 0, mess);
@@ -152,7 +152,7 @@ EdgeExtractionModel
 //         {
 //         ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
 //         extract->SetChannel(k + 1);
-//         itk::OStringStream oss;
+//         std::ostringstream oss;
 //         oss << "Mean Shift ";
 //         if (type == FeatureInfoEdge::MS_SMOOTH)
 //           {
@@ -172,7 +172,7 @@ EdgeExtractionModel
 //       }
 //     else
 //       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Mean Shift Clustered Boundries: ";
 //       if (type == FeatureInfoEdge::MS_BOUND) oss << "Clustered Boundries: ";
 //       else if (type == FeatureInfoEdge::MS_LABELED) oss << "Labeled: ";
@@ -193,7 +193,7 @@ EdgeExtractionModel
 //         {
 //         ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
 //         extract->SetChannel(k + 1);
-//         itk::OStringStream oss;
+//         std::ostringstream oss;
 //         oss << "Mean Shift ";
 //         if (type == FeatureInfoEdge::MS_SMOOTH)
 //           {
@@ -213,7 +213,7 @@ EdgeExtractionModel
 //       }
 //     else
 //       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Mean Shift Clustered Boundries: ";
 //       if (type == FeatureInfoEdge::MS_LABELED) oss << "Labeled: ";
 //       else if (type == FeatureInfoEdge::MS_BOUND) oss << "Clustered Boundries: ";
@@ -239,7 +239,7 @@ EdgeExtractionModel
     filterTouzi->SetRadius(radius);
     filterTouzi->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "TOUZI: " << radiusX;
     std::string mess = oss.str();
     this->AddFeatureFilter(filterTouzi, FeatureInfoEdge::TOUZI, i, 0, mess);

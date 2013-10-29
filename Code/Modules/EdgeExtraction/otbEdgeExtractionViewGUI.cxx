@@ -77,7 +77,7 @@ EdgeExtractionViewGUI
 ::UpdateFeatureInfo(FeatureType feat)
 {
   FeatureInfoEdge        inf;
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << inf.GetMapInfo().find(feat)->second;
   guiFeatInfo->buffer()->remove(0, guiFeatInfo->buffer()->length());
   guiFeatInfo->insert(oss.str().c_str());

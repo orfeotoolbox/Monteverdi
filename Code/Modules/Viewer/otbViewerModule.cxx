@@ -323,7 +323,7 @@ void ViewerModule::Run()
       ImageType::SizeType currentImageSize = image->GetLargestPossibleRegion().GetSize();
       if (currentImageSize != firstImageSize)
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Image '" << this->GetInputDataDescription<ImageType> ("InputImage", i)
             << "' dropped because its size is different that of the first image (" << currentImageSize << " vs "
             << firstImageSize << ")";
@@ -351,7 +351,7 @@ void ViewerModule::Run()
       }
     catch (itk::ExceptionObject & err)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Problem occurred while generation of QuickLook. The following error was returned:\n";
       oss << err.GetDescription();
       MsgReporter::GetInstance()->SendError(oss.str());
@@ -391,7 +391,7 @@ void ViewerModule::Run()
     // This was done because if two image has the same description, the Fl_Choice will only contain 1 possible item.
 
     const DataObjectWrapper& dow = this->GetInputDataDescriptorByKey(std::string("InputImage")).GetNthData(i);
-    itk::OStringStream text;
+    std::ostringstream text;
     text << "[" << dow.GetSourceInstanceId() << "] " << desc;
     guiOpaqueImageSelection->add(text.str().c_str());
     guiTransparentImageSelection->add(text.str().c_str());
@@ -525,7 +525,7 @@ void ViewerModule::Run()
     }
   catch (itk::ExceptionObject & err)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Problem occured while loading input image. The following error was returned:\n";
     oss << err.GetDescription();
     MsgReporter::GetInstance()->SendError(oss.str());
@@ -623,7 +623,7 @@ void ViewerModule::UpdateVectorData(unsigned int index)
  */
 void ViewerModule::AddNameToVectorDataBrowser(const std::string & name)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << m_DisplayedLabel << name;
 
@@ -833,7 +833,7 @@ void ViewerModule::UpdateVectorDataListShowed(unsigned int selectedItem, std::st
   /* Update the ImageList using the status label "+" or "-" */
   std::string filename = this->GetInputDataDescription<VectorDataType> ("VectorData", selectedItem - 1);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << status << filename;
   dVDList->text(selectedItem, oss.str().c_str());
   oss.str("");
@@ -1158,7 +1158,7 @@ void ViewerModule::UpdateViewerSetupWindow()
   //Get the number of components per pixel
   unsigned int nbComponent = image->GetNumberOfComponentsPerPixel();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
 
   //Clear all the choices
@@ -1928,7 +1928,7 @@ void ViewerModule::UpdatePixelInformationWindow()
   ImageLayerType::Pointer imageLayer = m_InputImageLayerList->GetNthElement(m_CurrentOpaqueImage);
 
   // Get the description
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   bPixelInfo->buffer()->remove(0, bPixelInfo->buffer()->length());
   oss << imageLayer->GetPixelDescription(index);
@@ -2012,7 +2012,7 @@ void ViewerModule::UpdateInformation()
   ImageType::Pointer image = m_InputImageList->GetNthElement(m_CurrentOpaqueImage);
 
   std::string imName = m_Label.c_str();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << imName.substr(imName.find_last_of("/") + 1, imName.size()) << " (" << image->GetNumberOfComponentsPerPixel();
   if (image->GetNumberOfComponentsPerPixel() != 1)

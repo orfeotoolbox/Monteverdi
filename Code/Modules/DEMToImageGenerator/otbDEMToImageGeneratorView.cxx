@@ -201,7 +201,7 @@ void
 DEMToImageGeneratorView
 ::UpdateOutputParameters()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   oss.str("");
   oss << m_Controller->GetModel()->GetOutputOrigin()[0];
@@ -362,7 +362,7 @@ void DEMToImageGeneratorView::UpdateSpacing()
   double spacingX = (latLongPointLR[0] - latLongPointUL[0]) / sizeX;
   double spacingY = (latLongPointLR[1] - latLongPointUL[1]) / sizeY;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << spacingX;
   oSpacingX->value(oss.str().c_str());
@@ -452,7 +452,7 @@ void DEMToImageGeneratorView::UpdateSpacingMeter()
   double spacingXm = (cartoPointLR[0] - cartoPointUL[0]) / sizeX;
   double spacingYm = (cartoPointLR[1] - cartoPointUL[1]) / sizeY;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << spacingXm;
   oSpacingXm->value(oss.str().c_str());

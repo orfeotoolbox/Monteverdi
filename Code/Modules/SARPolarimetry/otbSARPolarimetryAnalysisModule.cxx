@@ -87,7 +87,7 @@ void SARPolarimetryAnalysisModule::CheckInputs()
         }
       else
         {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "Invalid Input, must have 6 channels (for HAlpha process) or 4 channels (for synthesys process) instead of " << m_InputImage->GetNumberOfComponentsPerPixel() << ".";
           MsgReporter::GetInstance()->SendError( oss.str() );
           this->Quit();

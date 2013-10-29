@@ -55,7 +55,7 @@ SmoothingModel
     copy->SetScale(1);
     copy->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Original data";
     std::string mess = oss.str();
 
@@ -76,7 +76,7 @@ SmoothingModel
     mean->SetRadius(rad);
     mean->SetInput(GetInputImageList()->GetNthElement(i));
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Mean: " << radiusX << ", " << radiusY;
     std::string mess = oss.str();
     this->AddFeatureFilter(mean, FeatureInfoSmooth::MEAN, i, 0, mess);
@@ -134,7 +134,7 @@ SmoothingModel
         {
         ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
         extract->SetChannel(k + 1);
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Mean Shift ";
         if (type == FeatureInfoSmooth::MS_SMOOTH)
           {
@@ -154,7 +154,7 @@ SmoothingModel
 //       }
 //     else
 //       {
-//       itk::OStringStream oss;
+//       std::ostringstream oss;
 //       oss << "Mean Shift ";
 //       if (type == FeatureInfoSmooth::MS_BOUND) oss << "Clustered Boundries: ";
 //       else if (type == FeatureInfoSmooth::MS_LABELED) oss << "Labeled: ";
@@ -175,7 +175,7 @@ SmoothingModel
         {
         ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
         extract->SetChannel(k + 1);
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "Mean Shift ";
         if (type == FeatureInfoSmooth::MS_SMOOTH)
           {
@@ -195,7 +195,7 @@ SmoothingModel
 //       }
 //     else
 //       {
-//       itk::OStringStream oss;
+//       std::ostringstream oss;
 //       oss << "Mean Shift ";
 //       if (type == FeatureInfoSmooth::MS_LABELED) oss << "Labeled: ";
 //       else if (type == FeatureInfoSmooth::MS_BOUND) oss << "Clustered Boundries: ";

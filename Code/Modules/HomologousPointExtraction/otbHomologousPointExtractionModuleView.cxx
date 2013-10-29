@@ -201,7 +201,7 @@ void
 HomologousPointExtractionModuleView
 ::AddPointsToList(IndexType id1, IndexType id2)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << id1 << " , " << id2;
   this->lPointList->add(oss.str().c_str());
 

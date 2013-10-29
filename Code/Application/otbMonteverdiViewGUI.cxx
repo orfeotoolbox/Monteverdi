@@ -60,7 +60,7 @@ MonteverdiViewGUI
   this->Build();
 
   // Main window title includes the version
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Monteverdi - ";
   oss << Monteverdi_VERSION_STRING;
   wMainWindow->copy_label(oss.str().c_str());

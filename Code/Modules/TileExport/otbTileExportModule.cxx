@@ -245,7 +245,7 @@ void TileExportModule::SaveDataSet()
   // Check that the kmz file can be written
   if (!itksys::SystemTools::Touch(m_KmzFileName.str().c_str(), true))
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<"Cannot write the Kmz file (" << m_KmzFileName.str() << ") is not writeable, please choose another one.";
     MsgReporter::GetInstance()->SendError(oss.str());
     this->Hide();
@@ -297,10 +297,10 @@ void TileExportModule::SaveDataSet()
     m_VectorWriter->Update();
 
     // Add the logo to the kmz
-    itk::OStringStream logo_root_path_in_kmz;
+    std::ostringstream logo_root_path_in_kmz;
     logo_root_path_in_kmz << "logo.jpeg";
 
-    itk::OStringStream logo_absolut_path;
+    std::ostringstream logo_absolut_path;
     logo_absolut_path << m_LogoFilename.str();
 
     this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
@@ -310,7 +310,7 @@ void TileExportModule::SaveDataSet()
       {
         if (itksys::SystemTools::RemoveFile(logo_absolut_path.str().c_str()) == false)
           {
-            itk::OStringStream oss;
+            std::ostringstream oss;
             oss << "Error while deleting the logo file " << logo_absolut_path.str();
             MsgReporter::GetInstance()->SendError(oss.str());
             this->Hide();
@@ -698,7 +698,7 @@ TileExportModule::GetCuttenFileName(std::string description, unsigned int idx)
   std::string currentImageName;
   std::string tempName;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "tiles_" << idx;
   tempName = oss.str();
 
@@ -1555,11 +1555,11 @@ TileExportModule::AddCurrentProductLegends(unsigned int curProd)
     m_VectorWriter->Update();
 
     // Add the legend to the kmz
-    itk::OStringStream legend_root_path_in_kmz;
+    std::ostringstream legend_root_path_in_kmz;
     legend_root_path_in_kmz << "legends/legend_" << curProd << m_ProductVector[curProd].m_AssociatedLegends[i] <<
     ".jpeg";
 
-    itk::OStringStream legend_absolut_path;
+    std::ostringstream legend_absolut_path;
     legend_absolut_path << legendName.str();
 
     this->AddFileToKMZ(legend_absolut_path, legend_root_path_in_kmz);

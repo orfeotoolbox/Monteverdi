@@ -129,7 +129,7 @@ VectorDataTreeBrowser<TVectorData>
     it.GoToBegin();
 
     // StringStream used to build strings
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss.str("");
 
     FluNodeVectorType updatedFluNodes;
@@ -274,7 +274,7 @@ VectorDataTreeBrowser<TVectorData>
     = dataNode->GetLine()->GetVertexList()->Begin();
 
   int                count = 0;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   while (it != dataNode->GetLine()->GetVertexList()->End())
     {
@@ -306,7 +306,7 @@ VectorDataTreeBrowser<TVectorData>
     = dataNode->GetPolygonExteriorRing()->GetVertexList()->Begin();
 
   int                count = 0;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   while (it != dataNode->GetPolygonExteriorRing()->GetVertexList()->End())
     {
@@ -359,7 +359,7 @@ VectorDataTreeBrowser<TVectorData>
     }
   else
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss.str("");
     oss << m_NodeNameMap[dataNode->GetNodeType()] << m_NumberingMap[dataNode->GetNodeType()];
     resp = parent->add(oss.str().c_str());
@@ -378,7 +378,7 @@ typename VectorDataTreeBrowser<TVectorData>
 VectorDataTreeBrowser<TVectorData>
 ::FetchSubNode(FluNodeType * parent, const std::string& label)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << parent->find_path() << "/" << label;
   FluNodeType * node = this->find(oss.str().c_str());
 
@@ -397,7 +397,7 @@ typename VectorDataTreeBrowser<TVectorData>
 VectorDataTreeBrowser<TVectorData>
 ::UpdateOrCreatePointField(FluNodeType * parent, const char * label, const PointType& point)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << parent->find_path() << "/" << label;
 
   FluNodeType * node = this->find(oss.str().c_str());
@@ -436,7 +436,7 @@ VectorDataTreeBrowser<TVectorData>
 {
   std::string label = field.first->GetNameRef();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << parent->find_path() << "/" << label;
 
   FluNodeType * node = this->find(oss.str().c_str());

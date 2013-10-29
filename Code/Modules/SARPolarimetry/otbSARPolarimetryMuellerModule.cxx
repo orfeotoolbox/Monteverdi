@@ -74,7 +74,7 @@ void SARPolarimetryMuellerModule::CheckInputs()
       m_InputImage->UpdateOutputInformation();
       if( m_InputImage->GetNumberOfComponentsPerPixel() != 16)
         {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "Invalid Input, must have 16 channels instead of " << m_InputImage->GetNumberOfComponentsPerPixel() << ".";
           MsgReporter::GetInstance()->SendError( oss.str() );
           this->Quit();

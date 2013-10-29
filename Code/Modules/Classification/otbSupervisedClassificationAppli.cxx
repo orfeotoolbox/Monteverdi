@@ -235,7 +235,7 @@ SupervisedClassificationAppli
     }
 
   /// Add the choice for color composition
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for (unsigned int i = 0; i < m_InputImage->GetNumberOfComponentsPerPixel(); ++i)
     {
     oss << i + 1;
@@ -413,7 +413,7 @@ SupervisedClassificationAppli
     // the the soecify file is not a directory -> error message
     if (isFile)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss.str("");
       oss << dirname << " already exists as a file.";
       oss << "Please select a valid directory or set a new one name that will be created." << std::endl;
@@ -475,7 +475,7 @@ SupervisedClassificationAppli
   std::vector<VectorDataPointerType>::iterator vectorDataVectorIterator =  vectorDataVector.begin();
   ClassesMapType::iterator                     cit = m_ClassesMap.begin();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   while (cit != m_ClassesMap.end() && vectorDataVectorIterator !=  vectorDataVector.end())
     {
@@ -576,7 +576,7 @@ SupervisedClassificationAppli
       {
       OutputVectorDataType::DataNodePointerType poly = OutputVectorDataType::DataNodeType::New();
       poly->SetNodeType(otb::FEATURE_POLYGON);
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss.str("");
       oss << i + 1;
       poly->SetNodeId(oss.str().c_str());
@@ -757,7 +757,7 @@ void
 SupervisedClassificationAppli
 ::VisualisationSetup()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for (unsigned int i = 0; i < m_InputImage->GetNumberOfComponentsPerPixel(); ++i)
     {
     oss.str("");
@@ -965,7 +965,7 @@ void
 SupervisedClassificationAppli
 ::AddClass()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   ClassPointerType newClass = ClassType::New();
   oss << "Class " << m_CurrentLabel;
@@ -1191,7 +1191,7 @@ SupervisedClassificationAppli
 
   dClassInfo->buffer()->remove(0, dClassInfo->buffer()->length());
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Class name: " << theClass->GetName() << " (Id: " << theClass->GetId() << ")";
   dClassInfo->insert(oss.str().c_str());
   oss.str("");
@@ -1233,7 +1233,7 @@ void
 SupervisedClassificationAppli
 ::UpdateImageInfo()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   // Clear the info buffer
   dImageInfo->buffer()->remove(0, dImageInfo->buffer()->length());
@@ -1789,7 +1789,7 @@ SupervisedClassificationAppli
     {
       if (*countIt == 0)
         {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "Class " << (*classesIt)->GetName() << " has no training sample, cannot do SVM estimation." << std::endl;
           MsgReporter::GetInstance()->SendError(oss.str().c_str());
           return;
@@ -2117,7 +2117,7 @@ SupervisedClassificationAppli
     }
   if (m_ValidationListSample->Size() == 0)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "No Validation samples selected..." << std::endl;
     MsgReporter::GetInstance()->SendError(oss.str().c_str());
     return;
@@ -2187,7 +2187,7 @@ SupervisedClassificationAppli
 
   double kappa = (overallAccuracy - luckyRate) / (1 - luckyRate);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << std::setprecision(2);
   oss << std::fixed;
   std::vector<double> columnSum(m_ClassesMap.size(), 0);
@@ -2347,7 +2347,7 @@ SupervisedClassificationAppli
     }
   catch (itk::ExceptionObject& err)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Error while reading labeled image: "  << err << std::endl;
     MsgReporter::GetInstance()->SendError(oss.str().c_str());
     return;

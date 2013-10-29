@@ -111,7 +111,7 @@ void SupervisedClassificationModule::Notify()
     ClassesMapType myMap = m_SupervisedClassification->GetClassesMap();
     for (ClassesMapType::iterator it = myMap.begin(); it != myMap.end(); ++it)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "OutputVector " << (*it)->GetName();
       this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector()[i], oss.str().c_str(),
                                 otbGetTextMacro("Vectors of classified image"));

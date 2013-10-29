@@ -130,7 +130,7 @@ CachingPathManager
 
   if( this->IsValidCachingPath(filename) == false )
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<"Invalid directory ";
       oss<<filename;
       oss<<" as caching dir."<<std::endl;
@@ -152,7 +152,7 @@ CachingPathManager
   // if existing dir, check writable
   if ( itksys::SystemTools::FileIsDirectory( path.c_str() ) )
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<path<<"/foo";
       if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
         {
@@ -201,7 +201,7 @@ CachingPathManager
   
   if( res == false )
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<"Not enough permission for write caching in ";
       oss<<itksys::SystemTools::GetRealPath(".")<<".";
       MsgReporter::GetInstance()->SendError(oss.str());

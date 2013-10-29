@@ -402,7 +402,7 @@ namespace otb
     color[2]= rand()/(RAND_MAX+1.0);
     color[3]=1.0;
 
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "New Class " << label;
     std::string name = oss.str().c_str();
 
@@ -754,7 +754,7 @@ namespace otb
 
   void ObjectLabelingModel::SaveClassificationParametersToXMLFile(const char * fname)
   {
-    itk::OStringStream oss;
+    std::ostringstream oss;
 
     // Build the model name
     std::string svmExt = itksys::SystemTools::GetFilenameWithoutLastExtension(fname);

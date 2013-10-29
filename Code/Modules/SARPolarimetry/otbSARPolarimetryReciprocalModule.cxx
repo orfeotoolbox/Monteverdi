@@ -84,7 +84,7 @@ void SARPolarimetryReciprocalModule::CheckInputs()
         }
       else
         {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss << "Invalid Input, must have 6 channels instead of " << m_InputImage->GetNumberOfComponentsPerPixel() << ".";
           MsgReporter::GetInstance()->SendError( oss.str() );
           this->Quit();

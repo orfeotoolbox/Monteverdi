@@ -89,7 +89,7 @@ void VectorizationModule::Run()
         }
       else
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss<<"Invalid DEm directory "<<cfname<<".";
         MsgReporter::GetInstance()->SendError(oss.str());
         }

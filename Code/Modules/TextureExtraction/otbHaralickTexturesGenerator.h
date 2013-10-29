@@ -126,7 +126,7 @@ void AddHarTexturesFilter(ModelPointerType pModel,
       
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           //oss << "Haralick Text: ";
           
           switch (pHarList[textId])

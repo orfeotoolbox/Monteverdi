@@ -350,7 +350,7 @@ void ReaderModule::OpenDataSet()
             // Check if it is a multiband image of scalar (only monoband complex image can go here)
             if ( (!(dynamic_cast<GDALImageIO*> (m_FPVReader->GetImageIO()))->GDALPixelTypeIsComplex()) && (m_FPVReader->GetImageIO()->GetNumberOfComponents() == 2))
               {
-              itk::OStringStream oss;
+              std::ostringstream oss;
               oss << "You try to open a two bands image of scalar as a Complex image, \n" << \
                      "we consider that first band is Real part and second band is Imaginary part.\n"<< \
                      "This warning message occurred with: " << vFilePath->value();
@@ -358,7 +358,7 @@ void ReaderModule::OpenDataSet()
               }
             else if (m_FPVReader->GetImageIO()->GetNumberOfComponents()  > 2)
               {
-              itk::OStringStream oss;
+              std::ostringstream oss;
               oss << "You try to open a Multiband ( number of bands > 2) image of scalar as a Complex image, \n" << \
                      "we consider only that first band is Real part and second band is Imaginary part. \n"<< \
                      "Rest of data are not considered.\n" << \
@@ -490,13 +490,13 @@ void ReaderModule::OpenRealImage()
   {
   if(m_TypeJPEG2000)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<filepath<<"?&resol="<<vDataset->value();
     filepath = oss.str();
     }
   else if(m_TypeHdf)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<filepath<<"?&sdataidx="<<vDataset->value();
     filepath= oss.str();
     }
@@ -533,13 +533,13 @@ void ReaderModule::OpenRealImageWithQuicklook()
   {
   if(m_TypeJPEG2000)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<otbFilepath<<"?&resol="<<vDataset->value();
     otbFilepath = oss.str();
     }
   else if(m_TypeHdf)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<otbFilepath<<"?&sdataidx="<<vDataset->value();
     otbFilepath= oss.str();
     }
@@ -646,7 +646,7 @@ void ReaderModule::UpdateProgress()
 
 //   double progress = m_ProcessObject->GetProgress();
 //
-//   itk::OStringStream oss1, oss2;
+//   std::ostringstream oss1, oss2;
 //   oss1.str("");
 //   oss1 << otbGetTextMacro("Generating QuickLook") << "  (" << std::floor(100 * progress) << "%)";
 //   oss2.str("");
@@ -764,7 +764,7 @@ void ReaderModule::ThreadedRun()
         qlReader = FPVReaderType::New();
         if (!m_Desc.empty() && vDataset->visible() )
           {
-          itk::OStringStream oss;
+          std::ostringstream oss;
           oss<<m_Filepath<<"?&resol="<<resolution;
           qlReader->SetFileName(oss.str());
           }
@@ -893,13 +893,13 @@ void ReaderModule::OpenComplexImage()
   {
   if(m_TypeJPEG2000)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<filepath<<"?&resol="<<vDataset->value();
     filepath = oss.str();
     }
   else if(m_TypeHdf)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<filepath<<"?&sdataidx="<<vDataset->value();
     filepath= oss.str();
     }

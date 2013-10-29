@@ -117,7 +117,7 @@ RadiometricIndicesExtractionModel
   angle->SetInput(this->GetInputImage());
   angle->SetReferencePixel(pix);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Full Image: Spect Angle: ";
   for (unsigned int i = 0; i < pix.Size(); ++i)
     {

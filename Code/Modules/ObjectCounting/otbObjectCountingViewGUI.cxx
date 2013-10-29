@@ -191,7 +191,7 @@ void ObjectCountingViewGUI
 
     case POLYGONS_DETECTED:
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "Number of Object(s) found: ";
       oss << m_Model->GetNumberOfObjects();
       tStat->value(oss.str().c_str());
@@ -206,7 +206,7 @@ void ObjectCountingViewGUI
 
     case HAS_REFERENCEPIXEL:
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << m_Model->GetReferencePixel();
       tRefPixel->value(oss.str().c_str());
       tRefPixel->redraw();

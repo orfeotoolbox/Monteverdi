@@ -161,7 +161,7 @@ FeatureExtractionBaseViewGUI
 ::UpdateChannelSelection()
 {
   guiChannelSelection->clear();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   int                count = 1;
   for (unsigned int i = 0; i < GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel(); i++)
     {
@@ -184,7 +184,7 @@ FeatureExtractionBaseViewGUI
 ::UpdateInformation()
 {
   std::string        imName = GetModel()->GetInputFileName();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << m_WindowTitle;
   oss << ": " << imName.substr(imName.find_last_of("/") + 1, imName.size());

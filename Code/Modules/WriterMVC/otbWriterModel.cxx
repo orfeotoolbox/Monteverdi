@@ -262,7 +262,7 @@ WriterModel
 
   m_ChannelExtractorList->PushBack(extract);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Ch" << id;
   m_OutputChannelsInformation.push_back(oss.str());
 }

@@ -247,7 +247,7 @@ void PolarimetricSynthesisController::MouseOut()
 
 void PolarimetricSynthesisController::PixelHovered(const IndexType& index)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   if (m_Model->GetRGB() && m_Model->GetOutputVectorImage()->GetBufferedRegion().IsInside(index))
   {

@@ -126,7 +126,7 @@ void ImageStatisticsModule::Run()
        m_MinMaxFilter->Update();
 
        // Update inteface
-       itk::OStringStream oss;
+       std::ostringstream oss;
        oss << m_MinMaxFilter->GetMinimum();
        this->vMin->value(oss.str().c_str());
 
@@ -182,7 +182,7 @@ void ImageStatisticsModule::Run()
        m_StatisticsFilter->Update();
 
        // Update inteface
-       itk::OStringStream oss;
+       std::ostringstream oss;
        oss << m_StatisticsFilter->GetMinimum();
        this->vMin->value(oss.str().c_str());
 
@@ -230,7 +230,7 @@ void ImageStatisticsModule::Run()
 
  void ImageStatisticsModule::UpdateCovarianceText()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   
   const MatrixType & covMatrix = m_StatisticsFilter->GetCovariance();
 

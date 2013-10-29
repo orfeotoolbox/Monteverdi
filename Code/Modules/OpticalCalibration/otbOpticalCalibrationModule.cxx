@@ -145,7 +145,7 @@ OpticalCalibrationModule
     }
   catch (itk::ExceptionObject& err)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss.str("");
     oss << "Invalid input image medadata. The parsing returns the following error:\n";
     oss << err.GetDescription();
@@ -194,7 +194,7 @@ void
 OpticalCalibrationModule
 ::UpdateInformation()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << "Optical calibration module: ";
   std::string myFile(this->GetInputDataDescription<ImageType>("InputImage", 0));
@@ -249,7 +249,7 @@ OpticalCalibrationModule
 ::UpdateCoefSetup()
 {
   unsigned int       lNbComponent = m_InputImage->GetNumberOfComponentsPerPixel();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
 
   guiBandSelection->clear();
@@ -310,7 +310,7 @@ void
 OpticalCalibrationModule
 ::UpdateParamDisplay()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
 
@@ -324,7 +324,7 @@ OpticalCalibrationModule
   tdParam->buffer(buff);
   tdParam->redraw();
 
-  itk::OStringStream oss2;
+  std::ostringstream oss2;
   oss2.str("");
   AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
   oss2 << atmoPar;

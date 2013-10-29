@@ -145,7 +145,7 @@ void ObjectLabelingView::UpdateViewerSetup()
     }
   
   unsigned int lNbComponent = m_Model->GetVectorImage()->GetNumberOfComponentsPerPixel();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   
   //Clear all the choices
@@ -265,7 +265,7 @@ void ObjectLabelingView::RefreshInterface()
   // Update the classes list
   lClasses->clear();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   while(it!=m_Model->GetClasses().end())
     {
@@ -355,7 +355,7 @@ void ObjectLabelingView::UpdateClassInformation()
   if(m_Model->HasSelectedClass())
     {
     unsigned int classIndex = m_Model->GetSelectedClass();
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<m_Model->GetClass(classIndex).m_Label;
     vClassLabel->activate();
     vClassLabel->value(oss.str().c_str());

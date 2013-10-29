@@ -48,7 +48,7 @@ MonteverdiController
     }
   catch (itk::ExceptionObject& err)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << "Problem occurred with the module: " << id << " \n";
     oss << err.GetDescription();
     err.SetDescription(oss.str());

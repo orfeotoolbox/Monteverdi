@@ -179,7 +179,7 @@ FeatureExtractionBaseModel
 
   m_ChannelExtractorList->PushBack(extract);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "Ch" << id;
   m_OutputChannelsInformation.push_back(oss.str());
 }
@@ -214,7 +214,7 @@ FeatureExtractionBaseModel
   this->AddFilter(filter);
   this->AddFilterType(type);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   if (inputId != -1) oss << m_OutputChannelsInformation[inputId] << ": " << mess;
   else oss << mess;
   m_OutputFilterInformation.push_back(oss.str());

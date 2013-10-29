@@ -106,7 +106,7 @@ void InputViewComponent::AddChoice(const StringPairType& choice, bool locked, co
     itkExceptionMacro("Input choice gui is not built !");
     }
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << choice.first << "/" << choice.second;
 
   // Handle the locked data case
@@ -381,7 +381,7 @@ void InputViewComponent::UpdateCachingProgress()
     // Check if we need to update progress
     if (progress >= (m_ProgressBar->value() + 0.01))
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss.str("");
       oss << std::floor(100 * progress);
       oss << " %";

@@ -87,7 +87,7 @@ void KMeansModule::UpdateNumberOfSamples()
 
   unsigned int nbSamples =  static_cast<unsigned int>(vNumberOfSamples->value() * image->GetLargestPossibleRegion().GetNumberOfPixels() / 100);
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << vNumberOfSamples->value() << "% of image (" << nbSamples << " samples)";
   oNumberOfSamples->copy_label(oss.str().c_str());
 }
@@ -120,7 +120,7 @@ void KMeansModule::UpdateProgress()
 {
   itk::MutexLockHolder<itk::SimpleFastMutexLock> lock(m_Mutex);
 
-  itk::OStringStream oss1;
+  std::ostringstream oss1;
   oss1.str("");
 
   pProgressBar->show();

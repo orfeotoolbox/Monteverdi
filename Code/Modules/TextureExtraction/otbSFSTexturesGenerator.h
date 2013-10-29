@@ -77,7 +77,7 @@ public:
       filter->SetNumberOfDirections(pNbDirection);
       filter->SetInput(pModel->GetInputImageList()->GetNthElement(i));
       filter->InitFeatureStatus(false);
-      itk::OStringStream oss;
+      std::ostringstream oss;
 
       switch (pType)
         {

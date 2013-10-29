@@ -227,7 +227,7 @@ void ProjectionView::RetrieveInputProjection()
        int zone = oSRS.GetUTMZone(&north);
 
        // Fill the UTM Parameters in the GUI
-       itk::OStringStream oss;
+       std::ostringstream oss;
        oss << zone;
        iUTMZone->value(oss.str().c_str());
 
@@ -394,7 +394,7 @@ void ProjectionView::UpdateMapParam()
   // Project the new geo Point
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << setiosflags(std::ios_base::fixed);
   oss.str("");
 
@@ -508,7 +508,7 @@ void ProjectionView::UpdateLongLat()
       geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(point);
 
       // Fill the datas in the GUI
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << setiosflags(std::ios_base::fixed);
       oss.str("");
       oss << geoPoint[0];
@@ -570,7 +570,7 @@ void ProjectionView::UpdateUnavailableLongLat()
   geoPoint = m_Controller->GetModel()->GetInverseTransform()->GetTransform()->GetFirstTransform()->TransformPoint(point);
 
   // Fill the datas in the GUI
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << setiosflags(std::ios_base::fixed);
   oss.str("");
   oss << geoPoint[0];
@@ -588,7 +588,7 @@ void ProjectionView::UpdateOutputParameters()
 {
   m_HaveUpdatePreview = true;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << m_Controller->GetModel()->GetOutputSpacing()[0];
   guiSpacingX->value(oss.str().c_str());
@@ -636,7 +636,7 @@ int ProjectionView::UpdateInterpolator()
       }
       //     case MAP_SINC:
       //       {
-      //       itk::OStringStream oss;
+      //       std::ostringstream oss;
       //       oss.str("");
       //       oss << guiSincRadius->value();
       //       if (strcmp("", oss.str().c_str()) != 0)
@@ -750,7 +750,7 @@ void ProjectionView::InitializeAction()
   geoPoint = rsTransform->GetTransform()->GetFirstTransform()->TransformPoint(middlePoint);
 
   // Fill the datas in the GUI
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << setiosflags(std::ios_base::fixed);
   oss.str("");
   oss << geoPoint[0];
@@ -1280,7 +1280,7 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
   // carto point in WGS84 and update the Long/Lat fields
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << setiosflags(std::ios_base::fixed);
   oss.str("");
 

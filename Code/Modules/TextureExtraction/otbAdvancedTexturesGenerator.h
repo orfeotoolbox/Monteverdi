@@ -126,7 +126,7 @@ public:
 
       for (unsigned int textId = 0; textId < pHarList.size(); textId++)
         {
-        itk::OStringStream oss;
+        std::ostringstream oss;
         //oss<<"Advanced Text: ";
 
         switch (pHarList[textId])

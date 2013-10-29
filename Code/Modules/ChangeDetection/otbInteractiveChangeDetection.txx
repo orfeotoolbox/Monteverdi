@@ -1128,7 +1128,7 @@ InteractiveChangeDetection<TPixel>::LoadCenterImage()
     }
 
   //  /// Add the choice for color composition
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   oss << "Intensity difference";
   bCenterViewerGrayscaleChannel->add(oss.str().c_str());
@@ -1244,7 +1244,7 @@ InteractiveChangeDetection<TPixel>::LoadLeftImage()
   aLeftViewerHistogram->add(m_LeftViewer->GetRedHistogramWidget());
 
   /// Add the choice for color composition
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for (unsigned int i = 0; i < m_LeftImage->GetNumberOfComponentsPerPixel(); ++i)
     {
     oss << "Left image channel " << i + 1;
@@ -1335,7 +1335,7 @@ InteractiveChangeDetection<TPixel>::LoadRightImage()
     }
 
   /// Add the choice for color composition
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for (unsigned int i = 0; i < m_RightImage->GetNumberOfComponentsPerPixel(); ++i)
     {
     oss << "Right image channel " << i + 1;
