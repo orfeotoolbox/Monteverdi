@@ -110,7 +110,7 @@ public:
   typedef itk::Statistics::ListSample<MeasurementVectorType>                       ListSampleType;
   typedef double                                                                   HistogramMeasurementType;
   /*typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,
-  HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType;*/
+  HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType; */
 
   typedef itk::Statistics::Histogram<
       HistogramMeasurementType,

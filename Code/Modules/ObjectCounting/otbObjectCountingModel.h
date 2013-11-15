@@ -143,7 +143,7 @@ public:
   /*typedef itk::Statistics::ListSampleToHistogramGenerator<
       ListSampleType,
       HistogramMeasurementType,
-      itk::Statistics::DenseFrequencyContainer, 1>                   HistogramGeneratorType;*/
+      itk::Statistics::DenseFrequencyContainer, 1>                   HistogramGeneratorType; */
 
   typedef itk::Statistics::Histogram<
       HistogramMeasurementType,

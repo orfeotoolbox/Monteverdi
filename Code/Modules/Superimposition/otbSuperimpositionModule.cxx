@@ -104,7 +104,7 @@ void SuperimpositionModule::Ok()
 
   VectorImageType::PixelType defaultValue;
   /*itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
-                                                      vmoving->GetNumberOfComponentsPerPixel());*/
+                                                      vmoving->GetNumberOfComponentsPerPixel()); */
   itk::NumericTraits<VectorImageType::PixelType>::SetLength(defaultValue,
                                                             vmoving->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
