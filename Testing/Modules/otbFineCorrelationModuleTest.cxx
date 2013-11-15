@@ -120,7 +120,7 @@ int otbFineCorrelationModuleTest(int argc, char* argv[])
   writer1->SetInput(out1);
   writer1->Update();
 
-  otb::DataObjectWrapper wrapperOut2 = module->GetOutputByKey("XDeformationField");
+  otb::DataObjectWrapper wrapperOut2 = module->GetOutputByKey("XDisplacementField");
   std::cout << "Output wrapper: " << wrapperOut1 << std::endl;
   ImageType::Pointer out2 = dynamic_cast<ImageType *>(wrapperOut2.GetDataObject());
 
@@ -130,7 +130,7 @@ int otbFineCorrelationModuleTest(int argc, char* argv[])
   writer2->SetInput(out2);
   writer2->Update();
 
-  otb::DataObjectWrapper wrapperOut3 = module->GetOutputByKey("YDeformationField");
+  otb::DataObjectWrapper wrapperOut3 = module->GetOutputByKey("YDisplacementField");
   std::cout << "Output wrapper: " << wrapperOut3 << std::endl;
   ImageType::Pointer out3 = dynamic_cast<ImageType *>(wrapperOut3.GetDataObject());
 

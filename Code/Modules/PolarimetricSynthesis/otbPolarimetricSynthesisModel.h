@@ -33,7 +33,10 @@ See OTBCopyright.txt for details.
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
-#include "itkListSampleToHistogramGenerator.h"
+//#include "itkListSampleToHistogramGenerator.h"
+#include "itkSampleToHistogramFilter.h"
+#include "itkDenseFrequencyContainer2.h"
+#include "itkHistogram.h"
 
 // Visu
 #include "otbImageLayerRenderingModel.h"
@@ -106,9 +109,20 @@ public:
   typedef itk::Vector<itk::NumericTraits<PixelType>::RealType, 1>                   MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType>                       ListSampleType;
   typedef double                                                                   HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,
-  HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType;
-  typedef  HistogramGeneratorType::HistogramType                                   HistogramType;
+  /*typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,
+  HistogramMeasurementType, itk::Statistics::DenseFrequencyContainer, 1>           HistogramGeneratorType;*/
+
+  typedef itk::Statistics::Histogram<
+      HistogramMeasurementType,
+      itk::Statistics::DenseFrequencyContainer2>                                   HistogramType;
+  typedef HistogramType::SizeType                                                  HistogramSizeType;
+  typedef HistogramType::MeasurementVectorType                                     HistogramMeasurementVectorType;
+
+  typedef itk::Statistics::SampleToHistogramFilter<
+      ListSampleType,
+      HistogramType>                                                               HistogramGeneratorType;
+
+  //typedef  HistogramGeneratorType::HistogramType                                   HistogramType;
   typedef otb::ImageFileWriter<DoubleVectorImageType>                     WriterRGBType;
   typedef otb::ImageFileWriter<OutputImageType>                           WriterGrayType;
 

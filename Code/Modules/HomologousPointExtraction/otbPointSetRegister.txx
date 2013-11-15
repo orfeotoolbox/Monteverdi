@@ -74,7 +74,8 @@ PointSetRegister<TTransform>
   registration->SetFixedPointSet(m_FixPointSet);
   registration->SetMovingPointSet(m_MovingPointSet);
 
-  registration->StartRegistration();
+  //registration->StartRegistration();
+  registration->Update();
 
   invTransform->GetInverse(m_Transform);
 

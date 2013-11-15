@@ -1098,6 +1098,10 @@ void ProjectionView::DisplayPreviewWidget()
         // image
         if (m_PreviousMapType != this->GetMapType())
           {
+          ModelType::ResampleFilterType::OutputImageType::PixelType zeroPaddingValue;
+          zeroPaddingValue.SetSize(m_Controller->GetModel()->GetInputImage()->GetNumberOfComponentsPerPixel());
+          zeroPaddingValue.Fill(0);
+
           // Reproject the image with a final size equal to the previewWidget
           // size  and relative spacing
           m_Transform->SetInput(m_Controller->GetModel()->GetInputImage());
@@ -1105,8 +1109,10 @@ void ProjectionView::DisplayPreviewWidget()
           m_Transform->SetOutputOrigin(estimator->GetOutputOrigin());
           m_Transform->SetOutputSpacing(estimator->GetOutputSpacing());
           m_Transform->SetOutputSize(estimator->GetOutputSize());
-          m_Transform->SetDeformationFieldSpacing(10. * estimator->GetOutputSpacing());
-          m_Transform->SetEdgePaddingValue(0);
+          //m_Transform->SetDeformationFieldSpacing(10. * estimator->GetOutputSpacing());
+          m_Transform->SetDisplacementFieldSpacing(10. * estimator->GetOutputSpacing());
+          //m_Transform->SetEdgePaddingValue(0);
+          m_Transform->SetEdgePaddingValue(zeroPaddingValue);
 
           // Update the MapType
           m_PreviousMapType = this->GetMapType();

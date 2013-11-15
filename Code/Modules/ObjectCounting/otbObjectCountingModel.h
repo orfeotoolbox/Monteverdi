@@ -29,7 +29,10 @@ See OTBCopyright.txt for details.
 #include "itkImageRegionConstIterator.h"
 #include "itkVector.h"
 #include "itkListSample.h"
-#include "itkListSampleToHistogramGenerator.h"
+//#include "itkListSampleToHistogramGenerator.h"
+#include "itkSampleToHistogramFilter.h"
+#include "itkDenseFrequencyContainer2.h"
+#include "itkHistogram.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbPolygon.h"
 #include "otbObjectList.h"
@@ -137,11 +140,21 @@ public:
   typedef itk::Vector<itk::NumericTraits<PixelType>::RealType, 1> MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType>      ListSampleType;
   typedef float                                                   HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<
+  /*typedef itk::Statistics::ListSampleToHistogramGenerator<
       ListSampleType,
       HistogramMeasurementType,
-      itk::Statistics::DenseFrequencyContainer, 1>                   HistogramGeneratorType;
-  typedef HistogramGeneratorType::HistogramType        HistogramType;
+      itk::Statistics::DenseFrequencyContainer, 1>                   HistogramGeneratorType;*/
+
+  typedef itk::Statistics::Histogram<
+      HistogramMeasurementType,
+      itk::Statistics::DenseFrequencyContainer2>                  HistogramType;
+  typedef HistogramType::SizeType                                 HistogramSizeType;
+
+  typedef itk::Statistics::SampleToHistogramFilter<
+      ListSampleType,
+      HistogramType>                                              HistogramGeneratorType;
+
+  //typedef HistogramGeneratorType::HistogramType        HistogramType;
   typedef HistogramType::Pointer                       HistogramPointerType;
   typedef MultiChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
   typedef otb::Polygon<double>                         PolygonType;

@@ -139,8 +139,10 @@ namespace otb
     lfilter->Update();
     unsigned int nbPix = limage->GetLargestPossibleRegion().GetSize()[0]*limage->GetLargestPossibleRegion().GetSize()[1];
     bool res = true;
-    otbMsgDevMacro(<<"map label size: "<<lfilter->GetOutput()->GetLabelObjectContainer().size());
-    if(lfilter->GetOutput()->GetLabelObjectContainer().size() > nbPix*0.1)
+    //otbMsgDevMacro(<<"map label size: "<<lfilter->GetOutput()->GetLabelObjectContainer().size());
+    otbMsgDevMacro(<<"map label size: "<<lfilter->GetOutput()->GetNumberOfLabelObjects());
+    //if(lfilter->GetOutput()->GetLabelObjectContainer().size() > nbPix*0.1)
+    if(lfilter->GetOutput()->GetNumberOfLabelObjects() > nbPix*0.1)
       {
       res = false;
       }
@@ -952,7 +954,8 @@ namespace otb
         labelMap2SampleList->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
         }
       }
-    labelMap2SampleList->Compute();
+    //labelMap2SampleList->Compute();
+    labelMap2SampleList->Update();
     m_ListSample = labelMap2SampleList->GetOutputSampleList();
 
     // Build training LabelMap
@@ -984,7 +987,8 @@ namespace otb
         trainingSampleGenerator->GetMeasurementFunctor().AddAttribute(fit->first.c_str());
         }
       }
-    trainingSampleGenerator->Compute();
+    //trainingSampleGenerator->Compute();
+    trainingSampleGenerator->Update();
 
     m_TrainingListSample = trainingSampleGenerator->GetOutputSampleList();
     m_LabelsListSample = trainingSampleGenerator->GetOutputTrainingSampleList();
@@ -1021,7 +1025,8 @@ namespace otb
     otbMsgDevMacro(<<"Sampling margin ...");
 
     // Margin sampling
-    m_MarginSampler->SetSample(m_ListSample);
+    //m_MarginSampler->SetSample(m_ListSample);
+    m_MarginSampler->SetInput(m_ListSample);
     m_MarginSampler->SetModel(m_SVMEstimator->GetModel());
     m_MarginSampler->Modified();
     m_MarginSampler->Update();

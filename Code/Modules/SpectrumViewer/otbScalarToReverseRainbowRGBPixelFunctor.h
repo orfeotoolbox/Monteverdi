@@ -21,7 +21,8 @@
 #define __otbScalarToReverseRainbowRGBPixelFunctor_h
 
 #include "itkRGBPixel.h"
-#include "itkColormapFunctor.h"
+//#include "itkColormapFunctor.h"
+#include "itkColormapFunction.h"
 
 namespace otb
 {
@@ -129,14 +130,14 @@ namespace Functor
  */
 template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
 class ITK_EXPORT ScalarToReverseRainbowRGBPixelFunctor
-: public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+: public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 {
 public:
   ScalarToReverseRainbowRGBPixelFunctor();
   ~ScalarToReverseRainbowRGBPixelFunctor() {}
 
   typedef ScalarToReverseRainbowRGBPixelFunctor             Self;
-  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
+  typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
 

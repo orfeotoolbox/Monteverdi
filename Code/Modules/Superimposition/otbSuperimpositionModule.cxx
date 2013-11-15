@@ -103,8 +103,10 @@ void SuperimpositionModule::Ok()
   m_Resampler->SetOutputParametersFromImage(vfixed);
 
   VectorImageType::PixelType defaultValue;
-  itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
-                                                      vmoving->GetNumberOfComponentsPerPixel());
+  /*itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
+                                                      vmoving->GetNumberOfComponentsPerPixel());*/
+  itk::NumericTraits<VectorImageType::PixelType>::SetLength(defaultValue,
+                                                            vmoving->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
 
   typedef otb::DEMHandler DEMHandlerType;

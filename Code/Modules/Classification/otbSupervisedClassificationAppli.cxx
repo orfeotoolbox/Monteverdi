@@ -2128,7 +2128,8 @@ SupervisedClassificationAppli
     }
 
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
-  validationClassifier->SetSample(m_ValidationListSample);
+  //validationClassifier->SetSample(m_ValidationListSample);
+  validationClassifier->SetInput(m_ValidationListSample);
   validationClassifier->SetNumberOfClasses(m_ClassesMap.size());
   validationClassifier->SetModel(m_Model);
   validationClassifier->Update();

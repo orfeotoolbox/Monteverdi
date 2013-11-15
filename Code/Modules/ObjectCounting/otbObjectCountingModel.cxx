@@ -227,10 +227,15 @@ ObjectCountingModel
       }
     //std::cout << "histogramm generator" << std::endl;
     HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-    generator->SetListSample(sl);
-    HistogramGeneratorType::HistogramType::SizeType size;
+    //generator->SetListSample(sl);
+    generator->SetInput(sl);
+    //HistogramGeneratorType::HistogramType::SizeType size;
+    HistogramSizeType size;
+    // Initialize the size of the SizeType size
+    size.SetSize(sl->GetMeasurementVectorSize());
     size.Fill(256);
-    generator->SetNumberOfBins(size);
+    //generator->SetNumberOfBins(size);
+    generator->SetHistogramSize(size);
     //std::cout << "update generator" << std::endl;
     generator->Update();
     m_Histogram.push_back(const_cast<HistogramType *>(generator->GetOutput()));

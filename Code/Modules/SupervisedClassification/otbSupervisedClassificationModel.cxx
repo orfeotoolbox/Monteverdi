@@ -175,7 +175,8 @@ SupervisedClassificationModel
 ::Validate()
 {
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
-  validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
+  //validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
+  validationClassifier->SetInput(m_SampleGenerator->GetValidationListSample());
   validationClassifier->SetNumberOfClasses(m_NumberOfClasses);
   validationClassifier->SetModel(m_ModelEstimator->GetModel());
   validationClassifier->Update();
@@ -241,7 +242,8 @@ SupervisedClassificationModel
   m_SampleGenerator->SetInput(m_InputImage);
   m_SampleGenerator->SetInputVectorData(m_VectorROIs);
 
-  m_SampleGenerator->GenerateClassStatistics();
+ //m_SampleGenerator->GenerateClassStatistics();
+  m_SampleGenerator->Update();
   m_NumberOfClasses = m_SampleGenerator->GetNumberOfClasses();
 
   m_ClassMinSize = vcl_ceil(m_SampleGenerator->GetClassMinSize());

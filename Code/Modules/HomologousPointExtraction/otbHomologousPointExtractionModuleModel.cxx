@@ -464,8 +464,10 @@ HomologousPointExtractionModuleModel
 {
   // Import parameters from fixed image
   VectorImageType::PixelType defaultValue;
-  itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
-                                                        m_SecondInputImage->GetNumberOfComponentsPerPixel());
+  /*itk::PixelBuilder<VectorImageType::PixelType>::Zero(defaultValue,
+                                                        m_SecondInputImage->GetNumberOfComponentsPerPixel());*/
+  itk::NumericTraits<VectorImageType::PixelType>::SetLength(defaultValue,
+                                                            m_SecondInputImage->GetNumberOfComponentsPerPixel());
   BCOInterpolatorType::Pointer  bcoInterpolator = BCOInterpolatorType::New();
   bcoInterpolator->SetInputImage(m_SecondInputImage);
 

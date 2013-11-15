@@ -140,11 +140,11 @@ void FineCorrelationModule::OK()
     m_CorrelationFilter->SetInitialOffset(initialOffset);
 
 
-    m_ExtractXField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
-    m_ExtractYField->SetInput(m_CorrelationFilter->GetOutputDeformationField());
+    m_ExtractXField->SetInput(m_CorrelationFilter->GetOutputDisplacementField());
+    m_ExtractYField->SetInput(m_CorrelationFilter->GetOutputDisplacementField());
 
     m_WarpFilter->SetInput(secondaryImage);
-    m_WarpFilter->SetDeformationField(m_CorrelationFilter->GetOutputDeformationField());
+    m_WarpFilter->SetDisplacementField(m_CorrelationFilter->GetOutputDisplacementField());
     m_WarpFilter->SetOutputParametersFromImage(referenceImage);
 
     m_AbsImageFilter->SetInput(m_CorrelationFilter->GetOutput());
@@ -152,10 +152,10 @@ void FineCorrelationModule::OK()
     // First, clear any previous output
     this->ClearOutputDescriptors();
     // Add an output (single version)
-    //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDeformationField(), "DeformationField", otbGetTextMacro("Deformation field"));
+    //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDisplacementField(), "DisplacementField", otbGetTextMacro("Displacement field"));
     this->AddOutputDescriptor(m_AbsImageFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
-    this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDeformationField", otbGetTextMacro("X Deformation field"));
-    this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDeformationField", otbGetTextMacro("Y Deformation field"));
+    this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDisplacementField", otbGetTextMacro("X Displacement field"));
+    this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDisplacementField", otbGetTextMacro("Y Displacement field"));
 
     // If needed, expose the warped moving image
     if(vWarpMovingImage)

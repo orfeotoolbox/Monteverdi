@@ -756,14 +756,20 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
     m_RelabelOutputReady = false;
     m_OBIAOpeningOutputReady = false;
 
+    ImageLayerType::LayerValueType minLayerValue, maxLayerValue;
+    minLayerValue.SetSize(1);
+    minLayerValue.Fill(0);
+    maxLayerValue.SetSize(1);
+    maxLayerValue.Fill(1);
+
     m_RenderingModel->DeleteLayerByName("Mask");
     m_MaskFilter->SetExpression(mask_expression);
     m_CurrentExpressionMask = mask_expression;
     m_MaskGenerator->SetImage(m_MaskFilter->GetOutput());
     m_MaskGenerator->GenerateQuicklookOff();
     m_MaskGenerator->GenerateLayer();
-    m_MaskGenerator->GetLayer()->SetMinValues(0);
-    m_MaskGenerator->GetLayer()->SetMaxValues(1);
+    m_MaskGenerator->GetLayer()->SetMinValues(minLayerValue);
+    m_MaskGenerator->GetLayer()->SetMaxValues(maxLayerValue);
 
     m_MaskGenerator->GetLayer()->SetName("Mask");
 

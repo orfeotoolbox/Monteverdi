@@ -62,7 +62,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSimplifyPathFunctor.h"
 
 // KMeans
-#include "itkEuclideanDistance.h"
+//#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 
@@ -168,7 +169,8 @@ public:
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
   typedef TreeGeneratorType::KdTreeType                                            TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
-  typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
+  //typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<VectorType>                     DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
 
   /** Visualization model */
@@ -426,11 +428,14 @@ private:
   LayerGeneratorType::Pointer        m_LabeledImageGenerator;
   
   /** Samples */
-  ListSampleType::Pointer            m_ListSample;
+  //ListSampleType::Pointer            m_ListSample;
+  const ListSampleType*              m_ListSample;
 
-  ListSampleType::Pointer            m_TrainingListSample;
+  //ListSampleType::Pointer            m_TrainingListSample;
+  const ListSampleType*              m_TrainingListSample;
 
-  TrainingListSampleType::Pointer    m_LabelsListSample;
+  //TrainingListSampleType::Pointer    m_LabelsListSample;
+  const TrainingListSampleType*      m_LabelsListSample;
 
   SVMEstimatorType::Pointer          m_SVMEstimator;
 

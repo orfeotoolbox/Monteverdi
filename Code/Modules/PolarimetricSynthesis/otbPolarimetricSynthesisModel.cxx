@@ -249,10 +249,15 @@ void PolarimetricSynthesisModel::ComputeNormalizationFactors()
 
 
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-  generator->SetListSample(listSample);
-  HistogramGeneratorType::HistogramType::SizeType size;
+  //generator->SetListSample(listSample);
+  generator->SetInput(listSample);
+  //HistogramGeneratorType::HistogramType::SizeType size;
+  HistogramSizeType size;
+  // Initialize the size of the SizeType size
+  size.SetSize(listSample->GetMeasurementVectorSize());
   size.Fill(256);
-  generator->SetNumberOfBins(size);
+  //generator->SetNumberOfBins(size);
+  generator->SetHistogramSize(size);
   generator->Update();
   m_Min = generator->GetOutput()->Quantile(0, 0.02);
   m_Max = generator->GetOutput()->Quantile(0, 0.98);
@@ -406,16 +411,26 @@ void PolarimetricSynthesisModel::GenerateOutputHistogram(Color value)
       ++it;
     }
 
-    HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-    m_HistogramGenerator->SetListSample(listSample);
-    HistogramGeneratorType::HistogramType::SizeType size;
+    //HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
+    //m_HistogramGenerator->SetListSample(listSample);
+    m_HistogramGenerator->SetInput(listSample);
+    //HistogramGeneratorType::HistogramType::SizeType size;
+    HistogramSizeType size;
+    // Initialize the size of the SizeType size
+    size.SetSize(listSample->GetMeasurementVectorSize());
     size.Fill(256);
-    m_HistogramGenerator->SetNumberOfBins(size);
-    MeasurementVectorType min, max;
+    //m_HistogramGenerator->SetNumberOfBins(size);
+    m_HistogramGenerator->SetHistogramSize(size);
+    //MeasurementVectorType min, max;
+    HistogramMeasurementVectorType min, max;
+    itk::NumericTraits<HistogramMeasurementVectorType>::SetLength(min, 1);
+    itk::NumericTraits<HistogramMeasurementVectorType>::SetLength(max, 1);
     min[0]= m_AbsoluteMin;
     max[0]= m_AbsoluteMax;
-    m_HistogramGenerator->SetHistogramMin(min);
-    m_HistogramGenerator->SetHistogramMax(max);
+    //m_HistogramGenerator->SetHistogramMin(min);
+    m_HistogramGenerator->SetHistogramBinMinimum(min);
+    //m_HistogramGenerator->SetHistogramMax(max);
+    m_HistogramGenerator->SetHistogramBinMaximum(max);
     m_HistogramGenerator->Update();
   }
 }

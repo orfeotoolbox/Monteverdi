@@ -381,7 +381,8 @@ void ProjectionModel::ReprojectImage()
 
   // Default padding value
   InputImageType::PixelType defaultValue;
-  itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue, m_InputImage->GetNumberOfComponentsPerPixel());
+  //itk::PixelBuilder<InputImageType::PixelType>::Zero(defaultValue, m_InputImage->GetNumberOfComponentsPerPixel());
+  itk::NumericTraits<InputImageType::PixelType>::SetLength(defaultValue, m_InputImage->GetNumberOfComponentsPerPixel());
   m_Resampler->SetEdgePaddingValue(defaultValue);
 
   m_Output = m_Resampler->GetOutput();
