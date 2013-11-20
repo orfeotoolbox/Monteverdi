@@ -200,7 +200,7 @@ SupervisedClassificationModel
   confMatCalc->SetReferenceLabels(m_SampleGenerator->GetValidationListLabel());
   confMatCalc->SetProducedLabels(validationList);
 
-  confMatCalc->Update();
+  confMatCalc->Compute();
 
   m_ConfusionMatrix = confMatCalc->GetConfusionMatrix();
   m_OverallAccuracy = confMatCalc->GetOverallAccuracy();
