@@ -16,7 +16,7 @@ ADD_DEFINITIONS(
 #-----------------------------------------------------------------------------
 # Montevrdi version number.  An even minor number corresponds to releases.
 SET(Monteverdi_VERSION_MAJOR "1")
-SET(Monteverdi_VERSION_MINOR "18")
+SET(Monteverdi_VERSION_MINOR "19")
 SET(Monteverdi_VERSION_PATCH "0")
 
 
@@ -71,7 +71,7 @@ ENDIF(WIN32)
 INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Utilities)
 
 # Link to the Orfeo ToolBox
-FIND_PACKAGE(OTB PATHS /usr/lib/otb)
+FIND_PACKAGE(OTB PATHS /usr/lib/otb )
 IF(OTB_FOUND)
   INCLUDE(${OTB_USE_FILE})
 ELSE(OTB_FOUND)
@@ -79,13 +79,19 @@ ELSE(OTB_FOUND)
           "OTB not found. Please set OTB_DIR")
 ENDIF(OTB_FOUND)
 
-# Check OTB_USE_VISU_GUI option activated
-IF(NOT OTB_USE_VISU_GUI)
+IF(OTB_VERSION_MAJOR LESS "4")
   MESSAGE(FATAL_ERROR
-          "The OTB library must be compiled with Visu/Gui options. Please reinstall OTB and set OTB_USE_VISU_GUI to ON")
-ENDIF(NOT OTB_USE_VISU_GUI)
+          "Monteverdi is only compatible with OTB version greater than 4.0.0")
+ENDIF()
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OTB_SOURCE_DIR}/CMake")
+SET(CMAKE_MODULE_PATH 
+    ${CMAKE_SOURCE_DIR}/CMake 
+    ${CMAKE_MODULE_PATH} 
+    "${OTB_SOURCE_DIR}/CMake" )
+
+# Import FLTK
+include(ImportFLTK) 
+
 
 FIND_PACKAGE(Mercurial QUIET)
 IF(Mercurial_FOUND)
@@ -135,7 +141,6 @@ SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
 
 # Include directories
 SET(Monteverdi_INCLUDE_DIRS
-${OTB_INCLUDE_DIRS}
 ${Monteverdi_BINARY_DIR}/
 ${Monteverdi_SOURCE_DIR}/Code/Common
 ${Monteverdi_BINARY_DIR}/Code/Common
@@ -146,6 +151,10 @@ ${Monteverdi_SOURCE_DIR}/Utilities/FLU/FLU
 ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
+${Monteverdi_SOURCE_DIR}/Code/VisuFLTK
+${Monteverdi_SOURCE_DIR}/Code/GuiFLTK
+${Monteverdi_SOURCE_DIR}/Code/VisuLegacyFLTK
+${OTB_INCLUDE_DIRS}
 )
 
 #-----------------------------------------------------------------------------
