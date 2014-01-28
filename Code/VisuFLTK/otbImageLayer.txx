@@ -34,7 +34,7 @@ namespace otb
 
 template <class TImage, class TOutputImage>
 ImageLayer<TImage, TOutputImage>
-::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false),m_ComputeHistoOnFullResolution(false),
+::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false), m_ComputeHistoOnFullResolution(false),
   m_ComputeHistoOnZoomResolution(false), m_UpdateHisto(false), m_RenderingFunction(), m_QuicklookRenderingFilter(),
   m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
   m_ExtractFilter(), m_ScaledExtractFilter()

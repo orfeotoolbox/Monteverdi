@@ -433,7 +433,7 @@ protected:
         / (static_cast<double> (max) - static_cast<double> (min));
 
       return static_cast<OutputValueType> (vcl_floor(
-                                             255. * vcl_pow(scaled,1./m_Gamma)
+                                             255. * vcl_pow(scaled, 1./m_Gamma)
                                              + 0.5));
 
       }

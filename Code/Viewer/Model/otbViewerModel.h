@@ -126,7 +126,7 @@ public:
   typedef Curves2DWidget                                                         CurvesWidgetType;
 
 
-  typedef enum ViewEnum {Grayscale,ComplexMod,ComplexPhase,RGB} ViewEnumType;
+  typedef enum ViewEnum {Grayscale, ComplexMod, ComplexPhase, RGB} ViewEnumType;
 
   /**
    * Struct embedded in the model

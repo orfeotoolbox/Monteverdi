@@ -233,7 +233,7 @@ void VectorDataEditionModel
 
   // Add the verticies to the polygon
   VertexType p;
-  VertexType ul,ur, ll, lr;
+  VertexType ul, ur, ll, lr;
   ul[0] = rsRegion.GetIndex()[0];
   ul[1] = rsRegion.GetIndex()[1];
   regionPolygon->AddVertex(ul);
