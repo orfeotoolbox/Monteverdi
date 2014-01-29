@@ -152,6 +152,7 @@ ${Monteverdi_SOURCE_DIR}/Utilities/FLU/src
 ${Monteverdi_SOURCE_DIR}/Code/Application
 ${Monteverdi_BINARY_DIR}/Code/Application
 ${Monteverdi_SOURCE_DIR}/Code/VisuFLTK
+${Monteverdi_BINARY_DIR}/Code/VisuFLTK
 ${Monteverdi_SOURCE_DIR}/Code/GuiFLTK
 ${Monteverdi_SOURCE_DIR}/Code/VisuLegacyFLTK
 ${OTB_INCLUDE_DIRS}
