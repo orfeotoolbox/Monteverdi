@@ -26,7 +26,6 @@
 #include "otbTypeManager.h"
 
 // KMeans
-//#include "itkEuclideanDistance.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
@@ -90,7 +89,6 @@ public:
 
 private:
   typedef std::map<TLabel, TSample>                   CentroidMapType;
-  //typedef itk::Statistics::EuclideanDistance<TSample> DistanceType;
   typedef itk::Statistics::EuclideanDistanceMetric<TSample> DistanceType;
 
   CentroidMapType m_CentroidsMap;

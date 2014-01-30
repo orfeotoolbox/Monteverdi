@@ -62,7 +62,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSimplifyPathFunctor.h"
 
 // KMeans
-//#include "itkEuclideanDistance.h"
 #include "itkEuclideanDistanceMetric.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
@@ -169,7 +168,6 @@ public:
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
   typedef TreeGeneratorType::KdTreeType                                            TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
-  //typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
   typedef itk::Statistics::EuclideanDistanceMetric<VectorType>                     DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
 

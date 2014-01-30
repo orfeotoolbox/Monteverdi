@@ -172,7 +172,7 @@ VectorDataEditionModel::SearchDataNodeIndexFromPoint( PointType srcPoint)
     {
     if (it.Get()->IsPointFeature() || it.Get()->IsLineFeature() || it.Get()->IsPolygonFeature())
       {
-      double dist = it.Get()->EuclideanDistance(srcPoint);
+      double dist = it.Get()->EuclideanDistanceMetric(srcPoint);
 
       if (dist < m_Threshold )
         {
