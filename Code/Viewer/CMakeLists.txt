@@ -44,4 +44,9 @@ add_executable(otbViewer
                    ${otbViewer_FLTK_UI_SRCS})
 target_link_libraries(otbViewer OTBIO OTBCommon OTBVisuFLTK)
 
+install(TARGETS otbViewer
+        RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+        LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
+
 

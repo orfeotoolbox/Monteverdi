@@ -13,4 +13,13 @@ if(MVD_LIBRARY_PROPERTIES)
   set_target_properties(OTBVisuFLTK PROPERTIES ${MVD_LIBRARY_PROPERTIES})
 endif()
 
+install(TARGETS OTBVisuFLTK
+        RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+        LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
 
+file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+install(FILES ${__files1} ${__files2}
+        DESTINATION ${Monteverdi_INSTALL_INCLUDE_DIR}/VisuFLTK
+        COMPONENT Development)
