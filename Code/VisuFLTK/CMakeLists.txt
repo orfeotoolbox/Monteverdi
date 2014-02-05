@@ -14,6 +14,7 @@ if(MVD_LIBRARY_PROPERTIES)
 endif()
 
 install(TARGETS OTBVisuFLTK
+        EXPORT MonteverdiTargets
         RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)

@@ -9,9 +9,11 @@ if(MVD_LIBRARY_PROPERTIES)
 endif()
 
 install(TARGETS OTBGuiFLTK
+        EXPORT MonteverdiTargets
         RUNTIME DESTINATION ${Monteverdi_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
+        ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development
+)
 
 file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")

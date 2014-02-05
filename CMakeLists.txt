@@ -185,10 +185,10 @@ IF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
   SET(Monteverdi_INSTALL_INCLUDE_DIR "include/otb")
 ENDIF(NOT Monteverdi_INSTALL_INCLUDE_DIR)
 
-IF(NOT Monteverdi_INSTALL_PACKAGE_DIR)
-  SET(Monteverdi_INSTALL_PACKAGE_DIR ${Monteverdi_INSTALL_LIB_DIR}
+IF(NOT Monteverdi_INSTALL_CMAKE_DIR)
+  SET(Monteverdi_INSTALL_CMAKE_DIR ${Monteverdi_INSTALL_LIB_DIR}
     CACHE INTERNAL "")
-ENDIF(NOT Monteverdi_INSTALL_PACKAGE_DIR)
+ENDIF(NOT Monteverdi_INSTALL_CMAKE_DIR)
 
 IF(NOT Monteverdi_INSTALL_NO_DEVELOPMENT)
   SET(Monteverdi_INSTALL_NO_DEVELOPMENT 0)
@@ -212,6 +212,16 @@ ELSE(Monteverdi_BUILD_SHARED_LIBS)
     SET(Monteverdi_INSTALL_NO_LIBRARIES 1)
   ENDIF(Monteverdi_INSTALL_NO_DEVELOPMENT)
 ENDIF(Monteverdi_BUILD_SHARED_LIBS)
+
+
+# Make relative paths absolute (needed later on)
+foreach(p LIB BIN INCLUDE CMAKE)
+  set(var Monteverdi_INSTALL_${p}_DIR)
+  if(NOT IS_ABSOLUTE "${${var}}")
+    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+  endif()
+endforeach()
+ 
 
 # Make sure the user does not try to install on top of the build tree.
 IF(WIN32 OR APPLE OR UNIX)
@@ -286,20 +296,64 @@ ENDIF(BUILD_TESTING)
 #-----------------------------------------------------------------------------
 # Generate MonteverdiConfig.cmake
 
+
+
+export(TARGETS OTBGuiFLTK OTBVisuFLTK
+       FILE "${PROJECT_BINARY_DIR}/MonteverdiTargets.cmake")
+export(PACKAGE Monteverdi)
+
+# Create the MonteverdiConfig.cmake and MonteverdiConfigVersion files
+file(RELATIVE_PATH REL_INCLUDE_DIR "${Monteverdi_INSTALL_CMAKE_DIR}"
+   "${Monteverdi_INSTALL_INCLUDE_DIR}")
+
+# ... for the build tree
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Code/GuiFLTK" "${PROJECT_BINARY_DIR}/Code/GuiFLTK"
+"${PROJECT_SOURCE_DIR}/Code/VisuFLTK" "${PROJECT_BINARY_DIR}/Code/VisuFLTK"
+)
+
+configure_file(MonteverdiConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/MonteverdiConfig.cmake" @ONLY)
+
+# ... for the install tree
+set(CONF_INCLUDE_DIRS "\${Monteverdi_CMAKE_DIR}/${REL_INCLUDE_DIR}/GuiFLTK" "\${Monteverdi_CMAKE_DIR}/${REL_INCLUDE_DIR}/VisuFLTK")
+configure_file(MonteverdiConfig.cmake.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/MonteverdiConfig.cmake" @ONLY)
+# ... for both
+configure_file(MonteverdiConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/MonteverdiConfigVersion.cmake" @ONLY)
+ 
+# Install the MonteverdiConfig.cmake and MonteverdiConfigVersion.cmake
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/MonteverdiConfig.cmake"
+  "${PROJECT_BINARY_DIR}/MonteverdiConfigVersion.cmake"
+  DESTINATION "${Monteverdi_INSTALL_CMAKE_DIR}" COMPONENT Development)
+ 
+# Install the export set for use with the install-tree
+install(EXPORT MonteverdiTargets DESTINATION
+  "${Monteverdi_INSTALL_CMAKE_DIR}" COMPONENT Development)
+
+
+
+
+
+
 # Save library dependencies.
-SET(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
-EXPORT_LIBRARY_DEPENDENCIES(${Monteverdi_LIBRARY_DEPENDS_FILE})
+#SET(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
+#EXPORT_LIBRARY_DEPENDENCIES(${Monteverdi_LIBRARY_DEPENDS_FILE})
 
 # Library directory.
-SET(Monteverdi_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
+#SET(Monteverdi_LIBRARY_DIRS ${OTB_LIBRARY_DIRS} ${LIBRARY_OUTPUT_PATH})
 
-SET(Monteverdi_USE_FILE ${Monteverdi_BINARY_DIR}/UseMonteverdi.cmake)
+#SET(Monteverdi_USE_FILE ${Monteverdi_BINARY_DIR}/UseMonteverdi.cmake)
 
-CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
-               ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake @ONLY IMMEDIATE)
-CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
-               ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
+#CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/MonteverdiConfig.cmake.in
+#               ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake @ONLY IMMEDIATE)
+#CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/UseMonteverdi.cmake.in
+#               ${Monteverdi_USE_FILE} @ONLY IMMEDIATE)
 
+#install(FILES ${Monteverdi_BINARY_DIR}/MonteverdiConfig.cmake ${Monteverdi_USE_FILE}
+#        DESTINATION ${Monteverdi_INSTALL_PACKAGE_DIR}
+#        COMPONENT Development)
 
 #-----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid)
