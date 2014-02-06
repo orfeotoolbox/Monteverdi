@@ -30,7 +30,6 @@
 #include "itkObject.h"
 
 
-
 namespace otb
 {
 /** \class SplashScreen

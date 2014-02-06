@@ -22,7 +22,6 @@ See OTBCopyright.txt for details.
 #include "otbMsgReporter.h"
 
 
-
 int main(int argc, char* argv[])
 {
 
