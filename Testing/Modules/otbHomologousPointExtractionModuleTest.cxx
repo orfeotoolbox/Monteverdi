@@ -18,7 +18,7 @@
 #include "ConfigureMonteverdi.h"
 
 // For internationalisation
-#include "otbI18n.h"
+
 
 #include "otbHomologousPointExtractionModule.h"
 #include "otbImageFileReader.h"
@@ -27,7 +27,7 @@
 int otbHomologousPointExtractionModuleTest(int argc, char* argv[])
 {
   //Internationalization
-  otbI18nMacro();
+  
 
   otb::HomologousPointExtractionModule::Pointer pointModule = otb::HomologousPointExtractionModule::New();
   otb::Module::Pointer                          module = pointModule.GetPointer();

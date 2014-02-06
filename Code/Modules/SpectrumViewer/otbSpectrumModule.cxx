@@ -40,7 +40,7 @@ SpectrumModule
 
   m_SpectrumModuleModel->RegisterListener(this);
 
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image for spectrum display."));
+  this->AddInputDescriptor<ImageType>("InputImage", "Image for spectrum display.");
 
 }
 
@@ -71,7 +71,7 @@ SpectrumModule
       {
       ImageType::Pointer filteredOutput = m_SpectrumModuleModel->GetspectralImage();
       this->AddOutputDescriptor(filteredOutput, "Filtered Image",
-                                otbGetTextMacro("Result of the spectral angle filtering"));
+                                "Result of the spectral angle filtering");
       }
 
     // Send an event to Monteverdi application

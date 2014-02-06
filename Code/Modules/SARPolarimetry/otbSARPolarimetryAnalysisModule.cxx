@@ -32,7 +32,7 @@ namespace otb
   m_InputImage = ComplexVectorImageType::New();
 
   // Add inputs
-  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", otbGetTextMacro("Input Image (multi channel complex image, 4 or 6 channels)"));
+  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", "Input Image (multi channel complex image, 4 or 6 channels)");
 }
 
 /** Destructor */
@@ -106,7 +106,7 @@ void SARPolarimetryAnalysisModule::Ok()
       m_ReciprocalHAlphaImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_ReciprocalHAlphaImageFilter->GetOutput(), "ReciprocalHAlphaImageFilter",
-                                otbGetTextMacro("Reciprocal H-Alpha image"));
+                                "Reciprocal H-Alpha image");
       hasOutput = true;
     }
   if( rb_Syn->value() )
@@ -118,7 +118,7 @@ void SARPolarimetryAnalysisModule::Ok()
       m_MultiChannelsPolarimetricSynthesisFilter->SetPsiR( static_cast<double>(v_PsiR->value()) );
   
       this->AddOutputDescriptor(m_MultiChannelsPolarimetricSynthesisFilter->GetOutput(), "MultiChannelsPolarimetricSynthesisFilter",
-                                otbGetTextMacro("Polarimetric synthesis image"));
+                                "Polarimetric synthesis image");
       hasOutput = true;
     }
   

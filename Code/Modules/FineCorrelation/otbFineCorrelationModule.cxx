@@ -27,8 +27,8 @@ FineCorrelationModule::FineCorrelationModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("ReferenceInputImage", otbGetTextMacro("Reference input image"));
-  this->AddInputDescriptor<ImageType>("SecondaryInputImage", otbGetTextMacro("Secondary input image"));
+  this->AddInputDescriptor<ImageType>("ReferenceInputImage", "Reference input image");
+  this->AddInputDescriptor<ImageType>("SecondaryInputImage", "Secondary input image");
   m_CorrelationFilter    = CorrelationFilterType::New();
   m_FixedGaussianFilter  = GaussianFilterType::New();
   m_MovingGaussianFilter = GaussianFilterType::New();
@@ -152,15 +152,15 @@ void FineCorrelationModule::OK()
     // First, clear any previous output
     this->ClearOutputDescriptors();
     // Add an output (single version)
-    //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDisplacementField(), "DisplacementField", otbGetTextMacro("Displacement field"));
-    this->AddOutputDescriptor(m_AbsImageFilter->GetOutput(), "Correlation", otbGetTextMacro("Correlation value"));
-    this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDisplacementField", otbGetTextMacro("X Displacement field"));
-    this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDisplacementField", otbGetTextMacro("Y Displacement field"));
+    //this->AddOutputDescriptor(m_CorrelationFilter->GetOutputDisplacementField(), "DisplacementField", "Displacement field");
+    this->AddOutputDescriptor(m_AbsImageFilter->GetOutput(), "Correlation", "Correlation value");
+    this->AddOutputDescriptor(m_ExtractXField->GetOutput(), "XDisplacementField", "X Displacement field");
+    this->AddOutputDescriptor(m_ExtractYField->GetOutput(), "YDisplacementField", "Y Displacement field");
 
     // If needed, expose the warped moving image
     if(vWarpMovingImage)
       {
-      this->AddOutputDescriptor(m_WarpFilter->GetOutput(), "RegisteredImage", otbGetTextMacro("Registered image"));
+      this->AddOutputDescriptor(m_WarpFilter->GetOutput(), "RegisteredImage", "Registered image");
       }
 
     // Last, when all outputs where declared, notify listeners

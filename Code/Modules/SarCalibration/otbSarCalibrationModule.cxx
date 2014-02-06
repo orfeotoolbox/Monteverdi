@@ -44,7 +44,7 @@ SarCalibrationModule
   m_Log10TImageFilterB = Log10TImageFilterType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Input image"));
+  this->AddInputDescriptor<ImageType>("InputImage", "Input image");
   this->AddTypeToInputDescriptor<ComplexImageType>("InputImage");
 
   m_WorkWithCplx = false;
@@ -140,10 +140,10 @@ SarCalibrationModule
     {
     msgDescriptor = "Calibrated image" + msgAboutNoise;
     this->AddOutputDescriptor(m_ComplexCalibFilter->GetOutput(), "Radiometric Calibration Image",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
 
     this->AddOutputDescriptor(m_ComplexBrightnessFilter->GetOutput(), "Brightness Image",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
     }
   else if (bLin->value() == 0 && bdB->value() == 1) // dB
     {
@@ -151,12 +151,12 @@ SarCalibrationModule
     m_Log10TImageFilterRC->SetInput(m_ComplexCalibFilter->GetOutput());
     m_Log10TImageFilterRC->SetThresholdedValue(valueT);
     this->AddOutputDescriptor(m_Log10TImageFilterRC->GetOutput(), "Radiometric Calibration in dB",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
 
     m_Log10TImageFilterB->SetInput(m_ComplexBrightnessFilter->GetOutput());
     m_Log10TImageFilterB->SetThresholdedValue(valueT);
     this->AddOutputDescriptor(m_Log10TImageFilterB->GetOutput(), "Brightness Image in dB",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
     }
   else // Invalid case
     {
@@ -187,10 +187,10 @@ SarCalibrationModule
     {
     msgDescriptor = "Calibrated image" + msgAboutNoise;
     this->AddOutputDescriptor(m_CalibFilter->GetOutput(), "Radiometric Calibration Image",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
 
     this->AddOutputDescriptor(m_BrightnessCalibFilter->GetOutput(), "Brightness Image",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
 
     }
   else if (bLin->value() == 0 && bdB->value() == 1) // dB
@@ -199,12 +199,12 @@ SarCalibrationModule
     m_Log10TImageFilterRC->SetInput(m_CalibFilter->GetOutput());
     m_Log10TImageFilterRC->SetThresholdedValue(valueT);
     this->AddOutputDescriptor(m_Log10TImageFilterRC->GetOutput(), "Radiometric Calibration in dB",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
 
     m_Log10TImageFilterB->SetInput(m_BrightnessCalibFilter->GetOutput());
     m_Log10TImageFilterB->SetThresholdedValue(valueT);
     this->AddOutputDescriptor(m_Log10TImageFilterB->GetOutput(), "Brightness Image in dB",
-                              otbGetTextMacro(msgDescriptor.c_str()));
+                              msgDescriptor.c_str());
     }
   else // Invalid case
     {

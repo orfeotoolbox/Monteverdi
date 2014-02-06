@@ -18,7 +18,7 @@
 #include "ConfigureMonteverdi.h"
 
 // For internationalisation
-#include "otbI18n.h"
+
 
 #include "otbOpticalCalibrationModule.h"
 #include "otbImageFileReader.h"
@@ -29,7 +29,7 @@ int otbOpticalCalibrationModuleTest(int argc, char* argv[])
   bool runIt = false;
   if (atoi(argv[2]) == 1) runIt = true;
   //Internationalization
-  otbI18nMacro();
+  
 
   otb::OpticalCalibrationModule::Pointer pointModule = otb::OpticalCalibrationModule::New();
   otb::Module::Pointer                   module = pointModule.GetPointer();

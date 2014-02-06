@@ -60,7 +60,7 @@ RadiometricIndicesExtractionViewGUI::RadiometricIndicesExtractionViewGUI()
   this->InitParameterGroupList();
   
   // Rename window title
-  SetWindowTitle(otbGetTextMacro("Radiometric indices extraction"));
+  SetWindowTitle("Radiometric indices extraction");
   
   // Set up callbacks on menu items
   int curPos = 0;

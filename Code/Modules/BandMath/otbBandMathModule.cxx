@@ -32,7 +32,7 @@ namespace otb
 BandMathModule::BandMathModule()
 {
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to process"), false, true);
+  this->AddInputDescriptor<ImageType>("InputImage", "Image to process", false, true);
   this->AddTypeToInputDescriptor<VectorImageType>("InputImage");
   
   // Build the GUI
@@ -305,7 +305,7 @@ void BandMathModule::OK()
   m_BandMathFilter->SetExpression(ui_Expression->value());
   m_Output = m_BandMathFilter->GetOutput();
   this->ClearOutputDescriptors();
-  this->AddOutputDescriptor(m_BandMathFilter->GetOutput(), "OutputImage", otbGetTextMacro("Result image"));
+  this->AddOutputDescriptor(m_BandMathFilter->GetOutput(), "OutputImage", "Result image");
   this->NotifyOutputsChange();
   
   // close the GUI

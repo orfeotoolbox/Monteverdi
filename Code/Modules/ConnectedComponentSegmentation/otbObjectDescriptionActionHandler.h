@@ -142,7 +142,7 @@ public:
           index[1] = static_cast<long int> (imagePoint[1]);
 
           std::ostringstream oss;
-          oss << otbGetTextMacro("Index") << ": " << imagePoint << std::endl;
+          oss << "Index" << ": " << imagePoint << std::endl;
           // Report pixel info for each visible layer
           for (LayerConstIteratorType it = m_Model->GetLayers()->Begin(); it != m_Model->GetLayers()->End(); ++it)
             {
@@ -152,7 +152,7 @@ public:
               // Get the pixel description
               //oss << it.Get()->GetPixelDescription(index) << std::endl;
 
-              oss << otbGetTextMacro("Value") << ": " <<it.Get()->GetValueAtIndex(index) << std::endl;
+              oss << "Value" << ": " <<it.Get()->GetValueAtIndex(index) << std::endl;
 
               // we test if the filter output is selected
               std::string layerName = it.Get()->GetName();

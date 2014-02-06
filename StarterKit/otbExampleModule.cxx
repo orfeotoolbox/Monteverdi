@@ -27,16 +27,16 @@ ExampleModule::ExampleModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage", otbGetTextMacro("This is my input"));
+  this->AddInputDescriptor<FloatingVectorImageType>("MyInputImage", "This is my input");
 
   // Add another supported type for this input
   this->AddTypeToInputDescriptor<FloatingImageType>("MyInputImage");
 
   // Add an optional input
-  this->AddInputDescriptor<VectorType>("MyOptionalInput", otbGetTextMacro("This is my optional input"), true);
+  this->AddInputDescriptor<VectorType>("MyOptionalInput", "This is my optional input", true);
 
   // add a multiple input (multiple can also be optional)
-  this->AddInputDescriptor<VectorType>("MyMultipleInput", otbGetTextMacro("This is my multiple input"), false, true);
+  this->AddInputDescriptor<VectorType>("MyMultipleInput", "This is my multiple input", false, true);
 }
 
 /** Destructor */
@@ -121,12 +121,12 @@ void ExampleModule::Run()
 
   // Add an output (single version)
   FloatingImageType::Pointer myBrandNewImageOutput = FloatingImageType::New();
-  this->AddOutputDescriptor(myBrandNewImageOutput, "MyImageOutput", otbGetTextMacro("This is my image output"));
+  this->AddOutputDescriptor(myBrandNewImageOutput, "MyImageOutput", "This is my image output");
 
   // Add an output (multiple version)
 
   FloatingPointSetType::Pointer pointSetOutput1 = FloatingPointSetType::New();
-  this->AddOutputDescriptor(pointSetOutput1, "MyPointSetOutput", otbGetTextMacro("These are my pointset outputs"));
+  this->AddOutputDescriptor(pointSetOutput1, "MyPointSetOutput", "These are my pointset outputs");
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();

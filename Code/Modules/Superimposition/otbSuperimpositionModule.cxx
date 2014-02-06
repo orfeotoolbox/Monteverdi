@@ -38,10 +38,10 @@ SuperimpositionModule::SuperimpositionModule()
 
   // Describe inputs
   this->AddInputDescriptor<VectorImageType>("ReferenceImage",
-                                            otbGetTextMacro("Reference image for reprojection"));
+                                            "Reference image for reprojection");
   this->AddTypeToInputDescriptor<ImageType>("ReferenceImage");
   this->AddInputDescriptor<VectorImageType>("InputImage",
-                                            otbGetTextMacro("Image to reproject"));
+                                            "Image to reproject");
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
   this->BuildGUI();
@@ -123,7 +123,7 @@ void SuperimpositionModule::Ok()
 
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_Resampler->GetOutput(), "Reprojected image",
-                            otbGetTextMacro("Image superimposable to reference"));
+                            "Image superimposable to reference");
   this->NotifyOutputsChange();
 
   // Close the GUI
@@ -140,7 +140,7 @@ void SuperimpositionModule::Browse()
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
 
-  filename = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), defaultPath);
+  filename = flu_dir_chooser("Choose the DEM dir...", defaultPath);
 
   if (filename == NULL)
     {

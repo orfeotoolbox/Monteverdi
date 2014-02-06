@@ -114,7 +114,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
 
   // Description
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Whole dataset") << ")";
+  oss << description << " (" << "Whole dataset" << ")";
   // Output ID
   ossId.str("");
   ossId << key;
@@ -155,10 +155,10 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
 
     // Description
     oss.str("");
-    oss << description << "(" << otbGetTextMacro("Band") << " " << band + 1 << ")";
+    oss << description << "(" << "Band" << " " << band + 1 << ")";
     // Output ID
     ossId.str("");
-    ossId << key << " (" << otbGetTextMacro("band") << " " << band + 1 << ")";
+    ossId << key << " (" << "band" << " " << band + 1 << ")";
 
     // Check if the key already exists
     if (IsOutputKeyPresent(ossId.str()))
@@ -192,9 +192,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<T> * dat
     m_ProcessObjects.push_back(amplitudeFilter.GetPointer());
 
     oss.str("");
-    oss << description << " (" << otbGetTextMacro("Amplitude") << ")";
+    oss << description << " (" << "Amplitude" << ")";
     ossId.str("");
-    ossId << key << " (" << otbGetTextMacro("amplitude") << ")";
+    ossId << key << " (" << "amplitude" << ")";
 
     // Check if the key already exists
     if (IsOutputKeyPresent(ossId.str()))
@@ -243,7 +243,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
 
   // Description
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Whole dataset") << ")";
+  oss << description << " (" << "Whole dataset" << ")";
   // Output ID
   ossId.str("");
   ossId << key;
@@ -291,10 +291,10 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
 
     // Description
     oss.str("");
-    oss << description << "(" << otbGetTextMacro("Band") << " " << band + 1 << ")";
+    oss << description << "(" << "Band" << " " << band + 1 << ")";
     // Output ID
     ossId.str("");
-    ossId << key << " (" << otbGetTextMacro("band") << " " << band + 1 << ")";
+    ossId << key << " (" << "band" << " " << band + 1 << ")";
 
     // Check if the key already exists
     if ( IsOutputKeyPresent(ossId.str()) )
@@ -321,9 +321,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
     realFilter->SetInput(extract->GetOutput());
     m_ProcessObjects.push_back(realFilter.GetPointer());
     oss.str("");
-    oss << description << " (" << otbGetTextMacro("Real part, Band") << " "<< band + 1  <<")";
+    oss << description << " (" << "Real part, Band" << " "<< band + 1  <<")";
     ossId.str("");
-    ossId << key << " (" << otbGetTextMacro("Real part, band") << " " << band + 1 << ")";
+    ossId << key << " (" << "Real part, band" << " " << band + 1 << ")";
 
     // Check if the key already exists
     if ( IsOutputKeyPresent(ossId.str()) )
@@ -350,9 +350,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
     imaginaryFilter->SetInput(extract->GetOutput());
     m_ProcessObjects.push_back(imaginaryFilter.GetPointer());
     oss.str("");
-    oss << description << " (" << otbGetTextMacro("Imaginary part, Band") << " " << band + 1 << ")";
+    oss << description << " (" << "Imaginary part, Band" << " " << band + 1 << ")";
     ossId.str("");
-    ossId << key << " (" << otbGetTextMacro("Imaginary part, band") << " " << band + 1 <<")";
+    ossId << key << " (" << "Imaginary part, band" << " " << band + 1 <<")";
 
       // Check if the key already exists
     if ( IsOutputKeyPresent(ossId.str()) )
@@ -379,9 +379,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
       modulusFilter->SetInput(extract->GetOutput());
       m_ProcessObjects.push_back(modulusFilter.GetPointer());
       oss.str("");
-      oss << description << " (" << otbGetTextMacro("Modulus part, Band") << " "<< band +1 << ")";
+      oss << description << " (" << "Modulus part, Band" << " "<< band +1 << ")";
       ossId.str("");
-      ossId << key << " (" << otbGetTextMacro("Modulus part, band") << " "<< band +1 << ")";
+      ossId << key << " (" << "Modulus part, band" << " "<< band +1 << ")";
 
       // Check if the key already exists
       if ( IsOutputKeyPresent(ossId.str()) )
@@ -408,9 +408,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::VectorImage<std::com
       PhaseFilter->SetInput(extract->GetOutput());
       m_ProcessObjects.push_back(PhaseFilter.GetPointer());
       oss.str("");
-      oss << description << " (" << otbGetTextMacro("Phase part, Band") << " "<< band +1 << ")";
+      oss << description << " (" << "Phase part, Band" << " "<< band +1 << ")";
       ossId.str("");
-      ossId << key << " (" << otbGetTextMacro("Phase part, band") << " "<< band +1 << ")";
+      ossId << key << " (" << "Phase part, band" << " "<< band +1 << ")";
 
       // Check if the key already exists
       if ( IsOutputKeyPresent(ossId.str()) )
@@ -461,7 +461,7 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
 
   // Description
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Whole dataset") << ")";
+  oss << description << " (" << "Whole dataset" << ")";
   // Output ID
   ossId.str("");
   ossId << key;
@@ -501,9 +501,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   realFilter->SetInput(data);
   m_ProcessObjects.push_back(realFilter.GetPointer());
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Real part") << ")";
+  oss << description << " (" << "Real part" << ")";
   ossId.str("");
-  ossId << key << " (" << otbGetTextMacro("Real part") << ")";
+  ossId << key << " (" << "Real part" << ")";
 
   // Check if the key already exists
   if (IsOutputKeyPresent(ossId.str()))
@@ -530,9 +530,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   imaginaryFilter->SetInput(data);
   m_ProcessObjects.push_back(imaginaryFilter.GetPointer());
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Imaginary part") << ")";
+  oss << description << " (" << "Imaginary part" << ")";
   ossId.str("");
-  ossId << key << " (" << otbGetTextMacro("Imaginary part") << ")";
+  ossId << key << " (" << "Imaginary part" << ")";
 
   // Check if the key already exists
   if (IsOutputKeyPresent(ossId.str()))
@@ -559,9 +559,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   modulusFilter->SetInput(data);
   m_ProcessObjects.push_back(modulusFilter.GetPointer());
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Modulus part") << ")";
+  oss << description << " (" << "Modulus part" << ")";
   ossId.str("");
-  ossId << key << " (" << otbGetTextMacro("Modulus part") << ")";
+  ossId << key << " (" << "Modulus part" << ")";
 
   // Check if the key already exists
   if (IsOutputKeyPresent(ossId.str()))
@@ -588,9 +588,9 @@ template <typename T> void Module::AddOutputDescriptor(otb::Image<std::complex<T
   PhaseFilter->SetInput(data);
   m_ProcessObjects.push_back(PhaseFilter.GetPointer());
   oss.str("");
-  oss << description << " (" << otbGetTextMacro("Phase part") << ")";
+  oss << description << " (" << "Phase part" << ")";
   ossId.str("");
-  ossId << key << " (" << otbGetTextMacro("Phase part") << ")";
+  ossId << key << " (" << "Phase part" << ")";
 
   // Check if the key already exists
   if (IsOutputKeyPresent(ossId.str()))

@@ -56,7 +56,7 @@ TextureExtractionViewGUI::TextureExtractionViewGUI()
   this->InitTextureLists();
   
   // Rename window title
-  SetWindowTitle(otbGetTextMacro("Texture extraction"));
+  SetWindowTitle("Texture extraction");
   
   // Set up callbacks on menu items
   int curPos = 0;

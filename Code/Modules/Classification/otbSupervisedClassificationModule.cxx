@@ -32,7 +32,7 @@ SupervisedClassificationModule::SupervisedClassificationModule()
 
   // Describe inputs
   this->AddInputDescriptor<SupervisedClassificationAppli::ImageType>("InputImage",
-                                                                     otbGetTextMacro("Image to apply Classification on"));
+                                                                     "Image to apply Classification on");
 
 }
 
@@ -87,7 +87,7 @@ void SupervisedClassificationModule::Notify()
     //this->ClearOutputDescriptors();
     this->EraseOutputByKey("OutputImage");
     this->AddOutputDescriptor(m_SupervisedClassification->GetOutput(), "OutputImage",
-                              otbGetTextMacro("Classified image"));
+                              "Classified image");
     this->NotifyOutputsChange();
     // Once module is closed, it is no longer busy
     this->BusyOff();
@@ -114,7 +114,7 @@ void SupervisedClassificationModule::Notify()
       std::ostringstream oss;
       oss << "OutputVector " << (*it)->GetName();
       this->AddOutputDescriptor(m_SupervisedClassification->GetOutputVector()[i], oss.str().c_str(),
-                                otbGetTextMacro("Vectors of classified image"));
+                                "Vectors of classified image");
       m_LabelsList.push_back(oss.str());
       i++;
       }

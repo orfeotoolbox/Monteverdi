@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #include "otbMacro.h"
-#include "otbI18n.h"
+
 #include "otbChannelSelectorFunctor.h"
 #include "otbStandardRenderingFunction.h"
 #include "otbViewerConst.h"

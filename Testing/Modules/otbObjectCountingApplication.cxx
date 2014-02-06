@@ -26,7 +26,7 @@
 #include "otbSplashScreen.h"
 
 // For internationalisation
-#include "otbI18n.h"
+
 
 // Include existing modules
 #include "otbReaderModule.h"
@@ -37,7 +37,7 @@
 int main(int argc, char* argv[])
 {
   //Internationalization
-  otbI18nMacro();
+  
 
   // Splash Screen
   typedef otb::SplashScreen::Pointer SplashScreenPointerType;

@@ -82,19 +82,19 @@ void DEMToImageGeneratorModule::Run()
 void DEMToImageGeneratorModule::Notify()
 {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutput(), "DEM Image", otbGetTextMacro("DEM image"));
+    this->AddOutputDescriptor(m_Model->GetOutput(), "DEM Image", "DEM image");
     if(m_Model->GetHillShadingProcess())
       {
       this->AddOutputDescriptor(m_Model->GetHillShading()->GetOutput(),
                                 "Hill Shading Image",
-                                otbGetTextMacro("Hill Shading image"));
+                                "Hill Shading image");
       }
 
     if(m_Model->GetReliefProcess())
       {
       this->AddOutputDescriptor(m_Model->GetReliefColored(),
                                 "Relief colored Image",
-                                otbGetTextMacro("Relief Colored Image"));
+                                "Relief Colored Image");
       }
 
     this->NotifyOutputsChange();

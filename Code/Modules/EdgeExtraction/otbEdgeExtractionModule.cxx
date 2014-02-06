@@ -44,7 +44,7 @@ EdgeExtractionModule::EdgeExtractionModule()
   m_View->InitVisu();
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply edge detection"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to apply edge detection");
 
   // the model registers its module
   m_ModelEdge->RegisterListener(this);

@@ -83,8 +83,8 @@ ViewerModule::ViewerModule() :
 
   // Build the curve widget
   m_CurveWidget = CurvesWidgetType::New();
-  m_CurveWidget->SetXAxisLabel(otbGetTextMacro("Pixels"));
-  m_CurveWidget->SetYAxisLabel(otbGetTextMacro("Frequency"));
+  m_CurveWidget->SetXAxisLabel("Pixels");
+  m_CurveWidget->SetYAxisLabel("Frequency");
 
   // Curvet Widget Instanciation
   m_BlueCurveWidgetGroup = CurvesWidgetType::New();
@@ -203,11 +203,11 @@ ViewerModule::ViewerModule() :
   m_InputImageLayerList = ImageLayerListType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType> ("InputImage", otbGetTextMacro("Image to display"), false, true);
+  this->AddInputDescriptor<ImageType> ("InputImage", "Image to display", false, true);
   this->AddTypeToInputDescriptor<SingleImageType> ("InputImage");
   this->AddTypeToInputDescriptor<LabeledImageType> ("InputImage");
   this->AddTypeToInputDescriptor<FloatImageWithQuicklook> ("InputImage");
-  this->AddInputDescriptor<VectorDataType> ("VectorData", otbGetTextMacro("Vector data to display"), true, true);
+  this->AddInputDescriptor<VectorDataType> ("VectorData", "Vector data to display", true, true);
 
   // Build GUI
   this->Build();
@@ -346,7 +346,7 @@ void ViewerModule::Run()
     try
       {
       FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20,
-                                  otbGetTextMacro("Generating QuickLook ..."));
+                                  "Generating QuickLook ...");
       generator->GenerateLayer();
       }
     catch (itk::ExceptionObject & err)
@@ -991,7 +991,7 @@ void ViewerModule::ChangeROIColor()
     double g = (double) curColor[1];
     double b = (double) curColor[2];
 
-    int ok = fl_color_chooser(otbGetTextMacro("Changed class color"), r, g, b);
+    int ok = fl_color_chooser("Changed class color", r, g, b);
 
     if (ok)
       {
@@ -1989,7 +1989,7 @@ void ViewerModule::SaveScreenShot(const char * winLab, ImageWidgetType * widget)
   screener->SetNumberOfChannels(3);
   screener->SetInverseXSpacing(true);
 
-  filename = flu_file_chooser(otbGetTextMacro(winLab), "*.*", "");
+  filename = flu_file_chooser(winLab, "*.*", "");
 
   if (filename == NULL)
     {

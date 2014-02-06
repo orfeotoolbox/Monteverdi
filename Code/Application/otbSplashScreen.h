@@ -29,7 +29,7 @@
 #include <sstream>
 #include "itkObject.h"
 
-#include "otbI18n.h"
+
 
 namespace otb
 {

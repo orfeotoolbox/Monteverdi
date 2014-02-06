@@ -43,10 +43,10 @@ namespace otb
   m_SinclairToMuellerMatrixFilter = SinclairToMuellerMatrixFilterType::New();
 
   // Add inputs
-  this->AddInputDescriptor<ComplexImageType>("HHImage", otbGetTextMacro("HH Image (mono channel complex image)"));
-  this->AddInputDescriptor<ComplexImageType>("HVImage", otbGetTextMacro("HV Image (mono channel complex image used for reciprocal process)"));
-  this->AddInputDescriptor<ComplexImageType>("VHImage", otbGetTextMacro("VH Image (mono channel complex image, optional)"), true, false);
-  this->AddInputDescriptor<ComplexImageType>("VVImage", otbGetTextMacro("VV Image (mono channel complex image)"));
+  this->AddInputDescriptor<ComplexImageType>("HHImage", "HH Image (mono channel complex image)");
+  this->AddInputDescriptor<ComplexImageType>("HVImage", "HV Image (mono channel complex image used for reciprocal process)");
+  this->AddInputDescriptor<ComplexImageType>("VHImage", "VH Image (mono channel complex image, optional)", true, false);
+  this->AddInputDescriptor<ComplexImageType>("VVImage", "VV Image (mono channel complex image)");
 }
 
 /** Destructor */
@@ -115,7 +115,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToCircularCovarianceMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCircularCovarianceMatrixFilter->SetInputVV(m_VVImage);
       this->AddOutputDescriptor(m_SinclairToCircularCovarianceMatrixFilter->GetOutput(), "SinclairToCircularCovarianceMatrixFilter",
-                                otbGetTextMacro("Sinclair to circular covariance image"));
+                                "Sinclair to circular covariance image");
       hasOutput = true;
     }
   if( rb_Coh->value() )
@@ -125,7 +125,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToCoherencyMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCoherencyMatrixFilter->SetInputVV(m_VVImage);
       this->AddOutputDescriptor(m_SinclairToCoherencyMatrixFilter->GetOutput(), "SinclairToCoherencyMatrixFilter",
-                                otbGetTextMacro("Sinclair to coherency image"));
+                                "Sinclair to coherency image");
       hasOutput = true;
     }
   if( rb_Cov->value() )
@@ -135,7 +135,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToCovarianceMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToCovarianceMatrixFilter->SetInputVV(m_VVImage);
       this->AddOutputDescriptor(m_SinclairToCovarianceMatrixFilter->GetOutput(), "SinclairToCovarianceMatrixFilter",
-                                otbGetTextMacro("Sinclair to covariance image"));
+                                "Sinclair to covariance image");
       hasOutput = true;
     }
   if( rb_Mue->value() )
@@ -145,7 +145,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToMuellerMatrixFilter->SetInputVH(m_VHImage);
       m_SinclairToMuellerMatrixFilter->SetInputVV(m_VVImage);
       this->AddOutputDescriptor(m_SinclairToMuellerMatrixFilter->GetOutput(), "SinclairToMuellerMatrixFilter",
-                                otbGetTextMacro("Sinclair to Mueller image"));
+                                "Sinclair to Mueller image");
       hasOutput = true;
     }
   // SinclairToReciprocalCoherencyMatrixFilter
@@ -155,7 +155,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToReciprocalCoherencyMatrixFilter->SetInputHV_VH( m_HVImage );
       m_SinclairToReciprocalCoherencyMatrixFilter-> SetInputVV( m_VVImage );
       this->AddOutputDescriptor(m_SinclairToReciprocalCoherencyMatrixFilter->GetOutput(), "SinclairToReciprocalCoherencyImage",
-                                otbGetTextMacro("Sinclair to reciprocal coherency image"));
+                                "Sinclair to reciprocal coherency image");
       hasOutput = true;
     }
   // SinclairToReciprocalCircularCovarianceMatrixFilter
@@ -165,7 +165,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
       m_SinclairToReciprocalCircularCovarianceMatrixFilter->SetInputVV( m_VVImage );
       this->AddOutputDescriptor(m_SinclairToReciprocalCircularCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCircularCovariance",
-                                otbGetTextMacro("Sinclair to reciprocal circular covariance"));
+                                "Sinclair to reciprocal circular covariance");
       hasOutput = true;
     }
   // SinclairToReciprocalCovarianceMatrixFilter
@@ -175,7 +175,7 @@ void SARPolarimetrySinclairModule::Ok()
       m_SinclairToReciprocalCovarianceMatrixFilter->SetInputHV_VH( m_HVImage );
       m_SinclairToReciprocalCovarianceMatrixFilter->SetInputVV( m_VVImage );
       this->AddOutputDescriptor(m_SinclairToReciprocalCovarianceMatrixFilter->GetOutput(), "SinclairToReciprocalCovariance",
-                                otbGetTextMacro("Sinclair to reciprocal covariance"));
+                                "Sinclair to reciprocal covariance");
       hasOutput = true;
     }
   

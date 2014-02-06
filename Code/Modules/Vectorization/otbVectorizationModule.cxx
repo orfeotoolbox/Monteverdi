@@ -44,8 +44,8 @@ VectorizationModule::VectorizationModule()
 
   // Then, describe inputs needed by the module
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
-  this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data"), true, true);
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", "Input image");
+  this->AddInputDescriptor<VectorDataType>("VectorData", "Vector data", true, true);
 }
 
 /** Destructor */
@@ -140,7 +140,7 @@ void VectorizationModule::Notify()
       this->ClearOutputDescriptors();
       // Add outputs
       VectorDataType::Pointer vData = m_Model->GetOutput();
-      this->AddOutputDescriptor(vData,"VectorData", otbGetTextMacro("New vector data"));
+      this->AddOutputDescriptor(vData,"VectorData", "New vector data");
 
       this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
       this->BusyOff();

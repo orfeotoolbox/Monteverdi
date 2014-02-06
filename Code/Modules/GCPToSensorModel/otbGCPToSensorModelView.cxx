@@ -329,7 +329,7 @@ GCPToSensorModelView
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
-  cfname = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), defaultPath);
+  cfname = flu_dir_chooser("Choose the DEM dir...", defaultPath);
 
   if (cfname == NULL)
     {
@@ -523,7 +523,7 @@ GCPToSensorModelView
   const char * fname = NULL;
 
   // Choose file
-  fname = flu_file_chooser(otbGetTextMacro("Choose an XML file containing GCPs ..."), "*.xml", "");
+  fname = flu_file_chooser("Choose an XML file containing GCPs ...", "*.xml", "");
 
   if (fname == NULL)
     {
@@ -540,7 +540,7 @@ GCPToSensorModelView
   const char * fname = NULL;
 
   // Choose file
-  fname = flu_file_chooser(otbGetTextMacro("Choose an XML file to export GCPs ..."), "*.xml", "");
+  fname = flu_file_chooser("Choose an XML file to export GCPs ...", "*.xml", "");
 
   if (fname == NULL)
     {

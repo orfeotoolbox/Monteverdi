@@ -42,7 +42,7 @@ SmoothingViewGUI::SmoothingViewGUI()
   this->InitParameterGroupList();
   
   // Rename window title
-  SetWindowTitle(otbGetTextMacro("Smoothing"));
+  SetWindowTitle("Smoothing");
   
   // Set up callbacks on menu items
   int curPos = 0;

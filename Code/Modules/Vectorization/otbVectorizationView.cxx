@@ -281,7 +281,7 @@ void VectorizationView
   double g = (double) m_Color[1];
   double b = (double) m_Color[2];
   
-  int ok = fl_color_chooser(otbGetTextMacro("Changed class color"), r, g, b);
+  int ok = fl_color_chooser("Changed class color", r, g, b);
   
   if (ok)
     {

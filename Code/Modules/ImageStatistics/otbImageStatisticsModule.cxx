@@ -30,7 +30,7 @@ ImageStatisticsModule::ImageStatisticsModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Statistics for image"));
+  this->AddInputDescriptor<VectorImageType>("InputImage", "Statistics for image");
   this->AddTypeToInputDescriptor<ImageType>("InputImage");
 
   m_ImageToVectorImageFilter = ImageToVectorImageCastFilterType::New();

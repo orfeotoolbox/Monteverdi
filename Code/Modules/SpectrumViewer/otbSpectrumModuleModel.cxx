@@ -108,7 +108,7 @@ SpectrumModuleModel
   m_LayerGenerator = LayerGeneratorType::New();
   m_LayerGenerator->SetImage(m_InputImage);
 
-  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+  //FltkFilterWatcher qlwatcher(m_LayerGenerator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_LayerGenerator->GenerateLayer();
 
   hasQuickLook = m_LayerGenerator->GetLayer()->GetHasQuicklook();

@@ -68,7 +68,7 @@ CompareImagesModel
   m_LeftImageGenerator->GenerateQuicklookOn();
   //FltkFilterWatcher qlwatcher(m_LeftImageGenerator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook...");
   FltkFilterWatcher qlwatcher(m_LeftImageGenerator->GetProgressSource(), 0, 0, 200, 20,
-                                  otbGetTextMacro("Generating DEM QuickLook ..."));
+                                  "Generating DEM QuickLook ...");
   m_LeftImageGenerator->GenerateLayer();
 
   m_LeftImageGenerator->GetLayer()->SetName("LeftImage");

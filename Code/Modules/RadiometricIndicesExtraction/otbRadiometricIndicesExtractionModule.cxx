@@ -44,7 +44,7 @@ RadiometricIndicesExtractionModule::RadiometricIndicesExtractionModule()
   m_View->InitVisu();
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply radiometric indices extraction"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to apply radiometric indices extraction");
 
   // the model registers its module
   m_ModelRI->RegisterListener(this);

@@ -123,7 +123,7 @@ namespace otb
   guiInterpolator->value( (int) NEARESTNEIGHBOR );
 
   //Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to resample"));
+  this->AddInputDescriptor<ImageType>("InputImage", "Image to resample");
 }
 
 /** Destructor */
@@ -149,7 +149,7 @@ void ResampleModule::Run()
 
   // Generate the layer
   m_Generator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_Generator->GenerateLayer();
   m_InputImageLayer = m_Generator->GetLayer();
   m_InputImageLayer->SetName("ImageLayer");
@@ -369,7 +369,7 @@ void ResampleModule::OK()
 
   this->AddOutputDescriptor(m_ResampleFilter->GetOutput(),
                          "OutputImage",
-                         otbGetTextMacro("Resampled image"));
+                         "Resampled image");
 
   this->NotifyOutputsChange();
 

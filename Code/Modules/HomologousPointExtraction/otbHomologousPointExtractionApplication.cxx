@@ -18,7 +18,7 @@
 #include "ConfigureMonteverdi.h"
 
 // For internationalisation
-#include "otbI18n.h"
+
 
 #include "otbCommandLineArgumentParser.h"
 #include "otbHomologousPointExtractionModule.h"
@@ -28,7 +28,7 @@
 int main(int argc, char* argv[])
 {
   //Internationalization
-  otbI18nMacro();
+  
 
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser      ParserType;

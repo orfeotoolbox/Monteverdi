@@ -43,8 +43,8 @@ HomologousPointExtractionModule::HomologousPointExtractionModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage", otbGetTextMacro("Fix image"));
-  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage", otbGetTextMacro("Moving Image"));
+  this->AddInputDescriptor<FloatingVectorImageType>("FixInputImage", "Fix image");
+  this->AddInputDescriptor<FloatingVectorImageType>("MovingInputImage", "Moving Image");
 }
 
 /** Destructor */
@@ -102,7 +102,7 @@ void HomologousPointExtractionModule::Notify()
     this->ClearOutputDescriptors();
     // Add outputs
     FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-    this->AddOutputDescriptor(filteredOutput, "Transformed Image", otbGetTextMacro("Transformed moving image"));
+    this->AddOutputDescriptor(filteredOutput, "Transformed Image", "Transformed moving image");
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));

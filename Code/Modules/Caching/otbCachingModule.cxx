@@ -33,7 +33,7 @@ CachingModule::CachingModule()
   this->NeedsPipelineLockingOn();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", "Dataset to write");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<CharVectorImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<LabeledImageType>("InputDataSet");
@@ -52,7 +52,7 @@ CachingModule::CachingModule()
   pBar->minimum(0);
   pBar->maximum(1);
 
-  pBar->label(otbGetTextMacro("Caching dataset (0%)"));
+  pBar->label("Caching dataset (0%)");
 }
 
 /** Destructor */
@@ -75,7 +75,7 @@ void CachingModule::UpdateProgress()
 
   std::ostringstream oss1, oss2;
   oss1.str("");
-  oss1 << otbGetTextMacro("Caching dataset") << "  (" << std::floor(100 * progress) << "%)";
+  oss1 << "Caching dataset" << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
   oss2 << std::floor(100 * progress);
   oss2 << "%";
@@ -172,7 +172,7 @@ void CachingModule::ThreadedRun()
 
   // Create description
   std::ostringstream oss;
-  oss << otbGetTextMacro("Cached data from") << " " << sourceId << " (" << outputKey << ")";
+  oss << "Cached data from" << " " << sourceId << " (" << outputKey << ")";
   std::string description = oss.str();
   oss.str("");
 

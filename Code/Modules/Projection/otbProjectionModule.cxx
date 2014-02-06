@@ -39,7 +39,7 @@ ProjectionModule::ProjectionModule()
   m_CastFilter = CastSingleImageFilter::New();
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to project"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to project");
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
 }
 
@@ -92,7 +92,7 @@ void ProjectionModule::Notify()
   if (m_Model->GetOutputChanged())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", otbGetTextMacro("Projected image"));
+    this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", "Projected image");
     // Send an event to Monteverdi application
     //this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     this->NotifyOutputsChange();

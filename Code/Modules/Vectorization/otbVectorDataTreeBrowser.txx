@@ -41,7 +41,7 @@ VectorDataTreeBrowser<TVectorData>
 {
   this->box(FL_DOWN_BOX);
   this->auto_branches(true);
-  this->label(otbGetTextMacro("VectorData browser"));
+  this->label("VectorData browser");
 
   // allow callback with the tree
   this->box(FL_DOWN_BOX);
@@ -60,7 +60,7 @@ VectorDataTreeBrowser<TVectorData>
   //Flu_Tree_Browser::Node* root = this->first();
   typename Flu_Tree_Browser::Node* root = this->first();
   root->open(true);
-  root->label(otbGetTextMacro("VectorData"));
+  root->label("VectorData");
 
   this->show_root(false);
   this->insertion_mode(FLU_INSERT_BACK);

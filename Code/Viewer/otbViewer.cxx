@@ -21,12 +21,12 @@ See OTBCopyright.txt for details.
 
 #include "otbMsgReporter.h"
 
-#include "otbI18n.h"
+
 
 int main(int argc, char* argv[])
 {
 
-  otbI18nMacro();
+  
 
   typedef otb::ViewerController ControllerType;
   typedef otb::ViewerViewGUI    ViewType;

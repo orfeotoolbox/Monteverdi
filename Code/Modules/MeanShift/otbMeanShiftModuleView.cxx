@@ -1,7 +1,7 @@
 #include "otbMeanShiftModuleView.h"
 
 #include "otbMsgReporter.h"
-#include "otbI18n.h"
+
 
 #include <FL/Fl_File_Chooser.H>
 #include <FL/fl_draw.H>

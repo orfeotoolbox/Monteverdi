@@ -18,7 +18,7 @@
 
 #include "otbCachingPathManager.h"
 #include "FLU/Flu_File_Chooser.h"
-#include "otbI18n.h"
+
 #include "otbMsgReporter.h"
 
 #include "itksys/SystemTools.hxx"
@@ -121,7 +121,7 @@ CachingPathManager
 ::ChangeCachingPath()
 {
   const char * filename = NULL;
-  filename = flu_dir_chooser(otbGetTextMacro("Choose a caching direstory..."), "");
+  filename = flu_dir_chooser("Choose a caching direstory...", "");
   
   if (filename == NULL)
     {

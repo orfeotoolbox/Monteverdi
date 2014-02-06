@@ -23,7 +23,7 @@ namespace otb
 MosaicImagesModule::MosaicImagesModule()
 {
   // Handle both images with quicklook and image without
-  this->AddInputDescriptor<ImageWithQuicklook>("InputImages", otbGetTextMacro("Input images to mosaic (RiCj dataset name pattern)."), false, true);
+  this->AddInputDescriptor<ImageWithQuicklook>("InputImages", "Input images to mosaic (RiCj dataset name pattern.)", false, true);
   this->AddTypeToInputDescriptor<VectorImageType>("InputImages");
 
   // Instanciate filters
@@ -168,14 +168,14 @@ void MosaicImagesModule::Run()
     output->SetQuicklook(m_QLVectorTileFilter->GetOutput());
     output->SetShrinkFactor(shrinkFactor);
     this->AddOutputDescriptor(output, "OutputImage",
-                            otbGetTextMacro("Mosaicked image"));
+                            "Mosaicked image");
   
     }
   else
     {
     // Add an output (single version)
     this->AddOutputDescriptor(m_VectorTileFilter->GetOutput(), "OutputImage",
-                            otbGetTextMacro("Mosaicked image"));
+                            "Mosaicked image");
  
     }
 

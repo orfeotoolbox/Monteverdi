@@ -27,7 +27,7 @@ SarIntensityModule::SarIntensityModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<ComplexImageType>("InputImage", otbGetTextMacro("Complex image to extract intensity from"));
+  this->AddInputDescriptor<ComplexImageType>("InputImage", "Complex image to extract intensity from");
 
   m_ModulusFilter = ModulusFilterType::New();
   m_SquareFilter  = SquareFilterType::New();
@@ -68,9 +68,9 @@ void SarIntensityModule::Run()
 
     // Add an output (single version)
     this->AddOutputDescriptor(m_SquareFilter->GetOutput(), "Intensity",
-                              otbGetTextMacro("Intensity of the complex image"));
+                              "Intensity of the complex image");
     this->AddOutputDescriptor(m_LogFilter->GetOutput(), "LogIntensity",
-                              otbGetTextMacro("Log10-intensity of the complex image"));
+                              "Log10-intensity of the complex image");
 
     // Last, when all outputs where declared, notify listeners
     this->NotifyOutputsChange();

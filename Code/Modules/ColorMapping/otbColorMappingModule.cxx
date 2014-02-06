@@ -42,7 +42,7 @@ ColorMappingModule
   m_ColorBarWidget->SetColormap(m_ColorMapFilter->GetColormap());
 
   // Describe inputs
-  this->AddInputDescriptor<SingleImageType>("InputImage", otbGetTextMacro("Scalar image to process"));
+  this->AddInputDescriptor<SingleImageType>("InputImage", "Scalar image to process");
 
 }
 
@@ -115,7 +115,7 @@ ColorMappingModule
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_RGBtoVectorImageCastFilter->GetOutput(),
                             m_ColormapName +" ColorMap Image",
-                            otbGetTextMacro("RGB ColorMap Image") );
+                            "RGB ColorMap Image" );
 }
 
 

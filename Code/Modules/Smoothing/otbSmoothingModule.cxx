@@ -44,7 +44,7 @@ SmoothingModule::SmoothingModule()
   m_View->InitVisu();
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply smoothing"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to apply smoothing");
 
   // the model registers its module
   m_ModelSmooth->RegisterListener(this);

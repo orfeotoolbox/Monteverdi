@@ -1,11 +1,8 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
- 
- 
- 
+version 1.0300 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include <FLU/Flu_File_Chooser.h>} {public
+decl {\#include <FLU/Flu_File_Chooser.h>} {public local
 } 
 
 class ViewerModuleGroup {open
@@ -131,19 +128,19 @@ class ViewerModuleGroup {open
             }
             Fl_Spinner guiGrayscaleChannelChoice {
               label {Grey Channel}
-              tooltip {Select the band to view in grayscale mode} xywh {138 94 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1
+              tooltip {Select the band to view in grayscale mode} xywh {138 94 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187
             }
             Fl_Spinner guiRedChannelChoice {
               label {Red channel}
-              tooltip {Select band for red channel in RGB composition} xywh {138 164 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+              tooltip {Select band for red channel in RGB composition} xywh {138 164 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
             }
             Fl_Spinner guiGreenChannelChoice {
               label {Green channel}
-              tooltip {Select band for green channel in RGB composition} xywh {138 199 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+              tooltip {Select band for green channel in RGB composition} xywh {138 199 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
             }
             Fl_Spinner guiBlueChannelChoice {
               label {Blue channel}
-              tooltip {Select band for blue channel in RGB composition} xywh {138 231 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+              tooltip {Select band for blue channel in RGB composition} xywh {138 231 58 24} box PLASTIC_DOWN_BOX color 7 selection_color 55 labelcolor 187 deactivate
             }
             Fl_Return_Button guiViewerSetupOk {
               label Apply
@@ -209,7 +206,7 @@ this->SetContrastStretch();}
                 callback {guiStretchQL->set();
 guiStretchFull->clear();
 guiStretchZoom->clear();
-this->SetContrastStretch();} selected
+this->SetContrastStretch();}
                 xywh {529 75 100 25} down_box ROUND_DOWN_BOX selection_color 22 labelcolor 186
               }
             }
@@ -523,4 +520,7 @@ bDEM->value(0);
     comment {for fluid 1.3} {in_source not_in_header
     }
   }
+} 
+
+decl {\#include "otbConfigurationFile.h"} {selected public local
 } 

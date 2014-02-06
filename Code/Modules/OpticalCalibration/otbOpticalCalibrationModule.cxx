@@ -37,7 +37,7 @@ OpticalCalibrationModule::OpticalCalibrationModule()
   m_HelpTextBuffer = new Fl_Text_Buffer();
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to apply OpticalCalibration on"));
+  this->AddInputDescriptor<ImageType>("InputImage", "Image to apply OpticalCalibration on");
 }
 
 /** Destructor */
@@ -503,7 +503,7 @@ OpticalCalibrationModule
   this->ClearOutputDescriptors();
 
   // Add outputs
-  this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(), "Luminance image", otbGetTextMacro("Luminance image"));
+  this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(), "Luminance image", "Luminance image");
 
   std::cout << "filter function: " << m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionCoef() << std::endl;
 
@@ -521,18 +521,18 @@ OpticalCalibrationModule
     m_TOCMultiplier->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
     m_DiffTOATOCMultiplier->SetInput(m_DifferenceFilter->GetOutput());
 
-    this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(), "TOA image (*1000)", otbGetTextMacro("TOA image 1000"));
-    this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(), "TOC image (*1000)", otbGetTextMacro("TOC image 1000"));
+    this->AddOutputDescriptor(m_TOAMultiplier->GetOutput(), "TOA image (*1000)", "TOA image 1000");
+    this->AddOutputDescriptor(m_TOCMultiplier->GetOutput(), "TOC image (*1000)", "TOC image 1000");
     this->AddOutputDescriptor(m_DiffTOATOCMultiplier->GetOutput(), "Difference TOA-TOC image (*1000)",
-                              otbGetTextMacro("Difference TOA-TOC image 1000"));
+                              "Difference TOA-TOC image 1000");
     }
   else
     {
-    this->AddOutputDescriptor(m_LuminanceToReflectanceFilter->GetOutput(), "TOA image", otbGetTextMacro("TOA Image"));
+    this->AddOutputDescriptor(m_LuminanceToReflectanceFilter->GetOutput(), "TOA image", "TOA Image");
     this->AddOutputDescriptor(m_ReflectanceToSurfaceReflectanceFilter->GetOutput(), "TOC image",
-                              otbGetTextMacro("TOC Image"));
+                              "TOC Image");
     this->AddOutputDescriptor(m_DifferenceFilter->GetOutput(), "Difference TOA-TOC image",
-                              otbGetTextMacro("Difference TOA-TOC image"));
+                              "Difference TOA-TOC image");
     }
 
   // Send an event to Monteverdi application

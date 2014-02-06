@@ -43,8 +43,8 @@ CompareImagesModule::CompareImagesModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<InputImageType>("LeftInputImage", otbGetTextMacro("First image to compare"));
-  this->AddInputDescriptor<InputImageType>("RightInputImage", otbGetTextMacro("Second image to compare"));
+  this->AddInputDescriptor<InputImageType>("LeftInputImage", "First image to compare");
+  this->AddInputDescriptor<InputImageType>("RightInputImage", "Second image to compare");
 
 }
 
@@ -93,7 +93,7 @@ void CompareImagesModule::Notify(const std::string& event)
   if (event == "SaveQuit")
     {
     this->ClearOutputDescriptors();
-    //this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", otbGetTextMacro("Speckle filtered image"));
+    //this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", "Speckle filtered image");
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     }

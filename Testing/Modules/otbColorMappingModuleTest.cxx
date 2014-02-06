@@ -18,7 +18,7 @@
 #include "ConfigureMonteverdi.h"
 
 // For internationalisation
-#include "otbI18n.h"
+
 
 #include "otbColorMappingModule.h"
 #include "otbImageFileReader.h"
@@ -31,7 +31,7 @@ int otbColorMappingModuleTest(int argc, char* argv[])
   // if (atoi(argv[2]) == 1) withComplex = true;
 
   //Internationalization
-  otbI18nMacro();
+  
 
   otb::ColorMappingModule::Pointer pointModule = otb::ColorMappingModule::New();
   otb::Module::Pointer             module = pointModule.GetPointer();

@@ -35,7 +35,7 @@ WriterModule::WriterModule()
 
   // Describe inputs
   // Image inputs
-  this->AddInputDescriptor<UCharImageType>(InputDataSetID, otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<UCharImageType>(InputDataSetID, "Dataset to write");
   this->AddTypeToInputDescriptor<UShortImageType>(InputDataSetID);
   this->AddTypeToInputDescriptor<ShortImageType>(InputDataSetID);
   this->AddTypeToInputDescriptor<UIntImageType>(InputDataSetID);
@@ -168,7 +168,7 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser(otbGetTextMacro("Choose the dataset file..."), "*.*", "");
+  filename = flu_file_chooser("Choose the dataset file...", "*.*", "");
 
   if (filename == NULL)
     {
@@ -196,7 +196,7 @@ void WriterModule::UpdateProgress()
 
   std::ostringstream oss1, oss2;
   oss1.str("");
-  oss1 << otbGetTextMacro("Writing dataset") << "  (" << std::floor(100 * progress) << "%)";
+  oss1 << "Writing dataset" << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
   oss2 << std::floor(100 * progress);
   oss2 << "%";

@@ -32,7 +32,7 @@
 #include "otbMonteverdiViewGUI.h"
 #include "otbMonteverdiController.h"
 #include "otbSplashScreen.h"
-#include "otbI18n.h"
+
 
 // There are function prototype conflits under cygwin between standard w32 API
 // and standard C ones
@@ -113,7 +113,7 @@
 int main(int argc, char* argv[])
 {
   //Internationalization
-  otbI18nMacro();
+  
 
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
@@ -164,100 +164,99 @@ int main(int argc, char* argv[])
 
   // Register modules
   /***********  File menu *******************/
-  model->RegisterModule<otb::ReaderModule>("Reader", otbGetTextMacro("File/Open dataset"));
-  model->RegisterModule<otb::WriterModule> ("Writer", otbGetTextMacro("File/Save dataset"));
+  model->RegisterModule<otb::ReaderModule>("Reader", "File/Open dataset");
+  model->RegisterModule<otb::WriterModule> ("Writer", "File/Save dataset");
   model->RegisterModule<otb::WriterMVCModule> ("Specific writer for X image",
-                                               otbGetTextMacro("File/Save dataset (advanced)"));
-  model->RegisterModule<otb::CachingModule>("Caching", otbGetTextMacro("File/Cache dataset"));
-  model->RegisterModule<otb::ExtractROIModule>("ExtractROI", otbGetTextMacro("File/Extract ROI from dataset"));
-  model->RegisterModule<otb::UncompressJpeg2000Module>("UncompressJpeg2000Module", otbGetTextMacro("File/Uncompress Jpeg2000 image"));
-  model->RegisterModule<otb::ConcatenateModule>("Concatenate", otbGetTextMacro("File/Concatenate images"));
-  model->RegisterModule<otb::MosaicImagesModule>("Mosaic", otbGetTextMacro("File/Mosaic images"));
+                                               "File/Save dataset (advanced)");
+  model->RegisterModule<otb::CachingModule>("Caching", "File/Cache dataset");
+  model->RegisterModule<otb::ExtractROIModule>("ExtractROI", "File/Extract ROI from dataset");
+  model->RegisterModule<otb::UncompressJpeg2000Module>("UncompressJpeg2000Module", "File/Uncompress Jpeg2000 image");
+  model->RegisterModule<otb::ConcatenateModule>("Concatenate", "File/Concatenate images");
+  model->RegisterModule<otb::MosaicImagesModule>("Mosaic", "File/Mosaic images");
 #ifdef OTB_USE_MAPNIK
-  model->RegisterModule<otb::RasterizationModule>("Rasterize", otbGetTextMacro("File/Rasterize vector data"));
+  model->RegisterModule<otb::RasterizationModule>("Rasterize", "File/Rasterize vector data");
 #endif
 
-  model->RegisterModule<otb::TileExportModule>("Export To Kmz", otbGetTextMacro("File/Export To Kmz"));
+  model->RegisterModule<otb::TileExportModule>("Export To Kmz", "File/Export To Kmz");
 
 #ifdef OTB_USE_CURL
-    model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", otbGetTextMacro("File/Tile Map Import"));
+    model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", "File/Tile Map Import");
 #endif
     
-    model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", otbGetTextMacro("File/Statistics/Image Statistics"));
-    model->RegisterModule<otb::CompareImagesModule>("Compare Images", otbGetTextMacro("File/Statistics/Compare images"));
+    model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", "File/Statistics/Image Statistics");
+    model->RegisterModule<otb::CompareImagesModule>("Compare Images", "File/Statistics/Compare images");
 
   /***********  Visu menu *******************/
-  model->RegisterModule<otb::ViewerModule>("Viewer", otbGetTextMacro("Visualization/Viewer"));
-  model->RegisterModule<otb::SpectrumModule>("SpectralViewer", otbGetTextMacro("Visualization/Spectral Viewer"));
-  model->RegisterModule<otb::ColorMappingModule>("ColorMapping", otbGetTextMacro("Visualization/Color Mapping"));
+  model->RegisterModule<otb::ViewerModule>("Viewer", "Visualization/Viewer");
+  model->RegisterModule<otb::SpectrumModule>("SpectralViewer", "Visualization/Spectral Viewer");
+  model->RegisterModule<otb::ColorMappingModule>("ColorMapping", "Visualization/Color Mapping");
   
   /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",
-                                                       otbGetTextMacro("Calibration/Optical Calibration"));
-  model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", otbGetTextMacro("Calibration/SAR Calibration"));
+                                                       "Calibration/Optical Calibration");
+  model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", "Calibration/SAR Calibration");
   
   /***********  Filtering menu *******************/
-  model->RegisterModule<otb::BandMathModule>("BandMath", otbGetTextMacro("Filtering/BandMath"));
-  model->RegisterModule<otb::ThresholdModule>("Threshold", otbGetTextMacro("Filtering/Threshold"));
-  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", otbGetTextMacro("Filtering/Pansharpening/Simple RCS pan-sharpening"));
-  model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion", otbGetTextMacro("Filtering/Pansharpening/Bayesian fusion"));
-  model->RegisterModule<otb::MeanShiftModule> ("MeanShift", otbGetTextMacro("Filtering/Mean shift clustering"));
+  model->RegisterModule<otb::BandMathModule>("BandMath", "Filtering/BandMath");
+  model->RegisterModule<otb::ThresholdModule>("Threshold", "Filtering/Threshold");
+  model->RegisterModule<otb::PanSharpeningModule> ("PanSharpening", "Filtering/Pansharpening/Simple RCS pan-sharpening");
+  model->RegisterModule<otb::BayesianFusionModule>("BayesianFusion", "Filtering/Pansharpening/Bayesian fusion");
+  model->RegisterModule<otb::MeanShiftModule> ("MeanShift", "Filtering/Mean shift clustering");
 //   model->RegisterModule<otb::FeatureExtractionModule>("FeatureExtraction",
-//                                                       otbGetTextMacro("Filtering/Feature extraction"));
+//                                                       "Filtering/Feature extraction");
   model->RegisterModule<otb::RadiometricIndicesExtractionModule>("RadiometricIndicesExtraction",
-                                                      otbGetTextMacro("Filtering/Feature extraction/Radiometric indices extraction"));
+                                                      "Filtering/Feature extraction/Radiometric indices extraction");
   model->RegisterModule<otb::TextureExtractionModule>("TextureExtraction",
-                                                      otbGetTextMacro("Filtering/Feature extraction/Texture extraction"));
+                                                      "Filtering/Feature extraction/Texture extraction");
   model->RegisterModule<otb::MorphologyExtractionModule>("MorphologyExtraction",
-                                                      otbGetTextMacro("Filtering/Feature extraction/Morphology"));
+                                                      "Filtering/Feature extraction/Morphology");
   model->RegisterModule<otb::SmoothingModule>("Smoothing",
-                                                      otbGetTextMacro("Filtering/Feature extraction/Smoothing"));
+                                                      "Filtering/Feature extraction/Smoothing");
   model->RegisterModule<otb::EdgeExtractionModule>("EdgeExtraction",
-                                                      otbGetTextMacro("Filtering/Feature extraction/Edge extraction"));
-  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", otbGetTextMacro("Filtering/Change detection"));
-  model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", otbGetTextMacro("Filtering/Fine Correlation"));
-  model->RegisterModule<otb::VectorizationModule>("Vectorization", otbGetTextMacro("Filtering/Vectorization"));
-  model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", otbGetTextMacro("Filtering/Connected Component segmentation"));
-  model->RegisterModule<otb::ResampleModule>("Resampling", otbGetTextMacro("Filtering/Resampling"));
+                                                      "Filtering/Feature extraction/Edge extraction");
+  model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", "Filtering/Change detection");
+  model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", "Filtering/Fine Correlation");
+  model->RegisterModule<otb::VectorizationModule>("Vectorization", "Filtering/Vectorization");
+  model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", "Filtering/Connected Component segmentation");
+  model->RegisterModule<otb::ResampleModule>("Resampling", "Filtering/Resampling");
 
   /***********  SAR menu *******************/
-  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", otbGetTextMacro("SAR/Despeckle"));
+  model->RegisterModule<otb::SpeckleFilteringModule>("Speckle", "SAR/Despeckle");
   model->RegisterModule<otb::SarIntensityModule>("SarIntensity",
-                                                 otbGetTextMacro("SAR/Compute intensity and log-intensity"));
+                                                 "SAR/Compute intensity and log-intensity");
   model->RegisterModule<otb::PolarimetricSynthesisModule>("PolarimetricSynthesis",
-                                                 otbGetTextMacro("SAR/Polarimetry/Synthesis"));
+                                                 "SAR/Polarimetry/Synthesis");
   model->RegisterModule<otb::SARPolarimetrySinclairModule>("PolarimetrySinclair",
-                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From Sinclair matrix to"));
+                                                 "SAR/Polarimetry/Conversion/From Sinclair matrix to");
    model->RegisterModule<otb::SARPolarimetryMuellerModule>("PolarimetryMueller",
-                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From Mueller matrix to"));
+                                                 "SAR/Polarimetry/Conversion/From Mueller matrix to");
   model->RegisterModule<otb::SARPolarimetryReciprocalModule>("PolarimetryReciprocal",
-                                                 otbGetTextMacro("SAR/Polarimetry/Conversion/From reciprocal matrix to"));
+                                                 "SAR/Polarimetry/Conversion/From reciprocal matrix to");
   model->RegisterModule<otb::SARPolarimetryAnalysisModule>("PolarimetryAnalysis",
-                                                 otbGetTextMacro("SAR/Polarimetry/Analysis"));
+                                                 "SAR/Polarimetry/Analysis");
 
   /***********  Learning menu *******************/
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
-                                                             otbGetTextMacro("Learning/SVM classification"));
+                                                             "Learning/SVM classification");
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
-                                                              otbGetTextMacro(
-                                                                     "Learning/SVM classification (EXPERIMENTAL)"));
-  model->RegisterModule<otb::KMeansModule>("KMeans", otbGetTextMacro("Learning/KMeans clustering"));
+                                                                     "Learning/SVM classification (EXPERIMENTAL)");
+  model->RegisterModule<otb::KMeansModule>("KMeans", "Learning/KMeans clustering");
   
   /***********  Geometry menu *******************/
-  model->RegisterModule<otb::ProjectionModule>("Projection", otbGetTextMacro("Geometry/Reproject image"));
+  model->RegisterModule<otb::ProjectionModule>("Projection", "Geometry/Reproject image");
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition",
-                                                    otbGetTextMacro("Geometry/Superimpose two images"));
+                                                    "Geometry/Superimpose two images");
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
-                                                              otbGetTextMacro("Geometry/Homologous points extraction"));
+                                                              "Geometry/Homologous points extraction");
   
-  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", otbGetTextMacro("Learning/Object Labeling"));
+  model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", "Learning/Object Labeling");
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
-                                                     otbGetTextMacro("Geometry/GCP to sensor model"));
+                                                     "Geometry/GCP to sensor model");
   model->RegisterModule<otb::DEMToImageGeneratorModule>("DEM To Image Generator",
-                                                     otbGetTextMacro("Geometry/DEM To Image Generator"));
+                                                     "Geometry/DEM To Image Generator");
 
   model->RegisterModule<otb::VectorDataTransformModule>("VectorData Transform",
-                                                        otbGetTextMacro("Geometry/VectorData Transform"));
+                                                        "Geometry/VectorData Transform");
   
   // Launch Monteverdi
   view->InitWidgets();

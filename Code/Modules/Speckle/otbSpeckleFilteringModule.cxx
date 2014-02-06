@@ -36,7 +36,7 @@ SpeckleFilteringModule::SpeckleFilteringModule()
   m_Model->RegisterListener(this);
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply speckle filtering on"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to apply speckle filtering on");
 }
 
 /** Destructor */
@@ -72,7 +72,7 @@ void SpeckleFilteringModule::Notify()
   if (m_Model->GetOutputChanged())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", otbGetTextMacro("Speckle filtered image"));
+    this->AddOutputDescriptor(m_Model->GetOutput(), "OutputImage", "Speckle filtered image");
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
     }

@@ -294,7 +294,7 @@ ViewerModel
     shrinker->SetShrinkFactor(shrinkFactor);
     shrinker->SetInput(reader->GetOutput());
     FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
-                                otbGetTextMacro("Generating QuickLook ..."));
+                                "Generating QuickLook ...");
     shrinker->Update();
     shrinkFactor = shrinker->GetShrinkFactor();
 

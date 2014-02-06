@@ -29,7 +29,7 @@ namespace otb
 ExtractROIModule::ExtractROIModule()
 {
   // Describe inputs
-  this->AddInputDescriptor<FloatingImageType>("InputImage", otbGetTextMacro("Image to read"));
+  this->AddInputDescriptor<FloatingImageType>("InputImage", "Image to read");
   this->AddTypeToInputDescriptor<FloatingVectorImageType>("InputImage");
   //this->AddTypeToInputDescriptor<FloatImageWithQuicklook>("InputImage");
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
@@ -118,7 +118,7 @@ void ExtractROIModule::Run()
     m_Generator->SetImage(image);
 
     FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20,
-                                otbGetTextMacro("Generating QuickLook ..."));
+                                "Generating QuickLook ...");
     m_Generator->GenerateLayer();
     m_Model->AddLayer(m_Generator->GetLayer());
 
@@ -163,7 +163,7 @@ void ExtractROIModule::Run()
     m_VectorGenerator->SetImage(vectorImage);
 
     FltkFilterWatcher qlwatcher(m_VectorGenerator->GetProgressSource(), 0, 0, 200, 20,
-                                otbGetTextMacro("Generating QuickLook ..."));
+                                "Generating QuickLook ...");
     m_VectorGenerator->GenerateLayer();
     m_Model->AddLayer(m_VectorGenerator->GetLayer());
 
@@ -461,7 +461,7 @@ void ExtractROIModule::Ok()
       m_ImageExtractROIFilter->SetInput(image);
 
       this->ClearOutputDescriptors();
-      this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(), "OutputImage", otbGetTextMacro("Image extracted"));
+      this->AddOutputDescriptor(m_ImageExtractROIFilter->GetOutput(), "OutputImage", "Image extracted");
 
       /*ImageRegionType newRequestedRegion;
       newRequestedRegion.SetSize(0, 0);
@@ -489,7 +489,7 @@ void ExtractROIModule::Ok()
 
       this->ClearOutputDescriptors();
       this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
-                                otbGetTextMacro("Image extracted"));
+                                "Image extracted");
 
      /* VectorImageRegionType newRequestedRegion;
       newRequestedRegion.SetSize(0, 0);
@@ -515,7 +515,7 @@ void ExtractROIModule::Ok()
 //
 //       this->ClearOutputDescriptors();
 //       this->AddOutputDescriptor(m_VectorImageExtractROIFilter->GetOutput(), "OutputImage",
-//                                 otbGetTextMacro("Image extracted"));
+//                                 "Image extracted");
 //
 //      /* VectorImageRegionType newRequestedRegion;
 //       newRequestedRegion.SetSize(0, 0);

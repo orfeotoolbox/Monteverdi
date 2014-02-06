@@ -46,7 +46,7 @@ EdgeExtractionViewGUI::EdgeExtractionViewGUI()
   this->InitParameterGroupList();
   
   // Rename window title
-  SetWindowTitle(otbGetTextMacro("Edge extraction"));
+  SetWindowTitle("Edge extraction");
   
   // Set up callbacks on menu items
   int curPos = 0;

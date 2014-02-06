@@ -32,7 +32,7 @@ namespace otb
   m_InputImage = VectorImageType::New();
 
   // Add inputs
-  this->AddInputDescriptor<VectorImageType>("InputImage", otbGetTextMacro("Input Image (multi channel real image, 16 channels)"));
+  this->AddInputDescriptor<VectorImageType>("InputImage", "Input Image (multi channel real image, 16 channels)");
 }
 
 /** Destructor */
@@ -93,7 +93,7 @@ void SARPolarimetryMuellerModule::Ok()
       m_MuellerToPolarisationDegreeAndPowerImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_MuellerToPolarisationDegreeAndPowerImageFilter->GetOutput(), "MuellerToPolarisationDegreeAndPowerImageFilter",
-                                otbGetTextMacro("Mueller to polarisation degree and power image"));
+                                "Mueller to polarisation degree and power image");
      hasOutput = true;
     }
   if( rb_MueRecCv->value() )
@@ -101,7 +101,7 @@ void SARPolarimetryMuellerModule::Ok()
       m_MuellerToReciprocalCovarianceImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_MuellerToReciprocalCovarianceImageFilter->GetOutput(), "MuellerToReciprocalCovarianceImageFilter",
-                                otbGetTextMacro("Mueller to reciprocal covarianc image"));
+                                "Mueller to reciprocal covarianc image");
      hasOutput = true;
     }
   

@@ -34,7 +34,7 @@ UncompressJpeg2000Module::UncompressJpeg2000Module()
   this->NeedsPipelineLockingOn();
   
   // Describe inputs
-  this->AddInputDescriptor<FloatImageWithQuicklook>("InputImage", otbGetTextMacro("Image to read"));
+  this->AddInputDescriptor<FloatImageWithQuicklook>("InputImage", "Image to read");
 
   m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
   
@@ -271,7 +271,7 @@ void UncompressJpeg2000Module::Ok()
     if (m_Filename.length() == 0)
       {
       const char * filename = NULL;
-      filename = flu_file_chooser(otbGetTextMacro("Choose the image file..."), "*.tif", "");
+      filename = flu_file_chooser("Choose the image file...", "*.tif", "");
       if (filename == NULL)
         {
         otbMsgDebugMacro(<< "Empty file name!");
@@ -305,7 +305,7 @@ void UncompressJpeg2000Module::UpdateProgress()
 
   std::ostringstream oss1, oss2;
   oss1.str("");
-  oss1 << otbGetTextMacro("Writing image") << "  (" << std::floor(100 * progress) << "%)";
+  oss1 << "Writing image" << "  (" << std::floor(100 * progress) << "%)";
   oss2.str("");
   oss2 << std::floor(100 * progress);
   oss2 << "%";

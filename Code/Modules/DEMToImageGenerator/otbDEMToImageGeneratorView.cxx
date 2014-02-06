@@ -259,7 +259,7 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
     }
 
   // Choose file
-  srtmDirectory = flu_dir_chooser(otbGetTextMacro("Choose the SRTM DEM directory ..."), defaultPath);
+  srtmDirectory = flu_dir_chooser("Choose the SRTM DEM directory ...", defaultPath);
   
   if (srtmDirectory  == NULL)
     {

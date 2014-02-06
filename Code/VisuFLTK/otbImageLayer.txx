@@ -20,7 +20,7 @@
 
 #include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
-#include "otbI18n.h"
+
 #include "itkTimeProbe.h"
 #include "otbStandardRenderingFunction.h"
 
@@ -271,9 +271,9 @@ ImageLayer<TImage, TOutputImage>
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?
   // The ouptut stringstream
   std::ostringstream oss;
-  oss << otbGetTextMacro("Index") << ": " << index << std::endl;
-  oss << otbGetTextMacro("Layer") << ": " << this->GetName();
-  oss << std::endl << otbGetTextMacro("Image size") << ": " << m_Image->GetLargestPossibleRegion().GetSize() << std::endl;
+  oss << "Index" << ": " << index << std::endl;
+  oss << "Layer" << ": " << this->GetName();
+  oss << std::endl << "Image size" << ": " << m_Image->GetLargestPossibleRegion().GetSize() << std::endl;
 
   // If we are inside the buffered region
   if (m_Image->GetBufferedRegion().IsInside(index))
@@ -323,13 +323,13 @@ ImageLayer<TImage, TOutputImage>
         m_PlaceName = m_CoordinateToName->GetPlaceName();
         m_CountryName = m_CoordinateToName->GetCountryName();
 
-        if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
-        if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
+        if (m_PlaceName != "") oss << "Near" << " " << m_PlaceName << std::endl;
+        if (m_CountryName != "") oss << " " << "in" << " " << m_CountryName << std::endl;
         }
       }
     else
       {
-      oss << otbGetTextMacro("Location unknown") << std::endl;
+      oss << "Location unknown" << std::endl;
       }
     }
 

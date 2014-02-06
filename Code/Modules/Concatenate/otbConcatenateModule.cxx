@@ -27,7 +27,7 @@ ConcatenateModule::ConcatenateModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to concatenate"), false, true);
+  this->AddInputDescriptor<ImageType>("InputImage", "Image to concatenate", false, true);
   m_ImageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
   m_ImageList = ImageListType::New();
 }
@@ -72,7 +72,7 @@ void ConcatenateModule::Run()
   this->ClearOutputDescriptors();
   // Add an output (single version)
   this->AddOutputDescriptor(m_ImageListToVectorImageFilter->GetOutput(), "OutputImage",
-                            otbGetTextMacro("Image concatenated"));
+                            "Image concatenated");
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
 }

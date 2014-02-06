@@ -32,8 +32,8 @@ ChangeDetectionModule::ChangeDetectionModule()
   m_CastFilter = CastSingleImageFilter::New();
 
   // Describe inputs
-  this->AddInputDescriptor<ImageType>("LeftImage", otbGetTextMacro("Left image"));
-  this->AddInputDescriptor<ImageType>("RightImage", otbGetTextMacro("Right image"));
+  this->AddInputDescriptor<ImageType>("LeftImage", "Left image");
+  this->AddInputDescriptor<ImageType>("RightImage", "Right image");
   this->AddTypeToInputDescriptor<SingleImageType>("LeftImage");
   this->AddTypeToInputDescriptor<SingleImageType>("RightImage");
 }
@@ -105,7 +105,7 @@ void ChangeDetectionModule::Notify()
   if (m_ChangeDetection->GetHasOutput())
     {
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(), "OutputImage", otbGetTextMacro("Change image Label"));
+    this->AddOutputDescriptor(m_ChangeDetection->GetOutput(), "OutputImage", "Change image Label");
     this->NotifyOutputsChange();
     }
 }

@@ -39,7 +39,7 @@ ObjectCountingModule::ObjectCountingModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Image to apply ObjectCounting on"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", "Image to apply ObjectCounting on");
 
 }
 
@@ -98,7 +98,7 @@ void ObjectCountingModule::Notify(const std::string& event)
 
     // Add outputs
     LabeledImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
-    this->AddOutputDescriptor(labeledOutput, "Labeled Image", otbGetTextMacro("Result of the ObjectCounting labeling"));
+    this->AddOutputDescriptor(labeledOutput, "Labeled Image", "Result of the ObjectCounting labeling");
 
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));

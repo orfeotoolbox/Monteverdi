@@ -32,8 +32,8 @@ RasterizationModule::RasterizationModule()
 
        // Add a vector and image input
 
-       this->AddInputDescriptor<VectorDataType>("VectorData", otbGetTextMacro("Vector data to rasterize"));
-       this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Support Image"));
+       this->AddInputDescriptor<VectorDataType>("VectorData", "Vector data to rasterize");
+       this->AddInputDescriptor<ImageType>("InputImage", "Support Image");
 
 
        m_InputImage=ImageType::New();
@@ -150,7 +150,7 @@ void RasterizationModule::Run()
 
        //this->AddOutputDescriptor(m_VectorDataRendering->GetOutput(), "OutputImage",
        this->AddOutputDescriptor(m_OutputImage, "OutputImage",
-       otbGetTextMacro("Vector data rasterized"));
+       "Vector data rasterized");
 
        this->NotifyOutputsChange();
 

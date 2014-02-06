@@ -40,7 +40,7 @@ MorphologyExtractionViewGUI::MorphologyExtractionViewGUI()
   this->InitParameterGroupList();
   
   // Rename window title
-  SetWindowTitle(otbGetTextMacro("Morphology extraction"));
+  SetWindowTitle("Morphology extraction");
   
   // Set up callbacks on menu items
   int curPos = 0;

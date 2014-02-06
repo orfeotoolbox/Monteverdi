@@ -39,11 +39,11 @@ TileExportModule::TileExportModule() : m_Logo(NULL), m_LogoFilename(),
                                        m_InputHaveMetaData(true)
 {
   // Add a multiple inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"), false);
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", "Input image", false);
   this->AddTypeToInputDescriptor<SingleImageType>("InputImage");
-  this->AddInputDescriptor<FloatingVectorImageType>("InputLegend", otbGetTextMacro("Input Legend"), true, true);
+  this->AddInputDescriptor<FloatingVectorImageType>("InputLegend", "Input Legend", true, true);
   //this->AddTypeToInputDescriptor<SingleImageType>("InputLegend"); //TODO
-  this->AddInputDescriptor<FloatingVectorImageType>("InputLogo", otbGetTextMacro("Input Logo"), true, false);
+  this->AddInputDescriptor<FloatingVectorImageType>("InputLogo", "Input Logo", true, false);
   //this->AddTypeToInputDescriptor<SingleImageType>("InputLogo"); //TODO
 
   // Initialize some values

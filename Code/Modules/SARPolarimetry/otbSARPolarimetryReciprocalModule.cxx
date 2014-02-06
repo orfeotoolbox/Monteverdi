@@ -33,7 +33,7 @@ namespace otb
   m_InputImage = ComplexVectorImageType::New();
 
   // Add inputs
-  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", otbGetTextMacro("Input Image (multi channel complex image, 6 or 10 channels)"));
+  this->AddInputDescriptor<ComplexVectorImageType>("InputImage", "Input Image (multi channel complex image, 6 or 10 channels)");
 }
 
 /** Destructor */
@@ -103,7 +103,7 @@ void SARPolarimetryReciprocalModule::Ok()
       m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_ReciprocalCovarianceToReciprocalCoherencyImageFilter->GetOutput(), "ReciprocalCovarianceToReciprocalCoherencyImageFilter",
-                                otbGetTextMacro("Reciprocal to rec. coherency image"));
+                                "Reciprocal to rec. coherency image");
       hasOutput = true;
     }
   if( rb_CohDeg->value() )
@@ -111,7 +111,7 @@ void SARPolarimetryReciprocalModule::Ok()
       m_ReciprocalCovarianceToCoherencyDegreeImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_ReciprocalCovarianceToCoherencyDegreeImageFilter->GetOutput(), "ReciprocalCovarianceToCoherencyDegreeImageFilter",
-                                otbGetTextMacro("Reciprocal to cohenrency degree image"));
+                                "Reciprocal to cohenrency degree image");
       hasOutput = true;
     }
   if( rb_Mue->value() )
@@ -119,7 +119,7 @@ void SARPolarimetryReciprocalModule::Ok()
       m_ReciprocalCoherencyToReciprocalMuellerImageFilter->SetInput(m_InputImage);
       
       this->AddOutputDescriptor(m_ReciprocalCoherencyToReciprocalMuellerImageFilter->GetOutput(), "ReciprocalCoherencyToMuellerImageFilter",
-                                otbGetTextMacro("RecCoherency to Mueller image"));
+                                "RecCoherency to Mueller image");
       hasOutput = true;
     }
 

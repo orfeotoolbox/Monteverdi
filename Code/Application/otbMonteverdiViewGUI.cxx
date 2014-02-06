@@ -25,7 +25,7 @@
 #include <FL/fl_ask.H>
 
 #include "otbMacro.h"
-#include "otbI18n.h"
+
 #include "otbMsgReporter.h"
 #include "otbCachingPathManager.h"
 
@@ -165,7 +165,7 @@ MonteverdiViewGUI
   const ModuleDescriptorMapType&          lModuleDescriptorMap = m_MonteverdiModel->GetRegisteredModuleDescriptors();
   ModuleDescriptorMapType::const_iterator mcIt;
 
-  mMenuBar->add(otbGetTextMacro("File"), 0, 0, 0, FL_SUBMENU);
+  mMenuBar->add("File", 0, 0, 0, FL_SUBMENU);
 
   unsigned int idx = 0;
 
@@ -186,8 +186,8 @@ MonteverdiViewGUI
     }
 
   // In the end
-  mMenuBar->add(otbGetTextMacro("File/Quit"), 0, (Fl_Callback *) MonteverdiViewGUI::QuitCallback, (void*) (this));
-  mMenuBar->add(otbGetTextMacro("?/Help"), 0, (Fl_Callback *) MonteverdiViewGUI::HelpCallback, (void*) (this));
+  mMenuBar->add("File/Quit", 0, (Fl_Callback *) MonteverdiViewGUI::QuitCallback, (void*) (this));
+  mMenuBar->add("?/Help", 0, (Fl_Callback *) MonteverdiViewGUI::HelpCallback, (void*) (this));
 }
 
 /** Second step of Init Widgets : creation of the tree */
@@ -200,7 +200,7 @@ MonteverdiViewGUI
 
   m_Tree->box(FL_DOWN_BOX);
   m_Tree->auto_branches(true);
-  m_Tree->label(otbGetTextMacro("Datasets Browser"));
+  m_Tree->label("Datasets Browser");
 
   // allow callback with the tree
   m_Tree->box(FL_DOWN_BOX);
@@ -217,7 +217,7 @@ MonteverdiViewGUI
   //Flu_Tree_Browser::Node* root = m_Tree->first();
   FluTreeBrowser::Node* root = m_Tree->first();
   root->open(true);
-  root->label(otbGetTextMacro("Dataset"));
+  root->label("Dataset");
 
   gTreeGroup->resizable(m_Tree);
   wMainWindow->resizable(gTreeGroup);

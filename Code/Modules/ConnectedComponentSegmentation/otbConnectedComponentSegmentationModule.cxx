@@ -175,7 +175,7 @@ ConnectedComponentSegmentationModule::ConnectedComponentSegmentationModule()
 
   // Describe inputs
 
-  this->AddInputDescriptor<VectorImageType> ("InputImage", otbGetTextMacro("Image to process"), false, true);
+  this->AddInputDescriptor<VectorImageType> ("InputImage", "Image to process", false, true);
   this->AddTypeToInputDescriptor<ImageType> ("InputImage");
 
 }
@@ -342,7 +342,7 @@ void ConnectedComponentSegmentationModule::Run()
   // Generate the layer
   m_ImageGenerator->SetImage(m_InputImage);
   FltkFilterWatcher qlwatcher(m_ImageGenerator->GetProgressSource(), 0, 0, 200, 20,
-                              otbGetTextMacro("Generating QuickLook ..."));
+                              "Generating QuickLook ...");
   m_ImageGenerator->GenerateLayer();
 
   m_InputImageLayer = m_ImageGenerator->GetLayer();
@@ -1149,7 +1149,7 @@ void ConnectedComponentSegmentationModule::OK()
     else streamingFilter->GetFilter()->SetOBIAExpression(m_OBIAOpeningFilter->GetExpression());
 
     FltkFilterWatcher qlwatcher(streamingFilter->GetStreamer(), 0, 0, 200, 20,
-                                otbGetTextMacro("Processing entire image ..."));
+                                "Processing entire image ...");
 
     streamingFilter->Update();
 
@@ -1226,9 +1226,9 @@ void ConnectedComponentSegmentationModule::OK()
 
      m_OutputRGBLabelImage = m_OBIAOpeningColorMapper->GetOutput();
 
-     this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", otbGetTextMacro("Output image"));
+     this->AddOutputDescriptor(m_OutputRGBLabelImage, "OutputLabelImage", "Output image");
      */
-    this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", otbGetTextMacro("Output vector data"));
+    this->AddOutputDescriptor(m_OutputVectorData, "OutputVectorData", "Output vector data");
 
     this->NotifyOutputsChange();
     }

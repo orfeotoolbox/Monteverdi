@@ -36,7 +36,7 @@ KMeansModule::KMeansModule()
   m_ChangeLabelFilter = ChangeLabelFilterType::New();
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Image to cluster"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", "Image to cluster");
 }
 
 /** Destructor */
@@ -142,7 +142,7 @@ void KMeansModule::UpdateProgress()
     if (m_Estimator->GetCurrentIteration() == 0)
       {
       pProgressBar->value(0.);
-      pProgressBar->copy_label(otbGetTextMacro("Generating decision tree"));
+      pProgressBar->copy_label("Generating decision tree");
       }
     else
       {
@@ -296,7 +296,7 @@ void KMeansModule::ThreadedRun()
   treeGenerator->SetBucketSize(static_cast<unsigned int>(vNumberOfSamples->value() / (10 * nbClasses)));
   treeGenerator->Update();
 
-  otbGenericMsgDebugMacro(<< otbGetTextMacro("Tree generated"));
+  otbGenericMsgDebugMacro(<< "Tree generated");
 
   // Estimate the centroids
   m_Estimator->SetKdTree(treeGenerator->GetOutput());
@@ -305,7 +305,7 @@ void KMeansModule::ThreadedRun()
   m_Estimator->SetCentroidPositionChangesThreshold(vConvergenceThreshold->value());
   m_Estimator->StartOptimization();
 
-  otbGenericMsgDebugMacro(<< otbGetTextMacro("Optimization ended"));
+  otbGenericMsgDebugMacro(<< "Optimization ended");
 
   // Finally, update the KMeans filter
   KMeansFunctorType functor;
@@ -334,9 +334,9 @@ void KMeansModule::ThreadedRun()
   Fl::lock();
   this->ClearOutputDescriptors();
   this->AddOutputDescriptor(m_KMeansFilter->GetOutput(), "KMeans labeled image",
-                            otbGetTextMacro("The labeled image from kmeans classification"));
+                            "The labeled image from kmeans classification");
   this->AddOutputDescriptor(m_ChangeLabelFilter->GetOutput(), "KMeans clustered image",
-                            otbGetTextMacro("The clustered image from kmeans classification"));
+                            "The clustered image from kmeans classification");
   this->NotifyOutputsChange();
   Fl::unlock();
 

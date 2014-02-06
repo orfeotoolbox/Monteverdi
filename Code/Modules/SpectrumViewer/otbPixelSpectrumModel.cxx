@@ -19,7 +19,7 @@
 =========================================================================*/
 #include "otbPixelSpectrumModel.h"
 #include "otbMacro.h"
-#include "otbI18n.h"
+
 #include "itkTimeProbe.h"
 
 namespace otb

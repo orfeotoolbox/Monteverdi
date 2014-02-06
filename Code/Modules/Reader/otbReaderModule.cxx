@@ -24,7 +24,7 @@
 #include "FLU/Flu_File_Chooser.h"
 
 #include "otbMsgReporter.h"
-#include "otbI18n.h"
+
 
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbFltkFilterWatcher.h"
@@ -102,12 +102,12 @@ ReaderModule::ReaderModule()
 
 
   // Expose supported data type:
-  vType->add(otbGetTextMacro("Unknown"));
-  vType->add(otbGetTextMacro("Real image"));
-  vType->add(otbGetTextMacro("Complex image"));
-  vType->add(otbGetTextMacro("Vector Data"));
-  vType->add(otbGetTextMacro("Pleiades Image"));
-  vType->add(otbGetTextMacro("Raw Image"));
+  vType->add("Unknown");
+  vType->add("Real image");
+  vType->add("Complex image");
+  vType->add("Vector Data");
+  vType->add("Pleiades Image");
+  vType->add("Raw Image");
   vType->value(ImageType_Unknown);
 
   // Deactivate ok for now
@@ -117,38 +117,38 @@ ReaderModule::ReaderModule()
   vName->value("");
   
   // Fill ENVI types for raw data
-  vPixType->add(otbGetTextMacro("[ 1]: 8-bit byte"));
+  vPixType->add("[ 1]: 8-bit byte");
   m_MapEnviPixelType[0]=1;
-  vPixType->add(otbGetTextMacro("[ 2]: 16-bit signed integer"));
+  vPixType->add("[ 2]: 16-bit signed integer");
   m_MapEnviPixelType[1]=2;
-  vPixType->add(otbGetTextMacro("[12]: 16-bit unsigned integer"));
+  vPixType->add("[12]: 16-bit unsigned integer");
   m_MapEnviPixelType[2]=12;
-  vPixType->add(otbGetTextMacro("[ 3]: 32-bit signed integer"));
+  vPixType->add("[ 3]: 32-bit signed integer");
   m_MapEnviPixelType[3]=3;
-  vPixType->add(otbGetTextMacro("[13]: 32-bit unsigned integer"));
+  vPixType->add("[13]: 32-bit unsigned integer");
   m_MapEnviPixelType[4]=13;
-  vPixType->add(otbGetTextMacro("[14]: 64-bit signed integer"));
+  vPixType->add("[14]: 64-bit signed integer");
   m_MapEnviPixelType[5]=14;
-  vPixType->add(otbGetTextMacro("[15]: 64-bit unsigned integer"));
+  vPixType->add("[15]: 64-bit unsigned integer");
   m_MapEnviPixelType[6]=15;
-  vPixType->add(otbGetTextMacro("[ 4]: 32-bit floating point"));
+  vPixType->add("[ 4]: 32-bit floating point");
   m_MapEnviPixelType[7]=4;
-  vPixType->add(otbGetTextMacro("[ 5]: 64-bit double precision floating point"));
+  vPixType->add("[ 5]: 64-bit double precision floating point");
   m_MapEnviPixelType[8]=5;
-  vPixType->add(otbGetTextMacro("[ 6]: 2 x 32-bit complex (real-imaginary pair)"));
+  vPixType->add("[ 6]: 2 x 32-bit complex (real-imaginary pair)");
   m_MapEnviPixelType[9]=6;
-  vPixType->add(otbGetTextMacro("[ 9]: 2 x 64-bit double precision complex (real-imaginary pair)"));
+  vPixType->add("[ 9]: 2 x 64-bit double precision complex (real-imaginary pair)");
   m_MapEnviPixelType[10]=9;
   vPixType->value(EnviPixelType_Byte);
   
-  vInterleave->add(otbGetTextMacro("BSQ"));
-  vInterleave->add(otbGetTextMacro("BIP"));
-  vInterleave->add(otbGetTextMacro("BIL"));
+  vInterleave->add("BSQ");
+  vInterleave->add("BIP");
+  vInterleave->add("BIL");
   vInterleave->value(EnviInterleave_BSQ);
   
-  vByteOrder->add(otbGetTextMacro("LSF : Least Significant byte First"));
-  vByteOrder->add(otbGetTextMacro("MSF : Most Significant byte First"));
-  vByteOrder->tooltip(otbGetTextMacro("LSF = little endian; MSF = big endian"));
+  vByteOrder->add("LSF : Least Significant byte First");
+  vByteOrder->add("MSF : Most Significant byte First");
+  vByteOrder->tooltip("LSF = little endian; MSF = big endian");
   vByteOrder->value(EnviByteOrder_LSF);
   
 }
@@ -648,7 +648,7 @@ void ReaderModule::UpdateProgress()
 //
 //   std::ostringstream oss1, oss2;
 //   oss1.str("");
-//   oss1 << otbGetTextMacro("Generating QuickLook") << "  (" << std::floor(100 * progress) << "%)";
+//   oss1 << "Generating QuickLook" << "  (" << std::floor(100 * progress) << "%)";
 //   oss2.str("");
 //   oss2 << std::floor(100 * progress);
 //   oss2 << "%";
@@ -814,7 +814,7 @@ void ReaderModule::ThreadedRun()
       StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
       shrinker->SetInput(m_FPVReader->GetOutput());
       //FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
-      //                            otbGetTextMacro("Generating QuickLook ..."));
+      //                            "Generating QuickLook ...");
       m_ProcessObject = shrinker->GetStreamer();
       shrinker->Update();
       m_ShrinkFactor = shrinker->GetShrinkFactor();

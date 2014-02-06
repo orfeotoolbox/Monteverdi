@@ -972,7 +972,7 @@ void ProjectionView::Browse()
     {
     defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
     }
-  demName = flu_dir_chooser(otbGetTextMacro("Choose the DEM dir..."), defaultPath);
+  demName = flu_dir_chooser("Choose the DEM dir...", defaultPath);
 
   if (demName == NULL)
     {

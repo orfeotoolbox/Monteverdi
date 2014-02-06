@@ -44,7 +44,7 @@ MorphologyExtractionModule::MorphologyExtractionModule()
   m_View->InitVisu();
 
   // Describe inputs
-  this->AddInputDescriptor<InputImageType>("InputImage", otbGetTextMacro("Image to apply morphology extraction"));
+  this->AddInputDescriptor<InputImageType>("InputImage", "Image to apply morphology extraction");
 
   // the model registers its module
   m_ModelMorpho->RegisterListener(this);

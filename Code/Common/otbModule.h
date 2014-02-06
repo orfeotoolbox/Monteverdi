@@ -21,7 +21,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
-#include "otbI18n.h"
+
 
 #include "otbDataObjectWrapper.h"
 #include "otbInputDataDescriptor.h"

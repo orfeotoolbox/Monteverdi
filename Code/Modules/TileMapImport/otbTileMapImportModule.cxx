@@ -244,7 +244,7 @@ void TileMapImportModule::Ok()
     m_ExtractROIOsmFilter->SetInput(m_ReaderTile->GetOutput());
 
     this->ClearOutputDescriptors();
-    this->AddOutputDescriptor(m_ExtractROIOsmFilter->GetOutput(), m_OutputKey, otbGetTextMacro("Image extracted"));
+    this->AddOutputDescriptor(m_ExtractROIOsmFilter->GetOutput(), m_OutputKey, "Image extracted");
     this->NotifyOutputsChange();
 
     wTileMapImportWindow->hide();

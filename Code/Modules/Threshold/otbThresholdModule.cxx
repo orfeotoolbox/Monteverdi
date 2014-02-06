@@ -101,7 +101,7 @@ ThresholdModule::ThresholdModule() : m_HasToGenerateLayer(true)
                                     gScroll->w(), gScroll->h());
 
   //Describe inputs
-  this->AddInputDescriptor<ImageType>("InputImage", otbGetTextMacro("Image to threshold"));
+  this->AddInputDescriptor<ImageType>("InputImage", "Image to threshold");
 }
 
 /** Destructor */
@@ -132,7 +132,7 @@ void ThresholdModule::Run()
 
   // Generate the layer
   m_Generator->SetImage(m_InputImage);
-  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, otbGetTextMacro("Generating QuickLook ..."));
+  FltkFilterWatcher qlwatcher(m_Generator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   m_Generator->GenerateLayer();
   m_InputImageLayer = m_Generator->GetLayer();
   m_InputImageLayer->SetName("ImageLayer");
@@ -308,11 +308,11 @@ void ThresholdModule::OK()
 
   if (genValue != 0 && binValue == 0)
     {
-    this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(), "OutputImage", otbGetTextMacro("Thresholded image"));
+    this->AddOutputDescriptor(m_ThresholdFilter->GetOutput(), "OutputImage", "Thresholded image");
     }
   else if (genValue == 0 && binValue != 0)
     {
-    this->AddOutputDescriptor(m_BinaryThresholdFilter->GetOutput(), "OutputImage", otbGetTextMacro("Thresholded image"));
+    this->AddOutputDescriptor(m_BinaryThresholdFilter->GetOutput(), "OutputImage", "Thresholded image");
     }
   else
     {

@@ -41,8 +41,8 @@ SupervisedClassificationModule2::SupervisedClassificationModule2()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", otbGetTextMacro("Input image"));
-  this->AddInputDescriptor<VectorDataType>("VectorDataROIs", otbGetTextMacro("Training/validation ROIs"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputImage", "Input image");
+  this->AddInputDescriptor<VectorDataType>("VectorDataROIs", "Training/validation ROIs");
 }
 
 /** Destructor */
@@ -98,7 +98,7 @@ void SupervisedClassificationModule2::Notify()
     this->ClearOutputDescriptors();
     // Add outputs
     FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutput();
-    this->AddOutputDescriptor(filteredOutput, "OutputImage", otbGetTextMacro("Input image with new keyword list"));
+    this->AddOutputDescriptor(filteredOutput, "OutputImage", "Input image with new keyword list");
     }
 
   this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));

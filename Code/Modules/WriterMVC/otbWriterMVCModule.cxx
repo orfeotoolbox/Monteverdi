@@ -41,7 +41,7 @@ WriterMVCModule::WriterMVCModule()
   m_Controller->SetView(m_View);
 
   // Describe inputs
-  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", otbGetTextMacro("Dataset to write"));
+  this->AddInputDescriptor<FloatingVectorImageType>("InputDataSet", "Dataset to write");
   this->AddTypeToInputDescriptor<LabeledImageType>("InputDataSet");
   this->AddTypeToInputDescriptor<FloatingImageType>("InputDataSet");
 

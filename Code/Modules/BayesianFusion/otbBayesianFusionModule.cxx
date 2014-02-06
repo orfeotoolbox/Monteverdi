@@ -27,9 +27,9 @@ BayesianFusionModule::BayesianFusionModule()
   // Then, describe inputs needed by the module
 
   // Add a new input
-  this->AddInputDescriptor<FloatingImageType>("PanImage", otbGetTextMacro("Panchromatic image"));
-  this->AddInputDescriptor<FloatingVectorImageType>("ZoomXsImage", otbGetTextMacro("XS image superimposed to panchromatic image with cubic resampling"));
-  this->AddInputDescriptor<FloatingVectorImageType>("XsImage", otbGetTextMacro("XS image superimposed to panchromatic image with nearest neighbors resampling"));
+  this->AddInputDescriptor<FloatingImageType>("PanImage", "Panchromatic image");
+  this->AddInputDescriptor<FloatingVectorImageType>("ZoomXsImage", "XS image superimposed to panchromatic image with cubic resampling");
+  this->AddInputDescriptor<FloatingVectorImageType>("XsImage", "XS image superimposed to panchromatic image with nearest neighbors resampling");
 
   m_BayesianFusionFilter = BayesianFusionFilterType::New();
 
@@ -74,7 +74,7 @@ void BayesianFusionModule::Run()
 
   // Add an output (single version)
   this->AddOutputDescriptor(m_BayesianFusionFilter->GetOutput(), "PanSharpenedImageOutput",
-                            otbGetTextMacro("Pansharpened image"));
+                            "Pansharpened image");
 
   // Last, when all outputs where declared, notify listeners
   this->NotifyOutputsChange();
