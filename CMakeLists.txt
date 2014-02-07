@@ -267,7 +267,8 @@ ${Monteverdi_INCLUDE_DIRS}
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Utilities)
-ADD_SUBDIRECTORY(StarterKit)
+# For an unknow reason this part failed to build on windows
+#ADD_SUBDIRECTORY(StarterKit)
 
 # Include the Packaging subdir after every other dir
 # since all other install directives must be executed before fixupbundle
