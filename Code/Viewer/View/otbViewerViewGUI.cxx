@@ -18,6 +18,7 @@ See OTBCopyright.txt for details.
 #include <FL/Fl_Text_Buffer.H>
 #include "otbViewerViewGUI.h"
 #include "otbMacro.h"
+#include "itksys\SystemTools.hxx"
 
 namespace otb
 {
@@ -604,7 +605,7 @@ ViewerViewGUI
    widgetList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
-   widgetList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
+   widgetList->GetNthElement(selectedItem-1)->SetLabel((this->CutFileName2(selectedItem-1)).c_str());
    widgetList->GetNthElement(selectedItem-1)->Show();
  }
 
@@ -1169,10 +1170,16 @@ ViewerViewGUI
  ::CutFileName(unsigned int selectedItem)
  {
    std::string fileName     = m_ViewerModel->GetObjectList().at(selectedItem).pFileName;
-   int slashIndex           = fileName.find_last_of("/", fileName.size());
-   std::string  fileNameCut = fileName.substr(slashIndex+1, fileName.size());
-
+   std::string  fileNameCut = itksys::SystemTools::GetFilenameName(fileName);
    return fileNameCut.c_str();
+ }
+
+ std::string
+  ViewerViewGUI
+ ::CutFileName2(unsigned int selectedItem)
+ {
+   std::string fileName     = m_ViewerModel->GetObjectList().at(selectedItem).pFileName;
+   return itksys::SystemTools::GetFilenameName(fileName);
  }
 
 void

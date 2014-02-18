@@ -178,6 +178,7 @@ protected:
   virtual void   UpdateDiaporamaProgressBar();
 
   virtual const char * CutFileName(unsigned int selectedItem);
+  virtual std::string CutFileName2(unsigned int selectedItem);
 
   virtual void LinkSetup();
   virtual void LinkSetupSave();
