@@ -33,6 +33,17 @@ IF(WIN32)
 ADD_DEFINITIONS(-DNOMINMAX -DOSSIM_STATIC)
 ENDIF(WIN32)
 
+if(WIN32)
+    if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
+        if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
+            message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+        else()
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000" CACHE STRING "Flags used by the linker" FORCE)
+            message(STATUS "Increase the size of the stack to 10Mbytes.")
+        endif()
+    endif()
+endif()
+
 # ensure WIN32 definition
 IF(WIN32)
   ADD_DEFINITIONS(-DWIN32)
