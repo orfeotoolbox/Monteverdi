@@ -18,7 +18,7 @@ See OTBCopyright.txt for details.
 #include <FL/Fl_Text_Buffer.H>
 #include "otbViewerViewGUI.h"
 #include "otbMacro.h"
-#include "itksys\SystemTools.hxx"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
