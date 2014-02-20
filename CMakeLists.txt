@@ -224,16 +224,6 @@ ELSE(Monteverdi_BUILD_SHARED_LIBS)
   ENDIF(Monteverdi_INSTALL_NO_DEVELOPMENT)
 ENDIF(Monteverdi_BUILD_SHARED_LIBS)
 
-
-# Make relative paths absolute (needed later on)
-foreach(p LIB BIN INCLUDE CMAKE)
-  set(var Monteverdi_INSTALL_${p}_DIR)
-  if(NOT IS_ABSOLUTE "${${var}}")
-    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
-  endif()
-endforeach()
- 
-
 # Make sure the user does not try to install on top of the build tree.
 IF(WIN32 OR APPLE OR UNIX)
   STRING(TOLOWER "${CMAKE_INSTALL_PREFIX}" _PREFIX)
@@ -314,10 +304,10 @@ export(TARGETS OTBGuiFLTK OTBVisuFLTK
        FILE "${PROJECT_BINARY_DIR}/MonteverdiTargets.cmake")
 export(PACKAGE Monteverdi)
 
-# Create the MonteverdiConfig.cmake and MonteverdiConfigVersion files
-file(RELATIVE_PATH REL_INCLUDE_DIR "${Monteverdi_INSTALL_CMAKE_DIR}"
-   "${Monteverdi_INSTALL_INCLUDE_DIR}")
-
+file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${Monteverdi_INSTALL_CMAKE_DIR}"
+   "${CMAKE_INSTALL_PREFIX}/${Monteverdi_INSTALL_INCLUDE_DIR}")
+  
+   
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Code/GuiFLTK" "${PROJECT_BINARY_DIR}/Code/GuiFLTK"
 "${PROJECT_SOURCE_DIR}/Code/VisuFLTK" "${PROJECT_BINARY_DIR}/Code/VisuFLTK"
