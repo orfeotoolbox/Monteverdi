@@ -21,6 +21,11 @@ install(TARGETS OTBVisuFLTK
 
 file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-install(FILES ${__files1} ${__files2}
-        DESTINATION ${Monteverdi_INSTALL_INCLUDE_DIR}/VisuFLTK
-        COMPONENT Development)
+file(GLOB __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.fl")
+install(FILES ${__files1} ${__files2}  ${__files3}
+   ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetPackedManager.h
+   ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetSplittedManager.h
+   ${CMAKE_CURRENT_BINARY_DIR}/otbMsgReporterGUI.h
+   DESTINATION ${Monteverdi_INSTALL_INCLUDE_DIR}/VisuFLTK
+   COMPONENT Development)
+
