@@ -300,10 +300,10 @@ ImageLayer<TImage, TOutputImage>
       {
       PointType point = this->GetPixelLocation (index);
 
-      oss << setiosflags(std::ios::fixed) << std::setprecision(2) << "Ground spacing(in m): (" << m_ApproxGroundSpacing[0] << ";" << m_ApproxGroundSpacing[1] << ")" <<
+      oss << std::setiosflags(std::ios::fixed) << std::setprecision(2) << "Ground spacing(in m): (" << m_ApproxGroundSpacing[0] << ";" << m_ApproxGroundSpacing[1] << ")" <<
       std::endl;
 
-      oss << setiosflags(std::ios::fixed) << std::setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;
+      oss << std::setiosflags(std::ios::fixed) << std::setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;
 
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss << "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss << "(estimated location)" << std::endl;
