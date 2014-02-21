@@ -395,7 +395,7 @@ void ProjectionView::UpdateMapParam()
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetTransform();
 
   std::ostringstream oss;
-  oss << setiosflags(std::ios_base::fixed);
+  oss << std::setiosflags(std::ios_base::fixed);
   oss.str("");
 
   switch (this->GetMapType())
@@ -509,7 +509,7 @@ void ProjectionView::UpdateLongLat()
 
       // Fill the datas in the GUI
       std::ostringstream oss;
-      oss << setiosflags(std::ios_base::fixed);
+      oss << std::setiosflags(std::ios_base::fixed);
       oss.str("");
       oss << geoPoint[0];
       guiLongSelection->value(oss.str().c_str());
@@ -571,7 +571,7 @@ void ProjectionView::UpdateUnavailableLongLat()
 
   // Fill the datas in the GUI
   std::ostringstream oss;
-  oss << setiosflags(std::ios_base::fixed);
+  oss << std::setiosflags(std::ios_base::fixed);
   oss.str("");
   oss << geoPoint[0];
   guiLongSelection->value(oss.str().c_str());
@@ -751,7 +751,7 @@ void ProjectionView::InitializeAction()
 
   // Fill the datas in the GUI
   std::ostringstream oss;
-  oss << setiosflags(std::ios_base::fixed);
+  oss << std::setiosflags(std::ios_base::fixed);
   oss.str("");
   oss << geoPoint[0];
   guiLongSelection->value(oss.str().c_str());
@@ -1287,7 +1287,7 @@ void ProjectionView::UpdateOriginGeographicalCoordinates()
   TransformType::Pointer rsTransform = m_Controller->GetModel()->GetInverseTransform();
 
   std::ostringstream oss;
-  oss << setiosflags(std::ios_base::fixed);
+  oss << std::setiosflags(std::ios_base::fixed);
   oss.str("");
 
   switch (this->GetMapType())
