@@ -428,6 +428,12 @@ ADD_TEST(moTvColorMappingModuleTest ${Modules_TESTS4} otbColorMappingModuleTest
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#------------- KMeans Module Tests ---------------------------
+ADD_TEST(moTvKMeansModuleTest ${Modules_TESTS4} otbKMeansModuleTest
+	${INPUTDATA}/Classification/QB_1_ortho.tif
+    ${TEMP}/moTvKMeansModule.tif
+)
+
 #------------- DEMToImageGenerator Module Tests ---------------------------
 ADD_TEST(moTvDEMToImageGeneratorModuleTest ${Modules_TESTS4} otbDEMToImageGeneratorModuleTest
 	${INPUTDATA}/DEM/srtm_directory
@@ -615,6 +621,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbVectorizationClassificationTest.cxx
   otbPolarimetricSynthesisTest.cxx
   otbColorMappingModuleTest.cxx
+  otbKMeansModuleTest.cxx
   otbDEMToImageGeneratorModuleTest.cxx
   otbImageStatisticsModuleTest.cxx
   otbConnectedComponentSegmentationModuleTest.cxx

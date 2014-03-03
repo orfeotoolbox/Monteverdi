@@ -40,6 +40,7 @@ void RegisterTests()
   REGISTER_TEST(otbVectorizationClassification);
   REGISTER_TEST(otbPolarimetricSynthesisTest);
   REGISTER_TEST(otbColorMappingModuleTest);
+  REGISTER_TEST(otbKMeansModuleTest);
   REGISTER_TEST(otbDEMToImageGeneratorModuleTest);
   REGISTER_TEST(otbImageStatisticsModuleTest);
   REGISTER_TEST(otbConnectedComponentSegmentationModuleTest);
