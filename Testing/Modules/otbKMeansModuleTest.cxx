@@ -24,13 +24,13 @@
 
 int otbKMeansModuleTest(int argc, char* argv[])
 {
-  otb::KMeansModule::Pointer pointModule = otb::KMeansModule::New(); 
+  otb::KMeansModule::Pointer pointModule = otb::KMeansModule::New();
   otb::Module::Pointer             module = pointModule.GetPointer();
 
   std::cout << "Module: " << module << std::endl;
 
   // Put in the tests
-  //typedef otb::VectorImage<float,2>        ImageType;
+  //typedef otb::VectorImage<float, 2>        ImageType;
   typedef otb::KMeansModule::FloatingVectorImageType        ImageType;
   typedef otb::KMeansModule::LabeledImageType             LabelImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;

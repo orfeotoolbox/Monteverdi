@@ -1666,7 +1666,7 @@ SupervisedClassificationAppli
   m_ValidationListSample->Clear();
   m_ValidationListLabelSample->Clear();
   m_TrainingListSample->SetMeasurementVectorSize(sampleSize);
-  m_ValidationListSample->SetMeasurementVectorSize(sampleSize);  
+  m_ValidationListSample->SetMeasurementVectorSize(sampleSize);
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
