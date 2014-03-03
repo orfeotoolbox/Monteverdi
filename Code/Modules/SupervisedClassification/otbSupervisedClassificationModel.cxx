@@ -175,7 +175,6 @@ SupervisedClassificationModel
 ::Validate()
 {
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
-  //validationClassifier->SetSample(m_SampleGenerator->GetValidationListSample());
   validationClassifier->SetInput(m_SampleGenerator->GetValidationListSample());
   validationClassifier->SetNumberOfClasses(m_NumberOfClasses);
   validationClassifier->SetModel(m_ModelEstimator->GetModel());

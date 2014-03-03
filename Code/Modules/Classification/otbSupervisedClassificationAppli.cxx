@@ -1658,15 +1658,17 @@ SupervisedClassificationAppli
 ::JointlyGenerateTrainingAndValidationSamplesFromROIs()
 {
 
+  ImagePointerType image = m_InputImage;
+  unsigned int     sampleSize = image->GetNumberOfComponentsPerPixel();
+
   m_TrainingListSample->Clear();
   m_TrainingListLabelSample->Clear();
   m_ValidationListSample->Clear();
   m_ValidationListLabelSample->Clear();
+  m_TrainingListSample->SetMeasurementVectorSize(sampleSize);
+  m_ValidationListSample->SetMeasurementVectorSize(sampleSize);  
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
-
-  ImagePointerType image = m_InputImage;
-  unsigned int     sampleSize = image->GetNumberOfComponentsPerPixel();
 
   for (PolygonListType::Iterator polygIt = m_TrainingSet->Begin();
        polygIt != m_TrainingSet->End(); ++polygIt)
@@ -2128,7 +2130,6 @@ SupervisedClassificationAppli
     }
 
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
-  //validationClassifier->SetSample(m_ValidationListSample);
   validationClassifier->SetInput(m_ValidationListSample);
   validationClassifier->SetNumberOfClasses(m_ClassesMap.size());
   validationClassifier->SetModel(m_Model);

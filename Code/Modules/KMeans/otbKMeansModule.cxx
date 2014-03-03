@@ -242,6 +242,7 @@ void KMeansModule::ThreadedRun()
                                                        sampler->GetOutput()->GetLargestPossibleRegion());
   it.GoToBegin();
   ListSampleType::Pointer listSample = ListSampleType::New();
+  listSample->SetMeasurementVectorSize(it.Get().GetSize());
 
   FloatingVectorImageType::PixelType pixel = it.Get();
   SampleType mini(pixel);
