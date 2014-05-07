@@ -4,8 +4,8 @@ file(GLOB OTBGuiFLTK_SRCS "*.cxx" )
 
 add_library(OTBGuiFLTK ${OTBGuiFLTK_SRCS})
 target_link_libraries(OTBGuiFLTK OTBCommon ${MVD_VISU_GUI_LIBRARIES})
-if(MVD_LIBRARY_PROPERTIES)
-  set_target_properties(OTBGuiFLTK PROPERTIES ${MVD_LIBRARY_PROPERTIES})
+if(Monteverdi_LIBRARY_PROPERTIES)
+  set_target_properties(OTBGuiFLTK PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
 endif()
 
 install(TARGETS OTBGuiFLTK

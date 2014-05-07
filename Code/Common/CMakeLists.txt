@@ -4,6 +4,9 @@ SET(OTBMonteverdiCommon_SRCS ${OTBMonteverdiCommon_SRCS})
 
 ADD_LIBRARY(OTBMonteverdiCommon ${OTBMonteverdiCommon_SRCS} )
 TARGET_LINK_LIBRARIES(OTBMonteverdiCommon OTBIO OTBCommon OTBGuiFLTK OTBVisuFLTK flu)
+IF(Monteverdi_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(OTBMonteverdiCommon PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
+ENDIF()
 
 
 IF(NOT Monteverdi_INSTALL_NO_LIBRARIES)

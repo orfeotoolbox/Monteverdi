@@ -19,10 +19,13 @@ SET(Monteverdi_VERSION_MAJOR "1")
 SET(Monteverdi_VERSION_MINOR "21")
 SET(Monteverdi_VERSION_PATCH "0")
 
-
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 SET(Monteverdi_VERSION_STRING "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}")
+
+SET(Monteverdi_LIBRARY_PROPERTIES
+    VERSION   "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}"
+    SOVERSION "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}")
 
 
 SET(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)" )
@@ -95,13 +98,13 @@ IF(OTB_VERSION_MAJOR LESS "4")
           "Monteverdi is only compatible with OTB version greater than 4.0.0")
 ENDIF()
 
-SET(CMAKE_MODULE_PATH 
-    ${CMAKE_SOURCE_DIR}/CMake 
-    ${CMAKE_MODULE_PATH} 
+SET(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/CMake
+    ${CMAKE_MODULE_PATH}
     "${OTB_SOURCE_DIR}/CMake" )
 
 # Import FLTK
-include(ImportFLTK) 
+include(ImportFLTK)
 
 
 FIND_PACKAGE(Mercurial QUIET)
@@ -306,8 +309,8 @@ export(PACKAGE Monteverdi)
 
 file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${Monteverdi_INSTALL_CMAKE_DIR}"
    "${CMAKE_INSTALL_PREFIX}/${Monteverdi_INSTALL_INCLUDE_DIR}")
-  
-   
+
+
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Code/GuiFLTK" "${PROJECT_BINARY_DIR}/Code/GuiFLTK"
 "${PROJECT_SOURCE_DIR}/Code/VisuFLTK" "${PROJECT_BINARY_DIR}/Code/VisuFLTK"
@@ -323,13 +326,13 @@ configure_file(MonteverdiConfig.cmake.in
 # ... for both
 configure_file(MonteverdiConfigVersion.cmake.in
   "${PROJECT_BINARY_DIR}/MonteverdiConfigVersion.cmake" @ONLY)
- 
+
 # Install the MonteverdiConfig.cmake and MonteverdiConfigVersion.cmake
 install(FILES
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/MonteverdiConfig.cmake"
   "${PROJECT_BINARY_DIR}/MonteverdiConfigVersion.cmake"
   DESTINATION "${Monteverdi_INSTALL_CMAKE_DIR}" COMPONENT Development)
- 
+
 # Install the export set for use with the install-tree
 install(EXPORT MonteverdiTargets DESTINATION
   "${Monteverdi_INSTALL_CMAKE_DIR}" COMPONENT Development)

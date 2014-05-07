@@ -40,6 +40,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbMonteverdi OTBGuiFLTK OTBMonteverdiCommon flu otbCachingModule otbWriterModule otbViewerModule otbReaderModule)
+IF(Monteverdi_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(otbMonteverdi PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
+ENDIF()
 ADD_DEPENDENCIES(otbMonteverdi OTBMonteverdiCommon otbCachingModule otbWriterModule otbViewerModule)
 
 IF(NOT OTB_INSTALL_NO_LIBRARIES)

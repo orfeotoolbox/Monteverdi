@@ -13,6 +13,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbExampleModule ${MODULE_SRCS})
 TARGET_LINK_LIBRARIES(otbExampleModule OTBMonteverdiCommon OTBIO)
+IF(Monteverdi_LIBRARY_PROPERTIES)
+  SET_TARGET_PROPERTIES(otbExampleModule PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
+ENDIF()
 
 # Then, compile the application
 ADD_EXECUTABLE(otbExampleApplication otbExampleApplication.cxx)

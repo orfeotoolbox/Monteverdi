@@ -9,8 +9,8 @@ fltk_wrap_ui(OTBVisuFLTK
 
 add_library(OTBVisuFLTK ${OTBVisuFLTK_SRCS} ${OTBVisuFLTK_FLTK_UI_SRCS})
 target_link_libraries(OTBVisuFLTK OTBGuiFLTK OTBCommon OTBIO ${MVD_VISU_GUI_LIBRARIES})
-if(MVD_LIBRARY_PROPERTIES)
-  set_target_properties(OTBVisuFLTK PROPERTIES ${MVD_LIBRARY_PROPERTIES})
+if(Monteverdi_LIBRARY_PROPERTIES)
+  set_target_properties(OTBVisuFLTK PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
 endif()
 
 install(TARGETS OTBVisuFLTK
@@ -28,4 +28,3 @@ install(FILES ${__files1} ${__files2}  ${__files3}
    ${CMAKE_CURRENT_BINARY_DIR}/otbMsgReporterGUI.h
    DESTINATION ${Monteverdi_INSTALL_INCLUDE_DIR}/VisuFLTK
    COMPONENT Development)
-
