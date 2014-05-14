@@ -56,6 +56,7 @@ public:
   {
     m_TextToHarMap[AdvancedTexture::VARIANCE] = FeatureInfoTex::TEXT_ADV_VARIANCE;
     m_TextToHarMap[AdvancedTexture::MEAN] = FeatureInfoTex::TEXT_ADV_MEAN;
+    m_TextToHarMap[AdvancedTexture::DISSIM] = FeatureInfoTex::TEXT_ADV_DISSIM;
     m_TextToHarMap[AdvancedTexture::SUMAV] = FeatureInfoTex::TEXT_ADV_SUMAV;
     m_TextToHarMap[AdvancedTexture::SUMVAR] = FeatureInfoTex::TEXT_ADV_SUMVAR;
     m_TextToHarMap[AdvancedTexture::SUMENT] = FeatureInfoTex::TEXT_ADV_SUMENT;
@@ -80,16 +81,16 @@ public:
                             unsigned int pBin)
   {
     std::vector<double> minHarVect, maxHarVect;
-    
+
     for (unsigned int i = 0; i < pModel->GetInputImageList()->Size(); i++)
       {
         minHarVect.push_back(pModel->GetSelectedMinValues()[i]);
         maxHarVect.push_back(pModel->GetSelectedMaxValues()[i]);
       }
-    
+
     this->AddAdvTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
   }
-  
+
   // AddHarTexturesFilter using user's image min/max
   void AddAdvTexturesFilter(ModelPointerType pModel,
                             TextureVectorType pHarList,
@@ -101,10 +102,10 @@ public:
   {
     std::vector<double> minHarVect(pModel->GetInputImageList()->Size(), minHar);
     std::vector<double> maxHarVect(pModel->GetInputImageList()->Size(), maxHar);
-  
+
     this->AddAdvTexturesFilter( pModel, pHarList, pRadius, pOff, minHarVect, maxHarVect, pBin);
   }
-  
+
   void AddAdvTexturesFilter(ModelPointerType pModel,
                             TextureVectorType pHarList,
                             SizeType pRadius,
@@ -139,6 +140,11 @@ public:
           case AdvancedTexture::MEAN:
             {
             oss << "Mean: ";
+            break;
+            }
+          case AdvancedTexture::DISSIM:
+            {
+            oss << "Dissimilarity: ";
             break;
             }
           case AdvancedTexture::SUMAV:
@@ -208,6 +214,11 @@ public:
       case FeatureInfoTex::TEXT_ADV_MEAN:
         {
         image = filter->GetMeanOutput();
+        break;
+        }
+      case FeatureInfoTex::TEXT_ADV_DISSIM:
+        {
+        image = filter->GetDissimilarityOutput();
         break;
         }
       case FeatureInfoTex::TEXT_ADV_SUMAV:

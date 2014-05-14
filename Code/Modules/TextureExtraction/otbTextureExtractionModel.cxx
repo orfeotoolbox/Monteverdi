@@ -125,6 +125,7 @@ TextureExtractionModel
       }
     case FeatureInfoTex::TEXT_ADV_VARIANCE:
     case FeatureInfoTex::TEXT_ADV_MEAN:
+    case FeatureInfoTex::TEXT_ADV_DISSIM:
     case FeatureInfoTex::TEXT_ADV_SUMAV:
     case FeatureInfoTex::TEXT_ADV_SUMVAR:
     case FeatureInfoTex::TEXT_ADV_SUMENT:

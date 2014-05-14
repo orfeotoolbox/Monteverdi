@@ -29,35 +29,35 @@ TextureExtractionViewGUI::TextureExtractionViewGUI()
   // Create parameters for textures
   m_SpecificGUI = new TextureExtractionViewGroup();
   m_SpecificGUI->CreateParameters();
-  
+
   // Plug the specific menu items to the main GUI
   guiFeatureChoice->menu(m_SpecificGUI->fakeChoice->menu());
   guiFeatureChoice->user_data((void*)(this));
-  
+
   // Plug the specific parameter widgets in the main window
   guiParameter->add(m_SpecificGUI->guiSFS); // panel 1
   guiParameter->add(m_SpecificGUI->guiHaralick);
   guiParameter->add(m_SpecificGUI->guiAdvanced);
   guiParameter->add(m_SpecificGUI->guiPanTex);
-  
+
   // setup for callbacks
   m_SpecificGUI->guiHaralick->user_data((void*)(this));
   m_SpecificGUI->guiAdvanced->user_data((void*)(this));
-  
+
   m_SpecificGUI->guiHarCk->callback((Fl_Callback*)HarCkCallback);
   m_SpecificGUI->guiHarMin->callback((Fl_Callback*)HarMinCallback);
   m_SpecificGUI->guiHarMax->callback((Fl_Callback*)HarMaxCallback);
-  
+
   m_SpecificGUI->guiAdvHarCk->callback((Fl_Callback*)AdvHarCkCallback);
   m_SpecificGUI->guiAdvHarMin->callback((Fl_Callback*)AdvHarMinCallback);
   m_SpecificGUI->guiAdvHarMax->callback((Fl_Callback*)AdvHarMaxCallback);
 
   this->InitParameterGroupList();
   this->InitTextureLists();
-  
+
   // Rename window title
   SetWindowTitle("Texture extraction");
-  
+
   // Set up callbacks on menu items
   int curPos = 0;
 #define otbMenuItemCallbackMacro(mMenuItem, featureIndex, panelIndex)         \
@@ -78,7 +78,7 @@ TextureExtractionViewGUI::TextureExtractionViewGUI()
   otbMenuItemCallbackMacro(mHaralick1, otb::FeatureInfoTex::TEXT_HAR, 2);
   otbMenuItemCallbackMacro(mHaralick2, otb::FeatureInfoTex::TEXT_ADV, 3);
 #undef otbMenuItemCallbackMacro
-  
+
 }
 
 TextureExtractionViewGUI::~TextureExtractionViewGUI()
@@ -102,7 +102,7 @@ TextureExtractionViewGUI
 ::UpdateChannels()
 {
   Superclass::UpdateChannels();
-  
+
   m_SpecificGUI->guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
   m_SpecificGUI->guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
   m_SpecificGUI->guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
@@ -117,7 +117,7 @@ TextureExtractionViewGUI
   m_SpecificGUI->guiHarBin->value(0);
   m_SpecificGUI->guiAdvBin->value(0);
   m_SpecificGUI->guiPanTexBin->value(0);
-  
+
   Superclass::InitWidgets();
 }
 
@@ -128,7 +128,7 @@ TextureExtractionViewGUI
   if( m_SpecificGUI->guiHarCk->value() != 0 )
     {
       m_SpecificGUI->guiHarIm->activate();
-      
+
       m_SpecificGUI->guiHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
       m_SpecificGUI->guiHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
     }
@@ -145,7 +145,7 @@ TextureExtractionViewGUI
   if( m_SpecificGUI->guiAdvHarCk->value() != 0 )
     {
       m_SpecificGUI->guiAdvHarIm->activate();
-      
+
       m_SpecificGUI->guiAdvHarMin->value( this->GetModel()->GetMinValues()[ this->GetModel()->GetMinValues().size()-1 ] );
       m_SpecificGUI->guiAdvHarMax->value( this->GetModel()->GetMaxValues()[ this->GetModel()->GetMaxValues().size()-1 ] );
     }
@@ -180,13 +180,14 @@ TextureExtractionViewGUI
 
   m_SpecificGUI->guiAdvList->add("Variance", 1);
   m_SpecificGUI->guiAdvList->add("Mean", 2);
-  m_SpecificGUI->guiAdvList->add("Sum average", 3);
-  m_SpecificGUI->guiAdvList->add("Sum variance", 4);
-  m_SpecificGUI->guiAdvList->add("Sum entropy", 5);
-  m_SpecificGUI->guiAdvList->add("Difference entropy", 6);
-  m_SpecificGUI->guiAdvList->add("Difference variance", 7);
-  m_SpecificGUI->guiAdvList->add("Information. Correlation 1", 8);
-  m_SpecificGUI->guiAdvList->add("Information Correlation 2", 9);
+  m_SpecificGUI->guiAdvList->add("Dissimilarity", 3);
+  m_SpecificGUI->guiAdvList->add("Sum average", 4);
+  m_SpecificGUI->guiAdvList->add("Sum variance", 5);
+  m_SpecificGUI->guiAdvList->add("Sum entropy", 6);
+  m_SpecificGUI->guiAdvList->add("Difference entropy", 7);
+  m_SpecificGUI->guiAdvList->add("Difference variance", 8);
+  m_SpecificGUI->guiAdvList->add("Information. Correlation 1", 9);
+  m_SpecificGUI->guiAdvList->add("Information Correlation 2", 10);
   m_SpecificGUI->guiAdvList->redraw();
 
 }

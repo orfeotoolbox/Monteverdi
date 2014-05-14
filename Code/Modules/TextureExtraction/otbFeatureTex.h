@@ -53,6 +53,7 @@ public:
     TEXT_HAR_UNKNOWN,
     TEXT_ADV_VARIANCE,
     TEXT_ADV_MEAN,
+    TEXT_ADV_DISSIM,
     TEXT_ADV_SUMAV,
     TEXT_ADV_SUMVAR,
     TEXT_ADV_SUMENT,
@@ -76,7 +77,7 @@ public:
     m_MapInfo.insert(std::pair<FeatureType, std::string>(SFS_SD, "Structural Feature Set: Standard deviation"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_HAR, "Haralick's textures. Select whose wanted ones."));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TEXT_ADV, "Advanced textures. Select whose wanted ones."));
-    
+
   }
 
   virtual ~FeatureInfoTex(){}
@@ -155,10 +156,11 @@ public:
     {
     VARIANCE, //0
     MEAN,
+    DISSIM,
     SUMAV,
     SUMVAR,
     SUMENT,
-    DIFFENT, //6
+    DIFFENT, //7
     DIFFVAR,
     IC1,
     IC2,
@@ -179,30 +181,34 @@ public:
         break;
         }
       case 2: {
+        res = DISSIM;
+        break;
+       }
+      case 3: {
         res = SUMAV;
         break;
         }
-      case 3: {
+      case 4: {
         res = SUMVAR;
         break;
         }
-      case 4: {
+      case 5: {
         res = SUMENT;
         break;
         }
-      case 5: {
+      case 6: {
         res = DIFFENT;
         break;
         }
-      case 6: {
+      case 7: {
         res = DIFFVAR;
         break;
         }
-      case 7: {
+      case 8: {
         res = IC1;
         break;
         }
-      case 8: {
+      case 9: {
         res = IC2;
         break;
         }
