@@ -16,7 +16,7 @@ ADD_DEFINITIONS(
 #-----------------------------------------------------------------------------
 # Montevrdi version number.  An even minor number corresponds to releases.
 SET(Monteverdi_VERSION_MAJOR "1")
-SET(Monteverdi_VERSION_MINOR "21")
+SET(Monteverdi_VERSION_MINOR "22")
 SET(Monteverdi_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -39,7 +39,7 @@ ENDIF(WIN32)
 if(WIN32)
     if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
         if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
-            message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+            message(STATUS "The size of the stack is already defined, so we don't modify it.")
         else()
             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000" CACHE STRING "Flags used by the linker" FORCE)
             message(STATUS "Increase the size of the stack to 10Mbytes.")
