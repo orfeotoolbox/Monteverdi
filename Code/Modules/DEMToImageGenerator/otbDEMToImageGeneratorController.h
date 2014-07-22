@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT DEMToImageGeneratorController
+class ITK_ABI_EXPORT DEMToImageGeneratorController
   : public DEMToImageGeneratorControllerInterface
 {
 public:

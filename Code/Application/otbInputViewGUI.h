@@ -42,7 +42,7 @@ namespace otb
 /** \class InputViewGUI
  *
  */
-class ITK_EXPORT InputViewGUI
+class ITK_ABI_EXPORT InputViewGUI
   : public InputViewGroup, public AsynchronousProcessBase
 {
 public:

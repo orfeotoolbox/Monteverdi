@@ -39,7 +39,7 @@
 
 namespace otb
 {
-class ITK_EXPORT DEMToImageGeneratorModel
+class ITK_ABI_EXPORT DEMToImageGeneratorModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 

@@ -41,7 +41,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT GCPToSensorModelModule
+class ITK_ABI_EXPORT GCPToSensorModelModule
   : public Module, public ListenerBase
 {
 public:

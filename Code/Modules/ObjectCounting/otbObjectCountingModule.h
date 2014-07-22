@@ -43,7 +43,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ObjectCountingModule
+class ITK_ABI_EXPORT ObjectCountingModule
 //   : public Module, public ListenerBase
   : public Module, public EventsListener<std::string>
 {

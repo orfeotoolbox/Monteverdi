@@ -47,7 +47,7 @@ namespace otb
 /** \class WriterViewGUI
  *
  */
-class ITK_EXPORT WriterViewGUI
+class ITK_ABI_EXPORT WriterViewGUI
   : public EventsListener<std::string>, public WriterViewGroup, public itk::Object
 {
 public:

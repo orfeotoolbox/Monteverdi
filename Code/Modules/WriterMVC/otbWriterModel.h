@@ -55,7 +55,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT WriterModel
+class ITK_ABI_EXPORT WriterModel
   : public EventsSender<std::string>, public itk::Object
 {
 public:

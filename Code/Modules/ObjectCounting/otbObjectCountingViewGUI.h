@@ -44,7 +44,7 @@ namespace otb
 /** \class ObjectCountingViewGUI
  *
  */
-class ITK_EXPORT ObjectCountingViewGUI
+class ITK_ABI_EXPORT ObjectCountingViewGUI
   : public EventsListener<std::string>, public ObjectCountingViewGroup, public itk::Object
 {
 public:

@@ -39,7 +39,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT ColorMappingModule
+class ITK_ABI_EXPORT ColorMappingModule
   : public Module, public ColorMappingModuleGUI
 {
 public:

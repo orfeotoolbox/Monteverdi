@@ -33,7 +33,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT DEMToImageGeneratorModule
+class ITK_ABI_EXPORT DEMToImageGeneratorModule
   : public Module, public ListenerBase
 {
 public:

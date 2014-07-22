@@ -32,7 +32,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT MorphologyExtractionModel
+class ITK_ABI_EXPORT MorphologyExtractionModel
   : public FeatureExtractionBaseModel
 {
 public:

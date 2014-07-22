@@ -34,7 +34,7 @@ namespace otb
  *
  */
 template <class TPixel, class TController, class TLabel = double>
-class ITK_EXPORT InteractiveFullResolutionImageWidget
+class ITK_ABI_EXPORT InteractiveFullResolutionImageWidget
   : public FixedSizeFullImageWidget<TPixel>
 {
 public:

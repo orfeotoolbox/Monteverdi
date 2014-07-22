@@ -40,7 +40,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT PolarimetricSynthesisModule
+class ITK_ABI_EXPORT PolarimetricSynthesisModule
   : public Module, public EventsListener<std::string>
 {
 public:

@@ -50,7 +50,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT ExtractROIModule
+class ITK_ABI_EXPORT ExtractROIModule
   : public Module, public ExtractROIModuleGUI
 {
 public:

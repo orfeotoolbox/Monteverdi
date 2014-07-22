@@ -34,7 +34,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT VectorDataTransformModule
+class ITK_ABI_EXPORT VectorDataTransformModule
   : public Module, public EventsListener<std::string>
 {
 public:

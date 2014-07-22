@@ -33,7 +33,7 @@
 
 namespace otb
 {
-class ITK_EXPORT MeanShiftModuleController
+class ITK_ABI_EXPORT MeanShiftModuleController
   : public MeanShiftModuleControllerInterface
 {
 public:

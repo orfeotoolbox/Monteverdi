@@ -26,7 +26,7 @@
 
 namespace otb
 {
-class ITK_EXPORT ProjectionController
+class ITK_ABI_EXPORT ProjectionController
   : public ProjectionControllerInterface
 {
 public:

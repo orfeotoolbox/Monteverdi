@@ -65,7 +65,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor
  */
 
-class ITK_EXPORT ResampleModule
+class ITK_ABI_EXPORT ResampleModule
   : public Module, public ResampleGroup
 {
 public:

@@ -63,7 +63,7 @@ typedef enum
   GRAYSCALE=3
 } Color;
 
-class ITK_EXPORT PolarimetricSynthesisModel
+class ITK_ABI_EXPORT PolarimetricSynthesisModel
 : public  EventsSender<std::string>, public itk::Object
 {
 public:

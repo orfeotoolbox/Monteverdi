@@ -45,7 +45,7 @@ namespace otb
 /** \class SpeckleFilteringView
  *
  */
-class ITK_EXPORT SpeckleFilteringView
+class ITK_ABI_EXPORT SpeckleFilteringView
   : public ListenerBase, public SpeckleFilteringViewGUI, public itk::Object
 {
 public:

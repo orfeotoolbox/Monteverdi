@@ -32,7 +32,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT EdgeExtractionModule
+class ITK_ABI_EXPORT EdgeExtractionModule
   : public FeatureExtractionBaseModule
 {
 public:

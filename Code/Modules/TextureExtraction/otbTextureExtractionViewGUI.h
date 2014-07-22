@@ -29,7 +29,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT TextureExtractionViewGUI
+class ITK_ABI_EXPORT TextureExtractionViewGUI
   : public FeatureExtractionBaseViewGUI //, public TextureExtractionViewGroup
 {
 public:

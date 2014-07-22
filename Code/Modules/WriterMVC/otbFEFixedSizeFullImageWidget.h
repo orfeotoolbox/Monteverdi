@@ -27,7 +27,7 @@ namespace otb
  *
  */
 template <class TPixel, class TController, class TLabel = double>
-class ITK_EXPORT FEFixedSizeFullImageWidget : public FixedSizeFullImageWidget<TPixel>
+class ITK_ABI_EXPORT FEFixedSizeFullImageWidget : public FixedSizeFullImageWidget<TPixel>
 {
 public:
   /** Standard class typedefs */

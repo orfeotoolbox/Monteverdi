@@ -59,7 +59,7 @@ namespace otb
  * \ingroup
  * \ingroup
  */
-class ITK_EXPORT DEMToImageGeneratorView
+class ITK_ABI_EXPORT DEMToImageGeneratorView
   : public ListenerBase, public DEMToImageGeneratorGUI, public itk::Object
 {
 public:

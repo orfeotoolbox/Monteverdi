@@ -40,7 +40,7 @@ namespace otb {
  *
  */
 template<class TTransform>
-class ITK_EXPORT PointSetRegister : public itk::ProcessObject
+class ITK_ABI_EXPORT PointSetRegister : public itk::ProcessObject
 {
 
 public:

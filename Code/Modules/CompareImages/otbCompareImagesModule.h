@@ -42,7 +42,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT CompareImagesModule
+class ITK_ABI_EXPORT CompareImagesModule
   : public Module, public EventsListener<std::string>
 {
 public:

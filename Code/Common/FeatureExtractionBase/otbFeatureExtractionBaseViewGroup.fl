@@ -7,11 +7,13 @@ header_name {.h}
 code_name {.cxx}
 decl {\#include <FL/Fl_Gl_Window.H>} {public
 } 
+decl {\#include "itkMacro.h"} {public
+ } 
 
 # decl {\#include "otbFeatureBase.h"} {public
 # } 
 
-class FeatureExtractionBaseViewGroup {open
+class ITK_ABI_EXPORT FeatureExtractionBaseViewGroup {open
 } {
   Function {CreateGUI()} {open return_type void
   } {

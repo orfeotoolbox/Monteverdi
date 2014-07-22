@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT WriterControllerInterface
+class ITK_ABI_EXPORT WriterControllerInterface
   : public itk::ProcessObject
 {
 public:

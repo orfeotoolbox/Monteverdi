@@ -23,7 +23,7 @@
 
 namespace otb
 {
-class ITK_EXPORT MonteverdiController
+class ITK_ABI_EXPORT MonteverdiController
   : public MonteverdiControllerInterface
 {
 public:

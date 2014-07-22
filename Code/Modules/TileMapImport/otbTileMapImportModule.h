@@ -46,7 +46,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT TileMapImportModule
+class ITK_ABI_EXPORT TileMapImportModule
   : public Module, public TileMapImportModuleGUI
 {
 public:

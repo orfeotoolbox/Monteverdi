@@ -24,7 +24,7 @@
 namespace otb
 {
 
-class FeatureInfoBase
+class ITK_ABI_EXPORT FeatureInfoBase
 {
 public:
 

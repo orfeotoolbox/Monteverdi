@@ -39,7 +39,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT HomologousPointExtractionModule
+class ITK_ABI_EXPORT HomologousPointExtractionModule
   : public Module, public ListenerBase
 {
 public:

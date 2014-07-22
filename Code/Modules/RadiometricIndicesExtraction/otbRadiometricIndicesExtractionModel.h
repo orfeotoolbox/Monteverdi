@@ -30,7 +30,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT RadiometricIndicesExtractionModel
+class ITK_ABI_EXPORT RadiometricIndicesExtractionModel
   : public FeatureExtractionBaseModel
 {
 public:

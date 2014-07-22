@@ -29,7 +29,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT EdgeExtractionViewGUI
+class ITK_ABI_EXPORT EdgeExtractionViewGUI
   : public FeatureExtractionBaseViewGUI //, public EdgeExtractionViewGroup
 {
 public:

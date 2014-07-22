@@ -36,7 +36,7 @@
 
 namespace otb {
 
-class SpectrumModule
+class ITK_ABI_EXPORT SpectrumModule
 : public Module, public EventsListener<std::string>
 {
 public:

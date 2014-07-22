@@ -31,7 +31,7 @@
 
 namespace otb
 {
-class ITK_EXPORT SpeckleFilteringModel
+class ITK_ABI_EXPORT SpeckleFilteringModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 

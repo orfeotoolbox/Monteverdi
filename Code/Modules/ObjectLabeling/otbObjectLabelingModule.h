@@ -41,7 +41,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ObjectLabelingModule
+class ITK_ABI_EXPORT ObjectLabelingModule
   : public Module, public EventsListener<std::string>
 {
 public:

@@ -31,7 +31,7 @@ namespace otb
  *  \brief Simple tree browser for VectorData
  */
 template <class TVectorData>
-class ITK_EXPORT VectorDataTreeBrowser
+class ITK_ABI_EXPORT VectorDataTreeBrowser
   : public Flu_Tree_Browser, public itk::Object
 {
 public:

@@ -53,7 +53,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT ThresholdModule
+class ITK_ABI_EXPORT ThresholdModule
   : public Module, public ThresholdGroup
 {
 public:

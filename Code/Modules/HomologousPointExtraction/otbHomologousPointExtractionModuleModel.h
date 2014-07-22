@@ -57,7 +57,7 @@ namespace otb {
  *
  *
  */
-class ITK_EXPORT HomologousPointExtractionModuleModel
+class ITK_ABI_EXPORT HomologousPointExtractionModuleModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 

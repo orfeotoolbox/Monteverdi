@@ -31,7 +31,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT MorphologyExtractionController
+class ITK_ABI_EXPORT MorphologyExtractionController
   : public FeatureExtractionBaseController
 {
 public:

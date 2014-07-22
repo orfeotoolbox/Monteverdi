@@ -34,7 +34,7 @@ namespace otb
 /** \class HomologousPointExtractionModuleView
  *
  */
-class ITK_EXPORT HomologousPointExtractionModuleView
+class ITK_ABI_EXPORT HomologousPointExtractionModuleView
   : public ListenerBase, public HomologousPointExtractionViewGroup, public itk::Object
 {
 public:

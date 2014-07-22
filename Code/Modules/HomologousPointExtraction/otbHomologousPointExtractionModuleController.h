@@ -42,7 +42,7 @@
 
 namespace otb
 {
-class ITK_EXPORT HomologousPointExtractionModuleController
+class ITK_ABI_EXPORT HomologousPointExtractionModuleController
   : public HomologousPointExtractionModuleControllerInterface
 {
 public:

@@ -33,7 +33,7 @@ namespace otb
 /** \class VectorizationView
  *
  */
-class ITK_EXPORT VectorizationView
+class ITK_ABI_EXPORT VectorizationView
   : public ListenerBase,
   public VectorizationViewGroup,
   public itk::Object

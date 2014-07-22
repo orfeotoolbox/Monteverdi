@@ -21,7 +21,7 @@ namespace otb {
  *
  *
  */
-class ITK_EXPORT MeanShiftModuleModel
+class ITK_ABI_EXPORT MeanShiftModuleModel
   : public EventsSender<std::string>, public itk::Object
 {
 

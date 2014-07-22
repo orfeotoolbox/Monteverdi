@@ -39,7 +39,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT SARPolarimetryReciprocalModule
+class ITK_ABI_EXPORT SARPolarimetryReciprocalModule
   : public Module, public SARPolarimetryReciprocalModuleGUI
 {
 public:

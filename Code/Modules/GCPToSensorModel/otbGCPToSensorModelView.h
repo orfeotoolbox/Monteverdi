@@ -34,7 +34,7 @@ namespace otb
 /** \class GCPToSensorModelView
  *
  */
-class ITK_EXPORT GCPToSensorModelView
+class ITK_ABI_EXPORT GCPToSensorModelView
   : public ListenerBase, public GCPToSensorModelViewGroup, public itk::Object
 {
 public:

@@ -38,7 +38,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT SuperimpositionModule
+class ITK_ABI_EXPORT SuperimpositionModule
   : public Module, public SuperimpositionModuleGUI
 {
 public:

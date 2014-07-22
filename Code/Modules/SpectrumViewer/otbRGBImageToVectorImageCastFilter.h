@@ -73,7 +73,7 @@ public:
  *
  */
 template <class TInputImage, class TOutputVectorImage>
-class ITK_EXPORT RGBImageToVectorImageCastFilter
+class ITK_ABI_EXPORT RGBImageToVectorImageCastFilter
 : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
                                       Functor::VectorCastRGBtoVLV<typename TInputImage::PixelType,
                                                                   typename TOutputVectorImage::PixelType> >

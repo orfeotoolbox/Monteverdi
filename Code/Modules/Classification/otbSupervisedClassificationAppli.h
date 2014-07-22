@@ -62,7 +62,7 @@ namespace otb
  * Use FLTK gui.
  *
  */
-class ITK_EXPORT SupervisedClassificationAppli
+class ITK_ABI_EXPORT SupervisedClassificationAppli
   : public itk::ProcessObject, public SupervisedClassificationAppliGUI, public MVCModel<ListenerBase>
 {
 public:

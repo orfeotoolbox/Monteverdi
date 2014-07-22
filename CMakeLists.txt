@@ -32,11 +32,13 @@ SET(Monteverdi_FLOATING_TYPE "float" CACHE STRING "The type of data in which inp
 
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
-IF(WIN32)
-ADD_DEFINITIONS(-DNOMINMAX -DOSSIM_STATIC)
-ENDIF(WIN32)
-
 if(WIN32)
+  if(NOT BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DNOMINMAX -DOSSIM_STATIC)
+  endif()
+endif()
+
+if(MSVC)
     if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
         if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
             message(STATUS "The size of the stack is already defined, so we don't modify it.")

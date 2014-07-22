@@ -29,7 +29,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT SmoothingViewGUI
+class ITK_ABI_EXPORT SmoothingViewGUI
   : public FeatureExtractionBaseViewGUI //, public SmoothingViewGroup
 {
 public:
@@ -68,7 +68,7 @@ private:
   
   /** Generic callback for radiometric indices items */
   void GenericMenuItemCallback_i(Fl_Menu_* o, void* v);
-  static void GenericMenuItemCallback(Fl_Menu_* o, void* v);
+  static ITK_ABI_EXPORT void GenericMenuItemCallback(Fl_Menu_* o, void* v);
 
 };
 

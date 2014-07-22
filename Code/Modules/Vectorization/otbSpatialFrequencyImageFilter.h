@@ -29,7 +29,7 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SpatialFrequencyImageFilter :
+class ITK_ABI_EXPORT SpatialFrequencyImageFilter :
     public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

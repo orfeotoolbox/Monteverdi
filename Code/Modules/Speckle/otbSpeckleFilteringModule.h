@@ -33,7 +33,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT SpeckleFilteringModule
+class ITK_ABI_EXPORT SpeckleFilteringModule
   : public Module, public ListenerBase
 {
 public:

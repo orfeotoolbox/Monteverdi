@@ -52,7 +52,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT FeatureExtractionBaseModel
+class ITK_ABI_EXPORT FeatureExtractionBaseModel
 //       : public MVCModel<ListenerBase>, public itk::Object
   : public EventsSender<std::string>, public itk::Object
 {

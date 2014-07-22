@@ -26,7 +26,7 @@ namespace otb
  *
  */
 template <class TPixel, class TController, class TLabel = double>
-class ITK_EXPORT InteractiveScrollWidget
+class ITK_ABI_EXPORT InteractiveScrollWidget
   : public FixedSizeFullImageWidget<TPixel>
 {
 public:

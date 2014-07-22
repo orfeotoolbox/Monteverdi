@@ -30,7 +30,7 @@
 
 namespace otb
 {
-class ITK_EXPORT ProjectionModel
+class ITK_ABI_EXPORT ProjectionModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 

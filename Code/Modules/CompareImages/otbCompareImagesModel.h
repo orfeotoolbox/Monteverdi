@@ -36,7 +36,7 @@
 
 namespace otb
 {
-class ITK_EXPORT CompareImagesModel
+class ITK_ABI_EXPORT CompareImagesModel
   : public EventsSender<std::string>, public itk::Object
 {
 

@@ -67,7 +67,7 @@ namespace otb
  *
  */
 template <class TPixel>
-class ITK_EXPORT InteractiveChangeDetection
+class ITK_ABI_EXPORT InteractiveChangeDetection
   : public itk::ProcessObject, public otbInteractiveChangeDetectionGUI, public MVCModel<ListenerBase>
 {
 public:

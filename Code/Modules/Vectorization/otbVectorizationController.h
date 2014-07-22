@@ -34,7 +34,7 @@
 
 namespace otb
 {
-class ITK_EXPORT VectorizationController
+class ITK_ABI_EXPORT VectorizationController
   : public VectorizationControllerInterface
 {
 public:

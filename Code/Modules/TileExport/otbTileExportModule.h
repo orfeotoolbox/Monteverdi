@@ -79,7 +79,7 @@ public:
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT TileExportModule
+class ITK_ABI_EXPORT TileExportModule
   : public Module, public TileExportModuleGUI
 {
 public:

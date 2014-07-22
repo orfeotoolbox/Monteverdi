@@ -37,7 +37,7 @@ namespace otb
  *    of points, polylines and polygons over an image.
  */
 
-class ITK_EXPORT VectorizationModule
+class ITK_ABI_EXPORT VectorizationModule
   : public Module, public ListenerBase
 {
 public:

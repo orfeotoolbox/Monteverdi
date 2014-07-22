@@ -68,7 +68,7 @@ namespace otb
  * \ingroup
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToStdGaborConvolutionFilter :
+class ITK_ABI_EXPORT ImageToStdGaborConvolutionFilter :
     public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

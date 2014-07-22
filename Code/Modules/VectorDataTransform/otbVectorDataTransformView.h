@@ -35,7 +35,7 @@ namespace otb
 /** \class VectorDataTransformView
  *
  */
-class ITK_EXPORT VectorDataTransformView
+class ITK_ABI_EXPORT VectorDataTransformView
   :  public EventsListener<std::string>,
      public VectorDataTransformGUI,
      public itk::Object

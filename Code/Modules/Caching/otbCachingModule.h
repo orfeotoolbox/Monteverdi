@@ -37,7 +37,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT CachingModule
+class ITK_ABI_EXPORT CachingModule
   : public Module, public CachingModuleGUI
 {
 public:

@@ -70,7 +70,7 @@ namespace otb
  * \ingroup
  * \ingroup
  */
-class ITK_EXPORT ProjectionView
+class ITK_ABI_EXPORT ProjectionView
   : public ListenerBase, public ProjectionGroup, public itk::Object
 {
 public:

@@ -29,7 +29,7 @@ namespace otb
 /** \class SupervisedClassificationView
  *
  */
-class ITK_EXPORT SupervisedClassificationView
+class ITK_ABI_EXPORT SupervisedClassificationView
   : public ListenerBase,
   public SupervisedClassificationGUI,
   public itk::Object

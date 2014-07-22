@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT SupervisedClassificationControllerInterface
+class ITK_ABI_EXPORT SupervisedClassificationControllerInterface
   : public itk::Object
 {
 public:

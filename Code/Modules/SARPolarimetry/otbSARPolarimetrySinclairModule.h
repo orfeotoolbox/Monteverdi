@@ -45,7 +45,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT SARPolarimetrySinclairModule
+class ITK_ABI_EXPORT SARPolarimetrySinclairModule
   : public Module, public SARPolarimetrySinclairModuleGUI
 {
 public:

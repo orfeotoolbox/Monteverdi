@@ -48,7 +48,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT UncompressJpeg2000Module
+class ITK_ABI_EXPORT UncompressJpeg2000Module
   : public Module, public UncompressJpeg2000ModuleGUI
 {
 public:

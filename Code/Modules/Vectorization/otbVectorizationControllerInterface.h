@@ -23,7 +23,7 @@
 
 namespace otb
 {
-class ITK_EXPORT VectorizationControllerInterface
+class ITK_ABI_EXPORT VectorizationControllerInterface
   : public itk::Object
 {
 public:

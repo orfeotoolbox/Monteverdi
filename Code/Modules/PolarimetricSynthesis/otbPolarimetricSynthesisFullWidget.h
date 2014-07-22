@@ -27,7 +27,7 @@ namespace otb
  *
  */
 template <class TPixel, class TController, class TLabel = double>
-class ITK_EXPORT PolarimetricSynthesisFullWidget
+class ITK_ABI_EXPORT PolarimetricSynthesisFullWidget
       : public FullResolutionImageWidget<TPixel>
 {
 public:

@@ -15,7 +15,7 @@ namespace otb
 /** \class MeanShiftModuleView
  *
  */
-class ITK_EXPORT MeanShiftModuleView
+class ITK_ABI_EXPORT MeanShiftModuleView
   : public EventsListener<std::string>, public MeanShiftModuleViewGroup, public itk::Object
 {
 public:

@@ -34,7 +34,7 @@
 
 namespace otb
 {
-class ITK_EXPORT CompareImagesController
+class ITK_ABI_EXPORT CompareImagesController
   : public CompareImagesControllerInterface
 {
   

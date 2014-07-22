@@ -29,7 +29,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT RadiometricIndicesExtractionViewGUI
+class ITK_ABI_EXPORT RadiometricIndicesExtractionViewGUI
   : public FeatureExtractionBaseViewGUI //, public RadiometricIndicesExtractionViewGroup
 {
 public:

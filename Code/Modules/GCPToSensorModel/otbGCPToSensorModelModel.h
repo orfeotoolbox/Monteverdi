@@ -54,7 +54,7 @@ namespace otb {
  *
  *
  */
-class ITK_EXPORT GCPToSensorModelModel
+class ITK_ABI_EXPORT GCPToSensorModelModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 

@@ -30,7 +30,7 @@
 namespace otb
 {
 
-class ITK_EXPORT MonteverdiModel
+class ITK_ABI_EXPORT MonteverdiModel
   : public itk::Object, public EventsSender<MonteverdiEvent>, public EventsListener<MonteverdiEvent>
 {
 public:

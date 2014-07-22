@@ -5,6 +5,9 @@ version 1.0109
  
 header_name {.h} 
 code_name {.cxx}
+decl {\#include "itkMacro.h"} {public
+ } 
+
 declblock {\#ifdef _MSC_VER} {open public after {\#endif}
 } {
   decl {\#pragma warning(push)} {public global
@@ -13,7 +16,7 @@ declblock {\#ifdef _MSC_VER} {open public after {\#endif}
   }
 } 
 
-class otbInteractiveChangeDetectionGUI {open
+class ITK_ABI_EXPORT otbInteractiveChangeDetectionGUI {open
 } {
   Function {otbInteractiveChangeDetectionGUI()} {open
   } {comment {for fluid 1.3} {in_source not_in_header}}

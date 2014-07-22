@@ -46,7 +46,7 @@ namespace otb {
  *
  *
  */
-class ITK_EXPORT SupervisedClassificationModel
+class ITK_ABI_EXPORT SupervisedClassificationModel
   : public MVCModel<ListenerBase>, public itk::Object
 {
 public:

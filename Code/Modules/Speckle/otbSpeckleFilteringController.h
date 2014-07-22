@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT SpeckleFilteringController
+class ITK_ABI_EXPORT SpeckleFilteringController
   : public SpeckleFilteringControllerInterface
 {
 public:

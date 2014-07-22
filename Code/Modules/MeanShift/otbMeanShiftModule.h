@@ -42,7 +42,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT MeanShiftModule
+class ITK_ABI_EXPORT MeanShiftModule
 //   : public Module, public ListenerBase
   : public Module, public EventsListener<std::string>
 {

@@ -35,7 +35,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT PanSharpeningModule
+class ITK_ABI_EXPORT PanSharpeningModule
   : public Module
 {
 public:

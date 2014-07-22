@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT MonteverdiControllerInterface
+class ITK_ABI_EXPORT MonteverdiControllerInterface
   : public itk::ProcessObject
 {
 public:

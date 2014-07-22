@@ -31,7 +31,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT EdgeExtractionController
+class ITK_ABI_EXPORT EdgeExtractionController
   : public FeatureExtractionBaseController
 {
 public:

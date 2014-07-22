@@ -30,7 +30,7 @@ namespace otb
 /** \class FieldEditorGUI
  *  \brief
  */
-class ITK_EXPORT FieldEditorGUI
+class ITK_ABI_EXPORT FieldEditorGUI
   : public itk::Object, public FieldEditorGroup
 {
 public:

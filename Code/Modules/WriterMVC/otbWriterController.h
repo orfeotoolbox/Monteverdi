@@ -26,7 +26,7 @@
 
 namespace otb
 {
-class ITK_EXPORT WriterController
+class ITK_ABI_EXPORT WriterController
   : public WriterControllerInterface
 {
 public:

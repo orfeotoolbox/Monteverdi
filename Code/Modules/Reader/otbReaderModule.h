@@ -39,7 +39,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT ReaderModule
+class ITK_ABI_EXPORT ReaderModule
   : public Module, public ReaderModuleGUI
 {
 public:

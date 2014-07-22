@@ -35,7 +35,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT BandMathModule
+class ITK_ABI_EXPORT BandMathModule
   : public Module, public BandMathModuleGUI
 {
 public:

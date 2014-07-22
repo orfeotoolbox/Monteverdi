@@ -93,7 +93,7 @@ public:
  *
  */
 
-class ITK_EXPORT ObjectCountingModel
+class ITK_ABI_EXPORT ObjectCountingModel
   : public EventsSender<std::string>, public itk::Object
 {
 

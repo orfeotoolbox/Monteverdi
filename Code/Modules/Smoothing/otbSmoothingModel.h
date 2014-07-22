@@ -32,7 +32,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT SmoothingModel
+class ITK_ABI_EXPORT SmoothingModel
   : public FeatureExtractionBaseModel
 {
 public:

@@ -27,7 +27,7 @@
 
 namespace otb
 {
-class ITK_EXPORT FeatureExtractionBaseController
+class ITK_ABI_EXPORT FeatureExtractionBaseController
   : public FeatureExtractionBaseControllerInterface
 {
   /** Inner model class for mouse click action handler */

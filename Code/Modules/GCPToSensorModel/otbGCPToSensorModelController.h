@@ -42,7 +42,7 @@
 
 namespace otb
 {
-class ITK_EXPORT GCPToSensorModelController
+class ITK_ABI_EXPORT GCPToSensorModelController
   : public GCPToSensorModelControllerInterface
 {
 public:

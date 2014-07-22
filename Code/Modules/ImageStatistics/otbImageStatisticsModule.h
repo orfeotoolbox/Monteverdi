@@ -40,7 +40,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ImageStatisticsModule
+class ITK_ABI_EXPORT ImageStatisticsModule
   : public Module, public ImageStatisticsModuleGUI
 {
 public:

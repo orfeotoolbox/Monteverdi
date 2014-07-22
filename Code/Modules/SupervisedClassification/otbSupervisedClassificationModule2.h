@@ -39,7 +39,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT SupervisedClassificationModule2
+class ITK_ABI_EXPORT SupervisedClassificationModule2
   : public Module, public ListenerBase
 {
 public:

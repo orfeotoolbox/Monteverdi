@@ -50,7 +50,7 @@ namespace otb
 /** \class CompareImagesView
  *
  */
-class ITK_EXPORT CompareImagesView
+class ITK_ABI_EXPORT CompareImagesView
   : public EventsListener<std::string>, public CompareImagesGUI, public itk::Object
 {
 public:

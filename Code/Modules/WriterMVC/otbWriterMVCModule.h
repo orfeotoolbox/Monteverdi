@@ -48,7 +48,7 @@ namespace otb
    *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT WriterMVCModule
+class ITK_ABI_EXPORT WriterMVCModule
   : public Module, public EventsListener<std::string>
 {
 public:

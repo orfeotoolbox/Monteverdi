@@ -41,7 +41,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT WriterModule
+class ITK_ABI_EXPORT WriterModule
   : public Module, public WriterModuleGUI
 {
 public:

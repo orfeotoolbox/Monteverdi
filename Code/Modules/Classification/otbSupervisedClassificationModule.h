@@ -31,7 +31,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT SupervisedClassificationModule
+class ITK_ABI_EXPORT SupervisedClassificationModule
   : public Module, public ListenerBase
 {
 public:

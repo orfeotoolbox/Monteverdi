@@ -41,7 +41,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT OpticalCalibrationModule
+class ITK_ABI_EXPORT OpticalCalibrationModule
   : public Module, public OpticalCalibrationViewGroup
 {
 public:

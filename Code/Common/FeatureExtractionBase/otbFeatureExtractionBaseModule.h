@@ -36,7 +36,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT FeatureExtractionBaseModule
+class ITK_ABI_EXPORT FeatureExtractionBaseModule
   : public Module, public EventsListener<std::string>
   //   : public Module, public ListenerBase
 

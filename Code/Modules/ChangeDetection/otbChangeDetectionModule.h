@@ -32,7 +32,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ChangeDetectionModule
+class ITK_ABI_EXPORT ChangeDetectionModule
   : public Module, public ListenerBase
 {
 public:

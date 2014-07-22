@@ -25,7 +25,7 @@
 
 namespace otb
 {
-class ITK_EXPORT ProjectionControllerInterface
+class ITK_ABI_EXPORT ProjectionControllerInterface
   : public itk::Object
 {
 public:

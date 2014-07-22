@@ -35,7 +35,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT BayesianFusionModule
+class ITK_ABI_EXPORT BayesianFusionModule
   : public Module
 {
 public:

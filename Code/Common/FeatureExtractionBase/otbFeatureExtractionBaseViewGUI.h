@@ -45,7 +45,7 @@ namespace otb
 /** \class FeatureExtractionBaseViewGUI
  *
  */
-class ITK_EXPORT FeatureExtractionBaseViewGUI
+class ITK_ABI_EXPORT FeatureExtractionBaseViewGUI
   : public EventsListener<std::string>, public FeatureExtractionBaseViewGroup, public itk::Object
 {
 public:

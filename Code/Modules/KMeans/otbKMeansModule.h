@@ -102,7 +102,7 @@ private:
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT KMeansModule
+class ITK_ABI_EXPORT KMeansModule
   : public Module, public KMeansModuleGUI
 {
 public:

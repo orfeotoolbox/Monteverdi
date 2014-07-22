@@ -78,7 +78,7 @@ namespace otb {
 /** \class VectorizationModel
  *
  */
-class ITK_EXPORT VectorizationModel
+class ITK_ABI_EXPORT VectorizationModel
   : public  MVCModel<ListenerBase>, public itk::Object, public ListenerBase
 {
 public:

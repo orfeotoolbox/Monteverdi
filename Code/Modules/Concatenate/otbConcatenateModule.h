@@ -36,7 +36,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ConcatenateModule
+class ITK_ABI_EXPORT ConcatenateModule
   : public Module
 {
 public:

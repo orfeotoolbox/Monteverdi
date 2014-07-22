@@ -34,7 +34,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT ProjectionModule
+class ITK_ABI_EXPORT ProjectionModule
   : public Module, public ListenerBase
 {
 public:

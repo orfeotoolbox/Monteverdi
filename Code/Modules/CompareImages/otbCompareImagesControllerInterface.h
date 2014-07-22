@@ -24,7 +24,7 @@
 
 namespace otb
 {
-class ITK_EXPORT CompareImagesControllerInterface
+class ITK_ABI_EXPORT CompareImagesControllerInterface
   : public itk::Object
 {
 public:

@@ -91,7 +91,7 @@ const double ALPHA_BLENDING_INVISIBLE = 1.0;
  *
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
-class ITK_EXPORT ViewerModule
+class ITK_ABI_EXPORT ViewerModule
   : public Module, public ViewerModuleGroup
 {
 public:

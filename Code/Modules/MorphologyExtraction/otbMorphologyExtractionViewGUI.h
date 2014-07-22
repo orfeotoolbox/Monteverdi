@@ -29,7 +29,7 @@ namespace otb
  *  \sa DataObjectWrapper, DataDescriptor, DataDescriptor
  */
 
-class ITK_EXPORT MorphologyExtractionViewGUI
+class ITK_ABI_EXPORT MorphologyExtractionViewGUI
   : public FeatureExtractionBaseViewGUI //, public MorphologyExtractionViewGroup
 {
 public:

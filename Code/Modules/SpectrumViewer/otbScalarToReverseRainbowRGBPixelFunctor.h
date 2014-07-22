@@ -39,7 +39,7 @@ namespace Functor
  *
  */
 template<class TRGBPixel>
-class ITK_EXPORT HSVToRGBFunctor
+class ITK_ABI_EXPORT HSVToRGBFunctor
   {
 public:
   HSVToRGBFunctor()
@@ -129,7 +129,7 @@ namespace Functor
  *
  */
 template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
-class ITK_EXPORT ScalarToReverseRainbowRGBPixelFunctor
+class ITK_ABI_EXPORT ScalarToReverseRainbowRGBPixelFunctor
 : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 {
 public:

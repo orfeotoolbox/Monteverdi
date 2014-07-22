@@ -51,7 +51,7 @@ namespace otb
 /** \class MonteverdiViewGUI
  *
  */
-class MonteverdiViewGUI
+class ITK_ABI_EXPORT MonteverdiViewGUI
   : public MonteverdiViewGroup, public itk::Object, public EventsListener<MonteverdiEvent>
 {
 public:

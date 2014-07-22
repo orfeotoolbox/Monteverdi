@@ -50,7 +50,7 @@ public:
 };
 }
 
-class ITK_EXPORT SarIntensityModule
+class ITK_ABI_EXPORT SarIntensityModule
   : public Module
 {
 public:

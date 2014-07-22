@@ -46,7 +46,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT InputViewComponent
+class ITK_ABI_EXPORT InputViewComponent
   : public itk::Object, public Fl_Group
 {
 public:

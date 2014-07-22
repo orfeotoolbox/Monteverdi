@@ -71,7 +71,7 @@ private:
  *
  */
 
-class ITK_EXPORT FineCorrelationModule
+class ITK_ABI_EXPORT FineCorrelationModule
   : public Module, public FineCorrelationGroup
 {
 public:

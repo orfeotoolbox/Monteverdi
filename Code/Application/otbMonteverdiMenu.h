@@ -26,7 +26,7 @@
 namespace otb
 {
 
-class ITK_EXPORT MonteverdiMenu : public Fl_Menu_Bar
+class ITK_ABI_EXPORT MonteverdiMenu : public Fl_Menu_Bar
 {
 public:
   /** Standard class typedefs */

@@ -23,7 +23,7 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-class ITK_EXPORT ObjectCountingControllerInterface
+class ITK_ABI_EXPORT ObjectCountingControllerInterface
   : public ImageViewerFullResolutionEventsInterface
 {
 public:

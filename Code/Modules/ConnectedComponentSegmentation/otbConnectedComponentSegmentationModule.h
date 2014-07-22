@@ -99,7 +99,7 @@ namespace otb
  */
 const unsigned int     Dimension = 2;
 
-class ITK_EXPORT ConnectedComponentSegmentationModule
+class ITK_ABI_EXPORT ConnectedComponentSegmentationModule
   : public Module, public ConnectedComponentSegmentationModuleGUI
 {
 public:

@@ -36,7 +36,7 @@ namespace otb
  *  \sa DataObjectWrapper, InputDataDescriptor, OutputDataDescriptor
  */
 
-class ITK_EXPORT SarCalibrationModule
+class ITK_ABI_EXPORT SarCalibrationModule
   : public Module, public SarCalibrationModuleGUI
 {
 public:

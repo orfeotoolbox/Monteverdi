@@ -36,7 +36,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT MosaicImagesModule
+class ITK_ABI_EXPORT MosaicImagesModule
   : public Module
 {
 public:
