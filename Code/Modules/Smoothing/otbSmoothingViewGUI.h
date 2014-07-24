@@ -41,23 +41,23 @@ public:
 
   /** Standard type macro */
   itkTypeMacro(SmoothingViewGUI, FeatureExtractionBaseViewGUI);
-  
+
   /** Standard type macro */
   itkNewMacro(Self);
-  
+
   /** Constructor */
   SmoothingViewGUI();
-  
+
   /** Update feature information with Radiometric indices features */
   virtual void UpdateFeatureInfo(FeatureType feat);
-  
+
   /** Specific GUI for menu items and parameters widgets */
   SmoothingViewGroup* m_SpecificGUI;
 
 protected:
   /** Destructor */
   virtual ~SmoothingViewGUI();
-  
+
   /** Register parameters widgets */
   virtual void InitParameterGroupList();
 
@@ -65,10 +65,10 @@ private:
 
   /** Stores pairs : menu index - panel index (used for callbacks) */
   int m_FeatureTable[60];
-  
+
   /** Generic callback for radiometric indices items */
   void GenericMenuItemCallback_i(Fl_Menu_* o, void* v);
-  static ITK_ABI_EXPORT void GenericMenuItemCallback(Fl_Menu_* o, void* v);
+  static void GenericMenuItemCallback(Fl_Menu_* o, void* v);
 
 };
 
