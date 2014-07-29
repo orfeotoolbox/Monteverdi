@@ -97,7 +97,7 @@ public:
   DataNodeType::Pointer   m_Folder;
 };
 
-class ObjectLabelingModel
+class ITK_ABI_EXPORT ObjectLabelingModel
   : public  EventsSender<std::string>, public itk::Object
 {
 public:
@@ -118,10 +118,10 @@ public:
   typedef TypeManager::Floating_Point_Precision   PixelType;
   typedef TypeManager::Labeled_Short_Image        LabeledImageType;
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
-  
+
   typedef LabeledImageType::IndexType             IndexType;
   typedef VectorImageType::PixelType              VectorPixelType;
-  
+
   typedef AttributesMapLabelObjectWithClassLabel<LabelType, 2, double, LabelType>  LabelObjectType;
   typedef LabelObjectType::AttributesValueType                                  AttributesValueType;
   typedef LabelObjectType::AttributesMapType                                    AttributesMapType;
@@ -187,7 +187,7 @@ public:
 
   /** Get the origin */
   itkGetConstReferenceMacro(Origin, VectorImageType::PointType);
-  
+
   /** Get the spacing */
   itkGetConstReferenceMacro(Spacing, VectorImageType::SpacingType);
 
@@ -197,7 +197,7 @@ public:
   /** Add sample */
   void AddSampleToClass(const IndexType & sampleIndex, unsigned int classIndex);
   void AddSampleToClass(const LabelType & label,       unsigned int classIndex);
-  
+
   /** Get number of classes */
   unsigned int GetNumberOfClasses();
 
@@ -212,10 +212,10 @@ public:
 
   /** Get the current class */
   const ObjectClassType & GetClass(unsigned int classIndex) const;
-  
+
   /** Get class index from label */
   unsigned int GetClassIndex(LabelType label) const;
-  
+
   /** Add a new class */
   void AddClass();
 
@@ -224,7 +224,7 @@ public:
 
   /** Clear all classes */
   void ClearClasses();
-  
+
   /** Get a const reference on the classes vector */
   const ObjectClassVectorType & GetClasses() const;
 
@@ -239,7 +239,7 @@ public:
 
   /** Set class label */
   void SetClassLabel(const LabelType & label, unsigned int classIndex);
-  
+
   /** Set class color */
   void SetClassColor(const ColorType & color, unsigned int classIndex);
 
@@ -288,7 +288,7 @@ public:
 
   /** Get the selected label polygon */
   itkGetObjectMacro(SelectedPolygon, VectorDataType);
-  
+
   /** Get the margin sampled polygons */
   itkGetObjectMacro(MarginSampledPolygon, VectorDataType);
 
@@ -343,10 +343,10 @@ public:
 
   /** Change displayed channel order */
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
-  
+
   /** Check image label relability. */
   bool CheckLabelImage(LabeledImageType* limage);
-  
+
   /** Link the pipeline and the visu. */
   void Link();
 
@@ -365,7 +365,7 @@ private:
 
   /** Create a new class */
   void AddClass(const LabelType& label, const std::string& name, const ColorType& color);
-  
+
   /** return an available label for a new added class */
   LabelType GetNextAvailableClassLabel();
 
@@ -424,7 +424,7 @@ private:
 
   /** Labeled Image layer generator */
   LayerGeneratorType::Pointer        m_LabeledImageGenerator;
-  
+
   /** Samples */
   //ListSampleType::Pointer            m_ListSample;
   const ListSampleType*              m_ListSample;
