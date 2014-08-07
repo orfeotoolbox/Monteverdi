@@ -167,8 +167,10 @@ OpticalCalibrationModule
 
   // Instanciate filters
   m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
-  m_LuminanceToReflectanceFilter              = LuminanceToReflectanceImageFilterType::New();
+  m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
   m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  m_ParamAtmo                             = ReflectanceToSurfaceReflectanceImageFilterType::AtmoCorrectionParametersType::New();
+  m_ParamAcqui                            = ReflectanceToSurfaceReflectanceImageFilterType::AcquiCorrectionParametersType::New();
   m_DifferenceFilter                      = DifferenceImageFilterType::New();
   // Link filters
   m_ImageToLuminanceFilter->SetInput(m_InputImage);
@@ -263,12 +265,12 @@ OpticalCalibrationModule
 
   tdAtmoParam->activate();
 
-  AtmosphericCorrectionParameters::Pointer param = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-  guiOzoneAmount->value(param->GetOzoneAmount());
-  guiAtmoPressure->value(param->GetAtmosphericPressure());
-  guiAerosolModel->value(param->GetAerosolModel());
-  guiWater->value(param->GetWaterVaporAmount());
-  guiAeroTh->value(param->GetAerosolOptical());
+  m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
+  guiOzoneAmount->value(m_ParamAtmo->GetOzoneAmount());
+  guiAtmoPressure->value(m_ParamAtmo->GetAtmosphericPressure());
+  guiAerosolModel->value(m_ParamAtmo->GetAerosolModel());
+  guiWater->value(m_ParamAtmo->GetWaterVaporAmount());
+  guiAeroTh->value(m_ParamAtmo->GetAerosolOptical());
   guiAerosolModel->redraw();
   guiOzoneAmount->redraw();
   guiAtmoPressure->redraw();
@@ -326,8 +328,8 @@ OpticalCalibrationModule
 
   std::ostringstream oss2;
   oss2.str("");
-  AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-  oss2 << atmoPar;
+  m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
+  oss2 << m_ParamAtmo;
   Fl_Text_Buffer *buff2 = new Fl_Text_Buffer();
   buff2->text(oss2.str().c_str());
   // Erase the first line (class name + pointer address)
@@ -342,8 +344,8 @@ OpticalCalibrationModule
     {
     //AtmosphericCorrectionParameters::Pointer param = m_OpticalCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
 
-    guiWater->value(atmoPar /*param*/->GetWaterVaporAmount());
-    guiAeroTh->value(atmoPar /*param*/->GetAerosolOptical());
+    guiWater->value(m_ParamAtmo /*param*/->GetWaterVaporAmount());
+    guiAeroTh->value(m_ParamAtmo /*param*/->GetAerosolOptical());
     guiWater->redraw();
     guiAeroTh->redraw();
     }
@@ -381,9 +383,10 @@ OpticalCalibrationModule
 
   bool        aeronetFile = false;
   std::string aeroFile = teAeronetFile->value();
-  if (aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName() && aeroFile != "")
+  if (aeroFile != m_ParamAtmo->GetAeronetFileName() && aeroFile != "") //chris
     {
-    m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(aeroFile);
+    m_ParamAtmo->SetAeronetFileName(aeroFile);
+    m_ReflectanceToSurfaceReflectanceFilter->SetAtmoCorrectionParameters(m_ParamAtmo);
     aeronetFile = true;
     }
 
@@ -391,28 +394,25 @@ OpticalCalibrationModule
   OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
   std::string ffvFile = teFFVFile->value();
-  if (ffvFile != m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName() &&  ffvFile !=
-      "")
+  if (ffvFile != m_ParamAcqui->GetFilterFunctionValuesFileName() &&  ffvFile != "") //chris
     {
-    m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(ffvFile);
+      m_ParamAcqui->SetFilterFunctionValuesFileName(ffvFile);
+      m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_ParamAcqui);
     }
-  else
-    {
-    m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
-    }
+
 
   try
     {
-    AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+    m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
 
-    atmoPar->SetAerosolModel(static_cast<AerosolModelType>(aeroMod));
-    atmoPar->SetOzoneAmount(ozAmount);
-    atmoPar->SetAtmosphericPressure(atmoPres);
+    m_ParamAtmo->SetAerosolModel(static_cast<AerosolModelType>(aeroMod));
+    m_ParamAtmo->SetOzoneAmount(ozAmount);
+    m_ParamAtmo->SetAtmosphericPressure(atmoPres);
 
     if (!aeronetFile)
       {
-      atmoPar->SetAerosolOptical(aeroTh);
-      atmoPar->SetWaterVaporAmount(waterAm);
+      m_ParamAtmo->SetAerosolOptical(aeroTh);
+      m_ParamAtmo->SetWaterVaporAmount(waterAm);
       }
 
     m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
@@ -505,7 +505,7 @@ OpticalCalibrationModule
   // Add outputs
   this->AddOutputDescriptor(m_ImageToLuminanceFilter->GetOutput(), "Luminance image", "Luminance image");
 
-  std::cout << "filter function: " << m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionCoef() << std::endl;
+  std::cout << "filter function: " << m_ParamAcqui->GetWavelengthSpectralBand() << std::endl; //chris
 
   if (bChangeScale->value() == 1)
     {
@@ -616,15 +616,16 @@ OpticalCalibrationModule
     std::string aeroFile = teAeronetFile->value();
     std::string ffvFile = teFFVFile->value();
 
-    AtmosphericCorrectionParameters::Pointer atmoPar = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-    if (static_cast<AerosolModelType>(aeroMod) != atmoPar->GetAerosolModel()) m_CanUpdateParameters = true;
-    else if (ozAmount != atmoPar->GetOzoneAmount()) m_CanUpdateParameters = true;
-    else if (atmoPres != atmoPar->GetAtmosphericPressure()) m_CanUpdateParameters = true;
+    m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
+    m_ParamAcqui = m_ReflectanceToSurfaceReflectanceFilter->GetAcquiCorrectionParameters(); //chris
+    if (static_cast<AerosolModelType>(aeroMod) != m_ParamAtmo->GetAerosolModel()) m_CanUpdateParameters = true;
+    else if (ozAmount != m_ParamAtmo->GetOzoneAmount()) m_CanUpdateParameters = true;
+    else if (atmoPres != m_ParamAtmo->GetAtmosphericPressure()) m_CanUpdateParameters = true;
     else if (ffvFile !=
-             m_ReflectanceToSurfaceReflectanceFilter->GetFilterFunctionValuesFileName()) m_CanUpdateParameters = true;
-    else if (aeroFile != m_ReflectanceToSurfaceReflectanceFilter->GetAeronetFileName()) m_CanUpdateParameters = true;
-    else if (aeroTh != atmoPar->GetAerosolOptical()) m_CanUpdateParameters = true;
-    else if (waterAm != atmoPar->GetWaterVaporAmount()) m_CanUpdateParameters = true;
+             m_ParamAcqui->GetFilterFunctionValuesFileName()) m_CanUpdateParameters = true;
+    else if (aeroFile != m_ParamAtmo->GetAeronetFileName()) m_CanUpdateParameters = true;
+    else if (aeroTh != m_ParamAtmo->GetAerosolOptical()) m_CanUpdateParameters = true;
+    else if (waterAm != m_ParamAtmo->GetWaterVaporAmount()) m_CanUpdateParameters = true;
     }
 
   if (!m_CanUpdateParameters) return;

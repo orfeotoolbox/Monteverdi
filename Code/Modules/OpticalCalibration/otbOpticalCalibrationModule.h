@@ -72,8 +72,8 @@ public:
       ImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::Pointer
   ReflectanceToSurfaceReflectanceImageFilterPointerType;
-  typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionCoefVectorType FilterFunctionCoefVectorType;
-  typedef ReflectanceToSurfaceReflectanceImageFilterType::CoefVectorType               CoefVectorType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType     FilterFunctionCoefVectorType;
+  typedef ReflectanceToSurfaceReflectanceImageFilterType::ValuesVectorType             CoefVectorType;
   typedef AtmosphericCorrectionParameters::AerosolModelType                            AerosolModelType;
   typedef DifferenceImageFilter<ImageType, ImageType>                                  DifferenceImageFilterType;
   typedef DifferenceImageFilterType::Pointer                                           DifferenceImageFilterPointerType;
@@ -154,6 +154,10 @@ private:
   LuminanceToReflectanceImageFilterPointerType m_LuminanceToReflectanceFilter;
   /** TOA to TOC filter*/
   ReflectanceToSurfaceReflectanceImageFilterPointerType m_ReflectanceToSurfaceReflectanceFilter;
+
+  ReflectanceToSurfaceReflectanceImageFilterType::AtmoCorrectionParametersPointerType  m_ParamAtmo;
+  ReflectanceToSurfaceReflectanceImageFilterType::AcquiCorrectionParametersPointerType m_ParamAcqui;
+
   /** Diff TOA-TOC filter*/
   DifferenceImageFilterPointerType m_DifferenceFilter;
   /** 1000* TOA filter*/
