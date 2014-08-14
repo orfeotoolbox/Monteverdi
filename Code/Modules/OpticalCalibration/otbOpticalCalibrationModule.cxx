@@ -179,6 +179,46 @@ OpticalCalibrationModule
   m_DifferenceFilter->SetValidInput(m_LuminanceToReflectanceFilter->GetOutput());
   m_DifferenceFilter->SetTestInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
 
+  // Init some acquisition parameters
+  itk::MetaDataDictionary dict = m_InputImage->GetMetaDataDictionary();
+  OpticalImageMetadataInterface::Pointer lImageMetadataInterface =
+    OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+  // Set spectral sensitivity
+  if (lImageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+    {
+    m_ParamAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+    }
+  // try to set the angles
+  try
+    {
+    m_ParamAcqui->SetSolarZenithalAngle(90. - lImageMetadataInterface->GetSunElevation());
+    m_ParamAcqui->SetSolarAzimutalAngle(lImageMetadataInterface->GetSunAzimuth());
+    m_ParamAcqui->SetViewingZenithalAngle(90. - lImageMetadataInterface->GetSatElevation());
+    m_ParamAcqui->SetViewingAzimutalAngle(lImageMetadataInterface->GetSatAzimuth());
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    // silent catch, set angles to defaults
+    m_ParamAcqui->SetSolarZenithalAngle(0.0);
+    m_ParamAcqui->SetSolarAzimutalAngle(0.0);
+    m_ParamAcqui->SetViewingZenithalAngle(0.0);
+    m_ParamAcqui->SetViewingAzimutalAngle(0.0);
+    }
+  // try to set the date
+  try
+    {
+    m_ParamAcqui->SetDay(lImageMetadataInterface->GetDay());
+    m_ParamAcqui->SetMonth(lImageMetadataInterface->GetMonth());
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    // silent catch, set date to default
+    m_ParamAcqui->SetDay(0);
+    m_ParamAcqui->SetMonth(0);
+    }
+  m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_ParamAcqui);
+  m_ReflectanceToSurfaceReflectanceFilter->SetAtmoCorrectionParameters(m_ParamAtmo);
+
   // Init aerosol model
   guiAerosolModel->value(0);
   // Init Band selection
@@ -328,7 +368,6 @@ OpticalCalibrationModule
 
   std::ostringstream oss2;
   oss2.str("");
-  m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
   oss2 << m_ParamAtmo;
   Fl_Text_Buffer *buff2 = new Fl_Text_Buffer();
   buff2->text(oss2.str().c_str());
@@ -342,8 +381,6 @@ OpticalCalibrationModule
   std::string aeroFile = teAeronetFile->value();
   if (aeroFile != "")
     {
-    //AtmosphericCorrectionParameters::Pointer param = m_OpticalCalibrationModel->GetReflectanceToSurfaceReflectanceFilter()->GetCorrectionParameters();
-
     guiWater->value(m_ParamAtmo /*param*/->GetWaterVaporAmount());
     guiAeroTh->value(m_ParamAtmo /*param*/->GetAerosolOptical());
     guiWater->redraw();
@@ -355,14 +392,6 @@ void
 OpticalCalibrationModule
 ::UpdateCorrectionParameters()
 {
-  AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
-  radTerms->ValuesInitialization(m_InputImage->GetNumberOfComponentsPerPixel());
-  m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
-  m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-  m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-  m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-  m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
-
   AerosolModelType aeroMod = AtmosphericCorrectionParameters::NO_AEROSOL;
   std::string      aeroModStd = guiAerosolModel->value();
 
@@ -383,7 +412,7 @@ OpticalCalibrationModule
 
   bool        aeronetFile = false;
   std::string aeroFile = teAeronetFile->value();
-  if (aeroFile != m_ParamAtmo->GetAeronetFileName() && aeroFile != "") //chris
+  if (aeroFile != m_ParamAtmo->GetAeronetFileName() && aeroFile != "")
     {
     m_ParamAtmo->SetAeronetFileName(aeroFile);
     m_ReflectanceToSurfaceReflectanceFilter->SetAtmoCorrectionParameters(m_ParamAtmo);
@@ -394,18 +423,15 @@ OpticalCalibrationModule
   OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
   std::string ffvFile = teFFVFile->value();
-  if (ffvFile != m_ParamAcqui->GetFilterFunctionValuesFileName() &&  ffvFile != "") //chris
+  if (ffvFile != m_ParamAcqui->GetFilterFunctionValuesFileName() &&  ffvFile != "")
     {
-      m_ParamAcqui->SetFilterFunctionValuesFileName(ffvFile);
-      m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_ParamAcqui);
+    m_ParamAcqui->SetFilterFunctionValuesFileName(ffvFile);
     }
 
 
   try
     {
-    m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
-
-    m_ParamAtmo->SetAerosolModel(static_cast<AerosolModelType>(aeroMod));
+    m_ParamAtmo->SetAerosolModel(aeroMod);
     m_ParamAtmo->SetOzoneAmount(ozAmount);
     m_ParamAtmo->SetAtmosphericPressure(atmoPres);
 
@@ -616,8 +642,6 @@ OpticalCalibrationModule
     std::string aeroFile = teAeronetFile->value();
     std::string ffvFile = teFFVFile->value();
 
-    m_ParamAtmo = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters(); //chris
-    m_ParamAcqui = m_ReflectanceToSurfaceReflectanceFilter->GetAcquiCorrectionParameters(); //chris
     if (static_cast<AerosolModelType>(aeroMod) != m_ParamAtmo->GetAerosolModel()) m_CanUpdateParameters = true;
     else if (ozAmount != m_ParamAtmo->GetOzoneAmount()) m_CanUpdateParameters = true;
     else if (atmoPres != m_ParamAtmo->GetAtmosphericPressure()) m_CanUpdateParameters = true;
