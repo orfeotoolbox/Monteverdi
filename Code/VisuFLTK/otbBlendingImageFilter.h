@@ -154,6 +154,11 @@ protected:
   BlendingImageFilter() {}
   /** Destructor */
   virtual ~BlendingImageFilter() {}
+  
+  virtual void VerifyInputInformation()
+    {
+    // Disable check on physical space
+    }
 
 private:
   BlendingImageFilter(const Self&); //purposely not implemented
