@@ -139,7 +139,7 @@ CompareImagesModel
 {
   m_CompareImagessFilter->SetInput1(m_InputLeftImage);
   m_CompareImagessFilter->SetInput2(m_InputRightImage);
-  
+  m_CompareImagessFilter->SetPhysicalSpaceCheck(false);
   m_CompareImagessFilter->Update();
   
   this->SetRMSE(static_cast<double>(vcl_sqrt(m_CompareImagessFilter->GetMSE())));
