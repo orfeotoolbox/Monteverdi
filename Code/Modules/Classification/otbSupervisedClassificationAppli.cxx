@@ -672,7 +672,7 @@ void
 SupervisedClassificationAppli
 ::SaveSVMModel()
 {
-  const char * cfname = flu_file_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
+  const char * cfname = flu_save_chooser("SVM model file:", "*.svm", m_LastPath.c_str());
   if (cfname == NULL || strlen(cfname) < 1)
     {
     return;

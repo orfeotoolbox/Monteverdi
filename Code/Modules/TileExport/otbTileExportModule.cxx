@@ -198,7 +198,7 @@ void TileExportModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.kmz", "");
+  filename = flu_save_chooser("Choose the dataset file...", "*.kmz", "");
 
   if (filename == NULL)
     {

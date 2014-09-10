@@ -168,7 +168,7 @@ void WriterModule::Browse()
 {
   const char * filename = NULL;
 
-  filename = flu_file_chooser("Choose the dataset file...", "*.*", "");
+  filename = flu_save_chooser("Choose the dataset file...", "*.*", "");
 
   if (filename == NULL)
     {

@@ -1989,7 +1989,7 @@ void ViewerModule::SaveScreenShot(const char * winLab, ImageWidgetType * widget)
   screener->SetNumberOfChannels(3);
   screener->SetInverseXSpacing(true);
 
-  filename = flu_file_chooser(winLab, "*.*", "");
+  filename = flu_save_chooser(winLab, "*.*", "");
 
   if (filename == NULL)
     {

@@ -416,7 +416,7 @@ SpectrumModuleView
 
     const char * filename = NULL;
 
-    filename = flu_file_chooser("Save Spectrum as CSV", "*.*",".");
+    filename = flu_save_chooser("Save Spectrum as CSV", "*.*",".");
 
     if (filename == NULL)
       {

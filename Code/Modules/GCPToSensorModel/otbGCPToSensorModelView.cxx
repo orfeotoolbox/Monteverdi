@@ -540,7 +540,7 @@ GCPToSensorModelView
   const char * fname = NULL;
 
   // Choose file
-  fname = flu_file_chooser("Choose an XML file to export GCPs ...", "*.xml", "");
+  fname = flu_save_chooser("Choose an XML file to export GCPs ...", "*.xml", "");
 
   if (fname == NULL)
     {

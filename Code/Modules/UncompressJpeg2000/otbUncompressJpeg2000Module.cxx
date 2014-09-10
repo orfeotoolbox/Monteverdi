@@ -271,7 +271,7 @@ void UncompressJpeg2000Module::Ok()
     if (m_Filename.length() == 0)
       {
       const char * filename = NULL;
-      filename = flu_file_chooser("Choose the image file...", "*.tif", "");
+      filename = flu_save_chooser("Choose the image file...", "*.tif", "");
       if (filename == NULL)
         {
         otbMsgDebugMacro(<< "Empty file name!");

@@ -515,7 +515,7 @@ void ObjectLabelingView::SaveSamplesToXMLFile()
   
   const char * filename = NULL;
   
-  filename = flu_file_chooser("Choose file", "*.xml", "");
+  filename = flu_save_chooser("Choose file", "*.xml", "");
   
   if (filename == NULL)
     {
@@ -531,7 +531,7 @@ void ObjectLabelingView::SaveClassificationParametersToXMLFile()
 
   const char * filename = NULL;
   
-  filename = flu_file_chooser("Choose file", "*.xml", "");
+  filename = flu_save_chooser("Choose file", "*.xml", "");
   
   if (filename == NULL)
     {
