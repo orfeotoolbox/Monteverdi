@@ -601,6 +601,8 @@ InteractiveChangeDetection<TPixel>::ChangeDetectionLearn()
   ImagePointerType                         image = m_ListToImageFilter1->GetOutput();
   unsigned int                             sampleSize = image->GetNumberOfComponentsPerPixel();
 
+  sampleList->SetMeasurementVectorSize(sampleSize);
+  
   for (typename PolygonListType::Iterator polygIt = polygonList->Begin();
        polygIt != polygonList->End(); ++polygIt)
     {
