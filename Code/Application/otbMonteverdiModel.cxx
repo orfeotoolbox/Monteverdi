@@ -34,7 +34,7 @@
 #include <itksys/Directory.hxx>
 #include "itksys/SystemTools.hxx"
 
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 
 namespace otb
 {

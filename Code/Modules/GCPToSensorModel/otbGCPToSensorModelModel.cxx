@@ -21,7 +21,7 @@
 #include "otbTileMapTransform.h"
 #include "otbCachingPathManager.h"
 
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 
 #include "otbPlaceNameToLonLat.h"
 #include "otbCoordinateToName.h"

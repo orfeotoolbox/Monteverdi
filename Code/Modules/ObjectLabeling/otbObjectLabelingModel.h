@@ -67,7 +67,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkKdTreeBasedKmeansEstimator.h"
 
 // Saving
-#include "otbTinyXML.h"
+#include "otb_tinyxml.h"
 
 
 namespace otb
