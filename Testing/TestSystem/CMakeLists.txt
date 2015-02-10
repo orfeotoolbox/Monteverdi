@@ -13,4 +13,4 @@ otbIsNightlyRevision.cxx
 )
 
 ADD_EXECUTABLE(otbTestSystemTests ${TESTSYSTEM_SRCS})
-TARGET_LINK_LIBRARIES(otbTestSystemTests OTBTesting OTBCommon OTBIO)
+TARGET_LINK_LIBRARIES(otbTestSystemTests ${OTB_LIBRARIES})

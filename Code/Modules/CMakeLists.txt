@@ -18,7 +18,7 @@ FOREACH(moduleDir ${moduleList})
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})
     SET(LIB_NAME "otb${moduleName}Module")
 
-    SET(LINK_LIBS OTBCommon OTBLearning OTBBasicFilters OTBIO OTBVisuFLTK OTBVisuLegacyFLTK OTBGuiFLTK OTBRadiometry OTBProjections OTBSARPolarimetry OTBMonteverdiCommon flu)
+    SET(LINK_LIBS ${OTB_LIBRARIES} OTBVisuFLTK OTBVisuLegacyFLTK OTBGuiFLTK OTBMonteverdiCommon flu)
     SET(DEPS_LIBS OTBMonteverdiCommon)
 
     # Special cases with modules using FeatureExtractionBase

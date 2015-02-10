@@ -36,4 +36,4 @@ endif()
 
 ADD_EXECUTABLE(otbGuiTests otbGuiTests.cxx ${Gui_SRCS})
 
-TARGET_LINK_LIBRARIES(otbGuiTests OTBIO OTBGuiFLTK OTBTesting)
+TARGET_LINK_LIBRARIES(otbGuiTests ${OTB_LIBRARIES} OTBGuiFLTK)

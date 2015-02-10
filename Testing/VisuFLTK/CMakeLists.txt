@@ -518,6 +518,6 @@ ADD_EXECUTABLE(otbVisualizationTests1 otbVisualizationTests1.cxx ${Visualization
 ADD_EXECUTABLE(otbVisualizationTests2 otbVisualizationTests2.cxx ${Visualization_SRCS2})
 ADD_EXECUTABLE(otbVisualizationTests3 otbVisualizationTests3.cxx ${Visualization_SRCS3})
 
-TARGET_LINK_LIBRARIES(otbVisualizationTests1 OTBVisuFLTK OTBIO OTBTesting)
-TARGET_LINK_LIBRARIES(otbVisualizationTests2 OTBVisuFLTK OTBIO OTBTesting)
-TARGET_LINK_LIBRARIES(otbVisualizationTests3 OTBVisuFLTK OTBIO OTBTesting)
+TARGET_LINK_LIBRARIES(otbVisualizationTests1 OTBVisuFLTK ${OTB_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbVisualizationTests2 OTBVisuFLTK ${OTB_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbVisualizationTests3 OTBVisuFLTK ${OTB_LIBRARIES})

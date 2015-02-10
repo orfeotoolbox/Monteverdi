@@ -8,7 +8,7 @@ fltk_wrap_ui(OTBVisuFLTK
                otbMsgReporterGUI.fl)
 
 add_library(OTBVisuFLTK ${OTBVisuFLTK_SRCS} ${OTBVisuFLTK_FLTK_UI_SRCS})
-target_link_libraries(OTBVisuFLTK OTBGuiFLTK OTBCommon OTBIO ${MVD_VISU_GUI_LIBRARIES})
+target_link_libraries(OTBVisuFLTK OTBGuiFLTK ${OTB_LIBRARIES} ${MVD_VISU_GUI_LIBRARIES})
 if(Monteverdi_LIBRARY_PROPERTIES)
   set_target_properties(OTBVisuFLTK PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
 endif()

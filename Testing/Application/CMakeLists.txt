@@ -49,4 +49,4 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
-TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi OTBIO OTBTesting ${LIST_MODULE_LIBRARIES} )
+TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi ${OTB_LIBRARIES} ${LIST_MODULE_LIBRARIES} )

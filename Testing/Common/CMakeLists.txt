@@ -17,4 +17,4 @@ otbModuleTest.cxx
 )
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${Common_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBMonteverdiCommon OTBIO OTBTesting)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBMonteverdiCommon ${OTB_LIBRARIES})

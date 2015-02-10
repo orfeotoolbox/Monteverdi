@@ -213,7 +213,7 @@ otbImageViewerWithOverlay.cxx
 ADD_EXECUTABLE(otbVisuTests1 otbVisuTests1.cxx ${BasicVisu_SRCS1})
 ADD_EXECUTABLE(otbVisuTests2 otbVisuTests2.cxx ${BasicVisu_SRCS2})
 
-TARGET_LINK_LIBRARIES(otbVisuTests1 OTBVisuLegacyFLTK OTBIO OTBTesting)
-TARGET_LINK_LIBRARIES(otbVisuTests2 OTBVisuLegacyFLTK OTBIO OTBTesting)
+TARGET_LINK_LIBRARIES(otbVisuTests1 OTBVisuLegacyFLTK ${OTB_LIBRARIES})
+TARGET_LINK_LIBRARIES(otbVisuTests2 OTBVisuLegacyFLTK ${OTB_LIBRARIES})
 
 
