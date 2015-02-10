@@ -86,6 +86,9 @@ ENDIF(WIN32)
 # Make it the first one in the list of includes
 INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Utilities)
 
+find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
+
 # Link to the Orfeo ToolBox
 FIND_PACKAGE(OTB PATHS /usr/lib/otb )
 IF(OTB_FOUND)
