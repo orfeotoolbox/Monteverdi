@@ -155,7 +155,7 @@ FOREACH(moduleDir ${moduleList})
         ENDIF(SC_GUI_SRCS_TEMP)
 
         ADD_LIBRARY(${LIB_NAME} ${SC_SRCS} )
-        TARGET_LINK_LIBRARIES(${LIB_NAME} ${LINK_LIBS} OTBOBIA)
+        TARGET_LINK_LIBRARIES(${LIB_NAME} ${LINK_LIBS} ${OTB_LIBRARIES})
         IF(Monteverdi_LIBRARY_PROPERTIES)
           SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
         ENDIF()
@@ -164,7 +164,7 @@ FOREACH(moduleDir ${moduleList})
         # OTBGeospatialAnalysis is not generated if OTB_USE_PQXX
         # is set to OFF
         IF(OTB_USE_PQXX)
-          TARGET_LINK_LIBRARIES(${LIB_NAME} OTBGeospatialAnalysis)
+          TARGET_LINK_LIBRARIES(${LIB_NAME} ${OTB_LIBRARIES})
           IF(Monteverdi_LIBRARY_PROPERTIES)
             SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
           ENDIF()

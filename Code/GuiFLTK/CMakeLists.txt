@@ -3,7 +3,7 @@
 file(GLOB OTBGuiFLTK_SRCS "*.cxx" )
 
 add_library(OTBGuiFLTK ${OTBGuiFLTK_SRCS})
-target_link_libraries(OTBGuiFLTK OTBCommon ${MVD_VISU_GUI_LIBRARIES})
+target_link_libraries(OTBGuiFLTK ${OTB_LIBRARIES} ${MVD_VISU_GUI_LIBRARIES})
 if(Monteverdi_LIBRARY_PROPERTIES)
   set_target_properties(OTBGuiFLTK PROPERTIES ${Monteverdi_LIBRARY_PROPERTIES})
 endif()

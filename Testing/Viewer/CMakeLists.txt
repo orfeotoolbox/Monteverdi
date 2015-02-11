@@ -64,4 +64,4 @@ include_directories(
 )
 
 add_executable(otbViewerTests ${Viewer_SRCS})
-target_link_libraries(otbViewerTests OTBVisuFLTK OTBTesting)
+target_link_libraries(otbViewerTests OTBVisuFLTK ${OTB_LIBRARIES})
