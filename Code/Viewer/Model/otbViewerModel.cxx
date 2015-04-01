@@ -141,12 +141,12 @@ ViewerModel
   bool isHDF = false;
   std::string filename = filepath;
   GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
-  std::vector<string> names;
+  std::vector<std::string> names;
   std::vector<std::string> desc;
 
   // in case of hdr file (.hdr), GDAL want the header file as filepath
-  string::size_type loc = filepath.find( ".hdr", 0 );
-  if ( loc != string::npos )
+  std::string::size_type loc = filepath.find( ".hdr", 0 );
+  if ( loc != std::string::npos )
     {
     filename.erase(loc, 4);
     }
@@ -176,8 +176,8 @@ ViewerModel
     {
     // in case of hdr file (.hdr), GDAL want the header file as filepath
     std::string filename = filepath;
-    string::size_type loc = filepath.find( ".hdr", 0 );
-    if ( loc != string::npos )
+    std::string::size_type loc = filepath.find( ".hdr", 0 );
+    if ( loc != std::string::npos )
       {
       filename.erase(loc, 4);
       }

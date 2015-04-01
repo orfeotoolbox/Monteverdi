@@ -249,7 +249,7 @@ ViewerViewGUI
     {
     size_t found;
     found = desc[id].find(descDataset);
-    if( found!=string::npos )
+    if( found!=std::string::npos )
       {
       isFound = true;
       datasetId = id;
