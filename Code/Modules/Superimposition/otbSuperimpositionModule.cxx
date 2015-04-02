@@ -21,6 +21,7 @@
 #include "otbSuperimpositionModule.h"
 #include <FLU/Flu_File_Chooser.h>
 #include "otbMsgReporter.h"
+#include "otbConfigurationManager.h"
 
 // Interpolators
 #include "itkLinearInterpolateImageFunction.h"
