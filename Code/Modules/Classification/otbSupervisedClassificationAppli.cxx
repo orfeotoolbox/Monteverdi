@@ -1027,7 +1027,7 @@ SupervisedClassificationAppli
     {
       return;
     }
-  
+
   std::vector<PolygonListType::Iterator> toRemove;
   for (PolygonListType::Iterator pit = m_TrainingSet->Begin();
        pit != m_TrainingSet->End(); ++pit)
@@ -1055,7 +1055,7 @@ SupervisedClassificationAppli
     m_ValidationSet->Erase(*it);
     }
 
-  
+
   m_ClassesMap.erase(m_ClassesMap.begin() + selectedItem - 1);
   dClassList->remove(selectedItem);
 
@@ -1725,13 +1725,13 @@ SupervisedClassificationAppli
 ::Learn()
 {
   bLearn->clear();
-  
+
   if (m_ClassesMap.size() <= 1)
     {
       fl_alert("At least two classes are required to do classification!");
       return;
     }
-  
+
   if (bRandomGeneration->value())
     {
       this->JointlyGenerateTrainingAndValidationSamplesFromROIs();
@@ -1740,15 +1740,15 @@ SupervisedClassificationAppli
     {
       this->GenerateTrainingSamplesFromROIs();
     }
-  
+
   // Link map between vector index and existing label
   // classical case          : label (1, 2, 3, 4) => index (0, 1, 2, 3)
   // class 3 supressed       : label (1, 2, 4)    => index (0, 1, 2)
   // class 1 and 3 supressed : label (2, 4)    => index (0, 1)
-  
+
   ClassesMapType::iterator      classesIt = m_ClassesMap.begin();
   unsigned int nbOfLabel = m_ClassesMap.size();
-  
+
   // Get and Sort the label list
   std::vector<unsigned int> labelList;
   while ( classesIt != m_ClassesMap.end() )
@@ -1757,7 +1757,7 @@ SupervisedClassificationAppli
       ++classesIt;
     }
   std::sort(labelList.begin(), labelList.end());
-  
+
   // Construct the link map (label, index)
   unsigned int count = 0;
   std::map<unsigned int, unsigned int> linkMap;
@@ -1772,21 +1772,21 @@ SupervisedClassificationAppli
             }
         }
     }
-  
+
   TrainingListSampleType::ConstIterator sampleValIter = m_TrainingListLabelSample->Begin();
   TrainingListSampleType::ConstIterator sampleValEnd  = m_TrainingListLabelSample->End();
-  
+
   std::vector<double> sampleCount(m_ClassesMap.size(), 0.);
-  
+
   while (sampleValIter != sampleValEnd)
     {
       sampleCount[ linkMap[sampleValIter.GetMeasurementVector()[0]] ] += 1;
       ++sampleValIter;
     }
-  
+
   classesIt = m_ClassesMap.begin();
   std::vector<double>::iterator countIt = sampleCount.begin();
-  
+
   while (countIt != sampleCount.end() && classesIt != m_ClassesMap.end() )
     {
       if (*countIt == 0)
@@ -1796,16 +1796,16 @@ SupervisedClassificationAppli
           MsgReporter::GetInstance()->SendError(oss.str().c_str());
           return;
         }
-      
+
       ++countIt;
       ++classesIt;
     }
-  
+
   m_Estimator = EstimatorType::New();
   this->SVMSetupOk();
   m_Estimator->SetInputSampleList(m_TrainingListSample);
   m_Estimator->SetTrainingSampleList(m_TrainingListLabelSample);
-  
+
   try
     {
       m_Estimator->Update();
@@ -1815,9 +1815,9 @@ SupervisedClassificationAppli
       fl_alert("%s", exc.what());
       return;
     }
-  
+
   m_Model = m_Estimator->GetModel();
-  
+
   bLearn->set();
   bSaveClassifAsVectorData->activate();
   bSaveSVMModel->activate();
@@ -1928,7 +1928,7 @@ SupervisedClassificationAppli
       FullWidgetPointerType full = m_ResultViewer->GetFullWidget();
       guiFullWindow->remove(full);
       guiFullWindow->redraw();
-   
+
       if (m_ResultViewer->GetUseScroll())
       {
          ScrollWidgetPointerType scroll = m_ResultViewer->GetScrollWidget();
@@ -2359,12 +2359,25 @@ SupervisedClassificationAppli
 
   // Setting up local streaming capabilities
   SplitterType::Pointer splitter = SplitterType::New();
-  unsigned int          numberOfStreamDivisions =
-    StreamingTraitsType::CalculateNumberOfStreamDivisions(labeledReader->GetOutput(),
-                                                          largestRegion,
-                                                          splitter,
-                                                          otb::SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS,
-                                                          0UL, 0UL, 0UL);
+   unsigned int          numberOfStreamDivisions =  1;
+   /* values copied from OTB/CMakeLists.txt pre-modularization */
+   const uint64_t streamMaxSizeBufferForStreamingInBytes = 128000000;
+   const uint64_t streamImageSizeToActivateStreamingInBytes = 128000000;
+
+   /*code for calculate NumberOfStreamDivisions is copied from OTB/Code/Common/otbStreamingTraits (pre-modularization) */
+   typedef LabeledImageType::InternalPixelType  LabeledImageInternalPixelType;
+   const uint64_t numberColumnsOfRegion = largestRegion.GetSize()[0]; // X dimension
+   const uint64_t sizeLineInBytes = static_cast<uint64_t>( numberColumnsOfRegion
+							  * labeledReader->GetOutput()->GetNumberOfComponentsPerPixel()
+							  * sizeof(LabeledImageInternalPixelType) );
+   const uint64_t regionSizeInBytes = static_cast<uint64_t>(largestRegion.GetSize()[1]) * sizeLineInBytes;
+   if ( regionSizeInBytes > streamImageSizeToActivateStreamingInBytes )
+     {
+      //Calculate NumberOfStreamDivisions
+       numberOfStreamDivisions =  static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSizeInBytes) /
+								     static_cast<double>(streamMaxSizeBufferForStreamingInBytes)));
+     }
+
   RegionType                                   streamingRegion;
   std::map<LabeledPixelType, LabeledPixelType> labelTranslationMap;
 
