@@ -37,6 +37,14 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
         PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
+if ("${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+      SET_SOURCE_FILES_PROPERTIES(
+            ${APPLICATION_SRCS}
+            ${otbMonteverdi_FLTK_UI_SRCS}
+            Monteverdi.cxx
+        PROPERTIES COMPILE_FLAGS -DOTB_USE_GKSVM=1)
+endif()
+
 
 ADD_LIBRARY(otbMonteverdi ${APPLICATION_SRCS} ${otbMonteverdi_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES(otbMonteverdi OTBGuiFLTK OTBMonteverdiCommon flu otbCachingModule otbWriterModule otbViewerModule otbReaderModule)

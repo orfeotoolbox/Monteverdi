@@ -15,9 +15,13 @@ LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/CMakeFiles)
 if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ChangeDetection)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/Classification)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectCounting)
+
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectLabeling)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/SupervisedClassification)
+endif()
+
+if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectCounting)
 endif()
 
 FOREACH(moduleDir ${moduleList})

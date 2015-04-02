@@ -373,5 +373,9 @@ SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes
 
 # check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
 if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
-  message(WARNING "OTB is built without libsvm. Consequently following modules are deactivated: 'ChangeDetection, Classification, ObjectCounting, ObjectLabeling, SupervisedClassification' since OTB >=4.5. If you want to activate these modules, rebuild OTB with the cmake flag OTB_USE_LIBSVM=ON")
+  message(WARNING "OTB is built without libsvm. Consequently following modules are deactivated: 'ChangeDetection, Classification, ObjectLabeling, SupervisedClassification' since OTB >=4.5. If you want to activate these modules, rebuild OTB with the cmake flag OTB_USE_LIBSVM=ON")
+endif()
+
+if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+  message(WARNING "OTB is built without GernicKernel Remote Module. Consequently following modules are deactivated: 'ObjectLabeling' since OTB >=4.5. If you want to activate these modules, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
 endif()

@@ -51,12 +51,14 @@
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
-#if OTB_USE_LIBSVM
+#ifdef OTB_USE_LIBSVM
 #include "otbSupervisedClassificationModule.h"
 #include "otbSupervisedClassificationModule2.h"
 #include "otbChangeDetectionModule.h"
-#include "otbObjectCountingModule.h"
 #include "otbObjectLabelingModule.h"
+#endif
+#ifdef OTB_USE_GKSVM
+#include "otbObjectCountingModule.h"
 #endif
 #include "otbMeanShiftModule.h"
 #include "otbPanSharpeningModule.h"
@@ -216,7 +218,7 @@ int main(int argc, char* argv[])
                                                       "Filtering/Feature extraction/Smoothing");
   model->RegisterModule<otb::EdgeExtractionModule>("EdgeExtraction",
                                                       "Filtering/Feature extraction/Edge extraction");
-#if OTB_USE_LIBSVM
+#ifdef OTB_USE_LIBSVM
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", "Filtering/Change detection");
 #endif
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", "Filtering/Fine Correlation");
@@ -240,7 +242,7 @@ int main(int argc, char* argv[])
                                                  "SAR/Polarimetry/Analysis");
 
   /***********  Learning menu *******************/
-#if OTB_USE_LIBSVM
+#ifdef OTB_USE_LIBSVM
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              "Learning/SVM classification");
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
@@ -254,7 +256,7 @@ int main(int argc, char* argv[])
                                                     "Geometry/Superimpose two images");
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               "Geometry/Homologous points extraction");
-#if OTB_USE_LIBSVM
+#ifdef OTB_USE_GKSVM
   model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", "Learning/Object Labeling");
 #endif
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
