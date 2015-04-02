@@ -51,8 +51,13 @@
 #include "otbMeanShiftModule.h"
 #include "otbWriterModule.h"
 #include "otbWriterMVCModule.h"
+#if OTB_USE_LIBSVM
 #include "otbSupervisedClassificationModule.h"
 #include "otbSupervisedClassificationModule2.h"
+#include "otbChangeDetectionModule.h"
+#include "otbObjectCountingModule.h"
+#include "otbObjectLabelingModule.h"
+#endif
 #include "otbMeanShiftModule.h"
 #include "otbPanSharpeningModule.h"
 #include "otbViewerModule.h"
@@ -64,15 +69,12 @@
 #include "otbProjectionModule.h"
 #include "otbSuperimpositionModule.h"
 #include "otbKMeansModule.h"
-#include "otbChangeDetectionModule.h"
 #include "otbGCPToSensorModelModule.h"
 #include "otbThresholdModule.h"
 #include "otbOpticalCalibrationModule.h"
 #include "otbSarCalibrationModule.h"
-#include "otbObjectCountingModule.h"
 #include "otbCommandLineArgumentParser.h"
 #include "otbTileExportModule.h"
-#include "otbObjectLabelingModule.h"
 #include "otbFineCorrelationModule.h"
 #include "otbVectorizationModule.h"
 #include "otbSpectrumModule.h"
@@ -113,7 +115,7 @@
 int main(int argc, char* argv[])
 {
   //Internationalization
-  
+
 
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
@@ -182,7 +184,7 @@ int main(int argc, char* argv[])
 #ifdef OTB_USE_CURL
     model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", "File/Tile Map Import");
 #endif
-    
+
     model->RegisterModule<otb::ImageStatisticsModule>("Image Statistics", "File/Statistics/Image Statistics");
     model->RegisterModule<otb::CompareImagesModule>("Compare Images", "File/Statistics/Compare images");
 
@@ -190,12 +192,12 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::ViewerModule>("Viewer", "Visualization/Viewer");
   model->RegisterModule<otb::SpectrumModule>("SpectralViewer", "Visualization/Spectral Viewer");
   model->RegisterModule<otb::ColorMappingModule>("ColorMapping", "Visualization/Color Mapping");
-  
+
   /***********  Calibration menu *******************/
   model->RegisterModule<otb::OpticalCalibrationModule>("OpticalCalibration",
                                                        "Calibration/Optical Calibration");
   model->RegisterModule<otb::SarCalibrationModule>("SarCalibration", "Calibration/SAR Calibration");
-  
+
   /***********  Filtering menu *******************/
   model->RegisterModule<otb::BandMathModule>("BandMath", "Filtering/BandMath");
   model->RegisterModule<otb::ThresholdModule>("Threshold", "Filtering/Threshold");
@@ -214,7 +216,9 @@ int main(int argc, char* argv[])
                                                       "Filtering/Feature extraction/Smoothing");
   model->RegisterModule<otb::EdgeExtractionModule>("EdgeExtraction",
                                                       "Filtering/Feature extraction/Edge extraction");
+#if OTB_USE_LIBSVM
   model->RegisterModule<otb::ChangeDetectionModule>("ChangeDetection", "Filtering/Change detection");
+#endif
   model->RegisterModule<otb::FineCorrelationModule>("FineCorrelation", "Filtering/Fine Correlation");
   model->RegisterModule<otb::VectorizationModule>("Vectorization", "Filtering/Vectorization");
   model->RegisterModule<otb::ConnectedComponentSegmentationModule>("ConnectedComponentSegmentation", "Filtering/Connected Component segmentation");
@@ -236,20 +240,23 @@ int main(int argc, char* argv[])
                                                  "SAR/Polarimetry/Analysis");
 
   /***********  Learning menu *******************/
+#if OTB_USE_LIBSVM
   model->RegisterModule<otb::SupervisedClassificationModule>("SupervisedClassification",
                                                              "Learning/SVM classification");
   model->RegisterModule<otb::SupervisedClassificationModule2>("SupervisedClassification2",
                                                                      "Learning/SVM classification (EXPERIMENTAL)");
+#endif
   model->RegisterModule<otb::KMeansModule>("KMeans", "Learning/KMeans clustering");
-  
+
   /***********  Geometry menu *******************/
   model->RegisterModule<otb::ProjectionModule>("Projection", "Geometry/Reproject image");
   model->RegisterModule<otb::SuperimpositionModule>("Superimposition",
                                                     "Geometry/Superimpose two images");
   model->RegisterModule<otb::HomologousPointExtractionModule>("HomologousPoints",
                                                               "Geometry/Homologous points extraction");
-  
+#if OTB_USE_LIBSVM
   model->RegisterModule<otb::ObjectLabelingModule>("Object Labeling (Experimental)", "Learning/Object Labeling");
+#endif
   model->RegisterModule<otb::GCPToSensorModelModule>("GCPToSensorModel",
                                                      "Geometry/GCP to sensor model");
   model->RegisterModule<otb::DEMToImageGeneratorModule>("DEM To Image Generator",
@@ -257,7 +264,7 @@ int main(int argc, char* argv[])
 
   model->RegisterModule<otb::VectorDataTransformModule>("VectorData Transform",
                                                         "Geometry/VectorData Transform");
-  
+
   // Launch Monteverdi
   view->InitWidgets();
   view->Show();
@@ -341,10 +348,10 @@ int main(int argc, char* argv[])
           {
             // Get the ModuleInstanceId
             std::string readerId = model->CreateModuleByKey("Reader");
-            
+
             // Get the module itself
             otb::Module::Pointer module = model->GetModuleByInstanceId(readerId);
-            
+
             // Simulate file chooser and ok callback
             otb::ReaderModule::Pointer readerModule = static_cast<otb::ReaderModule::Pointer>(dynamic_cast<otb::ReaderModule *>(module.GetPointer()));
             readerModule->vFilePath->value(parseResult->GetParameterString("--InputList", i).c_str());
