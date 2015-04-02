@@ -365,3 +365,8 @@ install(EXPORT MonteverdiTargets DESTINATION
 #-----------------------------------------------------------------------------
 # Setup valgrind option (default hard coded value is ctest is invalid)
 SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
+
+# check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
+if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
+  message(FATAL_ERROR "has no libsvm. some modules disabled")
+endif()
