@@ -64,20 +64,15 @@ void VectorizationModule::Run()
 {
   // Untill window closing, module will be busy
   this->BusyOn();
-  
+
   // Here is the body of the module.
   // When the Run() method is called, necessary inputs have been
   // passed to the module.
-  
+
   if(this->GetNumberOfInputDataByKey("VectorData") > 0)
     {
     const char* defaultPath = "";
-
-    if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-      {
-      defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-      }
-
+    defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
     const char *cfname = flu_dir_chooser("Choose DEM directory if you want to...", defaultPath);
     Fl::check();
     if(cfname != NULL)
@@ -95,11 +90,11 @@ void VectorizationModule::Run()
         }
       }
     }
-  
+
   // Second step is to retrieve the input image
   // To handle an input with multiple supported type :
   FloatingVectorImageType::Pointer fpvImage = this->GetInputData<FloatingVectorImageType>("InputImage");
-  
+
   // One of this pointer will be NULL:
   if (fpvImage.IsNotNull())
     {
@@ -127,7 +122,7 @@ void VectorizationModule::Run()
       itkExceptionMacro(<< "Input vector data is NULL.");
       }
     }
-  
+
   // Once all inputs have been properly retrieved, do what the module
   // should do : show a gui, start an MVC model, trigger processing...
 }
@@ -151,6 +146,6 @@ void VectorizationModule::Notify()
     }
 
   // Once module is closed, it is no longer busy
- 
+
 }
 } // End namespace otb

@@ -1859,12 +1859,7 @@ void TileExportModule::BrowseDEM()
   const char * filename = NULL;
 
   const char* defaultPath = "";
-  if (otb::ConfigurationFile::GetInstance()->IsValid())
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-    {
-    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-    }
-
+  defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
   filename = flu_dir_chooser("Choose the folder...", defaultPath);
 
   if (filename == NULL)

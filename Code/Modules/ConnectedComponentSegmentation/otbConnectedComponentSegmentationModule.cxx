@@ -730,7 +730,7 @@ void ConnectedComponentSegmentationModule::UpdateMaskLayer()
   //test layer generation
 
   m_HasToGenerateMaskLayer = false;
-  string mask_expression;
+  std::string mask_expression;
   if (m_NoMask)
     {
     mask_expression = "1";
@@ -1185,12 +1185,9 @@ void ConnectedComponentSegmentationModule::OK()
       if (!m_UseDEM)
         {
         const char* defaultPath = "";
-        if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-          {
-          defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-          }
 
-        cfname = flu_dir_chooser("Choose DEM directory if you want to...", defaultPath);
+    defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
+    cfname = flu_dir_chooser("Choose DEM directory if you want to...", defaultPath);
         Fl::check();
         }
       else

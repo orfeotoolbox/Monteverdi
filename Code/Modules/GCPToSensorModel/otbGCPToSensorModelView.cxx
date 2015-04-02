@@ -325,10 +325,7 @@ GCPToSensorModelView
   const char * cfname = NULL;
 
   const char* defaultPath = "";
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-    {
-    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-    }
+  defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
   cfname = flu_dir_chooser("Choose the DEM dir...", defaultPath);
 
   if (cfname == NULL)

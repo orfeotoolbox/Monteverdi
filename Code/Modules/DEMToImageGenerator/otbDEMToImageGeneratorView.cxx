@@ -25,6 +25,7 @@
 #include "otbMacro.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "itkExceptionObject.h"
+#include "otbConfigurationManager.h"
 
 #include "otbMsgReporter.h"
 #include "otbImageKeywordlist.h"
@@ -253,20 +254,16 @@ DEMToImageGeneratorView::BrowseSRTMDEM()
   const char * srtmDirectory = NULL;
 
   const char* defaultPath = "";
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-    {
-    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-    }
-
+  defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
   // Choose file
   srtmDirectory = flu_dir_chooser("Choose the SRTM DEM directory ...", defaultPath);
-  
+
   if (srtmDirectory  == NULL)
     {
     otbMsgDebugMacro(<< "No directory !");
     return;
     }
-  
+
   iDEMPath->value(srtmDirectory);
   m_Controller->SetDEMDirectoryPath(srtmDirectory);
 }
