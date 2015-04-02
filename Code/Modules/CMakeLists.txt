@@ -12,13 +12,6 @@ FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*)
 #the module directory. Of course, this is not a real module and should be
 #removed from the module list
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/CMakeFiles)
-if(NOT OTB_COMPILED_WITH_LIBSVM)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ChangeDetection)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/Classification)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectCounting)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectLabeling)
-LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/SupervisedClassification)
-endif()
 
 FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
