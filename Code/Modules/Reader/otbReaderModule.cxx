@@ -92,7 +92,7 @@ ReaderModule::ReaderModule()
   m_MultibandComplexImage(false)
 {
   this->NeedsPipelineLockingOn();
-  
+
   this->BuildGUI();
 
   // Hide busy bar
@@ -115,7 +115,7 @@ ReaderModule::ReaderModule()
 
   // No name for now
   vName->value("");
-  
+
   // Fill ENVI types for raw data
   vPixType->add("[ 1]: 8-bit byte");
   m_MapEnviPixelType[0]=1;
@@ -140,17 +140,17 @@ ReaderModule::ReaderModule()
   vPixType->add("[ 9]: 2 x 64-bit double precision complex (real-imaginary pair)");
   m_MapEnviPixelType[10]=9;
   vPixType->value(EnviPixelType_Byte);
-  
+
   vInterleave->add("BSQ");
   vInterleave->add("BIP");
   vInterleave->add("BIL");
   vInterleave->value(EnviInterleave_BSQ);
-  
+
   vByteOrder->add("LSF : Least Significant byte First");
   vByteOrder->add("MSF : Most Significant byte First");
   vByteOrder->tooltip("LSF = little endian; MSF = big endian");
   vByteOrder->value(EnviByteOrder_LSF);
-  
+
 }
 
 /** Destructor */
@@ -410,7 +410,7 @@ void ReaderModule::TypeChanged()
     {
     vType->value(ImageType_Unknown);
     std::string filepath = vFilePath->value();
-    
+
     if (filepath.size()==0)
       {
       return;
@@ -418,7 +418,7 @@ void ReaderModule::TypeChanged()
     wRawTypeWindow->show();
     return;
     }
-  
+
   // Is type found is correct?
   bool typeFoundCorrect = false;
   if (vType->value() != ImageType_Unknown)
@@ -567,10 +567,10 @@ void ReaderModule::OpenRealImageWithQuicklook()
   m_ImageWithQL = ImageWithQuicklook::New();
   m_ImageWithQL->SetImage(m_FPVReader->GetOutput());
   m_ShrinkFactor = 1;
-  
+
   m_KeyForQL = ossId.str();
   m_DescForQL = oss.str();
-  
+
   // Launch quicklook computation
   this->pBusyBar->value(0);
   this->pBusyBar->show();
@@ -585,12 +585,12 @@ void ReaderModule::OpenRealImageWithQuicklook()
 void ReaderModule::UpdateProgress()
 {
   double progress = pBusyBar->value();
-  
+
   if (m_progressIndex >= 4)
     {
     m_progressIndex = 0;
     }
-    
+
   switch (m_progressIndex)
     {
     case 0:
@@ -725,7 +725,7 @@ void ReaderModule::ThreadedRun()
 {
   std::string qlKey = "_ql_by_otb.tif";
   FloatingVectorImageType::Pointer quicklook;
-  
+
   if (m_TypeJPEG2000)
     {
     FPVReaderType::Pointer qlReader = FPVReaderType::New();
@@ -776,7 +776,7 @@ void ReaderModule::ThreadedRun()
         m_ErrorMsg = err.GetDescription();
         Fl::awake(&SendErrorCallback, &m_ErrorMsg);
         }
-      
+
       }
 
     quicklook = qlReader->GetOutput();
@@ -825,7 +825,7 @@ void ReaderModule::ThreadedRun()
       m_ErrorMsg = err.GetDescription();
       Fl::awake(&SendErrorCallback, &m_ErrorMsg);
       }
- 
+
     quicklook->DisconnectPipeline();
     }
 
@@ -834,7 +834,7 @@ void ReaderModule::ThreadedRun()
   m_ImageWithQL->SetShrinkFactor(m_ShrinkFactor / (1<<m_Resolution ));
   this->AddOutputDescriptor(m_ImageWithQL, m_KeyForQL, m_DescForQL, true);
   this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
-  
+
   m_ProcessObject = m_FPVReader;
   this->BusyOff();
 }
@@ -977,11 +977,11 @@ void ReaderModule::Hide()
 bool ReaderModule::IsHdfFile(std::string filepath)
 {
   GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
-  std::vector<string> names;
+  std::vector<std::string> names;
 
   // in case of hdr file (.hdr), GDAL want the header file as filepath
-  string::size_type loc = filepath.find( ".hdr", 0 );
-  if ( loc != string::npos )
+  std::string::size_type loc = filepath.find( ".hdr", 0 );
+  if ( loc != std::string::npos )
     {
     filepath.erase(loc, 4);
     }
@@ -1051,17 +1051,17 @@ bool ReaderModule::CheckDataSetString()
     {
     for (size_t it = 0; it < m_Desc.size(); it++)
       {
-      string key("/");
+      std::string key("/");
       size_t found;
       do
         {
         found = m_Desc[it].find(key);
-        if (found!=string::npos)
+        if (found!=std::string::npos)
           {
           m_Desc[it].replace(found, key.length()," ");
           }
         }
-      while(found!=string::npos);
+      while(found!=std::string::npos);
       }
     return true;
     }
@@ -1075,13 +1075,13 @@ bool ReaderModule::CheckDataSetString()
 void ReaderModule::RawTypeSetup()
 {
   std::string filepath = vFilePath->value();
-  
+
   // Write hdr file
   std::ofstream hdrFile;
   std::ostringstream oss;
   oss << filepath << ".hdr";
   std::string headerFilepath = oss.str();
-  
+
   // Check write permissions
   if (itksys::SystemTools::Touch(headerFilepath.c_str(), true) == false)
     {
@@ -1089,7 +1089,7 @@ void ReaderModule::RawTypeSetup()
     wRawTypeWindow->hide();
     return;
     }
-  
+
   hdrFile.open(headerFilepath.c_str(), std::ios_base::out | std::ios_base::trunc);
   if (hdrFile.is_open())
     {
@@ -1115,9 +1115,9 @@ void ReaderModule::RawTypeSetup()
     hdrFile << "sensor type = Unknown" << std::endl;
     hdrFile << "data type = " << m_MapEnviPixelType[vPixType->value()] << std::endl;
     hdrFile << "byte order = " << vByteOrder->value() << std::endl;
-    
+
     hdrFile.close();
-    
+
     this->Analyse();
     this->OpenDataSet();
     }

@@ -323,7 +323,7 @@ SpectrumModuleModel
   std::ostringstream address, content;
   address << path;
 
-  string fileType = address.str().substr(address.str().length() - 4, address.str().length() - 1);
+  std::string fileType = address.str().substr(address.str().length() - 4, address.str().length() - 1);
   if (fileType.compare(".csv"))
     {
     address << ".csv";
