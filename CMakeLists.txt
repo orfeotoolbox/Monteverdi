@@ -270,6 +270,11 @@ INCLUDE_DIRECTORIES(
 ${Monteverdi_INCLUDE_DIRS}
 )
 
+set(OTB_USE_CURL FALSE)
+if ("${OTB_MODULES_ENABLED}" MATCHES "OTBCurl")
+set(OTB_USE_CURL TRUE)
+endif()
+
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Utilities)
@@ -368,5 +373,5 @@ SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes
 
 # check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
 if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
-  message(FATAL_ERROR "has no libsvm. some modules disabled")
+  message(WARNING "has no libsvm. some modules disabled")
 endif()
