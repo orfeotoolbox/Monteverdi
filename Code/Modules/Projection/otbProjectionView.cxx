@@ -968,10 +968,7 @@ void ProjectionView::Browse()
   const char * demName = NULL;
 
   const char* defaultPath = "";
-  if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-    {
-    defaultPath = otb::ConfigurationFile::GetInstance()->GetDEMDirectory().c_str();
-    }
+  defaultPath = otb::ConfigurationManager::GetDEMDirectory().c_str();
   demName = flu_dir_chooser("Choose the DEM dir...", defaultPath);
 
   if (demName == NULL)
