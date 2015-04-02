@@ -12,7 +12,6 @@ FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*)
 #the module directory. Of course, this is not a real module and should be
 #removed from the module list
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/CMakeFiles)
-
 if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ChangeDetection)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/Classification)

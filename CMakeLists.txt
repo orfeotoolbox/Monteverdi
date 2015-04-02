@@ -373,5 +373,5 @@ SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes
 
 # check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
 if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
-  message(WARNING "has no libsvm. some modules disabled")
+  message(WARNING "OTB is built without libsvm. Consequently following modules are deactivated: 'ChangeDetection, Classification, ObjectCounting, ObjectLabeling, SupervisedClassification' since OTB >=4.5. If you want to activate these modules, rebuild OTB with the cmake flag OTB_USE_LIBSVM=ON")
 endif()
