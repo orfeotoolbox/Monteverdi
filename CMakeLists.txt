@@ -137,7 +137,7 @@ CONFIGURE_FILE(${Monteverdi_SOURCE_DIR}/ConfigureMonteverdi.h.in
 #-----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
 #By default, import the option from the OTB configuration
-SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
+SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED})
 
 
 #-----------------------------------------------------------------------------
