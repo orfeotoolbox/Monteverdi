@@ -286,6 +286,11 @@ if ("${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
 set(OTB_USE_LIBSVM ON)
 endif()
 
+set(OTB_USE_GKSVM OFF)
+if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+set(OTB_USE_GKSVM ON)
+endif()
+
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Utilities)
@@ -383,10 +388,10 @@ install(EXPORT MonteverdiTargets DESTINATION
 SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
 
 # check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
-if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
+if(NOT OTB_USE_LIBSVM)
   message(WARNING "OTB is built without libsvm. Consequently following modules are deactivated since OTB >=4.5.0 : 'ChangeDetection, Classification, ObjectLabeling, SupervisedClassification'. If you want to activate these modules, rebuild OTB with the cmake flag OTB_USE_LIBSVM=ON")
 endif()
 
-if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+if(NOT OTB_USE_GKSVM)
   message(WARNING "OTB is built without GernicKernel Remote Module. Consequently following modules are deactivated since OTB >=4.5.0 : 'ObjectLabeling'. If you want to activate these modules, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
 endif()
