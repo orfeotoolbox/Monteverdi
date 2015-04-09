@@ -281,6 +281,10 @@ if ("${OTB_MODULES_ENABLED}" MATCHES "OTBMapnik")
 set(OTB_USE_MAPNIK ON)
 endif()
 
+set(OTB_USE_LIBSVM OFF)
+if ("${OTB_MODULES_ENABLED}" MATCHES "OTBSVMLearning")
+set(OTB_USE_LIBSVM ON)
+endif()
 
 # Code location
 ADD_SUBDIRECTORY(Code)
