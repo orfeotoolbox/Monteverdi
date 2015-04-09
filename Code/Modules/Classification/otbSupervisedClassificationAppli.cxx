@@ -29,6 +29,7 @@
 #include "otbMacro.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbStreamingTraits.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbExtractROI.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkBinaryThresholdImageFilter.h"
@@ -2339,6 +2340,7 @@ SupervisedClassificationAppli
   typedef otb::StreamingTraits<LabeledImageType>                                 StreamingTraitsType;
   typedef itk::ImageRegionSplitter<2>                                            SplitterType;
   typedef  ImageType::RegionType                                                 RegionType;
+  typedef RAMDrivenStrippedStreamingManager<LabeledImageType> RAMDrivenStrippedStreamingManagerType;
 
   LabeledReaderType::Pointer labeledReader = LabeledReaderType::New();
   labeledReader->SetFileName(m_ROIsImageFileName);
@@ -2355,28 +2357,29 @@ SupervisedClassificationAppli
     return;
     }
 
+
+  /**
+   * MaxRAMHint denotes the maximum memory OTB should use for
+   * processing, expressed in MegaBytes.
+   *
+   * If environment variable OTB_MAX_RAM_HINT is defined and could be
+   * converted to int, return its content as a 64 bits unsigned int.
+   * Else, returns default value, which is 128 Mb
+   *
+   */
+  ConfigurationManager::RAMValueType availableRAM = ConfigurationManager::GetMaxRAMHint();
+  unsigned long numberOfStreamDivisions =  1;
+  float bias = 1.5; // empirical value
+  RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+  streamingManager->SetBias(bias);
+
   RegionType largestRegion = labeledReader->GetOutput()->GetLargestPossibleRegion();
+  streamingManager->PrepareStreaming(labeledReader->GetOutput(), largestRegion);
+  numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
 
   // Setting up local streaming capabilities
   SplitterType::Pointer splitter = SplitterType::New();
-   unsigned int          numberOfStreamDivisions =  1;
-   /* values copied from OTB/CMakeLists.txt pre-modularization */
-   const uint64_t streamMaxSizeBufferForStreamingInBytes = 128000000;
-   const uint64_t streamImageSizeToActivateStreamingInBytes = 128000000;
-
-   /*code for calculate NumberOfStreamDivisions is copied from OTB/Code/Common/otbStreamingTraits (pre-modularization) */
-   typedef LabeledImageType::InternalPixelType  LabeledImageInternalPixelType;
-   const uint64_t numberColumnsOfRegion = largestRegion.GetSize()[0]; // X dimension
-   const uint64_t sizeLineInBytes = static_cast<uint64_t>( numberColumnsOfRegion
-							  * labeledReader->GetOutput()->GetNumberOfComponentsPerPixel()
-							  * sizeof(LabeledImageInternalPixelType) );
-   const uint64_t regionSizeInBytes = static_cast<uint64_t>(largestRegion.GetSize()[1]) * sizeLineInBytes;
-   if ( regionSizeInBytes > streamImageSizeToActivateStreamingInBytes )
-     {
-      //Calculate NumberOfStreamDivisions
-       numberOfStreamDivisions =  static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSizeInBytes) /
-								     static_cast<double>(streamMaxSizeBufferForStreamingInBytes)));
-     }
 
   RegionType                                   streamingRegion;
   std::map<LabeledPixelType, LabeledPixelType> labelTranslationMap;
@@ -2396,7 +2399,7 @@ SupervisedClassificationAppli
     polygonList = m_ValidationSet;
     }
 
-  for (unsigned int piece = 0; piece < numberOfStreamDivisions; ++piece)
+  for (unsigned long piece = 0; piece < numberOfStreamDivisions; ++piece)
     {
     streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
 
