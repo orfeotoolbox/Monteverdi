@@ -276,6 +276,11 @@ if ("${OTB_MODULES_ENABLED}" MATCHES "OTBCurlAdapters")
 set(OTB_USE_CURL ON)
 endif()
 
+set(OTB_USE_MAPNIK OFF)
+if ("${OTB_MODULES_ENABLED}" MATCHES "OTBMapnik")
+set(OTB_USE_MAPNIK ON)
+endif()
+
 
 # Code location
 ADD_SUBDIRECTORY(Code)
