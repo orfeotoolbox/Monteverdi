@@ -8,7 +8,7 @@ SET(TEMP ${Monteverdi_BINARY_DIR}/Testing/Temporary)
 
 SET(TOL 0.0)
 
-# Large Input 
+# Large Input
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -48,7 +48,7 @@ ${TEMP}/readerModuleJPEGOuptut.tif
 
 #------------- Feature Extraction Tests ---------------------------
 ADD_TEST(moTvRadiometricIndicesExtractionModuleTest  ${Modules_TESTS1} otbRadiometricIndicesExtractionModuleTest
-${INPUTDATA}/GomaBestScale_w15_50.raw.hdr   
+${INPUTDATA}/GomaBestScale_w15_50.raw.hdr
 ${TEMP}/RadiometricIndicesExtractionModuleOuptut.hdr
 )
 
@@ -58,19 +58,21 @@ ${TEMP}/RadiometricIndicesExtractionModuleOuptut.hdr
 #)
 
 ADD_EXECUTABLE(otbFeatureExtractionModuleInterne otbFeatureExtractionApplication_test_interne.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne 
-                        otbRadiometricIndicesExtractionModule 
-                        otbTextureExtractionModule 
+TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne
+                        otbRadiometricIndicesExtractionModule
+                        otbTextureExtractionModule
                         otbMorphologyExtractionModule
                         otbSmoothingModule
                         otbEdgeExtractionModule)
 
+if(OTB_USE_LIBSVM)
 #------------- Supervised Classification Tests ---------------------------
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS1}  otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
 ${TEMP}/SupervisedClassificationModuleOuptut.tif
-${INPUTDATA}/poupees.svm    
+${INPUTDATA}/poupees.svm
 )
+endif()
 #------------- Writer Module Tests ---------------------------
 ADD_TEST(moTvWriterModuleTest  ${Modules_TESTS1} otbWriterModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
@@ -158,7 +160,7 @@ ${TEMP}/extractROIVectorImageModuleOuptut.tif
 ADD_TEST(moTvHomologousPointExtractionModuleTest ${Modules_TESTS2} otbHomologousPointExtractionModuleTest
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_translation.tif
-${TEMP}/moTvHomologousPointExtractionModule.tif	
+${TEMP}/moTvHomologousPointExtractionModule.tif
 158 246 162 242
 110 153 114 149
 192 94  195 90
@@ -172,7 +174,7 @@ ${INPUTDATA}/Seg1InputForRCC8Graph.tif
 ${INPUTDATA}/Seg2InputForRCC8Graph.tif
 ${INPUTDATA}/Seg3InputForRCC8Graph.tif
 ${INPUTDATA}/Seg4InputForRCC8Graph.tif
-${TEMP}/moTvConcatenateImageModule.tif 
+${TEMP}/moTvConcatenateImageModule.tif
 )
 
 
@@ -193,14 +195,18 @@ ${TEMP}/moTvBandMathModule.tif
 #----------------------------------------------------------------------------------------------
 
 #------------- Interactive Change Detection Module test
-ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS3} 
+
+if(OTB_USE_LIBSVM)
+ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS3}
          otbChangeDetectionModuleTest
 	 ${INPUTDATA}/GomaAvant.png
 	 ${INPUTDATA}/GomaApres.png
 	 ${INPUTDATA}/icdSVMModel.svm
 	 ${TEMP}/moTvChangeDetectionModule.tif
 	 0
-)
+   )
+endif()
+
 #------------- GCP to Sensor Model Module test -------------
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(gcpTvGCPToSensorModelModuleTest ${Modules_TESTS3} otbGCPToSensorModelModuleTest
@@ -215,7 +221,7 @@ ADD_TEST(moTuThresholdModuleTest ${Modules_TESTS3} otbThresholdModuleTestNew
 )
 
 #------------- Threshold  Module test -------------
-ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS3} 
+ADD_TEST(moTvThresholdModuleTest ${Modules_TESTS3}
 	 otbThresholdModuleTest
 	 ${INPUTDATA}/prison_toulouse.tif
 	 0
@@ -276,6 +282,7 @@ ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WoN ${Modules_TESTS3} ot
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+if(OTB_USE_LIBSVM)
 ADD_TEST(moTuSupervisedClassificationModelTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTest)
 
@@ -294,7 +301,7 @@ ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
 ADD_TEST(moTvSupervisedClassificationModelTrainTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTrainTest
 ${OTB_DATA_ROOT}/Examples/qb_RoadExtract.tif ${OTB_DATA_ROOT}/Examples/qb_RoadExtract_classification.shp)
-
+endif()
 
 ADD_TEST(moTvSertitHaitiXTTest ${Modules_TESTS3}
 otbSertitProcessingTest
@@ -349,7 +356,8 @@ ${INPUTDATA}/DEM/srtm_directory
 )
 SET_TESTS_PROPERTIES(vecTvVectorizationModuleTest PROPERTIES DEPENDS moTvVectorizationClassification)
 
-#-------------  Object Labeling Module 
+#-------------  Object Labeling Module
+if(OTB_USE_LIBSVM)
 ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
@@ -378,7 +386,7 @@ ADD_TEST(moTvObjectLabelingColoredOutput3Bands ${Modules_TESTS4} otbObjectLabeli
   ${TEMP}/moTvObjectLabelingColoredOutput3Bands.tif
   0
 )
-
+endif()
 
 #------------- FineCorrelation Module Tests ---------------------------
 ADD_TEST(ficTvFineCorrelationModuleTest ${Modules_TESTS4} otbFineCorrelationModuleTest
@@ -462,7 +470,7 @@ ADD_TEST(moTvImageStatisticsModuleTestImage  ${Modules_TESTS4}
 	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 )
 
-ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4} 
+ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4}
 	otbImageStatisticsModuleTest
 	1 # otbVectorImage
 	${INPUTDATA}/maur.tif
@@ -473,7 +481,7 @@ IF(OTB_USE_MAPNIK)
 	ADD_TEST(moTvRasterizationImageModuleTest ${Modules_TESTS4} otbRasterizationModuleTest
 	${INPUTDATA}/polygon.tif
 	${INPUTDATA}/Rasterization/polgons.shp
-	${TEMP}/moTvRasterizationImageModule.tif 
+	${TEMP}/moTvRasterizationImageModule.tif
 	)
 ENDIF(OTB_USE_MAPNIK)
 
@@ -488,11 +496,11 @@ ENDIF(OTB_USE_MAPNIK)
 
 ADD_TEST(moTvConnectedComponentSegmentationModuleTestNoMask  ${Modules_TESTS4}
 	 --compare-ogr ${TOL}
-	${BASELINE_APPLICATION_FILES}/ccTvConnectedComponentSegmentationNoMask.shp 
-	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp 
+	${BASELINE_APPLICATION_FILES}/ccTvConnectedComponentSegmentationNoMask.shp
+	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp
     otbConnectedComponentSegmentationModuleTest
 	${INPUTDATA}/ROI_QB_MUL_4.tif
-	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp 
+	${TEMP}/ccTvConnectedComponentSegmentationNoMask.shp
     0
     "1"
     "distance<10"
@@ -537,7 +545,7 @@ ${TEMP}/moTvResampleModuleTest.tif
     otbResampleModuleTest
     ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
     ${TEMP}/moTvResampleModuleTest.tif
-    20 # rotation 
+    20 # rotation
     1.5  # scale X
     2  # scale Y
 )
@@ -551,7 +559,7 @@ ADD_TEST(moTvResampleModuleTest_QB ${Modules_TESTS5}
   otbResampleModuleTest
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
   ${TEMP}/moTvResampleModuleTest_QB.tif
-  10 # rotation 
+  10 # rotation
   0.02  # scale X
   0.02  # scale Y
 )
@@ -563,14 +571,14 @@ ADD_TEST(moTvCompareImagesModuleTest  ${Modules_TESTS5}
   otbCompareImagesModuleTest
   ${INPUTDATA}/GomaAvant.png
   ${INPUTDATA}/GomaApres.png
-  0 # not Fl::run  
+  0 # not Fl::run
 )
 
 
 SET(Modules_SRCS1
 otbSpeckleFilteringApplication.cxx
 otbSpeckleFilteringModuleTest.cxx
-otbReaderModuleTest.cxx 
+otbReaderModuleTest.cxx
 otbWriterModuleTest.cxx
 otbRadiometricIndicesExtractionModuleTest.cxx
 otbSupervisedClassificationModuleTest.cxx
@@ -593,8 +601,8 @@ otbSpectrumViewerModuleTest.cxx
 
 SET(Modules_SRCS3
 otbChangeDetectionModuleTest.cxx
-otbGCPToSensorModelModuleTest.cxx	
-otbThresholdModuleTestNew.cxx	
+otbGCPToSensorModelModuleTest.cxx
+otbThresholdModuleTestNew.cxx
 otbThresholdModuleTest.cxx
 otbOpticalCalibrationModuleTest.cxx
 otbSarCalibrationModuleTest.cxx
