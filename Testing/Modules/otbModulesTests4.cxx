@@ -24,17 +24,18 @@
 #include <iostream>
 #include "otbTestMain.h"
 
-#include "otbCurlHelperInterface.h"
+#include "otbConfigure.h"
 
 void RegisterTests()
 {
-  if (otb::CurlHelperInterface::IsCurlAvailable())
-    {
-    REGISTER_TEST(otbTileMapImportModuleTest);
-    }
+  #ifdef OTB_USE_CURL
+  REGISTER_TEST(otbTileMapImportModuleTest);
+  #endif
   REGISTER_TEST(otbVectorizationModuleTest);
+  #ifdef OTB_USE_LIBSVM
   REGISTER_TEST(otbObjectLabelingOpenImage);
   REGISTER_TEST(otbObjectLabelingColoredOutput);
+  #endif
   REGISTER_TEST(otbFineCorrelationModuleTest);
   REGISTER_TEST(otbMeanShiftModuleTest);
   REGISTER_TEST(otbVectorizationClassification);

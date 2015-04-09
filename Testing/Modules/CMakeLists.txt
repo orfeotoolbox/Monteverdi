@@ -11,7 +11,7 @@ SET(TOL 0.0)
 # Large Input
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 SET(Modules_TESTS1 ${CXX_TEST_PATH}/otbModulesTests1)
 SET(Modules_TESTS2 ${CXX_TEST_PATH}/otbModulesTests2)
@@ -65,7 +65,7 @@ TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne
                         otbSmoothingModule
                         otbEdgeExtractionModule)
 
-if(OTBSVMLearning)
+if(OTBSVMLearning_LOADED)
 #------------- Supervised Classification Tests ---------------------------
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS1}  otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
@@ -104,7 +104,7 @@ ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000
 ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
 ${LARGEINPUT}/VECTOR/MidiPyrenees/buildings.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 #------------------  Spectrum Viewer Tests ---------------------------
 ADD_TEST(moTvSpectrumViewerModuleTest ${Modules_TESTS2} otbSpectrumViewerModuleTest
@@ -138,7 +138,7 @@ ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000
 0
 ${TEMP}/projectionModuleOutput.tif
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 #------------- Extract ROI Module Tests ---------------------------
 ADD_TEST(moTvExtractROIModuleTest  ${Modules_TESTS2} otbExtractROIModuleTest
@@ -196,7 +196,7 @@ ${TEMP}/moTvBandMathModule.tif
 
 #------------- Interactive Change Detection Module test
 
-if(OTBSVMLearning)
+if(OTBSVMLearning_LOADED)
 ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS3}
          otbChangeDetectionModuleTest
 	 ${INPUTDATA}/GomaAvant.png
@@ -214,7 +214,7 @@ ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000
 ${INPUTDATA}/DEM/srtm_directory/
 ${TEMP}/gcpTvGCPToSMModuleTest.xml
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 #------------- Threshold  Module test New -------------
 ADD_TEST(moTuThresholdModuleTest ${Modules_TESTS3} otbThresholdModuleTestNew
@@ -243,7 +243,7 @@ ADD_TEST(moTvOpticalCalibrationModuleQBTest ${Modules_TESTS3} otbOpticalCalibrat
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 0
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 
 #------------- SarCalibration Module -------------
@@ -280,9 +280,9 @@ ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WoN ${Modules_TESTS3} ot
 	0 # Without Noise
 )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
-if(OTBSVMLearning)
+if(OTBSVMLearning_LOADED)
 ADD_TEST(moTuSupervisedClassificationModelTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTest)
 
@@ -357,7 +357,7 @@ ${INPUTDATA}/DEM/srtm_directory
 SET_TESTS_PROPERTIES(vecTvVectorizationModuleTest PROPERTIES DEPENDS moTvVectorizationClassification)
 
 #-------------  Object Labeling Module
-if(OTBSVMLearning)
+if(OTBSVMLearning_LOADED)
 ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
@@ -426,7 +426,7 @@ ADD_TEST(moTvPolarimetricSynthesisModuleTest ${Modules_TESTS4} otbPolarimetricSy
 	${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 	0
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 #------------- Color Mapping Module Tests ---------------------------
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -434,7 +434,7 @@ ADD_TEST(moTvColorMappingModuleTest ${Modules_TESTS4} otbColorMappingModuleTest
 	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	1
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 #------------- KMeans Module Tests ---------------------------
 ADD_TEST(moTvKMeansModuleTest ${Modules_TESTS4} otbKMeansModuleTest
@@ -460,7 +460,7 @@ ADD_TEST(moTvDEMToImageGeneratorModuleTest_FromImage ${Modules_TESTS4} otbDEMToI
 	${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 	${TEMP}/moTvDEMToImageGeneratorModule_FromImage.tif
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 
 #------------- Image Statistics Module Tests ---------------------------
@@ -477,7 +477,7 @@ ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4}
 )
 
 #------------- Rasterization Module Tests ---------------------------
-IF(OTBMapnik)
+IF(OTBMapnik_LOADED)
 	ADD_TEST(moTvRasterizationImageModuleTest ${Modules_TESTS4} otbRasterizationModuleTest
 	${INPUTDATA}/polygon.tif
 	${INPUTDATA}/Rasterization/polgons.shp
@@ -563,7 +563,7 @@ ADD_TEST(moTvResampleModuleTest_QB ${Modules_TESTS5}
   0.02  # scale X
   0.02  # scale Y
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+ENDIF()
 
 
 # ----------------- Compare images Module testing -------------------
@@ -612,7 +612,7 @@ otbSertitProcessingTestNonGeoProduct.cxx
 otbSertitProcessingTestNonGeoProductXT.cxx
 )
 
-IF(OTBCurlAdapters)
+IF(OTBCurlAdapters_LOADED)
 SET(Modules_SRCS4
   otbTileMapImportModuleTest.cxx
 )
@@ -637,7 +637,7 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbUncompressJpeg2000ModuleTest.cxx
 )
 
-IF(OTBMapnik)
+IF(OTBMapnik_LOADED)
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbRasterizationModuleTest.cxx
 )
