@@ -65,7 +65,7 @@ TARGET_LINK_LIBRARIES(otbFeatureExtractionModuleInterne
                         otbSmoothingModule
                         otbEdgeExtractionModule)
 
-if(OTB_USE_LIBSVM)
+if(OTBSVMLearning)
 #------------- Supervised Classification Tests ---------------------------
 ADD_TEST(moTvSupervisedClassificationModuleTest ${Modules_TESTS1}  otbSupervisedClassificationModuleTest
 ${INPUTDATA}/poupees.tif
@@ -196,7 +196,7 @@ ${TEMP}/moTvBandMathModule.tif
 
 #------------- Interactive Change Detection Module test
 
-if(OTB_USE_LIBSVM)
+if(OTBSVMLearning)
 ADD_TEST(moTuChangeDetectionModuleTest ${Modules_TESTS3}
          otbChangeDetectionModuleTest
 	 ${INPUTDATA}/GomaAvant.png
@@ -282,7 +282,7 @@ ADD_TEST(moTvSarCalibrationModuleCplxTestRadiomectricDB_WoN ${Modules_TESTS3} ot
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-if(OTB_USE_LIBSVM)
+if(OTBSVMLearning)
 ADD_TEST(moTuSupervisedClassificationModelTest ${Modules_TESTS3}
 otbSupervisedClassificationModelTest)
 
@@ -336,7 +336,7 @@ SET_PROPERTY(TEST moTvSertitProcessingTestXtNonGeoProduct PROPERTY RESOURCE_LOCK
 #----------------------------------------------------------------------------------------------
 
 #------------- Tile Map Import Module Tests ---------------------------
-IF(OTB_USE_CURL)
+IF(OTBCurlAdapters_LOADED)
   ADD_TEST(moTvTileMapImportModuleTest ${Modules_TESTS4} otbTileMapImportModuleTest
   ${TEMP}/tileMapImportModuleTestOutput.tif
   Toulouse
@@ -345,7 +345,7 @@ IF(OTB_USE_CURL)
   15
   )
   SET_PROPERTY(TEST moTvTileMapImportModuleTest PROPERTY RESOURCE_LOCK tile_directory)
-ENDIF(OTB_USE_CURL)
+ENDIF()
 
 #------------- Vectorization Module Tests ---------------------------
 ADD_TEST(vecTvVectorizationModuleTest ${Modules_TESTS4} otbVectorizationModuleTest
@@ -357,7 +357,7 @@ ${INPUTDATA}/DEM/srtm_directory
 SET_TESTS_PROPERTIES(vecTvVectorizationModuleTest PROPERTIES DEPENDS moTvVectorizationClassification)
 
 #-------------  Object Labeling Module
-if(OTB_USE_LIBSVM)
+if(OTBSVMLearning)
 ADD_TEST(moTvObjectLabelingOpenImage4Bands ${Modules_TESTS4} otbObjectLabelingOpenImage
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
@@ -477,13 +477,13 @@ ADD_TEST(moTvImageStatisticsModuleTestVectorImage  ${Modules_TESTS4}
 )
 
 #------------- Rasterization Module Tests ---------------------------
-IF(OTB_USE_MAPNIK)
+IF(OTBMapnik)
 	ADD_TEST(moTvRasterizationImageModuleTest ${Modules_TESTS4} otbRasterizationModuleTest
 	${INPUTDATA}/polygon.tif
 	${INPUTDATA}/Rasterization/polgons.shp
 	${TEMP}/moTvRasterizationImageModule.tif
 	)
-ENDIF(OTB_USE_MAPNIK)
+ENDIF()
 
 
 
@@ -612,11 +612,11 @@ otbSertitProcessingTestNonGeoProduct.cxx
 otbSertitProcessingTestNonGeoProductXT.cxx
 )
 
-IF(OTB_USE_CURL)
+IF(OTBCurlAdapters)
 SET(Modules_SRCS4
   otbTileMapImportModuleTest.cxx
 )
-ENDIF(OTB_USE_CURL)
+ENDIF()
 
 
 
@@ -637,11 +637,11 @@ SET(Modules_SRCS4 ${Modules_SRCS4}
   otbUncompressJpeg2000ModuleTest.cxx
 )
 
-IF(OTB_USE_MAPNIK)
+IF(OTBMapnik)
 SET(Modules_SRCS4 ${Modules_SRCS4}
   otbRasterizationModuleTest.cxx
 )
-ENDIF(OTB_USE_MAPNIK)
+ENDIF()
 
 
 SET(Modules_SRCS5 ${Modules_SRCS5}
@@ -658,7 +658,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             otbObjectCountingApplication.cxx
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
 
 ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
 ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})

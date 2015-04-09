@@ -12,7 +12,7 @@ FILE(GLOB moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/*)
 #the module directory. Of course, this is not a real module and should be
 #removed from the module list
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/CMakeFiles)
-if(NOT OTB_USE_LIBSVM)
+if(NOT OTBSVMLearning_LOADED)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ChangeDetection)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/Classification)
 
@@ -20,7 +20,7 @@ LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectLabeling
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/SupervisedClassification)
 endif()
 
-if (NOT "${OTB_MODULES_ENABLED}" MATCHES "OTBGKSVM")
+if (NOT OTBGKSVM_LOADED)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectCounting)
 endif()
 
@@ -57,7 +57,7 @@ FOREACH(moduleDir ${moduleList})
     # If Module == Tile Map Import Module
     IF(${LIB_NAME} MATCHES "otbTileMapImportModule")
       # Remove modules using curl
-      IF(OTB_USE_CURL)
+      IF(OTBCurlAdapters_LOADED)
         FILE(GLOB SC_SRCS  ${moduleDir}/*.cxx )
         FILE(GLOB SC_GUI_SRCS_TEMP  ${moduleDir}/*.fl )
         SET(SC_GUI_SRCS "")
@@ -96,12 +96,12 @@ FOREACH(moduleDir ${moduleList})
             LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
             ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
         ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
-      ENDIF(OTB_USE_CURL)
-    ELSE(${LIB_NAME} MATCHES "otbTileMapImportModule")
+      ENDIF()
+    else()
       # If Module == Rasterization Module
       IF(${LIB_NAME} MATCHES "otbRasterizationModule")
         # Remove modules using mapnik
-        IF(OTB_USE_MAPNIK)
+        IF(OTBMapnik_LOADED)
           FILE(GLOB SC_SRCS  ${moduleDir}/*.cxx )
           FILE(GLOB SC_GUI_SRCS_TEMP  ${moduleDir}/*.fl )
           SET(SC_GUI_SRCS "")
@@ -140,8 +140,8 @@ FOREACH(moduleDir ${moduleList})
             LIBRARY DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
             ARCHIVE DESTINATION ${Monteverdi_INSTALL_LIB_DIR} COMPONENT Development)
         ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
-      ENDIF(OTB_USE_MAPNIK)
-    ELSE(${LIB_NAME} MATCHES "otbRasterizationModule")
+      ENDIF()
+    else() #${LIB_NAME} MATCHES "otbRasterizationModule"
         FILE(GLOB SC_SRCS  ${moduleDir}/*.cxx )
         FILE(GLOB SC_GUI_SRCS_TEMP  ${moduleDir}/*.fl )
         SET(SC_GUI_SRCS "")
