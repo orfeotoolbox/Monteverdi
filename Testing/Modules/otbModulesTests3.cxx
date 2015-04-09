@@ -23,6 +23,7 @@
 #endif
 #include <iostream>
 #include "otbTestMain.h"
+#include "otbConfigure.h"
 
 void RegisterTests()
 {
@@ -32,11 +33,13 @@ void RegisterTests()
   REGISTER_TEST(otbThresholdModuleTest);
   REGISTER_TEST(otbOpticalCalibrationModuleTest);
   REGISTER_TEST(otbSarCalibrationModuleTest);
+  #ifdef OTB_USE_LIBSVM
   REGISTER_TEST(otbSupervisedClassificationModelTest);
   REGISTER_TEST(otbSupervisedClassificationModelSetImageTest);
   REGISTER_TEST(otbSupervisedClassificationModelSetLabeledImageTest);
   REGISTER_TEST(otbSupervisedClassificationModelSetVectorDataTest);
   REGISTER_TEST(otbSupervisedClassificationModelTrainTest);
+  #endif
   REGISTER_TEST(otbSertitProcessingTest);
   REGISTER_TEST(otbSertitProcessingTestNonGeoProduct);
   REGISTER_TEST(otbSertitProcessingTestNonGeoProductXT);
