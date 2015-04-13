@@ -270,6 +270,11 @@ INCLUDE_DIRECTORIES(
 ${Monteverdi_INCLUDE_DIRS}
 )
 
+set(OTB_USE_CURL FALSE)
+if ("${OTB_MODULES_ENABLED}" MATCHES "OTBCurl")
+set(OTB_USE_CURL TRUE)
+endif()
+
 # Code location
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Utilities)
@@ -372,5 +377,5 @@ if(NOT OTBSVMLearning_LOADED)
 endif()
 
 if(NOT OTBGKSVM_LOADED)
-  message(WARNING "OTB is built without GernicKernel Remote Module. Consequently following modules are deactivated since OTB >=4.5.0 : 'ObjectLabeling'. If you want to activate these modules, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
+  message(WARNING "OTB is built without GenericKernel Remote Module. Consequently following modules are deactivated since OTB >=4.5.0 : 'ObjectLabeling'. If you want to activate these modules, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
 endif()
