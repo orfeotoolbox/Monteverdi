@@ -34,6 +34,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include <fstream>
 
 namespace otb
 {
