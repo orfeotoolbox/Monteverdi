@@ -539,6 +539,8 @@ MonteverdiViewGUI
 
         // Is it a set of scalar bands ?
         if(  it->GetDataType() == "Labeled_Short_Image"
+             || it->GetDataType() == "Labeled_Int_Image"
+             || it->GetDataType() == "Labeled_Char_Image"
              || it->GetDataType() == "Floating_Point_Image" )
           {
           // check if it is a band which belongs to the vector image
@@ -614,7 +616,9 @@ MonteverdiViewGUI
       }
 
     else if ( it->GetDataType() == "Floating_Point_Image"
-            || it->GetDataType() == "Labeled_Short_Image")
+            || it->GetDataType() == "Labeled_Short_Image"
+            || it->GetDataType() == "Labeled_Int_Image"
+            || it->GetDataType() == "Labeled_Char_Image")
       {
       new_node = n->add_branch(it->GetDataKey().c_str());
       new_node->parent()->open(true);

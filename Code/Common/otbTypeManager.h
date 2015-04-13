@@ -55,6 +55,7 @@ public:
 
   // Pixel Types
   typedef Monteverdi_FLOATING_TYPE                     Floating_Point_Precision;
+  typedef unsigned int                                 Label_Int_Precision;
   typedef unsigned short                               Label_Short_Precision;
   typedef unsigned char                                Label_Char_Precision;
   typedef std::complex<Floating_Point_Precision>       Floating_Point_Complex;
@@ -62,6 +63,7 @@ public:
 
   // Single Band Image Types
   typedef otb::Image<Floating_Point_Precision, 2> Floating_Point_Image;
+  typedef otb::Image<Label_Int_Precision, 2>      Labeled_Int_Image;
   typedef otb::Image<Label_Short_Precision, 2>    Labeled_Short_Image;
   typedef otb::Image<Label_Char_Precision, 2>     Labeled_Char_Image;
   typedef otb::Image<Floating_Point_Complex, 2>   Floating_Point_Complex_Image;
