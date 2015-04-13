@@ -45,7 +45,7 @@
 #include "itkLabelImageToLabelMapFilter.h"
 
 // Segmentation Mean shift
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
 
 // Gabor convolution
 #include "otbImageToStdGaborConvolutionFilter.h"
@@ -130,8 +130,8 @@ public:
   typedef VectorDataExtractROIType::RegionType    RemoteSensingRegionType;
   
   // Label Type
-  typedef TypeManager::Label_Short_Precision      LabelType;
-  typedef TypeManager::Labeled_Short_Image        LabeledImageType;
+  typedef TypeManager::Label_Int_Precision        LabelType;
+  typedef TypeManager::Labeled_Int_Image          LabeledImageType;
   typedef LabeledImageType::Pointer               LabeledImagePointerType;
 
   typedef ObjectList<LabeledImageType>            LabeledImageListType;
@@ -152,10 +152,10 @@ public:
     LabelObjectType, PolygonType>                 LabelObject2PolygonFunctorType;
 
   // MeanShift
-  typedef MeanShiftVectorImageFilter<
+  typedef MeanShiftSegmentationFilter<
     VectorImageType,
-    VectorImageType,
-    LabeledImageType>                             MeanShiftVectorImageFilterType;
+    LabeledImageType,
+    VectorImageType>                             MeanShiftVectorImageFilterType;
 
   // Image To Gabor convoluted image
   typedef ImageToStdGaborConvolutionFilter

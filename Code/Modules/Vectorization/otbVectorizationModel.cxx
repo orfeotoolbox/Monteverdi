@@ -540,11 +540,13 @@ VectorizationModel
   stdFilter->SetNumberOfDirection(nbDir);
   stdFilter->SetInitialDirection(firstDir);
   stdFilter->SetPhi(phi/180.0*CONST_PI);
-
+  
   msImageFilter->SetInput(stdFilter->GetOutput());
-  msImageFilter->SetSpatialRadius(spatialRadius);
-  msImageFilter->SetRangeRadius(rangeRadius);
-  msImageFilter->SetMinimumRegionSize(minRegionSize);
+  msImageFilter->SetSpatialBandwidth(spatialRadius);
+  msImageFilter->SetRangeBandwidth(rangeRadius);
+  msImageFilter->SetMinRegionSize(minRegionSize);
+  msImageFilter->SetThreshold(0.1);
+  msImageFilter->SetMaxIterationNumber(100);
   msImageFilter->Update();
 
   // Add the specific text for the segmentation method currently used
@@ -557,7 +559,7 @@ VectorizationModel
      <<std::endl;
   m_AlgorithmsNameList.push_back(os.str());
 
-  return msImageFilter->GetLabeledClusteredOutput();
+  return msImageFilter->GetLabelOutput();
 }
 
 /**
@@ -573,9 +575,11 @@ VectorizationModel
     msImageFilter = MeanShiftVectorImageFilterType::New();
 
   msImageFilter->SetInput(m_ExtractImageFilter->GetOutput());
-  msImageFilter->SetSpatialRadius(spatialRadius);
-  msImageFilter->SetRangeRadius(rangeRadius);
-  msImageFilter->SetMinimumRegionSize(minRegionSize);
+  msImageFilter->SetSpatialBandwidth(spatialRadius);
+  msImageFilter->SetRangeBandwidth(rangeRadius);
+  msImageFilter->SetMinRegionSize(minRegionSize);
+  msImageFilter->SetThreshold(0.1);
+  msImageFilter->SetMaxIterationNumber(100);
   msImageFilter->Update();
 
   // Add the specific text for the segmentation method currently used
@@ -592,7 +596,7 @@ VectorizationModel
            <<rangeRadius<<", minimum region size = "
            <<minRegionSize<<std::endl;
 
-  return msImageFilter->GetLabeledClusteredOutput();
+  return msImageFilter->GetLabelOutput();
 }
 
 
