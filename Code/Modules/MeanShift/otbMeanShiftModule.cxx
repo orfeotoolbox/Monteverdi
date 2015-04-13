@@ -96,22 +96,37 @@ void MeanShiftModule::Notify(const std::string& event)
   if (event == "OutputsUpdated")
     {
     this->ClearOutputDescriptors();
+    
+    // DEBUG
+    std::cout<< "Notify OutputsUpdated" << std::endl;
 
     // Add outputs
     FloatingVectorImageType::Pointer filteredOutput = m_Model->GetOutputFilteredImage();
     if (filteredOutput.IsNotNull()) this->AddOutputDescriptor(filteredOutput, "Filtered Image", "Result of the MeanShift filtering");
 
+    // DEBUG
+    std::cout<< "Filtered done" << std::endl;
+
     FloatingVectorImageType::Pointer clusteredOutput = m_Model->GetOutputClusteredImage();
     if (filteredOutput.IsNotNull()) this->AddOutputDescriptor(clusteredOutput, "Clustered Image", "Result of the MeanShift clustering");
-
+    
+    // DEBUG
+    std::cout<< "Clustered done" << std::endl;
+    
     LabelImageType::Pointer labeledOutput = m_Model->GetOutputLabeledImage();
     if (labeledOutput.IsNotNull()) this->AddOutputDescriptor(labeledOutput, "Labeled Image", "Result of the MeanShift labeling");
 
-    LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
-    if (boundOutput.IsNotNull()) this->AddOutputDescriptor(boundOutput, "Boundaries Image", "Cluster image boundaries");
+    // DEBUG
+    std::cout<< "Labeled done" << std::endl;
+
+    //LabelImageType::Pointer boundOutput = m_Model->GetOutputBoundariesImage();
+    //if (boundOutput.IsNotNull()) this->AddOutputDescriptor(boundOutput, "Boundaries Image", "Cluster image boundaries");
 
     // Send an event to Monteverdi application
     this->NotifyAll(MonteverdiEvent("OutputsUpdated", m_InstanceId));
+    
+    // DEBUG
+    std::cout<< "Notify OutputsUpdated to Monteverdi" << std::endl;
 
     // Once module is closed, it is no longer busy
     this->BusyOff();

@@ -29,9 +29,9 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
 
   // Put in the tests
   const char * infname  = argv[1];
-  const unsigned int spaRad     = atoi(argv[6]);
-  const unsigned int speRad     = atoi(argv[7]);
-  const unsigned int minRegSize = atoi(argv[8]);
+  const unsigned int spaRad     = atoi(argv[5]);
+  const unsigned int speRad     = atoi(argv[6]);
+  const unsigned int minRegSize = atoi(argv[7]);
  
   typedef otb::MeanShiftModule::FloatingVectorImageType  ImageType;
   typedef otb::MeanShiftModule::LabelImageType           LabelImageType;
@@ -63,10 +63,6 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
   Fl::check();
 
   // Simulate display options
-  specificModule->GetView()->mOpacity->value(0.35);
-  specificModule->GetView()->mOpacity->do_callback();
-  specificModule->GetView()->mBoundButton->value(1);
-  specificModule->GetView()->mBoundButton->do_callback();
   specificModule->GetView()->mClustersButton->value(1);
   specificModule->GetView()->mClustersButton->do_callback();
   
@@ -90,11 +86,6 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
   std::cout << "Output wrapper: " << wrapperOut3 << std::endl;
   LabelImageType::Pointer outImage3 = dynamic_cast<LabelImageType *>(wrapperOut3.GetDataObject());
 
-  otb::DataObjectWrapper wrapperOut4 = module->GetOutputByKey("Boundaries Image");
-  std::cout << "Output wrapper: " << wrapperOut4 << std::endl;
-  LabelImageType::Pointer outImage4 = dynamic_cast<LabelImageType *>(wrapperOut4.GetDataObject());
-
-
   //Write the images
   ImageWriterType::Pointer writer1 = ImageWriterType::New();
   writer1->SetFileName(argv[2]);
@@ -110,11 +101,6 @@ int otbMeanShiftModuleTest(int argc, char* argv[])
   writer3->SetFileName(argv[4]);
   writer3->SetInput(outImage3);
   writer3->Update();
-
-  LabelImageWriterType::Pointer writer4 = LabelImageWriterType::New();
-  writer4->SetFileName(argv[5]);
-  writer4->SetInput(outImage4);
-  writer4->Update();
 
   return EXIT_SUCCESS;
 }

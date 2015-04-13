@@ -61,20 +61,10 @@ class MeanShiftModuleViewGroup {open
           callback {SetMinRegionSize(static_cast<unsigned int>(this->mMinRegionSize->value()));}
           tooltip {Set the mean shift minimum region size} xywh {531 441 135 15} type Horizontal box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186 align 1 when 4 minimum 1 maximum 1000 step 1 value 100 textsize 14
         }
-        Fl_Check_Button mBoundButton {
-          label {Display Boundaries}
-          callback {SwitchBoundaries();}
-          xywh {536 469 129 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
-        }
-        Fl_Value_Slider mOpacity {
-          label Opacity
-          callback {SetOpacity(this->mOpacity->value());} selected
-          xywh {559 487 122 15} type Horizontal box PLASTIC_DOWN_BOX color 7 selection_color 7 labelfont 1 labelsize 12 labelcolor 186 align 4 when 4 value 0.5 textsize 14 deactivate
-        }
         Fl_Check_Button mClustersButton {
           label {Display Cluster}
           callback {SwitchClusters();}
-          xywh {548 509 107 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
+          xywh {548 469 107 15} down_box PLASTIC_DOWN_BOX color 7 labelfont 1 labelsize 12 labelcolor 186
         }
         Fl_Button {} {
           label Run
@@ -170,13 +160,9 @@ ViewerSetupOkCallback();}
   } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SetMinRegionSize(unsigned int)} {return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}
-  Function {SwitchBoundaries()} {open return_type {virtual void}
-  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Close()} {open return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~MeanShiftModuleViewGroup()} {open return_type virtual
-  } {comment {for fluid 1.3} {in_source not_in_header}}
-  Function {SetOpacity(double)} {return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetupOkCallback()} {return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}

@@ -12,7 +12,7 @@
 #include "otbImageLayerRenderingModel.h"
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
 
 namespace otb {
 
@@ -39,7 +39,7 @@ public:
   typedef TypeManager::Floating_Point_VectorImage VectorImageType;
   typedef VectorImageType::Pointer                VectorImagePointerType;
 
-  typedef TypeManager::Labeled_Short_Image LabeledImageType;
+  typedef TypeManager::Labeled_Int_Image   LabeledImageType;
   typedef LabeledImageType::Pointer        LabeledImagePointerType;
 
   /** Visualization model */
@@ -55,8 +55,9 @@ public:
 
   /** Mean Shift Vector Image*/
 
-  typedef MeanShiftVectorImageFilter<VectorImageType, VectorImageType, LabeledImageType> MSFilterType;
+  typedef MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType> MSFilterType;
   typedef MSFilterType::Pointer                                                          MSFilterPointerType;
+  typedef MeanShiftSmoothingImageFilter<VectorImageType, VectorImageType> MSSmoothFilterType;
 
   /** New macro */
   itkNewMacro(Self);
@@ -72,7 +73,7 @@ public:
   itkGetObjectMacro(OutputFilteredImage, VectorImageType);
   itkGetObjectMacro(OutputClusteredImage, VectorImageType);
   itkGetObjectMacro(OutputLabeledImage, LabeledImageType);
-  itkGetObjectMacro(OutputBoundariesImage, LabeledImageType);
+  //itkGetObjectMacro(OutputBoundariesImage, LabeledImageType);
 
   itkGetMacro(IsImageReady, bool);
 
@@ -84,13 +85,13 @@ public:
   /** Open an image */
   void RunSegmentationModel();
   void SwitchClusters(bool sc);
-  void SwitchBoundaries(bool sc);
+  //void SwitchBoundaries(bool sc);
 
   void SetSpatialRadius(unsigned int sr);
   void SetSpectralRadius(double sr);
   void SetMinRegionSize(unsigned int mr);
   // change opacity between the image (input or cluster) and the boundaries one
-  void SetOpacity(double op);
+  //void SetOpacity(double op);
   // Change displayed channel order
   void UpdateViewerDisplay(std::vector<unsigned int> ch);
 
@@ -123,10 +124,12 @@ private:
 
   /** MS filter type */
   MSFilterPointerType m_MeanShift;
+  
+  MSSmoothFilterType::Pointer m_MeanShiftSmooth;
 
   LayerGeneratorType::Pointer      m_ImageGenerator;
   LayerGeneratorType::Pointer      m_ClustersGenerator;
-  LabelLayerGeneratorType::Pointer m_BoundariesGenerator;
+  //LabelLayerGeneratorType::Pointer m_BoundariesGenerator;
 
   unsigned int              m_SpatialRadius;
   double                    m_SpectralRadius;
@@ -139,7 +142,7 @@ private:
   VectorImagePointerType  m_OutputFilteredImage;
   VectorImagePointerType  m_OutputClusteredImage;
   LabeledImagePointerType m_OutputLabeledImage;
-  LabeledImagePointerType m_OutputBoundariesImage;
+  //LabeledImagePointerType m_OutputBoundariesImage;
 
 };
 
