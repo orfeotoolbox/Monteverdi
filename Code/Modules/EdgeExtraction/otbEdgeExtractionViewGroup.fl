@@ -40,10 +40,6 @@ class EdgeExtractionViewGroup {open
           label Sobel
           tooltip {Sobel Edge Detector} xywh {50 50 30 20}
         }
-        MenuItem mMSBound {
-          label {Meanshift boundries}
-          tooltip {Sobel Edge Detector} xywh {80 80 30 20}
-        }
         MenuItem mTouzi {
           label Touzi
           tooltip {Touzi Image Filter} xywh {15 15 30 20}
@@ -131,26 +127,6 @@ class EdgeExtractionViewGroup {open
           Fl_Value_Input guiEgdeSobelUpThresh {
             label {Upper Thresh}
             xywh {320 423 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 255
-          }
-        }
-        Fl_Group guiMS {
-          xywh {200 318 246 140} hide
-        } {
-          Fl_Value_Input guiMSSpatial {
-            label {Spatial Radius}
-            xywh {330 335 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 3
-          }
-          Fl_Value_Input guiMSRange {
-            label {Range Radius}
-            xywh {330 365 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 10
-          }
-          Fl_Value_Input guiMSSize {
-            label {Min. Region Size}
-            xywh {330 395 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 10
-          }
-          Fl_Value_Input guiMSScale {
-            label Scale
-            xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
           }
         }
         Fl_Group guiTouzi {

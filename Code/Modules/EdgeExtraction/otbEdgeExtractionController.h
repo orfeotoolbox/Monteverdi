@@ -48,9 +48,6 @@ public:
   /** Standard type macro */
   itkNewMacro(Self);
   
-  /** clear also meanshift features */
-  virtual void ClearFeatures();
-  
   /** Create a specific feature */
   virtual void CreateSpecificFeature(FeatureBaseType featureType);
   

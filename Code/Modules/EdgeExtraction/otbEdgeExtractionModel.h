@@ -24,7 +24,6 @@
 #include "otbHarrisImageFilter.h"
 #include "otbVarianceImageFilter.h"
 #include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
 
 
 namespace otb
@@ -58,9 +57,6 @@ public:
   typedef VarianceImageFilter<SingleImageType, SingleImageType> VarFilterType;
   // Gradient
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<SingleImageType> GradientFilterType;
-  // Mean Shift
-  typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType> MeanShiftFilterType;
-  typedef ObjectList<MeanShiftFilterType>                                              MeanShiftFilterListType;
   // Touzi
   typedef TouziEdgeDetectorImageFilter<SingleImageType, SingleImageType> TouziFilterType;
   
@@ -68,11 +64,7 @@ public:
   void AddVarianceFilter(int radiusX, int radiusY);
   void AddGradientFilter(double sigma);
   void AddEdgeDensityFilter(FeatureType type, std::vector<double> params);
-  void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale);
   void AddTouziFilter(unsigned int radiusX);
-  
-  /** Init mean shift */
-  void InitMeanShiftLists();
   
   /** Get filtered single output image */
   virtual SingleImagePointerType GetSingleImage(int i);
@@ -84,10 +76,6 @@ protected:
   virtual ~EdgeExtractionModel();
 
 private:
-  // For mean shift
-  ImageListObjectListType::Pointer         m_MSImageListList;
-  ImageListToVectorObjectListType::Pointer m_MSListToVectorFilterList;
-  MeanShiftFilterListType::Pointer         m_MeanShiftFilterList;
 
 };
 

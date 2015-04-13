@@ -35,23 +35,6 @@ EdgeExtractionController::~EdgeExtractionController()
 
 void
 EdgeExtractionController
-::ClearFeatures()
-{
-  Superclass::ClearFeatures();
-  
-  try
-    {
-    m_ModelEdge->InitMeanShiftLists();
-    }
-  catch (itk::ExceptionObject& err)
-    {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
-    }
-
-}
-
-void
-EdgeExtractionController
 ::CreateSpecificFeature(FeatureBaseType featureType)
 {
   try
@@ -99,15 +82,6 @@ EdgeExtractionController
         params.push_back(static_cast<double>(m_ViewEdge->m_SpecificGUI->guiEgdeSobelLowThresh->value()));
         params.push_back(static_cast<double>(m_ViewEdge->m_SpecificGUI->guiEgdeSobelUpThresh->value()));
         m_ModelEdge->AddEdgeDensityFilter(featureType, params);
-        break;
-        }
-      case FeatureInfoEdge::MS_BOUND:
-        {
-        unsigned int spatial = static_cast<unsigned int>(m_ViewEdge->m_SpecificGUI->guiMSSpatial->value());
-        double       range = static_cast<double>(m_ViewEdge->m_SpecificGUI->guiMSRange->value());
-        unsigned int minSize = static_cast<unsigned int>(m_ViewEdge->m_SpecificGUI->guiMSSize->value());
-        double       scale = static_cast<double>(m_ViewEdge->m_SpecificGUI->guiMSScale->value());
-        m_ModelEdge->AddMeanShiftFilter(featureType, spatial, range, minSize, scale);
         break;
         }
       case FeatureInfoEdge::TOUZI:
