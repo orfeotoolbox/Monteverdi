@@ -29,6 +29,7 @@ SmoothingModel::SmoothingModel()
   m_MSImageListList          = ImageListObjectListType::New();
   m_MSListToVectorFilterList = ImageListToVectorObjectListType::New();
   m_MeanShiftFilterList      = MeanShiftFilterListType::New();
+  m_MeanShiftSmoothFilterList= MeanShiftSmoothFilterListType::New();
 }
 
 SmoothingModel::~SmoothingModel()
@@ -42,6 +43,7 @@ SmoothingModel
   m_MSImageListList->Clear();
   m_MSListToVectorFilterList->Clear();
   m_MeanShiftFilterList->Clear();
+  m_MeanShiftSmoothFilterList->Clear();
 }
 
 void
@@ -85,7 +87,7 @@ SmoothingModel
 
 void
 SmoothingModel
-::AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale)
+::AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize)
 {
   /*
      Mean shift clustered output is a vector image. We only deals with filter that have image as output.
@@ -96,17 +98,32 @@ SmoothingModel
   unsigned int i = 0;
 
   // if not already exist
-  while (i < m_MeanShiftFilterList->Size() && alreadyLinked == false)
+  if (type == FeatureInfoSmooth::MS_SMOOTH)
     {
-    // check same parameters
-    MeanShiftFilterType::Pointer meanShiftTemp = m_MeanShiftFilterList->GetNthElement(i);
-    unsigned int                 spatialCur = meanShiftTemp->GetSpatialRadius();
-    double                       rangeCur = meanShiftTemp->GetRangeRadius();
-    unsigned int                 minSizeCur = meanShiftTemp->GetMinimumRegionSize();
-    double                       scaleCur = meanShiftTemp->GetScale();
+    while (i < m_MeanShiftSmoothFilterList->Size() && alreadyLinked == false)
+      {
+      // check same parameters
+      MeanShiftSmoothFilterType::Pointer meanShiftTemp = m_MeanShiftSmoothFilterList->GetNthElement(i);
+      unsigned int                 spatialCur = meanShiftTemp->GetSpatialBandwidth();
+      double                       rangeCur = meanShiftTemp->GetRangeBandwidth();
+      
+      if (spatialCur == spatial && rangeCur == range) alreadyLinked = true;
+      i++;
+      }
+    }
+  else if (type == FeatureInfoSmooth::MS_CLUSTERED)
+    {
+    while (i < m_MeanShiftFilterList->Size() && alreadyLinked == false)
+      {
+      // check same parameters
+      MeanShiftFilterType::Pointer meanShiftTemp = m_MeanShiftFilterList->GetNthElement(i);
+      unsigned int                 spatialCur = meanShiftTemp->GetSpatialBandwidth();
+      double                       rangeCur = meanShiftTemp->GetRangeBandwidth();
+      unsigned int                 minSizeCur = meanShiftTemp->GetMinRegionSize();
 
-    if (spatialCur == spatial && rangeCur == range && minSizeCur == minSize && scaleCur == scale) alreadyLinked = true;
-    i++;
+      if (spatialCur == spatial && rangeCur == range && minSizeCur == minSize) alreadyLinked = true;
+      i++;
+      }
     }
 
   if (alreadyLinked == false)
@@ -122,11 +139,27 @@ SmoothingModel
     list2Vec->SetInput(imList);
 
     MeanShiftFilterType::Pointer meanShift = MeanShiftFilterType::New();
-    meanShift->SetInput(list2Vec->GetOutput());
-    meanShift->SetSpatialRadius(spatial);
-    meanShift->SetRangeRadius(range);
-    meanShift->SetMinimumRegionSize(minSize);
-    meanShift->SetScale(scale);
+    MeanShiftSmoothFilterType::Pointer meanShiftSmooth = MeanShiftSmoothFilterType::New();
+    
+    if (type == FeatureInfoSmooth::MS_SMOOTH)
+      {
+      meanShiftSmooth->SetInput(list2Vec->GetOutput());
+      meanShiftSmooth->SetSpatialBandwidth(spatial);
+      meanShiftSmooth->SetRangeBandwidth(range);
+      meanShiftSmooth->SetThreshold(0.1);
+      meanShiftSmooth->SetMaxIterationNumber(100);
+      m_MeanShiftSmoothFilterList->PushBack(meanShiftSmooth);
+      }
+    else if (type == FeatureInfoSmooth::MS_CLUSTERED)
+      {
+      meanShift->SetInput(list2Vec->GetOutput());
+      meanShift->SetSpatialBandwidth(spatial);
+      meanShift->SetRangeBandwidth(range);
+      meanShift->SetMinRegionSize(minSize);
+      meanShift->SetThreshold(0.1);
+      meanShift->SetMaxIterationNumber(100);
+      m_MeanShiftFilterList->PushBack(meanShift);
+      }
 
 //     if (type == FeatureInfoSmooth::MS_SMOOTH ||  type == FeatureInfoSmooth::MS_CLUSTERED)
 //       {
@@ -138,7 +171,7 @@ SmoothingModel
         oss << "Mean Shift ";
         if (type == FeatureInfoSmooth::MS_SMOOTH)
           {
-          extract->SetInput(meanShift->GetOutput());
+          extract->SetInput(meanShiftSmooth->GetOutput());
           oss << "Smooth";
           }
         else if (type == FeatureInfoSmooth::MS_CLUSTERED)
@@ -147,7 +180,7 @@ SmoothingModel
           oss << "Clustered";
           }
         oss << " (Ch." << k + 1 << "): ";
-        oss << spatial << ", " << range << ", " << minSize << ", " << scale;
+        oss << spatial << ", " << range << ", " << minSize;
         std::string mess = oss.str();
         this->AddFeatureFilter(extract, type, -1, 0, mess);
         }
@@ -165,7 +198,6 @@ SmoothingModel
 //       }
     m_MSImageListList->PushBack(imList);
     m_MSListToVectorFilterList->PushBack(list2Vec);
-    m_MeanShiftFilterList->PushBack(meanShift);
     }
   else
     {
@@ -179,7 +211,7 @@ SmoothingModel
         oss << "Mean Shift ";
         if (type == FeatureInfoSmooth::MS_SMOOTH)
           {
-          extract->SetInput(m_MeanShiftFilterList->GetNthElement(i - 1)->GetOutput());
+          extract->SetInput(m_MeanShiftSmoothFilterList->GetNthElement(i - 1)->GetOutput());
           oss << "Smooth";
           }
         else if (type == FeatureInfoSmooth::MS_CLUSTERED)
@@ -188,7 +220,7 @@ SmoothingModel
           oss << "Clustered";
           }
         oss << " (Ch." << k + 1 << "): ";
-        oss << spatial << ", " << range << ", " << minSize << ", " << scale;
+        oss << spatial << ", " << range << ", " << minSize;
         std::string mess = oss.str();
         this->AddFeatureFilter(extract, type, -1, 0, mess);
         }

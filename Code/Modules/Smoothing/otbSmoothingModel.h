@@ -22,7 +22,7 @@
 
 #include "itkMeanImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
 
 namespace otb
 {
@@ -54,12 +54,15 @@ public:
   // Mean
   typedef itk::MeanImageFilter<SingleImageType, SingleImageType> MeanFilterType;
   // Mean Shift
-  typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType> MeanShiftFilterType;
+  typedef MeanShiftSegmentationFilter<InputImageType, SingleImageType, OutputImageType> MeanShiftFilterType;
   typedef ObjectList<MeanShiftFilterType>                                              MeanShiftFilterListType;
+  typedef MeanShiftSmoothingImageFilter<InputImageType, InputImageType> MeanShiftSmoothFilterType;
+  typedef ObjectList<MeanShiftSmoothFilterType>                         MeanShiftSmoothFilterListType;
+  
   
   void AddOriginalData();
   void AddMeanFilter(int radiusX, int radiusY);
-  void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale);
+  void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize);
   
   /** Init mean shift */
   void InitMeanShiftLists();
@@ -78,6 +81,7 @@ private:
   ImageListObjectListType::Pointer         m_MSImageListList;
   ImageListToVectorObjectListType::Pointer m_MSListToVectorFilterList;
   MeanShiftFilterListType::Pointer         m_MeanShiftFilterList;
+  MeanShiftSmoothFilterListType::Pointer   m_MeanShiftSmoothFilterList;
 
 };
 

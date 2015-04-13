@@ -74,8 +74,7 @@ SmoothingController
         unsigned int spatial = static_cast<unsigned int>(m_ViewSmooth->m_SpecificGUI->guiMSSpatial->value());
         double       range = static_cast<double>(m_ViewSmooth->m_SpecificGUI->guiMSRange->value());
         unsigned int minSize = static_cast<unsigned int>(m_ViewSmooth->m_SpecificGUI->guiMSSize->value());
-        double       scale = static_cast<double>(m_ViewSmooth->m_SpecificGUI->guiMSScale->value());
-        m_ModelSmooth->AddMeanShiftFilter(featureType, spatial, range, minSize, scale);
+        m_ModelSmooth->AddMeanShiftFilter(featureType, spatial, range, minSize);
         break;
         }
       case FeatureInfoSmooth::ORIGINAL:
