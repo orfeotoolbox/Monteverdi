@@ -122,10 +122,10 @@ MeanShiftModuleController
     {
     m_Model->RunSegmentationModel();
 
-    //if (m_View->mBoundButton->value() != 0)
-    //  {
-    //  m_Model->SwitchBoundaries(true);
-    //  }
+    if (m_View->mBoundButton->value() != 0)
+      {
+      m_Model->SwitchBoundaries(true);
+      }
     }
   catch (itk::ExceptionObject& err)
     {
@@ -147,7 +147,7 @@ MeanShiftModuleController
     }
 }
 
-/* void
+void
 MeanShiftModuleController
 ::SetOpacity(double op)
 {
@@ -165,7 +165,7 @@ MeanShiftModuleController
     MsgReporter::GetInstance()->SendError(e.what());
     return;
     }
-} */
+}
 
 void
 MeanShiftModuleController
@@ -187,7 +187,7 @@ MeanShiftModuleController
     }
 }
 
-/* void
+void
 MeanShiftModuleController
 ::SwitchBoundaries(bool sb)
 {
@@ -205,7 +205,7 @@ MeanShiftModuleController
     MsgReporter::GetInstance()->SendError(e.what());
     return;
     }
-} */
+}
 
 void
 MeanShiftModuleController

@@ -68,11 +68,11 @@ public:
   /** User action */
   virtual void RunSegmentation();
   virtual void SwitchClusters(bool sc);
-  //virtual void SwitchBoundaries(bool sb);
+  virtual void SwitchBoundaries(bool sb);
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(double sr);
   virtual void SetMinRegionSize(unsigned int mr);
-  //virtual void SetOpacity(double op);
+  virtual void SetOpacity(double op);
   virtual void UpdateViewerDisplay();
 
   virtual void SetInputImage(MeanShiftModuleModel::VectorImageType* image)

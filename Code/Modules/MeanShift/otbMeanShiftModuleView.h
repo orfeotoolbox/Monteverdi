@@ -41,11 +41,11 @@ public:
   virtual void Exit();
   virtual void RunSegmentation();
   virtual void SwitchClusters();
-  //virtual void SwitchBoundaries();
+  virtual void SwitchBoundaries();
   virtual void SetSpatialRadius(unsigned int sr);
   virtual void SetSpectralRadius(double sr);
   virtual void SetMinRegionSize(unsigned int mr);
-  //virtual void SetOpacity(double op);
+  virtual void SetOpacity(double op);
   virtual void ViewerSetupOkCallback();
 
   void Show();

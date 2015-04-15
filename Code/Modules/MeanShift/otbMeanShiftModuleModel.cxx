@@ -16,13 +16,16 @@ MeanShiftModuleModel::MeanShiftModuleModel()
   m_MeanShiftSmooth->SetThreshold(0.1);
   m_MeanShiftSmooth->SetMaxIterationNumber(100);
   
-  //m_BlendingFunction = BlendingFunctionType::New();
+  m_BoundaryExtractor = BoundaryExtractorType::New();
+  m_BoundaryExtractor->SetRadius(1);
+  
+  m_BlendingFunction = BlendingFunctionType::New();
 
-  //m_BlendingFunction->SetAlpha(0.6);
+  m_BlendingFunction->SetAlpha(0.6);
 
   m_ImageGenerator = LayerGeneratorType::New();
   m_ClustersGenerator = LayerGeneratorType::New();
-  //m_BoundariesGenerator = LabelLayerGeneratorType::New();
+  m_BoundariesGenerator = LabelLayerGeneratorType::New();
   m_InputImage = VectorImageType::New();
 
   m_IsUpdating = false;
@@ -116,20 +119,21 @@ MeanShiftModuleModel
     m_ClustersGenerator->GenerateQuicklookOff();
     m_ClustersGenerator->GenerateLayer();
 
-    //m_BoundariesGenerator->SetImage(m_MeanShift->GetClusterBoundariesOutput());
-    //m_BoundariesGenerator->GenerateQuicklookOff();
-    //m_BoundariesGenerator->GenerateLayer();
+    m_BoundaryExtractor->SetInput(m_MeanShift->GetLabelOutput());
+    m_BoundariesGenerator->SetImage(m_BoundaryExtractor->GetOutput());
+    m_BoundariesGenerator->GenerateQuicklookOff();
+    m_BoundariesGenerator->GenerateLayer();
 
     m_ClustersGenerator->GetLayer()->GetRenderingFunction()->SetChannelList(m_Channels);
 
     m_ClustersGenerator->GetLayer()->SetName("Segmentation");
     m_ClustersGenerator->GetLayer()->SetVisible(false);
 
-    //m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
-    //m_BoundariesGenerator->GetLayer()->SetVisible(false);
+    m_BoundariesGenerator->GetLayer()->SetName("Boundaries");
+    m_BoundariesGenerator->GetLayer()->SetVisible(false);
 
     m_VisualizationModel->AddLayer(m_ClustersGenerator->GetLayer());
-    //m_VisualizationModel->AddLayer(m_BoundariesGenerator->GetLayer());
+    m_VisualizationModel->AddLayer(m_BoundariesGenerator->GetLayer());
 
     m_VisualizationModel->Update();
 
@@ -163,7 +167,7 @@ MeanShiftModuleModel
   m_ShowingResult = false;
 }
 
-/* void
+void
 MeanShiftModuleModel
 ::SwitchBoundaries(bool sb)
 {
@@ -193,7 +197,7 @@ MeanShiftModuleModel
   m_ShowingResult = true;
   m_VisualizationModel->Update();
   m_ShowingResult = false;
-} */
+}
 
 void
 MeanShiftModuleModel
@@ -236,7 +240,7 @@ MeanShiftModuleModel
     m_OutputFilteredImage = m_MeanShiftSmooth->GetOutput();
     m_OutputClusteredImage = m_MeanShift->GetClusteredOutput();
     m_OutputLabeledImage = m_MeanShift->GetLabelOutput();
-    //m_OutputBoundariesImage = m_MeanShift->GetClusterBoundariesOutput();
+    m_OutputBoundariesImage = m_BoundaryExtractor->GetOutput();
     this->NotifyAll("OutputsUpdated");
     }
   else
@@ -244,7 +248,7 @@ MeanShiftModuleModel
     m_OutputFilteredImage = 0;
     m_OutputClusteredImage = 0;
     m_OutputLabeledImage = 0;
-    //m_OutputBoundariesImage = 0;
+    m_OutputBoundariesImage = 0;
     }
 
   this->NotifyAll("BusyOff");

@@ -136,7 +136,7 @@ void MeanShiftModuleView::SwitchClusters()
   m_Controller->SwitchClusters(static_cast<bool>(this->mClustersButton->value()));
 }
 
-/* void MeanShiftModuleView::SwitchBoundaries()
+void MeanShiftModuleView::SwitchBoundaries()
 {
   bool val = true;
   if (mBoundButton->value() == 0)
@@ -150,12 +150,12 @@ void MeanShiftModuleView::SwitchClusters()
     }
 
   m_Controller->SwitchBoundaries(val);
-} */
+}
 
-/* void MeanShiftModuleView::SetOpacity(double op)
+void MeanShiftModuleView::SetOpacity(double op)
 {
   m_Controller->SetOpacity(op);
-} */
+}
 
 /**
  * Update the viewer setup window
