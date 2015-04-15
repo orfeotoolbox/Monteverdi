@@ -113,6 +113,7 @@ public:
   typedef TypeManager::Floating_Point_VectorImage   ImageType;
   typedef TypeManager::Vector_Data                  VectorDataType;
   typedef TypeManager::Labeled_Short_Image          LabeledImageType;
+  typedef TypeManager::Labeled_Int_Image            LabeledIntImageType;
   typedef TypeManager::FloatImageWithQuicklook      FloatImageWithQuicklook;
 
   /** WidgetManager related types definition */
@@ -222,6 +223,8 @@ public:
   /** Cast LabeledImage to VectorImageType*/
   typedef ImageToVectorImageCastFilter<LabeledImageType, ImageType>    CastLabeledImageFilter;
 
+  /** Cast LabeledIntImage to VectorImageType*/
+  typedef ImageToVectorImageCastFilter<LabeledIntImageType, ImageType> CastLabeledIntImageFilter;
 
   /** VectorData ObjectList*/
   typedef ObjectList<VectorDataType>                 VectorDataListType;
@@ -232,6 +235,7 @@ public:
   typedef ObjectList<RenderingFunctionType>          RenderingFunctionListType;
   typedef ObjectList<CastSingleImageFilter>          CastFilterListType;
   typedef ObjectList<CastLabeledImageFilter>         LabeledCastFilterListType;
+  typedef ObjectList<CastLabeledIntImageFilter>      LabeledIntCastFilterListType;
 
   /** Screen shot typedefs */
   typedef ScalarBufferToImageFileWriter<unsigned char, unsigned char> ScreenShotFilterType;
@@ -431,7 +435,7 @@ private:
   // Cast Filter
   CastFilterListType::Pointer              m_CastFilterList;
   LabeledCastFilterListType::Pointer       m_LabeledCastFilterList;
-
+  LabeledIntCastFilterListType::Pointer    m_LabeledIntCastFilterList;
 
   // Labels
   std::string                              m_DisplayedLabel;

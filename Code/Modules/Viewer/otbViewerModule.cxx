@@ -197,6 +197,9 @@ ViewerModule::ViewerModule() :
   // Instanciation of the LabeledImage To VectorImage filter list
   m_LabeledCastFilterList = LabeledCastFilterListType::New();
 
+  // Instanciation of the LabeledIntImage To VectorImage filter list
+  m_LabeledIntCastFilterList = LabeledIntCastFilterListType::New();
+
   // Data List Instance
   m_VectorDataList = VectorDataListType::New();
   m_InputImageList = ImageListType::New();
@@ -206,6 +209,7 @@ ViewerModule::ViewerModule() :
   this->AddInputDescriptor<ImageType> ("InputImage", "Image to display", false, true);
   this->AddTypeToInputDescriptor<SingleImageType> ("InputImage");
   this->AddTypeToInputDescriptor<LabeledImageType> ("InputImage");
+  this->AddTypeToInputDescriptor<LabeledIntImageType> ("InputImage");
   this->AddTypeToInputDescriptor<FloatImageWithQuicklook> ("InputImage");
   this->AddInputDescriptor<VectorDataType> ("VectorData", "Vector data to display", true, true);
 
@@ -285,6 +289,19 @@ void ViewerModule::Run()
 
         // Get the description
         desc = this->GetInputDataDescription<LabeledImageType> ("InputImage", i);
+        }
+
+      LabeledIntImageType::Pointer labeledIntImage = this->GetInputData<LabeledIntImageType> ("InputImage", i);
+      if (labeledIntImage.IsNotNull())
+        {
+        CastLabeledIntImageFilter::Pointer labeledIntCastFilter = CastLabeledIntImageFilter::New();
+        m_LabeledIntCastFilterList->PushBack(labeledIntCastFilter);
+
+        labeledIntCastFilter->SetInput(labeledIntImage);
+        image = labeledIntCastFilter->GetOutput();
+
+        // Get the description
+        desc = this->GetInputDataDescription<LabeledIntImageType> ("InputImage", i);
         }
 
       if (imageQL.IsNotNull())
