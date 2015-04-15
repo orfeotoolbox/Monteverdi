@@ -403,6 +403,7 @@ ${INPUTDATA}/ExtrZoneNuageuse.tif
 ${TEMP}/moTvMeanShiftModuleOutput1.tif
 ${TEMP}/moTvMeanShiftModuleOutput2.tif
 ${TEMP}/moTvMeanShiftModuleOutput3.tif
+${TEMP}/moTvMeanShiftModuleOutput4.tif
 10
 30
 290
