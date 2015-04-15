@@ -39,6 +39,7 @@ EdgeExtractionViewGUI::EdgeExtractionViewGUI()
   guiParameter->add(m_SpecificGUI->guiRadius);
   guiParameter->add(m_SpecificGUI->guiGrad);
   guiParameter->add(m_SpecificGUI->guiEdgeSobel);
+  guiParameter->add(m_SpecificGUI->guiMS); //5
   guiParameter->add(m_SpecificGUI->guiEdgeCanny);
   guiParameter->add(m_SpecificGUI->guiTouzi);
 
@@ -61,7 +62,8 @@ EdgeExtractionViewGUI::EdgeExtractionViewGUI()
   otbMenuItemCallbackMacro(mVariance, otb::FeatureInfoEdge::VARIANCE, 2);
   otbMenuItemCallbackMacro(mGradient, otb::FeatureInfoEdge::GRADIENT, 3);
   otbMenuItemCallbackMacro(mSobel, otb::FeatureInfoEdge::EDGE_SOBEL, 4);
-  otbMenuItemCallbackMacro(mTouzi, otb::FeatureInfoEdge::TOUZI, 5);
+  otbMenuItemCallbackMacro(mMSBound, otb::FeatureInfoEdge::MS_BOUND, 5);
+  otbMenuItemCallbackMacro(mTouzi, otb::FeatureInfoEdge::TOUZI, 6);
 #undef otbMenuItemCallbackMacro
   
 }
@@ -89,6 +91,7 @@ void EdgeExtractionViewGUI::InitParameterGroupList()
   m_ParameterGroupList.push_back(m_SpecificGUI->guiRadius);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiGrad);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiEdgeSobel);
+  m_ParameterGroupList.push_back(m_SpecificGUI->guiMS);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiEdgeCanny);
   m_ParameterGroupList.push_back(m_SpecificGUI->guiTouzi);
 }

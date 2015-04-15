@@ -37,6 +37,7 @@ public:
     HARRIS,
     EDGE_CANNY,
     EDGE_SOBEL,
+    MS_BOUND,
     TOUZI
     } FeatureType;
 
@@ -49,6 +50,7 @@ public:
     m_MapInfo.insert(std::pair<FeatureType, std::string>(GRADIENT, "Recursive gradient magnitude image filter"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(EDGE_SOBEL, "Edge density filter (with Sobel edge detector)"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(EDGE_CANNY, "Edge density filter (with Canny edge detector)"));
+    m_MapInfo.insert(std::pair<FeatureType, std::string>(MS_BOUND, "Mean shift cluster boundaries image"));
     m_MapInfo.insert(std::pair<FeatureType, std::string>(TOUZI, "Touzi image filter"));
   }
 
