@@ -43,7 +43,9 @@ See OTBCopyright.txt for details.
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
+#include "otbMSBoundaryFunctor.h"
+#include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkConnectedComponentImageFilter.h"
 #include "itkRelabelComponentImageFilter.h"
@@ -178,10 +180,17 @@ public:
   typedef ThresholdFilterType::Pointer                                           ThresholdFilterPointerType;
   typedef itk::IntensityWindowingImageFilter<SingleImageType, SingleImageType>   RescaleFilterType;
   typedef RescaleFilterType::Pointer                                             RescaleFilterPointerType;
-  typedef MeanShiftVectorImageFilter<ImageType, ImageType>                       MeanShiftFilterType;
-  typedef MeanShiftFilterType::LabeledOutputType                                 MSLabeledImageType;
+  typedef TypeManager::Labeled_Int_Image                                         MSLabeledImageType;
+  typedef MeanShiftSegmentationFilter<ImageType, MSLabeledImageType, ImageType>  MeanShiftFilterType;
   typedef MSLabeledImageType::PixelType                                          MSLabeledPixelType;
   typedef MeanShiftFilterType::Pointer                                           MeanShiftFilterPointerType;
+  typedef MeanShiftSmoothingImageFilter<ImageType, ImageType>                    MeanShiftSmoothFilterType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<
+    MSLabeledImageType,
+    MSLabeledImageType,
+    otb::Functor::MSBoundaryFunctor<
+      itk::ConstNeighborhoodIterator<MSLabeledImageType>,
+      MSLabeledPixelType > >                  BoundaryExtractorType;
   typedef itk::ChangeLabelImageFilter<IntLabeledImageType, LabeledImageType>     ChangeLabelImageFilterType;
   typedef ChangeLabelImageFilterType::Pointer                                    ChangeLabelImageFilterPointerType;
   typedef ClassifBoundaryFunctor<LabelPixelType, LabelPixelType, LabelPixelType> ClassifBoundaryFunctorType;
@@ -381,10 +390,12 @@ private:
   unsigned int m_SpatialRadius;
   /** Mean Shift Range Radius value */
   unsigned int m_RangeRadius;
-  /** Mean Shift Scale */
-  unsigned int m_Scale;
   /** Mean Shift Minimum Size Region value */
   unsigned int m_MinRegionSize;
+  /** Boundary extractor */
+  BoundaryExtractorType::Pointer m_BoundaryExtractor;
+  /** Smoothing filter */
+  MeanShiftSmoothFilterType::Pointer m_MSSmoothingFilter;
 
   /** Store output extract chain */
   LabeledImageType::Pointer m_ExtractOutputImage;

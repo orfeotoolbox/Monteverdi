@@ -65,7 +65,6 @@ ObjectCountingModel::ObjectCountingModel()
   m_ThresholdValue        = 0.95;
   m_SpatialRadius         = 5;
   m_RangeRadius           = 80;
-  m_Scale                 = 1;
   m_MinRegionSize         = 10;
   m_NuParameter           = 0.01;
 
@@ -104,6 +103,8 @@ ObjectCountingModel
   m_Classifier            = ClassifierType::New();
   m_Thresholder           = ThresholdFilterType::New();
   m_MeanShiftFilter       = MeanShiftFilterType::New();
+  m_BoundaryExtractor     = BoundaryExtractorType::New();
+  m_MSSmoothingFilter     = MeanShiftSmoothFilterType::New();
   m_ClassifOutputImage    = LabeledImageType::New();
   m_ChangeLabelFilter     = ChangeLabelImageFilterType::New();
   m_ExtractOutputImage    = LabeledImageType::New();
@@ -133,6 +134,13 @@ ObjectCountingModel
   m_RelabelFilter->SetInput(m_ConnectedFilter->GetOutput());
   m_PersistentVectorizationFilter->SetInput(m_RelabelFilter->GetOutput());
   //std::cout << "init filter ok" << std::endl;
+  
+  m_MeanShiftFilter->SetThreshold(0.1);
+  m_MeanShiftFilter->SetMaxIterationNumber(100);
+  m_MSSmoothingFilter->SetThreshold(0.1);
+  m_MSSmoothingFilter->SetMaxIterationNumber(100);
+
+  m_BoundaryExtractor->SetRadius(1);
 }
 
 void
@@ -558,7 +566,7 @@ ObjectCountingModel
 {
   m_Classifier->SetModel(m_Model);
 
-  if (m_UseSmoothing == true) m_Classifier->SetInput(m_MeanShiftFilter->GetOutput());
+  if (m_UseSmoothing == true) m_Classifier->SetInput(m_MSSmoothingFilter->GetOutput());
   else if (m_WhichImage == EXTRACT) m_Classifier->SetInput(m_ExtractedImage);
   else m_Classifier->SetInput(m_InputImage);
 
@@ -579,9 +587,9 @@ ObjectCountingModel
   itk::ImageRegionIteratorWithIndex<ImageType> it;
   if (m_UseSmoothing == true)
     {
-    m_MeanShiftFilter->Update();
-    it = itk::ImageRegionIteratorWithIndex<ImageType>(m_MeanShiftFilter->GetOutput(),
-                                                      m_MeanShiftFilter->GetOutput()->GetLargestPossibleRegion());
+    m_MSSmoothingFilter->Update();
+    it = itk::ImageRegionIteratorWithIndex<ImageType>(m_MSSmoothingFilter->GetOutput(),
+                                                      m_MSSmoothingFilter->GetOutput()->GetLargestPossibleRegion());
     }
   else it = itk::ImageRegionIteratorWithIndex<ImageType>(m_ExtractedImage, m_ExtractedImage->GetLargestPossibleRegion());
 
@@ -627,9 +635,9 @@ ObjectCountingModel
   itk::ImageRegionIteratorWithIndex<ImageType> itIm;
   if (m_RefPixelSmoothedImage == true)
     {
-    m_MeanShiftFilter->Update();
-    itIm = itk::ImageRegionIteratorWithIndex<ImageType>(m_MeanShiftFilter->GetOutput(),
-                                                        m_MeanShiftFilter->GetOutput()->GetLargestPossibleRegion());
+    m_MSSmoothingFilter->Update();
+    itIm = itk::ImageRegionIteratorWithIndex<ImageType>(m_MSSmoothingFilter->GetOutput(),
+                                                        m_MSSmoothingFilter->GetOutput()->GetLargestPossibleRegion());
     }
   else itIm = itk::ImageRegionIteratorWithIndex<ImageType>(m_ExtractedImage, m_ExtractedImage->GetLargestPossibleRegion());
 
@@ -673,7 +681,7 @@ ObjectCountingModel
   if (m_UseSmoothing == true)
     {
     // Update reference pixel with cluster image values
-    m_SpectralAngleFilter->SetInput(m_MeanShiftFilter->GetOutput());
+    m_SpectralAngleFilter->SetInput(m_MSSmoothingFilter->GetOutput());
     }
   if (m_WhichImage == FULL_IMAGE) m_SpectralAngleFilter->SetInput(m_InputImage);
   else m_SpectralAngleFilter->SetInput(m_ExtractedImage);
@@ -689,12 +697,18 @@ ObjectCountingModel
   if (m_WhichImage == FULL_IMAGE) m_MeanShiftFilter->SetInput(m_InputImage);
   else m_MeanShiftFilter->SetInput(m_ExtractedImage);
 
-  m_MeanShiftFilter->SetSpatialRadius(m_SpatialRadius);
-  m_MeanShiftFilter->SetRangeRadius(m_RangeRadius);
-  m_MeanShiftFilter->SetScale(m_Scale);
-  m_MeanShiftFilter->SetMinimumRegionSize(m_MinRegionSize);
+  m_MeanShiftFilter->SetSpatialBandwidth(m_SpatialRadius);
+  m_MeanShiftFilter->SetRangeBandwidth(m_RangeRadius);
+  m_MeanShiftFilter->SetMinRegionSize(m_MinRegionSize);
 
-  //m_MeanShiftFilter->Update();
+  m_BoundaryExtractor->SetInput(m_MeanShiftFilter->GetLabelOutput());
+  
+  if (m_WhichImage == FULL_IMAGE) m_MSSmoothingFilter->SetInput(m_InputImage);
+  else m_MSSmoothingFilter->SetInput(m_ExtractedImage);
+
+  m_MSSmoothingFilter->SetSpatialBandwidth(m_SpatialRadius);
+  m_MSSmoothingFilter->SetRangeBandwidth(m_RangeRadius);
+  m_MSSmoothingFilter->SetMinRegionSize(m_MinRegionSize);
 }
 
 void
@@ -702,7 +716,7 @@ ObjectCountingModel
 ::FuseData()
 {
   m_ClassifBoundaryFilter->SetInput1(m_ClassifOutputImage);
-  m_ClassifBoundaryFilter->SetInput2(m_MeanShiftFilter->GetClusterBoundariesOutput());
+  m_ClassifBoundaryFilter->SetInput2(m_BoundaryExtractor->GetOutput());
 
 }
 
