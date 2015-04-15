@@ -24,7 +24,10 @@
 #include "otbHarrisImageFilter.h"
 #include "otbVarianceImageFilter.h"
 #include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
-#include "otbMeanShiftVectorImageFilter.h"
+#include "otbMeanShiftSegmentationFilter.h"
+#include "otbMSBoundaryFunctor.h"
+#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+
 
 
 namespace otb
@@ -59,8 +62,17 @@ public:
   // Gradient
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<SingleImageType> GradientFilterType;
   // Mean Shift
-  typedef MeanShiftVectorImageFilter<InputImageType, OutputImageType, SingleImageType> MeanShiftFilterType;
+  typedef TypeManager::Labeled_Int_Image   LabeledImageType;
+  typedef MeanShiftSegmentationFilter<InputImageType, LabeledImageType, OutputImageType> MeanShiftFilterType;
   typedef ObjectList<MeanShiftFilterType>                                              MeanShiftFilterListType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<
+    LabeledImageType,
+    SingleImageType,
+    otb::Functor::MSBoundaryFunctor<
+      itk::ConstNeighborhoodIterator<LabeledImageType>,
+      SingleImageType::PixelType > >                   BoundaryExtractorType;
+  typedef ObjectList<BoundaryExtractorType>            BoundaryExtractorListType;
+  
   // Touzi
   typedef TouziEdgeDetectorImageFilter<SingleImageType, SingleImageType> TouziFilterType;
   
@@ -68,7 +80,7 @@ public:
   void AddVarianceFilter(int radiusX, int radiusY);
   void AddGradientFilter(double sigma);
   void AddEdgeDensityFilter(FeatureType type, std::vector<double> params);
-  void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale);
+  void AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize);
   void AddTouziFilter(unsigned int radiusX);
   
   /** Init mean shift */
@@ -88,6 +100,7 @@ private:
   ImageListObjectListType::Pointer         m_MSImageListList;
   ImageListToVectorObjectListType::Pointer m_MSListToVectorFilterList;
   MeanShiftFilterListType::Pointer         m_MeanShiftFilterList;
+  BoundaryExtractorListType::Pointer       m_BoundaryExtractorList;
 
 };
 

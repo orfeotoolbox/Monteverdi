@@ -148,10 +148,6 @@ class EdgeExtractionViewGroup {open
             label {Min. Region Size}
             xywh {330 395 110 18} box PLASTIC_DOWN_BOX labelcolor 32 maximum 1e+06 step 1 value 10
           }
-          Fl_Value_Input guiMSScale {
-            label Scale
-            xywh {330 425 110 18} box PLASTIC_DOWN_BOX labelcolor 32 minimum -1e+06 maximum 1e+06 step 0.5 value 50
-          }
         }
         Fl_Group guiTouzi {
           xywh {200 318 246 140} hide

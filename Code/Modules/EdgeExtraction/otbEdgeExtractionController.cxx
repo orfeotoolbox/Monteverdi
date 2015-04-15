@@ -106,8 +106,7 @@ EdgeExtractionController
         unsigned int spatial = static_cast<unsigned int>(m_ViewEdge->m_SpecificGUI->guiMSSpatial->value());
         double       range = static_cast<double>(m_ViewEdge->m_SpecificGUI->guiMSRange->value());
         unsigned int minSize = static_cast<unsigned int>(m_ViewEdge->m_SpecificGUI->guiMSSize->value());
-        double       scale = static_cast<double>(m_ViewEdge->m_SpecificGUI->guiMSScale->value());
-        m_ModelEdge->AddMeanShiftFilter(featureType, spatial, range, minSize, scale);
+        m_ModelEdge->AddMeanShiftFilter(featureType, spatial, range, minSize);
         break;
         }
       case FeatureInfoEdge::TOUZI:

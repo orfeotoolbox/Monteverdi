@@ -30,6 +30,7 @@ EdgeExtractionModel::EdgeExtractionModel()
   m_MSImageListList          = ImageListObjectListType::New();
   m_MSListToVectorFilterList = ImageListToVectorObjectListType::New();
   m_MeanShiftFilterList      = MeanShiftFilterListType::New();
+  m_BoundaryExtractorList    = BoundaryExtractorListType::New();
 }
 
 EdgeExtractionModel::~EdgeExtractionModel()
@@ -103,7 +104,7 @@ EdgeExtractionModel
 
 void
 EdgeExtractionModel
-::AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize, double scale)
+::AddMeanShiftFilter(FeatureType type, unsigned int spatial, double range, unsigned int minSize)
 {
   /*
      Mean shift clustered output is a vector image. We only deals with filter that have image as output.
@@ -118,12 +119,11 @@ EdgeExtractionModel
     {
     // check same parameters
     MeanShiftFilterType::Pointer meanShiftTemp = m_MeanShiftFilterList->GetNthElement(i);
-    unsigned int                 spatialCur = meanShiftTemp->GetSpatialRadius();
-    double                       rangeCur = meanShiftTemp->GetRangeRadius();
-    unsigned int                 minSizeCur = meanShiftTemp->GetMinimumRegionSize();
-    double                       scaleCur = meanShiftTemp->GetScale();
+    unsigned int                 spatialCur = meanShiftTemp->GetSpatialBandwidth();
+    double                       rangeCur = meanShiftTemp->GetRangeBandwidth();
+    unsigned int                 minSizeCur = meanShiftTemp->GetMinRegionSize();
 
-    if (spatialCur == spatial && rangeCur == range && minSizeCur == minSize && scaleCur == scale) alreadyLinked = true;
+    if (spatialCur == spatial && rangeCur == range && minSizeCur == minSize) alreadyLinked = true;
     i++;
     }
 
@@ -141,10 +141,15 @@ EdgeExtractionModel
 
     MeanShiftFilterType::Pointer meanShift = MeanShiftFilterType::New();
     meanShift->SetInput(list2Vec->GetOutput());
-    meanShift->SetSpatialRadius(spatial);
-    meanShift->SetRangeRadius(range);
-    meanShift->SetMinimumRegionSize(minSize);
-    meanShift->SetScale(scale);
+    meanShift->SetSpatialBandwidth(spatial);
+    meanShift->SetRangeBandwidth(range);
+    meanShift->SetMinRegionSize(minSize);
+    meanShift->SetThreshold(0.1);
+    meanShift->SetMaxIterationNumber(100);
+    
+    BoundaryExtractorType::Pointer boundary = BoundaryExtractorType::New();
+    boundary->SetRadius(1);
+    boundary->SetInput(meanShift->GetLabelOutput());
 
 //     if (type == FeatureInfoEdge::MS_SMOOTH ||  type == FeatureInfoEdge::MS_CLUSTERED)
 //       {
@@ -176,14 +181,15 @@ EdgeExtractionModel
       oss << "Mean Shift Clustered Boundries: ";
 //       if (type == FeatureInfoEdge::MS_BOUND) oss << "Clustered Boundries: ";
 //       else if (type == FeatureInfoEdge::MS_LABELED) oss << "Labeled: ";
-      oss << spatial << ", " << range << ", " << minSize << ", " << scale;
+      oss << spatial << ", " << range << ", " << minSize;
       std::string mess = oss.str();
 
-      this->AddFeatureFilter(meanShift, type, -1, 0, mess);
+      this->AddFeatureFilter(boundary, type, -1, 0, mess);
 //       }
     m_MSImageListList->PushBack(imList);
     m_MSListToVectorFilterList->PushBack(list2Vec);
     m_MeanShiftFilterList->PushBack(meanShift);
+    m_BoundaryExtractorList->PushBack(boundary);
     }
   else
     {
@@ -217,10 +223,10 @@ EdgeExtractionModel
       oss << "Mean Shift Clustered Boundries: ";
 //       if (type == FeatureInfoEdge::MS_LABELED) oss << "Labeled: ";
 //       else if (type == FeatureInfoEdge::MS_BOUND) oss << "Clustered Boundries: ";
-      oss << spatial << ", " << range << ", " << minSize << ", " << scale;
+      oss << spatial << ", " << range << ", " << minSize;
       std::string mess = oss.str();
 
-      this->AddFeatureFilter(m_MeanShiftFilterList->GetNthElement(i - 1), type, -1, 0, mess);
+      this->AddFeatureFilter(m_BoundaryExtractorList->GetNthElement(i - 1), type, -1, 0, mess);
 //       }
     }
 }
@@ -253,6 +259,7 @@ EdgeExtractionModel
   m_MSImageListList->Clear();
   m_MSListToVectorFilterList->Clear();
   m_MeanShiftFilterList->Clear();
+  m_BoundaryExtractorList->Clear();
 }
 
 EdgeExtractionModel
@@ -292,9 +299,9 @@ EdgeExtractionModel
       }
     case FeatureInfoEdge::MS_BOUND:
       {
-      MeanShiftFilterType::Pointer meanShift =
-        dynamic_cast<MeanShiftFilterType*>(static_cast<FilterType *>((GetFilterList())->GetNthElement(i)));
-      image = meanShift->GetClusterBoundariesOutput();
+      BoundaryExtractorType::Pointer boundary =
+        dynamic_cast<BoundaryExtractorType*>(static_cast<FilterType *>((GetFilterList())->GetNthElement(i)));
+      image = boundary->GetOutput();
       break;
       }
     case FeatureInfoEdge::TOUZI:
