@@ -25,9 +25,7 @@
 #include "otbVarianceImageFilter.h"
 #include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
 #include "otbMeanShiftSegmentationFilter.h"
-#include "otbMSBoundaryFunctor.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
-
+#include "otbLabelToBoundaryImageFilter.h"
 
 
 namespace otb
@@ -65,12 +63,7 @@ public:
   typedef TypeManager::Labeled_Int_Image   LabeledImageType;
   typedef MeanShiftSegmentationFilter<InputImageType, LabeledImageType, OutputImageType> MeanShiftFilterType;
   typedef ObjectList<MeanShiftFilterType>                                              MeanShiftFilterListType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<
-    LabeledImageType,
-    SingleImageType,
-    otb::Functor::MSBoundaryFunctor<
-      itk::ConstNeighborhoodIterator<LabeledImageType>,
-      SingleImageType::PixelType > >                   BoundaryExtractorType;
+  typedef LabelToBoundaryImageFilter<LabeledImageType,SingleImageType> BoundaryExtractorType;
   typedef ObjectList<BoundaryExtractorType>            BoundaryExtractorListType;
   
   // Touzi

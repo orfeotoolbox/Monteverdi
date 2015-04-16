@@ -44,8 +44,7 @@ See OTBCopyright.txt for details.
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkIntensityWindowingImageFilter.h"
 #include "otbMeanShiftSegmentationFilter.h"
-#include "otbMSBoundaryFunctor.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbLabelToBoundaryImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkConnectedComponentImageFilter.h"
 #include "itkRelabelComponentImageFilter.h"
@@ -185,12 +184,7 @@ public:
   typedef MSLabeledImageType::PixelType                                          MSLabeledPixelType;
   typedef MeanShiftFilterType::Pointer                                           MeanShiftFilterPointerType;
   typedef MeanShiftSmoothingImageFilter<ImageType, ImageType>                    MeanShiftSmoothFilterType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<
-    MSLabeledImageType,
-    MSLabeledImageType,
-    otb::Functor::MSBoundaryFunctor<
-      itk::ConstNeighborhoodIterator<MSLabeledImageType>,
-      MSLabeledPixelType > >                  BoundaryExtractorType;
+  typedef LabelToBoundaryImageFilter<MSLabeledImageType,MSLabeledImageType>      BoundaryExtractorType;
   typedef itk::ChangeLabelImageFilter<IntLabeledImageType, LabeledImageType>     ChangeLabelImageFilterType;
   typedef ChangeLabelImageFilterType::Pointer                                    ChangeLabelImageFilterPointerType;
   typedef ClassifBoundaryFunctor<LabelPixelType, LabelPixelType, LabelPixelType> ClassifBoundaryFunctorType;

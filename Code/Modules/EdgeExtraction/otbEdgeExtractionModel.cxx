@@ -148,7 +148,6 @@ EdgeExtractionModel
     meanShift->SetMaxIterationNumber(100);
     
     BoundaryExtractorType::Pointer boundary = BoundaryExtractorType::New();
-    boundary->SetRadius(1);
     boundary->SetInput(meanShift->GetLabelOutput());
 
 //     if (type == FeatureInfoEdge::MS_SMOOTH ||  type == FeatureInfoEdge::MS_CLUSTERED)

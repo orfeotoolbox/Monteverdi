@@ -17,7 +17,6 @@ MeanShiftModuleModel::MeanShiftModuleModel()
   m_MeanShiftSmooth->SetMaxIterationNumber(100);
   
   m_BoundaryExtractor = BoundaryExtractorType::New();
-  m_BoundaryExtractor->SetRadius(1);
   
   m_BlendingFunction = BlendingFunctionType::New();
 

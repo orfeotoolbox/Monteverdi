@@ -139,8 +139,6 @@ ObjectCountingModel
   m_MeanShiftFilter->SetMaxIterationNumber(100);
   m_MSSmoothingFilter->SetThreshold(0.1);
   m_MSSmoothingFilter->SetMaxIterationNumber(100);
-
-  m_BoundaryExtractor->SetRadius(1);
 }
 
 void

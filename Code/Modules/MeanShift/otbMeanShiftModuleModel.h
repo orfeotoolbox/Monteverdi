@@ -13,8 +13,7 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 #include "otbMeanShiftSegmentationFilter.h"
-#include "otbMSBoundaryFunctor.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbLabelToBoundaryImageFilter.h"
 
 namespace otb {
 
@@ -60,13 +59,7 @@ public:
   typedef MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType> MSFilterType;
   typedef MSFilterType::Pointer                                                          MSFilterPointerType;
   typedef MeanShiftSmoothingImageFilter<VectorImageType, VectorImageType> MSSmoothFilterType;
-  
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<
-    LabeledImageType,
-    LabeledImageType,
-    otb::Functor::MSBoundaryFunctor<
-      itk::ConstNeighborhoodIterator<LabeledImageType>,
-      LabeledImageType::PixelType > >                   BoundaryExtractorType;
+  typedef LabelToBoundaryImageFilter<LabeledImageType, LabeledImageType> BoundaryExtractorType;
 
   /** New macro */
   itkNewMacro(Self);
