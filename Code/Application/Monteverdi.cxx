@@ -76,7 +76,9 @@
 #include "otbOpticalCalibrationModule.h"
 #include "otbSarCalibrationModule.h"
 #include "otbCommandLineArgumentParser.h"
+#ifdef OTB_USE_LIBKML
 #include "otbTileExportModule.h"
+#endif
 #include "otbFineCorrelationModule.h"
 #include "otbVectorizationModule.h"
 #include "otbSpectrumModule.h"
@@ -181,7 +183,9 @@ int main(int argc, char* argv[])
   model->RegisterModule<otb::RasterizationModule>("Rasterize", "File/Rasterize vector data");
 #endif
 
+#ifdef OTB_USE_LIBKML
   model->RegisterModule<otb::TileExportModule>("Export To Kmz", "File/Export To Kmz");
+#endif
 
 #ifdef OTB_USE_CURL
     model->RegisterModule<otb::TileMapImportModule>("Tile Map Import", "File/Tile Map Import");

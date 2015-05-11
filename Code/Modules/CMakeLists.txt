@@ -24,6 +24,10 @@ if (NOT OTBGKSVM_LOADED)
 LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/ObjectCounting)
 endif()
 
+if (NOT OTBIOKML_LOADED)
+LIST(REMOVE_ITEM moduleList ${Monteverdi_SOURCE_DIR}/Code/Modules/TileExport)
+endif()
+
 FOREACH(moduleDir ${moduleList})
   IF(IS_DIRECTORY ${moduleDir})
     FILE(RELATIVE_PATH moduleName ${Monteverdi_SOURCE_DIR}/Code/Modules ${moduleDir})

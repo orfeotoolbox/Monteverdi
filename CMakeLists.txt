@@ -87,7 +87,7 @@ ENDIF(WIN32)
 INCLUDE_DIRECTORIES(${Monteverdi_SOURCE_DIR}/Utilities)
 
 # Link to the Orfeo ToolBox
-FIND_PACKAGE(OTB PATHS /usr/lib/otb )
+FIND_PACKAGE(OTB REQUIRED)
 IF(OTB_FOUND)
   INCLUDE(${OTB_USE_FILE})
 ELSE(OTB_FOUND)
@@ -344,11 +344,6 @@ install(FILES
 install(EXPORT MonteverdiTargets DESTINATION
   "${Monteverdi_INSTALL_CMAKE_DIR}" COMPONENT Development)
 
-
-
-
-
-
 # Save library dependencies.
 #SET(Monteverdi_LIBRARY_DEPENDS_FILE ${Monteverdi_BINARY_DIR}/MonteverdiLibraryDepends.cmake)
 #EXPORT_LIBRARY_DEPENDENCIES(${Monteverdi_LIBRARY_DEPENDS_FILE})
@@ -371,11 +366,17 @@ install(EXPORT MonteverdiTargets DESTINATION
 # Setup valgrind option (default hard coded value is ctest is invalid)
 SET(VALGRIND_COMMAND_OPTIONS  "--show-reachable=yes --workaround-gcc296-bugs=yes --num-callers=50")
 
+MESSAGE(STATUS "Found OTB: ${OTB_USE_FILE} (${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})")
+
 # check otb is built with libsvm using otbConfigure.h: OTB_USE_LIBSVM
 if(NOT OTBSVMLearning_LOADED)
   message(WARNING "OTB is built without libsvm. Consequently following modules are deactivated since OTB >=4.5.0 : 'ChangeDetection, Classification, ObjectLabeling, SupervisedClassification'. If you want to activate these modules, rebuild OTB with the cmake flag OTB_USE_LIBSVM=ON")
 endif()
 
 if(NOT OTBGKSVM_LOADED)
-  message(WARNING "OTB is built without GenericKernel Remote Module. Consequently following modules are deactivated since OTB >=4.5.0 : 'ObjectLabeling'. If you want to activate these modules, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
+  message(WARNING "OTB is built without GenericKernel Remote Module. Consequently ObjectLabeling module is deactivated since OTB >=4.5.0. If you want to activate it, read https://github.com/jmichel-otb/GKSVM and rebuild OTB")
+endif()
+
+if (NOT OTBIOKML_LOADED)
+  message(WARNING "OTB is built without OTBIOKML. Consequently TileExport module is deactivated since OTB >=4.5.0. If you want to activate it, Rebuild OTB with OTB_USE_LIBKML=ON")
 endif()
