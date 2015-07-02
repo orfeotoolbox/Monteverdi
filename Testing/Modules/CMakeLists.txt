@@ -659,16 +659,21 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
-ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
-ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
-ADD_EXECUTABLE(otbModulesTests4 otbModulesTests4.cxx ${Modules_SRCS4})
-ADD_EXECUTABLE(otbModulesTests5 otbModulesTests5.cxx ${Modules_SRCS5})
+if(OTBSVMLearning_LOADED)
+  ADD_EXECUTABLE(otbModulesTests1 otbModulesTests1.cxx ${Modules_SRCS1})
+  TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
 
-TARGET_LINK_LIBRARIES(otbModulesTests1 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
+  ADD_EXECUTABLE(otbModulesTests3 otbModulesTests3.cxx ${Modules_SRCS3})
+  TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
+
+  ADD_EXECUTABLE(otbModulesTests4 otbModulesTests4.cxx ${Modules_SRCS4})
+  TARGET_LINK_LIBRARIES(otbModulesTests4 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
+endif()  
+
+ADD_EXECUTABLE(otbModulesTests2 otbModulesTests2.cxx ${Modules_SRCS2})
 TARGET_LINK_LIBRARIES(otbModulesTests2 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
-TARGET_LINK_LIBRARIES(otbModulesTests3 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
-TARGET_LINK_LIBRARIES(otbModulesTests4 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
+
+ADD_EXECUTABLE(otbModulesTests5 otbModulesTests5.cxx ${Modules_SRCS5})
 TARGET_LINK_LIBRARIES(otbModulesTests5 ${LIST_MODULE_LIBRARIES} ${OTB_LIBRARIES})
 
 
