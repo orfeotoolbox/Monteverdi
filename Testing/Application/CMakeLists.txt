@@ -48,5 +48,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
+if(OTBSVMLearning_LOADED)
 ADD_EXECUTABLE(otbApplicationTests otbApplicationTests.cxx ${Application_SRCS})
 TARGET_LINK_LIBRARIES(otbApplicationTests otbMonteverdi ${OTB_LIBRARIES} ${LIST_MODULE_LIBRARIES} )
+endif()
